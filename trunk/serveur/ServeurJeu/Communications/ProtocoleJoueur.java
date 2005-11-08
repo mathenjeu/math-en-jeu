@@ -1,0 +1,1799 @@
+package ServeurJeu.Communications;
+
+import java.net.Socket;
+import java.net.SocketException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.Text;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import Enumerations.Filtre;
+import ClassesUtilitaires.UtilitaireXML;
+import ClassesUtilitaires.UtilitaireEncodeurDecodeur;
+import ClassesUtilitaires.UtilitaireNombres;
+import Enumerations.Commande;
+import Enumerations.RetourFonctions.ResultatAuthentification;
+import Enumerations.RetourFonctions.ResultatEntreeTable;
+import Enumerations.RetourFonctions.ResultatDemarrerPartie;
+import ServeurJeu.ControleurJeu;
+import ServeurJeu.ComposantesJeu.Salle;
+import ServeurJeu.ComposantesJeu.Table;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+
+/**
+ * @author Jean-François Brind'Amour
+ */
+public class ProtocoleJoueur implements Runnable
+{
+	// Déclaration d'une référence vers le contrôleur de jeu
+	private ControleurJeu objControleurJeu;
+	
+	// Déclaration d'une référence vers le gestionnaire des communications
+	private GestionnaireCommunication objGestionnaireCommunication;
+	
+	// Déclaration d'une référence vers le vérificateur des connexions
+	private VerificateurConnexions objVerificateurConnexions;
+	
+	// Cet objet permet de garder une référence vers le canal de communication 
+	// entre le serveur et le client (joueur) courant
+	private Socket objSocketJoueur;
+	
+	// Déclaration d'un canal de réception	
+	private InputStream objCanalReception;
+	
+	// Cette variable permet de savoir s'il faut arrêter le thread ou non
+	private boolean bolStopThread;
+
+	// Déclaration d'une référence vers un joueur humain correspondant à ce
+	// protocole
+	private JoueurHumain objJoueurHumain;
+	
+	// Déclaration d'une variable qui va servir de compteur pour envoyer des
+	// commandes ou événements au joueur de ce ProtocoleJoueur (sa valeur 
+	// maximale est 100, après 100 on recommence à 0)
+	private int intCompteurCommande;
+	
+	// Déclaration d'une contante gardant le maximum possible pour le 
+	// compteur de commandes du serveur de jeu
+	private final int MAX_COMPTEUR = 100;
+	
+	// Déclaration d'une variable qui va contenir le numéro de commande à 
+	// retourner au client ayant fait une requête au serveur
+	private int intNumeroCommandeReponse;
+	
+	/**
+	 * Constructeur de la classe ProtocoleJoueur qui permet de garder une 
+	 * référence vers le contrôleur de jeu, vers le gestionnaire des 
+	 * communications et vers le socket du joueur demandant la connexion 
+	 * et de s'assurer qu'il n'y a pas de délai.
+	 * 
+	 * @param ControleurJeu controleur : Le contrôleur du jeu
+	 * @param GestionnaireCommunication communication : Le gestionnaire des 
+	 * 							communications entre les clients et le serveur
+	 * @param VerificateurConnexions verificateur : Le vérificateur des connexions
+	 * @param Socket socketJoueur : Le canal de communication associé au joueur
+	 */
+	public ProtocoleJoueur(ControleurJeu controleur, GestionnaireCommunication communication, 
+						   VerificateurConnexions verificateur, Socket socketJoueur) 
+	{
+		super();
+		
+		// Initialiser les valeurs du ProtocoleJoueur courant
+		objControleurJeu = controleur;
+		objGestionnaireCommunication = communication;
+		objVerificateurConnexions = verificateur;
+		objSocketJoueur = socketJoueur;
+		objJoueurHumain = null;
+		bolStopThread = false;
+		intCompteurCommande = 0;
+		intNumeroCommandeReponse = -1;
+		
+		System.out.println("Le client " + socketJoueur.getInetAddress().toString() + " est connecte");
+		
+		try
+		{
+			// Étant donné que ce sont seulement de petits messages qui sont 
+			// envoyés entre le client et le serveur, alors il n'est pas 
+			// nécessaire d'attendre un délai supplémentaire
+			objSocketJoueur.setTcpNoDelay(true);
+		}
+		catch (SocketException se)
+		{
+			System.out.println("Le canal de communication entre le serveur et le client est ferme");
+			
+			// Arrêter le thread
+			bolStopThread = true;
+		}
+	}
+	
+	/**
+	 * Cette méthode est appelée automatiquement par le thread du joueur et elle
+	 * permet d'exécuter le protocole du joueur courant.
+	 * 
+	 * @synchronism Cette méthode n'a pas besoin d'être synchronisée
+	 */
+	public void run()
+	{
+		try
+		{
+			// Créer le canal qui permet de recevoir des données sur le canal
+			// de communication entre le client et le serveur
+			objCanalReception = objSocketJoueur.getInputStream();
+			
+			// Cette objet va contenir le message envoyé par le client au serveur
+			StringBuffer strMessageRecu = new StringBuffer();
+			
+			// Création d'un tableau de 1024 bytes qui va servir à lire sur le canal
+			byte[] byttBuffer = new byte[1024];
+			
+			// Boucler et obtenir les messages du client (joueur), puis les 
+			// traiter tant que le client n'a pas décidé de quitter (ou que la
+			// connexion ne s'est pas déconnectée)
+			while (bolStopThread == false)
+			{
+				// Déclaration d'une variable qui va servir de marqueur 
+				// pour savoir où on en est rendu dans la lecture
+				int intMarqueur = 0;
+				
+				// Déclaration d'une variable qui va contenir le nombre de 
+				// bytes réellement lus dans le canal
+				int intBytesLus = objCanalReception.read(byttBuffer);
+				
+				// Si le nombre de bytes lus est -1, alors c'est que le 
+				// stream a été fermé, il faut donc terminer le thread
+				if (intBytesLus == -1)
+				{
+					bolStopThread = true;
+				}
+				
+				// Passer tous les bytes lus dans le canal de réception et 
+				// découper le message en chaîne de commandes selon le byte 
+				// 0 marquant la fin d'une commande
+				for (int i = 0; i < intBytesLus; i++)
+				{
+					// Si le byte courant est le byte de fin de message (EOM)
+					// alors c'est qu'une commande vient de finir, on va donc
+					// traiter la commande reçue
+					if (byttBuffer[i] == (byte) 0)
+					{
+						// Créer une chaîne temporaire qui va garder la chaîne 
+						// de caractères lue jusqu'à maintenant
+						String strChaineAccumulee = new String(byttBuffer, 
+												intMarqueur, i - intMarqueur);
+						
+						// Ajouter la chaîne courante à la chaîne de commande
+						strMessageRecu.append(strChaineAccumulee);
+						
+						// On appelle une fonction qui va traiter le message reçu du 
+						// client et mettre le résultat à retourner dans une variable
+						String strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
+						
+						// On remet la variable contenant le numéro de commande
+						// à retourner à -1, pour dire qu'il n'est pas initialisé
+						intNumeroCommandeReponse = -1;
+						
+						// On renvoit une réponse au client seulement si le
+						// message n'est pas à null
+						if (strMessageAEnvoyer != null)
+						{
+							// On appelle la méthode qui permet de renvoyer un 
+							// message au client
+							envoyerMessage(strMessageAEnvoyer);
+						}
+													
+						// Vider la chaîne contenant les commandes à traiter
+						strMessageRecu.setLength(0);
+						
+						// Mettre le marqueur à l'endroit courant pour 
+						// pouvoir ensuite recommancer une nouvelle chaîne 
+						// de commande à partir d'ici
+						intMarqueur = i + 1;
+					}
+				}
+				
+				// Si le marqueur est toujours plus petit que le nombre de
+				// caractères lus, alors c'est qu'on n'a pas encore reçu
+				// le marqueur de fin de message EOM (byte 0)
+				if (intMarqueur < intBytesLus)
+				{
+					// On garde la partie du message non terminé dans la 
+					// chaîne qui va contenir le message à traiter lorsqu'on
+					// recevra le EOM
+					strMessageRecu.append(new String(byttBuffer, intMarqueur, intBytesLus - intMarqueur));
+				}
+			}
+		}
+		catch (IOException ioe)
+		{
+			System.out.println("Une erreur est survenue lors de la reception du message du client");
+		}
+		catch (TransformerConfigurationException tce)
+		{
+			System.out.println("Une erreur est survenue lors de la transformation du document XML en chaine de caracteres");
+		}
+		catch (TransformerException te)
+		{
+			System.out.println("Une erreur est survenue lors de la conversion du document XML en chaine de caracteres");
+		}
+		finally
+		{
+			try
+			{
+				// On tente de fermer le canal de réception
+				objCanalReception.close();
+			}
+			catch (IOException ioe) {}
+						
+			try
+			{
+				// On tente de fermer le socket liant le client au serveur
+				objSocketJoueur.close();						
+			}
+			catch (IOException ioe) {}
+			
+			// Si le joueur humain a été défini dans le protocole, alors
+			// c'est qu'il a réussi à se connecter au serveur de jeu, il
+			// faut donc aviser le contrôleur de jeu pour qu'il enlève
+			// le joueur du serveur de jeu
+			if (objJoueurHumain != null)
+			{
+				// Informer le contrôleur de jeu que la connexion avec le 
+				// client (joueur) a été fermée (on ne doit pas obtenir de
+			    // numéro de commande de cette fonction, car on ne retournera
+			    // rien du tout)
+				objControleurJeu.deconnecterJoueur(objJoueurHumain, false);					
+			}
+			
+			// Enlever le protocole du joueur courant de la liste des 
+			// protocoles de joueurs
+			objGestionnaireCommunication.supprimerProtocoleJoueur(this);
+		}
+		
+		System.out.println("Le thread du client " + objSocketJoueur.getInetAddress().toString() + " est termine");
+	}
+	
+	/**
+	 * Cette méthode permet de traiter le message de commande passé en 
+	 * paramètres et de retourner le message à renvoyer au client.
+	 * 
+	 * @param String message : le message de commande à traiter (en format XML)
+	 * @return String : le message à renvoyer au client (en format XML)
+	 * 		   			null si on ne doit rien retourner au client
+	 * @throws TransformerConfigurationException : S'il y a une erreur dans la 
+	 * 					configuration du transformeur
+	 * @throws TransformerException : S'il y a une erreur lors de la conversion
+	 * 					d'un document XML en une chaîne de code XML 
+	 * @synchronism Cette fonction est synchronisée lorsque nécessaire.
+	 * 	     		La plupart du temps, on doit synchroniser le 
+	 * 				traitement de la commande seulement dans le cas où
+	 * 				on doit passer les éléments d'une liste et qu'il
+	 * 				peut y avoir des modifications de cette liste par
+	 * 				un autre joueur. Dans les autres cas, ce sont les
+	 * 				fonctions appelées qui vont être synchronisées.
+	 */
+	private String traiterCommandeJoueur(String message) throws TransformerConfigurationException,
+																TransformerException
+	{
+		// Déclaration d'une variable qui permet de savoir si on doit retourner 
+		// une commande au client ou si ce n'était qu'une réponse du client 
+		boolean bolDoitRetournerCommande = true;
+System.out.println("Message recu : " + message);
+		// Créer un nouveau Document qui va contenir le code XML du message 
+		// passé en paramètres
+		Document objDocumentXMLEntree = UtilitaireXML.obtenirDocumentXML(message);
+		
+		// Créer un nouveau Document qui va contenir le code XML à retourner 
+		// au client
+		Document objDocumentXMLSortie = UtilitaireXML.obtenirDocumentXML();
+		
+		// Déclarer une référence vers le premier noeud de la commande
+		// du client. Ce noeud est le noeud commande
+		Element objNoeudCommandeEntree = objDocumentXMLEntree.getDocumentElement();
+
+		// Créer le noeud de commande à retourner
+		Element objNoeudCommande = objDocumentXMLSortie.createElement("commande");
+		
+		// Initialement, on définit les attributs type et nom comme étant Erreur
+		// et Commande respectivement pour dire qu'il y a une erreur avec la
+		// commande (la commande n'est pas connue) -> Ces attributs seront 
+		// modifiés par la suite s'il y a d'autres erreurs. Par contre, on ne
+		// définit pas tout de suite le numéro de commande à envoyer au client
+		objNoeudCommande.setAttribute("type", "Erreur");
+		objNoeudCommande.setAttribute("nom", "CommandeNonReconnue");
+		
+		// Si la commande est un ping et qu'il a bel et bien un numéro, alors
+		// on peut appeler la méthode du vérificateur de connexions pour lui
+		// dire qu'on a reçu un ping, il ne faut rien retourner au client
+		if (objDocumentXMLEntree.getChildNodes().getLength() == 1 &&
+		    objDocumentXMLEntree.getChildNodes().item(0).getNodeName().equals("ping") &&
+		    objDocumentXMLEntree.getChildNodes().item(0).hasAttributes() == true &&
+		    objDocumentXMLEntree.getChildNodes().item(0).getAttributes().getNamedItem("numero") != null)
+		{
+		    // TODO Modifier cette partie pour que la confirmation du ping soit le même 
+		    // principe pour tous les autres événements sauf que le ping ne renvoit pas 
+		    // de commande au client
+			// On ne retourne aucune commande au client
+			bolDoitRetournerCommande = false;
+
+			// Appeler la méthode du vérificateur de connexions permettant de
+			// dire qu'on vient de recevoir une réponse à un ping de la part
+			// d'un client
+			objVerificateurConnexions.confirmationPing(this, 
+					Integer.parseInt(objDocumentXMLEntree.getChildNodes().item(0).getAttributes().getNamedItem("numero").getNodeValue()));
+		}
+		// S'il n'y a pas de noeud commande dans le document XML, alors il y a 
+		// une erreur, sinon on peut traiter le contenu du message
+		else if (objDocumentXMLEntree.getChildNodes().getLength() == 1 &&
+			objDocumentXMLEntree.getChildNodes().item(0).getNodeName().equals("commande") &&
+			objDocumentXMLEntree.getChildNodes().item(0).hasAttributes() == true &&
+			objDocumentXMLEntree.getChildNodes().item(0).getAttributes().getNamedItem("nom") != null &&
+			objDocumentXMLEntree.getChildNodes().item(0).getAttributes().getNamedItem("no") != null &&
+			Commande.estUnMembre(objNoeudCommandeEntree.getAttribute("nom")) == true)
+		{
+			// Avant de continuer les vérifications, on va pouvoir retourner
+			// une commande avec le numéro de commande envoyé par le client
+			objNoeudCommande.setAttribute("noClient", objNoeudCommandeEntree.getAttribute("no"));
+
+			// Si le noeud de commande n'a pas une structure valide ou ne 
+			// respecte pas tous les paramètres nécessaires pour le type 
+			// commande, alors il y a une erreur, sinon on peut traiter cette 
+			// commande (donc on ne fait rien puisque l'erreur est déjà 
+			// définie comme étant une erreur de paramètres)
+			if (commandeEstValide(objNoeudCommandeEntree) == false)
+			{
+				// L'erreur est qu'un ou plusieurs des paramètres n'est pas bon 
+				// (soit par le nombre, soit le type, ...)
+				objNoeudCommande.setAttribute("nom", "ParametrePasBon");
+			}
+			else
+			{
+				// Pour chaque commande, on va faire certaines validations.
+				// On va ensuite traiter la demande du client
+				if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.Connexion))
+				{
+					// Si le joueur est déjà connecté au serveur de jeu, alors
+					// il y a une erreur, sinon on peut valider les informations
+					// sur ce joueur pour ensuite le connecter (même si cette 
+					// vérification est faite lors de l'authentification, il vaut 
+					// mieux la faire immédiatement, car ça réduit de beaucoup 
+					// les chances que ce joueur se connecte juste après cette 
+					// validation)
+					if (objControleurJeu.joueurEstConnecte(obtenirValeurParametre(objNoeudCommandeEntree, 
+												"NomUtilisateur").getNodeValue()) == true)
+					{
+						// Le joueur est déjà connecté au serveur de jeu
+						objNoeudCommande.setAttribute("nom", "JoueurDejaConnecte");
+					}
+					else
+					{
+						// On vérifie si le joueur est bel et bien dans la BD et si 
+						// son mot de passe est correct
+						String strResultatAuthentification = 
+							objControleurJeu.authentifierJoueur(this, 
+									obtenirValeurParametre(objNoeudCommandeEntree, "NomUtilisateur").getNodeValue(), 
+									obtenirValeurParametre(objNoeudCommandeEntree, "MotDePasse").getNodeValue(), true);
+						
+						// Si le résultat de l'authentification est true alors le
+						// joueur est maintenant connecté
+						if (strResultatAuthentification.equals(ResultatAuthentification.Succes))
+						{
+							// Il n'y a pas eu d'erreurs
+							objNoeudCommande.setAttribute("type", "Reponse");
+							objNoeudCommande.setAttribute("nom", "Ok");
+						}
+						else if (strResultatAuthentification.equals(ResultatAuthentification.JoueurDejaConnecte))
+						{
+							// Le joueur est déjà connecté au serveur de jeu
+							objNoeudCommande.setAttribute("nom", "JoueurDejaConnecte");
+						}
+						else
+						{
+							// Sinon la connexion est refusée
+							objNoeudCommande.setAttribute("nom", "JoueurNonConnu");    
+						}
+					}
+				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.Deconnexion))
+				{
+					// Si le joueur humain a été défini dans le protocole, alors
+					// c'est qu'il a réussi à se connecter au serveur de jeu, il
+					// faut donc aviser le contrôleur de jeu pour qu'il enlève
+					// le joueur du serveur de jeu
+					if (objJoueurHumain != null)
+					{
+						// Informer le contrôleur de jeu que la connexion avec le 
+						// client (joueur) a été fermée (il faut obtenir un numéro
+					    // de commandes de cette fonction)
+						objControleurJeu.deconnecterJoueur(objJoueurHumain, true);
+						
+						// Il n'y a pas eu d'erreurs
+						objNoeudCommande.setAttribute("type", "Reponse");
+						objNoeudCommande.setAttribute("nom", "Ok");
+					}
+					else
+					{
+						// Le joueur n'est pas connecté
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.ObtenirListeJoueurs))
+				{
+					// Si le joueur est connecté au serveur de jeu, alors on va
+					// retourner au client la liste des joueurs connectés
+					if (objJoueurHumain != null)
+					{
+						// Il n'y a pas eu d'erreurs et il va falloir retourner 
+						// une liste de joueurs
+						objNoeudCommande.setAttribute("type", "Reponse");
+						objNoeudCommande.setAttribute("nom", "ListeJoueurs");
+						
+						// Créer le noeud de pour le paramètre contenant la liste
+						// des joueurs à retourner
+						Element objNoeudParametreListeJoueurs = objDocumentXMLSortie.createElement("parametre");
+												
+						// On ajoute un attribut type qui va contenir le type
+						// du paramètre
+						objNoeudParametreListeJoueurs.setAttribute("type", "ListeNomUtilisateurs");
+						
+						// Obtenir la liste des joueurs connectés au serveur de jeu
+						TreeMap lstListeJoueurs = objControleurJeu.obtenirListeJoueurs();
+						
+						// Empêcher d'autres thread de toucher à la liste des
+						// joueurs connectés au serveur de jeu
+						synchronized (lstListeJoueurs)
+						{
+							// Créer un ensemble contenant tous les tuples de la liste 
+							// lstListeJoueurs (chaque élément est un Map.Entry)
+							Set lstEnsembleJoueurs = lstListeJoueurs.entrySet();
+							
+							// Obtenir un itérateur pour l'ensemble contenant les joueurs
+							Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+							
+							// Générer un nouveau numéro de commande qui sera 
+						    // retourné au client
+						    genererNumeroReponse();
+							
+							// Passer tous les joueurs connectés et créer un noeud
+							// pour chaque joueur et l'ajouter au noeud de paramètre
+							while (objIterateurListe.hasNext() == true)
+							{
+								// Créer une référence vers le joueur humain courant dans la liste
+								JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+								
+								// Créer le noeud du joueur courant
+								Element objNoeudJoueur = objDocumentXMLSortie.createElement("joueur");
+								
+								// On ajoute un attribut nom qui va contenir le nom
+								// du joueur
+								objNoeudJoueur.setAttribute("nom", objJoueur.obtenirNomUtilisateur());
+								
+								// Ajouter le noeud du joueur au noeud du paramètre
+								objNoeudParametreListeJoueurs.appendChild(objNoeudJoueur);
+							}
+						}
+						
+						// Ajouter le noeud paramètre au noeud de commande dans
+						// le document de sortie
+						objNoeudCommande.appendChild(objNoeudParametreListeJoueurs);
+					}
+					else
+					{
+						// Sinon, il y a une erreur car le joueur doit être connecté
+						// pour pouvoir avoir accès à la liste des joueurs
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.ObtenirListeSalles))
+				{
+					// Si le joueur est connecté au serveur de jeu, alors on va
+					// retourner au client la liste des salles actives
+					if (objJoueurHumain != null)
+					{
+					    // Il n'est pas nécessaire de synchroniser cette partie
+					    // du code car on n'ajoute ou retire jamais de salles
+					    
+						// Il n'y a pas eu d'erreurs et il va falloir retourner 
+						// une liste de salles
+						objNoeudCommande.setAttribute("type", "Reponse");
+						objNoeudCommande.setAttribute("nom", "ListeSalles");
+						
+						// Créer le noeud pour le paramètre contenant la liste
+						// des salles à retourner
+						Element objNoeudParametreListeSalles = objDocumentXMLSortie.createElement("parametre");
+												
+						// On ajoute un attribut type qui va contenir le type
+						// du paramètre
+						objNoeudParametreListeSalles.setAttribute("type", "ListeNomSalles");
+					    
+					    // Obtenir la liste des salles du serveur de jeu
+						TreeMap lstListeSalles = objControleurJeu.obtenirListeSalles();
+						
+						// Générer un nouveau numéro de commande qui sera 
+					    // retourné au client
+					    genererNumeroReponse();
+
+						// Créer un ensemble contenant tous les tuples de la liste 
+						// lstListeSalles (chaque élément est un Map.Entry)
+						Set lstEnsembleSalles = lstListeSalles.entrySet();
+						
+						// Obtenir un itérateur pour l'ensemble contenant les salles
+						Iterator objIterateurListe = lstEnsembleSalles.iterator();
+						
+						// Passer toutes les salles et créer un noeud pour 
+						// chaque salle et l'ajouter au noeud de paramètre
+						while (objIterateurListe.hasNext() == true)
+						{
+							// Créer une référence vers la salle courante dans la liste
+							Salle objSalle = (Salle)(((Map.Entry)(objIterateurListe.next())).getValue());
+							
+							// Créer le noeud de la salle courante
+							Element objNoeudSalle = objDocumentXMLSortie.createElement("salle");
+							
+							// On ajoute un attribut nom qui va contenir le nom
+							// de la salle
+							objNoeudSalle.setAttribute("nom", objSalle.obtenirNomSalle());
+							
+							// On ajoute un attribut protegee qui va contenir
+							// une valeur booléenne permettant de savoir si la
+							// salle est protégée par un mot de passe ou non
+							objNoeudSalle.setAttribute("protegee", Boolean.toString(objSalle.protegeeParMotDePasse()));
+
+							// Ajouter le noeud de la salle au noeud du paramètre
+							objNoeudParametreListeSalles.appendChild(objNoeudSalle);
+						}
+						
+						// Ajouter le noeud paramètre au noeud de commande dans
+						// le document de sortie
+						objNoeudCommande.appendChild(objNoeudParametreListeSalles);
+					}
+					else
+					{
+						// Sinon, il y a une erreur car le joueur doit être connecté
+						// pour pouvoir avoir accès à la liste des salles
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.EntrerSalle))
+				{
+					// Si le joueur est connecté, alors on peut faire d'autre 
+					// vérifications, sinon il y a une erreur
+					if (objJoueurHumain != null)
+					{
+						// Déclaration d'une variable qui va contenir le noeud
+						// du nom de la salle dans laquelle le client veut entrer
+						Node objNomSalle = obtenirValeurParametre(objNoeudCommandeEntree, "NomSalle");
+						
+						// Déclaration d'une variable qui va contenir le noeud
+						// du mot de passe permettant d'accéder à la salle (s'il 
+						// n'y en a pas, alors le mot de passe sera vide)
+						Node objMotDePasse = obtenirValeurParametre(objNoeudCommandeEntree, "MotDePasse");
+						
+						// Déclaration d'une variable qui va contenir le mot de
+						// passe pour accéder à la salle (peut être vide)
+						String strMotDePasse = "";
+						
+						// Si le noeud du mot de passe n'est pas null alors il y
+						// a un mot de passe pour la salle
+						if (objMotDePasse != null)
+						{
+							// Garder le mot de passe en mémoire
+							strMotDePasse = objMotDePasse.getNodeValue();
+						}
+						
+						// Il n'est pas nécessaire de synchroniser ces vérifications
+						// car un protocole ne peut pas exécuter plus qu'une fonction
+						// à la fois, donc les valeurs ne peuvent être modifiées par
+						// deux threads à la fois
+						
+						// Si la salle n'existe pas dans le serveur de jeu, alors il
+						// y a une erreur
+						if (objControleurJeu.salleExiste(objNomSalle.getNodeValue()) == false)
+						{
+							// La salle n'existe pas
+							objNoeudCommande.setAttribute("nom", "SalleNonExistante");
+						}
+						// Si le joueur courant se trouve déjà dans une salle, 
+						// alors il y a une erreur (pas besoin de synchroniser 
+						// cette validation, car un seul thread peut modifier cet 
+						// objet)
+						else if (objJoueurHumain.obtenirSalleCourante() != null)
+						{
+							// Le joueur est déjà dans une salle
+							objNoeudCommande.setAttribute("nom", "JoueurDansSalle");							
+						}
+						else
+						{
+							// Déclaration d'une variable qui va permettre de
+							// savoir si le le joueur a réussi à entrer dans
+							// la salle (donc que le mot de passe était le bon)
+							boolean bolResultatEntreeSalle = objControleurJeu.entrerSalle(objJoueurHumain, 
+										objNomSalle.getNodeValue(), strMotDePasse, true);
+
+							// Si le joueur a réussi à entrer
+							if (bolResultatEntreeSalle == true)
+							{
+								// Il n'y a pas eu d'erreurs
+								objNoeudCommande.setAttribute("type", "Reponse");
+								objNoeudCommande.setAttribute("nom", "Ok");								
+							}
+							else
+							{
+								// Le mot de passe pour entrer dans la salle 
+								// n'est pas le bon
+								objNoeudCommande.setAttribute("nom", "MauvaisMotDePasseSalle");								
+							}
+						}
+					}
+					else
+					{
+						// Le joueur doit être connecté au serveur de jeu pour 
+						// pouvoir entrer dans une salle
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");						
+					}
+				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.QuitterSalle))
+				{
+					// Si le joueur n'est pas connecté, alors il y a une erreur
+					if (objJoueurHumain == null)
+					{
+						// Le joueur n'est pas connecté
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+					// Si le joueur n'est pas dans aucune salle, alors il y a 
+					// une erreur
+					else if (objJoueurHumain.obtenirSalleCourante() == null)
+					{
+						// Le joueur n'est pas dans aucune salle
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");						
+					}
+					else
+					{
+						// Appeler la méthode pour quitter la salle
+						objJoueurHumain.obtenirSalleCourante().quitterSalle(objJoueurHumain, true);
+						
+						// Il n'y a pas eu d'erreurs
+						objNoeudCommande.setAttribute("type", "Reponse");
+						objNoeudCommande.setAttribute("nom", "Ok");
+					}
+				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.ObtenirListeJoueursSalle))
+				{
+					// Si le joueur n'est pas connecté au serveur de jeu, alors il
+					// y a une erreur
+					if (objJoueurHumain == null)
+					{
+						// Le joueur ne peut pas accéder à la liste des joueurs 
+						// s'il n'est pas connecté au serveur de jeu
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+					// Si le joueur n'est connecté à aucune salle, alors il ne 
+					// peut pas obtenir la liste des joueurs dans cette salle
+					else if (objJoueurHumain.obtenirSalleCourante() == null)
+					{
+						// Le joueur ne peut pas accéder à la liste des joueurs 
+						// s'il n'est pas dans une salle
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");						
+					}
+					else
+					{
+						// Il n'y a pas eu d'erreurs et il va falloir retourner 
+						// une liste de joueurs
+						objNoeudCommande.setAttribute("type", "Reponse");
+						objNoeudCommande.setAttribute("nom", "ListeJoueursSalle");
+						
+						// Créer le noeud de pour le paramètre contenant la liste
+						// des joueurs à retourner
+						Element objNoeudParametreListeJoueurs = objDocumentXMLSortie.createElement("parametre");
+												
+						// On ajoute un attribut type qui va contenir le type
+						// du paramètre
+						objNoeudParametreListeJoueurs.setAttribute("type", "ListeNomUtilisateurs");
+						
+					    // Obtenir la liste des joueurs se trouvant dans la 
+						// salle courante
+						TreeMap lstListeJoueurs = objJoueurHumain.obtenirSalleCourante().obtenirListeJoueurs();
+						
+						// Empêcher d'autres thread de toucher à la liste des
+						// joueurs se trouvant dans la salle courante
+						synchronized (lstListeJoueurs)
+						{
+							// Créer un ensemble contenant tous les tuples de la liste 
+							// lstListeJoueurs (chaque élément est un Map.Entry)
+							Set lstEnsembleJoueurs = lstListeJoueurs.entrySet();
+							
+							// Obtenir un itérateur pour l'ensemble contenant les joueurs
+							Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+							
+							// Générer un nouveau numéro de commande qui sera 
+						    // retourné au client
+						    genererNumeroReponse();
+							
+							// Passer tous les joueurs connectés et créer un noeud
+							// pour chaque joueur et l'ajouter au noeud de paramètre
+							while (objIterateurListe.hasNext() == true)
+							{
+								// Créer une référence vers le joueur humain courant dans la liste
+								JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+								
+								// Créer le noeud du joueur courant
+								Element objNoeudJoueur = objDocumentXMLSortie.createElement("joueur");
+								
+								// On ajoute un attribut nom qui va contenir le nom
+								// du joueur
+								objNoeudJoueur.setAttribute("nom", objJoueur.obtenirNomUtilisateur());
+								
+								// Ajouter le noeud du joueur au noeud du paramètre
+								objNoeudParametreListeJoueurs.appendChild(objNoeudJoueur);
+							}						    
+						}
+						
+						// Ajouter le noeud paramètre au noeud de commande dans
+						// le document de sortie
+						objNoeudCommande.appendChild(objNoeudParametreListeJoueurs);
+					}
+				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.ObtenirListeTables))
+				{
+				    // Cette partie de code est synchronisée de telle manière
+				    // que le client peut recevoir des événements d'entrée/sortie
+				    // de table avant le no de retour, un peu après, ou 
+				    // complètement après, dans tous les cas, le client doit 
+				    // s'occuper d'arranger tout ça et de ne rien faire si des 
+				    // événements arrivent après le no de retour et que ça ne 
+				    // change rien à la liste, car c'est normal
+				    
+					// Obtenir la valeur du paramètre Filtre et le garder en 
+					// mémoire dans une variable
+					String strFiltre = obtenirValeurParametre(objNoeudCommandeEntree, "Filtre").getNodeValue();
+					
+					// Si le joueur n'est pas connecté au serveur de jeu, alors il
+					// y a une erreur
+					if (objJoueurHumain == null)
+					{
+						// Le joueur ne peut pas accéder à la liste des tables 
+						// s'il n'est pas connecté au serveur de jeu
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+					// Si le joueur n'est connecté à aucune salle, alors il ne 
+					// peut pas obtenir la liste des tables dans cette salle
+					else if (objJoueurHumain.obtenirSalleCourante() == null)
+					{
+						// Le joueur ne peut pas accéder à la liste des tables 
+						// s'il n'est pas dans une salle
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");						
+					}
+					// Si le paramètre Filtre n'est pas l'un des éléments de 
+					// l'énumération des filtres, alors il y a une erreur
+					else if (Filtre.estUnMembre(strFiltre) == false)
+					{
+						// Le filtre n'a pas une valeur valide
+						objNoeudCommande.setAttribute("nom", "FiltreNonConnu");						
+					}
+					else
+					{
+						// Il n'y a pas eu d'erreurs et il va falloir retourner
+						// une liste de tables
+						objNoeudCommande.setAttribute("type", "Reponse");
+						objNoeudCommande.setAttribute("nom", "ListeTables");
+						
+						// Créer le noeud pour le paramètre contenant la liste
+						// des tables à retourner
+						Element objNoeudParametreListeTables = objDocumentXMLSortie.createElement("parametre");
+						
+						// On ajoute un attribut type qui va contenir le type
+						// du paramètre
+						objNoeudParametreListeTables.setAttribute("type", "ListeTables");
+						
+					    // Obtenir la liste des tables se trouvant dans la 
+						// salle courante
+						TreeMap lstListeTables = objJoueurHumain.obtenirSalleCourante().obtenirListeTables();
+						
+						// Empêcher d'autres thread de toucher à la liste des
+						// tables se trouvant dans la salle courante
+						synchronized (lstListeTables)
+						{
+							// Créer un ensemble contenant tous les tuples de la liste 
+							// lstListeTables (chaque élément est un Map.Entry)
+							Set lstEnsembleTables = lstListeTables.entrySet();
+							
+							// Obtenir un itérateur pour l'ensemble contenant les tables
+							Iterator objIterateurListeTables = lstEnsembleTables.iterator();
+							
+							// Générer un nouveau numéro de commande qui sera 
+						    // retourné au client
+						    genererNumeroReponse();
+							
+							// Passer toutes les tables et créer un noeud pour 
+							// chaque table et l'ajouter au noeud de paramètre
+							while (objIterateurListeTables.hasNext() == true)
+							{
+								// Créer une référence vers la table courante dans la liste
+								Table objTable = (Table)(((Map.Entry)(objIterateurListeTables.next())).getValue());
+								
+								// Obtenir la liste des joueurs se trouvant dans la 
+								// table courante
+								TreeMap lstListeJoueurs = objTable.obtenirListeJoueurs();
+								
+								// Empêcher d'autres thread de toucher à la liste des
+								// joueurs de la table courante
+								synchronized (lstListeJoueurs)
+								{
+									//TODO: Peut-être va-t-il falloir ajouter 
+									// des validations supplémentaires ici lorsqu'une 
+									// partie débutera ou se terminera
+									// Si la table est une de celles qui doivent être 
+									// retournées selon le filtre, alors on continue 
+									if (strFiltre.equals(Filtre.Toutes) ||
+									   (strFiltre.equals(Filtre.Incompletes) && objTable.estComplete() == false) || 
+									   (strFiltre.equals(Filtre.Completes) && objTable.estComplete() == true && objTable.estCommencee() == false) ||
+									   (strFiltre.equals(Filtre.Commencees) && objTable.estComplete() == true && objTable.estCommencee() == true))
+									{
+										// Créer le noeud de la table courante
+										Element objNoeudTable = objDocumentXMLSortie.createElement("table");
+										
+										// On ajoute un attribut no qui va contenir le 
+										// numéro de la table
+										objNoeudTable.setAttribute("no", Integer.toString(objTable.obtenirNoTable()));
+										
+										// On ajoute un attribut temps qui va contenir le 
+										// temps des parties qui se déroulent sur cette table
+										objNoeudTable.setAttribute("temps", Integer.toString(objTable.obtenirTempsTotal()));
+	
+										// Créer un ensemble contenant tous les tuples de la liste 
+										// lstListeJoueurs (chaque élément est un Map.Entry)
+										Set lstEnsembleJoueurs = lstListeJoueurs.entrySet();
+										
+										// Obtenir un itérateur pour l'ensemble contenant les joueurs
+										Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
+										
+										// Passer tous les joueurs et créer un noeud pour 
+										// chaque joueur et l'ajouter au noeud de la table 
+										// courante
+										while (objIterateurListeJoueurs.hasNext() == true)
+										{
+											// Créer une référence vers le joueur courant 
+										    // dans la liste
+											JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
+											
+											// Créer le noeud du joueur courant
+											Element objNoeudJoueur = objDocumentXMLSortie.createElement("joueur");
+											
+											// On ajoute un attribut nom qui va contenir le 
+											// nom d'utilisateur du joueur
+											objNoeudJoueur.setAttribute("nom", objJoueur.obtenirNomUtilisateur());
+											
+											// Ajouter le noeud du joueur au noeud de la table
+											objNoeudTable.appendChild(objNoeudJoueur);
+										}									    
+										
+										// Ajouter le noeud de la table au noeud du paramètre
+										objNoeudParametreListeTables.appendChild(objNoeudTable);
+									}
+								}
+							}						    
+						}
+						
+						// Ajouter le noeud paramètre au noeud de commande dans
+						// le document de sortie
+						objNoeudCommande.appendChild(objNoeudParametreListeTables);
+					}
+				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.CreerTable))
+				{
+					// Il n'est pas nécessaire de synchroniser ces vérifications
+					// car un protocole ne peut pas exécuter plus qu'une fonction
+					// à la fois, donc les valeurs ne peuvent être modifiées par
+					// deux threads à la fois
+					
+					// Si le joueur n'est pas connecté au serveur de jeu, alors il
+					// y a une erreur
+					if (objJoueurHumain == null)
+					{
+						// Le joueur ne peut pas accéder à la liste des joueurs 
+						// s'il n'est pas connecté au serveur de jeu
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+					// Si le joueur n'est connecté à aucune salle, alors il ne 
+					// peut pas créer de tables
+					else if (objJoueurHumain.obtenirSalleCourante() == null)
+					{
+						// Le joueur ne peut pas créer de nouvelles tables 
+						// s'il n'est pas dans une salle
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");
+					}
+					//TODO: Il va falloir synchroniser cette validation lorsqu'on va 
+					// avoir codé la commande SortirJoueurTable -> ça va ressembler au
+					// processus d'authentification
+					// Si le joueur est dans une table, alors il ne 
+					// peut pas créer de tables, il faut qu'il sorte avant
+					else if (objJoueurHumain.obtenirPartieCourante() != null)
+					{
+						// Le joueur ne peut pas créer de nouvelles tables 
+						// s'il est déjà dans une table
+						objNoeudCommande.setAttribute("nom", "JoueurDansTable");
+					}
+					else
+					{
+						// Il n'y a pas eu d'erreurs
+						objNoeudCommande.setAttribute("type", "Reponse");
+						objNoeudCommande.setAttribute("nom", "NoTable");
+						
+						// Déclaration d'une variable qui va contenir le temps
+						// de la partie que le client veut créer
+						int intTempsPartie = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "TempsPartie").getNodeValue());
+						
+						// Appeler la méthode permettant de créer la nouvelle
+						// table et d'entrer le joueur dans cette table
+						int intNoTable = objJoueurHumain.obtenirSalleCourante().creerTable(objJoueurHumain, 
+									intTempsPartie, true);
+						
+						// Créer le noeud paramètre du numéro de la table
+						Element objNoeudParametreNoTable = objDocumentXMLSortie.createElement("parametre"); 
+
+						// Créer un noeud texte contenant le numéro de la table
+						Text objNoeudTexteNoTable = objDocumentXMLSortie.createTextNode(Integer.toString(intNoTable));
+						
+						// Définir l'attribut type pour le noeud paramètre
+						objNoeudParametreNoTable.setAttribute("type", "NoTable");
+						
+						// Ajouter le noeud texte au noeud paramètre
+						objNoeudParametreNoTable.appendChild(objNoeudTexteNoTable);
+						
+						// Ajouter le noeud paramètre au noeud de commande
+						objNoeudCommande.appendChild(objNoeudParametreNoTable);
+					}
+				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.EntrerTable))
+				{
+					// Il n'est pas nécessaire de synchroniser ces vérifications
+					// car un protocole ne peut pas exécuter plus qu'une fonction
+					// à la fois, donc les valeurs ne peuvent être modifiées par
+					// deux threads à la fois
+					
+					// Si le joueur n'est pas connecté au serveur de jeu, alors il
+					// y a une erreur
+					if (objJoueurHumain == null)
+					{
+						// Le joueur ne peut pas entrer dans une table 
+						// s'il n'est pas connecté au serveur de jeu
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+					// Si le joueur n'est connecté à aucune salle, alors il ne 
+					// peut pas entrer dans une table
+					else if (objJoueurHumain.obtenirSalleCourante() == null)
+					{
+						// Le joueur ne peut pas entrer dans une table 
+						// s'il n'est pas dans une salle
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");
+					}
+					//TODO: Il va falloir synchroniser cette validation lorsqu'on va 
+					// avoir codé la commande SortirJoueurTable -> ça va ressembler au
+					// processus d'authentification
+					// Si le joueur est dans une table, alors il ne 
+					// peut pas entrer dans une autre table sans sortir de celle 
+					// dans laquelle il se trouve présentement
+					else if (objJoueurHumain.obtenirPartieCourante() != null)
+					{
+						// Le joueur ne peut pas entrer dans une table 
+						// s'il est déjà dans une table
+						objNoeudCommande.setAttribute("nom", "JoueurDansTable");
+					}
+					else
+					{
+						// Obtenir le numéro de la table dans laquelle le joueur 
+						// veut entrer et le garder en mémoire dans une variable
+						int intNoTable = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "NoTable").getNodeValue());
+						
+						// Déclaration d'une nouvelle liste de personnages
+						TreeMap lstPersonnageJoueurs = new TreeMap();
+						
+						// Appeler la méthode permettant d'entrer dans la
+						// table et garder son résultat dans une variable
+						String strResultatEntreeTable = objJoueurHumain.obtenirSalleCourante().entrerTable(objJoueurHumain, 
+																										   intNoTable, true, 
+																										   lstPersonnageJoueurs);
+						
+						// Si le résultat de l'entrée dans la table est true alors le
+						// joueur est maintenant dans la table
+						if (strResultatEntreeTable.equals(ResultatEntreeTable.Succes))
+						{
+							// Il n'y a pas eu d'erreurs, mais on doit retourner
+							// la liste des joueurs avec leur idPersonnage
+							objNoeudCommande.setAttribute("type", "Reponse");
+							objNoeudCommande.setAttribute("nom", "ListePersonnageJoueurs");
+							
+							// Créer le noeud pour le paramètre contenant la liste
+							// des personnages à retourner
+							Element objNoeudParametreListePersonnageJoueurs = objDocumentXMLSortie.createElement("parametre");
+							
+							// On ajoute un attribut type qui va contenir le type
+							// du paramètre
+							objNoeudParametreListePersonnageJoueurs.setAttribute("type", "ListePersonnageJoueurs");
+							
+							// Créer un ensemble contenant tous les tuples de la liste 
+							// lstPersonnageJoueurs (chaque élément est un Map.Entry)
+							Set lstEnsemblePersonnageJoueurs = lstPersonnageJoueurs.entrySet();
+							
+							// Obtenir un itérateur pour l'ensemble contenant les personnages
+							Iterator objIterateurListePersonnageJoueurs = lstEnsemblePersonnageJoueurs.iterator();
+							
+							// Passer tous les personnages et créer un noeud pour 
+							// chaque id de personnage et l'ajouter au noeud de paramètre
+							while (objIterateurListePersonnageJoueurs.hasNext() == true)
+							{
+								// Garder une référence vers l'entrée courante
+								Map.Entry objEntreeListePersonnageJoueurs = (Map.Entry)objIterateurListePersonnageJoueurs.next();
+								
+								// Créer le noeud pour le joueur courant
+								Element objNoeudPersonnage = objDocumentXMLSortie.createElement("personnage");
+								
+								// Définir le nom d'utilisateur du joueur ainsi que le id du personnage
+								objNoeudPersonnage.setAttribute("nom", (String) objEntreeListePersonnageJoueurs.getKey());
+								objNoeudPersonnage.setAttribute("idPersonnage", ((Integer) objEntreeListePersonnageJoueurs.getValue()).toString());
+								
+								// Ajouter le noeud du personnage au noeud de paramètre
+								objNoeudParametreListePersonnageJoueurs.appendChild(objNoeudPersonnage);
+							}
+							
+							// Ajouter le noeud de paramètres au noeud de commande
+							objNoeudCommande.appendChild(objNoeudParametreListePersonnageJoueurs);
+						}
+						else if (strResultatEntreeTable.equals(ResultatEntreeTable.TableNonExistante))
+						{
+							// La table n'existe plus
+							objNoeudCommande.setAttribute("nom", "TableNonExistante");
+						}
+						else if (strResultatEntreeTable.equals(ResultatEntreeTable.TableComplete))
+						{
+							// La table est complète
+							objNoeudCommande.setAttribute("nom", "TableComplete");
+						}
+						else
+						{
+							// Une partie est déjà commencée
+							objNoeudCommande.setAttribute("nom", "PartieEnCours");    
+						}
+					}
+				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.QuitterTable))
+				{
+					// Si le joueur n'est pas connecté, alors il y a une erreur
+					if (objJoueurHumain == null)
+					{
+						// Le joueur n'est pas connecté
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+					// Si le joueur n'est pas dans aucune salle, alors il y a 
+					// une erreur
+					else if (objJoueurHumain.obtenirSalleCourante() == null)
+					{
+						// Le joueur n'est pas dans aucune salle
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");						
+					}
+					//TODO: Il va falloir synchroniser cette validation lorsqu'on va 
+					// avoir codé la commande SortirJoueurTable -> ça va ressembler au
+					// processus d'authentification
+					// Si le joueur n'est pas dans aucune table, alors il y a 
+					// une erreur
+					else if (objJoueurHumain.obtenirPartieCourante() == null)
+					{
+						// Le joueur n'est pas dans aucune table
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansTable");						
+					}
+					else
+					{
+						// Appeler la méthode pour quitter la table
+						objJoueurHumain.obtenirPartieCourante().obtenirTable().quitterTable(objJoueurHumain, true);
+						
+						// Il n'y a pas eu d'erreurs
+						objNoeudCommande.setAttribute("type", "Reponse");
+						objNoeudCommande.setAttribute("nom", "Ok");
+					}
+				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.DemarrerPartie))
+				{
+					// Il n'est pas nécessaire de synchroniser ces vérifications
+					// car un protocole ne peut pas exécuter plus qu'une fonction
+					// à la fois, donc les valeurs ne peuvent être modifiées par
+					// deux threads à la fois
+					
+					// Si le joueur n'est pas connecté au serveur de jeu, alors il
+					// y a une erreur
+					if (objJoueurHumain == null)
+					{
+						// Le joueur ne peut pas démarrer une partie 
+						// s'il n'est pas connecté au serveur de jeu
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+					// Si le joueur n'est connecté à aucune salle, alors il ne 
+					// peut pas démarrer une partie
+					else if (objJoueurHumain.obtenirSalleCourante() == null)
+					{
+						// Le joueur ne peut pas démarrer une partie 
+						// s'il n'est pas dans une salle
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");
+					}
+					//TODO: Il va falloir synchroniser cette validation lorsqu'on va 
+					// avoir codé la commande SortirJoueurTable -> ça va ressembler au
+					// processus d'authentification
+					// Si le joueur n'est pas dans aucune table, alors il y a 
+					// une erreur
+					else if (objJoueurHumain.obtenirPartieCourante() == null)
+					{
+						// Le joueur ne peut pas démarrer une partie 
+						// s'il n'est dans aucune table
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansTable");
+					}
+					// On n'a pas besoin de valider qu'il n'y aucune partie de 
+					// commencée, car le joueur doit obligatoirement être dans 
+					// la table pour démarrer la partie et comme il ne peut entrer 
+					// si une partie est en cours, alors c'est certain qu'il n'y 
+					// aura pas de parties en cours
+					else
+					{
+						// Obtenir le numéro Id du personnage choisi et le garder 
+						// en mémoire dans une variable
+						int intIdPersonnage = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "IdPersonnage").getNodeValue());
+						
+						// Appeler la méthode permettant de démarrer une partie
+						// et garder son résultat dans une variable
+						String strResultatDemarrerPartie = objJoueurHumain.obtenirPartieCourante().obtenirTable().demarrerPartie(objJoueurHumain, 
+																intIdPersonnage, true);
+						
+						// Si le résultat du démarrage de partie est Succes alors le
+						// joueur est maintenant en attente
+						if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.Succes))
+						{
+							// Il n'y a pas eu d'erreurs
+							objNoeudCommande.setAttribute("type", "Reponse");
+							objNoeudCommande.setAttribute("nom", "Ok");
+						}
+						else if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.PartieEnCours))
+						{
+							// Il y avait déjà une partie en cours
+							objNoeudCommande.setAttribute("nom", "PartieEnCours");
+						}
+						else
+						{
+							// Le joueur était déjà en attente
+							objNoeudCommande.setAttribute("nom", "DejaEnAttente");
+						}
+					}
+				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.DeplacerPersonnage))
+				{
+					// Il n'est pas nécessaire de synchroniser ces vérifications
+					// car un protocole ne peut pas exécuter plus qu'une fonction
+					// à la fois, donc les valeurs ne peuvent être modifiées par
+					// deux threads à la fois
+					
+					/*// Si le joueur n'est pas connecté au serveur de jeu, alors il
+					// y a une erreur
+					if (objJoueurHumain == null)
+					{
+						// Le joueur ne peut pas déplacer son personnage 
+						// s'il n'est pas connecté au serveur de jeu
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+					// Si le joueur n'est connecté à aucune salle, alors il ne 
+					// peut pas déplacer son personnage
+					else if (objJoueurHumain.obtenirSalleCourante() == null)
+					{
+						// Le joueur ne peut pas déplacer son personnage 
+						// s'il n'est pas dans une salle
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");
+					}
+					//TODO: Il va falloir synchroniser cette validation lorsqu'on va 
+					// avoir codé la commande SortirJoueurTable -> ça va ressembler au
+					// processus d'authentification
+					// Si le joueur n'est pas dans aucune table, alors il y a 
+					// une erreur
+					else if (objJoueurHumain.obtenirPartieCourante() == null)
+					{
+						// Le joueur ne peut pas déplacer son personnage 
+						// s'il n'est dans aucune table
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansTable");
+					}
+					// On n'a pas besoin de valider qu'il n'y a aucune partie de 
+					// commencée, car le joueur doit obligatoirement être dans 
+					// la table pour démarrer la partie et comme il ne peut entrer 
+					// si une partie est en cours, alors c'est certain qu'il n'y 
+					// aura pas de parties en cours
+					else
+					{
+						// Obtenir le numéro Id du personnage choisi et le garder 
+						// en mémoire dans une variable
+						int intIdPersonnage = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "IdPersonnage").getNodeValue());
+						
+						// Appeler la méthode permettant de démarrer une partie
+						// et garder son résultat dans une variable
+						String strResultatDemarrerPartie = objJoueurHumain.obtenirPartieCourante().obtenirTable().demarrerPartie(objJoueurHumain, 
+																intIdPersonnage, true);
+						
+						// Si le résultat du démarrage de partie est Succes alors le
+						// joueur est maintenant en attente
+						if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.Succes))
+						{
+							// Il n'y a pas eu d'erreurs
+							objNoeudCommande.setAttribute("type", "Reponse");
+							objNoeudCommande.setAttribute("nom", "Ok");
+						}
+						else if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.PartieEnCours))
+						{
+							// Il y avait déjà une partie en cours
+							objNoeudCommande.setAttribute("nom", "PartieEnCours");
+						}
+						else
+						{
+							// Le joueur était déjà en attente
+							objNoeudCommande.setAttribute("nom", "DejaEnAttente");
+						}
+					}*/
+				}
+			}
+		}
+		
+		// Si on doit retourner une commande alors on ajoute le noeud de commande 
+		// et on retourne le code XML de la commande. Si le numéro de commande 
+		// n'avait pas été généré, alors on le génère
+		if (bolDoitRetournerCommande == true)
+		{
+		    // Si le numéro de commande à envoyer au client n'a pas encore
+		    // été défini, alors on le définit, puis on ajoute l'attribut
+		    // no du noeud de commande
+			if (intNumeroCommandeReponse == -1)
+			{
+			    // Générer un nouveau numéro de commande à renvoyer
+			    genererNumeroReponse();
+			}
+			
+			// Définir le numéro de la commande à retourner
+			objNoeudCommande.setAttribute("no", Integer.toString(intNumeroCommandeReponse));
+		    
+			// Ajouter le noeud de commande au noeud racine dans le document de sortie
+			objDocumentXMLSortie.appendChild(objNoeudCommande);
+
+	        // Retourner le document XML ne contenant pas l'entête XML ajoutée 
+	        // par défaut par le transformateur
+			return UtilitaireXML.transformerDocumentXMLEnString(objDocumentXMLSortie);
+		}
+		else
+		{
+			// Si on ne doit rien retourner, alors on retourne null
+			return null;
+		}
+	}
+
+	/**
+	 * Cette méthode permet d'envoyer le message passé en paramètre au 
+	 * client (joueur). Deux threads ne peuvent écrire sur le socket en même
+	 * temps.
+	 * 
+	 * @param String message : le message à envoyer au client
+	 * @throws IOException : Si on ne peut pas obtenir l'accès en 
+	 * 						 écriture sur le canal de communication
+	 */
+	public void envoyerMessage(String message) throws IOException
+	{
+		// Synchroniser cette partie de code pour empêcher 2 threads d'envoyer
+		// un message en même temps sur le canal d'envoi du socket
+		synchronized (objSocketJoueur)
+		{
+			// Créer le canal qui permet d'envoyer des données sur le canal
+			// de communication entre le client et le serveur
+			OutputStream objCanalEnvoi = objSocketJoueur.getOutputStream();
+String chainetemp = UtilitaireEncodeurDecodeur.encodeToUTF8(message);
+if (chainetemp.contains("ping") == false)
+{
+	System.out.println("Message envoye : " + chainetemp);	
+}
+			// Écrire le message sur le canal d'envoi au client
+			objCanalEnvoi.write(UtilitaireEncodeurDecodeur.encodeToUTF8(message).getBytes());
+			
+			// Écrire le byte 0 sur le canal d'envoi pour signifier la fin du message
+			objCanalEnvoi.write((byte) 0);
+			
+			// Envoyer le message sur le canal d'envoi
+			objCanalEnvoi.flush();
+			
+			System.out.println("Une confirmation a ete envoyee a " + objSocketJoueur.getInetAddress().toString());
+		}
+	}
+	
+	/**
+	 * Cette méthode permet de déterminer si le noeud de commande passé en 
+	 * paramètres ne contient que des paramètres valides et que chacun de
+	 * ces paramètres contient bien ce qu'il doit contenir. On suppose que le
+	 * noeud passé en paramètres est bel et bien un noeud de commande et qu'il
+	 * possède un attribut nom.
+	 * 
+	 * @param Element noeudCommande : le noeud de comande à valider
+	 * @return boolean : true si le noeud de commande et tous ses enfants sont
+	 * 				     	  corrects
+	 * 					 false sinon
+	 */
+	private boolean commandeEstValide(Element noeudCommande)
+	{
+		// Déclaration d'une variable qui va permettre de savoir si la 
+		// commande est valide ou non
+		boolean bolCommandeValide = false;
+		
+		// Si le nom de la commande est Connexion, alors il doit y avoir 
+		// 2 paramètres correspondants au nom d'utilisateur du joueur et 
+		// à son mot de passe
+		if (noeudCommande.getAttribute("nom").equals(Commande.Connexion))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 2, alors
+			// le nombre de paramètres est correct et on peut continuer
+			if (noeudCommande.getChildNodes().getLength() == 2)
+			{
+				// Déclarer une variable qui va permettre de savoir si les 
+				// noeuds enfants sont valides
+				boolean bolNoeudValide = true;
+				
+				// Déclaration d'un compteur
+				int i = 0;
+				
+				// Passer tous les noeuds enfants et vérifier qu'ils sont bien 
+				// des paramètres avec le type approprié
+				while (i < noeudCommande.getChildNodes().getLength() &&
+					   bolNoeudValide == true)
+				{
+					// Faire la référence vers le noeud enfant courant
+					Node objNoeudCourant = noeudCommande.getChildNodes().item(i);
+					
+					// Si le noeud courant n'est pas un paramètre, ou qu'il n'a
+					// pas exactement 1 attribut, ou que le nom de cet attribut 
+					// n'est pas type, ou que le noeud n'a pas de valeurs, alors 
+					// il y a une erreur dans la structure
+					if (objNoeudCourant.getNodeName().equals("parametre") == false || 
+						objNoeudCourant.getAttributes().getLength() != 1 ||
+						objNoeudCourant.getAttributes().getNamedItem("type") == null ||
+						(objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("NomUtilisateur") == false &&
+						objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("MotDePasse") == false) ||
+						objNoeudCourant.getChildNodes().getLength() != 1 ||
+						objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false)
+					{
+						bolNoeudValide = false;
+					}
+					
+					i++;
+				}
+				
+				// Si les enfants du noeud courant sont tous valides alors la
+				// commande est valide
+				bolCommandeValide = bolNoeudValide;
+			}
+		}
+		// Si le nom de la commande est Deconnexion, alors il ne doit pas y avoir 
+		// de paramètres
+		else if (noeudCommande.getAttribute("nom").equals(Commande.Deconnexion))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 0, alors
+			// il n'y a vraiment aucun paramètres
+			if (noeudCommande.getChildNodes().getLength() == 0)
+			{
+				bolCommandeValide = true;
+			}
+		}
+		// Si le nom de la commande est ObtenirListeJoueurs, alors il ne doit 
+		// pas y avoir de paramètres
+		else if (noeudCommande.getAttribute("nom").equals(Commande.ObtenirListeJoueurs))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 0, alors
+			// il n'y a vraiment aucun paramètres
+			if (noeudCommande.getChildNodes().getLength() == 0)
+			{
+				bolCommandeValide = true;
+			}
+		}
+		// Si le nom de la commande est ObtenirListeSalles, alors il ne doit 
+		// pas y avoir de paramètres
+		else if (noeudCommande.getAttribute("nom").equals(Commande.ObtenirListeSalles))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 0, alors
+			// il n'y a vraiment aucun paramètres
+			if (noeudCommande.getChildNodes().getLength() == 0)
+			{
+				bolCommandeValide = true;
+			}
+		}
+		// Si le nom de la commande est EntrerSalle, alors il doit y avoir 2 paramètres
+		else if (noeudCommande.getAttribute("nom").equals(Commande.EntrerSalle))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 2, alors
+			// le nombre de paramètres est correct et on peut continuer
+			if (noeudCommande.getChildNodes().getLength() == 2)
+			{
+				// Déclarer une variable qui va permettre de savoir si les 
+				// noeuds enfants sont valides
+				boolean bolNoeudValide = true;
+				
+				// Déclaration d'un compteur
+				int i = 0;
+				
+				// Passer tous les noeuds enfants et vérifier qu'ils sont bien 
+				// des paramètres avec le type approprié
+				while (i < noeudCommande.getChildNodes().getLength() &&
+					   bolNoeudValide == true)
+				{
+					// Faire la référence vers le noeud enfant courant
+					Node objNoeudCourant = noeudCommande.getChildNodes().item(i);
+					
+					// Si le noeud courant n'est pas un paramètre, ou qu'il n'a
+					// pas exactement 1 attribut, ou que le nom de cet attribut 
+					// n'est pas type, ou que le noeud n'a pas de valeurs, alors 
+					// il y a une erreur dans la structure (le deuxième paramètre 
+					// peut avoir aucune valeur)
+					if (objNoeudCourant.getNodeName().equals("parametre") == false || 
+						objNoeudCourant.getAttributes().getLength() != 1 ||
+						objNoeudCourant.getAttributes().getNamedItem("type") == null ||
+						(objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("NomSalle") == false &&
+						objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("MotDePasse") == false) ||
+						(objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("NomSalle") &&
+						objNoeudCourant.getChildNodes().getLength() != 1) ||
+						(objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("MotDePasse") &&
+						objNoeudCourant.getChildNodes().getLength() > 1) ||
+						(objNoeudCourant.getChildNodes().getLength() == 1 &&
+						objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false))
+					{
+						bolNoeudValide = false;
+					}
+					
+					i++;
+				}
+				
+				// Si les enfants du noeud courant sont tous valides alors la
+				// commande est valide
+				bolCommandeValide = bolNoeudValide;
+			}
+		}
+		// Si le nom de la commande est QuitterSalle, alors il ne doit pas y avoir 
+		// de paramètres
+		else if (noeudCommande.getAttribute("nom").equals(Commande.QuitterSalle))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 0, alors
+			// il n'y a vraiment aucun paramètres
+			if (noeudCommande.getChildNodes().getLength() == 0)
+			{
+				bolCommandeValide = true;
+			}
+		}
+		// Si le nom de la commande est ObtenirListeJoueursSalle, alors il ne 
+		// doit pas y avoir de paramètres
+		else if (noeudCommande.getAttribute("nom").equals(Commande.ObtenirListeJoueursSalle))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 0, alors
+			// il n'y a vraiment aucun paramètres
+			if (noeudCommande.getChildNodes().getLength() == 0)
+			{
+				bolCommandeValide = true;
+			}
+		}
+		// Si le nom de la commande est ObtenirListeTables, alors il ne doit 
+		// pas y avoir de paramètres
+		else if (noeudCommande.getAttribute("nom").equals(Commande.ObtenirListeTables))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 1, alors
+			// le nombre de paramètres est correct et on peut continuer
+			if (noeudCommande.getChildNodes().getLength() == 1)
+			{
+				// Déclarer une variable qui va permettre de savoir si le 
+				// noeud enfant est valide
+				boolean bolNoeudValide = true;
+		
+				// Faire la référence vers le noeud enfant courant
+				Node objNoeudCourant = noeudCommande.getChildNodes().item(0);
+				
+				// Si le noeud enfant n'est pas un paramètre, ou qu'il n'a
+				// pas exactement 1 attribut, ou que le nom de cet attribut 
+				// n'est pas type, ou que le noeud n'a pas de valeurs, alors 
+				// il y a une erreur dans la structure
+				if (objNoeudCourant.getNodeName().equals("parametre") == false || 
+					objNoeudCourant.getAttributes().getLength() != 1 ||
+					objNoeudCourant.getAttributes().getNamedItem("type") == null ||
+					objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("Filtre") == false ||
+					objNoeudCourant.getChildNodes().getLength() != 1 ||
+					objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false)
+				{
+					bolNoeudValide = false;
+				}
+				
+				// Si l'enfant du noeud courant est valide alors la commande 
+				// est valide
+				bolCommandeValide = bolNoeudValide;
+			}
+		}
+		// Si le nom de la commande est CreerTable, alors il doit y avoir 1 paramètre
+		else if (noeudCommande.getAttribute("nom").equals(Commande.CreerTable))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 1, alors
+			// le nombre de paramètres est correct et on peut continuer
+			if (noeudCommande.getChildNodes().getLength() == 1)
+			{
+				// Déclarer une variable qui va permettre de savoir si le 
+				// noeud enfant est valide
+				boolean bolNoeudValide = true;
+		
+				// Faire la référence vers le noeud enfant courant
+				Node objNoeudCourant = noeudCommande.getChildNodes().item(0);
+				
+				// Si le noeud enfant n'est pas un paramètre, ou qu'il n'a
+				// pas exactement 1 attribut, ou que le nom de cet attribut 
+				// n'est pas type, ou que le noeud n'a pas de valeurs, alors 
+				// il y a une erreur dans la structure
+				if (objNoeudCourant.getNodeName().equals("parametre") == false || 
+					objNoeudCourant.getAttributes().getLength() != 1 ||
+					objNoeudCourant.getAttributes().getNamedItem("type") == null ||
+					objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("TempsPartie") == false ||
+					objNoeudCourant.getChildNodes().getLength() != 1 ||
+					objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false ||
+					UtilitaireNombres.isPositiveNumber(objNoeudCourant.getChildNodes().item(0).getNodeValue()) == false)
+				{
+					bolNoeudValide = false;
+				}
+				
+				// Si l'enfant du noeud courant est valide alors la commande 
+				// est valide
+				bolCommandeValide = bolNoeudValide;
+			}
+		}
+		// Si le nom de la commande est EntrerTable, alors il doit y avoir 1 paramètre
+		else if (noeudCommande.getAttribute("nom").equals(Commande.EntrerTable))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 1, alors
+			// le nombre de paramètres est correct et on peut continuer
+			if (noeudCommande.getChildNodes().getLength() == 1)
+			{
+				// Déclarer une variable qui va permettre de savoir si le 
+				// noeud enfant est valide
+				boolean bolNoeudValide = true;
+		
+				// Faire la référence vers le noeud enfant courant
+				Node objNoeudCourant = noeudCommande.getChildNodes().item(0);
+				
+				// Si le noeud enfant n'est pas un paramètre, ou qu'il n'a
+				// pas exactement 1 attribut, ou que le nom de cet attribut 
+				// n'est pas type, ou que le noeud n'a pas de valeurs, alors 
+				// il y a une erreur dans la structure
+				if (objNoeudCourant.getNodeName().equals("parametre") == false || 
+					objNoeudCourant.getAttributes().getLength() != 1 ||
+					objNoeudCourant.getAttributes().getNamedItem("type") == null ||
+					objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("NoTable") == false ||
+					objNoeudCourant.getChildNodes().getLength() != 1 ||
+					objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false ||
+					UtilitaireNombres.isPositiveNumber(objNoeudCourant.getChildNodes().item(0).getNodeValue()) == false)
+				{
+					bolNoeudValide = false;
+				}
+				
+				// Si l'enfant du noeud courant est valide alors la commande 
+				// est valide
+				bolCommandeValide = bolNoeudValide;
+			}
+		}
+		// Si le nom de la commande est QuitterTable, alors il ne doit pas y avoir 
+		// de paramètres
+		else if (noeudCommande.getAttribute("nom").equals(Commande.QuitterTable))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 0, alors
+			// il n'y a vraiment aucun paramètres
+			if (noeudCommande.getChildNodes().getLength() == 0)
+			{
+				bolCommandeValide = true;
+			}
+		}
+		// Si le nom de la commande est DemarrerPartie, alors il doit y avoir 1 paramètre
+		else if (noeudCommande.getAttribute("nom").equals(Commande.DemarrerPartie))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 1, alors
+			// le nombre de paramètres est correct et on peut continuer
+			if (noeudCommande.getChildNodes().getLength() == 1)
+			{
+				// Déclarer une variable qui va permettre de savoir si le 
+				// noeud enfant est valide
+				boolean bolNoeudValide = true;
+		
+				// Faire la référence vers le noeud enfant courant
+				Node objNoeudCourant = noeudCommande.getChildNodes().item(0);
+				
+				// Si le noeud enfant n'est pas un paramètre, ou qu'il n'a
+				// pas exactement 1 attribut, ou que le nom de cet attribut 
+				// n'est pas type, ou que le noeud n'a pas de valeurs, alors 
+				// il y a une erreur dans la structure
+				if (objNoeudCourant.getNodeName().equals("parametre") == false || 
+					objNoeudCourant.getAttributes().getLength() != 1 ||
+					objNoeudCourant.getAttributes().getNamedItem("type") == null ||
+					objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("IdPersonnage") == false ||
+					objNoeudCourant.getChildNodes().getLength() != 1 ||
+					objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false ||
+					UtilitaireNombres.isPositiveNumber(objNoeudCourant.getChildNodes().item(0).getNodeValue()) == false)
+				{
+					bolNoeudValide = false;
+				}
+				
+				// Si l'enfant du noeud courant est valide alors la commande 
+				// est valide
+				bolCommandeValide = bolNoeudValide;
+			}
+		}
+		
+		return bolCommandeValide;
+	}
+		
+	/**
+	 * Cette fonction permet de retourner le noeud correspondant à la valeur
+	 * du paramètre dont le nom est passé en paramètres. On recherche d'abord
+	 * le noeud parametre parmi les noeuds enfants du noeud de commande passé
+	 * en paramètres puis une fois qu'on a trouvé le bon, on retourne son noeud
+	 * enfant. On suppose que la structure est conforme et que la valeur du 
+	 * paramètre est un seul noeud (soit un noeud texte ou une liste).
+	 * 
+	 * @param Element noeudCommande : le noeud de comande dans lequel chercher 
+	 * 								  le bon paramètre
+	 * @param String nomParametre : le nom du paramètre à chercher
+	 * @return Node : le noeud contenant la valeur du paramètre (soit un noeud 
+	 * 				  texte ou un noeud contenant une liste)
+	 */
+	private Node obtenirValeurParametre(Element noeudCommande, String nomParametre)
+	{
+		// Déclaration d'une variable qui va contenir le noeud représentant
+		// la valeur du paramètre
+		Node objValeurParametre = null;
+		
+		// Déclaration d'un compteur
+		int i = 0;
+		
+		// Déclaration d'une variable qui va nous permettre de savoir si on a 
+		// trouvé la valeur du paramètre recherché
+		boolean bolTrouve = false;
+		
+		// Passer tous les noeuds enfants (paramètres) du noeud de commande et 
+		// boucler tant qu'on n'a pas trouver le bon paramètre
+		while (i < noeudCommande.getChildNodes().getLength() && bolTrouve == false)
+		{
+			// Garder une référence vers le noeud courant
+			Node objNoeudCourant = noeudCommande.getChildNodes().item(i);
+			
+			// Si le noeud courant a l'attribut type dont la valeur est passée
+			// en paramètres, alors on l'a trouvé, on va garder une référence 
+			// vers la valeur du noeud courant
+			if (objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals(nomParametre))
+			{
+				bolTrouve = true;
+				
+				// Garder la référence vers le noeud enfant (il est le seul et 
+				// il est soit un noeud texte ou un noeud représentant une liste)
+				objValeurParametre = objNoeudCourant.getChildNodes().item(0);
+			}
+			
+			i++;
+		}
+		
+		return objValeurParametre;
+	}
+	
+	/**
+	 * Cette méthode permet de générer un nouveau numéro de commande à retourner
+	 * en réponse au client.
+	 */
+	public void genererNumeroReponse()
+	{
+	    // Modifier le numéro de commande à retourner au client
+	    intNumeroCommandeReponse = obtenirNumeroCommande();
+	}
+		
+	/**
+	 * Cette fonction permet de retourner le numéro de la commande courante et 
+	 * d'augmenter le compteur de commandes. Le numéro de commande permet au 
+	 * client de savoir quel événement est arrivé avant quel autre.
+	 * 
+	 * @return int : le numéro de la commande
+	 */
+	public int obtenirNumeroCommande()
+	{
+		// Déclaration d'une variable qui va contenir le numéro de la commande
+		// à retourner
+		int intNumeroCommande = intCompteurCommande;
+		
+		// Incrémenter le compteur de commandes
+		intCompteurCommande++;
+		
+		// Si le compteur de commandes est maintenant plus grand que la plus 
+		// grande valeur possible, alors on réinitialise le compteur à 0
+		if (intCompteurCommande > MAX_COMPTEUR)
+		{
+			intCompteurCommande = 0;
+		}
+		
+		return intNumeroCommande;
+	}
+		
+	/**
+	 * Cette méthode permet d'envoyer un événement ping au joueur courant 
+	 * pour savoir s'il est toujours connecté au serveur de jeu.
+	 * 
+	 * @param : int numeroPing : le numéro du ping, c'est le numéro qui 
+	 * 							 va servir à identifier le ping
+	 */
+	public void envoyerEvenementPing(int numeroPing)
+	{
+		try
+		{
+			// Envoyer le message ping au joueur
+			envoyerMessage("<ping numero=\"" + numeroPing + "\"/>");
+		}
+		catch (IOException e)
+		{
+			System.out.println("L'evenement ping n'a pas pu etre envoyee");
+		}
+	}
+	
+	/**
+	 * Cette méthode permet d'arrêter le thread et de fermer le socket du 
+	 * client. Si le joueur était connecté à une table, une salle ou au serveur
+	 * de jeu, alors il sera complètement déconnecté.
+	 */
+	public void arreterProtocoleJoueur()
+	{
+		try
+		{
+			// On tente de fermer le canal de réception. Cela va provoquer 
+			// une erreur dans le thread et le joueur va être déconnecté et 
+			// le thread va arrêter
+			objCanalReception.close();
+		}
+		catch (IOException ioe) {}
+		
+		try
+		{
+			// On tente de fermer le socket liant le client au serveur. Cela
+			// va provoquer une erreur dans le thread et le joueur va être
+			// déconnecté et le thread va arrêter
+			objSocketJoueur.close();						
+		}
+		catch (IOException ioe) {}
+	}
+	
+	/**
+	 * Cette fonction permet de retourner l'adresse IP du joueur courant. 
+	 * 
+	 * @return String : L'adresse IP du joueur courant
+	 */
+	public String obtenirAdresseIP()
+	{
+		// Retourner l'adresse IP du joueur
+		return objSocketJoueur.getInetAddress().getHostAddress();
+	}
+	
+	/**
+	 * Cette fonction permet de retourner le port du joueur courant. 
+	 * 
+	 * @return String : Le port du joueur courant
+	 */
+	public String obtenirPort()
+	{
+		// Retourner le port du joueur
+		return Integer.toString(objSocketJoueur.getPort());
+	}
+	
+	/**
+	 * Cette méthode permet de définir la nouvelle référence vers un joueur 
+	 * humain. 
+	 * 
+	 * @param JoueurHumain joueur : Le joueur humain auquel faire la référence
+	 */
+	public void definirJoueur(JoueurHumain joueur)
+	{
+		// Faire la référence vers le joueur humain
+		objJoueurHumain = joueur;
+	}
+}
