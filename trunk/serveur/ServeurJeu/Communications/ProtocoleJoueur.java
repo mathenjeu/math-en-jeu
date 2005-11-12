@@ -832,9 +832,10 @@ System.out.println("Message recu : " + message);
 									// Si la table est une de celles qui doivent être 
 									// retournées selon le filtre, alors on continue 
 									if (strFiltre.equals(Filtre.Toutes) ||
-									   (strFiltre.equals(Filtre.Incompletes) && objTable.estComplete() == false) || 
-									   (strFiltre.equals(Filtre.Completes) && objTable.estComplete() == true && objTable.estCommencee() == false) ||
-									   (strFiltre.equals(Filtre.Commencees) && objTable.estComplete() == true && objTable.estCommencee() == true))
+									   (strFiltre.equals(Filtre.IncompletesNonCommencees) && objTable.estComplete() == false && objTable.estCommencee() == false) || 
+									   (strFiltre.equals(Filtre.IncompletesCommencees) && objTable.estComplete() == false && objTable.estCommencee() == true) ||
+									   (strFiltre.equals(Filtre.CompletesNonCommencees) && objTable.estComplete() == true && objTable.estCommencee() == false) ||
+									   (strFiltre.equals(Filtre.CompletesCommencees) && objTable.estComplete() == true && objTable.estCommencee() == true))
 									{
 										// Créer le noeud de la table courante
 										Element objNoeudTable = objDocumentXMLSortie.createElement("table");

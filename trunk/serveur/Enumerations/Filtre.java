@@ -7,9 +7,10 @@ public final class Filtre
 {
 	// Déclaration des membres de cette énumération
 	public static final String Toutes = "Toutes";
-	public static final String Completes = "Completes";
-	public static final String Commencees = "Commencees";
-	public static final String Incompletes = "Incompletes";
+	public static final String CompletesNonCommencees = "CompletesNonCommencees";
+	public static final String CompletesCommencees = "CompletesCommencees";
+	public static final String IncompletesNonCommencees = "IncompletesNonCommencees";
+	public static final String IncompletesCommencees = "IncompletesCommencees";
 	
 	/**
 	 * Constructeur par défaut est privé pour empêcher de pourvoir créer des 
@@ -30,7 +31,8 @@ public final class Filtre
 		// Si la valeur passée en paramètre n'est pas égale à aucune des
 		// valeurs définies dans cette classe, alors la valeur n'est pas
 		// un membre de cette énumération, sinon elle en est un
-		return (valeur.equals(Toutes) || valeur.equals(Completes) || 
-				valeur.equals(Commencees) || valeur.equals(Incompletes));
+		return (valeur.equals(Toutes) || valeur.equals(CompletesNonCommencees) || 
+				valeur.equals(CompletesCommencees) || valeur.equals(IncompletesNonCommencees) ||
+				valeur.equals(IncompletesCommencees));
 	}
 }
