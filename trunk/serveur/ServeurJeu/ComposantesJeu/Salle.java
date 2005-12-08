@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import Enumerations.RetourFonctions.ResultatEntreeTable;
+import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.Evenements.EvenementJoueurEntreSalle;
@@ -25,6 +26,9 @@ public class Salle
 {
 	// Déclaration d'une référence vers le gestionnaire d'événements
 	private GestionnaireEvenements objGestionnaireEvenements;
+	
+	// Déclaration d'une référence vers le gestionnaire de bases de données
+	private GestionnaireBD objGestionnaireBD;
 	
 	// Cette variable va contenir le nom de la salle
 	private String strNomSalle;
@@ -54,19 +58,23 @@ public class Salle
 	 * d'accéder à la salle.
 	 * 
 	 * @param GestionnaireEvenements gestionnaireEv : Le gestionnaire d'événements
+	 * @param GestionnaireBD gestionnaireBD : Le gestionnaire de base de données
 	 * @param String nomSalle : Le nom de la salle
 	 * @param String nomUtilisateurCreateur : Le nom d'utilisateur du créateur
 	 * 										  de la salle
 	 * @param String motDePasse : Le mot de passe
 	 * @param Regles reglesSalle : Les règles de jeu pour la salle courante
 	 */
-	public Salle(GestionnaireEvenements gestionnaireEv, String nomSalle, 
-	        	 String nomUtilisateurCreateur, String motDePasse, Regles reglesSalle) 
+	public Salle(GestionnaireEvenements gestionnaireEv, GestionnaireBD gestionnaireBD, 
+				 String nomSalle, String nomUtilisateurCreateur, String motDePasse, 
+				 Regles reglesSalle) 
 	{
 		super();
 		
-		// Faire la référence vers le gestionnaire d'événements
+		// Faire la référence vers le gestionnaire d'événements et le 
+		// gestionnaire de base de données
 		objGestionnaireEvenements = gestionnaireEv;
+		objGestionnaireBD = gestionnaireBD;
 		
 		// Garder en mémoire le nom de la salle, le nom d'utilisateur du 
 		// créateur de la salle et le mot de passe
@@ -264,7 +272,7 @@ public class Salle
 	    synchronized (lstTables)
 	    {
 	    	// Créer une nouvelle table en passant les paramètres appropriés
-	    	Table objTable = new Table(objGestionnaireEvenements, this, genererNoTable(), joueur.obtenirNomUtilisateur(), tempsPartie, objRegles);
+	    	Table objTable = new Table(objGestionnaireEvenements, objGestionnaireBD, this, genererNoTable(), joueur.obtenirNomUtilisateur(), tempsPartie, objRegles);
 	    	
 	    	// Ajouter la table dans la liste des tables
 	    	lstTables.put(new Integer(objTable.obtenirNoTable()), objTable);

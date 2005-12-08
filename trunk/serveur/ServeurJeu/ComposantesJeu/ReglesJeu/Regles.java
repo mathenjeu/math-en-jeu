@@ -57,6 +57,10 @@ public class Regles
 	// Cette variable va contenir le temps maximal (minutes) d'une partie
 	private int intTempsMaximal;
 	
+	// Cette variable va contenir le nombre de cases maximales dont le joueur
+	// peut se déplacer (minimum de 1)
+	private int intDeplacementMaximal;
+	
 	/**
 	 * Constructeur de la classe Regles qui permet d'initialiser
 	 * les règles.
@@ -83,6 +87,7 @@ public class Regles
 	    intValeurPieceMaximale = 0;
 	    intTempsMinimal = 0;
 	    intTempsMaximal = 0;
+	    intDeplacementMaximal = 1;
 	}
 
 	/**
@@ -310,5 +315,26 @@ public class Regles
 	public void definirTempsMaximal(int temps)
 	{
 		intTempsMaximal = temps;
+	}
+	
+	/**
+	 * Cette fonction permet de retourner le déplacement maximal permis 
+	 * pour chaque joueur.
+	 * 
+	 * @return int : Le déplacement maximal d'un joueur
+	 */
+	public int obtenirDeplacementMaximal()
+	{
+	   return intDeplacementMaximal;
+	}
+	
+	/**
+	 * Cette fonction permet de définir le déplacement maximal des joueurs.
+	 * 
+	 * @param int deplacement : Le déplacement maximal d'un joueur
+	 */
+	public void definirDeplacementMaximal(int deplacement)
+	{
+		intDeplacementMaximal = deplacement;
 	}
 }

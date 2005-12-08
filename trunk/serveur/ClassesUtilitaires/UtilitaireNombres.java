@@ -15,7 +15,7 @@ public final class UtilitaireNombres
 
     /**
      * Cette fonction permet de retourner si oui ou non la chaîne passée en
-     * paramètres est un chiffre ou non.
+     * paramètres est un chiffre positif (>= 0) ou non.
      *
      * @param String stringNumber : La chaîne à vérifier
      * @return boolean : true si stringNumber est un chiffre,

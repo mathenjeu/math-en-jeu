@@ -1,11 +1,16 @@
 package ServeurJeu.BD;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
-
+import java.util.TreeMap;
+import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Salle;
 import ClassesUtilitaires.GenerateurPartie;
 import Enumerations.Visibilite;
+import Enumerations.TypeQuestion;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
@@ -18,6 +23,7 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Evenements.GestionnaireEvenements;
+import ServeurJeu.Evenements.InformationDestination;
 
 /**
  * @author Jean-François Brind'Amour
@@ -141,8 +147,9 @@ public class GestionnaireBD
 		objReglesSalle.definirValeurPieceMaximale(25);
 		objReglesSalle.definirTempsMinimal(10);
 		objReglesSalle.definirTempsMaximal(60);
+		objReglesSalle.definirDeplacementMaximal(6);
 		
-		Case[][] asdf = GenerateurPartie.genererPlateauJeu(objReglesSalle, 10, new Vector());
+		/*Case[][] asdf = GenerateurPartie.genererPlateauJeu(objReglesSalle, 10, new Vector());
 		for (int i = 0; i < asdf.length; i++)
 		{
 			for (int j = 0; j < asdf[i].length; j++)
@@ -177,13 +184,73 @@ public class GestionnaireBD
 					System.out.println("(" + i + ", " + j + ") -> case speciale:" + asdf[i][j].obtenirTypeCase());
 				}
 			}
-		}
+		}*/
 		
-	    Salle objSalle = new Salle(gestionnaireEv, "Générale", "Jeff", "", objReglesSalle);
-	    Salle objSalle2 = new Salle(gestionnaireEv, "Privée", "Jeff", "jeff", objReglesSalle);
+	    Salle objSalle = new Salle(gestionnaireEv, this, "Générale", "Jeff", "", objReglesSalle);
+	    Salle objSalle2 = new Salle(gestionnaireEv, this, "Privée", "Jeff", "jeff", objReglesSalle);
 	    
 	    objControleurJeu.ajouterNouvelleSalle(objSalle);
 	    objControleurJeu.ajouterNouvelleSalle(objSalle2);
+	}
+	
+	/**
+	 * Cette fonction permet de trouver une question dans la base de données
+	 * selon la catégorie de question et la difficulté et en tenant compte des
+	 * questions déjà posées.
+	 * 
+	 * @param int categorieQuestion : La catégorie de question dans laquelle 
+	 * 								  trouver une question
+	 * @param int difficulte : La difficulté de la question à retourner
+	 * @param TreeMap listeQuestionsPosees : La liste des questions posées 
+	 * @return Question : La question trouvée, null si aucune n'est trouvée.
+	 *					  Plus la liste des questions déjà posées est grande,
+	 *					  alors il y a plus de chances de retourner null
+	 */
+	public Question trouverProchaineQuestion(int categorieQuestion, int difficulte, TreeMap listeQuestionsPosees)
+	{
+		// Déclaration d'une question et de la requête SQL pour aller
+		// chercher les questions dans la BD
+		Question objQuestionTrouvee = null;
+		String strRequeteSQL = "SELECT * FROM Questions WHERE categorie=" + categorieQuestion 
+								+ " AND difficulte=" + difficulte; 
+		
+		// Créer un ensemble contenant tous les tuples de la liste 
+		// des questions posées (chaque élément est un Map.Entry)
+		Set lstEnsembleQuestions = listeQuestionsPosees.entrySet();
+		
+		// Obtenir un itérateur pour l'ensemble contenant les questions posées
+		Iterator objIterateurListe = lstEnsembleQuestions.iterator();
+
+		// Passer toutes les questions et ajouter ce qu'il faut dans la requête
+		// SQL
+		while (objIterateurListe.hasNext() == true)
+		{
+			// Créer une référence vers le joueur humain courant dans la liste
+			int intCodeQuestion = ((Integer)(((Map.Entry)(objIterateurListe.next())).getKey())).intValue();
+			
+			// Ajouter ce qu'il faut dans la clause where de la requête SQL
+			strRequeteSQL += " AND (NOT (codeQuestion=" + intCodeQuestion + "))";
+		}
+		
+		//TODO: À modifier pour aller pointe sur la BD selon la requête construite
+		//TODO: Il faut aussi faire en sorte que les questions obtenues par la 
+		//      requête soit triées de façon aléatoire, ou en prendre une dans 
+		//		le tas de façon aléatoire
+		//TODO: Il y a des optimisations à faire ici concernant la structure
+		// 		des questions gardées en mémoire (on pourrait séparer les 
+		//		questions en catégories et en difficulté)
+		if (listeQuestionsPosees.containsKey(new Integer(1)) == false)
+		{
+			// Retourne la question 1
+			objQuestionTrouvee = new Question(1, TypeQuestion.ChoixReponse, "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/Q-M0001-Q.swf", "A", "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/Q-M0001-R.swf");
+		}
+		else if (listeQuestionsPosees.containsKey(new Integer(2)) == false)
+		{
+			// Retourne la question 2
+			objQuestionTrouvee = new Question(2, TypeQuestion.ChoixReponse, "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/Q-M0002-Q.swf", "B", "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/Q-M0002-R.swf");
+		}
+		
+		return objQuestionTrouvee;
 	}
 	
 	/**

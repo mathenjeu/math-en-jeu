@@ -7,6 +7,8 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.awt.Point;
 import org.w3c.dom.Element;
+
+import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.Evenements.EvenementJoueurEntreTable;
@@ -26,6 +28,9 @@ public class Table
 {
 	// Déclaration d'une référence vers le gestionnaire d'événements
 	private GestionnaireEvenements objGestionnaireEvenements;
+	
+	// Déclaration d'une référence vers le gestionnaire de bases de données
+	private GestionnaireBD objGestionnaireBD;
 	
 	// Déclaration d'une référence vers la salle parente dans laquelle se 
 	// trouve cette table 
@@ -71,19 +76,23 @@ public class Table
 	 * privés de la table.
 	 *
 	 * @param Salle salleParente : La salle dans laquelle se trouve cette table
+	 * @param GestionnaireBD gestionnaireBD : Le gestionnaire de base de données
 	 * @param int noTable : Le numéro de la table
 	 * @param String nomUtilisateurCreateur : Le nom d'utilisateur du créateur
 	 * 										  de la table
 	 * @param int tempsPartie : Le temps de la partie
 	 * @param Regles reglesTable : Les règles pour une partie sur cette table
 	 */
-	public Table(GestionnaireEvenements gestionnaireEv, Salle salleParente, 
-				 int noTable, String nomUtilisateurCreateur, int tempsPartie, Regles reglesTable) 
+	public Table(GestionnaireEvenements gestionnaireEv, GestionnaireBD gestionnaireBD, 
+				 Salle salleParente, int noTable, String nomUtilisateurCreateur, 
+				 int tempsPartie, Regles reglesTable) 
 	{
 		super();
 		
-		// Faire la référence vers le gestionnaire d'événements
+		// Faire la référence vers le gestionnaire d'événements et le 
+		// gestionnaire de base de données
 		objGestionnaireEvenements = gestionnaireEv;
+		objGestionnaireBD = gestionnaireBD;
 		
 		// Garder en mémoire la référence vers la salle parente, le numéro de 
 		// la table, le nom d'utilisateur du créateur de la table et le temps
@@ -149,7 +158,7 @@ public class Table
 			// Le joueur est maintenant entré dans la table courante (il faut
 			// créer un objet InformationPartie qui va pointer sur la table
 			// courante)
-			joueur.definirPartieCourante(new InformationPartie(this));
+			joueur.definirPartieCourante(new InformationPartie(objGestionnaireBD, this));
 			
 			// Si on doit générer le numéro de commande de retour, alors
 			// on le génère, sinon on ne fait rien
@@ -485,6 +494,27 @@ public class Table
 	public boolean estCommencee()
 	{
 		return bolEstCommencee;	        
+	}
+	
+	/**
+	 * Cette fonction retourne les règles pour la table courante.
+	 * 
+	 * @return Regles : Les règles pour la table courante
+	 */
+	public Regles obtenirRegles()
+	{
+		return objRegles;
+	}
+	
+	/**
+	 * Cette fonction retourne le plateau de jeu courant.
+	 * 
+	 * @return Case[][] : Le plateau de jeu courant,
+	 * 					  null s'il n'y a pas de partie en cours
+	 */
+	public Case[][] obtenirPlateauJeuCourant()
+	{
+		return objttPlateauJeu;
 	}
 	
 	/**

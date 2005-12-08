@@ -1,5 +1,7 @@
 package ServeurJeu.ComposantesJeu;
 
+import Enumerations.TypeQuestion;
+
 /**
  * @author Jean-François Brind'Amour
  */
@@ -11,23 +13,34 @@ public class Question
 	// Déclaration d'une variable qui va contenir l'URL de la question
 	private String strURLQuestion;
 	
+	// Déclaration d'une variable qui va garder le type de la question
+	private String objTypeQuestion;
+	
 	// Déclaration d'une variable qui va contenir la réponse à la question
 	private String strReponse;
+	
+	// Déclaration d'une variable qui va contenir l'url de l'explication de 
+	// la réponse
+	private String strURLExplication;
 	
 	/**
 	 * Constructeur de la classe Question qui initialise les propriétés de 
 	 * la question.
 	 * 
 	 * @param int codeQuestion : Le code de la question
+	 * @param String typeQuestion : Le type de la question
 	 * @param String urlQuestion : Le URL de la question
 	 * @param String reponse : La réponse à la question
+	 * @param String urlExplication : Le URL de l'explication de la réponse
 	 */
-	public Question(int codeQuestion, String urlQuestion, String reponse)
+	public Question(int codeQuestion, String typeQuestion, String urlQuestion, String reponse, String urlExplication)
 	{
 		// Définir les propriétés des questions
 		intCodeQuestion = codeQuestion;
+		objTypeQuestion = typeQuestion;
 		strURLQuestion = urlQuestion;
 		strReponse = reponse;
+		strURLExplication = urlExplication;
 	}
 	
 	/**
@@ -38,6 +51,16 @@ public class Question
 	public int obtenirCodeQuestion()
 	{
 		return intCodeQuestion;
+	}
+	
+	/**
+	 * Cette fonction retourne le type de la question.
+	 * 
+	 * @return String : Le type de la question
+	 */
+	public String obtenirTypeQuestion()
+	{
+		return objTypeQuestion;
 	}
 	
 	/**
@@ -58,6 +81,17 @@ public class Question
 	 */
 	public boolean reponseEstValide(String reponse)
 	{
-		return strReponse.equals(reponse);
+		return strReponse.toUpperCase().equals(reponse.toUpperCase());
+	}
+	
+	/**
+	 * Cette fonction retourne le URL de l'explication de la réponse à la 
+	 * question courante.
+	 * 
+	 * @return String : Le URL de l'explication de la réponse
+	 */
+	public String obtenirURLExplication()
+	{
+		return strURLExplication;
 	}
 }
