@@ -242,12 +242,12 @@ public class GestionnaireBD
 		if (listeQuestionsPosees.containsKey(new Integer(1)) == false)
 		{
 			// Retourne la question 1
-			objQuestionTrouvee = new Question(1, TypeQuestion.ChoixReponse, "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/Q-M0001-Q.swf", "A", "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/Q-M0001-R.swf");
+			objQuestionTrouvee = new Question(1, TypeQuestion.ChoixReponse, difficulte, "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/Q-M0001-Q.swf", "A", "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/Q-M0001-R.swf");
 		}
 		else if (listeQuestionsPosees.containsKey(new Integer(2)) == false)
 		{
 			// Retourne la question 2
-			objQuestionTrouvee = new Question(2, TypeQuestion.ChoixReponse, "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/Q-M0002-Q.swf", "B", "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/Q-M0002-R.swf");
+			objQuestionTrouvee = new Question(2, TypeQuestion.ChoixReponse, difficulte, "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/Q-M0002-Q.swf", "B", "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/Q-M0002-R.swf");
 		}
 		
 		return objQuestionTrouvee;

@@ -16,6 +16,9 @@ public class Question
 	// Déclaration d'une variable qui va garder le type de la question
 	private String objTypeQuestion;
 	
+	// Déclaration d'une variable qui va garder la difficulté de la question
+	private int intDifficulte;
+	
 	// Déclaration d'une variable qui va contenir la réponse à la question
 	private String strReponse;
 	
@@ -29,15 +32,17 @@ public class Question
 	 * 
 	 * @param int codeQuestion : Le code de la question
 	 * @param String typeQuestion : Le type de la question
+	 * @param int difficulte : La difficulte de la question
 	 * @param String urlQuestion : Le URL de la question
 	 * @param String reponse : La réponse à la question
 	 * @param String urlExplication : Le URL de l'explication de la réponse
 	 */
-	public Question(int codeQuestion, String typeQuestion, String urlQuestion, String reponse, String urlExplication)
+	public Question(int codeQuestion, String typeQuestion, int difficulte, String urlQuestion, String reponse, String urlExplication)
 	{
 		// Définir les propriétés des questions
 		intCodeQuestion = codeQuestion;
 		objTypeQuestion = typeQuestion;
+		intDifficulte = difficulte;
 		strURLQuestion = urlQuestion;
 		strReponse = reponse;
 		strURLExplication = urlExplication;
@@ -61,6 +66,16 @@ public class Question
 	public String obtenirTypeQuestion()
 	{
 		return objTypeQuestion;
+	}
+	
+	/**
+	 * Cette fonction retourne la difficulté de la question.
+	 * 
+	 * @return String : La difficulté de la question
+	 */
+	public int obtenirDifficulte()
+	{
+		return intDifficulte;
 	}
 	
 	/**

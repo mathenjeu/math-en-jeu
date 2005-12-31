@@ -1234,7 +1234,7 @@ System.out.println("Message recu : " + message);
 					{
 						// Trouver la question à poser selon la difficulté et 
 						// le type de case sur laquelle on veut se diriger
-						Question objQuestionAPoser = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoser(objNouvellePosition);
+						Question objQuestionAPoser = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoser(objNouvellePosition, true);
 						
 						// Il n'y a pas eu d'erreurs
 						objNoeudCommande.setAttribute("type", "Reponse");
@@ -1318,7 +1318,7 @@ System.out.println("Message recu : " + message);
 					{
 						// Vérifier si la réponse est bonne et obtenir un objet
 						// contenant toutes les informations à retourner
-						RetourVerifierReponseEtMettreAJourPlateauJeu objRetour = objJoueurHumain.obtenirPartieCourante().verifierReponseEtMettreAJourPlateauJeu(strReponse);
+						RetourVerifierReponseEtMettreAJourPlateauJeu objRetour = objJoueurHumain.obtenirPartieCourante().verifierReponseEtMettreAJourPlateauJeu(strReponse, true);
 						
 						// Il n'y a pas eu d'erreurs
 						objNoeudCommande.setAttribute("type", "Reponse");

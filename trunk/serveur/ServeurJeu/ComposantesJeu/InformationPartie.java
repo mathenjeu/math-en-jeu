@@ -3,6 +3,11 @@ package ServeurJeu.ComposantesJeu;
 import java.awt.Point;
 import java.util.TreeMap;
 import ServeurJeu.BD.GestionnaireBD;
+import ServeurJeu.ComposantesJeu.Cases.Case;
+import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
+import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 
 /**
@@ -12,6 +17,10 @@ public class InformationPartie
 {
 	// Déclaration d'une référence vers le gestionnaire de bases de données
 	private GestionnaireBD objGestionnaireBD;
+	
+	// Déclaration d'une référence vers un joueur humain correspondant à cet
+	// objet d'information de partie
+	private JoueurHumain objJoueurHumain;
 	
 	// Déclaration d'une référence vers la table courante
 	private Table objTable;
@@ -40,14 +49,20 @@ public class InformationPartie
 	// null dans cette variable
 	private Question objQuestionCourante;
 	
+	// Déclaration d'une liste d'objets utilisables ramassés par le joueur
+	private TreeMap lstObjetsUtilisablesRamasses;
+	
 	/**
 	 * Constructeur de la classe InformationPartie qui permet d'initialiser
 	 * les propriétés de la partie et de faire la référence vers la table.
 	 */
-	public InformationPartie(GestionnaireBD gestionnaireBD, Table tableCourante)
+	public InformationPartie(GestionnaireBD gestionnaireBD, JoueurHumain joueur, Table tableCourante)
 	{
 		// Faire la référence vers le gestionnaire de base de données
 		objGestionnaireBD = gestionnaireBD;
+		
+		// Faire la référence vers le joueur humain courant
+		objJoueurHumain = joueur;
 		
 	    // Définir les propriétés de l'objet InformationPartie
 	    intPointage = 0;
@@ -67,6 +82,9 @@ public class InformationPartie
 	    
 	    // Créer la liste des questions qui ont été répondues
 	    lstQuestionsRepondues = new TreeMap();
+	    
+	    // Créer la liste des objets utilisables qui ont été ramassés
+	    lstObjetsUtilisablesRamasses = new TreeMap();
 	}
 
 	/**
@@ -312,10 +330,12 @@ public class InformationPartie
 	 * et le type de question à poser.
 	 * 
 	 * @param Point nouvellePosition : La position où le joueur désire se déplacer
+	 * @param boolean doitGenererNoCommandeRetour : Permet de savoir si on doit 
+	 * 						générer un numéro de commande à retourner
 	 * @return Question : La question trouvée, s'il n'y a pas eu de déplacement,
 	 * 					  alors la question retournée est null
 	 */
-	public Question trouverQuestionAPoser(Point nouvellePosition)
+	public Question trouverQuestionAPoser(Point nouvellePosition, boolean doitGenererNoCommandeRetour)
 	{
 		// Déclarations de variables qui vont contenir la catégorie de question 
 		// à poser, la difficulté et la question à retourner
@@ -379,6 +399,16 @@ public class InformationPartie
 			}
 		}
 		
+		// Si on doit générer le numéro de commande de retour, alors
+		// on le génère, sinon on ne fait rien (ça devrait toujours
+		// être vrai, donc on le génère tout le temps)
+		if (doitGenererNoCommandeRetour == true)
+		{
+			// Générer un nouveau numéro de commande qui sera 
+		    // retourné au client
+		    objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();					    
+		}
+		
 		return objQuestionTrouvee;
 	}
 	
@@ -388,10 +418,12 @@ public class InformationPartie
 	 * du joueur est mis à jour.
 	 * 
 	 * @param String reponse : La réponse du joueur
+	 * @param boolean doitGenererNoCommandeRetour : Permet de savoir si on doit 
+	 * 						générer un numéro de commande à retourner
 	 * @return RetourVerifierReponseEtMettreAJourPlateauJeu : Un objet contenant 
 	 * 				toutes les valeurs à retourner au client
 	 */
-	public RetourVerifierReponseEtMettreAJourPlateauJeu verifierReponseEtMettreAJourPlateauJeu(String reponse)
+	public RetourVerifierReponseEtMettreAJourPlateauJeu verifierReponseEtMettreAJourPlateauJeu(String reponse, boolean doitGenererNoCommandeRetour)
 	{
 		// Déclaration de l'objet de retour 
 		RetourVerifierReponseEtMettreAJourPlateauJeu objRetour = null;
@@ -402,33 +434,109 @@ public class InformationPartie
 		// Le pointage est initialement celui courant
 		int intNouveauPointage = intPointage;
 		
+		// Déclaration d'une référence vers l'objet ramassé
+		ObjetUtilisable objObjetRamasse = null;
+		
+		// Déclaration d'une référence vers l'objet subi
+		ObjetUtilisable objObjetSubi = null;
+		
 		// Si la réponse est bonne, alors on modifie le plateau de jeu
 		if (bolReponseEstBonne == true)
 		{
-			// Calculer le nouveau pointage du joueur
+			// Faire la référence vers la case de destination
+			Case objCaseDestination = objTable.obtenirPlateauJeuCourant()[objPositionJoueurDesiree.x][objPositionJoueurDesiree.y];
 			
-			// TODO:
-			// Enlever les objets sur la nouvelle case
-			// Donner les objets au joueur
-			// Modifier le pointage du joueur
-			// 		-> Il a un pointage pour son déplacement
-			// 		-> Son pointage contient les pièces ramassées
+			// Calculer le nouveau pointage du joueur (on ajoute la difficulté 
+			// de la question au pointage)
+			intNouveauPointage += objQuestionCourante.obtenirDifficulte();
 			
-			// TODO: Il faut aussi traiter les objets que le joueur aurait subis
-			// 		 On enlève les objets subis de sur les cases
-
+			// Si la case de destination est une case de couleur, alors on 
+			// vérifie l'objet qu'il y a dessus et si c'est un objet utilisable, 
+			// alors on l'enlève et on le donne au joueur, sinon si c'est une 
+			// pièce on l'enlève et on met à jour le pointage du joueur, sinon 
+			// on ne fait rien
+			if (objCaseDestination instanceof CaseCouleur)
+			{
+				// Faire la référence vers la case de couleur
+				CaseCouleur objCaseCouleurDestination = (CaseCouleur) objCaseDestination;
+				
+				// S'il y a un objet sur la case, alors on va faire l'action 
+				// tout dépendant de l'objet (pièce, objet utilisable ou autre)
+				if (objCaseCouleurDestination.obtenirObjetCase() != null)
+				{
+					// Si l'objet est un objet utilisable, alors on l'ajoute à 
+					// la liste des objets utilisables du joueur
+					if (objCaseCouleurDestination.obtenirObjetCase() instanceof ObjetUtilisable)
+					{
+						// Faire la référence vers l'objet utilisable
+						ObjetUtilisable objObjetUtilisable = (ObjetUtilisable) objCaseCouleurDestination.obtenirObjetCase();
+						
+						// Garder la référence vers l'objet utilisable pour l'ajouter à l'objet de retour
+						objObjetRamasse = objObjetUtilisable;
+						
+						// Ajouter l'objet ramassé dans la liste des objets du joueur courant
+						lstObjetsUtilisablesRamasses.put(new Integer(objObjetUtilisable.obtenirId()), objObjetUtilisable);
+						
+						// Enlever l'objet de la case du plateau de jeu
+						objCaseCouleurDestination.definirObjetCase(null);
+					}
+					else if (objCaseCouleurDestination.obtenirObjetCase() instanceof Piece)
+					{
+						// Faire la référence vers la pièce
+						Piece objPiece = (Piece) objCaseCouleurDestination.obtenirObjetCase();
+						
+						// Mettre à jour le pointage du joueur
+						intNouveauPointage += objPiece.obtenirValeur();
+						
+						// Enlever la pièce de la case du plateau de jeu
+						objCaseCouleurDestination.definirObjetCase(null);
+						
+						// TODO: Il faut peut-être lancer un algo qui va placer 
+						// 		 les pièces sur le plateau de jeu s'il n'y en n'a
+						//		 plus
+					}
+				}
+				
+				// S'il y a un objet à subir sur la case, alors on va faire une
+				// certaine action (TODO: à compléter)
+				if (objCaseCouleurDestination.obtenirObjetArme() != null)
+				{
+					// Faire la référence vers l'objet utilisable
+					ObjetUtilisable objObjetUtilisable = (ObjetUtilisable) objCaseCouleurDestination.obtenirObjetArme();
+					
+					// Garder la référence vers l'objet utilisable à subir
+					objObjetSubi = objObjetUtilisable;
+					
+					//TODO: Faire une certaine action au joueur
+					
+					// Enlever l'objet subi de la case
+					objCaseCouleurDestination.definirObjetArme(null);
+				}
+			}
+			
 			// Créer l'objet de retour
 			objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, intNouveauPointage);
-			objRetour.definirObjetRamasse(null);
-			// Ajouter l'objet aux objets que le joueur possède
-			objRetour.definirObjetSubi(null);
+			objRetour.definirObjetRamasse(objObjetRamasse);
+			objRetour.definirObjetSubi(objObjetSubi);
 			objRetour.definirNouvellePosition(objPositionJoueurDesiree);
+			
+			//TODO: Il faut envoyer l'événement aux autres joueurs que ce joueur s'est déplacé
 		}
 		else
 		{
 			// Créer l'objet de retour
 			objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, intNouveauPointage);
 			objRetour.definirExplications(objQuestionCourante.obtenirURLExplication());
+		}
+		
+		// Si on doit générer le numéro de commande de retour, alors
+		// on le génère, sinon on ne fait rien (ça devrait toujours
+		// être vrai, donc on le génère tout le temps)
+		if (doitGenererNoCommandeRetour == true)
+		{
+			// Générer un nouveau numéro de commande qui sera 
+		    // retourné au client
+		    objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();					    
 		}
 
 		return objRetour;
