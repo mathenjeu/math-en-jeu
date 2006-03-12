@@ -311,6 +311,7 @@ public class GestionnaireBD
 		//TODO: Il y a des optimisations à faire ici concernant la structure
 		// 		des questions gardées en mémoire (on pourrait séparer les 
 		//		questions en catégories et en difficulté)
+		// 
 		
 		try
 		{

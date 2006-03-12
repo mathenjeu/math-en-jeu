@@ -1,8 +1,15 @@
 package ServeurJeu.ComposantesJeu;
 
 import java.awt.Point;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import ServeurJeu.BD.GestionnaireBD;
+import ServeurJeu.Evenements.EvenementJoueurDemarrePartie;
+import ServeurJeu.Evenements.EvenementJoueurDeplacePersonnage;
+import ServeurJeu.Evenements.GestionnaireEvenements;
+import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
@@ -17,6 +24,9 @@ public class InformationPartie
 {
 	// Déclaration d'une référence vers le gestionnaire de bases de données
 	private GestionnaireBD objGestionnaireBD;
+	
+//	 Déclaration d'une référence vers le gestionnaire d'evenements
+	private GestionnaireEvenements objGestionnaireEv;
 	
 	// Déclaration d'une référence vers un joueur humain correspondant à cet
 	// objet d'information de partie
@@ -56,10 +66,13 @@ public class InformationPartie
 	 * Constructeur de la classe InformationPartie qui permet d'initialiser
 	 * les propriétés de la partie et de faire la référence vers la table.
 	 */
-	public InformationPartie(GestionnaireBD gestionnaireBD, JoueurHumain joueur, Table tableCourante)
+	public InformationPartie( GestionnaireEvenements gestionnaireEv, GestionnaireBD gestionnaireBD, JoueurHumain joueur, Table tableCourante)
 	{
 		// Faire la référence vers le gestionnaire de base de données
 		objGestionnaireBD = gestionnaireBD;
+		
+//		 Faire la référence vers le gestionnaire d'evenements
+		objGestionnaireEv = gestionnaireEv;
 		
 		// Faire la référence vers le joueur humain courant
 		objJoueurHumain = joueur;
@@ -521,6 +534,14 @@ public class InformationPartie
 			objRetour.definirNouvellePosition(objPositionJoueurDesiree);
 			
 			//TODO: Il faut envoyer l'événement aux autres joueurs que ce joueur s'est déplacé
+			synchronized (objTable.obtenirListeJoueurs() )
+		    {
+				// Préparer l'événement de deplacement de personnage. 
+				// Cette fonction va passer les joueurs et créer un 
+				// InformationDestination pour chacun et ajouter l'événement 
+				// dans la file de gestion d'événements
+				preparerEvenementJoueurDeplacePersonnage();		    	
+		    }
 		}
 		else
 		{
@@ -540,5 +561,41 @@ public class InformationPartie
 		}
 
 		return objRetour;
+	}
+	
+	private void preparerEvenementJoueurDeplacePersonnage()
+	{
+	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
+	    // aux joueurs qu'un joueur démarré une partie
+		String nomUtilisateur = objJoueurHumain.obtenirNomUtilisateur();
+		EvenementJoueurDeplacePersonnage joueurDeplacePersonnage = new EvenementJoueurDeplacePersonnage( nomUtilisateur, objPositionJoueurDesiree );
+	    
+		// Créer un ensemble contenant tous les tuples de la liste 
+		// des joueurs de la table (chaque élément est un Map.Entry)
+		Set lstEnsembleJoueurs = objTable.obtenirListeJoueurs().entrySet();
+		
+		// Obtenir un itérateur pour l'ensemble contenant les joueurs
+		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		
+		// Passer tous les joueurs de la table et leur envoyer un événement
+		while (objIterateurListe.hasNext() == true)
+		{
+			// Créer une référence vers le joueur humain courant dans la liste
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			
+			// Si le nom d'utilisateur du joueur courant n'est pas celui
+			// qui vient de démarrer la partie, alors on peut envoyer un 
+			// événement à cet utilisateur
+			if (objJoueur.obtenirNomUtilisateur().equals(nomUtilisateur) == false)
+			{
+			    // Obtenir un numéro de commande pour le joueur courant, créer 
+			    // un InformationDestination et l'ajouter à l'événement
+				joueurDeplacePersonnage.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
+			            																	 objJoueur.obtenirProtocoleJoueur()));
+			}
+		}
+		
+		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
+		objGestionnaireEv.ajouterEvenement(joueurDeplacePersonnage);
 	}
 }

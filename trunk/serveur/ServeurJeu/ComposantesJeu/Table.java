@@ -158,7 +158,7 @@ public class Table
 			// Le joueur est maintenant entré dans la table courante (il faut
 			// créer un objet InformationPartie qui va pointer sur la table
 			// courante)
-			joueur.definirPartieCourante(new InformationPartie(objGestionnaireBD, joueur, this));
+			joueur.definirPartieCourante(new InformationPartie(objGestionnaireEvenements, objGestionnaireBD, joueur, this));
 			
 			// Si on doit générer le numéro de commande de retour, alors
 			// on le génère, sinon on ne fait rien
