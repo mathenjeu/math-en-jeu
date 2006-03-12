@@ -27,6 +27,9 @@ public class JoueurHumain extends Joueur
 	// Cette variable va contenir le nom de famille du joueur
 	private String strNomFamille;
 	
+	//Cette variable défini si un jouer peut creer une salle
+	private boolean bolPeutCreerSalle;
+	
 	// Déclaration d'une référence vers la salle dans laquelle le joueur se 
 	// trouve (null si le joueur n'est dans aucune salle)
 	private Salle objSalleCourante;
@@ -65,6 +68,7 @@ public class JoueurHumain extends Joueur
 		// Initialiser les caractéristiques du joueur
 		strPrenom = "";
 		strNomFamille = "";
+		bolPeutCreerSalle = false;
 		
 		// Au début, le joueur n'est dans aucune salle ni table
 		objSalleCourante = null;
@@ -124,6 +128,16 @@ public class JoueurHumain extends Joueur
 	}
 	
 	/**
+	 * Cette fonction permet de retourner si un joueur peut creer une salle.
+	 * 
+	 * @return boolean : peut ou peut pas creer une salle
+	 */
+	public boolean obtenirPeutCreerSalle()
+	{
+		return bolPeutCreerSalle;
+	}
+	
+	/**
 	 * Cette méthode permet de définir le prénom du joueur.
 	 * 
 	 * @param String prenom : Le prénom du joueur à définir
@@ -151,6 +165,16 @@ public class JoueurHumain extends Joueur
 	public void definirNomFamille(String nomFamille)
 	{
 		strNomFamille = nomFamille;
+	}
+	
+	/**
+	 * Cette méthode permet de définir si un joueur peut creer une salle.
+	 * 
+	 * @param boolean peutCreerSalle : peut ou peux pas creer salle
+	 */
+	public void definirPeutCreerSalles( boolean peutCreerSalle)
+	{
+		bolPeutCreerSalle = peutCreerSalle;
 	}
 	
 	/**

@@ -1,6 +1,7 @@
 package ClassesUtilitaires;
 
 import java.util.Random;
+import java.util.Date;
 
 /**
  * @author Jean-François Brind'Amour
@@ -125,5 +126,13 @@ public final class UtilitaireNombres
         rndNormal = (z * stDev) + moyenne;
 
      return (int) Math.round(rndNormal);   
+    }
+    
+    public static int genererNbAleatoire( int max )
+    {
+    	Date d = new Date();
+    	long seed = d.getTime();
+    	Random objRandom = new Random( seed );
+    	return objRandom.nextInt( max );
     }
 }

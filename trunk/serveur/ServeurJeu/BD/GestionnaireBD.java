@@ -5,10 +5,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 import java.util.TreeMap;
+import java.sql.*;
+import com.mysql.jdbc.Driver;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Salle;
 import ClassesUtilitaires.GenerateurPartie;
+import ClassesUtilitaires.UtilitaireNombres;
 import Enumerations.Visibilite;
 import Enumerations.TypeQuestion;
 import ServeurJeu.ComposantesJeu.Cases.Case;
@@ -33,6 +36,21 @@ public class GestionnaireBD
 	// Déclaration d'une référence vers le contrôleur de jeu
 	private ControleurJeu objControleurJeu;
 	
+//	 Objet Connection nécessaire pour le contact avec le serveur MySQL
+	private Connection connexion;
+	
+	// Objet Statement nécessaire pour envoyer une requête au serveur MySQL
+	private Statement requete;
+	
+	// Nom de l'hôte pour la connexion à la base de données
+	static private String nomHote = "jdbc:mysql://localhost/smac";
+	
+	// Nom de l'utilisateur pour la connexion à la base de données
+	static private String nomUtilisateur = "root";//"smac";
+	
+	// Mot de passe pour la connexion à la base de données
+	static private String motDePasse = "";//"smac/pi";
+	
 	/**
 	 * Constructeur de la classe GestionnaireBD qui permet de garder la 
 	 * référence vers le contrôleur de jeu
@@ -43,6 +61,47 @@ public class GestionnaireBD
 		
 		// Garder la référence vers le contrôleur de jeu
 		objControleurJeu = controleur;
+		
+		//Création du driver JDBC
+		try
+		{
+			Class.forName("org.gjt.mm.mysql.Driver");
+		}
+		catch (Exception e)
+		{
+			// Une erreur est survenue lors de l'instanciation du pilote
+		    System.out.println("Il est impossible d'instancier le pilote JDBC.");
+		    System.out.println("La communication avec la base de données sera impossible.");
+		    return;			
+		}
+		
+		// Établissement de la connexion avec la base de données
+		try
+		{
+			connexion = DriverManager.getConnection(GestionnaireBD.nomHote, GestionnaireBD.nomUtilisateur, GestionnaireBD.motDePasse);
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de la connexion à la base de données
+		    System.out.println("Une erreur est survenue lors de la connexion à la base de données.");
+		    System.out.println("La trace donnée par le système est la suivante:");
+		    e.printStackTrace();
+		    return;			
+		}
+		
+		// Création de l'objet "requête"
+		try
+		{
+			requete = connexion.createStatement();
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de la création d'une requête
+		    System.out.println("Une erreur est survenue lors de la création d'une requête.");
+		    System.out.println("La trace donnée par le système est la suivante:");
+		    e.printStackTrace();
+		    return;			
+		}
 	}
 	
 	/**
@@ -57,16 +116,18 @@ public class GestionnaireBD
 	 */
 	public boolean joueurExiste(String nomUtilisateur, String motDePasse)
 	{
-		if ((nomUtilisateur.equals("Jeff") && motDePasse.equals("jeff")) ||
-			(nomUtilisateur.equals("Chriss") && motDePasse.equals("ti-chriss")) ||
-			(nomUtilisateur.equals("Simon") && motDePasse.equals("si")) ||
-			(nomUtilisateur.equals("Sylvain") && motDePasse.equals("halle")))
+		try
 		{
-			return true;
+			ResultSet rs = requete.executeQuery("SELECT * FROM Joueur WHERE alias = '" + nomUtilisateur + "' AND motDePasse = '" + motDePasse + "';");
+			return rs.next();
 		}
-		else
+		catch (SQLException e)
 		{
-			return false;
+			// Une erreur est survenue lors de l'exécution de la requête
+		    System.out.println("Une erreur est survenue lors de l'exécution de la requête.");
+		    System.out.println("La trace donnée par le système est la suivante:");
+		    e.printStackTrace();
+		    return false;			
 		}
 	}
 	
@@ -79,25 +140,27 @@ public class GestionnaireBD
 	 */
 	public void remplirInformationsJoueur(JoueurHumain joueur)
 	{
-		if (joueur.obtenirNomUtilisateur().equals("Jeff"))
+		try
 		{
-			joueur.definirPrenom("Jean-François");
-			joueur.definirNomFamille("Brind'Amour");
+			ResultSet rs = requete.executeQuery("SELECT prenom, nom, peutCreerSalles FROM Joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+			if (rs.next())
+			{
+				if (rs.getInt("peutCreerSalles") != 0)
+				{
+					joueur.definirPeutCreerSalles(true);
+				}
+				String prenom = rs.getString("prenom");
+				String nom = rs.getString("nom");
+				joueur.definirPrenom(prenom);
+				joueur.definirNomFamille(nom);
+			}
 		}
-		else if (joueur.obtenirNomUtilisateur().equals("Sylvain"))
+		catch (SQLException e)
 		{
-			joueur.definirPrenom("Sylvain");
-			joueur.definirNomFamille("Hallé");
-		}
-		else if (joueur.obtenirNomUtilisateur().equals("Christian"))
-		{
-			joueur.definirPrenom("Christian");
-			joueur.definirNomFamille("Dompierre");
-		}
-		else if (joueur.obtenirNomUtilisateur().equals("Simon"))
-		{
-			joueur.definirPrenom("Simon");
-			joueur.definirNomFamille("Paquette");
+			// Une erreur est survenue lors de l'exécution de la requête
+		    System.out.println("Une erreur est survenue lors de l'exécution de la requête.");
+		    System.out.println("La trace donnée par le système est la suivante:");
+		    e.printStackTrace();			
 		}
 	}
 
@@ -211,8 +274,10 @@ public class GestionnaireBD
 		// Déclaration d'une question et de la requête SQL pour aller
 		// chercher les questions dans la BD
 		Question objQuestionTrouvee = null;
-		String strRequeteSQL = "SELECT * FROM Questions WHERE categorie=" + categorieQuestion 
-								+ " AND difficulte=" + difficulte; 
+		/*String strRequeteSQL = "SELECT * FROM question WHERE categorie=" + categorieQuestion 
+								+ " AND difficulte=" + difficulte; */
+		
+		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion NOT IN("; //TODO pour les test
 		
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des questions posées (chaque élément est un Map.Entry)
@@ -223,31 +288,64 @@ public class GestionnaireBD
 
 		// Passer toutes les questions et ajouter ce qu'il faut dans la requête
 		// SQL
+		String codes = null;
 		while (objIterateurListe.hasNext() == true)
 		{
 			// Créer une référence vers le joueur humain courant dans la liste
 			int intCodeQuestion = ((Integer)(((Map.Entry)(objIterateurListe.next())).getKey())).intValue();
-			
 			// Ajouter ce qu'il faut dans la clause where de la requête SQL
-			strRequeteSQL += " AND (NOT (codeQuestion=" + intCodeQuestion + "))";
+			if( codes == null )
+			{
+				codes = "" + intCodeQuestion;
+			}
+			else
+			{
+				codes += "," + intCodeQuestion;
+			}
+			
 		}
+		strRequeteSQL += codes + ")";
 		
-		//TODO: À modifier pour aller pointe sur la BD selon la requête construite
-		//TODO: Il faut aussi faire en sorte que les questions obtenues par la 
-		//      requête soit triées de façon aléatoire, ou en prendre une dans 
-		//		le tas de façon aléatoire
 		//TODO: Il y a des optimisations à faire ici concernant la structure
 		// 		des questions gardées en mémoire (on pourrait séparer les 
 		//		questions en catégories et en difficulté)
-		if (listeQuestionsPosees.containsKey(new Integer(1)) == false)
+		
+		try
 		{
-			// Retourne la question 1
-			objQuestionTrouvee = new Question(1, TypeQuestion.ChoixReponse, difficulte, "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/Q-M0001-Q.swf", "A", "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/Q-M0001-R.swf");
+			ResultSet rs = requete.executeQuery( strRequeteSQL );
+			int intLength = 0;
+			String path = "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/";
+			Vector listeQuestions = new Vector();
+			while(rs.next())
+			{
+				int codeQuestion = rs.getInt("cleQuestion");
+				String typeQuestion = TypeQuestion.ChoixReponse; //TODO aller chercher code dans bd
+				String question = rs.getString( "FichierFlashQuestion" );
+				String reponse = rs.getString("bonneReponse");
+				String explication = rs.getString("FichierFlashReponse");
+				listeQuestions.addElement( new Question( codeQuestion, typeQuestion, difficulte, path + question, reponse, path + explication ));
+				intLength++;
+			}
+			if( intLength > 0 )
+			{
+				int intRandom = UtilitaireNombres.genererNbAleatoire( intLength );
+				objQuestionTrouvee = (Question)listeQuestions.elementAt( intRandom );
+			}
+			
 		}
-		else if (listeQuestionsPosees.containsKey(new Integer(2)) == false)
+		catch (SQLException e)
 		{
-			// Retourne la question 2
-			objQuestionTrouvee = new Question(2, TypeQuestion.ChoixReponse, difficulte, "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/Q-M0002-Q.swf", "B", "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/Q-M0002-R.swf");
+			// Une erreur est survenue lors de l'exécution de la requête
+		    System.out.println("Une erreur est survenue lors de l'exécution de la requête.");
+		    System.out.println("La trace donnée par le système est la suivante:");
+		    e.printStackTrace();			
+		}
+		catch( RuntimeException e)
+		{
+			//Une erreur est survenue lors de la recherche de la prochaine question
+		    System.out.println("Une erreur est survenue lors de la recherche de la prochaine question.");
+			System.out.println("La trace donnée par le système est la suivante:");
+		    e.printStackTrace();
 		}
 		
 		return objQuestionTrouvee;
@@ -259,6 +357,17 @@ public class GestionnaireBD
 	 */
 	public void arreterGestionnaireBD()
 	{
-		// TODO Fermer la connexion de BD et peut-être d'autres choses
+		// TODO faire peut-être d'autres choses
+		try
+		{
+			connexion.close();
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de la fermeture de la connexion
+		    System.out.println("Une erreur est survenue lors de la fermeture de la connexion.");
+		    System.out.println("La trace donnée par le système est la suivante:");
+		    e.printStackTrace();			
+		}
 	}
 }
