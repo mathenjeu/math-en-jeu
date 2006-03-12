@@ -46,10 +46,12 @@ public class GestionnaireBD
 	static private String nomHote = "jdbc:mysql://localhost/smac";
 	
 	// Nom de l'utilisateur pour la connexion à la base de données
-	static private String nomUtilisateur = "root";//"smac";
+	static private String nomUtilisateur = "smac";
 	
 	// Mot de passe pour la connexion à la base de données
-	static private String motDePasse = "";//"smac/pi";
+	static private String motDePasse = "smac/pi";
+	
+	static private String urlQuestionReponse = "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/";
 	
 	/**
 	 * Constructeur de la classe GestionnaireBD qui permet de garder la 
@@ -314,7 +316,6 @@ public class GestionnaireBD
 		{
 			ResultSet rs = requete.executeQuery( strRequeteSQL );
 			int intLength = 0;
-			String path = "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/";
 			Vector listeQuestions = new Vector();
 			while(rs.next())
 			{
@@ -323,7 +324,7 @@ public class GestionnaireBD
 				String question = rs.getString( "FichierFlashQuestion" );
 				String reponse = rs.getString("bonneReponse");
 				String explication = rs.getString("FichierFlashReponse");
-				listeQuestions.addElement( new Question( codeQuestion, typeQuestion, difficulte, path + question, reponse, path + explication ));
+				listeQuestions.addElement( new Question( codeQuestion, typeQuestion, difficulte, urlQuestionReponse + question, reponse, urlQuestionReponse + explication ));
 				intLength++;
 			}
 			if( intLength > 0 )
