@@ -30,6 +30,8 @@ import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
+import ServeurJeu.Temps.GestionnaireTemps;
+import ServeurJeu.Temps.TacheSynchroniser;
 
 /**
  * @author Jean-François Brind'Amour
@@ -72,6 +74,9 @@ public class ProtocoleJoueur implements Runnable
 	// retourner au client ayant fait une requête au serveur
 	private int intNumeroCommandeReponse;
 	
+	private GestionnaireTemps objGestionnaireTemps;
+	private TacheSynchroniser objTacheSynchroniser;
+	
 	/**
 	 * Constructeur de la classe ProtocoleJoueur qui permet de garder une 
 	 * référence vers le contrôleur de jeu, vers le gestionnaire des 
@@ -85,7 +90,8 @@ public class ProtocoleJoueur implements Runnable
 	 * @param Socket socketJoueur : Le canal de communication associé au joueur
 	 */
 	public ProtocoleJoueur(ControleurJeu controleur, GestionnaireCommunication communication, 
-						   VerificateurConnexions verificateur, Socket socketJoueur) 
+						   VerificateurConnexions verificateur, Socket socketJoueur,
+						   GestionnaireTemps gestionnaireTemps, TacheSynchroniser tacheSynchroniser ) 
 	{
 		super();
 		
@@ -98,6 +104,8 @@ public class ProtocoleJoueur implements Runnable
 		bolStopThread = false;
 		intCompteurCommande = 0;
 		intNumeroCommandeReponse = -1;
+		objGestionnaireTemps = gestionnaireTemps;
+		objTacheSynchroniser = tacheSynchroniser;
 		
 		System.out.println("Le client " + socketJoueur.getInetAddress().toString() + " est connecte");
 		
@@ -937,7 +945,8 @@ System.out.println("Message recu : " + message);
 						// Appeler la méthode permettant de créer la nouvelle
 						// table et d'entrer le joueur dans cette table
 						int intNoTable = objJoueurHumain.obtenirSalleCourante().creerTable(objJoueurHumain, 
-									intTempsPartie, true);
+									intTempsPartie, true,
+									objGestionnaireTemps, objTacheSynchroniser);
 						
 						// Créer le noeud paramètre du numéro de la table
 						Element objNoeudParametreNoTable = objDocumentXMLSortie.createElement("parametre"); 

@@ -15,6 +15,8 @@ import ServeurJeu.Evenements.EvenementNouvelleTable;
 import ServeurJeu.Evenements.EvenementTableDetruite;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
+import ServeurJeu.Temps.GestionnaireTemps;
+import ServeurJeu.Temps.TacheSynchroniser;
 
 //TODO: Le mot de passe d'une salle ne doit pas être modifiée pendant le jeu,
 //      sinon il va falloir ajouter des synchronisations à chaque fois qu'on
@@ -262,7 +264,7 @@ public class Salle
 	 * 				joueurs de la salle et leur envoyer un événement. La
 	 * 				fonction entrerTable est synchronisée automatiquement.
 	 */
-	public int creerTable(JoueurHumain joueur, int tempsPartie, boolean doitGenererNoCommandeRetour)
+	public int creerTable(JoueurHumain joueur, int tempsPartie, boolean doitGenererNoCommandeRetour, GestionnaireTemps gestionnaireTemps, TacheSynchroniser tacheSynchroniser )
 	{
 		// Déclaration d'une variable qui va contenir le numéro de la table
 		int intNoTable;
@@ -272,8 +274,11 @@ public class Salle
 	    synchronized (lstTables)
 	    {
 	    	// Créer une nouvelle table en passant les paramètres appropriés
-	    	Table objTable = new Table(objGestionnaireEvenements, objGestionnaireBD, this, genererNoTable(), joueur.obtenirNomUtilisateur(), tempsPartie, objRegles);
-	    	
+	    	Table objTable = new Table(objGestionnaireEvenements, objGestionnaireBD, this, 
+	    								genererNoTable(), joueur.obtenirNomUtilisateur(), 
+										tempsPartie, objRegles,
+										gestionnaireTemps, tacheSynchroniser );
+	    	objTable.creation();
 	    	// Ajouter la table dans la liste des tables
 	    	lstTables.put(new Integer(objTable.obtenirNoTable()), objTable);
 	    	
@@ -405,6 +410,11 @@ public class Salle
 	 */
 	public void detruireTable(Table tableADetruire)
 	{
+		Table t = (Table)lstTables.get( new Integer(tableADetruire.obtenirNoTable() ) );
+		if( t != null )
+		{
+			t.destruction();
+		}
 		// Enlever la table de la liste des tables de cette salle
 		lstTables.remove(new Integer(tableADetruire.obtenirNoTable()));
 		

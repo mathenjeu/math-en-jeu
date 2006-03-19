@@ -56,7 +56,7 @@ public abstract class Evenement
 	        }
 	        catch (IOException ioe)
 	        {
-				System.out.println("L'evenement courant n'a n'a pas pu etre envoye");
+				System.out.println("L'evenement courant n'a pas pu etre envoye");
 	        }
 	    }
 	}

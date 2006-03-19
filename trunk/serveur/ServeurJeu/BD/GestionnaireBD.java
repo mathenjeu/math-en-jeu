@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.TreeMap;
 import java.sql.*;
-import com.mysql.jdbc.Driver;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Salle;
@@ -67,13 +66,15 @@ public class GestionnaireBD
 		//Création du driver JDBC
 		try
 		{
-			Class.forName("org.gjt.mm.mysql.Driver");
+			Class.forName("com.mysql.jdbc.Driver");
+			//Class.forName("org.gjt.mm.mysql.Driver");
 		}
 		catch (Exception e)
 		{
 			// Une erreur est survenue lors de l'instanciation du pilote
 		    System.out.println("Il est impossible d'instancier le pilote JDBC.");
 		    System.out.println("La communication avec la base de données sera impossible.");
+		    e.printStackTrace();
 		    return;			
 		}
 		
@@ -256,6 +257,8 @@ public class GestionnaireBD
 	    
 	    objControleurJeu.ajouterNouvelleSalle(objSalle);
 	    objControleurJeu.ajouterNouvelleSalle(objSalle2);
+	    
+	    //TODO : charger salles de la bd, ou permettre a un joueur de creer une salle
 	}
 	
 	/**
@@ -279,7 +282,7 @@ public class GestionnaireBD
 		/*String strRequeteSQL = "SELECT * FROM question WHERE categorie=" + categorieQuestion 
 								+ " AND difficulte=" + difficulte; */
 		
-		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion NOT IN("; //TODO pour les test
+		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion >= 0 and cleQuestion <= 92 and cleQuestion NOT IN("; //TODO pour les test
 		
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des questions posées (chaque élément est un Map.Entry)
@@ -351,6 +354,36 @@ public class GestionnaireBD
 		}
 		
 		return objQuestionTrouvee;
+	}
+	
+	public void mettreAJourJoueur( JoueurHumain joueur, int tempsTotal )
+	{
+		try
+		{
+			ResultSet rs = requete.executeQuery("SELECT partiesCompletes, meilleurPointage, tempsPartie FROM Joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+			if (rs.next())
+			{
+				int partiesCompletes = rs.getInt( "partiesCompletes" ) + 1;
+				int meilleurPointage = rs.getInt( "meilleurPointage" );
+				int pointageActuel = joueur.obtenirPartieCourante().obtenirPointage();
+				if( meilleurPointage < pointageActuel )
+				{
+					meilleurPointage = pointageActuel;
+				}
+				
+				//TODO : tempsPartie
+				
+				//mise-a-jour
+				int result = requete.executeUpdate( "UPDATE joueur SET partiesCompletes=" + partiesCompletes + ",meilleurPointage=" + meilleurPointage + " WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+			}
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exécution de la requête
+		    System.out.println("Une erreur est survenue lors de l'exécution de la requête.");
+		    System.out.println("La trace donnée par le système est la suivante:");
+		    e.printStackTrace();			
+		}
 	}
 	
 	/**

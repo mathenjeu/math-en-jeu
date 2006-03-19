@@ -12,7 +12,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
+import java.util.TreeMap;
+import java.util.Iterator;
+
 import ClassesUtilitaires.UtilitaireXML;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 
 /**
  * @author Marc
@@ -21,6 +25,14 @@ import ClassesUtilitaires.UtilitaireXML;
  */
 public class EvenementPartieTerminee  extends Evenement
 {
+	private TreeMap lstJoueurs;
+	
+	public EvenementPartieTerminee( TreeMap joueurs )
+	{
+		super();
+		lstJoueurs = joueurs;
+	}
+	
 	protected String genererCodeXML(InformationDestination information)
 	{
 	    // Déclaration d'une variable qui va contenir le code XML à retourner
@@ -35,9 +47,6 @@ public class EvenementPartieTerminee  extends Evenement
 			// Créer le noeud de commande à retourner
 			Element objNoeudCommande = objDocumentXML.createElement("commande");
 			
-			// Créer le noeud du paramètre
-			Element objNoeudParametre = objDocumentXML.createElement("parametre");
-			
 			// Créer un noeud contenant le nom d'utilisateur du noeud paramètre
 			
 			// Définir les attributs du noeud de commande
@@ -45,13 +54,33 @@ public class EvenementPartieTerminee  extends Evenement
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "PartieTerminee");
 			
-			// On ajoute un attribut type qui va contenir le type
-			// du paramètre
-			
-			// Ajouter le noeud texte au noeud du paramètre
-			
-			// Ajouter le noeud paramètre au noeud de commande
-			objNoeudCommande.appendChild(objNoeudParametre);
+			Iterator it = lstJoueurs.values().iterator();
+			while( it.hasNext() )
+			{
+				JoueurHumain joueur = (JoueurHumain)it.next();
+				String nomUtilisateur = joueur.obtenirNomUtilisateur();
+				int pointage = joueur.obtenirPartieCourante().obtenirPointage();
+				
+//				 Créer le noeud du paramètre
+				Element objNoeudParametre = objDocumentXML.createElement("parametre");
+				
+				// On ajoute un attribut type qui va contenir le type
+				// du paramètre
+				objNoeudParametre.setAttribute("type", "StatistiqueJoueur");
+				
+				Element objNoeudNom = objDocumentXML.createElement("utilisateur");
+				Text objNoeudTexteNom = objDocumentXML.createTextNode( nomUtilisateur );
+				objNoeudNom.appendChild( objNoeudTexteNom );
+				
+				Element objNoeudPoint = objDocumentXML.createElement("pointage");
+				Text objNoeudTextePoint = objDocumentXML.createTextNode( new Integer( pointage).toString() );
+				objNoeudPoint.appendChild( objNoeudTextePoint );
+				
+				objNoeudParametre.appendChild( objNoeudNom );
+				objNoeudParametre.appendChild( objNoeudPoint );
+				// Ajouter le noeud paramètre au noeud de commande
+				objNoeudCommande.appendChild(objNoeudParametre);
+			}
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
 			objDocumentXML.appendChild(objNoeudCommande);

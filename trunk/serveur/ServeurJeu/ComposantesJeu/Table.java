@@ -20,11 +20,14 @@ import ServeurJeu.Evenements.InformationDestination;
 import ClassesUtilitaires.GenerateurPartie;
 import Enumerations.RetourFonctions.ResultatDemarrerPartie;
 import ServeurJeu.ComposantesJeu.Cases.Case;
+import ServeurJeu.Temps.*;
+import ServeurJeu.Evenements.EvenementSynchroniserTemps;
+import ServeurJeu.Evenements.EvenementPartieTerminee;
 
 /**
  * @author Jean-François Brind'Amour
  */
-public class Table 
+public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 {
 	// Déclaration d'une référence vers le gestionnaire d'événements
 	private GestionnaireEvenements objGestionnaireEvenements;
@@ -52,7 +55,7 @@ public class Table
 	
 	// Déclaration d'une variable qui va garder le temps restant (au départ 
 	// il vaut la même chose que intTempsTotal)
-	private int intTempsRestant;
+	//private int intTempsRestant;
 	
 	// Cet objet est une liste des joueurs qui sont présentement sur cette table
 	private TreeMap lstJoueurs;
@@ -70,6 +73,11 @@ public class Table
 	
 	// Cet objet permet de déterminer les règles de jeu pour cette table
 	private Regles objRegles;
+	
+	private GestionnaireTemps objGestionnaireTemps;
+	private TacheSynchroniser objTacheSynchroniser;
+	private Minuterie objMinuterie;
+	
 
 	/**
 	 * Constructeur de la classe Table qui permet d'initialiser les membres 
@@ -80,12 +88,13 @@ public class Table
 	 * @param int noTable : Le numéro de la table
 	 * @param String nomUtilisateurCreateur : Le nom d'utilisateur du créateur
 	 * 										  de la table
-	 * @param int tempsPartie : Le temps de la partie
+	 * @param int tempsPartie : Le temps de la partie en minute
 	 * @param Regles reglesTable : Les règles pour une partie sur cette table
 	 */
 	public Table(GestionnaireEvenements gestionnaireEv, GestionnaireBD gestionnaireBD, 
 				 Salle salleParente, int noTable, String nomUtilisateurCreateur, 
-				 int tempsPartie, Regles reglesTable) 
+				 int tempsPartie, Regles reglesTable,
+				 GestionnaireTemps gestionnaireTemps, TacheSynchroniser tacheSynchroniser ) 
 	{
 		super();
 		
@@ -101,7 +110,7 @@ public class Table
 		intNoTable = noTable;
 		strNomUtilisateurCreateur = nomUtilisateurCreateur;
 		intTempsTotal = tempsPartie;
-		intTempsRestant = tempsPartie;
+	//	intTempsRestant = tempsPartie;
 		
 		// Créer une nouvelle liste de joueurs
 		lstJoueurs = new TreeMap();
@@ -115,6 +124,19 @@ public class Table
 		
 		// Initialiser le plateau de jeu à null
 		objttPlateauJeu = null;
+		
+		objGestionnaireTemps = gestionnaireTemps;
+		objTacheSynchroniser = tacheSynchroniser;
+	}
+	
+	public void creation()
+	{
+
+	}
+	
+	public void destruction()
+	{
+		arreterPartie();
 	}
 	
 	/**
@@ -245,6 +267,8 @@ public class Table
 			    // détruire la table
 			    if (lstJoueurs.size() == 0)
 			    {
+			    	//Arreter le gestionnaire de temps
+			    	//objGestionnaireTemps.arreterGestionnaireTemps();
 			    	// Détruire la table courante et envoyer les événements 
 			    	// appropriés
 			    	objSalle.detruireTable(this);
@@ -400,12 +424,41 @@ public class Table
 						// InformationDestination pour chacun et ajouter l'événement 
 						// dans la file de gestion d'événements
 						preparerEvenementPartieDemarree(lstPositionsJoueurs);
-				    }					
+				    }
+				    
+				    objTacheSynchroniser.ajouterObservateur( this );
+				    objMinuterie = new Minuterie( intTempsTotal * 60, 1 );
+				    objMinuterie.ajouterObservateur( this );
+				    objGestionnaireTemps.ajouterTache( objMinuterie, 1 );
 				}
 	    	}
 		}
 	    
 	    return strResultatDemarrerPartie;
+	}
+	
+	public void arreterPartie()
+	{
+		if( bolEstCommencee )
+		{
+			bolEstCommencee = false;
+			objTacheSynchroniser.enleverObservateur( this );
+			objGestionnaireTemps.enleverTache( objMinuterie );
+			objMinuterie = null;
+			synchronized (lstJoueurs)
+		    {
+				preparerEvenementPartieTerminee();
+				Iterator it = lstJoueurs.values().iterator();
+				while( it.hasNext() )
+				{
+					//Mettre a jour les donnees des joueurs
+					//TODO : si partie pas completee???
+					JoueurHumain joueur = (JoueurHumain)it.next();
+					objGestionnaireBD.mettreAJourJoueur( joueur, intTempsTotal );
+					//TODO le temps total si partie pas terminée ???
+				}
+		    }
+		}
 	}
 	
 	/**
@@ -754,5 +807,90 @@ public class Table
 		// Ajouter les nouveaux événements créés dans la liste d'événements 
 		// à traiter
 		objGestionnaireEvenements.ajouterEvenement(partieDemarree);
+	}
+	
+	private void preparerEvenementSynchroniser()
+	{
+		//Créer un nouvel événement qui va permettre d'envoyer l'événement 
+	    // aux joueurs de la table
+	    EvenementSynchroniserTemps synchroniser = new EvenementSynchroniserTemps( objMinuterie.obtenirTempsActuel() );
+	    
+		// Créer un ensemble contenant tous les tuples de la liste 
+		// des joueurs de la table (chaque élément est un Map.Entry)
+		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		
+		// Obtenir un itérateur pour l'ensemble contenant les joueurs
+		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		
+		// Passer tous les joueurs de la salle et leur envoyer un événement
+		while (objIterateurListe.hasNext() == true)
+		{
+			// Créer une référence vers le joueur humain courant dans la liste
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+
+		    // Obtenir un numéro de commande pour le joueur courant, créer 
+		    // un InformationDestination et l'ajouter à l'événement de la 
+			// table
+			synchroniser.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
+			            										objJoueur.obtenirProtocoleJoueur()));				
+		}
+		
+		// Ajouter les nouveaux événements créés dans la liste d'événements 
+		// à traiter
+		objGestionnaireEvenements.ajouterEvenement(synchroniser);
+	}
+	
+	private void preparerEvenementPartieTerminee()
+	{
+//		Créer un nouvel événement qui va permettre d'envoyer l'événement 
+	    // aux joueurs de la table
+	    EvenementPartieTerminee partieTerminee = new EvenementPartieTerminee( lstJoueurs );
+	    
+		// Créer un ensemble contenant tous les tuples de la liste 
+		// des joueurs de la table (chaque élément est un Map.Entry)
+		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		
+		// Obtenir un itérateur pour l'ensemble contenant les joueurs
+		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		
+		// Passer tous les joueurs de la salle et leur envoyer un événement
+		while (objIterateurListe.hasNext() == true)
+		{
+			// Créer une référence vers le joueur humain courant dans la liste
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+
+		    // Obtenir un numéro de commande pour le joueur courant, créer 
+		    // un InformationDestination et l'ajouter à l'événement de la 
+			// table
+			partieTerminee.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
+			            										objJoueur.obtenirProtocoleJoueur()));				
+		}
+		
+		// Ajouter les nouveaux événements créés dans la liste d'événements 
+		// à traiter
+		objGestionnaireEvenements.ajouterEvenement(partieTerminee);
+	}
+	
+	public void tempsEcoule()
+	{
+		arreterPartie();
+	}
+
+	public int getObservateurMinuterieId()
+	{
+		return obtenirNoTable();
+	}
+	
+	public void synchronise()
+	{
+		synchronized (lstJoueurs)
+	    {
+			preparerEvenementSynchroniser();
+	    }
+	}
+	
+	public int getObservateurSynchroniserId()
+	{
+		return obtenirNoTable();
 	}
 }

@@ -14,6 +14,8 @@ import ServeurJeu.Evenements.EvenementJoueurDeconnecte;
 import ServeurJeu.Evenements.EvenementJoueurConnecte;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
+import ServeurJeu.Temps.GestionnaireTemps;
+import ServeurJeu.Temps.TacheSynchroniser;
 
 //TODO: Si un jour on doit modifier le nom d'utilisateur d'un joueur pendant 
 //      le jeu, il va falloir ajouter des synchronisation à chaque fois qu'on 
@@ -52,6 +54,12 @@ public class ControleurJeu
 	// serveur aux clients (l'événement ping n'est pas géré par ce gestionnaire)
 	private GestionnaireEvenements objGestionnaireEvenements;
 	
+	private TacheSynchroniser objTacheSynchroniser;
+	
+	private GestionnaireTemps objGestionnaireTemps;
+	
+	static private int intStepSynchro = 2;
+	
 	// Cet objet est une liste des joueurs qui sont connectés au serveur de jeu 
 	// (cela inclus les joueurs dans les salles ainsi que les joueurs jouant
 	// présentement dans des tables de jeu)
@@ -85,8 +93,12 @@ public class ControleurJeu
 		// Charger les salles en mémoire
 		objGestionnaireBD.chargerSalles(objGestionnaireEvenements);
 		
+		objGestionnaireTemps = new GestionnaireTemps();
+		objTacheSynchroniser = new TacheSynchroniser();
+		objGestionnaireTemps.ajouterTache( objTacheSynchroniser, intStepSynchro );
+		
 		// Créer un nouveau gestionnaire de communication
-		objGestionnaireCommunication = new GestionnaireCommunication(this, objGestionnaireEvenements, objGestionnaireBD);
+		objGestionnaireCommunication = new GestionnaireCommunication(this, objGestionnaireEvenements, objGestionnaireBD, objGestionnaireTemps, objTacheSynchroniser);
 		
 		// Créer un thread pour le GestionnaireEvenements
 		Thread threadEvenements = new Thread(objGestionnaireEvenements);

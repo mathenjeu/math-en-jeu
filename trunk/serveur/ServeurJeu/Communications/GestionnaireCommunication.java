@@ -6,6 +6,8 @@ import java.util.Vector;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Evenements.GestionnaireEvenements;
+import ServeurJeu.Temps.GestionnaireTemps;
+import ServeurJeu.Temps.TacheSynchroniser;
 
 /**
  * @author Jean-François Brind'Amour
@@ -35,13 +37,17 @@ public class GestionnaireCommunication
 	// Déclaration d'un socket pour le serveur
 	private ServerSocket objSocketServeur;
 	
+	private GestionnaireTemps objGestionnaireTemps;
+	private TacheSynchroniser objTacheSynchroniser;
+	
 	/**
 	 * Constructeur de la classe GestionnaireCommunication qui permet d'initialiser
 	 * le port d'écoute du serveur et la référence vers le contrôleur de jeu ainsi
 	 * que vers le gestionnaire d'événements.
 	 */
 	public GestionnaireCommunication(ControleurJeu controleur, GestionnaireEvenements gestionnaireEv, 
-	        						 GestionnaireBD gestionnaireBD) 
+	        						 GestionnaireBD gestionnaireBD,
+									 GestionnaireTemps gestionnaireTemps, TacheSynchroniser tacheSynchroniser ) 
 	{
 		super();
 		
@@ -60,6 +66,9 @@ public class GestionnaireCommunication
 		
 		// Créer le vérificateur de connexions
 		objVerificateurConnexions = new VerificateurConnexions(this);
+		
+		objGestionnaireTemps = gestionnaireTemps;
+		objTacheSynchroniser = tacheSynchroniser;
 		
 		// Créer un thread pour le vérificateur de connexions
 		Thread threadVerificateur = new Thread(objVerificateurConnexions);
@@ -99,7 +108,8 @@ public class GestionnaireCommunication
 				// Accepter une connexion et créer un objet ProtocoleJoueur
 				// qui va exécuter le protocole pour le joueur
 				ProtocoleJoueur objJoueur = new ProtocoleJoueur(objControleurJeu, this, objVerificateurConnexions,
-																objSocketServeur.accept());
+																objSocketServeur.accept(),
+																objGestionnaireTemps, objTacheSynchroniser);
 				
 				// Créer un thread pour le joueur demandant la connexion
 				Thread threadJoueur = new Thread(objJoueur);
