@@ -121,7 +121,7 @@ public class GestionnaireBD
 	{
 		try
 		{
-			ResultSet rs = requete.executeQuery("SELECT * FROM Joueur WHERE alias = '" + nomUtilisateur + "' AND motDePasse = '" + motDePasse + "';");
+			ResultSet rs = requete.executeQuery("SELECT * FROM joueur WHERE alias = '" + nomUtilisateur + "' AND motDePasse = '" + motDePasse + "';");
 			return rs.next();
 		}
 		catch (SQLException e)
@@ -145,7 +145,7 @@ public class GestionnaireBD
 	{
 		try
 		{
-			ResultSet rs = requete.executeQuery("SELECT prenom, nom, peutCreerSalles FROM Joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+			ResultSet rs = requete.executeQuery("SELECT prenom, nom, peutCreerSalles FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
 			if (rs.next())
 			{
 				if (rs.getInt("peutCreerSalles") != 0)
@@ -326,7 +326,7 @@ public class GestionnaireBD
 				int codeQuestion = rs.getInt("cleQuestion");
 				String typeQuestion = TypeQuestion.ChoixReponse; //TODO aller chercher code dans bd
 				String question = rs.getString( "FichierFlashQuestion" );
-				String reponse = rs.getString("bonneReponse");
+				String reponse = "a";//TODO = rs.getString("bonneReponse");
 				String explication = rs.getString("FichierFlashReponse");
 				listeQuestions.addElement( new Question( codeQuestion, typeQuestion, difficulte, urlQuestionReponse + question, reponse, urlQuestionReponse + explication ));
 				intLength++;
@@ -360,7 +360,7 @@ public class GestionnaireBD
 	{
 		try
 		{
-			ResultSet rs = requete.executeQuery("SELECT partiesCompletes, meilleurPointage, tempsPartie FROM Joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+			ResultSet rs = requete.executeQuery("SELECT partiesCompletes, meilleurPointage, tempsPartie FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
 			if (rs.next())
 			{
 				int partiesCompletes = rs.getInt( "partiesCompletes" ) + 1;

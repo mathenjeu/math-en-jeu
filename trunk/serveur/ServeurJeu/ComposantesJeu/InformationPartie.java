@@ -288,7 +288,7 @@ public class InformationPartie
 						bolEstPermis = false;
 					}
 					
-					i++;
+					i--;
 				}
 			}
 			// Si on se déplace vers le bas
@@ -330,7 +330,7 @@ public class InformationPartie
 						bolEstPermis = false;
 					}
 					
-					i++;
+					i--;
 				}
 			}
 		}
@@ -533,7 +533,6 @@ public class InformationPartie
 			objRetour.definirObjetSubi(objObjetSubi);
 			objRetour.definirNouvellePosition(objPositionJoueurDesiree);
 			
-			//TODO: Il faut envoyer l'événement aux autres joueurs que ce joueur s'est déplacé
 			synchronized (objTable.obtenirListeJoueurs() )
 		    {
 				// Préparer l'événement de deplacement de personnage. 
@@ -542,6 +541,9 @@ public class InformationPartie
 				// dans la file de gestion d'événements
 				preparerEvenementJoueurDeplacePersonnage();		    	
 		    }
+			
+			definirPositionJoueur( objPositionJoueurDesiree );
+			intPointage = intNouveauPointage;
 		}
 		else
 		{
@@ -559,6 +561,8 @@ public class InformationPartie
 		    // retourné au client
 		    objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();					    
 		}
+		
+		objQuestionCourante = null;
 
 		return objRetour;
 	}
