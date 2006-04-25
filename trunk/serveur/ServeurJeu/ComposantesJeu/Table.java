@@ -46,6 +46,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	// dans une table
 	private final int MAX_NB_JOUEURS = 4;
 	
+	private int intNbJoueurDemande; 
+	
 	// Cette variable va contenir le nom d'utilisateur du créateur de cette table
 	private String strNomUtilisateurCreateur;
 	
@@ -118,6 +120,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Au départ, aucune partie ne se joue sur la table
 		bolEstCommencee = false;
+		intNbJoueurDemande = MAX_NB_JOUEURS;//TODO intNbJoueurDemande = intNbJoueur; validation avec MAX_NB_JOUEURS
 		
 		// Définir les règles de jeu pour la salle courante
 		objRegles = reglesTable;
@@ -353,7 +356,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				// Si le nombre de joueurs en attente est maintenant le nombre 
 				// de joueurs que ça prend pour joueur au jeu, alors on lance 
 				// un événement qui indique que la partie est commencée
-				if (lstJoueursEnAttente.size() == MAX_NB_JOUEURS)
+				if (lstJoueursEnAttente.size() == intNbJoueurDemande)
 				{
 					// Créer une nouvelle liste qui va garder les points des 
 					// cases libres (n'ayant pas d'objets dessus)
@@ -381,7 +384,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre);
 					
 					// Obtenir la position des joueurs de cette table
-					objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(MAX_NB_JOUEURS, lstPointsCaseLibre);
+					objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(intNbJoueurDemande, lstPointsCaseLibre);
 					
 					// Créer un ensemble contenant tous les tuples de la liste 
 					// lstJoueursEnAttente (chaque élément est un Map.Entry)
@@ -426,10 +429,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 						preparerEvenementPartieDemarree(lstPositionsJoueurs);
 				    }
 				    
+				    int tempsStep = 1;
 				    objTacheSynchroniser.ajouterObservateur( this );
-				    objMinuterie = new Minuterie( intTempsTotal * 60, 1 );
+				    objMinuterie = new Minuterie( intTempsTotal * 60, tempsStep );
 				    objMinuterie.ajouterObservateur( this );
-				    objGestionnaireTemps.ajouterTache( objMinuterie, 1 );
+				    objGestionnaireTemps.ajouterTache( objMinuterie, tempsStep );
 				}
 	    	}
 		}
@@ -534,7 +538,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    {
 			// Si la taille de la liste de joueurs égale le nombre maximal de 
 			// joueurs alors la table est complète, sinon elle ne l'est pas
-			return (lstJoueurs.size() == MAX_NB_JOUEURS);	        
+			return (lstJoueurs.size() == intNbJoueurDemande);	        
 	    }
 	}
 	

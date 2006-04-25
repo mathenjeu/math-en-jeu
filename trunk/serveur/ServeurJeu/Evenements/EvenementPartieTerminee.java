@@ -54,30 +54,35 @@ public class EvenementPartieTerminee  extends Evenement
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "PartieTerminee");
 			
+//			 Créer le noeud du paramètre
+			Element objNoeudParametre = objDocumentXML.createElement("parametre");
+			
+			// On ajoute un attribut type qui va contenir le type
+			// du paramètre
+			objNoeudParametre.setAttribute("type", "StatistiqueJoueur");
+			
 			Iterator it = lstJoueurs.values().iterator();
 			while( it.hasNext() )
 			{
 				JoueurHumain joueur = (JoueurHumain)it.next();
 				String nomUtilisateur = joueur.obtenirNomUtilisateur();
 				int pointage = joueur.obtenirPartieCourante().obtenirPointage();
+			
 				
-//				 Créer le noeud du paramètre
-				Element objNoeudParametre = objDocumentXML.createElement("parametre");
+				Element objNoeudJoueur = objDocumentXML.createElement("joueur");
+				objNoeudJoueur.setAttribute("utilisateur", nomUtilisateur);
+				objNoeudJoueur.setAttribute("pointage", new Integer( pointage).toString());
 				
-				// On ajoute un attribut type qui va contenir le type
-				// du paramètre
-				objNoeudParametre.setAttribute("type", "StatistiqueJoueur");
-				
-				Element objNoeudNom = objDocumentXML.createElement("utilisateur");
+				/*Element objNoeudNom = objDocumentXML.createElement("utilisateur");
 				Text objNoeudTexteNom = objDocumentXML.createTextNode( nomUtilisateur );
 				objNoeudNom.appendChild( objNoeudTexteNom );
 				
 				Element objNoeudPoint = objDocumentXML.createElement("pointage");
 				Text objNoeudTextePoint = objDocumentXML.createTextNode( new Integer( pointage).toString() );
-				objNoeudPoint.appendChild( objNoeudTextePoint );
+				objNoeudPoint.appendChild( objNoeudTextePoint );*/
 				
-				objNoeudParametre.appendChild( objNoeudNom );
-				objNoeudParametre.appendChild( objNoeudPoint );
+				objNoeudParametre.appendChild( objNoeudJoueur );
+
 				// Ajouter le noeud paramètre au noeud de commande
 				objNoeudCommande.appendChild(objNoeudParametre);
 			}

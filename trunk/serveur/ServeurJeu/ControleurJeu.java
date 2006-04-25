@@ -1,9 +1,14 @@
 package ServeurJeu;
 
+import java.util.Date;
 import java.util.TreeMap;
 import java.util.Set;
 import java.util.Iterator;
 import java.util.Map;
+
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
+
 import Enumerations.RetourFonctions.ResultatAuthentification;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Communications.GestionnaireCommunication;
@@ -43,6 +48,8 @@ import ServeurJeu.Temps.TacheSynchroniser;
  */
 public class ControleurJeu 
 {
+	static private Logger objLogger = Logger.getLogger( ControleurJeu.class );
+	
 	// Cet objet permet de gérer toutes les interactions avec la base de données
 	private GestionnaireBD objGestionnaireBD;
 	
@@ -58,7 +65,7 @@ public class ControleurJeu
 	
 	private GestionnaireTemps objGestionnaireTemps;
 	
-	static private int intStepSynchro = 2;
+	static private int intStepSynchro = 30;
 	
 	// Cet objet est une liste des joueurs qui sont connectés au serveur de jeu 
 	// (cela inclus les joueurs dans les salles ainsi que les joueurs jouant
@@ -77,6 +84,10 @@ public class ControleurJeu
 	public ControleurJeu() 
 	{
 		super();
+		
+		BasicConfigurator.configure();
+
+		objLogger.info( "Le serveur démarre : " + new Date().toString() );
 		
 		// Créer une liste des joueurs
 		lstJoueursConnectes = new TreeMap();

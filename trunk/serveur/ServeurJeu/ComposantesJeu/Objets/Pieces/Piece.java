@@ -19,7 +19,8 @@ public class Piece extends Objet
 	public Piece(int valeur)
 	{
 		// Initialiser la valeur de la pièce
-		intValeur = valeur;
+		//TODO intValeur = valeur;
+		intValeur = 10;
 	}
 
 	/**

@@ -13,6 +13,8 @@ import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.ComposantesJeu.Objets.Objet;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
@@ -539,7 +541,7 @@ public class InformationPartie
 				// Cette fonction va passer les joueurs et créer un 
 				// InformationDestination pour chacun et ajouter l'événement 
 				// dans la file de gestion d'événements
-				preparerEvenementJoueurDeplacePersonnage();		    	
+				preparerEvenementJoueurDeplacePersonnage( objCaseDestination );		    	
 		    }
 			
 			definirPositionJoueur( objPositionJoueurDesiree );
@@ -567,12 +569,32 @@ public class InformationPartie
 		return objRetour;
 	}
 	
-	private void preparerEvenementJoueurDeplacePersonnage()
+	private void preparerEvenementJoueurDeplacePersonnage( Case objCaseDestination )
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs qu'un joueur démarré une partie
 		String nomUtilisateur = objJoueurHumain.obtenirNomUtilisateur();
-		EvenementJoueurDeplacePersonnage joueurDeplacePersonnage = new EvenementJoueurDeplacePersonnage( nomUtilisateur, objPositionJoueurDesiree );
+		String collision = "";
+		if( objCaseDestination instanceof CaseCouleur )
+		{
+			Objet objet = ((CaseCouleur)objCaseDestination).obtenirObjetCase();
+			if( objet != null )
+			{
+				if( objet instanceof ObjetUtilisable )
+				{
+					collision = "objet";
+				}
+				else if( objet instanceof Piece )
+				{
+					collision = "piece";
+				}
+				else if( objet instanceof Magasin ) 
+				{
+					collision = "magasin";
+				}
+			}
+		}
+		EvenementJoueurDeplacePersonnage joueurDeplacePersonnage = new EvenementJoueurDeplacePersonnage( nomUtilisateur, objPositionJoueur, objPositionJoueurDesiree, collision );
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)

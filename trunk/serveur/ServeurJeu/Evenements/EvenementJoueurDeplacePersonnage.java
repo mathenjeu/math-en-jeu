@@ -24,13 +24,17 @@ public class EvenementJoueurDeplacePersonnage extends Evenement
 //	 Déclaration d'une variable qui va garder le nom d'utilisateur du 
 	// joueur qui se deplace
     private String strNomUtilisateur;
+    private Point objAnciennePosition;
     private Point objPositionJoueur;
+    private String strCollision;
     
-	public EvenementJoueurDeplacePersonnage(String nomUtilisateur, Point positionJoueur )
+	public EvenementJoueurDeplacePersonnage(String nomUtilisateur, Point anciennePosition, Point positionJoueur, String collision )
     {
         // Définir le nom d'utilisateur du joueur qui se deplace
         strNomUtilisateur = nomUtilisateur;
+        objAnciennePosition = anciennePosition;
         objPositionJoueur = positionJoueur;
+        strCollision = collision;
     }
 	
 	/**
@@ -58,9 +62,13 @@ public class EvenementJoueurDeplacePersonnage extends Evenement
 			// Créer le noeud du paramètre
 			Element objNoeudParametreNomUtilisateur = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreNouvellePosition = objDocumentXML.createElement("parametre");
+			Element objNoeudParametreAnciennePosition = objDocumentXML.createElement("parametre");
+			Element objNoeudParametreCollision = objDocumentXML.createElement("parametre");
 			// Créer un noeud contenant le nom d'utilisateur du noeud paramètre
 			Text objNoeudTexte = objDocumentXML.createTextNode(strNomUtilisateur);
+			Text objNoeudTexteCollision = objDocumentXML.createTextNode(strCollision);
 			
+			Element objNoeudAnciennePosition = objDocumentXML.createElement("position");
 			Element objNoeudPosition = objDocumentXML.createElement("position");
 			
 			// Définir les attributs du noeud de commande
@@ -73,15 +81,26 @@ public class EvenementJoueurDeplacePersonnage extends Evenement
 			objNoeudParametreNomUtilisateur.setAttribute("type", "NomUtilisateur");
 			objNoeudParametreNomUtilisateur.appendChild(objNoeudTexte);
 			
+			objNoeudAnciennePosition.setAttribute("x", new Integer( objAnciennePosition.x ).toString() );
+			objNoeudAnciennePosition.setAttribute("y", new Integer( objAnciennePosition.y ).toString() );
+			
 			objNoeudPosition.setAttribute("x", new Integer( objPositionJoueur.x ).toString() );
 			objNoeudPosition.setAttribute("y", new Integer( objPositionJoueur.y ).toString() );
+			
+			objNoeudParametreAnciennePosition.setAttribute("type", "AnciennePosition");
+			objNoeudParametreAnciennePosition.appendChild( objNoeudAnciennePosition );
 			
 			objNoeudParametreNouvellePosition.setAttribute("type", "NouvellePosition");
 			objNoeudParametreNouvellePosition.appendChild( objNoeudPosition );
 			
+			objNoeudParametreCollision.setAttribute("type", "Collision");
+			objNoeudParametreCollision.appendChild( objNoeudTexteCollision );
+			
 			// Ajouter le noeud paramètre au noeud de commande
 			objNoeudCommande.appendChild(objNoeudParametreNomUtilisateur);
+			objNoeudCommande.appendChild(objNoeudParametreAnciennePosition);
 			objNoeudCommande.appendChild(objNoeudParametreNouvellePosition);
+			objNoeudCommande.appendChild(objNoeudParametreCollision);
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
 			objDocumentXML.appendChild(objNoeudCommande);

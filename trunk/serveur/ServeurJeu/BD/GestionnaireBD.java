@@ -67,7 +67,6 @@ public class GestionnaireBD
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
-			//Class.forName("org.gjt.mm.mysql.Driver");
 		}
 		catch (Exception e)
 		{
@@ -253,12 +252,12 @@ public class GestionnaireBD
 		}*/
 		
 	    Salle objSalle = new Salle(gestionnaireEv, this, "Générale", "Jeff", "", objReglesSalle);
-	    Salle objSalle2 = new Salle(gestionnaireEv, this, "Privée", "Jeff", "jeff", objReglesSalle);
+	    //Salle objSalle2 = new Salle(gestionnaireEv, this, "Privée", "Jeff", "jeff", objReglesSalle);
 	    
 	    objControleurJeu.ajouterNouvelleSalle(objSalle);
-	    objControleurJeu.ajouterNouvelleSalle(objSalle2);
+	    //objControleurJeu.ajouterNouvelleSalle(objSalle2);
 	    
-	    //TODO : charger salles de la bd, ou permettre a un joueur de creer une salle
+	    //TODO : charger salles de la bd??
 	}
 	
 	/**
@@ -326,7 +325,7 @@ public class GestionnaireBD
 				int codeQuestion = rs.getInt("cleQuestion");
 				String typeQuestion = TypeQuestion.ChoixReponse; //TODO aller chercher code dans bd
 				String question = rs.getString( "FichierFlashQuestion" );
-				String reponse = "a";//TODO = rs.getString("bonneReponse");
+				String reponse = "a";//rs.getString("bonneReponse");
 				String explication = rs.getString("FichierFlashReponse");
 				listeQuestions.addElement( new Question( codeQuestion, typeQuestion, difficulte, urlQuestionReponse + question, reponse, urlQuestionReponse + explication ));
 				intLength++;
@@ -371,10 +370,10 @@ public class GestionnaireBD
 					meilleurPointage = pointageActuel;
 				}
 				
-				//TODO : tempsPartie
+				int tempsPartie = tempsTotal + rs.getInt("tempsPartie");
 				
 				//mise-a-jour
-				int result = requete.executeUpdate( "UPDATE joueur SET partiesCompletes=" + partiesCompletes + ",meilleurPointage=" + meilleurPointage + " WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+				int result = requete.executeUpdate( "UPDATE joueur SET partiesCompletes=" + partiesCompletes + ",meilleurPointage=" + meilleurPointage + ",tempsPartie=" + tempsPartie + " WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
 			}
 		}
 		catch (SQLException e)
@@ -392,7 +391,6 @@ public class GestionnaireBD
 	 */
 	public void arreterGestionnaireBD()
 	{
-		// TODO faire peut-être d'autres choses
 		try
 		{
 			connexion.close();
