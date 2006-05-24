@@ -68,7 +68,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	// Déclaration d'une variable qui va permettre de savoir si la partie est 
 	// commencée ou non
 	private boolean bolEstCommencee;
-
+	   
+	// Déclaration d'une variable qui va permettre d'arrêter la partie en laissant
+	// l'état de la partie à "commencée" tant que les joueurs sont à l'écran des pointages
+	private boolean bolEstArretee;
+	
 	// Déclaration d'un tableau à 2 dimensions qui va contenir les informations 
 	// sur les cases du jeu
 	private Case[][] objttPlateauJeu;
@@ -120,6 +124,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Au départ, aucune partie ne se joue sur la table
 		bolEstCommencee = false;
+		bolEstArretee = true;
 		intNbJoueurDemande = MAX_NB_JOUEURS;//TODO intNbJoueurDemande = intNbJoueur; validation avec MAX_NB_JOUEURS
 		
 		// Définir les règles de jeu pour la salle courante
@@ -130,6 +135,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		objGestionnaireTemps = gestionnaireTemps;
 		objTacheSynchroniser = tacheSynchroniser;
+
 	}
 	
 	public void creation()
@@ -378,7 +384,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					// Changer l'état de la table pour dire que maintenant une 
 					// partie est commencée
 					bolEstCommencee = true;
-					
+		            
+		            // Change l'état de la table pour dire que la partie
+		            // n'est pas arrêtée (note: bolEstCommencee restera à true
+		            // pendant que les joueurs sont à l'écran de pointage)
+		            bolEstArretee = false;
+		            
 					// Générer le plateau de jeu selon les règles de la table et 
 					// garder le plateau en mémoire dans la table
 					objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre);
@@ -443,9 +454,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	
 	public void arreterPartie()
 	{
-		if( bolEstCommencee )
+		if( bolEstArretee == false )
 		{
-			bolEstCommencee = false;
+			bolEstArretee = true;
 			objTacheSynchroniser.enleverObservateur( this );
 			objGestionnaireTemps.enleverTache( objMinuterie );
 			objMinuterie = null;
