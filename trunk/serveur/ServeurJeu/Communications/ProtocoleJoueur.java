@@ -7,10 +7,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
+
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
+
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -77,6 +81,8 @@ public class ProtocoleJoueur implements Runnable
 	private GestionnaireTemps objGestionnaireTemps;
 	private TacheSynchroniser objTacheSynchroniser;
 	
+	static private Logger objLogger = Logger.getLogger( ProtocoleJoueur.class );
+	
 	/**
 	 * Constructeur de la classe ProtocoleJoueur qui permet de garder une 
 	 * référence vers le contrôleur de jeu, vers le gestionnaire des 
@@ -107,7 +113,7 @@ public class ProtocoleJoueur implements Runnable
 		objGestionnaireTemps = gestionnaireTemps;
 		objTacheSynchroniser = tacheSynchroniser;
 		
-		System.out.println("Le client " + socketJoueur.getInetAddress().toString() + " est connecte");
+		objLogger.info( "Le client " + socketJoueur.getInetAddress().toString() + " est connecte" );
 		
 		try
 		{
@@ -118,7 +124,7 @@ public class ProtocoleJoueur implements Runnable
 		}
 		catch (SocketException se)
 		{
-			System.out.println("Le canal de communication entre le serveur et le client est ferme");
+			objLogger.info( "Le canal de communication entre le serveur et le client est ferme" );
 			
 			// Arrêter le thread
 			bolStopThread = true;
@@ -185,8 +191,8 @@ public class ProtocoleJoueur implements Runnable
 						
 						// On appelle une fonction qui va traiter le message reçu du 
 						// client et mettre le résultat à retourner dans une variable
+						objLogger.info( "Message recu : " + strMessageRecu );
 						String strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
-						
 						// On remet la variable contenant le numéro de commande
 						// à retourner à -1, pour dire qu'il n'est pas initialisé
 						intNumeroCommandeReponse = -1;
@@ -224,15 +230,18 @@ public class ProtocoleJoueur implements Runnable
 		}
 		catch (IOException ioe)
 		{
-			System.out.println("Une erreur est survenue lors de la reception du message du client");
+			objLogger.error( "Une erreur est survenue lors de la reception du message du client" );
+			objLogger.error( ioe.getMessage() );
 		}
 		catch (TransformerConfigurationException tce)
 		{
-			System.out.println("Une erreur est survenue lors de la transformation du document XML en chaine de caracteres");
+			objLogger.error("Une erreur est survenue lors de la transformation du document XML en chaine de caracteres");
+			objLogger.error( tce.getMessage() );
 		}
 		catch (TransformerException te)
 		{
-			System.out.println("Une erreur est survenue lors de la conversion du document XML en chaine de caracteres");
+			objLogger.error("Une erreur est survenue lors de la conversion du document XML en chaine de caracteres");
+			objLogger.error( te.getMessage() );
 		}
 		finally
 		{
@@ -241,14 +250,20 @@ public class ProtocoleJoueur implements Runnable
 				// On tente de fermer le canal de réception
 				objCanalReception.close();
 			}
-			catch (IOException ioe) {}
+			catch (IOException ioe) 
+			{
+				objLogger.error( ioe.getMessage() );
+			}
 						
 			try
 			{
 				// On tente de fermer le socket liant le client au serveur
 				objSocketJoueur.close();						
 			}
-			catch (IOException ioe) {}
+			catch (IOException ioe) 
+			{
+				objLogger.error( ioe.getMessage() );
+			}
 			
 			// Si le joueur humain a été défini dans le protocole, alors
 			// c'est qu'il a réussi à se connecter au serveur de jeu, il
@@ -268,7 +283,7 @@ public class ProtocoleJoueur implements Runnable
 			objGestionnaireCommunication.supprimerProtocoleJoueur(this);
 		}
 		
-		System.out.println("Le thread du client " + objSocketJoueur.getInetAddress().toString() + " est termine");
+		objLogger.info( "Le thread du client " + objSocketJoueur.getInetAddress().toString() + " est termine" );
 	}
 	
 	/**
@@ -296,7 +311,7 @@ public class ProtocoleJoueur implements Runnable
 		// Déclaration d'une variable qui permet de savoir si on doit retourner 
 		// une commande au client ou si ce n'était qu'une réponse du client 
 		boolean bolDoitRetournerCommande = true;
-System.out.println("Message recu : " + message);
+		
 		// Créer un nouveau Document qui va contenir le code XML du message 
 		// passé en paramètres
 		Document objDocumentXMLEntree = UtilitaireXML.obtenirDocumentXML(message);
@@ -1111,6 +1126,90 @@ System.out.println("Message recu : " + message);
 						objNoeudCommande.setAttribute("nom", "Ok");
 					}
 				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.DemarrerMaintenant ))
+				{
+					
+//					 Il n'est pas nécessaire de synchroniser ces vérifications
+					// car un protocole ne peut pas exécuter plus qu'une fonction
+					// à la fois, donc les valeurs ne peuvent être modifiées par
+					// deux threads à la fois
+					
+					// Si le joueur n'est pas connecté au serveur de jeu, alors il
+					// y a une erreur
+					if (objJoueurHumain == null)
+					{
+						// Le joueur ne peut pas démarrer une partie 
+						// s'il n'est pas connecté au serveur de jeu
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+					// Si le joueur n'est connecté à aucune salle, alors il ne 
+					// peut pas démarrer une partie
+					else if (objJoueurHumain.obtenirSalleCourante() == null)
+					{
+						// Le joueur ne peut pas démarrer une partie 
+						// s'il n'est pas dans une salle
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");
+					}
+					//TODO: Il va falloir synchroniser cette validation lorsqu'on va 
+					// avoir codé la commande SortirJoueurTable -> ça va ressembler au
+					// processus d'authentification
+					// Si le joueur n'est pas dans aucune table, alors il y a 
+					// une erreur
+					else if (objJoueurHumain.obtenirPartieCourante() == null)
+					{
+						// Le joueur ne peut pas démarrer une partie 
+						// s'il n'est dans aucune table
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansTable");
+					}
+					// On n'a pas besoin de valider qu'il n'y aucune partie de 
+					// commencée, car le joueur doit obligatoirement être dans 
+					// la table pour démarrer la partie et comme il ne peut entrer  
+					// si une partie est en cours, alors c'est certain qu'il n'y 
+					// aura pas de parties en cours
+					else
+					{
+						try
+						{
+						
+							// Obtenir le numéro Id du personnage choisi et le garder 
+							// en mémoire dans une variable
+							int intIdPersonnage = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "IdPersonnage").getNodeValue());
+							objLogger.info( "personnage : " + intIdPersonnage );
+							
+							// Appeler la méthode permettant de démarrer une partie
+							// et garder son résultat dans une variable
+							String strResultatDemarrerPartie = objJoueurHumain.obtenirPartieCourante().obtenirTable().demarrerMaintenant( objJoueurHumain, 
+									intIdPersonnage, true);
+							
+							objLogger.info( "Resultat : " + strResultatDemarrerPartie );
+							
+							// Si le résultat du démarrage de partie est Succes alors le
+							// joueur est maintenant en attente
+							if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.Succes))
+							{
+								// Il n'y a pas eu d'erreurs
+								objNoeudCommande.setAttribute("type", "Reponse");
+								objNoeudCommande.setAttribute("nom", "DemarrerMaintenant");
+							}
+							else if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.PartieEnCours))
+							{
+								// Il y avait déjà une partie en cours
+								objNoeudCommande.setAttribute("nom", "PartieEnCours");
+							}
+							else
+							{
+								// Le joueur était déjà en attente
+								objNoeudCommande.setAttribute("nom", "DejaEnAttente");
+							}
+						}
+						catch( Exception e )
+						{
+							e.printStackTrace();
+						}
+	
+						
+					}
+				}
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.DemarrerPartie))
 				{
 					// Il n'est pas nécessaire de synchroniser ces vérifications
@@ -1356,10 +1455,12 @@ System.out.println("Message recu : " + message);
 							Element objNoeudParametreObjetRamasse = objDocumentXMLSortie.createElement("parametre");
 							Element objNoeudParametreObjetSubi = objDocumentXMLSortie.createElement("parametre");
 							Element objNoeudParametreNouvellePosition = objDocumentXMLSortie.createElement("parametre");
+							Element objNoeudParametreCollision = objDocumentXMLSortie.createElement("parametre");
 							
 							objNoeudParametreObjetRamasse.setAttribute("type", "ObjetRamasse");
 							objNoeudParametreObjetSubi.setAttribute("type", "ObjetSubi");
 							objNoeudParametreNouvellePosition.setAttribute("type", "NouvellePosition");
+							objNoeudParametreCollision.setAttribute("type", "Collision");
 							
 							// S'il y a un objet qui a été ramassé, alors on peut
 							// créer son noeud enfant, sinon on n'en crée pas
@@ -1388,6 +1489,10 @@ System.out.println("Message recu : " + message);
 							objNoeudNouvellePosition.setAttribute("y", Integer.toString(objRetour.obtenirNouvellePosition().y));
 							objNoeudParametreNouvellePosition.appendChild(objNoeudNouvellePosition);
 							objNoeudCommande.appendChild(objNoeudParametreNouvellePosition);
+							
+							Text objNoeudTexteCollision = objDocumentXMLSortie.createTextNode(objRetour.obtenirCollision());
+							objNoeudParametreCollision.appendChild( objNoeudTexteCollision );
+							objNoeudCommande.appendChild( objNoeudParametreCollision );
 						}
 						else
 						{
@@ -1400,6 +1505,61 @@ System.out.println("Message recu : " + message);
 						}
 						
 						// Ajouter les noeuds paramètres au noeud de commande
+						objNoeudCommande.appendChild(objNoeudParametrePointage);
+					}
+				}
+				else if( objNoeudCommandeEntree.getAttribute("nom").equals(Commande.Pointage) )
+				{
+//					 Obtenir pointage
+					int pointage = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "Pointage").getNodeValue());
+					
+//					 Si le joueur n'est pas connecté au serveur de jeu, alors il
+					// y a une erreur
+					if (objJoueurHumain == null)
+					{
+						// Le joueur ne peut pas répondre à une question 
+						// s'il n'est pas connecté au serveur de jeu
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+					// Si le joueur n'est connecté à aucune salle, alors il ne 
+					// peut pas répondre à aucune question
+					else if (objJoueurHumain.obtenirSalleCourante() == null)
+					{
+						// Le joueur ne peut pas répondre à aucune question 
+						// s'il n'est pas dans une salle
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");
+					}
+					//TODO: Il va falloir synchroniser cette validation lorsqu'on va 
+					// avoir codé la commande SortirJoueurTable -> ça va ressembler au
+					// processus d'authentification
+					// Si le joueur n'est pas dans aucune table, alors il y a 
+					// une erreur
+					else if (objJoueurHumain.obtenirPartieCourante() == null)
+					{
+						// Le joueur ne peut pas répondre à aucune question 
+						// s'il n'est dans aucune table
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansTable");
+					}
+					// Si la partie n'est pas commencée, alors il y a une erreur
+					else if (objJoueurHumain.obtenirPartieCourante().obtenirTable().estCommencee() == false)
+					{
+						// Le joueur ne peut pas répondre à aucune question 
+						// si la partie n'est pas commencée
+						objNoeudCommande.setAttribute("nom", "PartiePasDemarree");
+					}
+					else
+					{
+						int nouveauPointage = objJoueurHumain.obtenirPartieCourante().obtenirPointage();
+						nouveauPointage += pointage;
+						objJoueurHumain.obtenirPartieCourante().definirPointage( nouveauPointage );
+//						 Il n'y a pas eu d'erreurs
+						objNoeudCommande.setAttribute("type", "Reponse");
+						objNoeudCommande.setAttribute("nom", "Pointage");
+						
+						Element objNoeudParametrePointage = objDocumentXMLSortie.createElement("parametre");
+						Text objNoeudTextePointage = objDocumentXMLSortie.createTextNode(Integer.toString(nouveauPointage));
+						objNoeudParametrePointage.setAttribute("type", "Pointage");
+						objNoeudParametrePointage.appendChild(objNoeudTextePointage);		
 						objNoeudCommande.appendChild(objNoeudParametrePointage);
 					}
 				}
@@ -1455,11 +1615,11 @@ System.out.println("Message recu : " + message);
 			// Créer le canal qui permet d'envoyer des données sur le canal
 			// de communication entre le client et le serveur
 			OutputStream objCanalEnvoi = objSocketJoueur.getOutputStream();
-String chainetemp = UtilitaireEncodeurDecodeur.encodeToUTF8(message);
-if (chainetemp.contains("ping") == false)
-{
-	System.out.println("Message envoye : " + chainetemp);	
-}
+			String chainetemp = UtilitaireEncodeurDecodeur.encodeToUTF8(message);
+			if (chainetemp.contains("ping") == false)
+			{
+				objLogger.info( "Message envoye : " + chainetemp );
+			}
 			// Écrire le message sur le canal d'envoi au client
 			objCanalEnvoi.write(UtilitaireEncodeurDecodeur.encodeToUTF8(message).getBytes());
 			
@@ -1469,7 +1629,7 @@ if (chainetemp.contains("ping") == false)
 			// Envoyer le message sur le canal d'envoi
 			objCanalEnvoi.flush();
 			
-			System.out.println("Une confirmation a ete envoyee a " + objSocketJoueur.getInetAddress().toString());
+			objLogger.info( "Une confirmation a ete envoyee a " + objSocketJoueur.getInetAddress().toString() );
 		}
 	}
 	
@@ -1790,6 +1950,40 @@ if (chainetemp.contains("ping") == false)
 				bolCommandeValide = bolNoeudValide;
 			}
 		}
+//		 Si le nom de la commande est DemarrerMaintenant, alors il doit y avoir 1 paramètre
+		else if (noeudCommande.getAttribute("nom").equals(Commande.DemarrerMaintenant))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 1, alors
+			// le nombre de paramètres est correct et on peut continuer
+			if (noeudCommande.getChildNodes().getLength() == 1)
+			{
+				// Déclarer une variable qui va permettre de savoir si le 
+				// noeud enfant est valide
+				boolean bolNoeudValide = true;
+		
+				// Faire la référence vers le noeud enfant courant
+				Node objNoeudCourant = noeudCommande.getChildNodes().item(0);
+				
+				// Si le noeud enfant n'est pas un paramètre, ou qu'il n'a
+				// pas exactement 1 attribut, ou que le nom de cet attribut 
+				// n'est pas type, ou que le noeud n'a pas de valeurs, alors 
+				// il y a une erreur dans la structure
+				if (objNoeudCourant.getNodeName().equals("parametre") == false || 
+					objNoeudCourant.getAttributes().getLength() != 1 ||
+					objNoeudCourant.getAttributes().getNamedItem("type") == null ||
+					objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("IdPersonnage") == false ||
+					objNoeudCourant.getChildNodes().getLength() != 1 ||
+					objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false ||
+					UtilitaireNombres.isPositiveNumber(objNoeudCourant.getChildNodes().item(0).getNodeValue()) == false)
+				{
+					bolNoeudValide = false;
+				}
+				
+				// Si l'enfant du noeud courant est valide alors la commande 
+				// est valide
+				bolCommandeValide = bolNoeudValide;
+			}
+		}
 		// Si le nom de la commande est DeplacerPersonnage, alors il doit y avoir 
 		// 1 paramètre position contenant les coordonnées x, y
 		else if (noeudCommande.getAttribute("nom").equals(Commande.DeplacerPersonnage))
@@ -1853,6 +2047,40 @@ if (chainetemp.contains("ping") == false)
 					objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("Reponse") == false ||
 					objNoeudCourant.getChildNodes().getLength() != 1 ||
 					objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false)
+				{
+					bolNoeudValide = false;
+				}
+				
+				// Si l'enfant du noeud courant est valide alors la commande 
+				// est valide
+				bolCommandeValide = bolNoeudValide;
+			}
+		}
+		//Si le nom de la commande est Pointage, alors il doit y avoir 1 paramètre
+		else if (noeudCommande.getAttribute("nom").equals(Commande.Pointage))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 1, alors
+			// le nombre de paramètres est correct et on peut continuer
+			if (noeudCommande.getChildNodes().getLength() == 1)
+			{
+				// Déclarer une variable qui va permettre de savoir si le 
+				// noeud enfant est valide
+				boolean bolNoeudValide = true;
+		
+				// Faire la référence vers le noeud enfant courant
+				Node objNoeudCourant = noeudCommande.getChildNodes().item(0);
+				
+				// Si le noeud enfant n'est pas un paramètre, ou qu'il n'a
+				// pas exactement 1 attribut, ou que le nom de cet attribut 
+				// n'est pas type, ou que le noeud n'a pas de valeurs, alors 
+				// il y a une erreur dans la structure
+				if (objNoeudCourant.getNodeName().equals("parametre") == false || 
+					objNoeudCourant.getAttributes().getLength() != 1 ||
+					objNoeudCourant.getAttributes().getNamedItem("type") == null ||
+					objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("Pointage") == false ||
+					objNoeudCourant.getChildNodes().getLength() != 1 ||
+					objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false ||
+					UtilitaireNombres.isPositiveNumber(objNoeudCourant.getChildNodes().item(0).getNodeValue()) == false)
 				{
 					bolNoeudValide = false;
 				}
@@ -1970,7 +2198,8 @@ if (chainetemp.contains("ping") == false)
 		}
 		catch (IOException e)
 		{
-			System.out.println("L'evenement ping n'a pas pu etre envoyee");
+			objLogger.info( "L'evenement ping n'a pas pu etre envoyee" );
+			objLogger.error( e.getMessage() );
 		}
 	}
 	
@@ -1988,7 +2217,10 @@ if (chainetemp.contains("ping") == false)
 			// le thread va arrêter
 			objCanalReception.close();
 		}
-		catch (IOException ioe) {}
+		catch (IOException ioe) 
+		{
+			objLogger.error( ioe.getMessage() );
+		}
 		
 		try
 		{
@@ -1997,7 +2229,10 @@ if (chainetemp.contains("ping") == false)
 			// déconnecté et le thread va arrêter
 			objSocketJoueur.close();						
 		}
-		catch (IOException ioe) {}
+		catch (IOException ioe) 
+		{
+			objLogger.error( ioe.getMessage() );
+		}
 	}
 	
 	/**

@@ -1,8 +1,13 @@
 package ServeurJeu.Communications;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Vector;
+
+import org.apache.log4j.Logger;
+
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Evenements.GestionnaireEvenements;
@@ -40,6 +45,9 @@ public class GestionnaireCommunication
 	private GestionnaireTemps objGestionnaireTemps;
 	private TacheSynchroniser objTacheSynchroniser;
 	
+	static private Logger objLogger = Logger.getLogger( GestionnaireCommunication.class );
+	
+	
 	/**
 	 * Constructeur de la classe GestionnaireCommunication qui permet d'initialiser
 	 * le port d'écoute du serveur et la référence vers le contrôleur de jeu ainsi
@@ -69,6 +77,7 @@ public class GestionnaireCommunication
 		
 		objGestionnaireTemps = gestionnaireTemps;
 		objTacheSynchroniser = tacheSynchroniser;
+		
 		
 		// Créer un thread pour le vérificateur de connexions
 		Thread threadVerificateur = new Thread(objVerificateurConnexions);
@@ -120,12 +129,14 @@ public class GestionnaireCommunication
 				// Ajouter le nouveau ProtocoleJoueur dans la liste (ici on n'a 
 				// pas besoin de synchroniser la liste puisque le vecteur fait 
 				// déjà cette synchronisation)
-				lstProtocoleJoueur.add(objJoueur);
+				lstProtocoleJoueur.add( objJoueur );
+				miseAJourInfo();
 			}
 			catch (IOException e)
 			{
 				// Une erreur est survenue lors de l'acceptation de la connexion
 				System.out.println("Il est impossible d'accepter la connexion du client");
+				objLogger.error( e.getMessage() );
 				// System.out.println("Le serveur va maintenant s'arrêter");
 				// System.exit(-1);
 			}
@@ -144,7 +155,15 @@ public class GestionnaireCommunication
 	public void supprimerProtocoleJoueur(ProtocoleJoueur protocole)
 	{
 		// Enlever le protocole joueur de la liste des ProtocoleJoueur
-		lstProtocoleJoueur.remove(protocole);
+		try
+		{
+			lstProtocoleJoueur.remove(protocole);
+			miseAJourInfo();
+		}
+		catch( Exception e )
+		{
+			System.out.println("Erreur a la suppression du protocole joueur");
+		}
 	}
 	
 	/**
@@ -157,6 +176,22 @@ public class GestionnaireCommunication
 	public Vector obtenirListeProtocoleJoueur()
 	{
 		return lstProtocoleJoueur;
+	}
+	
+	public void miseAJourInfo()
+	{
+		try
+		{
+			FileWriter writer = new FileWriter( "serveur.info" );
+			writer.write( new Integer( lstProtocoleJoueur.size() ).toString() );
+			objLogger.info( "Nombre de joueur connectés : " +  lstProtocoleJoueur.size() );
+			writer.close();
+		}
+		catch( Exception e )
+		{
+			System.out.println("Erreur d'écriture dans le fichier info");
+			objLogger.error( e.getMessage() );
+		}
 	}
 	
 	/**

@@ -455,6 +455,8 @@ public class InformationPartie
 		// Déclaration d'une référence vers l'objet subi
 		ObjetUtilisable objObjetSubi = null;
 		
+		String collision = "";
+		
 		// Si la réponse est bonne, alors on modifie le plateau de jeu
 		if (bolReponseEstBonne == true)
 		{
@@ -506,6 +508,8 @@ public class InformationPartie
 						// Enlever la pièce de la case du plateau de jeu
 						objCaseCouleurDestination.definirObjetCase(null);
 						
+						collision = "piece";
+						
 						// TODO: Il faut peut-être lancer un algo qui va placer 
 						// 		 les pièces sur le plateau de jeu s'il n'y en n'a
 						//		 plus
@@ -534,6 +538,7 @@ public class InformationPartie
 			objRetour.definirObjetRamasse(objObjetRamasse);
 			objRetour.definirObjetSubi(objObjetSubi);
 			objRetour.definirNouvellePosition(objPositionJoueurDesiree);
+			objRetour.definirCollision( collision );
 			
 			synchronized (objTable.obtenirListeJoueurs() )
 		    {
@@ -541,7 +546,7 @@ public class InformationPartie
 				// Cette fonction va passer les joueurs et créer un 
 				// InformationDestination pour chacun et ajouter l'événement 
 				// dans la file de gestion d'événements
-				preparerEvenementJoueurDeplacePersonnage( objCaseDestination );		    	
+				preparerEvenementJoueurDeplacePersonnage( collision );		    	
 		    }
 			
 			definirPositionJoueur( objPositionJoueurDesiree );
@@ -569,31 +574,12 @@ public class InformationPartie
 		return objRetour;
 	}
 	
-	private void preparerEvenementJoueurDeplacePersonnage( Case objCaseDestination )
+	private void preparerEvenementJoueurDeplacePersonnage( String collision )
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs qu'un joueur démarré une partie
 		String nomUtilisateur = objJoueurHumain.obtenirNomUtilisateur();
-		String collision = "";
-		if( objCaseDestination instanceof CaseCouleur )
-		{
-			Objet objet = ((CaseCouleur)objCaseDestination).obtenirObjetCase();
-			if( objet != null )
-			{
-				if( objet instanceof ObjetUtilisable )
-				{
-					collision = "objet";
-				}
-				else if( objet instanceof Piece )
-				{
-					collision = "piece";
-				}
-				else if( objet instanceof Magasin ) 
-				{
-					collision = "magasin";
-				}
-			}
-		}
+		
 		EvenementJoueurDeplacePersonnage joueurDeplacePersonnage = new EvenementJoueurDeplacePersonnage( nomUtilisateur, objPositionJoueur, objPositionJoueurDesiree, collision );
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 

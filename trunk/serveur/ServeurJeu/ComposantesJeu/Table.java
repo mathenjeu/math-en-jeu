@@ -364,92 +364,136 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				// un événement qui indique que la partie est commencée
 				if (lstJoueursEnAttente.size() == intNbJoueurDemande)
 				{
-					// Créer une nouvelle liste qui va garder les points des 
-					// cases libres (n'ayant pas d'objets dessus)
-					Vector lstPointsCaseLibre = new Vector();
-					
-					// Créer un tableau de points qui va contenir la position 
-					// des joueurs
-					Point[] objtPositionsJoueurs;
-					
-					// Création d'une nouvelle liste dont la clé est le nom 
-					// d'utilisateur du joueur et le contenu est un point 
-					// représentant la position du joueur
-					TreeMap lstPositionsJoueurs = new TreeMap();
-					
-					//TODO: Peut-être devoir synchroniser cette partie, il 
-					//      faut voir avec les autres bouts de code qui 
-					// 		vérifient si la partie est commencée (c'est OK 
-					//		pour entrerTable)
-					// Changer l'état de la table pour dire que maintenant une 
-					// partie est commencée
-					bolEstCommencee = true;
-		            
-		            // Change l'état de la table pour dire que la partie
-		            // n'est pas arrêtée (note: bolEstCommencee restera à true
-		            // pendant que les joueurs sont à l'écran de pointage)
-		            bolEstArretee = false;
-		            
-					// Générer le plateau de jeu selon les règles de la table et 
-					// garder le plateau en mémoire dans la table
-					objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre);
-					
-					// Obtenir la position des joueurs de cette table
-					objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(intNbJoueurDemande, lstPointsCaseLibre);
-					
-					// Créer un ensemble contenant tous les tuples de la liste 
-					// lstJoueursEnAttente (chaque élément est un Map.Entry)
-					Set lstEnsembleJoueurs = lstJoueursEnAttente.entrySet();
-					
-					// Obtenir un itérateur pour l'ensemble contenant les personnages
-					Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
-					
-					// Passer toutes les positions des joueurs et les définir
-					for (int i = 0; i < objtPositionsJoueurs.length; i++)
-					{
-						// Comme les positions sont générées aléatoirement, on 
-						// se fou un peu duquel on va définir la position en 
-						// premier, on va donc passer simplement la liste des 
-						// joueurs
-						// Créer une référence vers le joueur courant 
-					    // dans la liste (pas besoin de vérifier s'il y en a un 
-						// prochain, car on a généré la position des joueurs 
-						// selon cette liste
-						JoueurHumain objJoueur = (JoueurHumain) (((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
-						
-						// Définir la position du joueur courant
-						objJoueur.obtenirPartieCourante().definirPositionJoueur(objtPositionsJoueurs[i]);
-						
-						// Ajouter la position du joueur dans la liste
-						lstPositionsJoueurs.put(objJoueur.obtenirNomUtilisateur(), objtPositionsJoueurs[i]);
-					}
-					
-					// On peut maintenant vider la liste des joueurs en attente
-					// car elle ne nous sert plus à rien
-					lstJoueursEnAttente.clear();
-					
-					// Empêcher d'autres thread de toucher à la liste des joueurs de 
-				    // cette table pendant qu'on parcourt tous les joueurs de la table
-					// pour leur envoyer un événement
-				    synchronized (lstJoueurs)
-				    {
-						// Préparer l'événement que la partie est commencée. 
-						// Cette fonction va passer les joueurs et créer un 
-						// InformationDestination pour chacun et ajouter l'événement 
-						// dans la file de gestion d'événements
-						preparerEvenementPartieDemarree(lstPositionsJoueurs);
-				    }
-				    
-				    int tempsStep = 1;
-				    objTacheSynchroniser.ajouterObservateur( this );
-				    objMinuterie = new Minuterie( intTempsTotal * 60, tempsStep );
-				    objMinuterie.ajouterObservateur( this );
-				    objGestionnaireTemps.ajouterTache( objMinuterie, tempsStep );
+					laPartieCommence();			
 				}
 	    	}
 		}
 	    
 	    return strResultatDemarrerPartie;
+	}
+	
+	public String demarrerMaintenant(JoueurHumain joueur, int idPersonnage, boolean doitGenererNoCommandeRetour)
+	{
+		String strResultatDemarrerPartie;
+		synchronized (lstJoueursEnAttente)
+	    {
+//			 Si une partie est en cours alors on va retourner PartieEnCours
+	    	if (bolEstCommencee == true)
+	    	{
+	    		strResultatDemarrerPartie = ResultatDemarrerPartie.PartieEnCours;
+	    	}
+	    	//TODO si joueur pas en attente?????
+	    	else
+	    	{
+	    		// La commande s'est effectuée avec succès
+	    		strResultatDemarrerPartie = ResultatDemarrerPartie.Succes;
+	    		
+	    		// Ajouter le joueur dans la liste des joueurs en attente
+				//lstJoueursEnAttente.put(joueur.obtenirNomUtilisateur(), joueur);
+				
+				// Garder en mémoire le Id du personnage choisi par le joueur
+				joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
+				
+	    		// Si on doit générer le numéro de commande de retour, alors
+				// on le génère, sinon on ne fait rien (ça se peut que ce soit
+				// faux)
+				if (doitGenererNoCommandeRetour == true)
+				{
+					// Générer un nouveau numéro de commande qui sera 
+				    // retourné au client
+				    joueur.obtenirProtocoleJoueur().genererNumeroReponse();					    
+				}
+				
+				laPartieCommence();
+	    	}
+	    }
+		return strResultatDemarrerPartie;
+	}
+	
+	private void laPartieCommence()
+	{
+//		 Créer une nouvelle liste qui va garder les points des 
+		// cases libres (n'ayant pas d'objets dessus)
+		Vector lstPointsCaseLibre = new Vector();
+		
+		// Créer un tableau de points qui va contenir la position 
+		// des joueurs
+		Point[] objtPositionsJoueurs;
+		
+		// Création d'une nouvelle liste dont la clé est le nom 
+		// d'utilisateur du joueur et le contenu est un point 
+		// représentant la position du joueur
+		TreeMap lstPositionsJoueurs = new TreeMap();
+		
+		//TODO: Peut-être devoir synchroniser cette partie, il 
+		//      faut voir avec les autres bouts de code qui 
+		// 		vérifient si la partie est commencée (c'est OK 
+		//		pour entrerTable)
+		// Changer l'état de la table pour dire que maintenant une 
+		// partie est commencée
+		bolEstCommencee = true;
+		
+		// Change l'état de la table pour dire que la partie
+		// n'est pas arrêtée (note: bolEstCommencee restera à true
+		// pendant que les joueurs sont à l'écran de pointage)
+		bolEstArretee = false;
+		
+		// Générer le plateau de jeu selon les règles de la table et 
+		// garder le plateau en mémoire dans la table
+		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre);
+		
+		// Obtenir la position des joueurs de cette table
+		int nbJoueur = lstJoueursEnAttente.size(); //TODO a vérifier
+		objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(nbJoueur, lstPointsCaseLibre);
+		
+		// Créer un ensemble contenant tous les tuples de la liste 
+		// lstJoueursEnAttente (chaque élément est un Map.Entry)
+		Set lstEnsembleJoueurs = lstJoueursEnAttente.entrySet();
+		
+		// Obtenir un itérateur pour l'ensemble contenant les personnages
+		Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
+		
+		// Passer toutes les positions des joueurs et les définir
+		for (int i = 0; i < objtPositionsJoueurs.length; i++)
+		{
+			// Comme les positions sont générées aléatoirement, on 
+			// se fou un peu duquel on va définir la position en 
+			// premier, on va donc passer simplement la liste des 
+			// joueurs
+			// Créer une référence vers le joueur courant 
+		    // dans la liste (pas besoin de vérifier s'il y en a un 
+			// prochain, car on a généré la position des joueurs 
+			// selon cette liste
+			JoueurHumain objJoueur = (JoueurHumain) (((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
+			
+			// Définir la position du joueur courant
+			objJoueur.obtenirPartieCourante().definirPositionJoueur(objtPositionsJoueurs[i]);
+			
+			// Ajouter la position du joueur dans la liste
+			lstPositionsJoueurs.put(objJoueur.obtenirNomUtilisateur(), objtPositionsJoueurs[i]);
+		}
+		
+		// On peut maintenant vider la liste des joueurs en attente
+		// car elle ne nous sert plus à rien
+		lstJoueursEnAttente.clear();
+		
+		// Empêcher d'autres thread de toucher à la liste des joueurs de 
+	    // cette table pendant qu'on parcourt tous les joueurs de la table
+		// pour leur envoyer un événement
+	    synchronized (lstJoueurs)
+	    {
+			// Préparer l'événement que la partie est commencée. 
+			// Cette fonction va passer les joueurs et créer un 
+			// InformationDestination pour chacun et ajouter l'événement 
+			// dans la file de gestion d'événements
+			preparerEvenementPartieDemarree(lstPositionsJoueurs);
+	    }
+	    
+	    int tempsStep = 1;
+	    objTacheSynchroniser.ajouterObservateur( this );
+	    objMinuterie = new Minuterie( intTempsTotal * 60, tempsStep );
+	    objMinuterie.ajouterObservateur( this );
+	    objGestionnaireTemps.ajouterTache( objMinuterie, tempsStep );
 	}
 	
 	public void arreterPartie()

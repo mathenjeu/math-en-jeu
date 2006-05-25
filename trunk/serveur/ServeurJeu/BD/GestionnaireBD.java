@@ -6,6 +6,9 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.TreeMap;
 import java.sql.*;
+
+import org.apache.log4j.Logger;
+
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Salle;
@@ -52,6 +55,8 @@ public class GestionnaireBD
 	
 	static private String urlQuestionReponse = "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/";
 	
+	static private Logger objLogger = Logger.getLogger( GestionnaireBD.class );
+	
 	/**
 	 * Constructeur de la classe GestionnaireBD qui permet de garder la 
 	 * référence vers le contrôleur de jeu
@@ -71,8 +76,9 @@ public class GestionnaireBD
 		catch (Exception e)
 		{
 			// Une erreur est survenue lors de l'instanciation du pilote
-		    System.out.println("Il est impossible d'instancier le pilote JDBC.");
-		    System.out.println("La communication avec la base de données sera impossible.");
+		    objLogger.error("Il est impossible d'instancier le pilote JDBC.");
+		    objLogger.error("La communication avec la base de données sera impossible.");
+		    objLogger.error( e.getMessage() );
 		    e.printStackTrace();
 		    return;			
 		}
@@ -85,8 +91,9 @@ public class GestionnaireBD
 		catch (SQLException e)
 		{
 			// Une erreur est survenue lors de la connexion à la base de données
-		    System.out.println("Une erreur est survenue lors de la connexion à la base de données.");
-		    System.out.println("La trace donnée par le système est la suivante:");
+			objLogger.error("Une erreur est survenue lors de la connexion à la base de données.");
+			objLogger.error("La trace donnée par le système est la suivante:");
+			objLogger.error( e.getMessage() );
 		    e.printStackTrace();
 		    return;			
 		}
@@ -99,8 +106,9 @@ public class GestionnaireBD
 		catch (SQLException e)
 		{
 			// Une erreur est survenue lors de la création d'une requête
-		    System.out.println("Une erreur est survenue lors de la création d'une requête.");
-		    System.out.println("La trace donnée par le système est la suivante:");
+			objLogger.error("Une erreur est survenue lors de la création d'une requête.");
+			objLogger.error("La trace donnée par le système est la suivante:");
+			objLogger.error( e.getMessage() );
 		    e.printStackTrace();
 		    return;			
 		}
@@ -126,8 +134,9 @@ public class GestionnaireBD
 		catch (SQLException e)
 		{
 			// Une erreur est survenue lors de l'exécution de la requête
-		    System.out.println("Une erreur est survenue lors de l'exécution de la requête.");
-		    System.out.println("La trace donnée par le système est la suivante:");
+			objLogger.error("Une erreur est survenue lors de l'exécution de la requête.");
+		    objLogger.error("La trace donnée par le système est la suivante:");
+		    objLogger.error( e.getMessage() );
 		    e.printStackTrace();
 		    return false;			
 		}
@@ -160,8 +169,9 @@ public class GestionnaireBD
 		catch (SQLException e)
 		{
 			// Une erreur est survenue lors de l'exécution de la requête
-		    System.out.println("Une erreur est survenue lors de l'exécution de la requête.");
-		    System.out.println("La trace donnée par le système est la suivante:");
+			objLogger.error("Une erreur est survenue lors de l'exécution de la requête.");
+			objLogger.error("La trace donnée par le système est la suivante:");
+			objLogger.error( e.getMessage() );
 		    e.printStackTrace();			
 		}
 	}
@@ -206,7 +216,7 @@ public class GestionnaireBD
 		objReglesSalle.definirPermetChat(true);
 		objReglesSalle.definirRatioTrous(0.30f);
 		objReglesSalle.definirRatioMagasins(0.05f);
-		objReglesSalle.definirRatioCasesSpeciales(0.15f);
+		objReglesSalle.definirRatioCasesSpeciales(0.05f);
 		objReglesSalle.definirRatioPieces(0.10f);
 		objReglesSalle.definirRatioObjetsUtilisables(0.05f);
 		objReglesSalle.definirValeurPieceMaximale(25);
@@ -281,7 +291,7 @@ public class GestionnaireBD
 		/*String strRequeteSQL = "SELECT * FROM question WHERE categorie=" + categorieQuestion 
 								+ " AND difficulte=" + difficulte; */
 		
-		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion >= 0 and cleQuestion <= 92 and cleQuestion NOT IN("; //TODO pour les test
+		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion >= 2 and cleQuestion <= 800 and cleQuestion NOT IN("; //TODO pour les test
 		
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des questions posées (chaque élément est un Map.Entry)
@@ -325,7 +335,7 @@ public class GestionnaireBD
 				int codeQuestion = rs.getInt("cleQuestion");
 				String typeQuestion = TypeQuestion.ChoixReponse; //TODO aller chercher code dans bd
 				String question = rs.getString( "FichierFlashQuestion" );
-				String reponse = "a";//rs.getString("bonneReponse");
+				String reponse = rs.getString("bonneReponse");
 				String explication = rs.getString("FichierFlashReponse");
 				listeQuestions.addElement( new Question( codeQuestion, typeQuestion, difficulte, urlQuestionReponse + question, reponse, urlQuestionReponse + explication ));
 				intLength++;
@@ -340,15 +350,17 @@ public class GestionnaireBD
 		catch (SQLException e)
 		{
 			// Une erreur est survenue lors de l'exécution de la requête
-		    System.out.println("Une erreur est survenue lors de l'exécution de la requête.");
-		    System.out.println("La trace donnée par le système est la suivante:");
+			objLogger.error("Une erreur est survenue lors de l'exécution de la requête.");
+			objLogger.error("La trace donnée par le système est la suivante:");
+			objLogger.error( e.getMessage() );
 		    e.printStackTrace();			
 		}
 		catch( RuntimeException e)
 		{
 			//Une erreur est survenue lors de la recherche de la prochaine question
-		    System.out.println("Une erreur est survenue lors de la recherche de la prochaine question.");
-			System.out.println("La trace donnée par le système est la suivante:");
+			objLogger.error("Une erreur est survenue lors de la recherche de la prochaine question.");
+			objLogger.error("La trace donnée par le système est la suivante:");
+			objLogger.error( e.getMessage() );
 		    e.printStackTrace();
 		}
 		
@@ -379,8 +391,9 @@ public class GestionnaireBD
 		catch (SQLException e)
 		{
 			// Une erreur est survenue lors de l'exécution de la requête
-		    System.out.println("Une erreur est survenue lors de l'exécution de la requête.");
-		    System.out.println("La trace donnée par le système est la suivante:");
+			objLogger.error("Une erreur est survenue lors de l'exécution de la requête.");
+		    objLogger.error("La trace donnée par le système est la suivante:");
+		    objLogger.error( e.getMessage() );
 		    e.printStackTrace();			
 		}
 	}
@@ -398,8 +411,9 @@ public class GestionnaireBD
 		catch (SQLException e)
 		{
 			// Une erreur est survenue lors de la fermeture de la connexion
-		    System.out.println("Une erreur est survenue lors de la fermeture de la connexion.");
-		    System.out.println("La trace donnée par le système est la suivante:");
+			objLogger.error("Une erreur est survenue lors de la fermeture de la connexion.");
+			objLogger.error("La trace donnée par le système est la suivante:");
+			objLogger.error( e.getMessage() );
 		    e.printStackTrace();			
 		}
 	}

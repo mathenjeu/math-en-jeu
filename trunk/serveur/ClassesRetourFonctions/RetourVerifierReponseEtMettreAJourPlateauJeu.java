@@ -30,6 +30,8 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 	// Déclaration d'une variable qui va contenir le nouveau pointage
 	private int intNouveauPointage;
 	
+	private String strCollision;
+	
 	/**
 	 * Constructeur de la classe RetourVerifierReponseEtMettreAJourPlateauJeu.
 	 * 
@@ -46,6 +48,7 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 		objObjetSubi = null;
 		objNouvellePosition = null;
 		intNouveauPointage = nouveauPointage;
+		strCollision = "vide";
 	}
 	
 	/**
@@ -148,5 +151,15 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 	public int obtenirNouveauPointage()
 	{
 		return intNouveauPointage;
+	}
+	
+	public String obtenirCollision()
+	{
+		return strCollision;
+	}
+	
+	public void definirCollision( String collision )
+	{
+		strCollision = collision;
 	}
 }

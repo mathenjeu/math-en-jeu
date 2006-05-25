@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 
 import Enumerations.RetourFonctions.ResultatAuthentification;
 import ServeurJeu.BD.GestionnaireBD;
@@ -85,7 +86,8 @@ public class ControleurJeu
 	{
 		super();
 		
-		BasicConfigurator.configure();
+		//DOMConfigurator.configure( "log4j.xml" );
+		//BasicConfigurator.configure();
 
 		objLogger.info( "Le serveur démarre : " + new Date().toString() );
 		
