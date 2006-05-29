@@ -22,6 +22,8 @@ import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
+import ClassesUtilitaires.Espion;
+
 
 //TODO: Si un jour on doit modifier le nom d'utilisateur d'un joueur pendant 
 //      le jeu, il va falloir ajouter des synchronisation à chaque fois qu'on 
@@ -77,6 +79,11 @@ public class ControleurJeu
 	// de jeu. Chaque élément de cette liste a comme clé le nom de la salle
 	private TreeMap lstSalles;
 	
+	// Déclaration de l'objet Espion qui va inscrire des informationsà proppos
+	// du serveur en parallète
+	private Espion objEspion;
+	
+	
 	/**
 	 * Constructeur de la classe ControleurJeu qui permet de créer le gestionnaire 
 	 * des communications, le gestionnaire d'événements et le gestionnaire de bases 
@@ -119,8 +126,15 @@ public class ControleurJeu
 		// Démarrer le thread du gestionnaire d'événements
 		threadEvenements.start();
 		
+		// Démarrer l'espion qui écrit dans un fichier périodiquement les
+		// informations du serveur
+		objEspion = new Espion(this, "Espion.txt", 5000, ClassesUtilitaires.Espion.MODE_FICHIER_TEXTE);
+		Thread threadEspion = new Thread(objEspion);
+		threadEspion.start();
+		
 		// Démarrer l'écoute des connexions clientes
-		objGestionnaireCommunication.ecouterConnexions();
+		objGestionnaireCommunication.ecouterConnexions();	
+				
 	}
 	
 	/**
@@ -514,5 +528,10 @@ public class ControleurJeu
 	public static void main(String[] args) 
 	{
 		ControleurJeu objJeu = new ControleurJeu();
+	}
+	
+	public GestionnaireCommunication obtenirGestionnaireCommunication()
+	{
+		return objGestionnaireCommunication;
 	}
 }

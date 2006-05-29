@@ -952,4 +952,24 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	{
 		return obtenirNoTable();
 	}
+	
+	public boolean estArretee()
+	{
+		return bolEstArretee;
+	}
+	
+	public int obtenirTempsRestant()
+	{
+	    if (objMinuterie == null)
+	    {
+	    	return intTempsTotal;
+	    }
+	    else
+	    {
+	    	return objMinuterie.obtenirTempsActuel();
+	    }
+		
+	}
+	
+	
 }

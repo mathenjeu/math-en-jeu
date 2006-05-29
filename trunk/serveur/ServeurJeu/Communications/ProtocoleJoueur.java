@@ -36,7 +36,7 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
-
+ 
 /**
  * @author Jean-François Brind'Amour
  */
@@ -311,7 +311,7 @@ public class ProtocoleJoueur implements Runnable
 		// Déclaration d'une variable qui permet de savoir si on doit retourner 
 		// une commande au client ou si ce n'était qu'une réponse du client 
 		boolean bolDoitRetournerCommande = true;
-		
+
 		// Créer un nouveau Document qui va contenir le code XML du message 
 		// passé en paramètres
 		Document objDocumentXMLEntree = UtilitaireXML.obtenirDocumentXML(message);
@@ -2267,5 +2267,11 @@ public class ProtocoleJoueur implements Runnable
 	{
 		// Faire la référence vers le joueur humain
 		objJoueurHumain = joueur;
+	}
+	
+	public JoueurHumain obtenirJoueurHumain()
+	{
+		// Retourner une référence vers le joueur humain
+		return objJoueurHumain;
 	}
 }
