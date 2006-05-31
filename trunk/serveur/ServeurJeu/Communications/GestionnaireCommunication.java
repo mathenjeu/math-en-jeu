@@ -84,6 +84,8 @@ public class GestionnaireCommunication
 		
 		// Démarrer le thread du vérificateur
 		threadVerificateur.start();
+		
+		miseAJourInfo();
 	}
 	
 	/**

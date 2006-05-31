@@ -128,8 +128,11 @@ public class GestionnaireBD
 	{
 		try
 		{
-			ResultSet rs = requete.executeQuery("SELECT * FROM joueur WHERE alias = '" + nomUtilisateur + "' AND motDePasse = '" + motDePasse + "';");
-			return rs.next();
+			synchronized( requete )
+			{
+				ResultSet rs = requete.executeQuery("SELECT * FROM joueur WHERE alias = '" + nomUtilisateur + "' AND motDePasse = '" + motDePasse + "';");
+				return rs.next();
+			}
 		}
 		catch (SQLException e)
 		{
@@ -153,17 +156,20 @@ public class GestionnaireBD
 	{
 		try
 		{
-			ResultSet rs = requete.executeQuery("SELECT prenom, nom, peutCreerSalles FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
-			if (rs.next())
+			synchronized( requete )
 			{
-				if (rs.getInt("peutCreerSalles") != 0)
+				ResultSet rs = requete.executeQuery("SELECT prenom, nom, peutCreerSalles FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+				if (rs.next())
 				{
-					joueur.definirPeutCreerSalles(true);
+					if (rs.getInt("peutCreerSalles") != 0)
+					{
+						joueur.definirPeutCreerSalles(true);
+					}
+					String prenom = rs.getString("prenom");
+					String nom = rs.getString("nom");
+					joueur.definirPrenom(prenom);
+					joueur.definirNomFamille(nom);
 				}
-				String prenom = rs.getString("prenom");
-				String nom = rs.getString("nom");
-				joueur.definirPrenom(prenom);
-				joueur.definirNomFamille(nom);
 			}
 		}
 		catch (SQLException e)
@@ -327,25 +333,28 @@ public class GestionnaireBD
 		
 		try
 		{
-			ResultSet rs = requete.executeQuery( strRequeteSQL );
-			int intLength = 0;
-			Vector listeQuestions = new Vector();
-			while(rs.next())
+			synchronized( requete )
 			{
-				int codeQuestion = rs.getInt("cleQuestion");
-				String typeQuestion = TypeQuestion.ChoixReponse; //TODO aller chercher code dans bd
-				String question = rs.getString( "FichierFlashQuestion" );
-				String reponse = rs.getString("bonneReponse");
-				String explication = rs.getString("FichierFlashReponse");
-				listeQuestions.addElement( new Question( codeQuestion, typeQuestion, difficulte, urlQuestionReponse + question, reponse, urlQuestionReponse + explication ));
-				intLength++;
-			}
-			if( intLength > 0 )
-			{
-				int intRandom = UtilitaireNombres.genererNbAleatoire( intLength );
-				objQuestionTrouvee = (Question)listeQuestions.elementAt( intRandom );
-			}
+				ResultSet rs = requete.executeQuery( strRequeteSQL );
+				int intLength = 0;
+				Vector listeQuestions = new Vector();
+				while(rs.next())
+				{
+					int codeQuestion = rs.getInt("cleQuestion");
+					String typeQuestion = TypeQuestion.ChoixReponse; //TODO aller chercher code dans bd
+					String question = rs.getString( "FichierFlashQuestion" );
+					String reponse = rs.getString("bonneReponse");
+					String explication = rs.getString("FichierFlashReponse");
+					listeQuestions.addElement( new Question( codeQuestion, typeQuestion, difficulte, urlQuestionReponse + question, reponse, urlQuestionReponse + explication ));
+					intLength++;
+				}
 			
+				if( intLength > 0 )
+				{
+					int intRandom = UtilitaireNombres.genererNbAleatoire( intLength );
+					objQuestionTrouvee = (Question)listeQuestions.elementAt( intRandom );
+				}
+			}
 		}
 		catch (SQLException e)
 		{
@@ -371,21 +380,24 @@ public class GestionnaireBD
 	{
 		try
 		{
-			ResultSet rs = requete.executeQuery("SELECT partiesCompletes, meilleurPointage, tempsPartie FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
-			if (rs.next())
+			synchronized( requete )
 			{
-				int partiesCompletes = rs.getInt( "partiesCompletes" ) + 1;
-				int meilleurPointage = rs.getInt( "meilleurPointage" );
-				int pointageActuel = joueur.obtenirPartieCourante().obtenirPointage();
-				if( meilleurPointage < pointageActuel )
+				ResultSet rs = requete.executeQuery("SELECT partiesCompletes, meilleurPointage, tempsPartie FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+				if (rs.next())
 				{
-					meilleurPointage = pointageActuel;
+					int partiesCompletes = rs.getInt( "partiesCompletes" ) + 1;
+					int meilleurPointage = rs.getInt( "meilleurPointage" );
+					int pointageActuel = joueur.obtenirPartieCourante().obtenirPointage();
+					if( meilleurPointage < pointageActuel )
+					{
+						meilleurPointage = pointageActuel;
+					}
+					
+					int tempsPartie = tempsTotal + rs.getInt("tempsPartie");
+					
+					//mise-a-jour
+					int result = requete.executeUpdate( "UPDATE joueur SET partiesCompletes=" + partiesCompletes + ",meilleurPointage=" + meilleurPointage + ",tempsPartie=" + tempsPartie + " WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
 				}
-				
-				int tempsPartie = tempsTotal + rs.getInt("tempsPartie");
-				
-				//mise-a-jour
-				int result = requete.executeUpdate( "UPDATE joueur SET partiesCompletes=" + partiesCompletes + ",meilleurPointage=" + meilleurPointage + ",tempsPartie=" + tempsPartie + " WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
 			}
 		}
 		catch (SQLException e)

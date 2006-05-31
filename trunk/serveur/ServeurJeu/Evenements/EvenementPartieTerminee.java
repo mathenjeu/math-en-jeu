@@ -10,7 +10,6 @@ import javax.xml.transform.TransformerException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Text;
 
 import java.util.TreeMap;
 import java.util.Iterator;

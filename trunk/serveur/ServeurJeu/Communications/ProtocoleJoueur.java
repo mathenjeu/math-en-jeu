@@ -124,7 +124,7 @@ public class ProtocoleJoueur implements Runnable
 		}
 		catch (SocketException se)
 		{
-			objLogger.info( "Le canal de communication entre le serveur et le client est ferme" );
+			objLogger.error( "Le canal de communication entre le serveur et le client est ferme" );
 			
 			// Arrêter le thread
 			bolStopThread = true;
