@@ -168,6 +168,7 @@ public class ProtocoleJoueur implements Runnable
 				// stream a été fermé, il faut donc terminer le thread
 				if (intBytesLus == -1)
 				{
+                    objLogger.error("Une erreur est survenue: nombre d'octets lus = -1");
 					bolStopThread = true;
 				}
 				
@@ -242,6 +243,11 @@ public class ProtocoleJoueur implements Runnable
 		{
 			objLogger.error("Une erreur est survenue lors de la conversion du document XML en chaine de caracteres");
 			objLogger.error( te.getMessage() );
+		}
+		catch (Exception e)
+		{
+		  objLogger.error("Une erreur est survenue dans la thread du client");
+		  objLogger.error(e.getMessage());
 		}
 		finally
 		{
