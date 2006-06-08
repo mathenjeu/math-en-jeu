@@ -32,6 +32,9 @@ public class EvenementPartieDemarree extends Evenement
 	// Déclaration d'une liste contenant les positions des joueurs et dont la 
 	// clé est le nom d'utilisateur du joueur
 	private TreeMap lstPositionJoueurs;
+	
+	private Document objDocumentXML;
+	private Element objNoeudCommande;
     
     /**
      * Constructeur de la classe EvenementPartieDemarree qui permet 
@@ -50,6 +53,8 @@ public class EvenementPartieDemarree extends Evenement
     	intTempsPartie = tempsPartie;
         objttPlateauJeu = plateauJeu;
         lstPositionJoueurs = listePositionJoueurs;
+        objDocumentXML = null;
+        objNoeudCommande = null;
     }
 	
 	/**
@@ -64,174 +69,178 @@ public class EvenementPartieDemarree extends Evenement
 	{
 	    // Déclaration d'une variable qui va contenir le code XML à retourner
 	    String strCodeXML = "";
-	    
+	 
 		try
 		{
-	        // Appeler une fonction qui va créer un document XML dans lequel 
-		    // on peut ajouter des noeuds
-	        Document objDocumentXML = UtilitaireXML.obtenirDocumentXML();
-
-			// Créer le noeud de commande à retourner
-			Element objNoeudCommande = objDocumentXML.createElement("commande");
-			
-			// Créer les noeuds de paramètre et de taille
-			Element objNoeudParametreTempsPartie = objDocumentXML.createElement("parametre");
-			Element objNoeudParametreTaillePlateauJeu = objDocumentXML.createElement("parametre");
-			Element objNoeudParametrePositionJoueurs = objDocumentXML.createElement("parametre");
-			Element objNoeudParametrePlateauJeu = objDocumentXML.createElement("parametre");
-			Element objNoeudParametreTaille = objDocumentXML.createElement("taille");
-			
-			// Créer un noeud contenant le temps de la partie
-			Text objNoeudTexte = objDocumentXML.createTextNode(Integer.toString(intTempsPartie));
-			
-			// Ajouter le noeud texte au noeud du paramètre
-			objNoeudParametreTempsPartie.appendChild(objNoeudTexte);
-			
-			// Définir les attributs du noeud de commande
-			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
-			objNoeudCommande.setAttribute("type", "Evenement");
-			objNoeudCommande.setAttribute("nom", "PartieDemarree");
-			
-			// On ajoute un attribut type qui va contenir le type
-			// du paramètre
-			objNoeudParametreTempsPartie.setAttribute("type", "TempsPartie");
-			objNoeudParametreTaillePlateauJeu.setAttribute("type", "Taille");
-			objNoeudParametrePositionJoueurs.setAttribute("type", "PositionJoueurs");
-			objNoeudParametrePlateauJeu.setAttribute("type", "PlateauJeu");
-			
-			// Créer les informations concernant la taille
-			objNoeudParametreTaille.setAttribute("nbLignes", Integer.toString(objttPlateauJeu.length));
-			objNoeudParametreTaille.setAttribute("nbColonnes", Integer.toString(objttPlateauJeu[0].length));
-			
-			// Ajouter les noeuds enfants aux noeuds paramètres
-			objNoeudParametreTaillePlateauJeu.appendChild(objNoeudParametreTaille);
-			
-			// Créer un ensemble contenant tous les tuples de la liste 
-			// des positions de joueurs (chaque élément est un Map.Entry)
-			Set lstEnsemblePositionJoueurs = lstPositionJoueurs.entrySet();
-			
-			// Obtenir un itérateur pour l'ensemble contenant les positions 
-			// des joueurs
-			Iterator objIterateurListe = lstEnsemblePositionJoueurs.iterator();
-			
-			// Passer tous les positions des joueurs et créer leur code XML
-			while (objIterateurListe.hasNext() == true)
+			if( objDocumentXML == null )
 			{
-				// Déclaration d'une référence vers l'objet clé valeur courant
-				Map.Entry objPositionJoueur = (Map.Entry) objIterateurListe.next();
+		        // Appeler une fonction qui va créer un document XML dans lequel 
+			    // on peut ajouter des noeuds
+		        objDocumentXML = UtilitaireXML.obtenirDocumentXML();
+	
+				// Créer le noeud de commande à retourner
+				objNoeudCommande = objDocumentXML.createElement("commande");
 				
-				// Créer une référence vers la position du joueur courant
-				Point objPosition = (Point) objPositionJoueur.getValue();
+				// Créer les noeuds de paramètre et de taille
+				Element objNoeudParametreTempsPartie = objDocumentXML.createElement("parametre");
+				Element objNoeudParametreTaillePlateauJeu = objDocumentXML.createElement("parametre");
+				Element objNoeudParametrePositionJoueurs = objDocumentXML.createElement("parametre");
+				Element objNoeudParametrePlateauJeu = objDocumentXML.createElement("parametre");
+				Element objNoeudParametreTaille = objDocumentXML.createElement("taille");
 				
-				// Créer un noeud de case en passant le bon nom
-				Element objNoeudPositionJoueur = objDocumentXML.createElement("position");
+				// Créer un noeud contenant le temps de la partie
+				Text objNoeudTexte = objDocumentXML.createTextNode(Integer.toString(intTempsPartie));
 				
-				// Définir les attributs du noeud courant
-				objNoeudPositionJoueur.setAttribute("nom", (String) objPositionJoueur.getKey());
-				objNoeudPositionJoueur.setAttribute("x", Integer.toString(objPosition.x));
-				objNoeudPositionJoueur.setAttribute("y", Integer.toString(objPosition.y));
+				// Ajouter le noeud texte au noeud du paramètre
+				objNoeudParametreTempsPartie.appendChild(objNoeudTexte);
 				
-				// Ajouter le noeud de position courant au noeud paramètre
-				objNoeudParametrePositionJoueurs.appendChild(objNoeudPositionJoueur);
+				// Définir les attributs du noeud de commande
+				objNoeudCommande.setAttribute("type", "Evenement");
+				objNoeudCommande.setAttribute("nom", "PartieDemarree");
+				
+				// On ajoute un attribut type qui va contenir le type
+				// du paramètre
+				objNoeudParametreTempsPartie.setAttribute("type", "TempsPartie");
+				objNoeudParametreTaillePlateauJeu.setAttribute("type", "Taille");
+				objNoeudParametrePositionJoueurs.setAttribute("type", "PositionJoueurs");
+				objNoeudParametrePlateauJeu.setAttribute("type", "PlateauJeu");
+				
+				// Créer les informations concernant la taille
+				objNoeudParametreTaille.setAttribute("nbLignes", Integer.toString(objttPlateauJeu.length));
+				objNoeudParametreTaille.setAttribute("nbColonnes", Integer.toString(objttPlateauJeu[0].length));
+				
+				// Ajouter les noeuds enfants aux noeuds paramètres
+				objNoeudParametreTaillePlateauJeu.appendChild(objNoeudParametreTaille);
+				
+				// Créer un ensemble contenant tous les tuples de la liste 
+				// des positions de joueurs (chaque élément est un Map.Entry)
+				Set lstEnsemblePositionJoueurs = lstPositionJoueurs.entrySet();
+				
+				// Obtenir un itérateur pour l'ensemble contenant les positions 
+				// des joueurs
+				Iterator objIterateurListe = lstEnsemblePositionJoueurs.iterator();
+				
+				// Passer tous les positions des joueurs et créer leur code XML
+				while (objIterateurListe.hasNext() == true)
+				{
+					// Déclaration d'une référence vers l'objet clé valeur courant
+					Map.Entry objPositionJoueur = (Map.Entry) objIterateurListe.next();
+					
+					// Créer une référence vers la position du joueur courant
+					Point objPosition = (Point) objPositionJoueur.getValue();
+					
+					// Créer un noeud de case en passant le bon nom
+					Element objNoeudPositionJoueur = objDocumentXML.createElement("position");
+					
+					// Définir les attributs du noeud courant
+					objNoeudPositionJoueur.setAttribute("nom", (String) objPositionJoueur.getKey());
+					objNoeudPositionJoueur.setAttribute("x", Integer.toString(objPosition.x));
+					objNoeudPositionJoueur.setAttribute("y", Integer.toString(objPosition.y));
+					
+					// Ajouter le noeud de position courant au noeud paramètre
+					objNoeudParametrePositionJoueurs.appendChild(objNoeudPositionJoueur);
+				}
+				
+				// Passer toutes les lignes du plateau de jeu et créer toutes 
+				// les cases
+				for (int i = 0; i < objttPlateauJeu.length; i++)
+				{
+					// Passer toutes les colonnes du plateau de jeu
+					for (int j = 0; j < objttPlateauJeu[0].length; j++)
+					{
+						// S'il y a une case au point courant, alors on peut la 
+						// créer en XML, sinon on ne fait rien
+						if (objttPlateauJeu[i][j] != null)
+						{
+							// Déclaration d'un noeud de case
+							Element objNoeudCase;
+							
+							// Si la classe de l'objet courant est CaseCouleur,
+							// alors on va créer l'élément en passant le bon nom
+							if (objttPlateauJeu[i][j] instanceof CaseCouleur)
+							{
+								// Créer le noeud de case en passant le bon nom
+								objNoeudCase = objDocumentXML.createElement("caseCouleur");
+							}
+							else
+							{
+								// Créer le noeud de case en passant le bon nom
+								objNoeudCase = objDocumentXML.createElement("caseSpeciale");		
+							}
+							
+							// Créer les informations de la case
+							objNoeudCase.setAttribute("x", Integer.toString(i));
+							objNoeudCase.setAttribute("y", Integer.toString(j));
+							objNoeudCase.setAttribute("type", Integer.toString(objttPlateauJeu[i][j].obtenirTypeCase()));
+							
+							// Si la case courante est une case couleur, alors
+							// on définit son objet, sinon on ne fait rien de 
+							// plus pour une case spéciale
+							if (objttPlateauJeu[i][j] instanceof CaseCouleur)
+							{
+								// Créer une référence vers la case couleur 
+								// courante
+								CaseCouleur objCaseCouleur = (CaseCouleur) objttPlateauJeu[i][j];
+								
+								// S'il y a un objet sur la case, alors on va 
+								// créer le code XML pour cet objet (il ne peut 
+								// y en avoir qu'un seul)
+								if (objCaseCouleur.obtenirObjetCase() != null)
+								{
+									// Déclaration d'un noeud d'objet
+									Element objNoeudObjet;
+									
+									// Si l'objet sur la case est un magasin
+									if (objCaseCouleur.obtenirObjetCase() instanceof Magasin)
+									{
+										// Créer le noeud d'objet
+										objNoeudObjet = objDocumentXML.createElement("magasin");
+										
+										// Mettre le nom de la classe de l'objet comme attribut
+										objNoeudObjet.setAttribute("nom", objCaseCouleur.obtenirObjetCase().getClass().getSimpleName());
+									}
+									else if (objCaseCouleur.obtenirObjetCase() instanceof ObjetUtilisable)
+									{
+										// Créer le noeud d'objet
+										objNoeudObjet = objDocumentXML.createElement("objetUtilisable");
+										
+										// Définir les attributs de l'objet
+										objNoeudObjet.setAttribute("id", Integer.toString(((ObjetUtilisable) objCaseCouleur.obtenirObjetCase()).obtenirId()));
+										objNoeudObjet.setAttribute("nom", objCaseCouleur.obtenirObjetCase().getClass().getSimpleName());
+										objNoeudObjet.setAttribute("visible", Boolean.toString(((ObjetUtilisable) objCaseCouleur.obtenirObjetCase()).estVisible()));
+									}
+									else
+									{
+										// Créer le noeud d'objet
+										objNoeudObjet = objDocumentXML.createElement("piece");
+										
+										// Définir la valeur de l'objet
+										objNoeudObjet.setAttribute("valeur", Integer.toString(((Piece) objCaseCouleur.obtenirObjetCase()).obtenirValeur()));										
+									}
+									
+									// Ajouter le noeud objet au noeud de la case
+									objNoeudCase.appendChild(objNoeudObjet);
+								}
+							}
+							
+							// Ajouter la case courante au noeud du plateau de 
+							// jeu
+							objNoeudParametrePlateauJeu.appendChild(objNoeudCase);
+						}
+					}
+				}				
+				
+				// Ajouter le noeud paramètre au noeud de commande
+				objNoeudCommande.appendChild(objNoeudParametreTempsPartie);
+				objNoeudCommande.appendChild(objNoeudParametreTaillePlateauJeu);
+				objNoeudCommande.appendChild(objNoeudParametrePositionJoueurs);
+				objNoeudCommande.appendChild(objNoeudParametrePlateauJeu);
+	
+				// Ajouter le noeud de commande au noeud racine dans le document
+				objDocumentXML.appendChild(objNoeudCommande);
 			}
 			
-			// Passer toutes les lignes du plateau de jeu et créer toutes 
-			// les cases
-			for (int i = 0; i < objttPlateauJeu.length; i++)
-			{
-				// Passer toutes les colonnes du plateau de jeu
-				for (int j = 0; j < objttPlateauJeu[0].length; j++)
-				{
-					// S'il y a une case au point courant, alors on peut la 
-					// créer en XML, sinon on ne fait rien
-					if (objttPlateauJeu[i][j] != null)
-					{
-						// Déclaration d'un noeud de case
-						Element objNoeudCase;
-						
-						// Si la classe de l'objet courant est CaseCouleur,
-						// alors on va créer l'élément en passant le bon nom
-						if (objttPlateauJeu[i][j] instanceof CaseCouleur)
-						{
-							// Créer le noeud de case en passant le bon nom
-							objNoeudCase = objDocumentXML.createElement("caseCouleur");
-						}
-						else
-						{
-							// Créer le noeud de case en passant le bon nom
-							objNoeudCase = objDocumentXML.createElement("caseSpeciale");		
-						}
-						
-						// Créer les informations de la case
-						objNoeudCase.setAttribute("x", Integer.toString(i));
-						objNoeudCase.setAttribute("y", Integer.toString(j));
-						objNoeudCase.setAttribute("type", Integer.toString(objttPlateauJeu[i][j].obtenirTypeCase()));
-						
-						// Si la case courante est une case couleur, alors
-						// on définit son objet, sinon on ne fait rien de 
-						// plus pour une case spéciale
-						if (objttPlateauJeu[i][j] instanceof CaseCouleur)
-						{
-							// Créer une référence vers la case couleur 
-							// courante
-							CaseCouleur objCaseCouleur = (CaseCouleur) objttPlateauJeu[i][j];
-							
-							// S'il y a un objet sur la case, alors on va 
-							// créer le code XML pour cet objet (il ne peut 
-							// y en avoir qu'un seul)
-							if (objCaseCouleur.obtenirObjetCase() != null)
-							{
-								// Déclaration d'un noeud d'objet
-								Element objNoeudObjet;
-								
-								// Si l'objet sur la case est un magasin
-								if (objCaseCouleur.obtenirObjetCase() instanceof Magasin)
-								{
-									// Créer le noeud d'objet
-									objNoeudObjet = objDocumentXML.createElement("magasin");
-									
-									// Mettre le nom de la classe de l'objet comme attribut
-									objNoeudObjet.setAttribute("nom", objCaseCouleur.obtenirObjetCase().getClass().getSimpleName());
-								}
-								else if (objCaseCouleur.obtenirObjetCase() instanceof ObjetUtilisable)
-								{
-									// Créer le noeud d'objet
-									objNoeudObjet = objDocumentXML.createElement("objetUtilisable");
-									
-									// Définir les attributs de l'objet
-									objNoeudObjet.setAttribute("id", Integer.toString(((ObjetUtilisable) objCaseCouleur.obtenirObjetCase()).obtenirId()));
-									objNoeudObjet.setAttribute("nom", objCaseCouleur.obtenirObjetCase().getClass().getSimpleName());
-									objNoeudObjet.setAttribute("visible", Boolean.toString(((ObjetUtilisable) objCaseCouleur.obtenirObjetCase()).estVisible()));
-								}
-								else
-								{
-									// Créer le noeud d'objet
-									objNoeudObjet = objDocumentXML.createElement("piece");
-									
-									// Définir la valeur de l'objet
-									objNoeudObjet.setAttribute("valeur", Integer.toString(((Piece) objCaseCouleur.obtenirObjetCase()).obtenirValeur()));										
-								}
-								
-								// Ajouter le noeud objet au noeud de la case
-								objNoeudCase.appendChild(objNoeudObjet);
-							}
-						}
-						
-						// Ajouter la case courante au noeud du plateau de 
-						// jeu
-						objNoeudParametrePlateauJeu.appendChild(objNoeudCase);
-					}
-				}
-			}				
-			
-			// Ajouter le noeud paramètre au noeud de commande
-			objNoeudCommande.appendChild(objNoeudParametreTempsPartie);
-			objNoeudCommande.appendChild(objNoeudParametreTaillePlateauJeu);
-			objNoeudCommande.appendChild(objNoeudParametrePositionJoueurs);
-			objNoeudCommande.appendChild(objNoeudParametrePlateauJeu);
-
-			// Ajouter le noeud de commande au noeud racine dans le document
-			objDocumentXML.appendChild(objNoeudCommande);
+			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
 
 			// Transformer le document XML en code XML
 			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
@@ -243,6 +252,10 @@ public class EvenementPartieDemarree extends Evenement
 		catch (TransformerException te)
 		{
 			System.out.println("Une erreur est survenue lors de la conversion du document XML en chaine de caracteres");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
 		}
 		
 		return strCodeXML;
