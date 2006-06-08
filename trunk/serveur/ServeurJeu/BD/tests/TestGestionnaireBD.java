@@ -7,6 +7,7 @@ package ServeurJeu.BD.tests;
 
 import java.util.TreeMap;
 import ServeurJeu.BD.GestionnaireBD;
+import ServeurJeu.ComposantesJeu.BoiteQuestions;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.InformationPartie;
@@ -97,6 +98,31 @@ public class TestGestionnaireBD
 		gBD.mettreAJourJoueur( objJoueurHumain, 60 );
 	}
 	
+	private static void test_remplirBoiteQuestions( GestionnaireBD gBD )
+	{
+		System.out.println( "_________________________________________" );
+		System.out.println( "test_remplirBoiteQuestions" );
+		BoiteQuestions boiteQuestions = new BoiteQuestions();
+		gBD.remplirBoiteQuestions( boiteQuestions );
+		Question q = boiteQuestions.pigerQuestion( 0, 0 );
+		int nbQuestion = 0;
+		while( q != null )
+		{
+			nbQuestion++;
+			int codeQuestion = q.obtenirCodeQuestion();
+			String question = q.obtenirURLQuestion();
+			String explication = q.obtenirURLExplication();
+			System.out.println( "Code question " + nbQuestion +  " : " + codeQuestion );
+			System.out.println( "Url question : " + question );
+			System.out.println( "Url explication : " + explication );
+			q = boiteQuestions.pigerQuestion( 0, 0 );
+			if( q == null )
+			{
+				System.out.println( "Pas de questions disponibles" );
+			}
+		}
+	}
+	
 	private static void test_arreterGestionnaireBD( GestionnaireBD gBD )
 	{
 		System.out.println( "_________________________________________" );
@@ -111,6 +137,7 @@ public class TestGestionnaireBD
 		test_joueurExiste( gBD );
 		test_remplirInformationsJoueur( gBD );
 		test_mettreAJourJoueur( gBD );
+		test_remplirBoiteQuestions( gBD );
 		test_arreterGestionnaireBD( gBD );
 	}
 }

@@ -64,6 +64,8 @@ public class InformationPartie
 	// Déclaration d'une liste d'objets utilisables ramassés par le joueur
 	private TreeMap lstObjetsUtilisablesRamasses;
 	
+	private BoiteQuestions objBoiteQuestions;
+	
 	/**
 	 * Constructeur de la classe InformationPartie qui permet d'initialiser
 	 * les propriétés de la partie et de faire la référence vers la table.
@@ -100,6 +102,9 @@ public class InformationPartie
 	    
 	    // Créer la liste des objets utilisables qui ont été ramassés
 	    lstObjetsUtilisablesRamasses = new TreeMap();
+	    
+	    objBoiteQuestions = new BoiteQuestions();
+	    objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions );
 	}
 
 	/**
@@ -375,7 +380,8 @@ public class InformationPartie
 		// une question
 		if (intDifficulte > 0)
 		{
-			objQuestionTrouvee = objGestionnaireBD.trouverProchaineQuestion(intCategorieQuestion, intDifficulte, lstQuestionsRepondues);
+			//TODO enlever ce commentaire : objQuestionTrouvee = objGestionnaireBD.trouverProchaineQuestion(intCategorieQuestion, intDifficulte, lstQuestionsRepondues);
+			objQuestionTrouvee = objBoiteQuestions.pigerQuestion( intCategorieQuestion, intDifficulte );
 		}
 		
 		// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
@@ -390,6 +396,9 @@ public class InformationPartie
 		}
 		else if (intDifficulte > 0)
 		{
+			objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions );
+			objQuestionTrouvee = objBoiteQuestions.pigerQuestion( intCategorieQuestion, intDifficulte );
+			
 			// Toutes les questions de cette catégorie et de cette difficulté
 			// ont toutes été posées, on vide donc toute la liste de questions
 			// et on recommence du début
@@ -401,7 +410,7 @@ public class InformationPartie
 			lstQuestionsRepondues.clear();
 			
 			// Aller chercher de nouveau une question dans la BD
-			objQuestionTrouvee = objGestionnaireBD.trouverProchaineQuestion(intCategorieQuestion, intDifficulte, lstQuestionsRepondues);
+			//TODO enlever ce commentaire : objQuestionTrouvee = objGestionnaireBD.trouverProchaineQuestion(intCategorieQuestion, intDifficulte, lstQuestionsRepondues);
 			
 			// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
 			// des questions posées et on la garde en mémoire pour pouvoir ensuite

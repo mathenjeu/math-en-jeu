@@ -9,6 +9,7 @@ import java.sql.*;
 
 import org.apache.log4j.Logger;
 
+import ServeurJeu.ComposantesJeu.BoiteQuestions;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Salle;
@@ -276,6 +277,45 @@ public class GestionnaireBD
 	    //TODO : charger salles de la bd??
 	}
 	
+	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions )
+	{
+		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion >= 2 and cleQuestion <= 800";
+		try
+		{
+			synchronized( requete )
+			{
+				ResultSet rs = requete.executeQuery( strRequeteSQL );
+				Vector listeQuestions = new Vector();
+				while(rs.next())
+				{
+					int codeQuestion = rs.getInt("cleQuestion");
+					String typeQuestion = TypeQuestion.ChoixReponse; //TODO aller chercher code dans bd
+					String question = rs.getString( "FichierFlashQuestion" );
+					String reponse = rs.getString("bonneReponse");
+					String explication = rs.getString("FichierFlashReponse");
+					int difficulte = 1;
+					boiteQuestions.ajouterQuestion( new Question( codeQuestion, typeQuestion, difficulte, urlQuestionReponse + question, reponse, urlQuestionReponse + explication ));
+				}
+			}
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exécution de la requête
+			objLogger.error("Une erreur est survenue lors de l'exécution de la requête.");
+			objLogger.error("La trace donnée par le système est la suivante:");
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();			
+		}
+		catch( RuntimeException e)
+		{
+			//Une erreur est survenue lors de la recherche de la prochaine question
+			objLogger.error("Une erreur est survenue lors de la recherche de la prochaine question.");
+			objLogger.error("La trace donnée par le système est la suivante:");
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Cette fonction permet de trouver une question dans la base de données
 	 * selon la catégorie de question et la difficulté et en tenant compte des
@@ -291,6 +331,8 @@ public class GestionnaireBD
 	 */
 	public Question trouverProchaineQuestion(int categorieQuestion, int difficulte, TreeMap listeQuestionsPosees)
 	{
+		objLogger.error( "trouverProchaineQuestion n'est pu utilisée" );
+		
 		// Déclaration d'une question et de la requête SQL pour aller
 		// chercher les questions dans la BD
 		Question objQuestionTrouvee = null;
