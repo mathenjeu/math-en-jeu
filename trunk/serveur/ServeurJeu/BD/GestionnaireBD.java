@@ -30,6 +30,8 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
+import java.util.Date;
+import java.text.SimpleDateFormat; 
 
 /**
  * @author Jean-François Brind'Amour
@@ -159,7 +161,7 @@ public class GestionnaireBD
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery("SELECT prenom, nom, peutCreerSalles FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+				ResultSet rs = requete.executeQuery("SELECT cleJoueur, prenom, nom, peutCreerSalles FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
 				if (rs.next())
 				{
 					if (rs.getInt("peutCreerSalles") != 0)
@@ -168,8 +170,10 @@ public class GestionnaireBD
 					}
 					String prenom = rs.getString("prenom");
 					String nom = rs.getString("nom");
+					int cle = Integer.parseInt(rs.getString("cleJoueur"));
 					joueur.definirPrenom(prenom);
 					joueur.definirNomFamille(nom);
+					joueur.definirCleJoueur(cle);
 				}
 			}
 		}
@@ -268,7 +272,7 @@ public class GestionnaireBD
 			}
 		}*/
 		
-	    Salle objSalle = new Salle(gestionnaireEv, this, "Générale", "Jeff", "", objReglesSalle);
+	    Salle objSalle = new Salle(gestionnaireEv, this, "Générale", "Jeff", "", objReglesSalle, objControleurJeu);
 	    //Salle objSalle2 = new Salle(gestionnaireEv, this, "Privée", "Jeff", "jeff", objReglesSalle);
 	    
 	    objControleurJeu.ajouterNouvelleSalle(objSalle);
@@ -470,5 +474,100 @@ public class GestionnaireBD
 			objLogger.error( e.getMessage() );
 		    e.printStackTrace();			
 		}
+	}
+	
+	/* Aller chercher un nom de joueur virtuel aléatoire
+	 * Cette fonction pourra aussi faire en sorte que le même nom ne soit pas utilisé
+	 * plus d'une fois en modifiant la valeur d'un champ booléan de la bd
+	 * TODO: Aller chercher dans la BD
+	 */
+	public String obtenirNomJoueurVirtuelAleatoire()
+	{
+	   int intValeurAleatoire = UtilitaireNombres.genererNbAleatoire(5);
+	   switch(intValeurAleatoire)
+	   {
+	       case 0: return "Bot 1";
+	       case 1: return "Bot 2";
+	       case 2: return "Bot 3";
+	       case 3: return "Crac";
+	       case 4: return "Croc";
+	       default: return "Bot";
+	   }
+	   
+	}
+	
+	/* Cette fonction permet d'ajouter les information sur une partie dans 
+	 * la base de données dans la table partie. 
+	 *
+	 * Retour: la clé de partie qui servira pour la table partieJoueur
+	 */
+	public int ajouterInfosPartiePartieTerminee(Date dateDebut, int dureePartie)
+	{
+
+        SimpleDateFormat objFormatDate = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat objFormatHeure = new SimpleDateFormat("HH:mm:ss");
+        
+        String strDate = objFormatDate.format(dateDebut);
+        String strHeure = objFormatHeure.format(dateDebut);
+
+        // Création du SQL pour l'ajout
+		String strSQL = "INSERT INTO partie(datePartie, heurePartie, dureePartie) VALUES ('" + 
+		    strDate + "','" + strHeure + "'," + dureePartie + ")";
+
+		try
+		{
+			
+			synchronized(requete)
+			{
+
+				// Ajouter l'information pour cette partie
+	            requete.executeUpdate(strSQL, Statement.RETURN_GENERATED_KEYS);
+	            
+	            // Aller chercher la clé de partie qu'on vient d'ajouter
+	            ResultSet  rs = requete.getGeneratedKeys();
+	            
+	            // On retourne la clé de partie
+	            rs.next();
+	           	return Integer.parseInt(rs.getString("GENERATED_KEY"));
+			}
+        }
+        catch (Exception e)
+        {
+        	System.out.println("Erreur ajout info : " + e.getMessage());
+        }
+        
+        // Au cas où il y aurait erreur, on retourne -1
+        return -1;
+	}
+
+	/* Cette fonction permet d'ajouter les informations sur une partie pour
+	 * un joueur dans la table partieJoueur;
+	 *
+	 */
+	public void ajouterInfosJoueurPartieTerminee(int clePartie, int cleJoueur, int pointage, boolean gagner)
+	{
+		int intGagner = 0;
+		if (gagner == true)
+		{
+			intGagner = 1;
+		}
+		
+		// Création du SQL pour l'ajout
+		String strSQL = "INSERT INTO partiejoueur(clePartie, cleJoueur, pointage, gagner) VALUES " +
+		    "(" + clePartie + "," + cleJoueur + "," + pointage + "," + intGagner + ");";
+		
+		try
+		{
+			
+			synchronized(requete)
+			{
+				// Ajouter l'information pour ce joueur
+	            requete.executeUpdate(strSQL);
+			}
+        }
+        catch (Exception e)
+        {
+        	
+        }
 	}
 }

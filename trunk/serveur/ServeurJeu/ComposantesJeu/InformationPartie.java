@@ -619,4 +619,12 @@ public class InformationPartie
 		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
 		objGestionnaireEv.ajouterEvenement(joueurDeplacePersonnage);
 	}
+	
+	/*
+	 * Retourne une référence vers la liste des objets ramassés
+	 */
+	public TreeMap obtenirListeObjets()
+	{
+		return lstObjetsUtilisablesRamasses;
+	}
 }

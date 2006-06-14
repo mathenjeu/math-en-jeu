@@ -18,15 +18,18 @@ import java.util.Map;
 import java.util.Set;
 import ServeurJeu.Temps.Minuterie;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 
 
-
+/**
+ * @author Jean-François Fournier
+ */
 public class Espion implements Runnable{
 	
-	// Déclaration d'une constante contenant ls version de l'espion
+	// Déclaration d'une constante contenant la version de l'espion
 	private final String VERSION = "Espion Math-En-Jeu Version 1.0";
 	
-	// Déclaraction d'une variable contenant le nombre de millisecondes entre
+	// Déclaration d'une variable contenant le nombre de millisecondes entre
 	// chaque mise à jour. 
 	private int intDelaiMaj;
 	
@@ -59,7 +62,7 @@ public class Espion implements Runnable{
 	/* Contructeur de la classe
 	 * @param String nomFichier: Le fichier dans lequel l'espion écrira périodiquement
 	 * 
-	 * @param int delaiMaj: Le délai en millisecondes en chaque maj
+	 * @param int delaiMaj: Le délai en millisecondes entre chaque maj
 	 */
 	public Espion(ControleurJeu controleur, String nomFichier, int delaiMaj, int mode)
 	{
@@ -72,7 +75,7 @@ public class Espion implements Runnable{
 	}
 
 
-    /* Changer le mode de l'espion, on peut le mettre au mode RIEN, mais si
+    /* Changer le mode de l'espion, on peut le mettre en mode RIEN, mais si
      * on veut l'arrêter pour de bon, on doit utiliser arreterEspion()
      */
     public void changerMode(int nouveauMode)
@@ -109,27 +112,32 @@ public class Espion implements Runnable{
      */
     public void run()
     {   
-    	try
+    
+    	while (bolArreterEspion == false)
     	{
-    		while (bolArreterEspion == false)
-    		{
+    	
+	    	try
+	    	{
+	
                 // Effectuer une mise à jour des informations
                 faireMaj();
 
-                // Mettre l'espion
+                // Bloquer la thread jusqu'à la prochaine mise à jour
                	Thread.sleep(intDelaiMaj);
-    		}
-    		objLogger.info("Espion arrêté");
-    	}
-		catch( Exception e )
-		{
-			//System.out.println("Erreur dans la thread de l'espion.");
-			//System.out.println(e.getMessage());
-			objLogger.info("Erreur dans la thread de l'espion.");
-			objLogger.error( e.getMessage() );
+	               	
+	    	}
+			catch( Exception e )
+			{
+				//System.out.println("Erreur dans la thread de l'espion.");
+				//System.out.println(e.getMessage());
+				objLogger.info("Erreur dans la thread de l'espion.");
+				objLogger.error( e.getMessage() );
+				e.printStackTrace();
+			}
 		}
-    	
-    }
+		
+	    objLogger.info("Espion arrêté");
+	}
     
     
     private void faireMaj()
@@ -145,8 +153,7 @@ public class Espion implements Runnable{
                         
         case MODE_FICHIER_TEXTE:   
         
-            // Écrire dans le fichier en texte
-
+            // Écrire dans le fichier texte
             traiterFichierTexte();
             break;
 
@@ -156,7 +163,7 @@ public class Espion implements Runnable{
     
     /* traiterFichierTexte
      * 
-     * Cette fonction écris dans le fichier [strNomFichier] les informations
+     * Cette fonction écrit dans le fichier strNomFichier les informations
      * du serveur.
      */
     private void traiterFichierTexte()
@@ -170,25 +177,37 @@ public class Espion implements Runnable{
 	    StringBuffer strEntete = new StringBuffer();
 	    StringBuffer strDerniereMAJ = new StringBuffer();
 	    StringBuffer strJoueursConnectes = new StringBuffer();
+	    StringBuffer strJoueursDeconnectes = new StringBuffer();
 	    StringBuffer strSalles = new StringBuffer();
 	    StringBuffer strTables = new StringBuffer();
 	    
-	    // Déclaraction d'un objet qui contiendra une référence vers la liste des joueurs
+	    // Déclaration d'un objet qui contiendra une référence vers la liste des joueurs
 	    Vector lstProtocoleJoueur = objControleurJeu.obtenirGestionnaireCommunication().obtenirListeProtocoleJoueur();
 	    
 		// Déclaration d'une liste de ProtocoleJoueur qui va contenir une copie
 		Vector lstCopieProtocoleJoueur = null;
 		
+		// Déclaration d'un objet qui contiendra une référence vers la liste des joueurs déconnectés
+		TreeMap lstJoueursDeconnectes = objControleurJeu.obtenirListeJoueursDeconnectes();
+		
+		
 		// Déclaration d'un objet qui contiendra une référence vers la liste des salles
 		TreeMap lstSalles = objControleurJeu.obtenirListeSalles();
 		
-	    // Déclaraction d'un objet qui contiendra une référence vers la liste des tables
+	    // Déclaration d'un objet qui contiendra une référence vers la liste des tables
 	    // pour une certaine salle
 	    TreeMap lstTables;
 		
 		// Déclaration d'un objet qui contiendra une référence vers la liste des joueurs
 		// pour une table
 		TreeMap lstJoueurs;
+
+        // Déclaration d'un objet qui contiendra une référence vers la liste des 
+        // jouers connectés au serveur
+        TreeMap lstJoueursConnectes = objControleurJeu.obtenirListeJoueurs();		
+		
+		// Permet de calculer le nombre de connexion refusé
+		int intConnexionRefusee = 0;
 		
 		
 		// Empêcher d'autres threads de toucher à la liste des protocoles 
@@ -216,33 +235,125 @@ public class Espion implements Runnable{
         strDerniereMAJ.append(strDate);
 
 
-	    // Joueurs connectés
+	    // Joueurs connectés au gestionnaire de communication
 	    // Ajouter le nombre de joueurs connectés
-	    strJoueursConnectes.append("Joueurs connectés : ");
+	    strJoueursConnectes.append("Joueurs connectés (protocole): ");
 	    strJoueursConnectes.append(lstCopieProtocoleJoueur.size());
-
-        // S'il y a des joueurs de connectés, on va ajouter leurs noms      
+		strJoueursConnectes.append(strFinLigne);
+		
+        // S'il y a des joueurs connectés, on va ajouter leurs noms      
         if (lstCopieProtocoleJoueur.size() > 0)
         {
-        	// Parcourir tous les joueurs connectés et ajouter les noms
+			// Passer tous les objets ProtocoleJoueur et ajouter les noms d'utilisateur
+			// des joueurs
+			for (int i = 0; i < lstCopieProtocoleJoueur.size(); i++)
+			{
+
+                ProtocoleJoueur objProtocoleJoueur = (ProtocoleJoueur) lstCopieProtocoleJoueur.get(i);
+                
+                if (objProtocoleJoueur != null)
+                {
+                	JoueurHumain objJoueurHumain = objProtocoleJoueur.obtenirJoueurHumain();
+                	
+                	// Le joueur humain peut être nul si la connexion est refusée 
+                	if (objJoueurHumain != null)
+                	{
+						if (i == 0)
+						{
+        	                strJoueursConnectes.append("    ");	
+						}
+						
+						if (i > 0 )
+						{
+							strJoueursConnectes.append(",");
+						}
+
+						
+						// Ajouter le nom du joueur humain
+						strJoueursConnectes.append(objJoueurHumain.obtenirNomUtilisateur());
+					}
+					else
+					{
+						intConnexionRefusee++;
+					}
+				}
+
+			}
+			
+	        strJoueursConnectes.append(strFinLigne);
+        	
+        }
+
+        // Joueurs connectés au serveur
+	    // Préparation pour parcourir le TreeMap des joueurs connectés
+	    Set lstEnsembleJoueursConnectes = lstJoueursConnectes.entrySet();
+	    Iterator objIterateurListeJoueursConnectes = lstEnsembleJoueursConnectes.iterator();
+	    
+	    // Ajouter le nombre de joueurs connectés
+	    strJoueursConnectes.append(strFinLigne);
+	    strJoueursConnectes.append("Joueurs connectés (serveur): ");
+	    strJoueursConnectes.append(lstEnsembleJoueursConnectes.size());
+        
+        // Afficher la liste des joueurs connectés
+        if (lstEnsembleJoueursConnectes.size() > 0)
+        {
         	strJoueursConnectes.append(strFinLigne);
         	strJoueursConnectes.append("    ");
         	
-			// Passer tous les objets ProtocoleJoueur et ajouter leur nom
-			for (int i = 0; i < lstCopieProtocoleJoueur.size(); i++)
+			// Passer tous les joueurs connectés et ajouter leur nom
+			int intCompteur = 0;
+			while (objIterateurListeJoueursConnectes.hasNext() == true)
 			{
-				if (i > 0 )
+				if (intCompteur > 0)
 				{
 					strJoueursConnectes.append(",");
 				}
 				
-				// Ajouter le nom du joueur humain
-				strJoueursConnectes.append(((ProtocoleJoueur) lstCopieProtocoleJoueur.get(i)).obtenirJoueurHumain().obtenirNomUtilisateur());
+				strJoueursConnectes.append(((JoueurHumain)((Map.Entry)objIterateurListeJoueursConnectes.next()).getValue()).obtenirNomUtilisateur());
+			    intCompteur++;
 			}
-        	
         }
         
+        // S'il y a des connexions refusées, on les ajouter ici
+        if (intConnexionRefusee > 0)
+        {
+        	strJoueursConnectes.append(strFinLigne);
+        	strJoueursConnectes.append(strFinLigne);
+        	strJoueursConnectes.append("Connexion refusée: ");
+        	strJoueursConnectes.append(intConnexionRefusee);
+        }
+        
+        
+        // Joueurs déconnectés
+        // Préparation pour parcourir le TreeMap des joueurs déconnectés
+        Set lstEnsembleJoueursDeconnectes = lstJoueursDeconnectes.entrySet();
+        Iterator objIterateurListeJoueursDeconnectes = lstEnsembleJoueursDeconnectes.iterator();
+        
+        // Afficher le nombre de joueurs déconnectés
+        strJoueursDeconnectes.append("Joueurs déconnectés: ");
+        strJoueursDeconnectes.append(lstEnsembleJoueursDeconnectes.size());
 
+        // Afficher la liste des joueurs déconnectés
+        if (lstEnsembleJoueursDeconnectes.size() > 0)
+        {
+        	strJoueursDeconnectes.append(strFinLigne);
+        	strJoueursDeconnectes.append("    ");
+        	
+			// Passer tous les joueurs déconnectés et ajouter leur nom
+			int intCompteur = 0;
+			while (objIterateurListeJoueursDeconnectes.hasNext() == true)
+			{
+				if (intCompteur > 0)
+				{
+					strJoueursDeconnectes.append(",");
+				}
+				
+				strJoueursDeconnectes.append(((JoueurHumain)((Map.Entry)objIterateurListeJoueursDeconnectes.next()).getValue()).obtenirNomUtilisateur());
+			    intCompteur++;
+			}
+        }
+
+        
 	    // Salles
         // Préparation pour parcourir le TreeMap des salles
         Set lstEnsembleSalles = lstSalles.entrySet();
@@ -256,7 +367,6 @@ public class Espion implements Runnable{
         // Afficher la liste des salles     
 	    if (lstEnsembleSalles.size() > 0)
 	    {
-
         	strSalles.append(strFinLigne);
         	strSalles.append("    ");
         	
@@ -312,7 +422,7 @@ public class Espion implements Runnable{
          	    {
          	    	strTables.append(strFinLigne);
 	         	    
-	         	    // Boucle de parcour de la liste de tables pour la salle courante
+	         	    // Boucle de parcours de la liste de tables pour la salle courante
 	         	    while(objIterateurListeTables.hasNext() == true)
 	         	    {
 	         	    	 // Aller chercher l'objet Table
@@ -363,12 +473,12 @@ public class Espion implements Runnable{
 				         Set lstEnsembleJoueurs = lstJoueurs.entrySet();
 				         Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
 	         	   	     
-	         	   	     // Ajouter le nom de chaque joueurs sur la table
+	         	   	     // Ajouter le nom de chaque joueur sur la table
 	         	   	     strTables.append("    Joueurs : ");
 	         	   	     int intCompteur = 0;
 	         	   	     while(objIterateurListeJoueurs.hasNext() == true)
 	         	   	     {
-	         	   	     	if (intCompteur> 0)
+	         	   	     	if (intCompteur > 0)
 	         	   	     	{
 	         	   	     		strTables.append(",");
 	         	   	     	}
@@ -382,10 +492,42 @@ public class Espion implements Runnable{
 
                          }
                          
-                         // TODO: Ajouter la liste des joueurs virtuels
-                                                  
-                         // Ligne vide entre chaque block de tables
+                         // Obtenir la liste des joueurs virtuels
+                         if (objTable.obtenirListeJoueursVirtuels() != null)
+                         {
+                             Vector lstJoueursVirtuels = objTable.obtenirListeJoueursVirtuels();
+                             strTables.append(",");
+                             for (int i=0; i < lstJoueursVirtuels.size(); i++)
+                             {
+                                 JoueurVirtuel objJoueurVirtuel = (JoueurVirtuel) lstJoueursVirtuels.get(i);
+                                 strTables.append(objJoueurVirtuel.obtenirNom());
+                             }   
+                         }
+                         
+                         // Fin de la liste des joueurs                         
                          strTables.append(strFinLigne);
+
+                         // Obtenir la liste des joueurs déconnectés
+                         if (objTable.obtenirListeJoueursDeconnectes() != null && 
+                             objTable.obtenirListeJoueursDeconnectes().size() > 0)
+                         {
+                             strTables.append("    Joueurs déconnectés : ");
+                             
+	                         for (int i = 0; i < objTable.obtenirListeJoueursDeconnectes().size(); i++)
+	                         {
+	                         	if (i > 0)
+	                         	{
+	                         		strTables.append(",");
+	                         	}
+	                         	
+	                         	strTables.append((String) objTable.obtenirListeJoueursDeconnectes().get(i));
+	                         }
+	                         
+                             strTables.append(strFinLigne);
+                         }
+
+                         
+                         // Ligne vide entre chaque block de table
                          strTables.append(strFinLigne);
 	         	   	     
 	         	    }
@@ -404,6 +546,9 @@ public class Espion implements Runnable{
     	strResultat.append(strJoueursConnectes);
     	strResultat.append(strFinLigne);
     	strResultat.append(strFinLigne);
+        strResultat.append(strJoueursDeconnectes);
+    	strResultat.append(strFinLigne);
+    	strResultat.append(strFinLigne);
     	strResultat.append(strSalles);
     	strResultat.append(strFinLigne);
     	strResultat.append(strFinLigne);
@@ -415,6 +560,7 @@ public class Espion implements Runnable{
     		// Écrire dans le fichier
 			FileWriter writer = new FileWriter(strNomFichier);
 			writer.write(strResultat.toString());
+			//writer.write(strFinLigne + "(" + writer.getEncoding() + ")");
 			writer.close();
 
 	    }

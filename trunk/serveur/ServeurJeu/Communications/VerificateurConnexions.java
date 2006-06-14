@@ -87,24 +87,34 @@ public class VerificateurConnexions implements Runnable
 			// Passer tous les ProtocoleJoueur et vérifier s'ils ont 
 			// répondus au ping. S'ils n'ont pas répondus, alors on va les
 			// faire se fermer et s'assurer qu'ils se sont bien enlevé de 
-			// la liste
+			// la liste. On fait exception pour les joueurs en train de jouer
+			// une partie, dans ce cas, on ne les déconnecte pas tant que
+			// la partie est en cours
 			for (int i = 0; i < lstCopieProtocoleJoueur.size(); i++)
 			{
 				// Faire la référence vers le ProtocoleJoueur courant
 				ProtocoleJoueur protocole = (ProtocoleJoueur) lstCopieProtocoleJoueur.get(i);
 				
-				// Empêcher d'autres threads de toucher à la liste des protocoles
-				// de joueur ayant répondus au ping
-				synchronized (lstClientsPresents)
-				{
-					// Si le protocole courant ne se trouve pas dans la liste des
-					// clients qui ont répondus, alors on peut arrêter le 
-					// ProtocoleJoueur
-					if (lstClientsPresents.contains(protocole) == false)
-					{
-						// Arrêter le ProtocoleJoueur
-						protocole.arreterProtocoleJoueur();
-					}	
+				// Si le joueur est en train de jouer sur une table, alors
+				// on attend, peut-être il se reconnectera et pourra
+				// continuer à jouer
+				// Si le joueur a fermé le browser ou fait refresh(), il sera déconnecté
+				// dans la thread du ProtocoleJoueur, donc n'apparaîtra plus ici
+                if (protocole.isPlaying() == false)
+                {
+    				// Empêcher d'autres threads de toucher à la liste des protocoles
+    				// de joueur ayant répondus au ping
+    				synchronized (lstClientsPresents)
+    				{
+    					// Si le protocole courant ne se trouve pas dans la liste des
+    					// clients qui ont répondus, alors on peut arrêter le 
+    					// ProtocoleJoueur
+    					if (lstClientsPresents.contains(protocole) == false)
+    					{
+    						// Arrêter le ProtocoleJoueur
+    						protocole.arreterProtocoleJoueur();
+    					}	
+    				}
 				}
 			}				
 			

@@ -17,6 +17,7 @@ import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
+import ServeurJeu.ControleurJeu;
 
 //TODO: Le mot de passe d'une salle ne doit pas être modifiée pendant le jeu,
 //      sinon il va falloir ajouter des synchronisations à chaque fois qu'on
@@ -28,6 +29,9 @@ public class Salle
 {
 	// Déclaration d'une référence vers le gestionnaire d'événements
 	private GestionnaireEvenements objGestionnaireEvenements;
+	
+	// Déclaration d'une référence vers le contrôleur de jeu
+	private ControleurJeu objControleurJeu;
 	
 	// Déclaration d'une référence vers le gestionnaire de bases de données
 	private GestionnaireBD objGestionnaireBD;
@@ -69,7 +73,7 @@ public class Salle
 	 */
 	public Salle(GestionnaireEvenements gestionnaireEv, GestionnaireBD gestionnaireBD, 
 				 String nomSalle, String nomUtilisateurCreateur, String motDePasse, 
-				 Regles reglesSalle) 
+				 Regles reglesSalle, ControleurJeu controleurJeu) 
 	{
 		super();
 		
@@ -91,6 +95,9 @@ public class Salle
 		
 		// Définir les règles de jeu pour la salle courante
 		objRegles = reglesSalle;
+		
+		// Faire la référence vers le controleur de jeu
+		objControleurJeu = controleurJeu;
 	}
 
 	/**
@@ -277,7 +284,8 @@ public class Salle
 	    	Table objTable = new Table(objGestionnaireEvenements, objGestionnaireBD, this, 
 	    								genererNoTable(), joueur.obtenirNomUtilisateur(), 
 										tempsPartie, objRegles,
-										gestionnaireTemps, tacheSynchroniser );
+										gestionnaireTemps, tacheSynchroniser,
+										objControleurJeu);
 	    	objTable.creation();
 	    	// Ajouter la table dans la liste des tables
 	    	lstTables.put(new Integer(objTable.obtenirNoTable()), objTable);
@@ -669,6 +677,11 @@ public class Salle
 	public String obtenirNomSalle()
 	{
 		return strNomSalle;
+	}
+	
+	public Regles obtenirRegles()
+	{
+	   return objRegles;
 	}
 	
 	/**

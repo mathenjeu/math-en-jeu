@@ -22,7 +22,8 @@ public final class Commande
 	public static final String DeplacerPersonnage = "DeplacerPersonnage";
 	public static final String RepondreQuestion = "RepondreQuestion";
 	public static final String Pointage = "Pointage";
-	
+    public static final String RejoindrePartie = "RejoindrePartie";
+    
 	/**
 	 * Constructeur par défaut est privé pour empêcher de pourvoir créer des 
 	 * instances de cette classe.
@@ -49,7 +50,8 @@ public final class Commande
 		        valeur.equals(CreerTable) || valeur.equals(EntrerTable) ||
 		        valeur.equals(QuitterTable) || valeur.equals(DemarrerPartie) ||
 		        valeur.equals(DeplacerPersonnage) || valeur.equals(RepondreQuestion) ||
-		        valeur.equals(DemarrerMaintenant) || valeur.equals(Pointage) );
+		        valeur.equals(DemarrerMaintenant) || valeur.equals(Pointage) ||
+		        valeur.equals(RejoindrePartie));
 
 	}
 }

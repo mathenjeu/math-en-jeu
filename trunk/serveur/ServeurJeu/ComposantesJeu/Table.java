@@ -7,9 +7,11 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.awt.Point;
 import org.w3c.dom.Element;
+import java.util.Date;
 
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.Evenements.EvenementJoueurEntreTable;
 import ServeurJeu.Evenements.EvenementJoueurQuitteTable;
@@ -23,6 +25,7 @@ import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.Temps.*;
 import ServeurJeu.Evenements.EvenementSynchroniserTemps;
 import ServeurJeu.Evenements.EvenementPartieTerminee;
+import ServeurJeu.ControleurJeu;
 
 /**
  * @author Jean-François Brind'Amour
@@ -31,6 +34,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 {
 	// Déclaration d'une référence vers le gestionnaire d'événements
 	private GestionnaireEvenements objGestionnaireEvenements;
+	
+	// Déclaration d'une référence vers le contrôleur de jeu
+	private ControleurJeu objControleurJeu;
 	
 	// Déclaration d'une référence vers le gestionnaire de bases de données
 	private GestionnaireBD objGestionnaireBD;
@@ -84,7 +90,21 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	private TacheSynchroniser objTacheSynchroniser;
 	private Minuterie objMinuterie;
 	
-
+    // Cet objet est une liste des joueurs virtuels qui jouent sur cette table
+    private Vector lstJoueursVirtuels;
+    
+    // Cette variable indique le nombre de joueurs virtuels sur la table
+    private int intNombreJoueursVirtuels;
+	
+    // Cette liste contient le nom des joueurs qui ont été déconnectés
+    // dans cette table, ce qui nous permettra, lorsqu'une partie se termine, de
+    // faire la mise à jour de la liste des joueurs déconnectés du gestionnaire
+    // de communication
+    private Vector lstJoueursDeconnectes;
+    
+    
+    private Date objDateDebutPartie;
+    
 	/**
 	 * Constructeur de la classe Table qui permet d'initialiser les membres 
 	 * privés de la table.
@@ -100,7 +120,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	public Table(GestionnaireEvenements gestionnaireEv, GestionnaireBD gestionnaireBD, 
 				 Salle salleParente, int noTable, String nomUtilisateurCreateur, 
 				 int tempsPartie, Regles reglesTable,
-				 GestionnaireTemps gestionnaireTemps, TacheSynchroniser tacheSynchroniser ) 
+				 GestionnaireTemps gestionnaireTemps, 
+				 TacheSynchroniser tacheSynchroniser,
+				 ControleurJeu controleurJeu) 
 	{
 		super();
 		
@@ -136,6 +158,18 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		objGestionnaireTemps = gestionnaireTemps;
 		objTacheSynchroniser = tacheSynchroniser;
 
+        // Au départ, on considère qu'il n'y a que des joueurs humains.
+        // Lorsque l'on démarrera une partie dans laPartieCommence(), on créera
+        // autant de joueurs virtuels que intNombreJoueursVirtuels (qui devra donc
+        // être affecté du bon nombre au préalable)
+        intNombreJoueursVirtuels = 0;
+        lstJoueursVirtuels = null;
+        
+        // Cette liste sera modifié si jamais un joueur est déconnecté
+        lstJoueursDeconnectes = new Vector();
+        
+        // Faire la référence vers le controleu jeu
+        objControleurJeu = controleurJeu;
 	}
 	
 	public void creation()
@@ -410,6 +444,30 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		return strResultatDemarrerPartie;
 	}
 	
+	/* pour test */
+	public Vector genererPlateauJeu()
+	{
+//       Créer une nouvelle liste qui va garder les points des 
+        // cases libres (n'ayant pas d'objets dessus)
+        Vector lstPointsCaseLibre = new Vector();
+        
+        // Générer le plateau de jeu selon les règles de la table et 
+        // garder le plateau en mémoire dans la table
+        objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre);
+        
+        return lstPointsCaseLibre;
+	}
+	
+	/* pour test */
+	public void demarrerMinuterie()
+	{
+        int tempsStep = 1;
+        objTacheSynchroniser.ajouterObservateur( this );
+        objMinuterie = new Minuterie( intTempsTotal * 60, tempsStep );
+        objMinuterie.ajouterObservateur( this );
+        objGestionnaireTemps.ajouterTache( objMinuterie, tempsStep );
+	}
+	
 	private void laPartieCommence()
 	{
 //		 Créer une nouvelle liste qui va garder les points des 
@@ -424,7 +482,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// d'utilisateur du joueur et le contenu est un point 
 		// représentant la position du joueur
 		TreeMap lstPositionsJoueurs = new TreeMap();
-		
+        
 		//TODO: Peut-être devoir synchroniser cette partie, il 
 		//      faut voir avec les autres bouts de code qui 
 		// 		vérifient si la partie est commencée (c'est OK 
@@ -444,7 +502,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Obtenir la position des joueurs de cette table
 		int nbJoueur = lstJoueursEnAttente.size(); //TODO a vérifier
-		objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(nbJoueur, lstPointsCaseLibre);
+        objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels, lstPointsCaseLibre);
 		
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// lstJoueursEnAttente (chaque élément est un Map.Entry)
@@ -453,24 +511,60 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Obtenir un itérateur pour l'ensemble contenant les personnages
 		Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
 		
+		// S'il y a des joueurs virtuels, alors on va créer une nouvelle liste
+		// qui contiendra ces joueurs
+		if (intNombreJoueursVirtuels > 0)
+		{
+		    lstJoueursVirtuels = new Vector();
+		}
+		
 		// Passer toutes les positions des joueurs et les définir
 		for (int i = 0; i < objtPositionsJoueurs.length; i++)
 		{
-			// Comme les positions sont générées aléatoirement, on 
-			// se fou un peu duquel on va définir la position en 
-			// premier, on va donc passer simplement la liste des 
-			// joueurs
-			// Créer une référence vers le joueur courant 
-		    // dans la liste (pas besoin de vérifier s'il y en a un 
-			// prochain, car on a généré la position des joueurs 
-			// selon cette liste
-			JoueurHumain objJoueur = (JoueurHumain) (((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
-			
-			// Définir la position du joueur courant
-			objJoueur.obtenirPartieCourante().definirPositionJoueur(objtPositionsJoueurs[i]);
-			
-			// Ajouter la position du joueur dans la liste
-			lstPositionsJoueurs.put(objJoueur.obtenirNomUtilisateur(), objtPositionsJoueurs[i]);
+		    // On doit affecter certains positions aux joueurs humains et d'autres aux joueurs
+		    // virtuels. La grandeur de objtPositionsJoueurs est nbJoueur + intNombreJoueursVirtuels
+		    if (i < nbJoueur)
+		    {
+    		    
+    			// Comme les positions sont générées aléatoirement, on 
+    			// se fou un peu duquel on va définir la position en 
+    			// premier, on va donc passer simplement la liste des 
+    			// joueurs
+    			// Créer une référence vers le joueur courant 
+    		    // dans la liste (pas besoin de vérifier s'il y en a un 
+    			// prochain, car on a généré la position des joueurs 
+    			// selon cette liste
+    			JoueurHumain objJoueur = (JoueurHumain) (((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
+    			
+    			// Définir la position du joueur courant
+    			objJoueur.obtenirPartieCourante().definirPositionJoueur(objtPositionsJoueurs[i]);
+    			
+    			// Ajouter la position du joueur dans la liste
+    			lstPositionsJoueurs.put(objJoueur.obtenirNomUtilisateur(), objtPositionsJoueurs[i]);
+    		}
+    		else
+    		{
+    		    // On se rendra ici seulement si intNombreJoueursVirtuels > 0
+    		    // C'est ici qu'on crée les joueurs virtuels, ils vont commencer
+    		    // à jouer plus loin
+    		  
+                // Ajouter un joueur virtuel dans la table
+                // TODO: NE PAS PRENDRE 2 FOIS LE MÊME NOM ET NE PAS PRENDRE
+                //       LE MÊME NOM QU'UN JOUEUR HUMAIN
+                JoueurVirtuel objJoueurVirtuel = new JoueurVirtuel(objGestionnaireBD.obtenirNomJoueurVirtuelAleatoire(), 
+                    JoueurVirtuel.DIFFICULTE_MOYEN, this, objGestionnaireEvenements);
+                
+                // Définir sa position
+                objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i]);
+                
+                // Ajouter le joueur virtuel à la liste
+                lstJoueursVirtuels.add(objJoueurVirtuel);
+                
+                // Ajouter le joueur virtuel à la liste des positions, liste qui sera envoyée
+                // aux joueurs humains
+                lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[i]);
+                
+    		}
 		}
 		
 		// On peut maintenant vider la liste des joueurs en attente
@@ -494,29 +588,124 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    objMinuterie = new Minuterie( intTempsTotal * 60, tempsStep );
 	    objMinuterie.ajouterObservateur( this );
 	    objGestionnaireTemps.ajouterTache( objMinuterie, tempsStep );
+	    
+	    // Obtenir la date à ce moment précis
+	    objDateDebutPartie = new Date();
+	    
+	    // Démarrer tous les joueurs virtuels 
+	    if (intNombreJoueursVirtuels > 0)
+	    {
+    	    for (int i = 0; i < lstJoueursVirtuels.size(); i++)
+    	    {
+                Thread threadJoueurVirtuel = new Thread((JoueurVirtuel) lstJoueursVirtuels.get(i));
+                threadJoueurVirtuel.start();
+            }
+        }
+        
 	}
 	
 	public void arreterPartie()
 	{
-		if( bolEstArretee == false )
+		
+	    // bolEstArretee permet de savoir si cette fonction a déjà été appelée
+	    // de plus, bolEstArretee et bolEstCommencee permettent de connaître 
+	    // l'état de la partie
+		if(bolEstArretee == false)
 		{
+			// Arrêter la partie
 			bolEstArretee = true;
-			objTacheSynchroniser.enleverObservateur( this );
-			objGestionnaireTemps.enleverTache( objMinuterie );
+			objTacheSynchroniser.enleverObservateur(this);
+			objGestionnaireTemps.enleverTache(objMinuterie);
 			objMinuterie = null;
-			synchronized (lstJoueurs)
-		    {
-				preparerEvenementPartieTerminee();
-				Iterator it = lstJoueurs.values().iterator();
-				while( it.hasNext() )
+
+			// S'il y a au moins un joueur qui a complété la partie,
+			// alors on ajoute les informations de cette partie dans la BD
+			if(lstJoueurs.size() > 0)
+			{				
+				// Ajouter la partie dans la BD
+				int clePartie = objGestionnaireBD.ajouterInfosPartiePartieTerminee(objDateDebutPartie, intTempsTotal);
+	
+		        // Sert à déterminer si le joueur a gagné
+		        boolean bolGagnant;
+		
+		        // Sert à déterminer le meilleur score pour cette partie
+				int meilleurPointage = 0;
+							
+				// Parcours des joueurs virtuels pour trouver le meilleur pointage
+				if (lstJoueursVirtuels != null)
 				{
-					//Mettre a jour les donnees des joueurs
-					//TODO : si partie pas completee???
-					JoueurHumain joueur = (JoueurHumain)it.next();
-					objGestionnaireBD.mettreAJourJoueur( joueur, intTempsTotal );
-					//TODO le temps total si partie pas terminée ???
+					for (int i = 0; i < lstJoueursVirtuels.size(); i++)
+					{
+						JoueurVirtuel objJoueurVirtuel = (JoueurVirtuel) lstJoueursVirtuels.get(i);
+					    if (objJoueurVirtuel.obtenirPointage() > meilleurPointage)
+					    {
+					    	meilleurPointage = objJoueurVirtuel.obtenirPointage();
+					    }
+					}
 				}
+					
+				synchronized (lstJoueurs)
+			    {
+			    	// Parcours des joueurs pour trouver le meilleur pointage
+					Iterator iteratorJoueursHumains = lstJoueurs.values().iterator();
+					while (iteratorJoueursHumains.hasNext())
+					{
+						JoueurHumain objJoueurHumain = (JoueurHumain)iteratorJoueursHumains.next();
+						if (objJoueurHumain.obtenirPartieCourante().obtenirPointage() > meilleurPointage)
+						{
+							meilleurPointage = objJoueurHumain.obtenirPartieCourante().obtenirPointage();
+						}
+					}
+			    	
+					preparerEvenementPartieTerminee();
+					
+					// Parcours des joueurs pour mise à jour de la BD et
+					// pour ajouter les infos de la partie complétée
+					Iterator it = lstJoueurs.values().iterator();
+					while(it.hasNext())
+					{
+						// Mettre a jour les donnees des joueurs
+						JoueurHumain joueur = (JoueurHumain)it.next();
+						objGestionnaireBD.mettreAJourJoueur(joueur, intTempsTotal);
+						
+						// Vérififer si ce joueur a gagner
+						if (joueur.obtenirPartieCourante().obtenirPointage() == meilleurPointage)
+						{
+							bolGagnant = true;
+						}
+						else
+						{
+							bolGagnant = false;
+						}
+						
+						// Ajouter l'information pour cette partie et ce joueur
+						objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur.obtenirCleJoueur(), 
+						    joueur.obtenirPartieCourante().obtenirPointage(), bolGagnant);
+						
+						
+					}
+			    }
 		    }
+		    
+		    // Arrêter les threads des joueurs virtuels
+            if (intNombreJoueursVirtuels > 0)
+		    {
+		        for (int i = 0; i < lstJoueursVirtuels.size(); i++)
+		        {
+                    ((JoueurVirtuel)lstJoueursVirtuels.get(i)).arreterThread();
+		        }
+		    }
+		    
+		    // Enlever les joueurs déconnectés de cette table de la
+		    // liste des joueurs déconnectés du serveur pour éviter
+		    // qu'ils ne se reconnectent
+		    for (int i = 0; i < lstJoueursDeconnectes.size(); i++)
+		    {
+		    	objControleurJeu.enleverJoueurDeconnecte((String) lstJoueursDeconnectes.get(i));
+		    }
+		    
+		    // Enlever les joueurs déconnectés de cette tables
+		    lstJoueursDeconnectes = new Vector();
 		}
 	}
 	
@@ -970,6 +1159,42 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    }
 		
 	}
+
+    /* Cette fonction permet de définir le nombre de joueurs virtuels que l'on
+     * veut pour cette table
+     * @param: nb -> Nouveau nombre de joueurs virtuels
+     */	
+	public void setNombreJoueursVirtuels(int nb)
+	{
+	   intNombreJoueursVirtuels = nb;
+	}
 	
+	/* Cette fonction permet d'obtenir le nombre de joueurs virtuels pour 
+	 * cette table
+	 */
+	public int getNombreJoueursVirtuels()
+	{
+	   return intNombreJoueursVirtuels;
+	}
 	
+	public Vector obtenirListeJoueursVirtuels()
+	{
+	   return lstJoueursVirtuels;
+	}
+	
+	/*
+	 * Lorsqu'un joueur est déconnecté d'une partie en cours, on appelle
+	 * cette fonction qui se charge de conserver les références vers
+	 * les informations pour ce joueur
+	 */
+	public void ajouterJoueurDeconnecte(JoueurHumain joueurHumain)
+	{
+		lstJoueursDeconnectes.add(joueurHumain.obtenirNomUtilisateur().toLowerCase());
+		//objControleurJeu.ajouterJoueurDeconnecte(joueurHumain);
+	}
+	
+	public Vector obtenirListeJoueursDeconnectes()
+	{
+		return lstJoueursDeconnectes;
+	}
 }

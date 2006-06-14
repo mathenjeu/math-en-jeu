@@ -15,6 +15,9 @@ public class JoueurHumain extends Joueur
 	// Cette variable va contenir le nom d'utilisateur du joueur
 	private String strNomUtilisateur;
 	
+	// Cetta variable contient la clé de la table joueur
+	private int intCleJoueur;
+	
 	// Cette variable va contenir l'adresse IP du joueur
 	private String strAdresseIP;
 	
@@ -228,5 +231,15 @@ public class JoueurHumain extends Joueur
 	public void definirPartieCourante(InformationPartie partieCourante)
 	{
 		objPartieCourante = partieCourante;
+	}
+	
+	public int obtenirCleJoueur()
+	{
+		return intCleJoueur;
+	}
+	
+	public void definirCleJoueur(int cle)
+	{
+		intCleJoueur = cle;
 	}
 }

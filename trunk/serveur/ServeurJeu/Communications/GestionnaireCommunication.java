@@ -46,7 +46,8 @@ public class GestionnaireCommunication
 	private TacheSynchroniser objTacheSynchroniser;
 	
 	static private Logger objLogger = Logger.getLogger( GestionnaireCommunication.class );
-	
+
+    
 	
 	/**
 	 * Constructeur de la classe GestionnaireCommunication qui permet d'initialiser
@@ -230,4 +231,5 @@ public class GestionnaireCommunication
 		// Fermer toutes les connexions ouvertes pour le gestionnaire de base de données
 		objGestionnaireBD.arreterGestionnaireBD();
 	}
+
 }

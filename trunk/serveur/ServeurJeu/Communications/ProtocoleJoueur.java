@@ -37,6 +37,11 @@ import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
  
+import ServeurJeu.ComposantesJeu.Cases.Case;
+import ServeurJeu.Evenements.EvenementPartieDemarree;
+import ServeurJeu.Evenements.InformationDestination;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
+
 /**
  * @author Jean-François Brind'Amour
  */
@@ -83,6 +88,12 @@ public class ProtocoleJoueur implements Runnable
 	
 	static private Logger objLogger = Logger.getLogger( ProtocoleJoueur.class );
 	
+	
+	// Déclaration d'une variable qui va permettre de savoir si le joueur
+	// en en train de joueur une partie ou non. Cet état sera utile car on
+	// ne déconnectera pas un joeur en train de joueur via le vérification de connexion
+	private boolean bolEnTrainDeJouer;
+	
 	/**
 	 * Constructeur de la classe ProtocoleJoueur qui permet de garder une 
 	 * référence vers le contrôleur de jeu, vers le gestionnaire des 
@@ -112,6 +123,7 @@ public class ProtocoleJoueur implements Runnable
 		intNumeroCommandeReponse = -1;
 		objGestionnaireTemps = gestionnaireTemps;
 		objTacheSynchroniser = tacheSynchroniser;
+        bolEnTrainDeJouer = false;
 		
 		objLogger.info( "Le client " + socketJoueur.getInetAddress().toString() + " est connecte" );
 		
@@ -139,6 +151,13 @@ public class ProtocoleJoueur implements Runnable
 	 */
 	public void run()
 	{
+
+        // Cette variable nous permettra de savoir, lors de l'interception
+        // d'une erreur, si c'était une erreu de communication, auquel cas
+        // si le joueur était en train de jouer une partie, sa partie
+        // sera sauvegardée et il pourra la continuer s'il se reconnecte
+        boolean bolErreurSocket = false;
+        
 		try
 		{
 			// Créer le canal qui permet de recevoir des données sur le canal
@@ -169,6 +188,7 @@ public class ProtocoleJoueur implements Runnable
 				if (intBytesLus == -1)
 				{
                     objLogger.error("Une erreur est survenue: nombre d'octets lus = -1");
+			        bolErreurSocket = true;
 					bolStopThread = true;
 				}
 				
@@ -233,6 +253,7 @@ public class ProtocoleJoueur implements Runnable
 		{
 			objLogger.error( "Une erreur est survenue lors de la reception du message du client" );
 			objLogger.error( ioe.getMessage() );
+			bolErreurSocket = true;
 		}
 		catch (TransformerConfigurationException tce)
 		{
@@ -248,6 +269,7 @@ public class ProtocoleJoueur implements Runnable
 		{
 		  objLogger.error("Une erreur est survenue dans la thread du client");
 		  objLogger.error(e.getMessage());
+		  e.printStackTrace();
 		}
 		finally
 		{
@@ -288,7 +310,7 @@ public class ProtocoleJoueur implements Runnable
 			// protocoles de joueurs
 			objGestionnaireCommunication.supprimerProtocoleJoueur(this);
 		}
-		
+
 		objLogger.info( "Le thread du client " + objSocketJoueur.getInetAddress().toString() + " est termine" );
 	}
 	
@@ -417,9 +439,28 @@ public class ProtocoleJoueur implements Runnable
 						// joueur est maintenant connecté
 						if (strResultatAuthentification.equals(ResultatAuthentification.Succes))
 						{
-							// Il n'y a pas eu d'erreurs
-							objNoeudCommande.setAttribute("type", "Reponse");
-							objNoeudCommande.setAttribute("nom", "Ok");
+						  
+                            if (objControleurJeu.estJoueurDeconnecte(obtenirValeurParametre(objNoeudCommandeEntree, 
+                                                "NomUtilisateur").getNodeValue()))
+                            {
+                                // Le joueur a été déconnecté et tente de se reconnecter.
+                                // Il faut lui envoyer une réponse spéciale lui
+                                // permettant de choisir s'il veut se reconnecter
+                                
+                                bolEnTrainDeJouer = false;
+                                
+                                objNoeudCommande.setAttribute("type","Reponse");
+                                objNoeudCommande.setAttribute("nom","OkEtPartieDejaCommencee");
+                                 
+                            }
+                            else
+                            {
+                                bolEnTrainDeJouer = false;
+    						  
+    							// Il n'y a pas eu d'erreurs
+    							objNoeudCommande.setAttribute("type", "Reponse");
+    							objNoeudCommande.setAttribute("nom", "Ok");
+							}
 						}
 						else if (strResultatAuthentification.equals(ResultatAuthentification.JoueurDejaConnecte))
 						{
@@ -432,6 +473,37 @@ public class ProtocoleJoueur implements Runnable
 							objNoeudCommande.setAttribute("nom", "JoueurNonConnu");    
 						}
 					}
+				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.RejoindrePartie))
+				{
+				    // Un joueur déconnecté tente de rejoindre une partie déjà commencée
+                    if (objJoueurHumain != null)
+                    {
+                        if (objControleurJeu.estJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur()) == true)
+                        {
+                            // Ici, on renvoie l'état du jeu au joueur pour
+                            // qu'il puisse reprendre sa partie
+                            JoueurHumain objAncientJoueurHumain = objControleurJeu.obtenirJoueurHumainJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
+                            
+                            // Envoyer le plateau de jeu, la liste des joueurs, 
+                            // leurs ids personnage et leurs positions au joueur
+                            // qui se reconnecte
+                            envoyerPlateauJeu(objAncientJoueurHumain);
+                            
+                            // Envoyer la liste des items du joueur qui
+                            // se reconnecte
+                            envoyerItemsJoueurDeconnecte(objAncientJoueurHumain);
+                    
+                            // Faire en sorte que le joueur est correctement
+                            // considéré en train de jouer
+                            objJoueurHumain = objAncientJoueurHumain;
+                            bolEnTrainDeJouer = true;
+                            
+                            // Enlever le joueur de la liste des joueurs déconnectés
+                            objControleurJeu.enleverJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
+                            
+                        }
+				    }    
 				}
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.Deconnexion))
 				{
@@ -1193,6 +1265,8 @@ public class ProtocoleJoueur implements Runnable
 							// joueur est maintenant en attente
 							if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.Succes))
 							{
+                                bolEnTrainDeJouer = true;
+							 
 								// Il n'y a pas eu d'erreurs
 								objNoeudCommande.setAttribute("type", "Reponse");
 								objNoeudCommande.setAttribute("nom", "DemarrerMaintenant");
@@ -1270,6 +1344,8 @@ public class ProtocoleJoueur implements Runnable
 						// joueur est maintenant en attente
 						if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.Succes))
 						{
+                            bolEnTrainDeJouer = true;
+                            
 							// Il n'y a pas eu d'erreurs
 							objNoeudCommande.setAttribute("type", "Reponse");
 							objNoeudCommande.setAttribute("nom", "Ok");
@@ -1516,10 +1592,10 @@ public class ProtocoleJoueur implements Runnable
 				}
 				else if( objNoeudCommandeEntree.getAttribute("nom").equals(Commande.Pointage) )
 				{
-//					 Obtenir pointage
+                    // Obtenir pointage
 					int pointage = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "Pointage").getNodeValue());
 					
-//					 Si le joueur n'est pas connecté au serveur de jeu, alors il
+                    // Si le joueur n'est pas connecté au serveur de jeu, alors il
 					// y a une erreur
 					if (objJoueurHumain == null)
 					{
@@ -1558,7 +1634,7 @@ public class ProtocoleJoueur implements Runnable
 						int nouveauPointage = objJoueurHumain.obtenirPartieCourante().obtenirPointage();
 						nouveauPointage += pointage;
 						objJoueurHumain.obtenirPartieCourante().definirPointage( nouveauPointage );
-//						 Il n'y a pas eu d'erreurs
+                        //	Il n'y a pas eu d'erreurs
 						objNoeudCommande.setAttribute("type", "Reponse");
 						objNoeudCommande.setAttribute("nom", "Pointage");
 						
@@ -2280,4 +2356,170 @@ public class ProtocoleJoueur implements Runnable
 		// Retourner une référence vers le joueur humain
 		return objJoueurHumain;
 	}
+	
+	public boolean isPlaying()
+	{
+        return bolEnTrainDeJouer;
+	}
+
+    public void definirEnTrainDeJoueur(boolean nouvelleValeur)
+    {
+        bolEnTrainDeJouer = nouvelleValeur;
+    }
+    
+    
+    /* 
+     * Permet d'envoyer le plateau de jeu à un joueur qui rejoint une partie
+     */
+    private void envoyerPlateauJeu(JoueurHumain ancientJoueur)
+    {
+        // Obtenir la référence vers la table où le joueur était
+        Table objTable = ancientJoueur.obtenirPartieCourante().obtenirTable();
+        
+        // Créer un tableau des positions des joueurs, on a "+ 1" car le joueur
+        // déconnecté n'était plus dans cette liste
+        Point objtPositionsJoueurs[] = new Point[objTable.obtenirListeJoueurs().size() + 1];
+        
+        // Obtenir a liste des joueurs sur la table
+        TreeMap lstJoueurs = objTable.obtenirListeJoueurs();
+        
+        // Déclaration d'une variable qui va contenir le code XML à retourner
+        String strCodeXML = "";
+        
+        // Obtenir une référence vers le plateau de jeu
+        Case[][] objttPlateauJeu = objTable.obtenirPlateauJeuCourant();
+        
+        // Créer la liste des positions des joueurs à retourner
+        TreeMap lstPositionsJoueurs = new TreeMap();
+        
+        // Parcourir les positions des joueurs de la table et les ajouter
+        // à notre liste locale
+        Set lstEnsemblePositionJoueurs = objTable.obtenirListeJoueurs().entrySet();
+        Iterator objIterateurListe = lstEnsemblePositionJoueurs.iterator();
+            
+        // Passer tous les positions des joueurs et les ajouter à la liste locale
+        while (objIterateurListe.hasNext() == true)
+        {
+            // Déclaration d'une référence vers l'objet clé valeur courant
+            Map.Entry objPositionJoueur = (Map.Entry) objIterateurListe.next();
+            
+            // Créer une référence vers la position du joueur courant
+            Point objPosition = (Point) objPositionJoueur.getValue();
+            
+            lstPositionsJoueurs.put(objPositionJoueur.getKey(), objPositionJoueur);
+
+        }
+        
+        // Ajouter la position du joueur déconnecté à la liste
+        lstPositionsJoueurs.put(ancientJoueur.obtenirNomUtilisateur(),
+            ancientJoueur.obtenirPartieCourante().obtenirPositionJoueur());
+        
+            
+        // Créer l'événement contenant toutes les informations sur le plateau et
+        // la partie
+        EvenementPartieDemarree objEvenementPartieDemarree = new EvenementPartieDemarree(
+            objTable.obtenirTempsTotal(), lstPositionsJoueurs, objttPlateauJeu);
+
+        // Créer l'objet information destination pour envoyer l'information à ce joueur
+        InformationDestination objInformationDestination = new InformationDestination(obtenirNumeroCommande(), this);
+        
+        // Envoyer l'événement
+        objEvenementPartieDemarree.ajouterInformationDestination(objInformationDestination);
+        objEvenementPartieDemarree.envoyerEvenement();
+        
+    }
+    
+    /*
+     * Permet d'envoyer la liste des items d'un joueur qui rejoint une partie
+     */                            
+    private void envoyerItemsJoueurDeconnecte(JoueurHumain ancientJoueur)
+    {
+        // Référence vers la liste des items que l'on doit envoyer
+        TreeMap lstItems = ancientJoueur.obtenirPartieCourante().obtenirListeObjets();
+
+		/*
+		 * <commande nom="ListeItems" no="0" type="MiseAJour">
+		 * <parametre type="ListeItems"><item nom="item1"/>
+		 * <item nom="item2"/></parametre></commande>
+		 *
+		 */   
+
+	    // Déclaration d'une variable qui va contenir le code XML à envoyer
+	    String strCodeXML = "";
+	    
+        // Appeler une fonction qui va créer un document XML dans lequel 
+	    // on peut ajouter des noeuds
+        Document objDocumentXML = UtilitaireXML.obtenirDocumentXML();
+    
+		// Créer le noeud de commande à retourner
+		Element objNoeudCommande = objDocumentXML.createElement("commande");
+		
+		// Créer le noeud du paramètre
+		Element objNoeudParametre = objDocumentXML.createElement("parametre");
+
+		// Envoyer une liste des items
+		objNoeudCommande.setAttribute("type", "MiseAJour");
+		objNoeudCommande.setAttribute("nom", "ListeItems");
+		
+		// Créer le noeud pour le paramètre contenant la liste
+		// des items à retourner
+		Element objNoeudParametreListeItems = objDocumentXML.createElement("parametre");
+		
+		// On ajoute un attribut type qui va contenir le type
+		// du paramètre
+		objNoeudParametreListeItems.setAttribute("type", "ListeItems");
+		
+	    // Obtenir la liste des items du joueur déconnecté
+		TreeMap lstListeItemss = ancientJoueur.obtenirPartieCourante().obtenirListeObjets();
+		
+		// Créer un ensemble contenant tous les tuples de la liste 
+		// lstListeItemss (chaque élément est un Map.Entry)
+		Set lstEnsembleItems = lstListeItemss.entrySet();
+		
+		// Obtenir un itérateur pour l'ensemble contenant les tables
+		Iterator objIterateurListeItems = lstEnsembleItems.iterator();
+		
+		// Générer un nouveau numéro de commande qui sera 
+	    // retourné au client
+	    genererNumeroReponse();
+		
+		// Passer toutes les items et créer un noeud pour 
+		// chaque item et l'ajouter au noeud de paramètre
+		while (objIterateurListeItems.hasNext() == true)
+		{
+			// Créer une référence vers l'item courant dans la liste
+			ObjetUtilisable objItem = (ObjetUtilisable)(((Map.Entry)(objIterateurListeItems.next())).getValue());
+			
+		    // Créer le noeud de la table courante
+			Element objNoeudItem = objDocumentXML.createElement("item");
+			
+			// On ajoute un attribut id qui va contenir le 
+			// numéro identifiant l'item
+			objNoeudItem.setAttribute("id", Integer.toString(objItem.obtenirId()));
+							    
+			// Ajouter le noeud de l'item au noeud du paramètre
+			objNoeudParametreListeItems.appendChild(objNoeudItem);
+
+		}						    
+
+		
+		// Ajouter le noeud paramètre au noeud de commande dans
+		// le document de sortie
+		objNoeudCommande.appendChild(objNoeudParametreListeItems);
+    	    
+    	try
+    	{
+    	
+	    	// Transformer le XML en string
+	    	strCodeXML = ClassesUtilitaires.UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+	    	
+	    	// Envoyer le message string
+	    	envoyerMessage(strCodeXML);
+	    }
+	    catch(Exception e)
+	    {
+	    	objLogger.error(e.getMessage());
+	    }
+    }
+    
 }

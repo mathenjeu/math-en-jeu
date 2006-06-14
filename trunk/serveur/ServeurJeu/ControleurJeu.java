@@ -22,6 +22,10 @@ import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
 import ClassesUtilitaires.Espion;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+
+//import ServeurJeu.ComposantesJeu.Joueurs.TestJoueurVirtuel;
+
 
 
 //TODO: Si un jour on doit modifier le nom d'utilisateur d'un joueur pendant 
@@ -74,6 +78,11 @@ public class ControleurJeu
 	// présentement dans des tables de jeu)
 	private TreeMap lstJoueursConnectes;
 	
+    
+    // Déclaration d'une variable pour contenir une liste des joueurs
+    // qui ont étés déconnectés et qui étaient en train de joueur une partie
+    private TreeMap lstJoueursDeconnectes;
+	
 	// Cet objet est une liste des salles créées qui se trouvent dans le serveur
 	// de jeu. Chaque élément de cette liste a comme clé le nom de la salle
 	private TreeMap lstSalles;
@@ -81,7 +90,6 @@ public class ControleurJeu
 	// Déclaration de l'objet Espion qui va inscrire des informationsà proppos
 	// du serveur en parallète
 	private Espion objEspion;
-	
 	
 	/**
 	 * Constructeur de la classe ControleurJeu qui permet de créer le gestionnaire 
@@ -99,6 +107,10 @@ public class ControleurJeu
 		
 		// Créer une liste des joueurs
 		lstJoueursConnectes = new TreeMap();
+		
+		
+		// Créer une liste des joueurs déconnectés
+		lstJoueursDeconnectes = new TreeMap();
 		
 		// Créer une liste des salles
 		lstSalles = new TreeMap();
@@ -130,7 +142,9 @@ public class ControleurJeu
 		objEspion = new Espion(this, "Espion.txt", 5000, ClassesUtilitaires.Espion.MODE_FICHIER_TEXTE);
 		Thread threadEspion = new Thread(objEspion);
 		threadEspion.start();
-		
+
+        //TestJoueurVirtuel objTestJoueurVirtuel = new TestJoueurVirtuel(this);
+        
 		// Démarrer l'écoute des connexions clientes
 		objGestionnaireCommunication.ecouterConnexions();	
 				
@@ -152,7 +166,7 @@ public class ControleurJeu
 	    synchronized (lstJoueursConnectes)
 	    {
 			// Retourner si le joueur est déjà connecté au serveur de jeu ou non
-			return lstJoueursConnectes.containsKey(nomUtilisateur);	        
+			return lstJoueursConnectes.containsKey(nomUtilisateur.toLowerCase());	        
 	    }
 	}
 
@@ -237,7 +251,7 @@ public class ControleurJeu
 					
 					// Ajouter ce nouveau joueur dans la liste des joueurs connectés
 					// au serveur de jeu
-					lstJoueursConnectes.put(nomUtilisateur, objJoueurHumain);
+					lstJoueursConnectes.put(nomUtilisateur.toLowerCase(), objJoueurHumain);
 					
 					// Si on doit générer le numéro de commande de retour, alors
 					// on le génère, sinon on ne fait rien (ça devrait toujours
@@ -287,6 +301,27 @@ public class ControleurJeu
 	 */
 	public void deconnecterJoueur(JoueurHumain joueur, boolean doitGenererNoCommandeRetour)
 	{
+
+		
+		// Lors d'une déconnexion par erreur du socket, la valeur
+		// de doitGenererNoCommandeRetour est à false
+		// On va donc ajouter ce joueur à la liste des joueurs
+		// déconnectés pour cette table et pour le contrôleur du jeu
+		if (doitGenererNoCommandeRetour == false && joueur != null &&
+		    joueur.obtenirPartieCourante() != null &&
+		    joueur.obtenirPartieCourante().obtenirTable() != null &&
+		    joueur.obtenirPartieCourante().obtenirTable().estCommencee() == true &&
+		    joueur.obtenirPartieCourante().obtenirTable().estArretee() == false)
+		{
+					
+			// Ajouter ce joueur à la liste des joueurs déconnectés pour cette
+			// table
+			joueur.obtenirPartieCourante().obtenirTable().ajouterJoueurDeconnecte(joueur);
+		    
+		    // Ajouter ce joueur à la liste des joueurs déconnectés du serveur
+		    ajouterJoueurDeconnecte(joueur);
+		}
+		
 		// Si le joueur courant est dans une salle, alors on doit le retirer de
 		// cette salle (pas besoin de faire la synchronisation sur la salle 
 		// courante du joueur car elle ne peut être modifiée par aucun autre
@@ -297,12 +332,13 @@ public class ControleurJeu
 			joueur.obtenirSalleCourante().quitterSalle(joueur, false);
 		}
 		
+		
 		// Empêcher d'autres thread de venir utiliser la liste des joueurs
 		// connectés au serveur de jeu pendant qu'on déconnecte le joueur
 		synchronized (lstJoueursConnectes)
 		{
 			// Enlever le joueur de la liste des joueurs connectés
-			lstJoueursConnectes.remove(joueur.obtenirNomUtilisateur());
+			lstJoueursConnectes.remove(joueur.obtenirNomUtilisateur().toLowerCase());
 			
 			// Enlever la référence du protocole du joueur vers son joueur humain 
 			// (cela va avoir pour effet que le protocole du joueur va penser que
@@ -533,4 +569,82 @@ public class ControleurJeu
 	{
 		return objGestionnaireCommunication;
 	}
+	
+	public GestionnaireEvenements obtenirGestionnaireEvenements()
+	{
+	    return objGestionnaireEvenements;
+	}
+	
+	public GestionnaireTemps obtenirGestionnaireTemps()
+	{
+	    return objGestionnaireTemps;
+	}
+	
+	public TacheSynchroniser obtenirTacheSynchroniser()
+	{
+	    return objTacheSynchroniser;
+	}
+	
+	public GestionnaireBD obtenirGestionnaireBD()
+	{
+	   return objGestionnaireBD;
+	}
+
+    
+    /*
+     * Cette fonction ajouter un joueur à la liste des joueurs déconnectés. Si le
+     * joueur tente de se reconnecter, il sera possible qu'il reprenne la partie
+     */
+    public void ajouterJoueurDeconnecte(JoueurHumain joueurHumain)
+    {
+
+        synchronized(lstJoueursDeconnectes)
+        {
+            lstJoueursDeconnectes.put(joueurHumain.obtenirNomUtilisateur().toLowerCase(), joueurHumain);
+        }   
+    }
+    
+    /*
+     * Cette fonction va nous permettre de savoir si ce joueur a été
+     * déconnecté pendant une partie.
+     */
+    public boolean estJoueurDeconnecte(String nomUtilisateur)
+    {
+       synchronized(lstJoueursDeconnectes)
+       {
+           return lstJoueursDeconnectes.containsKey(nomUtilisateur.toLowerCase()); 
+       }
+
+    }
+    
+    /*
+     * Cette fonction retourne une référence vers un objet JoueurHumain
+     * d'un joueur déconnecté. Cet objet contient toutes les informations
+     * à propos de la partie qui était en cours
+     */
+    public JoueurHumain obtenirJoueurHumainJoueurDeconnecte(String nomUtilisateur)
+    {
+        synchronized(lstJoueursDeconnectes)
+        {
+            return (JoueurHumain) lstJoueursDeconnectes.get(nomUtilisateur);
+        }
+    }
+    
+    /*
+     * Cette fonction permet d'enlever un joueur déconnecté de la liste
+     * des joueurs déconnectés, soit parce qu'il vient de se reconnecter,
+     * ou car la partie qu'il avait commencée et qui était en suspend est terminée
+     */
+    public void enleverJoueurDeconnecte(String nomUtilisateur)
+    {
+    	synchronized(lstJoueursDeconnectes)
+    	{
+    		lstJoueursDeconnectes.remove(nomUtilisateur.toLowerCase());
+    	}
+    }
+    
+    public TreeMap obtenirListeJoueursDeconnectes()
+    {
+    	return lstJoueursDeconnectes;
+    }
 }
