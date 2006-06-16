@@ -23,7 +23,7 @@ public final class UtilitaireEncodeurDecodeur
     {
         // Déclaration d'une chaîne qui va contenir la version encodée en UTF-8
         // de la chaîne passée en paramètres
-        String strChaineEncodee = "";
+        StringBuffer strChaineEncodee = new StringBuffer();
 
         // Si la chaîne contient au moins un caractère, alors on peut l'encoder
         if (stringToEncode != null && stringToEncode.equals("") == false)
@@ -37,16 +37,18 @@ public final class UtilitaireEncodeurDecodeur
                 // laisse tel quel
                 if (((int) stringToEncode.charAt(i)) > 127)
                 {
-                    strChaineEncodee += "&#" + UtilitaireNombres.formatNumber(((int) stringToEncode.charAt(i)), 3, "0") + ";";
+                    strChaineEncodee.append("&#");
+                    strChaineEncodee.append(UtilitaireNombres.formatNumber(((int) stringToEncode.charAt(i)), 3, "0"));
+                    strChaineEncodee.append(";");
                 }
                 else
                 {
-                    strChaineEncodee += stringToEncode.charAt(i);
+                    strChaineEncodee.append(stringToEncode.charAt(i));
                 }
             }
         }
 
-        return strChaineEncodee;
+        return strChaineEncodee.toString();
     }
 
     /**
@@ -61,7 +63,7 @@ public final class UtilitaireEncodeurDecodeur
     {
         // Déclaration d'une chaîne qui va contenir la version décodée
         // de la chaîne UTF-8 passée en paramètres
-        String strChaineDecodee = "";
+        StringBuffer strChaineDecodee = new StringBuffer();
 
         // Si la chaîne contient au moins un caractère, alors on peut la
         // décoder
@@ -80,18 +82,18 @@ public final class UtilitaireEncodeurDecodeur
                     UtilitaireNombres.isPositiveNumber(stringToDecode.substring(i + 2, i + 5)) == true)
                 {
                     // Obtenir le caractère correspondant au code ASCII courant
-                    strChaineDecodee += ((char) Integer.parseInt(stringToDecode.substring(i + 2, i + 5)));
+                    strChaineDecodee.append(((char) Integer.parseInt(stringToDecode.substring(i + 2, i + 5))));
 
                     // Augmenter le i pour ne pas retraiter le même caractère
                     i += 5;
                 }
                 else
                 {
-                    strChaineDecodee += stringToDecode.charAt(i);
+                    strChaineDecodee.append(stringToDecode.charAt(i));
                 }
             }
         }
 
-        return strChaineDecodee;
+        return strChaineDecodee.toString();
     }
 }
