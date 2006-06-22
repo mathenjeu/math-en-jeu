@@ -444,7 +444,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		return strResultatDemarrerPartie;
 	}
 	
-	/* pour test */
+	/* pour test joueur virtuel (TestJoueurVirtuel.java)*/
 	public Vector genererPlateauJeu()
 	{
 //       Créer une nouvelle liste qui va garder les points des 
@@ -458,7 +458,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         return lstPointsCaseLibre;
 	}
 	
-	/* pour test */
+	/* pour test joueur virtuel (TestJoueurVirtuel.java) */
 	public void demarrerMinuterie()
 	{
         int tempsStep = 1;
@@ -499,9 +499,19 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Générer le plateau de jeu selon les règles de la table et 
 		// garder le plateau en mémoire dans la table
 		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre);
-		
+
 		// Obtenir la position des joueurs de cette table
 		int nbJoueur = lstJoueursEnAttente.size(); //TODO a vérifier
+		
+		// Obtenir le nombre de joueurs virtuel requis
+		intNombreJoueursVirtuels = 4 - lstJoueursEnAttente.size();
+		if (intNombreJoueursVirtuels < 0 || intNombreJoueursVirtuels >=4)
+		{
+			intNombreJoueursVirtuels = 0;
+		}
+		
+		//System.out.println("Nombre de joueurs virtuels: " + intNombreJoueursVirtuels);
+		
         objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels, lstPointsCaseLibre);
 		
 		// Créer un ensemble contenant tous les tuples de la liste 
@@ -510,6 +520,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Obtenir un itérateur pour l'ensemble contenant les personnages
 		Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
+
 		
 		// S'il y a des joueurs virtuels, alors on va créer une nouvelle liste
 		// qui contiendra ces joueurs
@@ -552,7 +563,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 // TODO: NE PAS PRENDRE 2 FOIS LE MÊME NOM ET NE PAS PRENDRE
                 //       LE MÊME NOM QU'UN JOUEUR HUMAIN
                 JoueurVirtuel objJoueurVirtuel = new JoueurVirtuel(objGestionnaireBD.obtenirNomJoueurVirtuelAleatoire(), 
-                    JoueurVirtuel.DIFFICULTE_MOYEN, this, objGestionnaireEvenements);
+                    JoueurVirtuel.DIFFICULTE_MOYEN, this, objGestionnaireEvenements, objControleurJeu);
                 
                 // Définir sa position
                 objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i]);
@@ -562,6 +573,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 
                 // Ajouter le joueur virtuel à la liste des positions, liste qui sera envoyée
                 // aux joueurs humains
+                //System.out.println(objJoueurVirtuel.obtenirNom());
                 lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[i]);
                 
     		}
@@ -570,6 +582,29 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// On peut maintenant vider la liste des joueurs en attente
 		// car elle ne nous sert plus à rien
 		lstJoueursEnAttente.clear();
+		
+		
+		// Maintenant pour tous les joueurs, s'il y a des joueurs
+		// virtuels de présents, on leur envoit un message comme
+		// quoi les joueurs virtuels sont prêts
+		if (intNombreJoueursVirtuels > 0)
+		{
+		    synchronized (lstJoueurs)
+		    {
+	    	    for (int i = 0; i < lstJoueursVirtuels.size(); i++)
+	    	    {
+					// Préparer l'événement de joueur en attente. 
+					// Cette fonction va passer les joueurs et créer un 
+					// InformationDestination pour chacun et ajouter l'événement 
+					// dans la file de gestion d'événements
+					JoueurVirtuel objJoueurVirtuel = (JoueurVirtuel) lstJoueursVirtuels.get(i);
+					
+					preparerEvenementJoueurEntreTable(objJoueurVirtuel.obtenirNom());
+					preparerEvenementJoueurDemarrePartie(objJoueurVirtuel.obtenirNom(), objJoueurVirtuel.obtenirIdPersonnage());		    	
+			    }
+		    }
+	    }
+		
 		
 		// Empêcher d'autres thread de toucher à la liste des joueurs de 
 	    // cette table pendant qu'on parcourt tous les joueurs de la table
@@ -597,6 +632,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    {
     	    for (int i = 0; i < lstJoueursVirtuels.size(); i++)
     	    {
+    	    	//System.out.println("Thread.start()");
                 Thread threadJoueurVirtuel = new Thread((JoueurVirtuel) lstJoueursVirtuels.get(i));
                 threadJoueurVirtuel.start();
             }
@@ -1092,7 +1128,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	{
 //		Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs de la table
-	    EvenementPartieTerminee partieTerminee = new EvenementPartieTerminee( lstJoueurs );
+	    EvenementPartieTerminee partieTerminee = new EvenementPartieTerminee(lstJoueurs, lstJoueursVirtuels);
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)

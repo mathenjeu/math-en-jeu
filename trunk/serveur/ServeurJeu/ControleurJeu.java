@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-
+import java.util.Random;
 
 import Enumerations.RetourFonctions.ResultatAuthentification;
 import ServeurJeu.BD.GestionnaireBD;
@@ -91,6 +91,11 @@ public class ControleurJeu
 	// du serveur en parallète
 	private Espion objEspion;
 	
+	
+	// Déclaration d'un objet random pour générer des nombres aléatoires
+	private Random objRandom;
+	
+	
 	/**
 	 * Constructeur de la classe ControleurJeu qui permet de créer le gestionnaire 
 	 * des communications, le gestionnaire d'événements et le gestionnaire de bases 
@@ -105,9 +110,13 @@ public class ControleurJeu
 
 		objLogger.info( "Le serveur démarre : " + new Date().toString() );
 		
+		// Préparer l'objet pour créer les nombres aléatoires
+    	Date d = new Date();
+    	long seed = d.getTime();
+    	objRandom = new Random(seed);
+		
 		// Créer une liste des joueurs
 		lstJoueursConnectes = new TreeMap();
-		
 		
 		// Créer une liste des joueurs déconnectés
 		lstJoueursDeconnectes = new TreeMap();
@@ -328,7 +337,7 @@ public class ControleurJeu
 		// thread que celui courant)
 		if (joueur.obtenirSalleCourante() != null)
 		{
-			// Le joueur courant qui la salle dans laquelle il se trouve
+			// Le joueur courant quitte la salle dans laquelle il se trouve
 			joueur.obtenirSalleCourante().quitterSalle(joueur, false);
 		}
 		
@@ -646,5 +655,11 @@ public class ControleurJeu
     public TreeMap obtenirListeJoueursDeconnectes()
     {
     	return lstJoueursDeconnectes;
+    }
+    
+    
+    public int genererNbAleatoire(int max)
+    {
+    	return objRandom.nextInt(max);
     }
 }

@@ -1,5 +1,6 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
+import ServeurJeu.ControleurJeu;
 import ServeurJeu.Communications.ProtocoleJoueur;
 import ServeurJeu.ComposantesJeu.InformationPartie;
 import ServeurJeu.ComposantesJeu.Salle;
@@ -38,6 +39,7 @@ import ServeurJeu.ComposantesJeu.Joueurs.TestJoueurVirtuel;
 
 /* Priorité haute
  * -----------------
+ * TODO: Ne pas utiliser "instanceof" mais utiliser obtenirTypeCase
  *
  * Priorité moyenne
  * -----------------
@@ -133,8 +135,12 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	// virtuel
 	private TreeMap lstObjetsUtilisablesRamasses;
 	
+	// Déclaration d'une référence vers le controleur jeu
+	private ControleurJeu objControleurJeu;
+	
+	
 	// Déclaration d'une variable pour générer des nombres aléatoires
-    private Random objRandom;
+    //private Random objRandom;
 	
 	// Cette constante définit le temps de pause lors d'une rétroaction
 	private final static int TEMPS_RETROACTION = 10;
@@ -175,14 +181,16 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 
 	 */
 	public JoueurVirtuel(String nom, int niveauDifficulte, Table tableCourante, 
-	    GestionnaireEvenements gestionnaireEv)
+	    GestionnaireEvenements gestionnaireEv, ControleurJeu controleur)
 	{
 	   
         // Préparation de l'objet pour créer des nombres aléatoires
-        Date d = new Date();
-        long seed = d.getTime();
-        objRandom = new Random(seed);
+        //Date d = new Date();
+        //long seed = d.getTime();
+        //objRandom = new Random(System.currentTimeMillis());
 	   
+	    objControleurJeu = controleur;
+	    
 		strNom = nom;
 		
 		// Cette variable sera utilisée dans la thread
@@ -244,6 +252,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		// Cette variable contient le temps de pause pour le déplacement
 		// du personnage
 		int intTempsDeplacement;
+		
+		//System.out.println("Joueur virtuel démarré");
 		
 		while(bolStopThread == false)
 		{		
@@ -1095,7 +1105,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 
     private int genererNbAleatoire(int max)
     {
-        return objRandom.nextInt(max);
+        //return objRandom.nextInt(max);
+        return objControleurJeu.genererNbAleatoire(max);
     }
     
     
@@ -1158,7 +1169,12 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     	}
     }
 
-
+    public int obtenirIdPersonnage()
+    {
+    	return intIdPersonnage;
+    }
+    
+    
     /* Cette fonction permet d'obtenir le nom du joueur virtuel
      */
     public String obtenirNom()

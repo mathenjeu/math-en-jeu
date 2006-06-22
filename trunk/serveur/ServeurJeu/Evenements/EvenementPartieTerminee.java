@@ -13,9 +13,11 @@ import org.w3c.dom.Element;
 
 import java.util.TreeMap;
 import java.util.Iterator;
+import java.util.Vector;
 
 import ClassesUtilitaires.UtilitaireXML;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 
 /**
  * @author Marc
@@ -25,11 +27,13 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 public class EvenementPartieTerminee  extends Evenement
 {
 	private TreeMap lstJoueurs;
+	private Vector lstJoueursVirtuels;
 	
-	public EvenementPartieTerminee( TreeMap joueurs )
+	public EvenementPartieTerminee( TreeMap joueurs, Vector joueursVirtuels )
 	{
 		super();
 		lstJoueurs = joueurs;
+		lstJoueursVirtuels = joueursVirtuels;
 	}
 	
 	protected String genererCodeXML(InformationDestination information)
@@ -85,6 +89,28 @@ public class EvenementPartieTerminee  extends Evenement
 				// Ajouter le noeud paramètre au noeud de commande
 				objNoeudCommande.appendChild(objNoeudParametre);
 			}
+			
+			if (lstJoueursVirtuels != null)
+			{
+				for (int i = 0; i < lstJoueursVirtuels.size(); i++)
+				{
+					JoueurVirtuel joueur = (JoueurVirtuel) lstJoueursVirtuels.get(i);
+					String nomUtilisateur = joueur.obtenirNom();
+					int pointage = joueur.obtenirPointage();
+				
+					
+					Element objNoeudJoueur = objDocumentXML.createElement("joueur");
+					objNoeudJoueur.setAttribute("utilisateur", nomUtilisateur);
+					objNoeudJoueur.setAttribute("pointage", new Integer( pointage).toString());
+					
+				    objNoeudParametre.appendChild(objNoeudJoueur);
+
+				    // Ajouter le noeud paramètre au noeud de commande
+				    objNoeudCommande.appendChild(objNoeudParametre);
+					
+				}
+			}
+			
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
 			objDocumentXML.appendChild(objNoeudCommande);

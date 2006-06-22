@@ -22,7 +22,10 @@ public class GestionnaireTemps extends Timer
 	
 	public void enleverTache( Tache t )
 	{
-		t.cancel();
+		if (t != null)
+		{
+			t.cancel();
+		}
 		this.purge();
 	}
 }

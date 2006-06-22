@@ -171,15 +171,15 @@ public class Espion implements Runnable{
     	
 	    // Déclaration de la variable qui contiendra le résultat
 	    // de l'espion pour cette mise à jour
-	    StringBuffer strResultat = new StringBuffer();
+	    StringBuilder strResultat = new StringBuilder();
 	    
 	    // Déclaration des différentes parties du résultat
-	    StringBuffer strEntete = new StringBuffer();
-	    StringBuffer strDerniereMAJ = new StringBuffer();
-	    StringBuffer strJoueursConnectes = new StringBuffer();
-	    StringBuffer strJoueursDeconnectes = new StringBuffer();
-	    StringBuffer strSalles = new StringBuffer();
-	    StringBuffer strTables = new StringBuffer();
+	    StringBuilder strEntete = new StringBuilder();
+	    StringBuilder strDerniereMAJ = new StringBuilder();
+	    StringBuilder strJoueursConnectes = new StringBuilder();
+	    StringBuilder strJoueursDeconnectes = new StringBuilder();
+	    StringBuilder strSalles = new StringBuilder();
+	    StringBuilder strTables = new StringBuilder();
 	    
 	    // Déclaration d'un objet qui contiendra une référence vers la liste des joueurs
 	    Vector lstProtocoleJoueur = objControleurJeu.obtenirGestionnaireCommunication().obtenirListeProtocoleJoueur();
@@ -499,6 +499,12 @@ public class Espion implements Runnable{
                              strTables.append(",");
                              for (int i=0; i < lstJoueursVirtuels.size(); i++)
                              {
+                                 
+                             	 if (i > 0)
+                             	 {
+                             	     strTables.append(",");
+                             	 }
+                             	 
                                  JoueurVirtuel objJoueurVirtuel = (JoueurVirtuel) lstJoueursVirtuels.get(i);
                                  strTables.append(objJoueurVirtuel.obtenirNom());
                              }   

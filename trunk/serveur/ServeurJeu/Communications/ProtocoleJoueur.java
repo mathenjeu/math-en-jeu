@@ -1697,7 +1697,9 @@ public class ProtocoleJoueur implements Runnable
 			// Créer le canal qui permet d'envoyer des données sur le canal
 			// de communication entre le client et le serveur
 			OutputStream objCanalEnvoi = objSocketJoueur.getOutputStream();
+
 			String chainetemp = UtilitaireEncodeurDecodeur.encodeToUTF8(message);
+
 			if (chainetemp.contains("ping") == false)
 			{
 				objLogger.info( "Message envoye : " + chainetemp );

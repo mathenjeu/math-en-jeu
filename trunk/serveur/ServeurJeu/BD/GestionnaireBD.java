@@ -60,6 +60,9 @@ public class GestionnaireBD
 	
 	static private Logger objLogger = Logger.getLogger( GestionnaireBD.class );
 	
+	// Variable temporaire pour nommer les joueurs virtuels "Bot 1", "Bot 2", etc.
+	private int intBotId;
+	
 	/**
 	 * Constructeur de la classe GestionnaireBD qui permet de garder la 
 	 * référence vers le contrôleur de jeu
@@ -67,6 +70,8 @@ public class GestionnaireBD
 	public GestionnaireBD(ControleurJeu controleur)
 	{
 		super();
+		
+		intBotId = 1;
 		
 		// Garder la référence vers le contrôleur de jeu
 		objControleurJeu = controleur;
@@ -484,15 +489,12 @@ public class GestionnaireBD
 	public String obtenirNomJoueurVirtuelAleatoire()
 	{
 	   int intValeurAleatoire = UtilitaireNombres.genererNbAleatoire(5);
-	   switch(intValeurAleatoire)
-	   {
-	       case 0: return "Bot 1";
-	       case 1: return "Bot 2";
-	       case 2: return "Bot 3";
-	       case 3: return "Crac";
-	       case 4: return "Croc";
-	       default: return "Bot";
-	   }
+	   String strNom;
+	   
+       strNom = "Bot " + intBotId;
+       intBotId++;
+       
+       return strNom;
 	   
 	}
 	

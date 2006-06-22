@@ -23,7 +23,7 @@ public final class UtilitaireEncodeurDecodeur
     {
         // Déclaration d'une chaîne qui va contenir la version encodée en UTF-8
         // de la chaîne passée en paramètres
-        StringBuffer strChaineEncodee = new StringBuffer();
+        StringBuilder strChaineEncodee = new StringBuilder();
 
         // Si la chaîne contient au moins un caractère, alors on peut l'encoder
         if (stringToEncode != null && stringToEncode.equals("") == false)
@@ -63,7 +63,7 @@ public final class UtilitaireEncodeurDecodeur
     {
         // Déclaration d'une chaîne qui va contenir la version décodée
         // de la chaîne UTF-8 passée en paramètres
-        StringBuffer strChaineDecodee = new StringBuffer();
+        StringBuilder strChaineDecodee = new StringBuilder();
 
         // Si la chaîne contient au moins un caractère, alors on peut la
         // décoder

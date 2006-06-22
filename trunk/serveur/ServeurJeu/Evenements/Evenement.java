@@ -51,12 +51,16 @@ public abstract class Evenement
 	        
 	        try
 	        {
+                
+                String strTemp = genererCodeXML(information);
+		        
 		        // Envoyer l'événement au joueur courant
-		        information.obtenirProtocoleJoueur().envoyerMessage(genererCodeXML(information));	            
+		        information.obtenirProtocoleJoueur().envoyerMessage(strTemp);	            
+   
 	        }
 	        catch (IOException ioe)
 	        {
-				System.out.println("L'evenement courant n'a pas pu etre envoye");
+				//System.out.println("L'evenement courant n'a pas pu etre envoye");
 	        }
 	    }
 	}
