@@ -496,7 +496,11 @@ public class Espion implements Runnable{
                          if (objTable.obtenirListeJoueursVirtuels() != null)
                          {
                              Vector lstJoueursVirtuels = objTable.obtenirListeJoueursVirtuels();
-                             strTables.append(",");
+                             if (intCompteur > 0)
+                             {
+                             	strTables.append(",");
+                             }
+                             
                              for (int i=0; i < lstJoueursVirtuels.size(); i++)
                              {
                                  

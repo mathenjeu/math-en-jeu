@@ -23,6 +23,7 @@ public final class Commande
 	public static final String RepondreQuestion = "RepondreQuestion";
 	public static final String Pointage = "Pointage";
     public static final String RejoindrePartie = "RejoindrePartie";
+    public static final String NePasRejoindrePartie = "NePasRejoindrePartie";
     
 	/**
 	 * Constructeur par défaut est privé pour empêcher de pourvoir créer des 

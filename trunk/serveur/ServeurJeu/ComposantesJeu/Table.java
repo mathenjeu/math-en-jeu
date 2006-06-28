@@ -268,7 +268,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  inverserait les synchronisations, ça pourrait créer un 
 	 * 				  deadlock avec les personnes entrant dans la salle.
 	 */
-	public void quitterTable(JoueurHumain joueur, boolean doitGenererNoCommandeRetour)
+	public void quitterTable(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, boolean detruirePartieCourante)
 	{
 	    // Empêcher d'autres thread de toucher à la liste des tables de 
 	    // cette salle pendant que le joueur quitte cette table
@@ -282,7 +282,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				lstJoueurs.remove(joueur.obtenirNomUtilisateur());
 				
 				// Le joueur est maintenant dans aucune table
-				joueur.definirPartieCourante(null);
+				if (detruirePartieCourante == true)
+				{
+					joueur.definirPartieCourante(null);
+				}
 				
 				// Si on doit générer le numéro de commande de retour, alors
 				// on le génère, sinon on ne fait rien (ça se peut que ce soit
@@ -306,9 +309,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					preparerEvenementJoueurQuitteTable(joueur.obtenirNomUtilisateur());
 			    }
 
-			    // S'il ne reste aucuns joueurs dans la table, alors on doit 
-			    // détruire la table
-			    if (lstJoueurs.size() == 0)
+			    // S'il ne reste aucun joueur dans la table et que la partie
+			    // est terminée, alors on doit détruire la table
+			    if (lstJoueurs.size() == 0 && bolEstArretee == true)
 			    {
 			    	//Arreter le gestionnaire de temps
 			    	//objGestionnaireTemps.arreterGestionnaireTemps();
@@ -408,10 +411,15 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	
 	public String demarrerMaintenant(JoueurHumain joueur, int idPersonnage, boolean doitGenererNoCommandeRetour)
 	{
+		// Lorsqu'on fait démarré maintenant, le nombre de joueurs sur la
+		// table devient le nombre de joueurs demandé, lorsqu'ils auront tous
+		// fait OK, la partie démarrera
+		intNbJoueurDemande = lstJoueurs.size();
+		
 		String strResultatDemarrerPartie;
 		synchronized (lstJoueursEnAttente)
 	    {
-//			 Si une partie est en cours alors on va retourner PartieEnCours
+            // Si une partie est en cours alors on va retourner PartieEnCours
 	    	if (bolEstCommencee == true)
 	    	{
 	    		strResultatDemarrerPartie = ResultatDemarrerPartie.PartieEnCours;
@@ -438,7 +446,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				    joueur.obtenirProtocoleJoueur().genererNumeroReponse();					    
 				}
 				
-				laPartieCommence();
+				// Si le nombre de joueurs en attente est maintenant le nombre 
+				// de joueurs que ça prend pour joueur au jeu, alors on lance 
+				// un événement qui indique que la partie est commencée
+				if (lstJoueursEnAttente.size() == intNbJoueurDemande)
+				{
+					laPartieCommence();			
+				}
 	    	}
 	    }
 		return strResultatDemarrerPartie;
@@ -742,6 +756,15 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		    
 		    // Enlever les joueurs déconnectés de cette tables
 		    lstJoueursDeconnectes = new Vector();
+		    
+		    // Si jamais les joueurs humains sont tous déconnectés, alors
+		    // il faut détruire la table ici
+		    if (lstJoueurs.size() == 0)
+		    {
+		    	// Détruire la table courante et envoyer les événements 
+		    	// appropriés
+		    	objSalle.detruireTable(this);
+		    }
 		}
 	}
 	

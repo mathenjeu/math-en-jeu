@@ -308,15 +308,13 @@ public class ControleurJeu
 	 * 				s'assurer que personne d'autre ne va toucher à la liste
 	 * 				des joueurs connectés.
 	 */
-	public void deconnecterJoueur(JoueurHumain joueur, boolean doitGenererNoCommandeRetour)
+	public void deconnecterJoueur(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, boolean ajouterJoueurDeconnecte)
 	{
 
-		
-		// Lors d'une déconnexion par erreur du socket, la valeur
-		// de doitGenererNoCommandeRetour est à false
+		// Si déconnection pendant une partie, ajouterJoueurDeconnecte = true
 		// On va donc ajouter ce joueur à la liste des joueurs
 		// déconnectés pour cette table et pour le contrôleur du jeu
-		if (doitGenererNoCommandeRetour == false && joueur != null &&
+		if (ajouterJoueurDeconnecte == true && joueur != null &&
 		    joueur.obtenirPartieCourante() != null &&
 		    joueur.obtenirPartieCourante().obtenirTable() != null &&
 		    joueur.obtenirPartieCourante().obtenirTable().estCommencee() == true &&
@@ -338,7 +336,7 @@ public class ControleurJeu
 		if (joueur.obtenirSalleCourante() != null)
 		{
 			// Le joueur courant quitte la salle dans laquelle il se trouve
-			joueur.obtenirSalleCourante().quitterSalle(joueur, false);
+			joueur.obtenirSalleCourante().quitterSalle(joueur, false, !ajouterJoueurDeconnecte);
 		}
 		
 		
@@ -353,7 +351,7 @@ public class ControleurJeu
 			// (cela va avoir pour effet que le protocole du joueur va penser que
 			// le joueur n'est plus connecté au serveur de jeu)
 			joueur.obtenirProtocoleJoueur().definirJoueur(null);
-			
+
 			// Si on doit générer le numéro de commande de retour, alors
 			// on le génère, sinon on ne fait rien
 			if (doitGenererNoCommandeRetour == true)
@@ -610,7 +608,7 @@ public class ControleurJeu
         synchronized(lstJoueursDeconnectes)
         {
             lstJoueursDeconnectes.put(joueurHumain.obtenirNomUtilisateur().toLowerCase(), joueurHumain);
-        }   
+        }  
     }
     
     /*

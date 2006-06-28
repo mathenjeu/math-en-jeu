@@ -38,6 +38,9 @@ public class BoiteQuestions
 			int intRandom = UtilitaireNombres.genererNbAleatoire( lstQuestions.size() );
 			question = (Question)lstQuestions.elementAt( intRandom );
 			lstQuestions.remove( intRandom );
+			
+			// Fix temporaire pour la difficulté de la question
+		    question.definirDifficulte(intDifficulte);
 		}
 		
 		return question;

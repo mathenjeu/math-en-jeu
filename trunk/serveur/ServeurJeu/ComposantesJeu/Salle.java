@@ -211,7 +211,7 @@ public class Salle
 	 * 				pas toujours dans une autre salle (car le protocole
 	 * 				ne peut pas exécuter plusieurs fonctions en même temps)
 	 */
-	public void quitterSalle(JoueurHumain joueur, boolean doitGenererNoCommandeRetour)
+	public void quitterSalle(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, boolean detruirePartieCourante)
 	{
 		//TODO: Peut-être va-t-il falloir ajouter une synchronisation ici
 		// 		lorsque la commande sortir joueur de la table sera codée
@@ -220,7 +220,7 @@ public class Salle
 		if (joueur.obtenirPartieCourante() != null)
 		{
 		    // Quitter la table courante avant de quitter la salle
-		    joueur.obtenirPartieCourante().obtenirTable().quitterTable(joueur, false);
+		    joueur.obtenirPartieCourante().obtenirTable().quitterTable(joueur, false, detruirePartieCourante);
 		}
 	    
 	    // Empêcher d'autres thread de toucher à la liste des joueurs de 

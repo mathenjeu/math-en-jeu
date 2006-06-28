@@ -96,7 +96,7 @@ public class Question
 	 */
 	public boolean reponseEstValide(String reponse)
 	{
-		return strReponse.toUpperCase().equals(reponse.toUpperCase());
+		return strReponse.toUpperCase().replace(".",",").equals(reponse.toUpperCase());
 	}
 	
 	/**
@@ -108,5 +108,10 @@ public class Question
 	public String obtenirURLExplication()
 	{
 		return strURLExplication;
+	}
+	
+	public void definirDifficulte(int difficulte)
+	{
+		intDifficulte = difficulte;
 	}
 }
