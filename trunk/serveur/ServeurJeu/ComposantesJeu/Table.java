@@ -22,6 +22,7 @@ import ServeurJeu.Evenements.InformationDestination;
 import ClassesUtilitaires.GenerateurPartie;
 import Enumerations.RetourFonctions.ResultatDemarrerPartie;
 import ServeurJeu.ComposantesJeu.Cases.Case;
+import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.Temps.*;
 import ServeurJeu.Evenements.EvenementSynchroniserTemps;
 import ServeurJeu.Evenements.EvenementPartieTerminee;
@@ -50,7 +51,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	
 	// Déclaration d'une constante qui définit le nombre maximal de joueurs 
 	// dans une table
-	private final int MAX_NB_JOUEURS = 4;
+	private int _MAX_NB_JOUEURS;
 	
 	private int intNbJoueurDemande; 
 	
@@ -126,6 +127,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	{
 		super();
 		
+		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+		_MAX_NB_JOUEURS = config.obtenirNombreEntier( "table.max-nb-joueurs" );
+		
 		// Faire la référence vers le gestionnaire d'événements et le 
 		// gestionnaire de base de données
 		objGestionnaireEvenements = gestionnaireEv;
@@ -147,7 +151,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Au départ, aucune partie ne se joue sur la table
 		bolEstCommencee = false;
 		bolEstArretee = true;
-		intNbJoueurDemande = MAX_NB_JOUEURS;//TODO intNbJoueurDemande = intNbJoueur; validation avec MAX_NB_JOUEURS
+		intNbJoueurDemande = _MAX_NB_JOUEURS;//TODO intNbJoueurDemande = intNbJoueur; validation avec MAX_NB_JOUEURS
 		
 		// Définir les règles de jeu pour la salle courante
 		objRegles = reglesTable;
@@ -912,7 +916,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Boucler tant qu'on n'a pas atteint le nombre maximal de 
 		// joueurs moins le joueur courant car on ne le met pas dans la liste
-		while (listePersonnageJoueurs.size() < MAX_NB_JOUEURS - 1)
+		while (listePersonnageJoueurs.size() < _MAX_NB_JOUEURS - 1)
 		{
 			// On ajoute un joueur inconnu ayant le personnage 0
 			listePersonnageJoueurs.put("Inconnu" + Integer.toString(i), new Integer(0));
