@@ -24,9 +24,9 @@
 	<!-- Section de la classe ServeurJeu.BD.GestionnaireBD -->
 	<gestionnairebd>
 		<jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-		<hote>jdbc:mysql://localhost/smac</hote>
-		<utilisateur>smac</utilisateur>
-		<mot-de-passe>smac/pi</mot-de-passe>
-		<url-questions-reponses>http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/</url-questions-reponses>
+		<hote></hote>
+		<utilisateur></utilisateur>
+		<mot-de-passe></mot-de-passe>
+		<url-questions-reponses></url-questions-reponses>
 	</gestionnairebd>
 </configuration>
