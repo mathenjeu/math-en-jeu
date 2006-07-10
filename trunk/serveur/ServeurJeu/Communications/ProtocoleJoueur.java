@@ -1487,7 +1487,7 @@ public class ProtocoleJoueur implements Runnable
 				{
 					// Obtenir la réponse du joueur
 					String strReponse = obtenirValeurParametre(objNoeudCommandeEntree, "Reponse").getNodeValue();
-					
+					System.out.println( "la reponse est : " + strReponse );
 					// Si le joueur n'est pas connecté au serveur de jeu, alors il
 					// y a une erreur
 					if (objJoueurHumain == null)

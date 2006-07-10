@@ -28,6 +28,7 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
+import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
 import java.util.Date;
@@ -47,16 +48,7 @@ public class GestionnaireBD
 	// Objet Statement nécessaire pour envoyer une requête au serveur MySQL
 	private Statement requete;
 	
-	// Nom de l'hôte pour la connexion à la base de données
-	static private String nomHote = "jdbc:mysql://localhost/smac";
-	
-	// Nom de l'utilisateur pour la connexion à la base de données
-	static private String nomUtilisateur = "smac";
-	
-	// Mot de passe pour la connexion à la base de données
-	static private String motDePasse = "smac/pi";
-	
-	static private String urlQuestionReponse = "http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/";
+	private String urlQuestionReponse = "";
 	
 	static private Logger objLogger = Logger.getLogger( GestionnaireBD.class );
 	
@@ -71,6 +63,9 @@ public class GestionnaireBD
 	{
 		super();
 		
+		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+		urlQuestionReponse = config.obtenirString( "gestionnairebd.url-questions-reponses" );
+		
 		intBotId = 1;
 		
 		// Garder la référence vers le contrôleur de jeu
@@ -79,7 +74,8 @@ public class GestionnaireBD
 		//Création du driver JDBC
 		try
 		{
-			Class.forName("com.mysql.jdbc.Driver");
+			String driver = config.obtenirString( "gestionnairebd.jdbc-driver" );
+			Class.forName( driver );
 		}
 		catch (Exception e)
 		{
@@ -94,7 +90,10 @@ public class GestionnaireBD
 		// Établissement de la connexion avec la base de données
 		try
 		{
-			connexion = DriverManager.getConnection(GestionnaireBD.nomHote, GestionnaireBD.nomUtilisateur, GestionnaireBD.motDePasse);
+			String hote = config.obtenirString( "gestionnairebd.hote" );
+			String utilisateur = config.obtenirString( "gestionnairebd.utilisateur" );
+			String motDePasse = config.obtenirString( "gestionnairebd.mot-de-passe" );
+			connexion = DriverManager.getConnection( hote, utilisateur, motDePasse);
 		}
 		catch (SQLException e)
 		{

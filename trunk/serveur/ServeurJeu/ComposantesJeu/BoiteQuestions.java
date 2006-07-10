@@ -18,7 +18,7 @@ import ClassesUtilitaires.UtilitaireNombres;
  */
 public class BoiteQuestions 
 {
-	private Vector lstQuestions;
+	private Vector <Question>lstQuestions;
 	
 	public BoiteQuestions()
 	{

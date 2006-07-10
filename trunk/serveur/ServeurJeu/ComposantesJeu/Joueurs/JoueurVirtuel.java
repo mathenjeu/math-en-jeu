@@ -34,7 +34,7 @@ import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import java.util.Random;
 import java.util.Date;
 
-import ServeurJeu.ComposantesJeu.Joueurs.TestJoueurVirtuel;
+//import ServeurJeu.ComposantesJeu.Joueurs.TestJoueurVirtuel;
 
 
 /* Priorité haute

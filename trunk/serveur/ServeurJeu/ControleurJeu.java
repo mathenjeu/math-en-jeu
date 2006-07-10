@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationFactory;
 import org.apache.log4j.Logger;
 import java.util.Random;
 
@@ -23,6 +25,7 @@ import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
 import ClassesUtilitaires.Espion;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.Configuration.GestionnaireConfiguration;
 
 //import ServeurJeu.ComposantesJeu.Joueurs.TestJoueurVirtuel;
 
@@ -71,7 +74,6 @@ public class ControleurJeu
 	
 	private GestionnaireTemps objGestionnaireTemps;
 	
-	static private int intStepSynchro = 30;
 	
 	// Cet objet est une liste des joueurs qui sont connectés au serveur de jeu 
 	// (cela inclus les joueurs dans les salles ainsi que les joueurs jouant
@@ -95,7 +97,6 @@ public class ControleurJeu
 	// Déclaration d'un objet random pour générer des nombres aléatoires
 	private Random objRandom;
 	
-	
 	/**
 	 * Constructeur de la classe ControleurJeu qui permet de créer le gestionnaire 
 	 * des communications, le gestionnaire d'événements et le gestionnaire de bases 
@@ -104,9 +105,6 @@ public class ControleurJeu
 	public ControleurJeu() 
 	{
 		super();
-		
-		//DOMConfigurator.configure( "log4j.xml" );
-		//BasicConfigurator.configure();
 
 		objLogger.info( "Le serveur démarre : " + new Date().toString() );
 		
@@ -133,6 +131,8 @@ public class ControleurJeu
 		// Charger les salles en mémoire
 		objGestionnaireBD.chargerSalles(objGestionnaireEvenements);
 		
+		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+		int intStepSynchro = config.obtenirNombreEntier( "controleurjeu.synchro.step" );
 		objGestionnaireTemps = new GestionnaireTemps();
 		objTacheSynchroniser = new TacheSynchroniser();
 		objGestionnaireTemps.ajouterTache( objTacheSynchroniser, intStepSynchro );
@@ -148,7 +148,9 @@ public class ControleurJeu
 		
 		// Démarrer l'espion qui écrit dans un fichier périodiquement les
 		// informations du serveur
-		objEspion = new Espion(this, "Espion.txt", 5000, ClassesUtilitaires.Espion.MODE_FICHIER_TEXTE);
+		String fichier = config.obtenirString( "controleurjeu.info.fichier-sortie" );
+		int delai = config.obtenirNombreEntier( "controleurjeu.info.delai" );
+		objEspion = new Espion(this, fichier, delai, ClassesUtilitaires.Espion.MODE_FICHIER_TEXTE);
 		Thread threadEspion = new Thread(objEspion);
 		threadEspion.start();
 

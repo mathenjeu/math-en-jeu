@@ -32,6 +32,7 @@ public class TestGestionnaireBD
 			int codeQuestion = q.obtenirCodeQuestion();
 			String question = q.obtenirURLQuestion();
 			String explication = q.obtenirURLExplication();
+			
 			System.out.println( "Code question " + nbQuestion +  " : " + codeQuestion );
 			System.out.println( "Url question : " + question );
 			System.out.println( "Url explication : " + explication );
@@ -133,7 +134,7 @@ public class TestGestionnaireBD
 	public static void main(String[] args) 
 	{
 		GestionnaireBD gBD = new GestionnaireBD( null );
-		test_trouverProchaineQuestion( gBD );
+		//test_trouverProchaineQuestion( gBD );
 		test_joueurExiste( gBD );
 		test_remplirInformationsJoueur( gBD );
 		test_mettreAJourJoueur( gBD );
