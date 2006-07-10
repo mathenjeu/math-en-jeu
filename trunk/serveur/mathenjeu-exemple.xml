@@ -29,4 +29,9 @@
 		<mot-de-passe></mot-de-passe>
 		<url-questions-reponses></url-questions-reponses>
 	</gestionnairebd>
+	
+	<!-- Section de la classe ServeurJeu.ComposantesJeu.Table -->
+	<table>
+		<max-nb-joueurs>4</max-nb-joueurs>
+	</table>
 </configuration>
