@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!-- Fichier de configuration de Math en jeu -->
+<configuration>
+	
+	<!-- Section globale -->
+	<globale>
+		
+	</globale>
+	
+	<!-- Section de la classe ServeurJeu.ControleurJeu -->
+	<controleurjeu>
+		<synchro>
+			<!--Delai en seconde de la synchronisation des clients avec la minuterie du serveur -->
+			<step>30</step>
+		</synchro>
+		<info>
+			<!--fichier de sortie qui contient les informations des activités sur le serveur -->
+			<fichier-sortie>Espion.txt</fichier-sortie>
+			<!--le delai doit etre un nombre entier, represente une valeur en milisecondes -->
+			<delai>5000</delai>
+		</info>
+	</controleurjeu>
+	
+	<!-- Section de la classe ServeurJeu.BD.GestionnaireBD -->
+	<gestionnairebd>
+		<jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+		<hote>jdbc:mysql://localhost/smac</hote>
+		<utilisateur>smac</utilisateur>
+		<mot-de-passe>smac/pi</mot-de-passe>
+		<url-questions-reponses>http://newton.mat.ulaval.ca/~smac/mathenjeu/questions/</url-questions-reponses>
+	</gestionnairebd>
+</configuration>
