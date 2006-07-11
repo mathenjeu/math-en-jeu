@@ -21,6 +21,11 @@
 		</info>
 	</controleurjeu>
 	
+	<!-- Section de la classe ServeurJeu.Communication.GestionnaireCommunication -->
+	<gestionnairecommunication>
+		<port>6100</port>
+	</gestionnairecommunication>
+	
 	<!-- Section de la classe ServeurJeu.BD.GestionnaireBD -->
 	<gestionnairebd>
 		<jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
