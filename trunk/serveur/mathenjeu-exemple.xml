@@ -19,6 +19,65 @@
 			<!--le delai doit etre un nombre entier, represente une valeur en milisecondes -->
 			<delai>5000</delai>
 		</info>
+		<salles-initiales>
+			<salle>
+				<nom>Générale</nom>
+				<createur></createur>
+				<mot-de-passe></mot-de-passe>
+			</salle>
+			<regles>
+				<case-couleur>
+					<priorite>2</priorite>
+					<type>1</type>
+				</case-couleur>
+				<case-couleur>
+					<priorite>1</priorite>
+					<type>2</type>
+				</case-couleur>
+				<case-couleur>
+					<priorite>3</priorite>
+					<type>3</type>
+				</case-couleur>
+				<case-couleur>
+					<priorite>4</priorite>
+					<type>4</type>
+				</case-couleur>
+				<case-couleur>
+					<priorite>5</priorite>
+					<type>5</type>
+				</case-couleur>
+				
+				<case-speciale>
+					<priorite>1</priorite>
+					<type>1</type>
+				</case-speciale>
+				
+				<magasin>
+					<priorite>1</priorite>
+					<nom>Magasin1</nom>
+				</magasin>
+				<magasin>
+					<priorite>2</priorite>
+					<nom>Magasin2</nom>
+				</magasin>
+				
+				<objet-utilisable>
+					<priorite>1</priorite>
+					<nom>Reponse</nom>
+				</objet-utilisable>
+				
+				<chat>true</chat>
+				<ratio-trous>0.30f</ratio-trous>
+				<ratio-magasins>0.05f</ratio-magasins>
+				<ratio-cases-speciales>0.05f</ratio-cases-speciales>
+				<ratio-pieces>0.10f</ratio-pieces>
+				<ratio-objets-utilisables>0.05f</ratio-objets-utilisables>
+				<valeur-piece-maximale>25</valeur-piece-maximale>
+				<temps-minimal>10</temps-minimal>
+				<temps-maximal>60</temps-maximal>
+				<deplacement-maximal>6</deplacement-maximal>
+			</regles>
+		</salles-initiales>
 	</controleurjeu>
 	
 	<!-- Section de la classe ServeurJeu.Communication.GestionnaireCommunication -->

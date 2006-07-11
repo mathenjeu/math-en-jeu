@@ -5,12 +5,14 @@ import java.util.TreeMap;
 import java.util.Set;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeSet;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationFactory;
 import org.apache.log4j.Logger;
 import java.util.Random;
 
+import Enumerations.Visibilite;
 import Enumerations.RetourFonctions.ResultatAuthentification;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Communications.GestionnaireCommunication;
@@ -25,6 +27,11 @@ import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
 import ClassesUtilitaires.Espion;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
+import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
+import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
+import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
+import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 
 //import ServeurJeu.ComposantesJeu.Joueurs.TestJoueurVirtuel;
@@ -106,7 +113,7 @@ public class ControleurJeu
 	{
 		super();
 
-		objLogger.info( "Le serveur démarre : " + new Date().toString() );
+		objLogger.info( "Le serveur démarre" );
 		
 		// Préparer l'objet pour créer les nombres aléatoires
     	Date d = new Date();
@@ -128,8 +135,8 @@ public class ControleurJeu
 		// Créer un nouveau gestionnaire de base de données MySQL
 		objGestionnaireBD = new GestionnaireBD(this);
 		
-		// Charger les salles en mémoire
-		objGestionnaireBD.chargerSalles(objGestionnaireEvenements);
+		// Charger les salles par défaut
+		chargerSallesInitiales();
 		
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		int intStepSynchro = config.obtenirNombreEntier( "controleurjeu.synchro.step" );
@@ -560,6 +567,48 @@ public class ControleurJeu
 		
 		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
 		objGestionnaireEvenements.ajouterEvenement(joueurDeconnecte);
+	}
+	
+	private void chargerSallesInitiales()
+	{
+		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+		
+		Regles objReglesSalle = new Regles();
+		
+		TreeSet casesCouleur = objReglesSalle.obtenirListeCasesCouleurPossibles();
+		casesCouleur.add(new ReglesCaseCouleur(2, 1));
+		casesCouleur.add(new ReglesCaseCouleur(1, 2));
+		casesCouleur.add(new ReglesCaseCouleur(3, 3));
+		casesCouleur.add(new ReglesCaseCouleur(4, 4));
+		casesCouleur.add(new ReglesCaseCouleur(5, 5));
+		
+		TreeSet casesSpeciale = objReglesSalle.obtenirListeCasesSpecialesPossibles();
+		casesSpeciale.add(new ReglesCaseSpeciale(1, 1));
+		
+		TreeSet magasins = objReglesSalle.obtenirListeMagasinsPossibles();
+		magasins.add(new ReglesMagasin(1, "Magasin1"));
+		magasins.add(new ReglesMagasin(2, "Magasin2"));
+		
+		TreeSet objetsUtilisables = objReglesSalle.obtenirListeObjetsUtilisablesPossibles();
+		objetsUtilisables.add(new ReglesObjetUtilisable(1, "Reponse", Visibilite.Aleatoire));
+		
+		objReglesSalle.definirPermetChat( config.obtenirValeurBooleenne( "controleurjeu.salles-initiales.regles.chat" ) );
+		objReglesSalle.definirRatioTrous( config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-trous" ) );
+		objReglesSalle.definirRatioMagasins( config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-magasins" ) );
+		objReglesSalle.definirRatioCasesSpeciales(config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-cases-speciales" ) );
+		objReglesSalle.definirRatioPieces( config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-pieces" ) );
+		objReglesSalle.definirRatioObjetsUtilisables(config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-objets-utilisables" ) );
+		objReglesSalle.definirValeurPieceMaximale(config.obtenirNombreEntier( "controleurjeu.salles-initiales.regles.valeur-piece-maximale" ) );
+		objReglesSalle.definirTempsMinimal( config.obtenirNombreEntier( "controleurjeu.salles-initiales.regles.temps-minimal" ) );
+		objReglesSalle.definirTempsMaximal( config.obtenirNombreEntier( "controleurjeu.salles-initiales.regles.temps-maximal" ) );
+		objReglesSalle.definirDeplacementMaximal( config.obtenirNombreEntier( "controleurjeu.salles-initiales.regles.deplacement-maximal" ) );
+		
+		String nom = config.obtenirString( "controleurjeu.salles-initiales.salle.nom" );
+		String createur = config.obtenirString( "controleurjeu.salles-initiales.salle.createur" );
+		String motDePasse = config.obtenirString( "controleurjeu.salles-initiales.salle.mot-de-passe" );
+	    Salle objSalle = new Salle(objGestionnaireEvenements, objGestionnaireBD, nom, createur, motDePasse, objReglesSalle, this);
+	    
+	    ajouterNouvelleSalle( objSalle );
 	}
 	
 	/**
