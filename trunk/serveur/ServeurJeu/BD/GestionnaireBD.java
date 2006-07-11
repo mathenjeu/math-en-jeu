@@ -201,6 +201,8 @@ public class GestionnaireBD
 	 */
 	public void chargerSalles(GestionnaireEvenements gestionnaireEv)
 	{
+		objLogger.error( "chargerSalles n'est pu utilisée" );
+		
 		Regles objReglesSalle = new Regles();
 		
 		objReglesSalle.obtenirListeCasesCouleurPossibles().add(new ReglesCaseCouleur(2, 1));
