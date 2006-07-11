@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.BD.GestionnaireBD;
+import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
@@ -60,8 +61,8 @@ public class GestionnaireCommunication
 	{
 		super();
 		
-		// On définit le port par défaut à 6100
-		intPort = 6100;
+		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+		intPort = config.obtenirNombreEntier( "gestionnairecommunication.port" );
 		
 		// Garder la référence vers le contrôleur de jeu
 		objControleurJeu = controleur;
