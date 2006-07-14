@@ -96,8 +96,6 @@ public class Question
 	 */
 	public boolean reponseEstValide(String reponse)
 	{
-		System.out.println( reponse );
-		System.out.println( strReponse );
 		return strReponse.toUpperCase().replace(".",",").equals(reponse.toUpperCase());
 	}
 	

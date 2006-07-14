@@ -6,6 +6,12 @@
 package ServeurJeu.BD.tests;
 
 import java.util.TreeMap;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.BoiteQuestions;
 import ServeurJeu.ComposantesJeu.Question;
@@ -17,54 +23,24 @@ import ServeurJeu.ComposantesJeu.InformationPartie;
  *
  * 
  */
-public class TestGestionnaireBD 
+public class TestGestionnaireBD extends TestCase 
 {
-	private static void test_trouverProchaineQuestion( GestionnaireBD gBD )
-	{
-		System.out.println( "_________________________________________" );
-		System.out.println( "test_trouverProchaineQuestion" );
-		TreeMap listeQuestions = new TreeMap();
-		Question q = gBD.trouverProchaineQuestion( 0, 0, listeQuestions );
-		int nbQuestion = 0;
-		while( q != null )
-		{
-			nbQuestion++;
-			int codeQuestion = q.obtenirCodeQuestion();
-			String question = q.obtenirURLQuestion();
-			String explication = q.obtenirURLExplication();
-			
-			System.out.println( "Code question " + nbQuestion +  " : " + codeQuestion );
-			System.out.println( "Url question : " + question );
-			System.out.println( "Url explication : " + explication );
-			if( listeQuestions.get( new Integer( codeQuestion ) ) != null )
-			{
-				System.out.println( "La question existe deja." );
-			}
-			listeQuestions.put( new Integer( codeQuestion ), q );
-			q = gBD.trouverProchaineQuestion( 0, 0, listeQuestions );
-			if( q == null )
-			{
-				System.out.println( "Pas de questions disponibles" );
-			}
-		}
-	}
+	private GestionnaireBD gBD = null;
 	
-	private static void test_joueurExiste( GestionnaireBD gBD )
+	@Before public void setUp() 
+	{
+		gBD = new GestionnaireBD( null );
+	}
+
+	@Test public void test_joueurExiste()
 	{
 		System.out.println( "_________________________________________" );
 		System.out.println( "test_joueurExiste" );
 		boolean existe = gBD.joueurExiste( "test", "test" );
-		if( existe )
-		{
-			System.out.println( "Joueur test existe" );
-		}
-		else
-		{
-			System.out.println( "Joueur test n'existe pas" );
-		}
+		Assert.assertTrue( existe );
 	}
 	
-	private static void test_remplirInformationsJoueur( GestionnaireBD gBD )
+	@Test public void test_remplirInformationsJoueur()
 	{
 		System.out.println( "_________________________________________" );
 		System.out.println( "test_remplirInformationsJoueur" );
@@ -77,7 +53,7 @@ public class TestGestionnaireBD
 		System.out.println( objJoueurHumain.obtenirPrenom() + " " + objJoueurHumain.obtenirNomFamille() + " " + objJoueurHumain.obtenirPeutCreerSalle() );
 	}
 	
-	private static void test_mettreAJourJoueur( GestionnaireBD gBD )
+	@Test public void test_mettreAJourJoueur()
 	{
 		System.out.println( "_________________________________________" );
 		System.out.println( "test_mettreAJourJoueur" );
@@ -97,9 +73,11 @@ public class TestGestionnaireBD
 		
 		objJoueurHumain.obtenirPartieCourante().definirPointage( 500 );
 		gBD.mettreAJourJoueur( objJoueurHumain, 60 );
+		
+		Assert.assertTrue( true );
 	}
 	
-	private static void test_remplirBoiteQuestions( GestionnaireBD gBD )
+	@Test public void test_remplirBoiteQuestions()
 	{
 		System.out.println( "_________________________________________" );
 		System.out.println( "test_remplirBoiteQuestions" );
@@ -122,23 +100,26 @@ public class TestGestionnaireBD
 				System.out.println( "Pas de questions disponibles" );
 			}
 		}
+		Assert.assertTrue( true );
 	}
 	
-	private static void test_arreterGestionnaireBD( GestionnaireBD gBD )
+	@Test public void test_arreterGestionnaireBD()
 	{
 		System.out.println( "_________________________________________" );
 		System.out.println( "test_arreterGestionnaireBD" );
 		gBD.arreterGestionnaireBD();
+		
+		Assert.assertTrue( true );
 	}
+	
+	public static junit.framework.Test suite() 
+	{
+		return new TestSuite(TestGestionnaireBD.class);
+	}
+	
 	
 	public static void main(String[] args) 
 	{
-		GestionnaireBD gBD = new GestionnaireBD( null );
-		//test_trouverProchaineQuestion( gBD );
-		test_joueurExiste( gBD );
-		test_remplirInformationsJoueur( gBD );
-		test_mettreAJourJoueur( gBD );
-		test_remplirBoiteQuestions( gBD );
-		test_arreterGestionnaireBD( gBD );
+		junit.textui.TestRunner.run(suite());
 	}
 }
