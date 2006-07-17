@@ -278,7 +278,7 @@ public class GestionnaireBD
 			}
 		}*/
 		
-	    Salle objSalle = new Salle(gestionnaireEv, this, "Générale", "Jeff", "", objReglesSalle, objControleurJeu);
+	    Salle objSalle = new Salle(this, "Générale", "Jeff", "", objReglesSalle, objControleurJeu);
 	    //Salle objSalle2 = new Salle(gestionnaireEv, this, "Privée", "Jeff", "jeff", objReglesSalle);
 	    
 	    objControleurJeu.ajouterNouvelleSalle(objSalle);

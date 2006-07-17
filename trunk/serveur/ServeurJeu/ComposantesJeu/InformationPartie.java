@@ -555,7 +555,7 @@ public class InformationPartie
 				// Cette fonction va passer les joueurs et créer un 
 				// InformationDestination pour chacun et ajouter l'événement 
 				// dans la file de gestion d'événements
-				preparerEvenementJoueurDeplacePersonnage( collision );		    	
+				objTable.preparerEvenementJoueurDeplacePersonnage( objJoueurHumain.obtenirNomUtilisateur() , collision, objPositionJoueur, objPositionJoueurDesiree );		    	
 		    }
 			
 			definirPositionJoueur( objPositionJoueurDesiree );
@@ -583,42 +583,6 @@ public class InformationPartie
 		return objRetour;
 	}
 	
-	private void preparerEvenementJoueurDeplacePersonnage( String collision )
-	{
-	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
-	    // aux joueurs qu'un joueur démarré une partie
-		String nomUtilisateur = objJoueurHumain.obtenirNomUtilisateur();
-		
-		EvenementJoueurDeplacePersonnage joueurDeplacePersonnage = new EvenementJoueurDeplacePersonnage( nomUtilisateur, objPositionJoueur, objPositionJoueurDesiree, collision );
-	    
-		// Créer un ensemble contenant tous les tuples de la liste 
-		// des joueurs de la table (chaque élément est un Map.Entry)
-		Set lstEnsembleJoueurs = objTable.obtenirListeJoueurs().entrySet();
-		
-		// Obtenir un itérateur pour l'ensemble contenant les joueurs
-		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
-		
-		// Passer tous les joueurs de la table et leur envoyer un événement
-		while (objIterateurListe.hasNext() == true)
-		{
-			// Créer une référence vers le joueur humain courant dans la liste
-			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
-			
-			// Si le nom d'utilisateur du joueur courant n'est pas celui
-			// qui vient de démarrer la partie, alors on peut envoyer un 
-			// événement à cet utilisateur
-			if (objJoueur.obtenirNomUtilisateur().equals(nomUtilisateur) == false)
-			{
-			    // Obtenir un numéro de commande pour le joueur courant, créer 
-			    // un InformationDestination et l'ajouter à l'événement
-				joueurDeplacePersonnage.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
-			            																	 objJoueur.obtenirProtocoleJoueur()));
-			}
-		}
-		
-		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
-		objGestionnaireEv.ajouterEvenement(joueurDeplacePersonnage);
-	}
 	
 	/*
 	 * Retourne une référence vers la liste des objets ramassés

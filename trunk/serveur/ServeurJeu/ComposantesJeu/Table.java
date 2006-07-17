@@ -6,13 +6,13 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 import java.awt.Point;
-import org.w3c.dom.Element;
 import java.util.Date;
 
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
+import ServeurJeu.Evenements.EvenementJoueurDeplacePersonnage;
 import ServeurJeu.Evenements.EvenementJoueurEntreTable;
 import ServeurJeu.Evenements.EvenementJoueurQuitteTable;
 import ServeurJeu.Evenements.EvenementJoueurDemarrePartie;
@@ -118,7 +118,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @param int tempsPartie : Le temps de la partie en minute
 	 * @param Regles reglesTable : Les règles pour une partie sur cette table
 	 */
-	public Table(GestionnaireEvenements gestionnaireEv, GestionnaireBD gestionnaireBD, 
+	public Table(GestionnaireBD gestionnaireBD, 
 				 Salle salleParente, int noTable, String nomUtilisateurCreateur, 
 				 int tempsPartie, Regles reglesTable,
 				 GestionnaireTemps gestionnaireTemps, 
@@ -132,7 +132,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Faire la référence vers le gestionnaire d'événements et le 
 		// gestionnaire de base de données
-		objGestionnaireEvenements = gestionnaireEv;
+		objGestionnaireEvenements = new GestionnaireEvenements();
 		objGestionnaireBD = gestionnaireBD;
 		
 		// Garder en mémoire la référence vers la salle parente, le numéro de 
@@ -174,6 +174,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         
         // Faire la référence vers le controleu jeu
         objControleurJeu = controleurJeu;
+        
+//		 Créer un thread pour le GestionnaireEvenements
+		Thread threadEvenements = new Thread(objGestionnaireEvenements);
+		
+		// Démarrer le thread du gestionnaire d'événements
+		threadEvenements.start();
 	}
 	
 	public void creation()
@@ -1118,6 +1124,42 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Ajouter les nouveaux événements créés dans la liste d'événements 
 		// à traiter
 		objGestionnaireEvenements.ajouterEvenement(partieDemarree);
+	}
+	
+	public void preparerEvenementJoueurDeplacePersonnage( String nomUtilisateur, String collision, Point anciennePosition, Point positionJoueur )
+	{
+	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
+	    // aux joueurs qu'un joueur démarré une partie
+		
+		EvenementJoueurDeplacePersonnage joueurDeplacePersonnage = new EvenementJoueurDeplacePersonnage( nomUtilisateur, anciennePosition, positionJoueur, collision );
+	    
+		// Créer un ensemble contenant tous les tuples de la liste 
+		// des joueurs de la table (chaque élément est un Map.Entry)
+		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		
+		// Obtenir un itérateur pour l'ensemble contenant les joueurs
+		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		
+		// Passer tous les joueurs de la table et leur envoyer un événement
+		while (objIterateurListe.hasNext() == true)
+		{
+			// Créer une référence vers le joueur humain courant dans la liste
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			
+			// Si le nom d'utilisateur du joueur courant n'est pas celui
+			// qui vient de démarrer la partie, alors on peut envoyer un 
+			// événement à cet utilisateur
+			if (objJoueur.obtenirNomUtilisateur().equals(nomUtilisateur) == false)
+			{
+			    // Obtenir un numéro de commande pour le joueur courant, créer 
+			    // un InformationDestination et l'ajouter à l'événement
+				joueurDeplacePersonnage.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
+			            																	 objJoueur.obtenirProtocoleJoueur()));
+			}
+		}
+		
+		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
+		objGestionnaireEvenements.ajouterEvenement(joueurDeplacePersonnage);
 	}
 	
 	private void preparerEvenementSynchroniser()

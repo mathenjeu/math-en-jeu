@@ -606,7 +606,7 @@ public class ControleurJeu
 		String nom = config.obtenirString( "controleurjeu.salles-initiales.salle.nom" );
 		String createur = config.obtenirString( "controleurjeu.salles-initiales.salle.createur" );
 		String motDePasse = config.obtenirString( "controleurjeu.salles-initiales.salle.mot-de-passe" );
-	    Salle objSalle = new Salle(objGestionnaireEvenements, objGestionnaireBD, nom, createur, motDePasse, objReglesSalle, this);
+	    Salle objSalle = new Salle(objGestionnaireBD, nom, createur, motDePasse, objReglesSalle, this);
 	    
 	    ajouterNouvelleSalle( objSalle );
 	}

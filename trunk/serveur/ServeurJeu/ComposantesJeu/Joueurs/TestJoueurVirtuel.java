@@ -88,7 +88,7 @@ public class TestJoueurVirtuel {
         synchronized (lstTables)
         {
             // Créer une table
-            objTable = new Table(ev, bd, salleGenerale, noTable, nomCreateur, 
+            objTable = new Table(bd, salleGenerale, noTable, nomCreateur, 
                 tempsPartie, reglesTable, t, ts, controleur);
             
             objTable.creation();
