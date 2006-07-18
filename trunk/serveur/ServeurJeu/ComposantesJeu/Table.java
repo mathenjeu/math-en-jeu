@@ -102,8 +102,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     // faire la mise à jour de la liste des joueurs déconnectés du gestionnaire
     // de communication
     private Vector lstJoueursDeconnectes;
-    
-    
+      
     private Date objDateDebutPartie;
     
 	/**
@@ -171,6 +170,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         
         // Cette liste sera modifié si jamais un joueur est déconnecté
         lstJoueursDeconnectes = new Vector();
+        
         
         // Faire la référence vers le controleu jeu
         objControleurJeu = controleurJeu;

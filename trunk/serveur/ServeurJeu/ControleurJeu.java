@@ -569,6 +569,11 @@ public class ControleurJeu
 		objGestionnaireEvenements.ajouterEvenement(joueurDeconnecte);
 	}
 	
+	/**
+	 * Cette méthode permet de charger les salles initiales en mémoire 
+	 * à partir de la configuration
+	 * TODO : à comléter pour utiliser seulement la configuration
+	 */
 	private void chargerSallesInitiales()
 	{
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
