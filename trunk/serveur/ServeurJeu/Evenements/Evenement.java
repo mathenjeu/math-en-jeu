@@ -3,6 +3,9 @@ package ServeurJeu.Evenements;
 import java.util.Vector;
 import java.io.IOException;
 
+import com.jamonapi.Monitor;
+import com.jamonapi.MonitorFactory;
+
 /**
  * @author Jean-François Brind'Amour
  */
@@ -44,6 +47,7 @@ public abstract class Evenement
 	{
 	    // Passer tous les InformationDestination se trouvant dans la liste de
 	    // l'événement courant et envoyer à chacun l'événement courant
+		
 	    for (int i = 0; i < lstInformationDestination.size(); i++)
 	    {
 	        // Faire la référence vers l'objet InformationDestination courant
@@ -63,5 +67,6 @@ public abstract class Evenement
 				//System.out.println("L'evenement courant n'a pas pu etre envoye");
 	        }
 	    }
+	    
 	}
 }

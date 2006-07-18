@@ -5,6 +5,8 @@ import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
+
+import ServeurJeu.Monitoring.Moniteur;
 import ClassesUtilitaires.UtilitaireXML;
 
 /**
@@ -36,6 +38,7 @@ public class EvenementJoueurConnecte extends Evenement
 	 */
 	protected String genererCodeXML(InformationDestination information)
 	{
+		Moniteur.obtenirInstance().debut( "EvenementJoueurConnecte.genererCodeXML" );
 	    // Déclaration d'une variable qui va contenir le code XML à retourner
 	    String strCodeXML = "";
 	    
@@ -84,6 +87,7 @@ public class EvenementJoueurConnecte extends Evenement
 			System.out.println("Une erreur est survenue lors de la conversion du document XML en chaine de caracteres");
 		}
 		
+		Moniteur.obtenirInstance().fin();
 		return strCodeXML;
 	}
 }

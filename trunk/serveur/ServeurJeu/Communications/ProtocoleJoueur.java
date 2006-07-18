@@ -36,6 +36,7 @@ import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
+import ServeurJeu.Monitoring.Moniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
 import ServeurJeu.Evenements.EvenementSynchroniserTemps;
@@ -339,6 +340,7 @@ public class ProtocoleJoueur implements Runnable
 	private String traiterCommandeJoueur(String message) throws TransformerConfigurationException,
 																TransformerException
 	{
+		Moniteur.obtenirInstance().debut( "ProtocoleJoueur.traiterCommandeJoueur" );
 		// Déclaration d'une variable qui permet de savoir si on doit retourner 
 		// une commande au client ou si ce n'était qu'une réponse du client 
 		boolean bolDoitRetournerCommande = true;
@@ -1674,6 +1676,8 @@ public class ProtocoleJoueur implements Runnable
 			}
 		}
 		
+		Moniteur.obtenirInstance().fin();
+		
 		// Si on doit retourner une commande alors on ajoute le noeud de commande 
 		// et on retourne le code XML de la commande. Si le numéro de commande 
 		// n'avait pas été généré, alors on le génère
@@ -1716,6 +1720,7 @@ public class ProtocoleJoueur implements Runnable
 	 */
 	public void envoyerMessage(String message) throws IOException
 	{
+		Moniteur.obtenirInstance().debut( "ProtocoleJoueur.envoyerMessage");
 		// Synchroniser cette partie de code pour empêcher 2 threads d'envoyer
 		// un message en même temps sur le canal d'envoi du socket
 		synchronized (objSocketJoueur)
@@ -1741,6 +1746,8 @@ public class ProtocoleJoueur implements Runnable
 			
 			objLogger.info( "Une confirmation a ete envoyee a " + objSocketJoueur.getInetAddress().toString() );
 		}
+		
+		Moniteur.obtenirInstance().fin();
 	}
 	
 	/**

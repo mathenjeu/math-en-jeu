@@ -7,9 +7,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationFactory;
+
 import org.apache.log4j.Logger;
+
+import com.jamonapi.Monitor;
+import com.jamonapi.MonitorFactory;
+
 import java.util.Random;
 
 import Enumerations.Visibilite;
@@ -23,10 +26,12 @@ import ServeurJeu.Evenements.EvenementJoueurDeconnecte;
 import ServeurJeu.Evenements.EvenementJoueurConnecte;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
+import ServeurJeu.Monitoring.Moniteur;
+import ServeurJeu.Monitoring.TacheLogMoniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
 import ClassesUtilitaires.Espion;
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
@@ -112,7 +117,7 @@ public class ControleurJeu
 	public ControleurJeu() 
 	{
 		super();
-
+		
 		objLogger.info( "Le serveur démarre" );
 		
 		// Préparer l'objet pour créer les nombres aléatoires
@@ -163,9 +168,13 @@ public class ControleurJeu
 
         //TestJoueurVirtuel objTestJoueurVirtuel = new TestJoueurVirtuel(this);
         
+		//Demarrer une tache de monitoring
+		TacheLogMoniteur objTacheLogMoniteur = new TacheLogMoniteur();
+		int intStepMonitor = config.obtenirNombreEntier( "controleurjeu.monitoring.step" );
+		objGestionnaireTemps.ajouterTache( objTacheLogMoniteur, intStepMonitor );
+		
 		// Démarrer l'écoute des connexions clientes
 		objGestionnaireCommunication.ecouterConnexions();	
-				
 	}
 	
 	/**

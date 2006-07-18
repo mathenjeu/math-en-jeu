@@ -15,6 +15,7 @@ import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
+import ServeurJeu.Monitoring.Moniteur;
 import ClassesUtilitaires.UtilitaireXML;
 
 /**
@@ -67,6 +68,7 @@ public class EvenementPartieDemarree extends Evenement
 	 */
 	protected String genererCodeXML(InformationDestination information)
 	{
+		Moniteur.obtenirInstance().debut( "EvenementPartieDemarree.genererCodeXML" );
 	    // Déclaration d'une variable qui va contenir le code XML à retourner
 	    String strCodeXML = "";
 	 
@@ -258,6 +260,7 @@ public class EvenementPartieDemarree extends Evenement
 			e.printStackTrace();
 		}
 		
+		Moniteur.obtenirInstance().fin();
 		return strCodeXML;
 	}
 }

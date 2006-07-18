@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="C:/Work/third_party/Java/commons-beanutils-1.7.0/commons-beanutils.jar"/>
 	<classpathentry kind="lib" path="C:/Work/third_party/Java/commons-digester-1.7/commons-digester-1.7.jar"/>
 	<classpathentry kind="lib" path="C:/Work/third_party/Java/junit4.1/junit-4.1.jar"/>
+	<classpathentry kind="lib" path="C:/Work/third_party/Java/jamonapi/jamon-2.1.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

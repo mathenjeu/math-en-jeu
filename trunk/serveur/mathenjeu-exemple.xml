@@ -13,6 +13,9 @@
 			<!--Delai en seconde de la synchronisation des clients avec la minuterie du serveur -->
 			<step>30</step>
 		</synchro>
+		<monitoring>
+			<step>3600</step>
+		</monitoring>
 		<info>
 			<!--fichier de sortie qui contient les informations des activités sur le serveur -->
 			<fichier-sortie>Espion.txt</fichier-sortie>
@@ -98,4 +101,9 @@
 	<table>
 		<max-nb-joueurs>4</max-nb-joueurs>
 	</table>
+	
+	<!-- Section de la classe ServeurJeu.Monitoring.Monitor -->
+	<monitor>
+		<fichier-sortie>serveur_monitoring.html</fichier-sortie>
+	</monitor>
 </configuration>
