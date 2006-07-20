@@ -14,7 +14,7 @@ import ClassesUtilitaires.UtilitaireNombres;
 /**
  * @author Marc
  *
- * TODO Tenir compte du niveau de difficulté des questions, et de la catégorie
+ * 
  */
 public class BoiteQuestions 
 {
@@ -27,7 +27,7 @@ public class BoiteQuestions
 	
 	public void ajouterQuestion( Question question )
 	{
-		int intCategorieQuestion = 1;
+		int intCategorieQuestion = question.obtenirCategorie();
 		int difficulte = question.obtenirDifficulte();
 		
 		TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );

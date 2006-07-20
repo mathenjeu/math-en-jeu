@@ -26,6 +26,9 @@ public class Question
 	// la réponse
 	private String strURLExplication;
 	
+//	 Déclaration d'une variable qui va contenir la catégorie de la question
+	private int intCategorie;
+	
 	/**
 	 * Constructeur de la classe Question qui initialise les propriétés de 
 	 * la question.
@@ -46,6 +49,7 @@ public class Question
 		strURLQuestion = urlQuestion;
 		strReponse = reponse;
 		strURLExplication = urlExplication;
+		intCategorie = 1;
 	}
 	
 	/**
@@ -113,5 +117,15 @@ public class Question
 	public void definirDifficulte(int difficulte)
 	{
 		intDifficulte = difficulte;
+	}
+
+	public int obtenirCategorie() 
+	{
+		return intCategorie;
+	}
+
+	public void definirCategorie( int categorie ) 
+	{
+		intCategorie = categorie;
 	}
 }
