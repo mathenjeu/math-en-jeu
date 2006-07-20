@@ -7,40 +7,67 @@
 package ServeurJeu.ComposantesJeu;
 
 
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.Vector;
 import ClassesUtilitaires.UtilitaireNombres;
 
 /**
  * @author Marc
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * TODO Tenir compte du niveau de difficulté des questions, et de la catégorie
  */
 public class BoiteQuestions 
 {
-	private Vector <Question>lstQuestions;
+	private TreeMap<Integer, TreeMap<Integer, Vector<Question>>> lstQuestions;
 	
 	public BoiteQuestions()
 	{
-		lstQuestions = new Vector();
+		lstQuestions = new TreeMap<Integer, TreeMap<Integer, Vector<Question>>>();
 	}
 	
 	public void ajouterQuestion( Question question )
 	{
-		lstQuestions.add( question );
+		int intCategorieQuestion = 1;
+		int difficulte = question.obtenirDifficulte();
+		
+		TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );
+		
+		if( difficultes == null )
+		{
+			difficultes = new TreeMap<Integer, Vector<Question>>();
+			lstQuestions.put( intCategorieQuestion, difficultes );
+			difficultes.put( difficulte, new Vector<Question>());
+		}
+		Vector<Question> questions = difficultes.get( difficulte );
+		questions.add( question );
 	}
 	
 	public Question pigerQuestion( int intCategorieQuestion, int intDifficulte )
 	{
+		intCategorieQuestion = 1;
 		Question question = null;
-		if( lstQuestions.size() > 0  )
+		TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );	
+		if( difficultes != null )
 		{
-			int intRandom = UtilitaireNombres.genererNbAleatoire( lstQuestions.size() );
-			question = (Question)lstQuestions.elementAt( intRandom );
-			lstQuestions.remove( intRandom );
+			Vector<Question> questions = difficultes.get( intDifficulte );
+			if( questions != null )
+			{
+				if( questions.size() > 0 )
+				{
+					int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
+					question = (Question)questions.elementAt( intRandom );
+					questions.remove( intRandom );
+				}
+			}
+			else
+			{
+				
+			}
+		}
+		else
+		{
 			
-			// Fix temporaire pour la difficulté de la question
-		    question.definirDifficulte(intDifficulte);
 		}
 		
 		return question;

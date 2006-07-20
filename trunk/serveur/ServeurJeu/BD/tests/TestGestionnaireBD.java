@@ -83,7 +83,7 @@ public class TestGestionnaireBD extends TestCase
 		System.out.println( "test_remplirBoiteQuestions" );
 		BoiteQuestions boiteQuestions = new BoiteQuestions();
 		gBD.remplirBoiteQuestions( boiteQuestions );
-		Question q = boiteQuestions.pigerQuestion( 0, 0 );
+		Question q = boiteQuestions.pigerQuestion( 1, 1 );
 		int nbQuestion = 0;
 		while( q != null )
 		{
@@ -94,7 +94,7 @@ public class TestGestionnaireBD extends TestCase
 			System.out.println( "Code question " + nbQuestion +  " : " + codeQuestion );
 			System.out.println( "Url question : " + question );
 			System.out.println( "Url explication : " + explication );
-			q = boiteQuestions.pigerQuestion( 0, 0 );
+			q = boiteQuestions.pigerQuestion( 1, 1 );
 			if( q == null )
 			{
 				System.out.println( "Pas de questions disponibles" );

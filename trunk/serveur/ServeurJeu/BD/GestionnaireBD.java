@@ -287,7 +287,7 @@ public class GestionnaireBD
 	    //TODO : charger salles de la bd??
 	}
 	
-	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions )
+	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions/*, niveau */ )
 	{
 		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion >= 2 and cleQuestion <= 800";
 		try

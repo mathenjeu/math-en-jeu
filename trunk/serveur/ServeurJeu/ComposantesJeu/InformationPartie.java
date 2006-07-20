@@ -104,6 +104,7 @@ public class InformationPartie
 	    lstObjetsUtilisablesRamasses = new TreeMap();
 	    
 	    objBoiteQuestions = new BoiteQuestions();
+	    //TODO : tenir compte du niveau du joueur
 	    objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions );
 	}
 
