@@ -198,6 +198,7 @@ public class GestionnaireBD
 	 * @param GestionnaireEvenements gestionnaireEv : Le gestionnaire d'événements
 	 * 				qu'on doit fournir à chaque salle pour qu'elles puissent 
 	 * 				envoyer des événements
+	 * @deprecated
 	 */
 	public void chargerSalles(GestionnaireEvenements gestionnaireEv)
 	{
@@ -283,8 +284,6 @@ public class GestionnaireBD
 	    
 	    objControleurJeu.ajouterNouvelleSalle(objSalle);
 	    //objControleurJeu.ajouterNouvelleSalle(objSalle2);
-	    
-	    //TODO : charger salles de la bd??
 	}
 	
 	//TODO tenir compte du niveau pour remplir la boite de questions
@@ -339,6 +338,7 @@ public class GestionnaireBD
 	 * @return Question : La question trouvée, null si aucune n'est trouvée.
 	 *					  Plus la liste des questions déjà posées est grande,
 	 *					  alors il y a plus de chances de retourner null
+	 * @deprecated
 	 */
 	public Question trouverProchaineQuestion(int categorieQuestion, int difficulte, TreeMap listeQuestionsPosees)
 	{
