@@ -47,34 +47,50 @@ public class BoiteQuestions
 	{
 		intCategorieQuestion = 1;
 		Question question = null;
-		TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );	
-		if( difficultes != null )
+		Vector<Question> questions = obtenirQuestions( intCategorieQuestion, intDifficulte );
+		
+		if( questions != null )
 		{
-			Vector<Question> questions = difficultes.get( intDifficulte );
-			if( questions != null )
+			if( questions.size() > 0 )
 			{
-				if( questions.size() > 0 )
-				{
-					int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
-					question = (Question)questions.elementAt( intRandom );
-					questions.remove( intRandom );
-				}
+				int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
+				question = (Question)questions.elementAt( intRandom );
+				questions.remove( intRandom );
 			}
-			else
-			{
-				
-			}
+		}
+		else
+		{
+					
+		}
+		
+		return question;
+	}
+	
+	public boolean estVide( int intCategorieQuestion, int intDifficulte )
+	{
+		boolean ret = true;
+		Vector<Question> questions = obtenirQuestions( intCategorieQuestion, intDifficulte );
+		
+		if( questions != null )
+		{
+			ret = questions.size() == 0;
 		}
 		else
 		{
 			
 		}
 		
-		return question;
+		return ret;
 	}
 	
-	public boolean estVide()
+	private Vector<Question> obtenirQuestions( int intCategorieQuestion, int intDifficulte )
 	{
-		return lstQuestions.size() == 0;
+		Vector<Question> questions = null;
+		TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );	
+		if( difficultes != null )
+		{
+			questions = difficultes.get( intDifficulte );
+		}
+		return questions;
 	}
 }
