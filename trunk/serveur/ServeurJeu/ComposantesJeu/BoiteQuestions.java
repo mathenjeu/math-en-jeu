@@ -9,6 +9,10 @@ package ServeurJeu.ComposantesJeu;
 
 import java.util.TreeMap;
 import java.util.Vector;
+
+import org.apache.log4j.Logger;
+
+import ServeurJeu.BD.GestionnaireBD;
 import ClassesUtilitaires.UtilitaireNombres;
 
 /**
@@ -18,6 +22,7 @@ import ClassesUtilitaires.UtilitaireNombres;
  */
 public class BoiteQuestions 
 {
+	static private Logger objLogger = Logger.getLogger( BoiteQuestions.class );
 	private TreeMap<Integer, TreeMap<Integer, Vector<Question>>> lstQuestions;
 	
 	public BoiteQuestions()
@@ -48,18 +53,15 @@ public class BoiteQuestions
 		Question question = null;
 		Vector<Question> questions = obtenirQuestions( intCategorieQuestion, intDifficulte );
 		
-		if( questions != null )
+		if( questions != null && questions.size() > 0 )
 		{
-			if( questions.size() > 0 )
-			{
-				int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
-				question = (Question)questions.elementAt( intRandom );
-				questions.remove( intRandom );
-			}
+			int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
+			question = (Question)questions.elementAt( intRandom );
+			questions.remove( intRandom );
 		}
 		else
 		{
-					
+			objLogger.error( "Il n'y a pas de questions disponibles" );
 		}
 		
 		return question;
@@ -72,11 +74,11 @@ public class BoiteQuestions
 		
 		if( questions != null )
 		{
-			ret = questions.size() == 0;
+			ret = ( questions.size() == 0 );
 		}
 		else
 		{
-			
+			objLogger.error( "Il n'y a pas de questions disponibles" );
 		}
 		
 		return ret;
