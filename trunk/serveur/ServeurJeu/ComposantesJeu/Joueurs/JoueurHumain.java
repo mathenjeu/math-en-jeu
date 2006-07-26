@@ -33,6 +33,8 @@ public class JoueurHumain extends Joueur
 	//Cette variable défini si un jouer peut creer une salle
 	private boolean bolPeutCreerSalle;
 	
+	private String cleNiveau;
+	
 	// Déclaration d'une référence vers la salle dans laquelle le joueur se 
 	// trouve (null si le joueur n'est dans aucune salle)
 	private Salle objSalleCourante;
@@ -241,5 +243,15 @@ public class JoueurHumain extends Joueur
 	public void definirCleJoueur(int cle)
 	{
 		intCleJoueur = cle;
+	}
+
+	public String obtenirCleNiveau() 
+	{
+		return cleNiveau;
+	}
+
+	public void definirCleNiveau(String cleNiveau) 
+	{
+		this.cleNiveau = cleNiveau;
 	}
 }

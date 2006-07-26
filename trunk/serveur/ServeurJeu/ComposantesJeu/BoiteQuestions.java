@@ -33,24 +33,29 @@ public class BoiteQuestions
 	public void ajouterQuestion( Question question )
 	{
 		int intCategorieQuestion = 1;// = question.obtenirCategorie();
-		int difficulte = 1;//question.obtenirDifficulte();
+		int difficulte = question.obtenirDifficulte();
 		
 		TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );
-		
 		if( difficultes == null )
 		{
 			difficultes = new TreeMap<Integer, Vector<Question>>();
 			lstQuestions.put( intCategorieQuestion, difficultes );
-			difficultes.put( difficulte, new Vector<Question>());
 		}
+		
 		Vector<Question> questions = difficultes.get( difficulte );
+		if( questions == null )
+		{
+			questions = new Vector<Question>();
+			difficultes.put( difficulte, questions);
+		}
+	
 		questions.add( question );
 	}
 	
 	public Question pigerQuestion( int intCategorieQuestion, int intDifficulte )
 	{
 		intCategorieQuestion = 1;
-		intDifficulte = 1;
+		
 		Question question = null;
 		Vector<Question> questions = obtenirQuestions( intCategorieQuestion, intDifficulte );
 		

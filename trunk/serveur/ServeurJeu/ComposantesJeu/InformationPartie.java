@@ -104,8 +104,8 @@ public class InformationPartie
 	    lstObjetsUtilisablesRamasses = new TreeMap();
 	    
 	    objBoiteQuestions = new BoiteQuestions();
-	    //TODO : tenir compte du niveau du joueur
-	    objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions );
+	    
+	    objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau() );
 	}
 
 	/**
@@ -397,21 +397,10 @@ public class InformationPartie
 		}
 		else if (intDifficulte > 0)
 		{
-			objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions );
+			objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau(), intCategorieQuestion, intDifficulte );
 			objQuestionTrouvee = objBoiteQuestions.pigerQuestion( intCategorieQuestion, intDifficulte );
 			
-			// Toutes les questions de cette catégorie et de cette difficulté
-			// ont toutes été posées, on vide donc toute la liste de questions
-			// et on recommence du début
-			//TODO: Il y aurait moyen d'améliorer ça en divisant la liste des 
-			// 		questions posées en catégorie et difficulté et réinitialiser
-			//		ici seulement un catégorie et difficulté, mais pas toute la
-			//		liste. Cela rendrait aussi la recherche d'une question plus
-			//		efficace lorsqu'on construit la requête SQL.
 			lstQuestionsRepondues.clear();
-			
-			// Aller chercher de nouveau une question dans la BD
-			//TODO enlever ce commentaire : objQuestionTrouvee = objGestionnaireBD.trouverProchaineQuestion(intCategorieQuestion, intDifficulte, lstQuestionsRepondues);
 			
 			// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
 			// des questions posées et on la garde en mémoire pour pouvoir ensuite

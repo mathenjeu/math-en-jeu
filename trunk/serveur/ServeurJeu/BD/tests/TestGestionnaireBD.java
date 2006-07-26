@@ -61,6 +61,7 @@ public class TestGestionnaireBD extends TestCase
 		JoueurHumain objJoueurHumain = new JoueurHumain(null, "test", 
 				"127.0.0.1",
 				"6100" );
+		objJoueurHumain.definirCleNiveau( "7");
 		
 		InformationPartie partie = new InformationPartie( null, gBD, objJoueurHumain, null );
 		objJoueurHumain.definirPartieCourante( partie );
@@ -82,7 +83,7 @@ public class TestGestionnaireBD extends TestCase
 		System.out.println( "_________________________________________" );
 		System.out.println( "test_remplirBoiteQuestions" );
 		BoiteQuestions boiteQuestions = new BoiteQuestions();
-		gBD.remplirBoiteQuestions( boiteQuestions );
+		gBD.remplirBoiteQuestions( boiteQuestions, "7" );
 		Question q = boiteQuestions.pigerQuestion( 1, 1 );
 		int nbQuestion = 0;
 		while( q != null )

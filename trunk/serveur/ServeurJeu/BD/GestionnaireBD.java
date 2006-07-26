@@ -55,6 +55,8 @@ public class GestionnaireBD
 	// Variable temporaire pour nommer les joueurs virtuels "Bot 1", "Bot 2", etc.
 	private int intBotId;
 	
+	private static final String strValeurGroupeAge = "valeurGroupeAge";
+	
 	/**
 	 * Constructeur de la classe GestionnaireBD qui permet de garder la 
 	 * référence vers le contrôleur de jeu
@@ -165,7 +167,7 @@ public class GestionnaireBD
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery("SELECT cleJoueur, prenom, nom, peutCreerSalles FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+				ResultSet rs = requete.executeQuery("SELECT cleJoueur, prenom, nom, cleNiveau, peutCreerSalles FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
 				if (rs.next())
 				{
 					if (rs.getInt("peutCreerSalles") != 0)
@@ -175,9 +177,11 @@ public class GestionnaireBD
 					String prenom = rs.getString("prenom");
 					String nom = rs.getString("nom");
 					int cle = Integer.parseInt(rs.getString("cleJoueur"));
+					String cleNiveau = rs.getString( "cleNiveau" );
 					joueur.definirPrenom(prenom);
 					joueur.definirNomFamille(nom);
 					joueur.definirCleJoueur(cle);
+					joueur.definirCleNiveau( cleNiveau );
 				}
 			}
 		}
@@ -286,16 +290,29 @@ public class GestionnaireBD
 	    //objControleurJeu.ajouterNouvelleSalle(objSalle2);
 	}
 	
-	//TODO tenir compte du niveau pour remplir la boite de questions
-	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions/*, niveau */ )
+	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau )
 	{
-		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion >= 2 and cleQuestion <= 800";
+		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion >= 2 and cleQuestion <= 800 and ";
+		strRequeteSQL += strValeurGroupeAge + niveau + " > 0";
+		
+		remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
+	}
+	
+	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, int intCategorie, int intDifficulte )
+	{
+		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion >= 2 and cleQuestion <= 800 and ";
+		strRequeteSQL += strValeurGroupeAge + niveau + " = " + intDifficulte;
+		
+		remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
+	}
+	
+	private void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, String strRequeteSQL )
+	{
 		try
 		{
 			synchronized( requete )
 			{
 				ResultSet rs = requete.executeQuery( strRequeteSQL );
-				Vector listeQuestions = new Vector();
 				while(rs.next())
 				{
 					int codeQuestion = rs.getInt("cleQuestion");
@@ -303,7 +320,8 @@ public class GestionnaireBD
 					String question = rs.getString( "FichierFlashQuestion" );
 					String reponse = rs.getString("bonneReponse");
 					String explication = rs.getString("FichierFlashReponse");
-					int difficulte = 1; //TODO aller cherhcer dans la bd
+					int difficulte = rs.getInt( strValeurGroupeAge + niveau );
+					//TODO la categorie???
 					boiteQuestions.ajouterQuestion( new Question( codeQuestion, typeQuestion, difficulte, urlQuestionReponse + question, reponse, urlQuestionReponse + explication ));
 				}
 			}
