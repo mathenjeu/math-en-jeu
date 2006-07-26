@@ -1,5 +1,6 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
+import ClassesUtilitaires.UtilitaireNombres;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.Communications.ProtocoleJoueur;
 import ServeurJeu.ComposantesJeu.InformationPartie;
@@ -9,7 +10,9 @@ import java.util.TreeMap;
 import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
+import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.Evenements.EvenementJoueurDeplacePersonnage;
@@ -26,9 +29,11 @@ import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
 
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
+import ServeurJeu.ComposantesJeu.Joueurs.ParametreIAObjet;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
-
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Reponse;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 
 import java.util.Random;
@@ -39,52 +44,14 @@ import java.util.Date;
 
 /* Priorité haute
  * -----------------
- * TODO: Ne pas utiliser "instanceof" mais utiliser obtenirTypeCase
  *
  * Priorité moyenne
  * -----------------
- * TODO: Optimiser l'utilisation des matrices (réutiliser les mêmes)
- * TODO: Prendre en compte magasins, mini-jeu et objets lors des choix
- * TODO: Profil: Importance magasin, mini-jeu et objets
- * TODO: Émuler mini-jeu
  * TODO: Achat magasin
- * TODO: Utiliser objet
- * TODO: Noms des joueurs virtuels
- * TODO: Conserver le chemin trouvé dans trouverPosFinale pour posIntermediaire
- * TODO: Optimisation: Analyser la pertinence d'utiliser des listes des cases
- *       importantes et de vérifier ces listes plutôt que de parcourir toute
- *       la matrice du plateau de jeu lorsqu'on cherche une case finale
- * TODO: Case finale: améliorer en prenant en compte les autres joueurs
- *
+ * 
  * Priorité basse
  * -----------------
- * TODO: Dans l'algorithme de valorisation de regroupements de pièces, prendre
- *       en compte le fait que la case se trouve par-dessus un trou (ou qu'elle est trop loin)
- * TODO: Case finale: améliorer pour ce qui est des croches (le joueur virtuel
- *       ne voit pas de différence entre 3 cases en ligne droite et 3 cases 
- *       avec un croche)
- * TODO: Améliorer la case finale si jamais il n'y a plus de pièces
- *       (trouver de grands déplacements en ligne droite qui permet
- *        d'avoir des déplacements maximales)
- * TODO: Profil: prendre en compte position des ennemis
- * TODO: Profil: aggressivité: Joueurs aggressif essaie de "voler" des pièces, alors
- *       que les joueurs passifs restent plus à l'écart, impact aussi sur les objets
- *       que le joueur achètera
- * TODO: Profil: Prioriser certains objets (en plus de ceux priorisés par l'aggressivité, 
- *       par exemple, on pourrait avoir un joueur virtuel qui adore jouer un certain
- *       objet même si l'objet est très mauvais)
- * TODO: Profil: Réaction lorsque gagne / perd (augmenter/diminuer témérité, un joueur
- *       qui perd avec un très grand écart va tenter de plus grands mouvements)
- * TODO: Pos finale: prendre en compte quelques coups d'avance
- * TODO: Profil: Certain joueur virtuel meilleur en statistique, algèbre, etc, 
- *       donc prioriser certains cases couleurs ainsi que les pièces sur ces cases
- *       couleurs.
- * TODO: Profil: On ne demande qu'un niveau de difficulté, le reste est générer aléatoirement
- *       En général, on obtient des settings prochent de la normal, mais il est possible
- *       de se ramasser quelque fois avec des joueurs un peu spécial (très aggressif,
- *       très porté à jouer à des mini-jeu sans arrêt, fixation sur tel objet, etc.)
- * TODO: Prioriser mouvements au centre du plateau plutôt que dans les côtés
- * 
+ *
  **/
  
  
@@ -98,6 +65,10 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	
     // Déclaration d'une référence vers le gestionnaire d'evenements
 	private GestionnaireEvenements objGestionnaireEv;
+	
+	// Déclaration d'une référence vers un objet contenant tous
+	// les paramètres des joueurs virtuels
+	private ParametreIA objParametreIA;
 	
 	// Cette variable contient la case ciblée par la joueur virtuel.
 	// Il tentera de s'y rendre. Cette case sera choisie selon 
@@ -138,34 +109,62 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	// Déclaration d'une référence vers le controleur jeu
 	private ControleurJeu objControleurJeu;
 	
-	
-	// Déclaration d'une variable pour générer des nombres aléatoires
-    //private Random objRandom;
-	
-	// Cette constante définit le temps de pause lors d'une rétroaction
-	private final static int TEMPS_RETROACTION = 10;
-	
-	
-	// Autres constantes utilisés dans les algorithmes de recherche de choix
-    private final static int DROITE = 0;
-    private final static int BAS = 1;
-    private final static int GAUCHE = 2;
-    private final static int HAUT = 3;
+    // Déclaration d'une variable qui contient le nombre de fois 
+    // que le joueur virtuel a joué à un mini-jeu
+    private int intNbMiniJeuJoues;
     
-    // Déplacement maximum autorisé
-    private final static int DEPLACEMENT_MAX = 6;
-	
-	// Constantes pour définir le niveu de difficulté du joueur virtuel
-    public static final int DIFFICULTE_FACILE = 0;
-    public static final int DIFFICULTE_MOYEN = 1;
-    public static final int DIFFICULTE_DIFFICILE = 2;
-	
-	// Quelques raisons pour déplacer le joueur virtuel
-	private final static int RAISON_AUCUNE = 0;
-	private final static int RAISON_PIECE = 1;
-	private final static int RAISON_MINIJEU = 2;
-	private final static int RAISON_MAGASIN = 3;
+    // Déclaration d'une variable qui contient le nombre de fois
+    // que le joueur virtuel a visité un magasin
+    private int intNbMagasinVisites;
+    
+    // Déclaration d'un tableau contenant les temps où le joueur
+    // virtuel peut jouer à un mini-jeu (lorsque le temps arrive, 
+    // cela donne un jeton au joueur virtuel, lorsqu'il croisera 
+    // une case de mini-jeu, il y jouera)
+    private int tJetonsMiniJeu[];
+    
+    // Déclaration d'un tableau contenant les temps où le joueur
+    // virtuel peut se servir d'un magasin (lorsque le temps arrive,
+    // cela donne un jeton au joueur virtuel, lorsqu'il croisera un
+    // magasin, il ira pour peut-être acheter un objet)
+    private int tJetonsMagasins[];
+    
+    // Cette variable contient le nombre maximum d'items que le joueur
+    // virtuel traînera
+    private int intNbObjetsMax;
+    
+    // Cette liste va contenir les magasins déjà visités
+    // par le joueur virtuel, pour empêcher qu'il les visite
+    // à plus d'une reprise
+    private Vector lstMagasinsVisites;
+    
+    // Tableau contenant une référence vers le plateau de jeu
+    private Case objttPlateauJeu[][];
+    
+    // Obtenir le nombre de lignes et de colonnes du plateau de jeu
+    private int intNbLignes;
+    private int intNbColonnes;
+    
+    // Cette matrice contiendra les valeurs indiquants quelles cases ont
+    // été parcourue par l'algorithme
+    private boolean matriceParcourue[][];
+    
+    // Cette matrice contiendra, pour chaque case enfilée, de quelle case
+    // celle-ci a été enfilée. Cela nous permettra de trouver le chemin
+    // emprunté par l'algorithme. 
+    private Point matricePrec[][];
 
+    // Déclaration d'une matrice qui contiendra un pointage pour chaque
+    // case du plateau de jeu, ce qui permettra de choisir le meilleur
+    // coup à jouer
+    private int matPoints[][];
+    
+	// Constante pour la compilation conditionnelle
+	private static final boolean ccDebug = false;
+	
+	// Constante pour accélérer les déplacements
+	// (voir fonction pause() )
+	private static final boolean ccFast = false;
 	
 	/**
 	 * Constructeur de la classe JoueurVirtuel qui permet d'initialiser les 
@@ -184,12 +183,9 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    GestionnaireEvenements gestionnaireEv, ControleurJeu controleur)
 	{
 	   
-        // Préparation de l'objet pour créer des nombres aléatoires
-        //Date d = new Date();
-        //long seed = d.getTime();
-        //objRandom = new Random(System.currentTimeMillis());
-	   
 	    objControleurJeu = controleur;
+	    
+	    objParametreIA = objControleurJeu.obtenirParametreIA();
 	    
 		strNom = nom;
 		
@@ -206,7 +202,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		objTable = tableCourante;	
 			
 		// Choisir un id de personnage aléatoirement
-		intIdPersonnage = genererNbAleatoire(4) + 1;
+		intIdPersonnage = genererNbAleatoire(ParametreIA.NOMBRE_PERSONNAGE_ID) + 1;
 		
 		// Initialisation du pointage
 		intPointage = 0;
@@ -219,8 +215,36 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		
         // Création du profil du joueur virtuel
         intNiveauDifficulte = niveauDifficulte;
-        
 
+        // Tableau contenant une référence vers le plateau de jeu
+        objttPlateauJeu = objTable.obtenirPlateauJeuCourant();
+        
+        // Obtenir le nombre de lignes et de colonnes du plateau de jeu
+        intNbLignes = objttPlateauJeu.length;
+        intNbColonnes = objttPlateauJeu[0].length;
+        
+        // Initialiser les matrices
+        matriceParcourue = new boolean[intNbLignes][intNbColonnes];
+        matricePrec = new Point[intNbLignes][intNbColonnes];
+        matPoints = new int[intNbLignes][intNbColonnes];
+
+        // Déterminer les temps des jetons des minijeus
+        determinerJetonsMiniJeu();
+
+        // Au départ, le joueur virtuel n'a joué aucun mini-jeu
+        intNbMiniJeuJoues = 0;
+        
+        // Déterminer les temps des jetons pour les magasins
+        determinerJetonsMagasins();
+        
+        // Au départ, le joueur virtuel n'a pas visité de magasin
+        intNbMagasinVisites = 0;
+
+        // Définir le nombre d'objets max par une valeur de base
+        intNbObjetsMax = ParametreIA.MAX_NOMBRE_OBJETS;
+        
+        // Créer une liste de magasin déjà visité vide
+        lstMagasinsVisites = new Vector();
 
 	}
 
@@ -253,7 +277,11 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		// du personnage
 		int intTempsDeplacement;
 		
-		//System.out.println("Joueur virtuel démarré");
+		// La grandeur de déplacement demandé par le joueur virtuel
+		int intGrandeurDeplacement;
+		
+		// Le pourcentage de réussite à la question
+		int intPourcentageReussite;
 		
 		while(bolStopThread == false)
 		{		
@@ -261,11 +289,12 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 			// Déterminer le temps de réflexion pour le prochain coup
 			intTempsReflexionCoup = obtenirTempsReflexionCoup();
 			
+
 			// Pause pour moment de réflexion de décision
 			pause(intTempsReflexionCoup);
 			
             // Trouver une case intéressante à atteindre
-            if (reviserPositioinFinaleVisee() == true)
+            if (reviserPositionFinaleVisee() == true)
             {
             	objPositionFinaleVisee = trouverPositionFinaleVisee();	
             }
@@ -278,10 +307,37 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 			if (objPositionIntermediaire.x != objPositionJoueur.x || 
 			    objPositionIntermediaire.y != objPositionJoueur.y)
 			{
+				// Calculer la grandeur du déplacement demandé
+				intGrandeurDeplacement = obtenirPointage(objPositionJoueur, objPositionIntermediaire);
+				
+				// Aller chercher le pourcentage de réussite à la question
+				intPourcentageReussite = objParametreIA.tPourcentageReponse[intNiveauDifficulte][intGrandeurDeplacement-1];
+	
+				// Vérifier si on utilise l'objet reponse selon notre
+				// pourcentage de réussite.   
+				boolean bolUtiliserReponse = nombreObjetsPossedes(Objet.UID_OU_REPONSE) > 0 &&
+				    intGrandeurDeplacement >= 3;
+				
+				// Si on utilise l'objet, on modifie le % de réussite
+				if (bolUtiliserReponse == true)
+				{
+    				if (ccDebug)
+    				{
+    					System.out.println("Utilise objet: Reponse");
+    				}
+					
+					// Augmenter les chances de réussites utilisant le 
+					// tableau de % de réponse lorsqu'on utilise cet objet
+				    intPourcentageReussite = objParametreIA.tPourcentageReponseObjetReponse[intNiveauDifficulte][intGrandeurDeplacement-1];
+				    
+				    // Enlever un objet reponse des objets du joueur
+				    enleverObjet(Objet.UID_OU_REPONSE);
+
+				}
+				
     			// Déterminer si le joueur virtuel répondra à la question
-                bolQuestionReussie = obtenirValiditeReponse(
-                    obtenirPointage(objPositionJoueur, objPositionIntermediaire));
-    			
+                bolQuestionReussie = (genererNbAleatoire(100)+1 <= intPourcentageReussite);
+    			        
     			// Déterminer le temps de réponse à la question
     			intTempsReflexionQuestion = obtenirTempsReflexionReponse();
                 
@@ -297,14 +353,19 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     				
     				// Obtenir le temps que le déplacement dure
     				intTempsDeplacement = obtenirTempsDeplacement(obtenirPointage(objPositionJoueur, objPositionIntermediaire));
-    				
+
     				// Pause pour laisser le personnage se déplacer
     				pause(intTempsDeplacement);
     			}
     			else
     			{
+    				if (ccDebug)
+    				{
+    					System.out.println("Question ratée");
+    				}
+
     				// Pause pour rétroaction
-    				pause(TEMPS_RETROACTION);
+    				pause(ParametreIA.TEMPS_RETROACTION);
     			}
     			
     	    }	
@@ -320,21 +381,6 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	 */
     public Vector trouverCheminPlusCourt(Point depart, Point arrivee)
     {
-        // Tableau contenant une référence vers le plateau de jeu
-        Case objttPlateauJeu[][] = objTable.obtenirPlateauJeuCourant();
-        
-        // Obtenir le nombre de lignes et de colonnes du plateau de jeu
-        int intNbLignes = objttPlateauJeu.length;
-        int intNbColonnes = objttPlateauJeu[0].length;
-        
-        // Cette matrice contiendra les valeurs indiquants quelles cases ont
-        // été parcourue par l'algorithme
-        boolean matriceParcourue[][] = new boolean[intNbLignes][intNbColonnes];
-        
-        // Cette matrice contiendra, pour chaque case enfilée, de quelle case
-        // celle-ci a été enfilée. Cela nous permettra de trouver le chemin
-        // emprunté par l'algorithme. 
-        Point matricePrec[][] = new Point[intNbLignes][intNbColonnes];
         
         // Liste des points à traiter pour l'algorithme de recherche de chemin
         Vector lstPointsATraiter = new Vector();
@@ -350,15 +396,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         
         // Cette variable nous indiquera si l'algorithme a trouvé un chemin
         boolean bolCheminTrouve = false;
-        
-        // Ce tableau nous permettra de traiter les 4 cases autour d'une case
-        // à l'intérieur d'une boucle.
-        Point ptDxDy[] = new Point[4];
-        ptDxDy[DROITE] = new Point(0,1);
-        ptDxDy[BAS] = new Point(1,0);
-        ptDxDy[GAUCHE] = new Point(0,-1);
-        ptDxDy[HAUT] = new Point(-1,0);
-        
+
         // Variable pour boucler dans le tableau ptDxDy[]
         int dxIndex = 0;
         
@@ -366,11 +404,24 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         // permettra de peut-être trouver différents chemin
         int tRandom[] = {0,1,2,3};
         
-        // Servira pour brasser tRandom
+        // Sert pour brasser tRandom
         int indiceA;
         int indiceB;
         int indiceNombreMelange;
         int valeurTemp;
+        
+        // On va faire 3 mélanges, ce sera suffisant
+        for (indiceNombreMelange = 1; indiceNombreMelange <= 3;indiceNombreMelange++)
+        {
+            // Brasser aléatoirement le tableau aléatoire
+            indiceA = genererNbAleatoire(4);
+            indiceB = genererNbAleatoire(4); 
+            
+            // Permutter les deux valeurs
+            valeurTemp = tRandom[indiceA];
+            tRandom[indiceA] = tRandom[indiceB];
+            tRandom[indiceB] = valeurTemp;
+        }
         
         // Initialiser les objets pour la recherche de chemin
         for (int i = 0; i < intNbLignes; i++)
@@ -383,8 +434,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
                 // Chaque case précédente sera le point -1,-1
                 matricePrec[i][j] = new Point(-1,-1);
             }
-        }
-        
+        }       
+            
         // Enfiler notre position de départ
         lstPointsATraiter.add(depart);
         matriceParcourue[depart.x][depart.y] = true;
@@ -403,25 +454,13 @@ public class JoueurVirtuel extends Joueur implements Runnable {
                 bolCheminTrouve = true;
                 break;
             }
-            
-            // On va faire 3 mélanges, ce sera suffisant
-            for (indiceNombreMelange = 1; indiceNombreMelange <= 3;indiceNombreMelange++)
-            {
-                // Brasser aléatoirement le tableau aléatoire
-                indiceA = genererNbAleatoire(4);
-                indiceB = genererNbAleatoire(4); 
-                
-                // Permutter les deux valeurs
-                valeurTemp = tRandom[indiceA];
-                tRandom[indiceA] = tRandom[indiceB];
-                tRandom[indiceB] = valeurTemp;
-            }
+
                        
             // Enfiler les 4 cases accessibles depuis cette position  
             for (dxIndex = 0; dxIndex < 4; dxIndex++)
             {
-                ptPosTemp.x = ptPosDefile.x + ptDxDy[tRandom[dxIndex]].x;
-                ptPosTemp.y = ptPosDefile.y + ptDxDy[tRandom[dxIndex]].y;
+                ptPosTemp.x = ptPosDefile.x + objParametreIA.ptDxDy[tRandom[dxIndex]].x;
+                ptPosTemp.y = ptPosDefile.y + objParametreIA.ptDxDy[tRandom[dxIndex]].y;
                 
                 if (ptPosTemp.y >= 0 &&
                     ptPosTemp.y < intNbColonnes && 
@@ -485,37 +524,60 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	{
 		Point ptTemp;
 		int intPoints = 0;;
-		
+        
+        boolean considererMiniJeu = determinerPretAJouerMiniJeu();
+        boolean considererMagasin = determinerPretAVisiterMagasin();
+        
 		for (int i = 0; i < lstPositions.size() - 1; i++)
 		{
 
            ptTemp = (Point) lstPositions.get(i);
            
+           int intPointsCase = 0;
+           
            if (objttPlateauJeu[ptTemp.x][ptTemp.y] instanceof CaseCouleur)
            {
-           	   // Points pour une case couleur
-               if (((CaseCouleur) objttPlateauJeu[ptTemp.x][ptTemp.y]).obtenirObjetCase() == null)
-               {
-               	   // Case couleur sans objet
-		           //TODO: Ajouter points selon type de case et type de joueur
-                   intPoints += 10;
-               }
-               else if (((CaseCouleur) objttPlateauJeu[ptTemp.x][ptTemp.y]).obtenirObjetCase() instanceof Piece)
+               if (((CaseCouleur) objttPlateauJeu[ptTemp.x][ptTemp.y]).obtenirObjetCase() instanceof Piece)
                {
                	   // Piece sur la case
-                   intPoints += 100;
+                   intPointsCase = objParametreIA.objParametreIAPiece.intPointsChemin;
                }
-               else
+               else if (((CaseCouleur) objttPlateauJeu[ptTemp.x][ptTemp.y]).obtenirObjetCase() instanceof Magasin)
                {
-               	   // Autre objet
-                   intPoints += 10;
+                   if (considererMagasin == true)
+                   {
+                   	   // Magasin sur la case
+                       intPointsCase = objParametreIA.objParametreIAMagasin.intPointsChemin;
+                   }
+               }
+               
+               else if (((CaseCouleur) objttPlateauJeu[ptTemp.x][ptTemp.y]).obtenirObjetCase() instanceof ObjetUtilisable &&
+                   lstObjetsUtilisablesRamasses.size() < intNbObjetsMax)
+               {
+                   ObjetUtilisable objObjet = (ObjetUtilisable)((CaseCouleur)objttPlateauJeu[ptTemp.x][ptTemp.y]).obtenirObjetCase();
+                   if (objObjet.estVisible() && determinerPretARamasserObjet(objObjet.obtenirUniqueId()))
+                   {
+                       // Objet réponse sur la case
+                       intPointsCase = objParametreIA.tParametresIAObjetUtilisable[objObjet.obtenirUniqueId()].intPointsChemin;
+                       intPointsCase -= objParametreIA.tParametresIAObjetUtilisable[objObjet.obtenirUniqueId()].intPointsEnleverDistance * (nombreObjetsPossedes(objObjet.obtenirUniqueId()));
+                       if (intPointsCase < 0)
+                       {
+                           intPointsCase = 0;
+                       }
+                   }
+               }
+
+           }
+           else if (objttPlateauJeu[ptTemp.x][ptTemp.y] instanceof CaseSpeciale)
+           {
+               if (considererMiniJeu == true)
+               {
+               	   // Mini-jeu sur la case
+                   intPointsCase = objParametreIA.objParametreIAMinijeu.intPointsChemin;
                }
            }
-           else
-           {
-           	   // Points pour une case pas couleur
-               intPoints += 10;
-           }
+           
+           intPoints += intPointsCase;
            
 		}
 		
@@ -530,13 +592,6 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	{
 	    // Variable contenant la position à retourner à la fonction appelante
 		Point objPositionTrouvee;
-		
-        // Tableau contenant une référence vers le plateau de jeu
-        Case objttPlateauJeu[][] = objTable.obtenirPlateauJeuCourant();
-        
-        // Obtenir le nombre de lignes et de colonnes du plateau de jeu
-        int intNbLignes = objttPlateauJeu.length;
-        int intNbColonnes = objttPlateauJeu[0].length;
 
         Vector lstPositions[] = new Vector[5];
         Vector lstPositionsTrouvees;
@@ -567,6 +622,22 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         // Choisir le meilleur chemin
         lstPositionsTrouvees = lstPositions[intPlusGrand];
 
+        if (ccDebug)
+        {
+        	System.out.print("Chemin : ");
+        	for (int i = lstPositionsTrouvees.size()-1 ; i >=0 ; i--)
+        	{
+        		if (i < lstPositionsTrouvees.size()-1)
+        		{
+        			System.out.print(", ");
+        		}
+        		
+        		System.out.print("(" + ((Point)lstPositionsTrouvees.get(i)).x +"-" +
+        		    ((Point)lstPositionsTrouvees.get(i)).y + ")");
+        	}
+        	System.out.println("");
+        }
+        
         // Valeur du point de départ (égale à objPositionJoueur en principe)
         Point ptDepart = (Point) lstPositionsTrouvees.get(lstPositionsTrouvees.size() - 1);
         
@@ -581,12 +652,23 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         int intPourcentageCase[] = obtenirPourcentageChoix();
         int iIndiceTableau = 0;
         
+        boolean bolConsidererMiniJeu = determinerPretAJouerMiniJeu();
+        boolean bolConsidererMagasin = determinerPretAVisiterMagasin();
+        
         // On part du début du chemin jusqu'à la fin et on trouve le premier croche
         for (int i = lstPositionsTrouvees.size() - 2; i >= 0 ; i--)
         {
             ptTemp = (Point) lstPositionsTrouvees.get(i);
 
             iIndiceTableau++;       
+            
+            // S'il y a un mini-jeu ici et que le joueur n'a pas de jeton
+            // pour y jouer, alors on va mettre à 0 les possiblités
+            // de choisir cette case
+	        if (bolConsidererMiniJeu == false && objttPlateauJeu[ptTemp.x][ptTemp.y] instanceof CaseSpeciale)
+	        {
+	        	traiterCaseEliminerDansLigne(intPourcentageCase, iIndiceTableau -1);
+	        }
                                  
             // On vérifie si le premier "croche" est ici
             if (ptTemp.x != ptDepart.x && ptTemp.y != ptDepart.y)
@@ -608,9 +690,36 @@ public class JoueurVirtuel extends Joueur implements Runnable {
                 }
             }
             
+            // S'il y a un mini-jeu et que le joueur à un jeton pour
+            // un mini-jeu, on s'assure de ne pas dépasser cette case
+            else if (objttPlateauJeu[ptTemp.x][ptTemp.y] instanceof CaseSpeciale && 
+                bolConsidererMiniJeu == true)
+            {
+            	traiterPieceTrouveeDansLigne(intPourcentageCase, iIndiceTableau - 1);
+                break; 
+            }
+            
+            // S'il y a un magasin et que le joueur à un jeton pour
+            // le visiter, on s'assure de ne pas dépasser cette case
+            else if (objttPlateauJeu[ptTemp.x][ptTemp.y] instanceof CaseCouleur && 
+                ((CaseCouleur)objttPlateauJeu[ptTemp.x][ptTemp.y]).obtenirObjetCase() instanceof Magasin &&
+                bolConsidererMagasin == true)
+            {
+            	traiterPieceTrouveeDansLigne(intPourcentageCase, iIndiceTableau - 1);
+                break; 
+            }
+            
+            // S'il y a un objet visible, alors on s'assurer de ne pas dépasser cette case
+            else if (objttPlateauJeu[ptTemp.x][ptTemp.y] instanceof CaseCouleur &&
+                ((CaseCouleur)objttPlateauJeu[ptTemp.x][ptTemp.y]).obtenirObjetCase() instanceof ObjetUtilisable &&
+                determinerPretARamasserObjet(((ObjetUtilisable)((CaseCouleur)objttPlateauJeu[ptTemp.x][ptTemp.y]).obtenirObjetCase()).obtenirUniqueId()))
+            {
+            	traiterPieceTrouveeDansLigne(intPourcentageCase, iIndiceTableau - 1);
+                break; 
+            }
 
             
-            if (iIndiceTableau > DEPLACEMENT_MAX-1)
+            if (iIndiceTableau > ParametreIA.DEPLACEMENT_MAX-1)
             {
                 break;
             }  
@@ -618,7 +727,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         }
         
         // Si on est près de la position finale, on s'assure de ne pas la dépasser
-        if (lstPositionsTrouvees.size() < DEPLACEMENT_MAX)
+        if (lstPositionsTrouvees.size() < ParametreIA.DEPLACEMENT_MAX)
         {
             traiterPieceTrouveeDansLigne(intPourcentageCase, lstPositionsTrouvees.size() - 2); 
         }
@@ -634,7 +743,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         int intDecision = 0;
         
         // On détermine à quel décision cela appartient
-        for (int i = 0 ; i <= DEPLACEMENT_MAX-1 ; i++)
+        for (int i = 0 ; i <= ParametreIA.DEPLACEMENT_MAX-1 ; i++)
         {
             intValeurAccumulee += intPourcentageCase[i];
             if (intPourcentageAleatoire <= intValeurAccumulee)
@@ -650,16 +759,189 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         objPositionTrouvee = new Point(ptTemp.x, ptTemp.y);
 
         //--------------------------------
-        /*System.out.println("Position du joueur: " + objPositionJoueur.x + "," + 
-            objPositionJoueur.y);        
-        System.out.println("Position trouvée: " + objPositionTrouvee.x + "," + 
-            objPositionTrouvee.y);           
-        System.out.println("Position a atteindre: " + objPositionFinaleVisee.x + "," + 
-            objPositionFinaleVisee.y);
-        TestJoueurVirtuel.outputPlateau(objttPlateauJeu);*/
+        if (ccDebug)
+        {
+        	int intTempsEcoule = objTable.obtenirTempsTotal() * 60 - objTable.obtenirTempsRestant();
+	        System.out.println("Temps ecoule:" + intTempsEcoule);
+	        System.out.println("Magasins: " + intNbMagasinVisites + "/" + 
+	            obtenirNombreJetonsDisponibles(tJetonsMagasins, intTempsEcoule));
+	        System.out.println("Minijeu: " + intNbMiniJeuJoues + "/" + 
+	            obtenirNombreJetonsDisponibles(tJetonsMiniJeu, intTempsEcoule));
+		    System.out.println("Pointage: " + intPointage);
+		    
+		    System.out.print("Liste objets: ");
+	        if (lstObjetsUtilisablesRamasses.size() > 0)
+	        {
+
+		        Set lstEnsembleObjets = lstObjetsUtilisablesRamasses.entrySet();
+		        Iterator objIterateurListeObjets = lstEnsembleObjets.iterator();
+		        int i = 0;
+		        	        
+		        while (objIterateurListeObjets.hasNext())
+		        {
+		        	ObjetUtilisable objObjet = (ObjetUtilisable)(((Map.Entry)(objIterateurListeObjets.next())).getValue());
+		        	
+		        	if (i > 0)
+		        	{
+		        		System.out.print(", ");
+		        	}
+		        	
+		        	if (objObjet instanceof Reponse)
+		        	{
+		        		System.out.print("Reponse");
+		        	}
+		        	System.out.print("(" + objObjet.obtenirId() + ")");
+		        	i++;
+		        }
+		        System.out.println("");
+	        }
+	        else
+	        {
+	        	System.out.println("Aucun objet");
+	        }
+	        
+	        System.out.println("Position du joueur: " + objPositionJoueur.x + "," + 
+	            objPositionJoueur.y);        
+	        System.out.println("Position trouvee: " + objPositionTrouvee.x + "," + 
+	            objPositionTrouvee.y);           
+	        System.out.println("Position a atteindre: " + objPositionFinaleVisee.x + "," + 
+	            objPositionFinaleVisee.y);
+	        TestJoueurVirtuel.outputPlateau(objttPlateauJeu);
+        }
         //--------------------------------
         
         return objPositionTrouvee;
+
+	}
+	
+	/* Cette fonction permet d'attribuer de l'importance à une case en
+	 * lui attribuant des points
+	 *
+	 * ptCase: La case à traiter
+	 *
+	 * pointCase: Le pointage à ajouter à la case
+	 *
+	 * pointAleatoire: on ajoute entre [0, pointAleatoire[ au pointage, 
+	 *                 ce qui ajoute un élément aléatoire
+	 *
+	 * limitDistance: On enlève un nombre de points par coup de distance, 
+	 *                limité à limitDistance, ce qui permet d'attirer le 
+	 *                joueur virtuel vers des cases importantes même si
+	 *                elles sont très loin (empêche les points négatifs)
+	 *
+	 * pointDistance: Nombre de points qu'on décrémente par coup de distance
+	 *
+	 * ttPointsRegion: Un tableau contenant les informations pour 
+	 *                 ajouter un nombre de points aux cases adjacentes, 
+	 *                 ce qui permet de valoriser les regroupements de cases
+	 *                 importantes
+	 *
+	 * deplacementMoyen: Le déplacement moyen du joueur virtuel, trouvé
+	 *                   selon son niveau de difficulté
+	 * 
+	 * dblFacteurAdj: Un facteur d'ajustement pour les points ajoutés
+	 *                via ttPointsRegion, normalement à 1, on le met 
+	 *                entre 0 et 1 si on veut rendre moins important la
+	 *                case, et à 0 si on ne veut pas ajouter de points
+	 *                aux cases adjacentes
+	 */ 
+	private void attribuerImportanceCase(Point ptCase, int pointCase, 
+	    int pointAleatoire, int limitDistance, int pointDistance, 
+	    int[][] ttPointsRegion, double deplacementMoyen,
+	    double dblFacteurAdj)
+	{
+
+        int x = ptCase.x;
+        int y = ptCase.y;
+        
+        // Point en cours d'analyse
+        Point ptTemp = ptCase;
+
+        // Autre point en cours d'analyse
+        Point ptTemp2 = new Point(0,0);
+        
+        // Chemin entre le joueur et une case importante analysée
+        Vector lstChemin;
+        
+        // Cette variable contiendra le nombre de coups estimé pour se rendre
+        // à la case en cours d'analyse
+        double dblDistance;
+        
+        // Déplacement moyen, contient le nombre de cases que l'on peut
+        // s'attendre à franchir par coup (prend en compte niveau de
+        // difficulté)
+        double dblDeplacementMoyen = deplacementMoyen;
+        
+        // Ce facteur d'éloignement sert à considérer l'éloingement
+        // de la case lorsqu'on attribue des points aux cases adjacentes
+        double dblFacteurEloignement = 1.0; 
+        
+        // Cette case augmente d'environ pointCase +pointAleatoire/2 
+        // le pointage
+        matPoints[x][y] += pointCase + genererNbAleatoire(pointAleatoire);
+    
+        // On va trouver le chemin le plus court
+        lstChemin = trouverCheminPlusCourt(objPositionJoueur, ptTemp);
+        
+        if (lstChemin == null)
+        {
+            // Une case inaccessible ne doit pas être choisie
+            matPoints[x][y] = ParametreIA.POINTS_IGNORER_CASE;
+        }
+        else
+        {
+            // On a un chemin qui contient chaque case, maintenant, on
+            // va trouver, pour ce chemin, le nombre de coups estimé
+            // pour le parcourir, et ce, en prenant en compte le niveau
+            // de difficulté
+            // TODO:Prendre en compte nombre de croches
+            dblDistance = lstChemin.size() / dblDeplacementMoyen;
+            
+
+            // Pour permettre de quand même prioriser les cases
+            // lointaines, on va limiter le nombre de coups
+            // ce qui enlèvera un maximum de points pour une case lointaine
+            // et évitera les pointages négatifs
+            if (dblDistance > limitDistance)
+            {
+                dblDistance = limitDistance;
+            }
+            
+            // Plus la case est loin, plus son pointage diminue
+            // On enlève pointDistance points par coup
+            matPoints[x][y] -= (int) (pointDistance * dblDistance + .5);
+
+            // Calculer le facteur d'éloignement pour les cases adjacents
+            dblFacteurEloignement = ((double)pointCase - pointDistance * dblDistance) / pointCase;
+            
+            if (dblFacteurEloignement <= 0)
+            {
+            	dblFacteurEloignement = ParametreIA.FACTEUR_AJUSTEMENT_MIN;
+            }
+            
+            // Cette case étant accessible, on va augmenter les
+            // points des cases aux alentours pour attirer
+            // le joueur virtuel vers des regroupements de cases
+            // importantes
+            int intBorneI = ttPointsRegion.length - 1;
+            int intBorneJ = ttPointsRegion[0].length - 1;
+            
+            for (int i = -intBorneI; i <= intBorneI; i++)
+            {
+                for (int j = -intBorneJ; j <= intBorneJ; j++)
+                {
+                    ptTemp2.x = x + i;
+                    ptTemp2.y = y + j;
+                    
+                    if (ptTemp2.x >= 0 && ptTemp2.x < intNbLignes &&
+                        ptTemp2.y >=0 && ptTemp2.y < intNbColonnes &&
+                        objttPlateauJeu[ptTemp2.x][ptTemp2.y] != null)  
+                    {
+                        matPoints[ptTemp2.x][ptTemp2.y] += ttPointsRegion[intBorneI - Math.abs(i)][Math.abs(j)] * dblFacteurAdj * dblFacteurEloignement;
+                    }  
+                } 
+            }
+        }
 
 	}
 	
@@ -674,18 +956,6 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		
 		// Position trouvée par l'algorithme
 		Point objPositionTrouvee = null;
-		
-        // Tableau contenant une référence vers le plateau de jeu
-        Case objttPlateauJeu[][] = objTable.obtenirPlateauJeuCourant();
-        
-        // Obtenir le nombre de lignes et de colonnes du plateau de jeu
-        int intNbLignes = objttPlateauJeu.length;
-        int intNbColonnes = objttPlateauJeu[0].length;
-
-        // Déclaration d'une matrice qui contiendra un pointage pour chaque
-        // case du plateau de jeu, ce qui permettra de choisir le meilleur
-        // coup à jouer
-        int matPoints[][] = new int[intNbLignes][intNbColonnes];
 
         // Cette variable contiendra le nombre de coups estimé pour se rendre
         // à la case en cours d'analyse
@@ -703,21 +973,32 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         // Déplacement moyen, contient le nombre de cases que l'on peut
         // s'attendre à franchir par coup (prend en compte niveau de
         // difficulté)
-        double dblDeplacementMoyen = obtenirDeplacementMoyen();
+        double dblDeplacementMoyen = objParametreIA.tDeplacementMoyen[intNiveauDifficulte];
         
-        // Ce tableau contiendra les 5 cases les plus intéressantes
-        Point tPlusGrand[] = new Point[5];
+        // Ce tableau contiendra les cases les plus intéressantes
+        Point tPlusGrand[] = new Point[ParametreIA.NOMBRE_CHOIX_ALTERNATIF];
         
-        // Ce tableau contient des paramètres pour prioriser les
-        // regroupement de pièces
-        int[][] ttPointsRegion = 
-                    {{ 10, 10,  0,  0,  0,  0,  0}, 
-                     { 20, 15, 10  ,0,  0,  0,  0},
-                     { 50, 30, 15, 10,  0,  0,  0},
-                     {100, 75, 30, 15, 10,  0,  0},
-                     {200,150, 75, 30, 15, 10,  0},
-                     {400,300,150, 75, 30, 15, 10},
-                     {500,400,200,100, 50, 20, 10}};
+        // Variable qui indiquera à l'algorithme s'il faut considérer
+        // les minis-jeu. On considère les minis-jeu s'il y a un jeton de
+        // disponible
+        boolean bolConsidererMiniJeu = determinerPretAJouerMiniJeu();
+        
+        // Variable qui indiquera à l'algorithme s'il faut considérer
+        // les magasins. 
+        boolean bolConsidererMagasin = determinerPretAVisiterMagasin();
+        
+        //Variables pour calcul des points pour objets et pièces
+		int intPointsObjet;
+		int intPointsEnleverNb;
+		int intPointsEnleverDistance;
+		int intPointsAleat;
+		int intDistanceMax;
+
+        // Variable qui contiendra après calcul les points pour une case
+        int intPointsCase;
+                    		
+        // Facteur d'ajustement pour les regroupements de pièces
+        double dblFacteurAdj;
                
         // Initialiser la matrice
         for (int x = 0; x < intNbLignes; x++)
@@ -725,10 +1006,13 @@ public class JoueurVirtuel extends Joueur implements Runnable {
             for (int y = 0; y < intNbColonnes; y++)
             {
                 // Pointage de départ (environ 0)
-                matPoints[x][y] = -50 + genererNbAleatoire(101);
+                matPoints[x][y] = ParametreIA.POINTS_BASE_CASE_COULEUR + 
+                    genererNbAleatoire(ParametreIA.POINTS_ALEATOIRE_CASE_COULEUR);
             }
         }
-        
+
+        // Parcourir toutes les cases du plateau et leur attribuer
+        // un pointage
         for (int x = 0; x < intNbLignes; x++)
         {
             for (int y = 0; y < intNbColonnes; y++)
@@ -739,7 +1023,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
                 if (objPositionJoueur.x == x && objPositionJoueur.y == y)
                 {
                     // La position courante du joueur ne doit pas être choisie
-                    matPoints[x][y] = -999999999;
+                    matPoints[x][y] = ParametreIA.POINTS_IGNORER_CASE;
                 }
                 else
                 {
@@ -748,65 +1032,126 @@ public class JoueurVirtuel extends Joueur implements Runnable {
                     if (objttPlateauJeu[x][y] == null)
                     {
                         // Une case nulle ne doit pas être chosie
-                        matPoints[x][y] = -999999999;
+                        matPoints[x][y] = ParametreIA.POINTS_IGNORER_CASE;
                     }
-                    else if(objttPlateauJeu[x][y] instanceof CaseCouleur && 
+                    
+                    
+                    // Objets
+                    else if (objttPlateauJeu[x][y] instanceof CaseCouleur && 
+                        ((CaseCouleur)objttPlateauJeu[x][y]).obtenirObjetCase() instanceof ObjetUtilisable &&
+                        lstObjetsUtilisablesRamasses.size() < intNbObjetsMax)
+                    {
+                    	// Ici, dépendamment de l'objet, on peut lui attribuer
+                    	// un pointage différent.
+                    	// TODO: Prendre en compte objets déjà ramassés
+                    	//       pour par exemple diminuer les pointages
+                    	//       pour les objets qu'on possède déjà
+                    	
+                    	// Obtenir une référence à l'objet sur la case
+                    	ObjetUtilisable objObjet = (ObjetUtilisable)((CaseCouleur)objttPlateauJeu[x][y]).obtenirObjetCase();
+                    	
+                    	// Le joueur virtuel ne voit pas les objets invisibles
+                    	if (objObjet.estVisible() && determinerPretARamasserObjet(objObjet.obtenirUniqueId()))
+                    	{
+                    		// Aller chercher l'UID de l'objet
+                    		int uidObjet = objObjet.obtenirUniqueId();
+                    		
+                    		// Aller chercher les paramètres pour cet objet
+                    		intPointsObjet = objParametreIA.tParametresIAObjetUtilisable[uidObjet].intValeurPoints;
+                    		intPointsEnleverNb = objParametreIA.tParametresIAObjetUtilisable[uidObjet].intPointsEnleverQuantite;
+                    		intPointsEnleverDistance = objParametreIA.tParametresIAObjetUtilisable[uidObjet].intPointsEnleverDistance;
+                    		intPointsAleat = objParametreIA.tParametresIAObjetUtilisable[uidObjet].intValeurAleatoire;
+                    		intDistanceMax = objParametreIA.tParametresIAObjetUtilisable[uidObjet].intMaxDistance;
+
+
+                		    // Plus on possède d'objet, moins cette
+                		    // case est importante
+                		    intPointsCase = intPointsObjet - intPointsEnleverNb * nombreObjetsPossedes(uidObjet);
+                		    
+                		    // On va aussi diminuer l'influence sur les
+                		    // cases autour de celle-ci
+	                    	dblFacteurAdj = intPointsCase / intPointsObjet;
+	                    	if (dblFacteurAdj <= 0.00)
+	                    	{
+	                    		dblFacteurAdj = ParametreIA.FACTEUR_AJUSTEMENT_MIN; 
+	                    	}
+	                    	
+	                    	// Attribuer les points pour l'objet Reponse
+                		    attribuerImportanceCase(ptTemp, intPointsCase, intPointsAleat, 
+                		        intDistanceMax, intPointsEnleverDistance, 
+                		        objParametreIA.ttPointsRegionPiece, 
+                		        dblDeplacementMoyen, dblFacteurAdj);
+                		    
+
+                    	}
+                    }
+                    
+                    
+                    // Pièces
+                    else if (objttPlateauJeu[x][y] instanceof CaseCouleur && 
                         ((CaseCouleur)objttPlateauJeu[x][y]).obtenirObjetCase() instanceof Piece)
                     {
+
+                        intPointsObjet = objParametreIA.objParametreIAPiece.intValeurPoints;
+                        intPointsEnleverDistance = objParametreIA.objParametreIAPiece.intPointsEnleverDistance;
+                        intPointsAleat = objParametreIA.objParametreIAPiece.intValeurAleatoire;
+                        intDistanceMax = objParametreIA.objParametreIAPiece.intMaxDistance;
                         
-                        // Une pièce augmente d'environ 5000 le pointage
-                        matPoints[x][y] += 4950 + genererNbAleatoire(101);
+                        //objParametreIAObjetPiece;
+                        attribuerImportanceCase(ptTemp, intPointsObjet, intPointsAleat, 
+                             intDistanceMax, intPointsEnleverDistance, 
+                             objParametreIA.ttPointsRegionPiece, 
+                             dblDeplacementMoyen, 1.0);
+                        
+                    }
                     
-                        // On va trouver le chemin le plus court
-                        lstChemin = trouverCheminPlusCourt(objPositionJoueur, ptTemp);
-                        
-                        if (lstChemin == null)
-                        {
-                            // Une case inaccessible ne doit pas être choisie
-                            matPoints[x][y] = -999999999;
-                        }
-                        else
-                        {
-                            // On a un chemin qui contient chaque case, maintenant, on
-                            // va trouver, pour ce chemin, le nombre de coups estimé
-                            // pour le parcourir, et ce, en prenant en compte le niveau
-                            // de difficulté
-                            // TODO:Prendre en compte nombre de croches
-                            dblDistance = lstChemin.size() / dblDeplacementMoyen;
-                            
-
-                            // Pour permettre de quand même prioriser les pièces
-                            // lointaines, on va limiter le nombre de coups
-                            // ce qui enlèvera 4800 points pour une pièce lointaine
-                            if (dblDistance > 6)
-                            {
-                                dblDistance = 6;
-                            }
-                            
-                            // Plus la pièce est loin, plus son pointage diminue
-                            // On enlève 800 points par coup
-                            matPoints[x][y] -= (int) (800 * dblDistance + .5);
-
-                            // Cette pièce étant accessible, on va augmenter les
-                            // points des cases aux alentours pour attirer
-                            // le joueur virtuel vers des regroupements de pièces
-                            for (int i = -6; i <= 6; i++)
-                            {
-                                for (int j = -6; j <= 6; j++)
-                                {
-                                    ptTemp2.x = x + i;
-                                    ptTemp2.y = y + j;
-                                    
-                                    if (ptTemp2.x >= 0 && ptTemp2.x < intNbLignes &&
-                                        ptTemp2.y >=0 && ptTemp2.y < intNbColonnes &&
-                                        objttPlateauJeu[ptTemp2.x][ptTemp2.y] != null)  
-                                    {
-                                        matPoints[ptTemp2.x][ptTemp2.y] += ttPointsRegion[6 - Math.abs(i)][Math.abs(j)];
-                                    }  
-                                } 
-                            }
-                        }
-                        
+                    // Magasins
+                    else if(objttPlateauJeu[x][y] instanceof CaseCouleur && 
+                        ((CaseCouleur)objttPlateauJeu[x][y]).obtenirObjetCase() instanceof Magasin &&
+                        bolConsidererMagasin == true &&
+                        !lstMagasinsVisites.contains(((CaseCouleur)objttPlateauJeu[x][y]).obtenirObjetCase()))
+                    {
+                    	// Plus le joueur virtuel possède d'objets, moins il est
+                    	// important d'aller visiter un magasin
+                    	intPointsCase = objParametreIA.objParametreIAMagasin.intValeurPoints;
+                    	
+                    	// On enlève les points par objets possédés
+                    	intPointsCase -= lstObjetsUtilisablesRamasses.size() * ParametreIA.PTS_ENLEVER_MAGASIN_NB_OBJETS;
+                    	
+                    	dblFacteurAdj = intPointsCase / objParametreIA.objParametreIAMagasin.intValeurPoints;
+                    	if (dblFacteurAdj <= 0.00)
+                    	{
+                    		dblFacteurAdj = ParametreIA.FACTEUR_AJUSTEMENT_MIN; 
+                    	}
+                    	
+                    	attribuerImportanceCase(ptTemp, intPointsCase, 
+                    	    objParametreIA.objParametreIAMagasin.intValeurAleatoire, 
+                    	    objParametreIA.objParametreIAMagasin.intMaxDistance, 
+                    	    objParametreIA.objParametreIAMagasin.intPointsEnleverDistance, 
+                    	    objParametreIA.ttPointsRegionPiece, 
+                    	    dblDeplacementMoyen, dblFacteurAdj);
+                    }
+                    
+                    // Mini-jeu
+                    else if(objttPlateauJeu[x][y] instanceof CaseSpeciale)
+                    {
+                    	// Attribuer un pointage à la case de MiniJeu
+                    	if (bolConsidererMiniJeu == true)
+                    	{
+                    		attribuerImportanceCase(ptTemp, 
+                    		    objParametreIA.objParametreIAMinijeu.intValeurPoints, 
+                    		    objParametreIA.objParametreIAMinijeu.intValeurAleatoire, 
+                    		    objParametreIA.objParametreIAMinijeu.intMaxDistance, 
+                    		    objParametreIA.objParametreIAMinijeu.intPointsEnleverDistance, 
+                    		    objParametreIA.ttPointsRegionPiece, 
+                    		    dblDeplacementMoyen, 1.0);
+                    	}
+                    	else
+                    	{
+                    		// On veut s'assurer que le joueur virtuel
+                    		// ne tombe pas sur cette case
+                    		matPoints[x][y] = ParametreIA.POINTS_IGNORER_CASE;
+                    	}
                     }
                 }
 
@@ -814,7 +1159,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
             }
         }
          
-         // On va maintenant trouver les 5 meilleurs déplacements
+         // On va maintenant trouver les meilleurs déplacements
         for (int x = 0; x < intNbLignes; x++)
         {
             for (int y = 0; y < intNbColonnes; y++)
@@ -822,7 +1167,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
                 // Gestion de la liste des 5 plus grands
                 // On ajoute la case qu'on est en train de parcourir dans la liste
                 // des 5 plus grands pointage si elle est digne d'y être
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < ParametreIA.NOMBRE_CHOIX_ALTERNATIF; i++)
                 {
                     if (tPlusGrand[i] == null)
                     {
@@ -832,7 +1177,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
                     else if (matPoints[x][y] > matPoints[tPlusGrand[i].x][tPlusGrand[i].y])
                     {
                         // Tout décaler vers la droite
-                        for (int j = 4; j > i; j--)
+                        for (int j = ParametreIA.NOMBRE_CHOIX_ALTERNATIF-1; j > i; j--)
                         {
                         	if (tPlusGrand[j-1] != null)
                         	{
@@ -860,7 +1205,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 
         // Maintenant, on rend le joueur virtuel faillible et on fait en sorte
         // qu'il ne choisisse pas toujours le meilleur choix
-        int intDifferenceMax = obtenirNombrePointsMaximumChoixFinal();
+        int intDifferenceMax = objParametreIA.tNombrePointsMaximalChoixFinal[intNiveauDifficulte];
         
         // Nombre de choix possible qui ne dépasse pas la limite de intDifferenceMax
         int intNombreChoix = 1;
@@ -884,7 +1229,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         // selon la différence maximum calculée (qui tient compte du niveau
         // de difficulté)
         intValeurMax = tPourcentageChoix[0];
-        for (int i = 1; i < 5; i ++)
+        for (int i = 1; i < ParametreIA.NOMBRE_CHOIX_ALTERNATIF; i ++)
         {
         	if (matPoints[tPlusGrand[i].x][tPlusGrand[i].y] < 0 || 
         	    matPoints[tPlusGrand[i].x][tPlusGrand[i].y] < 
@@ -915,45 +1260,37 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         }
 
         // Déterminer la raison
-        intRaisonPositionFinale = RAISON_AUCUNE;
+        intRaisonPositionFinale = ParametreIA.RAISON_AUCUNE;
         if (objttPlateauJeu[tPlusGrand[intDecision].x][tPlusGrand[intDecision].y] instanceof CaseCouleur)
         {
         	if (((CaseCouleur)objttPlateauJeu[tPlusGrand[intDecision].x][tPlusGrand[intDecision].y]).obtenirObjetCase() instanceof Piece)
         	{
-        		intRaisonPositionFinale = RAISON_PIECE;
+        		intRaisonPositionFinale = ParametreIA.RAISON_PIECE;
         	}
+        	
+        	else if (((CaseCouleur)objttPlateauJeu[tPlusGrand[intDecision].x][tPlusGrand[intDecision].y]).obtenirObjetCase() instanceof Magasin)
+        	{
+        		intRaisonPositionFinale = ParametreIA.RAISON_MAGASIN;
+        	}
+        	
+        	if (((CaseCouleur)objttPlateauJeu[tPlusGrand[intDecision].x][tPlusGrand[intDecision].y]).obtenirObjetCase() instanceof ObjetUtilisable)
+        	{
+        		ObjetUtilisable objObjet = (ObjetUtilisable)((CaseCouleur)objttPlateauJeu[tPlusGrand[intDecision].x][tPlusGrand[intDecision].y]).obtenirObjetCase();
+                   
+        		if (objObjet.estVisible())
+        		{
+        			intRaisonPositionFinale = ParametreIA.RAISON_OBJET;
+        		}
+        	}
+        }
+        else if (objttPlateauJeu[tPlusGrand[intDecision].x][tPlusGrand[intDecision].y] instanceof CaseSpeciale)
+        {
+        	intRaisonPositionFinale = ParametreIA.RAISON_MINIJEU;
         }
         
         // Retourner la position trouvée     
         objPositionTrouvee = new Point(tPlusGrand[intDecision].x, tPlusGrand[intDecision].y);
         return objPositionTrouvee;
-		
-		/*	
-		// Choisir la case aléatoirement
-		int x, y;
-        int nbLignes = objTable.obtenirPlateauJeuCourant().length;
-        int nbColonnes = objTable.obtenirPlateauJeuCourant()[0].length;
-		
-		Boolean bolTerminee = false;
-		while (bolTerminee == false)
-		{
-            x = genererNbAleatoire(nbLignes);
-            y = genererNbAleatoire(nbColonnes);
-		    
-            //System.out.println("Dimension du plateau : " + nbLignes + "," + nbColonnes);
-		    //System.out.println("Position random: " + x + "," + y); 
-		     
-		    if (objTable.obtenirPlateauJeuCourant()[x][y] != null && x != objPositionJoueur.x &&
-		        objPositionJoueur.y != y)
-		    {
-		    	objPositionTrouvee = new Point(x, y);
-		        bolTerminee = true;
-		    }
-		        
-		}
-        return objPositionTrouvee;
-        */
-
 	}
 
       
@@ -964,111 +1301,144 @@ public class JoueurVirtuel extends Joueur implements Runnable {
      */
     private void deplacerJoueurVirtuelEtMajPlateau(Point objNouvellePosition)
     {
-        String collision = "";
-                
-        // Déclaration d'une référence vers l'objet ramassé
-        ObjetUtilisable objObjetRamasse = null;
+    	
+    	String reponse = "";
+    	
+		RetourVerifierReponseEtMettreAJourPlateauJeu objRetour =
+		    InformationPartie.verifierReponseEtMettreAJourPlateauJeu(reponse, objNouvellePosition, this);
+    	
+    	Case objCaseDestination = objTable.obtenirPlateauJeuCourant()[objNouvellePosition.x][objNouvellePosition.y];
         
-        // Déclaration d'une référence vers l'objet subi
-        ObjetUtilisable objObjetSubi = null;
+        ObjetUtilisable objObjetRamasse = objRetour.obtenirObjetRamasse();
         
-        // Faire la référence vers la case de destination
-        Case objCaseDestination = objTable.obtenirPlateauJeuCourant()[objNouvellePosition.x][objNouvellePosition.y];
-            
-        // Le pointage est initialement celui courant
-        int intNouveauPointage = intPointage;   
-            
-        // Calculer le nouveau pointage du joueur (on ajoute la difficulté 
-        // de la question au pointage)
-        intNouveauPointage += obtenirPointage(objPositionJoueur, objNouvellePosition);
-        
-        // Si la case de destination est une case de couleur, alors on 
-        // vérifie l'objet qu'il y a dessus et si c'est un objet utilisable, 
-        // alors on l'enlève et on le donne au joueur virtuel, sinon si c'est une 
-        // pièce on l'enlève et on met à jour le pointage, sinon 
-        // on ne fait rien
-        if (objCaseDestination instanceof CaseCouleur)
+        if (ccDebug)
         {
-            // Faire la référence vers la case de couleur
-            CaseCouleur objCaseCouleurDestination = (CaseCouleur) objCaseDestination;
-                    
-            // S'il y a un objet sur la case, alors on va faire l'action 
-            // tout dépendant de l'objet (pièce, objet utilisable ou autre)
-            if (objCaseCouleurDestination.obtenirObjetCase() != null)
-            {
-                // Si l'objet est un objet utilisable, alors on l'ajoute à 
-                // la liste des objets utilisables du joueur virtuel
-                if (objCaseCouleurDestination.obtenirObjetCase() instanceof ObjetUtilisable)
-                {
-                    // Faire la référence vers l'objet utilisable
-                    ObjetUtilisable objObjetUtilisable = (ObjetUtilisable) objCaseCouleurDestination.obtenirObjetCase();
-                    
-                    // Garder la référence vers l'objet utilisable pour l'ajouter à l'objet de retour
-                    objObjetRamasse = objObjetUtilisable;
-                    
-                    // Ajouter l'objet ramassé dans la liste des objets du joueur virtuel
-                    lstObjetsUtilisablesRamasses.put(new Integer(objObjetUtilisable.obtenirId()), objObjetUtilisable);
-                    
-                    // Enlever l'objet de la case du plateau de jeu
-                    objCaseCouleurDestination.definirObjetCase(null);
-                }
-                else if (objCaseCouleurDestination.obtenirObjetCase() instanceof Piece)
-                {
-                    // Faire la référence vers la pièce
-                    Piece objPiece = (Piece) objCaseCouleurDestination.obtenirObjetCase();
-                    
-                    // Mettre à jour le pointage du joueur virtuel
-                    intNouveauPointage += objPiece.obtenirValeur();
-                    
-                    // Enlever la pièce de la case du plateau de jeu
-                    objCaseCouleurDestination.definirObjetCase(null);
-                    
-                    collision = "piece";
-                    
-
-                    
-                    // TODO: Il faut peut-être lancer un algo qui va placer 
-                    //       les pièces sur le plateau de jeu s'il n'y en n'a
-                    //       plus
-                }
-
-            }
-            
-            // S'il y a un objet à subir sur la case, alors on va faire une
-            // certaine action (TODO: à compléter)
-            if (objCaseCouleurDestination.obtenirObjetArme() != null)
-            {
-                // Faire la référence vers l'objet utilisable
-                ObjetUtilisable objObjetUtilisable = (ObjetUtilisable) objCaseCouleurDestination.obtenirObjetArme();
-                
-                // Garder la référence vers l'objet utilisable à subir
-                objObjetSubi = objObjetUtilisable;
-                
-                //TODO: Faire une certaine action au joueur virtuel
-                
-                // Enlever l'objet subi de la case
-                objCaseCouleurDestination.definirObjetArme(null);
-            }
-            
-        }
-        else
-        { 
-            //TODO: Émuler mini-jeu
-        }
-                
-        synchronized (objTable.obtenirListeJoueurs())
-        {
-            // Préparer l'événement de deplacement de personnage. 
-            // Cette fonction va passer les joueurs et créer un 
-            // InformationDestination pour chacun et ajouter l'événement 
-            // dans la file de gestion d'événements
-            preparerEvenementJoueurVirtuelDeplacePersonnage(collision, objNouvellePosition);                
+        	System.out.println("Nouvelle position: "  + objPositionJoueur.x + "," + 
+	            objPositionJoueur.y);
         }
         
-        // Mettre à jour pointage et position du joueur virtuel
-        objPositionJoueur = objNouvellePosition;
-        intPointage = intNouveauPointage;
+        if (objCaseDestination instanceof CaseSpeciale)
+        {
+        	// Émulation du mini-jeu
+        	
+        	// Pour l'instant, il n'y a qu'un type de mini-jeu, donc
+            // on ne lui fait jouer que balle-au-mur
+        	int intTypeMiniJeu = ParametreIA.MINIJEU_BALLE_AU_MUR;
+        	
+        	// On détermine le temps que va passer le joueur à jouer
+        	int intTempsJeu = determinerTempsJeuMiniJeu(intTypeMiniJeu);
+        	
+        	// On s'assure que ce temps ne dépasse pas le temps restant
+        	if (intTempsJeu > (objTable.obtenirTempsRestant() - ParametreIA.TEMPS_SURETE_MINIJEU_FIN_PARTIE))
+        	{
+        		intTempsJeu = objTable.obtenirTempsRestant() - ParametreIA.TEMPS_SURETE_MINIJEU_FIN_PARTIE;
+        	}
+        	
+        	if (intTempsJeu < 0)
+        	{
+        		intTempsJeu = 0;
+        	}
+        	
+        	// On détermine le nombre de points que le joueur virtuel
+        	// fera selon le temps pris pour jouer
+        	int intPointsJeu = determinerPointsJeuMiniJeu(intTypeMiniJeu, intTempsJeu);
 
+        	//---------------------------------------
+        	if (ccDebug)
+        	{
+        		System.out.println("Début du mini jeu");
+        	    System.out.println("Temps="+intTempsJeu);
+        	    System.out.println("Points="+intPointsJeu);
+        	}
+        	//----------------------------------------
+        	
+        	// On fait une pause pour le laisser jouer
+        	pause(intTempsJeu);
+        	
+        	// On incrémente les points du joueur virtuel
+        	intPointage += intPointsJeu;
+        	
+        	// On incrémente le compteur de mini-jeu
+        	intNbMiniJeuJoues++;
+    	}
+    	else if (objCaseDestination instanceof CaseCouleur &&
+    	    ((CaseCouleur)objCaseDestination).obtenirObjetCase() instanceof Magasin)
+    	{
+   		
+   		    // Temps de pause pour que le joueur virtuel
+   		    // pense à ce qu'il achète
+            int intTempsReflexion = 0;
+            
+            // Décision d'acheter quelque chose ou non
+    		boolean bolDecision;
+    		
+    		// Aller chercher une référence vers le magasin
+    		Magasin objMagasin = (Magasin)((CaseCouleur)objCaseDestination).obtenirObjetCase();
+    		
+    		// Aller chercher une référence vers la liste d'objets
+    		Vector lstObjetsMagasins = objMagasin.obtenirListeObjetsUtilisables();
+    		
+    		// Si le magasin ne possède aucun item, si le joueur
+    		// virtuel a atteint sa limit d'objets ou si le magasin
+    		// est dans la liste des magasins à ne pas visiter, alors le 
+    		// temps de réflexion est de 0 et la décision est de ne 
+    		// rien acheter
+    		if (lstObjetsMagasins.size() >= 0 && 
+    		    lstObjetsUtilisablesRamasses.size() < intNbObjetsMax &&
+    		    !lstMagasinsVisites.contains(objMagasin))
+    		{
+    			intTempsReflexion = obtenirTempsReflexionAchat();
+    			
+	    		// TODO: Décider si le joueur virtuel achète
+	    		//       un objet; selon quels objets sont disponibles,
+	    		//       leur prix et l'inventaire du joueur. Peut aussi
+	    		//       prendre en considération l'utilité de l'objet
+	    		//       selon l'état de la partie si l'effet de l'objet
+	    		//       a des restrictions
+	    		bolDecision = false;
+
+    		}
+    		else
+    		{
+    			intTempsReflexion = 0;
+    			bolDecision = true;
+    		}
+    		
+    		pause(intTempsReflexion);
+    		
+    		// On incrément le compteur de magasin visités
+    		intNbMagasinVisites++;
+    		
+    		// Ajouter ce magasin à la liste des magasins déjà visités
+    		if (!lstMagasinsVisites.contains(objMagasin))
+    		{
+    			lstMagasinsVisites.add(objMagasin);
+    		}
+    		
+        	//---------------------------------------
+        	if (ccDebug)
+        	{
+        		System.out.println("Magasin visite");
+            }
+        	//----------------------------------------
+    	}
+    	
+    	if (objObjetRamasse instanceof Reponse)
+    	{
+    		if (ccDebug)
+    		{
+    			System.out.println("Objet ramasse: Reponse");
+    		}
+    	}
+    	
+    	if (objRetour.obtenirCollision().equals("piece"))
+    	{
+    		if (ccDebug)
+    		{
+    			System.out.println("Objet ramasse: Piece");
+    		}
+    	}
+ 
     }
     
     /*
@@ -1076,39 +1446,23 @@ public class JoueurVirtuel extends Joueur implements Runnable {
      */
     private void preparerEvenementJoueurVirtuelDeplacePersonnage( String collision, Point objNouvellePosition )
     {
+        objTable.preparerEvenementJoueurDeplacePersonnage(strNom, collision, objPositionJoueur, 
+            objNouvellePosition);
 
-        EvenementJoueurDeplacePersonnage joueurDeplacePersonnage = new EvenementJoueurDeplacePersonnage(strNom, objPositionJoueur, objNouvellePosition, collision );
-        
-        // Créer un ensemble contenant tous les tuples de la liste 
-        // des joueurs de la table (chaque élément est un Map.Entry)
-        Set lstEnsembleJoueurs = objTable.obtenirListeJoueurs().entrySet();
-        
-        // Obtenir un itérateur pour l'ensemble contenant les joueurs
-        Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
-        
-        // Passer tous les joueurs de la table et leur envoyer un événement
-        while (objIterateurListe.hasNext() == true)
-        {
-            // Créer une référence vers le joueur humain courant dans la liste
-            JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
-
-            // Créer un InformationDestination et l'ajouter à l'événement
-            joueurDeplacePersonnage.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
-                                                                                             objJoueur.obtenirProtocoleJoueur()));
-        }
-        
-        // Ajouter le nouvel événement créé dans la liste d'événements à traiter
-        objGestionnaireEv.ajouterEvenement(joueurDeplacePersonnage);
     }
     
 
 
     private int genererNbAleatoire(int max)
     {
-        //return objRandom.nextInt(max);
         return objControleurJeu.genererNbAleatoire(max);
     }
     
+    
+    public void definirPointage(int valeur)
+    {
+        intPointage = valeur;
+    }
     
     public void definirPositionJoueurVirtuel(Point pos)
     {
@@ -1123,7 +1477,15 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     {
     	try
     	{
-    	    Thread.sleep(nbSecondes * 1000);
+    		if (!ccFast)
+    		{
+    	        Thread.sleep(nbSecondes * 1000);
+    	    }
+    	    else
+    	    {
+    	    	Thread.sleep(500);
+    	    }
+    	    
     	}
     	catch(InterruptedException e)
     	{ 
@@ -1136,7 +1498,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
      * Cette fonction retourne le pointage d'un déplacement
      *
      */
-    private int obtenirPointage(Point ptFrom, Point ptTo)
+    public int obtenirPointage(Point ptFrom, Point ptTo)
     {
     	if (ptFrom.x == ptTo.x)
     	{
@@ -1148,6 +1510,73 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     	}
     }
     
+    
+    /* Cette fonction de service utilisée dans l'algorithme de recherche
+     * de position permet d'éliminer une case du choix, si par exemple, 
+     * on ne veut pas diriger le joueur virtuel sur un minijeu, on
+     * enlève cette case du choix
+     */
+    private void traiterCaseEliminerDansLigne(int intPourcentageCase[], int indiceCase)
+    {
+    	// On va éliminer la case dans les pourcentages puis
+    	// remettre le tout sur 100
+        int intDenominateur = 0;
+        
+        for (int i = 0; i < ParametreIA.DEPLACEMENT_MAX; i++)
+        {
+        	if (i != indiceCase)
+        	{
+        		intDenominateur += intPourcentageCase[i];
+        	}
+        }
+        
+        // On élinie la case ici
+        intPourcentageCase[indiceCase] = 0;
+        
+        // On repondère car le total n'est plus 100
+        for (int i = 0; i < ParametreIA.DEPLACEMENT_MAX; i++)
+        {
+        	if (i != indiceCase)
+        	{
+        		intPourcentageCase[i] = intPourcentageCase[i] * 100 / intDenominateur;
+        	}
+        }
+        
+        // On s'assure que le total est bien de 100
+        int intTotal = 0;
+        for (int i = 0; i < ParametreIA.DEPLACEMENT_MAX; i++)
+        {
+        	intTotal += intPourcentageCase[i];
+        }
+        
+        if (intTotal < 100)
+        {
+        	// Ajouter au prochaine indice != 0 ce qui manque
+        	for (int j = 0; j < ParametreIA.DEPLACEMENT_MAX; j++)
+        	{
+        		if (intPourcentageCase[j] > 0)
+        		{
+        			intPourcentageCase[j] += 100 - intTotal;
+        			break;
+        		}
+        	}
+        }
+        else if (intTotal > 100)
+        {
+        	// Enlever au prochaine indice != 0 ce qui a de trop
+        	for (int j = 0; j < ParametreIA.DEPLACEMENT_MAX; j++)
+        	{
+        		if (intPourcentageCase[j] > 0)
+        		{
+        			intPourcentageCase[j] -= intTotal - 100;
+        			break;
+        		}
+        	}	
+        }
+        
+    }
+    
+    
     /* 
      * Fonction de service utilisée dans l'algorithme de recherche de 
      * position qui permet de modifier les pourcentages du choix à faire.
@@ -1158,9 +1587,9 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     private void traiterPieceTrouveeDansLigne(int tPourcentageCase[], int indice)
     {
     	int x;
-    	if (indice + 1 <= DEPLACEMENT_MAX - 1 && indice >= 0)
+    	if (indice + 1 <= ParametreIA.DEPLACEMENT_MAX - 1 && indice >= 0)
     	{
-    	    for(x = indice + 1; x <= DEPLACEMENT_MAX - 1; x++)
+    	    for(x = indice + 1; x <= ParametreIA.DEPLACEMENT_MAX - 1; x++)
     	    {
     	    	tPourcentageCase[indice] += tPourcentageCase[x];
     	    	tPourcentageCase[x] = 0;
@@ -1168,7 +1597,26 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     	
     	}
     }
-
+    public GestionnaireEvenements obtenirGestionnaireEvenements()
+    {
+    	return objGestionnaireEv;
+    }
+    
+    public Point obtenirPositionJoueur()
+    {
+    	return objPositionJoueur;
+    }
+    
+    public TreeMap obtenirListeObjetsRamasses()
+    {
+    	return lstObjetsUtilisablesRamasses;
+    }
+    
+    public Table obtenirTable()
+    {
+    	return objTable;
+    }
+    
     public int obtenirIdPersonnage()
     {
     	return intIdPersonnage;
@@ -1202,80 +1650,42 @@ public class JoueurVirtuel extends Joueur implements Runnable {
      */
     private int[] obtenirPourcentageChoix()
     {
-        int intPourcentageCase[] = new int[DEPLACEMENT_MAX];
         
-        switch (intNiveauDifficulte)
+        int tTableauSource[][];
+        
+        // Déterminer dans quel tableau on va chercher les pourcentages
+        // de choix. Si le joueur possède l'objet réponse, il va choisir
+        // des choix plus difficile car l'objet va l'aider
+        if (nombreObjetsPossedes(Objet.UID_OU_REPONSE) > 0)
         {
-            case DIFFICULTE_FACILE:
-                intPourcentageCase[0] = 50;
-                intPourcentageCase[1] = 30;
-                intPourcentageCase[2] = 19;
-                intPourcentageCase[3] = 1;
-                intPourcentageCase[4] = 0;
-                intPourcentageCase[5] = 0;                  
-                break;
-                
-            case DIFFICULTE_MOYEN:
-                intPourcentageCase[0] = 5;
-                intPourcentageCase[1] = 19;
-                intPourcentageCase[2] = 40;
-                intPourcentageCase[3] = 25;
-                intPourcentageCase[4] = 10;
-                intPourcentageCase[5] = 1;  
-                break;
-                
-            case DIFFICULTE_DIFFICILE:
-                intPourcentageCase[0] = 0;
-                intPourcentageCase[1] = 5;
-                intPourcentageCase[2] = 15;
-                intPourcentageCase[3] = 40;
-                intPourcentageCase[4] = 30;
-                intPourcentageCase[5] = 10;  
-                break;
+        	tTableauSource = objParametreIA.tPourcentageChoixObjetReponse;
+        }
+        else
+        {
+        	tTableauSource = objParametreIA.tPourcentageChoix;
+        }
+        
+        int intPourcentageCase[] = new int[ParametreIA.DEPLACEMENT_MAX];
+        for (int i = 0; i < ParametreIA.DEPLACEMENT_MAX; i++)
+        {
+        	intPourcentageCase[i] = tTableauSource[intNiveauDifficulte][i];
         }
         
         return intPourcentageCase;
+ 
     }
-    
-    /* Cette fonction permet d'obtenir un tableau qui indique, pour chaque grandeur
-     * de déplacement, le pourcentage de réussite à la question. Ce pourcentage est
-     * basé sur le niveau de difficulté du joueur virtuel
+       
+    /* Cette fonction permet d'obtenir le temps de réflexion d'un joueur
+     * virtuel pour penser à son achat dans un magasin. Ce temps est basé 
+     * sur le niveau de difficulté du joueur virtuel et comprend un élément 
+     * aléatoire.
      */
-    private int[] obtenirPourcentageReponse()
+    private int obtenirTempsReflexionAchat()
     {
-        int intPourcentageCase[] = new int[DEPLACEMENT_MAX];
         
-        switch (intNiveauDifficulte)
-        {
-            case DIFFICULTE_FACILE:
-                intPourcentageCase[0] = 90;
-                intPourcentageCase[1] = 80;
-                intPourcentageCase[2] = 60;
-                intPourcentageCase[3] = 10;
-                intPourcentageCase[4] = 0;
-                intPourcentageCase[5] = 0;                  
-                break;
-                
-            case DIFFICULTE_MOYEN:
-                intPourcentageCase[0] = 95;
-                intPourcentageCase[1] = 90;
-                intPourcentageCase[2] = 85;
-                intPourcentageCase[3] = 50;
-                intPourcentageCase[4] = 30;
-                intPourcentageCase[5] = 15;  
-                break;
-                
-            case DIFFICULTE_DIFFICILE:
-                intPourcentageCase[0] = 100;
-                intPourcentageCase[1] = 95;
-                intPourcentageCase[2] = 90;
-                intPourcentageCase[3] = 80;
-                intPourcentageCase[4] = 70;
-                intPourcentageCase[5] = 60;  
-                break;
-        }
-        
-        return intPourcentageCase;
+        return objParametreIA.tTempsReflexionBase[ParametreIA.TYPE_REFLEXION_ACHAT][intNiveauDifficulte] + 
+            genererNbAleatoire(objParametreIA.tTempsReflexionAleatoire[ParametreIA.TYPE_REFLEXION_ACHAT][intNiveauDifficulte]);
+
     }
     
     /* Cette fonction permet d'obtenir le temps de réflexion d'un joueur
@@ -1284,24 +1694,10 @@ public class JoueurVirtuel extends Joueur implements Runnable {
      */
     private int obtenirTempsReflexionCoup()
     {
-        int intTemps = 0;
         
-        switch (intNiveauDifficulte)
-        {
-            case DIFFICULTE_FACILE:  
-                intTemps = 3 + genererNbAleatoire(4);           
-                break;
-                
-            case DIFFICULTE_MOYEN:
-                intTemps = 2 + genererNbAleatoire(3); 
-                break;
-                
-            case DIFFICULTE_DIFFICILE:
-                intTemps = 1 + genererNbAleatoire(2); 
-                break; 
-        }
-        
-        return intTemps;
+        return objParametreIA.tTempsReflexionBase[ParametreIA.TYPE_REFLEXION_COUP][intNiveauDifficulte] + 
+            genererNbAleatoire(objParametreIA.tTempsReflexionAleatoire[ParametreIA.TYPE_REFLEXION_COUP][intNiveauDifficulte]);
+
     }
     
     
@@ -1311,76 +1707,11 @@ public class JoueurVirtuel extends Joueur implements Runnable {
      */
     private int obtenirTempsReflexionReponse()
     {
-        int intTemps = 0;
         
-        switch (intNiveauDifficulte)
-        {
-            case DIFFICULTE_FACILE: 
-                intTemps = 24 + genererNbAleatoire(12);           
-                break;
-                
-            case DIFFICULTE_MOYEN:
-                intTemps = 16 + genererNbAleatoire(10); 
-                break;
-                
-            case DIFFICULTE_DIFFICILE:
-                intTemps = 8 + genererNbAleatoire(8); 
-                break; 
-        }
-        
-        return intTemps;
-    }
-    
-    /* Cette fonction permet de savoir si le joueur virtuel répondra correctement
-     * à la question. En paramètre, la grandeur du déplacement que le joueur virtuel
-     * demande.
-     */
-    private boolean obtenirValiditeReponse(int grandeurDeplacement)
-    {
-        int intPourcentageReponse[] = obtenirPourcentageReponse();
-        
-        if (grandeurDeplacement < 1 || grandeurDeplacement > DEPLACEMENT_MAX)
-        {
-            return false;
-        }
-        
-        // Générer un nombre aléatoire
-        int intValeurAleatoire = genererNbAleatoire(100)+1;
-        
-        if (intValeurAleatoire <= intPourcentageReponse[grandeurDeplacement - 1])
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-        
-    }
-    
-    /* Cette fonction obtient le nombre de cases que le joueur virtuel franchira
-     * en moyenne selon son niveau de difficulté.
-     * NOTE: Pré-calculé et hard-codé selon les pourcentages de choix et de réussites
-     *       pour les différentes grandeurs de déplacements
-     */
-    private double obtenirDeplacementMoyen()
-    {
-        
-        switch (intNiveauDifficulte)
-        {
-            case DIFFICULTE_FACILE: 
-                return 1.276;          
-                
-            case DIFFICULTE_MOYEN:
-                return 2.0685;
-                
-            case DIFFICULTE_DIFFICILE:
-                return 3.19;
-        }
-
-        return 1;
-    }
-    
+        return objParametreIA.tTempsReflexionBase[ParametreIA.TYPE_REFLEXION_REPONSE][intNiveauDifficulte] + 
+            genererNbAleatoire(objParametreIA.tTempsReflexionAleatoire[ParametreIA.TYPE_REFLEXION_REPONSE][intNiveauDifficulte]);
+    }   
+       
     /* Cette fonction retourne le temps en secondes que dure un déplacement
      * de joueur selon le nombre de cases du déplacement.
      */
@@ -1395,63 +1726,19 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     		return nombreCase - 1;
     	}
     }
-    
-    /* Cette fonction retourne le nombre de points maximum qu'un joueur
-     * virtuel peut négliger lors du choix de la position finale
-     */
-    private int obtenirNombrePointsMaximumChoixFinal()
-    {
-        switch (intNiveauDifficulte)
-        {
-            case DIFFICULTE_FACILE: 
-                return 2000;          
-                
-            case DIFFICULTE_MOYEN:
-                return 1000;
-                
-            case DIFFICULTE_DIFFICILE:
-                return 400;
-        }
-
-        return 0;
-    }
      
     /* Cette fonction retourne un tableau contenant les pourcentages pour les 
      * choix alternatifs de positions finales selon le niveau de difficulté
      */
     private int[] obtenirPourcentageChoixAlternatifFinal()
     {
-		int intPourcentageChoix[] = new int[5];
+		int intPourcentageChoix[] = new int[ParametreIA.NOMBRE_CHOIX_ALTERNATIF];
 	    	
-		switch (intNiveauDifficulte)
-		{
-		    case DIFFICULTE_FACILE:
-		        intPourcentageChoix[0] = 70;
-		        intPourcentageChoix[1] = 20;
-		        intPourcentageChoix[2] = 5;
-		        intPourcentageChoix[3] = 4;
-		        intPourcentageChoix[4] = 1; 
-		        break;
-		        
-		    case DIFFICULTE_MOYEN:
-		        intPourcentageChoix[0] = 80;
-		        intPourcentageChoix[1] = 17;
-		        intPourcentageChoix[2] = 2;
-		        intPourcentageChoix[3] = 1;
-		        intPourcentageChoix[4] = 0; 
-		        break;
-		        
-		    case DIFFICULTE_DIFFICILE:
-		        intPourcentageChoix[0] = 90;
-		        intPourcentageChoix[1] = 8;
-		        intPourcentageChoix[2] = 2;
-		        intPourcentageChoix[3] = 0;
-		        intPourcentageChoix[4] = 0;  
-
-		        break;
-		}
-		
-		return intPourcentageChoix;
+	    for (int i = 0; i < ParametreIA.NOMBRE_CHOIX_ALTERNATIF; i++)
+	    {
+	    	intPourcentageChoix[i] = objParametreIA.tPourcentageChoixAlternatifFinal[intNiveauDifficulte][i];
+	    }
+	    return intPourcentageChoix;
     }
     
     /* Cette fonction permet de savoir si c'est le temps de calculer 
@@ -1462,7 +1749,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
      * - Le joueur a atteint la position qu'il visait
      * - L'état de la case visée a changé (l'objet a disparu)
      */
-    private boolean reviserPositioinFinaleVisee()
+    private boolean reviserPositionFinaleVisee()
     {
     	// Vérifier si aucune position trouvée
     	if (objPositionFinaleVisee == null)
@@ -1483,14 +1770,14 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         // Vérifier si l'état de la case a changé
         switch (intRaisonPositionFinale)
         {
-        	case RAISON_AUCUNE: 
+        	case ParametreIA.RAISON_AUCUNE: 
         	
 	        	// Aucune raison = erreur en général, donc on va recalculer
 	            // une position finale
 	            return true;
 
             
-        	case RAISON_PIECE:
+        	case ParametreIA.RAISON_PIECE:
         	
 	        	// Vérifier si la pièce a été capturée
 	    	    if (((CaseCouleur)objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y]).obtenirObjetCase() == null)
@@ -1500,7 +1787,32 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    	    else
 	    	    {
 	    	    	return false;
-	    	    }    
+	    	    }
+	    	
+	    	case ParametreIA.RAISON_MINIJEU:
+	    	
+	    	    // Vérifier si encore prêt pour un minijeu
+	    	    return !determinerPretAJouerMiniJeu();
+	    	    
+	    	case ParametreIA.RAISON_MAGASIN:
+	    	    
+	    	    // Vérifier si encore prêt à visiter un magasin
+	    	    return !determinerPretAVisiterMagasin();
+	    	    
+	    	case ParametreIA.RAISON_OBJET:
+	    	
+	    	    // Vérifier si l'objet a été capturé et si encore prêt
+	    	    // à ramasser l'objet
+	    	    if (((CaseCouleur)objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y]).obtenirObjetCase() == null ||
+	    	        determinerPretARamasserObjet(((ObjetUtilisable)((CaseCouleur)objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y]).obtenirObjetCase()).obtenirUniqueId()) == false)
+	    	    {
+	    	    	return true;
+	    	    }
+	    	    else
+	    	    {
+	    	    	return false;
+	    	    }
+	    	        
         }
         
         // Dans les autres cas, ce n'est pas nécessaire de rechercher
@@ -1509,4 +1821,500 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         return false;
 
     }
+ 
+    /* Cette fonction détermine le nombre de points que fera un 
+     * joueur virtuel en jouant à un mini-jeu dépendamment du temps qu'il
+     * y met
+     */
+    private int determinerPointsJeuMiniJeu(int intTypeMiniJeu, int intTempsMiniJeu)
+    {
+    	// Le temps pour les calculs
+    	double dblTempsCalcul = 0.0;
+    	
+    	// Le pointage obtenu
+    	int intPointsJeu = 0;
+    	
+    	// Un petit délai au début de la partie
+    	double dblDelaiDepart = 0.0;
+    	
+    	// Un délai additionnel, pour ball-au-mur, correspond au temps du
+    	// dernier coup qui lui, ne donne pas de points
+    	double dblDelaiAdditionnel = 0.0;
+    	
+        switch(intTypeMiniJeu)
+        {
+        	case ParametreIA.MINIJEU_BALLE_AU_MUR:
+        	    
+        	    // Délai de départ de 0 à 2 secondes
+        	    dblDelaiDepart = objControleurJeu.genererNbAleatoire(3);
+        	    
+                // Trouver le temps de jeu pour le calcul
+                dblTempsCalcul = (double)intTempsMiniJeu - dblDelaiDepart;
+
+                // Trouver le temps additionnel
+        	    if (dblTempsCalcul > 125.0)
+        	    {
+        	    	dblDelaiAdditionnel = 0.5;
+        	    }
+        	    else if (dblTempsCalcul > 68.0)
+        	    {
+        	    	dblDelaiAdditionnel = 1.0;
+        	    }
+        	    else if (dblTempsCalcul > 50.0)
+        	    {
+        	    	dblDelaiAdditionnel = 2.0;
+        	    }
+        	    else if (dblTempsCalcul > 32)
+        	    {
+        	    	dblDelaiAdditionnel = 3.0;
+        	    }
+        	    else if (dblTempsCalcul > 20)
+        	    {
+        	    	dblDelaiAdditionnel = 4.0;
+        	    }
+        	    else
+        	    {
+        	    	dblDelaiAdditionnel = 5.0;
+        	    }
+        	    
+        	    // Modifier le temps de calcul selon le temps additionnel
+        	    dblTempsCalcul -= dblDelaiAdditionnel; 
+                
+                if (dblTempsCalcul < 0.0)
+                {
+                	dblTempsCalcul = 0.0;
+                }   	    
+                
+        	    // Dépendamment du temps pris à jouer, trouver le
+        	    // nombre de points que fera le joueur
+        	    if (dblTempsCalcul >= 125.5)
+        	    {
+        	    	intPointsJeu = (int)(79 + (dblTempsCalcul - 125) * 2);
+        	    }
+        	    else if (dblTempsCalcul >= 69.0)
+        	    {
+        	    	intPointsJeu = (int)(22 + (dblTempsCalcul - 68));
+        	    }
+        	    else if (dblTempsCalcul >= 52.0)
+        	    {
+        	    	intPointsJeu = (int)(13 + (dblTempsCalcul - 50) * 0.5);
+        	    }
+        	    else if (dblTempsCalcul >= 35)
+        	    {
+        	    	intPointsJeu = (int)(7 + (dblTempsCalcul - 32) / 3);
+        	    }
+        	    else if (dblTempsCalcul >= 24)
+        	    {
+        	    	intPointsJeu = (int)(4 + (dblTempsCalcul - 20) * 0.25);
+        	    }
+        	    else
+        	    {
+        	    	intPointsJeu = (int)(dblTempsCalcul * 0.2);
+        	    }
+
+				break;
+		}
+		
+		if (intPointsJeu < 0)
+		{
+			intPointsJeu = 0;
+		}
+		
+    	return intPointsJeu;
+    }
+    
+    
+    /* Cette fonction détermine le temps que jouera le joueur virtuel
+     * au mini-jeu. Ce temps permettra de connaître le nombre de points
+     * qu'il fera pendant le jeu.
+     */
+    private int determinerTempsJeuMiniJeu(int intTypeMiniJeu)
+    {
+    	// Un temps minimal que l'on donne au joueur pour ce jeu
+    	int intMinimum = 0;
+    	
+    	// Un temps maximal que l'on donne au joueur pour ce jeu
+    	int intMaximum = 0;
+    	
+    	// La valeur moyenne de la loi normale
+    	double dblMoyenne = 0.0;
+    	
+    	// La variance de la loi normale
+    	double dblVariance = 0.0;
+    	
+    	// La valeur à retourner
+    	int intTemps;
+    	       
+    	switch(intTypeMiniJeu)
+        {
+        	case ParametreIA.MINIJEU_BALLE_AU_MUR:
+        	
+				switch (intNiveauDifficulte)
+				{
+				    case ParametreIA.DIFFICULTE_FACILE:
+				        intMinimum = 24;
+				        intMaximum = 86;
+				        dblMoyenne = 47.00;
+				        dblVariance = 100.00;
+				        break;
+				        
+				    case ParametreIA.DIFFICULTE_MOYEN:
+				        intMinimum = 71;
+				        intMaximum = 135;
+				        dblMoyenne = 31.00;
+				        dblVariance = 225.00;
+				        break;
+				        
+				    case ParametreIA.DIFFICULTE_DIFFICILE: 
+				        intMinimum = 91;
+				        intMaximum = 190;
+				        dblMoyenne = 39.50;
+				        dblVariance = 225.00;
+				        break;
+				}
+				break;
+		}
+		
+		
+		// Maintenant, faire le calcul
+		intTemps = intMinimum + UtilitaireNombres.genererNbAleatoireLoiNormale(dblMoyenne, dblVariance);
+		
+		if (intTemps > intMaximum)
+		{
+			intTemps = intMaximum;
+		}
+		else if (intTemps < intMinimum)
+		{
+			intTemps = intMinimum;
+		}
+		
+		return intTemps;
+    	
+    }
+    
+
+    // Pour tous les minijeus
+    private int obtenirTempsSureteMiniJeu()
+    {
+    	// Temps à la fin de la partie où le joueur ne doit pas
+    	// débuter un mini-jeu
+    	int intTempsSurete = 0;
+    	
+		switch (intNiveauDifficulte)
+		{
+		    case ParametreIA.DIFFICULTE_FACILE:
+    	        intTempsSurete = 80;
+		        break;
+		        
+		    case ParametreIA.DIFFICULTE_MOYEN:
+    	        intTempsSurete = 150;
+		        break;
+		        
+		    case ParametreIA.DIFFICULTE_DIFFICILE:
+    	        intTempsSurete = 240;
+		        break;
+		}	
+		
+		return intTempsSurete;
+    }
+    
+    /* Cette fonction va remplir le tableau tJetonsMagasins[] qui
+     * permettra aux joueurs virtuels de se servir des magasins, mais
+     * en limitant le nombre de fois qu'il s'en servira au cours
+     * de la partie
+     */
+    private void determinerJetonsMagasins()
+    {
+    	// Nombre de visite à l'heure
+    	int intNombreMagasins = 0;
+    	
+    	// Maintenant, on trouve le nombre de magasins que le joueur
+    	// virtuel visitera dans les prochaines 60 minutes
+		intNombreMagasins = objParametreIA.tNbJetonsMagasinBase[intNiveauDifficulte] + 
+		    objControleurJeu.genererNbAleatoire(objParametreIA.tNbJetonsMagasinAleatoire[intNiveauDifficulte]);
+
+		
+
+        // Obtenir le temps de la partie en minutes
+        int intTempsPartie = objTable.obtenirTempsTotal();
+        
+        // Obtenir un temps pour les calculs
+        int intTempsCalcul = (((int)(intTempsPartie / 61)) + 1) * 60;
+
+        // Obtenir le nombre de jetons à générer
+        int intNombreJetons = intTempsCalcul * intNombreMagasins / 60;
+        
+        // Initialiser le tableau pour contenir les jetons
+        tJetonsMagasins = new int[intNombreJetons];
+		
+        // Generer tous les jetons
+        for (int i = 0; i < intNombreJetons; i++)
+        {
+        	tJetonsMagasins[i] = objControleurJeu.genererNbAleatoire(intTempsCalcul * 60);
+        }
+    	
+        int intTempsSurete = ParametreIA.TEMPS_SURETE_MAGASIN;
+    	int intTempsMax = intTempsPartie * 60 - intTempsSurete;
+    	
+    	// Déplacer en arrière les jetons dans les dernières X secondes
+    	for (int i = 0; i < intNombreJetons; i++)
+    	{
+    		if (tJetonsMagasins[i] >= intTempsMax && tJetonsMagasins[i] < intTempsPartie * 60)
+    		{
+    			tJetonsMagasins[i] -= intTempsSurete * 2;
+    		}
+    	}
+
+        if (ccDebug)
+	    {  
+	        System.out.print("Jetons magasins: ");
+	    	for (int i = 0; i < intNombreJetons ; i++)
+	    	{
+	    		if (i > 0)
+	    		{
+	    			System.out.print(", ");
+	    		}
+	    		System.out.print(tJetonsMagasins[i]);
+	    	}
+	    	System.out.println("");
+	    }
+    }
+    
+    /* Cette fonction va remplir le tableau tJetonsMiniJeu[] qui
+     * permettra aux joueurs virtuels de jouer à des mini-jeux, mais
+     * en limitant le nombre de fois qu'il jouera au cours de la partie
+     */    
+    private void determinerJetonsMiniJeu()
+    {
+    	
+    	// Nombre de mini-jeu à l'heure
+    	int intNombreMiniJeu = 0;
+    	
+    	// Maintenant, on trouve le nombre de partie de minijeu que le
+    	// joueur virtuel fera pour les prochaines 60 minutes	
+		intNombreMiniJeu = objParametreIA.tNbJetonsMinijeuBase[intNiveauDifficulte] + 
+		    objControleurJeu.genererNbAleatoire(objParametreIA.tNbJetonsMinijeuAleatoire[intNiveauDifficulte]);
+
+        // Obtenir le temps de la partie en minutes
+        int intTempsPartie = objTable.obtenirTempsTotal();
+        
+        // Obtenir un temps pour les calculs
+        int intTempsCalcul = (((int)(intTempsPartie / 61)) + 1) * 60;
+
+        // Obtenir le nombre de jetons à générer
+        int intNombreJetons = intTempsCalcul * intNombreMiniJeu / 60;
+        
+        // Initialiser le tableau pour contenir les jetons
+        tJetonsMiniJeu = new int[intNombreJetons];
+        
+        // Generer tous les jetons
+        for (int i = 0; i < intNombreJetons; i++)
+        {
+        	tJetonsMiniJeu[i] = objControleurJeu.genererNbAleatoire(intTempsCalcul * 60);
+        }
+    	
+        int intTempsSurete = obtenirTempsSureteMiniJeu();
+    	int intTempsMax = intTempsPartie * 60 - intTempsSurete;
+    	
+    	// Déplacer en arrière les jetons dans les dernières X secondes
+    	for (int i = 0; i < intNombreJetons; i++)
+    	{
+    		if (tJetonsMiniJeu[i] >= intTempsMax && tJetonsMiniJeu[i] < intTempsPartie * 60)
+    		{
+    			tJetonsMiniJeu[i] -= intTempsSurete * 2;
+    		}
+    	}
+
+        if (ccDebug)
+        {
+        	System.out.print("Jetons minijeu: ");
+	    	for (int i = 0; i < intNombreJetons ; i++)
+	    	{
+	    		if (i > 0)
+	    		{
+	    			System.out.print(", ");
+	    		}
+	    		System.out.print(tJetonsMiniJeu[i]);
+	    	}
+	    	System.out.println("");
+    	}
+    }
+    
+    /* Cette fonction retourne le nombre de jetons disponibles
+     * d'un tableau de jetons en fonction du temps écoulé
+     */ 
+    private int obtenirNombreJetonsDisponibles(int tTableauJetons[], int intTempsEcoule)
+    {
+    	int intNombreJetonsDisponibles = 0;
+    	for (int i = 0; i < tTableauJetons.length; i++)
+    	{
+    		if (tTableauJetons[i] <= intTempsEcoule)
+    		{
+    			intNombreJetonsDisponibles++;
+    		}
+    	}
+    	
+    	return intNombreJetonsDisponibles;	
+    }
+    
+    /* Cette fonction permet à l'algorithme de recherche de position
+     * de déterminer s'il faut considérer les cases avec des
+     * objets comme des cases importantes, puisque leur utilisation
+     * risque d'être limité dans le temps, alors en fin de partie, on
+     * essaye de ne pas ramasser d'objets.
+     */
+    private boolean determinerPretARamasserObjet(int uidObjet)
+    {
+    	// Vérifier s'il reste assez de temps et que le joueur a de la place
+    	if (lstObjetsUtilisablesRamasses.size() >= intNbObjetsMax || 
+    		objTable.obtenirTempsRestant() <= objParametreIA.tParametresIAObjetUtilisable[uidObjet].intTempsSureteRamasser ||
+    	    nombreObjetsPossedes(uidObjet) >= objParametreIA.tParametresIAObjetUtilisable[uidObjet].intQuantiteMax)
+    	{
+    		return false;
+    	}	
+    	else
+    	{
+    		return true;
+    	}
+    }
+    
+    /* Cette fonction permet à l'algorithme de recherche de position
+     * finale de déterminer s'il doit considérer les cases magasins
+     * comme des cases importantes. On prend en compte le tableau
+     * tJetonsMagasins[], intNbMagasinVisites, le temps de la partie
+     * ainsi que les items que le joueur virtuel possède
+     */
+    private boolean determinerPretAVisiterMagasin()
+    {
+    	// Enlever ceci lorsqu'il y aura quelquechose à acheter
+    	// dans les magasins
+    	return false;
+    	
+   	    /*int intNombreJetonsDisponibles = 0;
+    	int intTempsEcoule = objTable.obtenirTempsTotal() * 60 - objTable.obtenirTempsRestant();
+    	
+    	// Vérifier d'abord s'il reste assez de temps
+    	if (objTable.obtenirTempsRestant() <= ParametreIA.TEMPS_SURETE_MAGASIN * 2)
+    	{
+    		return false;
+    	}
+    	
+    	// Si le joueur a atteint son quotas d'objets, alors
+    	// il ne visite plus de magasins
+    	if (lstObjetsUtilisablesRamasses.size() >= intNbObjetsMax)
+    	{
+    		return false;
+    	}
+    	
+    	intNombreJetonsDisponibles = obtenirNombreJetonsDisponibles(tJetonsMagasins, intTempsEcoule);
+    	
+    	// Enlever les magasins déjà jouées
+    	intNombreJetonsDisponibles -= intNbMagasinVisites;
+    	
+    	// S'il y a des jetons disponibles, on permet au joueur
+    	// virtuel de se déplacer vers un magasin
+    	if (intNombreJetonsDisponibles > 0)
+    	{
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}*/
+    }
+    
+    /* Cette fonction permet à l'algorithme de recherche de position
+     * finale de déterminer s'il doit considérer les cases minis-jeu
+     * comme des cases importantes. Pour ce faire, il faut prendre en
+     * considération le tableau tJetonsMiniJeu[], le nombre de minis-jeu
+     * déjà joués par le joueur virtuel dans cette partie et aussi le
+     * temps de la partie.
+     *
+     * Tout ça a pour but de limiter le nombre de mini-jeu que le
+     * joueur virtuel va jouer, faire en sorte que ce soit différent
+     * à chaque partie et aussi espacer les parties pour ne pas que le 
+     * joueur virtuel "bloque" lorsqu'il arrive sur une case mini-jeu,
+     * fait un va-et-vient et joue sans cesse sur cette case.
+     */
+    private boolean determinerPretAJouerMiniJeu()
+    {
+    	
+    	int intNombreJetonsDisponibles = 0;
+    	int intTempsEcoule = objTable.obtenirTempsTotal() * 60 - objTable.obtenirTempsRestant();
+    	
+    	// Vérifier d'abord s'il reste assez de temps
+    	if (objTable.obtenirTempsRestant() <= obtenirTempsSureteMiniJeu() * 2)
+    	{
+    		return false;
+    	}
+    	
+    	intNombreJetonsDisponibles = obtenirNombreJetonsDisponibles(tJetonsMiniJeu, intTempsEcoule);
+    	
+    	// Enlever les parties déjà jouées
+    	intNombreJetonsDisponibles -= intNbMiniJeuJoues;
+    	
+    	// S'il y a des jetons disponibles, on permet au joueur
+    	// virtuel de jouer sur une case mini-jeu
+    	if (intNombreJetonsDisponibles > 0)
+    	{
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
+
+    	
+    }
+    
+
+    private void enleverObjet(int uidObjet)
+    {
+        Set lstEnsembleObjets = lstObjetsUtilisablesRamasses.entrySet();
+        Iterator objIterateurListeObjets = lstEnsembleObjets.iterator();
+        int i = 0;
+        	        
+        while (objIterateurListeObjets.hasNext())
+        {
+        	ObjetUtilisable objObjet = (ObjetUtilisable)(((Map.Entry)(objIterateurListeObjets.next())).getValue());
+        	
+        	if (objObjet.obtenirUniqueId() == uidObjet)
+        	{
+        		lstObjetsUtilisablesRamasses.remove(objObjet.obtenirId());
+        		break;
+        	}
+        	
+        	i++;
+        }
+    }
+    
+    
+    /* Cette fonction calcule le nombre d'objets que le joueur
+     * virtuel possède du type uidObjet
+     */
+    private int nombreObjetsPossedes(int uidObjet)
+    {
+    	int intNbObjets = 0;
+    	
+        if (lstObjetsUtilisablesRamasses.size() > 0)
+        {
+
+	        Set lstEnsembleObjets = lstObjetsUtilisablesRamasses.entrySet();
+	        Iterator objIterateurListeObjets = lstEnsembleObjets.iterator();
+	        	        
+	        while (objIterateurListeObjets.hasNext())
+	        {
+	        	ObjetUtilisable objObjet = (ObjetUtilisable)(((Map.Entry)(objIterateurListeObjets.next())).getValue());
+	        	
+	        	if (objObjet.obtenirUniqueId() == uidObjet)
+	        	{
+	        		intNbObjets++;
+	        	}
+	        }
+
+        }
+        
+        return intNbObjets;
+    }
 }
+

@@ -245,6 +245,13 @@ public class JoueurHumain extends Joueur
 		intCleJoueur = cle;
 	}
 
+	
+	public void enleverObjet(int intIdObjet, String strTypeObjet)
+	{
+		objPartieCourante.enleverObjet(intIdObjet, strTypeObjet);
+	}
+
+
 	public String obtenirCleNiveau() 
 	{
 		return cleNiveau;

@@ -1,6 +1,7 @@
 package ServeurJeu.ComposantesJeu;
 
 import Enumerations.TypeQuestion;
+import ClassesUtilitaires.UtilitaireNombres;
 
 /**
  * @author Jean-François Brind'Amour
@@ -103,6 +104,50 @@ public class Question
 		return strReponse.toUpperCase().replace(".",",").equals(reponse.toUpperCase());
 	}
 	
+	
+	/**
+	 * Cette fonction retourne une mauvaise réponse. Utilisé lorsqu'un
+	 * joueur utilise l'objet "Reponse" qui permet d'éliminer un choix
+	 * de réponse. Dans le cas d'une question sans choix de réponse, la 
+	 * fonction retourne "PasUnChoixDeReponse"
+	 */
+	 public String obtenirMauvaiseReponse()
+	 {
+	 	// Vérifier si la réponse est un choix de réponse
+	 	if (strReponse.toUpperCase().equals("A") ||
+	 	    strReponse.toUpperCase().equals("B") ||
+	 	    strReponse.toUpperCase().equals("C") ||
+	 	    strReponse.toUpperCase().equals("D") )
+	 	{
+	 		// Choisir aléatoirement une mauvaise réponse
+	 	    int arrShuffle[] = {0,1,2,3};
+	 	    for (int x = 1; x < 10; x++)
+	 	    {
+	 	    	int a = UtilitaireNombres.genererNbAleatoire(4);
+	 	    	int b = UtilitaireNombres.genererNbAleatoire(4);
+	 	    	
+	 	    	int temp = arrShuffle[a];
+	 	    	arrShuffle[a] = arrShuffle[b];
+	 	    	arrShuffle[b] = temp;
+	 	    }
+	 	    for (int x = 1; x < 4; x++)
+	 	    {
+	 	    	Character c = new Character((char)(arrShuffle[x] + 65));
+	 	    	String strMauvaiseReponse = c.toString();
+	 	    	if (!strMauvaiseReponse.equals(strReponse.toUpperCase()))
+	 	    	{
+	 	    		return strMauvaiseReponse;
+	 	    	}
+	 	    }	 
+	 	    
+	 	    return "Erreur";		
+	 	}
+	 	else
+	 	{
+	 		return "PasUnChoixDeReponse";
+	 	}
+	 }
+	 
 	/**
 	 * Cette fonction retourne le URL de l'explication de la réponse à la 
 	 * question courante.

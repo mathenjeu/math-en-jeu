@@ -393,7 +393,7 @@ public final class GenerateurPartie
 
 				// Si le nom du magasin est Magasin1, alors on met un objet 
 				// Magasin1 sur la case, sinon on fait le même genre de 
-				// vérifications pour les autres types de agasins
+				// vérifications pour les autres types de magasins
 				if (objReglesMagasin.obtenirNomMagasin().equals("Magasin1"))
 				{
 					// Définir la valeur de la case au point spécifié à la case 
@@ -492,7 +492,7 @@ public final class GenerateurPartie
 				{
 					bolEstVisible = false;
 				}
-				// Si l'objet est doit avoir une visibilité aléatoire, alors 
+				// Si l'objet doit avoir une visibilité aléatoire, alors 
 				// on va générer un nombre aléatoire qui va donner soit true 
 				// soit false
 				else
@@ -511,7 +511,7 @@ public final class GenerateurPartie
 
 				// Si le nom de l'objet est Reponse, alors on met un objet 
 				// Reponse sur la case, sinon on fait le même genre de 
-				// vérifications pour les autres types de agasins
+				// vérifications pour les autres types de magasins
 				if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Reponse"))
 				{
 					// Définir la valeur de la case au point spécifié à la case 

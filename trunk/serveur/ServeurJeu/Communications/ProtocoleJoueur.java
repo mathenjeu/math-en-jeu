@@ -515,6 +515,9 @@ public class ProtocoleJoueur implements Runnable
                             // qui se reconnecte
                             envoyerPlateauJeu(objAncientJoueurHumain);
                             
+                            // envoyer le pointage au joueur
+                            envoyerPointage(objAncientJoueurHumain);
+                            
                             // Envoyer la liste des items du joueur qui
                             // se reconnecte
                             envoyerItemsJoueurDeconnecte(objAncientJoueurHumain);
@@ -1489,7 +1492,7 @@ public class ProtocoleJoueur implements Runnable
 				{
 					// Obtenir la réponse du joueur
 					String strReponse = obtenirValeurParametre(objNoeudCommandeEntree, "Reponse").getNodeValue();
-					System.out.println( "la reponse est : " + strReponse );
+					
 					// Si le joueur n'est pas connecté au serveur de jeu, alors il
 					// y a une erreur
 					if (objJoueurHumain == null)
@@ -1618,7 +1621,7 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudCommande.appendChild(objNoeudParametrePointage);
 					}
 				}
-				else if( objNoeudCommandeEntree.getAttribute("nom").equals(Commande.Pointage) )
+				else if(objNoeudCommandeEntree.getAttribute("nom").equals(Commande.Pointage))
 				{
                     // Obtenir pointage
 					int pointage = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "Pointage").getNodeValue());
@@ -1673,7 +1676,12 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudCommande.appendChild(objNoeudParametrePointage);
 					}
 				}
+				else if(objNoeudCommandeEntree.getAttribute("nom").equals(Commande.UtiliserObjet))
+				{
+					traiterCommandeUtiliserObjet(objNoeudCommandeEntree, objNoeudCommande, objDocumentXMLEntree, objDocumentXMLSortie, bolDoitRetournerCommande);
+				}
 			}
+
 		}
 		
 		Moniteur.obtenirInstance().fin();
@@ -2470,7 +2478,10 @@ public class ProtocoleJoueur implements Runnable
     /*
      * Permet d'envoyer la liste des joueurs à un joueur qui rejoint une partie
      * La liste inclut le joueur qui rejoint la partie car il doit connaître
-     * quel avatar il avait.
+     * quel avatar il avait. À noter que ce message est différent de envoyer
+     * liste des joueurs pour une table, il faut aussi envoyer les joueurs 
+     * virtuels et s'envoyer soi-même (?) pour que le joueur qui se reconnecte
+     * sache quel avatar il avait choisit
      */
     private void envoyerListeJoueurs(JoueurHumain ancientJoueur)
     {
@@ -2614,6 +2625,61 @@ public class ProtocoleJoueur implements Runnable
                             
     }
     
+    /*
+     * Permet d'envoyer le pointage à un joueur qui se reconnecte
+     */
+    private void envoyerPointage(JoueurHumain ancientJoueur)
+    {
+    	
+		/*
+		 * <commande nom="Pointage" no="0" type="MiseAJour">
+		 * <parametre type="Pointage" valeur="123"></parametre></commande>
+		 *
+		 */ 
+        
+		// Déclaration d'une variable qui va contenir le code XML à envoyer
+		String strCodeXML = "";
+		 
+		// Appeler une fonction qui va créer un document XML dans lequel
+		// on peut ajouter des noeuds
+		Document objDocumentXML = UtilitaireXML.obtenirDocumentXML();
+		 
+		// Créer le noeud de commande à retourner
+		Element objNoeudCommande = objDocumentXML.createElement("commande");
+		
+		// Créer le noeud du paramètre
+		Element objNoeudParametre = objDocumentXML.createElement("parametre");
+
+		// Envoyer une liste des joueurs
+		objNoeudCommande.setAttribute("type", "MiseAJour");
+		objNoeudCommande.setAttribute("nom", "Pointage");
+		
+		objNoeudParametre.setAttribute("type", "Pointage");	
+		objNoeudParametre.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirPointage()));
+
+		// Ajouter le noeud paramètre au noeud de commande dans
+		// le document de sortie
+		objNoeudCommande.appendChild(objNoeudParametre);
+		
+		// Ajouter le noeud de commande au noeud racine dans le document
+		objDocumentXML.appendChild(objNoeudCommande);
+		
+    	try
+    	{
+    	
+	    	// Transformer le XML en string
+	    	strCodeXML = ClassesUtilitaires.UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+	    	
+	    	// Envoyer le message string
+	    	envoyerMessage(strCodeXML);
+	    }
+	    catch(Exception e)
+	    {
+	    	objLogger.error(e.getMessage());
+	    }
+		 
+		
+    }
     
     /*
      * Permet d'envoyer la liste des items d'un joueur qui rejoint une partie
@@ -2642,7 +2708,7 @@ public class ProtocoleJoueur implements Runnable
 
 		// Envoyer une liste des items
 		objNoeudCommande.setAttribute("type", "MiseAJour");
-		objNoeudCommande.setAttribute("nom", "ListeItems");
+		objNoeudCommande.setAttribute("nom", "ListeObjets");
 		
 		// Créer le noeud pour le paramètre contenant la liste
 		// des items à retourner
@@ -2650,7 +2716,7 @@ public class ProtocoleJoueur implements Runnable
 		
 		// On ajoute un attribut type qui va contenir le type
 		// du paramètre
-		objNoeudParametreListeItems.setAttribute("type", "ListeItems");
+		objNoeudParametreListeItems.setAttribute("type", "ListeObjets");
 		
 	    // Obtenir la liste des items du joueur déconnecté
 		TreeMap lstListeItems = ancientJoueur.obtenirPartieCourante().obtenirListeObjets();
@@ -2674,11 +2740,14 @@ public class ProtocoleJoueur implements Runnable
 			ObjetUtilisable objItem = (ObjetUtilisable)(((Map.Entry)(objIterateurListeItems.next())).getValue());
 			
 		    // Créer le noeud de la table courante
-			Element objNoeudItem = objDocumentXML.createElement("item");
+			Element objNoeudItem = objDocumentXML.createElement("objet");
 			
 			// On ajoute un attribut id qui va contenir le 
 			// numéro identifiant l'item
 			objNoeudItem.setAttribute("id", Integer.toString(objItem.obtenirId()));
+			
+			// On ajoute le type de l'item
+			objNoeudItem.setAttribute("type", objItem.getClass().getSimpleName());
 							    
 			// Ajouter le noeud de l'item au noeud du paramètre
 			objNoeudParametreListeItems.appendChild(objNoeudItem);
@@ -2707,5 +2776,94 @@ public class ProtocoleJoueur implements Runnable
 	    	objLogger.error(e.getMessage());
 	    }
     }
-    
+
+    /*
+     * Cette fonction permet de traiter le message "utiliserObjet"
+     */
+    private void traiterCommandeUtiliserObjet(Element objNoeudCommandeEntree, Element objNoeudCommande, Document objDocumentXMLEntree, Document objDocumentXMLSortie, boolean bolDoitRetournerCommande)
+    {
+		// Obtenir le type de l'objet a utilisé
+		String strTypeObjet = obtenirValeurParametre(objNoeudCommandeEntree, "type").getNodeValue();
+		
+		// Obtenir l'id de l'objet a utilisé
+		int intIdObjet = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "id").getNodeValue());
+		
+		// Si le joueur n'est pas connecté au serveur de jeu, alors il
+		// y a une erreur
+		if (objJoueurHumain == null)
+		{
+			// Le joueur ne peut pas utiliser un objet
+			// s'il n'est pas connecté au serveur de jeu
+			objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+		}
+		// Si le joueur n'est connecté à aucune salle, alors il ne 
+		// peut pas utiliser un objet
+		else if (objJoueurHumain.obtenirSalleCourante() == null)
+		{
+			// Le joueur ne peut pas utiliser un objet
+			// s'il n'est pas dans une salle
+			objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");
+		}
+		//TODO: Il va falloir synchroniser cette validation lorsqu'on va 
+		// avoir codé la commande SortirJoueurTable -> ça va ressembler au
+		// processus d'authentification
+		// Si le joueur n'est dans aucune table, alors il y a 
+		// une erreur
+		else if (objJoueurHumain.obtenirPartieCourante() == null)
+		{
+			// Le joueur ne peut pas utiliser un objet
+			// s'il n'est dans aucune table
+			objNoeudCommande.setAttribute("nom", "JoueurPasDansTable");
+		}
+		// Si la partie n'est pas commencée, alors il y a une erreur
+		else if (objJoueurHumain.obtenirPartieCourante().obtenirTable().estCommencee() == false)
+		{
+			// Le joueur ne peut pas utiliser un objet
+			// si la partie n'est pas commencée
+			objNoeudCommande.setAttribute("nom", "PartiePasDemarree");
+		}
+		else if(objJoueurHumain.obtenirPartieCourante().joueurPossedeObjet(intIdObjet) == false)
+		{
+			// Le joueur ne possède pas cet objet
+			objNoeudCommande.setAttribute("nom", "ObjetInvalide");
+		}
+		else
+		{		
+			// Dépendamment du type de l'objet, on effectue le traitement approprié
+			if (strTypeObjet.equals("Reponse"))
+			{
+				// Dans le cas de cet objet, il faut qu'une question ait été 
+				// posée
+                if (objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante() == null)
+                {
+                	objNoeudCommande.setAttribute("nom", "AucuneQuestionPosee");
+                }
+                else
+                {
+                	// Aller chercher une mauvais réponse au hasard et la retourner
+                    String strMauvaiseReponse = objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirMauvaiseReponse();
+                    
+                    if (strMauvaiseReponse.equals("PasUnChoixDeReponse"))
+                    {
+                    	objNoeudCommande.setAttribute("nom", "PasUnChoixDeReponse");
+                    }
+                    else
+                    {
+                    	// Retourner la mauvaise réponse
+                    	objNoeudCommande.setAttribute("type", "Reponse");
+                    	objNoeudCommande.setAttribute("nom", "Ok");
+                    	Element objNoeudParametreObjet = objDocumentXMLSortie.createElement("parametre");
+                    	objNoeudParametreObjet.setAttribute("indice", strMauvaiseReponse);
+                    	objNoeudCommande.appendChild(objNoeudParametreObjet);
+                    
+                        // Enlever l'objet de la liste des objets du
+                        // joueur
+                        objJoueurHumain.enleverObjet(intIdObjet, strTypeObjet);
+                    
+                    }
+                }
+			}
+		}
+		
+    }
 }

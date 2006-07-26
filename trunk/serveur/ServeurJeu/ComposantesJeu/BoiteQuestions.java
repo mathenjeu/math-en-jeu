@@ -54,6 +54,7 @@ public class BoiteQuestions
 	
 	public Question pigerQuestion( int intCategorieQuestion, int intDifficulte )
 	{
+		int intPointageQuestion = intDifficulte;
 		intCategorieQuestion = 1;
 		
 		Question question = null;
@@ -64,6 +65,8 @@ public class BoiteQuestions
 			int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
 			question = (Question)questions.elementAt( intRandom );
 			questions.remove( intRandom );
+		    question.definirDifficulte(intPointageQuestion);
+
 		}
 		else
 		{

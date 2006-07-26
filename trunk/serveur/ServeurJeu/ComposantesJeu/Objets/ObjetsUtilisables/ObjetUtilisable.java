@@ -15,6 +15,10 @@ public abstract class ObjetUtilisable extends Objet
 	// de l'objet courant
 	protected int intId;
 	
+	// Déclaration d'une variable qui contient un numéro id identifiant le
+	// type d'objet
+	protected int intUID;
+	
 	/**
 	 * Constructeur de la classe ObjetUtilisable qui permet d'initialiser 
 	 * les propriétés de l'objet courant.
@@ -23,11 +27,12 @@ public abstract class ObjetUtilisable extends Objet
 	 * @param boolean estVisible : Permet de savoir si l'objet doit être 
 	 * 							   visible ou non
 	 */
-	public ObjetUtilisable(int id, boolean estVisible)
+	public ObjetUtilisable(int id, boolean estVisible, int intUniqueId)
 	{
 		// Définir les propriétés de l'objet courant
 		intId = id;
 		bolEstVisible = estVisible;
+		intUID = intUniqueId;
 	}
 	
 	/**
@@ -50,5 +55,10 @@ public abstract class ObjetUtilisable extends Objet
 	public boolean estVisible()
 	{
 	   return bolEstVisible;
+	}
+	
+	public int obtenirUniqueId()
+	{
+		return intUID;
 	}
 }

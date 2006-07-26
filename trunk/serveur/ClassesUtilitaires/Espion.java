@@ -26,8 +26,8 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
  */
 public class Espion implements Runnable{
 	
-	// Déclaration d'une constante contenant la version de l'espion
-	private final String VERSION = "Espion Math-En-Jeu Version 1.0";
+	// Déclaration d'une constante contenant la version du serveur
+	private final String VERSION = "Version du serveur: 2.0";
 	
 	// Déclaration d'une variable contenant le nombre de millisecondes entre
 	// chaque mise à jour. 
@@ -220,10 +220,9 @@ public class Espion implements Runnable{
 		
 
 	    // Entête 
-	    // Ajouter la version de l'espion
-	    strEntete.append("(");
+	    // Ajouter la version du serveur
 	    strEntete.append(VERSION);
-	    strEntete.append(")");
+
 	    
 	    
 	    // Dernière mise à jour
@@ -265,7 +264,7 @@ public class Espion implements Runnable{
 						
 						if (i > 0 )
 						{
-							strJoueursConnectes.append(",");
+							strJoueursConnectes.append(", ");
 						}
 
 						
@@ -306,7 +305,7 @@ public class Espion implements Runnable{
 			{
 				if (intCompteur > 0)
 				{
-					strJoueursConnectes.append(",");
+					strJoueursConnectes.append(", ");
 				}
 				
 				strJoueursConnectes.append(((JoueurHumain)((Map.Entry)objIterateurListeJoueursConnectes.next()).getValue()).obtenirNomUtilisateur());
@@ -345,7 +344,7 @@ public class Espion implements Runnable{
 			{
 				if (intCompteur > 0)
 				{
-					strJoueursDeconnectes.append(",");
+					strJoueursDeconnectes.append(", ");
 				}
 				
 				strJoueursDeconnectes.append(((JoueurHumain)((Map.Entry)objIterateurListeJoueursDeconnectes.next()).getValue()).obtenirNomUtilisateur());
@@ -376,7 +375,7 @@ public class Espion implements Runnable{
 			{
 				if (intCompteur > 0 )
 				{
-					strSalles.append(",");
+					strSalles.append(", ");
 				}
 				
 				intCompteur++;
@@ -434,7 +433,15 @@ public class Espion implements Runnable{
 	         	   	     strTables.append(strFinLigne);
 	         	   	     strTables.append("    Temps : ");
 	         	   	     strTables.append(objTable.obtenirTempsTotal());
-	         	   	     strTables.append(" minutes");
+	         	   	     if (objTable.obtenirTempsTotal() <= 1)
+	         	   	     {
+	         	   	     	strTables.append(" minute");
+	         	   	     }
+	         	   	     else
+	         	   	     {
+	         	   	     	strTables.append(" minutes");
+	         	   	     }
+	         	   	     
 	         	   	     strTables.append(strFinLigne);
 	         	   	     strTables.append("    État : ");
 	         	   	         
@@ -462,7 +469,15 @@ public class Espion implements Runnable{
 	         	   	     {
 	         	   	     	strTables.append("    Temps Restant : ");
 	         	   	     	strTables.append(objTable.obtenirTempsRestant());
-	         	   	     	strTables.append(" secondes");
+	         	   	     	if (objTable.obtenirTempsRestant() <= 1)
+	         	   	     	{
+	         	   	     		strTables.append(" seconde");
+	         	   	     	}
+	         	   	     	else
+	         	   	     	{
+	         	   	     		strTables.append(" secondes");
+	         	   	     	}
+	         	   	     		
 	         	   	     	strTables.append(strFinLigne);
 	         	   	     }
 	         	   	     
@@ -480,7 +495,7 @@ public class Espion implements Runnable{
 	         	   	     {
 	         	   	     	if (intCompteur > 0)
 	         	   	     	{
-	         	   	     		strTables.append(",");
+	         	   	     		strTables.append(", ");
 	         	   	     	}
 	         	   	     	intCompteur++;
 	         	   	     	
@@ -498,15 +513,15 @@ public class Espion implements Runnable{
                              Vector lstJoueursVirtuels = objTable.obtenirListeJoueursVirtuels();
                              if (intCompteur > 0)
                              {
-                             	strTables.append(",");
+                             	strTables.append(", ");
                              }
                              
-                             for (int i=0; i < lstJoueursVirtuels.size(); i++)
+                             for (int i = 0; i < lstJoueursVirtuels.size(); i++)
                              {
                                  
                              	 if (i > 0)
                              	 {
-                             	     strTables.append(",");
+                             	     strTables.append(", ");
                              	 }
                              	 
                                  JoueurVirtuel objJoueurVirtuel = (JoueurVirtuel) lstJoueursVirtuels.get(i);
@@ -527,7 +542,7 @@ public class Espion implements Runnable{
 	                         {
 	                         	if (i > 0)
 	                         	{
-	                         		strTables.append(",");
+	                         		strTables.append(", ");
 	                         	}
 	                         	
 	                         	strTables.append((String) objTable.obtenirListeJoueursDeconnectes().get(i));

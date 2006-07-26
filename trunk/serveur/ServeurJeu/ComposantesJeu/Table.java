@@ -27,6 +27,7 @@ import ServeurJeu.Temps.*;
 import ServeurJeu.Evenements.EvenementSynchroniserTemps;
 import ServeurJeu.Evenements.EvenementPartieTerminee;
 import ServeurJeu.ControleurJeu;
+import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
 
 /**
  * @author Jean-François Brind'Amour
@@ -471,7 +472,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	/* pour test joueur virtuel (TestJoueurVirtuel.java)*/
 	public Vector genererPlateauJeu()
 	{
-//       Créer une nouvelle liste qui va garder les points des 
+        // Créer une nouvelle liste qui va garder les points des 
         // cases libres (n'ayant pas d'objets dessus)
         Vector lstPointsCaseLibre = new Vector();
         
@@ -491,10 +492,62 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         objMinuterie.ajouterObservateur( this );
         objGestionnaireTemps.ajouterTache( objMinuterie, tempsStep );
 	}
+		
+    /* Cette fonction permet d'obtenir un tableau contenant intNombreJoueurs
+     * noms de joueurs virtuels différentes
+     */
+	private String[] obtenirNomsJoueursVirtuels(int intNombreJoueurs)
+	{
+		// Obtenir une référence vers l'objet ParametreIA contenant
+		// la banque de noms
+		ParametreIA objParametreIA = objControleurJeu.obtenirParametreIA();
+		
+		// Obtenir le nombre de noms dans la banque
+		int intQuantiteBanque = objParametreIA.tBanqueNomsJoueurVirtuels.length;
+		
+		// Déclaration d'un tableau pour mélanger les indices de noms
+		int tIndexNom[] = new int[intQuantiteBanque];
+		
+		// Permet d'échanger des indices du tableau pour mélanger
+		int intTemp;
+		int intA;
+		int intB;
+		
+		// Préparer le tableau pour le mélange
+		for (int i = 0; i < tIndexNom.length; i++)
+		{
+			tIndexNom[i] = i;
+		}
+		
+		// Mélanger les noms
+		for (int i = 0; i < intNombreJoueurs; i++)
+		{
+			intA = i;
+			intB = objControleurJeu.genererNbAleatoire(intQuantiteBanque);
+		    
+		    intTemp = tIndexNom[intA];
+		    tIndexNom[intA] = tIndexNom[intB];
+		    tIndexNom[intB] = intTemp;
+		}
+
+       // Créer le tableau de retour
+       String tRetour[] = new String[intNombreJoueurs];
+       
+       // Choisir au hasard où aller chercher les indices
+       int intDepart = objControleurJeu.genererNbAleatoire(intQuantiteBanque);
+       
+       // Remplir le tableau avec les valeurs trouvées
+       for (int i = 0; i < intNombreJoueurs; i++)
+       {
+           tRetour[i] = new String("[Ordi]" + objParametreIA.tBanqueNomsJoueurVirtuels[(i + intDepart) % intQuantiteBanque]);
+       }
+       
+       return tRetour;
+	}
 	
 	private void laPartieCommence()
 	{
-//		 Créer une nouvelle liste qui va garder les points des 
+        // Créer une nouvelle liste qui va garder les points des 
 		// cases libres (n'ayant pas d'objets dessus)
 		Vector lstPointsCaseLibre = new Vector();
 		
@@ -506,6 +559,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// d'utilisateur du joueur et le contenu est un point 
 		// représentant la position du joueur
 		TreeMap lstPositionsJoueurs = new TreeMap();
+        
+        // Contient les noms des joueurs virtuels
+        String tNomsJoueursVirtuels[] = null;
         
 		//TODO: Peut-être devoir synchroniser cette partie, il 
 		//      faut voir avec les autres bouts de code qui 
@@ -534,8 +590,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			intNombreJoueursVirtuels = 0;
 		}
 		
-		//System.out.println("Nombre de joueurs virtuels: " + intNombreJoueursVirtuels);
-		
         objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels, lstPointsCaseLibre);
 		
 		// Créer un ensemble contenant tous les tuples de la liste 
@@ -551,6 +605,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		if (intNombreJoueursVirtuels > 0)
 		{
 		    lstJoueursVirtuels = new Vector();
+		    
+		    // Aller trouver les noms des joueurs virtuels
+		    tNomsJoueursVirtuels = obtenirNomsJoueursVirtuels(intNombreJoueursVirtuels);
+		    
 		}
 		
 		// Passer toutes les positions des joueurs et les définir
@@ -586,8 +644,47 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 // Ajouter un joueur virtuel dans la table
                 // TODO: NE PAS PRENDRE 2 FOIS LE MÊME NOM ET NE PAS PRENDRE
                 //       LE MÊME NOM QU'UN JOUEUR HUMAIN
-                JoueurVirtuel objJoueurVirtuel = new JoueurVirtuel(objGestionnaireBD.obtenirNomJoueurVirtuelAleatoire(), 
-                    JoueurVirtuel.DIFFICULTE_MOYEN, this, objGestionnaireEvenements, objControleurJeu);
+                
+                // TODO: Enlever cette partie strictement pour tester
+                if (lstJoueursEnAttente.size() == 1)
+		        {
+		            Set lstE = lstJoueursEnAttente.entrySet();
+		            Iterator objI = lstE.iterator(); 
+		            JoueurHumain objJ = (JoueurHumain) (((Map.Entry)(objI.next())).getValue());
+		            if (objJ.obtenirNomUtilisateur().toLowerCase().equals("jeff2"))
+		            {
+		            	// Si c'est moi qui démarre la partie, alors
+		            	// je vais mettre 3 joueurs de niveau
+		            	// différent avec des noms spéciaux
+		            	// But: Tester les 3 niveaux de difficulté
+		            	//      ensemble sur le jeu et vérifier
+		            	//      les pointages finaux
+		            	
+	                    JoueurVirtuel objJoueurVirtuel = new JoueurVirtuel("Piggy", 
+	                        ParametreIA.DIFFICULTE_FACILE, this, objGestionnaireEvenements, objControleurJeu);
+	                    objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i]);
+	                    lstJoueursVirtuels.add(objJoueurVirtuel);
+	                    lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[i]);
+			            	
+	                    objJoueurVirtuel = new JoueurVirtuel("Neutrinos", 
+	                        ParametreIA.DIFFICULTE_MOYEN, this, objGestionnaireEvenements, objControleurJeu);
+	                    objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i+1]);
+	                    lstJoueursVirtuels.add(objJoueurVirtuel);
+	                    lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[i+1]);
+			            	
+	                    objJoueurVirtuel = new JoueurVirtuel("ThE DeStRuCtOr 2000", 
+	                        ParametreIA.DIFFICULTE_DIFFICILE, this, objGestionnaireEvenements, objControleurJeu);
+	                    objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i+2]);
+	                    lstJoueursVirtuels.add(objJoueurVirtuel);
+	                    lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[i+2]);
+			            
+			            break;		
+		            }
+		            
+		        }
+		        
+                JoueurVirtuel objJoueurVirtuel = new JoueurVirtuel(tNomsJoueursVirtuels[i - nbJoueur], 
+                    ParametreIA.DIFFICULTE_MOYEN, this, objGestionnaireEvenements, objControleurJeu);
                 
                 // Définir sa position
                 objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i]);
@@ -597,7 +694,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 
                 // Ajouter le joueur virtuel à la liste des positions, liste qui sera envoyée
                 // aux joueurs humains
-                //System.out.println(objJoueurVirtuel.obtenirNom());
                 lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[i]);
                 
     		}
@@ -656,7 +752,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    {
     	    for (int i = 0; i < lstJoueursVirtuels.size(); i++)
     	    {
-    	    	//System.out.println("Thread.start()");
                 Thread threadJoueurVirtuel = new Thread((JoueurVirtuel) lstJoueursVirtuels.get(i));
                 threadJoueurVirtuel.start();
             }

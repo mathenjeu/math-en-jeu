@@ -33,6 +33,7 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Reponse;
 import java.io.File;
 import java.io.FileWriter;
 
@@ -63,7 +64,6 @@ public class TestJoueurVirtuel {
     
     public TestJoueurVirtuel(ControleurJeu controleur)
     {
-        
         GestionnaireEvenements ev = controleur.obtenirGestionnaireEvenements();
         GestionnaireBD bd = controleur.obtenirGestionnaireBD();
         TreeMap lstSalles = controleur.obtenirListeSalles();
@@ -102,6 +102,13 @@ public class TestJoueurVirtuel {
             System.out.println("Table créée");
         //-----------------------------------------
         
+        /*String tNoms[] = objTable.obtenirNomsJoueursVirtuels(10);
+        for (int i = 0; i < 10; i++)
+        {
+        	System.out.println("" + tNoms[i]);
+        }*/
+        
+        
         // Créer le plateau de jeu
         Vector lstPointsCaseLibre = objTable.genererPlateauJeu();
         
@@ -136,7 +143,7 @@ public class TestJoueurVirtuel {
         threadJv.start();
         
         //-----------------------------------------
-            System.out.println("Thread dujoueur virtuel démarré");
+            System.out.println("Thread du joueur virtuel démarré");
         //-----------------------------------------
 
 /*
@@ -223,6 +230,21 @@ public class TestJoueurVirtuel {
                         if (((CaseCouleur)pj[i][j]).obtenirObjetCase() instanceof Piece)
                         {
                             strTemp.append("P");
+                        }
+                        else if (((CaseCouleur)pj[i][j]).obtenirObjetCase() instanceof Magasin)
+                        {
+                        	strTemp.append("M"); 
+                        }
+                        else if (((CaseCouleur)pj[i][j]).obtenirObjetCase() instanceof Reponse)
+                        {
+                        	if ((((ObjetUtilisable)((CaseCouleur)pj[i][j]).obtenirObjetCase())).estVisible())
+                        	{
+                        		strTemp.append("R");
+                        	}
+                        	else
+                        	{
+                        		strTemp.append("r");
+                        	}
                         }
                         else
                         {

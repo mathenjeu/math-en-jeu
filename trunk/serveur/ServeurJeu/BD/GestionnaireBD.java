@@ -52,11 +52,8 @@ public class GestionnaireBD
 	
 	static private Logger objLogger = Logger.getLogger( GestionnaireBD.class );
 	
-	// Variable temporaire pour nommer les joueurs virtuels "Bot 1", "Bot 2", etc.
-	private int intBotId;
-	
 	private static final String strValeurGroupeAge = "valeurGroupeAge";
-	
+
 	/**
 	 * Constructeur de la classe GestionnaireBD qui permet de garder la 
 	 * référence vers le contrôleur de jeu
@@ -67,8 +64,6 @@ public class GestionnaireBD
 		
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		urlQuestionReponse = config.obtenirString( "gestionnairebd.url-questions-reponses" );
-		
-		intBotId = 1;
 		
 		// Garder la référence vers le contrôleur de jeu
 		objControleurJeu = controleur;
@@ -234,7 +229,7 @@ public class GestionnaireBD
 		objReglesSalle.obtenirListeMagasinsPossibles().add(new ReglesMagasin(2, "Magasin2"));
 		
 		objReglesSalle.obtenirListeObjetsUtilisablesPossibles().add(new ReglesObjetUtilisable(1, "Reponse", Visibilite.Aleatoire));
-		
+
 		objReglesSalle.definirPermetChat(true);
 		objReglesSalle.definirRatioTrous(0.30f);
 		objReglesSalle.definirRatioMagasins(0.05f);
@@ -499,23 +494,6 @@ public class GestionnaireBD
 			objLogger.error( e.getMessage() );
 		    e.printStackTrace();			
 		}
-	}
-	
-	/* Aller chercher un nom de joueur virtuel aléatoire
-	 * Cette fonction pourra aussi faire en sorte que le même nom ne soit pas utilisé
-	 * plus d'une fois en modifiant la valeur d'un champ booléan de la bd
-	 * TODO: Aller chercher dans la BD
-	 */
-	public String obtenirNomJoueurVirtuelAleatoire()
-	{
-	   int intValeurAleatoire = UtilitaireNombres.genererNbAleatoire(5);
-	   String strNom;
-	   
-       strNom = "Bot " + intBotId;
-       intBotId++;
-       
-       return strNom;
-	   
 	}
 	
 	/* Cette fonction permet d'ajouter les information sur une partie dans 

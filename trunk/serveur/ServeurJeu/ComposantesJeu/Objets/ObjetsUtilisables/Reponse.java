@@ -29,6 +29,7 @@ public class Reponse extends ObjetUtilisable
 	public Reponse(int id, boolean estVisible)
 	{
 		// Appeler le constructeur du parent
-		super(id, estVisible);
+		super(id, estVisible, UID_OU_REPONSE);
 	}
+	
 }

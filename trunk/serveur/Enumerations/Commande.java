@@ -24,6 +24,7 @@ public final class Commande
 	public static final String Pointage = "Pointage";
     public static final String RejoindrePartie = "RejoindrePartie";
     public static final String NePasRejoindrePartie = "NePasRejoindrePartie";
+    public static final String UtiliserObjet = "UtiliserObjet";
     
 	/**
 	 * Constructeur par défaut est privé pour empêcher de pourvoir créer des 
@@ -52,7 +53,7 @@ public final class Commande
 		        valeur.equals(QuitterTable) || valeur.equals(DemarrerPartie) ||
 		        valeur.equals(DeplacerPersonnage) || valeur.equals(RepondreQuestion) ||
 		        valeur.equals(DemarrerMaintenant) || valeur.equals(Pointage) ||
-		        valeur.equals(RejoindrePartie));
+		        valeur.equals(RejoindrePartie) || valeur.equals(UtiliserObjet));
 
 	}
 }

@@ -13,6 +13,8 @@ import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
+import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
@@ -426,27 +428,73 @@ public class InformationPartie
 		return objQuestionTrouvee;
 	}
 	
+	
 	/**
 	 * Cette fonction met à jour le plateau de jeu si le joueur a bien répondu
 	 * à la question. Les objets sur la nouvelle case sont enlevés et le pointage
-	 * du joueur est mis à jour.
-	 * 
-	 * @param String reponse : La réponse du joueur
-	 * @param boolean doitGenererNoCommandeRetour : Permet de savoir si on doit 
-	 * 						générer un numéro de commande à retourner
-	 * @return RetourVerifierReponseEtMettreAJourPlateauJeu : Un objet contenant 
-	 * 				toutes les valeurs à retourner au client
+	 * du joueur est mis à jour. Utilisé par les joueurs humains et les joueurs virtuels
+	 *
 	 */
-	public RetourVerifierReponseEtMettreAJourPlateauJeu verifierReponseEtMettreAJourPlateauJeu(String reponse, boolean doitGenererNoCommandeRetour)
-	{
+	public static RetourVerifierReponseEtMettreAJourPlateauJeu verifierReponseEtMettreAJourPlateauJeu(String reponse, 
+	    Point objPositionDesiree, Joueur objJoueur)
+    {
+        
 		// Déclaration de l'objet de retour 
 		RetourVerifierReponseEtMettreAJourPlateauJeu objRetour = null;
 		
-		// Vérifier la réponse du joueur
-		boolean bolReponseEstBonne = objQuestionCourante.reponseEstValide(reponse);
+		int intPointageCourant; 
+		Table table;
+		int intDifficulteQuestion;
+		TreeMap objListeObjetsUtilisablesRamasses; 
+		Point positionJoueur; 
+		GestionnaireEvenements gestionnaireEv;
+		Question objQuestion; 
+		String nomJoueur; 
+		boolean bolReponseEstBonne; 
 		
-		// Le pointage est initialement celui courant
-		int intNouveauPointage = intPointage;
+		// Obtenir les divers informations à utiliser dépendamment de si
+		// la fonction s'applique à un joueur humain ou un joueur virtuel
+		if (objJoueur instanceof JoueurHumain)
+		{
+			InformationPartie objPartieCourante = ((JoueurHumain)objJoueur).obtenirPartieCourante();
+			
+			// Obtenir les informations du joueur humain
+			intPointageCourant = objPartieCourante.obtenirPointage();
+		    table = objPartieCourante.obtenirTable();
+		    intDifficulteQuestion = objPartieCourante.obtenirQuestionCourante().obtenirDifficulte();
+		    objListeObjetsUtilisablesRamasses = objPartieCourante.obtenirListeObjets();
+		    positionJoueur = objPartieCourante.obtenirPositionJoueur();
+		    gestionnaireEv = objPartieCourante.obtenirGestionnaireEvenements();
+		    objQuestion = objPartieCourante.obtenirQuestionCourante();
+		    nomJoueur = ((JoueurHumain)objJoueur).obtenirNomUtilisateur();
+		    bolReponseEstBonne = objQuestion.reponseEstValide(reponse);
+		    
+		}
+		else
+		{
+			JoueurVirtuel objJoueurVirtuel = (JoueurVirtuel)objJoueur;
+			
+			
+			// Obtenir les informations du joueur virtuel
+			intPointageCourant = objJoueurVirtuel.obtenirPointage();
+		    table = objJoueurVirtuel.obtenirTable();
+		    intDifficulteQuestion = objJoueurVirtuel.obtenirPointage(objJoueurVirtuel.obtenirPositionJoueur(), objPositionDesiree);
+		    objListeObjetsUtilisablesRamasses = objJoueurVirtuel.obtenirListeObjetsRamasses();
+		    positionJoueur = objJoueurVirtuel.obtenirPositionJoueur();
+		    gestionnaireEv = objJoueurVirtuel.obtenirGestionnaireEvenements();
+		    
+		    // Pas de question pour les joueurs virtuels
+		    objQuestion = null;
+		    nomJoueur = objJoueurVirtuel.obtenirNom();
+		    
+		    // On appelle jamais cette fonction si le joueur virtuel rate 
+		    // la question
+		    bolReponseEstBonne = true;
+
+		}
+		
+		// Le nouveau pointage est initialement le pointage courant
+		int intNouveauPointage = intPointageCourant;
 		
 		// Déclaration d'une référence vers l'objet ramassé
 		ObjetUtilisable objObjetRamasse = null;
@@ -460,11 +508,11 @@ public class InformationPartie
 		if (bolReponseEstBonne == true)
 		{
 			// Faire la référence vers la case de destination
-			Case objCaseDestination = objTable.obtenirPlateauJeuCourant()[objPositionJoueurDesiree.x][objPositionJoueurDesiree.y];
+			Case objCaseDestination = table.obtenirPlateauJeuCourant()[objPositionDesiree.x][objPositionDesiree.y];
 			
 			// Calculer le nouveau pointage du joueur (on ajoute la difficulté 
 			// de la question au pointage)
-			intNouveauPointage += objQuestionCourante.obtenirDifficulte();
+			intNouveauPointage += intDifficulteQuestion;
 			
 			// Si la case de destination est une case de couleur, alors on 
 			// vérifie l'objet qu'il y a dessus et si c'est un objet utilisable, 
@@ -491,7 +539,7 @@ public class InformationPartie
 						objObjetRamasse = objObjetUtilisable;
 						
 						// Ajouter l'objet ramassé dans la liste des objets du joueur courant
-						lstObjetsUtilisablesRamasses.put(new Integer(objObjetUtilisable.obtenirId()), objObjetUtilisable);
+						objListeObjetsUtilisablesRamasses.put(new Integer(objObjetUtilisable.obtenirId()), objObjetUtilisable);
 						
 						// Enlever l'objet de la case du plateau de jeu
 						objCaseCouleurDestination.definirObjetCase(null);
@@ -536,27 +584,63 @@ public class InformationPartie
 			objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, intNouveauPointage);
 			objRetour.definirObjetRamasse(objObjetRamasse);
 			objRetour.definirObjetSubi(objObjetSubi);
-			objRetour.definirNouvellePosition(objPositionJoueurDesiree);
+			objRetour.definirNouvellePosition(objPositionDesiree);
 			objRetour.definirCollision( collision );
 			
-			synchronized (objTable.obtenirListeJoueurs() )
+			synchronized (table.obtenirListeJoueurs())
 		    {
 				// Préparer l'événement de deplacement de personnage. 
 				// Cette fonction va passer les joueurs et créer un 
 				// InformationDestination pour chacun et ajouter l'événement 
 				// dans la file de gestion d'événements
-				objTable.preparerEvenementJoueurDeplacePersonnage( objJoueurHumain.obtenirNomUtilisateur() , collision, objPositionJoueur, objPositionJoueurDesiree );		    	
+				table.preparerEvenementJoueurDeplacePersonnage(nomJoueur, collision, positionJoueur, objPositionDesiree);	
+						    	
 		    }
-			
-			definirPositionJoueur( objPositionJoueurDesiree );
-			intPointage = intNouveauPointage;
+		    
+			// Modifier la position et le pointage
+			if (objJoueur instanceof JoueurHumain)
+			{
+				((JoueurHumain)objJoueur).obtenirPartieCourante().definirPositionJoueur(objPositionDesiree);
+			    ((JoueurHumain)objJoueur).obtenirPartieCourante().definirPointage(intNouveauPointage);
+			}
+			else if (objJoueur instanceof JoueurVirtuel)
+			{
+				((JoueurVirtuel)objJoueur).definirPositionJoueurVirtuel(objPositionDesiree);
+				((JoueurVirtuel)objJoueur).definirPointage(intNouveauPointage);
+			}
 		}
 		else
 		{
 			// Créer l'objet de retour
 			objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, intNouveauPointage);
-			objRetour.definirExplications(objQuestionCourante.obtenirURLExplication());
+			
+			// La question sera nulle pour les joueurs virtuels
+			if (objQuestion != null)
+			{
+				objRetour.definirExplications(objQuestion.obtenirURLExplication());
+			}
 		}
+		
+		return objRetour;
+		
+	}
+	
+	/**
+	 * Cette fonction met à jour le plateau de jeu si le joueur a bien répondu
+	 * à la question. Les objets sur la nouvelle case sont enlevés et le pointage
+	 * du joueur est mis à jour.
+	 * 
+	 * @param String reponse : La réponse du joueur
+	 * @param boolean doitGenererNoCommandeRetour : Permet de savoir si on doit 
+	 * 						générer un numéro de commande à retourner
+	 * @return RetourVerifierReponseEtMettreAJourPlateauJeu : Un objet contenant 
+	 * 				toutes les valeurs à retourner au client
+	 */
+	public RetourVerifierReponseEtMettreAJourPlateauJeu verifierReponseEtMettreAJourPlateauJeu(String reponse, boolean doitGenererNoCommandeRetour)
+	{
+		
+		RetourVerifierReponseEtMettreAJourPlateauJeu objRetour =
+		    verifierReponseEtMettreAJourPlateauJeu(reponse, objPositionJoueurDesiree, objJoueurHumain);
 		
 		// Si on doit générer le numéro de commande de retour, alors
 		// on le génère, sinon on ne fait rien (ça devrait toujours
@@ -573,12 +657,47 @@ public class InformationPartie
 		return objRetour;
 	}
 	
-	
 	/*
 	 * Retourne une référence vers la liste des objets ramassés
 	 */
 	public TreeMap obtenirListeObjets()
 	{
 		return lstObjetsUtilisablesRamasses;
+	}
+	
+	/*
+	 * Détermine si le joueur possède un certain objet, permet
+	 * de valider l'information envoyé par le client lorsqu'il utiliser l'objet
+	 */
+	 public boolean joueurPossedeObjet(int id)
+	 {
+	     // Préparation pour parcourir la liste d'objets
+	     Set lstEnsembleObjets = lstObjetsUtilisablesRamasses.entrySet();
+	     Iterator objIterateurListeObjets = lstEnsembleObjets.iterator();
+	     
+	     // Parcours du TreeMap
+	     while (objIterateurListeObjets.hasNext() == true)
+	     {
+	     	Objet objObjet = (Objet)(((Map.Entry)(objIterateurListeObjets.next())).getValue());
+	     	if (objObjet instanceof ObjetUtilisable)
+	     	{
+	     		if (((ObjetUtilisable)objObjet).obtenirId() == id)
+	     		{
+	     			return true;
+	     		}
+	     	}
+	     }
+	     
+	     return false;
+	 }
+	 
+	 public GestionnaireEvenements obtenirGestionnaireEvenements()
+	 {
+	 	return objGestionnaireEv;
+	 }
+	 
+	public void enleverObjet(int intIdObjet, String strTypeObjet)
+	{
+		lstObjetsUtilisablesRamasses.remove(intIdObjet);
 	}
 }

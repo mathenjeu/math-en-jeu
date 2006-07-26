@@ -38,6 +38,8 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
+import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
+
 
 //import ServeurJeu.ComposantesJeu.Joueurs.TestJoueurVirtuel;
 
@@ -109,6 +111,11 @@ public class ControleurJeu
 	// Déclaration d'un objet random pour générer des nombres aléatoires
 	private Random objRandom;
 	
+	
+	// Déclaration d'un objet pour conserver tous les paramètres
+	// pour les joueurs virtuels
+	private ParametreIA objParametreIA;
+	
 	/**
 	 * Constructeur de la classe ControleurJeu qui permet de créer le gestionnaire 
 	 * des communications, le gestionnaire d'événements et le gestionnaire de bases 
@@ -163,8 +170,11 @@ public class ControleurJeu
 		String fichier = config.obtenirString( "controleurjeu.info.fichier-sortie" );
 		int delai = config.obtenirNombreEntier( "controleurjeu.info.delai" );
 		objEspion = new Espion(this, fichier, delai, ClassesUtilitaires.Espion.MODE_FICHIER_TEXTE);
+
 		Thread threadEspion = new Thread(objEspion);
 		threadEspion.start();
+
+        objParametreIA = new ParametreIA();
 
         //TestJoueurVirtuel objTestJoueurVirtuel = new TestJoueurVirtuel(this);
         
@@ -724,5 +734,10 @@ public class ControleurJeu
     public int genererNbAleatoire(int max)
     {
     	return objRandom.nextInt(max);
+    }
+    
+    public ParametreIA obtenirParametreIA()
+    {
+    	return objParametreIA;
     }
 }
