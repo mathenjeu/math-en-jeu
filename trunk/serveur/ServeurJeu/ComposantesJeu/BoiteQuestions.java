@@ -32,8 +32,8 @@ public class BoiteQuestions
 	
 	public void ajouterQuestion( Question question )
 	{
-		int intCategorieQuestion = question.obtenirCategorie();
-		int difficulte = question.obtenirDifficulte();
+		int intCategorieQuestion = 1;// = question.obtenirCategorie();
+		int difficulte = 1;//question.obtenirDifficulte();
 		
 		TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );
 		
@@ -50,6 +50,7 @@ public class BoiteQuestions
 	public Question pigerQuestion( int intCategorieQuestion, int intDifficulte )
 	{
 		intCategorieQuestion = 1;
+		intDifficulte = 1;
 		Question question = null;
 		Vector<Question> questions = obtenirQuestions( intCategorieQuestion, intDifficulte );
 		

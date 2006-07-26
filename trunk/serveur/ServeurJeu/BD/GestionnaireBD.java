@@ -303,7 +303,7 @@ public class GestionnaireBD
 					String question = rs.getString( "FichierFlashQuestion" );
 					String reponse = rs.getString("bonneReponse");
 					String explication = rs.getString("FichierFlashReponse");
-					int difficulte = 1;
+					int difficulte = 1; //TODO aller cherhcer dans la bd
 					boiteQuestions.ajouterQuestion( new Question( codeQuestion, typeQuestion, difficulte, urlQuestionReponse + question, reponse, urlQuestionReponse + explication ));
 				}
 			}
