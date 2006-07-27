@@ -125,8 +125,10 @@ public class ControleurJeu
 	 */
 	public static void main(String[] args) 
 	{
+		System.out.println( "Le serveur demarre" );
 		ControleurJeu objJeu = new ControleurJeu();
 		objJeu.demarrer();
+		System.out.println( "Le serveur arrete" );
 	}
 	
 	/**
