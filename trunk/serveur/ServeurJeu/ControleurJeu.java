@@ -117,6 +117,19 @@ public class ControleurJeu
 	private ParametreIA objParametreIA;
 	
 	/**
+	 * Cette méthode est le point d'entrée du serveur. Elle ne fait que créer 
+	 * un nouveau contrôleur de jeu.
+	 * 
+	 * @param String[] args : les arguments passés en paramètre lors de l'appel
+	 * 						  de l'application 
+	 */
+	public static void main(String[] args) 
+	{
+		ControleurJeu objJeu = new ControleurJeu();
+		objJeu.demarrer();
+	}
+	
+	/**
 	 * Constructeur de la classe ControleurJeu qui permet de créer le gestionnaire 
 	 * des communications, le gestionnaire d'événements et le gestionnaire de bases 
 	 * de données. 
@@ -147,19 +160,26 @@ public class ControleurJeu
 		// Créer un nouveau gestionnaire de base de données MySQL
 		objGestionnaireBD = new GestionnaireBD(this);
 		
+		objParametreIA = new ParametreIA();
+		
 		// Charger les salles par défaut
 		chargerSallesInitiales();
 		
-		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
-		int intStepSynchro = config.obtenirNombreEntier( "controleurjeu.synchro.step" );
 		objGestionnaireTemps = new GestionnaireTemps();
 		objTacheSynchroniser = new TacheSynchroniser();
-		objGestionnaireTemps.ajouterTache( objTacheSynchroniser, intStepSynchro );
 		
 		// Créer un nouveau gestionnaire de communication
 		objGestionnaireCommunication = new GestionnaireCommunication(this, objGestionnaireEvenements, objGestionnaireBD, objGestionnaireTemps, objTacheSynchroniser);
+	}
+	
+	public void demarrer()
+	{
+		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		
-		// Créer un thread pour le GestionnaireEvenements
+		int intStepSynchro = config.obtenirNombreEntier( "controleurjeu.synchro.step" );
+		objGestionnaireTemps.ajouterTache( objTacheSynchroniser, intStepSynchro );
+		
+//		 Créer un thread pour le GestionnaireEvenements
 		Thread threadEvenements = new Thread(objGestionnaireEvenements);
 		
 		// Démarrer le thread du gestionnaire d'événements
@@ -173,18 +193,16 @@ public class ControleurJeu
 
 		Thread threadEspion = new Thread(objEspion);
 		threadEspion.start();
-
-        objParametreIA = new ParametreIA();
-
-        //TestJoueurVirtuel objTestJoueurVirtuel = new TestJoueurVirtuel(this);
-        
+  
 		//Demarrer une tache de monitoring
 		TacheLogMoniteur objTacheLogMoniteur = new TacheLogMoniteur();
 		int intStepMonitor = config.obtenirNombreEntier( "controleurjeu.monitoring.step" );
 		objGestionnaireTemps.ajouterTache( objTacheLogMoniteur, intStepMonitor );
 		
-		// Démarrer l'écoute des connexions clientes
-		objGestionnaireCommunication.ecouterConnexions();	
+		//Démarrer l'écoute des connexions clientes
+		//Cette methode est la loop de l'application
+		//Au retour, l'application se termine
+		objGestionnaireCommunication.ecouterConnexions();
 	}
 	
 	/**
@@ -633,18 +651,6 @@ public class ControleurJeu
 	    Salle objSalle = new Salle(objGestionnaireBD, nom, createur, motDePasse, objReglesSalle, this);
 	    
 	    ajouterNouvelleSalle( objSalle );
-	}
-	
-	/**
-	 * Cette méthode est le point d'entrée du serveur. Elle ne fait que créer 
-	 * un nouveau contrôleur de jeu.
-	 * 
-	 * @param String[] args : les arguments passés en paramètre lors de l'appel
-	 * 						  de l'application 
-	 */
-	public static void main(String[] args) 
-	{
-		ControleurJeu objJeu = new ControleurJeu();
 	}
 	
 	public GestionnaireCommunication obtenirGestionnaireCommunication()

@@ -46,7 +46,9 @@ public class GestionnaireCommunication
 	private GestionnaireTemps objGestionnaireTemps;
 	private TacheSynchroniser objTacheSynchroniser;
 	
-	static private Logger objLogger = Logger.getLogger( GestionnaireCommunication.class );
+	private boolean boolStopThread; 
+	
+	private static Logger objLogger = Logger.getLogger( GestionnaireCommunication.class );
 
     
 	
@@ -100,6 +102,7 @@ public class GestionnaireCommunication
 		{
 			// Créer un socket pour le serveur qui va écouter sur le port définit
 			// par la variable "intPort"
+			boolStopThread = false;
 			objSocketServeur = new ServerSocket(intPort);
 		}
 		catch (IOException e)
@@ -107,12 +110,12 @@ public class GestionnaireCommunication
 			// L'écoute n'a pas pu être démarrée
 			System.out.println("Il est impossible de demarrer l'ecoute sur le port " + intPort);
 			System.out.println("Le serveur va maintenant s'arreter");
-			System.exit(-1);
+			boolStopThread = true;
 		}
 		
 		// Boucler indéfiniment en écoutant sur le port "intPort" et en démarrant un
 		// nouveau thread pour chacune des connexions établies
-		while (true)
+		while( !boolStopThread )
 		{
 			try
 			{
@@ -141,8 +144,8 @@ public class GestionnaireCommunication
 				// Une erreur est survenue lors de l'acceptation de la connexion
 				System.out.println("Il est impossible d'accepter la connexion du client");
 				objLogger.error( e.getMessage() );
-				// System.out.println("Le serveur va maintenant s'arrêter");
-				// System.exit(-1);
+				System.out.println("Le serveur va maintenant s'arrêter");
+				boolStopThread = true;
 			}
 		}
 	}
