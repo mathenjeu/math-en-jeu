@@ -54,6 +54,7 @@ public class Moniteur
 		}
 		catch( Exception e )
 		{
+			logger.error( e.getMessage() );
 			logger.error( "Impossible d'ecrire dans le fichier de monitoring." );
 		}
 	}

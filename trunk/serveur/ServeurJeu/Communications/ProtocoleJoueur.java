@@ -1309,8 +1309,8 @@ public class ProtocoleJoueur implements Runnable
 							}
 							else
 							{
-								// Le joueur était déjà en attente
-								objNoeudCommande.setAttribute("nom", "DejaEnAttente");
+								objLogger.error( "Mauvais code de retour : " + strResultatDemarrerPartie );
+								objNoeudCommande.setAttribute("nom", "");
 							}
 						}
 						catch( Exception e )
