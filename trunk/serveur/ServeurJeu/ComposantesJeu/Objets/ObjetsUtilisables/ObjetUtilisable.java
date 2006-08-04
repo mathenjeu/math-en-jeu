@@ -19,6 +19,19 @@ public abstract class ObjetUtilisable extends Objet
 	// type d'objet
 	protected int intUID;
 	
+	// Le prix de l'objet utilsable
+	protected int intPrix;
+	
+	// Indique si l'objet peut être armé
+	protected boolean bolPeutEtreArme;
+	
+	// Indique si l'objet se vend de façon illimité dans les magasins
+	protected boolean bolEstLimite;
+	
+	// Le type de l'objet en chaîne de caractères, utilisé de façon
+	// unique pour communiquer avec le client
+	protected String strTypeObjet;
+	
 	/**
 	 * Constructeur de la classe ObjetUtilisable qui permet d'initialiser 
 	 * les propriétés de l'objet courant.
@@ -27,12 +40,17 @@ public abstract class ObjetUtilisable extends Objet
 	 * @param boolean estVisible : Permet de savoir si l'objet doit être 
 	 * 							   visible ou non
 	 */
-	public ObjetUtilisable(int id, boolean estVisible, int intUniqueId)
+	public ObjetUtilisable(int id, boolean estVisible, int intUniqueId,
+	    int prix, boolean peutEtreArme, boolean estLimite, String typeObjet)
 	{
 		// Définir les propriétés de l'objet courant
 		intId = id;
 		bolEstVisible = estVisible;
 		intUID = intUniqueId;
+		intPrix = prix;
+		bolPeutEtreArme = peutEtreArme;
+		bolEstLimite = estLimite;
+		strTypeObjet = typeObjet;
 	}
 	
 	/**
@@ -60,5 +78,25 @@ public abstract class ObjetUtilisable extends Objet
 	public int obtenirUniqueId()
 	{
 		return intUID;
+	}
+	
+	public int obtenirPrix()
+	{
+		return intPrix;
+	}
+	
+	public boolean obtenirEstLimite()
+	{
+		return bolEstLimite;
+	}
+	
+	public boolean obtenirPeutEtreArme()
+	{
+		return bolPeutEtreArme;
+	}
+	
+	public String obtenirTypeObjet()
+	{
+		return strTypeObjet;
 	}
 }

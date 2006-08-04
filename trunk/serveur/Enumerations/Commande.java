@@ -25,6 +25,7 @@ public final class Commande
     public static final String RejoindrePartie = "RejoindrePartie";
     public static final String NePasRejoindrePartie = "NePasRejoindrePartie";
     public static final String UtiliserObjet = "UtiliserObjet";
+    public static final String AcheterObjet = "AcheterObjet";
     
 	/**
 	 * Constructeur par défaut est privé pour empêcher de pourvoir créer des 

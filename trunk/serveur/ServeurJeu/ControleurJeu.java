@@ -1,6 +1,5 @@
 package ServeurJeu;
 
-import java.util.Date;
 import java.util.TreeMap;
 import java.util.Set;
 import java.util.Iterator;
@@ -143,9 +142,7 @@ public class ControleurJeu
 		objLogger.info( "Le serveur démarre" );
 		
 		// Préparer l'objet pour créer les nombres aléatoires
-    	Date d = new Date();
-    	long seed = d.getTime();
-    	objRandom = new Random(seed);
+    	objRandom = new Random();
 		
 		// Créer une liste des joueurs
 		lstJoueursConnectes = new TreeMap();
@@ -193,9 +190,17 @@ public class ControleurJeu
 		int delai = config.obtenirNombreEntier( "controleurjeu.info.delai" );
 		objEspion = new Espion(this, fichier, delai, ClassesUtilitaires.Espion.MODE_FICHIER_TEXTE);
 
+        // Démarrer la thread de l'espion
 		Thread threadEspion = new Thread(objEspion);
 		threadEspion.start();
-  
+
+        // Créer une instance de la classe regroupant tous les paramètres
+        // des joueurs virtuels
+        objParametreIA = new ParametreIA();
+
+        // Démarrer la classe de test pour les joueurs virtuels
+        //TestJoueurVirtuel objTestJoueurVirtuel = new TestJoueurVirtuel(this);
+
 		//Demarrer une tache de monitoring
 		TacheLogMoniteur objTacheLogMoniteur = new TacheLogMoniteur();
 		int intStepMonitor = config.obtenirNombreEntier( "controleurjeu.monitoring.step" );

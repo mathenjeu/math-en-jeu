@@ -8,15 +8,19 @@ import Enumerations.Visibilite;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin1;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin2;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Reponse;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
+import ClassesUtilitaires.IntObj;
+
 
 /**
  * @author Jean-François Brind'Amour
@@ -43,7 +47,7 @@ public final class GenerateurPartie
      * @throws NullPointerException : Si la liste passée en paramètre qui doit 
      * 								  être remplie est nulle
      */
-    public static Case[][] genererPlateauJeu(Regles reglesPartie, int temps, Vector listePointsCaseLibre) throws NullPointerException
+    public static Case[][] genererPlateauJeu(Regles reglesPartie, int temps, Vector listePointsCaseLibre, IntObj objDernierIdObjets) throws NullPointerException
     {
 		// Création d'un objet permettant de générer des nombres aléatoires
 		Random objRandom = new Random();
@@ -85,7 +89,10 @@ public final class GenerateurPartie
 		
 		// Déclaration d'un compteur de cases
 		int intCompteurCases = 1;
-		
+
+        // Déclaration d'un compteur des id des objets
+        int intCompteurIdObjet = 1;
+        
 		// Déclaration d'une case dont le type est -1 (ça n'existe pas) qui
 		// va nous servir pour identifier les cases qui ont été passées
 		CaseCouleur objCaseParcourue = new CaseCouleur(1);
@@ -407,6 +414,30 @@ public final class GenerateurPartie
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Magasin2());
 				}
 				
+				// Aller chercher une référence vers le magasin que l'on vient de créer
+				Magasin objMagasin = (Magasin)((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).obtenirObjetCase();
+				
+				// ************************************
+				// Créer les objets en vente dans le magasin selon le type du magasin
+				// Ici, il y aura des objets réponses dans tous les magasins des 
+				// deux types, mais cela pourra changer au fur et à mesure qu'on
+				// ajoute des objets dans le jeu, on pourra jouer avec des pourcentages
+				// et des quantités (ex. un type de magasin qui ne vend que des
+				// objets plus rares (et plus coûteux))
+				// ************************************
+				
+				// Créer un nouvel objet de type Reponse
+				Reponse objReponse = new Reponse(intCompteurIdObjet, true);
+				
+				// Incrémenter le compteur de ID pour les objets
+				intCompteurIdObjet++;
+				
+				// Ajouter l'objet dans la liste des objets utilisables du magasin
+				objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objReponse);
+				
+				
+				
+				
 				// Incrémenter le nombre de cases passées
 				intCompteurCases++;
 				
@@ -516,11 +547,14 @@ public final class GenerateurPartie
 				{
 					// Définir la valeur de la case au point spécifié à la case 
 					// d'identification
-					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Reponse(intCompteurCases, bolEstVisible));					
+					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Reponse(intCompteurIdObjet, bolEstVisible));					
 				}
 				
 				// Incrémenter le nombre de cases passées
 				intCompteurCases++;
+				
+				// Incrémenter le compteur des id des objets
+				intCompteurIdObjet++;
 				
 				// Si on est arrivé à la fin de la liste, alors il faut 
 				// retourner au début
@@ -535,6 +569,9 @@ public final class GenerateurPartie
 		// Ajouter les points restants dans la liste des points représentant 
 		// les cases sans objets et n'étant pas des cases spéciales
 		listePointsCaseLibre.addAll(lstPointsCasesPresentes);
+		
+		// Indiquer quel a été le dernier id des objets
+		objDernierIdObjets.intValue = intCompteurIdObjet;
 		
 		return objttPlateauJeu;
     }

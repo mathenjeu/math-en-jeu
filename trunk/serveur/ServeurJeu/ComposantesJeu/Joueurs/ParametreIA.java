@@ -144,6 +144,9 @@ public class ParametreIA {
     // Temps de sûreté fin de partie fin de mini-jeu
     public final static int TEMPS_SURETE_MINIJEU_FIN_PARTIE = 3;
     
+    // Ratio de questions à choix de réponse (pour objet Reponse)
+    public final static int RATIO_CHOIX_DE_REPONSE = 85;
+    
 	public ParametreIA()
 	{
 		// Créer le tableau contenant l'info pour chaque objet utilisable

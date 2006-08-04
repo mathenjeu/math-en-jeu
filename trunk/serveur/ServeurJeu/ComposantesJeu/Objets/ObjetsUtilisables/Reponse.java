@@ -6,7 +6,7 @@ package ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables;
 public class Reponse extends ObjetUtilisable 
 {
 	// Cette constante spécifie le prix de l'objet courant
-	public static final int PRIX = 10;
+	public static final int PRIX = 5;
 	
 	// Cette constante affirme que l'objet courant n'est pas limité 
 	// lorsqu'on l'achète (c'est-à-dire qu'un magasin n'épuise jamais 
@@ -17,6 +17,9 @@ public class Reponse extends ObjetUtilisable
 	// et déposé sur une case pour qu'un autre joueur tombe dessus. Elle 
 	// ne peut seulement être utilisée immédiatement par le joueur
 	public static final boolean PEUT_ETRE_ARME = false;
+	
+	// Cette constante définit le nom de cet objet
+	public static final String TYPE_OBJET = "Reponse";
 	
 	/**
 	 * Constructeur de la classe Reponse qui permet de définir les propriétés 
@@ -29,7 +32,7 @@ public class Reponse extends ObjetUtilisable
 	public Reponse(int id, boolean estVisible)
 	{
 		// Appeler le constructeur du parent
-		super(id, estVisible, UID_OU_REPONSE);
+		super(id, estVisible, UID_OU_REPONSE, PRIX, EST_LIMITE, PEUT_ETRE_ARME, TYPE_OBJET);
 	}
 	
 }

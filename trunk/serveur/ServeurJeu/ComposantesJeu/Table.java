@@ -28,6 +28,7 @@ import ServeurJeu.Evenements.EvenementSynchroniserTemps;
 import ServeurJeu.Evenements.EvenementPartieTerminee;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
+import ClassesUtilitaires.IntObj;
 
 /**
  * @author Jean-François Brind'Amour
@@ -106,6 +107,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
       
     private Date objDateDebutPartie;
     
+    // Déclaration d'une variable qui permettra de créer des id pour les objets
+    // On va initialisé cette variable lorsque le plateau de jeu sera créé
+    private IntObj objProchainIdObjet;
+    
 	/**
 	 * Constructeur de la classe Table qui permet d'initialiser les membres 
 	 * privés de la table.
@@ -181,6 +186,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Démarrer le thread du gestionnaire d'événements
 		threadEvenements.start();
+
 	}
 	
 	public void creation()
@@ -476,9 +482,15 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         // cases libres (n'ayant pas d'objets dessus)
         Vector lstPointsCaseLibre = new Vector();
         
+        // Contiendra le dernier ID des objets
+        objProchainIdObjet = new IntObj();
+        
         // Générer le plateau de jeu selon les règles de la table et 
         // garder le plateau en mémoire dans la table
-        objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre);
+        objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet);
+        
+        // Définir le prochain id pour les objets
+        objProchainIdObjet.intValue++;
         
         return lstPointsCaseLibre;
 	}
@@ -563,6 +575,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         // Contient les noms des joueurs virtuels
         String tNomsJoueursVirtuels[] = null;
         
+        // Contiendra le dernier ID des objets
+        objProchainIdObjet = new IntObj();
+        
 		//TODO: Peut-être devoir synchroniser cette partie, il 
 		//      faut voir avec les autres bouts de code qui 
 		// 		vérifient si la partie est commencée (c'est OK 
@@ -578,8 +593,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Générer le plateau de jeu selon les règles de la table et 
 		// garder le plateau en mémoire dans la table
-		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre);
+		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet);
 
+        // Définir le prochain id pour les objets
+        objProchainIdObjet.intValue++;
+        
 		// Obtenir la position des joueurs de cette table
 		int nbJoueur = lstJoueursEnAttente.size(); //TODO a vérifier
 		
@@ -1390,11 +1408,23 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	public void ajouterJoueurDeconnecte(JoueurHumain joueurHumain)
 	{
 		lstJoueursDeconnectes.add(joueurHumain.obtenirNomUtilisateur().toLowerCase());
-		//objControleurJeu.ajouterJoueurDeconnecte(joueurHumain);
 	}
 	
 	public Vector obtenirListeJoueursDeconnectes()
 	{
 		return lstJoueursDeconnectes;
 	}
+	
+	public IntObj obtenirProchainIdObjet()
+	{
+		return objProchainIdObjet;
+	}
+	
+	/*public void incrementerProchainIdObjet()
+	{
+		synchronized (objProchainIdObjet)
+		{
+			objProchainIdObjet.intValue++;
+		}
+	}*/
 }

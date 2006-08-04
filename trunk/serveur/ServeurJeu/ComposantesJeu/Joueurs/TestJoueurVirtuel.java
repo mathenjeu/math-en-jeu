@@ -115,12 +115,16 @@ public class TestJoueurVirtuel {
         //-----------------------------------------
             System.out.println("Plateau de jeu créé");
         //-----------------------------------------   
+        
+        // Afficher le prochain id pour les objets
+        System.out.println("Prochain Id pour objets: " + objTable.obtenirProchainIdObjet().intValue);
              
         // Ajouter un joueur virtuel dans la table
         JoueurVirtuel jv = new JoueurVirtuel("Test Bot 1 - The DeStRuCtOr", 1, objTable, ev, controleur);
         
         Point ptJv[] = GenerateurPartie.genererPositionJoueurs(1, lstPointsCaseLibre);
         jv.definirPositionJoueurVirtuel(new Point(ptJv[0].x,ptJv[0].y));
+        
         //-----------------------------------------
             System.out.println("Joueur virtuel créé");
         //-----------------------------------------

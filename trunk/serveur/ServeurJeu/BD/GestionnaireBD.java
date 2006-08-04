@@ -417,7 +417,7 @@ public class GestionnaireBD
 			
 				if( intLength > 0 )
 				{
-					int intRandom = UtilitaireNombres.genererNbAleatoire( intLength );
+					int intRandom = objControleurJeu.genererNbAleatoire( intLength );
 					objQuestionTrouvee = (Question)listeQuestions.elementAt( intRandom );
 				}
 			}

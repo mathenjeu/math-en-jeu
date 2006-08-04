@@ -44,7 +44,13 @@ import ServeurJeu.Evenements.EvenementSynchroniserTemps;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.Evenements.EvenementPartieDemarree;
 import ServeurJeu.Evenements.InformationDestination;
+import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Reponse;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin1;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin2;
+
 
 /**
  * @author Jean-François Brind'Amour
@@ -191,7 +197,7 @@ public class ProtocoleJoueur implements Runnable
 				// stream a été fermé, il faut donc terminer le thread
 				if (intBytesLus == -1)
 				{
-                    objLogger.error("Une erreur est survenue: nombre d'octets lus = -1");
+                    //objLogger.error("Une erreur est survenue: nombre d'octets lus = -1");
 			        bolErreurSocket = true;
 					bolStopThread = true;
 				}
@@ -1565,6 +1571,10 @@ public class ProtocoleJoueur implements Runnable
 						// noeuds spécifiques au succès de la réponse
 						if (objRetour.deplacementEstAccepte() == true)
 						{
+							// Définir l'indicateur pour empêcher d'acheter plus d'un objet 
+							// par tour
+							objJoueurHumain.obtenirPartieCourante().definirObjetAcheter(false);
+							
 							Element objNoeudParametreObjetRamasse = objDocumentXMLSortie.createElement("parametre");
 							Element objNoeudParametreObjetSubi = objDocumentXMLSortie.createElement("parametre");
 							Element objNoeudParametreNouvellePosition = objDocumentXMLSortie.createElement("parametre");
@@ -1595,6 +1605,19 @@ public class ProtocoleJoueur implements Runnable
 								objNoeudObjetSubi.setAttribute("type", objRetour.obtenirObjetSubi().getClass().getSimpleName());
 								objNoeudParametreObjetSubi.appendChild(objNoeudObjetSubi);
 								objNoeudCommande.appendChild(objNoeudParametreObjetSubi);
+							}
+							
+							// Si le joueur est arrivé sur un magasin, alors on lui
+							// renvoie la liste des objets que le magasin vend
+							if (objRetour.obtenirCollision().equals("magasin"))
+							{
+								// Aller chercher une référence vers le magasin
+								// que le joueur visite
+								Magasin objMagasin = objRetour.obtenirMagasin();
+								
+								// Créer la liste des objets directement dans le 
+								// document XML de sortie
+								creerListeObjetsMagasin(objMagasin, objDocumentXMLSortie);
 							}
 							
 							Element objNoeudNouvellePosition = objDocumentXMLSortie.createElement("position");
@@ -1679,6 +1702,10 @@ public class ProtocoleJoueur implements Runnable
 				else if(objNoeudCommandeEntree.getAttribute("nom").equals(Commande.UtiliserObjet))
 				{
 					traiterCommandeUtiliserObjet(objNoeudCommandeEntree, objNoeudCommande, objDocumentXMLEntree, objDocumentXMLSortie, bolDoitRetournerCommande);
+				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.AcheterObjet))
+				{
+					traiterCommandeAcheterObjet(objNoeudCommandeEntree, objNoeudCommande, objDocumentXMLEntree, objDocumentXMLSortie, bolDoitRetournerCommande);
 				}
 			}
 
@@ -2778,7 +2805,124 @@ public class ProtocoleJoueur implements Runnable
     }
 
     /*
-     * Cette fonction permet de traiter le message "utiliserObjet"
+     * Cette fonction permet de traiter le message "AcheterObjet"
+     */
+    private void traiterCommandeAcheterObjet(Element objNoeudCommandeEntree, Element objNoeudCommande, Document objDocumentXMLEntree, Document objDocumentXMLSortie, boolean bolDoitRetournerCommande)
+    {
+		// Obtenir le type de l'objet a acheté
+		String strTypeObjet = obtenirValeurParametre(objNoeudCommandeEntree, "type").getNodeValue();
+		
+		// Obtenir l'id de l'objet a acheté
+		int intIdObjet = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "id").getNodeValue());
+        
+		// Si le joueur n'est pas connecté au serveur de jeu, alors il
+		// y a une erreur
+		if (objJoueurHumain == null)
+		{
+			// Le joueur ne peut pas acheter un objet
+			// s'il n'est pas connecté au serveur de jeu
+			objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+		}
+		// Si le joueur n'est connecté à aucune salle, alors il ne 
+		// peut pas acheter un objet
+		else if (objJoueurHumain.obtenirSalleCourante() == null)
+		{
+			// Le joueur ne peut pas acheter un objet
+			// s'il n'est pas dans une salle
+			objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");
+		}
+		//TODO: Il va falloir synchroniser cette validation lorsqu'on va 
+		// avoir codé la commande SortirJoueurTable -> ça va ressembler au
+		// processus d'authentification
+		// Si le joueur n'est dans aucune table, alors il y a 
+		// une erreur
+		else if (objJoueurHumain.obtenirPartieCourante() == null)
+		{
+			// Le joueur ne peut pas acheter un objet
+			// s'il n'est dans aucune table
+			objNoeudCommande.setAttribute("nom", "JoueurPasDansTable");
+		}
+		// Si la partie n'est pas commencée, alors il y a une erreur
+		else if (objJoueurHumain.obtenirPartieCourante().obtenirTable().estCommencee() == false)
+		{
+			// Le joueur ne peut pas acheter un objet
+			// si la partie n'est pas commencée
+			objNoeudCommande.setAttribute("nom", "PartiePasDemarree");
+		}
+		else if (objJoueurHumain.obtenirPartieCourante().peutAcheterObjet() == false)
+		{
+			// Le joeur a déjà acheter un objet ce tour-ci
+			objNoeudCommande.setAttribute("nom", "ObjetDejaAchete");
+		}
+		else 
+		{
+			// Aller chercher l'objet sur la case où le joueur se trouve
+			// présentement (peut retourner null)
+            Objet objObjet = objJoueurHumain.obtenirPartieCourante().obtenirObjetCaseCourante();
+            
+            Table objTable = objJoueurHumain.obtenirPartieCourante().obtenirTable();
+            
+            // Vérifier si l'objet est un magasin
+            if (objObjet instanceof Magasin)
+            {
+            	// Vérifier si le magasin vend l'objet strTypeObjet avec id = intIdObjet
+                if (((Magasin)objObjet).objetExiste(intIdObjet, strTypeObjet))
+                {
+                	// Aller chercher l'objet voulu
+                	ObjetUtilisable objObjetVoulu = ((Magasin)objObjet).obtenirObjet(intIdObjet);
+                	
+                	// Vérifier si assez de points pour acheter cet objet
+                	if (objJoueurHumain.obtenirPartieCourante().obtenirPointage() < objObjetVoulu.obtenirPrix())
+                	{
+                		// Le joueur n'a pas assez de points pour acheter cet objet
+			            objNoeudCommande.setAttribute("nom", "PasAssezDePoints");
+                	}
+                	else
+                	{
+	                	// Acheter l'objet
+	                	ObjetUtilisable objObjetAcheter = ((Magasin)objObjet).acheterObjet(intIdObjet, strTypeObjet, objTable.obtenirProchainIdObjet());
+	                	
+	                	// Définir l'indicateur pour empêcher que le joueur
+	                	// achète plus qu'un objet
+	                	objJoueurHumain.obtenirPartieCourante().definirObjetAcheter(true);
+	                	
+	                	// L'ajouter à la liste des objets du joueur
+	                	objJoueurHumain.obtenirPartieCourante().ajouterObjetUtilisableListe(objObjetAcheter);
+	                	
+	                	// Défrayer les coûts
+	                	objJoueurHumain.obtenirPartieCourante().definirPointage(objJoueurHumain.obtenirPartieCourante().obtenirPointage() - objObjetAcheter.obtenirPrix());
+	                	                	
+	                	// Retourner une réponse positive au joueur
+	                	objNoeudCommande.setAttribute("type", "Reponse");
+	                	objNoeudCommande.setAttribute("nom", "Ok");
+	                	
+	                	// Ajouter l'objet acheté dans la réponse
+	                	Element objNoeudObjetAchete = objDocumentXMLSortie.createElement("objetAchete");
+	                	objNoeudObjetAchete.setAttribute("type", strTypeObjet);
+	                	objNoeudObjetAchete.setAttribute("id", Integer.toString(intIdObjet));
+	                	objNoeudCommande.appendChild(objNoeudObjetAchete);
+                	}
+
+            	
+                }
+                else
+                {
+                	// Ce magasin ne vend pas cet objet
+                	objNoeudCommande.setAttribute("nom", "ObjetInexistant");
+                }
+            }
+            else
+            {
+            	// Le joueur n'est pas sur un magasin
+            	objNoeudCommande.setAttribute("nom", "PasDeMagasin");
+            }
+
+        }
+    }
+    
+    
+    /*
+     * Cette fonction permet de traiter le message "UtiliserObjet"
      */
     private void traiterCommandeUtiliserObjet(Element objNoeudCommandeEntree, Element objNoeudCommande, Document objDocumentXMLEntree, Document objDocumentXMLSortie, boolean bolDoitRetournerCommande)
     {
@@ -2865,5 +3009,49 @@ public class ProtocoleJoueur implements Runnable
 			}
 		}
 		
+    }
+    
+    /* Cette procédure permet de créer la liste des objets en vente
+     * dans un magasin. On appelle cette méthode lorsqu'un joueur répond
+     * à une question et tombe sur un magasin. On lui envoie donc la liste
+     * des objets en vente.
+     * 
+     * @param Magasin objMagasin: Le magasin en question
+     * @param Document objDocumentXMLSortie: Le document XML dans lequel ajouter
+     *                                       les informations
+     */
+    private void creerListeObjetsMagasin(Magasin objMagasin, Document objDocumentXMLSortie)
+    {
+    	// Créer l'élément objetsMagasin
+        Element objNoeudObjetsMagasin = objDocumentXMLSortie.createElement("objetsMagasins");
+								
+    	// Obtenir la liste des objets en vente au magasin
+    	Vector lstObjetsEnVente = objMagasin.obtenirListeObjetsUtilisables();
+    	
+    	// Créer le message XML en parcourant la liste des objets en vente
+    	for (int i = 0; i < lstObjetsEnVente.size(); i++)
+    	{
+    		// Aller chercher cet objet
+    		ObjetUtilisable objObjetEnVente = (ObjetUtilisable) lstObjetsEnVente.get(i);
+    		
+    		// Aller chercher le type de l'objet (son type en String)
+    		String strNomObjet = objObjetEnVente.obtenirTypeObjet();
+    		
+    		// Aller chercher le prix de l'objet
+    		int intPrixObjet = objObjetEnVente.obtenirPrix();
+    		
+    		// Créer un élément pour cet objet
+    		Element objNoeudObjet = objDocumentXMLSortie.createElement("objet");
+    		
+    		// Ajouter l'attribut type de l'objet
+    		objNoeudObjet.setAttribute("type", strNomObjet);
+    		
+    		// Ajouter l'attribut pour le coût de l'objet
+    		objNoeudObjet.setAttribute("cout", Integer.toString(intPrixObjet));
+    		
+    		// Maintenant ajouter cet objet à la liste
+    		objNoeudObjetsMagasin.appendChild(objNoeudObjet);
+    	}
+
     }
 }

@@ -1,6 +1,7 @@
 package ClassesRetourFonctions;
 
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import java.awt.Point;
 
 /**
@@ -22,6 +23,9 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 	// Déclaration d'une variable qui va contenir la référence vers l'objet
 	// que le joueur a subi
 	private ObjetUtilisable objObjetSubi;
+	
+	// Déclaration d'une référence vers un magasin que le joueur rencontre
+	private Magasin objMagasin;
 	
 	//TODO: Il ne serait pas nécessaire de retourner la nouvelle position
 	// 		mais on doit la retourner à cause du client 
@@ -162,4 +166,14 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 	{
 		strCollision = collision;
 	}
+	
+	public Magasin obtenirMagasin()
+	{
+		return objMagasin;
+	}
+	
+	public void definirMagasin(Magasin mag)
+    {
+    	objMagasin = mag;
+    }	
 }

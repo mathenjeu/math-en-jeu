@@ -40,20 +40,6 @@ import java.util.Random;
 import java.util.Date;
 
 //import ServeurJeu.ComposantesJeu.Joueurs.TestJoueurVirtuel;
-
-
-/* Priorité haute
- * -----------------
- *
- * Priorité moyenne
- * -----------------
- * TODO: Achat magasin
- * 
- * Priorité basse
- * -----------------
- *
- **/
- 
  
 /**
  * @author Jean-François Fournier
@@ -313,9 +299,14 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 				// Aller chercher le pourcentage de réussite à la question
 				intPourcentageReussite = objParametreIA.tPourcentageReponse[intNiveauDifficulte][intGrandeurDeplacement-1];
 	
+	            // Vérifier si c'est une question à choix de réponse
+	            boolean bolQuestionChoixDeReponse = (genererNbAleatoire(100)+1 <= ParametreIA.RATIO_CHOIX_DE_REPONSE);	            
+	            
 				// Vérifier si on utilise l'objet reponse selon notre
-				// pourcentage de réussite.   
-				boolean bolUtiliserReponse = nombreObjetsPossedes(Objet.UID_OU_REPONSE) > 0 &&
+				// pourcentage de réussite et si la question est une question
+				// à choix de réponse.   
+				boolean bolUtiliserReponse = bolQuestionChoixDeReponse &&
+				    nombreObjetsPossedes(Objet.UID_OU_REPONSE) > 0 &&
 				    intGrandeurDeplacement >= 3;
 				
 				// Si on utilise l'objet, on modifie le % de réussite
@@ -1369,6 +1360,10 @@ public class JoueurVirtuel extends Joueur implements Runnable {
    		    // pense à ce qu'il achète
             int intTempsReflexion = 0;
             
+            // Pour décision de l'objet
+	    	int intPlusGrand = -9999999;
+	    	int intIndicePlusGrand = -1;
+	    		
             // Décision d'acheter quelque chose ou non
     		boolean bolDecision;
     		
@@ -1388,23 +1383,58 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     		    !lstMagasinsVisites.contains(objMagasin))
     		{
     			intTempsReflexion = obtenirTempsReflexionAchat();
-    			
-	    		// TODO: Décider si le joueur virtuel achète
-	    		//       un objet; selon quels objets sont disponibles,
-	    		//       leur prix et l'inventaire du joueur. Peut aussi
-	    		//       prendre en considération l'utilité de l'objet
-	    		//       selon l'état de la partie si l'effet de l'objet
-	    		//       a des restrictions
-	    		bolDecision = false;
+	    		
+	    		// Pour chaque objet de la liste, on va attribuer un pointage
+	    		int tPointageObjets[] = new int[lstObjetsMagasins.size()];
+	    		
+	    		for (int i = 0; i < lstObjetsMagasins.size(); i ++)
+	    		{
+	    			// Aller chercher l'objet
+	    			ObjetUtilisable objObjetAVendre = (ObjetUtilisable) lstObjetsMagasins.get(i);
+	    			
+	    			// Si le joueur virtuel n'a pas assez de point pour acheter
+	    			// l'objet, alors on donne un pointage très bas
+	    			if (intPointage < objObjetAVendre.obtenirPrix())
+	    			{
+	    				tPointageObjets[i] = -9999999;
+	    			}
+	    			
+	    			// Attribuer des points à l'objet selon le nombre
+	    			// d'objets de ce type déjà en possession
+	    			else
+	    			{
+	    				tPointageObjets[i] = objParametreIA.tParametresIAObjetUtilisable[objObjetAVendre.obtenirUniqueId()].intValeurPoints - 
+	    				    objParametreIA.tParametresIAObjetUtilisable[objObjetAVendre.obtenirUniqueId()].intPointsEnleverQuantite * 
+	    				    nombreObjetsPossedes(objObjetAVendre.obtenirUniqueId());
+	    			}
+
+	    		}
+	    		
+	    		// Choisir l'objet
+	    		for (int i = 0; i < tPointageObjets.length; i ++)
+	    		{
+	    			if (tPointageObjets[i] > intPlusGrand)
+	    			{
+	    				intPlusGrand = tPointageObjets[i];
+	    				intIndicePlusGrand = i;
+	    			}
+	    		}
+	    		
+	    		if (intIndicePlusGrand >= 0 && intIndicePlusGrand < tPointageObjets.length)
+	    		{
+	    			bolDecision = true;
+	    		}
+	    		else
+	    		{
+	    			bolDecision = false;
+	    		}
 
     		}
     		else
     		{
     			intTempsReflexion = 0;
-    			bolDecision = true;
+    			bolDecision = false;
     		}
-    		
-    		pause(intTempsReflexion);
     		
     		// On incrément le compteur de magasin visités
     		intNbMagasinVisites++;
@@ -1418,25 +1448,64 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         	//---------------------------------------
         	if (ccDebug)
         	{
-        		System.out.println("Magasin visite");
+        		System.out.println("***************** Magasin visite");
             }
         	//----------------------------------------
+        	
+    		pause(intTempsReflexion);
+    		
+    		if (bolDecision)
+    		{
+    			// Aller chercer l'objet choisit
+    			ObjetUtilisable objObjet = (ObjetUtilisable)lstObjetsMagasins.get(intIndicePlusGrand);
+    			
+    			// Acheter l'objet
+    			objObjet = objMagasin.acheterObjet(objObjet.obtenirId(), objObjet.obtenirTypeObjet(), objTable.obtenirProchainIdObjet());
+    			
+    			// Ajouter l'objet dans la liste
+    			lstObjetsUtilisablesRamasses.put(new Integer(objObjet.obtenirId()), objObjet);
+    		
+    		    // Défrayer les coûts
+    		    intPointage -= objObjet.obtenirPrix();
+    		    
+    		    //---------------------------------------
+    		    if (ccDebug)
+    		    {
+    		    	System.out.println("***************** Objet acheté: " + objObjet.obtenirTypeObjet());
+    		        System.out.println("***************** Cout: " + objObjet.obtenirPrix());
+    		        System.out.println("***************** Prochain id: " + objTable.obtenirProchainIdObjet().intValue);
+    		        
+    		        System.out.print("***** Liste objets dans le magasin après achat:");
+    		        for (int i = 0; i < objMagasin.obtenirListeObjetsUtilisables().size(); i++)
+    		        {
+    		        	System.out.print(((ObjetUtilisable)objMagasin.obtenirListeObjetsUtilisables().get(i)).obtenirTypeObjet() + 
+    		                "(" + ((ObjetUtilisable)objMagasin.obtenirListeObjetsUtilisables().get(i)).obtenirId() + "),");
+    		        }
+    		        System.out.println("");
+    		    }
+    		    //---------------------------------------
+    		}
+
     	}
     	
     	if (objObjetRamasse instanceof Reponse)
     	{
+    		//---------------------------------------
     		if (ccDebug)
     		{
     			System.out.println("Objet ramasse: Reponse");
     		}
+    		//---------------------------------------
     	}
     	
     	if (objRetour.obtenirCollision().equals("piece"))
     	{
+    		//---------------------------------------
     		if (ccDebug)
     		{
     			System.out.println("Objet ramasse: Piece");
     		}
+    		//---------------------------------------
     	}
  
     }
@@ -2186,11 +2255,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
      */
     private boolean determinerPretAVisiterMagasin()
     {
-    	// Enlever ceci lorsqu'il y aura quelquechose à acheter
-    	// dans les magasins
-    	return false;
-    	
-   	    /*int intNombreJetonsDisponibles = 0;
+      	
+   	    int intNombreJetonsDisponibles = 0;
     	int intTempsEcoule = objTable.obtenirTempsTotal() * 60 - objTable.obtenirTempsRestant();
     	
     	// Vérifier d'abord s'il reste assez de temps
@@ -2202,6 +2268,12 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     	// Si le joueur a atteint son quotas d'objets, alors
     	// il ne visite plus de magasins
     	if (lstObjetsUtilisablesRamasses.size() >= intNbObjetsMax)
+    	{
+    		return false;
+    	}
+    	
+    	// Il faut au moins 5 points pour acheter ne serait-ce qu'un objet Reponse
+    	if (intPointage < 4)
     	{
     		return false;
     	}
@@ -2220,7 +2292,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     	else
     	{
     		return false;
-    	}*/
+    	}
     }
     
     /* Cette fonction permet à l'algorithme de recherche de position

@@ -68,6 +68,9 @@ public class InformationPartie
 	
 	private BoiteQuestions objBoiteQuestions;
 	
+	// Pour empêcher le joueur d'acheter plus qu'un seul objet à la fois
+	private boolean bolObjetAcheter;
+	
 	/**
 	 * Constructeur de la classe InformationPartie qui permet d'initialiser
 	 * les propriétés de la partie et de faire la référence vers la table.
@@ -504,6 +507,9 @@ public class InformationPartie
 		
 		String collision = "";
 		
+		// Déclaration d'une référence vers le magasin recontré
+		Magasin objMagasinRencontre = null;
+		
 		// Si la réponse est bonne, alors on modifie le plateau de jeu
 		if (bolReponseEstBonne == true)
 		{
@@ -561,6 +567,14 @@ public class InformationPartie
 						// 		 les pièces sur le plateau de jeu s'il n'y en n'a
 						//		 plus
 					}
+					else if (objCaseCouleurDestination.obtenirObjetCase() instanceof Magasin)
+					{
+						// Définir la collision
+						collision = "magasin";
+						
+						// Définir la référence vers le magasin rencontré
+						objMagasinRencontre = (Magasin) objCaseCouleurDestination.obtenirObjetCase();
+					}
 				}
 				
 				// S'il y a un objet à subir sur la case, alors on va faire une
@@ -586,6 +600,7 @@ public class InformationPartie
 			objRetour.definirObjetSubi(objObjetSubi);
 			objRetour.definirNouvellePosition(objPositionDesiree);
 			objRetour.definirCollision( collision );
+			objRetour.definirMagasin(objMagasinRencontre);
 			
 			synchronized (table.obtenirListeJoueurs())
 		    {
@@ -665,6 +680,11 @@ public class InformationPartie
 		return lstObjetsUtilisablesRamasses;
 	}
 	
+	public void ajouterObjetUtilisableListe(ObjetUtilisable objObjetUtilisable)
+	{
+		lstObjetsUtilisablesRamasses.put(new Integer(objObjetUtilisable.obtenirId()), objObjetUtilisable);
+	}
+	
 	/*
 	 * Détermine si le joueur possède un certain objet, permet
 	 * de valider l'information envoyé par le client lorsqu'il utiliser l'objet
@@ -699,5 +719,36 @@ public class InformationPartie
 	public void enleverObjet(int intIdObjet, String strTypeObjet)
 	{
 		lstObjetsUtilisablesRamasses.remove(intIdObjet);
+	}
+	
+	public Objet obtenirObjetCaseCourante()
+	{
+		// L'objet à retourné
+		Objet objObjet = null;
+		
+		// Aller chercher le plateau de jeu
+		Case[][] objPlateauJeu = objTable.obtenirPlateauJeuCourant();
+		
+		// Aller chercher la case où le joueur se trouve
+		Case objCaseJoueur = objPlateauJeu[objPositionJoueur.x][objPositionJoueur.y];
+		
+		// Si c'est une case couleur, retourner l'objet, sinon on va retourner null
+		if (objCaseJoueur instanceof CaseCouleur)
+		{
+			objObjet = ((CaseCouleur) objCaseJoueur).obtenirObjetCase();
+		}
+		
+		return objObjet;
+		
+	}
+	
+	public boolean peutAcheterObjet()
+	{
+		return !bolObjetAcheter;
+	}
+	
+	public void definirObjetAcheter(boolean valeur)
+	{
+		bolObjetAcheter = valeur;
 	}
 }
