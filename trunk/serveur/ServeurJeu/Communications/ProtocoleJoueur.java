@@ -1617,7 +1617,7 @@ public class ProtocoleJoueur implements Runnable
 								
 								// Créer la liste des objets directement dans le 
 								// document XML de sortie
-								creerListeObjetsMagasin(objMagasin, objDocumentXMLSortie);
+								creerListeObjetsMagasin(objMagasin, objDocumentXMLSortie, objNoeudCommande);
 							}
 							
 							Element objNoeudNouvellePosition = objDocumentXMLSortie.createElement("position");
@@ -3020,7 +3020,7 @@ public class ProtocoleJoueur implements Runnable
      * @param Document objDocumentXMLSortie: Le document XML dans lequel ajouter
      *                                       les informations
      */
-    private void creerListeObjetsMagasin(Magasin objMagasin, Document objDocumentXMLSortie)
+    private void creerListeObjetsMagasin(Magasin objMagasin, Document objDocumentXMLSortie, Element objNoeudCommande)
     {
     	// Créer l'élément objetsMagasin
         Element objNoeudObjetsMagasin = objDocumentXMLSortie.createElement("objetsMagasins");
@@ -3052,6 +3052,8 @@ public class ProtocoleJoueur implements Runnable
     		// Maintenant ajouter cet objet à la liste
     		objNoeudObjetsMagasin.appendChild(objNoeudObjet);
     	}
+    	
+    	objNoeudCommande.appendChild(objNoeudObjetsMagasin);
 
     }
 }
