@@ -150,6 +150,19 @@ public class GestionnaireCommunication
 		}
 	}
 	
+	public void arreter()
+	{
+		try 
+		{
+			objSocketServeur.close();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		boolStopThread = true;
+	}
+	
 	/**
 	 * Cette méthode permet de supprimer le protocole joueur passé en paramètres
 	 * de la liste des ProtocoleJoueur. Cela signifie que le joueur ne sera plus

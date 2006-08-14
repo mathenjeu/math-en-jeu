@@ -210,6 +210,13 @@ public class ControleurJeu
 		//Cette methode est la loop de l'application
 		//Au retour, l'application se termine
 		objGestionnaireCommunication.ecouterConnexions();
+		System.out.println( "arret" );
+	}
+	
+	public void arreter()
+	{
+		System.out.println( "Le serveur arrete..." );
+		objGestionnaireCommunication.arreter();
 	}
 	
 	/**
