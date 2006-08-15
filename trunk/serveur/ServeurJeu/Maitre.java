@@ -9,9 +9,27 @@ import java.net.UnknownHostException;
 public class Maitre implements Runnable
 {
 	private ControleurJeu objJeu = null;
+	private static final int _ARRETER = 1;
+	private static final int _STATUS = 2;
+	
 	public static void main(String[] args) 
 	{
-		if( args.length == 0 || args[0].equals( "demarrer" ) )
+		String commande = null;
+		if( args.length > 0 )
+		{
+			commande = args[0];
+		}
+		traiterCommande( commande );
+	}
+	
+	public Maitre()
+	{
+		objJeu = new ControleurJeu();
+	}
+	
+	public static void traiterCommande( String commande )
+	{
+		if( commande == null || commande.equals( "demarrer" ) )
 		{
 			System.out.println( "demarrer" );
 			Maitre maitre = new Maitre();
@@ -19,12 +37,38 @@ public class Maitre implements Runnable
 			thread.start();
 			maitre.demarrer();
 		}
-		else if( args[0].equals( "arreter" ) )
+		else if( commande.equals( "arreter" ) )
 		{
 			System.out.println( "arreter" );
 			try 
 			{
 				Socket socket = new Socket( "localhost", 6101 );
+				byte [] buffer = new byte[2];
+				buffer[0] = (byte)_ARRETER;
+				buffer[1] = (byte)0;
+				socket.getOutputStream().write( buffer );
+			} 
+			catch (UnknownHostException e) 
+			{
+				e.printStackTrace();
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+		else if( commande.equals( "status" ) )
+		{
+			System.out.println( "status" );
+			try 
+			{
+				Socket socket = new Socket( "localhost", 6101 );
+				byte [] buffer = new byte[256];
+				buffer[0] = (byte)_STATUS;
+				buffer[1] = (byte)0;
+				socket.getOutputStream().write( buffer );
+				socket.getInputStream().read( buffer );
+				System.out.println( new String( buffer ) );
 			} 
 			catch (UnknownHostException e) 
 			{
@@ -37,13 +81,8 @@ public class Maitre implements Runnable
 		}
 		else
 		{
-			//mauvais argument
+			System.out.println( "Mauvaise commande" );
 		}
-	}
-	
-	public Maitre()
-	{
-		objJeu = new ControleurJeu();
 	}
 	
 	public void demarrer()
@@ -62,10 +101,27 @@ public class Maitre implements Runnable
 				Socket socket = socketServeur.accept();
 				if( socket.getInetAddress().isLoopbackAddress() == true )
 				{
-					System.out.println( "arreter par un socket local" );
-					arret = true;
-					objJeu.arreter();
-					System.exit( 0 );
+					byte [] buffer = new byte[256];
+					socket.getInputStream().read( buffer );
+					byte commande = (byte)buffer[0];
+					if( commande == (byte)_ARRETER )
+					{
+						System.out.println( "arreter le serveur" );
+						arret = true;
+						objJeu.arreter();
+						System.exit( 0 );
+					}
+					else if( commande == (byte)_STATUS )
+					{
+						System.out.println( "obtenir le status du serveur" );
+						String message = "Le serveur est en ligne\0";
+						buffer = message.getBytes();
+						socket.getOutputStream().write( buffer );
+					}
+					else
+					{
+						System.out.println( "ERREUR : Mauvaise commande" );
+					}
 				}
 			}
 		} 
