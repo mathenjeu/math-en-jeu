@@ -1,13 +1,15 @@
 package ServeurJeu;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import org.apache.log4j.Logger;
+
 public class Maitre implements Runnable
 {
+	static private Logger objLogger = Logger.getLogger( Maitre.class );
 	private ControleurJeu objJeu = null;
 	private static final int _ARRETER = 1;
 	private static final int _STATUS = 2;
@@ -50,11 +52,15 @@ public class Maitre implements Runnable
 			} 
 			catch (UnknownHostException e) 
 			{
-				e.printStackTrace();
+				//e.printStackTrace();
+				objLogger.error( e.getMessage() );
+				System.out.println( "Le serveur n'est pas en ligne" );
 			} 
 			catch (IOException e) 
 			{
-				e.printStackTrace();
+				//e.printStackTrace();
+				objLogger.error( e.getMessage() );
+				System.out.println( "Le serveur n'est pas en ligne" );
 			}
 		}
 		else if( commande.equals( "status" ) )
@@ -127,7 +133,7 @@ public class Maitre implements Runnable
 		} 
 		catch (IOException e) 
 		{	
-			e.printStackTrace();
+			objLogger.error( e.getMessage() );
 		}
 	}
 }
