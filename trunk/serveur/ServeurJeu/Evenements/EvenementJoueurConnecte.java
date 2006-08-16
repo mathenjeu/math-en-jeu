@@ -8,6 +8,7 @@ import org.w3c.dom.Text;
 
 import ServeurJeu.Monitoring.Moniteur;
 import ClassesUtilitaires.UtilitaireXML;
+import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
  * @author Jean-François Brind'Amour
@@ -80,11 +81,11 @@ public class EvenementJoueurConnecte extends Evenement
 		}
 		catch (TransformerConfigurationException tce)
 		{
-			System.out.println("Une erreur est survenue lors de la transformation du document XML en chaine de caracteres");
+			System.out.println(GestionnaireMessages.message("evenement.XML_transformation"));
 		}
 		catch (TransformerException te)
 		{
-			System.out.println("Une erreur est survenue lors de la conversion du document XML en chaine de caracteres");
+			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
 		
 		Moniteur.obtenirInstance().fin();

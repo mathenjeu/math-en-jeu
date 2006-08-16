@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
 import ClassesUtilitaires.UtilitaireXML;
+import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
  * @author Marc
@@ -69,11 +70,11 @@ public class EvenementSynchroniserTemps extends Evenement
 		}
 		catch (TransformerConfigurationException tce)
 		{
-			System.out.println("Une erreur est survenue lors de la transformation du document XML en chaine de caracteres");
+			System.out.println(GestionnaireMessages.message("evenement.XML_transformation"));
 		}
 		catch (TransformerException te)
 		{
-			System.out.println("Une erreur est survenue lors de la conversion du document XML en chaine de caracteres");
+			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
 		
 		return strCodeXML;

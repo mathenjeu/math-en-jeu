@@ -36,7 +36,7 @@ public class GestionnaireConfiguration
 		{
 			_instance = new GestionnaireConfiguration();
 		}
-		return _instance;
+	    return _instance;
 	}
 	
 	public int obtenirNombreEntier( String id )

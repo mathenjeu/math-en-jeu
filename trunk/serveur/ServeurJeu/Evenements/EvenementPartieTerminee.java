@@ -18,6 +18,7 @@ import java.util.Vector;
 import ClassesUtilitaires.UtilitaireXML;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
+import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
  * @author Marc
@@ -57,7 +58,7 @@ public class EvenementPartieTerminee  extends Evenement
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "PartieTerminee");
 			
-//			 Créer le noeud du paramètre
+           // Créer le noeud du paramètre
 			Element objNoeudParametre = objDocumentXML.createElement("parametre");
 			
 			// On ajoute un attribut type qui va contenir le type
@@ -120,11 +121,11 @@ public class EvenementPartieTerminee  extends Evenement
 		}
 		catch (TransformerConfigurationException tce)
 		{
-			System.out.println("Une erreur est survenue lors de la transformation du document XML en chaine de caracteres");
+			System.out.println(GestionnaireMessages.message("evenement.XML_transformation"));
 		}
 		catch (TransformerException te)
 		{
-			System.out.println("Une erreur est survenue lors de la conversion du document XML en chaine de caracteres");
+			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
 		
 		return strCodeXML;

@@ -17,6 +17,7 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ServeurJeu.Monitoring.Moniteur;
 import ClassesUtilitaires.UtilitaireXML;
+import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
  * @author Jean-François Brind'Amour
@@ -249,11 +250,11 @@ public class EvenementPartieDemarree extends Evenement
 		}
 		catch (TransformerConfigurationException tce)
 		{
-			System.out.println("Une erreur est survenue lors de la transformation du document XML en chaine de caracteres");
+			System.out.println(GestionnaireMessages.message("evenement.XML_transformation"));
 		}
 		catch (TransformerException te)
 		{
-			System.out.println("Une erreur est survenue lors de la conversion du document XML en chaine de caracteres");
+			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
 		catch( Exception e )
 		{

@@ -36,6 +36,11 @@ import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Reponse;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.Category;
+import org.apache.log4j.Level;
+import ServeurJeu.Configuration.GestionnaireMessages;
+
 import java.util.Random;
 import java.util.Date;
 
@@ -152,6 +157,9 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	// (voir fonction pause() )
 	private static final boolean ccFast = false;
 	
+	// Objet logger pour afficher les erreurs dans le fichier log
+	static private Logger objLogger = Logger.getLogger(JoueurVirtuel.class);
+	
 	/**
 	 * Constructeur de la classe JoueurVirtuel qui permet d'initialiser les 
 	 * membres privés du joueur virtuel
@@ -242,124 +250,136 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	 */
 	public void run()
 	{
+		try
+		{	
+		    // Assigner le priorité TRACE au logger pour qu'il puisse
+		    // écrire les traces des exceptions si il en arrivent
+		    objLogger.setLevel((Level) Level.TRACE);
+		
+			// Cette variable conserve la case sur laquelle le joueur virtuel
+			// tente de se déplacer
+			Point objPositionIntermediaire = null;
 			
-		// Cette variable conserve la case sur laquelle le joueur virtuel
-		// tente de se déplacer
-		Point objPositionIntermediaire = null;
-		
-		// Cette variable indique si le joueur virtuel a répondu correctement
-		// à la question
-		boolean bolQuestionReussie;
-		
-		// Cette variable contient le temps de réflexion pour répondre à 
-		// la question
-		int intTempsReflexionQuestion;
-		
-		// Cette variable contient le temps de réflexion pour choisir 
-		// le prochain coup à jouer
-        int intTempsReflexionCoup;
-		
-		// Cette variable contient le temps de pause pour le déplacement
-		// du personnage
-		int intTempsDeplacement;
-		
-		// La grandeur de déplacement demandé par le joueur virtuel
-		int intGrandeurDeplacement;
-		
-		// Le pourcentage de réussite à la question
-		int intPourcentageReussite;
-		
-		while(bolStopThread == false)
-		{		
-
-			// Déterminer le temps de réflexion pour le prochain coup
-			intTempsReflexionCoup = obtenirTempsReflexionCoup();
+			// Cette variable indique si le joueur virtuel a répondu correctement
+			// à la question
+			boolean bolQuestionReussie;
 			
-
-			// Pause pour moment de réflexion de décision
-			pause(intTempsReflexionCoup);
+			// Cette variable contient le temps de réflexion pour répondre à 
+			// la question
+			int intTempsReflexionQuestion;
 			
-            // Trouver une case intéressante à atteindre
-            if (reviserPositionFinaleVisee() == true)
-            {
-            	objPositionFinaleVisee = trouverPositionFinaleVisee();	
-            }
-                    
-			// Trouver une case intermédiaire
-			objPositionIntermediaire = trouverPositionIntermediaire();
-
-			// S'il y a erreur de recherche ou si le joueur virtuel est pris
-			// on ne le fait pas bouger
-			if (objPositionIntermediaire.x != objPositionJoueur.x || 
-			    objPositionIntermediaire.y != objPositionJoueur.y)
-			{
-				// Calculer la grandeur du déplacement demandé
-				intGrandeurDeplacement = obtenirPointage(objPositionJoueur, objPositionIntermediaire);
-				
-				// Aller chercher le pourcentage de réussite à la question
-				intPourcentageReussite = objParametreIA.tPourcentageReponse[intNiveauDifficulte][intGrandeurDeplacement-1];
+			// Cette variable contient le temps de réflexion pour choisir 
+			// le prochain coup à jouer
+	        int intTempsReflexionCoup;
+			
+			// Cette variable contient le temps de pause pour le déplacement
+			// du personnage
+			int intTempsDeplacement;
+			
+			// La grandeur de déplacement demandé par le joueur virtuel
+			int intGrandeurDeplacement;
+			
+			// Le pourcentage de réussite à la question
+			int intPourcentageReussite;
+			
+			while(bolStopThread == false)
+			{		
+				// Déterminer le temps de réflexion pour le prochain coup
+				intTempsReflexionCoup = obtenirTempsReflexionCoup();
 	
-	            // Vérifier si c'est une question à choix de réponse
-	            boolean bolQuestionChoixDeReponse = (genererNbAleatoire(100)+1 <= ParametreIA.RATIO_CHOIX_DE_REPONSE);	            
-	            
-				// Vérifier si on utilise l'objet reponse selon notre
-				// pourcentage de réussite et si la question est une question
-				// à choix de réponse.   
-				boolean bolUtiliserReponse = bolQuestionChoixDeReponse &&
-				    nombreObjetsPossedes(Objet.UID_OU_REPONSE) > 0 &&
-				    intGrandeurDeplacement >= 3;
+				// Pause pour moment de réflexion de décision
+				pause(intTempsReflexionCoup);
 				
-				// Si on utilise l'objet, on modifie le % de réussite
-				if (bolUtiliserReponse == true)
+	            // Trouver une case intéressante à atteindre
+	            if (reviserPositionFinaleVisee() == true)
+	            {
+	            	objPositionFinaleVisee = trouverPositionFinaleVisee();	
+	            }
+	                    
+				// Trouver une case intermédiaire
+				objPositionIntermediaire = trouverPositionIntermediaire();
+	
+				// S'il y a erreur de recherche ou si le joueur virtuel est pris
+				// on ne le fait pas bouger
+				if (objPositionIntermediaire.x != objPositionJoueur.x || 
+				    objPositionIntermediaire.y != objPositionJoueur.y)
 				{
-    				if (ccDebug)
-    				{
-    					System.out.println("Utilise objet: Reponse");
-    				}
+					// Calculer la grandeur du déplacement demandé
+					intGrandeurDeplacement = obtenirPointage(objPositionJoueur, objPositionIntermediaire);
 					
-					// Augmenter les chances de réussites utilisant le 
-					// tableau de % de réponse lorsqu'on utilise cet objet
-				    intPourcentageReussite = objParametreIA.tPourcentageReponseObjetReponse[intNiveauDifficulte][intGrandeurDeplacement-1];
-				    
-				    // Enlever un objet reponse des objets du joueur
-				    enleverObjet(Objet.UID_OU_REPONSE);
-
-				}
-				
-    			// Déterminer si le joueur virtuel répondra à la question
-                bolQuestionReussie = (genererNbAleatoire(100)+1 <= intPourcentageReussite);
-    			        
-    			// Déterminer le temps de réponse à la question
-    			intTempsReflexionQuestion = obtenirTempsReflexionReponse();
-                
-    			// Pause pour moment de réflexion de réponse
-    			pause(intTempsReflexionQuestion);	
-    					
-    			// Faire déplacer le personnage si le joueur virtuel a 
-    			// réussi à répondre à la question
-    			if (bolQuestionReussie == true)
-    			{
-    				// Déplacement du joueur virtuel
-    				deplacerJoueurVirtuelEtMajPlateau(objPositionIntermediaire);
-    				
-    				// Obtenir le temps que le déplacement dure
-    				intTempsDeplacement = obtenirTempsDeplacement(obtenirPointage(objPositionJoueur, objPositionIntermediaire));
-
-    				// Pause pour laisser le personnage se déplacer
-    				pause(intTempsDeplacement);
-    			}
-    			else
-    			{
-    				if (ccDebug)
-    				{
-    					System.out.println("Question ratée");
-    				}
-
-    				// Pause pour rétroaction
-    				pause(ParametreIA.TEMPS_RETROACTION);
-    			}
-    			
-    	    }	
+					// Aller chercher le pourcentage de réussite à la question
+					intPourcentageReussite = objParametreIA.tPourcentageReponse[intNiveauDifficulte][intGrandeurDeplacement-1];
+		
+		            // Vérifier si c'est une question à choix de réponse
+		            boolean bolQuestionChoixDeReponse = (genererNbAleatoire(100)+1 <= ParametreIA.RATIO_CHOIX_DE_REPONSE);	            
+		            
+					// Vérifier si on utilise l'objet reponse selon notre
+					// pourcentage de réussite et si la question est une question
+					// à choix de réponse.   
+					boolean bolUtiliserReponse = bolQuestionChoixDeReponse &&
+					    nombreObjetsPossedes(Objet.UID_OU_REPONSE) > 0 &&
+					    intGrandeurDeplacement >= 3;
+					
+					// Si on utilise l'objet, on modifie le % de réussite
+					if (bolUtiliserReponse == true)
+					{
+	    				if (ccDebug)
+	    				{
+	    					System.out.println("Utilise objet: Reponse");
+	    				}
+						
+						// Augmenter les chances de réussites utilisant le 
+						// tableau de % de réponse lorsqu'on utilise cet objet
+					    intPourcentageReussite = objParametreIA.tPourcentageReponseObjetReponse[intNiveauDifficulte][intGrandeurDeplacement-1];
+					    
+					    // Enlever un objet reponse des objets du joueur
+					    enleverObjet(Objet.UID_OU_REPONSE);
+	
+					}
+					
+	    			// Déterminer si le joueur virtuel répondra à la question
+	                bolQuestionReussie = (genererNbAleatoire(100)+1 <= intPourcentageReussite);
+	    			        
+	    			// Déterminer le temps de réponse à la question
+	    			intTempsReflexionQuestion = obtenirTempsReflexionReponse();
+	                
+	    			// Pause pour moment de réflexion de réponse
+	    			pause(intTempsReflexionQuestion);	
+	    					
+	    			// Faire déplacer le personnage si le joueur virtuel a 
+	    			// réussi à répondre à la question
+	    			if (bolQuestionReussie == true)
+	    			{
+	    				// Déplacement du joueur virtuel
+	    				deplacerJoueurVirtuelEtMajPlateau(objPositionIntermediaire);
+	    				
+	    				// Obtenir le temps que le déplacement dure
+	    				intTempsDeplacement = obtenirTempsDeplacement(obtenirPointage(objPositionJoueur, objPositionIntermediaire));
+	
+	    				// Pause pour laisser le personnage se déplacer
+	    				pause(intTempsDeplacement);
+	    			}
+	    			else
+	    			{
+	    				if (ccDebug)
+	    				{
+	    					System.out.println("Question ratée");
+	    				}
+	
+	    				// Pause pour rétroaction
+	    				pause(ParametreIA.TEMPS_RETROACTION);
+	    			}
+	    			
+	    	    }	
+			}
+		}
+		catch (Exception e)
+		{
+			// Envoyer la trace de l'erreur dans le log
+			objLogger.trace(GestionnaireMessages.message("joueur_virtuel.erreur_thread") + strNom, e);
+			
+			// Envoyer la trace de l'erreur à l'écran
+			e.printStackTrace();
 		}
 	}
 	
@@ -372,7 +392,6 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	 */
     public Vector trouverCheminPlusCourt(Point depart, Point arrivee)
     {
-        
         // Liste des points à traiter pour l'algorithme de recherche de chemin
         Vector lstPointsATraiter = new Vector();
         
@@ -718,7 +737,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         }
         
         // Si on est près de la position finale, on s'assure de ne pas la dépasser
-        if (lstPositionsTrouvees.size() < ParametreIA.DEPLACEMENT_MAX)
+        if (lstPositionsTrouvees.size() <= ParametreIA.DEPLACEMENT_MAX)
         {
             traiterPieceTrouveeDansLigne(intPourcentageCase, lstPositionsTrouvees.size() - 2); 
         }
@@ -729,7 +748,6 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         // On génère un nombre entre 1 et 100
         intPourcentageAleatoire = genererNbAleatoire(100)+1;
 
-        
         int intValeurAccumulee = 0;
         int intDecision = 0;
         
@@ -744,11 +762,11 @@ public class JoueurVirtuel extends Joueur implements Runnable {
             }
         }
         
-
         // On peut donc retourner la case choisie par le joueur virtuel
         ptTemp = (Point)lstPositionsTrouvees.get(lstPositionsTrouvees.size() - 1 - intDecision);
         objPositionTrouvee = new Point(ptTemp.x, ptTemp.y);
 
+        
         //--------------------------------
         if (ccDebug)
         {
@@ -1370,27 +1388,60 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     		// Aller chercher une référence vers le magasin
     		Magasin objMagasin = (Magasin)((CaseCouleur)objCaseDestination).obtenirObjetCase();
     		
-    		// Aller chercher une référence vers la liste d'objets
-    		Vector lstObjetsMagasins = objMagasin.obtenirListeObjetsUtilisables();
+            // Aller chercher une référence vers la liste des objets du magasin
+            Vector lstObjetsMagasins = objMagasin.obtenirListeObjetsUtilisables();
+            Vector lstCopieObjetsMagasins = new Vector();
+            
+            synchronized (lstObjetsMagasins)
+            {
+            	// Faire une copie de la liste des objets du magasin
+    		    //(Vector)objMagasin.obtenirListeObjetsUtilisables().clone();
+    		    
+    		    // Copier tous les objets du magasin
+    		    for (int i = 0; i < lstObjetsMagasins.size(); i++)
+    		    {
+    		    	// Aller chercher l'objet du magasin
+    		    	ObjetUtilisable objObjet = (ObjetUtilisable)lstObjetsMagasins.get(i);
+    		    	
+    		    	// Créer une copie
+    		    	ObjetUtilisable objCopieObjet = new ObjetUtilisable(objObjet.obtenirId(),
+    		    	    objObjet.estVisible(), objObjet.obtenirUniqueId(),
+    		    	    objObjet.obtenirPrix(), objObjet.obtenirPeutEtreArme(),
+    		    	    objObjet.obtenirEstLimite(), objObjet.obtenirTypeObjet());
+    		    	
+	                // Ajouter la copie à notre liste
+    		    	lstCopieObjetsMagasins.add(objCopieObjet);
+    		    }
+    		}
+    		
+    		/**********************************
+    		 *
+    		 * Maintenant, on fait les calculs sur la copie de la liste
+    		 * d'objets. Il est possible qu'un ou que des joueurs
+    		 * achètent les objets pendant ce temps. Si l'objet choisit 
+    		 * n'y est plus après les calculs, le joueur
+    		 * virtuel va passer son tour et n'achètera rien
+    		 *
+    		 **********************************/
     		
     		// Si le magasin ne possède aucun item, si le joueur
-    		// virtuel a atteint sa limit d'objets ou si le magasin
+    		// virtuel a atteint sa limite d'objets ou si le magasin
     		// est dans la liste des magasins à ne pas visiter, alors le 
     		// temps de réflexion est de 0 et la décision est de ne 
     		// rien acheter
-    		if (lstObjetsMagasins.size() >= 0 && 
+    		if (lstCopieObjetsMagasins.size() >= 0 && 
     		    lstObjetsUtilisablesRamasses.size() < intNbObjetsMax &&
     		    !lstMagasinsVisites.contains(objMagasin))
     		{
     			intTempsReflexion = obtenirTempsReflexionAchat();
 	    		
 	    		// Pour chaque objet de la liste, on va attribuer un pointage
-	    		int tPointageObjets[] = new int[lstObjetsMagasins.size()];
+	    		int tPointageObjets[] = new int[lstCopieObjetsMagasins.size()];
 	    		
-	    		for (int i = 0; i < lstObjetsMagasins.size(); i ++)
+	    		for (int i = 0; i < lstCopieObjetsMagasins.size(); i ++)
 	    		{
 	    			// Aller chercher l'objet
-	    			ObjetUtilisable objObjetAVendre = (ObjetUtilisable) lstObjetsMagasins.get(i);
+	    			ObjetUtilisable objObjetAVendre = (ObjetUtilisable) lstCopieObjetsMagasins.get(i);
 	    			
 	    			// Si le joueur virtuel n'a pas assez de point pour acheter
 	    			// l'objet, alors on donne un pointage très bas
@@ -1451,39 +1502,76 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         		System.out.println("***************** Magasin visite");
             }
         	//----------------------------------------
-        	
-    		pause(intTempsReflexion);
-    		
+
+	    	pause(intTempsReflexion);
+
     		if (bolDecision)
     		{
-    			// Aller chercer l'objet choisit
-    			ObjetUtilisable objObjet = (ObjetUtilisable)lstObjetsMagasins.get(intIndicePlusGrand);
-    			
-    			// Acheter l'objet
-    			objObjet = objMagasin.acheterObjet(objObjet.obtenirId(), objObjet.obtenirTypeObjet(), objTable.obtenirProchainIdObjet());
-    			
-    			// Ajouter l'objet dans la liste
-    			lstObjetsUtilisablesRamasses.put(new Integer(objObjet.obtenirId()), objObjet);
-    		
-    		    // Défrayer les coûts
-    		    intPointage -= objObjet.obtenirPrix();
-    		    
-    		    //---------------------------------------
-    		    if (ccDebug)
-    		    {
-    		    	System.out.println("***************** Objet acheté: " + objObjet.obtenirTypeObjet());
-    		        System.out.println("***************** Cout: " + objObjet.obtenirPrix());
-    		        System.out.println("***************** Prochain id: " + objTable.obtenirProchainIdObjet().intValue);
-    		        
-    		        System.out.print("***** Liste objets dans le magasin après achat:");
-    		        for (int i = 0; i < objMagasin.obtenirListeObjetsUtilisables().size(); i++)
-    		        {
-    		        	System.out.print(((ObjetUtilisable)objMagasin.obtenirListeObjetsUtilisables().get(i)).obtenirTypeObjet() + 
-    		                "(" + ((ObjetUtilisable)objMagasin.obtenirListeObjetsUtilisables().get(i)).obtenirId() + "),");
-    		        }
-    		        System.out.println("");
-    		    }
-    		    //---------------------------------------
+    			// Aller chercher, dans la copie, l'indice de l'objet à acheter
+                int intObjetId = ((ObjetUtilisable)lstCopieObjetsMagasins.get(intIndicePlusGrand)).obtenirId();
+                
+                // Permet de savoir si l'achat a eu lieu
+                boolean bolAchatOk;
+                
+                // Va contenir l'objet 
+                ObjetUtilisable objObjet = null;
+                
+                // Vérifier si l'objet existe encore
+                synchronized(objMagasin)
+                {
+                	if (objMagasin.objetExiste(intObjetId))
+                	{
+		    			// Aller chercher l'objet choisit
+		    			objObjet = (ObjetUtilisable)lstObjetsMagasins.get(intIndicePlusGrand);
+		    			
+		    			// Acheter l'objet
+		    			objObjet = objMagasin.acheterObjet(objObjet.obtenirId(), objObjet.obtenirTypeObjet(), objTable.obtenirProchainIdObjet());
+		    			
+		    			// On indique que l'achat a eu lieu puis on sort de la s.c.
+		    			bolAchatOk = true;
+                	}
+                	else
+                	{
+                		bolAchatOk = false;
+                	}
+                }
+                
+                if (bolAchatOk)
+                {
+	    			// Ajouter l'objet dans la liste
+	    			lstObjetsUtilisablesRamasses.put(new Integer(objObjet.obtenirId()), objObjet);
+	    		
+	    		    // Défrayer les coûts
+	    		    intPointage -= objObjet.obtenirPrix();
+	    		    
+	    		    //---------------------------------------
+	    		    if (ccDebug)
+	    		    {
+	    		    	System.out.println("***************** Objet acheté: " + objObjet.obtenirTypeObjet());
+	    		        System.out.println("***************** Cout: " + objObjet.obtenirPrix());
+	    		        System.out.println("***************** Prochain id: " + objTable.obtenirProchainIdObjet().intValue);
+	    		        
+	    		        System.out.print("***** Liste objets dans le magasin après achat:");
+	    		        for (int i = 0; i < objMagasin.obtenirListeObjetsUtilisables().size(); i++)
+	    		        {
+	    		        	System.out.print(((ObjetUtilisable)objMagasin.obtenirListeObjetsUtilisables().get(i)).obtenirTypeObjet() + 
+	    		                "(" + ((ObjetUtilisable)objMagasin.obtenirListeObjetsUtilisables().get(i)).obtenirId() + "),");
+	    		        }
+	    		        System.out.println("");
+	    		    }
+	    		    //---------------------------------------
+	    		    
+                }
+                else
+                {
+                	if (ccDebug)
+                	{
+                		System.out.println("Objet envolé après réflexion (" + strNom + 
+                		    ", " + objPositionJoueur.x + "-" + objPositionJoueur.y + 
+                		    ", " + System.currentTimeMillis() + ")");
+                	}
+                }
+
     		}
 
     	}
@@ -1517,9 +1605,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     {
         objTable.preparerEvenementJoueurDeplacePersonnage(strNom, collision, objPositionJoueur, 
             objNouvellePosition);
-
     }
-    
 
 
     private int genererNbAleatoire(int max)
@@ -2101,8 +2187,6 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     	// virtuel visitera dans les prochaines 60 minutes
 		intNombreMagasins = objParametreIA.tNbJetonsMagasinBase[intNiveauDifficulte] + 
 		    objControleurJeu.genererNbAleatoire(objParametreIA.tNbJetonsMagasinAleatoire[intNiveauDifficulte]);
-
-		
 
         // Obtenir le temps de la partie en minutes
         int intTempsPartie = objTable.obtenirTempsTotal();

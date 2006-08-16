@@ -118,36 +118,43 @@ public class TestJoueurVirtuel {
         
         // Afficher le prochain id pour les objets
         System.out.println("Prochain Id pour objets: " + objTable.obtenirProchainIdObjet().intValue);
-             
-        // Ajouter un joueur virtuel dans la table
-        JoueurVirtuel jv = new JoueurVirtuel("Test Bot 1 - The DeStRuCtOr", 1, objTable, ev, controleur);
         
-        Point ptJv[] = GenerateurPartie.genererPositionJoueurs(1, lstPointsCaseLibre);
-        jv.definirPositionJoueurVirtuel(new Point(ptJv[0].x,ptJv[0].y));
-        
-        //-----------------------------------------
-            System.out.println("Joueur virtuel créé");
-        //-----------------------------------------
-        
+        // Envoyer le plateau de jeu dans un fichier     
         outputPlateau(objTable.obtenirPlateauJeuCourant());
         
         //-----------------------------------------
             System.out.println("Plateau de jeu dans plateau.txt");
-        //-----------------------------------------       
+        //-----------------------------------------    
+        
+        // Nombre de joueurs virtuels à créer
+        int intNombreJoueursVirtuels = 2;
+        
+        Point ptJv[] = GenerateurPartie.genererPositionJoueurs(intNombreJoueursVirtuels, lstPointsCaseLibre);
+        
+        for (int i = 0; i < intNombreJoueursVirtuels; i++)
+        {
+        	JoueurVirtuel jv = new JoueurVirtuel("Test Bot " + i, 2, objTable, ev, controleur);
+            jv.definirPositionJoueurVirtuel(new Point(ptJv[i].x,ptJv[i].y));
+	        
+	        //-----------------------------------------
+	            System.out.println("Joueur virtuel créé (" + i + ")");
+	        //-----------------------------------------
+	        
+	        // Démarrer le joueur virtuel
+	        Thread threadJv = new Thread(jv);
+	        threadJv.start();
+	        
+	        //-----------------------------------------
+	            System.out.println("Thread du joueur virtuel démarré");
+	        //-----------------------------------------
+        
+        }
         
         // Minuterie
         objTable.demarrerMinuterie();
         
         //-----------------------------------------
             System.out.println("Minuterie créé");
-        //-----------------------------------------
-        
-        // Démarrer le joueur virtuel
-        Thread threadJv = new Thread(jv);
-        threadJv.start();
-        
-        //-----------------------------------------
-            System.out.println("Thread du joueur virtuel démarré");
         //-----------------------------------------
 
 /*

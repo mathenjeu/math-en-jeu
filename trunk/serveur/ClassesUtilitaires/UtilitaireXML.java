@@ -15,6 +15,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
  * @author Jean-François Brind'Amour
@@ -60,7 +61,7 @@ public final class UtilitaireXML
         }
 		catch (ParserConfigurationException pce)
 		{
-			System.out.println("Une erreur est survenue lors de la transformation du message recu en format XML");
+			System.out.println(GestionnaireMessages.message("erreur_transformation"));
 		}
 		
 		return objDocumentXML;
@@ -101,15 +102,15 @@ public final class UtilitaireXML
         }
 		catch (ParserConfigurationException pce)
 		{
-			System.out.println("Une erreur est survenue lors de la transformation du message recu en format XML");
+			System.out.println(GestionnaireMessages.message("erreur_transformation"));
 		}
 		catch (IOException ioe)
 		{
-			System.out.println("Une erreur est survenue lors de la lecture du code XML");
+			System.out.println(GestionnaireMessages.message("erreur_io"));
 		}
 		catch (SAXException saxe)
 		{
-			System.out.println("Une erreur est survenue lors de la lecture du message en format XML");
+			System.out.println(GestionnaireMessages.message("erreur_sax"));
 		}
 		
 		return objDocumentXML;

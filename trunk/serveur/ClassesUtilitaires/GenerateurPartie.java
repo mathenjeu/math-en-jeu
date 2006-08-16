@@ -20,7 +20,7 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ClassesUtilitaires.IntObj;
-
+import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
  * @author Jean-François Brind'Amour

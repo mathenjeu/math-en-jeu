@@ -147,7 +147,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		intNoTable = noTable;
 		strNomUtilisateurCreateur = nomUtilisateurCreateur;
 		intTempsTotal = tempsPartie;
-	//	intTempsRestant = tempsPartie;
+	    // intTempsRestant = tempsPartie;
 		
 		// Créer une nouvelle liste de joueurs
 		lstJoueurs = new TreeMap();
@@ -181,7 +181,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         // Faire la référence vers le controleu jeu
         objControleurJeu = controleurJeu;
         
-//		 Créer un thread pour le GestionnaireEvenements
+        // Créer un thread pour le GestionnaireEvenements
 		Thread threadEvenements = new Thread(objGestionnaireEvenements);
 		
 		// Démarrer le thread du gestionnaire d'événements
@@ -418,7 +418,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				// un événement qui indique que la partie est commencée
 				if (lstJoueursEnAttente.size() == intNbJoueurDemande)
 				{
-					laPartieCommence();			
+					laPartieCommence("Aucun");			
 				}
 	    	}
 		}
@@ -426,7 +426,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    return strResultatDemarrerPartie;
 	}
 	
-	public String demarrerMaintenant(JoueurHumain joueur, int idPersonnage, boolean doitGenererNoCommandeRetour)
+	public String demarrerMaintenant(JoueurHumain joueur, int idPersonnage, boolean doitGenererNoCommandeRetour, String strParamJoueurVirtuel)
 	{
 		// Lorsqu'on fait démarré maintenant, le nombre de joueurs sur la
 		// table devient le nombre de joueurs demandé, lorsqu'ils auront tous
@@ -468,7 +468,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				// un événement qui indique que la partie est commencée
 				if (lstJoueursEnAttente.size() == intNbJoueurDemande)
 				{
-					laPartieCommence();			
+					laPartieCommence(strParamJoueurVirtuel);			
 				}
 	    	}
 	    }
@@ -506,7 +506,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	}
 		
     /* Cette fonction permet d'obtenir un tableau contenant intNombreJoueurs
-     * noms de joueurs virtuels différentes
+     * noms de joueurs virtuels différents
      */
 	private String[] obtenirNomsJoueursVirtuels(int intNombreJoueurs)
 	{
@@ -557,7 +557,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
        return tRetour;
 	}
 	
-	private void laPartieCommence()
+	private void laPartieCommence(String strParamJoueurVirtuel)
 	{
         // Créer une nouvelle liste qui va garder les points des 
 		// cases libres (n'ayant pas d'objets dessus)
@@ -601,11 +601,37 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Obtenir la position des joueurs de cette table
 		int nbJoueur = lstJoueursEnAttente.size(); //TODO a vérifier
 		
+		// Contient le niveau de difficulté que le joueur désire pour
+		// les joueurs virtuels
+		int intDifficulteJoueurVirtuel = ParametreIA.DIFFICULTE_MOYEN;
+		
 		// Obtenir le nombre de joueurs virtuel requis
-		intNombreJoueursVirtuels = 4 - lstJoueursEnAttente.size();
-		if (intNombreJoueursVirtuels < 0 || intNombreJoueursVirtuels >=4)
+		// Vérifier d'abord le paramètre envoyer par le joueur
+		if (strParamJoueurVirtuel.equals("Aucun"))
 		{
 			intNombreJoueursVirtuels = 0;
+		}
+		else
+		{
+			if (strParamJoueurVirtuel.equals("Facile"))
+			{
+				intDifficulteJoueurVirtuel = ParametreIA.DIFFICULTE_FACILE;
+			}
+			else if(strParamJoueurVirtuel.equals("Intermediaire"))
+			{
+				intDifficulteJoueurVirtuel = ParametreIA.DIFFICULTE_MOYEN;
+			}
+			else if(strParamJoueurVirtuel.equals("Difficile"))
+			{
+				intDifficulteJoueurVirtuel = ParametreIA.DIFFICULTE_DIFFICILE;
+			}
+			
+			// Le joueur veut des joueurs virtuels
+			intNombreJoueursVirtuels = 4 - lstJoueursEnAttente.size();
+			if (intNombreJoueursVirtuels < 0 || intNombreJoueursVirtuels >=4)
+			{
+				intNombreJoueursVirtuels = 0;
+			}
 		}
 		
         objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels, lstPointsCaseLibre);
@@ -660,10 +686,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     		    // à jouer plus loin
     		  
                 // Ajouter un joueur virtuel dans la table
-                // TODO: NE PAS PRENDRE 2 FOIS LE MÊME NOM ET NE PAS PRENDRE
-                //       LE MÊME NOM QU'UN JOUEUR HUMAIN
-                
+
+                //------------------------------------------------------------------
                 // TODO: Enlever cette partie strictement pour tester
+                //
+                //                
+                // 
                 if (lstJoueursEnAttente.size() == 1)
 		        {
 		            Set lstE = lstJoueursEnAttente.entrySet();
@@ -671,7 +699,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		            JoueurHumain objJ = (JoueurHumain) (((Map.Entry)(objI.next())).getValue());
 		            if (objJ.obtenirNomUtilisateur().toLowerCase().equals("jeff2"))
 		            {
-		            	// Si c'est moi qui démarre la partie, alors
+		            	// Si c'est le joueur "jeff2" qui démarre la partie, alors
 		            	// je vais mettre 3 joueurs de niveau
 		            	// différent avec des noms spéciaux
 		            	// But: Tester les 3 niveaux de difficulté
@@ -700,9 +728,14 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		            }
 		            
 		        }
-		        
+		        //
+		        //
+		        //
+		        // ------------------------------------------------------------------
+		       
+		        // Créé le joueur virtuel selon le niveau de difficulté désiré
                 JoueurVirtuel objJoueurVirtuel = new JoueurVirtuel(tNomsJoueursVirtuels[i - nbJoueur], 
-                    ParametreIA.DIFFICULTE_MOYEN, this, objGestionnaireEvenements, objControleurJeu);
+                    intDifficulteJoueurVirtuel, this, objGestionnaireEvenements, objControleurJeu);
                 
                 // Définir sa position
                 objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i]);
@@ -837,7 +870,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					Iterator it = lstJoueurs.values().iterator();
 					while(it.hasNext())
 					{
-						// Mettre a jour les donnees des joueurs
+						// Mettre a jour les données des joueurs
 						JoueurHumain joueur = (JoueurHumain)it.next();
 						objGestionnaireBD.mettreAJourJoueur(joueur, intTempsTotal);
 						
@@ -871,13 +904,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		    
 		    // Enlever les joueurs déconnectés de cette table de la
 		    // liste des joueurs déconnectés du serveur pour éviter
-		    // qu'ils ne se reconnectent
+		    // qu'ils ne se reconnectent et tentent de rejoindre une partie terminée
 		    for (int i = 0; i < lstJoueursDeconnectes.size(); i++)
 		    {
 		    	objControleurJeu.enleverJoueurDeconnecte((String) lstJoueursDeconnectes.get(i));
 		    }
 		    
-		    // Enlever les joueurs déconnectés de cette tables
+		    // Enlever les joueurs déconnectés de cette table
 		    lstJoueursDeconnectes = new Vector();
 		    
 		    // Si jamais les joueurs humains sont tous déconnectés, alors
@@ -1308,7 +1341,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	
 	private void preparerEvenementPartieTerminee()
 	{
-//		Créer un nouvel événement qui va permettre d'envoyer l'événement 
+        // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs de la table
 	    EvenementPartieTerminee partieTerminee = new EvenementPartieTerminee(lstJoueurs, lstJoueursVirtuels);
 	    
@@ -1419,12 +1452,4 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	{
 		return objProchainIdObjet;
 	}
-	
-	/*public void incrementerProchainIdObjet()
-	{
-		synchronized (objProchainIdObjet)
-		{
-			objProchainIdObjet.intValue++;
-		}
-	}*/
 }

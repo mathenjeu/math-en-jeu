@@ -5,7 +5,7 @@ import ServeurJeu.ComposantesJeu.Objets.Objet;
 /**
  * @author Jean-François Brind'Amour
  */
-public abstract class ObjetUtilisable extends Objet
+public class ObjetUtilisable extends Objet
 {
 	// Déclaration d'une variable qui va garder si oui ou non l'objet 
 	// courant est visible sur la case ou non

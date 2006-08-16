@@ -14,6 +14,7 @@ import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
+import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
  * @author Jean-François Brind'Amour
@@ -108,8 +109,8 @@ public class GestionnaireCommunication
 		catch (IOException e)
 		{
 			// L'écoute n'a pas pu être démarrée
-			System.out.println("Il est impossible de demarrer l'ecoute sur le port " + intPort);
-			System.out.println("Le serveur va maintenant s'arreter");
+			System.out.println(GestionnaireMessages.message("communication.erreur_demarrage") + intPort);
+			System.out.println(GestionnaireMessages.message("communication.serveur_arrete"));
 			boolStopThread = true;
 		}
 		
@@ -119,7 +120,7 @@ public class GestionnaireCommunication
 		{
 			try
 			{
-				System.out.println("En attente de recevoir connexion");
+				System.out.println(GestionnaireMessages.message("communication.attente"));
 				
 				// Accepter une connexion et créer un objet ProtocoleJoueur
 				// qui va exécuter le protocole pour le joueur
@@ -142,9 +143,9 @@ public class GestionnaireCommunication
 			catch (IOException e)
 			{
 				// Une erreur est survenue lors de l'acceptation de la connexion
-				System.out.println("Il est impossible d'accepter la connexion du client");
+				System.out.println(GestionnaireMessages.message("communication.erreur_accept"));
 				objLogger.error( e.getMessage() );
-				System.out.println("Le serveur va maintenant s'arrêter");
+				System.out.println(GestionnaireMessages.message("communication.serveur_arrete"));
 				boolStopThread = true;
 			}
 		}
@@ -182,7 +183,7 @@ public class GestionnaireCommunication
 		}
 		catch( Exception e )
 		{
-			System.out.println("Erreur a la suppression du protocole joueur");
+			System.out.println(GestionnaireMessages.message("communication.erreur_protocole"));
 		}
 	}
 	
@@ -204,12 +205,12 @@ public class GestionnaireCommunication
 		{
 			FileWriter writer = new FileWriter( "serveur.info" );
 			writer.write( new Integer( lstProtocoleJoueur.size() ).toString() );
-			objLogger.info( "Nombre de joueur connectés : " +  lstProtocoleJoueur.size() );
+			objLogger.info( GestionnaireMessages.message("communication.nb_joueurs") + lstProtocoleJoueur.size() );
 			writer.close();
 		}
 		catch( Exception e )
 		{
-			System.out.println("Erreur d'écriture dans le fichier info");
+			System.out.println(GestionnaireMessages.message("communication.erreur_fichier"));
 			objLogger.error( e.getMessage() );
 		}
 	}
@@ -233,7 +234,7 @@ public class GestionnaireCommunication
 		catch (IOException e)
 		{
 			// Le socket du serveur est déjà fermé
-			System.out.println("Le socket du serveur est deja ferme");
+			System.out.println(GestionnaireMessages.message("communication.erreur_socket"));
 		}
 		
 		// Vider la liste des protocoles de joueurs

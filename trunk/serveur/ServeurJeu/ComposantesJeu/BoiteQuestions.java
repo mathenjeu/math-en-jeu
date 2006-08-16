@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import ServeurJeu.BD.GestionnaireBD;
 import ClassesUtilitaires.UtilitaireNombres;
+import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
  * @author Marc
@@ -58,19 +59,19 @@ public class BoiteQuestions
 		intCategorieQuestion = 1;
 		
 		Question question = null;
-		Vector<Question> questions = obtenirQuestions( intCategorieQuestion, intDifficulte );
+	    Vector<Question> questions = obtenirQuestions( intCategorieQuestion, intDifficulte );
 		
+
 		if( questions != null && questions.size() > 0 )
 		{
 			int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
 			question = (Question)questions.elementAt( intRandom );
 			questions.remove( intRandom );
 		    question.definirDifficulte(intPointageQuestion);
-
 		}
 		else
 		{
-			objLogger.error( "Il n'y a pas de questions disponibles" );
+			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
 		}
 		
 		return question;
@@ -87,7 +88,7 @@ public class BoiteQuestions
 		}
 		else
 		{
-			objLogger.error( "Il n'y a pas de questions disponibles" );
+			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
 		}
 		
 		return ret;

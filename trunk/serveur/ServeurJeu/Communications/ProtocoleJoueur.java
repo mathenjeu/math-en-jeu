@@ -50,6 +50,7 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Reponse;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin1;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin2;
+import ServeurJeu.Configuration.GestionnaireMessages;
 
 
 /**
@@ -135,7 +136,7 @@ public class ProtocoleJoueur implements Runnable
 		objTacheSynchroniser = tacheSynchroniser;
         bolEnTrainDeJouer = false;
 		
-		objLogger.info( "Le client " + socketJoueur.getInetAddress().toString() + " est connecte" );
+		objLogger.info( GestionnaireMessages.message("protocole.connexion").replace("$$CLIENT$$", socketJoueur.getInetAddress().toString()));
 		
 		try
 		{
@@ -146,7 +147,7 @@ public class ProtocoleJoueur implements Runnable
 		}
 		catch (SocketException se)
 		{
-			objLogger.error( "Le canal de communication entre le serveur et le client est ferme" );
+			objLogger.error( GestionnaireMessages.message("protocole.canal_ferme") );
 			
 			// Arrêter le thread
 			bolStopThread = true;
@@ -222,7 +223,7 @@ public class ProtocoleJoueur implements Runnable
 						
 						// On appelle une fonction qui va traiter le message reçu du 
 						// client et mettre le résultat à retourner dans une variable
-						objLogger.info( "Message recu : " + strMessageRecu );
+						objLogger.info( GestionnaireMessages.message("protocole.message_recu") + strMessageRecu );
 						String strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
 						// On remet la variable contenant le numéro de commande
 						// à retourner à -1, pour dire qu'il n'est pas initialisé
@@ -261,23 +262,23 @@ public class ProtocoleJoueur implements Runnable
 		}
 		catch (IOException ioe)
 		{
-			objLogger.error( "Une erreur est survenue lors de la reception du message du client" );
+			objLogger.error( GestionnaireMessages.message("protocole.erreur_reception") );
 			objLogger.error( ioe.getMessage() );
 			bolErreurSocket = true;
 		}
 		catch (TransformerConfigurationException tce)
 		{
-			objLogger.error("Une erreur est survenue lors de la transformation du document XML en chaine de caracteres");
+			objLogger.error(GestionnaireMessages.message("protocole.erreurXML_transformer"));
 			objLogger.error( tce.getMessage() );
 		}
 		catch (TransformerException te)
 		{
-			objLogger.error("Une erreur est survenue lors de la conversion du document XML en chaine de caracteres");
+			objLogger.error(GestionnaireMessages.message("protocole.erreurXML_conversion"));
 			objLogger.error( te.getMessage() );
 		}
 		catch (Exception e)
 		{
-		  objLogger.error("Une erreur est survenue dans la thread du client");
+		  objLogger.error(GestionnaireMessages.message("protocole.erreur_thread"));
 		  objLogger.error(e.getMessage());
 		  e.printStackTrace();
 		}
@@ -321,7 +322,7 @@ public class ProtocoleJoueur implements Runnable
 			objGestionnaireCommunication.supprimerProtocoleJoueur(this);
 		}
 
-		objLogger.info( "Le thread du client " + objSocketJoueur.getInetAddress().toString() + " est termine" );
+		objLogger.info( GestionnaireMessages.message("protocole.fin_thread").replace("$$CLIENT$$",objSocketJoueur.getInetAddress().toString()));
 	}
 	
 	/**
@@ -347,6 +348,7 @@ public class ProtocoleJoueur implements Runnable
 																TransformerException
 	{
 		Moniteur.obtenirInstance().debut( "ProtocoleJoueur.traiterCommandeJoueur" );
+		
 		// Déclaration d'une variable qui permet de savoir si on doit retourner 
 		// une commande au client ou si ce n'était qu'une réponse du client 
 		boolean bolDoitRetournerCommande = true;
@@ -1244,7 +1246,7 @@ public class ProtocoleJoueur implements Runnable
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.DemarrerMaintenant ))
 				{
 					
-//					 Il n'est pas nécessaire de synchroniser ces vérifications
+                    // Il n'est pas nécessaire de synchroniser ces vérifications
 					// car un protocole ne peut pas exécuter plus qu'une fonction
 					// à la fois, donc les valeurs ne peuvent être modifiées par
 					// deux threads à la fois
@@ -1286,17 +1288,30 @@ public class ProtocoleJoueur implements Runnable
 						try
 						{
 						
+						    // Obtenir le paramètre pour le joueur virtuel
+						    // choix possible: "Aucun", "Facile", "Intermediaire", "Difficile"
+						    String strParamJoueurVirtuel = null;
+						    if (obtenirValeurParametre(objNoeudCommandeEntree, "IdPersonnage") != null)
+						    {
+						    	strParamJoueurVirtuel = obtenirValeurParametre(objNoeudCommandeEntree, "IdPersonnage").getNodeValue();
+						    }
+						    else
+						    {
+						    	// Valeur par défaut
+						    	strParamJoueurVirtuel = "Intermediaire";
+						    }
+						    
 							// Obtenir le numéro Id du personnage choisi et le garder 
 							// en mémoire dans une variable
 							int intIdPersonnage = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "IdPersonnage").getNodeValue());
-							objLogger.info( "personnage : " + intIdPersonnage );
+							objLogger.info( GestionnaireMessages.message("protocole.personnage") + intIdPersonnage );
 							
 							// Appeler la méthode permettant de démarrer une partie
 							// et garder son résultat dans une variable
 							String strResultatDemarrerPartie = objJoueurHumain.obtenirPartieCourante().obtenirTable().demarrerMaintenant( objJoueurHumain, 
-									intIdPersonnage, true);
+									intIdPersonnage, true, strParamJoueurVirtuel);
 							
-							objLogger.info( "Resultat : " + strResultatDemarrerPartie );
+							objLogger.info( GestionnaireMessages.message("protocole.resultat") + strResultatDemarrerPartie );
 							
 							// Si le résultat du démarrage de partie est Succes alors le
 							// joueur est maintenant en attente
@@ -1315,7 +1330,7 @@ public class ProtocoleJoueur implements Runnable
 							}
 							else
 							{
-								objLogger.error( "Mauvais code de retour : " + strResultatDemarrerPartie );
+								objLogger.error( GestionnaireMessages.message("protocole.erreur_code") + strResultatDemarrerPartie );
 								objNoeudCommande.setAttribute("nom", "");
 							}
 						}
@@ -1756,6 +1771,7 @@ public class ProtocoleJoueur implements Runnable
 	public void envoyerMessage(String message) throws IOException
 	{
 		Moniteur.obtenirInstance().debut( "ProtocoleJoueur.envoyerMessage");
+		
 		// Synchroniser cette partie de code pour empêcher 2 threads d'envoyer
 		// un message en même temps sur le canal d'envoi du socket
 		synchronized (objSocketJoueur)
@@ -1768,7 +1784,7 @@ public class ProtocoleJoueur implements Runnable
 
 			if (chainetemp.contains("ping") == false)
 			{
-				objLogger.info( "Message envoye : " + chainetemp );
+				objLogger.info( GestionnaireMessages.message("protocole.message_envoye") + chainetemp );
 			}
 			// Écrire le message sur le canal d'envoi au client
 			objCanalEnvoi.write(UtilitaireEncodeurDecodeur.encodeToUTF8(message).getBytes());
@@ -1779,7 +1795,7 @@ public class ProtocoleJoueur implements Runnable
 			// Envoyer le message sur le canal d'envoi
 			objCanalEnvoi.flush();
 			
-			objLogger.info( "Une confirmation a ete envoyee a " + objSocketJoueur.getInetAddress().toString() );
+			objLogger.info( GestionnaireMessages.message("protocole.confirmation") + objSocketJoueur.getInetAddress().toString() );
 		}
 		
 		Moniteur.obtenirInstance().fin();
@@ -2350,7 +2366,7 @@ public class ProtocoleJoueur implements Runnable
 		}
 		catch (IOException e)
 		{
-			objLogger.info( "L'evenement ping n'a pas pu etre envoyee" );
+			objLogger.info(GestionnaireMessages.message("protocole.erreur_ping"));
 			objLogger.error( e.getMessage() );
 		}
 	}
@@ -2862,53 +2878,59 @@ public class ProtocoleJoueur implements Runnable
             
             Table objTable = objJoueurHumain.obtenirPartieCourante().obtenirTable();
             
+
             // Vérifier si l'objet est un magasin
             if (objObjet instanceof Magasin)
             {
-            	// Vérifier si le magasin vend l'objet strTypeObjet avec id = intIdObjet
-                if (((Magasin)objObjet).objetExiste(intIdObjet, strTypeObjet))
+            	// Synchronisme sur l'objet magasin
+                synchronized (objObjet)
                 {
-                	// Aller chercher l'objet voulu
-                	ObjetUtilisable objObjetVoulu = ((Magasin)objObjet).obtenirObjet(intIdObjet);
-                	
-                	// Vérifier si assez de points pour acheter cet objet
-                	if (objJoueurHumain.obtenirPartieCourante().obtenirPointage() < objObjetVoulu.obtenirPrix())
-                	{
-                		// Le joueur n'a pas assez de points pour acheter cet objet
-			            objNoeudCommande.setAttribute("nom", "PasAssezDePoints");
-                	}
-                	else
-                	{
-	                	// Acheter l'objet
-	                	ObjetUtilisable objObjetAcheter = ((Magasin)objObjet).acheterObjet(intIdObjet, strTypeObjet, objTable.obtenirProchainIdObjet());
+	            	// Vérifier si le magasin vend l'objet strTypeObjet avec id = intIdObjet
+	                if (((Magasin)objObjet).objetExiste(intIdObjet, strTypeObjet))
+	                {
+	                	// Aller chercher l'objet voulu
+	                	ObjetUtilisable objObjetVoulu = ((Magasin)objObjet).obtenirObjet(intIdObjet);
 	                	
-	                	// Définir l'indicateur pour empêcher que le joueur
-	                	// achète plus qu'un objet
-	                	objJoueurHumain.obtenirPartieCourante().definirObjetAcheter(true);
-	                	
-	                	// L'ajouter à la liste des objets du joueur
-	                	objJoueurHumain.obtenirPartieCourante().ajouterObjetUtilisableListe(objObjetAcheter);
-	                	
-	                	// Défrayer les coûts
-	                	objJoueurHumain.obtenirPartieCourante().definirPointage(objJoueurHumain.obtenirPartieCourante().obtenirPointage() - objObjetAcheter.obtenirPrix());
-	                	                	
-	                	// Retourner une réponse positive au joueur
-	                	objNoeudCommande.setAttribute("type", "Reponse");
-	                	objNoeudCommande.setAttribute("nom", "Ok");
-	                	
-	                	// Ajouter l'objet acheté dans la réponse
-	                	Element objNoeudObjetAchete = objDocumentXMLSortie.createElement("objetAchete");
-	                	objNoeudObjetAchete.setAttribute("type", strTypeObjet);
-	                	objNoeudObjetAchete.setAttribute("id", Integer.toString(intIdObjet));
-	                	objNoeudCommande.appendChild(objNoeudObjetAchete);
-                	}
-
-            	
-                }
-                else
-                {
-                	// Ce magasin ne vend pas cet objet
-                	objNoeudCommande.setAttribute("nom", "ObjetInexistant");
+	                	// Vérifier si assez de points pour acheter cet objet
+	                	if (objJoueurHumain.obtenirPartieCourante().obtenirPointage() < objObjetVoulu.obtenirPrix())
+	                	{
+	                		// Le joueur n'a pas assez de points pour acheter cet objet
+				            objNoeudCommande.setAttribute("nom", "PasAssezDePoints");
+	                	}
+	                	else
+	                	{
+		                	// Acheter l'objet
+		                	ObjetUtilisable objObjetAcheter = ((Magasin)objObjet).acheterObjet(intIdObjet, strTypeObjet, objTable.obtenirProchainIdObjet());
+		                	
+		                	// Définir l'indicateur pour empêcher que le joueur
+		                	// achète plus qu'un objet
+		                	objJoueurHumain.obtenirPartieCourante().definirObjetAcheter(true);
+		                	
+		                	// L'ajouter à la liste des objets du joueur
+		                	objJoueurHumain.obtenirPartieCourante().ajouterObjetUtilisableListe(objObjetAcheter);
+		                	
+		                	// Défrayer les coûts
+		                	objJoueurHumain.obtenirPartieCourante().definirPointage(objJoueurHumain.obtenirPartieCourante().obtenirPointage() - objObjetAcheter.obtenirPrix());
+		                	                	
+		                	// Retourner une réponse positive au joueur
+		                	objNoeudCommande.setAttribute("type", "Reponse");
+		                	objNoeudCommande.setAttribute("nom", "Ok");
+		                	
+		                	// Ajouter l'objet acheté dans la réponse
+		                	Element objNoeudObjetAchete = objDocumentXMLSortie.createElement("objetAchete");
+		                	objNoeudObjetAchete.setAttribute("type", strTypeObjet);
+		                	objNoeudObjetAchete.setAttribute("id", Integer.toString(intIdObjet));
+		                	objNoeudCommande.appendChild(objNoeudObjetAchete);
+	                	}
+	
+	            	
+	                }
+	                else
+	                {
+	                	// Ce magasin ne vend pas cet objet (l'objet peut avoir
+	                	// été acheté entre-temps)
+	                	objNoeudCommande.setAttribute("nom", "ObjetInexistant");
+	                }
                 }
             }
             else
@@ -3023,36 +3045,44 @@ public class ProtocoleJoueur implements Runnable
     private void creerListeObjetsMagasin(Magasin objMagasin, Document objDocumentXMLSortie, Element objNoeudCommande)
     {
     	// Créer l'élément objetsMagasin
-        Element objNoeudObjetsMagasin = objDocumentXMLSortie.createElement("objetsMagasins");
-								
-    	// Obtenir la liste des objets en vente au magasin
-    	Vector lstObjetsEnVente = objMagasin.obtenirListeObjetsUtilisables();
-    	
-    	// Créer le message XML en parcourant la liste des objets en vente
-    	for (int i = 0; i < lstObjetsEnVente.size(); i++)
-    	{
-    		// Aller chercher cet objet
-    		ObjetUtilisable objObjetEnVente = (ObjetUtilisable) lstObjetsEnVente.get(i);
-    		
-    		// Aller chercher le type de l'objet (son type en String)
-    		String strNomObjet = objObjetEnVente.obtenirTypeObjet();
-    		
-    		// Aller chercher le prix de l'objet
-    		int intPrixObjet = objObjetEnVente.obtenirPrix();
-    		
-    		// Créer un élément pour cet objet
-    		Element objNoeudObjet = objDocumentXMLSortie.createElement("objet");
-    		
-    		// Ajouter l'attribut type de l'objet
-    		objNoeudObjet.setAttribute("type", strNomObjet);
-    		
-    		// Ajouter l'attribut pour le coût de l'objet
-    		objNoeudObjet.setAttribute("cout", Integer.toString(intPrixObjet));
-    		
-    		// Maintenant ajouter cet objet à la liste
-    		objNoeudObjetsMagasin.appendChild(objNoeudObjet);
+        Element objNoeudObjetsMagasin = objDocumentXMLSortie.createElement("objetsMagasin");
+		
+		synchronized(objMagasin)
+		{					
+	    	// Obtenir la liste des objets en vente au magasin
+	    	Vector lstObjetsEnVente = objMagasin.obtenirListeObjetsUtilisables();
+	    	
+	    	// Créer le message XML en parcourant la liste des objets en vente
+	    	for (int i = 0; i < lstObjetsEnVente.size(); i++)
+	    	{
+	    		// Aller chercher cet objet
+	    		ObjetUtilisable objObjetEnVente = (ObjetUtilisable) lstObjetsEnVente.get(i);
+	    		
+	    		// Aller chercher le type de l'objet (son type en String)
+	    		String strNomObjet = objObjetEnVente.obtenirTypeObjet();
+	    		
+	    		// Aller chercher le prix de l'objet
+	    		int intPrixObjet = objObjetEnVente.obtenirPrix();
+	    		
+	    		// Aller chercher l'id de l'objet
+	    		int intObjetId = objObjetEnVente.obtenirId();
+	    		
+	    		// Créer un élément pour cet objet
+	    		Element objNoeudObjet = objDocumentXMLSortie.createElement("objet");
+	    		
+	    		// Ajouter l'attribut type de l'objet
+	    		objNoeudObjet.setAttribute("type", strNomObjet);
+	    		
+	    		// Ajouter l'attribut pour le coût de l'objet
+	    		objNoeudObjet.setAttribute("cout", Integer.toString(intPrixObjet));
+	    		
+	    		// Ajouter l'attribut pour l'id de l'objet
+	    		objNoeudObjet.setAttribute("id", Integer.toString(intObjetId));
+	    		
+	    		// Maintenant ajouter cet objet à la liste
+	    		objNoeudObjetsMagasin.appendChild(objNoeudObjet);
+	    	}
     	}
-    	
     	objNoeudCommande.appendChild(objNoeudObjetsMagasin);
 
     }

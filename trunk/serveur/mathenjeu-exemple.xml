@@ -46,6 +46,11 @@
 
 		</info>
 
+        <messages>
+            <!--fichier XML contenant les messages du serveur -->
+            <fichierxml>messages_fr.xml</fichierxml>
+        </messages>
+
 		<salles-initiales>
 
 			<salle>

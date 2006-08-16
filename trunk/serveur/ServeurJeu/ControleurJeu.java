@@ -38,7 +38,7 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
-
+import ServeurJeu.Configuration.GestionnaireMessages;
 
 //import ServeurJeu.ComposantesJeu.Joueurs.TestJoueurVirtuel;
 
@@ -110,7 +110,6 @@ public class ControleurJeu
 	// Déclaration d'un objet random pour générer des nombres aléatoires
 	private Random objRandom;
 	
-	
 	// Déclaration d'un objet pour conserver tous les paramètres
 	// pour les joueurs virtuels
 	private ParametreIA objParametreIA;
@@ -122,13 +121,20 @@ public class ControleurJeu
 	 * @param String[] args : les arguments passés en paramètre lors de l'appel
 	 * 						  de l'application 
 	 */
-	public static void main(String[] args) 
-	{
-		System.out.println( "Le serveur demarre" );
+	//public static void main(String[] args) 
+	//{
+        /* Cette fonction n'est plus utilisée, on utiliser Maitre.java
+         * maintenant
+         *
+        // Initialiser la classe statique GestionnaireMessages
+        GestionnaireMessages.initialiser();
+        
+		System.out.println(GestionnaireMessages.message("controleur_jeu.serveur_demarre"));
 		ControleurJeu objJeu = new ControleurJeu();
 		objJeu.demarrer();
-		System.out.println( "Le serveur arrete" );
-	}
+		System.out.println(GestionnaireMessages.message("controleur_jeu.serveur_arrete"));
+	    */
+	//}
 	
 	/**
 	 * Constructeur de la classe ControleurJeu qui permet de créer le gestionnaire 
@@ -139,7 +145,10 @@ public class ControleurJeu
 	{
 		super();
 		
-		objLogger.info( "Le serveur démarre" );
+        // Initialiser la classe statique GestionnaireMessages
+        GestionnaireMessages.initialiser();
+        
+		objLogger.info(GestionnaireMessages.message("controleur_jeu.serveur_demarre"));
 		
 		// Préparer l'objet pour créer les nombres aléatoires
     	objRandom = new Random();
@@ -159,14 +168,12 @@ public class ControleurJeu
 		// Créer un nouveau gestionnaire de base de données MySQL
 		objGestionnaireBD = new GestionnaireBD(this);
 		
-		objParametreIA = new ParametreIA();
-		
 		// Charger les salles par défaut
 		chargerSallesInitiales();
 		
 		objGestionnaireTemps = new GestionnaireTemps();
 		objTacheSynchroniser = new TacheSynchroniser();
-		
+
 		// Créer un nouveau gestionnaire de communication
 		objGestionnaireCommunication = new GestionnaireCommunication(this, objGestionnaireEvenements, objGestionnaireBD, objGestionnaireTemps, objTacheSynchroniser);
 	}
@@ -178,7 +185,7 @@ public class ControleurJeu
 		int intStepSynchro = config.obtenirNombreEntier( "controleurjeu.synchro.step" );
 		objGestionnaireTemps.ajouterTache( objTacheSynchroniser, intStepSynchro );
 		
-//		 Créer un thread pour le GestionnaireEvenements
+        // Créer un thread pour le GestionnaireEvenements
 		Thread threadEvenements = new Thread(objGestionnaireEvenements);
 		
 		// Démarrer le thread du gestionnaire d'événements

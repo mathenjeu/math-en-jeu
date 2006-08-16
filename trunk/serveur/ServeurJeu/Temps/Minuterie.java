@@ -47,7 +47,7 @@ public class Minuterie extends Tache
 			if( intTemps <= 0 )
 			{
 				bolStopped = true;
-	//			notifier les observateurs
+	            // notifier les observateurs
 				synchronized( lstObservateurs )
 				{
 					Iterator it = lstObservateurs.values().iterator();

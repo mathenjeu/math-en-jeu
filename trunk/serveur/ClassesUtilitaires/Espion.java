@@ -19,7 +19,7 @@ import java.util.Set;
 import ServeurJeu.Temps.Minuterie;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
-
+import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
  * @author Jean-François Fournier
@@ -27,10 +27,10 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 public class Espion implements Runnable{
 	
 	// Déclaration d'une constante contenant la version du serveur
-	private final String VERSION = "Version du serveur: 2.0";
+	private String strVersion;
 	
 	// Déclaration d'une variable contenant le nombre de millisecondes entre
-	// chaque mise à jour. 
+	// chaque mise à jour
 	private int intDelaiMaj;
 	
 	// Déclaration de la variable contenant le nom du fichier espion
@@ -51,7 +51,7 @@ public class Espion implements Runnable{
     private int intModeEspion;
 	
 	// Déclaration d'un objet pour faire référence au Contrôleur de jeu
-	ControleurJeu objControleurJeu;
+	private ControleurJeu objControleurJeu;
 	
 	// Déclaration d'une variable qui contiendra le séparateur de ligne
 	private String strFinLigne;
@@ -66,6 +66,8 @@ public class Espion implements Runnable{
 	 */
 	public Espion(ControleurJeu controleur, String nomFichier, int delaiMaj, int mode)
 	{
+		strVersion = "Class Path: " + System.getProperty("java.class.path");
+		    
 		intModeEspion = mode;
 		objControleurJeu = controleur;
 		strFinLigne = System.getProperty("line.separator");
@@ -130,13 +132,13 @@ public class Espion implements Runnable{
 			{
 				//System.out.println("Erreur dans la thread de l'espion.");
 				//System.out.println(e.getMessage());
-				objLogger.info("Erreur dans la thread de l'espion.");
+				objLogger.info(GestionnaireMessages.message("espion.erreur_thread"));
 				objLogger.error( e.getMessage() );
 				e.printStackTrace();
 			}
 		}
 		
-	    objLogger.info("Espion arrêté");
+	    objLogger.info(GestionnaireMessages.message("espion.arrete"));
 	}
     
     
@@ -221,8 +223,8 @@ public class Espion implements Runnable{
 
 	    // Entête 
 	    // Ajouter la version du serveur
-	    strEntete.append(VERSION);
-
+	    strEntete.append(strVersion);
+		strEntete.append(strFinLigne);
 	    
 	    
 	    // Dernière mise à jour
@@ -592,7 +594,7 @@ public class Espion implements Runnable{
 	    catch( Exception e)
 	    {
 			//System.out.println("Erreur d'écriture dans le fichier espion.");
-		    objLogger.info("Erreur d'écriture dans le fichier espion.");
+		    objLogger.info(GestionnaireMessages.message("espion.arrete"));
 			objLogger.error(e.getMessage());
 	    }
 	

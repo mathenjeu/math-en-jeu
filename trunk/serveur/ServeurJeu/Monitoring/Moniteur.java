@@ -8,7 +8,7 @@ import ServeurJeu.Configuration.GestionnaireConfiguration;
 import com.jamonapi.Monitor;
 import com.jamonapi.MonitorComposite;
 import com.jamonapi.MonitorFactory;
-
+import ServeurJeu.Configuration.GestionnaireMessages;
 
 public class Moniteur 
 {
@@ -36,7 +36,7 @@ public class Moniteur
 		_moniteur = MonitorFactory.start( id );
 	}
 	
-	public void fin()
+    public void fin()
 	{
 		_moniteur.stop();
 	}
@@ -55,7 +55,7 @@ public class Moniteur
 		catch( Exception e )
 		{
 			logger.error( e.getMessage() );
-			logger.error( "Impossible d'ecrire dans le fichier de monitoring." );
+			logger.error( GestionnaireMessages.message("monitoring.erreur_fichier") );
 		}
 	}
 	

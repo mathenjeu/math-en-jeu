@@ -96,6 +96,26 @@ public abstract class Magasin extends Objet
 		return false;
 	}
 	
+	public boolean objetExiste(int intObjetId)
+	{
+		for (int i = 0 ; i < lstObjetsUtilisables.size(); i++)
+		{
+			// Aller chercher l'objet
+			ObjetUtilisable objObjetUtilisable = (ObjetUtilisable) lstObjetsUtilisables.get(i);
+		
+		    // Vérifier son id généré et son type
+		    if (objObjetUtilisable.obtenirId() == intObjetId)
+		    {
+		    	// Objet existant
+		    	return true;
+		    }
+		}
+		
+		// Objet inexistant
+		return false;
+	}	
+
+	
 	public ObjetUtilisable obtenirObjet(int intObjetId)
 	{
 		for (int i = 0 ; i < lstObjetsUtilisables.size(); i++)
