@@ -120,7 +120,7 @@ public class Maitre implements Runnable
 					else if( commande == (byte)_STATUS )
 					{
 						System.out.println( "obtenir le status du serveur" );
-						String message = "Le serveur est en ligne\0";
+						String message = "Le serveur est en ligne";
 						buffer = message.getBytes();
 						socket.getOutputStream().write( buffer );
 					}

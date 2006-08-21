@@ -1,8 +1,7 @@
 /*
  * Created on 2006-03-17
  *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * 
  */
 package ServeurJeu.Temps;
 
@@ -10,20 +9,33 @@ import java.util.TreeMap;
 import java.util.Iterator;
 
 /**
- * @author Marc
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * @author Marc Dumoulin
+ * 
+ * Classe qui implémente une tâche pour la synchronisation des joueurs 
+ * 
  */
 public class TacheSynchroniser extends Tache
 {
+	//Liste des observateurs qui seront notifiés pour la synchronisation
 	private TreeMap lstObservateurs;
 	
+	/**
+	 * Constructeur de la classe TacheSynchroniser
+	 * 
+	 */
 	public TacheSynchroniser()
 	{
 		lstObservateurs = new TreeMap();
 	}
 	
+	/**
+	 * Cette méthode est appelé pour ajouter un observateur qui va recevoir 
+	 * une notification de se synchoniser
+	 * 
+	 * @param ObservateurSynchroniser obs : Un objet qui implémente l'interface observateur
+	 * @return
+	 * @throws
+	 */
 	public void ajouterObservateur( ObservateurSynchroniser obs )
 	{
 		synchronized( lstObservateurs )
@@ -32,6 +44,13 @@ public class TacheSynchroniser extends Tache
 		}
 	}
 	
+	/**
+	 * Cette méthode est appelé pour enlever un observateur 
+	 * 
+	 * @param ObservateurSynchroniser obs : Un objet qui implémente l'interface observateur
+	 * @return
+	 * @throws
+	 */
 	public void enleverObservateur( ObservateurSynchroniser obs )
 	{
 		synchronized( lstObservateurs )
@@ -40,6 +59,12 @@ public class TacheSynchroniser extends Tache
 		}
 	}
 	
+	/**
+	 * Cette méthode est appelé quand le thread de la tâche démarre
+	 * @param
+	 * @return
+	 * @throws
+	 */
 	public void run()
 	{
 		//notifier les observateurs
