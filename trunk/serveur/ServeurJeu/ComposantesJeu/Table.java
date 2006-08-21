@@ -17,6 +17,7 @@ import ServeurJeu.Evenements.EvenementJoueurEntreTable;
 import ServeurJeu.Evenements.EvenementJoueurQuitteTable;
 import ServeurJeu.Evenements.EvenementJoueurDemarrePartie;
 import ServeurJeu.Evenements.EvenementPartieDemarree;
+import ServeurJeu.Evenements.EvenementMAJPointage;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
 import ClassesUtilitaires.GenerateurPartie;
@@ -613,6 +614,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		}
 		else
 		{
+			// Le joueur veut des joueurs virtuels
 			if (strParamJoueurVirtuel.equals("Facile"))
 			{
 				intDifficulteJoueurVirtuel = ParametreIA.DIFFICULTE_FACILE;
@@ -626,7 +628,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				intDifficulteJoueurVirtuel = ParametreIA.DIFFICULTE_DIFFICILE;
 			}
 			
-			// Le joueur veut des joueurs virtuels
+			// Déterminer combien de joueurs on veut
 			intNombreJoueursVirtuels = 4 - lstJoueursEnAttente.size();
 			if (intNombreJoueursVirtuels < 0 || intNombreJoueursVirtuels >=4)
 			{
@@ -634,6 +636,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			}
 		}
 		
+		// Aller chercher les positions de départ pour les joueurs humains et virtuels
         objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels, lstPointsCaseLibre);
 		
 		// Créer un ensemble contenant tous les tuples de la liste 
@@ -643,7 +646,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Obtenir un itérateur pour l'ensemble contenant les personnages
 		Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
 
-		
 		// S'il y a des joueurs virtuels, alors on va créer une nouvelle liste
 		// qui contiendra ces joueurs
 		if (intNombreJoueursVirtuels > 0)
@@ -655,6 +657,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		    
 		}
 		
+		// Cette variable permettra d'affecter aux joueurs virtuels des id
+		// de personnage différents de ceux des joueurs humains
+		int intIdPersonnage = 1;
+
 		// Passer toutes les positions des joueurs et les définir
 		for (int i = 0; i < objtPositionsJoueurs.length; i++)
 		{
@@ -707,19 +713,19 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		            	//      les pointages finaux
 		            	
 	                    JoueurVirtuel objJoueurVirtuel = new JoueurVirtuel("Piggy", 
-	                        ParametreIA.DIFFICULTE_FACILE, this, objGestionnaireEvenements, objControleurJeu);
+	                        ParametreIA.DIFFICULTE_FACILE, this, objGestionnaireEvenements, objControleurJeu, -1);
 	                    objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i]);
 	                    lstJoueursVirtuels.add(objJoueurVirtuel);
 	                    lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[i]);
 			            	
 	                    objJoueurVirtuel = new JoueurVirtuel("Neutrinos", 
-	                        ParametreIA.DIFFICULTE_MOYEN, this, objGestionnaireEvenements, objControleurJeu);
+	                        ParametreIA.DIFFICULTE_MOYEN, this, objGestionnaireEvenements, objControleurJeu, -1);
 	                    objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i+1]);
 	                    lstJoueursVirtuels.add(objJoueurVirtuel);
 	                    lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[i+1]);
 			            	
 	                    objJoueurVirtuel = new JoueurVirtuel("ThE DeStRuCtOr 2000", 
-	                        ParametreIA.DIFFICULTE_DIFFICILE, this, objGestionnaireEvenements, objControleurJeu);
+	                        ParametreIA.DIFFICULTE_DIFFICILE, this, objGestionnaireEvenements, objControleurJeu, -1);
 	                    objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i+2]);
 	                    lstJoueursVirtuels.add(objJoueurVirtuel);
 	                    lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[i+2]);
@@ -733,9 +739,16 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		        //
 		        // ------------------------------------------------------------------
 		       
+		        // Utiliser le prochaine id de personnage libre
+		        while (!idPersonnageEstLibre(intIdPersonnage))
+		        {
+		        	// Incrémenter le id du personnage en espérant en trouver un autre
+		        	intIdPersonnage++;
+		        }
+		        
 		        // Créé le joueur virtuel selon le niveau de difficulté désiré
                 JoueurVirtuel objJoueurVirtuel = new JoueurVirtuel(tNomsJoueursVirtuels[i - nbJoueur], 
-                    intDifficulteJoueurVirtuel, this, objGestionnaireEvenements, objControleurJeu);
+                    intDifficulteJoueurVirtuel, this, objGestionnaireEvenements, objControleurJeu, intIdPersonnage);
                 
                 // Définir sa position
                 objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i]);
@@ -746,6 +759,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 // Ajouter le joueur virtuel à la liste des positions, liste qui sera envoyée
                 // aux joueurs humains
                 lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[i]);
+                
+                // Pour le prochain joueur virtuel
+                intIdPersonnage++;
                 
     		}
 		}
@@ -1272,12 +1288,50 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		objGestionnaireEvenements.ajouterEvenement(partieDemarree);
 	}
 	
-	public void preparerEvenementJoueurDeplacePersonnage( String nomUtilisateur, String collision, Point anciennePosition, Point positionJoueur )
+	public void preparerEvenementMAJPointage(String nomUtilisateur, int nouveauPointage)
+	{
+		// Créer un nouveal événement qui va permettre d'envoyer l'événment
+		// aux joueurs pour signifier une modification du pointage
+		EvenementMAJPointage majPointage = new EvenementMAJPointage(nomUtilisateur, nouveauPointage);
+		
+		// Créer un ensemble contenant tous les tuples de la liste des joueurs
+		// de la table
+		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		
+		// Obtenir un itérateur pour l'ensemble contenant les joueurs
+		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		
+		// Passser tous les joueurs de la table et leur envoyer l'événement
+		// NOTE: On omet d'envoyer au joueur nomUtilisateur étant donné
+		//       qu'il connait déjà son pointage
+		while (objIterateurListe.hasNext() == true)
+		{
+			// Créer une référence vers le joueur humain courant dans la liste
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			
+			// Si le nom d'utilisateur du joueur n'est pas nomUtilisateur, alors
+			// on peut envoyer un événement à cet utilisateur
+			if (objJoueur.obtenirNomUtilisateur().equals(nomUtilisateur) == false)
+			{
+				// Obtenir un numéro de commande pour le joueur courant, créer
+				// un InformationDestination et l'ajouter à l'événement
+				majPointage.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
+			            																	 objJoueur.obtenirProtocoleJoueur()));      																	 
+			}
+		}
+		
+		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
+		objGestionnaireEvenements.ajouterEvenement(majPointage);
+	}
+	
+	public void preparerEvenementJoueurDeplacePersonnage( String nomUtilisateur, String collision, 
+	    Point anciennePosition, Point positionJoueur, int nouveauPointage )
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs qu'un joueur démarré une partie
 		
-		EvenementJoueurDeplacePersonnage joueurDeplacePersonnage = new EvenementJoueurDeplacePersonnage( nomUtilisateur, anciennePosition, positionJoueur, collision );
+		EvenementJoueurDeplacePersonnage joueurDeplacePersonnage = new EvenementJoueurDeplacePersonnage( nomUtilisateur, 
+		    anciennePosition, positionJoueur, collision, nouveauPointage );
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
@@ -1451,5 +1505,77 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	public IntObj obtenirProchainIdObjet()
 	{
 		return objProchainIdObjet;
+	}
+	
+	/* 
+	 * Aller chercher dans la liste des joueurs sur cette table
+	 * les ID des personnages choisi et vérifier si le id intID est
+	 * déjà choisi
+	 *
+	 * Cette fonction vérifie dans la liste des joueurs et non dans
+	 * la liste des joueurs en attente
+	 */
+	private boolean idPersonnageEstLibre(int intID)
+	{
+   	    // Préparation pour parcourir la liste des joueurs
+        Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+        Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
+
+        // Parcourir la liste des joueurs et vérifier le id
+   	    while(objIterateurListeJoueurs.hasNext() == true)
+   	    {
+	        // Aller chercher l'objet JoueurHumain
+	        JoueurHumain objJoueurHumain = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
+	         
+	        // Vérifier le id
+	        if (objJoueurHumain.obtenirPartieCourante().obtenirIdPersonnage() == intID)
+	        {
+	         	// Déjà utilisé
+	            return false;
+	        }	   	     	
+   	    }
+   	     
+   	    // Si on se rend ici, on a parcouru tous les joueurs et on n'a pas
+   	    // trouvé ce id de personnage, donc le id est libre
+   	    return true;
+	}
+	
+	/* 
+	 * Aller chercher dans la liste des joueurs en attente
+	 * les ID des personnages choisi et vérifier si le id intID est
+	 * déjà choisi
+	 *
+	 * Cette fonction vérifie dans la liste des joueurs en attente
+	 * la liste des joueurs (doit donc être utilisé avant que la partie commence)
+	 *
+	 */     
+	public boolean idPersonnageEstLibreEnAttente(int intID)
+	{
+		synchronized (lstJoueursEnAttente)
+		{
+			// Préparation pour parcourir la liste des joueurs
+			Set lstEnsembleJoueurs = lstJoueursEnAttente.entrySet();
+			Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
+			
+			// Parcourir la liste des joueurs et vérifier le id
+			while(objIterateurListeJoueurs.hasNext() == true)
+			{
+				// Aller chercher l'objet JoueurHumain
+				JoueurHumain objJoueurHumain = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
+				
+				// Vérifier le id
+				if (objJoueurHumain.obtenirPartieCourante().obtenirIdPersonnage() == intID)
+				{
+					// Déjà utilisé
+					return false;
+				}	   	     	
+			}
+			
+
+		}
+		
+		// Si on se rend ici, on a parcouru tous les joueurs et on n'a pas
+		// trouvé ce id de personnage, donc le id est libre
+		return true;		
 	}
 }

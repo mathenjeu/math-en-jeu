@@ -28,14 +28,17 @@ public class EvenementJoueurDeplacePersonnage extends Evenement
     private Point objAnciennePosition;
     private Point objPositionJoueur;
     private String strCollision;
+    private int intNouveauPointage;
     
-	public EvenementJoueurDeplacePersonnage(String nomUtilisateur, Point anciennePosition, Point positionJoueur, String collision )
+	public EvenementJoueurDeplacePersonnage(String nomUtilisateur, Point anciennePosition, 
+        Point positionJoueur, String collision, int nouveauPointage)
     {
         // Définir le nom d'utilisateur du joueur qui se deplace
         strNomUtilisateur = nomUtilisateur;
         objAnciennePosition = anciennePosition;
         objPositionJoueur = positionJoueur;
         strCollision = collision;
+        intNouveauPointage = nouveauPointage;
     }
 	
 	/**
@@ -65,6 +68,8 @@ public class EvenementJoueurDeplacePersonnage extends Evenement
 			Element objNoeudParametreNouvellePosition = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreAnciennePosition = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreCollision = objDocumentXML.createElement("parametre");
+			Element objNoeudParametreNouveauPointage = objDocumentXML.createElement("parametre");
+			
 			// Créer un noeud contenant le nom d'utilisateur du noeud paramètre
 			Text objNoeudTexte = objDocumentXML.createTextNode(strNomUtilisateur);
 			Text objNoeudTexteCollision = objDocumentXML.createTextNode(strCollision);
@@ -97,11 +102,19 @@ public class EvenementJoueurDeplacePersonnage extends Evenement
 			objNoeudParametreCollision.setAttribute("type", "Collision");
 			objNoeudParametreCollision.appendChild( objNoeudTexteCollision );
 			
+
+			Text objNoeudTextePointage = objDocumentXML.createTextNode(Integer.toString(intNouveauPointage));
+            objNoeudParametreNouveauPointage.setAttribute("type", "NouveauPointage");
+            objNoeudParametreNouveauPointage.appendChild(objNoeudTextePointage);
+			
+			
 			// Ajouter le noeud paramètre au noeud de commande
 			objNoeudCommande.appendChild(objNoeudParametreNomUtilisateur);
 			objNoeudCommande.appendChild(objNoeudParametreAnciennePosition);
 			objNoeudCommande.appendChild(objNoeudParametreNouvellePosition);
 			objNoeudCommande.appendChild(objNoeudParametreCollision);
+            objNoeudCommande.appendChild(objNoeudParametreNouveauPointage);
+			
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
 			objDocumentXML.appendChild(objNoeudCommande);

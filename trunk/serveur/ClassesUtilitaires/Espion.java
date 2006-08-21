@@ -594,7 +594,7 @@ public class Espion implements Runnable{
 	    catch( Exception e)
 	    {
 			//System.out.println("Erreur d'écriture dans le fichier espion.");
-		    objLogger.info(GestionnaireMessages.message("espion.arrete"));
+		    objLogger.info(GestionnaireMessages.message("espion.erreur_fichier"));
 			objLogger.error(e.getMessage());
 	    }
 	

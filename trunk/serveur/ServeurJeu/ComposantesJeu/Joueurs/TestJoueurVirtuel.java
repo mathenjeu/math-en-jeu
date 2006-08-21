@@ -133,7 +133,7 @@ public class TestJoueurVirtuel {
         
         for (int i = 0; i < intNombreJoueursVirtuels; i++)
         {
-        	JoueurVirtuel jv = new JoueurVirtuel("Test Bot " + i, 2, objTable, ev, controleur);
+        	JoueurVirtuel jv = new JoueurVirtuel("Test Bot " + i, 2, objTable, ev, controleur, -1);
             jv.definirPositionJoueurVirtuel(new Point(ptJv[i].x,ptJv[i].y));
 	        
 	        //-----------------------------------------

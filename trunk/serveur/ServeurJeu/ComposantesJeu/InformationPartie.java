@@ -608,7 +608,7 @@ public class InformationPartie
 				// Cette fonction va passer les joueurs et créer un 
 				// InformationDestination pour chacun et ajouter l'événement 
 				// dans la file de gestion d'événements
-				table.preparerEvenementJoueurDeplacePersonnage(nomJoueur, collision, positionJoueur, objPositionDesiree);	
+				table.preparerEvenementJoueurDeplacePersonnage(nomJoueur, collision, positionJoueur, objPositionDesiree, intNouveauPointage);	
 						    	
 		    }
 		    
@@ -683,6 +683,24 @@ public class InformationPartie
 	public void ajouterObjetUtilisableListe(ObjetUtilisable objObjetUtilisable)
 	{
 		lstObjetsUtilisablesRamasses.put(new Integer(objObjetUtilisable.obtenirId()), objObjetUtilisable);
+	}
+	
+	/* 
+	 * Aller chercher une référence vers un objet de la liste des objets selon
+	 * son id
+	 */
+	public ObjetUtilisable obtenirObjetUtilisable(int intObjetId)
+	{
+		for (int i = 0; i < lstObjetsUtilisablesRamasses.size(); i++)
+		{
+			ObjetUtilisable objObjet = (ObjetUtilisable) lstObjetsUtilisablesRamasses.get(i);
+			
+			if (objObjet.obtenirId() == intObjetId)
+			{
+				return objObjet;
+			}
+		}
+		return null;
 	}
 	
 	/*

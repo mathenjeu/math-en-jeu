@@ -174,7 +174,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 
 	 */
 	public JoueurVirtuel(String nom, int niveauDifficulte, Table tableCourante, 
-	    GestionnaireEvenements gestionnaireEv, ControleurJeu controleur)
+	    GestionnaireEvenements gestionnaireEv, ControleurJeu controleur, int idPersonnage)
 	{
 	   
 	    objControleurJeu = controleur;
@@ -195,8 +195,17 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		// Faire la référence vers la table courante
 		objTable = tableCourante;	
 			
-		// Choisir un id de personnage aléatoirement
-		intIdPersonnage = genererNbAleatoire(ParametreIA.NOMBRE_PERSONNAGE_ID) + 1;
+		
+		if (idPersonnage == -1)
+		{
+			// Choisir un id de personnage aléatoirement
+			intIdPersonnage = genererNbAleatoire(ParametreIA.NOMBRE_PERSONNAGE_ID) + 1;
+		}
+		else
+		{
+			// Affecter le id personnage pour ce joueur
+			intIdPersonnage = idPersonnage;
+		}
 		
 		// Initialisation du pointage
 		intPointage = 0;
@@ -1367,6 +1376,10 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         	// On incrémente les points du joueur virtuel
         	intPointage += intPointsJeu;
         	
+			// Préparer un événement pour les autres joueurs de la table
+			// pour qu'il se tienne à jour du pointage de ce joueur
+			objTable.preparerEvenementMAJPointage(strNom, intPointage);
+        	
         	// On incrémente le compteur de mini-jeu
         	intNbMiniJeuJoues++;
     	}
@@ -1525,7 +1538,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		    			objObjet = (ObjetUtilisable)lstObjetsMagasins.get(intIndicePlusGrand);
 		    			
 		    			// Acheter l'objet
-		    			objObjet = objMagasin.acheterObjet(objObjet.obtenirId(), objObjet.obtenirTypeObjet(), objTable.obtenirProchainIdObjet());
+		    			objObjet = objMagasin.acheterObjet(objObjet.obtenirId(), objTable.obtenirProchainIdObjet());
 		    			
 		    			// On indique que l'achat a eu lieu puis on sort de la s.c.
 		    			bolAchatOk = true;
@@ -1561,6 +1574,10 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    		    }
 	    		    //---------------------------------------
 	    		    
+					// Préparer un événement pour les autres joueurs de la table
+					// pour qu'il se tienne à jour du pointage de ce joueur
+					objTable.preparerEvenementMAJPointage(strNom, intPointage);
+					
                 }
                 else
                 {
@@ -1601,11 +1618,11 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     /*
      * Cette fonction prépare l'événement indiquant que le joueur virtuel se déplace
      */
-    private void preparerEvenementJoueurVirtuelDeplacePersonnage( String collision, Point objNouvellePosition )
+    /*private void preparerEvenementJoueurVirtuelDeplacePersonnage( String collision, Point objNouvellePosition, int nouveauPointage )
     {
         objTable.preparerEvenementJoueurDeplacePersonnage(strNom, collision, objPositionJoueur, 
-            objNouvellePosition);
-    }
+            objNouvellePosition, nouveauPointage);
+    }*/
 
 
     private int genererNbAleatoire(int max)

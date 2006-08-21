@@ -135,7 +135,7 @@ public abstract class Magasin extends Objet
 		return null;	
 	}
 	
-	public ObjetUtilisable acheterObjet(int intObjetId, String strTypeObjet, IntObj objProchainId)
+	public ObjetUtilisable acheterObjet(int intObjetId, IntObj objProchainId)
 	{
 
     	// Enlever l'objet de la liste du magasin

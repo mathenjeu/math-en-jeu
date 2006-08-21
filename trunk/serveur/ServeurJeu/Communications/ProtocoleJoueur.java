@@ -1243,7 +1243,7 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudCommande.setAttribute("nom", "Ok");
 					}
 				}
-				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.DemarrerMaintenant ))
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.DemarrerMaintenant))
 				{
 					
                     // Il n'est pas nécessaire de synchroniser ces vérifications
@@ -1285,9 +1285,13 @@ public class ProtocoleJoueur implements Runnable
 					// aura pas de parties en cours
 					else
 					{
+					    // Obtenir le numéro Id du personnage choisi et le garder 
+						// en mémoire dans une variable
+						int intIdPersonnage = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "IdPersonnage").getNodeValue());
+						objLogger.info( GestionnaireMessages.message("protocole.personnage") + intIdPersonnage );
+						
 						try
 						{
-						
 						    // Obtenir le paramètre pour le joueur virtuel
 						    // choix possible: "Aucun", "Facile", "Intermediaire", "Difficile"
 						    String strParamJoueurVirtuel = null;
@@ -1301,11 +1305,7 @@ public class ProtocoleJoueur implements Runnable
 						    	strParamJoueurVirtuel = "Intermediaire";
 						    }
 						    
-							// Obtenir le numéro Id du personnage choisi et le garder 
-							// en mémoire dans une variable
-							int intIdPersonnage = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "IdPersonnage").getNodeValue());
-							objLogger.info( GestionnaireMessages.message("protocole.personnage") + intIdPersonnage );
-							
+
 							// Appeler la méthode permettant de démarrer une partie
 							// et garder son résultat dans une variable
 							String strResultatDemarrerPartie = objJoueurHumain.obtenirPartieCourante().obtenirTable().demarrerMaintenant( objJoueurHumain, 
@@ -1338,8 +1338,7 @@ public class ProtocoleJoueur implements Runnable
 						{
 							e.printStackTrace();
 						}
-	
-						
+
 					}
 				}
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.DemarrerPartie))
@@ -1387,30 +1386,39 @@ public class ProtocoleJoueur implements Runnable
 						// en mémoire dans une variable
 						int intIdPersonnage = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "IdPersonnage").getNodeValue());
 						
-						// Appeler la méthode permettant de démarrer une partie
-						// et garder son résultat dans une variable
-						String strResultatDemarrerPartie = objJoueurHumain.obtenirPartieCourante().obtenirTable().demarrerPartie(objJoueurHumain, 
-																intIdPersonnage, true);
-						
-						// Si le résultat du démarrage de partie est Succes alors le
-						// joueur est maintenant en attente
-						if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.Succes))
+						// Vérifier que ce id de personnage n'est pas déjà utilisé
+						if (!objJoueurHumain.obtenirPartieCourante().obtenirTable().idPersonnageEstLibreEnAttente(intIdPersonnage))
 						{
-                            bolEnTrainDeJouer = true;
-                            
-							// Il n'y a pas eu d'erreurs
-							objNoeudCommande.setAttribute("type", "Reponse");
-							objNoeudCommande.setAttribute("nom", "Ok");
-						}
-						else if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.PartieEnCours))
-						{
-							// Il y avait déjà une partie en cours
-							objNoeudCommande.setAttribute("nom", "PartieEnCours");
+							// Le id personnage a déjà été choisi
+							objNoeudCommande.setAttribute("nom", "MauvaisId");
 						}
 						else
 						{
-							// Le joueur était déjà en attente
-							objNoeudCommande.setAttribute("nom", "DejaEnAttente");
+							// Appeler la méthode permettant de démarrer une partie
+							// et garder son résultat dans une variable
+							String strResultatDemarrerPartie = objJoueurHumain.obtenirPartieCourante().obtenirTable().demarrerPartie(objJoueurHumain, 
+																	intIdPersonnage, true);
+							
+							// Si le résultat du démarrage de partie est Succes alors le
+							// joueur est maintenant en attente
+							if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.Succes))
+							{
+	                            bolEnTrainDeJouer = true;
+	                            
+								// Il n'y a pas eu d'erreurs
+								objNoeudCommande.setAttribute("type", "Reponse");
+								objNoeudCommande.setAttribute("nom", "Ok");
+							}
+							else if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.PartieEnCours))
+							{
+								// Il y avait déjà une partie en cours
+								objNoeudCommande.setAttribute("nom", "PartieEnCours");
+							}
+							else
+							{
+								// Le joueur était déjà en attente
+								objNoeudCommande.setAttribute("nom", "DejaEnAttente");
+							}
 						}
 					}
 				}
@@ -1703,6 +1711,7 @@ public class ProtocoleJoueur implements Runnable
 						int nouveauPointage = objJoueurHumain.obtenirPartieCourante().obtenirPointage();
 						nouveauPointage += pointage;
 						objJoueurHumain.obtenirPartieCourante().definirPointage( nouveauPointage );
+                        
                         //	Il n'y a pas eu d'erreurs
 						objNoeudCommande.setAttribute("type", "Reponse");
 						objNoeudCommande.setAttribute("nom", "Pointage");
@@ -1712,6 +1721,11 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudParametrePointage.setAttribute("type", "Pointage");
 						objNoeudParametrePointage.appendChild(objNoeudTextePointage);		
 						objNoeudCommande.appendChild(objNoeudParametrePointage);
+						
+						// Préparer un événement pour les autres joueurs de la table
+						// pour qu'il se tienne à jour du pointage de ce joueur
+						objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementMAJPointage(objJoueurHumain.obtenirNomUtilisateur(), 
+						    objJoueurHumain.obtenirPartieCourante().obtenirPointage());
 					}
 				}
 				else if(objNoeudCommandeEntree.getAttribute("nom").equals(Commande.UtiliserObjet))
@@ -2118,7 +2132,7 @@ public class ProtocoleJoueur implements Runnable
 				bolCommandeValide = bolNoeudValide;
 			}
 		}
-//		 Si le nom de la commande est DemarrerMaintenant, alors il doit y avoir 1 paramètre
+        // Si le nom de la commande est DemarrerMaintenant, alors il doit y avoir 1 paramètre
 		else if (noeudCommande.getAttribute("nom").equals(Commande.DemarrerMaintenant))
 		{
 			// Si le nombre d'enfants du noeud de commande est de 1, alors
@@ -2246,6 +2260,70 @@ public class ProtocoleJoueur implements Runnable
 					objNoeudCourant.getAttributes().getLength() != 1 ||
 					objNoeudCourant.getAttributes().getNamedItem("type") == null ||
 					objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("Pointage") == false ||
+					objNoeudCourant.getChildNodes().getLength() != 1 ||
+					objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false ||
+					UtilitaireNombres.isPositiveNumber(objNoeudCourant.getChildNodes().item(0).getNodeValue()) == false)
+				{
+					bolNoeudValide = false;
+				}
+				
+				// Si l'enfant du noeud courant est valide alors la commande 
+				// est valide
+				bolCommandeValide = bolNoeudValide;
+			}
+		}
+		// Si le nom de la commande est AcheterObjet, il doit y voir un paramètre
+		else if (noeudCommande.getAttribute("nom").equals(Commande.AcheterObjet))
+		{
+			if (noeudCommande.getChildNodes().getLength() == 1)
+			{
+				// Déclarer une variable qui va permettre de savoir si le 
+				// noeud enfant est valide
+				boolean bolNoeudValide = true;
+		
+				// Faire la référence vers le noeud enfant courant
+				Node objNoeudCourant = noeudCommande.getChildNodes().item(0);
+				
+				// Si le noeud enfant n'est pas un paramètre, ou qu'il n'a
+				// pas exactement 1 attribut, ou que le nom de cet attribut 
+				// n'est pas type, ou que le noeud n'a pas de valeurs, alors 
+				// il y a une erreur dans la structure
+				if (objNoeudCourant.getNodeName().equals("parametre") == false || 
+					objNoeudCourant.getAttributes().getLength() != 1 ||
+					objNoeudCourant.getAttributes().getNamedItem("type") == null ||
+					objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("id") == false ||
+					objNoeudCourant.getChildNodes().getLength() != 1 ||
+					objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false ||
+					UtilitaireNombres.isPositiveNumber(objNoeudCourant.getChildNodes().item(0).getNodeValue()) == false)
+				{
+					bolNoeudValide = false;
+				}
+				
+				// Si l'enfant du noeud courant est valide alors la commande 
+				// est valide
+				bolCommandeValide = bolNoeudValide;
+			}
+		}
+		// Si le nom de la commande est UtiliserObjet, il doit y voir un paramètre
+		else if (noeudCommande.getAttribute("nom").equals(Commande.UtiliserObjet))
+		{
+			if (noeudCommande.getChildNodes().getLength() == 1)
+			{
+				// Déclarer une variable qui va permettre de savoir si le 
+				// noeud enfant est valide
+				boolean bolNoeudValide = true;
+		
+				// Faire la référence vers le noeud enfant courant
+				Node objNoeudCourant = noeudCommande.getChildNodes().item(0);
+				
+				// Si le noeud enfant n'est pas un paramètre, ou qu'il n'a
+				// pas exactement 1 attribut, ou que le nom de cet attribut 
+				// n'est pas type, ou que le noeud n'a pas de valeurs, alors 
+				// il y a une erreur dans la structure
+				if (objNoeudCourant.getNodeName().equals("parametre") == false || 
+					objNoeudCourant.getAttributes().getLength() != 1 ||
+					objNoeudCourant.getAttributes().getNamedItem("type") == null ||
+					objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("id") == false ||
 					objNoeudCourant.getChildNodes().getLength() != 1 ||
 					objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false ||
 					UtilitaireNombres.isPositiveNumber(objNoeudCourant.getChildNodes().item(0).getNodeValue()) == false)
@@ -2825,9 +2903,6 @@ public class ProtocoleJoueur implements Runnable
      */
     private void traiterCommandeAcheterObjet(Element objNoeudCommandeEntree, Element objNoeudCommande, Document objDocumentXMLEntree, Document objDocumentXMLSortie, boolean bolDoitRetournerCommande)
     {
-		// Obtenir le type de l'objet a acheté
-		String strTypeObjet = obtenirValeurParametre(objNoeudCommandeEntree, "type").getNodeValue();
-		
 		// Obtenir l'id de l'objet a acheté
 		int intIdObjet = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "id").getNodeValue());
         
@@ -2885,8 +2960,8 @@ public class ProtocoleJoueur implements Runnable
             	// Synchronisme sur l'objet magasin
                 synchronized (objObjet)
                 {
-	            	// Vérifier si le magasin vend l'objet strTypeObjet avec id = intIdObjet
-	                if (((Magasin)objObjet).objetExiste(intIdObjet, strTypeObjet))
+	            	// Vérifier si le magasin vend l'objet avec id = intIdObjet
+	                if (((Magasin)objObjet).objetExiste(intIdObjet))
 	                {
 	                	// Aller chercher l'objet voulu
 	                	ObjetUtilisable objObjetVoulu = ((Magasin)objObjet).obtenirObjet(intIdObjet);
@@ -2900,7 +2975,7 @@ public class ProtocoleJoueur implements Runnable
 	                	else
 	                	{
 		                	// Acheter l'objet
-		                	ObjetUtilisable objObjetAcheter = ((Magasin)objObjet).acheterObjet(intIdObjet, strTypeObjet, objTable.obtenirProchainIdObjet());
+		                	ObjetUtilisable objObjetAcheter = ((Magasin)objObjet).acheterObjet(intIdObjet, objTable.obtenirProchainIdObjet());
 		                	
 		                	// Définir l'indicateur pour empêcher que le joueur
 		                	// achète plus qu'un objet
@@ -2911,14 +2986,19 @@ public class ProtocoleJoueur implements Runnable
 		                	
 		                	// Défrayer les coûts
 		                	objJoueurHumain.obtenirPartieCourante().definirPointage(objJoueurHumain.obtenirPartieCourante().obtenirPointage() - objObjetAcheter.obtenirPrix());
-		                	                	
+		                    
+		                    // Préparer un événement pour les autres joueurs de la table
+						    // pour qu'il se tienne à jour du pointage de ce joueur
+						    objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementMAJPointage(objJoueurHumain.obtenirNomUtilisateur(), 
+						        objJoueurHumain.obtenirPartieCourante().obtenirPointage());
+						                	
 		                	// Retourner une réponse positive au joueur
 		                	objNoeudCommande.setAttribute("type", "Reponse");
 		                	objNoeudCommande.setAttribute("nom", "Ok");
 		                	
 		                	// Ajouter l'objet acheté dans la réponse
 		                	Element objNoeudObjetAchete = objDocumentXMLSortie.createElement("objetAchete");
-		                	objNoeudObjetAchete.setAttribute("type", strTypeObjet);
+		                	objNoeudObjetAchete.setAttribute("type", objObjetAcheter.obtenirTypeObjet());
 		                	objNoeudObjetAchete.setAttribute("id", Integer.toString(intIdObjet));
 		                	objNoeudCommande.appendChild(objNoeudObjetAchete);
 	                	}
@@ -2948,9 +3028,6 @@ public class ProtocoleJoueur implements Runnable
      */
     private void traiterCommandeUtiliserObjet(Element objNoeudCommandeEntree, Element objNoeudCommande, Document objDocumentXMLEntree, Document objDocumentXMLSortie, boolean bolDoitRetournerCommande)
     {
-		// Obtenir le type de l'objet a utilisé
-		String strTypeObjet = obtenirValeurParametre(objNoeudCommandeEntree, "type").getNodeValue();
-		
 		// Obtenir l'id de l'objet a utilisé
 		int intIdObjet = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "id").getNodeValue());
 		
@@ -2995,6 +3072,12 @@ public class ProtocoleJoueur implements Runnable
 		}
 		else
 		{		
+		    // Obtenir l'objet
+		    ObjetUtilisable objObjetUtilise = objJoueurHumain.obtenirPartieCourante().obtenirObjetUtilisable(intIdObjet);
+		    
+		    // Obtenir le type de l'objet a utilisé
+		    String strTypeObjet = objObjetUtilise.obtenirTypeObjet();
+		
 			// Dépendamment du type de l'objet, on effectue le traitement approprié
 			if (strTypeObjet.equals("Reponse"))
 			{
