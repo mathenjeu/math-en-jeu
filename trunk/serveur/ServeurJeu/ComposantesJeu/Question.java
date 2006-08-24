@@ -27,7 +27,7 @@ public class Question
 	// la réponse
 	private String strURLExplication;
 	
-//	 Déclaration d'une variable qui va contenir la catégorie de la question
+    // Déclaration d'une variable qui va contenir la catégorie de la question
 	private int intCategorie;
 	
 	/**
@@ -62,6 +62,7 @@ public class Question
 	{
 		return intCodeQuestion;
 	}
+
 	
 	/**
 	 * Cette fonction retourne le type de la question.
@@ -173,4 +174,5 @@ public class Question
 	{
 		intCategorie = categorie;
 	}
+
 }

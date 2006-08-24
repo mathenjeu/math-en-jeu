@@ -288,7 +288,12 @@ public class GestionnaireBD
 	
 	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau )
 	{
-		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion >= 2 and cleQuestion <= 800 and ";
+		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+
+		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion >= " +
+		    config.obtenirString("gestionnairebd.cle-question-min") + " and cleQuestion <= " +
+		    config.obtenirString("gestionnairebd.cle-question-max") + " and ";
+		    
 		strRequeteSQL += strValeurGroupeAge + niveau + " > 0";
 		
 		remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
@@ -296,14 +301,19 @@ public class GestionnaireBD
 	
 	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, int intCategorie, int intDifficulte )
 	{
-		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion >= 2 and cleQuestion <= 800 and ";
+		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+
+		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion >= " +
+		    config.obtenirString("gestionnairebd.cle-question-min") + " and cleQuestion <= " +
+		    config.obtenirString("gestionnairebd.cle-question-max") + " and ";
+		    
 		strRequeteSQL += strValeurGroupeAge + niveau + " = " + intDifficulte;
 		
 		remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
 	}
 	
 	private void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, String strRequeteSQL )
-	{
+	{	
 		try
 		{
 			synchronized( requete )

@@ -127,7 +127,7 @@ public class TestJoueurVirtuel {
         //-----------------------------------------    
         
         // Nombre de joueurs virtuels à créer
-        int intNombreJoueursVirtuels = 2;
+        int intNombreJoueursVirtuels = 1;
         
         Point ptJv[] = GenerateurPartie.genererPositionJoueurs(intNombreJoueursVirtuels, lstPointsCaseLibre);
         

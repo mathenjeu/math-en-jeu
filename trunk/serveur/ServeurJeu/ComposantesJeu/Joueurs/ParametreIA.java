@@ -3,6 +3,7 @@ package ServeurJeu.ComposantesJeu.Joueurs;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIAObjet;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import java.awt.Point;
+import ServeurJeu.Configuration.GestionnaireConfiguration;
 
 // Cette classe contient tous les paramètres utilisés
 // par les joueurs virtuels
@@ -149,6 +150,9 @@ public class ParametreIA {
     
 	public ParametreIA()
 	{
+		// Aller chercher la référence vers le gestionnaire de configuration
+		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+		
 		// Créer le tableau contenant l'info pour chaque objet utilisable
 		tParametresIAObjetUtilisable = new ParametreIAObjet[1];
 		
@@ -357,11 +361,7 @@ public class ParametreIA {
 	    tNbJetonsMagasinAleatoire[DIFFICULTE_DIFFICILE] = 6;
 	    
 	    // Initialiser les noms des joueurs virtuels        
-        String[] tNomsTemp = {"Willy", "Billy", "Fred", "Max", 
-            "Véro", "Bob", "Greg", "Dany", "Dave", "John",
-            "Joe", "Vince", "Mike", "Tod", "Doum", "Kev",
-            "Dan"}; 
-        
+        String[] tNomsTemp = config.obtenirString("joueurs-virtuels.noms").split("/");
 	    tBanqueNomsJoueurVirtuels = tNomsTemp;
 	    
 	}

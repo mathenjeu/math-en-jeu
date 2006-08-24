@@ -1508,6 +1508,7 @@ public class ProtocoleJoueur implements Runnable
 							objNoeudQuestion.setAttribute("id", Integer.toString(objQuestionAPoser.obtenirCodeQuestion()));
 							objNoeudQuestion.setAttribute("type", objQuestionAPoser.obtenirTypeQuestion().toString());
 							objNoeudQuestion.setAttribute("url", objQuestionAPoser.obtenirURLQuestion());
+							objNoeudQuestion.setAttribute("MauvaiseReponse1", objJoueurHumain.obtenirPartieCourante().obtenirMauvaiseReponse1(objQuestionAPoser));
 							
 							// Ajouter le noeud question au noeud paramètre
 							objNoeudParametreQuestion.appendChild(objNoeudQuestion);
@@ -3081,36 +3082,13 @@ public class ProtocoleJoueur implements Runnable
 			// Dépendamment du type de l'objet, on effectue le traitement approprié
 			if (strTypeObjet.equals("Reponse"))
 			{
-				// Dans le cas de cet objet, il faut qu'une question ait été 
-				// posée
-                if (objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante() == null)
-                {
-                	objNoeudCommande.setAttribute("nom", "AucuneQuestionPosee");
-                }
-                else
-                {
-                	// Aller chercher une mauvais réponse au hasard et la retourner
-                    String strMauvaiseReponse = objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirMauvaiseReponse();
-                    
-                    if (strMauvaiseReponse.equals("PasUnChoixDeReponse"))
-                    {
-                    	objNoeudCommande.setAttribute("nom", "PasUnChoixDeReponse");
-                    }
-                    else
-                    {
-                    	// Retourner la mauvaise réponse
-                    	objNoeudCommande.setAttribute("type", "Reponse");
-                    	objNoeudCommande.setAttribute("nom", "Ok");
-                    	Element objNoeudParametreObjet = objDocumentXMLSortie.createElement("parametre");
-                    	objNoeudParametreObjet.setAttribute("indice", strMauvaiseReponse);
-                    	objNoeudCommande.appendChild(objNoeudParametreObjet);
-                    
-                        // Enlever l'objet de la liste des objets du
-                        // joueur
-                        objJoueurHumain.enleverObjet(intIdObjet, strTypeObjet);
-                    
-                    }
-                }
+                // Démarrer le compteur pour l'objet réponse
+                objJoueurHumain.obtenirPartieCourante().initialiserCompteurObjetReponse();
+            
+                // Enlever l'objet de la liste des objets du
+                // joueur
+                objJoueurHumain.enleverObjet(intIdObjet, strTypeObjet);
+
 			}
 		}
 		

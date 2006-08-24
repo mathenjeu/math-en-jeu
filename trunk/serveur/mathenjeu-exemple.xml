@@ -197,6 +197,10 @@
 
 		<url-questions-reponses></url-questions-reponses>
 
+        <cle-question-min>1</cle-question-min>
+
+        <cle-question-max>800</cle-question-max>
+
 	</gestionnairebd>
 
 	
@@ -218,5 +222,10 @@
 		<fichier-sortie>serveur_monitoring.html</fichier-sortie>
 
 	</monitor>
+
+    <!-- Section de la classe ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel -->
+    <joueurs-virtuels>
+        <noms>Willy/Billy/Fred/Max/Véro/Bob/Greg/Dany/Dave/John/Joe/Mike/Tod/Doum/Dan</noms>
+    </joueurs-virtuels>
 
 </configuration>

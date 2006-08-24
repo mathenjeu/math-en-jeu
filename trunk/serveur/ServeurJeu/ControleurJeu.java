@@ -181,7 +181,7 @@ public class ControleurJeu
 	public void demarrer()
 	{
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
-		
+
 		int intStepSynchro = config.obtenirNombreEntier( "controleurjeu.synchro.step" );
 		objGestionnaireTemps.ajouterTache( objTacheSynchroniser, intStepSynchro );
 		

@@ -19,6 +19,7 @@ import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Reponse;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 
 /**
@@ -29,7 +30,7 @@ public class InformationPartie
 	// Déclaration d'une référence vers le gestionnaire de bases de données
 	private GestionnaireBD objGestionnaireBD;
 	
-//	 Déclaration d'une référence vers le gestionnaire d'evenements
+    // Déclaration d'une référence vers le gestionnaire d'evenements
 	private GestionnaireEvenements objGestionnaireEv;
 	
 	// Déclaration d'une référence vers un joueur humain correspondant à cet
@@ -71,6 +72,10 @@ public class InformationPartie
 	// Pour empêcher le joueur d'acheter plus qu'un seul objet à la fois
 	private boolean bolObjetAcheter;
 	
+    // Compteur pour l'objet réponse
+    private int intCompteurObjetReponse;
+	
+	 
 	/**
 	 * Constructeur de la classe InformationPartie qui permet d'initialiser
 	 * les propriétés de la partie et de faire la référence vers la table.
@@ -80,7 +85,7 @@ public class InformationPartie
 		// Faire la référence vers le gestionnaire de base de données
 		objGestionnaireBD = gestionnaireBD;
 		
-//		 Faire la référence vers le gestionnaire d'evenements
+        // Faire la référence vers le gestionnaire d'evenements
 		objGestionnaireEv = gestionnaireEv;
 		
 		// Faire la référence vers le joueur humain courant
@@ -111,6 +116,9 @@ public class InformationPartie
 	    objBoiteQuestions = new BoiteQuestions();
 	    
 	    objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau() );
+
+        intCompteurObjetReponse = 0;
+
 	}
 
 	/**
@@ -768,5 +776,34 @@ public class InformationPartie
 	public void definirObjetAcheter(boolean valeur)
 	{
 		bolObjetAcheter = valeur;
+	}
+	
+	public void initialiserCompteurObjetReponse()
+	{
+        intCompteurObjetReponse = Reponse.NOMBRE_CHARGE;
+	}
+	
+	public String obtenirMauvaiseReponse1(Question objQuestionPoser)
+	{
+		String strRetour = "";
+		
+		// Il faut qu'il reste des charges à l'objet réponse précédamment utilisé
+		if (intCompteurObjetReponse > 0)
+		{
+			strRetour = objQuestionPoser.obtenirMauvaiseReponse();
+			if (strRetour.equals("PasUnChoixDeReponse") ||
+			    strRetour.equals("Erreur"))
+			{
+				strRetour = "";
+			}
+			else
+			{
+				intCompteurObjetReponse--;
+			}
+
+		}
+		
+		return strRetour;
+		
 	}
 }

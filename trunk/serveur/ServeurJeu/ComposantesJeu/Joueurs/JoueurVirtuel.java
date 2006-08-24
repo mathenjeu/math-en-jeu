@@ -160,6 +160,9 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	// Objet logger pour afficher les erreurs dans le fichier log
 	static private Logger objLogger = Logger.getLogger(JoueurVirtuel.class);
 	
+	// Compteur pour l'objet réponse
+	private int intCompteurObjetReponse;
+	
 	/**
 	 * Constructeur de la classe JoueurVirtuel qui permet d'initialiser les 
 	 * membres privés du joueur virtuel
@@ -249,6 +252,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         // Créer une liste de magasin déjà visité vide
         lstMagasinsVisites = new Vector();
 
+        // Initialiser le compteur à 0
+        intCompteurObjetReponse = 0;
 	}
 
 
@@ -316,34 +321,48 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 					// Calculer la grandeur du déplacement demandé
 					intGrandeurDeplacement = obtenirPointage(objPositionJoueur, objPositionIntermediaire);
 					
+					// Vérifier si on utilise un objet réponse
+					boolean bolUtiliserReponse = nombreObjetsPossedes(Objet.UID_OU_REPONSE) > 0 &&
+					    intCompteurObjetReponse <= 0;
+					    
 					// Aller chercher le pourcentage de réussite à la question
 					intPourcentageReussite = objParametreIA.tPourcentageReponse[intNiveauDifficulte][intGrandeurDeplacement-1];
-		
-		            // Vérifier si c'est une question à choix de réponse
-		            boolean bolQuestionChoixDeReponse = (genererNbAleatoire(100)+1 <= ParametreIA.RATIO_CHOIX_DE_REPONSE);	            
-		            
-					// Vérifier si on utilise l'objet reponse selon notre
-					// pourcentage de réussite et si la question est une question
-					// à choix de réponse.   
-					boolean bolUtiliserReponse = bolQuestionChoixDeReponse &&
-					    nombreObjetsPossedes(Objet.UID_OU_REPONSE) > 0 &&
-					    intGrandeurDeplacement >= 3;
 					
-					// Si on utilise l'objet, on modifie le % de réussite
+					// Si on utilise l'objet, on met des charges dans le compteur
 					if (bolUtiliserReponse == true)
 					{
 	    				if (ccDebug)
 	    				{
 	    					System.out.println("Utilise objet: Reponse");
 	    				}
-						
-						// Augmenter les chances de réussites utilisant le 
-						// tableau de % de réponse lorsqu'on utilise cet objet
-					    intPourcentageReussite = objParametreIA.tPourcentageReponseObjetReponse[intNiveauDifficulte][intGrandeurDeplacement-1];
+
+					    // Démarrer le compteur pour l'objet réponse
+					    intCompteurObjetReponse = Reponse.NOMBRE_CHARGE;
 					    
 					    // Enlever un objet reponse des objets du joueur
 					    enleverObjet(Objet.UID_OU_REPONSE);
 	
+					}
+					
+		            // Vérifier si c'est une question à choix de réponse
+		            boolean bolQuestionChoixDeReponse = (genererNbAleatoire(100)+1 <= ParametreIA.RATIO_CHOIX_DE_REPONSE);	            
+		            
+		            // Maintenant, s'il reste des charges, modifier le % de réussite
+					if (bolQuestionChoixDeReponse && intCompteurObjetReponse > 0)
+					{						
+						// Augmenter les chances de réussites utilisant le 
+						// tableau de % de réponse lorsqu'il reste des charges
+						// à l'objet et si cette question est à choix de réponse
+					    intPourcentageReussite = objParametreIA.tPourcentageReponseObjetReponse[intNiveauDifficulte][intGrandeurDeplacement-1];
+					    
+					    // Décrémenter une charge
+					    intCompteurObjetReponse--;
+					    
+	    				if (ccDebug)
+	    				{
+	    					System.out.println("Une mauvaise réponse est éliminée: charge restante = " + 
+	    					    intCompteurObjetReponse);
+	    				}
 					}
 					
 	    			// Déterminer si le joueur virtuel répondra à la question
@@ -1826,9 +1845,9 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         int tTableauSource[][];
         
         // Déterminer dans quel tableau on va chercher les pourcentages
-        // de choix. Si le joueur possède l'objet réponse, il va choisir
-        // des choix plus difficile car l'objet va l'aider
-        if (nombreObjetsPossedes(Objet.UID_OU_REPONSE) > 0)
+        // de choix. Si le joueur possède l'objet réponse ou s'il y reste des charges,
+        // il va choisir des choix plus difficile car l'objet va l'aider
+        if (nombreObjetsPossedes(Objet.UID_OU_REPONSE) > 0 || intCompteurObjetReponse > 0)
         {
         	tTableauSource = objParametreIA.tPourcentageChoixObjetReponse;
         }

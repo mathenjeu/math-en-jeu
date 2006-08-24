@@ -21,6 +21,9 @@ public class Reponse extends ObjetUtilisable
 	// Cette constante définit le nom de cet objet
 	public static final String TYPE_OBJET = "Reponse";
 	
+	// Cette constante définit le nombre de charge de l'objet reponse
+	public static final int NOMBRE_CHARGE = 5;
+	
 	/**
 	 * Constructeur de la classe Reponse qui permet de définir les propriétés 
 	 * propres à l'objet courant.

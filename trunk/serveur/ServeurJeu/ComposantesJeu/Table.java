@@ -693,52 +693,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     		  
                 // Ajouter un joueur virtuel dans la table
 
-                //------------------------------------------------------------------
-                // TODO: Enlever cette partie strictement pour tester
-                //
-                //                
-                // 
-                if (lstJoueursEnAttente.size() == 1)
-		        {
-		            Set lstE = lstJoueursEnAttente.entrySet();
-		            Iterator objI = lstE.iterator(); 
-		            JoueurHumain objJ = (JoueurHumain) (((Map.Entry)(objI.next())).getValue());
-		            if (objJ.obtenirNomUtilisateur().toLowerCase().equals("jeff2"))
-		            {
-		            	// Si c'est le joueur "jeff2" qui démarre la partie, alors
-		            	// je vais mettre 3 joueurs de niveau
-		            	// différent avec des noms spéciaux
-		            	// But: Tester les 3 niveaux de difficulté
-		            	//      ensemble sur le jeu et vérifier
-		            	//      les pointages finaux
-		            	
-	                    JoueurVirtuel objJoueurVirtuel = new JoueurVirtuel("Piggy", 
-	                        ParametreIA.DIFFICULTE_FACILE, this, objGestionnaireEvenements, objControleurJeu, -1);
-	                    objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i]);
-	                    lstJoueursVirtuels.add(objJoueurVirtuel);
-	                    lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[i]);
-			            	
-	                    objJoueurVirtuel = new JoueurVirtuel("Neutrinos", 
-	                        ParametreIA.DIFFICULTE_MOYEN, this, objGestionnaireEvenements, objControleurJeu, -1);
-	                    objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i+1]);
-	                    lstJoueursVirtuels.add(objJoueurVirtuel);
-	                    lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[i+1]);
-			            	
-	                    objJoueurVirtuel = new JoueurVirtuel("ThE DeStRuCtOr 2000", 
-	                        ParametreIA.DIFFICULTE_DIFFICILE, this, objGestionnaireEvenements, objControleurJeu, -1);
-	                    objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i+2]);
-	                    lstJoueursVirtuels.add(objJoueurVirtuel);
-	                    lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[i+2]);
-			            
-			            break;		
-		            }
-		            
-		        }
-		        //
-		        //
-		        //
-		        // ------------------------------------------------------------------
-		       
 		        // Utiliser le prochaine id de personnage libre
 		        while (!idPersonnageEstLibre(intIdPersonnage))
 		        {
