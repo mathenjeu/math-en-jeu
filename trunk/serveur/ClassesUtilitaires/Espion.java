@@ -66,7 +66,8 @@ public class Espion implements Runnable{
 	 */
 	public Espion(ControleurJeu controleur, String nomFichier, int delaiMaj, int mode)
 	{
-		strVersion = "Class Path: " + System.getProperty("java.class.path");
+		String strArr[] = System.getProperty("java.class.path").split(":");
+		strVersion = "Serveur: " + strArr[0];
 		    
 		intModeEspion = mode;
 		objControleurJeu = controleur;
