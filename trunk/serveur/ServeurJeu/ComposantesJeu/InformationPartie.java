@@ -524,9 +524,9 @@ public class InformationPartie
 			// Faire la référence vers la case de destination
 			Case objCaseDestination = table.obtenirPlateauJeuCourant()[objPositionDesiree.x][objPositionDesiree.y];
 			
-			// Calculer le nouveau pointage du joueur (on ajoute la difficulté 
-			// de la question au pointage)
-			intNouveauPointage += intDifficulteQuestion;
+			// Calculer le nouveau pointage du joueur (on ajoute le carré 
+			// de la difficulté de la question au pointage)
+			intNouveauPointage += intDifficulteQuestion*intDifficulteQuestion;
 			
 			// Si la case de destination est une case de couleur, alors on 
 			// vérifie l'objet qu'il y a dessus et si c'est un objet utilisable, 
