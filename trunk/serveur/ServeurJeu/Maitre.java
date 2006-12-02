@@ -31,7 +31,11 @@ public class Maitre implements Runnable
 	
 	public static void traiterCommande( String commande )
 	{
-		if( commande == null || commande.equals( "demarrer" ) )
+		
+		//on enlève les \r de la commande
+		commande = commande.replaceAll("\\r","");
+		
+		if( commande == null || commande.equals( "demarrer" ))
 		{
 			System.out.println( "demarrer" );
 			Maitre maitre = new Maitre();
@@ -87,7 +91,7 @@ public class Maitre implements Runnable
 		}
 		else
 		{
-			System.out.println( "Mauvaise commande" );
+			System.out.println( "Erreur : Mauvaise commande" );
 		}
 	}
 	
