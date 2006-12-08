@@ -1,0 +1,31 @@
+﻿<?xml version ='1.0' encoding='UTF-8' ?>
+<config>
+	<langue>francais</langue>
+	<adresseWeb></adresseWeb>
+	<nbNouvelles>5</nbNouvelles>
+	<nbJoueurs>5</nbJoueurs>
+	<minParties>1</minParties>
+	<nbJours>120</nbJours>
+	<template>default</template>
+	<css>bleu.css</css>
+	<courriel></courriel>
+	<serveurSMTP></serveurSMTP>
+	<portSMTP>25</portSMTP>
+	<utilisateurSMTP></utilisateurSMTP>
+	<motDePasseSMTP></motDePasseSMTP>
+	<sujet_courriel_inscription><![CDATA[Confirmation de l'inscription à Math en jeu.]]></sujet_courriel_inscription>
+	<courriel_inscription><![CDATA[Bonjour [ALIAS],<p>
+Ce courriel confirme que votre inscription à math en jeu s'est bien déroulée.<br>
+Vous n'avez maintenant qu'à suivre le lien ci-dessous pour confirmer votre inscription.<br>
+Si vous ne pouvez cliquer directement sur le lien vous pouvez le copier et le coller dans votre navigateur.<p>
+<a target="_blank" href="[ADRESSE_SITE_WEB]confirmation-courriel.php?ID=[CLE_CONFIRMATION]"> [ADRESSE_SITE_WEB]confirmation-courriel.php?ID=[CLE_CONFIRMATION]</a><p>
+Merci et bon Math en jeu!]]></courriel_inscription>
+	<sujet_courriel_pass_perdu><![CDATA[Math en jeu!]]></sujet_courriel_pass_perdu>
+	<courriel_pass_perdu><![CDATA[Voici vos informations personnelles.<br>
+Votre alias : [ALIAS]<br>
+Votre Mot de passe : [MOT_DE_PASSE]]]></courriel_pass_perdu>
+	<dbHote></dbHote>
+	<dbUtilisateur></dbUtilisateur>
+	<dbMotDePasse></dbMotDePasse>
+	<dbSchema></dbSchema>
+</config>
