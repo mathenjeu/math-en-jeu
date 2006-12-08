@@ -552,7 +552,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
        // Remplir le tableau avec les valeurs trouvées
        for (int i = 0; i < intNombreJoueurs; i++)
        {
-           tRetour[i] = new String("[Ordi]" + objParametreIA.tBanqueNomsJoueurVirtuels[(i + intDepart) % intQuantiteBanque]);
+           tRetour[i] = new String(objParametreIA.tBanqueNomsJoueurVirtuels[(i + intDepart) % intQuantiteBanque]);
        }
        
        return tRetour;
