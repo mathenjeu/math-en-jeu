@@ -604,7 +604,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Contient le niveau de difficulté que le joueur désire pour
 		// les joueurs virtuels
-		int intDifficulteJoueurVirtuel = ParametreIA.DIFFICULTE_MOYEN;
+		// on obtient la difficulté par défaut à partir du fichier de configuration
+		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+		
+		int intDifficulteJoueurVirtuel = config.obtenirNombreEntier("joueurs-virtuels.difficulte_defaut");
+		//int intDifficulteJoueurVirtuel = ParametreIA.DIFFICULTE_MOYEN;
 		
 		// Obtenir le nombre de joueurs virtuel requis
 		// Vérifier d'abord le paramètre envoyer par le joueur
