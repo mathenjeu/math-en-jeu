@@ -85,12 +85,25 @@ public class GestionnaireBD
 		    return;			
 		}
 		
+		connexionDB();
+				
+	}
+	
+	/**
+	 * Cette fonction permet d'initialiser une connexion avec le serveur MySQL
+	 * et de créer un objet requête
+	 */
+	private void connexionDB()
+	{
+		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+		
+		String hote = config.obtenirString( "gestionnairebd.hote" );
+		String utilisateur = config.obtenirString( "gestionnairebd.utilisateur" );
+		String motDePasse = config.obtenirString( "gestionnairebd.mot-de-passe" );
+		
 		// Établissement de la connexion avec la base de données
 		try
 		{
-			String hote = config.obtenirString( "gestionnairebd.hote" );
-			String utilisateur = config.obtenirString( "gestionnairebd.utilisateur" );
-			String motDePasse = config.obtenirString( "gestionnairebd.mot-de-passe" );
 			connexion = DriverManager.getConnection( hote, utilisateur, motDePasse);
 		}
 		catch (SQLException e)
@@ -117,6 +130,7 @@ public class GestionnaireBD
 		    e.printStackTrace();
 		    return;			
 		}
+		
 	}
 	
 	/**
@@ -131,23 +145,49 @@ public class GestionnaireBD
 	 */
 	public boolean joueurExiste(String nomUtilisateur, String motDePasse)
 	{
-		try
+		
+		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+		String codeErreur = config.obtenirString( "gestionnairebd.code_erreur_inactivite" );
+			
+		int count=0;	//compteur du nombre d'essai de la requête
+
+		//boucler la requête jusqu'à 5 fois si la connexion à MySQL
+		//a été interrompu du à un manque d'activité de la connexion
+		while(count<5)
 		{
-			synchronized( requete )
+			try
 			{
-				ResultSet rs = requete.executeQuery("SELECT * FROM joueur WHERE alias = '" + nomUtilisateur + "' AND motDePasse = '" + motDePasse + "';");
-				return rs.next();
+				if(count!=0)
+				{
+					connexionDB();
+				}
+				synchronized( requete )
+				{
+					ResultSet rs = requete.executeQuery("SELECT * FROM joueur WHERE alias = '" + nomUtilisateur + "' AND motDePasse = '" + motDePasse + "';");
+					return rs.next();
+				}
+			}
+			catch (SQLException e)
+			{
+				//on vérifie l'état de l'exception 
+				//si l'état est égal au codeErreur
+				//on peut réesayer la connexion
+				if(e.getSQLState().equals(codeErreur))
+				{
+					count++;
+				}
+				else
+				{
+					// Une erreur est survenue lors de l'exécution de la requête
+					objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+					objLogger.error(GestionnaireMessages.message("bd.trace"));
+					objLogger.error( e.getMessage() );
+					e.printStackTrace();
+					return false;	
+				}
 			}
 		}
-		catch (SQLException e)
-		{
-			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-		    objLogger.error(GestionnaireMessages.message("bd.trace"));
-		    objLogger.error( e.getMessage() );
-		    e.printStackTrace();
-		    return false;			
-		}
+		return false;
 	}
 	
 	/**
