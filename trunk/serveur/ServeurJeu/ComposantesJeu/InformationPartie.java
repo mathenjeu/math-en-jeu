@@ -389,13 +389,13 @@ public class InformationPartie
 		{
 			intDifficulte = Math.abs(nouvellePosition.y - objPositionJoueur.y);
 		}
-
+		
 		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
 		// une question
 		if (intDifficulte > 0)
 		{
 			//TODO enlever ce commentaire : objQuestionTrouvee = objGestionnaireBD.trouverProchaineQuestion(intCategorieQuestion, intDifficulte, lstQuestionsRepondues);
-			objQuestionTrouvee = objBoiteQuestions.pigerQuestion( intCategorieQuestion, intDifficulte );
+			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
 		}
 		
 		// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
@@ -410,8 +410,9 @@ public class InformationPartie
 		}
 		else if (intDifficulte > 0)
 		{
-			objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau(), intCategorieQuestion, intDifficulte );
-			objQuestionTrouvee = objBoiteQuestions.pigerQuestion( intCategorieQuestion, intDifficulte );
+			
+			objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());
+			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
 			
 			lstQuestionsRepondues.clear();
 			
@@ -423,6 +424,11 @@ public class InformationPartie
 				lstQuestionsRepondues.put(new Integer(objQuestionTrouvee.obtenirCodeQuestion()), objQuestionTrouvee);
 				objQuestionCourante = objQuestionTrouvee;
 				objPositionJoueurDesiree = nouvellePosition;
+			}
+			else
+			{
+				// en théorie on ne devrait plus entrer dans ce else 
+				System.out.println( "Ça va mal : aucune question" );
 			}
 		}
 		
@@ -439,6 +445,48 @@ public class InformationPartie
 		return objQuestionTrouvee;
 	}
 	
+	/**
+	 * Cette fonction essaie de de piger une question du niveau de dificulté proche 
+	 * de intDifficulte, si on y arrive pas, ça veut dire qu'il ne 
+	 * reste plus de questions de niveau de difficulté proche 
+	 * de intDifficulte dans la boite de questions
+	 * 
+	 * @param intCategorieQuestion
+	 * @param intDifficulte
+	 * @return la question trouver ou null si aucune question n'a pu être pigée
+	 */
+	private Question trouverQuestion(int intCategorieQuestion, int intDifficulte)
+	{
+		
+		int intDifficulteTmp=intDifficulte;
+		Question objQuestionTrouvee = null;
+		int i=0;
+		do
+		{
+			if(i%2==0)
+			{
+				intDifficulteTmp+=i;
+			}
+			else
+			{
+				intDifficulteTmp-=i;
+			}
+			
+			i++;
+			
+			if(intDifficulteTmp>0)
+			{
+				objQuestionTrouvee = objBoiteQuestions.pigerQuestion( intCategorieQuestion, intDifficulteTmp );
+			}
+			if(i>=5)
+			{
+				break;
+			}
+		}while(objQuestionTrouvee==null);
+		
+		return objQuestionTrouvee;
+		
+	}
 	
 	/**
 	 * Cette fonction met à jour le plateau de jeu si le joueur a bien répondu
