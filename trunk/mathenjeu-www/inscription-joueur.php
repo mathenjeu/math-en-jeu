@@ -156,26 +156,32 @@ function validerEtape2($joueur)
     return $lang['erreur_mot_passe'];
   elseif($_POST['motDePasse']!=$_POST['motDePasse2'])
   	 return $lang['erreur_resaisie_mot_passe'];
-  elseif(isset($_POST["aliasProf"]))
+  else
   {
-    if(!$joueur->asgAdministrateur($_POST["aliasProf"]))
+    if(isset($_POST["aliasProf"]))
     {
-	  return $lang['alias_prof_introuvable'];
-	 }
-	 else
-	 {
-	    $joueur->asgAlias($_POST["alias"]);
-	    $joueur->asgMotDePasse($_POST["motDePasse"]);
+    	if(!$joueur->asgAdministrateur($_POST["aliasProf"]))
+    	{
+	  		return $lang['alias_prof_introuvable'];
+	 	}
+	}
+	$joueur->asgAlias($_POST["alias"]);
+	$joueur->asgMotDePasse($_POST["motDePasse"]);
 	
-	    if(!isset($_POST["etablissement"]))
-	        $joueur->asgEtablissement(0);
-	    else
-	        $joueur->asgEtablissement($_POST["etablissement"]);
+	if(!isset($_POST["etablissement"]))
+	{
+	    $joueur->asgEtablissement(0);
+	}
+	else
+	{
+	    $joueur->asgEtablissement($_POST["etablissement"]);
+	}
 	
-	    $joueur->asgNiveau($_POST["niveau"]);
-	    $_SESSION["joueurInscription"] = $joueur;
-	    return "";
-	 }
+	$joueur->asgNiveau($_POST["niveau"]);
+	$_SESSION["joueurInscription"] = $joueur;
+	
+	return "";
+	 
   }
 
 }
