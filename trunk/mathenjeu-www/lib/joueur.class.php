@@ -598,6 +598,10 @@ class Joueur extends Utilisateur
             "',cleAdministrateur=" . $this->reqCleAdministrateur() .
             ",cleGroupe=" . $this->reqCleGroupe() .
             ",cleConfirmation='" . $this->reqCleConfirmation() . "'" .
+            ",sondageQ1=" . $this->reqAimeMaths() .
+            ",sondageQ2=" . $this->reqMathConsidere() .
+            ",sondageQ3=" . $this->reqMathEtudie() .
+            ",sondageQ4=" . $this->reqMathDecouvert() .
             " where cleJoueur=" . $this->reqCle();
 
         $result=$this->mysqli->query($sql);
