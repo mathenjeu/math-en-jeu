@@ -4,7 +4,7 @@
 		<h4 class="titre_menu">{$lang.titre_menu_joueur}</h4>
 		<div>
 			<ul>
-				<li><a href="nouvelles.php" class="menu" onclick="window.open('jeu-popup.php?alias={$alias}&amp;motDePasse={$motDePasse}&amp;{$sid}','jeu','width=700,height=510;menubar=no,toolbar=no,location=no,resizable=no,scrollbars=no,status=no');">{$lang.menu_jouer}</a><p/></li>
+				<li><a href="nouvelles.php" class="menu" onclick="window.open('jeu-popup.php?alias={$alias}&amp;motDePasse={$motDePasse}&amp;{$sid}','jeu','width=700,height=510;menubar=no,toolbar=no,location=no,resizable=yes,scrollbars=no,status=no');">{$lang.menu_jouer}</a><p/></li>
 				<li><a href="index.php" class=menu>{$lang.menu_accueil}</a></li>
 				<li><a href="nouvelles.php" class="menu">{$lang.menu_nouvelles}</a></li>
 				<li><a href="instructions.php" class="menu">{$lang.menu_instructions}</a></li>

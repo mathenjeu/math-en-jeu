@@ -24,7 +24,7 @@ if (!isset($_SESSION["joueur"]))
 <script type="text/javascript">
 <!-- Begin
 function Launch(page) {
- OpenWin = this.open(page, "Aide", "toolbar=no,menubar=no,location=no,scrollbars=auto,resizable=yes,width=350,height=250");
+ OpenWin = window.open(page, "Aide", "toolbar=no,menubar=no,location=no,scrollbars=auto,resizable=yes,width=350,height=250");
 }
 // End -->
 </script> 
@@ -36,13 +36,13 @@ function Launch(page) {
 <object
         type="application/x-shockwave-flash"
         data="flash/chargement_beta.swf?nomUtilisateur=<?php echo $_GET["alias"]; ?>&amp;motDePasse=<?php echo $_GET["motDePasse"]; ?>"
-        width="700"
-        height="510">
+        width="100%"
+        height="100%">
     	<param name="movie"	value="flash/chargement_beta.swf?nomUtilisateur=<?php echo $_GET["alias"]; ?>&amp;motDePasse=<?php echo $_GET["motDePasse"]; ?>" />
     	<param name="allowScriptAccess" value="always" />
 		<param name="quality" value="high" />
 		<param name="bgcolor" value="#000000" />
-		<param name="scale" value="exactfit" />
+		<!--<param name="scale" value="exactfit" />-->
 </object>
 </div>
 </body>
