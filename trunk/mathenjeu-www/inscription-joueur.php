@@ -158,6 +158,11 @@ function validerEtape2($joueur)
   	 return $lang['erreur_resaisie_mot_passe'];
   else
   {
+
+   	if(isset($GLOBALS[$_POST["alias"]]))
+   	{
+		return $lang['doublon_alias'];
+	}
     if(isset($_POST["aliasProf"]))
     {
     	if(!$joueur->asgAdministrateur($_POST["aliasProf"]))
@@ -180,6 +185,19 @@ function validerEtape2($joueur)
 	$joueur->asgNiveau($_POST["niveau"]);
 	$_SESSION["joueurInscription"] = $joueur;
 	
+	
+	//on inscrit le joueur à cet étape pour s'assurer que le nom d'utlisateur
+	//est réserver pour ce joueur, au cas ou 2 joueurs s'inscrive en même temps avec
+	//le même nom d'utlisateur
+	$joueur->asgAimeMaths(3);
+    $joueur->asgMathConsidere(3);
+    $joueur->asgMathEtudie(3);
+    $joueur->asgMathDecouvert(3);
+    if($joueur->insertionMySQL())
+    {
+		$joueur->envoyerCourrielConfirmation();
+	}
+    
 	return "";
 	 
   }
@@ -193,14 +211,13 @@ Description : valider et assigné les informations de l'étape 3
 *******************************************************************************/
 function validerEtape3($joueur)
 {
+ 	$joueur->chargerMySQLCle($joueur->reqCle());
     $joueur->asgAimeMaths($_POST["aimeMaths"]);
     $joueur->asgMathConsidere($_POST["mathConsidere"]);
     $joueur->asgMathEtudie($_POST["mathEtudie"]);
     $joueur->asgMathDecouvert($_POST["mathDecouvert"]);
-    if($joueur->insertionMySQL())
-    {
-    	$joueur->envoyerCourrielConfirmation();
-    }
+	$joueur->miseAJourMySQL();
+    
     return "";
 }
 
