@@ -17,10 +17,10 @@
         <td colspan="2" align="left"><h2 id="top">{$lang.inscription_donnee_personnel}</h2></td>
     </tr>
     <tr>
-    	<td align="left" colspan="2" class="commentaire">{$lang.inscription_asterix_info}</td>
+    	<td align="left" colspan="2">{$lang.inscription_1_joueur_info}</td>
     </tr>
     <tr>
-    	<td align="left" colspan="2">{$lang.inscription_1_joueur_info}</td>
+    	<td align="left" colspan="2" class="commentaire">{$lang.inscription_asterix_info}</td>
     </tr>
     <tr>
 		<td align="left" colspan="2" class="erreur">{$erreur}</td>
@@ -71,10 +71,10 @@
         <td colspan="2"><h2 id="2">{$lang.inscription_joueur_profil}</h2></td>
     </tr>
     <tr align="left">
-    	<td colspan="2" class="commentaire">{$lang.inscription_asterix_info}</td>
+    	<td colspan="2">{$lang.inscription_2_joueur_info}</td>
     </tr>
     <tr align="left">
-    	<td colspan="2">{$lang.inscription_2_joueur_info}</td>
+    	<td colspan="2" class="commentaire">{$lang.inscription_asterix_info}</td>
     </tr>
     </table>
     <table align="left" width="100%" border="0" cellspacing="5">
@@ -106,7 +106,7 @@
     <tr align="left">
         <td>{$lang.niveau_scolaire}</td>
         <td>
-        <select name="niveau"
+        <select name="niveau" style="width: 200px;"
             onChange='document.inscription.action="inscription-joueur.php?action=etablissement";
             document.inscription.submit()'>
         {html_options values=$niveauID output=$niveauTexte selected=$niveau}

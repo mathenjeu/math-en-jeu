@@ -76,7 +76,7 @@
 	   <tr>
 	   	  <td>{$lang.niveau_scolaire}</td>
 	        <td>
-	            <select name="niveau"
+	            <select name="niveau" style="width: 200px;"
 	            onChange='document.scolaire.action="portail-joueur.php?action=etablissement#3";
 	            document.scolaire.submit()'>
 	            {html_options values=$niveauID output=$niveauTexte selected=$niveau}

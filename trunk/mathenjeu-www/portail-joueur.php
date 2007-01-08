@@ -316,8 +316,8 @@ function formulaireModification($joueur,$erreur,$erreur_id,$message,$message_id)
 
     //
     // on génère la liste des niveau scolaire
-    //
-    for($i=1;$i<=14;$i++)
+    // on enleve les niveau primaire temporairement
+    for($i=7;$i<=14;$i++)
     {
         $niveauTexte[$i] = $lang["niveau_$i"];
     }
