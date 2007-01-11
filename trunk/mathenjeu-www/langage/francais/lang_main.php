@@ -176,12 +176,8 @@ $lang['menu_stat_joueur'] = 'Mes statistiques';
 //
 
 $lang['titre_index'] = 'Bienvenue à Math en jeu';
-$lang['texte_index'] = '<p style="font-weight:bold">Dernière heure:  première démonstration publique de
-Math en jeu bientôt à l\'École
-secondaire Les Compagnons de Cartier à Québec!</p>
-
+$lang['texte_index'] = '
 <a target="_blank" href="img/screenshot-1-hr.jpg"><img src="img/screenshot-1.jpg" alt="Capture d\'écran" border="0" hspace="15" align="right"></a>
-
 <p>Math en jeu, coffret d\'énigmes mathématiques, vous lance un défi: trouver les
 clefs pour les déchiffrer.  Il recèle des questions de tous les niveaux de
 difficulté.  Novice ou expert, mathophobe ou mathophile, jeune ou vieux, vous
@@ -205,11 +201,7 @@ limite.  Mais attention!
 Le plaisir et la victoire ne reposent pas seulement sur les
 connaissances, mais sur l\'adresse et les astuces dont font preuve les joueurs
 devant les obstacles mathématiques!
-Que le meilleur gagne!</p>
-
-<p>Des étudiants développent Math en jeu conjointement avec des enseignants
-du secondaire et alimentent la banque de questions en tenant compte des
-programmes du Ministère de l\'éducation du Québec.</p>';
+Que le meilleur gagne!</p>';
 
 //
 //Inscription des administrateur

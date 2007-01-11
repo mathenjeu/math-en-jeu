@@ -10,7 +10,7 @@
             alt="Valid HTML 4.01 Transitional" height="31" width="88" border="0">
     </a>
     <a target="_blank" href="http://www.smac.ulaval.ca/">
-        <img alt="smac" border="0" src="img/smac.jpg">
+        <img alt="smac" height="31" width="88" border="0" src="img/smac.jpg">
     </a>
     <a target="_blank" href="http://www.ulaval.ca/">
         <img border="0" alt="Université Laval" src="img/logo_ulaval.jpg">
