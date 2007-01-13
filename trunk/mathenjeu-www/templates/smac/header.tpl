@@ -94,12 +94,12 @@ Projet SMAC
 		<td>
 		<table cellpadding="0" cellspacing="0" border="0" style="width:100%;height:100%;">
 		<tr>
-			<td id="content-border-l" style="background-image:url('{$template}img/border-l.png');background-repeat: repeat-y;background-position: left">&nbsp;<br></td>
+			<td class="content-border-l" style="background-image:url('{$template}img/border-l.png');background-repeat: repeat-y;background-position: left">&nbsp;<br></td>
 			<td></td>
-			<td id="content-border-r" style="background-image:url('{$template}img/border-r.png');background-repeat: repeat-y;background-position: right">&nbsp;<br></td>
+			<td class="content-border-r" style="background-image:url('{$template}img/border-r.png');background-repeat: repeat-y;background-position: right">&nbsp;<br></td>
 		</tr>
 		<tr>
-			<td id="content-border-l" style="background-image:url('{$template}img/border-l.png');background-repeat: repeat-y;background-position: left">&nbsp;<br></td>
+			<td class="content-border-l" style="background-image:url('{$template}img/border-l.png');background-repeat: repeat-y;background-position: left">&nbsp;<br></td>
 			<td>
 				<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;background-image:url('{$template}img/personnages.jpg');background-repeat: no-repeat;background-position: 95% 95%">
 				<tr>
