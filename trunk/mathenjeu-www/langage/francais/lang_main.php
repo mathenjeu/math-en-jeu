@@ -4,6 +4,7 @@ Fichier : lang_main.php
 Auteur : Maxime Bégin
 Description : Tous les textes du site web sont regroupés ici
 ********************************************************************************
+15-01-2007 Sylvain Hallé - Correction et uniformisation des textes
 21-06-2006 Maxime Bégin - Ajout de commentaires.
 15-06-2006 Maxime Bégin - Version initiale
 *******************************************************************************/
@@ -68,7 +69,7 @@ $lang['etablissement'] = 'Établissement';
 $lang['autre'] = 'Autre';
 $lang['nouvelles'] = 'Nouvelles';
 
-$lang['niveau_1'] = 'Primaire, 1e année';
+$lang['niveau_1'] = 'Primaire, 1re année';
 $lang['niveau_2'] = 'Primaire, 2e année';
 $lang['niveau_3'] = 'Primaire, 3e année';
 $lang['niveau_4'] = 'Primaire, 4e année';
@@ -101,11 +102,11 @@ $lang['titre_confirm_courriel'] = "Math en jeu! - Confirmation du courriel";
 $lang['titre_admin'] = "Math en jeu! - Administration";
 $lang['titre_index'] = 'Math en jeu!';
 $lang['titre_pass_perdu'] = 'Math en jeu! - Récupération de mot de passe';
-$lang['titre_portail_admin'] = 'Math en jeu! - Portail des professeurs';
+$lang['titre_portail_admin'] = 'Math en jeu! - Portail des enseignants';
 $lang['titre_portail_joueur'] = 'Math en jeu! - Portail des joueurs';
 $lang['titre_inscription_joueur'] = 'Math en jeu! - Inscription des joueurs';
-$lang['titre_inscription_admin'] = 'Math en jeu! - Inscription des professeurs';
-$lang['titre_faq'] = 'Math en jeu! - Foire au questions (FAQ)';
+$lang['titre_inscription_admin'] = 'Math en jeu! - Inscription des enseignants';
+$lang['titre_faq'] = 'Math en jeu! - Foire aux questions (FAQ)';
 $lang['titre_contact'] = 'Math en jeu! - Nous contacter';
 $lang['titre_nouvelle'] = 'Math en jeu - Nouvelles';
 $lang['titre_instruction'] = 'Math en jeu - Instructions';
@@ -136,15 +137,15 @@ $lang['bouton_inscription_terminer'] = 'Inscription terminée';
 $lang['titre_menu_joueur'] = 'Menu des joueurs';
 $lang['titre_menu_principal'] = 'Menu principal';
 $lang['titre_menu_super_admin'] = 'Menu de l\'administration';
-$lang['titre_menu_admin'] = 'Menu des professeurs';
+$lang['titre_menu_admin'] = 'Menu des enseignants';
 $lang['titre_menu_couleur'] = 'Couleur';
 
 $lang['menu_accueil'] = 'Accueil';
 $lang['menu_portail_joueur'] = 'Portail des joueurs';
 $lang['menu_connexion'] = 'Connexion';
 $lang['menu_inscription_joueur'] = 'Inscris-toi';
-$lang['menu_portail_prof'] = 'Portail des professeurs';
-$lang['menu_inscription_prof'] = 'Inscription des professeurs';
+$lang['menu_portail_prof'] = 'Portail des enseignants';
+$lang['menu_inscription_prof'] = 'Inscription des enseignants';
 $lang['menu_info_dev'] = 'Information sur le développement';
 $lang['menu_admin'] = 'Administration';
 $lang['menu_nouvelles'] = 'Dernières nouvelles';
@@ -175,14 +176,19 @@ $lang['menu_stat_joueur'] = 'Mes statistiques';
 //index
 //
 
-$lang['titre_index'] = 'Bienvenue à Math en jeu';
+$lang['titre_index'] = 'Math en jeu';
 $lang['texte_index'] = '
-<a target="_blank" href="img/screenshot-1-hr.jpg"><img src="img/screenshot-1.jpg" alt="Capture d\'écran" border="0" hspace="15" align="right"></a>
-<p>Math en jeu, coffret d\'énigmes mathématiques, vous lance un défi: trouver les
-clefs pour les déchiffrer.  Il recèle des questions de tous les niveaux de
-difficulté.  Novice ou expert, mathophobe ou mathophile, jeune ou vieux, vous
-prendrez plaisir à jouer et, qui sait, à apprendre!</p>
 
+<a target="_blank" href="img/screenshot-5-hr.jpg"><img src="img/screenshot-5.jpg" alt="Capture d\'écran" border="0" hspace="15" align="left"></a>
+
+<p>Peut-on s\'amuser en faisant des maths? L’équipe de SMAC &laquo;oui&raquo;!
+Tout juste sorti des cartons, Math en jeu est un jeu multimédia interactif
+développé par SMAC et accessible gratuitement sur Internet.
+L\'objectif, en ligne avec la mission de SMAC, consiste à exposer les
+jeunes aux mathématiques par le jeu, et invite le grand public à renouer
+avec les mathématiques.</p>
+
+<h2>Comment ça marche?</h2>
 
 <p>Pour jouer, rien de plus simple:</p>
 
@@ -192,27 +198,73 @@ prendrez plaisir à jouer et, qui sait, à apprendre!</p>
 <li>et c\'est parti!</li>
 </ul>
 
-<a target="_blank" href="img/screenshot-5-hr.jpg"><img src="img/screenshot-5.jpg" alt="Capture d\'écran" border="0" hspace="15" align="left"></a>
+<p>Math en jeu est essentiellement un jeu de société à saveur
+mathématique. Jusqu\'à quatre joueurs s\'affrontent dans une même partie
+en se déplaçant sur un échiquier créé de façon aléatoire.  Tous tentent
+d\'amasser le plus de jetons possible avant que le temps ne soit écoulé.
+Pour pouvoir avancer et gagner des jetons, chacun doit répondre à des
+questions mathématiques: plus le déplacement souhaité est grand, plus la
+question posée est difficile, et plus elle rapporte!</p>
 
-<p>Jusqu\'à quatre personnes peuvent rivaliser
-d\'audace et de stratégie pour résoudre des problèmes mathématiques, ce qui leur
-permettra d\'amasser le plus de jetons possible en un temps
-limite.  Mais attention!
-Le plaisir et la victoire ne reposent pas seulement sur les
-connaissances, mais sur l\'adresse et les astuces dont font preuve les joueurs
-devant les obstacles mathématiques!
-Que le meilleur gagne!</p>';
+<a target="_blank" href="img/screenshot-1-hr.jpg"><img src="img/screenshot-1.jpg" alt="Capture d\'écran" border="0" hspace="15" align="right"></a>
+
+<p>Dans le cas où le joueur n\'obtient pas la bonne réponse, une rétroaction
+unique à chaque question est affichée, expliquant au joueur la raison de son
+erreur et la façon d\'obtenir la bonne réponse.  De manière à rendre le jeu
+plus dynamique, tous les joueurs d\'une même partie peuvent se déplacer
+simultanément, à leur rythme, et indépendamment des autres. On peut aussi
+jouer seul en demandant à l\'ordinateur de fournir trois opposants virtuels.
+</p>
+
+
+<h2>La banque de questions</h2>
+
+<p>Le contenu de Math en jeu est tiré d\'une banque de 1500 questions réparties
+en huit domaines (géométrie, logique, algèbre, arithmétique, probabilité et
+statistique, histoire des sciences, fonctions, général). Chaque question
+correspond à un objectif précis du programme de mathématiques du Ministère
+de l\'éducation, du loisir et du sport du Québec et possède une cote
+correspondant à son degré de difficulté selon le niveau scolaire du joueur.
+Il est ainsi possible à deux joueurs de niveaux scolaires différents de
+s\'affronter dans une même partie en recevant des questions adaptées à leur
+niveau. Tous les niveaux scolaires sont représentés, avec une concentration
+sur le deuxième cycle du secondaire.</p>
+
+<p>Math en jeu est un projet en constante évolution. Dans les prochains mois,
+le jeu sera enrichi de nouvelles questions qui permettront à de nouveaux
+niveaux scolaires (premier cycle du secondaire, primaire, collégial) d\'être
+touchés de plus près. À la demande des enseignants, Math en jeu pourra
+également être utilisé pour la réalisation des devoirs à la maison. Ainsi,
+l\'enseignant pourra soit isoler un module de questions (par exemple, la
+géométrie) ou alors insérer ses propres questions dans le jeu.</p>
+
+<p>
+On peut jouer à Math en jeu à partir de n\'importe quel ordinateur connecté
+à Internet sans aucune installation requise. Le code source est entièrement
+ouvert (open source) et disponible gratuitement. Grâce à l\'architecture
+modulaire du logiciel, il pourra éventuellement servir dans d\'autres
+sciences: il suffira d\'adapter la banque de questions en conséquence.
+C\'est ainsi qu\'on projette de développer Physique en jeu, Chimie en jeu,
+etc.</p>
+
+<p>Assez parlé; maintenant allez vous amuser&hellip; avec Math en jeu!</p> 
+
+
+<p>Math en jeu, coffret d\'énigmes mathématiques, vous lance un défi: trouver les
+clefs pour les déchiffrer.  Il recèle des questions de tous les niveaux de
+difficulté.  Novice ou expert, mathophobe ou mathophile, jeune ou vieux, vous
+prendrez plaisir à jouer et, qui sait, à apprendre!</p>';
 
 //
 //Inscription des administrateur
 //
-$lang['inscription_admin'] = 'Inscription des professeurs';
+$lang['inscription_admin'] = 'Inscription des enseignants';
 
 
 //
 //Inscription des joueurs
 //
-$lang['inscription_asterix_info'] = 'Les champs suivi d\'un astérisque <span class="asterix">*</span> sont obligatoires.';
+$lang['inscription_asterix_info'] = 'Les champs suivis d\'un astérisque <span class="asterix">*</span> sont obligatoires.';
 $lang['inscription_alias_info'] = 'Lettres, chiffres et souligné, seulement. Entre 4 et 8 caractères inclusivement.';
 $lang['inscription_mot_de_passe_info'] = 'Entre 5 et 20 caractères inclusivement.';
 
@@ -221,7 +273,7 @@ $lang['inscription_etape'] = 'Étape';
 $lang['inscription_joueur'] = 'Inscription';
 
 //étape 1
-$lang['inscription_info_courriel'] = 'L\'adresse courriel ne peut contenir que des lettres,des chiffres, des points (.),des tirets (-) ou des traits de soulignement (_).';
+$lang['inscription_info_courriel'] = 'L\'adresse courriel ne peut contenir que des lettres, des chiffres, des points (.), des tirets (-) ou des traits de soulignement (_).';
 $lang['inscription_joueur_texte'] = 'L\'inscription du joueur est un processus qui ne se fait qu\'une seule fois lors de votre première visite à Math en jeu. Lors de vos prochaines parties, seuls votre nom d\'utilisateur et votre mot de passe seront nécessaires pour vous identifier.';
 $lang['inscription_1_joueur_info'] = 'Assurez-vous que les informations sont exactes. En particulier, votre adresse courriel sera utilisée pour confirmer votre inscription et vous renvoyer un nouveau mot de passe si vous l\'égarez.';
 $lang['inscription_donnee_personnel'] = 'Données personnelles';
@@ -231,16 +283,16 @@ $lang['inscription_2_joueur_info'] = 'Le nom d\'utilisateur est le nom qui servi
 $lang['inscription_joueur_profil'] = '';
 $lang['inscription_l_alias'] = 'Le nom d\'utilisateur';
 $lang['inscription_est_disponible'] = 'est disponible.';
-$lang['inscription_alias_prof_info'] = 'Si tu connais le nom d\'utilisateur de ton professeur inscrit le ici.Sinon n\'inscris rien.';
-$lang['inscription_alias_prof'] = 'Nom d\'utilisateur de votre professeur';
+$lang['inscription_alias_prof_info'] = 'Si tu connais le nom d\'utilisateur de ton enseignant, inscris-le ici. Sinon n\'inscris rien.';
+$lang['inscription_alias_prof'] = 'Nom d\'utilisateur de votre enseignant';
 
 //etape 3
-$lang['inscription_quelques_questions'] = 'Quelques petites questions...';
+$lang['inscription_quelques_questions'] = 'Quelques petites questions&hellip;';
 $lang['inscription_quelques_questions_info'] = 'Ces quelques petites questions nous aideront à mieux connaître nos joueurs et à améliorer le jeu en fonction des informations recueillies.';
-$lang['inscription_math_aime'] = 'J\'aime les mathématiques...';
-$lang['inscription_math_considere'] = 'En mathématiques, je me considère...';
-$lang['inscription_math_etudie'] = 'J\'étudie/je travaille ou je prévois étudier/travailler dans un domaine des sciences naturelles (ingénieur, physicien, chimiste, informaticien, mathématicien, etc.)...';
-$lang['inscription_math_decouvert'] = 'J\'ai découvert Math en jeu par...';
+$lang['inscription_math_aime'] = 'J\'aime les mathématiques&hellip;';
+$lang['inscription_math_considere'] = 'En mathématiques, je me considère&hellip;';
+$lang['inscription_math_etudie'] = 'J\'étudie/je travaille ou je prévois étudier/travailler dans un domaine des sciences naturelles (ingénieur, physicien, chimiste, informaticien, mathématicien, etc.)&hellip;';
+$lang['inscription_math_decouvert'] = 'J\'ai découvert Math en jeu par&hellip;';
 $lang['inscription_math_deteste'] = 'Je déteste';
 $lang['inscription_math_adore'] = 'J\'adore';
 $lang['inscription_math_difficulte'] = 'En difficulté';
@@ -248,14 +300,14 @@ $lang['inscription_math_excellent'] = 'Excellent';
 $lang['inscription_math_jamais'] = 'Jamais de la vie';
 $lang['inscription_math_certainement'] = 'Très certainement';
 $lang['inscription_math_moteur'] = 'Moteur de recherche';
-$lang['inscription_math_prof'] = 'Professeur';
+$lang['inscription_math_prof'] = 'Enseignant';
 $lang['inscription_math_pub'] = 'Publicité';
 $lang['inscription_math_recommendation'] = 'Recommandation de quelqu\'un';
 $lang['inscription_math_autre'] = 'Autre';
 
 $lang['inscription_succes_inscription'] = 'Vous êtes maintenant inscrit. Il ne vous reste plus qu\'à vous <a href="login-joueur.php">connecter</a> pour commencer à jouer.';
-$lang['inscription_succes'] = "Bravo! Tu es maintenant inscrit à math en jeu.<br>Mais avant de pouvoir commencer à jouer il te reste une dernière petite étape.<br>Tu va recevoir sous peu un courriel avec les informations nécessaires pour terminer ton inscription.";
-$lang['inscription_bravo_inscrit'] = 'Bravo tu es maintenant inscrit et ton adresse courriel est confirmée.<br>Tu sera redirigé à la page de connexion dans 10 secondes. <br>Sinon <a href="login-joueur.php">Clique ici</a>';
+$lang['inscription_succes'] = "Bravo! Tu es maintenant inscrit à math en jeu.<br>Mais avant de pouvoir commencer à jouer il te reste une dernière petite étape. Tu va recevoir sous peu un courriel avec les informations nécessaires pour terminer ton inscription.";
+$lang['inscription_bravo_inscrit'] = 'Bravo, tu es maintenant inscrit et ton adresse courriel est confirmée. Tu sera redirigé à la page de connexion dans 10 secondes.  Sinon <a href="login-joueur.php">clique ici</a>.';
 
 
 //
@@ -263,11 +315,11 @@ $lang['inscription_bravo_inscrit'] = 'Bravo tu es maintenant inscrit et ton adre
 //
 $lang['sp_stat_perso'] = 'Statistiques personnelles';
 $lang['sp_nb_parties_jouee'] = 'Nombre de parties jouées';
-$lang['sp_total_temps_jouee'] = 'Total de temps jouées';
-$lang['sp_total_points'] = 'Total de points';
+$lang['sp_total_temps_jouee'] = 'Durée cumulative de jeu';
+$lang['sp_total_points'] = 'Total des points';
 $lang['sp_nb_victoires'] = 'Nombre de victoires';
 $lang['sp_pourcentage_victoire'] = 'Pourcentage de victoire';
-$lang['sp_moy_point_minute'] = 'Moyenne de points par minutes de jeu';
+$lang['sp_moy_point_minute'] = 'Moyenne de points par minute de jeu';
 $lang['sp_duree_moy_parties'] = 'Durée moyenne des parties';
 
 
@@ -277,20 +329,20 @@ $lang['sp_duree_moy_parties'] = 'Durée moyenne des parties';
 $lang['joueur_login_identification'] = 'Identification du joueur';
 $lang['joueur_login_direction'] = 'Connexion';
 $lang['joueur_login_oublie'] = 'Tu as oublié ton nom d\'utilisateur ou ton mot de passe?';
-$lang['joueur_login_non_inscrit'] = 'C\'est la première fois que tu joues à Math en Jeu?  Clique sur <a class="lien_sur_couleur" href="inscription-joueur.php">Inscris-toi</a> pour te créer un nom d\'utilisateur et un mot de passe.  La prochaine fois que tu joueras à Math en Jeu, tu n\'auras qu\'à réutiliser ce nom d\'utilisateur et ce mot de passe.';
+$lang['joueur_login_non_inscrit'] = 'C\'est la première fois que tu joues à Math en Jeu?  <a class="lien_sur_couleur" href="inscription-joueur.php">Inscris-toi</a> pour te créer un nom d\'utilisateur et un mot de passe.  La prochaine fois que tu joueras à Math en Jeu, tu n\'auras qu\'à réutiliser ce nom d\'utilisateur et ce mot de passe.';
 $lang['joueur_login_non_confirmer'] = 'Tu es bien inscrit à Math en jeu mais tu n\'a pas confirmé ton adresse courriel.';
 $lang['joueur_login_inscrit_toi'] = 'Inscris-toi';
 $lang['joueur_login_gratuit'] = 'gratuitement!';
 $lang['joueur_login_clique_ici'] = 'Clique ici!';
 $lang['joueur_login_recuperation_mot_passe'] = 'Récupération des informations de connexion';
-$lang['joueur_login_pass_perdu_direction'] = 'Inscrit ici l\'adresse courriel avec laquelle tu t\'es inscrit à Math en jeu.<br>Un nouveau mot de passe te sera assigné et envoyé par courriel.';
-$lang['joueur_login_pass_perdu_ok'] = 'Ton nom d\'utilisateur et ton nouveau mot de passe ont été envoyés à ton adresse courriel.<br>Tu sera redirigé à la page principale dans 10 secondes. Sinon <a href="index.php">Clique ici</a>';
+$lang['joueur_login_pass_perdu_direction'] = 'Inscris ici l\'adresse courriel avec laquelle tu t\'es inscrit à Math en jeu. Un nouveau mot de passe te sera assigné et envoyé par courriel.';
+$lang['joueur_login_pass_perdu_ok'] = 'Ton nom d\'utilisateur et ton nouveau mot de passe ont été envoyés à ton adresse courriel. Tu sera redirigé à la page principale dans 10 secondes. Sinon <a href="index.php">clique ici</a>.';
 
 //
 // login des administrateurs
 //
-$lang['admin_login_titre'] = 'Identification du professeur';
-$lang['admin_login_direction'] = 'Inscrivez ici votre nom d\'utilisateur et votre mot de passe';
+$lang['admin_login_titre'] = 'Identification de l\'enseignant';
+$lang['admin_login_direction'] = 'Inscrivez ici votre nom d\'utilisateur et votre mot de passe.';
 $lang['cliquer_ici'] = 'Cliquez ici';
 $lang['admin_login_oublie'] = 'Vous avez oublié votre nom d\'utilisateur ou votre mot de passe?';
 $lang['admin_pass_perdu_direction'] = 'Entrez l\'adresse courriel avec laquelle vous vous êtes inscrit.';
@@ -304,45 +356,45 @@ $lang['mod_joueur_donnee_personnel'] = 'Données personnelles';
 $lang['mod_joueur_profil_scolaire'] = 'Profil scolaire';
 $lang['mod_joueur_ancien_pass'] = 'Ancien mot de passe';
 $lang['mod_joueur_nouveau_pass'] = 'Nouveau mot de passe';
-$lang['mod_joueur_alias_prof'] = 'Nom d\'utilisateur de votre professeur';
+$lang['mod_joueur_alias_prof'] = 'Nom d\'utilisateur de votre enseignant';
 $lang['mod_joueur_personel_succes'] = 'Les informations personnels ont été modifiées avec succès.';
 $lang['mod_joueur_pass_succes'] = 'Le mot de passe a été modifié avec succès.';
 $lang['mod_joueur_scolaire_succes'] = 'Les informations scolaires ont été modifiées avec succès.';
-$lang['mod_joueur_alias_prof_info'] = 'Si tu connais le nom d\'utilisateur de ton professeur inscrit le ici.Sinon n\'inscris rien.';
+$lang['mod_joueur_alias_prof_info'] = 'Si tu connais le nom d\'utilisateur de ton enseignant, inscris-le ici. Sinon n\'inscris rien.';
 
 
 
 //
 //Messages d'erreurs
 //
-$lang['doublon_courriel'] = 'Une autre personne a déjà choisi ce couriel.';
+$lang['doublon_courriel'] = 'Une autre personne a déjà choisi ce courriel.';
 $lang['doublon_alias'] = 'Une autre personne a déjà choisi ce nom d\'utilisateur.';
-$lang['erreur_nom'] = 'Le Nom n\'est pas valide.';
-$lang['erreur_prenom'] = 'Le Prénom n\'est pas valide.';
-$lang['erreur_alias'] ='Le nom d\'utilisateur est invalide.';
+$lang['erreur_nom'] = 'Le nom n\'est pas valide.';
+$lang['erreur_prenom'] = 'Le prénom n\'est pas valide.';
+$lang['erreur_alias'] ='Le nom d\'utilisateur n\'est pas valide.';
 $lang['erreur_mot_passe'] = 'Le mot de passe n\'est pas valide.';
 $lang['erreur_courriel'] = 'L\'adresse courriel n\'est pas valide.';
-$lang['erreur_resaisie_mot_passe'] = 'Le mot de passe a mal été resaisie.';
-$lang['erreur_resaisie_courriel'] = 'Le courriel a mal été resaisie.';
+$lang['erreur_resaisie_mot_passe'] = 'Le mot de passe n\'a pas été ressaisi correctement.';
+$lang['erreur_resaisie_courriel'] = 'Le courriel n\'a pas été ressaisi correctement.';
 $lang['login_impossible'] = 'Le nom d\'utilisateur ou le mot de passe est invalide.';
 
 $lang['courriel_introuvable'] = 'Cette adresse courriel est introuvable.';
 $lang['ancien_mot_passe_invalide'] = 'L\'ancien mot de passe est invalide.';
-$lang['session_expirer'] = 'La session a expirée.';
+$lang['session_expirer'] = 'La session est expirée.';
 $lang['erreur_ville'] = 'La ville est invalide.';
 $lang['erreur_pays'] = 'Le pays est invalide.';
 $lang['erreur_province'] = 'La province est invalide.';
 
-$lang['joueur_non_confirmer'] = 'Tu est bien inscrit à Math en jeu mais tu n\'as pas validé ton courriel. <br>Vérifie ta boite de courriel.';
+$lang['joueur_non_confirmer'] = 'Tu est bien inscrit à Math en jeu mais tu n\'as pas validé ton courriel.  Vérifie ta boîte de courriel.';
 $lang['erreur_connexion_db'] = 'Connexion à la base de données impossible.';
-$lang['admin_non_confirmer'] = 'Vous êtes bien inscrit à Math en jeu mais vous n\'avez pas validé votre courriel.<br>Vérifiez votre boite de courriel.';
-$lang['erreur_confirmation'] = 'Une erreur s\'est produite dans le processus de confirmation de votre courriel.<br>Vérifiez votre nom d\'utilisateur ou votre mot de passe.';
+$lang['admin_non_confirmer'] = 'Vous êtes bien inscrit à Math en jeu mais vous n\'avez pas validé votre courriel. Vérifiez votre boîte de courriel.';
+$lang['erreur_confirmation'] = 'Une erreur s\'est produite dans le processus de confirmation de votre courriel. Vérifiez votre nom d\'utilisateur ou votre mot de passe.';
 $lang['erreur_envoie_courriel'] = 'Une erreur est survenue dans le système d\'envoi de courriel.';
 
-$lang['alias_prof_introuvable'] = 'Le nom d\'utilisateur de ce professeur est introuvable.';
-$lang['erreur_format_date'] = 'Le format de la date est invalide. aaaa-mm-jj';
-$lang['erreur_code_etablissement'] = 'L\'établissement est invalide.';
-$lang['erreur_niveau_scolaire'] = 'Le niveau scolaire est invallide.';
+$lang['alias_prof_introuvable'] = 'Le nom d\'utilisateur de cet enseignant est introuvable.';
+$lang['erreur_format_date'] = 'Le format de la date n\'est pas valide. Utilisez le format <span style="font-style:italic">aaaa-mm-jj</span>.';
+$lang['erreur_code_etablissement'] = 'L\'établissement n\'est pas valide.';
+$lang['erreur_niveau_scolaire'] = 'Le niveau scolaire n\'est pas valide.';
 $lang['cle_confirmation_invalide'] = 'La clé de confirmation n\'est pas valide.';
 
 $lang['connexion_serveur_impossible'] = "Impossible de se connecter au serveur.";
@@ -356,22 +408,22 @@ $lang['erreur_sujet_vide'] = "Le sujet ne peut être vide.";
 $lang['nouvelle_insertion_impossible'] = 'L\'ajout de cette nouvelle est impossible.';
 $lang['nouvelle_update_impossible'] = 'La mise à jour de cette nouvelle est impossible.';
 $lang['nouvelle_delete_impossible'] = 'La suppression de cette nouvelle est impossible.';
-$lang['nouvelle_nouvelle_vide'] = 'Le contenu de la nouvelle est invalide.';
-$lang['nouvelle_titre_vide'] = 'Le titre de la nouvelle est invalide.';
-$lang['nouvelle_cle_invalide'] = 'La clé de la nouvelle est invalide.' ;
+$lang['nouvelle_nouvelle_vide'] = 'Le contenu de la nouvelle n\'est pas valide.';
+$lang['nouvelle_titre_vide'] = 'Le titre de la nouvelle n\'est pas valide.';
+$lang['nouvelle_cle_invalide'] = 'La clé de la nouvelle n\'est pas valide.';
 $lang['nouvelle_introuvable'] = 'Cette nouvelle est introuvable';
 
 //
 //message de sondage
 //
-$lang['sondage_texte_reponse_invalide'] = "Une des réponses est invalide.";
-$lang['sondage_cle_reponse_invalide'] = "La clé de la réponse est invalide.";
-$lang['sondage_cle_invalide'] = "La clé du sondage est invalide.";
-$lang['sondage_reponse_insertion_impossible'] = "L'ajout de cette réponse est impossible.";
-$lang['sondage_reponse_update_impossible'] = "La mise à jour de cette réponse est impossible.";
-$lang['sondage_reponse_compteur_invalide'] = "Le compteur de cette réponse est invalide.";
-$lang['sondage_titre_invalide'] = "Le titre de ce sondage est invalide.";
-$lang['sondage_nb_reponse_invalide'] = "Le nombre de réponses est invalide.";
+$lang['sondage_texte_reponse_invalide'] = 'Une des réponses n\'est pas valide.';
+$lang['sondage_cle_reponse_invalide'] = 'La clé de la réponse n\'est pas valide.';
+$lang['sondage_cle_invalide'] = 'La clé du sondage n\'est pas valide.';
+$lang['sondage_reponse_insertion_impossible'] = 'L\'ajout de cette réponse est impossible.';
+$lang['sondage_reponse_update_impossible'] = 'La mise à jour de cette réponse est impossible.';
+$lang['sondage_reponse_compteur_invalide'] = 'Le compteur de cette réponse n\'est pas valide.';
+$lang['sondage_titre_invalide'] = 'Le titre de ce sondage n\'est pas valide.';
+$lang['sondage_nb_reponse_invalide'] = 'Le nombre de réponses n\'est pas valide.';
 
 $lang['sondage_nb_reponse'] = 'Nombre de répondants';
 $lang['sondage_supprimer'] = 'Supprimer ce sondage';
@@ -400,17 +452,17 @@ $lang['groupe_clavardage'] = 'Clavardage permis';
 $lang['groupe_banque_question'] = 'Banque de questions';
 
 $lang['groupe_detail_titre'] = 'Détail d\'un groupe';
-$lang['groupe_detail_direction'] = 'Ajouter et enlever des joueurs avec ';
+$lang['groupe_detail_direction'] = 'Ajouter et retirer des joueurs avec ';
 $lang['groupe_ajout'] = 'Ajout d\'un groupe';
 
-$lang['groupe_mod_detail'] = 'Modifier/Détails ce groupe';
+$lang['groupe_mod_detail'] = 'Modifier/Détails de ce groupe';
 $lang['groupe_supprimer'] = 'Supprimer ce groupe';
-$lang['groupe_ajout_joueur'] = 'Ajouter le joueur à ce groupe.';
+$lang['groupe_ajout_joueur'] = 'Ajouter le joueur à ce groupe';
 $lang['groupe_supprimer_joueur'] = 'Supprimer le joueur de ce groupe';
 
 
 $lang['groupe_joueur_nb_victoire'] = 'Nombre de victoires';
-$lang['groupe_joueur_temps_joues'] = 'Minutes de jeu';
+$lang['groupe_joueur_temps_joues'] = 'Durée cumulative de jeu';
 $lang['groupe_joueur_nb_parties_jouees'] = 'Nombre de parties jouées';
 //$lang['groupe_joueur_afficher_detail_joueur'] = 'Afficher le détail de ce joueur';
 //$lang['groupe_joueur_supprimer_joueur'] = 'Supprimer ce joueur';
@@ -419,13 +471,13 @@ $lang['groupe_joueur_nb_parties_jouees'] = 'Nombre de parties jouées';
 //
 //Message pour le contact
 //
-$lang['contact_nom'] = "Ton nom :";
-$lang['contact_courriel'] = "Ton adresse courriel :";
+$lang['contact_nom'] = "Ton nom:";
+$lang['contact_courriel'] = "Ton adresse courriel:";
 $lang['contact_probleme']= "Un problème est survenu et votre message n'a pu être envoyé. Veuillez réessayer plus tard.";
 $lang['contact_reussi'] = "Ton message a été envoyé. Merci.";
-$lang['contact_message'] = "Ton message :";
-$lang['contact_sujet'] = "Le sujet de ton message :";
-$lang['contact_instruction'] = "Tu peux nous contacter en remplissant le formulaire suivant.Nous tenterons de te répondre dans les plus bref délais. Essaie d'être le plus précis possible.";
+$lang['contact_message'] = "Ton message:";
+$lang['contact_sujet'] = "Le sujet de ton message:";
+$lang['contact_instruction'] = "Tu peux nous contacter en remplissant le formulaire suivant. Nous tenterons de te répondre dans les plus bref délais. Essaie d'être le plus précis possible.";
 $lang['contact_titre'] = "Nous contacter";
 
 //
@@ -434,7 +486,7 @@ $lang['contact_titre'] = "Nous contacter";
 
 //configuration
 $lang['config_site'] = 'Configuration du site web';
-$lang['config_direction'] = 'Important : les données ne seront pas validées, assurez-vous d\'avoir entré les bonnes informations où le site pourrait devenir complétement inutilisable.';
+$lang['config_direction'] = 'Important: les données ne seront pas validées, assurez-vous d\'avoir entré les bonnes informations où le site pourrait devenir complètement inutilisable.';
 $lang['config_langage'] = 'Langage';
 $lang['config_schema'] = 'Schéma';
 $lang['config_utilisateur'] = 'Utilisateur';
@@ -442,9 +494,9 @@ $lang['config_adresse'] = 'Adresse';
 $lang['config_mot_de_passe'] = 'Mot de passe';
 $lang['config_db'] = 'Configuration de la base de données';
 $lang['config_fichier_css_defaut'] = 'Fichier css par défaut';
-$lang['config_choix_template'] = 'Choix du templates';
-$lang['config_nb_jours_palmares'] = 'Nombre de jour dans le calcul des palmarès';
-$lang['config_min_parties_palmares'] = 'Minimum de parties jouées pour le palmarès';
+$lang['config_choix_template'] = 'Choix du template';
+$lang['config_nb_jours_palmares'] = 'Nombre de jours dans le calcul des palmarès';
+$lang['config_min_parties_palmares'] = 'Minimum de parties jouées pour les palmarès';
 $lang['config_nb_joueurs_palmares'] = 'Nombre de joueurs pour les palmarès';
 $lang['config_nb_nouvelles'] = 'Nombre de nouvelles à afficher';
 $lang['config_adresse_site'] = 'Adresse du site web';
@@ -475,7 +527,7 @@ $lang['gestion_sondage'] = 'Gestion des sondages';
 
 $lang['valider_supression'] = 'Êtes-vous certain?';
 $lang['superadmin_login_impossible'] = 'L\'adresse courriel ou le mot de passe est invalide.';
-$lang['ajout_sondage'] = 'Ajout d\'un Sondage';
+$lang['ajout_sondage'] = 'Ajout d\'un sondage';
 $lang['modification_sondage'] = 'Modification d\'un sondage';
 $lang['question_sondage'] = 'Question';
 $lang['choix'] = 'Choix';
@@ -491,7 +543,7 @@ $lang['date_sondage'] = 'Date du sondage';
 $lang['destinataire'] = 'Destinataire';
 $lang['type_destinataire'][0] = 'Pour tous';
 $lang['type_destinataire'][1] = 'Joueurs';
-$lang['type_destinataire'][2] = 'Professeurs';
+$lang['type_destinataire'][2] = 'Enseignants';
 
 $lang['previsualise'] = 'Prévisualiser la nouvelle';
 
@@ -506,15 +558,15 @@ $lang['image'] = 'Image';
 //palmarès
 //
 $lang['palmares_titre'] = 'Palmarès';
-$lang['palmares_total_temps'] = 'Total de temps joués';
+$lang['palmares_total_temps'] = 'Durée cumulative de jeu';
 $lang['palmares_total_point'] = 'Total de points accumulés';
 $lang['palmares_moy_point_minute'] = 'Moyenne de points';
 $lang['palmares_nb_partie'] = 'Nombre de parties jouées';
-$lang['palmares_poucentage_victoire'] = 'Poucentage de victoire';
+$lang['palmares_poucentage_victoire'] = 'Pourcentage de victoire';
 $lang['palmares_rang'] = 'Rang';
-$lang['palmares_meilleur_moyenne_victoire'] = 'Joueurs avec la meilleure moyenne de victoire.';
-$lang['palmares_meilleur_moy_point'] = 'Joueurs avec la meilleure moyenne de points par minute de jeu.';
-$lang['palmares_joueur_plus_jouer'] = 'Joueurs qui ont joués le plus.';
+$lang['palmares_meilleur_moyenne_victoire'] = 'Joueurs ayant la meilleure moyenne de victoires';
+$lang['palmares_meilleur_moy_point'] = 'Joueurs ayant la meilleure moyenne de points par minute de jeu';
+$lang['palmares_joueur_plus_jouer'] = 'Joueurs ayant joué le plus';
 $lang['palmares_aucun_resultat'] = "Aucun résultat";
 $lang['palmares_joueur'] = 'Joueur (Ville)';
 
@@ -522,11 +574,11 @@ $lang['palmares_joueur'] = 'Joueur (Ville)';
 //statistique
 //
 $lang['stat_type_graph'] = 'Type de graphique';
-$lang['stat_baton'] = 'Baton';
-$lang['stat_ligne'] = 'Ligne';
-$lang['stat_smooth'] = 'Smooth';
-$lang['stat_type'] = 'Statistique à afficher';
-$lang['stat_param'] = 'Paramètre (nombre de jours,nombre de mois...)';
+$lang['stat_baton'] = 'Bâtons';
+$lang['stat_ligne'] = 'Lignes brisées';
+$lang['stat_smooth'] = 'Courbe lissée';
+$lang['stat_type'] = 'Statistiques à afficher';
+$lang['stat_param'] = 'Paramètre (nombre de jours, nombre de mois&hellip;)';
 $lang['stat_nb_partie_mois'] = 'Nombre de parties jouées par mois';
 $lang['stat_nb_partie_jour'] = 'Nombre de parties jouées par jour';
 $lang['stat_temps_total_jour'] = 'Temps total de jeu par jour';
@@ -551,7 +603,7 @@ $lang['faq_direction'] = 'Pour modifier l\'ordre dans lesquelles les questions v
 $lang['faq_question'] = 'Question';
 $lang['faq_reponse'] = 'Réponse';
 $lang['faq_numero'] = 'Position';
-$lang['faq_detail'] = 'Détail/modification de cette faq';
+$lang['faq_detail'] = 'Détail/modification de cette FAQ';
 $lang['faq_supprimer'] = 'Supprimer cette question';
 $lang['faq_haut'] = 'Haut';
 $lang['faq_bas'] = 'Bas';
@@ -577,11 +629,11 @@ $lang['install_lecutre_sql'] = 'Lecture du fichier SQL';
 $lang['install_creation_table'] = 'Création des tables';
 $lang['install_insertion_donnee'] = 'Insertion des données';
 $lang['install_table_existe'] = 'existe déjà.';
-$lang['install_erreur_table_existe'] = 'Il y a eu des erreur mais seulement parce que les table existe déjà. Si vous croyer que tout est en ordre vous pouvez continuer.';
+$lang['install_erreur_table_existe'] = 'Il y a eu des erreurs, mais seulement parce que les tables existent déjà. Si vous croyez que tout est en ordre, vous pouvez continuer.';
 $lang['install_db_succes'] = 'La base de données a été créée avec succès.';
-$lang['install_db_erreur'] = 'Impossible de créer la base de données. Retourner à la page précédente.';
+$lang['install_db_erreur'] = 'Impossible de créer la base de données. Retournez à la page précédente.';
 
-$lang['install_config_admin'] = 'Configuration de l\'account administrateur';
+$lang['install_config_admin'] = 'Configuration du compte administrateur';
 $lang['install_admin_courriel'] = 'Courriel de l\'administrateur (servira pour la connexion à la section administration)';
 $lang['install_admin_password'] = 'Mot de passe administrateur';
 $lang['install_admin_nom'] = 'Nom de l\'administrateur';
@@ -594,8 +646,8 @@ $lang['install_erreur_prenom'] = 'Le prénom n\'est pas valide.';
 
 $lang['install_titre'] = 'Installation du site web de Math en jeu.';
 $lang['install_suivant'] = 'Étape suivante';
-$lang['install_precedent'] = 'Étape Précédente';
-$lang['install_message_fin'] = 'Voila! L\'essentiel de l\'installation est terminé. <br>Vous pouvez maintenant vous rendre dans la section d\'administration pour terminer la configuration.<br><a href="../super-admin.php">cliquez-ici</a> pour vous y rendre.';
+$lang['install_precedent'] = 'Étape précédente';
+$lang['install_message_fin'] = 'Voilà! L\'essentiel de l\'installation est terminé. Vous pouvez maintenant vous rendre dans la <a href="../super-admin.php">section d\'administration</a> pour terminer la configuration.';
 $lang['install_admin_exist'] = 'Cet administrateur existe déjà dans la table.';
 $lang['install_erreur_ecriture_config'] = 'Le fichier de configuration /config/configuration.xml n\'est pas disponible en écriture.';
 
