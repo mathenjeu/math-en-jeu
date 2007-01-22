@@ -5,14 +5,15 @@
 	    <br><br>
 	    {$lang.texte_index}
 	    <!--
-	    <a href="img/screenshot-1-hr.jpg"><img src="screenshot-1.jpg" alt="Capture d'écran" border="0" hspace="15" align="right"></a>
-		<p>Plonger dans un univers fantaisiste où les mathématiques sont la clé de la
+	    <p>
+	    <a href="img/screenshot-1-hr.jpg"><img src="screenshot-1.jpg" alt="Capture d'écran" border="0" hspace="15" align="left"></a>
+		Plonger dans un univers fantaisiste où les mathématiques sont la clé de la
 		victoire, c'est maintenant possible grâce à Math en jeu!  Avec des centaines de
 		questions en banque de tous les niveaux de difficulté, le grand public autant
 		que les élèves du secondaire pourront apprendre en s'amusant grâce à ce jeu
 		multimédia interactif.</p>
 		
-		<a href="screenshot-5-hr.jpg"><img src="screenshot-5.jpg" alt="Capture d'écran" border="0" hspace="15" align="left"></a>
+		<a href="screenshot-5-hr.jpg"><img src="screenshot-5.jpg" alt="Capture d'écran" border="0" hspace="15" align="right"></a>
 		<p>Jusqu'à quatre personnes peuvent rivaliser
 
 		d'audace et de stratégie pour résoudre des problèmes mathématiques , ce qui leur
