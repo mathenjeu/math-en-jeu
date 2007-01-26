@@ -330,7 +330,8 @@ public class GestionnaireBD
 	{
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 
-		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion >= " +
+		String strRequeteSQL = "SELECT question.*,typereponse.nomType FROM question,typereponse " +
+			"WHERE typereponse.cleType = question.typeReponse and cleQuestion >= " +
 		    config.obtenirString("gestionnairebd.cle-question-min") + " and cleQuestion <= " +
 		    config.obtenirString("gestionnairebd.cle-question-max") + " and ";
 		    
@@ -342,8 +343,9 @@ public class GestionnaireBD
 	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, int intCategorie, int intDifficulte )
 	{
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
-
-		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion >= " +
+		
+		String strRequeteSQL = "SELECT question.*,typereponse.nomType FROM question,typereponse " +
+		"WHERE typereponse.cleType = question.typeReponse and cleQuestion >= " +
 		    config.obtenirString("gestionnairebd.cle-question-min") + " and cleQuestion <= " +
 		    config.obtenirString("gestionnairebd.cle-question-max") + " and ";
 		    
@@ -362,7 +364,8 @@ public class GestionnaireBD
 				while(rs.next())
 				{
 					int codeQuestion = rs.getInt("cleQuestion");
-					String typeQuestion = TypeQuestion.ChoixReponse; //TODO aller chercher code dans bd
+					//String typeQuestion = TypeQuestion.ChoixReponse; //TODO aller chercher code dans bd
+					String typeQuestion = rs.getString( "nomType" );
 					String question = rs.getString( "FichierFlashQuestion" );
 					String reponse = rs.getString("bonneReponse");
 					String explication = rs.getString("FichierFlashReponse");
