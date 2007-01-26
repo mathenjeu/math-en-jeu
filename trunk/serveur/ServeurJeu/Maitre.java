@@ -32,10 +32,13 @@ public class Maitre implements Runnable
 	public static void traiterCommande( String commande )
 	{
 		
-		//on enlève les \r de la commande
-		commande = commande.replaceAll("\\r","");
+		if(commande != null)
+		{
+			//on enlève les \r de la commande
+			commande = commande.replaceAll("\\r","");
+		}
 		
-		if( commande == null || commande.equals( "demarrer" ))
+		if( commande == null || commande.equals("") || commande.equals( "demarrer" ))
 		{
 			System.out.println( "demarrer" );
 			Maitre maitre = new Maitre();
