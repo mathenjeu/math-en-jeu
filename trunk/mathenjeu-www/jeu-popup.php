@@ -21,8 +21,11 @@ if (!isset($_SESSION["joueur"]))
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" style="margin:0px;padding:0px;height:100%;">
 <head>
+
 <meta http-equiv="Expires" content="Thu, 01 Dec 1994 16:00:00 GMT"/>
 <meta http-equiv="Cache-Control" content="no-cache, max-age=0"/>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+
 <script type="text/javascript">
 <!-- Begin
 function Launch(page) {
