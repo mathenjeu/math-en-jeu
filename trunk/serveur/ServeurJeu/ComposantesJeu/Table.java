@@ -631,6 +631,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			{
 				intDifficulteJoueurVirtuel = ParametreIA.DIFFICULTE_DIFFICILE;
 			}
+			else if(strParamJoueurVirtuel.equals("TresDifficile"))
+			{
+				intDifficulteJoueurVirtuel = ParametreIA.DIFFICULTE_TRES_DIFFICILE;
+			}
 			
 			// Déterminer combien de joueurs on veut
 			intNombreJoueursVirtuels = 4 - lstJoueursEnAttente.size();
