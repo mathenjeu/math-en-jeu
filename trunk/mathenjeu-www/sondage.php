@@ -11,12 +11,14 @@ require_once("lib/ini.php");
 try
 {
  	$sondage=new Sondage($_SESSION["mysqli"]);
-	$sondage->chargerPlusRecentSondageMySQL(array(0,1));
+	if(!$sondage->chargerPlusRecentSondageMySQL(array(0,1)))
+	{
+		return;
+	}
  	if(isset($_SESSION["joueur"]))
 	{
 		$joueur=$_SESSION["joueur"];
-		
-	    
+			    
 	    //si le joueurs choisie de répondre au sondage
 	    if(isset($_POST["reponseSondage"]))
         {
