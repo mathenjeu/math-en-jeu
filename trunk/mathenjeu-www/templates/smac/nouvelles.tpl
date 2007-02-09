@@ -4,19 +4,20 @@
 {section name=nouvelles loop=$nouvelle}
 	<table>
 		<tr>
-			<td class="titrenouvelle">{$nouvelle[nouvelles].titre}</td>
+			<td colspan="2" class="titrenouvelle">{$nouvelle[nouvelles].titre}</td>
 		</tr>
 		<tr>
-			<td class="datenouvelle">{$nouvelle[nouvelles].date}</td>
+			<td colspan="2" class="datenouvelle">{$nouvelle[nouvelles].date}</td>
 		</tr>
 		<tr>
-			<td colspan="2" class="textenouvelle">
+			<td valign="top" colspan="1" width="1%" class="textenouvelle">
 				{if $nouvelle[nouvelles].image neq " "}
 					<img alt="" src="{$nouvelle[nouvelles].image}" border="0" hspace="15" align="left">
 				{/if}
+			</td>
+			<td>
 				{$nouvelle[nouvelles].nouvelle}
 			</td>
-		
 		</tr>
 	</table>
 	<hr>

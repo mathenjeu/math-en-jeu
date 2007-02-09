@@ -48,7 +48,7 @@ function Launch(page) {
 	<param name="bgcolor" value="#000000" />
 	<param name="allowFullScreen" value="true" />
 	<EMBED src="flash/chargement_beta.swf?nomUtilisateur=<?php echo $_GET["alias"]; ?>&amp;motDePasse=<?php echo $_GET["motDePasse"]; ?>" 
-		quality=high bgcolor=#FFFFFF WIDTH="100%" HEIGHT="100%"
+		quality=high bgcolor=#000000 WIDTH="100%" HEIGHT="100%"
 		NAME="mathenjeu" TYPE="application/x-shockwave-flash"
 		PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer">
 	</EMBED>
