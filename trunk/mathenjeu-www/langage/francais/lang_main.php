@@ -181,7 +181,7 @@ $lang['texte_index'] = '
 
 <a target="_blank" href="img/screenshot-5-hr.jpg"><img src="img/screenshot-5.jpg" alt="Capture d\'écran" border="0" hspace="15" align="left"></a>
 
-<p>Peut-on s\'amuser en faisant des maths? L’équipe de SMAC &laquo;oui&raquo;!
+<p>Peut-on s\'amuser en faisant des maths? L’équipe de SMAC vous dit &laquo;oui&raquo;!
 Tout juste sorti des cartons, Math en jeu est un jeu multimédia interactif
 développé par SMAC et accessible gratuitement sur Internet.
 L\'objectif, en ligne avec la mission de SMAC, consiste à exposer les
@@ -247,13 +247,7 @@ sciences: il suffira d\'adapter la banque de questions en conséquence.
 C\'est ainsi qu\'on projette de développer Physique en jeu, Chimie en jeu,
 etc.</p>
 
-<p>Assez parlé; maintenant allez vous amuser&hellip; avec Math en jeu!</p> 
-
-
-<p>Math en jeu, coffret d\'énigmes mathématiques, vous lance un défi: trouver les
-clefs pour les déchiffrer.  Il recèle des questions de tous les niveaux de
-difficulté.  Novice ou expert, mathophobe ou mathophile, jeune ou vieux, vous
-prendrez plaisir à jouer et, qui sait, à apprendre!</p>';
+<p>Assez parlé; maintenant allez vous amuser&hellip; avec Math en jeu!</p>';
 
 //
 //Inscription des administrateur
@@ -367,6 +361,7 @@ $lang['mod_joueur_alias_prof_info'] = 'Si tu connais le nom d\'utilisateur de to
 //
 //Messages d'erreurs
 //
+$lang['texte_cookie'] = '<h2>Les cookies doivent être activés</h2>Ton navigateur est actuellement configuré pour bloquer les cookies. Il doit les accepter pour que tu puisses utiliser Math en jeu.<p>Les cookies sont de petits fichiers texte stockés sur ton ordinateur et qui indiquent au site de Math en jeu quand tu es connecté. Pour savoir comment autoriser les cookies, consulte l\'aide en ligne de ton navigateur Web.</p>';
 $lang['doublon_courriel'] = 'Une autre personne a déjà choisi ce courriel.';
 $lang['doublon_alias'] = 'Une autre personne a déjà choisi ce nom d\'utilisateur.';
 $lang['erreur_nom'] = 'Le nom n\'est pas valide.';
@@ -473,7 +468,7 @@ $lang['groupe_joueur_nb_parties_jouees'] = 'Nombre de parties jouées';
 //
 $lang['contact_nom'] = "Ton nom:";
 $lang['contact_courriel'] = "Ton adresse courriel:";
-$lang['contact_probleme']= "Un problème est survenu et votre message n'a pu être envoyé. Veuillez réessayer plus tard.";
+$lang['contact_probleme']= "Un problème est survenu et ton message n'a pu être envoyé. Veuillez réessayer plus tard.";
 $lang['contact_reussi'] = "Ton message a été envoyé. Merci.";
 $lang['contact_message'] = "Ton message:";
 $lang['contact_sujet'] = "Le sujet de ton message:";

@@ -19,6 +19,11 @@ function main()
 
   try
   {
+   	if(!isset($_COOKIE['test']))
+   	{
+		redirection("cookie.php",0);
+		exit;
+	}
     //si le joueur est déjà connecté,
     //il est redirigé à la page portail-joueur
     if(isset($_SESSION["joueur"]))
@@ -27,6 +32,7 @@ function main()
     }
     else
     {
+
       $smarty->assign('titre',$lang['titre_connexion']);
       
       if(isset($_SESSION['css']))

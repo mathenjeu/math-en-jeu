@@ -6,6 +6,7 @@ Description : affiche l'index
 ********************************************************************************
 10-06-2006 Maxime Bégin - Version initiale
 *******************************************************************************/
+
 require_once("lib/ini.php");
 
 $fp=fopen("compteur.txt","a+"); //OUVRE LE FICHIER compteur.txt

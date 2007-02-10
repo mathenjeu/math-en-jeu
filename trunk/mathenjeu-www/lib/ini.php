@@ -16,6 +16,9 @@ Description : regroupe toutes les fonctions d'initialisation
 
 ini_set('display_errors','1');
 
+//un cookie de test pour s'assurer que le joueur a bien ses cookies activés
+setcookie("test");
+
 define("SQL_DEBUG",1);      //mettre en commentaire pour passer au mode release
 define("CONTRAT_DEBUG",1);  //mettre en commentaire pour passer au mode release
 
@@ -73,8 +76,9 @@ define("IMAGE_DIR",DOC_ROOT . "img/sujet");						//dossier des images pour les n
 
 //définir les configurations de session
 ini_set('session.gc_maxlifetime',1800);
-ini_set('session.cookie_lifetime',1800);
+ini_set('session.cookie_lifetime',0);
 ini_set('session.use_trans_sid',1);
+ini_set('session.use_only_cookies',1);
 
 //si la session n'existe pas on la débute
 if(session_id()=="")
@@ -82,6 +86,7 @@ if(session_id()=="")
   //débute la session
   session_start();
 }
+
 
 //extension de la classe Smarty pour automatiquement
 //inclure les dossier de compilation et de templates
