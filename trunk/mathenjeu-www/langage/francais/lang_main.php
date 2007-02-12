@@ -472,7 +472,7 @@ $lang['contact_probleme']= "Un problème est survenu et ton message n'a pu être e
 $lang['contact_reussi'] = "Ton message a été envoyé. Merci.";
 $lang['contact_message'] = "Ton message:";
 $lang['contact_sujet'] = "Le sujet de ton message:";
-$lang['contact_instruction'] = "Tu peux nous contacter en remplissant le formulaire suivant. Nous tenterons de te répondre dans les plus bref délais. Essaie d'être le plus précis possible.";
+$lang['contact_instruction'] = "Avant de nous contacter, vérifie si la solution à ton problème ne se retrouve pas déjà dans la <a href=faq.php>foire aux question</a>.<br>Tu peux nous contacter en remplissant le formulaire suivant. Nous tenterons de te répondre dans les plus bref délais. Essaie d'être le plus précis possible.";
 $lang['contact_titre'] = "Nous contacter";
 
 //

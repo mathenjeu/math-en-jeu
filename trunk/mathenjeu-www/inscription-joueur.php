@@ -24,6 +24,11 @@ function main()
 {
   try
   {
+   	if(!isset($_COOKIE['test']))
+   	{
+		redirection("cookie.php",0);
+		exit;
+	}
     $smarty = new MonSmarty();
     global $lang;
     $smarty->assign('titre',$lang['titre_inscription_joueur']);
@@ -183,7 +188,7 @@ function validerEtape2($joueur)
 	}
 	
 	$joueur->asgNiveau($_POST["niveau"]);
-	$_SESSION["joueurInscription"] = $joueur;
+	
 	
 	
 	//on inscrit le joueur à cet étape pour s'assurer que le nom d'utlisateur
@@ -193,6 +198,7 @@ function validerEtape2($joueur)
     $joueur->asgMathConsidere(3);
     $joueur->asgMathEtudie(3);
     $joueur->asgMathDecouvert(3);
+    $_SESSION["joueurInscription"] = $joueur;
     if($joueur->insertionMySQL())
     {
 		$joueur->envoyerCourrielConfirmation();

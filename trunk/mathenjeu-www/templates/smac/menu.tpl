@@ -4,7 +4,8 @@
 		<h4 class="titre_menu">{$lang.titre_menu_joueur}</h4>
 		<div>
 			<ul>
-				<li><a href="nouvelles.php" class="menu" onclick="window.open('jeu-popup.php?alias={$alias}&amp;motDePasse={$motDePasse}&amp;{$sid}','jeu','fullscreen=yes,channelmode=yes,menubar=no,toolbar=no,location=no,resizable=yes,scrollbars=no,status=no');">{$lang.menu_jouer}</a><p/></li>
+				<li><a style="font-size: 150%" href="nouvelles.php" class="menu" onclick="window.open('jeu-popup.php','jeu','fullscreen=yes,channelmode=yes,menubar=no,toolbar=no,location=no,resizable=yes,scrollbars=no,status=no');">{$lang.menu_jouer}</a><p/></li>
+				<!--<li><a target="_blank" href="jeu-popup.php" class="menu">{$lang.menu_jouer}</a><p/></li>-->
 				<li><a href="index.php" class=menu>{$lang.menu_accueil}</a></li>
 				<li><a href="nouvelles.php" class="menu">{$lang.menu_nouvelles}</a></li>
 				<li><a href="instructions.php" class="menu">{$lang.menu_instructions}</a></li>
@@ -19,7 +20,7 @@
 		<h4 class="titre_menu">{$lang.titre_menu_principal}</h4>
 		<div>
 			<ul>
-				<li><a href="inscription-joueur.php" class=menu>{$lang.menu_inscription_joueur}</a><br><br></li>
+				<li><a style="font-size: 150%" href="inscription-joueur.php" class=menu>{$lang.menu_inscription_joueur}</a><br><br></li>
 			    <li><a href="index.php" class=menu>{$lang.menu_accueil}</a></li>
 			    <li><a href="nouvelles.php" class="menu">{$lang.menu_nouvelles}</a></li>
 			    <li><a href="instructions.php" class="menu">{$lang.menu_instructions}</a></li>

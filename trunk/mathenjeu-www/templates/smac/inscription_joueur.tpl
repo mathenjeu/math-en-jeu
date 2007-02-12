@@ -2,7 +2,7 @@
 <table width="100%" border="0" cellspacing="0">
     <tr>
         <td align="left" colspan="2"><h2>{$lang.inscription_joueur}</h2></td>
-        <td width="30%" align="center"><h3>{$lang.inscription_etape} {$etape} / 3</h3></td>
+        <td width="30%" align="center"><h3>{$lang.inscription_etape} {$etape} / 4</h3></td>
     </tr>
 </table>
 <div style="width:90%;align:center" class="hr"></div><p>

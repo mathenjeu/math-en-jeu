@@ -13,7 +13,7 @@ class MyException extends Exception
 {
     function exception_dump()
     {
-     	
+    	      	
        $res = "";
        $res .= "<h4>" . $this->getMessage() . "</h3>\n\n";
        $res .= "fichier: {$this->file}<br/>\n";
@@ -23,6 +23,7 @@ class MyException extends Exception
        $res .= "</PRE><br>";
        
        return $res;
+
     }
 }
 

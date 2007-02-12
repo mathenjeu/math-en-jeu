@@ -52,7 +52,10 @@ class mon_mysqli extends mysqli
         if(mysqli_error($this))
         {
          	$log = new clog(LOG_FILE);
-         	$log->ecrire("Erreur SQL : " . $requete);
+         	$log->ecrire(mysqli_error($this) . "\r\n" . $requete . "\n");
+         	//$log->ecrire(mysqli_error($this)->file . "\n");
+         	//$log->ecrire(mysqli_error($this)->line . "\n");
+			//$log->ecrire($requete . "\n");
 
          	if(defined('SQL_DEBUG'))
          	{
