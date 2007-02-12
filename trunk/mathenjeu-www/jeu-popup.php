@@ -28,6 +28,7 @@ if (!isset($_SESSION["joueur"]))
 
 <script type="text/javascript">
 <!-- Begin
+
 function Launch(page) {
  OpenWin = window.open(page, "Aide", "toolbar=no,menubar=no,location=no,scrollbars=auto,resizable=yes,width=350,height=250");
 }
@@ -36,18 +37,18 @@ function Launch(page) {
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>Math en jeu</title>
 </head>
-<body bgcolor="#000000" style="margin:0px;padding:0px;height:100%;width:100%;">
+<body onload="configuerFenetre()" bgcolor="#000000" style="margin:0px;padding:0px;height:100%;width:100%;">
 <div style="height:100%">
 
 <OBJECT 
 	classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 	codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"
 	WIDTH="100%" HEIGHT="100%" id="mathenjeu">
-	<PARAM NAME=movie VALUE="flash/chargement_beta.swf?nomUtilisateur=<?php echo $_GET["alias"]; ?>&amp;motDePasse=<?php echo $_GET["motDePasse"]; ?>">
+	<PARAM NAME=movie VALUE="flash/chargement_beta.swf?nomUtilisateur=<?php echo $_SESSION["joueur"]->reqAlias(); ?>&amp;motDePasse=<?php echo $_SESSION["joueur"]->reqMotDePasse(); ?>">
 	<PARAM NAME=quality VALUE=high>
 	<param name="bgcolor" value="#000000" />
 	<param name="allowFullScreen" value="true" />
-	<EMBED src="flash/chargement_beta.swf?nomUtilisateur=<?php echo $_GET["alias"]; ?>&amp;motDePasse=<?php echo $_GET["motDePasse"]; ?>" 
+	<EMBED src="flash/chargement_beta.swf?nomUtilisateur=<?php echo $_SESSION["joueur"]->reqAlias(); ?>&amp;motDePasse=<?php echo $_SESSION["joueur"]->reqMotDePasse(); ?>" 
 		quality=high bgcolor=#000000 WIDTH="100%" HEIGHT="100%"
 		NAME="mathenjeu" TYPE="application/x-shockwave-flash"
 		PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer">
