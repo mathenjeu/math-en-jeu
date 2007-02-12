@@ -50,7 +50,15 @@ class mon_mysqli extends mysqli
     {
         $result = parent::query($requete);
         if(mysqli_error($this))
-            throw new SQLException(mysqli_error($this), mysqli_errno($this), $requete);
+        {
+         	$log = new clog(LOG_FILE);
+         	$log->ecrire("Erreur SQL : " . $requete);
+
+         	if(defined('SQL_DEBUG'))
+         	{
+            	throw new SQLException(mysqli_error($this), mysqli_errno($this), $requete);
+            }
+        }
 
         return $result;
     }

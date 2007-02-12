@@ -26,6 +26,7 @@ define("CONTRAT_DEBUG",1);  //mettre en commentaire pour passer au mode release
 $chemin = strtr(__FILE__,'\\',"/");
 define('LIB_DIR',substr($chemin,0,strrpos($chemin,'/')));
 define('DOC_ROOT',(substr(LIB_DIR,0,strrpos(LIB_DIR,'/')+1)));		//dossier racine du site web ( ex : /var/www/html/mathenjeu )
+define('LOG_DIR',DOC_ROOT . "log/");
 
 //inclus les fichier requis pour faire fonctionner le site web
 require_once(LIB_DIR . "/Smarty/Smarty.class.php");
@@ -41,6 +42,7 @@ require_once(LIB_DIR . "/sondage.class.php");
 require_once(LIB_DIR . "/groupe.class.php");
 require_once(LIB_DIR . "/superadmin.class.php");
 require_once(LIB_DIR . "/faq.class.php");
+require_once(LIB_DIR . "/clog.class.php");
 
 
 define("LANGAGE_DIR",DOC_ROOT . "langage/");
@@ -73,10 +75,12 @@ define('COURRIEL_PASS_PERDU',utf8_decode((string)$config->courriel_pass_perdu));
 
 define("IMAGE_DIR",DOC_ROOT . "img/sujet");						//dossier des images pour les nouvelles
 
+define("LOG_FILE",DOC_ROOT . "/log/log.txt");					//fichier pour les logs
+
 
 //définir les configurations de session
 ini_set('session.gc_maxlifetime',1800);
-ini_set('session.cookie_lifetime',0);
+ini_set('session.cookie_lifetime',1800);
 ini_set('session.use_trans_sid',1);
 ini_set('session.use_only_cookies',1);
 
