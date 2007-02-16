@@ -55,23 +55,6 @@ function Launch(page) {
 	</EMBED>
 </OBJECT>
 
-<!--
-<object
-		codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0"
-        type="application/x-shockwave-flash"
-        data="flash/chargement_beta.swf?nomUtilisateur=<?php echo $_GET["alias"]; ?>&amp;motDePasse=<?php echo $_GET["motDePasse"]; ?>"
-        width="100%"
-        height="100%">
-    	<param name="movie"	value="flash/chargement_beta.swf?nomUtilisateur=<?php echo $_GET["alias"]; ?>&amp;motDePasse=<?php echo $_GET["motDePasse"]; ?>" />
-    	<param name="allowScriptAccess" value="always" />
-		<param name="quality" value="high" />
-		<param name="bgcolor" value="#000000" />
-		<EMBED WIDTH="550" HEIGHT="400"
-			TYPE="application/x-shockwave-flash"
-			pluginspage="http://www.macromedia.com/go/getflashplayer"></EMBED>
-
-</object>
--->
 </div>
 </body>
 </html>
