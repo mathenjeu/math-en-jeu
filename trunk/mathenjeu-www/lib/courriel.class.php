@@ -151,7 +151,7 @@ class Courriel extends PHPMailer
     function validerCourriel($courriel)
     {
         $user = "[-a-z0-9_]";
-        $domaine = '([a-z]([-a-z0-9]*[a-z0-9]+)?)';
+        $domaine = '([a-z0-9]([-a-z0-9]*[a-z0-9]+)?)';
 
         $valide = '^' .$user . '+' .      // un ou plusieurs caractère de user
         '(\.' . $user . '+)*'.            // suivi de 0 ou plusieur set de caractère séparé de points
