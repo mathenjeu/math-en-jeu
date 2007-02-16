@@ -53,10 +53,16 @@ class Joueur extends Utilisateur
     //**************************************************************************
     function Joueur($mysqli)
     {
-      PRECONDITION(get_class($mysqli)=="mon_mysqli");
-        parent::Utilisateur($mysqli);
+        PRECONDITION(get_class($mysqli)=="mon_mysqli");
+      	$this->aimeMaths = 3;
+        $this->mathConsidere = 3;
+        $this->mathEtudie = 3;
+        $this->mathDecouvert = 5;
         $this->cleGroupe=0;
         $this->cleAdministrateur=0;
+        parent::Utilisateur($mysqli);
+
+
     }
 
     //**************************************************************************
@@ -358,7 +364,7 @@ class Joueur extends Utilisateur
     function chargerMySQL($alias,$motDePasse)
     {
 
-        $sql="select cleJoueur,motDePasse from joueur where alias='$alias' and motDePasse=password('" . $motDePasse . "')";
+        $sql="select cleJoueur,motDePasse from joueur where alias='" . $alias . "' and motDePasse=password('" . addslashes($motDePasse) . "')";
         $result=$this->mysqli->query($sql);
 
         if($result->num_rows==0)
@@ -390,10 +396,23 @@ class Joueur extends Utilisateur
             return false;
 
         $row=$result->fetch_object();
-        $this->asgJoueur($row->nom,$row->prenom,$row->alias,$row->motDePasse,
-        $row->adresseCourriel,$row->estConfirme,$row->cleEtablissement,$row->cleNiveau,
-        $row->ville,$row->pays,$row->province,$row->dateInscription,
-        $row->sondageQ1,$row->sondageQ2,$row->sondageQ3,$row->sondageQ4);
+        $this->asgJoueur(
+			stripcslashes($row->nom),
+			stripcslashes($row->prenom),
+			$row->alias,
+			stripcslashes($row->motDePasse),
+	        $row->adresseCourriel,
+			$row->estConfirme,
+			$row->cleEtablissement,
+			$row->cleNiveau,
+	        stripcslashes($row->ville),
+			stripcslashes($row->pays),
+			stripcslashes($row->province),
+			$row->dateInscription,
+	        $row->sondageQ1,
+			$row->sondageQ2,
+			$row->sondageQ3,
+			$row->sondageQ4);
         
         $this->asgCle($row->cleJoueur);
         $this->asgAdministrateurCle($row->cleAdministrateur);
@@ -455,14 +474,14 @@ class Joueur extends Utilisateur
             cleConfirmation,cleEtablissement,cleGroupe,cleAdministrateur) VALUES(";
       
       $sql .= "'"
-            .$this->reqPrenom()."', '"
-            .$this->reqNom()."', '"
+            .addslashes($this->reqPrenom())."', '"
+            .addslashes($this->reqNom())."', '"
             .$this->reqAlias()."',password('"
-            .$this->reqMotdepasse()."'), '"
+            .addslashes($this->reqMotdepasse())."'), '"
             .$this->reqCourriel()."', '"
-            .$this->reqVille()."','"
-            .$this->reqProvince()."', '"
-            .$this->reqPays()."', "
+            .addslashes($this->reqVille())."','"
+            .addslashes($this->reqProvince())."', '"
+            .addslashes($this->reqPays())."', "
             .$this->reqNiveau().","
             .$this->reqAimeMaths().", "
             .$this->reqMathConsidere().", "
@@ -470,7 +489,7 @@ class Joueur extends Utilisateur
             .$this->reqMathDecouvert().",'"
             .$this->reqDateInscription()."','"
             .$this->reqCleConfirmation() . "',"
-            .$this->reqEtablissement() . ","
+            .addslashes($this->reqEtablissement()) . ","
             .$this->reqCleGroupe() . ","
             .$this->reqCleAdministrateur() . ")";
 
@@ -494,7 +513,7 @@ class Joueur extends Utilisateur
     function validerAliasUnique($alias)
     {
 
-        $sql="select * from joueur where alias='" . strtolower($alias) . "'";
+        $sql="select * from joueur where alias='" . stripslashes(strtolower($alias)) . "'";
         $result=$this->mysqli->query($sql);
 
         if($result->num_rows!=0)
@@ -583,14 +602,14 @@ class Joueur extends Utilisateur
       $this->INVARIANTS();
       PRECONDITION($this->reqCle()>=0);
 
-      $sql ="update joueur set nom='" . $this->reqNom() .
-            "',prenom='" . $this->reqPrenom() .
-            "',ville='" . $this->reqVille() .
-            "',pays='" .$this->reqPays() .
-            "',province='" . $this->reqProvince() .
+      $sql ="update joueur set nom='" . addslashes($this->reqNom()) .
+            "',prenom='" . addslashes($this->reqPrenom()) .
+            "',ville='" . addslashes($this->reqVille()) .
+            "',pays='" .addslashes($this->reqPays()) .
+            "',province='" . addslashes($this->reqProvince()) .
             "',cleNiveau=" . $this->reqNiveau() .
-            ",motDePasse='" . $this->reqMotDePasse() .
-            "',cleEtablissement=" . $this->reqEtablissement() .
+            ",motDePasse='" . addslashes($this->reqMotDePasse()) .
+            "',cleEtablissement=" . addslashes($this->reqEtablissement()) .
             ",adresseCourriel='" . $this->reqCourriel() .
             "',cleConfirmation='" . $this->reqCleConfirmation() .
             "',estConfirme=" . $this->reqEstConfirmer() .
@@ -619,7 +638,7 @@ class Joueur extends Utilisateur
     //**************************************************************************
     function miseAJourMotDePasseMySQL($motDePasse)
     {
-      $sql ="update joueur set motDePasse=password('" . $motDePasse . "') where cleJoueur=" . $this->reqCle();
+      $sql ="update joueur set motDePasse=password('" . addslashes($motDePasse) . "') where cleJoueur=" . $this->reqCle();
       $result=$this->mysqli->query($sql);
       $this->chargerMySQLCle($this->reqCle());
 	}

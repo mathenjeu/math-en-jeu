@@ -24,11 +24,13 @@ function main()
 {
   try
   {
+    //vérifie que le client a bien les cookies activés
    	if(!isset($_COOKIE['test']))
    	{
 		redirection("cookie.php",0);
 		exit;
 	}
+	
     $smarty = new MonSmarty();
     global $lang;
     $smarty->assign('titre',$lang['titre_inscription_joueur']);
@@ -44,12 +46,14 @@ function main()
     $smarty->cache_lifetime = 0;
     $smarty->display('menu.tpl');
     
+    //vérifie s'il y a un paramêtre, sinon on passe à l'étape 1
     if(!isset($_GET["action"]))
     {
       etape1("");
     }
     else
     {
+      //on vérifie si le joueur est déjà dans session
       if(!isset($_SESSION["joueurInscription"]))
       {
         $joueur=new Joueur($_SESSION["mysqli"]);
@@ -58,7 +62,8 @@ function main()
       {
         $joueur=$_SESSION["joueurInscription"];
       }
-
+		
+	  //changement de niveau scolaire, il faut rafrîchir la liste des établissements
       if($_GET["action"]=="etablissement")
       {
         etape2("");
@@ -218,10 +223,13 @@ Description : valider et assigné les informations de l'étape 3
 function validerEtape3($joueur)
 {
  	$joueur->chargerMySQLCle($joueur->reqCle());
-    $joueur->asgAimeMaths($_POST["aimeMaths"]);
-    $joueur->asgMathConsidere($_POST["mathConsidere"]);
-    $joueur->asgMathEtudie($_POST["mathEtudie"]);
-    $joueur->asgMathDecouvert($_POST["mathDecouvert"]);
+ 	if(isset($_POST["aimeMaths"]))
+ 	{
+    	$joueur->asgAimeMaths($_POST["aimeMaths"]);
+    	$joueur->asgMathConsidere($_POST["mathConsidere"]);
+    	$joueur->asgMathEtudie($_POST["mathEtudie"]);
+    	$joueur->asgMathDecouvert($_POST["mathDecouvert"]);
+    }
 	$joueur->miseAJourMySQL();
     
     return "";

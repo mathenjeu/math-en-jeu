@@ -73,7 +73,7 @@ abstract class Utilisateur
     //**************************************************************************
     function validerAlias($alias)
     {
-      return (eregi("^[a-zA-Z0-9]{4,8}$",$alias));
+      return (eregi("^[a-zA-Z0-9_-]{4,8}$",stripcslashes($alias)));
     }
 
     //**************************************************************************
@@ -277,7 +277,7 @@ abstract class Utilisateur
     //**************************************************************************
 	function validerPassCrypter($passChiffrer,$pass)
 	{
-	  $sql="select password('$pass')";
+	  $sql="select password('" . addslashes($pass) . "')";
 	  $result = $this->mysqli->query($sql);
 	  $row=$result->fetch_array();
 
