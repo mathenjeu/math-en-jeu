@@ -364,7 +364,7 @@ class Joueur extends Utilisateur
     function chargerMySQL($alias,$motDePasse)
     {
 
-        $sql="select cleJoueur,motDePasse from joueur where alias='" . $alias . "' and motDePasse=password('" . addslashes($motDePasse) . "')";
+        $sql="select cleJoueur,motDePasse from joueur where alias='" . addslashes($alias) . "' and motDePasse=password('" . addslashes($motDePasse) . "')";
         $result=$this->mysqli->query($sql);
 
         if($result->num_rows==0)
@@ -513,7 +513,7 @@ class Joueur extends Utilisateur
     function validerAliasUnique($alias)
     {
 
-        $sql="select * from joueur where alias='" . stripslashes(strtolower($alias)) . "'";
+        $sql="select * from joueur where alias='" . addslashes(strtolower($alias)) . "'";
         $result=$this->mysqli->query($sql);
 
         if($result->num_rows!=0)
