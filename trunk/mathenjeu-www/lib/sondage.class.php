@@ -421,7 +421,7 @@ class Sondage
         if($result->num_rows==0)
             return false;
         $row=$result->fetch_object();
-        $this->chargerSondageMySQL($row->cleSondage);
+        return $this->chargerSondageMySQL($row->cleSondage);
     }
     
     //**************************************************************************
