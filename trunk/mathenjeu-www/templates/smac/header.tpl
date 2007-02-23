@@ -5,7 +5,7 @@
 <html>
 
 <!--
-
+  
   Modele de page
 
   Projet:         Sciences et mathematiques en action
@@ -35,8 +35,9 @@ Projet SMAC
 </title>
 </head>
 
-<body>
 
+<body>
+<div style='height:100%;'>
 <table cellpadding="0" cellspacing="0" border="0" style="width:100%;height:100%;margin: 0;padding: 0;background-repeat: repeat-y">
 	<tr class="header">
 		<td valign="top">
@@ -90,15 +91,15 @@ Projet SMAC
 			</table>
 		</td>
 	</tr>
-	<tr>
-		<td>
+	<tr valign="top" style='height:100%'>
+		<td valign="top">
 		<table cellpadding="0" cellspacing="0" border="0" style="width:100%;height:100%;">
-		<tr>
+		<tr valign="top">
 			<td class="content-border-l" style="background-image:url('{$template}img/border-l.png');background-repeat: repeat-y;background-position: left">&nbsp;<br></td>
 			<td></td>
 			<td class="content-border-r" style="background-image:url('{$template}img/border-r.png');background-repeat: repeat-y;background-position: right">&nbsp;<br></td>
 		</tr>
-		<tr>
+		<tr valign="top">
 			<td class="content-border-l" style="background-image:url('{$template}img/border-l.png');background-repeat: repeat-y;background-position: left">&nbsp;<br></td>
 			<td>
 				<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;background-image:url('{$template}img/personnages.jpg');background-repeat: no-repeat;background-position: 95% 95%">

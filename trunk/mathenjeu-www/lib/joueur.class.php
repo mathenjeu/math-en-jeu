@@ -151,6 +151,7 @@ class Joueur extends Utilisateur
       POSTCONDITION($this->reqCleGroupe()==$cleGroupe);
     }
     
+    
     //fonction d'assignation pour le petit sondage à l'inscription
     function asgAimeMaths($no)
     {
@@ -248,11 +249,11 @@ class Joueur extends Utilisateur
     //**************************************************************************
     function asgJoueur($nom,$prenom,$alias,$motDePasse,$courriel,
         $estConfirmer,$etablissement,$niveau,$ville,$pays,$province,
-        $dateInscription,$aimeMaths,$mathConsidere,$mathEtudie,$mathDecouvert)
+        $dateInscription,$acces,$aimeMaths,$mathConsidere,$mathEtudie,$mathDecouvert)
     {
       
         parent::asgUtilisateur($nom,$prenom,$alias,$motDePasse,$courriel,
-            $estConfirmer,$etablissement,$niveau);
+            $estConfirmer,$etablissement,$niveau,$acces);
 
         $this->asgVille($ville);
         $this->asgPays($pays);
@@ -409,6 +410,7 @@ class Joueur extends Utilisateur
 			stripcslashes($row->pays),
 			stripcslashes($row->province),
 			$row->dateInscription,
+			$row->acces,
 	        $row->sondageQ1,
 			$row->sondageQ2,
 			$row->sondageQ3,
@@ -471,7 +473,7 @@ class Joueur extends Utilisateur
       $sql = "INSERT INTO joueur (prenom, nom, alias,
             motDePasse, adresseCourriel, ville, province, pays, cleNiveau,
             sondageQ1, sondageQ2, sondageQ3, sondageQ4, dateInscription,
-            cleConfirmation,cleEtablissement,cleGroupe,cleAdministrateur) VALUES(";
+            cleConfirmation,estConfirme,cleEtablissement,cleGroupe,cleAdministrateur) VALUES(";
       
       $sql .= "'"
             .addslashes($this->reqPrenom())."', '"
@@ -488,13 +490,14 @@ class Joueur extends Utilisateur
             .$this->reqMathEtudie().", "
             .$this->reqMathDecouvert().",'"
             .$this->reqDateInscription()."','"
-            .$this->reqCleConfirmation() . "',"
+            .$this->reqCleConfirmation() . "',0,"
             .addslashes($this->reqEtablissement()) . ","
             .$this->reqCleGroupe() . ","
             .$this->reqCleAdministrateur() . ")";
 
         $result=$this->mysqli->query($sql);
         $this->asgCle($this->mysqli->insert_id);
+        $this->asgEstConfirmer(0);
         //$this->envoyerCourrielConfirmation();
 
       
@@ -616,7 +619,6 @@ class Joueur extends Utilisateur
             ",alias='" . $this->reqAlias() .
             "',cleAdministrateur=" . $this->reqCleAdministrateur() .
             ",cleGroupe=" . $this->reqCleGroupe() .
-            ",cleConfirmation='" . $this->reqCleConfirmation() . "'" .
             ",sondageQ1=" . $this->reqAimeMaths() .
             ",sondageQ2=" . $this->reqMathConsidere() .
             ",sondageQ3=" . $this->reqMathEtudie() .
@@ -731,5 +733,6 @@ class Joueur extends Utilisateur
     {
 	  return $this->totalPoints;
 	}
+
 }
 

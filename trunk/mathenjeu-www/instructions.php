@@ -22,6 +22,7 @@ function main()
 		$smarty->assign('connecter',1); 
 		$smarty->assign('alias',$_SESSION["joueur"]->reqAlias());
 		$smarty->assign('motDePasse',$_SESSION["joueur"]->reqMotDePasse());
+		$smarty->assign('acces',$_SESSION["joueur"]->reqAcces());
 	}
 	
 	$smarty->assign('titre',$lang['titre_instruction']);

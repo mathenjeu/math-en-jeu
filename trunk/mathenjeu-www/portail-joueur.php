@@ -50,6 +50,7 @@ function main()
         
         $smarty->assign('alias',$joueur->reqAlias());
         $smarty->assign('motDePasse',$joueur->reqMotDePasse());
+        $smarty->assign('acces',$_SESSION["joueur"]->reqAcces());
         
         if(isset($_SESSION['css']))
 		{

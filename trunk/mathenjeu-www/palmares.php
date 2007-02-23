@@ -30,6 +30,7 @@ function main()
 	 	$smarty->assign('connecter',1);
 	 	$smarty->assign('alias',$_SESSION["joueur"]->reqAlias());
 	 	$smarty->assign('motDePasse',$_SESSION["joueur"]->reqMotDePasse());
+	 	$smarty->assign('acces',$_SESSION["joueur"]->reqAcces());
 	}
 	
 	$smarty->cache_lifetime = 0;
@@ -37,7 +38,7 @@ function main()
 	
 	//on vérifie si on a une copie valide dans la cache
 	//sinon on recalcule le palmarès
-	if(!$smarty->is_cached("palmares.php"))
+	if(!$smarty->is_cached("palmares.tpl"))
 	{
 		meilleurMoy($smarty);
     	joueurPlusJouee($smarty);

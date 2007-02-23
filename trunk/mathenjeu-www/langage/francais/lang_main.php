@@ -110,6 +110,8 @@ $lang['titre_faq'] = 'Math en jeu! - Foire aux questions (FAQ)';
 $lang['titre_contact'] = 'Math en jeu! - Nous contacter';
 $lang['titre_nouvelle'] = 'Math en jeu - Nouvelles';
 $lang['titre_instruction'] = 'Math en jeu - Instructions';
+$lang['titre_ajout_question'] = 'Math en jeu - Ajout d\'une question';
+$lang['menu_chercher_question'] = 'Chercher une question';
 
 //
 //bouton
@@ -171,6 +173,9 @@ $lang['menu_statistiques'] = 'Statistiques';
 $lang['menu_stats_web'] = 'Statistiques serveur web';
 
 $lang['menu_stat_joueur'] = 'Mes statistiques';
+
+$lang['menu_ajout_question'] = 'Ajouter une question';
+$lang['menu_chercher_question'] = 'Chercher une question';
 
 //
 //index

@@ -9,6 +9,16 @@ Description : Fichier de styles pour math en jeu, le skin par défaut
 *******************************************************************************/
 -->
 
+
+.symbole{
+	cursor:hand; 
+	cursor:pointer;
+}
+
+.outputML{
+	display:none;
+}
+
 .body1 {
 	font-family: Arial , Verdana, Geneva,  Helvetica;
 	font-size:16px;

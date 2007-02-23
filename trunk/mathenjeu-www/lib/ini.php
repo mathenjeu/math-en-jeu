@@ -79,9 +79,9 @@ define("LOG_FILE",DOC_ROOT . "/log/log.txt");					//fichier pour les logs
 
 
 //définir les configurations de session
-ini_set('session.gc_maxlifetime',1800);
+//ini_set('session.gc_maxlifetime',1800);
 ini_set('session.cookie_lifetime',1800);
-ini_set('session.use_trans_sid',1);
+//ini_set('session.use_trans_sid',1);
 ini_set('session.use_only_cookies',1);
 
 //si la session n'existe pas on la débute

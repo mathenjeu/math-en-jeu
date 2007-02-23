@@ -203,10 +203,10 @@ function validerEtape2($joueur)
     $joueur->asgMathConsidere(3);
     $joueur->asgMathEtudie(3);
     $joueur->asgMathDecouvert(3);
-    $_SESSION["joueurInscription"] = $joueur;
     if($joueur->insertionMySQL())
     {
 		$joueur->envoyerCourrielConfirmation();
+		$_SESSION["joueurInscription"] = $joueur;
 	}
     
 	return "";
@@ -223,15 +223,22 @@ Description : valider et assigné les informations de l'étape 3
 function validerEtape3($joueur)
 {
  	$joueur->chargerMySQLCle($joueur->reqCle());
- 	if(isset($_POST["aimeMaths"]))
+ 	if($joueur->reqCle()==0)
  	{
-    	$joueur->asgAimeMaths($_POST["aimeMaths"]);
-    	$joueur->asgMathConsidere($_POST["mathConsidere"]);
-    	$joueur->asgMathEtudie($_POST["mathEtudie"]);
-    	$joueur->asgMathDecouvert($_POST["mathDecouvert"]);
+		$log = new clog(LOG_FILE);
+		$log->ecrire("Problème avec les sessions");
+	}
+	else
+	{
+	 	if(isset($_POST["aimeMaths"]))
+	 	{
+	    	$joueur->asgAimeMaths($_POST["aimeMaths"]);
+	    	$joueur->asgMathConsidere($_POST["mathConsidere"]);
+	    	$joueur->asgMathEtudie($_POST["mathEtudie"]);
+	    	$joueur->asgMathDecouvert($_POST["mathDecouvert"]);
+	    }
+		$joueur->miseAJourMySQL();
     }
-	$joueur->miseAJourMySQL();
-    
     return "";
 }
 

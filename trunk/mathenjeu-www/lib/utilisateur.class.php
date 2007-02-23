@@ -27,6 +27,7 @@ abstract class Utilisateur
     private $estConfirmer;
     private $etablissement;
     private $niveau;
+    private $acces;
     protected $cleConfirmation;
     protected $mysqli;
 
@@ -132,7 +133,7 @@ abstract class Utilisateur
     //Note : on appel les fonctions d'assignations
     //**************************************************************************
     function asgUtilisateur($nom,$prenom,$alias,$motDePasse,$courriel,
-        $estConfirmer,$etablissement,$niveau)
+        $estConfirmer,$etablissement,$niveau,$acces)
     {
       $this->asgNom($nom);
       $this->asgPrenom($prenom);
@@ -142,6 +143,7 @@ abstract class Utilisateur
       $this->asgEstConfirmer($estConfirmer);
       $this->asgNiveau($niveau);
       $this->asgEtablissement($etablissement);
+      $this->asgAcces($acces);
       
       $this->INVARIANTS();
     }
@@ -235,6 +237,19 @@ abstract class Utilisateur
       $this->niveau=$niveau;
       POSTCONDITION($this->reqNiveau()==$niveau);
     }
+    
+    //**************************************************************************
+    // Sommaire:        asigne à l'utilisateur le niveau d'accès
+    // Entrée:          $acces
+    // Sortie:
+    // Note:            le niveau d'accès doit être entre 0 et 5 inclusivement
+    //**************************************************************************    
+    function asgAcces($acces)
+    {
+     	PRECONDITION($acces>=0 && $acces<=5);
+		$this->acces = $acces;
+		POSTCONDITION($this->reqAcces() == $acces);
+	}
     
     //**************************************************************************
     // Sommaire:        générer une chaîne aléatoire
@@ -337,6 +352,9 @@ abstract class Utilisateur
     function reqNiveau(){
       return $this->niveau;
     }
+    function reqAcces(){
+		return $this->acces;
+	}
 
 
 }

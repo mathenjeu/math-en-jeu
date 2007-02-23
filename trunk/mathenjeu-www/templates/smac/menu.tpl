@@ -16,6 +16,16 @@
 				<li><a href="contact.php" class="menu">{$lang.menu_contact}</a></li>
 			</ul>
 		</div>
+		{if $acces >= 1}
+		<p>
+		<div>
+			<ul>
+				<li><a href="question.php">{$lang.menu_ajout_question}</a></li>
+				<li><a href="question.php?action=find">{$lang.menu_chercher_question}</a></li>
+			</ul>
+		</div>
+		</p>
+		{/if}
 	{else}
 		<h4 class="titre_menu">{$lang.titre_menu_principal}</h4>
 		<div>
@@ -51,6 +61,12 @@
 	{/if}
 	</div>
 </div>
+
 </td>
-<td>&nbsp;&nbsp;</td>
+<td>
+&nbsp;&nbsp;
+
+</td>
+
+
 
