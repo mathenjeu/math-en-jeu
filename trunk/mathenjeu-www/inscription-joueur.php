@@ -24,12 +24,6 @@ function main()
 {
   try
   {
-    //vérifie que le client a bien les cookies activés
-   	if(!isset($_COOKIE['test']))
-   	{
-		redirection("cookie.php",0);
-		exit;
-	}
 	
     $smarty = new MonSmarty();
     global $lang;
@@ -50,6 +44,8 @@ function main()
     if(!isset($_GET["action"]))
     {
       etape1("");
+      $joueur=new Joueur($_SESSION["mysqli"]);
+      $_SESSION["joueurInscription"]=$joueur;
     }
     else
     {
@@ -57,6 +53,8 @@ function main()
       if(!isset($_SESSION["joueurInscription"]))
       {
         $joueur=new Joueur($_SESSION["mysqli"]);
+        redirection("cookie.php",0);
+        exit(0);
       }
       else
       {
@@ -76,7 +74,7 @@ function main()
       {
         if(!isset($_SESSION["joueurInscription"]))
         {
-            redirection("index.php",0);
+            redirection("cookie.php",0);
         }
         else
         {
@@ -285,7 +283,7 @@ function etape2($erreur)
     $smarty = new MonSmarty;
     global $lang;
     
-    $niveau=10;
+    $niveau=7;
     if(isset($_POST["niveau"]))
     {
       $niveau=$_POST["niveau"];
@@ -312,8 +310,8 @@ function etape2($erreur)
 
     //
     // on génère la liste des niveau scolaire
-    // on enleve les niveau primaire temporairement
-    for($i=7;$i<=14;$i++)
+    // on enleve les niveau primaire,collégial,universitaire,grand public temporairement
+    for($i=7;$i<=11;$i++)
     {
         $niveauTexte[$i] = $lang["niveau_$i"];
     }

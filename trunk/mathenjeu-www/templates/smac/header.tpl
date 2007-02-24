@@ -29,7 +29,10 @@
 <meta name="author" content="Sylvain Hall&eacute;">
 <meta name="description" content="Page d'accueil du projet Sciences et math&eacute;matiques en action de l'Universit&eacute; Laval">
 <meta name="keywords" content="spectacle, duo tang, humour, mathematiques, sciences, jeunes, education, secondaire, spectacles, math en jeu">
-<script type="text/javascript" src="lib/function.js"></script>
+<script type="text/javascript" src="lib/js/function.js"></script>
+<script type="text/javascript" src="lib/js/ASCIIMathML.js"></script>
+<script type="text/javascript" src="lib/js/editeur.js"></script>
+
 <title>
 Projet SMAC
 </title>
