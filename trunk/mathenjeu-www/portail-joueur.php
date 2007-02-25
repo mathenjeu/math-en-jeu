@@ -80,23 +80,6 @@ function main()
             {
               doModificationPerso($joueur);
             }
-            /*
-            elseif($action=="palmares")
-            {
-                meilleurMoy($smarty);
-                joueurPlusJouee($smarty);
-                joueurPlusGagner($smarty);
-                $smarty->assign('nbJour',NB_JOUR_PALMARES);
-                $smarty->display('palmares.tpl');
-            }
-            
-            elseif($action=="couleur")
-            {
-			  		$_SESSION['css'] = $_POST['css'];
-			  		redirection("portail-joueur.php",0);
-			  		return;
-			}
-			*/
 			elseif($action=="stat")
 			{
 			 	statJoueur();
@@ -317,8 +300,8 @@ function formulaireModification($joueur,$erreur,$erreur_id,$message,$message_id)
 
     //
     // on génère la liste des niveau scolaire
-    // on enleve les niveau primaire temporairement
-    for($i=7;$i<=14;$i++)
+    // on enleve les niveau primaire,collégial,universitaire temporairement
+    for($i=7;$i<=11;$i++)
     {
         $niveauTexte[$i] = $lang["niveau_$i"];
     }
