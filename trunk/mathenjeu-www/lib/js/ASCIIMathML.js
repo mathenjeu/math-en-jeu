@@ -29,10 +29,11 @@ for more details.
 var checkForMathML = true;   // check if browser can display MathML
 var notifyIfNoMathML = true; // display note if no MathML capability
 var alertIfNoMathML = false;  // show alert box if no MathML capability
-var mathcolor = "red";       // change it to "" (to inherit) or any other color
-var mathfontfamily = "serif"; // change to "" to inherit (works in IE) 
+var mathcolor = "";       // change it to "" (to inherit) or any other color
+var mathfontfamily = "";
+//var mathfontfamily = "serif"; // change to "" to inherit (works in IE) 
                               // or another family (e.g. "arial")
-var displaystyle = true;      // puts limits above and below large operators
+var displaystyle = false;      // puts limits above and below large operators
 var showasciiformulaonhover = true; // helps students learn ASCIIMath
 var decimalsign = ".";        // change to "," if you like, beware of `(1,2)`!
 var AMdelimiter1 = "`", AMescape1 = "\\\\`"; // can use other characters

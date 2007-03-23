@@ -34,6 +34,15 @@
         <td><input id="nom" type="text" name="nom" size="20" value="{$nom}"> <span class="asterix">*</span></td>
     </tr>
     <tr align="left">
+        <td><label for="nom">{$lang.sexe}</label></td>
+        <td>
+			<select length="10" id="sexe" name="sexe">
+				<option value="0" {if $sexe eq 0} selected {/if}>{$lang.feminin}&nbsp;&nbsp;&nbsp;</option> 
+				<option value="1" {if $sexe eq 1} selected {/if}>{$lang.masculin}&nbsp;&nbsp;&nbsp;</option>
+			</select> <span class="asterix">*</span>
+		</td>
+    </tr>
+    <tr align="left">
         <td><label for="ville">{$lang.ville}</label></td>
         <td><input id="ville" type="text" name="ville" size="20" value="{$ville}"> <span class="asterix">*</span></td>
     </tr>

@@ -16,8 +16,6 @@ Description : regroupe toutes les fonctions d'initialisation
 
 ini_set('display_errors','1');
 
-//un cookie de test pour s'assurer que le joueur a bien ses cookies activés
-setcookie("test");
 
 define("SQL_DEBUG",1);      //mettre en commentaire pour passer au mode release
 define("CONTRAT_DEBUG",1);  //mettre en commentaire pour passer au mode release
@@ -77,12 +75,65 @@ define("IMAGE_DIR",DOC_ROOT . "img/sujet");						//dossier des images pour les n
 
 define("LOG_FILE",DOC_ROOT . "/log/log.txt");					//fichier pour les logs
 
+//constante utile pour la création des questions
+define("TEMP_DIR","/tmp");
+define("LATEX","openin_any=p /usr/bin/latex");
+define("FICHIER_XSL","/home/mathenjeu/utilitaire/xsltml/mmltex.xsl");
+define("XALAN_JAR","/home/mathenjeu/utilitaire/xalanj/xalan.jar");
+define("HEADER_LATEX",
+'%% PREAMBULE POUR GENERATION FICHIERS QUESTIONS
+%% Sylvain Halle 2006-10-18
+%% Ce fichier est recopié au début de toutes les questions et rétroactions
+%% générées individuellement
+\documentclass[legalpaper, 12pt]{article}
+\usepackage[francais]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage[latin1]{inputenc}
+\usepackage{multirow}
+\usepackage{wasysym}
+
+%% Changements SH
+%% Marges LaTeX par défaut
+%\setlength{\topmargin}{-2cm}
+%\setlength{\textheight}{23.5cm}
+\setlength{\textwidth}{12cm}
+%\setlength{\oddsidemargin}{-1cm}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+
+%% Changements SH
+\usepackage{helvet} %% Remplace sans-serif par Helvetica
+\renewcommand{\familydefault}{\sfdefault} %% Fonte par défaut = sans-serif
+\usepackage{sfmath} %% Utilise le sans-serif même en mode math
+\pagestyle{empty} %% Pas de numéro de page
+
+%% Redéfinition du compteur des environnements enumerate pour afficher a), b), ...
+\renewcommand{\labelenumi}{\alph{enumi})}
+
+%\pdfoutput=1
+
+\begin{document}');
+
+define("FOOTER_LATEX",'
+\begin{flushright}\textcolor{white}{.}\end{flushright}
+\end{document}');
+
+define("QUESTION_EPS_DIR","/home/mathenjeu/html/questions/eps/");
+define("QUESTION_FLASH_DIR","I:/smac/website/questions/");
+define("QUESTION_EPS_WEB_DIR","/questions/eps/");
+define("QUESTION_FLASH_WEB_DIR","/questions/");
+
 
 //définir les configurations de session
 //ini_set('session.gc_maxlifetime',1800);
 ini_set('session.cookie_lifetime',1800);
-//ini_set('session.use_trans_sid',1);
-ini_set('session.use_only_cookies',1);
+ini_set('session.use_trans_sid',1);
+//ini_set('session.use_only_cookies',1);
 
 //si la session n'existe pas on la débute
 if(session_id()=="")
@@ -101,7 +152,7 @@ class MonSmarty extends Smarty
         // Constructeur de la classe.
         // Appelé automatiquement à l'instanciation de la classe.
         $this->Smarty();
-        $this->caching = 2;		//controle de la cache pour chaque fichier
+        $this->caching = 0;		//controle de la cache pour chaque fichier
         $this->template_dir = TEMPLATE_DIR;
         $this->compile_dir = LIB_DIR . '/Smarty/templates_c';
         $this->config_dir = LIB_DIR . '/Smarty/configs';

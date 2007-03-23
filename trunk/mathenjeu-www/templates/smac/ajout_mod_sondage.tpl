@@ -7,9 +7,9 @@
 {/if}
 
 {if $action eq "ajout"}
-    <form name="sondage" method="POST" action="super-admin.php?action=insertSondage&amp;nbChoix={$nbChoix}">
+    <form name="sondage" method="POST" action="admin_sondage.php?action=insertSondage&amp;nbChoix={$nbChoix}">
 {else}
-    <form name="sondage" action="super-admin.php?action=doModificationSondage&amp;nbChoix={$nbChoix}&amp;cleSondage={$cle}" method="POST">
+    <form name="sondage" action="admin_sondage.php?action=doModificationSondage&amp;nbChoix={$nbChoix}&amp;cleSondage={$cle}" method="POST">
 {/if}
 
 <table class="tableau_admin" border="0" align="left">
@@ -42,11 +42,11 @@
     {/section}
     <tr>
     {if $action eq "ajout"}
-        <td><input type="button" value="{$lang.ajout_choix}" onClick="document.sondage.action='super-admin.php?action=ajoutSondage&amp;nbChoix={$nbChoix+1}';document.sondage.submit();"></td>
-        <td><input type="button" value="{$lang.enlever_choix}" onClick="document.sondage.action='super-admin.php?action=ajoutSondage&amp;nbChoix={$nbChoix-1}';document.sondage.submit();"></td>
+        <td><input type="button" value="{$lang.ajout_choix}" onClick="document.sondage.action='admin_sondage.php?action=ajoutSondage&amp;nbChoix={$nbChoix+1}';document.sondage.submit();"></td>
+        <td><input type="button" value="{$lang.enlever_choix}" onClick="document.sondage.action='admin_sondage.php?action=ajoutSondage&amp;nbChoix={$nbChoix-1}';document.sondage.submit();"></td>
     {else}
-    	  <td><input type="button" value="{$lang.ajout_choix}" onClick="document.sondage.action='super-admin.php?action=modificationSondage&amp;nbChoix={$nbChoix+1}&amp;cleSondage={$cle}';document.sondage.submit();"></td>
-        <td><input type="button" value="{$lang.enlever_choix}" onClick="document.sondage.action='super-admin.php?action=modificationSondage&amp;nbChoix={$nbChoix-1}&amp;cleSondage={$cle}';document.sondage.submit();"></td>
+    	  <td><input type="button" value="{$lang.ajout_choix}" onClick="document.sondage.action='admin_sondage.php?action=modificationSondage&amp;nbChoix={$nbChoix+1}&amp;cleSondage={$cle}';document.sondage.submit();"></td>
+        <td><input type="button" value="{$lang.enlever_choix}" onClick="document.sondage.action='admin_sondage.php?action=modificationSondage&amp;nbChoix={$nbChoix-1}&amp;cleSondage={$cle}';document.sondage.submit();"></td>
     {/if}
     </tr>
     <tr>

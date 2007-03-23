@@ -34,7 +34,7 @@ function main()
 	 	$smarty->assign('motDePasse',$_SESSION["joueur"]->reqMotDePasse());
 	 	$smarty->assign('nom',$_SESSION["joueur"]->reqPrenom() . " " . $_SESSION["joueur"]->reqNom());
 	 	$smarty->assign('courriel',$_SESSION["joueur"]->reqCourriel());
-	 	$smarty->assign('acces',$_SESSION["joueur"]->reqAcces());
+	 	$smarty->assign('acces',$_SESSION["joueur"]->reqCategorie());
 	}
 	
 	$smarty->cache_lifetime = 0;

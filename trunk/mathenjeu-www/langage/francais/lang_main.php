@@ -14,6 +14,7 @@ Description : Tous les textes du site web sont regroupés ici
 //
 $lang['math_en_jeu'] = "Math en jeu";
 
+
 $lang['joueur'] = 'Joueur';
 $lang['total'] = 'Total';
 $lang['oui'] = 'Oui';
@@ -55,10 +56,14 @@ $lang['dec']='déc';
 $lang['prenom'] = 'Prénom';
 $lang['nom'] = 'Nom';
 $lang['ville'] = 'Ville';
+$lang['sexe'] = 'Sexe';
+$lang['feminin'] = 'Féminin';
+$lang['masculin'] = 'Masculin';
 $lang['province'] = 'Province';
 $lang['pays'] = 'Pays';
 $lang['courriel'] = 'Courriel';
 $lang['courriel_confirm'] = 'Saisir le courriel à nouveau';
+$lang['question_sexe'] = 'Quel est ton sexe?';
 
 $lang['joueur_profil'] = 'Profil du joueur';
 $lang['alias'] = "Nom d'utilisateur";
@@ -111,7 +116,7 @@ $lang['titre_contact'] = 'Math en jeu! - Nous contacter';
 $lang['titre_nouvelle'] = 'Math en jeu - Nouvelles';
 $lang['titre_instruction'] = 'Math en jeu - Instructions';
 $lang['titre_ajout_question'] = 'Math en jeu - Ajout d\'une question';
-$lang['menu_chercher_question'] = 'Chercher une question';
+
 
 //
 //bouton
@@ -176,6 +181,7 @@ $lang['menu_stat_joueur'] = 'Mes statistiques';
 
 $lang['menu_ajout_question'] = 'Ajouter une question';
 $lang['menu_chercher_question'] = 'Chercher une question';
+$lang['menu_mes_question'] = 'Afficher mes questions';
 
 //
 //index
@@ -184,7 +190,7 @@ $lang['menu_chercher_question'] = 'Chercher une question';
 $lang['titre_index'] = 'Math en jeu';
 $lang['texte_index'] = '
 
-<a target="_blank" href="img/screenshot-5-hr.jpg"><img src="img/screenshot-5.jpg" alt="Capture d\'écran" border="0" hspace="15" align="left"></a>
+<a target="_blank" href="img/screen2_big.jpg"><img src="img/screen2.jpg" alt="Capture d\'écran" border="0" hspace="15" align="left"></a>
 
 <p>Peut-on s\'amuser en faisant des maths? L’équipe de SMAC vous dit &laquo;oui&raquo;!
 Tout juste sorti des cartons, Math en jeu est un jeu multimédia interactif
@@ -211,7 +217,7 @@ Pour pouvoir avancer et gagner des jetons, chacun doit répondre à des
 questions mathématiques: plus le déplacement souhaité est grand, plus la
 question posée est difficile, et plus elle rapporte!</p>
 
-<a target="_blank" href="img/screenshot-1-hr.jpg"><img src="img/screenshot-1.jpg" alt="Capture d\'écran" border="0" hspace="15" align="right"></a>
+<a target="_blank" href="img/screen1_big.jpg"><img src="img/screen1.jpg" alt="Capture d\'écran" border="0" hspace="15" align="right"></a>
 
 <p>Dans le cas où le joueur n\'obtient pas la bonne réponse, une rétroaction
 unique à chaque question est affichée, expliquant au joueur la raison de son
@@ -486,7 +492,7 @@ $lang['contact_titre'] = "Nous contacter";
 
 //configuration
 $lang['config_site'] = 'Configuration du site web';
-$lang['config_direction'] = 'Important: les données ne seront pas validées, assurez-vous d\'avoir entré les bonnes informations où le site pourrait devenir complètement inutilisable.';
+$lang['config_direction'] = 'Important: les données ne seront pas validées, assurez-vous d\'avoir entré les bonnes informations ou bien le site pourrait devenir complètement inutilisable.';
 $lang['config_langage'] = 'Langage';
 $lang['config_schema'] = 'Schéma';
 $lang['config_utilisateur'] = 'Utilisateur';
@@ -613,6 +619,76 @@ $lang['faq_erreur_question'] = 'La question est invalide.';
 $lang['faq_erreur_reponse'] = 'La réponse est invalide.';
 $lang['faq_titre'] = 'Foire aux questions (FAQ)';
 $lang['faq_titre_gestion'] = 'Gestion de la FAQ';
+
+
+//
+// Questions
+//
+
+$lang['question_titre'] = 'Titre';
+
+$lang['question_greek'] = 'Lettres grecques';
+$lang['question_operation'] = 'Opération';
+$lang['question_relation'] = 'Relation';
+$lang['question_logique'] = 'Logique';
+
+$lang['question_misc'] = 'Divers';
+$lang['question_fonction'] = 'Fonction';
+$lang['question_accent'] = 'Accents';
+$lang['question_arrows'] = 'Flèches';
+
+$lang['question_categorie'] = 'Catégorie';
+$lang['question_generale_academique'] = 'Générale ou académique';
+$lang['question_generale'] = 'Générale';
+$lang['question_academique'] = 'Académique';
+$lang['question_question'] = 'Question';
+$lang['question_question_retroaction'] = 'Question et rétroaction';
+$lang['question_apercu_question'] = 'Aperçu de la question';
+$lang['question_retroaction'] = 'Rétroaction';
+$lang['question_apercu_retroaction'] = 'Aperçu de la rétroaction';
+
+$lang['question_choix_reponse_a'] = 'Choix de réponse a';
+$lang['question_choix_reponse_b'] = 'Choix de réponse b';
+$lang['question_choix_reponse_c'] = 'Choix de réponse c';
+$lang['question_choix_reponse_d'] = 'Choix de réponse d';
+$lang['question_bonne_reponse'] = 'Bonne réponse';
+
+$lang['question_niveau_difficulte'] = 'Niveau de difficulté';
+$lang['question_reponse'] = 'Réponses';
+
+$lang['question_toute_categorie'] = 'Toutes les catégories';
+$lang['question_categorie0'] = 'Générale';
+$lang['question_categorie1'] = 'Algèbre';
+$lang['question_categorie2'] = 'Arithmétique';
+$lang['question_categorie3'] = 'Énigmes et logique';
+$lang['question_categorie4'] = 'Fonctions';
+$lang['question_categorie5'] = 'Géometrie';
+$lang['question_categorie6'] = 'Histoire des maths';
+$lang['question_categorie7'] = 'Probabilités et statistiques';
+
+$lang['question_numero'] = 'Numéro';
+$lang['question_flash_question'] = 'Flash question';
+$lang['question_flash_reponse'] = 'Flash rétroaction';
+$lang['question_eps_question'] = 'Eps question';
+$lang['question_eps_reponse'] = 'Eps réponse';
+$lang['question_ps_question'] = 'Ps question';
+$lang['question_ps_reponse'] = 'Ps réponse';
+$lang['question_createur'] = 'Créée par';
+$lang['question_modifier'] = 'Modifier';
+$lang['question_non_valide'] = 'Rendre la question non valide';
+$lang['question_valide'] = 'Rendre la question valide';
+$lang['question_upload'] = 'Upload swf';
+
+$lang['question_fin'] = "Fin";
+$lang['question_debut'] = "Début";
+$lang['question_suivant'] = "Suivant";
+$lang['question_precedent'] = "Précédent";
+
+
+$lang['question_resultat_recherche'] = 'Résultat de la recherche';
+
+$lang['question_valide_non_valide'] = 'Valide / Non valide';
+
 
 
 //

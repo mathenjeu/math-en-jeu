@@ -22,6 +22,23 @@
 			<ul>
 				<li><a href="question.php">{$lang.menu_ajout_question}</a></li>
 				<li><a href="question.php?action=find">{$lang.menu_chercher_question}</a></li>
+				<li><a href="question.php?action=liste_courant">{$lang.menu_mes_question}</a></li>
+			</ul>
+		</div>
+		</p>
+		{/if}
+		{if $acces == 5}
+		<p>
+		<div>
+			<h4 class="titre_menu">{$lang.titre_menu_super_admin}</h4>
+			<ul>
+				<li><a href="admin_config.php" class="menu">{$lang.menu_configuration}</a></li>
+				<li><a target="_blank" href="/phpMyAdmin/" class="menu">{$lang.menu_php_my_admin}</a></li>
+				<li><a href="admin_nouvelles.php" class="menu">{$lang.menu_gestion_nouvelles}</a></li>
+				<li><a href="admin_sondage.php" class="menu">{$lang.menu_gestion_sondages}</a></li>
+				<li><a href="admin_faq.php">{$lang.menu_gestion_faq}</a></li>
+				<li><a target="_blank" href="/awstats/awstats.pl?config=mathenjeu" class="menu">{$lang.menu_stats_web}</a></li>
+				<li><a href="admin_statistiques.php" class="menu">{$lang.menu_statistiques}</a></li>
 			</ul>
 		</div>
 		</p>

@@ -27,7 +27,7 @@ abstract class Utilisateur
     private $estConfirmer;
     private $etablissement;
     private $niveau;
-    private $acces;
+    private $categorie;
     protected $cleConfirmation;
     protected $mysqli;
 
@@ -133,7 +133,7 @@ abstract class Utilisateur
     //Note : on appel les fonctions d'assignations
     //**************************************************************************
     function asgUtilisateur($nom,$prenom,$alias,$motDePasse,$courriel,
-        $estConfirmer,$etablissement,$niveau,$acces)
+        $estConfirmer,$etablissement,$niveau,$categorie)
     {
       $this->asgNom($nom);
       $this->asgPrenom($prenom);
@@ -143,7 +143,7 @@ abstract class Utilisateur
       $this->asgEstConfirmer($estConfirmer);
       $this->asgNiveau($niveau);
       $this->asgEtablissement($etablissement);
-      $this->asgAcces($acces);
+      $this->asgcategorie($categorie);
       
       $this->INVARIANTS();
     }
@@ -240,15 +240,16 @@ abstract class Utilisateur
     
     //**************************************************************************
     // Sommaire:        asigne à l'utilisateur le niveau d'accès
+	//				(catégorie de l'utilisateur)
     // Entrée:          $acces
     // Sortie:
     // Note:            le niveau d'accès doit être entre 0 et 5 inclusivement
     //**************************************************************************    
-    function asgAcces($acces)
+    function asgCategorie($categorie)
     {
-     	PRECONDITION($acces>=0 && $acces<=5);
-		$this->acces = $acces;
-		POSTCONDITION($this->reqAcces() == $acces);
+     	PRECONDITION($categorie>=0 && $categorie<=5);
+		$this->categorie = $categorie;
+		POSTCONDITION($this->reqCategorie() == $categorie);
 	}
     
     //**************************************************************************
@@ -352,8 +353,8 @@ abstract class Utilisateur
     function reqNiveau(){
       return $this->niveau;
     }
-    function reqAcces(){
-		return $this->acces;
+    function reqCategorie(){
+		return $this->categorie;
 	}
 
 

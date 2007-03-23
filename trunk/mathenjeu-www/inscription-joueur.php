@@ -141,6 +141,7 @@ function validerEtape1($joueur)
         $joueur->asgVille($_POST["ville"]);
         $joueur->asgProvince($_POST["province"]);
         $joueur->asgPays($_POST["pays"]);
+        $joueur->asgSexe($_POST['sexe']);
         $joueur->validerCourrielUnique($_POST["courriel"]);
         $joueur->asgCourriel($_POST["courriel"]);
         $_SESSION["joueurInscription"] = $joueur;
@@ -249,7 +250,6 @@ Description : afficher le formulaire d'inscription pour l'étape 1
 function etape1($erreur)
 {
     $smarty = new MonSmarty;
-
     if(isset($_POST["nom"]))
     {
       foreach($_POST as $cle => $valeur)

@@ -7,9 +7,9 @@
 {/if}
 
 {if $action eq "ajout"}
-    <form name="nouvelle" action="super-admin.php?action=insertNouvelle" method="POST">
+    <form name="nouvelle" action="admin_nouvelles.php?action=insertNouvelle" method="POST">
 {else}
-    <form name="nouvelle" action="super-admin.php?action=doUpdateNouvelle&amp;cleNouvelle={$cle}" method="POST">
+    <form name="nouvelle" action="admin_nouvelles.php?action=doUpdateNouvelle&amp;cleNouvelle={$cle}" method="POST">
 {/if}
 <table class="tableau_admin" align="left">
     <tr>
@@ -52,7 +52,7 @@
     </tr>
     <tr>
         <td colspan="2">
-        <input onclick="window.location.href='super-admin.php?action=nouvelle'" type="button" value="{$lang.bouton_retour_liste}">
+        <input onclick="window.location.href='admin_nouvelles.php'" type="button" value="{$lang.bouton_retour_liste}">
         <input type="submit" value="{$lang.bouton_envoyer}">
         <input type="button" value="{$lang.previsualise}" onclick="return prev_nouvelle(document.nouvelle.date.value,document.nouvelle.titre.value,document.nouvelle.nouvelle.value,document.nouvelle.image.options[document.nouvelle.image.selectedIndex].value);">
         </td>

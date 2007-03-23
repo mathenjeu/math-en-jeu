@@ -8,9 +8,9 @@
 <p class=erreur>{$erreur}</p>
 
 {if $action eq "ajout"}
-    <form name="faq" action="super-admin.php?action=insertFaq" method="POST">
+    <form name="faq" action="admin_faq.php?action=insertFaq" method="POST">
 {else}
-    <form name="nouvelle" action="super-admin.php?action=doUpdateFaq&amp;cleFaq={$cle}" method="POST">
+    <form name="nouvelle" action="admin_faq.php?action=doUpdateFaq&amp;cleFaq={$cle}" method="POST">
 {/if}
 <table align="left" width="80%">
     <tr>
@@ -23,7 +23,7 @@
     </tr>
     <tr>
         <td colspan="2">
-        <input onclick="window.location.href='super-admin.php?action=faq'" type="button" value="{$lang.bouton_retour_liste}">
+        <input onclick="window.location.href='admin_faq.php'" type="button" value="{$lang.bouton_retour_liste}">
         <input type="submit" value="{$lang.bouton_envoyer}">
         </td>
     </tr>

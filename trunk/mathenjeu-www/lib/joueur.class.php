@@ -25,6 +25,7 @@ class Joueur extends Utilisateur
 {
 
     private $ville;
+    private $sexe;
     private $pays;
     private $province;
     private $dateInscription;
@@ -96,6 +97,20 @@ class Joueur extends Utilisateur
       $this->ville=$ville;
       POSTCONDITION($this->reqVille()==$ville);
     }
+
+    //**************************************************************************
+    // Sommaire:        Assigner un sexe au joueur
+    // Entrée:          $sexe doit être égal à 0 ou 1
+    // Sortie:
+    // Note:
+    //**************************************************************************
+    function asgSexe($sexe)
+    {
+		PRECONDITION($sexe==0 || $sexe==1 || $sexe==null);
+		$this->sexe=$sexe;
+		POSTCONDITION($this->reqSexe()==$sexe);
+		
+	}
     
     //**************************************************************************
     // Sommaire:        Assigner un pays au joueur
@@ -240,6 +255,7 @@ class Joueur extends Utilisateur
     //                  $pays
     //                  $province
     //                  $dateInscription : date d'inscription au format aaaa-mm-jj
+    //					$categorie 		: la clé de la catégorie du joueur
     //                  $sondageQ1      : la réponse 1 au sondage lors de l'inscription
     //                  $sondageQ2      : la réponse 2 au sondage lors de l'inscription
     //                  $sondageQ3      : la réponse 3 au sondage lors de l'inscription
@@ -248,13 +264,14 @@ class Joueur extends Utilisateur
     // Note:            on apelle la focntion parente pour une partie des données
     //**************************************************************************
     function asgJoueur($nom,$prenom,$alias,$motDePasse,$courriel,
-        $estConfirmer,$etablissement,$niveau,$ville,$pays,$province,
-        $dateInscription,$acces,$aimeMaths,$mathConsidere,$mathEtudie,$mathDecouvert)
+        $estConfirmer,$etablissement,$niveau,$sexe,$ville,$pays,$province,
+        $dateInscription,$categorie,$aimeMaths,$mathConsidere,$mathEtudie,$mathDecouvert)
     {
       
         parent::asgUtilisateur($nom,$prenom,$alias,$motDePasse,$courriel,
-            $estConfirmer,$etablissement,$niveau,$acces);
-
+            $estConfirmer,$etablissement,$niveau,$categorie);
+		
+		$this->asgSexe($sexe);
         $this->asgVille($ville);
         $this->asgPays($pays);
         $this->asgProvince($province);
@@ -406,11 +423,12 @@ class Joueur extends Utilisateur
 			$row->estConfirme,
 			$row->cleEtablissement,
 			$row->cleNiveau,
+			$row->sexe,
 	        stripcslashes($row->ville),
 			stripcslashes($row->pays),
 			stripcslashes($row->province),
 			$row->dateInscription,
-			$row->acces,
+			$row->cleCategorie,
 	        $row->sondageQ1,
 			$row->sondageQ2,
 			$row->sondageQ3,
@@ -471,7 +489,7 @@ class Joueur extends Utilisateur
 	
 
       $sql = "INSERT INTO joueur (prenom, nom, alias,
-            motDePasse, adresseCourriel, ville, province, pays, cleNiveau,
+            motDePasse, adresseCourriel, ville, province, pays, cleNiveau, sexe,
             sondageQ1, sondageQ2, sondageQ3, sondageQ4, dateInscription,
             cleConfirmation,estConfirme,cleEtablissement,cleGroupe,cleAdministrateur) VALUES(";
       
@@ -485,6 +503,7 @@ class Joueur extends Utilisateur
             .addslashes($this->reqProvince())."', '"
             .addslashes($this->reqPays())."', "
             .$this->reqNiveau().","
+            .$this->reqSexe().","
             .$this->reqAimeMaths().", "
             .$this->reqMathConsidere().", "
             .$this->reqMathEtudie().", "
@@ -617,7 +636,8 @@ class Joueur extends Utilisateur
             "',cleConfirmation='" . $this->reqCleConfirmation() .
             "',estConfirme=" . $this->reqEstConfirmer() .
             ",alias='" . $this->reqAlias() .
-            "',cleAdministrateur=" . $this->reqCleAdministrateur() .
+            "',sexe=" . $this->reqSexe() .
+            ",cleAdministrateur=" . $this->reqCleAdministrateur() .
             ",cleGroupe=" . $this->reqCleGroupe() .
             ",sondageQ1=" . $this->reqAimeMaths() .
             ",sondageQ2=" . $this->reqMathConsidere() .
@@ -669,6 +689,10 @@ class Joueur extends Utilisateur
     {
       return $this->cleConfirmation;
     }
+    function reqSexe()
+    {
+		return $this->sexe;
+	}
     function reqVille()
     {
       return $this->ville;

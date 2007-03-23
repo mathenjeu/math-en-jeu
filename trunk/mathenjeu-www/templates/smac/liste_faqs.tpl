@@ -21,22 +21,22 @@
             
         <td align="center">
 			{if $faqs[faq].numero neq 1}
-				<a title="{$lang.faq_haut}" href="super-admin.php?action=faqMove&amp;numero={$faqs[faq].numero}"><img border="0" src="{$template}img/up.gif" alt="{$lang.faq_haut}"></a>
+				<a title="{$lang.faq_haut}" href="admin_faq.php?action=faqMove&amp;numero={$faqs[faq].numero}"><img border="0" src="{$template}img/up.gif" alt="{$lang.faq_haut}"></a>
 			{/if}
 		</td>
         <td align="center">
         	{if $faqs[faq].numero neq $nb_faq}
-				<a title="{$lang.faq_bas}" href="super-admin.php?action=faqMove&amp;numero=-{$faqs[faq].numero}"><img border="0" src="{$template}img/down.gif" alt="{$lang.faq_bas}"></a>
+				<a title="{$lang.faq_bas}" href="admin_faq.php?action=faqMove&amp;numero=-{$faqs[faq].numero}"><img border="0" src="{$template}img/down.gif" alt="{$lang.faq_bas}"></a>
 			{/if}
 		</td>
         <td width="40%">{$faqs[faq].question}</td>
         <td width="40%">{$faqs[faq].reponse}</td>
-        <td align="center"><a title="{$lang.faq_detail}" href="super-admin.php?action=detailFaq&amp;cleFaq={$faqs[faq].cle}"><img alt="{$lang.detail_faq}" border="0" src="{$template}img/modifier.png"></a></td>
-        <td align="center"><a title="{$lang.faq_supprimer}" onclick="return validerSupprimer('{$lang.valider_supression}')" href="super-admin.php?action=deleteFaq&amp;cleFaq={$faqs[faq].cle}"><img alt="{$lang.faq_supprimer}" border="0" src="{$template}img/delete.png"></a></td>
+        <td align="center"><a title="{$lang.faq_detail}" href="admin_faq.php?action=detailFaq&amp;cleFaq={$faqs[faq].cle}"><img alt="{$lang.detail_faq}" border="0" src="{$template}img/modifier.png"></a></td>
+        <td align="center"><a title="{$lang.faq_supprimer}" onclick="return validerSupprimer('{$lang.valider_supression}')" href="admin_faq.php?action=deleteFaq&amp;cleFaq={$faqs[faq].cle}"><img alt="{$lang.faq_supprimer}" border="0" src="{$template}img/delete.png"></a></td>
         </tr>
         {/section}
     </table>
     <br>
-	<input onclick="window.location.href='super-admin.php?action=ajoutFaq'" type="button" value="{$lang.bouton_ajout_faq}"></td>
+	<input onclick="window.location.href='admin_faq.php?action=ajoutFaq'" type="button" value="{$lang.bouton_ajout_faq}"></td>
 </div>
 </td>

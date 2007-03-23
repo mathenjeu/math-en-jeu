@@ -2,7 +2,7 @@
 <div class="centre">
 	<h2>{$lang.config_site}</h2>
 	<span class="direction_critique">{$lang.config_direction}</span>
-	<form name="configuration" action="super-admin.php?action=doConfig" method="post">
+	<form name="configuration" action="admin_config.php?action=doConfig" method="post">
 	<table width="100%" border="0">
 	<tr>
 		<td colspan="2"><br><b>{$lang.config_general}</b></td>
@@ -34,7 +34,7 @@
 	<tr>
 		<td>{$lang.config_choix_template} :</td>
 		<td><select name="template" 
-				onChange='document.configuration.action="super-admin.php?action=templates";
+				onChange='document.configuration.action="admin_config.php?action=templates";
             				document.configuration.submit()'>
 			{html_options options=$templates selected=$sTemplate}
 			</select>

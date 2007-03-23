@@ -52,17 +52,25 @@ function main()
         	{
             	$_SESSION["joueur"] = $joueur;
             	
-            	//on vérifie si le HTTP_REFERER existe si oui
-            	//on redirige le client vers la page où il s'est 
-            	//connecté
-            	if(isset($_SERVER['HTTP_REFERER']))
+            	//on vérifie si on a le sexe du joueur dans notre base de données
+            	if($joueur->reqSexe()==null)
             	{
-            	 	redirection($_SERVER['HTTP_REFERER'],0);
+					redirection("sexe.php",0);
 				}
 				else
 				{
-            		redirection("nouvelles.php",0);
-            	}
+	            	//on vérifie si le HTTP_REFERER existe si oui
+	            	//on redirige le client vers la page où il s'est 
+	            	//connecté
+	            	if(isset($_SERVER['HTTP_REFERER']))
+	            	{
+	            	 	redirection($_SERVER['HTTP_REFERER'],0);
+					}
+					else
+					{
+	            		redirection("nouvelles.php",0);
+	            	}
+	            }
         	}
         	else
         	{

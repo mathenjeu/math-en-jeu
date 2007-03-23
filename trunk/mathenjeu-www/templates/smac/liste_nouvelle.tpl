@@ -19,18 +19,18 @@
         <td>{$nouvelles[nouvelle].nouvelle}</td>
         <td>{$nouvelles[nouvelle].destinataire}</td>
         <td>
-            <a title="{$lang.modification_nouvelle}" href="super-admin.php?action=updateNouvelle&cleNouvelle={$nouvelles[nouvelle].cle}">
+            <a title="{$lang.modification_nouvelle}" href="admin_nouvelles.php?action=updateNouvelle&cleNouvelle={$nouvelles[nouvelle].cle}">
             <img border="0" src="{$template}img/modifier.png"></a>
         </td>
         <td>
-            <a title="{$lang.suppression_nouvelle}" onclick="return validerSupprimer('{$lang.valider_supression}')" href="super-admin.php?action=deleteNouvelle&cleNouvelle={$nouvelles[nouvelle].cle}">
+            <a title="{$lang.suppression_nouvelle}" onclick="return validerSupprimer('{$lang.valider_supression}')" href="admin_nouvelles.php?action=deleteNouvelle&cleNouvelle={$nouvelles[nouvelle].cle}">
             <img border="0" src="{$template}img/delete.png"></a>
         </td>
     </tr>
     {/section}
     </table>
     <br>
-    <input onclick="window.location.href='super-admin.php?action=ajoutNouvelle'" type="button" value="{$lang.ajout_nouvelle}" /></td>
+    <input onclick="window.location.href='admin_nouvelles.php?action=ajoutNouvelle'" type="button" value="{$lang.ajout_nouvelle}" /></td>
 </div>
 </td>
 

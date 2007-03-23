@@ -1,7 +1,7 @@
 var gControl = null;
 
 AMinitSymbols();
-var AMkeyspressed = 20;
+var AMkeyspressed = 10;
 
 function display(now,inputNode,output) {
    //if (document.getElementById("inputText") != null) {
@@ -65,8 +65,10 @@ function AMnode2string(inNode,indent) {
 
 function AMviewMathML(input,mlnode,outputNode) {
   var str = input.value;
-  var outstr = AMnode2string(mlnode,"").slice(mlnode.nodeName.length+23).slice(0,-6);
-  //document.write(input.value);
+  var outstr = AMnode2string(mlnode,"").slice(mlnode.nodeName.length+mlnode.attributes[0].nodeValue.length+9).slice(0,-6);
+  
+  //enlève le deuxième <math> inutile
+  outstr = outstr.slice(0,-105);
 
   outstr = '<?xml version="1.0" encoding="UTF-8"?>\r\
 <html xmlns="http://www.w3.org/1999/xhtml"\r\
@@ -83,6 +85,24 @@ outstr+'<\/body>\r<\/html>\r';
 
 function setElementFocus(control){
 	gControl = control
+}
+
+
+function refreshML(){
+	
+	display(true,document.getElementById('questionT'),'outputQuestion');
+	AMviewMathML(document.getElementById('questionT'),document.getElementById('outputQuestion'),document.getElementById('outputMLQuestion'));
+	display(true,document.getElementById('retroaction'),'outputRetroaction');
+	AMviewMathML(document.getElementById('retroaction'),document.getElementById('outputRetroaction'),document.getElementById('outputMLRetroaction'));
+	display(true,document.getElementById('reponse1'),'outputReponse1');
+	AMviewMathML(document.getElementById('reponse1'),document.getElementById('outputReponse1'),document.getElementById('outputMLReponse1'));
+	display(true,document.getElementById('reponse2'),'outputReponse2');
+	AMviewMathML(document.getElementById('reponse2'),document.getElementById('outputReponse2'),document.getElementById('outputMLReponse2'));
+	display(true,document.getElementById('reponse3'),'outputReponse3');
+	AMviewMathML(document.getElementById('reponse3'),document.getElementById('outputReponse3'),document.getElementById('outputMLReponse3'));
+	display(true,document.getElementById('reponse4'),'outputReponse4');
+	AMviewMathML(document.getElementById('reponse4'),document.getElementById('outputReponse4'),document.getElementById('outputMLReponse4'));
+
 }
 
 function insertionAuCurseur(myField, myValue) {
@@ -104,9 +124,38 @@ function insertionAuCurseur(myField, myValue) {
 		myField.value += myValue;
 	}
 	myField.focus();
+	refreshML();
+	
+}
+
+function selectMenuOperateur(obj,menuItem){
+	obj.style.display='';
+	menuItem.className='titre_symbole_selected';
+}
+
+function cacherListeOperateur(){
+	document.getElementById('greek').style.display='none';
+	document.getElementById('operation').style.display='none';
+	document.getElementById('relation').style.display='none';
+	document.getElementById('logique').style.display='none';
+	document.getElementById('misc').style.display='none';
+	document.getElementById('fonction').style.display='none';
+	document.getElementById('accent').style.display='none';
+	document.getElementById('arrows').style.display='none';
+	
+	document.getElementById('titre_greek').className='titre_symbole';
+	document.getElementById('titre_operation').className='titre_symbole';
+	document.getElementById('titre_relation').className='titre_symbole';
+	document.getElementById('titre_logique').className='titre_symbole';
+	document.getElementById('titre_misc').className='titre_symbole';
+	document.getElementById('titre_fonction').className='titre_symbole';
+	document.getElementById('titre_accent').className='titre_symbole';
+	document.getElementById('titre_arrows').className='titre_symbole';
+
 }
 
 function afficherCacher(control){
+	
 	if(control.style.display == '')
 	{
 		control.style.display = 'none';
@@ -118,31 +167,59 @@ function afficherCacher(control){
 }
 
 function afficherBouton(){
- 	mathcolor = "red"; 
- 	
- 	
+ 
 	var symbole = [
 	 //opération
-	 ['$+$','plus'],
-	 ['$-$','moins'],
-	 ['$*$','multiplier1'],
-	 ['$xx$','multiplier2'],
-	 ['$-:$','diviser'],
-	 ['$//$','slash'],
-	 ['$\\\13$','backslash'],
-	 ['$sum$','sommation'],
-	 ['$prod$','product'],
+	 ['$+$','plus'], ['$-$','moins'], ['$*$','multiplier1'], ['$xx$','multiplier2'],
+	 ['$-:$','diviser'], ['$//$','slash'], ['$sum$','sommation'], ['$prod$','product'],
 	 //relation
-	 ['$=$','egal'],
-	 ['$!=$','different'],
-	 ['$<$','plusPetit'],
-	 ['$>','plusGrand'],
-	 ['$<=','plusPetitEgal'],
-	 ['$>=','plusGrandEgal']
+	 ['$=$','egal'], ['$!=$','different'], ['$<$','plusPetit'], ['$>','plusGrand'],
+	 ['$<=','plusPetitEgal'], ['$>=','plusGrandEgal'], 
+	 ['$in$','in'],['$!in$','notin'],['$sub$','sub'],
+	 ['$sup$','sup'],['$sube$','sube'],['$supe$','supe'],
+	 ['$-=$','tripleegal'],['$~=$','egalaprox'],['$~~$','aprox'],
+				
+	 //Lettre grecque
+	 ['$alpha$','alpha'],['$beta$','beta'],['$chi$','chi'],['$delta$','delta'],
+	 ['$Delta$','Delta'],['$epsilon$','epsilon'],['$varepsilon$','varepsilon'],
+	 ['$eta$','eta'],['$gamma$','gamma'],['$Gamma$','Gamma'],
+	 ['$iota$','iota'],['$kappa$','kappa'],['$lambda$','lambda'],
+	 ['$Lambda$','Lambda'],['$mu$','mu'],['$nu$','nu'],
+	 ['$omega$','omega'],['$Omega$','Omega'],['$phi$','phi'],
+	 ['$varphi$','varphi'],['$Phi$','Phi'],['$pi$','pi'],
+	 ['$Pi$','Pi'],['$psi$','psi'],['$Psi$','Psi'],
+	 ['$rho$','rho'],['$sigma$','sigma'],['$Sigma$','Sigma'],
+	 ['$tau$','tau'],['$theta$','theta'],['$vartheta$','vartheta'],
+	 ['$Theta$','Theta'],['$upsilon$','upsilon'],['$xi$','xi'],
+	 ['$Xi$','Xi'],['$zeta$','zeta'],
+	 //logique
+	 ['$or$','or'],['$and$','and'],['$not','not'],
+	 ['$=>$','implication'],['$if$','if'],['$iff$','iff'],
+	 ['$AA$','pourtout'],['$EE$','existe'],['$^^$','and2'],
+	 ['$vv$','or2'],
+	 //divers
+	 ['$int$','int'],['$oint$','oint'],['$del$','del'],
+	 ['$grad$','grad'],['$+-$','plusmoins'],['$O/$','vide'],
+	 ['$oo$','infini'],['$aleph$','aleph'],['$/_$','angle'],
+	 ['$NN$','naturel'],['$QQ$','rationel'],['$RR$','reel'],['$ZZ$','entier'],
+	 //fonctions standard
+	 ['$sin$','sin'],['$cos$','cos'],['$tan$','tan'],
+	 ['$csc$','csc'],['$sec$','sec'],['$cot$','cot'],
+	 ['$sinh$','sinh'],['$cosh$','cosh'],['$tanh$','tanh'],
+	 ['$log$','log'],['$ln$','ln'],['$det$','det'],
+	 ['$dim$','dim'],['$lim$','lim'],['$mod$','mod'],
+	 ['$min$','min'],['$max$','max'],
+	 //accent
+	 ['$hat x$','hatx'],['$bar x$','barx'],['$ul x$','ulx'],
+	 ['$vec x$','vecx'],['$dot x$','dotx'],['$ddot x$','ddotx'],
+	 //arrows
+	 ['$uarr$','uarr'],['$darr$','darr'],['$rarr$','rarr'],
+	 ['$|->$','smarr'],['$larr$','larr'],['$harr$','harr'],
+	 ['$rArr$','rArr'],['$lArr$','lArr'],['$hArr$','hArr']
 	 ];
-    
+
+
     for(i=0;symbole.length;i++){
-     	
 		var outnode = document.getElementById(symbole[i][1]);
   		outnode.appendChild(document.createTextNode(symbole[i][0]));
   		AMprocessNode(outnode);
@@ -150,43 +227,3 @@ function afficherBouton(){
 	
 	
 }
-
-	/*
-    var str = "$sin$";
-  	var outnode = document.getElementById("sin");
-  	outnode.appendChild(document.createTextNode(str));
-  	AMprocessNode(outnode);
-  	
-  	var str = "$int$";
-  	var outnode = document.getElementById("int");
-  	outnode.appendChild(document.createTextNode(str));
-  	AMprocessNode(outnode);
-  	
-  	var str="$+$";
-  	var outnode = document.getElementById("plus");
-  	outnode.appendChild(document.createTextNode(str));
-  	AMprocessNode(outnode);
-  	*/
-      	
-
-/*
-function afficherMathml(){
-	AMdisplay(true);
-    var str = document.getElementById("inputText").value;
-    var outnode = document.getElementById("sortieMathML");
-    var outstr = AMnode2string(outnode,"").slice(22).slice(0,-6);
-    outstr = '<?xml version="1.0"?>\r\<!-- Copy of ASCIIMathML input\r'+str+
-		'-->\r<?xml-stylesheet type="text/xsl" href="http://www1.chapman.edu/~jipsen/mathml/pmathml.xsl"?>\r\
-		<html xmlns="http://www.w3.org/1999/xhtml"\r\
-  		xmlns:mml="http://www.w3.org/1998/Math/MathML">\r\
-		<head>\r<title>...</title>\r</head>\r<body>\r'+
-		outstr+'<\/body>\r<\/html>\r';
-  	var newnode = AMcreateElementXHTML("textarea");
-  	newnode.setAttribute("id","sortieMathML");
-  	newnode.setAttribute("rows","30");
-  	var node = document.getElementById("inputText");
-  	newnode.setAttribute("cols",node.getAttribute("cols"));
-  	newnode.appendChild(document.createTextNode(outstr));
-  	outnode.parentNode.replaceChild(newnode,outnode);
-}
-*/
