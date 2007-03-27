@@ -328,10 +328,11 @@ public class GestionnaireBD
 	
 	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau )
 	{
-		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+		//GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 
 		String strRequeteSQL = "SELECT question.*,typereponse.nomType FROM question,typereponse " +
-			"WHERE typereponse.cleType = question.typeReponse and ";
+			"WHERE typereponse.cleType = question.typeReponse and question.valide = 1 " +
+			" and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL and ";
 		
 		/*
 			 and cleQuestion >= " +
@@ -347,11 +348,11 @@ public class GestionnaireBD
 	
 	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, int intCategorie, int intDifficulte )
 	{
-		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+		//GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		
 		String strRequeteSQL = "SELECT question.*,typereponse.nomType FROM question,typereponse " +
-		"WHERE typereponse.cleType = question.typeReponse and ";
-		
+		"WHERE typereponse.cleType = question.typeReponse and question.valide = 1 " +
+			" and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL and ";
 		/*
 		 and cleQuestion >= " +
 		    config.obtenirString("gestionnairebd.cle-question-min") + " and cleQuestion <= " +
@@ -373,6 +374,9 @@ public class GestionnaireBD
 				while(rs.next())
 				{
 					int codeQuestion = rs.getInt("cleQuestion");
+					if(codeQuestion == 1){
+						System.out.println("problème");
+					}
 					//String typeQuestion = TypeQuestion.ChoixReponse; //TODO aller chercher code dans bd
 					String typeQuestion = rs.getString( "nomType" );
 					String question = rs.getString( "FichierFlashQuestion" );
