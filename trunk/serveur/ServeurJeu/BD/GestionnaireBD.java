@@ -331,9 +331,14 @@ public class GestionnaireBD
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 
 		String strRequeteSQL = "SELECT question.*,typereponse.nomType FROM question,typereponse " +
-			"WHERE typereponse.cleType = question.typeReponse and cleQuestion >= " +
+			"WHERE typereponse.cleType = question.typeReponse and ";
+		
+		/*
+			 and cleQuestion >= " +
 		    config.obtenirString("gestionnairebd.cle-question-min") + " and cleQuestion <= " +
 		    config.obtenirString("gestionnairebd.cle-question-max") + " and ";
+		    
+		  */
 		    
 		strRequeteSQL += strValeurGroupeAge + niveau + " > 0";
 		
@@ -345,9 +350,13 @@ public class GestionnaireBD
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		
 		String strRequeteSQL = "SELECT question.*,typereponse.nomType FROM question,typereponse " +
-		"WHERE typereponse.cleType = question.typeReponse and cleQuestion >= " +
+		"WHERE typereponse.cleType = question.typeReponse and ";
+		
+		/*
+		 and cleQuestion >= " +
 		    config.obtenirString("gestionnairebd.cle-question-min") + " and cleQuestion <= " +
 		    config.obtenirString("gestionnairebd.cle-question-max") + " and ";
+		  */
 		    
 		strRequeteSQL += strValeurGroupeAge + niveau + " = " + intDifficulte;
 		
