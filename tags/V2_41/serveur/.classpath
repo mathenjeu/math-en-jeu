@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="H:/java/mysql-connector-java-5.0.4/mysql-connector-java-5.0.4-bin.jar"/>
+	<classpathentry kind="lib" path="H:/java/logging-log4j-1.2.14/dist/lib/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="H:/java/commons-configuration-1.2/commons-configuration-1.2.jar"/>
+	<classpathentry kind="lib" path="H:/java/commons-collections-3.2/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="H:/java/commons-lang-2.2/commons-lang-2.2.jar"/>
+	<classpathentry kind="lib" path="H:/java/commons-logging-1.1/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="H:/java/commons-beanutils-1.7.0/commons-beanutils.jar"/>
+	<classpathentry kind="lib" path="H:/java/commons-digester-1.7/commons-digester-1.7.jar"/>
+	<classpathentry kind="lib" path="H:/java/junit4.1/junit-4.1.jar"/>
+	<classpathentry kind="lib" path="H:/java/jamonapi/jamon-2.2.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>
