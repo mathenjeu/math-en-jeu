@@ -374,9 +374,6 @@ public class GestionnaireBD
 				while(rs.next())
 				{
 					int codeQuestion = rs.getInt("cleQuestion");
-					if(codeQuestion == 1){
-						System.out.println("problème");
-					}
 					//String typeQuestion = TypeQuestion.ChoixReponse; //TODO aller chercher code dans bd
 					String typeQuestion = rs.getString( "nomType" );
 					String question = rs.getString( "FichierFlashQuestion" );
