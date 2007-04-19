@@ -71,62 +71,20 @@ define('COURRIEL_INSCRIPTION',utf8_decode((string)$config->courriel_inscription)
 define('SUJET_COURRIEL_PASS_PERDU',utf8_decode((string)$config->sujet_courriel_pass_perdu));	//sujet du courriel de récupération de mot de passe
 define('COURRIEL_PASS_PERDU',utf8_decode((string)$config->courriel_pass_perdu));				//courriel envoyé pour les nom d'usager ou les mot de passe perdu
 
-define("IMAGE_DIR",DOC_ROOT . "img/sujet");						//dossier des images pour les nouvelles
-
-define("LOG_FILE",DOC_ROOT . "/log/log.txt");					//fichier pour les logs
-
 //constante utile pour la création des questions
-define("TEMP_DIR","/tmp");
-define("LATEX","openin_any=p /usr/bin/latex");
-define("FICHIER_XSL","/home/mathenjeu/utilitaire/xsltml/mmltex.xsl");
-define("XALAN_JAR","/home/mathenjeu/utilitaire/xalanj/xalan.jar");
-define("HEADER_LATEX",
-'%% PREAMBULE POUR GENERATION FICHIERS QUESTIONS
-%% Sylvain Halle 2006-10-18
-%% Ce fichier est recopié au début de toutes les questions et rétroactions
-%% générées individuellement
-\documentclass[legalpaper, 12pt]{article}
-\usepackage[francais]{babel}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{amsthm}
-\usepackage{amssymb}
-\usepackage{color}
-\usepackage{graphicx}
-\usepackage[latin1]{inputenc}
-\usepackage{multirow}
-\usepackage{wasysym}
+define("TEMP_DIR",(string)$config->tempDir);					//temporary dir for the questions creation
+define("LATEX",(string)$config->latexApp);						//latex application command
+define("FICHIER_XSL",(string)$config->xslFile);					//xsl fil to be used with xalan
+define("XALAN_JAR",(string)$config->xalanApp);					//xalan jar file
+define("HEADER_LATEX",(string)$config->latexHeader);			//latex header
+define("FOOTER_LATEX",(string) $config->latexFooter);			//latex footer
+define("QUESTION_EPS_DIR",(string)$config->epsDir);				//eps/ps dir
+define("QUESTION_FLASH_DIR",(string)$config->flashDir);			//flash dir
+define("QUESTION_EPS_WEB_DIR",(string)$config->epsWebDir);		//eps/ps web dir
+define("QUESTION_FLASH_WEB_DIR",(string)$config->flashWebDir);	//flash web dir
 
-%% Changements SH
-%% Marges LaTeX par défaut
-%\setlength{\topmargin}{-2cm}
-%\setlength{\textheight}{23.5cm}
-\setlength{\textwidth}{12cm}
-%\setlength{\oddsidemargin}{-1cm}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{7pt}
-
-%% Changements SH
-\usepackage{helvet} %% Remplace sans-serif par Helvetica
-\renewcommand{\familydefault}{\sfdefault} %% Fonte par défaut = sans-serif
-\usepackage{sfmath} %% Utilise le sans-serif même en mode math
-\pagestyle{empty} %% Pas de numéro de page
-
-%% Redéfinition du compteur des environnements enumerate pour afficher a), b), ...
-\renewcommand{\labelenumi}{\alph{enumi})}
-
-%\pdfoutput=1
-
-\begin{document}');
-
-define("FOOTER_LATEX",'
-\begin{flushright}\textcolor{white}{.}\end{flushright}
-\end{document}');
-
-define("QUESTION_EPS_DIR","/home/mathenjeu/html/questions/eps/");
-define("QUESTION_FLASH_DIR","I:/smac/website/questions/");
-define("QUESTION_EPS_WEB_DIR","/questions/eps/");
-define("QUESTION_FLASH_WEB_DIR","/questions/");
+define("IMAGE_DIR",DOC_ROOT . "img/sujet");						//dossier des images pour les nouvelles
+define("LOG_FILE",DOC_ROOT . "/log/log.txt");					//fichier pour les logs
 
 
 //définir les configurations de session

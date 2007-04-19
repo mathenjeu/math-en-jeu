@@ -67,7 +67,32 @@ function main()
 		//on veut soumettre les modifications sur les questions
 		elseif($action=="mod_soumettre")
 		{
-			modificationCreationQuestion("mod",$_POST['cleQuestion']);
+		 	if(!isset($_POST['rebuild']))
+		 	{
+				modificationCreationQuestion("mod",$_POST['cleQuestion']);
+			}
+			else
+			{
+				$sql = "update question set " .
+				" cleSujet=" . $_POST['categorie'] . 
+				",generaleAcademique=" . $_POST['generaleAcademique'] .
+				",bonneReponse='" . $_POST['bonneReponse'] . "'" .
+				",valeurGroupeAge1=" . $_POST['niveau1'] .
+				",valeurGroupeAge2=" . $_POST['niveau2'] .
+				",valeurGroupeAge3=" . $_POST['niveau3'] .
+				",valeurGroupeAge4=" . $_POST['niveau4'] .
+				",valeurGroupeAge5=" . $_POST['niveau5'] .
+				",valeurGroupeAge6=" . $_POST['niveau6'] .
+				",valeurGroupeAge7=" . $_POST['niveau7'] .
+				",valeurGroupeAge8=" . $_POST['niveau8'] .
+				",valeurGroupeAge9=" . $_POST['niveau9'] .
+				",valeurGroupeAge10=" . $_POST['niveau10'] .
+				",valeurGroupeAge11=" . $_POST['niveau11'] .
+				",valeurGroupeAge12=" . $_POST['niveau12'] .
+				",valeurGroupeAge13=" . $_POST['niveau13'] .
+				",valeurGroupeAge14=" . $_POST['niveau14'];
+				$_SESSION['mysqli']->query($sql);
+			}
 		}
 		//on veut soumettre l'ajout d'une question
 		elseif($action=="ajout_soumettre")
@@ -190,13 +215,13 @@ function main()
 			}
 		}
 	}
-	
 	else
 	{
 	 	if(isset($_POST['action']))
 	 	{
 			$action=$_POST['action'];
 			$cle= $_POST['cleQuestion'];
+			//upload swf file
 			if($action=="doUpload")
 			{
 				//on décplace les fichiers reçus
@@ -616,7 +641,7 @@ function modificationCreationQuestion($action,$cleQuestion)
 	{
 		$sql = "insert into question set ";
 	}
-	//insertion de la nouvelle question dans la base de données
+	//construction de la requête sql
 	$sql .= " cleSujet=" . $_POST['categorie'] . 
 		",generaleAcademique=" . $_POST['generaleAcademique'] .
 		",texteASCII='" . addslashes($_POST['question']) . "'" .
@@ -653,8 +678,11 @@ function modificationCreationQuestion($action,$cleQuestion)
 		",valeurGroupeAge12=" . $_POST['niveau12'] .
 		",valeurGroupeAge13=" . $_POST['niveau13'] .
 		",valeurGroupeAge14=" . $_POST['niveau14'] .
-		",valide=" . $valide . 
-		",cleJoueur=" . $_SESSION["joueur"]->reqCle();
+		",valide=" . $valide; 
+	if($action!="mod")
+	{
+		$sql .= ",cleJoueur=" . $_SESSION["joueur"]->reqCle();
+	}
 	
 	//si on est en mode modification on ajoute la clause where cleQuestion
 	if($action=="mod")

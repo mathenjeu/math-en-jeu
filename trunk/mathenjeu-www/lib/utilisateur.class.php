@@ -62,7 +62,7 @@ abstract class Utilisateur
       INVARIANT($this->etablissement >= 0);
       INVARIANT(($this->niveau > 0) && ($this->niveau < 15));
       INVARIANT(Courriel::validerCourriel($this->courriel));
-      INVARIANT(eregi("^[a-zA-Z0-9]{4,8}$",$this->alias));
+      INVARIANT(eregi("^[a-zA-Z0-9_-]{4,8}$",$this->alias));
 
     }
     

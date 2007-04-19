@@ -7,12 +7,38 @@
 <input type="hidden" name="cleQuestion" value="{$cleQuestion}" />
 {/if}
 
-Information importante : <br>
-- L'utilisation du navigateur <a href="http://www.firefox.com" target="_blank">Firefox</a> est FORTEMENT recommandée.<br>
-- Pour utiliser ce site avec Internet explorer, vous devez installer ce logiciel gratuit : <a target="_blank" href="http://www.dessci.com/en/products/mathplayer/download.htm">Math Player</a> <br>
-- Pour définir une formule vous devez la place entre deux $. Par exemple : $sin(x)$ , $25 + 4 = 29$ <br>
-- Pour afficher un $. Il faut écrire \\$.<br>
+{$lang.question_info}
 
+<a href="#" onclick="window.open('exemple_ml.php','exemple ML','resizable=1,scrollbars=1,width=600,height=600')">{$lang.question_info_exemple}</a>
+
+<hr><br>
+
+<table>
+<tr>
+	<td>{$lang.question_categorie}</td>
+	<td colspan="4">
+		<select name="categorie" >
+			<option value="0" {$categorie0}>{$lang.question_categorie0}</option>
+			<option value="1" {$categorie1}>{$lang.question_categorie1}</option>
+			<option value="2" {$categorie2}>{$lang.question_categorie2}</option>
+			<option value="3" {$categorie3}>{$lang.question_categorie3}</option>
+			<option value="4" {$categorie4}>{$lang.question_categorie4}</option>
+			<option value="5" {$categorie5}>{$lang.question_categorie5}</option>
+			<option value="6" {$categorie6}>{$lang.question_categorie6}</option>
+			<option value="7" {$categorie7}>{$lang.question_categorie7}</option>
+		</select>
+	</td>
+</tr>
+<tr>
+	<td>{$lang.question_generale_academique}</td>
+	<td colspan="1">
+		<select name="generaleAcademique">
+			<option value="0" {$generaleAcademique0}>{$lang.question_academique}</option>
+			<option value="1" {$generaleAcademique1}>{$lang.question_generale}</option>
+		</select>
+	</td>
+</tr>
+</table>
 <table border="0">
 <tr>
 	<td colspan="10">
@@ -162,38 +188,10 @@ Information importante : <br>
 			</div>
 		</div>
 	</td>
-	<td>
-		
-	</td>
-	<td>
-		
-	</td>
 </tr>
-<tr>
-<tr>
-	<td>{$lang.question_categorie}</td>
-	<td colspan="4">
-		<select name="categorie" >
-			<option value="0" {$categorie0}>{$lang.question_categorie0}</option>
-			<option value="1" {$categorie1}>{$lang.question_categorie1}</option>
-			<option value="2" {$categorie2}>{$lang.question_categorie2}</option>
-			<option value="3" {$categorie3}>{$lang.question_categorie3}</option>
-			<option value="4" {$categorie4}>{$lang.question_categorie4}</option>
-			<option value="5" {$categorie5}>{$lang.question_categorie5}</option>
-			<option value="6" {$categorie6}>{$lang.question_categorie6}</option>
-			<option value="7" {$categorie7}>{$lang.question_categorie7}</option>
-		</select>
-	</td>
-</tr>
-<tr>
-	<td>{$lang.question_generale_academique}</td>
-	<td colspan="4">
-		<select name="generaleAcademique">
-			<option value="0" {$generaleAcademique0}>{$lang.question_academique}</option>
-			<option value="1" {$generaleAcademique1}>{$lang.question_generale}</option>
-		</select>
-	</td>
-</tr>
+</table>
+
+<table>
 <tr>
 	<td colspan="4">
 		<b>{$lang.question_question_retroaction}</b>
@@ -211,6 +209,8 @@ Information importante : <br>
 	<td>
 		<textarea class="outputML" id="outputMLQuestion" rows="10" cols="25" name="outputMLQuestion"></textarea>
 	</td>
+<tr>
+</tr>
 	<td colspan="2">
 		<label for="retroaction">{$lang.question_retroaction} :</label><br>
 		<textarea id="retroaction" name="retroaction" rows="10" cols="25"  onfocus="setElementFocus(this)" onkeyup="display(false,this,'outputRetroaction');AMviewMathML(this,document.getElementById('outputRetroaction'),document.getElementById('outputMLRetroaction'));">{$retroactionAscii}</textarea>
@@ -223,6 +223,12 @@ Information importante : <br>
 		<textarea class="outputML" id="outputMLRetroaction" rows="10" cols="25" name="outputMLRetroaction"></textarea>
 	</td>
 </tr>
+<tr>
+	<td><input value="{$lang.question_refresh}" type="button" onclick="refreshML();" /><br><br></td>
+</tr>
+</table>
+
+<table>
 <tr>
 	<td colspan="3" valign="top">
 		<table border="0">
@@ -271,9 +277,18 @@ Information importante : <br>
 					</select>
 				</td>
 			</tr>
+			<tr>
+				<td><input value="{$lang.question_refresh}" type="button" onclick="refreshML();" /></td>
+			</tr>
 		</table>
 	</td>
-	<td colspan="3" valign="top">
+	<td></td>
+</tr>
+</table>
+
+<table>
+<tr colspan="3">
+	<td>
 		<table>
 			<tr>
 				<td><b>{$lang.question_niveau_difficulte}</b></td>
@@ -401,21 +416,15 @@ Information importante : <br>
 				</td>
 			</tr>
 			</table>
-	</td>
+		</td>
 </tr>
-<tr>
-	<td>
-		<input value="Rafraîchir les aperçus" type="button" onclick="refreshML();" />
-	</td>
-</tr>
-<tr>
-	<td>
-		<input type="submit" onclick="refreshML();this.disabled=true;document.body.style.cursor='wait';">
-	</td>
-</tr>
-</form>
-
 </table>
+{if $mode_question eq "mod"}
+{$lang.question_no_rebuild} : <input name="rebuild" type="checkbox" /><br>
+{/if}
+<input value="{$lang.question_refresh}" type="button" onclick="refreshML();" /><br><br>
+<input type="submit" onclick="refreshML();this.disabled=true;document.body.style.cursor='wait';"><br>
+</form>
 <script type="text/javascript">
 
 //mettre à jour le mathml lors du chargement de la page

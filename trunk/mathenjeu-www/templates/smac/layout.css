@@ -55,16 +55,19 @@ Description : Fichier de styles pour math en jeu, le skin par défaut
 	padding-top: 1%;
 }
 
+/*
 input, 
 option,
 textarea {
   font-size:15px;
 }
+*/
+
 
 input,
 textarea,
 select{
-	font-size: 12pt;
+	/*font-size: 12pt;*/
 	color: #000000;
 	max-width: 500px; 
 	background: #F3F3F3; /* #EBF2FD;  */

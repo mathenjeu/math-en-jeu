@@ -91,7 +91,7 @@ function joueurPlusGagner(&$smarty)
   for($i=0;$i<$result->num_rows;$i++)
   {
     $row=$result->fetch_object();
-    $arr[$i]['alias'] = $row->alias . ' (' . $row->ville . ')';
+    $arr[$i]['alias'] = $row->alias;// . ' (' . $row->ville . ')';
     $arr[$i]['nbPartie'] = $row->nbPartie;
     $arr[$i]['poucentage_victoire'] = (int)(($row->moyVictoire)*100);
   }
@@ -129,7 +129,7 @@ function joueurPlusJouee(&$smarty)
   for($i=0;$i<$result->num_rows;$i++)
   {
     $row=$result->fetch_object();
-    $arr[$i]['alias'] = $row->alias . ' (' . $row->ville . ')';
+    $arr[$i]['alias'] = $row->alias;// . ' (' . $row->ville . ')';
     $arr[$i]['nbPartie'] = $row->nbPartie;
     $arr[$i]['totalTemps'] = $row->totalTemps;
 
@@ -169,7 +169,7 @@ function meilleurMoy(&$smarty)
   for($i=0;$i<$result->num_rows;$i++)
   {
     $row=$result->fetch_object();
-    $arr[$i]['alias'] = $row->alias . ' (' . $row->ville . ')';
+    $arr[$i]['alias'] = $row->alias;// . ' (' . $row->ville . ')';
     $arr[$i]['moy'] = $row->moy;
     $arr[$i]['nbPartie'] = $row->nbPartie;
   }

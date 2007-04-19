@@ -175,6 +175,7 @@ $lang['menu_gestion_sondages'] = 'Gestion des sondages';
 $lang['menu_gestion_questions'] = 'Gestion des questions';
 $lang['menu_gestion_faq'] = 'Gestion de la FAQ';
 $lang['menu_statistiques'] = 'Statistiques';
+$lang['menu_statistique2'] = 'Statistiques 2';
 $lang['menu_stats_web'] = 'Statistiques serveur web';
 
 $lang['menu_stat_joueur'] = 'Mes statistiques';
@@ -189,7 +190,7 @@ $lang['menu_mes_question'] = 'Afficher mes questions';
 
 $lang['titre_index'] = 'Math en jeu';
 $lang['texte_index'] = '
-
+<span style="font-size:150%"><i>Nouveau!</i> <a href="demo.php">Voir la vidéo de démonstration de Math en jeu.</a></span><p>
 <a target="_blank" href="img/screen2_big.jpg"><img src="img/screen2.jpg" alt="Capture d\'écran" border="0" hspace="15" align="left"></a>
 
 <p>Peut-on s\'amuser en faisant des maths? L’équipe de SMAC vous dit &laquo;oui&raquo;!
@@ -574,7 +575,8 @@ $lang['palmares_meilleur_moyenne_victoire'] = 'Joueurs ayant la meilleure moyenn
 $lang['palmares_meilleur_moy_point'] = 'Joueurs ayant la meilleure moyenne de points par minute de jeu';
 $lang['palmares_joueur_plus_jouer'] = 'Joueurs ayant joué le plus';
 $lang['palmares_aucun_resultat'] = "Aucun résultat";
-$lang['palmares_joueur'] = 'Joueur (Ville)';
+$lang['palmares_joueur'] = 'Joueur';
+$lang['palmares_info'] = 'Les données utilisées pour le palmarès s\'étendent sur ';
 
 //
 //statistique
@@ -626,6 +628,12 @@ $lang['faq_titre_gestion'] = 'Gestion de la FAQ';
 //
 
 $lang['question_titre'] = 'Titre';
+$lang['question_info'] = '<b>Information importante</b> : <br>
+- L\'utilisation du navigateur <a href="http://www.firefox.com" target="_blank">Firefox</a> est FORTEMENT recommandée.<br>
+- Pour utiliser ce site avec Internet explorer, vous devez installer ce logiciel gratuit : <a target="_blank" href="http://www.dessci.com/en/products/mathplayer/download.htm">Math Player</a> <br>
+- Pour définir une formule vous devez la place entre deux $ ou bien entre deux ` (accent grave). Par exemple : $sin(x)$ , $25 + 4 = 29$ <br>
+- Pour afficher un $. Il faut écrire \\\$.<br>';
+$lang['question_info_exemple'] = 'Afficher des exemples de formules';
 
 $lang['question_greek'] = 'Lettres grecques';
 $lang['question_operation'] = 'Opération';
@@ -675,10 +683,11 @@ $lang['question_ps_question'] = 'Ps question';
 $lang['question_ps_reponse'] = 'Ps réponse';
 $lang['question_createur'] = 'Créée par';
 $lang['question_modifier'] = 'Modifier';
+$lang['question_no_rebuild'] = 'Ne pas reconstruire les fichiers ps/eps';
 $lang['question_non_valide'] = 'Rendre la question non valide';
 $lang['question_valide'] = 'Rendre la question valide';
 $lang['question_upload'] = 'Upload swf';
-
+$lang['question_refresh'] = 'Rafraîchir les aperçus';
 $lang['question_fin'] = "Fin";
 $lang['question_debut'] = "Début";
 $lang['question_suivant'] = "Suivant";

@@ -2,8 +2,7 @@
 <h2>{$lang.palmares_titre}</h2>
 <div style="width:90%" class="hr"><p>
 <div class="centre">
-	Le palmarès est mis à jour toutes les heures. <br>
-	Les données utilisées pour le palmarès s'étendent sur {$nbJour} {$lang.jours}.<br><br>
+	{$lang.palmares_info} {$nbJour} {$lang.jours}.<br><br>
     <table border="0" cellspacing="0" class="tableau" style="background-color: #FFFFFF;" width="100%">
         <thead>
         <tr align="left">
