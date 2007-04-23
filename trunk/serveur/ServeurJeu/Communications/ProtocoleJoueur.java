@@ -2166,16 +2166,18 @@ public class ProtocoleJoueur implements Runnable
 					bolNoeudValide = false;
 				}
 				
-				//validation du deuxième noeud
-				//TODO: valider la valeur du paramètre NiveauJoueurVirtuel
+				//validation du deuxième noeud (NiveauJoueurVirtuel)
 				objNoeudCourant = noeudCommande.getChildNodes().item(1);
-				System.out.println(UtilitaireNombres.isPositiveNumber(objNoeudCourant.getChildNodes().item(0).getNodeValue()));
+				String valeurParam = objNoeudCourant.getChildNodes().item(0).getNodeValue();
+				
+				//System.out.println(JoueurVirtuel.validerParamNiveau(valeurParam));
 				if (objNoeudCourant.getNodeName().equals("parametre") == false || 
 						objNoeudCourant.getAttributes().getLength() != 1 ||
 						objNoeudCourant.getAttributes().getNamedItem("type") == null ||
 						objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("NiveauJoueurVirtuel") == false ||
 						objNoeudCourant.getChildNodes().getLength() != 1 ||
-						objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false)
+						objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false ||
+						JoueurVirtuel.validerParamNiveau(valeurParam) == false)
 					{
 						bolNoeudValide = false;
 					}
