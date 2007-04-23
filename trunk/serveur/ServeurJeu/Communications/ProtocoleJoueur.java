@@ -1295,15 +1295,16 @@ public class ProtocoleJoueur implements Runnable
 						    // Obtenir le paramètre pour le joueur virtuel
 						    // choix possible: "Aucun", "Facile", "Intermediaire", "Difficile"
 						    String strParamJoueurVirtuel = null;
-						    if (obtenirValeurParametre(objNoeudCommandeEntree, "JoueurVirtuel") != null)
+						    if (obtenirValeurParametre(objNoeudCommandeEntree, "NiveauJoueurVirtuel") != null)
 						    {
 						    	
-						    	strParamJoueurVirtuel = obtenirValeurParametre(objNoeudCommandeEntree, "JoueurVirtuel").getNodeValue();
+						    	strParamJoueurVirtuel = obtenirValeurParametre(objNoeudCommandeEntree, "NiveauJoueurVirtuel").getNodeValue();
 						    	System.out.println(strParamJoueurVirtuel);
 						    }
 						    else
 						    {
 						    	// Valeur par défaut
+						    	System.out.println("Pas de paramêtre reçu pour les joueurs virtuels.");
 						    	strParamJoueurVirtuel = "Intermediaire";
 						    }
 						    
