@@ -2508,5 +2508,17 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         
         return intNbObjets;
     }
+    /*
+     * Cette méthode statique permet de valider un niveau de joueur virtuel en format String
+     * 
+     * @param String s : le Niveau des joueurs virtuel en chaîne de caractères (Facile, Intermediaire,..)
+     * @return boolean : true : si le paramètre est valide
+     * 					 false : si le paramètre n'est pas valide
+     */
+    public static boolean validerParamNiveau(String s)
+    {
+    	return (s.equals("Aucun") || s.equals("Facile") || s.equals("Intermediaire") ||
+    			s.equals("Difficile") || s.equals("TresDifficile"));
+    }
 }
 
