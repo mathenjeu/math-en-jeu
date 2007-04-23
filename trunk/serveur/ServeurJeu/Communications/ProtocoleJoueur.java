@@ -1299,12 +1299,11 @@ public class ProtocoleJoueur implements Runnable
 						    {
 						    	
 						    	strParamJoueurVirtuel = obtenirValeurParametre(objNoeudCommandeEntree, "NiveauJoueurVirtuel").getNodeValue();
-						    	System.out.println(strParamJoueurVirtuel);
+						    	//System.out.println(strParamJoueurVirtuel);
 						    }
 						    else
 						    {
 						    	// Valeur par défaut
-						    	System.out.println("Pas de paramêtre reçu pour les joueurs virtuels.");
 						    	strParamJoueurVirtuel = "Intermediaire";
 						    }
 						    
@@ -2136,13 +2135,15 @@ public class ProtocoleJoueur implements Runnable
 				bolCommandeValide = bolNoeudValide;
 			}
 		}
-        // Si le nom de la commande est DemarrerMaintenant, alors il doit y avoir 1 paramètre
+        // Si le nom de la commande est DemarrerMaintenant, alors il doit y avoir 2 paramètres
 		else if (noeudCommande.getAttribute("nom").equals(Commande.DemarrerMaintenant))
 		{
-			// Si le nombre d'enfants du noeud de commande est de 1, alors
+			// Si le nombre d'enfants du noeud de commande est de 2, alors
 			// le nombre de paramètres est correct et on peut continuer
-			if (noeudCommande.getChildNodes().getLength() == 1)
+			
+			if (noeudCommande.getChildNodes().getLength() == 2)
 			{
+				
 				// Déclarer une variable qui va permettre de savoir si le 
 				// noeud enfant est valide
 				boolean bolNoeudValide = true;
@@ -2164,6 +2165,22 @@ public class ProtocoleJoueur implements Runnable
 				{
 					bolNoeudValide = false;
 				}
+				
+				//validation du deuxième noeud
+				//TODO: valider la valeur du paramètre NiveauJoueurVirtuel
+				objNoeudCourant = noeudCommande.getChildNodes().item(1);
+				System.out.println(UtilitaireNombres.isPositiveNumber(objNoeudCourant.getChildNodes().item(0).getNodeValue()));
+				if (objNoeudCourant.getNodeName().equals("parametre") == false || 
+						objNoeudCourant.getAttributes().getLength() != 1 ||
+						objNoeudCourant.getAttributes().getNamedItem("type") == null ||
+						objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("NiveauJoueurVirtuel") == false ||
+						objNoeudCourant.getChildNodes().getLength() != 1 ||
+						objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false)
+					{
+						bolNoeudValide = false;
+					}
+				
+				
 				
 				// Si l'enfant du noeud courant est valide alors la commande 
 				// est valide
