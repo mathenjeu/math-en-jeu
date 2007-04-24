@@ -1,19 +1,19 @@
 <?php
 /*******************************************************************************
 Fichier : jeu-popup.php
-Auteur : Sylvain Hallé
-Description :   Affiche le jeu si le joueur est bien connecté
+Auteur : Sylvain Hallï¿½
+Description :   Affiche le jeu si le joueur est bien connectï¿½
 ********************************************************************************
-TODO : modification pour spécifiaction HTML 4.01/XHTML
-10-06-2006 Maxime Bégin - Modification.
-02-06-2006 Maxime Bégin - Sylvain Hallé
+TODO : modification pour spï¿½cifiaction HTML 4.01/XHTML
+10-06-2006 Maxime Bï¿½gin - Modification.
+02-06-2006 Maxime Bï¿½gin - Sylvain Hallï¿½
 *******************************************************************************/
 require_once("lib/ini.php");
 
-// Vérifie si une session est en cours
+// Vï¿½rifie si une session est en cours
 if (!isset($_SESSION["joueur"]))
 {
-  // Sinon, on ferme la fenêtre
+  // Sinon, on ferme la fenï¿½tre
   echo "<script>window.close()</script>";
 }
 ?>
@@ -44,11 +44,11 @@ function Launch(page) {
 	classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 	codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"
 	WIDTH="100%" HEIGHT="100%" id="mathenjeu">
-	<PARAM NAME=movie VALUE="flash/chargement_beta.swf?nomUtilisateur=<?php echo $_SESSION["joueur"]->reqAlias(); ?>&amp;motDePasse=<?php echo $_SESSION["joueur"]->reqMotDePasse(); ?>">
+	<PARAM NAME=movie VALUE="flash/chargement_beta.swf?nomUtilisateur=<?php echo $_SESSION["joueur"]->reqAlias(); ?>&amp;motDePasse=<?php echo $_SESSION["joueur"]->reqMotDePasse(); ?>&amp;path=<?php echo FLASH_DIR ?>">
 	<PARAM NAME=quality VALUE=high>
 	<param name="bgcolor" value="#000000" />
 	<param name="allowFullScreen" value="true" />
-	<EMBED src="flash/chargement_beta.swf?nomUtilisateur=<?php echo $_SESSION["joueur"]->reqAlias(); ?>&amp;motDePasse=<?php echo $_SESSION["joueur"]->reqMotDePasse(); ?>" 
+	<EMBED src="flash/chargement_beta.swf?nomUtilisateur=<?php echo $_SESSION["joueur"]->reqAlias(); ?>&amp;motDePasse=<?php echo $_SESSION["joueur"]->reqMotDePasse(); ?>&amp;path=<?php echo FLASH_DIR ?>" 
 		quality=high bgcolor=#000000 WIDTH="100%" HEIGHT="100%"
 		NAME="mathenjeu" TYPE="application/x-shockwave-flash"
 		PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer">
