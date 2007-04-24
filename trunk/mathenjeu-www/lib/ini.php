@@ -44,7 +44,6 @@ require_once(LIB_DIR . "/clog.class.php");
 
 
 define("LANGAGE_DIR",DOC_ROOT . "langage/");
-define("FLASH_DIR", DOC_ROOT . "flash/");
 define("CONFIG_FILE", DOC_ROOT . "/config/configuration.xml");
 $config = simplexml_load_file(CONFIG_FILE);
 
@@ -59,6 +58,7 @@ define('TEMPLATES_DIR',DOC_ROOT . "templates/");				//dossier des templates
 define('TEMPLATE','templates/' . $config->template . "/");  	//dossier du template utilis�
 define('TEMPLATE_DIR',DOC_ROOT . "/" . TEMPLATE);				//chemin complet du template utilis�
 define('CSS_FILE',(string)$config->css);						//fichier css utilis�
+define("FLASH_DIR", ADRESSE_SITE_WEB . "flash/");
 
 define("NOM_COURRIEL",(string)$config->nomCourriel);			//le nom utilis� lorsqu'on envoie des courriels
 define("ADRESSE_COURRIEL",(string)$config->courriel);			//l'adresse de courriel utilis�
