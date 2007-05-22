@@ -5,6 +5,12 @@ import ServeurJeu.ComposantesJeu.Objets.Objet;
 /**
  * @author Jean-François Brind'Amour
  */
+
+//NOTE: On a changé le concept: les pièces ne donnent plus de points,
+//      mais plutôt de "l'argent", pour acheter des objets. La valeur
+//      des pièces est donc 0, et l'argent est entièrement géré par
+//      le client.
+
 public class Piece extends Objet
 {
 	// Cette variable va contenir la valeur de la pièce
@@ -19,8 +25,7 @@ public class Piece extends Objet
 	public Piece(int valeur)
 	{
 		// Initialiser la valeur de la pièce
-		//TODO intValeur = valeur;
-		intValeur = 10;
+		intValeur = 0;
 	}
 
 	/**
