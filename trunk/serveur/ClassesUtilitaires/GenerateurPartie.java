@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Vector;
+import java.util.TreeSet;
 import Enumerations.Visibilite;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
@@ -11,6 +12,8 @@ import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin1;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin2;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin3;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin4;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Reponse;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
@@ -399,19 +402,29 @@ public final class GenerateurPartie
 				lstPointsMagasins.add(objPoint);
 
 				// Si le nom du magasin est Magasin1, alors on met un objet 
-				// Magasin1 sur la case, sinon on fait le même genre de 
-				// vérifications pour les autres types de magasins
+				// Magasin(1) sur la case, sinon on fait le même genre de 
+				// vérifications pour les autres types de magasins                                
 				if (objReglesMagasin.obtenirNomMagasin().equals("Magasin1"))
 				{
 					// Définir la valeur de la case au point spécifié à la case 
 					// d'identification
-					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Magasin1());					
+					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Magasin1());
 				}
 				else if (objReglesMagasin.obtenirNomMagasin().equals("Magasin2"))
 				{
 					// Définir la valeur de la case au point spécifié à la case 
 					// d'identification
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Magasin2());
+				}else if (objReglesMagasin.obtenirNomMagasin().equals("Magasin3"))
+				{
+					// Définir la valeur de la case au point spécifié à la case 
+					// d'identification
+					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Magasin3());
+				}else if (objReglesMagasin.obtenirNomMagasin().equals("Magasin4"))
+				{
+					// Définir la valeur de la case au point spécifié à la case 
+					// d'identification
+					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Magasin4());
 				}
 				
 				// Aller chercher une référence vers le magasin que l'on vient de créer
@@ -576,9 +589,10 @@ public final class GenerateurPartie
 		return objttPlateauJeu;
     }
     
+    // Pas utilisé...?
     public static Case[][] genererPlateauJeu2(Regles reglesPartie, int temps, Vector listePointsCaseLibre) throws NullPointerException
     {
-//    	 Modifier le temps pour qu'il soit au moins le minimum de minutes
+                // Modifier le temps pour qu'il soit au moins le minimum de minutes
 		temps = Math.max(temps, reglesPartie.obtenirTempsMinimal());
 		
 		// Modifier le temps pour qu'il soit au plus le maximum de minutes
@@ -634,11 +648,19 @@ public final class GenerateurPartie
 			objPlateauJeu[point.x][point.y] = new CaseCouleur(1);
 		}
 		//enlever celles avec magasins aleatoirement
+                
 		for( int i = 0; i < intNbMagasins; i++ )
 		{
 			point = (Point)listePointsCaseLibre.remove(ClassesUtilitaires.UtilitaireNombres.genererNbAleatoire( listePointsCaseLibre.size() ) );
 			//generer case couleur avec magasin
-			((CaseCouleur) objPlateauJeu[point.x][point.y]).definirObjetCase(new Magasin1());
+                        switch((i%reglesPartie.obtenirListeMagasinsPossibles().size())+1)
+                        {
+                            case 1: ((CaseCouleur) objPlateauJeu[point.x][point.y]).definirObjetCase(new Magasin1()); break;
+                            case 2: ((CaseCouleur) objPlateauJeu[point.x][point.y]).definirObjetCase(new Magasin2()); break;
+                            case 3: ((CaseCouleur) objPlateauJeu[point.x][point.y]).definirObjetCase(new Magasin3()); break;
+                            case 4: ((CaseCouleur) objPlateauJeu[point.x][point.y]).definirObjetCase(new Magasin4()); break;
+                            default:((CaseCouleur) objPlateauJeu[point.x][point.y]).definirObjetCase(new Magasin1()); break;
+                        }
 		}
 		//enlever celles avec pieces aleatoirement
 		for( int i = 0; i < intNbPieces; i++ )
