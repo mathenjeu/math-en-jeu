@@ -48,8 +48,6 @@ import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Reponse;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin1;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin2;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
 
