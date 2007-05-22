@@ -1,10 +1,12 @@
 package ServeurJeu;
 
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import java.util.TreeMap;
 import java.util.Set;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
+import java.util.List;
 
 
 import org.apache.log4j.Logger;
@@ -629,32 +631,27 @@ public class ControleurJeu
 	
 	/**
 	 * Cette méthode permet de charger les salles initiales en mémoire 
-	 * à partir de la configuration
-	 * TODO : à comléter pour utiliser seulement la configuration
+	 * à partir de la configuration XML
 	 */
 	private void chargerSallesInitiales()
 	{
+                int i;
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
-		
-		Regles objReglesSalle = new Regles();
-		
+                Regles objReglesSalle = new Regles();
 		TreeSet casesCouleur = objReglesSalle.obtenirListeCasesCouleurPossibles();
-		casesCouleur.add(new ReglesCaseCouleur(2, 1));
-		casesCouleur.add(new ReglesCaseCouleur(1, 2));
-		casesCouleur.add(new ReglesCaseCouleur(3, 3));
-		casesCouleur.add(new ReglesCaseCouleur(4, 4));
-		casesCouleur.add(new ReglesCaseCouleur(5, 5));
-		
 		TreeSet casesSpeciale = objReglesSalle.obtenirListeCasesSpecialesPossibles();
-		casesSpeciale.add(new ReglesCaseSpeciale(1, 1));
-		
-		TreeSet magasins = objReglesSalle.obtenirListeMagasinsPossibles();
-		magasins.add(new ReglesMagasin(1, "Magasin1"));
-		magasins.add(new ReglesMagasin(2, "Magasin2"));
-		
 		TreeSet objetsUtilisables = objReglesSalle.obtenirListeObjetsUtilisablesPossibles();
-		objetsUtilisables.add(new ReglesObjetUtilisable(1, "Reponse", Visibilite.Aleatoire));
-		
+                TreeSet magasins = objReglesSalle.obtenirListeMagasinsPossibles();
+                
+                List propNomsMagasins = config.obtenirListe("controleurjeu.salles-initiales.regles.magasin.nom");
+                List propPrioriteMagasins = config.obtenirListe("controleurjeu.salles-initiales.regles.magasin.priorite");
+                for(i=1; i <= propNomsMagasins.size(); i++)
+                {
+                    Integer tmp1 = Integer.valueOf((String)propPrioriteMagasins.get(i-1));
+                    String tmp2 = (String)propNomsMagasins.get(i-1);
+                    magasins.add(new ReglesMagasin(tmp1, tmp2));
+                }
+                
 		objReglesSalle.definirPermetChat( config.obtenirValeurBooleenne( "controleurjeu.salles-initiales.regles.chat" ) );
 		objReglesSalle.definirRatioTrous( config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-trous" ) );
 		objReglesSalle.definirRatioMagasins( config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-magasins" ) );
@@ -669,9 +666,36 @@ public class ControleurJeu
 		String nom = config.obtenirString( "controleurjeu.salles-initiales.salle.nom" );
 		String createur = config.obtenirString( "controleurjeu.salles-initiales.salle.createur" );
 		String motDePasse = config.obtenirString( "controleurjeu.salles-initiales.salle.mot-de-passe" );
-	    Salle objSalle = new Salle(objGestionnaireBD, nom, createur, motDePasse, objReglesSalle, this);
-	    
-	    ajouterNouvelleSalle( objSalle );
+
+                List propTypeCaseSpeciale = config.obtenirListe("controleurjeu.salles-initiales.regles.case-speciale.type");
+                List propPrioriteCaseSpeciale = config.obtenirListe("controleurjeu.salles-initiales.regles.case-speciale.priorite");
+                for(i=1; i <= propTypeCaseSpeciale.size(); i++)
+                {
+                    Integer tmp1 = Integer.valueOf((String)propPrioriteCaseSpeciale.get(i-1));
+                    Integer tmp2 = Integer.valueOf((String)propTypeCaseSpeciale.get(i-1));
+                    casesSpeciale.add(new ReglesCaseSpeciale(tmp1, tmp2));
+                }
+                
+                List propTypeCaseCouleur = config.obtenirListe("controleurjeu.salles-initiales.regles.case-couleur.type");
+                List propPrioriteCaseCouleur = config.obtenirListe("controleurjeu.salles-initiales.regles.case-couleur.priorite");
+                for(i=1; i <= propTypeCaseCouleur.size(); i++)
+                {
+                    Integer tmp1 = Integer.valueOf((String)propPrioriteCaseCouleur.get(i-1));
+                    Integer tmp2 = Integer.valueOf((String)propTypeCaseCouleur.get(i-1));
+                    casesCouleur.add(new ReglesCaseCouleur(tmp1, tmp2));
+                }
+                
+                List propNomsObjetUtilisable = config.obtenirListe("controleurjeu.salles-initiales.regles.objet-utilisable.nom");
+                List propPrioriteObjetUtilisable = config.obtenirListe("controleurjeu.salles-initiales.regles.objet-utilisable.priorite");
+                for(i=1; i <= propNomsObjetUtilisable.size(); i++)
+                {
+                    Integer tmp1 = Integer.valueOf((String)propPrioriteObjetUtilisable.get(i-1));
+                    String tmp2 = (String)propNomsObjetUtilisable.get(i-1);
+                    objetsUtilisables.add(new ReglesObjetUtilisable(tmp1, tmp2, Visibilite.Aleatoire));
+                }
+                
+                Salle objSalle = new Salle(objGestionnaireBD, nom, createur, motDePasse, objReglesSalle, this);
+                ajouterNouvelleSalle( objSalle );
 	}
 	
 	public GestionnaireCommunication obtenirGestionnaireCommunication()
