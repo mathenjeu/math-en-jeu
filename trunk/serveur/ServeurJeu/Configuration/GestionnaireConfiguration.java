@@ -5,7 +5,9 @@ import java.util.List;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration.AbstractConfiguration;
 import org.w3c.dom.Document;
+import java.util.TreeSet;
 
 public class GestionnaireConfiguration 
 {
@@ -57,5 +59,10 @@ public class GestionnaireConfiguration
 	public boolean obtenirValeurBooleenne( String id )
 	{
 		return _config.getBoolean( id );
+	}
+        
+	public List obtenirListe( String id )
+	{
+		return _config.getList( id );
 	}
 }
