@@ -91,6 +91,9 @@ public class ProtocoleJoueur implements Runnable
 	// Déclaration d'une variable qui va contenir le numéro de commande à 
 	// retourner au client ayant fait une requête au serveur
 	private int intNumeroCommandeReponse;
+        
+        // Déclaration d'une chaîne de caractères donnant la langue de l'usager
+        public String langue;
 	
 	private GestionnaireTemps objGestionnaireTemps;
 	private TacheSynchroniser objTacheSynchroniser;
@@ -450,7 +453,7 @@ public class ProtocoleJoueur implements Runnable
 						// joueur est maintenant connecté
 						if (strResultatAuthentification.equals(ResultatAuthentification.Succes))
 						{
-						  
+                                                    langue = obtenirValeurParametre(objNoeudCommandeEntree, "Langue").getNodeValue();
                             if (objControleurJeu.estJoueurDeconnecte(obtenirValeurParametre(objNoeudCommandeEntree, 
                                                 "NomUtilisateur").getNodeValue()))
                             {
@@ -1841,7 +1844,7 @@ public class ProtocoleJoueur implements Runnable
 		{
 			// Si le nombre d'enfants du noeud de commande est de 2, alors
 			// le nombre de paramètres est correct et on peut continuer
-			if (noeudCommande.getChildNodes().getLength() == 2)
+			if (noeudCommande.getChildNodes().getLength() == 3)
 			{
 				// Déclarer une variable qui va permettre de savoir si les 
 				// noeuds enfants sont valides
@@ -1866,7 +1869,8 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudCourant.getAttributes().getLength() != 1 ||
 						objNoeudCourant.getAttributes().getNamedItem("type") == null ||
 						(objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("NomUtilisateur") == false &&
-						objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("MotDePasse") == false) ||
+						objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("MotDePasse") == false &&
+                                                objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("Langue") == false) ||
 						objNoeudCourant.getChildNodes().getLength() != 1 ||
 						objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false)
 					{
