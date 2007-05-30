@@ -193,7 +193,7 @@ $lang['texte_index'] = '
 <span style="font-size:150%"><i>Nouveau!</i> <a href="demo.php">Voir la vidéo de démonstration de Math en jeu.</a></span><p>
 <a target="_blank" href="img/screen2_big.jpg"><img src="img/screen2.jpg" alt="Capture d\'écran" border="0" hspace="15" align="left"></a>
 
-<p>Peut-on s\'amuser en faisant des maths? L’équipe de SMAC vous dit &laquo;oui&raquo;!
+<p>Peut-on s\'amuser en faisant des maths? L\'équipe de SMAC vous dit &laquo;oui&raquo;!
 Tout juste sorti des cartons, Math en jeu est un jeu multimédia interactif
 développé par SMAC et accessible gratuitement sur Internet.
 L\'objectif, en ligne avec la mission de SMAC, consiste à exposer les
