@@ -223,10 +223,7 @@ public class ProtocoleJoueur implements Runnable
 						// On appelle une fonction qui va traiter le message reçu du 
 						// client et mettre le résultat à retourner dans une variable
 						objLogger.info( GestionnaireMessages.message("protocole.message_recu") + strMessageRecu );
-                                                //FRANCOIS
-                                                System.out.println("Reçu:  " + strMessageRecu.toString());
 						String strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
-                                                System.out.println("Envoi: "+ strMessageAEnvoyer);
 						// On remet la variable contenant le numéro de commande
 						// à retourner à -1, pour dire qu'il n'est pas initialisé
 						intNumeroCommandeReponse = -1;
