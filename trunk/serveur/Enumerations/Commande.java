@@ -22,10 +22,11 @@ public final class Commande
 	public static final String DeplacerPersonnage = "DeplacerPersonnage";
 	public static final String RepondreQuestion = "RepondreQuestion";
 	public static final String Pointage = "Pointage";
-    public static final String RejoindrePartie = "RejoindrePartie";
-    public static final String NePasRejoindrePartie = "NePasRejoindrePartie";
-    public static final String UtiliserObjet = "UtiliserObjet";
-    public static final String AcheterObjet = "AcheterObjet";
+        public static final String RejoindrePartie = "RejoindrePartie";
+        public static final String NePasRejoindrePartie = "NePasRejoindrePartie";
+        public static final String UtiliserObjet = "UtiliserObjet";
+        public static final String AcheterObjet = "AcheterObjet";
+        public static final String Argent = "Argent";
     
 	/**
 	 * Constructeur par défaut est privé pour empêcher de pourvoir créer des 
@@ -55,7 +56,6 @@ public final class Commande
 		        valeur.equals(DeplacerPersonnage) || valeur.equals(RepondreQuestion) ||
 		        valeur.equals(DemarrerMaintenant) || valeur.equals(Pointage) ||
 		        valeur.equals(RejoindrePartie) || valeur.equals(UtiliserObjet) ||
-		        valeur.equals(AcheterObjet));
-
+		        valeur.equals(AcheterObjet) || valeur.equals(Argent));
 	}
 }
