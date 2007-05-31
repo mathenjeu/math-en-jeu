@@ -549,8 +549,7 @@ public class InformationPartie
 		    gestionnaireEv = objPartieCourante.obtenirGestionnaireEvenements();
 		    objQuestion = objPartieCourante.obtenirQuestionCourante();
 		    nomJoueur = ((JoueurHumain)objJoueur).obtenirNomUtilisateur();
-		    bolReponseEstBonne = true;
-                    //FRANCOIS bolReponseEstBonne = objQuestion.reponseEstValide(reponse);
+		    bolReponseEstBonne = objQuestion.reponseEstValide(reponse);
 		    
 		}
 		else
