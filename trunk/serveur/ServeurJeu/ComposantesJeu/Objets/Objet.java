@@ -6,5 +6,8 @@ package ServeurJeu.ComposantesJeu.Objets;
 public abstract class Objet 
 {
 	// Constantes pour le serveur des objets utilisables (OU)
-	public static final int UID_OU_REPONSE = 0;
+	public static final int UID_OU_LIVRE = 0;
+        public static final int UID_OU_PAPILLON = 1;
+	public static final int UID_OU_BOULE = 2;
+        public static final int UID_OU_TELEPHONE = 3;
 }
