@@ -17,9 +17,8 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Reponse;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 
 /**
@@ -47,6 +46,8 @@ public class InformationPartie
     // Déclaration d'une variable qui va contenir le pointage de la 
     // partie du joueur possédant cet objet
 	private int intPointage;
+        
+        private int intArgent;
 	
 	// Déclaration d'une position du joueur dans le plateau de jeu
 	private Point objPositionJoueur;
@@ -93,6 +94,7 @@ public class InformationPartie
 		
 	    // Définir les propriétés de l'objet InformationPartie
 	    intPointage = 0;
+            intArgent = 0;
 	    intIdPersonnage = 0;
 	    
 	    // Faire la référence vers la table courante
@@ -150,6 +152,25 @@ public class InformationPartie
 	public void definirPointage(int pointage)
 	{
 	   intPointage = pointage;
+	}
+        
+	/**
+	 * Cette fonction permet de retourner l'argent du joueur.
+	 * 
+	 * @return int : L'argent du joueur courant
+	 */
+	public int obtenirArgent()
+	{
+	   return intArgent;
+	}
+	/**
+	 * Cette fonction permet de redéfinir l'argent du joueur.
+	 * 
+	 * @param int argent : L'argent du joueur courant
+	 */
+	public void definirArgent(int argent)
+	{
+	   intArgent = argent;
 	}
 	
 	/**
@@ -490,8 +511,8 @@ public class InformationPartie
 	
 	/**
 	 * Cette fonction met à jour le plateau de jeu si le joueur a bien répondu
-	 * à la question. Les objets sur la nouvelle case sont enlevés et le pointage
-	 * du joueur est mis à jour. Utilisé par les joueurs humains et les joueurs virtuels
+	 * à la question. Les objets sur la nouvelle case sont enlevés et le pointage et l'argent
+	 * du joueur sont mis à jour. Utilisé par les joueurs humains et les joueurs virtuels
 	 *
 	 */
 	public static RetourVerifierReponseEtMettreAJourPlateauJeu verifierReponseEtMettreAJourPlateauJeu(String reponse, 
@@ -502,6 +523,7 @@ public class InformationPartie
 		RetourVerifierReponseEtMettreAJourPlateauJeu objRetour = null;
 		
 		int intPointageCourant; 
+                int intArgentCourant;
 		Table table;
 		int intDifficulteQuestion;
 		TreeMap objListeObjetsUtilisablesRamasses; 
@@ -519,6 +541,7 @@ public class InformationPartie
 			
 			// Obtenir les informations du joueur humain
 			intPointageCourant = objPartieCourante.obtenirPointage();
+                        intArgentCourant = objPartieCourante.obtenirArgent();
 		    table = objPartieCourante.obtenirTable();
 		    intDifficulteQuestion = objPartieCourante.obtenirQuestionCourante().obtenirDifficulte();
 		    objListeObjetsUtilisablesRamasses = objPartieCourante.obtenirListeObjets();
@@ -526,7 +549,8 @@ public class InformationPartie
 		    gestionnaireEv = objPartieCourante.obtenirGestionnaireEvenements();
 		    objQuestion = objPartieCourante.obtenirQuestionCourante();
 		    nomJoueur = ((JoueurHumain)objJoueur).obtenirNomUtilisateur();
-		    bolReponseEstBonne = objQuestion.reponseEstValide(reponse);
+		    bolReponseEstBonne = true;
+                    //FRANCOIS bolReponseEstBonne = objQuestion.reponseEstValide(reponse);
 		    
 		}
 		else
@@ -536,6 +560,7 @@ public class InformationPartie
 			
 			// Obtenir les informations du joueur virtuel
 			intPointageCourant = objJoueurVirtuel.obtenirPointage();
+                        intArgentCourant   = objJoueurVirtuel.obtenirArgent();
 		    table = objJoueurVirtuel.obtenirTable();
 		    intDifficulteQuestion = objJoueurVirtuel.obtenirPointage(objJoueurVirtuel.obtenirPositionJoueur(), objPositionDesiree);
 		    objListeObjetsUtilisablesRamasses = objJoueurVirtuel.obtenirListeObjetsRamasses();
@@ -554,6 +579,8 @@ public class InformationPartie
 		
 		// Le nouveau pointage est initialement le pointage courant
 		int intNouveauPointage = intPointageCourant;
+                
+                int intNouvelArgent = intArgentCourant;
 		
 		// Déclaration d'une référence vers l'objet ramassé
 		ObjetUtilisable objObjetRamasse = null;
@@ -611,8 +638,8 @@ public class InformationPartie
 						// Faire la référence vers la pièce
 						Piece objPiece = (Piece) objCaseCouleurDestination.obtenirObjetCase();
 						
-						// Mettre à jour le pointage du joueur
-						intNouveauPointage += objPiece.obtenirValeur();
+						// Mettre à jour l'argent du joueur
+						intNouvelArgent += objPiece.obtenirMonnaie();
 						
 						// Enlever la pièce de la case du plateau de jeu
 						objCaseCouleurDestination.definirObjetCase(null);
@@ -651,7 +678,7 @@ public class InformationPartie
 			}
 			
 			// Créer l'objet de retour
-			objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, intNouveauPointage);
+			objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, intNouveauPointage, intNouvelArgent);
 			objRetour.definirObjetRamasse(objObjetRamasse);
 			objRetour.definirObjetSubi(objObjetSubi);
 			objRetour.definirNouvellePosition(objPositionDesiree);
@@ -664,26 +691,28 @@ public class InformationPartie
 				// Cette fonction va passer les joueurs et créer un 
 				// InformationDestination pour chacun et ajouter l'événement 
 				// dans la file de gestion d'événements
-				table.preparerEvenementJoueurDeplacePersonnage(nomJoueur, collision, positionJoueur, objPositionDesiree, intNouveauPointage);	
+				table.preparerEvenementJoueurDeplacePersonnage(nomJoueur, collision, positionJoueur, objPositionDesiree, intNouveauPointage, intNouvelArgent);
 						    	
 		    }
 		    
-			// Modifier la position et le pointage
+			// Modifier la position, le pointage et l'argent
 			if (objJoueur instanceof JoueurHumain)
 			{
 				((JoueurHumain)objJoueur).obtenirPartieCourante().definirPositionJoueur(objPositionDesiree);
 			    ((JoueurHumain)objJoueur).obtenirPartieCourante().definirPointage(intNouveauPointage);
+                            ((JoueurHumain)objJoueur).obtenirPartieCourante().definirArgent(intNouvelArgent);
 			}
 			else if (objJoueur instanceof JoueurVirtuel)
 			{
 				((JoueurVirtuel)objJoueur).definirPositionJoueurVirtuel(objPositionDesiree);
 				((JoueurVirtuel)objJoueur).definirPointage(intNouveauPointage);
+                                ((JoueurVirtuel)objJoueur).definirArgent(intNouvelArgent);
 			}
 		}
 		else
 		{
 			// Créer l'objet de retour
-			objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, intNouveauPointage);
+			objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, intNouveauPointage, intNouvelArgent);
 			
 			// La question sera nulle pour les joueurs virtuels
 			if (objQuestion != null)
@@ -699,7 +728,7 @@ public class InformationPartie
 	/**
 	 * Cette fonction met à jour le plateau de jeu si le joueur a bien répondu
 	 * à la question. Les objets sur la nouvelle case sont enlevés et le pointage
-	 * du joueur est mis à jour.
+	 * et l'argent du joueur sont mis à jour.
 	 * 
 	 * @param String reponse : La réponse du joueur
 	 * @param boolean doitGenererNoCommandeRetour : Permet de savoir si on doit 
