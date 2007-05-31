@@ -18,6 +18,7 @@ import ServeurJeu.Evenements.EvenementJoueurQuitteTable;
 import ServeurJeu.Evenements.EvenementJoueurDemarrePartie;
 import ServeurJeu.Evenements.EvenementPartieDemarree;
 import ServeurJeu.Evenements.EvenementMAJPointage;
+import ServeurJeu.Evenements.EvenementMAJArgent;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
 import ClassesUtilitaires.GenerateurPartie;
@@ -1285,15 +1286,50 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
 		objGestionnaireEvenements.ajouterEvenement(majPointage);
 	}
-	
+
+	public void preparerEvenementMAJArgent(String nomUtilisateur, int nouvelArgent)
+	{
+		// Créer un nouveal événement qui va permettre d'envoyer l'événment
+		// aux joueurs pour signifier une modification de l'argent
+		EvenementMAJArgent majArgent = new EvenementMAJArgent(nomUtilisateur, nouvelArgent);
+		
+		// Créer un ensemble contenant tous les tuples de la liste des joueurs
+		// de la table
+		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		
+		// Obtenir un itérateur pour l'ensemble contenant les joueurs
+		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		
+		// Passser tous les joueurs de la table et leur envoyer l'événement
+		// NOTE: On omet d'envoyer au joueur nomUtilisateur étant donné
+		//       qu'il connait déjà son argent
+		while (objIterateurListe.hasNext() == true)
+		{
+			// Créer une référence vers le joueur humain courant dans la liste
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			
+			// Si le nom d'utilisateur du joueur n'est pas nomUtilisateur, alors
+			// on peut envoyer un événement à cet utilisateur
+			if (objJoueur.obtenirNomUtilisateur().equals(nomUtilisateur) == false)
+			{
+				// Obtenir un numéro de commande pour le joueur courant, créer
+				// un InformationDestination et l'ajouter à l'événement
+				majArgent.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(), objJoueur.obtenirProtocoleJoueur()));      																	 
+			}
+		}
+		
+		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
+		objGestionnaireEvenements.ajouterEvenement(majArgent);
+	}
+        
 	public void preparerEvenementJoueurDeplacePersonnage( String nomUtilisateur, String collision, 
-	    Point anciennePosition, Point positionJoueur, int nouveauPointage )
+	    Point anciennePosition, Point positionJoueur, int nouveauPointage, int nouvelArgent)
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs qu'un joueur démarré une partie
 		
 		EvenementJoueurDeplacePersonnage joueurDeplacePersonnage = new EvenementJoueurDeplacePersonnage( nomUtilisateur, 
-		    anciennePosition, positionJoueur, collision, nouveauPointage );
+		    anciennePosition, positionJoueur, collision, nouveauPointage, nouvelArgent);
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
