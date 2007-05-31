@@ -5,17 +5,13 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Vector;
 import java.util.TreeSet;
+import java.util.List;
 import Enumerations.Visibilite;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin1;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin2;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin3;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin4;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Reponse;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.*;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
@@ -23,6 +19,7 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ClassesUtilitaires.IntObj;
+import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
@@ -54,6 +51,12 @@ public final class GenerateurPartie
     {
 		// Création d'un objet permettant de générer des nombres aléatoires
 		Random objRandom = new Random();
+                
+                // Obtention de la configuration du serveur pour savoir ce que vont vendre les magasins
+                GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+                
+                // Obtention du nombre d'objets maximal en vente par magasin
+                int maxNbObjetsAVendre = Integer.valueOf(config.obtenirString("controleurjeu.salles-initiales.regles.max-objet-en-vente-par-magasin"));
 		
 		// Déclaration de points
 		Point objPoint;
@@ -429,27 +432,36 @@ public final class GenerateurPartie
 				
 				// Aller chercher une référence vers le magasin que l'on vient de créer
 				Magasin objMagasin = (Magasin)((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).obtenirObjetCase();
-				
-				// ************************************
-				// Créer les objets en vente dans le magasin selon le type du magasin
-				// Ici, il y aura des objets réponses dans tous les magasins des 
-				// deux types, mais cela pourra changer au fur et à mesure qu'on
-				// ajoute des objets dans le jeu, on pourra jouer avec des pourcentages
-				// et des quantités (ex. un type de magasin qui ne vend que des
-				// objets plus rares (et plus coûteux))
-				// ************************************
-				
-				// Créer un nouvel objet de type Reponse
-				Reponse objReponse = new Reponse(intCompteurIdObjet, true);
-				
-				// Incrémenter le compteur de ID pour les objets
-				intCompteurIdObjet++;
-				
-				// Ajouter l'objet dans la liste des objets utilisables du magasin
-				objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objReponse);
-				
-				
-				
+
+                                List lstNomsObjets = config.obtenirListe("controleurjeu.salles-initiales.regles.objet-a-vendre-" + objReglesMagasin.obtenirNomMagasin() + ".nom");
+                                for(int i=1; i<=lstNomsObjets.size(); i++)
+                                {
+                                    // Incrémenter le compteur de ID pour les objets
+                                    intCompteurIdObjet++;
+                                    
+                                    // On crée un nouvel objet du type correspondant
+                                    // puis on l'ajoute dans la liste des objets utilisables du magasin
+                                    if(((String)lstNomsObjets.get(i-1)).equals("Livre"))
+                                    {
+                                        Livre objAAjouter = new Livre(intCompteurIdObjet, true);
+                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                                    }
+                                    else if(((String)lstNomsObjets.get(i-1)).equals("Papillon"))
+                                    {
+                                        Papillon objAAjouter = new Papillon(intCompteurIdObjet, true);
+                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                                    }
+                                    else if(((String)lstNomsObjets.get(i-1)).equals("Boule"))
+                                    {
+                                        Boule objAAjouter = new Boule(intCompteurIdObjet, true);
+                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                                    }
+                                    else if(((String)lstNomsObjets.get(i-1)).equals("Telephone"))
+                                    {
+                                        Telephone objAAjouter = new Telephone(intCompteurIdObjet, true);
+                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                                    }
+                                }
 				
 				// Incrémenter le nombre de cases passées
 				intCompteurCases++;
@@ -490,7 +502,7 @@ public final class GenerateurPartie
 				
 				// Définir la valeur de la case au point spécifié à la case 
 				// d'identification
-				((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Piece(intValeur));				
+				((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Piece(intValeur, 1));				
 				
 				// Incrémenter le nombre de cases passées
 				intCompteurCases++;
@@ -556,11 +568,29 @@ public final class GenerateurPartie
 				// Si le nom de l'objet est Reponse, alors on met un objet 
 				// Reponse sur la case, sinon on fait le même genre de 
 				// vérifications pour les autres types de magasins
-				if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Reponse"))
+				if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Livre"))
 				{
 					// Définir la valeur de la case au point spécifié à la case 
 					// d'identification
-					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Reponse(intCompteurIdObjet, bolEstVisible));					
+					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Livre(intCompteurIdObjet, bolEstVisible));					
+				}
+                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Papillon"))
+				{
+					// Définir la valeur de la case au point spécifié à la case 
+					// d'identification
+					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Papillon(intCompteurIdObjet, bolEstVisible));					
+				}
+                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Telephone"))
+				{
+					// Définir la valeur de la case au point spécifié à la case 
+					// d'identification
+					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Telephone(intCompteurIdObjet, bolEstVisible));					
+				}
+                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Boule"))
+				{
+					// Définir la valeur de la case au point spécifié à la case 
+					// d'identification
+					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Boule(intCompteurIdObjet, bolEstVisible));					
 				}
 				
 				// Incrémenter le nombre de cases passées
@@ -589,7 +619,7 @@ public final class GenerateurPartie
 		return objttPlateauJeu;
     }
     
-    // Pas utilisé...?
+    // Deprecated...?
     public static Case[][] genererPlateauJeu2(Regles reglesPartie, int temps, Vector listePointsCaseLibre) throws NullPointerException
     {
                 // Modifier le temps pour qu'il soit au moins le minimum de minutes
@@ -667,7 +697,7 @@ public final class GenerateurPartie
 		{
 			point = (Point)listePointsCaseLibre.remove(ClassesUtilitaires.UtilitaireNombres.genererNbAleatoire( listePointsCaseLibre.size() ) );
 			//generer case couleur avec magasin
-			((CaseCouleur) objPlateauJeu[point.x][point.y]).definirObjetCase(new Piece( 10 ));
+			((CaseCouleur) objPlateauJeu[point.x][point.y]).definirObjetCase(new Piece(10, 1));
 		}
 		//enlever celles avec objets aleatoirement
 		for( int i = 0; i < intNbObjetsUtilisables; i++ )
