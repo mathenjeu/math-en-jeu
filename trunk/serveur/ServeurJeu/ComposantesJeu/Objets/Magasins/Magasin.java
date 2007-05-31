@@ -2,25 +2,25 @@ package ServeurJeu.ComposantesJeu.Objets.Magasins;
 
 import java.util.Vector;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Reponse;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ClassesUtilitaires.IntObj;
 
 
 /**
  * @author Jean-François Brind'Amour
  */
+
 public abstract class Magasin extends Objet
 {
 	// Déclaration d'une liste d'objets utilisables qui va servir à savoir 
 	// quels objets le magasin vend
 	protected Vector lstObjetsUtilisables;
-	
+        
 	/**
 	 * Constructeur de la classe Magasin qui permet d'initialiser
 	 * la liste des ObjetsUtilisables.
 	 */
-	protected Magasin()
+	public Magasin()
 	{
 		// Créer une nouvelle liste d'objets utilisables
 		lstObjetsUtilisables = new Vector();
@@ -147,15 +147,35 @@ public abstract class Magasin extends Objet
     	{
     		ObjetUtilisable objObjetRemplacement = null;
     		
-    		if (objObjetAchete instanceof Reponse)
+    		if (objObjetAchete instanceof Livre)
     		{
-    			// Créer un nouvel objet de type Reponse
+    			// Créer un nouvel objet de type Livre
     			synchronized (objProchainId)
     			{
-    				objObjetRemplacement = new Reponse(objProchainId.intValue, true);
+    				objObjetRemplacement = new Livre(objProchainId.intValue, true);
     			}
-
     		}
+                else if (objObjetAchete instanceof Papillon)
+                {
+    			synchronized (objProchainId)
+    			{
+    				objObjetRemplacement = new Papillon(objProchainId.intValue, true);
+    			}
+                }
+                else if (objObjetAchete instanceof Boule)
+                {
+    			synchronized (objProchainId)
+    			{
+    				objObjetRemplacement = new Boule(objProchainId.intValue, true);
+    			}
+                }
+                else if (objObjetAchete instanceof Telephone)
+                {
+    			synchronized (objProchainId)
+    			{
+    				objObjetRemplacement = new Telephone(objProchainId.intValue, true);
+    			}
+                }
     		
             // L'ajouter au magasin
     		ajouterObjetUtilisable((ObjetUtilisable)objObjetRemplacement);
@@ -164,13 +184,9 @@ public abstract class Magasin extends Objet
     		synchronized (objProchainId)
             {
             	objProchainId.intValue++;
-            
             }
-
     	}
     	
     	return objObjetAchete;
-    	
 	}
-		
 }
