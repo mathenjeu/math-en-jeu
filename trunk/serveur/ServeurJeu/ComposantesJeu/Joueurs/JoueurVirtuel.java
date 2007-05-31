@@ -14,7 +14,7 @@ import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.Evenements.EvenementJoueurDeplacePersonnage;
 
 import java.util.Iterator;
@@ -33,7 +33,6 @@ import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIAObjet;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Reponse;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 
 import org.apache.log4j.Logger;
@@ -89,6 +88,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     // Déclaration d'une variable qui va contenir le pointage de la 
     // partie du joueur virtuel
 	private int intPointage;
+        
+        private int intArgent;
 
 	// Déclaration de la position du joueur virtuel dans le plateau de jeu
 	private Point objPositionJoueur;
@@ -161,7 +162,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	static private Logger objLogger = Logger.getLogger(JoueurVirtuel.class);
 	
 	// Compteur pour l'objet réponse
-	private int intCompteurObjetReponse;
+	private int intCompteurObjetLivre;
 	
 	/**
 	 * Constructeur de la classe JoueurVirtuel qui permet d'initialiser les 
@@ -212,6 +213,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		
 		// Initialisation du pointage
 		intPointage = 0;
+                intArgent = 0;
 		
 		// Initialisation à null de la position, le joueur virtuel n'est nul part
 		objPositionJoueur = null;
@@ -253,7 +255,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         lstMagasinsVisites = new Vector();
 
         // Initialiser le compteur à 0
-        intCompteurObjetReponse = 0;
+        intCompteurObjetLivre = 0;
 	}
 
 
@@ -321,26 +323,26 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 					// Calculer la grandeur du déplacement demandé
 					intGrandeurDeplacement = obtenirPointage(objPositionJoueur, objPositionIntermediaire);
 					
-					// Vérifier si on utilise un objet réponse
-					boolean bolUtiliserReponse = nombreObjetsPossedes(Objet.UID_OU_REPONSE) > 0 &&
-					    intCompteurObjetReponse <= 0;
+					// Vérifier si on utilise un objet livre
+					boolean bolUtiliserLivre = nombreObjetsPossedes(Objet.UID_OU_LIVRE) > 0 &&
+					    intCompteurObjetLivre <= 0;
 					    
 					// Aller chercher le pourcentage de réussite à la question
 					intPourcentageReussite = objParametreIA.tPourcentageReponse[intNiveauDifficulte][intGrandeurDeplacement-1];
 					
 					// Si on utilise l'objet, on met des charges dans le compteur
-					if (bolUtiliserReponse == true)
+					if (bolUtiliserLivre == true)
 					{
 	    				if (ccDebug)
 	    				{
-	    					System.out.println("Utilise objet: Reponse");
+	    					System.out.println("Utilise objet: Livre");
 	    				}
 
 					    // Démarrer le compteur pour l'objet réponse
-					    intCompteurObjetReponse = Reponse.NOMBRE_CHARGE;
+					    intCompteurObjetLivre = Livre.NOMBRE_CHARGE;
 					    
-					    // Enlever un objet reponse des objets du joueur
-					    enleverObjet(Objet.UID_OU_REPONSE);
+					    // Enlever un objet livre des objets du joueur
+					    enleverObjet(Objet.UID_OU_LIVRE);
 	
 					}
 					
@@ -348,20 +350,20 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		            boolean bolQuestionChoixDeReponse = (genererNbAleatoire(100)+1 <= ParametreIA.RATIO_CHOIX_DE_REPONSE);	            
 		            
 		            // Maintenant, s'il reste des charges, modifier le % de réussite
-					if (bolQuestionChoixDeReponse && intCompteurObjetReponse > 0)
+					if (bolQuestionChoixDeReponse && intCompteurObjetLivre > 0)
 					{						
 						// Augmenter les chances de réussites utilisant le 
 						// tableau de % de réponse lorsqu'il reste des charges
 						// à l'objet et si cette question est à choix de réponse
-					    intPourcentageReussite = objParametreIA.tPourcentageReponseObjetReponse[intNiveauDifficulte][intGrandeurDeplacement-1];
+					    intPourcentageReussite = objParametreIA.tPourcentageReponseObjetLivre[intNiveauDifficulte][intGrandeurDeplacement-1];
 					    
 					    // Décrémenter une charge
-					    intCompteurObjetReponse--;
+					    intCompteurObjetLivre--;
 					    
 	    				if (ccDebug)
 	    				{
 	    					System.out.println("Une mauvaise réponse est éliminée: charge restante = " + 
-	    					    intCompteurObjetReponse);
+	    					    intCompteurObjetLivre);
 	    				}
 					}
 					
@@ -823,9 +825,9 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		        		System.out.print(", ");
 		        	}
 		        	
-		        	if (objObjet instanceof Reponse)
+		        	if (objObjet instanceof Livre)
 		        	{
-		        		System.out.print("Reponse");
+		        		System.out.print("Livre");
 		        	}
 		        	System.out.print("(" + objObjet.obtenirId() + ")");
 		        	i++;
@@ -1113,7 +1115,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	                    		dblFacteurAdj = ParametreIA.FACTEUR_AJUSTEMENT_MIN; 
 	                    	}
 	                    	
-	                    	// Attribuer les points pour l'objet Reponse
+	                    	// Attribuer les points pour l'objet Livre
                 		    attribuerImportanceCase(ptTemp, intPointsCase, intPointsAleat, 
                 		        intDistanceMax, intPointsEnleverDistance, 
                 		        objParametreIA.ttPointsRegionPiece, 
@@ -1334,7 +1336,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     /*
      * Cette fonction s'occupe de déplacer le joueur virtuel s'il a bien répondu
      * à la question, met à jour le plateau de jeu, envoie les événements aux autres joueurs
-     * et modifie le pointage et la position du joueur virtuel
+     * et modifie le pointage, l'argent et la position du joueur virtuel
      */
     private void deplacerJoueurVirtuelEtMajPlateau(Point objNouvellePosition)
     {
@@ -1475,9 +1477,9 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    			// Aller chercher l'objet
 	    			ObjetUtilisable objObjetAVendre = (ObjetUtilisable) lstCopieObjetsMagasins.get(i);
 	    			
-	    			// Si le joueur virtuel n'a pas assez de point pour acheter
+	    			// Si le joueur virtuel n'a pas assez d'argent pour acheter
 	    			// l'objet, alors on donne un pointage très bas
-	    			if (intPointage < objObjetAVendre.obtenirPrix())
+	    			if (intArgent < objObjetAVendre.obtenirPrix())
 	    			{
 	    				tPointageObjets[i] = -9999999;
 	    			}
@@ -1486,9 +1488,11 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    			// d'objets de ce type déjà en possession
 	    			else
 	    			{
-	    				tPointageObjets[i] = objParametreIA.tParametresIAObjetUtilisable[objObjetAVendre.obtenirUniqueId()].intValeurPoints - 
+                                    //FRANCOIS
+	    				tPointageObjets[i] = -9999999;
+                                    /*tPointageObjets[i] = objParametreIA.tParametresIAObjetUtilisable[objObjetAVendre.obtenirUniqueId()].intValeurPoints - 
 	    				    objParametreIA.tParametresIAObjetUtilisable[objObjetAVendre.obtenirUniqueId()].intPointsEnleverQuantite * 
-	    				    nombreObjetsPossedes(objObjetAVendre.obtenirUniqueId());
+	    				    nombreObjetsPossedes(objObjetAVendre.obtenirUniqueId());*/
 	    			}
 
 	    		}
@@ -1574,7 +1578,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    			lstObjetsUtilisablesRamasses.put(new Integer(objObjet.obtenirId()), objObjet);
 	    		
 	    		    // Défrayer les coûts
-	    		    intPointage -= objObjet.obtenirPrix();
+	    		    intArgent -= objObjet.obtenirPrix();
 	    		    
 	    		    //---------------------------------------
 	    		    if (ccDebug)
@@ -1594,8 +1598,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    		    //---------------------------------------
 	    		    
 					// Préparer un événement pour les autres joueurs de la table
-					// pour qu'il se tienne à jour du pointage de ce joueur
-					objTable.preparerEvenementMAJPointage(strNom, intPointage);
+					// pour qu'il se tienne à jour de l'argent de ce joueur
+					objTable.preparerEvenementMAJArgent(strNom, intArgent);
 					
                 }
                 else
@@ -1612,12 +1616,12 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 
     	}
     	
-    	if (objObjetRamasse instanceof Reponse)
+    	if (objObjetRamasse instanceof Livre)
     	{
     		//---------------------------------------
     		if (ccDebug)
     		{
-    			System.out.println("Objet ramasse: Reponse");
+    			System.out.println("Objet ramasse: Livre");
     		}
     		//---------------------------------------
     	}
@@ -1653,6 +1657,11 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     public void definirPointage(int valeur)
     {
         intPointage = valeur;
+    }
+    
+    public void definirArgent(int valeur)
+    {
+        intArgent = valeur;
     }
     
     public void definirPositionJoueurVirtuel(Point pos)
@@ -1828,6 +1837,13 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         return intPointage;
     }
     
+    /* Cette fonction permet d'obtenir l'argent du joueur virtuel
+     */
+    public int obtenirArgent()
+    {
+        return intArgent;
+    }
+    
     /* Cette fonction permet à la boucle dans run() de s'arrêter
      */
     public void arreterThread()
@@ -1847,9 +1863,9 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         // Déterminer dans quel tableau on va chercher les pourcentages
         // de choix. Si le joueur possède l'objet réponse ou s'il y reste des charges,
         // il va choisir des choix plus difficile car l'objet va l'aider
-        if (nombreObjetsPossedes(Objet.UID_OU_REPONSE) > 0 || intCompteurObjetReponse > 0)
+        if (nombreObjetsPossedes(Objet.UID_OU_LIVRE) > 0 || intCompteurObjetLivre > 0)
         {
-        	tTableauSource = objParametreIA.tPourcentageChoixObjetReponse;
+        	tTableauSource = objParametreIA.tPourcentageChoixObjetLivre;
         }
         else
         {
@@ -2355,6 +2371,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     private boolean determinerPretARamasserObjet(int uidObjet)
     {
     	// Vérifier s'il reste assez de temps et que le joueur a de la place
+        //FRANCOIS
+        if (uidObjet>0) return false;
     	if (lstObjetsUtilisablesRamasses.size() >= intNbObjetsMax || 
     		objTable.obtenirTempsRestant() <= objParametreIA.tParametresIAObjetUtilisable[uidObjet].intTempsSureteRamasser ||
     	    nombreObjetsPossedes(uidObjet) >= objParametreIA.tParametresIAObjetUtilisable[uidObjet].intQuantiteMax)
@@ -2392,8 +2410,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     		return false;
     	}
     	
-    	// Il faut au moins 5 points pour acheter ne serait-ce qu'un objet Reponse
-    	if (intPointage < 4)
+    	// Il faut au moins 1 dollar pour acheter ne serait-ce qu'un objet
+    	if (intArgent < 1)
     	{
     		return false;
     	}

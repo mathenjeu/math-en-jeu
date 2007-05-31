@@ -32,11 +32,11 @@ public class ParametreIA {
 	// Tableau pour le pourcentage des réponses
 	public int tPourcentageReponse[][];
 	
-	// Tableau pour le pourcentage des choix lorsqu'on possède l'objet réponse
-	public int tPourcentageChoixObjetReponse[][];
+	// Tableau pour le pourcentage des choix lorsqu'on possède l'objet Livre
+	public int tPourcentageChoixObjetLivre[][];
 	
-	// Tableau pour le pourcentage des réponses lorsqu'on possède l'objet réponse
-	public int tPourcentageReponseObjetReponse[][];
+	// Tableau pour le pourcentage des réponses lorsqu'on possède l'objet Livre
+	public int tPourcentageReponseObjetLivre[][];
 		
 	// Tableaux pour les temps de réflexion
 	public int tTempsReflexionBase[][];
@@ -158,7 +158,7 @@ public class ParametreIA {
 		tParametresIAObjetUtilisable = new ParametreIAObjet[1];
 		
 		// Objet Utilisable "Reponse" UID = 0
-		tParametresIAObjetUtilisable[Objet.UID_OU_REPONSE] = 
+		tParametresIAObjetUtilisable[Objet.UID_OU_LIVRE] = 
 		    new ParametreIAObjet(4950, 101, 6, 800, 200, 100, 20, 3, 60);
 		
 		// Paramètres pour les pièces
@@ -232,60 +232,60 @@ public class ParametreIA {
         
         // Créer le tableau pour le pourcentage des choix lorsque le 
         // joueur possède l'objet Reponse
-        tPourcentageChoixObjetReponse = new int[NOMBRE_NIVEAU_DIFFICULTE][DEPLACEMENT_MAX];
-		tPourcentageChoixObjetReponse[DIFFICULTE_FACILE][0] = 10;
-		tPourcentageChoixObjetReponse[DIFFICULTE_FACILE][1] = 30;
-		tPourcentageChoixObjetReponse[DIFFICULTE_FACILE][2] = 40;
-		tPourcentageChoixObjetReponse[DIFFICULTE_FACILE][3] = 20;
-		tPourcentageChoixObjetReponse[DIFFICULTE_FACILE][4] = 0;
-		tPourcentageChoixObjetReponse[DIFFICULTE_FACILE][5] = 0;
-		tPourcentageChoixObjetReponse[DIFFICULTE_MOYEN][0] = 5;
-		tPourcentageChoixObjetReponse[DIFFICULTE_MOYEN][1] = 20;
-		tPourcentageChoixObjetReponse[DIFFICULTE_MOYEN][2] = 50;
-		tPourcentageChoixObjetReponse[DIFFICULTE_MOYEN][3] = 20;
-		tPourcentageChoixObjetReponse[DIFFICULTE_MOYEN][4] = 5;
-		tPourcentageChoixObjetReponse[DIFFICULTE_MOYEN][5] = 0;
-		tPourcentageChoixObjetReponse[DIFFICULTE_DIFFICILE][0] = 0;
-		tPourcentageChoixObjetReponse[DIFFICULTE_DIFFICILE][1] = 5;
-		tPourcentageChoixObjetReponse[DIFFICULTE_DIFFICILE][2] = 20;
-		tPourcentageChoixObjetReponse[DIFFICULTE_DIFFICILE][3] = 50;
-		tPourcentageChoixObjetReponse[DIFFICULTE_DIFFICILE][4] = 15;
-		tPourcentageChoixObjetReponse[DIFFICULTE_DIFFICILE][5] = 10; 
-		tPourcentageChoixObjetReponse[DIFFICULTE_TRES_DIFFICILE][0] = 0;
-		tPourcentageChoixObjetReponse[DIFFICULTE_TRES_DIFFICILE][1] = 0;
-		tPourcentageChoixObjetReponse[DIFFICULTE_TRES_DIFFICILE][2] = 5;
-		tPourcentageChoixObjetReponse[DIFFICULTE_TRES_DIFFICILE][3] = 5;
-		tPourcentageChoixObjetReponse[DIFFICULTE_TRES_DIFFICILE][4] = 50;
-		tPourcentageChoixObjetReponse[DIFFICULTE_TRES_DIFFICILE][5] = 40; 
+        tPourcentageChoixObjetLivre = new int[NOMBRE_NIVEAU_DIFFICULTE][DEPLACEMENT_MAX];
+		tPourcentageChoixObjetLivre[DIFFICULTE_FACILE][0] = 10;
+		tPourcentageChoixObjetLivre[DIFFICULTE_FACILE][1] = 30;
+		tPourcentageChoixObjetLivre[DIFFICULTE_FACILE][2] = 40;
+		tPourcentageChoixObjetLivre[DIFFICULTE_FACILE][3] = 20;
+		tPourcentageChoixObjetLivre[DIFFICULTE_FACILE][4] = 0;
+		tPourcentageChoixObjetLivre[DIFFICULTE_FACILE][5] = 0;
+		tPourcentageChoixObjetLivre[DIFFICULTE_MOYEN][0] = 5;
+		tPourcentageChoixObjetLivre[DIFFICULTE_MOYEN][1] = 20;
+		tPourcentageChoixObjetLivre[DIFFICULTE_MOYEN][2] = 50;
+		tPourcentageChoixObjetLivre[DIFFICULTE_MOYEN][3] = 20;
+		tPourcentageChoixObjetLivre[DIFFICULTE_MOYEN][4] = 5;
+		tPourcentageChoixObjetLivre[DIFFICULTE_MOYEN][5] = 0;
+		tPourcentageChoixObjetLivre[DIFFICULTE_DIFFICILE][0] = 0;
+		tPourcentageChoixObjetLivre[DIFFICULTE_DIFFICILE][1] = 5;
+		tPourcentageChoixObjetLivre[DIFFICULTE_DIFFICILE][2] = 20;
+		tPourcentageChoixObjetLivre[DIFFICULTE_DIFFICILE][3] = 50;
+		tPourcentageChoixObjetLivre[DIFFICULTE_DIFFICILE][4] = 15;
+		tPourcentageChoixObjetLivre[DIFFICULTE_DIFFICILE][5] = 10; 
+		tPourcentageChoixObjetLivre[DIFFICULTE_TRES_DIFFICILE][0] = 0;
+		tPourcentageChoixObjetLivre[DIFFICULTE_TRES_DIFFICILE][1] = 0;
+		tPourcentageChoixObjetLivre[DIFFICULTE_TRES_DIFFICILE][2] = 5;
+		tPourcentageChoixObjetLivre[DIFFICULTE_TRES_DIFFICILE][3] = 5;
+		tPourcentageChoixObjetLivre[DIFFICULTE_TRES_DIFFICILE][4] = 50;
+		tPourcentageChoixObjetLivre[DIFFICULTE_TRES_DIFFICILE][5] = 40; 
         
         
         // Créer le tableau pour le pourcentage de réponse lorsque le
         // joueur utilise l'objet Reponse
-        tPourcentageReponseObjetReponse = new int[NOMBRE_NIVEAU_DIFFICULTE][DEPLACEMENT_MAX];
-		tPourcentageReponseObjetReponse[DIFFICULTE_FACILE][0] = 90;
-		tPourcentageReponseObjetReponse[DIFFICULTE_FACILE][1] = 80;
-		tPourcentageReponseObjetReponse[DIFFICULTE_FACILE][2] = 60;
-		tPourcentageReponseObjetReponse[DIFFICULTE_FACILE][3] = 25;
-		tPourcentageReponseObjetReponse[DIFFICULTE_FACILE][4] = 0;
-		tPourcentageReponseObjetReponse[DIFFICULTE_FACILE][5] = 0;
-		tPourcentageReponseObjetReponse[DIFFICULTE_MOYEN][0] = 100;
-		tPourcentageReponseObjetReponse[DIFFICULTE_MOYEN][1] = 100;
-		tPourcentageReponseObjetReponse[DIFFICULTE_MOYEN][2] = 85;
-		tPourcentageReponseObjetReponse[DIFFICULTE_MOYEN][3] = 35;
-		tPourcentageReponseObjetReponse[DIFFICULTE_MOYEN][4] = 30;
-		tPourcentageReponseObjetReponse[DIFFICULTE_MOYEN][5] = 0;
-		tPourcentageReponseObjetReponse[DIFFICULTE_DIFFICILE][0] = 100;
-		tPourcentageReponseObjetReponse[DIFFICULTE_DIFFICILE][1] = 100;
-		tPourcentageReponseObjetReponse[DIFFICULTE_DIFFICILE][2] = 100;
-		tPourcentageReponseObjetReponse[DIFFICULTE_DIFFICILE][3] = 80;
-		tPourcentageReponseObjetReponse[DIFFICULTE_DIFFICILE][4] = 55;
-		tPourcentageReponseObjetReponse[DIFFICULTE_DIFFICILE][5] = 40;
-		tPourcentageReponseObjetReponse[DIFFICULTE_TRES_DIFFICILE][0] = 100;
-		tPourcentageReponseObjetReponse[DIFFICULTE_TRES_DIFFICILE][1] = 100;
-		tPourcentageReponseObjetReponse[DIFFICULTE_TRES_DIFFICILE][2] = 100;
-		tPourcentageReponseObjetReponse[DIFFICULTE_TRES_DIFFICILE][3] = 100;
-		tPourcentageReponseObjetReponse[DIFFICULTE_TRES_DIFFICILE][4] = 95;
-		tPourcentageReponseObjetReponse[DIFFICULTE_TRES_DIFFICILE][5] = 85; 
+        tPourcentageReponseObjetLivre = new int[NOMBRE_NIVEAU_DIFFICULTE][DEPLACEMENT_MAX];
+		tPourcentageReponseObjetLivre[DIFFICULTE_FACILE][0] = 90;
+		tPourcentageReponseObjetLivre[DIFFICULTE_FACILE][1] = 80;
+		tPourcentageReponseObjetLivre[DIFFICULTE_FACILE][2] = 60;
+		tPourcentageReponseObjetLivre[DIFFICULTE_FACILE][3] = 25;
+		tPourcentageReponseObjetLivre[DIFFICULTE_FACILE][4] = 0;
+		tPourcentageReponseObjetLivre[DIFFICULTE_FACILE][5] = 0;
+		tPourcentageReponseObjetLivre[DIFFICULTE_MOYEN][0] = 100;
+		tPourcentageReponseObjetLivre[DIFFICULTE_MOYEN][1] = 100;
+		tPourcentageReponseObjetLivre[DIFFICULTE_MOYEN][2] = 85;
+		tPourcentageReponseObjetLivre[DIFFICULTE_MOYEN][3] = 35;
+		tPourcentageReponseObjetLivre[DIFFICULTE_MOYEN][4] = 30;
+		tPourcentageReponseObjetLivre[DIFFICULTE_MOYEN][5] = 0;
+		tPourcentageReponseObjetLivre[DIFFICULTE_DIFFICILE][0] = 100;
+		tPourcentageReponseObjetLivre[DIFFICULTE_DIFFICILE][1] = 100;
+		tPourcentageReponseObjetLivre[DIFFICULTE_DIFFICILE][2] = 100;
+		tPourcentageReponseObjetLivre[DIFFICULTE_DIFFICILE][3] = 80;
+		tPourcentageReponseObjetLivre[DIFFICULTE_DIFFICILE][4] = 55;
+		tPourcentageReponseObjetLivre[DIFFICULTE_DIFFICILE][5] = 40;
+		tPourcentageReponseObjetLivre[DIFFICULTE_TRES_DIFFICILE][0] = 100;
+		tPourcentageReponseObjetLivre[DIFFICULTE_TRES_DIFFICILE][1] = 100;
+		tPourcentageReponseObjetLivre[DIFFICULTE_TRES_DIFFICILE][2] = 100;
+		tPourcentageReponseObjetLivre[DIFFICULTE_TRES_DIFFICILE][3] = 100;
+		tPourcentageReponseObjetLivre[DIFFICULTE_TRES_DIFFICILE][4] = 95;
+		tPourcentageReponseObjetLivre[DIFFICULTE_TRES_DIFFICILE][5] = 85; 
 
 
         // Créer les tableaux pour les temps de réflexion
