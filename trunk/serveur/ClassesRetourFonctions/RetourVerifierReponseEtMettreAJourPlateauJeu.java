@@ -33,17 +33,18 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 	
 	// Déclaration d'une variable qui va contenir le nouveau pointage
 	private int intNouveauPointage;
+        
+        private int intNouvelArgent;
 	
 	private String strCollision;
 	
 	/**
 	 * Constructeur de la classe RetourVerifierReponseEtMettreAJourPlateauJeu.
 	 * 
-	 * @param boolean deplacementAccepte : Permet de savoir si le déplacement
-	 * 									   a été accepté ou non
+	 * @param boolean deplacementAccepte : Permet de savoir si le déplacement a été accepté ou non
 	 * @param int nouveauPointage : Le nouveau pointage du joueur
 	 */
-	public RetourVerifierReponseEtMettreAJourPlateauJeu(boolean deplacementAccepte, int nouveauPointage)
+	public RetourVerifierReponseEtMettreAJourPlateauJeu(boolean deplacementAccepte, int nouveauPointage, int nouvelArgent)
 	{
 		// Initialiser les membres de la classe de retour
 		bolDeplacementAccepte = deplacementAccepte;
@@ -52,6 +53,7 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 		objObjetSubi = null;
 		objNouvellePosition = null;
 		intNouveauPointage = nouveauPointage;
+                intNouvelArgent = nouvelArgent;
 		strCollision = "vide";
 	}
 	
@@ -156,6 +158,11 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 	{
 		return intNouveauPointage;
 	}
+
+        public int obtenirNouvelArgent()
+        {
+            return intNouvelArgent;
+        }
 	
 	public String obtenirCollision()
 	{
