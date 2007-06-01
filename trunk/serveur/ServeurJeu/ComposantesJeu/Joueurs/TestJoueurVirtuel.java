@@ -245,7 +245,7 @@ public class TestJoueurVirtuel {
                         {
                         	strTemp.append("M"); 
                         }
-                        else if (((CaseCouleur)pj[i][j]).obtenirObjetCase() instanceof Reponse)
+                        else if (((CaseCouleur)pj[i][j]).obtenirObjetCase() instanceof Livre)
                         {
                         	if ((((ObjetUtilisable)((CaseCouleur)pj[i][j]).obtenirObjetCase())).estVisible())
                         	{

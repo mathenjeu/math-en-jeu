@@ -146,7 +146,7 @@ public class ParametreIA {
     // Temps de sûreté fin de partie fin de mini-jeu
     public final static int TEMPS_SURETE_MINIJEU_FIN_PARTIE = 3;
     
-    // Ratio de questions à choix de réponse (pour objet Reponse)
+    // Ratio de questions à choix de réponse (pour objet Livre)
     public final static int RATIO_CHOIX_DE_REPONSE = 85;
     
 	public ParametreIA()
@@ -231,7 +231,7 @@ public class ParametreIA {
 		tPourcentageReponse[DIFFICULTE_TRES_DIFFICILE][5] = 60; 
         
         // Créer le tableau pour le pourcentage des choix lorsque le 
-        // joueur possède l'objet Reponse
+        // joueur possède l'objet Livre
         tPourcentageChoixObjetLivre = new int[NOMBRE_NIVEAU_DIFFICULTE][DEPLACEMENT_MAX];
 		tPourcentageChoixObjetLivre[DIFFICULTE_FACILE][0] = 10;
 		tPourcentageChoixObjetLivre[DIFFICULTE_FACILE][1] = 30;
@@ -260,7 +260,7 @@ public class ParametreIA {
         
         
         // Créer le tableau pour le pourcentage de réponse lorsque le
-        // joueur utilise l'objet Reponse
+        // joueur utilise l'objet Livre
         tPourcentageReponseObjetLivre = new int[NOMBRE_NIVEAU_DIFFICULTE][DEPLACEMENT_MAX];
 		tPourcentageReponseObjetLivre[DIFFICULTE_FACILE][0] = 90;
 		tPourcentageReponseObjetLivre[DIFFICULTE_FACILE][1] = 80;

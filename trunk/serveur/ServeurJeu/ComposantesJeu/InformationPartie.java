@@ -74,7 +74,7 @@ public class InformationPartie
 	private boolean bolObjetAcheter;
 	
     // Compteur pour l'objet réponse
-    private int intCompteurObjetReponse;
+    private int intCompteurObjetLivre;
 	
 	 
 	/**
@@ -119,7 +119,7 @@ public class InformationPartie
 	    
 	    objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau() );
 
-        intCompteurObjetReponse = 0;
+        intCompteurObjetLivre = 0;
 
 	}
 
@@ -854,17 +854,17 @@ public class InformationPartie
 		bolObjetAcheter = valeur;
 	}
 	
-	public void initialiserCompteurObjetReponse()
+	public void initialiserCompteurObjetLivre()
 	{
-        intCompteurObjetReponse = Reponse.NOMBRE_CHARGE;
+        intCompteurObjetLivre = Livre.NOMBRE_CHARGE;
 	}
 	
 	public String obtenirMauvaiseReponse1(Question objQuestionPoser)
 	{
 		String strRetour = "";
 		
-		// Il faut qu'il reste des charges à l'objet réponse précédamment utilisé
-		if (intCompteurObjetReponse > 0)
+		// Il faut qu'il reste des charges à l'objet livre précédamment utilisé
+		if (intCompteurObjetLivre > 0)
 		{
 			strRetour = objQuestionPoser.obtenirMauvaiseReponse();
 			if (strRetour.equals("PasUnChoixDeReponse") ||
@@ -874,7 +874,7 @@ public class InformationPartie
 			}
 			else
 			{
-				intCompteurObjetReponse--;
+				intCompteurObjetLivre--;
 			}
 
 		}

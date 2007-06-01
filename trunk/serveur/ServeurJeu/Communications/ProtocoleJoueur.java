@@ -3281,7 +3281,7 @@ public class ProtocoleJoueur implements Runnable
 			if (strTypeObjet.equals("Livre"))
 			{
                             // Démarrer le compteur pour l'objet réponse
-                           // objJoueurHumain.obtenirPartieCourante().initialiserCompteurObjetReponse();
+                           // objJoueurHumain.obtenirPartieCourante().initialiserCompteurObjetLivre();
 
                             // Enlever l'objet de la liste des objets du
                             // joueur
