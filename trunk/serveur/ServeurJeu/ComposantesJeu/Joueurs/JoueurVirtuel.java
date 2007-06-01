@@ -845,7 +845,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	            objPositionTrouvee.y);           
 	        System.out.println("Position a atteindre: " + objPositionFinaleVisee.x + "," + 
 	            objPositionFinaleVisee.y);
-	        TestJoueurVirtuel.outputPlateau(objttPlateauJeu);
+//	        TestJoueurVirtuel.outputPlateau(objttPlateauJeu);
         }
         //--------------------------------
         
