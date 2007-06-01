@@ -565,8 +565,8 @@ public final class GenerateurPartie
 				// utilisables trouvés
 				lstPointsObjetsUtilisables.add(objPoint);
 
-				// Si le nom de l'objet est Reponse, alors on met un objet 
-				// Reponse sur la case, sinon on fait le même genre de 
+				// Si le nom de l'objet est Livre, alors on met un objet 
+				// Livre sur la case, sinon on fait le même genre de 
 				// vérifications pour les autres types de magasins
 				if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Livre"))
 				{
@@ -704,7 +704,7 @@ public final class GenerateurPartie
 		{
 			point = (Point)listePointsCaseLibre.remove(ClassesUtilitaires.UtilitaireNombres.genererNbAleatoire( listePointsCaseLibre.size() ) );
 			//generer case couleur avec magasin
-			((CaseCouleur) objPlateauJeu[point.x][point.y]).definirObjetCase(new Reponse( 1, true ));
+			((CaseCouleur) objPlateauJeu[point.x][point.y]).definirObjetCase(new Livre( 1, true ));
 		}
 		
     	return objPlateauJeu;
