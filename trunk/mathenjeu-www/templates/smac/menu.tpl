@@ -1,5 +1,9 @@
 <td class="menu" width="20%" valign="top">
 <div class="menu">
+	<div id="lang">
+		<a href="set_lang.php?lang=francais"><img border="0" src="{$template}img/flag_fr.gif"></a>
+		<a href="set_lang.php?lang=english"><img border="0" src="{$template}img/flag_en.gif"></a>
+	</div>
 	{if $connecter eq 1}
 		<h4 class="titre_menu">{$lang.titre_menu_joueur}</h4>
 		<div>
