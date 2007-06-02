@@ -47,7 +47,7 @@ define("LANGAGE_DIR",DOC_ROOT . "langage/");
 define("CONFIG_FILE", DOC_ROOT . "/config/configuration.xml");
 $config = simplexml_load_file(CONFIG_FILE);
 
-require_once(LANGAGE_DIR . $config->langue . "/lang_main.php");
+//require_once(LANGAGE_DIR . $config->langue . "/lang_main.php");
 
 define("MAX_NB_NOUVELLES",(int)$config->nbNouvelles);       	//nombre maximal de nouvelles � afficher
 define("MAX_NB_JOUEURS_PALMARES",(int)$config->nbJoueurs);   	//nombre de joueurs pour les palmar�s
@@ -100,6 +100,13 @@ if(session_id()=="")
   //d�bute la session
   session_start();
 }
+
+if (isset($_SESSION['langage'])) {
+  require_once(LANGAGE_DIR . $_SESSION['langage'] . "/lang_main.php"); 
+} else {
+  require_once(LANGAGE_DIR . $config->langue . "/lang_main.php");
+}
+
 
 
 //extension de la classe Smarty pour automatiquement
