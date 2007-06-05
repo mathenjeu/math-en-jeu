@@ -3306,7 +3306,7 @@ public class ProtocoleJoueur implements Runnable
                             String mauvaiseReponse = derniereQuestionPosee.obtenirMauvaiseReponse();
                             
                             // On prépare la réponse
-                            objNoeudCommande.setAttribute("nom", "RetourUtiliserLivre";
+                            objNoeudCommande.setAttribute("nom", "RetourUtiliserLivre");
                             
 		            // Créer le noeud contenant le choix de réponse si c'était une question à choix de réponse
                             Element objNoeudParametreMauvaiseReponse = objDocumentXMLSortie.createElement("parametre");
