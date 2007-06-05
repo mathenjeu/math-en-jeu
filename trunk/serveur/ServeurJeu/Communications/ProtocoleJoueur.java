@@ -44,6 +44,7 @@ import ServeurJeu.Evenements.EvenementSynchroniserTemps;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.Evenements.EvenementPartieDemarree;
 import ServeurJeu.Evenements.InformationDestination;
+import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
@@ -98,6 +99,10 @@ public class ProtocoleJoueur implements Runnable
 	private TacheSynchroniser objTacheSynchroniser;
 	
 	static private Logger objLogger = Logger.getLogger( ProtocoleJoueur.class );
+        
+        // On veut savoir quelle a été la dernière question posée au joueur pour
+        // pouvoir utiliser l'objet livre
+        private Question derniereQuestionPosee;
 	
 	
 	// Déclaration d'une variable qui va permettre de savoir si le joueur
@@ -224,6 +229,9 @@ public class ProtocoleJoueur implements Runnable
 						// client et mettre le résultat à retourner dans une variable
 						objLogger.info( GestionnaireMessages.message("protocole.message_recu") + strMessageRecu );
 						String strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
+                                                //FRANCOIS
+                                                //System.out.println("Reçu:  " + strMessageRecu);
+                                                //System.out.println("Envoi: " + strMessageAEnvoyer);
 						// On remet la variable contenant le numéro de commande
 						// à retourner à -1, pour dire qu'il n'est pas initialisé
 						intNumeroCommandeReponse = -1;
@@ -1516,6 +1524,9 @@ public class ProtocoleJoueur implements Runnable
 							
 							// Ajouter le noeud question au noeud paramètre
 							objNoeudParametreQuestion.appendChild(objNoeudQuestion);
+                                                        
+                                                        // On note quelle question on vient d'envoyer au cas où le joueur utiliserait un livre
+                                                        derniereQuestionPosee = objQuestionAPoser;
 						}
 						
 						// Ajouter le noeud paramètre au noeud de commande
@@ -3280,39 +3291,30 @@ public class ProtocoleJoueur implements Runnable
 			// Dépendamment du type de l'objet, on effectue le traitement approprié
 			if (strTypeObjet.equals("Livre"))
 			{
-                            // Démarrer le compteur pour l'objet réponse
-                           // objJoueurHumain.obtenirPartieCourante().initialiserCompteurObjetLivre();
-
-                            // Enlever l'objet de la liste des objets du
-                            // joueur
-                            // objJoueurHumain.enleverObjet(intIdObjet, strTypeObjet);
-			}
-                        else if (strTypeObjet.equals("Papillon"))
-                        {
-                            // Le papillon permet au joueur de se déplacer où il veut sur le plateau
-                            // Le client devrait donc nous avoir envoyé les coordonnées x et y où le joueur veut se déplacer
-                            // On va vérifier si c'est une position correcte, on déplace le joueur, et on dit au client de déplacer le joueur
-                            // Le client s'occupe d'enlever l'objet de la liste du joueur
-                            //FRANCOIS
-                        /*<commande nom="UtiliserObjet">
-                                <parametre type="nom">
-                                        <position y="3" x="4" />
-                                </parametre>
-                                <parametre type="NouvellePosition">
-                                        <position y="3" x="4" />
-                                </parametre>
-                        </commande>*/
-                            // On obtient la nouvelle position
-                            Node objNoeudNouvellePosition = obtenirValeurParametre(objNoeudCommandeEntree, "NouvellePosition");
-                            Point objNouvellePosition = new Point(Integer.parseInt(objNoeudNouvellePosition.getAttributes().getNamedItem("x").getNodeValue()), Integer.parseInt(objNoeudNouvellePosition.getAttributes().getNamedItem("y").getNodeValue()));
-                            
-                            // On vérifie
-                            Case[][] plateauDeJeu = this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirPlateauJeuCourant();
-                            int verificationCase = plateauDeJeu[objNouvellePosition.x][objNouvellePosition.y].obtenirTypeCase();
-                            
+                            // Le livre est utilisé lorsqu'un joueur se fait poser une question
+                            // à choix de réponse. Le serveur renvoie alors une mauvaise réponse
+                            // à la question, et le client fera disparaître ce choix de réponse
+                            // parmi les choix possibles pour le joueur.
+                        
+                            // On doit retourner la mauvaise réponse
                             bolDoitRetournerCommande = true;
-                        }
-                    // FAIRE BOULE ET TELEPHONE
+                        
+                            // Enlever l'objet de la liste des objets du joueur
+                            objJoueurHumain.enleverObjet(intIdObjet, strTypeObjet);
+                            
+                            // On obtient une mauvaise réponse à la dernière question posée
+                            String mauvaiseReponse = derniereQuestionPosee.obtenirMauvaiseReponse();
+                            
+                            // On prépare la réponse
+                            objNoeudCommande.setAttribute("nom", "RetourUtiliserLivre";
+                            
+		            // Créer le noeud contenant le choix de réponse si c'était une question à choix de réponse
+                            Element objNoeudParametreMauvaiseReponse = objDocumentXMLSortie.createElement("parametre");
+                            Text objNoeudTexteMauvaiseReponse = objDocumentXMLSortie.createTextNode(mauvaiseReponse);
+                            objNoeudParametreMauvaiseReponse.setAttribute("type", "MauvaiseReponse");
+                            objNoeudParametreMauvaiseReponse.appendChild(objNoeudTexteMauvaiseReponse);
+                            objNoeudCommande.appendChild(objNoeudParametreMauvaiseReponse);
+			}
 		}
     }
     
