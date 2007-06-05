@@ -108,7 +108,7 @@ public class Question
 	
 	/**
 	 * Cette fonction retourne une mauvaise réponse. Utilisé lorsqu'un
-	 * joueur utilise l'objet "Reponse" qui permet d'éliminer un choix
+	 * joueur utilise l'objet "Livre" qui permet d'éliminer un choix
 	 * de réponse. Dans le cas d'une question sans choix de réponse, la 
 	 * fonction retourne "PasUnChoixDeReponse"
 	 */
