@@ -1,6 +1,5 @@
 package ServeurJeu;
 
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import java.util.TreeMap;
 import java.util.Set;
 import java.util.Iterator;
@@ -10,9 +9,6 @@ import java.util.List;
 
 
 import org.apache.log4j.Logger;
-
-import com.jamonapi.Monitor;
-import com.jamonapi.MonitorFactory;
 
 import java.util.Random;
 
@@ -27,7 +23,6 @@ import ServeurJeu.Evenements.EvenementJoueurDeconnecte;
 import ServeurJeu.Evenements.EvenementJoueurConnecte;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
-import ServeurJeu.Monitoring.Moniteur;
 import ServeurJeu.Monitoring.TacheLogMoniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;

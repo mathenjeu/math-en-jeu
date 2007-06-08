@@ -1,6 +1,5 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
-import ServeurJeu.ComposantesJeu.Joueurs.ParametreIAObjet;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import java.awt.Point;
 import ServeurJeu.Configuration.GestionnaireConfiguration;

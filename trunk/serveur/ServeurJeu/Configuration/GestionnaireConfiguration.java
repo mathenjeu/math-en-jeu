@@ -1,13 +1,8 @@
 package ServeurJeu.Configuration;
 
 import java.util.List;
-
-import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
-import org.apache.commons.configuration.AbstractConfiguration;
-import org.w3c.dom.Document;
-import java.util.TreeSet;
 
 public class GestionnaireConfiguration 
 {

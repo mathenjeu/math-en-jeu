@@ -1,6 +1,5 @@
 package ServeurJeu.ComposantesJeu;
 
-import Enumerations.TypeQuestion;
 import ClassesUtilitaires.UtilitaireNombres;
 
 /**

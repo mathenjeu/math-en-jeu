@@ -1,7 +1,6 @@
 package ClassesUtilitaires;
 
 import java.util.Random;
-import java.util.Date;
 
 /**
  * @author Jean-François Brind'Amour

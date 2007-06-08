@@ -2,46 +2,28 @@ package ServeurJeu.ComposantesJeu.Joueurs;
 
 import ClassesUtilitaires.UtilitaireNombres;
 import ServeurJeu.ControleurJeu;
-import ServeurJeu.Communications.ProtocoleJoueur;
 import ServeurJeu.ComposantesJeu.InformationPartie;
-import ServeurJeu.ComposantesJeu.Salle;
 import java.awt.Point;
 import java.util.TreeMap;
 import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
-import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
-import ServeurJeu.Evenements.EvenementJoueurDeplacePersonnage;
 
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.lang.Math;
 import java.util.Vector;
-
-import ServeurJeu.Evenements.EvenementJoueurDemarrePartie;
-import ServeurJeu.Evenements.EvenementJoueurDeplacePersonnage;
 import ServeurJeu.Evenements.GestionnaireEvenements;
-import ServeurJeu.Evenements.InformationDestination;
-
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
-import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
-import ServeurJeu.ComposantesJeu.Joueurs.ParametreIAObjet;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.Category;
 import org.apache.log4j.Level;
 import ServeurJeu.Configuration.GestionnaireMessages;
-
-import java.util.Random;
-import java.util.Date;
 
 //import ServeurJeu.ComposantesJeu.Joueurs.TestJoueurVirtuel;
  

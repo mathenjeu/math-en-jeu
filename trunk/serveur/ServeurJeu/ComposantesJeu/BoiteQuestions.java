@@ -11,8 +11,6 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-
-import ServeurJeu.BD.GestionnaireBD;
 import ClassesUtilitaires.UtilitaireNombres;
 import ServeurJeu.Configuration.GestionnaireMessages;
 

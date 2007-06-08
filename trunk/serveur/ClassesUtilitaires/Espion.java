@@ -1,22 +1,18 @@
 package ClassesUtilitaires;
 
 import org.apache.log4j.Logger;
-import java.io.File;
 import java.io.FileWriter;
 import java.util.Date;
 import java.text.DateFormat;
 import ServeurJeu.ControleurJeu;
-import ServeurJeu.Communications.GestionnaireCommunication;
 import ServeurJeu.Communications.ProtocoleJoueur;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Table;
 import java.util.Vector;
-import java.lang.System;
 import java.util.TreeMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import ServeurJeu.Temps.Minuterie;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ServeurJeu.Configuration.GestionnaireMessages;

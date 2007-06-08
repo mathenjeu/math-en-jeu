@@ -2,8 +2,6 @@ package ServeurJeu.ComposantesJeu.ReglesJeu;
 
 import java.util.TreeSet;
 
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesComparator;
-
 /**
  * @author Jean-François Brind'Amour
  */

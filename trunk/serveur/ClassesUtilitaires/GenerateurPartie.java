@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Vector;
-import java.util.TreeSet;
 import java.util.List;
 import Enumerations.Visibilite;
 import ServeurJeu.ComposantesJeu.Cases.Case;
@@ -18,9 +17,7 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
-import ClassesUtilitaires.IntObj;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
-import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
  * @author Jean-François Brind'Amour
