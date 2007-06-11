@@ -691,6 +691,10 @@ public class ControleurJeu
                 
                 Salle objSalle = new Salle(objGestionnaireBD, nom, createur, motDePasse, objReglesSalle, this);
                 ajouterNouvelleSalle( objSalle );
+                
+                //FRANCOIS Si on veut des nouvelles salles (avec peut-être de nouvelles règles):
+                //Salle objSalle2 = new Salle(objGestionnaireBD, "J'aime ça les peanuts, moé!", createur, motDePasse, objReglesSalle, this);
+                //ajouterNouvelleSalle(objSalle2);
 	}
 	
 	public GestionnaireCommunication obtenirGestionnaireCommunication()
