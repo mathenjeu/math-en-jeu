@@ -772,16 +772,20 @@ public class InformationPartie
 	 */
 	public ObjetUtilisable obtenirObjetUtilisable(int intObjetId)
 	{
-		for (int i = 0; i < lstObjetsUtilisablesRamasses.size(); i++)
-		{
-			ObjetUtilisable objObjet = (ObjetUtilisable) lstObjetsUtilisablesRamasses.get(i);
-			
-			if (objObjet.obtenirId() == intObjetId)
-			{
-				return objObjet;
-			}
-		}
-		return null;
+	     Set lstEnsembleObjets = lstObjetsUtilisablesRamasses.entrySet();
+	     Iterator objIterateurListeObjets = lstEnsembleObjets.iterator();
+	     while (objIterateurListeObjets.hasNext() == true)
+	     {
+	     	Objet objObjet = (Objet)(((Map.Entry)(objIterateurListeObjets.next())).getValue());
+	     	if (objObjet instanceof ObjetUtilisable)
+	     	{
+	     		if (((ObjetUtilisable)objObjet).obtenirId() == intObjetId)
+	     		{
+	     			return (ObjetUtilisable)objObjet;
+	     		}
+	     	}
+	     }
+	     return null;
 	}
 	
 	/*
