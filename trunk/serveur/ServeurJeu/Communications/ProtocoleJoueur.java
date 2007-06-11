@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.GregorianCalendar;
 import java.awt.Point;
 import Enumerations.Filtre;
 import ClassesUtilitaires.UtilitaireXML;
@@ -47,6 +48,7 @@ import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.Configuration.GestionnaireMessages;
+import java.util.Calendar;
 
 
 /**
@@ -1635,6 +1637,7 @@ public class ProtocoleJoueur implements Runnable
 								objNoeudObjetRamasse.setAttribute("type", objRetour.obtenirObjetRamasse().getClass().getSimpleName());
 								objNoeudParametreObjetRamasse.appendChild(objNoeudObjetRamasse);
 								objNoeudCommande.appendChild(objNoeudParametreObjetRamasse);
+                                                                objJoueurHumain.obtenirPartieCourante().ajouterObjetUtilisableListe(objRetour.obtenirObjetRamasse());
 							}
 							
 							// Si le joueur a subi un objet, alors on peut créer 
@@ -3311,6 +3314,7 @@ public class ProtocoleJoueur implements Runnable
                             Text objNoeudTexteMauvaiseReponse = objDocumentXMLSortie.createTextNode(mauvaiseReponse);
                             objNoeudParametreMauvaiseReponse.setAttribute("type", "MauvaiseReponse");
                             objNoeudParametreMauvaiseReponse.appendChild(objNoeudTexteMauvaiseReponse);
+                            objNoeudCommande.setAttribute("type", "Reponse");
                             objNoeudCommande.appendChild(objNoeudParametreMauvaiseReponse);
 			}
 		}
