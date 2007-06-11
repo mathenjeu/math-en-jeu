@@ -324,7 +324,7 @@ public class GestionnaireBD
 
 		String strRequeteSQL = "SELECT question.*,typereponse.nomType FROM question,typereponse " +
 			"WHERE typereponse.cleType = question.typeReponse and question.valide = 1 " +
-			" and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL and ";
+			"and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL and ";
 		
 		
                 strRequeteSQL += "cleQuestion >= " + config.obtenirString("gestionnairebd.cle-question-min")
@@ -341,20 +341,20 @@ public class GestionnaireBD
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		
 		String strRequeteSQL = "SELECT question.*,typereponse.nomType FROM question,typereponse " +
-		"WHERE typereponse.cleType = question.typeReponse and question.valide = 1 " +
-			" and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL ";
+			"WHERE typereponse.cleType = question.typeReponse and question.valide = 1 " +
+			"and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL ";
 		
                 strRequeteSQL += "and cleQuestion >= " +
 		    config.obtenirString("gestionnairebd.cle-question-min") + " and cleQuestion <= " +
 		    config.obtenirString("gestionnairebd.cle-question-max") + " and ";
 		    
 		strRequeteSQL += strValeurGroupeAge + niveau + " = " + intDifficulte;
-		
+		//FRANCOIS si on veut la catégorie et la difficulté, c'est ici
 		remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
 	}
 	
 	private void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, String strRequeteSQL )
-	{	
+	{	//FRANCOIS y'a dequoi à faire ici aussi
 		try
 		{
 			synchronized( requete )
