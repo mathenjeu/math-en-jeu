@@ -3,10 +3,20 @@
 <!-- Fichier de configuration de Math en jeu -->
 <configuration>
 	
-	<!-- Section globale -->
-	<globale>
-
-	</globale>
+	<langue>
+            <Anglais>
+                <nom-table-questions-BD></nom-table-questions-BD>
+                <url-questions-reponses></url-questions-reponses>
+                <cle-question-min></cle-question-min>
+                <cle-question-max></cle-question-max>
+            </Anglais>
+            <Francais>
+                <nom-table-questions-BD></nom-table-questions-BD>
+                <url-questions-reponses></url-questions-reponses>
+                <cle-question-min></cle-question-min>
+                <cle-question-max></cle-question-max>
+            </Francais>
+	</langue>
 
 	<!-- Section de la classe ServeurJeu.ControleurJeu -->
 	<controleurjeu>
@@ -150,23 +160,20 @@
 			</regles>
 		</salles-initiales>
 	</controleurjeu>
-	
+
+	<!-- Section de la classe ServeurJeu.Communications.GestionnaireCommunication -->
+	<gestionnairecommunication>
+		<port>6100</port>
+	</gestionnairecommunication>
+
 	<!-- Section de la classe ServeurJeu.BD.GestionnaireBD -->
 	<gestionnairebd>
 		<jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
 		<hote>jdbc:mysql://localhost/smac</hote>
 		<utilisateur></utilisateur>
 		<mot-de-passe></mot-de-passe>
-		<url-questions-reponses>http://localhost/questions/</url-questions-reponses>
-        	<cle-question-min>1</cle-question-min>
-        	<cle-question-max>800</cle-question-max>
 		<code_erreur_inactivite>08S01</code_erreur_inactivite>
 	</gestionnairebd>
-
-	<!-- Section de la classe ServeurJeu.Communications.GestionnaireCommunication -->
-	<gestionnairecommunication>
-		<port>6100</port>
-	</gestionnairecommunication>
 
 	<!-- Section de la classe ServeurJeu.ComposantesJeu.Table -->
 	<table>

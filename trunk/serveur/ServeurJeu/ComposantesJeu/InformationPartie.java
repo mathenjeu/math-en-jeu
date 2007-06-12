@@ -44,6 +44,7 @@ public class InformationPartie
     // partie du joueur possédant cet objet
 	private int intPointage;
         
+        // Combien d'argent ce joueur a-t-il?
         private int intArgent;
 	
 	// Déclaration d'une position du joueur dans le plateau de jeu
@@ -65,10 +66,12 @@ public class InformationPartie
 	// Déclaration d'une liste d'objets utilisables ramassés par le joueur
 	private TreeMap lstObjetsUtilisablesRamasses;
 	
-	private BoiteQuestions objBoiteQuestions;
-	
 	// Pour empêcher le joueur d'acheter plus qu'un seul objet à la fois
 	private boolean bolObjetAcheter;
+        
+        // Déclaration de la boîte de question personnelle au joueur possédant
+        // cet objet
+        BoiteQuestions objBoiteQuestions;
 	
     // Compteur pour l'objet réponse
     private int intCompteurObjetLivre;
@@ -111,11 +114,10 @@ public class InformationPartie
 	    
 	    // Créer la liste des objets utilisables qui ont été ramassés
 	    lstObjetsUtilisablesRamasses = new TreeMap();
-	    
-	    objBoiteQuestions = new BoiteQuestions();
-	    
-	    objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau() );
 
+            objBoiteQuestions = new BoiteQuestions(joueur.obtenirProtocoleJoueur().langue);
+            objGestionnaireBD.remplirBoiteQuestions(objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());
+            
         intCompteurObjetLivre = 0;
 
 	}
@@ -428,7 +430,6 @@ public class InformationPartie
 		}
 		else if (intDifficulte > 0)
 		{
-			
 			objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());
 			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
 			
@@ -467,7 +468,7 @@ public class InformationPartie
 	 * Cette fonction essaie de de piger une question du niveau de dificulté proche 
 	 * de intDifficulte, si on y arrive pas, ça veut dire qu'il ne 
 	 * reste plus de questions de niveau de difficulté proche 
-	 * de intDifficulte dans la boite de questions
+	 * de intDifficulte
 	 * 
 	 * @param intCategorieQuestion
 	 * @param intDifficulte

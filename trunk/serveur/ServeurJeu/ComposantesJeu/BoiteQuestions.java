@@ -13,6 +13,7 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 import ClassesUtilitaires.UtilitaireNombres;
 import ServeurJeu.Configuration.GestionnaireMessages;
+import ServeurJeu.Configuration.GestionnaireConfiguration;
 
 /**
  * @author Marc
@@ -23,10 +24,12 @@ public class BoiteQuestions
 {
 	static private Logger objLogger = Logger.getLogger( BoiteQuestions.class );
 	private TreeMap<Integer, TreeMap<Integer, Vector<Question>>> lstQuestions;
+        private Langue langue;
 	
-	public BoiteQuestions()
+	public BoiteQuestions(String langue)
 	{
 		lstQuestions = new TreeMap<Integer, TreeMap<Integer, Vector<Question>>>();
+                this.langue = new Langue(langue, GestionnaireConfiguration.obtenirInstance());
 	}
 	
 	public void ajouterQuestion( Question question )
@@ -102,4 +105,9 @@ public class BoiteQuestions
 		}
 		return questions;
 	}
+        
+        public Langue obtenirLangue()
+        {
+            return langue;
+        }
 }

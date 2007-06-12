@@ -44,10 +44,12 @@ import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.Evenements.EvenementPartieDemarree;
 import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.ComposantesJeu.Question;
+import ServeurJeu.ComposantesJeu.Langue;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.Configuration.GestionnaireMessages;
+import ServeurJeu.Configuration.GestionnaireConfiguration;
 import java.util.Calendar;
 
 
@@ -92,9 +94,6 @@ public class ProtocoleJoueur implements Runnable
 	// retourner au client ayant fait une requête au serveur
 	private int intNumeroCommandeReponse;
         
-        // Déclaration d'une chaine de caracteres pour la langue de l'usager
-        public String langue;
-	
 	private GestionnaireTemps objGestionnaireTemps;
 	private TacheSynchroniser objTacheSynchroniser;
 	
@@ -103,6 +102,9 @@ public class ProtocoleJoueur implements Runnable
         // On veut savoir quelle a été la dernière question posée au joueur pour
         // pouvoir utiliser l'objet livre
         private Question derniereQuestionPosee;
+        
+        // On obtiendra la langue du joueur pour pouvoir construire la boîte de questions
+        public String langue;
 	
 	
 	// Déclaration d'une variable qui va permettre de savoir si le joueur

@@ -12,17 +12,9 @@ import org.apache.log4j.Logger;
 import ServeurJeu.ComposantesJeu.BoiteQuestions;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ControleurJeu;
-import ServeurJeu.ComposantesJeu.Salle;
-import Enumerations.Visibilite;
 import Enumerations.TypeQuestion;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
-import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
-import ServeurJeu.Evenements.GestionnaireEvenements;
 import java.util.Date;
 import java.text.SimpleDateFormat; 
 import ServeurJeu.Configuration.GestionnaireMessages;
@@ -41,8 +33,6 @@ public class GestionnaireBD
 	// Objet Statement nécessaire pour envoyer une requête au serveur MySQL
 	private Statement requete;
 	
-	private String urlQuestionReponse = "";
-	
 	static private Logger objLogger = Logger.getLogger( GestionnaireBD.class );
 	
 	private static final String strValeurGroupeAge = "valeurGroupeAge";
@@ -56,7 +46,6 @@ public class GestionnaireBD
 		super();
 		
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
-		urlQuestionReponse = config.obtenirString( "gestionnairebd.url-questions-reponses" );
 		
 		// Garder la référence vers le contrôleur de jeu
 		objControleurJeu = controleur;
@@ -223,112 +212,16 @@ public class GestionnaireBD
 		}
 	}
 
-	/**
-	 * Cette méthode permet de charger les salles en mémoire dans la liste
-	 * des salles du contrôleur de jeu.
-	 * 
-	 * @param GestionnaireEvenements gestionnaireEv : Le gestionnaire d'événements
-	 * 				qu'on doit fournir à chaque salle pour qu'elles puissent 
-	 * 				envoyer des événements
-	 * @deprecated
-	 */
-	public void chargerSalles(GestionnaireEvenements gestionnaireEv)
-	{
-		objLogger.error( "chargerSalles n'est pu utilisée" );
-		
-		Regles objReglesSalle = new Regles();
-		
-		objReglesSalle.obtenirListeCasesCouleurPossibles().add(new ReglesCaseCouleur(2, 1));
-		objReglesSalle.obtenirListeCasesCouleurPossibles().add(new ReglesCaseCouleur(1, 2));
-		objReglesSalle.obtenirListeCasesCouleurPossibles().add(new ReglesCaseCouleur(3, 3));
-		objReglesSalle.obtenirListeCasesCouleurPossibles().add(new ReglesCaseCouleur(4, 4));
-		objReglesSalle.obtenirListeCasesCouleurPossibles().add(new ReglesCaseCouleur(5, 5));
-		/*objReglesSalle.obtenirListeCasesCouleurPossibles().add(new ReglesCaseCouleur(6, 6));
-		objReglesSalle.obtenirListeCasesCouleurPossibles().add(new ReglesCaseCouleur(8, 7));
-		objReglesSalle.obtenirListeCasesCouleurPossibles().add(new ReglesCaseCouleur(2, 8));*/
-		
-		objReglesSalle.obtenirListeCasesSpecialesPossibles().add(new ReglesCaseSpeciale(1, 1));
-		/*objReglesSalle.obtenirListeCasesSpecialesPossibles().add(new ReglesCaseSpeciale(2, 2));
-		objReglesSalle.obtenirListeCasesSpecialesPossibles().add(new ReglesCaseSpeciale(3, 3));
-		objReglesSalle.obtenirListeCasesSpecialesPossibles().add(new ReglesCaseSpeciale(4, 4));
-		objReglesSalle.obtenirListeCasesSpecialesPossibles().add(new ReglesCaseSpeciale(5, 5));
-		objReglesSalle.obtenirListeCasesSpecialesPossibles().add(new ReglesCaseSpeciale(6, 6));
-		objReglesSalle.obtenirListeCasesSpecialesPossibles().add(new ReglesCaseSpeciale(7, 7));
-		objReglesSalle.obtenirListeCasesSpecialesPossibles().add(new ReglesCaseSpeciale(8, 8));
-		objReglesSalle.obtenirListeCasesSpecialesPossibles().add(new ReglesCaseSpeciale(9, 9));
-		objReglesSalle.obtenirListeCasesSpecialesPossibles().add(new ReglesCaseSpeciale(10, 10));*/
-		
-		objReglesSalle.obtenirListeMagasinsPossibles().add(new ReglesMagasin(1, "Magasin1"));
-		objReglesSalle.obtenirListeMagasinsPossibles().add(new ReglesMagasin(2, "Magasin2"));
-		
-		objReglesSalle.obtenirListeObjetsUtilisablesPossibles().add(new ReglesObjetUtilisable(1, "Reponse", Visibilite.Aleatoire));
-
-		objReglesSalle.definirPermetChat(true);
-		objReglesSalle.definirRatioTrous(0.30f);
-		objReglesSalle.definirRatioMagasins(0.05f);
-		objReglesSalle.definirRatioCasesSpeciales(0.05f);
-		objReglesSalle.definirRatioPieces(0.10f);
-		objReglesSalle.definirRatioObjetsUtilisables(0.05f);
-		objReglesSalle.definirValeurPieceMaximale(25);
-		objReglesSalle.definirTempsMinimal(10);
-		objReglesSalle.definirTempsMaximal(60);
-		objReglesSalle.definirDeplacementMaximal(6);
-		
-		/*Case[][] asdf = GenerateurPartie.genererPlateauJeu(objReglesSalle, 10, new Vector());
-		for (int i = 0; i < asdf.length; i++)
-		{
-			for (int j = 0; j < asdf[i].length; j++)
-			{
-				if (asdf[i][j] == null)
-				{
-					System.out.println("(" + i + ", " + j + ") -> null");	
-				}
-				else if (asdf[i][j] instanceof CaseCouleur)
-				{
-					System.out.print("(" + i + ", " + j + ") -> case couleur:" + asdf[i][j].obtenirTypeCase() + ", objet:");
-					
-					if (((CaseCouleur) asdf[i][j]).obtenirObjetCase() == null)
-					{
-						System.out.print("null\n");
-					}
-					else if (((CaseCouleur) asdf[i][j]).obtenirObjetCase() instanceof Magasin)
-					{
-						System.out.print(((CaseCouleur) asdf[i][j]).obtenirObjetCase().getClass().getName() + "\n");
-					}
-					else if (((CaseCouleur) asdf[i][j]).obtenirObjetCase() instanceof ObjetUtilisable)
-					{
-						System.out.print(((CaseCouleur) asdf[i][j]).obtenirObjetCase().getClass().getName() + ", visible:" + ((ObjetUtilisable) ((CaseCouleur) asdf[i][j]).obtenirObjetCase()).estVisible() + "\n");
-					}
-					else
-					{
-						System.out.print("Piece, valeur:" + ((Piece) ((CaseCouleur) asdf[i][j]).obtenirObjetCase()).obtenirValeur() + "\n");
-					}
-				}
-				else
-				{
-					System.out.println("(" + i + ", " + j + ") -> case speciale:" + asdf[i][j].obtenirTypeCase());
-				}
-			}
-		}*/
-		
-	    Salle objSalle = new Salle(this, "Générale", "Jeff", "", objReglesSalle, objControleurJeu);
-	    //Salle objSalle2 = new Salle(gestionnaireEv, this, "Privée", "Jeff", "jeff", objReglesSalle);
-	    
-	    objControleurJeu.ajouterNouvelleSalle(objSalle);
-	    //objControleurJeu.ajouterNouvelleSalle(objSalle2);
-	}
-	
 	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau )
 	{
-		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
-
-		String strRequeteSQL = "SELECT question.*,typereponse.nomType FROM question,typereponse " +
-			"WHERE typereponse.cleType = question.typeReponse and question.valide = 1 " +
+                String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
+		String strRequeteSQL = "SELECT " + nomTable + ".*,typereponse.nomType FROM " + nomTable +
+                        ",typereponse WHERE typereponse.cleType = " + nomTable + ".typeReponse and " + nomTable + ".valide = 1 " +
 			"and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL and ";
 		
 		
-                strRequeteSQL += "cleQuestion >= " + config.obtenirString("gestionnairebd.cle-question-min")
-                                 + " and cleQuestion <= " + config.obtenirString("gestionnairebd.cle-question-max")
+                strRequeteSQL += "cleQuestion >= " + boiteQuestions.obtenirLangue().obtenirCleQuestionMin()
+                                 + " and cleQuestion <= " + boiteQuestions.obtenirLangue().obtenirCleQuestionMax()
                                  + " and ";
 		    
 		strRequeteSQL += strValeurGroupeAge + niveau + " > 0";
@@ -338,15 +231,15 @@ public class GestionnaireBD
 	
 	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, int intCategorie, int intDifficulte )
 	{
-		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
-		
-		String strRequeteSQL = "SELECT question.*,typereponse.nomType FROM question,typereponse " +
-			"WHERE typereponse.cleType = question.typeReponse and question.valide = 1 " +
+                String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
+            
+		String strRequeteSQL = "SELECT " + nomTable + ".*,typereponse.nomType FROM " + nomTable + ",typereponse " +
+			"WHERE typereponse.cleType = " + nomTable + ".typeReponse and " + nomTable + ".valide = 1 " +
 			"and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL ";
 		
                 strRequeteSQL += "and cleQuestion >= " +
-		    config.obtenirString("gestionnairebd.cle-question-min") + " and cleQuestion <= " +
-		    config.obtenirString("gestionnairebd.cle-question-max") + " and ";
+		    boiteQuestions.obtenirLangue().obtenirCleQuestionMin() + " and cleQuestion <= " +
+		    boiteQuestions.obtenirLangue().obtenirCleQuestionMax() + " and ";
 		    
 		strRequeteSQL += strValeurGroupeAge + niveau + " = " + intDifficulte;
 		//FRANCOIS si on veut la catégorie et la difficulté, c'est ici
@@ -370,7 +263,8 @@ public class GestionnaireBD
 					String explication = rs.getString("FichierFlashReponse");
 					int difficulte = rs.getInt( strValeurGroupeAge + niveau );
 					//TODO la categorie???
-					boiteQuestions.ajouterQuestion( new Question( codeQuestion, typeQuestion, difficulte, urlQuestionReponse + question, reponse, urlQuestionReponse + explication ));
+                                        String URL = boiteQuestions.obtenirLangue().obtenirURLQuestionsReponses();
+					boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication));
 				}
 			}
 		}
@@ -390,109 +284,6 @@ public class GestionnaireBD
 			objLogger.error( e.getMessage() );
 		    e.printStackTrace();
 		}
-	}
-	
-	/**
-	 * Cette fonction permet de trouver une question dans la base de données
-	 * selon la catégorie de question et la difficulté et en tenant compte des
-	 * questions déjà posées.
-	 * 
-	 * @param int categorieQuestion : La catégorie de question dans laquelle 
-	 * 								  trouver une question
-	 * @param int difficulte : La difficulté de la question à retourner
-	 * @param TreeMap listeQuestionsPosees : La liste des questions posées 
-	 * @return Question : La question trouvée, null si aucune n'est trouvée.
-	 *					  Plus la liste des questions déjà posées est grande,
-	 *					  alors il y a plus de chances de retourner null
-	 * @deprecated
-	 */
-	public Question trouverProchaineQuestion(int categorieQuestion, int difficulte, TreeMap listeQuestionsPosees)
-	{
-		objLogger.error( "trouverProchaineQuestion n'est plus utilisée" );
-		
-		// Déclaration d'une question et de la requête SQL pour aller
-		// chercher les questions dans la BD
-		Question objQuestionTrouvee = null;
-		/*String strRequeteSQL = "SELECT * FROM question WHERE categorie=" + categorieQuestion 
-								+ " AND difficulte=" + difficulte; */
-		
-		String strRequeteSQL = "SELECT * FROM question WHERE cleQuestion >= 2 and cleQuestion <= 800 and cleQuestion NOT IN("; //TODO pour les test
-		
-		// Créer un ensemble contenant tous les tuples de la liste 
-		// des questions posées (chaque élément est un Map.Entry)
-		Set lstEnsembleQuestions = listeQuestionsPosees.entrySet();
-		
-		// Obtenir un itérateur pour l'ensemble contenant les questions posées
-		Iterator objIterateurListe = lstEnsembleQuestions.iterator();
-
-		// Passer toutes les questions et ajouter ce qu'il faut dans la requête
-		// SQL
-		String codes = null;
-		while (objIterateurListe.hasNext() == true)
-		{
-			// Créer une référence vers le joueur humain courant dans la liste
-			int intCodeQuestion = ((Integer)(((Map.Entry)(objIterateurListe.next())).getKey())).intValue();
-			// Ajouter ce qu'il faut dans la clause where de la requête SQL
-			if( codes == null )
-			{
-				codes = "" + intCodeQuestion;
-			}
-			else
-			{
-				codes += "," + intCodeQuestion;
-			}
-			
-		}
-		strRequeteSQL += codes + ")";
-		
-		//TODO: Il y a des optimisations à faire ici concernant la structure
-		// 		des questions gardées en mémoire (on pourrait séparer les 
-		//		questions en catégories et en difficulté)
-		// 
-		
-		try
-		{
-			synchronized( requete )
-			{
-				ResultSet rs = requete.executeQuery( strRequeteSQL );
-				int intLength = 0;
-				Vector listeQuestions = new Vector();
-				while(rs.next())
-				{
-					int codeQuestion = rs.getInt("cleQuestion");
-					String typeQuestion = TypeQuestion.ChoixReponse; //TODO aller chercher code dans bd
-					String question = rs.getString( "FichierFlashQuestion" );
-					String reponse = rs.getString("bonneReponse");
-					String explication = rs.getString("FichierFlashReponse");
-					listeQuestions.addElement( new Question( codeQuestion, typeQuestion, difficulte, urlQuestionReponse + question, reponse, urlQuestionReponse + explication ));
-					intLength++;
-				}
-			
-				if( intLength > 0 )
-				{
-					int intRandom = objControleurJeu.genererNbAleatoire( intLength );
-					objQuestionTrouvee = (Question)listeQuestions.elementAt( intRandom );
-				}
-			}
-		}
-		catch (SQLException e)
-		{
-			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error( e.getMessage() );
-		    e.printStackTrace();			
-		}
-		catch( RuntimeException e)
-		{
-			//Une erreur est survenue lors de la recherche de la prochaine question
-			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error( e.getMessage() );
-		    e.printStackTrace();
-		}
-		
-		return objQuestionTrouvee;
 	}
 	
 	public void mettreAJourJoueur( JoueurHumain joueur, int tempsTotal )
