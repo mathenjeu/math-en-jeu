@@ -414,7 +414,6 @@ public class InformationPartie
 		// une question
 		if (intDifficulte > 0)
 		{
-			//TODO enlever ce commentaire : objQuestionTrouvee = objGestionnaireBD.trouverProchaineQuestion(intCategorieQuestion, intDifficulte, lstQuestionsRepondues);
 			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
 		}
 		
@@ -430,7 +429,7 @@ public class InformationPartie
 		}
 		else if (intDifficulte > 0)
 		{
-			objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());
+			objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau(), intCategorieQuestion, intDifficulte);
 			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
 			
 			lstQuestionsRepondues.clear();

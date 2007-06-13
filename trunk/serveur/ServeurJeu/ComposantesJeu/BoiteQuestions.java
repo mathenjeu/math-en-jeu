@@ -65,10 +65,11 @@ public class BoiteQuestions
 
 		if( questions != null && questions.size() > 0 )
 		{
+                        // Let's choose a question among the possible ones
 			int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
 			question = (Question)questions.elementAt( intRandom );
 			questions.remove( intRandom );
-		    question.definirDifficulte(intPointageQuestion);
+                        question.definirDifficulte(intPointageQuestion);
 		}
 		else
 		{
