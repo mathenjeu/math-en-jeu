@@ -99,10 +99,6 @@ public class ProtocoleJoueur implements Runnable
 	
 	static private Logger objLogger = Logger.getLogger( ProtocoleJoueur.class );
         
-        // On veut savoir quelle a été la dernière question posée au joueur pour
-        // pouvoir utiliser l'objet livre
-        private Question derniereQuestionPosee;
-        
         // On obtiendra la langue du joueur pour pouvoir construire la boîte de questions
         public String langue;
 	
@@ -1529,9 +1525,6 @@ public class ProtocoleJoueur implements Runnable
 							
 							// Ajouter le noeud question au noeud paramètre
 							objNoeudParametreQuestion.appendChild(objNoeudQuestion);
-                                                        
-                                                        // On note quelle question on vient d'envoyer au cas où le joueur utiliserait un livre
-                                                        derniereQuestionPosee = objQuestionAPoser;
 						}
 						
 						// Ajouter le noeud paramètre au noeud de commande
@@ -3309,7 +3302,7 @@ public class ProtocoleJoueur implements Runnable
                             objJoueurHumain.enleverObjet(intIdObjet, strTypeObjet);
                             
                             // On obtient une mauvaise réponse à la dernière question posée
-                            String mauvaiseReponse = derniereQuestionPosee.obtenirMauvaiseReponse();
+                            String mauvaiseReponse = objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirMauvaiseReponse();
                             
                             // On prépare la réponse
                             objNoeudCommande.setAttribute("nom", "RetourUtiliserObjet");
