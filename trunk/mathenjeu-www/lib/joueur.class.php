@@ -1,18 +1,18 @@
 <?php
 /*******************************************************************************
 Fichier : joueur.class.php
-Auteur : Maxime Bï¿½gin
+Auteur : Maxime Bégin
 Description :
-    classe qui hï¿½rite de la classe utilisateur. Elle gï¿½re les joueurs.
+    classe qui hérite de la classe utilisateur. Elle gère les joueurs.
 ********************************************************************************
-09-11-2006 Maxime Bï¿½gin - s'assurer que le nombre de caractï¿½res de l'alias 
-	suggï¿½rï¿½ ne dï¿½passe pas le nombre maximal de caractï¿½res autorisï¿½s.
-14-08-2006 Maxime Bï¿½gin - Ajout du cryptage du mot de passe. Utilisation de la 
+09-11-2006 Maxime Bégin - s'assurer que le nombre de caractères de l'alias 
+	suggéré ne dépasse pas le nombre maximal de caractères autorisés.
+14-08-2006 Maxime Bégin - Ajout du cryptage du mot de passe. Utilisation de la 
 	fonction password() de MySQL.
-11-07-2006 Maxime Bï¿½gin - modification des courriels pour qu'il fonctionne avec 
+11-07-2006 Maxime Bégin - modification des courriels pour qu'il fonctionne avec 
 	le fichier de configuration.
-21-06-2006 Maxime Bï¿½gin - ajout de quelques commentaires et petit changement
-25-05-2006 Maxime Bï¿½gin - Version initiale
+21-06-2006 Maxime Bégin - ajout de quelques commentaires et petit changement
+25-05-2006 Maxime Bégin - Version initiale
 *******************************************************************************/
 
 require_once("utilisateur.class.php");
@@ -33,6 +33,7 @@ class Joueur extends Utilisateur
     private $aliasAdministrateur;
     private $cleAdministrateur;
     private $cleGroupe;
+    private $cleLangue;
     //var $peutCreerSalle;
     
     private $partiesCompletes;
@@ -48,7 +49,7 @@ class Joueur extends Utilisateur
 
     //**************************************************************************
     // Sommaire:        Constructeur, appel du constructeur parent
-    // Entrï¿½e:          $un object mon_mysqli
+    // Entrée:          $un object mon_mysqli
     // Sortie:
     // Note:
     //**************************************************************************
@@ -67,8 +68,8 @@ class Joueur extends Utilisateur
     }
 
     //**************************************************************************
-    // Sommaire:    Vï¿½rifier les invariants de la classe
-    // Entrï¿½e:
+    // Sommaire:    Vérifier les invariants de la classe
+    // Entrée:
     // Sortie:
     // Note:
     //**************************************************************************
@@ -87,7 +88,7 @@ class Joueur extends Utilisateur
     
     //**************************************************************************
     // Sommaire:        Assigner une ville au joueur
-    // Entrï¿½e:          $ville ne doit pas ï¿½tre vide
+    // Entrée:          $ville ne doit pas être vide
     // Sortie:
     // Note:
     //**************************************************************************
@@ -100,7 +101,7 @@ class Joueur extends Utilisateur
 
     //**************************************************************************
     // Sommaire:        Assigner un sexe au joueur
-    // Entrï¿½e:          $sexe doit ï¿½tre ï¿½gal ï¿½ 0 ou 1
+    // Entrée:          $sexe doit être égal à 0 ou 1
     // Sortie:
     // Note:
     //**************************************************************************
@@ -114,7 +115,7 @@ class Joueur extends Utilisateur
     
     //**************************************************************************
     // Sommaire:        Assigner un pays au joueur
-    // Entrï¿½e:          $pays ne doit pas ï¿½tre vide
+    // Entrée:          $pays ne doit pas être vide
     // Sortie:
     // Note:
     //**************************************************************************
@@ -127,7 +128,7 @@ class Joueur extends Utilisateur
     
     //**************************************************************************
     // Sommaire:        Assigner une province au joueur
-    // Entrï¿½e:          $province ne doit pas ï¿½tre vide
+    // Entrée:          $province ne doit pas être vide
     // Sortie:
     // Note:
     //**************************************************************************
@@ -141,7 +142,7 @@ class Joueur extends Utilisateur
 
     //**************************************************************************
     // Sommaire:        Assigner une date d'inscription au joueur
-    // Entrï¿½e:          $dateInscription au format aaaa-mm-jj
+    // Entrée:          $dateInscription au format aaaa-mm-jj
     // Sortie:
     // Note:            
     //**************************************************************************
@@ -154,8 +155,8 @@ class Joueur extends Utilisateur
     }
     
     //**************************************************************************
-    // Sommaire:        Assigner une clï¿½ de groupe au joueur
-    // Entrï¿½e:          $cleGroupe doit ï¿½tre positive
+    // Sommaire:        Assigner une clé de groupe au joueur
+    // Entrée:          $cleGroupe doit être positive
     // Sortie:
     // Note:
     //**************************************************************************
@@ -167,7 +168,7 @@ class Joueur extends Utilisateur
     }
     
     
-    //fonction d'assignation pour le petit sondage ï¿½ l'inscription
+    //fonction d'assignation pour le petit sondage à l'inscription
     function asgAimeMaths($no)
     {
         $this->aimeMaths=$no;
@@ -187,9 +188,9 @@ class Joueur extends Utilisateur
     
     //**************************************************************************
     // Sommaire:        Assigner un administrateur au joueur courant
-    // Entrï¿½e:          $alias : l'alias du professeur associï¿½
+    // Entrée:          $alias : l'alias du professeur associé
     // Sortie:          retourne faux si l'administrateur n'existe pas, vrai sinon
-    // Note:            l'alias doit ï¿½tre dans la table administrateur
+    // Note:            l'alias doit être dans la table administrateur
     //**************************************************************************
     function asgAdministrateur($alias)
     {
@@ -215,9 +216,9 @@ class Joueur extends Utilisateur
     }
 
     //**************************************************************************
-    // Sommaire:        Assigner un administrateur au joueur courant avec la clï¿½
+    // Sommaire:        Assigner un administrateur au joueur courant avec la clé
     //                  de l'administrateur
-    // Entrï¿½e:          $cle : la clï¿½ de l'administrateur
+    // Entrée:          $cle : la clé de l'administrateur
     // Sortie:          
     // Note:            
     //**************************************************************************
@@ -242,26 +243,26 @@ class Joueur extends Utilisateur
     
     //**************************************************************************
     // Sommaire:        assigner toutes les informations au joueur
-    // Entrï¿½e:          $nom
+    // Entrée:          $nom
     //                  $prenom
     //                  $alias
     //                  $motDePasse
     //                  $courriel
     //                  $estConfirmer   : 0 ou 1 pour dire si le courriel du
-    //                                      joueur est confirï¿½
-    //                  $etablissement  : # de l'ï¿½tablissement choisie par le joueur
+    //                                      joueur est confiré
+    //                  $etablissement  : # de l'établissement choisie par le joueur
     //                  $niveau         : niveau scolaire entre 1 et 14
     //                  $ville
     //                  $pays
     //                  $province
     //                  $dateInscription : date d'inscription au format aaaa-mm-jj
-    //					$categorie 		: la clï¿½ de la catï¿½gorie du joueur
-    //                  $sondageQ1      : la rï¿½ponse 1 au sondage lors de l'inscription
-    //                  $sondageQ2      : la rï¿½ponse 2 au sondage lors de l'inscription
-    //                  $sondageQ3      : la rï¿½ponse 3 au sondage lors de l'inscription
-    //                  $sondageQ4      : la rï¿½ponse 4 au sondage lors de l'inscription
+    //					$categorie 		: la clé de la catégorie du joueur
+    //                  $sondageQ1      : la réponse 1 au sondage lors de l'inscription
+    //                  $sondageQ2      : la réponse 2 au sondage lors de l'inscription
+    //                  $sondageQ3      : la réponse 3 au sondage lors de l'inscription
+    //                  $sondageQ4      : la réponse 4 au sondage lors de l'inscription
     // Sortie:
-    // Note:            on apelle la focntion parente pour une partie des donnï¿½es
+    // Note:            on apelle la focntion parente pour une partie des données
     //**************************************************************************
     function asgJoueur($nom,$prenom,$alias,$motDePasse,$courriel,
         $estConfirmer,$etablissement,$niveau,$sexe,$ville,$pays,$province,
@@ -287,12 +288,12 @@ class Joueur extends Utilisateur
 
     /*******************************************************************************
     Fonction : suggestionAlias($alias)
-    Paramï¿½tre :
+    Paramètre :
         - $alias : l'alias voulu par le joueur pour lequel
           il faut trouver une suggestion
     Description :
-        - trouver un alias non utilisï¿½ ï¿½ partir d'un alias de base, il faut
-          vï¿½rifier dans la base de donnï¿½es pour s'assurer
+        - trouver un alias non utilisé à partir d'un alias de base, il faut
+          vérifier dans la base de données pour s'assurer
           que l'alias est effectivement libre
     *******************************************************************************/
     function suggestionAlias($alias)
@@ -303,8 +304,8 @@ class Joueur extends Utilisateur
       do
       {
         $nouvelAlias = $alias . $i;
-        //on vï¿½rifie si le nouveau nom d'utilisateur est valide, 
-		//ie : il ne dï¿½passe pas la longueur maximal pour un alias
+        //on vérifie si le nouveau nom d'utilisateur est valide, 
+		//ie : il ne dépasse pas la longueur maximal pour un alias
         if(!Utilisateur::validerAlias($nouvelAlias))
         {
          $nouvelAlias = substr($nouvelAlias,0,strlen($nouvelAlias)-strlen($i)-1).$i;
@@ -319,10 +320,10 @@ class Joueur extends Utilisateur
     }
     
     //**************************************************************************
-    // Sommaire:        sert ï¿½ valider un joueur nouvellement inscrit
-    //                  avec sa clï¿½ de confirmation
-    // Entrï¿½e:          $cleConfirmation
-    // Sortie:          retourne faux si le joueur n'est pas trouvï¿½,
+    // Sommaire:        sert à valider un joueur nouvellement inscrit
+    //                  avec sa clé de confirmation
+    // Entrée:          $cleConfirmation
+    // Sortie:          retourne faux si le joueur n'est pas trouvé,
     //                  vrai si tout va bien
     // Note:
     //**************************************************************************
@@ -345,8 +346,8 @@ class Joueur extends Utilisateur
 
     //**************************************************************************
     // Sommaire:        calculer le nombre de partie, le nombre de victoire
-    //                  et le temps jouï¿½s par ce joueur
-    // Entrï¿½e:          
+    //                  et le temps joués par ce joueur
+    // Entrée:          
     // Sortie:          
     // Note:
     //**************************************************************************
@@ -371,11 +372,11 @@ class Joueur extends Utilisateur
     }
 
     //**************************************************************************
-    // Sommaire:        charger un joueur de la base de donnï¿½e MySQL correspondant
-    //                  aux alias et mot de passe en entrï¿½e
-    // Entrï¿½e:          $alias
+    // Sommaire:        charger un joueur de la base de donnée MySQL correspondant
+    //                  aux alias et mot de passe en entrée
+    // Entrée:          $alias
     //                  $motDePasse
-    // Sortie:          retourne faux si le joueur n'est pas trouvï¿½,
+    // Sortie:          retourne faux si le joueur n'est pas trouvé,
     //                  vrai si tout va bien
     // Note:            
     //**************************************************************************
@@ -398,10 +399,10 @@ class Joueur extends Utilisateur
     }
 
     //**************************************************************************
-    // Sommaire:        charger un joueur de la base de donnï¿½e MySQL correspondant
-    //                  ï¿½ la clï¿½
-    // Entrï¿½e:          $cle
-    // Sortie:          retourne faux si le joueur n'est pas trouvï¿½,vrai s'il l'est
+    // Sommaire:        charger un joueur de la base de donnée MySQL correspondant
+    //                  à la clé
+    // Entrée:          $cle
+    // Sortie:          retourne faux si le joueur n'est pas trouvé,vrai s'il l'est
     // Note:            
     //**************************************************************************
     function chargerMySQLCle($cle)
@@ -440,21 +441,35 @@ class Joueur extends Utilisateur
         $this->calculNbPartieTempsJouee();
         $this->cleConfirmation=$row->cleConfirmation;
 
+	$this->cleLangue=$row->cleLangue;
+	switch($this->cleLangue)
+	{
+	case 0:
+		$_SESSION['langage'] = "francais";
+		break;
+	case 1:
+		$_SESSION['langage'] = "english";
+		break;
+	default:
+		$_SESSION['langage'] = "francais";
+		break;
+	}
+
         return true;
 
     }
     
     //**************************************************************************
-    // Sommaire:        Gï¿½nï¿½rer une clï¿½ unique de confirmation pour le courriel
-    // Entrï¿½e:          
+    // Sommaire:        Générer une clé unique de confirmation pour le courriel
+    // Entrée:          
     // Sortie:
-    // Note:            On s'assure que la cï¿½ gï¿½nï¿½rï¿½e est unique
-    //                  dans la table joueur avant de l'assignï¿½
+    // Note:            On s'assure que la cé générée est unique
+    //                  dans la table joueur avant de l'assigné
     //**************************************************************************
     function genererCleConfirmation()
     {
 
-        //on s'assure que la cle qui servira ï¿½ la confirmation
+        //on s'assure que la cle qui servira à la confirmation
         //du courriel soit unique
         do
         {
@@ -468,10 +483,10 @@ class Joueur extends Utilisateur
     }
 
     //**************************************************************************
-    // Sommaire:    Insï¿½rer le joueur nouvellement inscrit dans la base de donnï¿½es
-    // Entrï¿½e:
+    // Sommaire:    Insérer le joueur nouvellement inscrit dans la base de données
+    // Entrée:
     // Sortie:      retourne faux si l'alias ou le mot de pass ne sont pas unique
-    // Note:        On doit vï¿½rifier que l'alias est unique et
+    // Note:        On doit vérifier que l'alias est unique et
     //              que le courriel est unique
     //**************************************************************************
     function insertionMySQL()
@@ -482,16 +497,36 @@ class Joueur extends Utilisateur
       $this->INVARIANTS();
 
 	  //echo "test";
-      //vï¿½rifier la possibilitï¿½ de doublon
+      //vérifier la possibilité de doublon
       if($this->validerAliasUnique($this->reqAlias())==false
             || $this->validerCourrielUnique($this->reqCourriel())==false)
         return false;
+
+      if(isset($_SESSION['langage']))
+      {
+	switch($_SESSION['langage'])
+	{
+	case "francais":
+		$this->cleLangue = 0;
+		break;
+	case "english":
+		$this->cleLangue = 1;
+		break;
+	default:
+		$this->cleLangue = 0;
+		break;
+	}
+      }
+      else
+      {
+	$this->cleLangue = 0;
+      }
 	
 
       $sql = "INSERT INTO joueur (prenom, nom, alias,
             motDePasse, adresseCourriel, ville, province, pays, cleNiveau, sexe,
             sondageQ1, sondageQ2, sondageQ3, sondageQ4, dateInscription,
-            cleConfirmation,estConfirme,cleEtablissement,cleGroupe,cleAdministrateur) VALUES(";
+            cleConfirmation,estConfirme,cleEtablissement,cleGroupe,cleAdministrateur,cleLangue) VALUES(";
       
       $sql .= "'"
             .addslashes($this->reqPrenom())."', '"
@@ -512,7 +547,8 @@ class Joueur extends Utilisateur
             .$this->reqCleConfirmation() . "',0,"
             .addslashes($this->reqEtablissement()) . ","
             .$this->reqCleGroupe() . ","
-            .$this->reqCleAdministrateur() . ")";
+            .$this->reqCleAdministrateur() . ","
+            .$this->reqCleLangue() . ")";
 
         $result=$this->mysqli->query($sql);
         $this->asgCle($this->mysqli->insert_id);
@@ -527,8 +563,8 @@ class Joueur extends Utilisateur
 
 
     //**************************************************************************
-    // Sommaire:    vï¿½rifier que personne n'a dï¿½jï¿½ choisie cet alias
-    // Entrï¿½e:      $alias
+    // Sommaire:    vérifier que personne n'a déjà choisie cet alias
+    // Entrée:      $alias
     // Sortie:      retourne vrai si l'alias est libre faux sinon
     // Note:        
     //**************************************************************************
@@ -546,8 +582,8 @@ class Joueur extends Utilisateur
     }
     
     //**************************************************************************
-    // Sommaire:    vï¿½rifier que personne n'a dï¿½jï¿½ choisie ce courriel
-    // Entrï¿½e:      $courriel
+    // Sommaire:    vérifier que personne n'a déjà choisie ce courriel
+    // Entrée:      $courriel
     // Sortie:      retourne vrai si le courriel est libre, faux sinon
     // Note:        
     //**************************************************************************
@@ -566,7 +602,7 @@ class Joueur extends Utilisateur
     //**************************************************************************
     // Sommaire:    envoyer un courriel de confirmation
     //              pour valider l'adresse courriel
-    // Entrï¿½e:
+    // Entrée:
     // Sortie:		retourne vrai si tout va bien,faux sinon
     // Note:        
     //**************************************************************************
@@ -584,8 +620,8 @@ class Joueur extends Utilisateur
     
     //**************************************************************************
     // Sommaire:    envoyer un courriel avec les information de connexion
-    //				un nouveau mot de passe est gï¿½nï¿½rï¿½
-    // Entrï¿½e:
+    //				un nouveau mot de passe est généré
+    // Entrée:
     // Sortie:      on retourne faux si l'adresse courriel n'existe pas
     // Note:
     //**************************************************************************
@@ -614,10 +650,10 @@ class Joueur extends Utilisateur
     }
 
     //**************************************************************************
-    // Sommaire:    Mettre ï¿½ jour les donnï¿½es du joueur courant.
-    // Entrï¿½e:
+    // Sommaire:    Mettre à jour les données du joueur courant.
+    // Entrée:
     // Sortie:
-    // Note:        la clï¿½ doit ï¿½tre valide
+    // Note:        la clé doit être valide
     //**************************************************************************
     function miseAJourMySQL()
     {
@@ -653,8 +689,8 @@ class Joueur extends Utilisateur
     }
     
     //**************************************************************************
-    // Sommaire:    Mettre ï¿½ jour le mot de passe avec la fonction password() de MySQL
-    // Entrï¿½e:
+    // Sommaire:    Mettre à jour le mot de passe avec la fonction password() de MySQL
+    // Entrée:
     // Sortie:
     // Note:        
     //**************************************************************************
@@ -668,9 +704,9 @@ class Joueur extends Utilisateur
 
     //**************************************************************************
     // Sommaire:    Supprimer le joueur courant
-    // Entrï¿½e:
+    // Entrée:
     // Sortie:
-    // Note:        la clï¿½ doit ï¿½tre valide
+    // Note:        la clé doit être valide
     //**************************************************************************
     function deleteMySQL()
     {
@@ -736,6 +772,10 @@ class Joueur extends Utilisateur
     function reqCleAdministrateur()
     {
       return $this->cleAdministrateur;
+    }
+    function reqCleLangue()
+    {
+      return $this->cleLangue;
     }
     function reqCleGroupe()
     {
