@@ -354,7 +354,7 @@ public class ProtocoleJoueur implements Runnable
 	 */
 	private String traiterCommandeJoueur(String message) throws TransformerConfigurationException,
 																TransformerException
-	{
+	{            
 		Moniteur.obtenirInstance().debut( "ProtocoleJoueur.traiterCommandeJoueur" );
 		
 		// Déclaration d'une variable qui permet de savoir si on doit retourner 
@@ -1521,7 +1521,6 @@ public class ProtocoleJoueur implements Runnable
 							objNoeudQuestion.setAttribute("id", Integer.toString(objQuestionAPoser.obtenirCodeQuestion()));
 							objNoeudQuestion.setAttribute("type", objQuestionAPoser.obtenirTypeQuestion().toString());
 							objNoeudQuestion.setAttribute("url", objQuestionAPoser.obtenirURLQuestion());
-							objNoeudQuestion.setAttribute("MauvaiseReponse1", objJoueurHumain.obtenirPartieCourante().obtenirMauvaiseReponse1(objQuestionAPoser));
 							
 							// Ajouter le noeud question au noeud paramètre
 							objNoeudParametreQuestion.appendChild(objNoeudQuestion);
@@ -3286,6 +3285,9 @@ public class ProtocoleJoueur implements Runnable
 		    
 		    // Obtenir le type de l'objet a utilisé
 		    String strTypeObjet = objObjetUtilise.obtenirTypeObjet();
+                    
+                    // On prépare la réponse
+                    objNoeudCommande.setAttribute("nom", "RetourUtiliserObjet");
 		
 			// Dépendamment du type de l'objet, on effectue le traitement approprié
 			if (strTypeObjet.equals("Livre"))
@@ -3304,9 +3306,6 @@ public class ProtocoleJoueur implements Runnable
                             // On obtient une mauvaise réponse à la dernière question posée
                             String mauvaiseReponse = objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirMauvaiseReponse();
                             
-                            // On prépare la réponse
-                            objNoeudCommande.setAttribute("nom", "RetourUtiliserObjet");
-                            
 		            // Créer le noeud contenant le choix de réponse si c'était une question à choix de réponse
                             Element objNoeudParametreMauvaiseReponse = objDocumentXMLSortie.createElement("parametre");
                             Text objNoeudTexteMauvaiseReponse = objDocumentXMLSortie.createTextNode(mauvaiseReponse);
@@ -3315,6 +3314,37 @@ public class ProtocoleJoueur implements Runnable
                             objNoeudCommande.setAttribute("type", "Livre");
                             objNoeudCommande.appendChild(objNoeudParametreMauvaiseReponse);
 			}
+                        else if(strTypeObjet.equals("Boule"))
+                        {
+                            // La boule permettra à un joueur de changer de question si celle
+                            // qu'il s'est fait envoyer ne lui tente pas
+                            
+                            // On trouve une nouvelle question à poser
+                            Question nouvelleQuestion = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoser(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueurDesiree(), true);
+                            
+                            // Si on est tombé sur la même question, on recommence jusqu'à 10 fois
+                            int essais=0;
+                            while(nouvelleQuestion.obtenirCodeQuestion()==objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirCodeQuestion() && essais<10)
+                            {
+                                nouvelleQuestion = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoser(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueurDesiree(), true);
+                                essais++;
+                            }
+                            
+                            // On prépare l'envoi des informations sur la nouvelle question
+                            Element objNoeudParametreNouvelleQuestion = objDocumentXMLSortie.createElement("parametre");
+                            objNoeudParametreNouvelleQuestion.setAttribute("type", "nouvelleQuestion");
+
+                            Element objNoeudParametreQuestion = objDocumentXMLSortie.createElement("question");
+                            objNoeudParametreQuestion.setAttribute("id", Integer.toString(nouvelleQuestion.obtenirCodeQuestion()));
+                            objNoeudParametreQuestion.setAttribute("type", nouvelleQuestion.obtenirTypeQuestion());
+                            objNoeudParametreQuestion.setAttribute("url", nouvelleQuestion.obtenirURLQuestion());
+                            
+                            objNoeudParametreNouvelleQuestion.appendChild(objNoeudParametreQuestion);
+                            objNoeudCommande.setAttribute("type", "Boule");
+                            objNoeudCommande.appendChild(objNoeudParametreNouvelleQuestion);
+                            
+                            bolDoitRetournerCommande = true;
+                        }
 		}
     }
     
