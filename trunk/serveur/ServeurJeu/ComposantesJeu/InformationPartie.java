@@ -547,6 +547,8 @@ public class InformationPartie
 		    objQuestion = objPartieCourante.obtenirQuestionCourante();
 		    nomJoueur = ((JoueurHumain)objJoueur).obtenirNomUtilisateur();
 		    bolReponseEstBonne = objQuestion.reponseEstValide(reponse);
+                    //FRANCOIS
+                    //bolReponseEstBonne = true;
 		    
 		}
 		else
@@ -859,28 +861,9 @@ public class InformationPartie
 	{
         intCompteurObjetLivre = Livre.NOMBRE_CHARGE;
 	}
-	
-	public String obtenirMauvaiseReponse1(Question objQuestionPoser)
-	{
-		String strRetour = "";
-		
-		// Il faut qu'il reste des charges à l'objet livre précédamment utilisé
-		if (intCompteurObjetLivre > 0)
-		{
-			strRetour = objQuestionPoser.obtenirMauvaiseReponse();
-			if (strRetour.equals("PasUnChoixDeReponse") ||
-			    strRetour.equals("Erreur"))
-			{
-				strRetour = "";
-			}
-			else
-			{
-				intCompteurObjetLivre--;
-			}
-
-		}
-		
-		return strRetour;
-		
-	}
+        
+        public Point obtenirPositionJoueurDesiree()
+        {
+            return objPositionJoueurDesiree;
+        }
 }
