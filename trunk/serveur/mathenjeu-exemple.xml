@@ -17,6 +17,37 @@
                 <cle-question-max></cle-question-max>
             </Francais>
 	</langue>
+        
+        <musique>
+            <url></url>
+            
+            <style>jazz</style>
+            <style>rock</style>
+            <style>metal</style>
+            <style>ambiance</style>
+            <style>blues</style>
+            <style>pop</style>
+            <style>classical</style>
+            
+            <jazz>
+                <chanson>url ici</chanson>
+                <chanson>url ici</chanson>
+            </jazz>            
+            <rock>                
+            </rock>
+            <metal>                
+            </metal>
+            <ambiance>                
+            </ambiance>
+            <blues>                
+            </blues>
+            <pop>                
+            </pop>
+            <classical>             
+            </classical>
+            
+            
+        </musique>
 
 	<!-- Section de la classe ServeurJeu.ControleurJeu -->
 	<controleurjeu>
