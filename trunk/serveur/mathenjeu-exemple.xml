@@ -19,7 +19,7 @@
 	</langue>
         
         <musique>
-            <url></url>
+            <url>http://localhost/musique/</url>
             
             <style>jazz</style>
             <style>rock</style>
@@ -30,22 +30,24 @@
             <style>classical</style>
             
             <jazz>
-                <chanson>url ici</chanson>
-                <chanson>url ici</chanson>
-            </jazz>            
-            <rock>                
+                <chanson>chanson1.mp3</chanson>
+                <chanson>chanson2.mp3</chanson>
+            </jazz>
+            <rock>
+                <chanson>rock.mp3</chanson>
             </rock>
-            <metal>                
+            <metal>
+                <chanson>metal.mp3</chanson>
             </metal>
-            <ambiance>                
+            <ambiance>
+                <chanson>exemple.mp3</chanson>
             </ambiance>
-            <blues>                
+            <blues>
             </blues>
-            <pop>                
+            <pop>
             </pop>
-            <classical>             
+            <classical>
             </classical>
-            
             
         </musique>
 
