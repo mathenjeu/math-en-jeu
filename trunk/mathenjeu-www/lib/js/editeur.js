@@ -154,18 +154,6 @@ function cacherListeOperateur(){
 
 }
 
-function afficherCacher(control){
-	
-	if(control.style.display == '')
-	{
-		control.style.display = 'none';
-	}
-	else
-	{
-		control.style.display = '';
-	}
-}
-
 function afficherBouton(){
  
 	var symbole = [

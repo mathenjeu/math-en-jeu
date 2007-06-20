@@ -40,6 +40,18 @@ function afficherImage()
     return false;
 }
 
+function afficherCacher(control){
+	
+	if(control.style.display == '')
+	{
+		control.style.display = 'none';
+	}
+	else
+	{
+		control.style.display = '';
+	}
+}
+
 /*******************************************************************************
 Fonction : prev_nouvelle
 Paramètre : les informations qui compose une nouvelle
