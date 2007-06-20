@@ -130,8 +130,14 @@
                                 <objet-a-vendre-Magasin1>
                                     <nom>Livre</nom>
                                 </objet-a-vendre-Magasin1>
+                                <objet-a-vendre-Magasin1>
+                                    <nom>PotionGros</nom>
+                                </objet-a-vendre-Magasin1>
                                 <objet-a-vendre-Magasin2>
                                     <nom>Livre</nom>
+                                </objet-a-vendre-Magasin2>
+                                <objet-a-vendre-Magasin2>
+                                    <nom>PotionPetit</nom>
                                 </objet-a-vendre-Magasin2>
                                 <objet-a-vendre-Magasin2>
                                     <nom>Papillon</nom>
@@ -139,6 +145,9 @@
                                 <objet-a-vendre-Magasin3>
                                     <nom>Livre</nom>
                                 </objet-a-vendre-Magasin3>
+                                <objet-a-vendre-Magasin2>
+                                    <nom>PotionPetit</nom>
+                                </objet-a-vendre-Magasin2>
                                 <objet-a-vendre-Magasin3>
                                     <nom>Papillon</nom>
                                 </objet-a-vendre-Magasin3>
