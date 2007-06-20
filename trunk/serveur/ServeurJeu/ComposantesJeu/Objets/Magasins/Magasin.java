@@ -176,6 +176,20 @@ public abstract class Magasin extends Objet
     				objObjetRemplacement = new Telephone(objProchainId.intValue, true);
     			}
                 }
+                else if (objObjetAchete instanceof PotionGros)
+                {
+    			synchronized (objProchainId)
+    			{
+    				objObjetRemplacement = new PotionGros(objProchainId.intValue, true);
+    			}
+                }
+                else if (objObjetAchete instanceof PotionPetit)
+                {
+    			synchronized (objProchainId)
+    			{
+    				objObjetRemplacement = new PotionPetit(objProchainId.intValue, true);
+    			}
+                }
     		
             // L'ajouter au magasin
     		ajouterObjetUtilisable((ObjetUtilisable)objObjetRemplacement);

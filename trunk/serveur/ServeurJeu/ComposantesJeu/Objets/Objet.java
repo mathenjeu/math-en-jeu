@@ -10,4 +10,6 @@ public abstract class Objet
         public static final int UID_OU_PAPILLON = 1;
 	public static final int UID_OU_BOULE = 2;
         public static final int UID_OU_TELEPHONE = 3;
+	public static final int UID_OU_POTIONGROS = 4;
+        public static final int UID_OU_POTIONPETIT = 5;
 }

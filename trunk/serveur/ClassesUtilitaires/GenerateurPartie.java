@@ -458,6 +458,16 @@ public final class GenerateurPartie
                                         Telephone objAAjouter = new Telephone(intCompteurIdObjet, true);
                                         objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
                                     }
+                                    else if(((String)lstNomsObjets.get(i-1)).equals("PotionGros"))
+                                    {
+                                        PotionGros objAAjouter = new PotionGros(intCompteurIdObjet, true);
+                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                                    }
+                                    else if(((String)lstNomsObjets.get(i-1)).equals("PotionPetit"))
+                                    {
+                                        PotionPetit objAAjouter = new PotionPetit(intCompteurIdObjet, true);
+                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                                    }
                                 }
 				
 				// Incrémenter le nombre de cases passées
@@ -565,29 +575,30 @@ public final class GenerateurPartie
 				// Si le nom de l'objet est Livre, alors on met un objet 
 				// Livre sur la case, sinon on fait le même genre de 
 				// vérifications pour les autres types de magasins
+                                // On définit la valeur de la case au point spécifié à la case d'identification
 				if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Livre"))
 				{
-					// Définir la valeur de la case au point spécifié à la case 
-					// d'identification
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Livre(intCompteurIdObjet, bolEstVisible));					
 				}
                                 else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Papillon"))
 				{
-					// Définir la valeur de la case au point spécifié à la case 
-					// d'identification
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Papillon(intCompteurIdObjet, bolEstVisible));					
 				}
                                 else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Telephone"))
 				{
-					// Définir la valeur de la case au point spécifié à la case 
-					// d'identification
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Telephone(intCompteurIdObjet, bolEstVisible));					
 				}
                                 else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Boule"))
 				{
-					// Définir la valeur de la case au point spécifié à la case 
-					// d'identification
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Boule(intCompteurIdObjet, bolEstVisible));					
+				}
+                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("PotionGros"))
+				{
+					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new PotionGros(intCompteurIdObjet, bolEstVisible));					
+				}
+                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("PotionPetit"))
+				{
+					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new PotionPetit(intCompteurIdObjet, bolEstVisible));					
 				}
 				
 				// Incrémenter le nombre de cases passées

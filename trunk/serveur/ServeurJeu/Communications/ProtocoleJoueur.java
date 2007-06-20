@@ -3345,6 +3345,18 @@ public class ProtocoleJoueur implements Runnable
                             
                             bolDoitRetournerCommande = true;
                         }
+                        else if(strTypeObjet.equals("PotionGros"))
+                        {
+                           // La PotionGros fait grossir le joueur
+                            objNoeudCommande.setAttribute("type", "PotionGros");
+                            bolDoitRetournerCommande = true;
+                        }
+                        else if(strTypeObjet.equals("PotionPetit"))
+                        {
+                           // La PotionPetit fait rapetisser le joueur
+                            objNoeudCommande.setAttribute("type", "PotionPetit");
+                            bolDoitRetournerCommande = true;
+                        }
 		}
     }
     
