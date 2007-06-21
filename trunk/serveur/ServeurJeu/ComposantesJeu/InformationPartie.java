@@ -631,6 +631,9 @@ public class InformationPartie
 						
 						// Enlever l'objet de la case du plateau de jeu
 						objCaseCouleurDestination.definirObjetCase(null);
+
+						// On va dire aux clients qu'il y a eu collision avec cet objet
+						collision = objObjetUtilisable.obtenirTypeObjet();
 					}
 					else if (objCaseCouleurDestination.obtenirObjetCase() instanceof Piece)
 					{
