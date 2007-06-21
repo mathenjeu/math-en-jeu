@@ -5,8 +5,8 @@ main();
 
 /*******************************************************************************
 Fonction : main()
-Paramètre : -
-Description : permet de gérer les différentes actions à effectuer
+Paramï¿½tre : -
+Description : permet de gï¿½rer les diffï¿½rentes actions ï¿½ effectuer
 *******************************************************************************/
 function main()
 {
@@ -17,7 +17,7 @@ function main()
 
 	if(isset($_SESSION["joueur"]))
 	{
-	 	//vérifie que l'utilisateur peut être ici
+	 	//vï¿½rifie que l'utilisateur peut ï¿½tre ici
 	 	if($_SESSION["joueur"]->reqCategorie()<5)
 	 	{
 			redirection('index.php',0);
@@ -58,14 +58,15 @@ function main()
                 formAjoutNouvelle("");
                 break;
             case "insertNouvelle":
-                insertNouvelle($_POST["titre"],$_POST["nouvelle"],$_POST["destinataire"],$_POST['image']);
+                insertNouvelle($_POST["titre"],$_POST["nouvelle"],$_POST["destinataire"],
+                  $_POST['image'],$_POST['langue']);
                 break;
             case "updateNouvelle":
                 formModifierNouvelle($_GET["cleNouvelle"],"");
                 break;
             case "doUpdateNouvelle":
                 updateNouvelle($_GET["cleNouvelle"],$_POST["titre"],
-                    $_POST["nouvelle"],$_POST["destinataire"],$_POST['image']);
+                    $_POST["nouvelle"],$_POST["destinataire"],$_POST['image'],$_POST['langue']);
                 break;
             case "deleteNouvelle":
                 supprimerNouvelle($_GET["cleNouvelle"]);
@@ -89,13 +90,13 @@ function main()
 
 /*******************************************************************************
 Fonction : updateNouvelle($cle,$titre,$nouvelle)
-Paramètre :
-    - $cle : la clé unique de la nouvelle
+Paramï¿½tre :
+    - $cle : la clï¿½ unique de la nouvelle
     - $titre : le titre de la nouvelle
     - $nouvelle : la nouvelle
-Description : met à jour la nouvelle
+Description : met ï¿½ jour la nouvelle
 *******************************************************************************/
-function updateNouvelle($cle,$titre,$texte,$destinataire,$image)
+function updateNouvelle($cle,$titre,$texte,$destinataire,$image,$cleLangue)
 {
   global $lang;
   if($titre=="")
@@ -110,6 +111,7 @@ function updateNouvelle($cle,$titre,$texte,$destinataire,$image)
       $nouvelle->asgNouvelle(addslashes(wordwrap($texte,50,"\r\n")));
       $nouvelle->asgImage($image);
       $nouvelle->asgDestinataire($destinataire);
+      $nouvelle->asgCleLangue($cleLangue);
       $nouvelle->miseAJourMySQL();
       formNouvelle();
   }
@@ -118,9 +120,9 @@ function updateNouvelle($cle,$titre,$texte,$destinataire,$image)
 
 /*******************************************************************************
 Fonction : supprimerNouvelle($cle)
-Paramètre :
-    - $cle : la clé de la nouvelle à supprimer
-Description : supprime la nouvelle correspondant à la clé passé en paramètre
+Paramï¿½tre :
+    - $cle : la clï¿½ de la nouvelle ï¿½ supprimer
+Description : supprime la nouvelle correspondant ï¿½ la clï¿½ passï¿½ en paramï¿½tre
 *******************************************************************************/
 function supprimerNouvelle($cle)
 {
@@ -135,12 +137,12 @@ function supprimerNouvelle($cle)
 
 /*******************************************************************************
 Fonction : insertNouvelle($titre,$nouvelle)
-Paramètre :
+Paramï¿½tre :
     - $titre : le titre de la nouvelle
     - $nouvelle : la nouvelle
-Description : ajoute une nouvelle à la table
+Description : ajoute une nouvelle ï¿½ la table
 *******************************************************************************/
-function insertNouvelle($titre,$texte,$destinataire,$image)
+function insertNouvelle($titre,$texte,$destinataire,$image,$cleLangue)
 {
   global $lang;
   if($titre=="")
@@ -158,6 +160,7 @@ function insertNouvelle($titre,$texte,$destinataire,$image)
     $nouvelle->asgNouvelle(addslashes(wordwrap($texte,50,"\r\n")));
     $nouvelle->asgImage($image);
     $nouvelle->asgDestinataire($destinataire);
+    $nouvelle->asgCleLangue($cleLangue);
     $nouvelle->insertionMySQL();
     formNouvelle();
   }
@@ -165,7 +168,7 @@ function insertNouvelle($titre,$texte,$destinataire,$image)
 
 /*******************************************************************************
 Fonction : formNouvelle()
-Paramètre :
+Paramï¿½tre :
 Description : affiche les nouvelles avec des liens vers la modification
     et la suppression
 *******************************************************************************/
@@ -176,7 +179,7 @@ function formNouvelle()
   
     $nouvelles = new Nouvelles($_SESSION["mysqli"]);
     //on charge toutes les nouvelles
-    $nouvelles->chargerMySQL(-1,array(0,1,2));
+    $nouvelles->chargerTouteMySQL();
     for($i=0;$i<$nouvelles->reqNbNouvelle();$i++)
     {
         $nouvelle=$nouvelles->reqNouvelle($i+1);
@@ -203,11 +206,11 @@ function formNouvelle()
 
 /*******************************************************************************
 Fonction : formModifierNouvelle($cle)
-Paramètre :
-    $cle : le numéro de la nouvelle à modifier
+Paramï¿½tre :
+    $cle : le numï¿½ro de la nouvelle ï¿½ modifier
     $erreur : un message d'erreur s'il y en a
 Description : afficher le formulaire pour la modification de la nouvelle
-    qui correspond à $cle
+    qui correspond ï¿½ $cle
 *******************************************************************************/
 function formModifierNouvelle($cle,$erreur)
 {
@@ -224,6 +227,7 @@ function formModifierNouvelle($cle,$erreur)
   $smarty->assign('nouvelle',$nouvelle->reqNouvelle());
   $smarty->assign('dateLongue',convertirDateEnString($nouvelle->reqDate()));
   $smarty->assign('selected' . $nouvelle->reqDestinataire(),'selected');
+  $smarty->assign('langue',$nouvelle->reqCleLangue());
 
   imageDir($smarty,$nouvelle->reqImage());
   $smarty->cache_lifetime = 0;
@@ -233,12 +237,12 @@ function formModifierNouvelle($cle,$erreur)
 
 /*******************************************************************************
 Fonction : imageDir
-Paramètre :
+Paramï¿½tre :
     - $smarty : l'adresse de l'objet smarty
-    - $img : l'image à afficher(modification de nouvelle)
+    - $img : l'image ï¿½ afficher(modification de nouvelle)
             ou bien vide si on ajoute une nouvelle
-Description : parcourir le dossier des images relié au nouvelle et
-    assigner ces informations à smarty
+Description : parcourir le dossier des images reliï¿½ au nouvelle et
+    assigner ces informations ï¿½ smarty
 *******************************************************************************/
 function imageDir(&$smarty,$img)
 {
@@ -276,7 +280,7 @@ function imageDir(&$smarty,$img)
 
 /*******************************************************************************
 Fonction : formAjoutNouvelle()
-Paramètre : $erreur : un message d'erreur s'il y en a
+Paramï¿½tre : $erreur : un message d'erreur s'il y en a
 Description : afficher le formulaire pour l'ajout d'une nouvelle
 *******************************************************************************/
 function formAjoutNouvelle($erreur)

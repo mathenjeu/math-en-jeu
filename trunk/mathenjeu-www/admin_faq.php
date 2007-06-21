@@ -7,8 +7,8 @@ main();
 
 /*******************************************************************************
 Fonction : main()
-Paramètre : -
-Description : permet de gérer les différentes actions à effectuer
+Paramï¿½tre : -
+Description : permet de gï¿½rer les diffï¿½rentes actions ï¿½ effectuer
 *******************************************************************************/
 function main()
 {
@@ -19,7 +19,7 @@ function main()
 
 	if(isset($_SESSION["joueur"]))
 	{
-	 	//vérifie que l'utilisateur peut être ici
+	 	//vï¿½rifie que l'utilisateur peut ï¿½tre ici
 	 	if($_SESSION["joueur"]->reqCategorie()<5)
 	 	{
 			redirection('index.php',0);
@@ -95,9 +95,9 @@ function main()
 
 /*******************************************************************************
 Fonction : formModfierFaq
-Paramètre : $cle : la clé de la faq à modifier
-Description : on affiche le formulaire de modification avec les données de la 
-	faq corespondant à la clé
+Paramï¿½tre : $cle : la clï¿½ de la faq ï¿½ modifier
+Description : on affiche le formulaire de modification avec les donnï¿½es de la 
+	faq corespondant ï¿½ la clï¿½
 *******************************************************************************/
 function formModfierFaq($cle)
 {
@@ -118,8 +118,8 @@ function formModfierFaq($cle)
 
 /*******************************************************************************
 Fonction : doModifierFaq
-Paramètre : $cle : la clé de la faq à modifier
-Description : on modfie la faq corespondant à la clé, si une des données 
+Paramï¿½tre : $cle : la clï¿½ de la faq ï¿½ modifier
+Description : on modfie la faq corespondant ï¿½ la clï¿½, si une des donnï¿½es 
 	est invalide; on affiche le formulaire avec un message d'erreur
 *******************************************************************************/
 function doModifierFaq($cle)
@@ -143,6 +143,7 @@ function doModifierFaq($cle)
     $faq->chargerMySQL($cle);
     $faq->asgQuestion(addslashes($_POST['question']));
     $faq->asgReponse(addslashes($_POST['reponse']));
+    $faq->asgCleLangue($_POST['langue']);
     $faq->miseAJourMySQL();
     formFaq();
   }
@@ -150,8 +151,8 @@ function doModifierFaq($cle)
 
 /*******************************************************************************
 Fonction : deleteFaq
-Paramètre : $cle : la clé de la faq à supprimer
-Description : on supprimer la faq corespondant à la clé
+Paramï¿½tre : $cle : la clï¿½ de la faq ï¿½ supprimer
+Description : on supprimer la faq corespondant ï¿½ la clï¿½
 *******************************************************************************/
 function deleteFaq($cle)
 {
@@ -163,8 +164,8 @@ function deleteFaq($cle)
 
 /*******************************************************************************
 Fonction : insertFaq
-Paramètre : 
-Description : insérer une nouvelle faq dans la table, si une des données 
+Paramï¿½tre : 
+Description : insï¿½rer une nouvelle faq dans la table, si une des donnï¿½es 
 	est invalide; on affiche le formulaire avec un message d'erreur
 *******************************************************************************/
 function insertFaq()
@@ -185,6 +186,7 @@ function insertFaq()
     $faq = new FAQ($_SESSION['mysqli']);
     $faq->asgQuestion(addslashes($_POST['question']));
     $faq->asgReponse(addslashes($_POST['reponse']));
+    $faq->asgCleLangue($_POST['langue']);
     $faq->insertionMySQL();
     formFaq();
   }
@@ -193,11 +195,11 @@ function insertFaq()
 
 /*******************************************************************************
 Fonction : faqMove
-Paramètre : $numero(pas la clé) de la faq à monter ou descendre
+Paramï¿½tre : $numero(pas la clï¿½) de la faq ï¿½ monter ou descendre
 Description : fonction qui change l'ordre d'une faq.
-	si le numéro est négatif cela signifie que la faq descend dans la liste et
-	on augmente son numéro de 1 et on diminue celui de la faq juste en dessous.
-	On effectue l'opération inverse si le numéro est positif. 
+	si le numï¿½ro est nï¿½gatif cela signifie que la faq descend dans la liste et
+	on augmente son numï¿½ro de 1 et on diminue celui de la faq juste en dessous.
+	On effectue l'opï¿½ration inverse si le numï¿½ro est positif. 
 *******************************************************************************/
 function faqMove($numero)
 {
@@ -222,8 +224,8 @@ function faqMove($numero)
 
 /*******************************************************************************
 Fonction : formFaq
-Paramètre : 
-Description : charger les faqs et afficher la liste avec possibilité de modifier,
+Paramï¿½tre : 
+Description : charger les faqs et afficher la liste avec possibilitï¿½ de modifier,
 	supprimer et de changer leur ordre.
 *******************************************************************************/
 function formFaq()
@@ -231,7 +233,7 @@ function formFaq()
   $smarty = new MonSmarty();
   
   $faqs = new FAQs($_SESSION['mysqli']);
-  $faqs->chargerMySQL(0);
+  $faqs->chargerTouteMySQL();
   
   $nb=$faqs->reqNbFaq();
   for($i=0;$i<$nb;$i++)

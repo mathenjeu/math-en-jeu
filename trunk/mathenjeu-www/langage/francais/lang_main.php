@@ -62,6 +62,8 @@ $lang['masculin'] = 'Masculin';
 $lang['province'] = 'Province';
 $lang['pays'] = 'Pays';
 $lang['courriel'] = 'Courriel';
+$lang['francais'] = 'Français';
+$lang['anglais'] = 'Anglais';
 $lang['courriel_confirm'] = 'Saisir le courriel à nouveau';
 $lang['question_sexe'] = 'Quel est ton sexe?';
 
@@ -398,7 +400,7 @@ $lang['mod_joueur_personel_succes'] = 'Les informations personnels ont été modif
 $lang['mod_joueur_pass_succes'] = 'Le mot de passe a été modifié avec succès.';
 $lang['mod_joueur_scolaire_succes'] = 'Les informations scolaires ont été modifiées avec succès.';
 $lang['mod_joueur_alias_prof_info'] = 'Si tu connais le nom d\'utilisateur de ton enseignant, inscris-le ici. Sinon n\'inscris rien.';
-
+$lang['mod_joueur_lang'] = 'Langage';
 
 
 //

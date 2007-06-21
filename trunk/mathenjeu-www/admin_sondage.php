@@ -5,8 +5,8 @@ main();
 
 /*******************************************************************************
 Fonction : main()
-Paramètre : -
-Description : permet de gérer les différentes actions à effectuer
+Paramï¿½tre : -
+Description : permet de gï¿½rer les diffï¿½rentes actions ï¿½ effectuer
 *******************************************************************************/
 function main()
 {
@@ -17,7 +17,7 @@ function main()
 
 	if(isset($_SESSION["joueur"]))
 	{
-	 	//vérifie que l'utilisateur peut être ici
+	 	//vï¿½rifie que l'utilisateur peut ï¿½tre ici
 	 	if($_SESSION["joueur"]->reqCategorie()<5)
 	 	{
 			redirection('index.php',0);
@@ -91,7 +91,7 @@ function main()
 
 /*******************************************************************************
 Fonction : formSondage()
-Paramètre : aucun
+Paramï¿½tre : aucun
 Description : afficher tous les sondages avec le choix de supprimer celui-ci
 *******************************************************************************/
 function formSondage()
@@ -127,7 +127,7 @@ function formSondage()
 
 /*******************************************************************************
 Fonction : formAjoutsondage($nbChoix)
-Paramètre :
+Paramï¿½tre :
     $nbChoix : le nombre de choix pour le sondage
     $erreur : un message d'erreur s'il y en a
 Description : afficher le formulaire pour ajouter un sondage
@@ -175,9 +175,9 @@ function formAjoutsondage($nbChoix,$erreur)
 
 /*******************************************************************************
 Fonction : insertSondage($nbChoix)
-Paramètre :
+Paramï¿½tre :
     - $nbChoix : le nombre de choix que comporte le sondage
-Description : ajoute un sondage à la base de données
+Description : ajoute un sondage ï¿½ la base de donnï¿½es
 *******************************************************************************/
 function insertSondage($nbChoix)
 {
@@ -192,7 +192,7 @@ function insertSondage($nbChoix)
         $sondage->asgTitre(addslashes($_POST["sondage"]));
         $sondage->asgDate(date("Y-m-d"));
         $sondage->asgDestinataire($_POST['destinataire']);
-
+        $sondage->asgCleLangue($_POST['langue']);
         for($i=1;$i<=$nbChoix;$i++)
         {
             $reponse=new ReponseSondage($_SESSION["mysqli"]);
@@ -211,14 +211,14 @@ function insertSondage($nbChoix)
 
 /*******************************************************************************
 Fonction : modificationSondage
-Paramètre :
-Description : enregistrer les informations mise à jour à propos du sondage
+Paramï¿½tre :
+Description : enregistrer les informations mise ï¿½ jour ï¿½ propos du sondage
 *******************************************************************************/
 function modificationSondage()
 {
      
  	  global $lang;
- 	  //on vérifie que les données sont valide
+ 	  //on vï¿½rifie que les donnï¿½es sont valide
      if($_POST["sondage"]=="")
      {
         formModifierSondage($_GET['cleSondage'],$lang['sondage_titre_invalide']);
@@ -238,7 +238,8 @@ function modificationSondage()
  	  $sondage->chargerSondageMySQL($_GET['cleSondage']);
      $sondage->asgTitre(addslashes($_POST["sondage"]));
      $sondage->asgDestinataire(addslashes($_POST['destinataire']));
-	  	  
+	 $sondage->asgCleLangue($_POST['langue']);
+	 
 	  //on boucle pour le nombre de choix choisi par l'utilisateur
      for($i=1;$i<=$_GET['nbChoix'];$i++)
      {
@@ -250,13 +251,13 @@ function modificationSondage()
          	$reponse->insertionMySQL($_GET['cleSondage']);
          	$sondage->ajoutReponse($reponse);
          }
-         //on modifie seulement les réponses
+         //on modifie seulement les rï¿½ponses
          else{
          	$sondage->reqReponse($i)->asgReponse(addslashes($_POST["choix".$i]));
          }
      }
      
-     //on doit maintenant vérifier si l'utilisateur a choisi d'enlever des choix
+     //on doit maintenant vï¿½rifier si l'utilisateur a choisi d'enlever des choix
      if($sondage->reqNbReponse()>$_GET['nbChoix'])
      {        		
      		for($i=$sondage->reqNbReponse();$i>$_GET['nbChoix'];$i--)
@@ -272,8 +273,8 @@ function modificationSondage()
 
 /*******************************************************************************
 Fonction :  
-Paramètre :
-Description : préparé et afficher le formulaire pour la modification d'un sondsge
+Paramï¿½tre :
+Description : prï¿½parï¿½ et afficher le formulaire pour la modification d'un sondsge
 *******************************************************************************/
 function formModifierSondage($cle,$erreur)
 {
@@ -281,7 +282,7 @@ function formModifierSondage($cle,$erreur)
 	$smarty->assign('erreur',$erreur);
   	$smarty->assign('action','modifier');
 	
-	//on vérifie si on veut seulement ajouter un choix
+	//on vï¿½rifie si on veut seulement ajouter un choix
 	if(isset($_POST['sondage']))
 	{
 		//on s'assure que le nombre de choix est valide
@@ -304,7 +305,7 @@ function formModifierSondage($cle,$erreur)
 	  	$smarty->assign('selected' . $_POST['destinataire'],'selected');
 	  	$smarty->assign('nbChoix',$_GET['nbChoix']);
 	   
-	   	//on parcours les réponses
+	   	//on parcours les rï¿½ponses
 	   	for($i=0;$i<$_GET['nbChoix'];$i++)
 	   	{
 		   	if(!isset($_POST["choix" . ($i+1)]))
@@ -348,10 +349,10 @@ function formModifierSondage($cle,$erreur)
 
 /*******************************************************************************
 Fonction : supprimerSondage($cleSondage)
-Paramètre :
-    - $cleSondage : la clé du sondage à supprimer
-Description : on supprime toutes les données en relation avec ce sondage
-    dans la base de données
+Paramï¿½tre :
+    - $cleSondage : la clï¿½ du sondage ï¿½ supprimer
+Description : on supprime toutes les donnï¿½es en relation avec ce sondage
+    dans la base de donnï¿½es
 *******************************************************************************/
 function supprimerSondage($cleSondage)
 {

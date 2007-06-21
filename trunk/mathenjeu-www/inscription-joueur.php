@@ -1,14 +1,14 @@
 <?php
 /*******************************************************************************
 Fichier : inscription-joueur.php
-Auteur : Maxime Bégin
-Description : Inscription des joueurs en 3 étapes.
+Auteur : Maxime Bï¿½gin
+Description : Inscription des joueurs en 3 ï¿½tapes.
 ********************************************************************************
-14-07-2006 maxime Bégin - Ajout du choix de professeur dans l'inscription. 
+14-07-2006 maxime Bï¿½gin - Ajout du choix de professeur dans l'inscription. 
 	Modification pour avoir seulement un fichier inscription_joueur.tpl 
 	au lieu de plusieurs.
-21-06-2006 Maxime Bégin - Ajout de commentaires.
-10-06-2006 Maxime Bégin - Version initiale
+21-06-2006 Maxime Bï¿½gin - Ajout de commentaires.
+10-06-2006 Maxime Bï¿½gin - Version initiale
 *******************************************************************************/
 
 require_once("lib/ini.php");
@@ -17,8 +17,8 @@ main();
 
 /*******************************************************************************
 Fonction : main()
-Paramètre : -
-Description : permet de gérer les différentes actions à effectuer
+Paramï¿½tre : -
+Description : permet de gï¿½rer les diffï¿½rentes actions ï¿½ effectuer
 *******************************************************************************/
 function main()
 {
@@ -40,7 +40,7 @@ function main()
     $smarty->cache_lifetime = 0;
     $smarty->display('menu.tpl');
     
-    //vérifie s'il y a un paramêtre, sinon on passe à l'étape 1
+    //vï¿½rifie s'il y a un paramï¿½tre, sinon on passe ï¿½ l'ï¿½tape 1
     if(!isset($_GET["action"]))
     {
       etape1("");
@@ -49,7 +49,7 @@ function main()
     }
     else
     {
-      //on vérifie si le joueur est déjà dans session
+      //on vï¿½rifie si le joueur est dï¿½jï¿½ dans session
       if(!isset($_SESSION["joueurInscription"]))
       {
         $joueur=new Joueur($_SESSION["mysqli"]);
@@ -61,7 +61,7 @@ function main()
         $joueur=$_SESSION["joueurInscription"];
       }
 		
-	  //changement de niveau scolaire, il faut rafrîchir la liste des établissements
+	  //changement de niveau scolaire, il faut rafrï¿½chir la liste des ï¿½tablissements
       if($_GET["action"]=="etablissement")
       {
         etape2("");
@@ -111,8 +111,8 @@ function main()
 
 /*******************************************************************************
 Fonction : validerEtape1
-Paramètre : $joueur : le joueur qui est en train de s'inscrire
-Description : valider et assigné les informations de l'étape 1
+Paramï¿½tre : $joueur : le joueur qui est en train de s'inscrire
+Description : valider et assignï¿½ les informations de l'ï¿½tape 1
 *******************************************************************************/
 function validerEtape1($joueur)
 {
@@ -144,14 +144,21 @@ function validerEtape1($joueur)
         $joueur->asgSexe($_POST['sexe']);
         $joueur->validerCourrielUnique($_POST["courriel"]);
         $joueur->asgCourriel($_POST["courriel"]);
+        
+        $joueur->asgCleLangue(LANG_FRENCH);
+        if(isset($_SESSION['langage'])) {
+          if ($_SESSION['langage'] == "english") {
+            $joueur->asgCleLangue(LANG_ENGLISH);
+          }
+        }
         $_SESSION["joueurInscription"] = $joueur;
         return "";
     }
 }
 /*******************************************************************************
 Fonction : validerEtape2
-Paramètre : $joueur : le joueur qui est en train de s'inscrire
-Description : valider et assigné les informations de l'étape 2
+Paramï¿½tre : $joueur : le joueur qui est en train de s'inscrire
+Description : valider et assignï¿½ les informations de l'ï¿½tape 2
 *******************************************************************************/
 function validerEtape2($joueur)
 {
@@ -195,9 +202,9 @@ function validerEtape2($joueur)
 	
 	
 	
-	//on inscrit le joueur à cet étape pour s'assurer que le nom d'utlisateur
-	//est réserver pour ce joueur, au cas ou 2 joueurs s'inscrive en même temps avec
-	//le même nom d'utlisateur
+	//on inscrit le joueur ï¿½ cet ï¿½tape pour s'assurer que le nom d'utlisateur
+	//est rï¿½server pour ce joueur, au cas ou 2 joueurs s'inscrive en mï¿½me temps avec
+	//le mï¿½me nom d'utlisateur
 	$joueur->asgAimeMaths(3);
     $joueur->asgMathConsidere(3);
     $joueur->asgMathEtudie(3);
@@ -216,8 +223,8 @@ function validerEtape2($joueur)
 
 /*******************************************************************************
 Fonction : validerEtape3
-Paramètre : $joueur : le joueur qui est en train de s'inscrire
-Description : valider et assigné les informations de l'étape 3
+Paramï¿½tre : $joueur : le joueur qui est en train de s'inscrire
+Description : valider et assignï¿½ les informations de l'ï¿½tape 3
 *******************************************************************************/
 function validerEtape3($joueur)
 {
@@ -225,7 +232,7 @@ function validerEtape3($joueur)
  	if($joueur->reqCle()==0)
  	{
 		$log = new clog(LOG_FILE);
-		$log->ecrire("Problème avec les sessions");
+		$log->ecrire("Problï¿½me avec les sessions");
 	}
 	else
 	{
@@ -243,9 +250,9 @@ function validerEtape3($joueur)
 
 /*******************************************************************************
 Fonction : etape1($erreur)
-Paramètre :
+Paramï¿½tre :
     - $erreur : message d'erreur s'il y en a un
-Description : afficher le formulaire d'inscription pour l'étape 1
+Description : afficher le formulaire d'inscription pour l'ï¿½tape 1
 *******************************************************************************/
 function etape1($erreur)
 {
@@ -274,9 +281,9 @@ function etape1($erreur)
 
 /*******************************************************************************
 Fonction : etape2($erreur)
-Paramètre :
+Paramï¿½tre :
     - $erreur : message d'erreur s'il y en a un
-Description : afficher le formulaire d'inscription pour l'étape 2
+Description : afficher le formulaire d'inscription pour l'ï¿½tape 2
 *******************************************************************************/
 function etape2($erreur)
 {
@@ -309,8 +316,8 @@ function etape2($erreur)
     }
 
     //
-    // on génère la liste des niveau scolaire
-    // on enleve les niveau primaire,collégial,universitaire,grand public temporairement
+    // on gï¿½nï¿½re la liste des niveau scolaire
+    // on enleve les niveau primaire,collï¿½gial,universitaire,grand public temporairement
     for($i=7;$i<=11;$i++)
     {
         $niveauTexte[$i] = $lang["niveau_$i"];
@@ -319,7 +326,7 @@ function etape2($erreur)
     $smarty->assign('niveauTexte',$niveauTexte);
     
     //
-    // générer la liste d'établissement
+    // gï¿½nï¿½rer la liste d'ï¿½tablissement
     //
     $arrE = genererListeEtablissement($niveau);
     $smarty->assign('etablissementID',$arrE[0]);
@@ -338,8 +345,8 @@ function etape2($erreur)
 
 /*******************************************************************************
 Fonction : etape3
-Paramètre :
-Description : afficher le formulaire d'inscription pour l'étape 3
+Paramï¿½tre :
+Description : afficher le formulaire d'inscription pour l'ï¿½tape 3
 *******************************************************************************/
 function etape3()
 {

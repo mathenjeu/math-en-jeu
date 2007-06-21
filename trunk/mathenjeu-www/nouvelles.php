@@ -32,13 +32,13 @@ function main()
 	$smarty->display('menu.tpl');
 
 	
-	//on vérifie si on a une copie valide dans la cache
-	//sinon on va chercher les informations dans la base de données
+	//on vï¿½rifie si on a une copie valide dans la cache
+	//sinon on va chercher les informations dans la base de donnï¿½es
 	if(!$smarty->is_cached("nouvelle.tpl"))
 	{
 		//on charge les nouvelles
 	    $nouvelles = new Nouvelles($_SESSION["mysqli"]);
-	    $nouvelles->chargerMySQL(MAX_NB_NOUVELLES,array(0,1));
+	    $nouvelles->chargerMySQL(MAX_NB_NOUVELLES,array(0,1),getCleLangue($_SESSION['langage']));
 	    
 	    for($i=0;$i<$nouvelles->reqNbNouvelle();$i++)
 	    {
@@ -71,7 +71,7 @@ function main()
 
 /*******************************************************************************
 Fonction : afficherNouvelles
-Paramètre : $nouvelles : les nouvelles à afficher
+Paramï¿½tre : $nouvelles : les nouvelles ï¿½ afficher
 Description : affiche les nouvelles contenues dans l'objet $nouvelles
 *******************************************************************************/
 /*

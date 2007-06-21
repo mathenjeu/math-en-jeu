@@ -1,20 +1,19 @@
 <?php
 /*******************************************************************************
 Fichier : portail-joueur.php
-Auteur : Maxime Bégin
-Description : Permet de gérer les différentes actions qu'un joueur
-    peut effectuer. Par exemple : modifié ses informations, afficher le palmarès
-    des meilleurs joueurs, répondre aux sondage, lire les nouvelles
+Auteur : Maxime Bï¿½gin
+Description : Permet de gï¿½rer les diffï¿½rentes actions qu'un joueur
+    peut effectuer. Par exemple : modifiï¿½ ses informations, afficher le palmarï¿½s
+    des meilleurs joueurs, rï¿½pondre aux sondage, lire les nouvelles
     et lancer le jeu.
-    TODO : afficher les statistiques personnelles
 ********************************************************************************
-26-11-2006 Maxime Bégin - déménagement de plusieur fonctionnalité dans des pages
-	indépendante.
-23-06-2006 Maxime Bégin - Ajout d'image pour les nouvelles
-22-06-2006 Maxime Bégin - Modification pour l'ajout de destinataire
+26-11-2006 Maxime Bï¿½gin - dï¿½mï¿½nagement de plusieur fonctionnalitï¿½ dans des pages
+	indï¿½pendante.
+23-06-2006 Maxime Bï¿½gin - Ajout d'image pour les nouvelles
+22-06-2006 Maxime Bï¿½gin - Modification pour l'ajout de destinataire
     pour les nouvelles et les sondages
-21-06-2006 Maxime Bégin - Ajout de commentaires.
-10-06-2006 Maxime Bégin - Version initiale
+21-06-2006 Maxime Bï¿½gin - Ajout de commentaires.
+10-06-2006 Maxime Bï¿½gin - Version initiale
 *******************************************************************************/
 
 require_once("lib/ini.php");
@@ -23,8 +22,8 @@ main();
 
 /*******************************************************************************
 Fonction : main()
-Paramètre : -
-Description : permet de gérer les différentes actions à effectuer
+Paramï¿½tre : -
+Description : permet de gï¿½rer les diffï¿½rentes actions ï¿½ effectuer
 *******************************************************************************/
 function main()
 {
@@ -33,7 +32,7 @@ function main()
       $smarty = new MonSmarty();
       global $lang;
     	
-      //on vérifie su le joueur est connecté et a la permission d'accédé à cette page
+      //on vï¿½rifie su le joueur est connectï¿½ et a la permission d'accï¿½dï¿½ ï¿½ cette page
       if(!isset($_SESSION["joueur"]))
 	  {
         redirection("login-joueur.php",0);
@@ -60,7 +59,7 @@ function main()
         $smarty->cache_lifetime = 0;
         $smarty->display('menu.tpl');
         
-        //si on a une action à éfectuer
+        //si on a une action ï¿½ ï¿½fectuer
         if(isset($_GET["action"]))
         {
             $action=$_GET["action"];
@@ -139,10 +138,10 @@ function statJoueur()
 
 /*******************************************************************************
 Fonction : doModificationPerso
-Paramètre : $joueur : le joueur courant
+Paramï¿½tre : $joueur : le joueur courant
 Description : valider les nouvelles informations personnelles du joueur.
     Enregistrer les modifications si tout est correct, sinon afficher
-    le formulaire de modification avec le message d'erreur approprié
+    le formulaire de modification avec le message d'erreur appropriï¿½
 *******************************************************************************/
 function doModificationPerso($joueur)
 {
@@ -179,17 +178,22 @@ function doModificationPerso($joueur)
         $joueur->asgProvince($_POST["province"]);
         $joueur->asgPays($_POST["pays"]);
         $joueur->asgCourriel($_POST["courriel"]);
+        $oldLangue = $joueur->reqCleLangue();
+        $joueur->asgCleLangue($_POST["langue"]);
         $joueur->miseAJourMySQL();
+        $_SESSION["joueur"] = $joueur;
+        setLangage($joueur->reqCleLangue());
         formulaireModification($joueur,"",0,$lang['mod_joueur_personel_succes'],1);
+
     }
 }
 
 /*******************************************************************************
 Fonction : doModificationPass
-Paramètre : $joueur : le joueur courant
+Paramï¿½tre : $joueur : le joueur courant
 Description : valider le nouveau mot de passe du joueur.
     Enregistrer les modifications si tout est correct, sinon afficher
-    le formulaire de modification avec le message d'erreur approprié
+    le formulaire de modification avec le message d'erreur appropriï¿½
 *******************************************************************************/
 function doModificationPass($joueur)
 {
@@ -216,10 +220,10 @@ function doModificationPass($joueur)
 
 /*******************************************************************************
 Fonction : doModificationScolaire
-Paramètre : $joueur : le joueur courant
+Paramï¿½tre : $joueur : le joueur courant
 Description : valider les nouvelles informations scolaire du joueur.
     Enregistrer les modifications si tout est correct, sinon afficher
-    le formulaire de modification avec le message d'erreur approprié
+    le formulaire de modification avec le message d'erreur appropriï¿½
 *******************************************************************************/
 function doModificationScolaire($joueur)
 {
@@ -252,12 +256,12 @@ function doModificationScolaire($joueur)
 
 /*******************************************************************************
 Fonction : formulaireModification
-Paramètre :
+Paramï¿½tre :
     $joueur : le joueur courant
     $erreur : le message d'erreur s'il y en a un
-    $erreur_id : le numéro d'erreur ( un pour chacune des sections )
+    $erreur_id : le numï¿½ro d'erreur ( un pour chacune des sections )
     $message : un message s'il y en a
-    $message_id : le numéro de message ( un pour chacune des sections )
+    $message_id : le numï¿½ro de message ( un pour chacune des sections )
 Description : afficher le formulaire qui permet de modifier
     les informations du joueur.
 *******************************************************************************/
@@ -292,6 +296,7 @@ function formulaireModification($joueur,$erreur,$erreur_id,$message,$message_id)
     $smarty->assign('province',$joueur->reqProvince());
     $smarty->assign('pays',$joueur->reqPays());
     $smarty->assign('courriel',$joueur->reqCourriel());
+    $smarty->assign('langue',$joueur->reqCleLangue());
     $smarty->assign('aliasProf',$joueur->reqAliasAdministrateur());
     $smarty->assign('niveau',$niveau);
     $smarty->assign('etablissement',$joueur->reqEtablissement());
@@ -299,8 +304,8 @@ function formulaireModification($joueur,$erreur,$erreur_id,$message,$message_id)
     $smarty->assign('message'.$message_id,$message);
 
     //
-    // on génère la liste des niveau scolaire
-    // on enleve les niveau primaire,collégial,universitaire temporairement
+    // on gï¿½nï¿½re la liste des niveau scolaire
+    // on enleve les niveau primaire,collï¿½gial,universitaire temporairement
     for($i=7;$i<=11;$i++)
     {
         $niveauTexte[$i] = $lang["niveau_$i"];
@@ -309,7 +314,7 @@ function formulaireModification($joueur,$erreur,$erreur_id,$message,$message_id)
     $smarty->assign('niveauTexte',$niveauTexte);
 
     //
-    // générer la liste d'établissement
+    // gï¿½nï¿½rer la liste d'ï¿½tablissement
     //
     $arrE = genererListeEtablissement($niveau);
     $smarty->assign('etablissementID',$arrE[0]);

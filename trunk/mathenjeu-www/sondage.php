@@ -1,17 +1,17 @@
 <?php 
 /*******************************************************************************
 Fichier : sondage.php
-Auteur : Maxime Bégin
+Auteur : Maxime Bï¿½gin
 Description : pour afficher les sondages
 ********************************************************************************
-11-24-2006 Maxime Bégin - Version initiale
+11-24-2006 Maxime Bï¿½gin - Version initiale
 *******************************************************************************/
 
 require_once("lib/ini.php");
 try
 {
  	$sondage=new Sondage($_SESSION["mysqli"]);
-	if(!$sondage->chargerPlusRecentSondageMySQL(array(0,1)))
+	if(!$sondage->chargerPlusRecentSondageMySQL(array(0,1),getCleLangue($_SESSION['langage'])))
 	{
 		return;
 	}
@@ -19,12 +19,12 @@ try
 	{
 		$joueur=$_SESSION["joueur"];
 			    
-	    //si le joueurs choisie de répondre au sondage
+	    //si le joueurs choisie de rï¿½pondre au sondage
 	    if(isset($_POST["reponseSondage"]))
         {
             $sondage->ajoutChoixJoueur($joueur->reqCle(),$_POST["reponseSondage"]);
             $sondage=new Sondage($_SESSION["mysqli"]);
-            $sondage->chargerPlusRecentSondageMySQL(array(0,1));
+            $sondage->chargerPlusRecentSondageMySQL(array(0,1),getCleLangue($_SESSION['langage']));
             redirection("nouvelles.php",0);
         }
         else
@@ -58,8 +58,8 @@ catch(SQLException $e)
 
 /*******************************************************************************
 Fonction : afficherSondage
-Paramètre : $sondage : le sondage à afficher
-Description : affiche le sondage passé en paramètre
+Paramï¿½tre : $sondage : le sondage ï¿½ afficher
+Description : affiche le sondage passï¿½ en paramï¿½tre
 *******************************************************************************/
 function afficherSondage($sondage)
 {
@@ -93,8 +93,8 @@ function afficherSondage($sondage)
 
 /*******************************************************************************
 Fonction : afficherResultatSondage
-Paramètre : $sondage : le sondage à afficher
-Description : affiche le résultat du sondage passé en paramètre
+Paramï¿½tre : $sondage : le sondage ï¿½ afficher
+Description : affiche le rï¿½sultat du sondage passï¿½ en paramï¿½tre
 *******************************************************************************/
 function afficherResultatSondage($sondage)
 {

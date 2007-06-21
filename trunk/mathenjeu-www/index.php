@@ -1,10 +1,10 @@
 <?php
 /*******************************************************************************
 Fichier : index.php
-Auteur : Maxime Bégin
+Auteur : Maxime Bï¿½gin
 Description : affiche l'index
 ********************************************************************************
-10-06-2006 Maxime Bégin - Version initiale
+10-06-2006 Maxime Bï¿½gin - Version initiale
 *******************************************************************************/
 
 require_once("lib/ini.php");
@@ -37,6 +37,9 @@ function main()
 	
 	$smarty->assign('titre',$lang['titre_index']);
 	
+	if (!isset($_SESSION['langage'])) {
+	  $_SESSION['langage'] = "francais";
+	}
 	$smarty->cache_lifetime = 0;
 	$smarty->display('header.tpl');
 

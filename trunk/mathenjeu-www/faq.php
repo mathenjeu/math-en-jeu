@@ -1,10 +1,10 @@
 <?php
 /*******************************************************************************
 Fichier : faq.php
-Auteur : Maxime Bégin
+Auteur : Maxime Bï¿½gin
 Description : fichier pour afficher la foire au questions (FAQ)
 ********************************************************************************
-24-11-2006 Maxime Bégin - Version initiale
+24-11-2006 Maxime Bï¿½gin - Version initiale
 *******************************************************************************/
 
 
@@ -54,20 +54,20 @@ function main()
 
 /*******************************************************************************
 Fonction : afficherFaq()
-Paramètre :
+Paramï¿½tre :
 Description :
-    - on charge les informations à propos de la FAQ et on l'affiche
+    - on charge les informations ï¿½ propos de la FAQ et on l'affiche
 *******************************************************************************/
 function afficherFaq()
 {
   	$smarty=new MonSmarty();
   
-  	//on vérifie si on a une copie valide dans la cache
-	//sinon on va chercher les informations dans la base de données
+  	//on vï¿½rifie si on a une copie valide dans la cache
+	//sinon on va chercher les informations dans la base de donnï¿½es
 	if(!$smarty->is_cached("faq.tpl"))
 	{
   		$faqs = new FAQs($_SESSION['mysqli']);
-  		$faqs->chargerMySQL(0);
+  		$faqs->chargerMySQL(0,getCleLangue($_SESSION['langage']));
 	  	$nb = $faqs->reqNbFaq();
 	  	for($i=0;$i<$nb;$i++)
 	  	{

@@ -37,6 +37,20 @@
         </td>
     </tr>
     <tr>
+	  <td>{$lang.mod_joueur_lang}</td>
+	  <td>
+	      	<select name="langue" style="width: 100px;">
+	      		{if $langue eq 0}
+	        		<option value="0" selected>{$lang.francais}</option>
+	        		<option value="1">{$lang.anglais}</option>
+	        	{else}
+	        		<option value="0">{$lang.francais}</option>
+	        		<option value="1" selected>{$lang.anglais}</option>
+	        	{/if}
+	      	</select>
+	      </td>
+	</tr>
+    <tr>
         <td>{$lang.image}</td>
         <td>
             <select name="image" onChange="document.images.sujet.src=document.nouvelle.image.options[document.nouvelle.image.selectedIndex].value;">

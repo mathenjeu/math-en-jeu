@@ -1,17 +1,17 @@
 <?php
 /*******************************************************************************
 Fichier : lang_main.php
-Auteur : Maxime Bégin
-Description : Tous les textes du site web sont regroupés ici
+Auteur : Maxime Bï¿½gin
+Description : Tous les textes du site web sont regroupï¿½s ici
 ********************************************************************************
 31-05-2007 Hugo Drouin-Vaillancourt - Traduction anglaise
-15-01-2007 Sylvain Hallé - Correction et uniformisation des textes
-21-06-2006 Maxime Bégin - Ajout de commentaires.
-15-06-2006 Maxime Bégin - Version initiale
+15-01-2007 Sylvain Hallï¿½ - Correction et uniformisation des textes
+21-06-2006 Maxime Bï¿½gin - Ajout de commentaires.
+15-06-2006 Maxime Bï¿½gin - Version initiale
 *******************************************************************************/
 
 //
-//commun : à usage multiple
+//commun : ï¿½ usage multiple
 //
 $lang['math_en_jeu'] = "Math en jeu";
 
@@ -63,6 +63,8 @@ $lang['masculin'] = 'Male';
 $lang['province'] = 'Province';
 $lang['pays'] = 'Country';
 $lang['courriel'] = 'E-mail';
+$lang['francais'] = 'French';
+$lang['anglais'] = 'English';
 $lang['courriel_confirm'] = 'Enter the e-mail again';
 $lang['question_sexe'] = 'What is your sex?';
 
@@ -75,18 +77,18 @@ $lang['etablissement'] = 'Institution';
 $lang['autre'] = 'Other';
 $lang['nouvelles'] = 'News';
 
-$lang['niveau_1'] = 'Primaire, 1re année';
-$lang['niveau_2'] = 'Primaire, 2e année';
-$lang['niveau_3'] = 'Primaire, 3e année';
-$lang['niveau_4'] = 'Primaire, 4e année';
-$lang['niveau_5'] = 'Primaire, 5e année';
-$lang['niveau_6'] = 'Primaire, 6e année';
+$lang['niveau_1'] = 'Primaire, 1re annï¿½e';
+$lang['niveau_2'] = 'Primaire, 2e annï¿½e';
+$lang['niveau_3'] = 'Primaire, 3e annï¿½e';
+$lang['niveau_4'] = 'Primaire, 4e annï¿½e';
+$lang['niveau_5'] = 'Primaire, 5e annï¿½e';
+$lang['niveau_6'] = 'Primaire, 6e annï¿½e';
 $lang['niveau_7'] = 'Secondaire I';
 $lang['niveau_8'] = 'Secondaire II';
 $lang['niveau_9'] = 'Secondaire III';
 $lang['niveau_10'] = 'Secondaire IV';
 $lang['niveau_11'] = 'Secondaire V';
-$lang['niveau_12'] = 'Collégial';
+$lang['niveau_12'] = 'Collï¿½gial';
 $lang['niveau_13'] = 'Universitaire';
 $lang['niveau_14'] = 'Grand public';
 
@@ -108,16 +110,16 @@ $lang['titre_connexion'] = "Math en jeu! - Login";
 $lang['titre_confirm_courriel'] = "Math en jeu! - E-mail confirmation";
 $lang['titre_admin'] = "Math en jeu! - Administration";
 $lang['titre_index'] = 'Math en jeu!';
-$lang['titre_pass_perdu'] = 'Math en jeu! - Password Recovery';		// À vérifier
-$lang['titre_portail_admin'] = 'Math en jeu! - Teachers Portal';		// À vérifier
-$lang['titre_portail_joueur'] = 'Math en jeu! - Players Portal';		// À vérifier
+$lang['titre_pass_perdu'] = 'Math en jeu! - Password Recovery';		// ï¿½ vï¿½rifier
+$lang['titre_portail_admin'] = 'Math en jeu! - Teachers Portal';		// ï¿½ vï¿½rifier
+$lang['titre_portail_joueur'] = 'Math en jeu! - Players Portal';		// ï¿½ vï¿½rifier
 $lang['titre_inscription_joueur'] = 'Math en jeu! - Players registration';
 $lang['titre_inscription_admin'] = 'Math en jeu! - Teachers Registration';
 $lang['titre_faq'] = 'Math en jeu! - Frequently Asked Questions (FAQ)';
 $lang['titre_contact'] = 'Math en jeu! - Contact us';
 $lang['titre_nouvelle'] = 'Math en jeu - News';
 $lang['titre_instruction'] = 'Math en jeu - Instructions';
-$lang['titre_ajout_question'] = 'Math en jeu - Add a Question'; 	// À vérifier
+$lang['titre_ajout_question'] = 'Math en jeu - Add a Question'; 	// ï¿½ vï¿½rifier
 
 
 //
@@ -128,8 +130,8 @@ $lang['bouton_envoyer'] = 'Send';
 $lang['bouton_ajouter'] = 'Add';
 $lang['bouton_modifier'] = 'Modify';
 $lang['bouton_enregistrer'] = 'Save';
-$lang['bouton_valider'] = 'Confirm';				// À vérifier
-$lang['bouton_retour_liste'] = 'Back to list';		// À vérifier
+$lang['bouton_valider'] = 'Confirm';				// ï¿½ vï¿½rifier
+$lang['bouton_retour_liste'] = 'Back to list';		// ï¿½ vï¿½rifier
 $lang['bouton_repondre'] = 'Answer!';
 $lang['bouton_afficher'] = 'Show';
 $lang['bouton_ajout_groupe'] = 'Add a group';
@@ -166,8 +168,8 @@ $lang['menu_faq'] = 'Frequently Asked Questions (FAQ)';
 $lang['menu_contact'] = 'Contact us';
 $lang['menu_instructions'] = 'Instructions';
 
-$lang['menu_gestion_questions'] = 'Question Administration';		// À vérifier Administrayion ou Management?
-$lang['menu_gestion_groupes'] = 'Group Administration';				// À vérifier
+$lang['menu_gestion_questions'] = 'Question Administration';		// ï¿½ vï¿½rifier Administrayion ou Management?
+$lang['menu_gestion_groupes'] = 'Group Administration';				// ï¿½ vï¿½rifier
 $lang['menu_liste_etudiant'] = 'Student List';
 
 $lang['menu_configuration'] = 'Configuration';
@@ -183,7 +185,7 @@ $lang['menu_stats_web'] = 'Web Servor Statistics';
 $lang['menu_stat_joueur'] = 'My Statistics';
 
 $lang['menu_ajout_question'] = 'Add a question';
-$lang['menu_chercher_question'] = 'Search for a question';			// À vérifier
+$lang['menu_chercher_question'] = 'Search for a question';			// ï¿½ vï¿½rifier
 $lang['menu_mes_question'] = 'Add my questions';
 
 //
@@ -193,7 +195,7 @@ $lang['menu_mes_question'] = 'Add my questions';
 $lang['titre_index'] = 'Math en jeu';
 $lang['texte_index'] = '
 <span style="font-size:150%"><i>New!</i> <a href="demo.php">Watch the Math en jeu demo! (French Only)</a></span><p>
-<a target="_blank" href="img/screen2_big.jpg"><img src="img/screen2.jpg" alt="Capture d\'écran" border="0" hspace="15" align="left"></a>		
+<a target="_blank" href="img/screen2_big.jpg"><img src="img/screen2.jpg" alt="Capture d\'ï¿½cran" border="0" hspace="15" align="left"></a>		
 
 
 <p>Is it possible to have fun doing maths? The SMAC team says &laquo;yes&raquo;!
@@ -219,7 +221,7 @@ time runs out. To be able to win coins, each player must answer mathematical
 questions. The longer the displacement, the harder the question, and the more 
 coins it is worth! </p>
 
-<a target="_blank" href="img/screen1_big.jpg"><img src="img/screen1.jpg" alt="Capture d\'écran" border="0" hspace="15" align="right"></a>    
+<a target="_blank" href="img/screen1_big.jpg"><img src="img/screen1.jpg" alt="Capture d\'ï¿½cran" border="0" hspace="15" align="right"></a>    
 
 
 <p>In case a player answers a questioin  wrongly, a retroactive effect
@@ -236,8 +238,8 @@ three virtual opponents.</p>
 <p>The content of Math en Jeu is based on a question bank of 1500 questions
 divided into 8 categories (geometry, logic, algebra, arithmetics, probability 
 and statistics, history of science, functions, and general questions.) Each 
-question corresponds to a specific objective of the mathematics program of Québec\'s 
-Ministère de l\'éducation, du loisir et du sport, and has points that corresponds to
+question corresponds to a specific objective of the mathematics program of QuÃ©bec\'s 
+MinistÃ¨re de l\'Ã©ducation, du loisir et du sport, and has points that corresponds to
 it\'s degree of difficulty relative to the academic level of the player. It is 
 thus possible for two players of different academic levels to confront each other
 in a same game because they are given questions adapted to their levels. Every 
@@ -287,7 +289,7 @@ $lang['instructions_body'] ='
 	</ul>
 	<h4>Math en jeu rules : </h4>
 	<ul>	
-		<li>On the game board, you character appears bigger than the other player’s.</li>
+		<li>On the game board, you character appears bigger than the other playerï¿½s.</li>
 		<li>You character can move in four directions. To the front, to the back, to the left, and to the right on a line. The accessible cells appear paler.</li>  
 		<li>Your character can move from between one and six cells at once. The bigger the displacement, the harder the question, relative to the academic level on your registration. </li>  
 		<li>A one cell displacement is worth one point, a two cell displacement is worth two points, and so on. </li>    
@@ -316,14 +318,14 @@ $lang['inscription_mot_de_passe_info'] = 'Between 5 and 20 caracters inclusively
 $lang['inscription_etape'] = 'Step';
 $lang['inscription_joueur'] = 'Registration';
 
-//étape 1
+//ï¿½tape 1
 $lang['inscription_info_courriel'] = 'The e-mail address can only contain letters, numbers, points (.), dash (-), or underscores (_).';
 $lang['inscription_joueur_texte'] = 'The player\'s registration must only be done once during your first Math en jeu visit. Before your next gmes, you will only need to provide your username and password.';
 $lang['inscription_1_joueur_info'] = 'Make sure all the information is correct. In particular, your e-mail address will be used to confirm your registration, and to send you a new password in case you forget it.';
 $lang['inscription_donnee_personnel'] = 'Personal data';
 
 
-//étape 2
+//ï¿½tape 2
 $lang['inscription_2_joueur_info'] = 'Your username will be used to identify you to other players. Your username name must be unique. Be original!<p>The academic level is necessary to calibrate the questions difficulty level. If you are in the wrong level, the question will most likely not be appropriate, and the game will not be as fun!';
 $lang['inscription_joueur_profil'] = '';
 $lang['inscription_l_alias'] = 'This username';
@@ -408,7 +410,7 @@ $lang['mod_joueur_personel_succes'] = 'Your personal data was successfully modif
 $lang['mod_joueur_pass_succes'] = 'Your password was successfully modified.';
 $lang['mod_joueur_scolaire_succes'] = 'Your academic profile was successfully modified.';
 $lang['mod_joueur_alias_prof_info'] = 'If you know your teacher\'s username, write it here. Otherwise, leave this blank.';
-
+$lang['mod_joueur_lang'] = 'Language';
 
 
 //
@@ -603,7 +605,7 @@ $lang['image'] = 'Image';
 
 
 //
-//palmarès
+//palmarï¿½s
 //
 $lang['palmares_titre'] = 'Best scores';
 $lang['palmares_total_temps'] = 'Cumulative duration of play';
@@ -773,7 +775,7 @@ $lang['install_erreur_prenom'] = 'Invalid first name.';
 $lang['install_titre'] = 'Math en jeu website installation.';
 $lang['install_suivant'] = 'Next step';
 $lang['install_precedent'] = 'Previous step';
-$lang['install_message_fin'] = 'Voilà! The installation is basically finished. You can now go to the <a href="../super-admin.php">administration section</a> to complete the configuration.';
+$lang['install_message_fin'] = 'Voilï¿½! The installation is basically finished. You can now go to the <a href="../super-admin.php">administration section</a> to complete the configuration.';
 $lang['install_admin_exist'] = 'This administrator already exists in the table.';
 $lang['install_erreur_ecriture_config'] = 'The configuration file /config/configuration.xml is not available to write.';
 

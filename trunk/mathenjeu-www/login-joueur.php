@@ -1,11 +1,11 @@
 <?php
 /*******************************************************************************
 Fichier : joueur-login.php
-Auteur : Maxime Bégin
+Auteur : Maxime Bï¿½gin
 Description : Afficher la page de connexions des joueurs et valider cette connexion
 ********************************************************************************
-21-06-2006 Maxime Bégin - Ajout de commentaires.
-10-06-2006 Maxime Bégin - Version initiale
+21-06-2006 Maxime Bï¿½gin - Ajout de commentaires.
+10-06-2006 Maxime Bï¿½gin - Version initiale
 *******************************************************************************/
 
 require_once("lib/ini.php");
@@ -26,8 +26,8 @@ function main()
 		exit;
 	}
 	*/
-    //si le joueur est déjà connecté,
-    //il est redirigé à la page portail-joueur
+    //si le joueur est dï¿½jï¿½ connectï¿½,
+    //il est redirigï¿½ ï¿½ la page portail-joueur
     if(isset($_SESSION["joueur"]))
     {
         redirection("nouvelles.php",0);
@@ -51,17 +51,18 @@ function main()
         	if($joueur->chargerMySQL($_POST["alias"],$_POST["motDePasse"]))
         	{
             	$_SESSION["joueur"] = $joueur;
+        	    setLangage($joueur->reqCleLangue());
             	
-            	//on vérifie si on a le sexe du joueur dans notre base de données
+            	//on vï¿½rifie si on a le sexe du joueur dans notre base de donnï¿½es
             	if($joueur->reqSexe()==null)
             	{
 					redirection("sexe.php",0);
 				}
 				else
 				{
-	            	//on vérifie si le HTTP_REFERER existe si oui
-	            	//on redirige le client vers la page où il s'est 
-	            	//connecté
+	            	//on vï¿½rifie si le HTTP_REFERER existe si oui
+	            	//on redirige le client vers la page oï¿½ il s'est 
+	            	//connectï¿½
 	            	if(isset($_SERVER['HTTP_REFERER']))
 	            	{
 	            	 	redirection($_SERVER['HTTP_REFERER'],0);
