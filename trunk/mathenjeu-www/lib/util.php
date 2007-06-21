@@ -1,18 +1,18 @@
 <?php
 /*******************************************************************************
 Fichier : util.php
-Auteur : Maxime Bégin
+Auteur : Maxime Bï¿½gin
 Description : regroupe toutes les fonctions diverse utilitaire
 ********************************************************************************
-11-07-2006 Maxime Bégin - Ajout de la fonction pour afficher la FAQ
-30-05-2006 Maxime Bégin - Version initiale
+11-07-2006 Maxime Bï¿½gin - Ajout de la fonction pour afficher la FAQ
+30-05-2006 Maxime Bï¿½gin - Version initiale
 *******************************************************************************/
 
 
 
 /*******************************************************************************
 Fonction : convertirDateEnString($date)
-Paramètre :
+Paramï¿½tre :
         - $date est une date au format aaaa-mm-jj
 Description :
     - on convertir la date qui est au format aaaa-mm-jj en format jj Mois aaaa
@@ -40,8 +40,8 @@ function convertirDateEnString($date)
 
 /*******************************************************************************
 Fonction : redirection($page,$temps)
-Paramètre :
-        - $page : page web vers laquel il faut redirigé le client
+Paramï¿½tre :
+        - $page : page web vers laquel il faut redirigï¿½ le client
         - $temps : le temps avec la redirection (0 = immediatement)
 Description :
         - rediriger le client vers une autre page.
@@ -60,8 +60,8 @@ function redirection($page,$temps)
 
 /*******************************************************************************
 Fonction : genererListeEtablissement($niveau)
-Paramètre :
-        - $page : page web vers laquel il faut redirigé le client
+Paramï¿½tre :
+        - $page : page web vers laquel il faut redirigï¿½ le client
         - $temps : le temps avec la redirection (0 = immediatement)
 Description :
         - rediriger le client vers une autre page.
@@ -106,10 +106,10 @@ function genererListeEtablissement($niveau)
 
 /*******************************************************************************
 Fonction : templates_dir
-Paramètre : 
-	- &$smarty : référence à smarty
+Paramï¿½tre : 
+	- &$smarty : rï¿½fï¿½rence ï¿½ smarty
 	- $dir : dossier qui contient les langages
-Description : assigner à smarty les dossiers de langages disponibles
+Description : assigner ï¿½ smarty les dossiers de langages disponibles
 *******************************************************************************/
 function langage_dir(&$smarty,$dir)
 {
@@ -128,10 +128,10 @@ function langage_dir(&$smarty,$dir)
 }
 /*******************************************************************************
 Fonction : css_file
-Paramètre : 
-	- &$smarty : référence à smarty
+Paramï¿½tre : 
+	- &$smarty : rï¿½fï¿½rence ï¿½ smarty
 	- $dir : dossier qui contient les fichiers css
-Description : assigner à smarty les fichiers .css disponible
+Description : assigner ï¿½ smarty les fichiers .css disponible
 *******************************************************************************/
 function css_file(&$smarty,$dir)
 {
@@ -153,10 +153,10 @@ function css_file(&$smarty,$dir)
 
 /*******************************************************************************
 Fonction : templates_dir
-Paramètre : 
-	- &$smarty : référence à smarty
+Paramï¿½tre : 
+	- &$smarty : rï¿½fï¿½rence ï¿½ smarty
 	- $dir : dossier qui contient les templates
-Description : assigner à smarty les dossiers de templates disponible
+Description : assigner ï¿½ smarty les dossiers de templates disponible
 *******************************************************************************/
 function templates_dir(&$smarty,$dir)
 {
@@ -174,5 +174,29 @@ function templates_dir(&$smarty,$dir)
 	$smarty->assign('templates',$arr);
 }
 
+function setLangage($cleLangage) {
+  
+  switch($cleLangage)
+  {
+	case LANG_FRENCH:
+	  $_SESSION['langage'] = "francais";
+	  break;
+	case LANG_ENGLISH:
+		$_SESSION['langage'] = "english";
+		break;
+	default:
+		$_SESSION['langage'] = "francais";
+		break;
+  }
+}
 
-
+function getCleLangue($langage) {
+  $ret=0;
+  if ($langage == "english") {
+    $ret = LANG_ENGLISH;
+  } else {
+    $ret = LANG_FRENCH;
+  }
+  
+  return $ret;
+}

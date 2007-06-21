@@ -186,6 +186,11 @@ class Joueur extends Utilisateur
         $this->mathDecouvert=$no;
     }
     
+    function asgCleLangue($cleLangue) {
+      PRECONDITION($cleLangue == 0 || $cleLangue == 1);
+      $this->cleLangue = $cleLangue;
+    }
+    
     //**************************************************************************
     // Sommaire:        Assigner un administrateur au joueur courant
     // Entrée:          $alias : l'alias du professeur associé
@@ -441,19 +446,8 @@ class Joueur extends Utilisateur
         $this->calculNbPartieTempsJouee();
         $this->cleConfirmation=$row->cleConfirmation;
 
-	$this->cleLangue=$row->cleLangue;
-	switch($this->cleLangue)
-	{
-	case 0:
-		$_SESSION['langage'] = "francais";
-		break;
-	case 1:
-		$_SESSION['langage'] = "english";
-		break;
-	default:
-		$_SESSION['langage'] = "francais";
-		break;
-	}
+	    $this->cleLangue=$row->cleLangue;
+	
 
         return true;
 
@@ -502,26 +496,6 @@ class Joueur extends Utilisateur
             || $this->validerCourrielUnique($this->reqCourriel())==false)
         return false;
 
-      if(isset($_SESSION['langage']))
-      {
-	switch($_SESSION['langage'])
-	{
-	case "francais":
-		$this->cleLangue = 0;
-		break;
-	case "english":
-		$this->cleLangue = 1;
-		break;
-	default:
-		$this->cleLangue = 0;
-		break;
-	}
-      }
-      else
-      {
-	$this->cleLangue = 0;
-      }
-	
 
       $sql = "INSERT INTO joueur (prenom, nom, alias,
             motDePasse, adresseCourriel, ville, province, pays, cleNiveau, sexe,
@@ -673,6 +647,7 @@ class Joueur extends Utilisateur
             "',estConfirme=" . $this->reqEstConfirmer() .
             ",alias='" . $this->reqAlias() .
             "',sexe=" . $this->reqSexe() .
+            ",cleLangue=" . $this->reqCleLangue() .
             ",cleAdministrateur=" . $this->reqCleAdministrateur() .
             ",cleGroupe=" . $this->reqCleGroupe() .
             ",sondageQ1=" . $this->reqAimeMaths() .

@@ -1,18 +1,18 @@
 <?php
 /*******************************************************************************
 Fichier : nouvelles.class.php
-Auteur : Maxime Bégin
+Auteur : Maxime Bï¿½gin
 Description :
-    classes servant à la gestion des nouvelles
+    classes servant ï¿½ la gestion des nouvelles
     2 classes : uneNouvelle et Nouvelles
 ********************************************************************************
-23-06-2006 Maxime Bégin - Ajout d'une image associé aux nouvelles.
-22-06-2006 Maxime Bégin - ajout de destinataire pour les nouvelles :
+23-06-2006 Maxime Bï¿½gin - Ajout d'une image associï¿½ aux nouvelles.
+22-06-2006 Maxime Bï¿½gin - ajout de destinataire pour les nouvelles :
     tout le monde(0),seulement les joueurs(1) ou bien seulement les professeurs(2).
-    Lorsque l'on veut charger les nouvelles on peut par exemple passé en paramètre
+    Lorsque l'on veut charger les nouvelles on peut par exemple passï¿½ en paramï¿½tre
     un tableau contenant 0,1,2 ce qui signifie qu'on charger TOUTES les nouvelles
-21-06-2006 Maxime Bégin - ajout de quelques commentaires
-05-06-2006 Maxime Bégin - Version initiale
+21-06-2006 Maxime Bï¿½gin - ajout de quelques commentaires
+05-06-2006 Maxime Bï¿½gin - Version initiale
 *******************************************************************************/
 
 require_once("exception.class.php");
@@ -21,21 +21,21 @@ require_once("mon_mysqli.class.php");
 class UneNouvelle
 {
 
-    private $cleNouvelle;       //clé de la nouvelle
-    private $nouvelle;          //la nouvelle elle-même
+    private $cleNouvelle;       //clï¿½ de la nouvelle
+    private $nouvelle;          //la nouvelle elle-mï¿½me
     private $date;              //date de la nouvelle
     private $titre;             //titre de la nouvelle
     private $image;             //chemin de l'image
-    private $destinataire;      //à qui s'adresse la nouvelle
-    
+    private $destinataire;      //qui s'adresse la nouvelle
+    private $cleLangue;
     private $mysqli;            //objet monmysqli
 
 
     //**************************************************************************
     // Sommaire:    Constructeur de la classe uneNouvelle
-    // Entrée:
+    // Entrï¿½e:
     // Sortie:
-    // Note:        met la clé de la nouvelle à -1
+    // Note:        met la clï¿½ de la nouvelle ï¿½ -1
     //**************************************************************************
     function UneNouvelle($mysqli)
     {
@@ -45,8 +45,8 @@ class UneNouvelle
     }
 
     //**************************************************************************
-    // Sommaire:    Vérifier les invariants de la classe
-    // Entrée:
+    // Sommaire:    Vï¿½rifier les invariants de la classe
+    // Entrï¿½e:
     // Sortie:
     // Note:        
     //**************************************************************************
@@ -62,7 +62,7 @@ class UneNouvelle
 
     //**************************************************************************
     // Sommaire:    construire une nouvelle
-    // Entrée:      $nouvelle : la nouvelle
+    // Entrï¿½e:      $nouvelle : la nouvelle
     //              $date : la date de la nouvelle
     //              $titre le titre de la nouvelle
     // Sortie:
@@ -79,8 +79,8 @@ class UneNouvelle
     }
 
     //**************************************************************************
-    // Sommaire:    assigné le texte principale
-    // Entrée:      $nouvelle : la nouvelle
+    // Sommaire:    assignï¿½ le texte principale
+    // Entrï¿½e:      $nouvelle : la nouvelle
     // Sortie:
     // Note:
     //**************************************************************************
@@ -92,8 +92,8 @@ class UneNouvelle
     }
 
     //**************************************************************************
-    // Sommaire:    assigné le titre de la nouvelle
-    // Entrée:      $titre : le titre de la nouvelle
+    // Sommaire:    assignï¿½ le titre de la nouvelle
+    // Entrï¿½e:      $titre : le titre de la nouvelle
     // Sortie:
     // Note:
     //**************************************************************************
@@ -105,8 +105,8 @@ class UneNouvelle
     }
 
     //**************************************************************************
-    // Sommaire:    assigné le destinataire de la nouvelles
-    // Entrée:      $destinataire : le destinataire de la nouvelle
+    // Sommaire:    assignï¿½ le destinataire de la nouvelles
+    // Entrï¿½e:      $destinataire : le destinataire de la nouvelle
     // Sortie:
     // Note:
     //**************************************************************************
@@ -118,8 +118,8 @@ class UneNouvelle
     }
 
     //**************************************************************************
-    // Sommaire:    assigné la date de la nouvelle
-    // Entrée:      $date : le date de la nouvelle
+    // Sommaire:    assignï¿½ la date de la nouvelle
+    // Entrï¿½e:      $date : le date de la nouvelle
     // Sortie:
     // Note:        date au format aaaa-mm-jj
     //**************************************************************************
@@ -132,8 +132,8 @@ class UneNouvelle
     }
 
     //**************************************************************************
-    // Sommaire:    assigné une image à la nouvelle
-    // Entrée:      $img : le chemin de l'image
+    // Sommaire:    assignï¿½ une image ï¿½ la nouvelle
+    // Entrï¿½e:      $img : le chemin de l'image
     // Sortie:
     // Note:        
     //**************************************************************************
@@ -144,8 +144,8 @@ class UneNouvelle
     }
 
     //**************************************************************************
-    // Sommaire:    assigné la clé de la nouvelle
-    // Entrée:      $cle : la clé unique de la nouvelle
+    // Sommaire:    assignï¿½ la clï¿½ de la nouvelle
+    // Entrï¿½e:      $cle : la clï¿½ unique de la nouvelle
     // Sortie:
     // Note:
     //**************************************************************************
@@ -155,30 +155,37 @@ class UneNouvelle
       $this->cleNouvelle=$cle;
       POSTCONDITION($this->reqCle()==$cle);
     }
+    
+    function asgCleLangue($cleLangue) {
+      $this->cleLangue = $cleLangue;
+    }
 
     //**************************************************************************
-    // Sommaire:    insérer la nouvelle courante dans la table
-    // Entrée:
+    // Sommaire:    insï¿½rer la nouvelle courante dans la table
+    // Entrï¿½e:
     // Sortie:
-    // Note:        la clé doit être égale à -1
+    // Note:        la clï¿½ doit ï¿½tre ï¿½gale ï¿½ -1
     //**************************************************************************
     function insertionMySQL()
     {
       $this->date=date("Y-m-d");
       $this->INVARIANTS();
-      $sql="insert into nouvelle(titre,dateNouvelle,nouvelle,destinataire,image) values('" .
-            $this->titre . "','" . $this->date . "','" .
-            $this->nouvelle . "'," . $this->destinataire . ",'" . $this->image . "')";
+      $sql="insert into nouvelle(titre,dateNouvelle,nouvelle,destinataire,image,cleLangue) values('" .
+            $this->titre . "','" 
+			. $this->date . "','" 
+            . $this->nouvelle . "'," 
+			. $this->destinataire . ",'" 
+			. $this->image . "'," . $this->cleLangue . ")";
       $result = $this->mysqli->query($sql);
       $this->asgCleNouvelle($this->mysqli->insert_id);
 
     }
 
     //**************************************************************************
-    // Sommaire:    charger une nouvelle à partir du numéro de clé
-    // Entrée:
+    // Sommaire:    charger une nouvelle ï¿½ partir du numï¿½ro de clï¿½
+    // Entrï¿½e:
     // Sortie:      faux si aucune nouvelle, vrai sinon
-    // Note:        si aucun résultat on génère une exception
+    // Note:        si aucun rï¿½sultat on gï¿½nï¿½re une exception
     //**************************************************************************
     function chargerMySQL($cleNouvelle)
     {
@@ -197,13 +204,14 @@ class UneNouvelle
       $this->asgCleNouvelle($row->cleNouvelle);
       $this->asgDestinataire($row->destinataire);
       $this->asgImage($row->image);
+      $this->asgCleLangue($row->cleLangue);
       $this->INVARIANTS();
       return true;
     }
 
     //**************************************************************************
-    // Sommaire:    mettre à jour la nouvelle dans la table
-    // Entrée:
+    // Sommaire:    mettre ï¿½ jour la nouvelle dans la table
+    // Entrï¿½e:
     // Sortie:
     // Note:        
     //**************************************************************************
@@ -215,6 +223,7 @@ class UneNouvelle
             "',nouvelle='" . $this->nouvelle .
             "',image='" . $this->image .
             "',destinataire=" . $this->destinataire .
+            ",cleLangue=" . $this->reqCleLangue() .
             " where cleNouvelle=" . $this->cleNouvelle;
 
       $this->mysqli->query($sql);
@@ -224,8 +233,8 @@ class UneNouvelle
 
     //**************************************************************************
     // Sommaire:    supprimer la nouvelle de la table
-    // Entrée:
-    // Sortie:      retourne le nombre de ligne affecté
+    // Entrï¿½e:
+    // Sortie:      retourne le nombre de ligne affectï¿½
     // Note:        
     //**************************************************************************
     function deleteMySQL()
@@ -262,6 +271,9 @@ class UneNouvelle
     {
       return $this->image;
     }
+    function reqCleLangue() {
+      return $this->cleLangue;
+    }
 }
 
 //**************************************************************************
@@ -277,9 +289,9 @@ class Nouvelles
     
     //**************************************************************************
     // Sommaire:    Constructeur de la classe Nouvelles
-    // Entrée:
+    // Entrï¿½e:
     // Sortie:
-    // Note:        met le nombre de nouvelle à 0
+    // Note:        met le nombre de nouvelle ï¿½ 0
     //**************************************************************************
     function Nouvelles($mysqli)
     {
@@ -291,7 +303,7 @@ class Nouvelles
 
     //**************************************************************************
     // Sommaire:    Ajouter une nouvelle dans le tableau
-    // Entrée:      $nouvelle un object de type UneNouvelle
+    // Entrï¿½e:      $nouvelle un object de type UneNouvelle
     // Sortie:
     // Note:        ajouter une nouvelle de type uneNouvelleau tableau de nouvelles
     //**************************************************************************
@@ -306,17 +318,17 @@ class Nouvelles
 
     //**************************************************************************
     // Sommaire:    on charge dans le tableau les nouvelles de la table
-    // Entrée:      $nbNouvelle : le nombre de nouvelle à charger
+    // Entrï¿½e:      $nbNouvelle : le nombre de nouvelle ï¿½ charger
     //              $destinataire : un tableau qui peut contenir une ou plusieurs
     //                  valeur 0 - pour tous , 1 - joueurs, 2 - administrateurs
     // Sortie:
     // Note:        si $nbNouvelle = -1 on charge toutes les nouvelles
     //
     //**************************************************************************
-    function chargerMySQL($nbNouvelle,$destinataire)
+    function chargerMySQL($nbNouvelle,$destinataire, $cleLangue)
     {
 
-      $sql = "select * from nouvelle where ";
+      $sql = "select * from nouvelle where (";
       $nb=count($destinataire);
       for($i=0;$i<$nb;$i++)
       {
@@ -324,6 +336,8 @@ class Nouvelles
         if($i+1<$nb)
             $sql.= " or ";
       }
+      
+      $sql.= ") and cleLangue=" . $cleLangue;
 
       $sql.= " order by dateNouvelle desc, cleNouvelle desc";
       
@@ -340,10 +354,29 @@ class Nouvelles
         $uneNouvelle->asgUneNouvelle($row->nouvelle,$row->dateNouvelle,
             $row->titre,$row->destinataire,$row->image);
         $uneNouvelle->asgCleNouvelle($row->cleNouvelle);
-        
+        $uneNouvelle->asgCleLangue($row->cleLangue);
         $this->ajoutNouvelle($uneNouvelle);
       }
 
+    }
+    
+    function chargerTouteMySQL() {
+      $sql = "select * from nouvelle order by dateNouvelle desc, cleNouvelle desc";
+      
+      $result = $this->mysqli->query($sql);
+      $nbNouvelle = $result->num_rows;
+      
+      for($i=0;$i<$nbNouvelle;$i++)
+      {
+        $row=$result->fetch_object();
+        $uneNouvelle=new uneNouvelle($this->mysqli);
+        $uneNouvelle->asgUneNouvelle($row->nouvelle,$row->dateNouvelle,
+            $row->titre,$row->destinataire,$row->image);
+        $uneNouvelle->asgCleNouvelle($row->cleNouvelle);
+        $uneNouvelle->asgCleLangue($row->cleLangue);
+        $this->ajoutNouvelle($uneNouvelle);
+      }
+      
     }
 
     //*******************
@@ -352,9 +385,9 @@ class Nouvelles
     
     //**************************************************************************
     // Sommaire:    retourne la nouvelle # $noNouvelle
-    // Entrée:      $noNouvelle : doit être entre 1 et $nbNouvelle
+    // Entrï¿½e:      $noNouvelle : doit ï¿½tre entre 1 et $nbNouvelle
     // Sortie:
-    // Note:        $noNouvelle-1 est le numéro de la nouvelle dans le tableau
+    // Note:        $noNouvelle-1 est le numï¿½ro de la nouvelle dans le tableau
     //**************************************************************************
     function reqNouvelle($noNouvelle)
     {

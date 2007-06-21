@@ -1,31 +1,31 @@
 <?php
 /*******************************************************************************
 Fichier : sondage.class.php
-Auteur : Maxime Bégin
+Auteur : Maxime Bï¿½gin
 Description :
-    classes servant à la gestion des sondage
+    classes servant ï¿½ la gestion des sondage
     2 classes : ReponseSondage et Sondage
 ********************************************************************************
-27-07-2006 Maxime Bégin - ajout des fonctions de mise à jour d'un sondage,
-	et d'enlèvement d'une réponse.
-22-06-2006 Maxime Bégin - Ajout de fonctionnalité pour pouvoir afficher des
-    sondage spécifique aux joueurs ou bien aux administrateurs.
-21-06-2006 Maxime Bégin - ajout de quelques commentaires
-25-05-2006 Maxime Bégin - Version initiale
+27-07-2006 Maxime Bï¿½gin - ajout des fonctions de mise ï¿½ jour d'un sondage,
+	et d'enlï¿½vement d'une rï¿½ponse.
+22-06-2006 Maxime Bï¿½gin - Ajout de fonctionnalitï¿½ pour pouvoir afficher des
+    sondage spï¿½cifique aux joueurs ou bien aux administrateurs.
+21-06-2006 Maxime Bï¿½gin - ajout de quelques commentaires
+25-05-2006 Maxime Bï¿½gin - Version initiale
 *******************************************************************************/
 
-//classe permmetant de gérer une réponse à un sondage
+//classe permmetant de gï¿½rer une rï¿½ponse ï¿½ un sondage
 class ReponseSondage
 {
-    private $cleReponse;        //la clé unique de la réponse
-    private $reponse;           //une réponse
+    private $cleReponse;        //la clï¿½ unique de la rï¿½ponse
+    private $reponse;           //une rï¿½ponse
     private $compteur;          //nombre joueur ayant choisie ce choix
     private $mysqli;            //objet monmysqli
 
 
     //**************************************************************************
     // Sommaire:    Constructeur de la classe ReponseSondage
-    // Entrée:
+    // Entrï¿½e:
     // Sortie:
     // Note:        
     //**************************************************************************
@@ -39,8 +39,8 @@ class ReponseSondage
     }
 
     //**************************************************************************
-    // Sommaire:    Vérifier les invariants de la classe
-    // Entrée:
+    // Sommaire:    Vï¿½rifier les invariants de la classe
+    // Entrï¿½e:
     // Sortie:
     // Note:
     //**************************************************************************
@@ -52,10 +52,10 @@ class ReponseSondage
     }
     
     //**************************************************************************
-    // Sommaire:    assigné un texte à la réponse
-    // Entrée:      $réponse : la réponse
+    // Sommaire:    assignï¿½ un texte ï¿½ la rï¿½ponse
+    // Entrï¿½e:      $rï¿½ponse : la rï¿½ponse
     // Sortie:
-    // Note:        la réponse ne doit pas être vide
+    // Note:        la rï¿½ponse ne doit pas ï¿½tre vide
     //**************************************************************************
     function asgReponse($reponse)
     {
@@ -65,10 +65,10 @@ class ReponseSondage
     }
 
     //**************************************************************************
-    // Sommaire:    assigné une clé à la réponse
-    // Entrée:      $cle : la clé unique
+    // Sommaire:    assignï¿½ une clï¿½ ï¿½ la rï¿½ponse
+    // Entrï¿½e:      $cle : la clï¿½ unique
     // Sortie:
-    // Note:        la clé doit être plus grande que 0
+    // Note:        la clï¿½ doit ï¿½tre plus grande que 0
     //**************************************************************************
     function asgCleReponse($cle)
     {
@@ -78,10 +78,10 @@ class ReponseSondage
     }
     
     //**************************************************************************
-    // Sommaire:    assigné une valeur au compteur
-    // Entrée:      $compteur
+    // Sommaire:    assignï¿½ une valeur au compteur
+    // Entrï¿½e:      $compteur
     // Sortie:
-    // Note:        le compteur doit être positif
+    // Note:        le compteur doit ï¿½tre positif
     //**************************************************************************
     function asgCompteur($compteur)
     {
@@ -91,10 +91,10 @@ class ReponseSondage
     }
 
     //**************************************************************************
-    // Sommaire:    charger une réponse à partir d'une cle Reponse
-    // Entrée:      $cleReponse
-    // Sortie:      retourne vrai si la réponse est trouvé, faux sinon
-    // Note:        génère une exception si aucune réponse est trouvée
+    // Sommaire:    charger une rï¿½ponse ï¿½ partir d'une cle Reponse
+    // Entrï¿½e:      $cleReponse
+    // Sortie:      retourne vrai si la rï¿½ponse est trouvï¿½, faux sinon
+    // Note:        gï¿½nï¿½re une exception si aucune rï¿½ponse est trouvï¿½e
     //**************************************************************************
     function chargerMySQL($cleReponse)
     {
@@ -114,13 +114,13 @@ class ReponseSondage
     }
     
     //**************************************************************************
-    // Sommaire:    ajouter cette réponse dans la table
-    // Entrée:      $cleSondage
+    // Sommaire:    ajouter cette rï¿½ponse dans la table
+    // Entrï¿½e:      $cleSondage
     // Sortie:
-    // Note:        la clé du sondage doit être > 0 ,
-    //              la clé de la péponse doit être = 0
-    //              la réponse doit être valide
-    //              le compteur doit être valide
+    // Note:        la clï¿½ du sondage doit ï¿½tre > 0 ,
+    //              la clï¿½ de la pï¿½ponse doit ï¿½tre = 0
+    //              la rï¿½ponse doit ï¿½tre valide
+    //              le compteur doit ï¿½tre valide
     //**************************************************************************
     function insertionMySQL($cleSondage)
     {
@@ -136,10 +136,10 @@ class ReponseSondage
 
     
     //**************************************************************************
-    // Sommaire:    mettre à jour cette réponse dans la base de données
-    // Entrée:
+    // Sommaire:    mettre ï¿½ jour cette rï¿½ponse dans la base de donnï¿½es
+    // Entrï¿½e:
     // Sortie:
-    // Note:        la clé de la péponse ne doit pas être = 0
+    // Note:        la clï¿½ de la pï¿½ponse ne doit pas ï¿½tre = 0
     //**************************************************************************
     function miseAJourMySQL()
     {
@@ -153,8 +153,8 @@ class ReponseSondage
     }
     
     //**************************************************************************
-    // Sommaire:    supprimer cette réponse de la base de données
-    // Entrée:
+    // Sommaire:    supprimer cette rï¿½ponse de la base de donnï¿½es
+    // Entrï¿½e:
     // Sortie:
     // Note:        
     //**************************************************************************
@@ -166,10 +166,10 @@ class ReponseSondage
     
     //**************************************************************************
     // Sommaire:    ajout du choix dde l'utilisateur dans la table
-    // Entrée:      $table : la table dans laquelle il faut ajouter le choix
+    // Entrï¿½e:      $table : la table dans laquelle il faut ajouter le choix
     //              selon que c'est joueur ou un administrateur
     // Sortie:
-    // Note:        on incrémente le compteur de cette réponse
+    // Note:        on incrï¿½mente le compteur de cette rï¿½ponse
     //**************************************************************************
     function ajoutReponseUtilisateurMySQL($cleUtilisateur,$cleSondage,$table)
     {
@@ -202,24 +202,25 @@ class ReponseSondage
 }
 
 //**************************************************************************
-// Sommaire:    Pour gérer un sondage
+// Sommaire:    Pour gï¿½rer un sondage
 // Note:        contient un tableau d'objet de type reponseSondage
 //**************************************************************************
 class Sondage
 {
-    private $cleSondage;        //la clé unique du sondage
+    private $cleSondage;        //la clï¿½ unique du sondage
     private $titre;             //le texte du sondage
     private $date;              //la date du sondage
     private $destinataire;      //le destinataire du sondage
     private $reponse;           //tableau d'objet reponseSondage
-    private $nbReponse;         //nombre total de choix de réponse
-    private $total;             //nombre total de joueur ayaynt répondu au sondage
+    private $nbReponse;         //nombre total de choix de rï¿½ponse
+    private $total;             //nombre total de joueur ayaynt rï¿½pondu au sondage
+    private $cleLangue;
     private $mysqli;            //objet monmysqli
     
     
     //**************************************************************************
     // Sommaire:    constructeur de la classe Sondage
-    // Entrée:
+    // Entrï¿½e:
     // Sortie:
     // Note:
     //**************************************************************************
@@ -235,10 +236,10 @@ class Sondage
     }
     
     //**************************************************************************
-    // Sommaire:    assigner une clé unique au sondage courant
-    // Entrée:      $cle :
+    // Sommaire:    assigner une clï¿½ unique au sondage courant
+    // Entrï¿½e:      $cle :
     // Sortie:
-    // Note:        la clé doit être > 0
+    // Note:        la clï¿½ doit ï¿½tre > 0
     //**************************************************************************
     function asgCleSondage($cle)
     {
@@ -250,9 +251,9 @@ class Sondage
     
     //**************************************************************************
     // Sommaire:    assigner un titre au sondage
-    // Entrée:      $titre
+    // Entrï¿½e:      $titre
     // Sortie:
-    // Note:        le titre ne doit pas être vide
+    // Note:        le titre ne doit pas ï¿½tre vide
     //**************************************************************************
     function asgTitre($titre)
     {
@@ -263,9 +264,9 @@ class Sondage
 
     //**************************************************************************
     // Sommaire:    assigner une date
-    // Entrée:      $date
+    // Entrï¿½e:      $date
     // Sortie:
-    // Note:        la date doit être valide
+    // Note:        la date doit ï¿½tre valide
     //**************************************************************************
     function asgDate($date)
     {
@@ -273,6 +274,10 @@ class Sondage
       PRECONDITION(checkdate($dateEx[1],$dateEx[2],$dateEx[0]));
       $this->date=$date;
       POSTCONDITION($this->reqDate()==$date);
+    }
+    
+    function asgCleLangue($cleLangue) {
+      $this->cleLangue = $cleLangue;  
     }
     
     function asgDestinataire($destinataire)
@@ -283,8 +288,8 @@ class Sondage
     }
 
     //**************************************************************************
-    // Sommaire:    ajouter une réponse au sondage courant
-    // Entrée:      $reponse : un objet de type classe Reponse
+    // Sommaire:    ajouter une rï¿½ponse au sondage courant
+    // Entrï¿½e:      $reponse : un objet de type classe Reponse
     // Sortie:
     // Note:        
     //**************************************************************************
@@ -297,8 +302,8 @@ class Sondage
     }
     
     //**************************************************************************
-    // Sommaire:    enlever la dernière réponse
-    // Entrée:      
+    // Sommaire:    enlever la derniï¿½re rï¿½ponse
+    // Entrï¿½e:      
     // Sortie:
     // Note:        
     //**************************************************************************
@@ -312,19 +317,19 @@ class Sondage
 
     //**************************************************************************
     // Sommaire:    ajouter le sondage dans la table
-    // Entrée:      
+    // Entrï¿½e:      
     // Sortie:
-    // Note:        le nombre de réponses >= 2
+    // Note:        le nombre de rï¿½ponses >= 2
     //**************************************************************************
     function insertionSondageMySQL()
     {
       PRECONDITION($this->nbReponse>=2);
-      $sql="insert into sondage(sondage,dateSondage,nbChoix,destinataire) values('"
+      $sql="insert into sondage(sondage,dateSondage,nbChoix,destinataire,cleLangue) values('"
             . $this->titre . "','" . $this->date . "'," . $this->nbReponse . ","
-            . $this->destinataire . ")";
+            . $this->destinataire . "," . $this->cleLangue . ")";
       $result = $this->mysqli->query($sql);
         
-      //on obtient la cle du dernier sondage ajouté
+      //on obtient la cle du dernier sondage ajoutï¿½
       $this->cleSondage=$this->mysqli->insert_id;
       
       for($i=0;$i<$this->nbReponse;$i++)
@@ -334,8 +339,8 @@ class Sondage
     }
     
     //**************************************************************************
-    // Sommaire:    mettre à jour le sondage
-    // Entrée:      
+    // Sommaire:    mettre ï¿½ jour le sondage
+    // Entrï¿½e:      
     // Sortie:
     // Note:        
     //**************************************************************************
@@ -343,6 +348,7 @@ class Sondage
     {
     	$sql="UPDATE sondage set sondage='" . $this->titre . "',dateSondage='" . 
     		$this->date . "',nbChoix=" . $this->nbReponse . ",destinataire=" . $this->destinataire .
+    		",cleLangue=" . $this->cleLangue .
 			" where cleSondage=" . $this->cleSondage;
     	
     	$result = $this->mysqli->query($sql);
@@ -355,8 +361,8 @@ class Sondage
     }
 
     //**************************************************************************
-    // Sommaire:    charger un sondage à partir de la clé
-    // Entrée:      $clé : la clé unique du sondage
+    // Sommaire:    charger un sondage ï¿½ partir de la clï¿½
+    // Entrï¿½e:      $clï¿½ : la clï¿½ unique du sondage
     // Sortie:
     // Note:
     //**************************************************************************
@@ -377,14 +383,14 @@ class Sondage
         $this->asgDate($row->dateSondage);
         $this->asgDestinataire($row->destinataire);
 
-        //on va chercher les différents choix de réponse pour ce sondage
+        //on va chercher les diffï¿½rents choix de rï¿½ponse pour ce sondage
         $sql="SELECT cleReponse from reponsesondage where cleSondage=" . $this->cleSondage 
         	. " ORDER BY cleReponse";
         $result = $this->mysqli->query($sql);
       
-        //on obtient le nombre de réponse
+        //on obtient le nombre de rï¿½ponse
         $nb=$result->num_rows;
-        //on boucle pour chaque réponse et on les ajoutes au tableau de réponse
+        //on boucle pour chaque rï¿½ponse et on les ajoutes au tableau de rï¿½ponse
         for($i=0;$i<$nb;$i++)
         {
             $row=$result->fetch_object();
@@ -399,15 +405,15 @@ class Sondage
     }
 
     //**************************************************************************
-    // Sommaire:    charger le sondage le plus récent
-    // Entrée:      $destinataire : un tableau qui peut contenir une ou plusieurs
+    // Sommaire:    charger le sondage le plus rï¿½cent
+    // Entrï¿½e:      $destinataire : un tableau qui peut contenir une ou plusieurs
     //                  valeur 0 - pour tous , 1 - joueurs, 2 - administrateurs
     // Sortie:      retourne faux si aucun sondage dans la table
     // Note:        appel de la fonction chargerSondageMySQL
     //**************************************************************************
-    function chargerPlusRecentSondageMySQL($destinataire)
+    function chargerPlusRecentSondageMySQL($destinataire,$cleLangue)
     {
-        $sql="select cleSondage from sondage where ";
+        $sql="select cleSondage from sondage where (";
         $nb=count($destinataire);
         for($i=0;$i<$nb;$i++)
         {
@@ -415,7 +421,7 @@ class Sondage
           if($i+1<$nb)
             $sql.=" or ";
         }
-        $sql.=" order by dateSondage desc, cleSondage desc limit 1";
+        $sql.=") and cleLangue=" . $cleLangue . " order by dateSondage desc, cleSondage desc limit 1";
         
         $result = $this->mysqli->query($sql);
         if($result->num_rows==0)
@@ -426,9 +432,9 @@ class Sondage
     
     //**************************************************************************
     // Sommaire:    supprimer le sondage en cours
-    // Entrée:
+    // Entrï¿½e:
     // Sortie:
-    // Note:        on supprime dans les 4 tables, on appel de constructeur à la fin
+    // Note:        on supprime dans les 4 tables, on appel de constructeur ï¿½ la fin
     //**************************************************************************
     function deleteSondageMySQL()
     {
@@ -449,11 +455,11 @@ class Sondage
 
     //**************************************************************************
     // Sommaire:    ajouter le choix d'un joueur
-    // Entrée:      $cleJoueur : la clé unique du joueur
-    //              $noReponse : le # de réponse choisi
-    //                    ( entre 1 et le nombre total de réponse)
-    // Sortie:      faux si le choix n'a pas été ajouté
-    // Note:        on vérifie
+    // Entrï¿½e:      $cleJoueur : la clï¿½ unique du joueur
+    //              $noReponse : le # de rï¿½ponse choisi
+    //                    ( entre 1 et le nombre total de rï¿½ponse)
+    // Sortie:      faux si le choix n'a pas ï¿½tï¿½ ajoutï¿½
+    // Note:        on vï¿½rifie
     //**************************************************************************
     function ajoutChoixJoueur($cleJoueur,$noReponse)
     {
@@ -470,11 +476,11 @@ class Sondage
     
     //**************************************************************************
     // Sommaire:    ajouter le choix d'un joueur
-    // Entrée:      $cleJoueur : la clé unique du joueur
-    //              $noReponse : le # de réponse choisi
-    //                    ( entre 1 et le nombre total de réponse)
-    // Sortie:      faux si le choix n'a pas été ajouté
-    // Note:        on vérifie
+    // Entrï¿½e:      $cleJoueur : la clï¿½ unique du joueur
+    //              $noReponse : le # de rï¿½ponse choisi
+    //                    ( entre 1 et le nombre total de rï¿½ponse)
+    // Sortie:      faux si le choix n'a pas ï¿½tï¿½ ajoutï¿½
+    // Note:        on vï¿½rifie
     //**************************************************************************
     function ajoutChoixAdministrateur($cleAdministrateur,$noReponse)
     {
@@ -490,9 +496,9 @@ class Sondage
     }
 
     //**************************************************************************
-    // Sommaire:    vérifier si un joueur a déjà répondu à ce sondage
-    // Entrée:
-    // Sortie:      retourne faux si le joueur n'a pas encore répondu
+    // Sommaire:    vï¿½rifier si un joueur a dï¿½jï¿½ rï¿½pondu ï¿½ ce sondage
+    // Entrï¿½e:
+    // Sortie:      retourne faux si le joueur n'a pas encore rï¿½pondu
     //              vrai dans le cas contraire
     // Note:        
     //**************************************************************************
@@ -508,9 +514,9 @@ class Sondage
     }
     
     //**************************************************************************
-    // Sommaire:    vérifier si un joueur a déjà répondu à ce sondage
-    // Entrée:
-    // Sortie:      retourne faux si le joueur n'a pas encore répondu
+    // Sommaire:    vï¿½rifier si un joueur a dï¿½jï¿½ rï¿½pondu ï¿½ ce sondage
+    // Entrï¿½e:
+    // Sortie:      retourne faux si le joueur n'a pas encore rï¿½pondu
     //              vrai dans le cas contraire
     // Note:
     //**************************************************************************
@@ -531,10 +537,10 @@ class Sondage
     //*******************
 
     //**************************************************************************
-    // Sommaire:    retourne la réponse # $noReponse
-    // Entrée:      $noReponse : doit être entre 1 et $nbReponse
+    // Sommaire:    retourne la rï¿½ponse # $noReponse
+    // Entrï¿½e:      $noReponse : doit ï¿½tre entre 1 et $nbReponse
     // Sortie:
-    // Note:        $noReponse-1 est le numéro de la réponse dans le tableau
+    // Note:        $noReponse-1 est le numï¿½ro de la rï¿½ponse dans le tableau
     //**************************************************************************
     function reqReponse($noReponse)
     {
@@ -565,6 +571,10 @@ class Sondage
     function reqDestinataire()
     {
       return $this->destinataire;
+    }
+    
+    function reqCleLangue() {
+      return $this->cleLangue;
     }
 
 }

@@ -88,6 +88,9 @@ define("IMAGE_DIR",DOC_ROOT . "img/sujet");						//dossier des images pour les n
 define("LOG_FILE",DOC_ROOT . "/log/log.txt");					//fichier pour les logs
 
 
+define("LANG_FRENCH",0);
+define("LANG_ENGLISH",1);
+
 //d�finir les configurations de session
 //ini_set('session.gc_maxlifetime',1800);
 ini_set('session.cookie_lifetime',1800);
@@ -105,6 +108,7 @@ if (isset($_SESSION['langage'])) {
   require_once(LANGAGE_DIR . $_SESSION['langage'] . "/lang_main.php"); 
 } else {
   require_once(LANGAGE_DIR . $config->langue . "/lang_main.php");
+  //$_SESSION['langage'] = $config->langue;
 }
 
 

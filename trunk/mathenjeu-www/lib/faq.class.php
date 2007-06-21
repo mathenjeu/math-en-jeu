@@ -1,28 +1,29 @@
 <?php
 /*******************************************************************************
 Fichier : faq.class.php
-Auteur : Maxime Bégin
+Auteur : Maxime Bï¿½gin
 Description :
     classe pour la gestion de la FAQ(Foire au question)
 ********************************************************************************
-05-07-2006 Maxime Bégin - Version initiale
+05-07-2006 Maxime Bï¿½gin - Version initiale
 *******************************************************************************/
 require_once("exception.class.php");
 require_once("mon_mysqli.class.php");
 
 class FAQ
 {
-	private $cleFaq;		//la clé unique de la faq
+	private $cleFaq;		//la clï¿½ unique de la faq
 	private $question;		//le texte de la question
-	private $reponse;		//le texte de la réponse
-	private $numero;		//le numéro ( l'ordre dans lesquelles les questions seront afficher)
+	private $reponse;		//le texte de la rï¿½ponse
+	private $numero;		//le numï¿½ro ( l'ordre dans lesquelles les questions seront afficher)
+    private $cleLangue; 
 	private $mysqli;		//l'objet mysqli
 	
 	//**************************************************************************
     // Sommaire:    Constructeur de la classe FAQ
-    // Entrée:
+    // Entrï¿½e:
     // Sortie:
-    // Note:        initialise les données à vide
+    // Note:        initialise les donnï¿½es ï¿½ vide
     //**************************************************************************
 	function __construct($mysqli)
 	{
@@ -35,8 +36,8 @@ class FAQ
 	}
 	
 	//**************************************************************************
-    // Sommaire:    Vérifier les invariants de la classe
-    // Entrée:
+    // Sommaire:    Vï¿½rifier les invariants de la classe
+    // Entrï¿½e:
     // Sortie:
     // Note:        
     //**************************************************************************
@@ -49,8 +50,8 @@ class FAQ
 	}
 	
 	//**************************************************************************
-    // Sommaire:    assigné la clé de la faq
-    // Entrée:      $cle : la clé unique de la faq
+    // Sommaire:    assignï¿½ la clï¿½ de la faq
+    // Entrï¿½e:      $cle : la clï¿½ unique de la faq
     // Sortie:
     // Note:
     //**************************************************************************
@@ -62,8 +63,8 @@ class FAQ
 	}
 	
 	//**************************************************************************
-    // Sommaire:    assigné la question à la faq
-    // Entrée:      $question : ne doit pas être vide
+    // Sommaire:    assignï¿½ la question ï¿½ la faq
+    // Entrï¿½e:      $question : ne doit pas ï¿½tre vide
     // Sortie:
     // Note:
     //**************************************************************************
@@ -75,8 +76,8 @@ class FAQ
 	}
 
 	//**************************************************************************
-    // Sommaire:    assigné la réponse à la faq
-    // Entrée:      $reponse : ne doit pas être vide
+    // Sommaire:    assignï¿½ la rï¿½ponse ï¿½ la faq
+    // Entrï¿½e:      $reponse : ne doit pas ï¿½tre vide
     // Sortie:
     // Note:
     //**************************************************************************
@@ -88,8 +89,8 @@ class FAQ
 	}
 
 	//**************************************************************************
-    // Sommaire:    assigné le numéro à la faq
-    // Entrée:      $numero : doit être >= 0
+    // Sommaire:    assignï¿½ le numï¿½ro ï¿½ la faq
+    // Entrï¿½e:      $numero : doit ï¿½tre >= 0
     // Sortie:
     // Note:
     //**************************************************************************
@@ -100,11 +101,14 @@ class FAQ
 	  POSTCONDITION($this->reqNumero()==$no);
 	}
 
+	function asgCleLangue($cleLangue) {
+	  $this->cleLangue = $cleLangue;
+	}
 	//**************************************************************************
-    // Sommaire:    insérer la faq dans la table
-    // Entrée:      
+    // Sommaire:    insï¿½rer la faq dans la table
+    // Entrï¿½e:      
     // Sortie:		vrai si tout va bien, faux sinon
-    // Note:		la clé de la faq doit être égal à 0
+    // Note:		la clï¿½ de la faq doit ï¿½tre ï¿½gal ï¿½ 0
     //**************************************************************************
 	function insertionMySQL()
 	{
@@ -116,8 +120,8 @@ class FAQ
 	  
 	  $arr=$result->fetch_array();
 
-	  $sql="insert into faq(question,reponse,numero) 
-	  		values('" . $this->question . "','" . $this->reponse . "'," . ($arr[0]+1) . ")";
+	  $sql="insert into faq(question,reponse,numero,cleLangue) 
+	  		values('" . $this->question . "','" . $this->reponse . "'," . ($arr[0]+1) . "," . $this->cleLangue . ")";
 	  		
 	  $this->mysqli->query($sql);
 	  $this->asgCle($this->mysqli->insert_id);
@@ -126,10 +130,10 @@ class FAQ
 	}
 
 	//**************************************************************************
-    // Sommaire:    mettre à jour la faq dans la table
-    // Entrée:      
+    // Sommaire:    mettre ï¿½ jour la faq dans la table
+    // Entrï¿½e:      
     // Sortie:		vrai si tout va bien, faux sinon
-    // Note:		la clé de la faq doit être différente de 0
+    // Note:		la clï¿½ de la faq doit ï¿½tre diffï¿½rente de 0
     //**************************************************************************
 	function miseAJourMySQL()
 	{
@@ -138,7 +142,7 @@ class FAQ
 	  if($this->cleFaq==0)
 	  	return false;
 	  $sql="update faq set question='" . $this->question . "',reponse='" . $this->reponse . 
-	  	"',numero=" . $this->numero . " where cleFaq=" . $this->cleFaq;
+	  	"',numero=" . $this->numero . ",cleLangue=" . $this->cleLangue . " where cleFaq=" . $this->cleFaq;
 	  $this->mysqli->query($sql);
 	  
 	  return true;
@@ -146,10 +150,10 @@ class FAQ
 
 	//**************************************************************************
     // Sommaire:    supprimer la faq de la table
-    // Entrée:      
+    // Entrï¿½e:      
     // Sortie:		vrai si tout va bien, faux sinon
-    // Note:		la clé de la faq doit être différente de 0,
-    //				les numéros des faq subséquente sont diminués de 1
+    // Note:		la clï¿½ de la faq doit ï¿½tre diffï¿½rente de 0,
+    //				les numï¿½ros des faq subsï¿½quente sont diminuï¿½s de 1
     //**************************************************************************
 	function deleteMySQL()
 	{
@@ -168,9 +172,9 @@ class FAQ
 	}
 
 	//**************************************************************************
-    // Sommaire:    charger une faq à partir de la clé
-    // Entrée:      $cle : clé de la faq à charger
-    // Sortie:		vrai si tout va bien, faux si aucune faq n'est trouvé
+    // Sommaire:    charger une faq ï¿½ partir de la clï¿½
+    // Entrï¿½e:      $cle : clï¿½ de la faq ï¿½ charger
+    // Sortie:		vrai si tout va bien, faux si aucune faq n'est trouvï¿½
     // Note:		
     //**************************************************************************
 	function chargerMySQL($cle)
@@ -206,6 +210,9 @@ class FAQ
 	function reqNumero(){
 	  return $this->numero;
 	}
+	function reCleLangue() {
+	  return $this->cleLangue;
+	}
 }
 
 class FAQs
@@ -216,9 +223,9 @@ class FAQs
     
     //**************************************************************************
     // Sommaire:    Constructeur de la classe FAQ
-    // Entrée:
+    // Entrï¿½e:
     // Sortie:
-    // Note:        initialise les données à vide
+    // Note:        initialise les donnï¿½es ï¿½ vide
     //**************************************************************************
     function __construct($mysqli)
     {
@@ -228,7 +235,7 @@ class FAQs
 
     //**************************************************************************
     // Sommaire:    ajouter une faq au tableau de faqs
-    // Entrée:
+    // Entrï¿½e:
     // Sortie:
     // Note:        
     //**************************************************************************
@@ -243,13 +250,13 @@ class FAQs
     //**************************************************************************
     // Sommaire:    charger un certain nombre de faq ou toutes les charger si
     //				$nbFaq = 0
-    // Entrée:		$nbFaq : le nombre de faq à charger
+    // Entrï¿½e:		$nbFaq : le nombre de faq ï¿½ charger
     // Sortie:
     // Note:        
     //**************************************************************************
-	function chargerMySQL($nbFaq)
+	function chargerMySQL($nbFaq,$langue)
 	{
-	  $sql="select * from faq order by numero asc";
+	  $sql="select * from faq where cleLangue=" . $langue . " order by numero asc"; 
 	  if($nbFaq!=0)
         $sql.= " limit $nbFaq";
         
@@ -269,13 +276,35 @@ class FAQs
         $this->ajoutFaq($faq);
 	  }
 	}
+	
+    function chargerTouteMySQL()
+	{
+	  $sql="select * from faq order by numero asc";
+	  
+      $result = $this->mysqli->query($sql);
+      $nbFaq = $result->num_rows;
+      
+      for($i=0;$i<$nbFaq;$i++)
+      {
+        $row=$result->fetch_object();
+        $faq=new FAQ($this->mysqli);
+        
+		$faq->asgCle($row->cleFaq);
+        $faq->asgQuestion($row->question);
+        $faq->asgReponse($row->reponse);
+        $faq->asgNumero($row->numero);
+        $faq->asgCleLangue($row->cleLangue);
+        
+        $this->ajoutFaq($faq);
+	  }
+	}
 
     //**************************************************************************
-    // Sommaire:    charger une faq à partir du(des) numéro( pas la clé )
-    // Entrée:		$no : un tableau contenant les numéros 
-	//				d'ordre des faq à charger
+    // Sommaire:    charger une faq ï¿½ partir du(des) numï¿½ro( pas la clï¿½ )
+    // Entrï¿½e:		$no : un tableau contenant les numï¿½ros 
+	//				d'ordre des faq ï¿½ charger
     // Sortie:
-    // Note:        cette fonction est utlisé lors de la modification de l'ordre
+    // Note:        cette fonction est utlisï¿½ lors de la modification de l'ordre
 	//				des faqs.
     //**************************************************************************
 	function chargerMySQLNumero($no)
