@@ -173,7 +173,7 @@
 				<max-possession-objets-et-pieces>10</max-possession-objets-et-pieces>
 			</regles>
 		</salles-initiales>
-            <debug>true</debug>
+            <debug>false</debug>
 	</controleurjeu>
 
 	<!-- Section de la classe ServeurJeu.Communications.GestionnaireCommunication -->
