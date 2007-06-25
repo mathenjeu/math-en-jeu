@@ -43,7 +43,7 @@ public class JoueurHumain extends Joueur
 	// partie courant de la table où le joueur se trouve (null si le joueur 
 	// n'est dans aucune table)
 	private InformationPartie objPartieCourante;
-
+        
 	/**
 	 * Constructeur de la classe JoueurHumain qui permet d'initialiser les 
 	 * membres privés du joueur humain et de garder une référence vers l'objet

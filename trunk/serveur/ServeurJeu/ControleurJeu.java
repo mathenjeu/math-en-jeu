@@ -6,11 +6,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.List;
-
+import java.util.Random;
 
 import org.apache.log4j.Logger;
-
-import java.util.Random;
 
 import Enumerations.Visibilite;
 import Enumerations.RetourFonctions.ResultatAuthentification;
@@ -27,7 +25,6 @@ import ServeurJeu.Monitoring.TacheLogMoniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
 import ClassesUtilitaires.Espion;
-
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
@@ -36,8 +33,6 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
 import ServeurJeu.Configuration.GestionnaireMessages;
-
-//import ServeurJeu.ComposantesJeu.Joueurs.TestJoueurVirtuel;
 
 
 
@@ -67,6 +62,10 @@ import ServeurJeu.Configuration.GestionnaireMessages;
  */
 public class ControleurJeu 
 {
+        // Cette modeDebug est vraie, toute reponse des joueurs sera bonne, et
+        // on affichera dans la console des informations sur les communications
+        public static boolean modeDebug;
+        
 	static private Logger objLogger = Logger.getLogger( ControleurJeu.class );
 	
 	// Cet objet permet de gérer toutes les interactions avec la base de données
@@ -141,14 +140,16 @@ public class ControleurJeu
 	public ControleurJeu() 
 	{
 		super();
+                
+                modeDebug = GestionnaireConfiguration.obtenirInstance().obtenirValeurBooleenne("controleurjeu.debug");
 		
-        // Initialiser la classe statique GestionnaireMessages
-        GestionnaireMessages.initialiser();
+                // Initialiser la classe statique GestionnaireMessages
+                GestionnaireMessages.initialiser();
         
 		objLogger.info(GestionnaireMessages.message("controleur_jeu.serveur_demarre"));
 		
 		// Préparer l'objet pour créer les nombres aléatoires
-    	objRandom = new Random();
+                objRandom = new Random();
 		
 		// Créer une liste des joueurs
 		lstJoueursConnectes = new TreeMap();

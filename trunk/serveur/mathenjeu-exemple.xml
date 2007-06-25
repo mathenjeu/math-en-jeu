@@ -20,35 +20,6 @@
         
         <musique>
             <url>http://localhost/musique/</url>
-            
-            <style>jazz</style>
-            <style>rock</style>
-            <style>metal</style>
-            <style>ambiance</style>
-            <style>blues</style>
-            <style>pop</style>
-            <style>classical</style>
-            
-            <jazz>
-                <chanson>chanson1.mp3</chanson>
-                <chanson>chanson2.mp3</chanson>
-            </jazz>
-            <rock>
-                <chanson>rock.mp3</chanson>
-            </rock>
-            <metal>
-                <chanson>metal.mp3</chanson>
-            </metal>
-            <ambiance>
-                <chanson>exemple.mp3</chanson>
-            </ambiance>
-            <blues>
-            </blues>
-            <pop>
-            </pop>
-            <classical>
-            </classical>
-            
         </musique>
 
 	<!-- Section de la classe ServeurJeu.ControleurJeu -->
@@ -202,6 +173,7 @@
 				<max-possession-objets-et-pieces>10</max-possession-objets-et-pieces>
 			</regles>
 		</salles-initiales>
+            <debug>true</debug>
 	</controleurjeu>
 
 	<!-- Section de la classe ServeurJeu.Communications.GestionnaireCommunication -->
@@ -228,9 +200,9 @@
 		<fichier-sortie>serveur_monitoring.html</fichier-sortie>
 	</monitor>
 
-    <!-- Section de la classe ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel -->
-    <joueurs-virtuels>
-        <noms>Willy/Billy/Fred/Max/Véro/Bob/Greg/Dany/Dave/John/Joe/Mike/Tod/Doum/Dan</noms>
-	<difficulte_defaut>0</difficulte_defaut>
-    </joueurs-virtuels>
+        <!-- Section de la classe ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel -->
+        <joueurs-virtuels>
+            <noms>Willy/Billy/Fred/Max/Véro/Bob/Greg/Dany/Dave/John/Joe/Mike/Tod/Doum/Dan</noms>
+            <difficulte_defaut>0</difficulte_defaut>
+        </joueurs-virtuels>
 </configuration>

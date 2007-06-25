@@ -18,6 +18,7 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
+import ServeurJeu.ControleurJeu;
 
 /**
  * @author Jean-François Brind'Amour
@@ -547,10 +548,14 @@ public class InformationPartie
 		    gestionnaireEv = objPartieCourante.obtenirGestionnaireEvenements();
 		    objQuestion = objPartieCourante.obtenirQuestionCourante();
 		    nomJoueur = ((JoueurHumain)objJoueur).obtenirNomUtilisateur();
-		    bolReponseEstBonne = objQuestion.reponseEstValide(reponse);
-                    //FRANCOIS
-                    //bolReponseEstBonne = true;
-		    
+                    if(ControleurJeu.modeDebug)
+                    {
+                        bolReponseEstBonne = true;
+                    }
+                    else
+                    {
+                        bolReponseEstBonne = objQuestion.reponseEstValide(reponse);
+                    }		    
 		}
 		else
 		{
@@ -874,5 +879,10 @@ public class InformationPartie
         public boolean peutAvoirNouvelObjetOuPiece()
         {
             return Integer.parseInt(GestionnaireConfiguration.obtenirInstance().obtenirString("controleurjeu.salles-initiales.regles.max-possession-objets-et-pieces")) > this.intArgent + this.lstObjetsUtilisablesRamasses.size();
+        }
+        
+        public GestionnaireBD obtenirGestionnaireBD()
+        {
+            return objGestionnaireBD;
         }
 }

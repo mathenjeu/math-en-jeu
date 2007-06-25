@@ -35,21 +35,21 @@ import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
+import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Monitoring.Moniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
 import ServeurJeu.Evenements.EvenementSynchroniserTemps;
  
 import ServeurJeu.ComposantesJeu.Cases.Case;
+import ServeurJeu.ComposantesJeu.InformationPartie;
 import ServeurJeu.Evenements.EvenementPartieDemarree;
 import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.ComposantesJeu.Question;
-import ServeurJeu.ComposantesJeu.Langue;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.Configuration.GestionnaireMessages;
-import ServeurJeu.Configuration.GestionnaireConfiguration;
 import java.util.Calendar;
 
 
@@ -226,13 +226,22 @@ public class ProtocoleJoueur implements Runnable
 						// On appelle une fonction qui va traiter le message reçu du 
 						// client et mettre le résultat à retourner dans une variable
 						objLogger.info( GestionnaireMessages.message("protocole.message_recu") + strMessageRecu );
-                                                //FRANCOIS
-                                                //GregorianCalendar calendar = new GregorianCalendar();
-                                                //String timeB = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
-                                                //System.out.println("(" + timeB + ") Reçu:  " + strMessageRecu);
-						String strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
-                                                //String timeA = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
-                                                //System.out.println("(" + timeA + ") Envoi: " + strMessageAEnvoyer);
+
+                                                GregorianCalendar calendar = new GregorianCalendar();
+                                                if(ControleurJeu.modeDebug)
+                                                {
+                                                    String timeB = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
+                                                    System.out.println("(" + timeB + ") Reçu:  " + strMessageRecu);
+                                                }
+
+                                                String strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
+                                                
+                                                if(ControleurJeu.modeDebug)
+                                                {
+                                                    String timeA = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
+                                                    System.out.println("(" + timeA + ") Envoi: " + strMessageAEnvoyer);
+                                                }
+
 						// On remet la variable contenant le numéro de commande
 						// à retourner à -1, pour dire qu'il n'est pas initialisé
 						intNumeroCommandeReponse = -1;
@@ -481,6 +490,7 @@ public class ProtocoleJoueur implements Runnable
     							// Il n'y a pas eu d'erreurs
     							objNoeudCommande.setAttribute("type", "Reponse");
     							objNoeudCommande.setAttribute("nom", "Ok");
+                                                     
 							}
 						}
 						else if (strResultatAuthentification.equals(ResultatAuthentification.JoueurDejaConnecte))
@@ -1335,6 +1345,17 @@ public class ProtocoleJoueur implements Runnable
 								// Il n'y a pas eu d'erreurs
 								objNoeudCommande.setAttribute("type", "Reponse");
 								objNoeudCommande.setAttribute("nom", "DemarrerMaintenant");
+                                                                
+                                                                InformationPartie objPartie = objJoueurHumain.obtenirPartieCourante();
+                                                                GestionnaireBD objGestionnaireBD = objPartie.obtenirGestionnaireBD();
+                                                                Vector liste = objGestionnaireBD.obtenirListeURLsMusique(objJoueurHumain);
+                                                                for(int i=0; i<liste.size(); i++)
+                                                                {
+                                                                    Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("musique");
+                                                                    Text objNoeudTexteMusique = objDocumentXMLSortie.createTextNode((String)liste.get(i));
+                                                                    objNoeudParametreMusique.appendChild(objNoeudTexteMusique);
+                                                                    objNoeudCommande.appendChild(objNoeudParametreMusique);   
+                                                                }
 							}
 							else if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.PartieEnCours))
 							{

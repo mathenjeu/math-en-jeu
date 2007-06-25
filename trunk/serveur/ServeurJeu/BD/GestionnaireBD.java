@@ -1,23 +1,19 @@
 package ServeurJeu.BD;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-import java.util.TreeMap;
 import java.sql.*;
 
 import org.apache.log4j.Logger;
 
 import ServeurJeu.ComposantesJeu.BoiteQuestions;
+import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ControleurJeu;
-import Enumerations.TypeQuestion;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import java.util.Date;
 import java.text.SimpleDateFormat; 
 import ServeurJeu.Configuration.GestionnaireMessages;
+import java.util.Vector;
 
 /**
  * @author Jean-François Brind'Amour
@@ -247,7 +243,7 @@ public class GestionnaireBD
 	}
 	
 	private void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, String strRequeteSQL )
-	{	//FRANCOIS y'a dequoi à faire ici aussi
+	{	
 		try
 		{
 			synchronized( requete )
@@ -285,6 +281,52 @@ public class GestionnaireBD
 		    e.printStackTrace();
 		}
 	}
+        
+        public Vector obtenirListeURLsMusique(JoueurHumain joueur)
+	{
+            Vector liste = new Vector();
+            String URLMusique = GestionnaireConfiguration.obtenirInstance().obtenirString("musique.url");
+            String strRequeteSQL = "SELECT musique_Fichiers.nomFichier FROM musique_Fichiers,musique_Fichiers_Categories,musique_Categories,musique_Preferences_Joueur WHERE ";
+            strRequeteSQL       += "musique_Fichiers.cleFichier = musique_Fichiers_Categories.cleFichier AND ";
+            strRequeteSQL       += "musique_Fichiers_Categories.cleCategorie = musique_Categories.cleCategorie AND ";
+            strRequeteSQL       += "musique_Categories.cleCategorie = musique_Preferences_Joueur.cleCategorie AND ";
+            strRequeteSQL       += "musique_Preferences_Joueur.cleJoueur = " + Integer.toString(joueur.obtenirCleJoueur());
+		try
+		{
+			synchronized( requete )
+			{
+				ResultSet rs = requete.executeQuery(strRequeteSQL);
+				while(rs.next())
+				{
+                                    liste.add(URLMusique + rs.getString("nomFichier"));
+				}
+			}
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exécution de la requête
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();			
+		}
+		catch( RuntimeException e)
+		{
+			// Ce n'est pas le bon message d'erreur mais ce n'est pas grave
+			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();
+		}
+            return liste;
+	}
+        
+                        
+        /*List testtt = propNomsObjetUtilisable;
+                testtt.clear();
+                testtt.add("metal");
+                testtt.add("rock");FRANCOIS
+                List listedetounesurls = musique.getListeURL(testtt);*/
 	
 	public void mettreAJourJoueur( JoueurHumain joueur, int tempsTotal )
 	{
