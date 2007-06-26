@@ -24,6 +24,9 @@ public class BoiteQuestions
 {
 	static private Logger objLogger = Logger.getLogger( BoiteQuestions.class );
 	private TreeMap<Integer, TreeMap<Integer, Vector<Question>>> lstQuestions;
+        
+        // Since there is a question box for each player, and all players might not want to play
+        // in the same language, we set a language field for question boxes
         private Langue langue;
 	
 	public BoiteQuestions(String langue)

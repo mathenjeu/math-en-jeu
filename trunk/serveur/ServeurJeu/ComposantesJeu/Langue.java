@@ -27,7 +27,8 @@ public class Langue
         private int cleQuestionMin;
         private int cleQuestionMax;
         
-        // Le constructeur (est appelé dès que l'on sait la langue du joueur)
+        // The constructor is called as soon as we know the player's language
+        // The language is obtained in the method's arguments, and the rest is obtained from the server config file
 	public Langue(String langue, GestionnaireConfiguration config)
 	{
             this.langue = langue;

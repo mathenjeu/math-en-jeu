@@ -28,7 +28,7 @@ public class InformationPartie
 	// Déclaration d'une référence vers le gestionnaire de bases de données
 	private GestionnaireBD objGestionnaireBD;
 	
-    // Déclaration d'une référence vers le gestionnaire d'evenements
+        // Déclaration d'une référence vers le gestionnaire d'evenements
 	private GestionnaireEvenements objGestionnaireEv;
 	
 	// Déclaration d'une référence vers un joueur humain correspondant à cet
@@ -38,12 +38,12 @@ public class InformationPartie
 	// Déclaration d'une référence vers la table courante
 	private Table objTable;
 	
-    // Déclaration d'une variable qui va contenir le numéro Id du personnage 
+        // Déclaration d'une variable qui va contenir le numéro Id du personnage 
 	// choisit par le joueur
 	private int intIdPersonnage;
 	
-    // Déclaration d'une variable qui va contenir le pointage de la 
-    // partie du joueur possédant cet objet
+        // Déclaration d'une variable qui va contenir le pointage de la 
+        // partie du joueur possédant cet objet
 	private int intPointage;
         
         // Combien d'argent ce joueur a-t-il?
@@ -75,8 +75,8 @@ public class InformationPartie
         // cet objet
         BoiteQuestions objBoiteQuestions;
 	
-    // Compteur pour l'objet réponse
-    private int intCompteurObjetLivre;
+        // Compteur pour l'objet réponse
+        private int intCompteurObjetLivre;
 	
 	 
 	/**
@@ -85,14 +85,14 @@ public class InformationPartie
 	 */
 	public InformationPartie( GestionnaireEvenements gestionnaireEv, GestionnaireBD gestionnaireBD, JoueurHumain joueur, Table tableCourante)
 	{
-		// Faire la référence vers le gestionnaire de base de données
-		objGestionnaireBD = gestionnaireBD;
-		
-        // Faire la référence vers le gestionnaire d'evenements
-		objGestionnaireEv = gestionnaireEv;
-		
-		// Faire la référence vers le joueur humain courant
-		objJoueurHumain = joueur;
+            // Faire la référence vers le gestionnaire de base de données
+            objGestionnaireBD = gestionnaireBD;
+
+            // Faire la référence vers le gestionnaire d'evenements
+            objGestionnaireEv = gestionnaireEv;
+
+            // Faire la référence vers le joueur humain courant
+            objJoueurHumain = joueur;
 		
 	    // Définir les propriétés de l'objet InformationPartie
 	    intPointage = 0;
@@ -548,6 +548,8 @@ public class InformationPartie
 		    gestionnaireEv = objPartieCourante.obtenirGestionnaireEvenements();
 		    objQuestion = objPartieCourante.obtenirQuestionCourante();
 		    nomJoueur = ((JoueurHumain)objJoueur).obtenirNomUtilisateur();
+                    
+                    // If we're in debug mode, accept any answer
                     if(ControleurJeu.modeDebug)
                     {
                         bolReponseEstBonne = true;
