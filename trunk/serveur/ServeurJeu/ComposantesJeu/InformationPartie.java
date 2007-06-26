@@ -612,41 +612,48 @@ public class InformationPartie
 				// tout dépendant de l'objet (pièce, objet utilisable ou autre)
 				if (objCaseCouleurDestination.obtenirObjetCase() != null)
 				{
+                                    System.out.println("" + (Salle.maxPossessionPieceEtObjet > intNouvelArgent + objListeObjetsUtilisablesRamasses.size()));
 					// Si l'objet est un objet utilisable, alors on l'ajoute à 
 					// la liste des objets utilisables du joueur
 					if (objCaseCouleurDestination.obtenirObjetCase() instanceof ObjetUtilisable)
 					{
-						// Faire la référence vers l'objet utilisable
-						ObjetUtilisable objObjetUtilisable = (ObjetUtilisable) objCaseCouleurDestination.obtenirObjetCase();
-						
-						// Garder la référence vers l'objet utilisable pour l'ajouter à l'objet de retour
-						objObjetRamasse = objObjetUtilisable;
-						
-						// Ajouter l'objet ramassé dans la liste des objets du joueur courant
-						objListeObjetsUtilisablesRamasses.put(new Integer(objObjetUtilisable.obtenirId()), objObjetUtilisable);
-						
-						// Enlever l'objet de la case du plateau de jeu
-						objCaseCouleurDestination.definirObjetCase(null);
+                                                if(Salle.maxPossessionPieceEtObjet > intNouvelArgent + objListeObjetsUtilisablesRamasses.size())
+                                                {
+                                                    // Faire la référence vers l'objet utilisable
+                                                    ObjetUtilisable objObjetUtilisable = (ObjetUtilisable) objCaseCouleurDestination.obtenirObjetCase();
 
-						// On va dire aux clients qu'il y a eu collision avec cet objet
-						collision = objObjetUtilisable.obtenirTypeObjet();
+                                                    // Garder la référence vers l'objet utilisable pour l'ajouter à l'objet de retour
+                                                    objObjetRamasse = objObjetUtilisable;
+
+                                                    // Ajouter l'objet ramassé dans la liste des objets du joueur courant
+                                                    objListeObjetsUtilisablesRamasses.put(new Integer(objObjetUtilisable.obtenirId()), objObjetUtilisable);
+
+                                                    // Enlever l'objet de la case du plateau de jeu
+                                                    objCaseCouleurDestination.definirObjetCase(null);
+
+                                                    // On va dire aux clients qu'il y a eu collision avec cet objet
+                                                    collision = objObjetUtilisable.obtenirTypeObjet();
+                                                }
 					}
 					else if (objCaseCouleurDestination.obtenirObjetCase() instanceof Piece)
 					{
-						// Faire la référence vers la pièce
-						Piece objPiece = (Piece) objCaseCouleurDestination.obtenirObjetCase();
-						
-						// Mettre à jour l'argent du joueur
-						intNouvelArgent += objPiece.obtenirMonnaie();
-						
-						// Enlever la pièce de la case du plateau de jeu
-						objCaseCouleurDestination.definirObjetCase(null);
-						
-						collision = "piece";
-						
-						// TODO: Il faut peut-être lancer un algo qui va placer 
-						// 		 les pièces sur le plateau de jeu s'il n'y en n'a
-						//		 plus
+                                                if(Salle.maxPossessionPieceEtObjet > intNouvelArgent + objListeObjetsUtilisablesRamasses.size())
+                                                {
+                                                    // Faire la référence vers la pièce
+                                                    Piece objPiece = (Piece) objCaseCouleurDestination.obtenirObjetCase();
+
+                                                    // Mettre à jour l'argent du joueur
+                                                    intNouvelArgent += objPiece.obtenirMonnaie();
+
+                                                    // Enlever la pièce de la case du plateau de jeu
+                                                    objCaseCouleurDestination.definirObjetCase(null);
+
+                                                    collision = "piece";
+
+                                                    // TODO: Il faut peut-être lancer un algo qui va placer 
+                                                    // 		 les pièces sur le plateau de jeu s'il n'y en n'a
+                                                    //		 plus
+                                                }
 					}
 					else if (objCaseCouleurDestination.obtenirObjetCase() instanceof Magasin)
 					{
@@ -850,13 +857,6 @@ public class InformationPartie
         public Point obtenirPositionJoueurDesiree()
         {
             return objPositionJoueurDesiree;
-        }
-        
-        // This method tells if a player can hold another coin or item
-        // The maximum is defined in the server config file.
-        public boolean peutAvoirNouvelObjetOuPiece()
-        {
-            return Salle.maxPossessionPieceEtObjet > this.intArgent + this.lstObjetsUtilisablesRamasses.size();
         }
         
         public GestionnaireBD obtenirGestionnaireBD()
