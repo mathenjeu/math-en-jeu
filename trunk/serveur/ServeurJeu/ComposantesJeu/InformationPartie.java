@@ -66,9 +66,6 @@ public class InformationPartie
 	
 	// Déclaration d'une liste d'objets utilisables ramassés par le joueur
 	private TreeMap lstObjetsUtilisablesRamasses;
-	
-	// Pour empêcher le joueur d'acheter plus qu'un seul objet à la fois
-	private boolean bolObjetAcheter;
         
         // Déclaration de la boîte de question personnelle au joueur possédant
         // cet objet
@@ -850,16 +847,6 @@ public class InformationPartie
 		
 	}
 	
-	public boolean peutAcheterObjet()
-	{
-		return !bolObjetAcheter;
-	}
-	
-	public void definirObjetAcheter(boolean valeur)
-	{
-		bolObjetAcheter = valeur;
-	}
-        
         public Point obtenirPositionJoueurDesiree()
         {
             return objPositionJoueurDesiree;

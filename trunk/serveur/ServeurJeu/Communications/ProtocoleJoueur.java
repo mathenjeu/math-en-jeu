@@ -1634,10 +1634,6 @@ public class ProtocoleJoueur implements Runnable
 						// noeuds spécifiques au succès de la réponse
 						if (objRetour.deplacementEstAccepte() == true)
 						{
-							// Définir l'indicateur pour empêcher d'acheter plus d'un objet 
-							// par tour
-							objJoueurHumain.obtenirPartieCourante().definirObjetAcheter(false);
-							
 							Element objNoeudParametreObjetRamasse = objDocumentXMLSortie.createElement("parametre");
 							Element objNoeudParametreObjetSubi = objDocumentXMLSortie.createElement("parametre");
 							Element objNoeudParametreNouvellePosition = objDocumentXMLSortie.createElement("parametre");
@@ -3154,11 +3150,6 @@ public class ProtocoleJoueur implements Runnable
 			// si la partie n'est pas commencée
 			objNoeudCommande.setAttribute("nom", "PartiePasDemarree");
 		}
-		else if (objJoueurHumain.obtenirPartieCourante().peutAcheterObjet() == false)
-		{
-			// Le joeur a déjà acheter un objet ce tour-ci
-			objNoeudCommande.setAttribute("nom", "ObjetDejaAchete");
-		}
 		else 
 		{
 			// Aller chercher l'objet sur la case où le joueur se trouve
@@ -3190,10 +3181,6 @@ public class ProtocoleJoueur implements Runnable
 	                	{
 		                	// Acheter l'objet
 		                	ObjetUtilisable objObjetAcheter = ((Magasin)objObjet).acheterObjet(intIdObjet, objTable.obtenirProchainIdObjet());
-		                	
-		                	// Définir l'indicateur pour empêcher que le joueur
-		                	// achète plus qu'un objet
-		                	//objJoueurHumain.obtenirPartieCourante().definirObjetAcheter(true);
 		                	
 		                	// L'ajouter à la liste des objets du joueur
 		                	objJoueurHumain.obtenirPartieCourante().ajouterObjetUtilisableListe(objObjetAcheter);
