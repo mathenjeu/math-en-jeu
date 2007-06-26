@@ -3199,21 +3199,10 @@ public class ProtocoleJoueur implements Runnable
 		                	// Défrayer les coûts
 		                	objJoueurHumain.obtenirPartieCourante().definirArgent(objJoueurHumain.obtenirPartieCourante().obtenirArgent() - objObjetAcheter.obtenirPrix());
 		                    
-                                        /*                        
-                                                //	Il n'y a pas eu d'erreurs
-						objNoeudCommande.setAttribute("type", "Reponse");
-						objNoeudCommande.setAttribute("nom", "Argent");
-						
-						Element objNoeudParametreArgent = objDocumentXMLSortie.createElement("parametre");
-						Text objNoeudTexteArgent = objDocumentXMLSortie.createTextNode(Integer.toString(nouvelArgent));
-						objNoeudParametreArgent.setAttribute("type", "Argent");
-						objNoeudParametreArgent.appendChild(objNoeudTexteArgent);
-						objNoeudCommande.appendChild(objNoeudParametreArgent);*/
-                                        
-		                    // Préparer un événement pour les autres joueurs de la table
-						    // pour qu'il se tienne à jour de l'argent de ce joueur
-						    objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementMAJArgent(objJoueurHumain.obtenirNomUtilisateur(), 
-						        objJoueurHumain.obtenirPartieCourante().obtenirArgent());
+                                        // Préparer un événement pour les autres joueurs de la table
+					// pour qu'il se tienne à jour de l'argent de ce joueur
+					objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementMAJArgent(objJoueurHumain.obtenirNomUtilisateur(), 
+						objJoueurHumain.obtenirPartieCourante().obtenirArgent());
 						                	
 		                	// Retourner une réponse positive au joueur
 		                	objNoeudCommande.setAttribute("type", "Reponse");
@@ -3309,75 +3298,69 @@ public class ProtocoleJoueur implements Runnable
                     
                     // On prépare la réponse
                     objNoeudCommande.setAttribute("nom", "RetourUtiliserObjet");
+                    
+                    // On retourne une confirmation et parfois d'autres infos
+                    bolDoitRetournerCommande = true;
 		
-			// Dépendamment du type de l'objet, on effectue le traitement approprié
-			if (strTypeObjet.equals("Livre"))
-			{
-                            // Le livre est utilisé lorsqu'un joueur se fait poser une question
-                            // à choix de réponse. Le serveur renvoie alors une mauvaise réponse
-                            // à la question, et le client fera disparaître ce choix de réponse
-                            // parmi les choix possibles pour le joueur.
-                        
-                            // On doit retourner la mauvaise réponse
-                            bolDoitRetournerCommande = true;
-                        
-                            // Enlever l'objet de la liste des objets du joueur
-                            objJoueurHumain.enleverObjet(intIdObjet, strTypeObjet);
-                            
-                            // On obtient une mauvaise réponse à la dernière question posée
-                            String mauvaiseReponse = objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirMauvaiseReponse();
-                            
-		            // Créer le noeud contenant le choix de réponse si c'était une question à choix de réponse
-                            Element objNoeudParametreMauvaiseReponse = objDocumentXMLSortie.createElement("parametre");
-                            Text objNoeudTexteMauvaiseReponse = objDocumentXMLSortie.createTextNode(mauvaiseReponse);
-                            objNoeudParametreMauvaiseReponse.setAttribute("type", "MauvaiseReponse");
-                            objNoeudParametreMauvaiseReponse.appendChild(objNoeudTexteMauvaiseReponse);
-                            objNoeudCommande.setAttribute("type", "Livre");
-                            objNoeudCommande.appendChild(objNoeudParametreMauvaiseReponse);
-			}
-                        else if(strTypeObjet.equals("Boule"))
-                        {
-                            // La boule permettra à un joueur de changer de question si celle
-                            // qu'il s'est fait envoyer ne lui tente pas
-                            
-                            // On trouve une nouvelle question à poser
-                            Question nouvelleQuestion = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoser(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueurDesiree(), true);
-                            
-                            // Si on est tombé sur la même question, on recommence jusqu'à 10 fois
-                            int essais=0;
-                            while(nouvelleQuestion.obtenirCodeQuestion()==objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirCodeQuestion() && essais<10)
-                            {
-                                nouvelleQuestion = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoser(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueurDesiree(), true);
-                                essais++;
-                            }
-                            
-                            // On prépare l'envoi des informations sur la nouvelle question
-                            Element objNoeudParametreNouvelleQuestion = objDocumentXMLSortie.createElement("parametre");
-                            objNoeudParametreNouvelleQuestion.setAttribute("type", "nouvelleQuestion");
+                    // Dépendamment du type de l'objet, on effectue le traitement approprié
+                    if (strTypeObjet.equals("Livre"))
+                    {
+                        // Le livre est utilisé lorsqu'un joueur se fait poser une question
+                        // à choix de réponse. Le serveur renvoie alors une mauvaise réponse
+                        // à la question, et le client fera disparaître ce choix de réponse
+                        // parmi les choix possibles pour le joueur.
 
-                            Element objNoeudParametreQuestion = objDocumentXMLSortie.createElement("question");
-                            objNoeudParametreQuestion.setAttribute("id", Integer.toString(nouvelleQuestion.obtenirCodeQuestion()));
-                            objNoeudParametreQuestion.setAttribute("type", nouvelleQuestion.obtenirTypeQuestion());
-                            objNoeudParametreQuestion.setAttribute("url", nouvelleQuestion.obtenirURLQuestion());
-                            
-                            objNoeudParametreNouvelleQuestion.appendChild(objNoeudParametreQuestion);
-                            objNoeudCommande.setAttribute("type", "Boule");
-                            objNoeudCommande.appendChild(objNoeudParametreNouvelleQuestion);
-                            
-                            bolDoitRetournerCommande = true;
-                        }
-                        else if(strTypeObjet.equals("PotionGros"))
+                        // Enlever l'objet de la liste des objets du joueur
+                        objJoueurHumain.enleverObjet(intIdObjet, strTypeObjet);
+
+                        // On obtient une mauvaise réponse à la dernière question posée
+                        String mauvaiseReponse = objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirMauvaiseReponse();
+
+                        // Créer le noeud contenant le choix de réponse si c'était une question à choix de réponse
+                        Element objNoeudParametreMauvaiseReponse = objDocumentXMLSortie.createElement("parametre");
+                        Text objNoeudTexteMauvaiseReponse = objDocumentXMLSortie.createTextNode(mauvaiseReponse);
+                        objNoeudParametreMauvaiseReponse.setAttribute("type", "MauvaiseReponse");
+                        objNoeudParametreMauvaiseReponse.appendChild(objNoeudTexteMauvaiseReponse);
+                        objNoeudCommande.setAttribute("type", "Livre");
+                        objNoeudCommande.appendChild(objNoeudParametreMauvaiseReponse);
+                    }
+                    else if(strTypeObjet.equals("Boule"))
+                    {
+                        // La boule permettra à un joueur de changer de question si celle
+                        // qu'il s'est fait envoyer ne lui tente pas
+
+                        // On trouve une nouvelle question à poser
+                        Question nouvelleQuestion = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoser(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueurDesiree(), true);
+
+                        // Si on est tombé sur la même question, on recommence jusqu'à 10 fois
+                        int essais=0;
+                        while(nouvelleQuestion.obtenirCodeQuestion()==objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirCodeQuestion() && essais<10)
                         {
-                           // La PotionGros fait grossir le joueur
-                            objNoeudCommande.setAttribute("type", "PotionGros");
-                            bolDoitRetournerCommande = true;
+                            nouvelleQuestion = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoser(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueurDesiree(), true);
+                            essais++;
                         }
-                        else if(strTypeObjet.equals("PotionPetit"))
-                        {
-                           // La PotionPetit fait rapetisser le joueur
-                            objNoeudCommande.setAttribute("type", "PotionPetit");
-                            bolDoitRetournerCommande = true;
-                        }
+
+                        // On prépare l'envoi des informations sur la nouvelle question
+                        Element objNoeudParametreNouvelleQuestion = objDocumentXMLSortie.createElement("parametre");
+                        objNoeudParametreNouvelleQuestion.setAttribute("type", "nouvelleQuestion");
+                        Element objNoeudParametreQuestion = objDocumentXMLSortie.createElement("question");
+                        objNoeudParametreQuestion.setAttribute("id", Integer.toString(nouvelleQuestion.obtenirCodeQuestion()));
+                        objNoeudParametreQuestion.setAttribute("type", nouvelleQuestion.obtenirTypeQuestion());
+                        objNoeudParametreQuestion.setAttribute("url", nouvelleQuestion.obtenirURLQuestion());
+                        objNoeudParametreNouvelleQuestion.appendChild(objNoeudParametreQuestion);
+                        objNoeudCommande.setAttribute("type", "Boule");
+                        objNoeudCommande.appendChild(objNoeudParametreNouvelleQuestion);
+                    }
+                    else if(strTypeObjet.equals("PotionGros"))
+                    {
+                       // La PotionGros fait grossir le joueur
+                        objNoeudCommande.setAttribute("type", "PotionGros");
+                    }
+                    else if(strTypeObjet.equals("PotionPetit"))
+                    {
+                       // La PotionPetit fait rapetisser le joueur
+                        objNoeudCommande.setAttribute("type", "PotionPetit");
+                    }
 		}
     }
     
