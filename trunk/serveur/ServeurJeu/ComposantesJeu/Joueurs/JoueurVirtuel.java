@@ -1448,8 +1448,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    			// d'objets de ce type déjà en possession
 	    			else
 	    			{
-                                    //FRANCOIS
 	    				tPointageObjets[i] = -9999999;
+                                        //TODO: régler ça
                                     /*tPointageObjets[i] = objParametreIA.tParametresIAObjetUtilisable[objObjetAVendre.obtenirUniqueId()].intValeurPoints - 
 	    				    objParametreIA.tParametresIAObjetUtilisable[objObjetAVendre.obtenirUniqueId()].intPointsEnleverQuantite * 
 	    				    nombreObjetsPossedes(objObjetAVendre.obtenirUniqueId());*/
@@ -2331,8 +2331,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     private boolean determinerPretARamasserObjet(int uidObjet)
     {
     	// Vérifier s'il reste assez de temps et que le joueur a de la place
-        //FRANCOIS
-        if (uidObjet>0) return false;
+        if (uidObjet>0) return false; //TODO: régler ça
     	if (lstObjetsUtilisablesRamasses.size() >= intNbObjetsMax || 
     		objTable.obtenirTempsRestant() <= objParametreIA.tParametresIAObjetUtilisable[uidObjet].intTempsSureteRamasser ||
     	    nombreObjetsPossedes(uidObjet) >= objParametreIA.tParametresIAObjetUtilisable[uidObjet].intQuantiteMax)

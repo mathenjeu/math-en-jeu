@@ -240,7 +240,6 @@ public class GestionnaireBD
 		    boiteQuestions.obtenirLangue().obtenirCleQuestionMax() + " and ";
 		    
 		strRequeteSQL += strValeurGroupeAge + niveau + " = " + intDifficulte;
-		//FRANCOIS si on veut la catégorie et la difficulté, c'est ici
 		remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
 	}
 	
