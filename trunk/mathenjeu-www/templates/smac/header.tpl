@@ -68,6 +68,10 @@ Projet SMAC
 					
 					|
 					
+					<a class="topmenu" target="_parent" href="http://mathenjeu.mat.ulaval.ca/mathenjeu-beta/autresjeux.php">Autres jeux</a>
+					
+					|
+					
 					<a class="topmenu" target="_blank" href="http://www.smac.ulaval.ca/forum/">Forum</a>
 					
 					|
