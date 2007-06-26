@@ -34,6 +34,7 @@
         <erreur_prochaine_question>Une erreur est survenue lors de la recherche de la prochaine question.</erreur_prochaine_question>
         <erreur_fermeture_conn>Une erreur est survenue lors de la fermeture de la connexion.</erreur_fermeture_conn>
         <erreur_ajout_infos>Erreur ajout info :&#160;</erreur_ajout_infos>
+        <error_music>There has been an error while looking for MP3 URLs</error_music>
     </bd>
 
     <!-- Pour la classe ServeurJeu.Communications.GestionnaireCommunication -->
