@@ -612,7 +612,6 @@ public class InformationPartie
 				// tout dépendant de l'objet (pièce, objet utilisable ou autre)
 				if (objCaseCouleurDestination.obtenirObjetCase() != null)
 				{
-                                    System.out.println("" + (Salle.maxPossessionPieceEtObjet > intNouvelArgent + objListeObjetsUtilisablesRamasses.size()));
 					// Si l'objet est un objet utilisable, alors on l'ajoute à 
 					// la liste des objets utilisables du joueur
 					if (objCaseCouleurDestination.obtenirObjetCase() instanceof ObjetUtilisable)
