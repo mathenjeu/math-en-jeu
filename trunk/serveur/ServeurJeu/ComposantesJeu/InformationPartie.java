@@ -72,11 +72,7 @@ public class InformationPartie
         
         // Déclaration de la boîte de question personnelle au joueur possédant
         // cet objet
-        BoiteQuestions objBoiteQuestions;
-	
-        // Compteur pour l'objet réponse
-        private int intCompteurObjetLivre;
-	
+        BoiteQuestions objBoiteQuestions;	
 	 
 	/**
 	 * Constructeur de la classe InformationPartie qui permet d'initialiser
@@ -118,9 +114,6 @@ public class InformationPartie
 
             objBoiteQuestions = new BoiteQuestions(joueur.obtenirProtocoleJoueur().langue);
             objGestionnaireBD.remplirBoiteQuestions(objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());
-            
-        intCompteurObjetLivre = 0;
-
 	}
 
 	/**
@@ -865,11 +858,6 @@ public class InformationPartie
 	public void definirObjetAcheter(boolean valeur)
 	{
 		bolObjetAcheter = valeur;
-	}
-	
-	public void initialiserCompteurObjetLivre()
-	{
-        intCompteurObjetLivre = Livre.NOMBRE_CHARGE;
 	}
         
         public Point obtenirPositionJoueurDesiree()

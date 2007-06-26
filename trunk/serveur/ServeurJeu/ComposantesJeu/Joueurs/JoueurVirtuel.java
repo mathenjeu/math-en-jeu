@@ -143,9 +143,6 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	// Objet logger pour afficher les erreurs dans le fichier log
 	static private Logger objLogger = Logger.getLogger(JoueurVirtuel.class);
 	
-	// Compteur pour l'objet réponse
-	private int intCompteurObjetLivre;
-	
 	/**
 	 * Constructeur de la classe JoueurVirtuel qui permet d'initialiser les 
 	 * membres privés du joueur virtuel
@@ -235,9 +232,6 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         
         // Créer une liste de magasin déjà visité vide
         lstMagasinsVisites = new Vector();
-
-        // Initialiser le compteur à 0
-        intCompteurObjetLivre = 0;
 	}
 
 
@@ -306,22 +300,17 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 					intGrandeurDeplacement = obtenirPointage(objPositionJoueur, objPositionIntermediaire);
 					
 					// Vérifier si on utilise un objet livre
-					boolean bolUtiliserLivre = nombreObjetsPossedes(Objet.UID_OU_LIVRE) > 0 &&
-					    intCompteurObjetLivre <= 0;
+					boolean bolUtiliserLivre = nombreObjetsPossedes(Objet.UID_OU_LIVRE) > 0;
 					    
 					// Aller chercher le pourcentage de réussite à la question
 					intPourcentageReussite = objParametreIA.tPourcentageReponse[intNiveauDifficulte][intGrandeurDeplacement-1];
 					
-					// Si on utilise l'objet, on met des charges dans le compteur
 					if (bolUtiliserLivre == true)
 					{
-	    				if (ccDebug)
-	    				{
-	    					System.out.println("Utilise objet: Livre");
-	    				}
-
-					    // Démarrer le compteur pour l'objet réponse
-					    intCompteurObjetLivre = Livre.NOMBRE_CHARGE;
+                                            if (ccDebug)
+                                            {
+                                                    System.out.println("Utilise objet: Livre");
+                                            }
 					    
 					    // Enlever un objet livre des objets du joueur
 					    enleverObjet(Objet.UID_OU_LIVRE);
@@ -329,24 +318,13 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 					}
 					
 		            // Vérifier si c'est une question à choix de réponse
-		            boolean bolQuestionChoixDeReponse = (genererNbAleatoire(100)+1 <= ParametreIA.RATIO_CHOIX_DE_REPONSE);	            
-		            
-		            // Maintenant, s'il reste des charges, modifier le % de réussite
-					if (bolQuestionChoixDeReponse && intCompteurObjetLivre > 0)
+		            boolean bolQuestionChoixDeReponse = (genererNbAleatoire(100)+1 <= ParametreIA.RATIO_CHOIX_DE_REPONSE);
+					if (bolQuestionChoixDeReponse)
 					{						
 						// Augmenter les chances de réussites utilisant le 
 						// tableau de % de réponse lorsqu'il reste des charges
 						// à l'objet et si cette question est à choix de réponse
 					    intPourcentageReussite = objParametreIA.tPourcentageReponseObjetLivre[intNiveauDifficulte][intGrandeurDeplacement-1];
-					    
-					    // Décrémenter une charge
-					    intCompteurObjetLivre--;
-					    
-	    				if (ccDebug)
-	    				{
-	    					System.out.println("Une mauvaise réponse est éliminée: charge restante = " + 
-	    					    intCompteurObjetLivre);
-	    				}
 					}
 					
 	    			// Déterminer si le joueur virtuel répondra à la question
@@ -1843,9 +1821,9 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         int tTableauSource[][];
         
         // Déterminer dans quel tableau on va chercher les pourcentages
-        // de choix. Si le joueur possède l'objet réponse ou s'il y reste des charges,
+        // de choix. Si le joueur possède l'objet Livre,
         // il va choisir des choix plus difficile car l'objet va l'aider
-        if (nombreObjetsPossedes(Objet.UID_OU_LIVRE) > 0 || intCompteurObjetLivre > 0)
+        if (nombreObjetsPossedes(Objet.UID_OU_LIVRE) > 0)
         {
         	tTableauSource = objParametreIA.tPourcentageChoixObjetLivre;
         }

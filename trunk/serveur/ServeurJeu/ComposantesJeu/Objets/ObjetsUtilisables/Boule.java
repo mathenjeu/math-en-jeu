@@ -21,9 +21,6 @@ public class Boule extends ObjetUtilisable
 	// Cette constante définit le nom de cet objet
 	public static final String TYPE_OBJET = "Boule";
 	
-	// Cette constante définit le nombre de charge de l'objet
-	public static final int NOMBRE_CHARGE = 1;
-	
 	/**
 	 * Constructeur de la classe qui permet de définir les propriétés 
 	 * propres à l'objet courant.

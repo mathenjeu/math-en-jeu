@@ -21,9 +21,6 @@ public class Livre extends ObjetUtilisable
 	// Cette constante définit le nom de cet objet
 	public static final String TYPE_OBJET = "Livre";
 	
-	// Cette constante définit le nombre de charge de l'objet
-	public static final int NOMBRE_CHARGE = 1;
-	
 	/**
 	 * Constructeur de la classe Livre qui permet de définir les propriétés 
 	 * propres à l'objet courant.
