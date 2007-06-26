@@ -23,7 +23,7 @@ public class GestionnaireBD
 	// Déclaration d'une référence vers le contrôleur de jeu
 	private ControleurJeu objControleurJeu;
 	
-    // Objet Connection nécessaire pour le contact avec le serveur MySQL
+        // Objet Connection nécessaire pour le contact avec le serveur MySQL
 	private Connection connexion;
 	
 	// Objet Statement nécessaire pour envoyer une requête au serveur MySQL
@@ -208,6 +208,7 @@ public class GestionnaireBD
 		}
 	}
 
+        // This method fills a Question box with only the player's level
 	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau )
 	{
                 String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
@@ -225,6 +226,7 @@ public class GestionnaireBD
 		remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
 	}
 	
+        // This function fills a Question box with the player's level, a specified difficulty and a question category
 	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, int intCategorie, int intDifficulte )
 	{
                 String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
@@ -242,6 +244,8 @@ public class GestionnaireBD
 		remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
 	}
 	
+        // This function follows one of the two previous functions. It queries the database and
+        // does the actual filling of the question box.
 	private void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, String strRequeteSQL )
 	{	
 		try
@@ -282,6 +286,8 @@ public class GestionnaireBD
 		}
 	}
         
+        // This function queries the DB to find the player's musical preferences
+        // and returns a Vector containing URLs of MP3s the player might like
         public Vector obtenirListeURLsMusique(JoueurHumain joueur)
 	{
             Vector liste = new Vector();
@@ -291,43 +297,37 @@ public class GestionnaireBD
             strRequeteSQL       += "musique_Fichiers_Categories.cleCategorie = musique_Categories.cleCategorie AND ";
             strRequeteSQL       += "musique_Categories.cleCategorie = musique_Preferences_Joueur.cleCategorie AND ";
             strRequeteSQL       += "musique_Preferences_Joueur.cleJoueur = " + Integer.toString(joueur.obtenirCleJoueur());
-		try
-		{
-			synchronized( requete )
-			{
-				ResultSet rs = requete.executeQuery(strRequeteSQL);
-				while(rs.next())
-				{
-                                    liste.add(URLMusique + rs.getString("nomFichier"));
-				}
-			}
-		}
-		catch (SQLException e)
-		{
-			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error( e.getMessage() );
-		    e.printStackTrace();			
-		}
-		catch( RuntimeException e)
-		{
-			// Ce n'est pas le bon message d'erreur mais ce n'est pas grave
-			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error( e.getMessage() );
-		    e.printStackTrace();
-		}
+            try
+            {
+                    synchronized( requete )
+                    {
+                            ResultSet rs = requete.executeQuery(strRequeteSQL);
+                            while(rs.next())
+                            {
+                                liste.add(URLMusique + rs.getString("nomFichier"));
+                            }
+                    }
+            }
+            catch (SQLException e)
+            {
+                    // Une erreur est survenue lors de l'exécution de la requête
+                    objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+                    objLogger.error(GestionnaireMessages.message("bd.trace"));
+                    objLogger.error( e.getMessage() );
+                e.printStackTrace();			
+            }
+            catch( RuntimeException e)
+            {
+                    // Ce n'est pas le bon message d'erreur mais ce n'est pas grave
+                    objLogger.error(GestionnaireMessages.message("bd.error_music"));
+                    objLogger.error(GestionnaireMessages.message("bd.trace"));
+                    objLogger.error( e.getMessage() );
+                e.printStackTrace();
+            }
             return liste;
 	}
-        
-                        
-        /*List testtt = propNomsObjetUtilisable;
-                testtt.clear();
-                testtt.add("metal");
-                testtt.add("rock");FRANCOIS
-                List listedetounesurls = musique.getListeURL(testtt);*/
 	
+        // This method updates a player's information in the DB
 	public void mettreAJourJoueur( JoueurHumain joueur, int tempsTotal )
 	{
 		try
@@ -452,8 +452,7 @@ public class GestionnaireBD
 			}
         }
         catch (Exception e)
-        {
-        	
-        }
+            {
+            }
 	}
 }
