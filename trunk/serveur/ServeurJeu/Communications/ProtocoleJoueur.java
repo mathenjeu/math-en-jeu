@@ -227,6 +227,7 @@ public class ProtocoleJoueur implements Runnable
 						// client et mettre le résultat à retourner dans une variable
 						objLogger.info( GestionnaireMessages.message("protocole.message_recu") + strMessageRecu );
 
+                                                // If we're in debug mode (can be set in mathenjeu.xml), print communications
                                                 GregorianCalendar calendar = new GregorianCalendar();
                                                 if(ControleurJeu.modeDebug)
                                                 {
@@ -236,6 +237,7 @@ public class ProtocoleJoueur implements Runnable
 
                                                 String strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
                                                 
+                                                // If we're in debug mode (can be set in mathenjeu.xml), print communications
                                                 if(ControleurJeu.modeDebug)
                                                 {
                                                     String timeA = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
