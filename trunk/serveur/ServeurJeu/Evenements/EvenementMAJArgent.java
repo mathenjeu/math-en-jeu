@@ -16,12 +16,12 @@ import ServeurJeu.Configuration.GestionnaireMessages;
 
 public class EvenementMAJArgent extends Evenement
 {
-	// Déclaration d'une variable qui va garder le nom d'utilisateur du
+    // Déclaration d'une variable qui va garder le nom d'utilisateur du
     // joueur dont l'argent est mis à jour
     private String strNomUtilisateur;
-	
-	// Déclaration d'une variable qui va garder le nouvel argent
-	private int intArgent;
+
+    // Déclaration d'une variable qui va garder le nouvel argent
+    private int intArgent;
 	
     /**
      * Constructeur de la classe EvenementMAJArgent qui permet d'initialiser

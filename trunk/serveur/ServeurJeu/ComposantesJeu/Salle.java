@@ -18,6 +18,7 @@ import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
 import ServeurJeu.ControleurJeu;
+import ServeurJeu.Configuration.GestionnaireConfiguration;
 
 //TODO: Le mot de passe d'une salle ne doit pas être modifiée pendant le jeu,
 //      sinon il va falloir ajouter des synchronisations à chaque fois qu'on
@@ -57,6 +58,9 @@ public class Salle
 	
 	// Cet objet permet de déterminer les règles de jeu pour cette salle
 	private Regles objRegles;
+        
+        // This is the maximum number of coins and items a player can hold at one time
+        public static int maxPossessionPieceEtObjet = Integer.parseInt(GestionnaireConfiguration.obtenirInstance().obtenirString("controleurjeu.salles-initiales.regles.max-possession-objets-et-pieces"));
 	
 	/**
 	 * Constructeur de la classe Salle qui permet d'initialiser les membres 

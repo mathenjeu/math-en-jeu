@@ -17,7 +17,6 @@ import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
-import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.ControleurJeu;
 
 /**
@@ -878,9 +877,11 @@ public class InformationPartie
             return objPositionJoueurDesiree;
         }
         
+        // This method tells if a player can hold another coin or item
+        // The maximum is defined in the server config file.
         public boolean peutAvoirNouvelObjetOuPiece()
         {
-            return Integer.parseInt(GestionnaireConfiguration.obtenirInstance().obtenirString("controleurjeu.salles-initiales.regles.max-possession-objets-et-pieces")) > this.intArgent + this.lstObjetsUtilisablesRamasses.size();
+            return Salle.maxPossessionPieceEtObjet > this.intArgent + this.lstObjetsUtilisablesRamasses.size();
         }
         
         public GestionnaireBD obtenirGestionnaireBD()
