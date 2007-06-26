@@ -177,10 +177,6 @@
         <!-- Set this to 'true' for more console outputs (prints some communications between
         the server and the client), and when playing, any answer is good -->
         <debug>false</debug>
-        
-        <!-- Set this to 'true' to have a "win the game" element in the game.
-        If 'false', the traditionnal "player with most points wins" is in effect. -->
-        <winthegame>false</winthegame>
     </controleurjeu>
 
     <gestionnairecommunication>
