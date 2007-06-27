@@ -158,6 +158,14 @@
                     <priorite>4</priorite>
                     <nom>Telephone</nom>
                 </objet-utilisable>
+                <objet-utilisable>
+                    <priorite>5</priorite>
+                    <nom>PotionGros</nom>
+                </objet-utilisable>
+                <objet-utilisable>
+                    <priorite>6</priorite>
+                    <nom>PotionPetit</nom>
+                </objet-utilisable>
 
                 <chat>true</chat>
                 <ratio-trous>0.30f</ratio-trous>
