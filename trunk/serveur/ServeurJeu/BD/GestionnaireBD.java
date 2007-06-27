@@ -291,11 +291,11 @@ public class GestionnaireBD
 	{
             Vector liste = new Vector();
             String URLMusique = GestionnaireConfiguration.obtenirInstance().obtenirString("musique.url");
-            String strRequeteSQL = "SELECT musique_Fichiers.nomFichier FROM musique_Fichiers,musique_Fichiers_Categories,musique_Categories,musique_Preferences_Joueur WHERE ";
+            String strRequeteSQL = "SELECT musique_Fichiers.nomFichier FROM musique_Fichiers,musique_Fichiers_Categories,musique_Categories,musique_Categorie_Joueur WHERE ";
             strRequeteSQL       += "musique_Fichiers.cleFichier = musique_Fichiers_Categories.cleFichier AND ";
             strRequeteSQL       += "musique_Fichiers_Categories.cleCategorie = musique_Categories.cleCategorie AND ";
-            strRequeteSQL       += "musique_Categories.cleCategorie = musique_Preferences_Joueur.cleCategorie AND ";
-            strRequeteSQL       += "musique_Preferences_Joueur.cleJoueur = " + Integer.toString(joueur.obtenirCleJoueur());
+            strRequeteSQL       += "musique_Categories.cleCategorie = musique_Categorie_Joueur.cleCategorie AND ";
+            strRequeteSQL       += "musique_Categorie_Joueur.cleJoueur = " + Integer.toString(joueur.obtenirCleJoueur());
             try
             {
                     synchronized( requete )
