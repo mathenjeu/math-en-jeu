@@ -726,6 +726,17 @@ $lang['question_debut'] = "Début";
 $lang['question_suivant'] = "Suivant";
 $lang['question_precedent'] = "Précédent";
 
+$lang['musique_ambiance'] = "Ambiance";
+$lang['musique_blues'] = "Blues";
+$lang['musique_classique'] = "Classique";
+$lang['musique_rock'] = "Rock";
+$lang['musique_metal'] = "Métal";
+
+$lang['licence_site'] = "Site web";
+$lang['licence_artiste'] = "Artiste";
+$lang['licence_nom_piste'] = "Titre de la piste";
+$lang['licence_licence'] = "Licence";
+
 
 $lang['question_resultat_recherche'] = 'Résultat de la recherche';
 

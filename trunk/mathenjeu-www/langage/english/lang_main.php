@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /*******************************************************************************
 Fichier : lang_main.php
 Auteur : Maxime B�gin
@@ -735,6 +735,18 @@ $lang['question_fin'] = "End";
 $lang['question_debut'] = "Beginning";
 $lang['question_suivant'] = "Next";
 $lang['question_precedent'] = "Previous";
+
+
+$lang['musique_ambiance'] = "Ambiance";
+$lang['musique_blues'] = "Blues";
+$lang['musique_classique'] = "Classical";
+$lang['musique_rock'] = "Rock";
+$lang['musique_metal'] = "Metal";
+
+$lang['licence_site'] = "Website";
+$lang['licence_artiste'] = "Artist";
+$lang['licence_nom_piste'] = "Track title";
+$lang['licence_licence'] = "License";
 
 
 $lang['question_resultat_recherche'] = 'Search result';
