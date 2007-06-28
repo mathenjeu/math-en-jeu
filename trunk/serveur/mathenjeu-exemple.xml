@@ -107,6 +107,9 @@
                 <objet-a-vendre-Magasin1>
                     <nom>PotionGros</nom>
                 </objet-a-vendre-Magasin1>
+                <objet-a-vendre-Magasin1>
+                    <nom>Banane</nom>
+                </objet-a-vendre-Magasin1>
                 <objet-a-vendre-Magasin2>
                     <nom>Livre</nom>
                 </objet-a-vendre-Magasin2>
@@ -165,6 +168,10 @@
                 <objet-utilisable>
                     <priorite>6</priorite>
                     <nom>PotionPetit</nom>
+                </objet-utilisable>
+                <objet-utilisable>
+                    <priorite>7</priorite>
+                    <nom>Banane</nom>
                 </objet-utilisable>
 
                 <chat>true</chat>

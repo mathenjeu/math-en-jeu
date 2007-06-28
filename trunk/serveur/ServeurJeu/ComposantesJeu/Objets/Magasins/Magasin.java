@@ -190,6 +190,13 @@ public abstract class Magasin extends Objet
     				objObjetRemplacement = new PotionPetit(objProchainId.intValue, true);
     			}
                 }
+                else if (objObjetAchete instanceof Banane)
+                {
+    			synchronized (objProchainId)
+    			{
+    				objObjetRemplacement = new Banane(objProchainId.intValue, true);
+    			}
+                }
     		
             // L'ajouter au magasin
     		ajouterObjetUtilisable((ObjetUtilisable)objObjetRemplacement);

@@ -468,6 +468,11 @@ public final class GenerateurPartie
                                         PotionPetit objAAjouter = new PotionPetit(intCompteurIdObjet, true);
                                         objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
                                     }
+                                    else if(((String)lstNomsObjets.get(i-1)).equals("Banane"))
+                                    {
+                                        Banane objAAjouter = new Banane(intCompteurIdObjet, true);
+                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                                    }
                                 }
 				
 				// Incrémenter le nombre de cases passées
@@ -599,6 +604,10 @@ public final class GenerateurPartie
                                 else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("PotionPetit"))
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new PotionPetit(intCompteurIdObjet, bolEstVisible));					
+				}
+                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Banane"))
+				{
+					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Banane(intCompteurIdObjet, bolEstVisible));					
 				}
 				
 				// Incrémenter le nombre de cases passées

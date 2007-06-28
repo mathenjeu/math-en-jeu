@@ -1576,4 +1576,26 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// trouvé ce id de personnage, donc le id est libre
 		return true;		
 	}
+        
+	public JoueurHumain obtenirJoueurHumainParSonNom(String username)
+	{
+            Set nomsJoueursHumains = lstJoueurs.entrySet();
+            Iterator objIterateurListeJoueurs = nomsJoueursHumains.iterator();
+            while(objIterateurListeJoueurs.hasNext() == true)
+            {
+                JoueurHumain j = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
+                if(username.equals(j.obtenirNomUtilisateur())) return j;
+            }
+            return (JoueurHumain)null;
+	}
+        
+	public JoueurVirtuel obtenirJoueurVirtuelParSonNom(String username)
+	{
+            for(int i=0; i<lstJoueursVirtuels.size(); i++)
+            {
+                JoueurVirtuel j = (JoueurVirtuel)lstJoueursVirtuels.get(i);
+                if(username.equals(j.obtenirNom())) return j;
+            }
+            return (JoueurVirtuel)null;
+	}
 }

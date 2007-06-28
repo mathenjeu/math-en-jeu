@@ -42,7 +42,9 @@ import ServeurJeu.Temps.TacheSynchroniser;
 import ServeurJeu.Evenements.EvenementSynchroniserTemps;
  
 import ServeurJeu.ComposantesJeu.Cases.Case;
+import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.InformationPartie;
+import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.Evenements.EvenementPartieDemarree;
 import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.ComposantesJeu.Question;
@@ -51,7 +53,6 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import java.util.Calendar;
-
 
 /**
  * @author Jean-François Brind'Amour
@@ -3290,6 +3291,9 @@ public class ProtocoleJoueur implements Runnable
                     
                     // On retourne une confirmation et parfois d'autres infos
                     bolDoitRetournerCommande = true;
+                    
+                    // Enlever l'objet de la liste des objets du joueur
+                    objJoueurHumain.enleverObjet(intIdObjet, strTypeObjet);
 		
                     // Dépendamment du type de l'objet, on effectue le traitement approprié
                     if (strTypeObjet.equals("Livre"))
@@ -3298,9 +3302,6 @@ public class ProtocoleJoueur implements Runnable
                         // à choix de réponse. Le serveur renvoie alors une mauvaise réponse
                         // à la question, et le client fera disparaître ce choix de réponse
                         // parmi les choix possibles pour le joueur.
-
-                        // Enlever l'objet de la liste des objets du joueur
-                        objJoueurHumain.enleverObjet(intIdObjet, strTypeObjet);
 
                         // On obtient une mauvaise réponse à la dernière question posée
                         String mauvaiseReponse = objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirMauvaiseReponse();
@@ -3349,6 +3350,155 @@ public class ProtocoleJoueur implements Runnable
                     {
                        // La PotionPetit fait rapetisser le joueur
                         objNoeudCommande.setAttribute("type", "PotionPetit");
+                    }
+                    else if(strTypeObjet.equals("Banane"))
+                    {
+                        //La Banane éloigne du WinTheGame le joueur le plus près du WinTheGame
+                        //(sauf si c'est soi même, alors ça éloigne le 2ème)
+                        //NOTE: pour l'instant, on prend le pointage plutôt que la diatance au WTG
+                        
+                        // Entiers et Strings pour garder en mémoire la distance la plus courte au WTG et les joueurs associés
+                        int max1 = 0;
+                        int max2 = 0;
+                        String max1User = "";
+                        String max2User = "";
+                        boolean estHumain1 = false;
+                        boolean estHumain2 = false;
+                        
+                        // On obtient la liste des joueurs humains, puis la liste des joueurs virtuels
+                        TreeMap listeJoueursHumains = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs();
+                        Set nomsJoueursHumains = listeJoueursHumains.entrySet();
+                        Iterator objIterateurListeJoueurs = nomsJoueursHumains.iterator();
+                        Vector listeJoueursVirtuels = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();
+                        
+                        // On trouve les deux joueurs les plus susceptibles d'être affectés
+                        while(objIterateurListeJoueurs.hasNext() == true)
+                        {
+                            JoueurHumain j = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
+                            if(j.obtenirPartieCourante().obtenirPointage()>max1)
+                            {
+                                max2 = max1;
+                                max2User = max1User;
+                                estHumain2 = estHumain1;
+                                max1 = j.obtenirPartieCourante().obtenirPointage();
+                                max1User = j.obtenirNomUtilisateur();
+                                estHumain1 = true;
+                            }
+                            else if(j.obtenirPartieCourante().obtenirPointage()>max2)
+                            {
+                                max2 = j.obtenirPartieCourante().obtenirPointage();
+                                max2User = j.obtenirNomUtilisateur();
+                                estHumain2 = true;
+                            }
+                        }
+                        for(int i=0; i<listeJoueursVirtuels.size(); i++)
+                        {
+                            JoueurVirtuel j = (JoueurVirtuel)listeJoueursVirtuels.get(i);
+                            if(j.obtenirPointage()>max1)
+                            {
+                                max2 = max1;
+                                max2User = max1User;
+                                estHumain2 = estHumain1;
+                                max1 = j.obtenirPointage();
+                                max1User = j.obtenirNom();
+                                estHumain1 = false;
+                            }
+                            else if(j.obtenirPointage()>max2)
+                            {
+                                max2 = j.obtenirPointage();
+                                max2User = j.obtenirNom();
+                                estHumain2 = false;
+                            }
+                        }
+                        
+                        boolean estHumain; //Le joueur choisi est=il humain?
+                        Point positionJoueurChoisi;
+                        String nomJoueurChoisi;
+                        if(max1User.equals(objJoueurHumain.obtenirNomUtilisateur()))
+                        {
+                            // Celui qui utilise la banane est le 1er, alors on fait glisser le 2ème
+                            estHumain = estHumain2;
+                            nomJoueurChoisi = max2User;
+                            if(estHumain) positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(max2User).obtenirPartieCourante().obtenirPositionJoueur());
+                            else positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(max2User).obtenirPositionJoueur());
+                        }
+                        else
+                        {
+                            // Celui qui utilise la banane n'est pas le 1er, alors on fait glisser le 1er
+                            estHumain = estHumain1;
+                            nomJoueurChoisi = max1User;
+                            if(estHumain) positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(max1User).obtenirPartieCourante().obtenirPositionJoueur());
+                            else positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(max1User).obtenirPositionJoueur());
+                        }
+                        
+                        // On obtient la position du WinTheGame
+                        Point positionDuWinTheGame;
+                        positionDuWinTheGame = new Point(positionJoueurChoisi);
+                        
+                        // Distance (en cases) de l'éloignement souhaité du joueur
+                        int deCombienOnVeutEloigner = 15;
+                        
+                        // Distance optimale atteinte
+                        int distanceOptimale = 0;
+                        
+                        // Obtention du plateau de jeu
+                        Case[][] plateauDeJeu = obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirPlateauJeuCourant();
+                        
+                        // Point optimal
+                        Point pointOptimal = new Point(0,0);
+                        
+                        // On parcourt le plateau pour trouver la meilleure position où envoyer le joueur
+                        // La case doit exister et être vide
+                        for(int i=0; i<plateauDeJeu.length; i++)
+                        {
+                            for(int j=0; j<plateauDeJeu[i].length; j++)
+                            {
+                                // Est-ce que la case existe? Est-ce que c'est une case couleur?
+                                if(plateauDeJeu[i][j] != null && plateauDeJeu[i][j] instanceof CaseCouleur)
+                                {
+                                    CaseCouleur caseTemp = (CaseCouleur)plateauDeJeu[i][j];
+                                    // Est-ce qu'il n'y a rien dessus?
+                                    if(caseTemp.obtenirObjetArme() == null && caseTemp.obtenirObjetCase() == null)
+                                    {
+                                        // On regarde si c'est un meilleur point que l'optimal trouvé jusqu'à présent
+                                        int distanceActuelle = Math.abs(i-positionDuWinTheGame.x) + Math.abs(j-positionDuWinTheGame.y);
+                                        if(Math.abs(deCombienOnVeutEloigner - distanceActuelle) < Math.abs(deCombienOnVeutEloigner - distanceOptimale))
+                                        {
+                                            distanceOptimale = distanceActuelle;
+                                            pointOptimal.setLocation(i, j);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                        Element objNoeudParametreNouvellePositionX = objDocumentXMLSortie.createElement("parametre");
+                        Element objNoeudParametreNouvellePositionY = objDocumentXMLSortie.createElement("parametre");
+                        objNoeudParametreNouvellePositionX.setAttribute("type", "NouvellePositionX");
+                        objNoeudParametreNouvellePositionY.setAttribute("type", "NouvellePositionY");
+                        Text objNoeudTexteNouvellePositionX = objDocumentXMLSortie.createTextNode(Integer.toString(pointOptimal.x));
+                        Text objNoeudTexteNouvellePositionY = objDocumentXMLSortie.createTextNode(Integer.toString(pointOptimal.y));
+                        objNoeudParametreNouvellePositionX.appendChild(objNoeudTexteNouvellePositionX);
+                        objNoeudParametreNouvellePositionY.appendChild(objNoeudTexteNouvellePositionY);
+                        objNoeudCommande.appendChild(objNoeudParametreNouvellePositionX);
+                        objNoeudCommande.appendChild(objNoeudParametreNouvellePositionY);
+                        objNoeudCommande.setAttribute("type", "Banane");
+                      
+                        Element objNoeudParametreNomJoueurAffecte = objDocumentXMLSortie.createElement("parametre");
+                        objNoeudParametreNomJoueurAffecte.setAttribute("type", "NomJoueurAffecte");
+                        if(estHumain)
+                        {
+                            Text objNoeudTexteNomJoueurAffecte = objDocumentXMLSortie.createTextNode(nomJoueurChoisi);
+                            objNoeudParametreNomJoueurAffecte.appendChild(objNoeudTexteNomJoueurAffecte);
+                            obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().definirPositionJoueur(pointOptimal);
+                        }
+                        else
+                        {
+                            Text objNoeudTexteNomJoueurAffecte = objDocumentXMLSortie.createTextNode(nomJoueurChoisi);
+                            objNoeudParametreNomJoueurAffecte.appendChild(objNoeudTexteNomJoueurAffecte);
+                            obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(nomJoueurChoisi).definirPositionJoueurVirtuel(pointOptimal);
+                        }
+                        objNoeudCommande.appendChild(objNoeudParametreNomJoueurAffecte);
                     }
 		}
     }
