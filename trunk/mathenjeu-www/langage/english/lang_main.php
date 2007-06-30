@@ -332,7 +332,7 @@ $lang['inscription_l_alias'] = 'This username';
 $lang['inscription_est_disponible'] = 'is available.';
 $lang['inscription_alias_prof_info'] = 'If you know your teacher\'s username, write it here. If you don\'t, leave this blank.';
 $lang['inscription_alias_prof'] = 'Your teacher\'s username';
-
+$lang['inscription_equivalence'] = 'Academic equivalences';
 
 //etape 3
 $lang['inscription_quelques_questions'] = 'A few short questions&hellip;';

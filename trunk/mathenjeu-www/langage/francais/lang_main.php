@@ -324,6 +324,7 @@ $lang['inscription_l_alias'] = 'Le nom d\'utilisateur';
 $lang['inscription_est_disponible'] = 'est disponible.';
 $lang['inscription_alias_prof_info'] = 'Si tu connais le nom d\'utilisateur de ton enseignant, inscris-le ici. Sinon n\'inscris rien.';
 $lang['inscription_alias_prof'] = 'Nom d\'utilisateur de votre enseignant';
+$lang['inscription_equivalence'] = 'Équivalences scolaires';
 
 //etape 3
 $lang['inscription_quelques_questions'] = 'Quelques petites questions&hellip;';
