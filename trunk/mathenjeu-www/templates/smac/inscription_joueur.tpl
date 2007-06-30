@@ -121,6 +121,7 @@
         {html_options values=$niveauID output=$niveauTexte selected=$niveau}
         </select>
         <span class="asterix">*</span>
+        &nbsp;<a target="blank" href="http://isef.ntic.org/equivalence.html">{$lang.inscription_equivalence}</a>
         </td>
     </tr>
     {if $niveau ne 14}
