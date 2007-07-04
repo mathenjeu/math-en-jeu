@@ -3371,7 +3371,7 @@ public class ProtocoleJoueur implements Runnable
                         while(objIterateurListeJoueurs.hasNext() == true)
                         {
                             JoueurHumain j = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
-                            if(j.obtenirPartieCourante().obtenirPointage()>max1)
+                            if(j.obtenirPartieCourante().obtenirPointage()>=max1)
                             {
                                 max2 = max1;
                                 max2User = max1User;
@@ -3380,7 +3380,7 @@ public class ProtocoleJoueur implements Runnable
                                 max1User = j.obtenirNomUtilisateur();
                                 estHumain1 = true;
                             }
-                            else if(j.obtenirPartieCourante().obtenirPointage()>max2)
+                            else if(j.obtenirPartieCourante().obtenirPointage()>=max2)
                             {
                                 max2 = j.obtenirPartieCourante().obtenirPointage();
                                 max2User = j.obtenirNomUtilisateur();
@@ -3390,7 +3390,7 @@ public class ProtocoleJoueur implements Runnable
                         for(int i=0; i<listeJoueursVirtuels.size(); i++)
                         {
                             JoueurVirtuel j = (JoueurVirtuel)listeJoueursVirtuels.get(i);
-                            if(j.obtenirPointage()>max1)
+                            if(j.obtenirPointage()>=max1)
                             {
                                 max2 = max1;
                                 max2User = max1User;
@@ -3399,7 +3399,7 @@ public class ProtocoleJoueur implements Runnable
                                 max1User = j.obtenirNom();
                                 estHumain1 = false;
                             }
-                            else if(j.obtenirPointage()>max2)
+                            else if(j.obtenirPointage()>=max2)
                             {
                                 max2 = j.obtenirPointage();
                                 max2User = j.obtenirNom();
