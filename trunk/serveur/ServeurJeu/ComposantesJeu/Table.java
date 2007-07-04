@@ -31,6 +31,8 @@ import ServeurJeu.Evenements.EvenementPartieTerminee;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
 import ClassesUtilitaires.IntObj;
+import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
+import java.util.Random;
 
 /**
  * @author Jean-François Brind'Amour
@@ -94,6 +96,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	private GestionnaireTemps objGestionnaireTemps;
 	private TacheSynchroniser objTacheSynchroniser;
 	private Minuterie objMinuterie;
+        
+        // Position qui dit où se trouve le WinTheGame
+        private Point positionWinTheGame;
+        
+        // Defines what kind of game the players want to play (see config for details)
+        private String gameType;
 	
     // Cet objet est une liste des joueurs virtuels qui jouent sur cette table
     private Vector lstJoueursVirtuels;
@@ -130,9 +138,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				 int tempsPartie, Regles reglesTable,
 				 GestionnaireTemps gestionnaireTemps, 
 				 TacheSynchroniser tacheSynchroniser,
-				 ControleurJeu controleurJeu) 
+				 ControleurJeu controleurJeu, String type) 
 	{
 		super();
+                
+                positionWinTheGame = new Point(-1, -1);
+                gameType = type;
+                
 		
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		_MAX_NB_JOUEURS = config.obtenirNombreEntier( "table.max-nb-joueurs" );
@@ -476,36 +488,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    }
 		return strResultatDemarrerPartie;
 	}
-	
-	/* pour test joueur virtuel (TestJoueurVirtuel.java)*/
-	public Vector genererPlateauJeu()
-	{
-        // Créer une nouvelle liste qui va garder les points des 
-        // cases libres (n'ayant pas d'objets dessus)
-        Vector lstPointsCaseLibre = new Vector();
-        
-        // Contiendra le dernier ID des objets
-        objProchainIdObjet = new IntObj();
-        
-        // Générer le plateau de jeu selon les règles de la table et 
-        // garder le plateau en mémoire dans la table
-        objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet);
-        
-        // Définir le prochain id pour les objets
-        objProchainIdObjet.intValue++;
-        
-        return lstPointsCaseLibre;
-	}
-	
-	/* pour test joueur virtuel (TestJoueurVirtuel.java) */
-	public void demarrerMinuterie()
-	{
-        int tempsStep = 1;
-        objTacheSynchroniser.ajouterObservateur( this );
-        objMinuterie = new Minuterie( intTempsTotal * 60, tempsStep );
-        objMinuterie.ajouterObservateur( this );
-        objGestionnaireTemps.ajouterTache( objMinuterie, tempsStep );
-	}
 		
     /* Cette fonction permet d'obtenir un tableau contenant intNombreJoueurs
      * noms de joueurs virtuels différents
@@ -595,10 +577,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Générer le plateau de jeu selon les règles de la table et 
 		// garder le plateau en mémoire dans la table
-		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet);
+		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, gameType);
+                
+                // On trouve une position initiale au WinTheGame
+                definirNouvellePositionWinTheGame();
 
-        // Définir le prochain id pour les objets
-        objProchainIdObjet.intValue++;
+                // Définir le prochain id pour les objets
+                objProchainIdObjet.intValue++;
         
 		// Obtenir la position des joueurs de cette table
 		int nbJoueur = lstJoueursEnAttente.size(); //TODO a vérifier
@@ -1224,7 +1209,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs de la table qu'un joueur a démarré une partie
-	    EvenementPartieDemarree partieDemarree = new EvenementPartieDemarree(intTempsTotal, listePositionJoueurs, objttPlateauJeu);
+	    EvenementPartieDemarree partieDemarree = new EvenementPartieDemarree(intTempsTotal, listePositionJoueurs, objttPlateauJeu, positionWinTheGame);
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
@@ -1598,4 +1583,48 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             }
             return (JoueurVirtuel)null;
 	}
+        
+        // Cette méthode permettra de dire si un joueur a gagné la partie en
+        // ayant accumulé assez de points et en ayant rejoint le WinTheGame
+        public boolean aRejointLeWinTheGame(int pointageDuJoueur, Point positionDuJoueur)
+        {
+            return (pointageDuJoueur >= 0) && (positionDuJoueur.equals(positionWinTheGame));
+        }
+        
+        public Point obtenirPositionWinTheGame()
+        {
+            return positionWinTheGame;
+        }
+        
+        public String obtenirGameType()
+        {
+            return gameType;
+        }
+        
+        public void definirNouvellePositionWinTheGame()
+        {
+            //FRANCOIS quand on deplace le winthegame, verifier si qqun est deja dessus et gagne
+            Random objRandom = new Random();
+            if(gameType.equals("winTheGameWithScore") || gameType.equals("winTheGameWithoutScore"))
+            {
+                boolean pasTrouve = true;
+                for(int i=objRandom.nextInt(objttPlateauJeu.length); pasTrouve; i = objRandom.nextInt(objttPlateauJeu.length))
+                {
+                    for(int j=objRandom.nextInt(objttPlateauJeu[i].length); pasTrouve; j = objRandom.nextInt(objttPlateauJeu[i].length))
+                    {
+                        // Est-ce que la case existe? Est-ce que c'est une case couleur?
+                        if(objttPlateauJeu[i][j] != null && objttPlateauJeu[i][j] instanceof CaseCouleur)
+                        {
+                            CaseCouleur caseTemp = (CaseCouleur)objttPlateauJeu[i][j];
+                            // Est-ce qu'il n'y a rien dessus?
+                            if(caseTemp.obtenirObjetArme() == null && caseTemp.obtenirObjetCase() == null)
+                            {
+                                pasTrouve = false;
+                                positionWinTheGame.move(i, j);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 }

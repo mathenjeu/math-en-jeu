@@ -290,11 +290,8 @@ public class Salle
 	    synchronized (lstTables)
 	    {
 	    	// Créer une nouvelle table en passant les paramètres appropriés
-	    	Table objTable = new Table( objGestionnaireBD, this, 
-	    								genererNoTable(), joueur.obtenirNomUtilisateur(), 
-										tempsPartie, objRegles,
-										gestionnaireTemps, tacheSynchroniser,
-										objControleurJeu);
+                    //FRANCOIS: obtenir le gametype du client
+	    	Table objTable = new Table( objGestionnaireBD, this, genererNoTable(), joueur.obtenirNomUtilisateur(), tempsPartie, objRegles, gestionnaireTemps, tacheSynchroniser, objControleurJeu, "winTheGameWithScore");
 	    	objTable.creation();
 	    	// Ajouter la table dans la liste des tables
 	    	lstTables.put(new Integer(objTable.obtenirNoTable()), objTable);

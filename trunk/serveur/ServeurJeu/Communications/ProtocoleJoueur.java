@@ -493,7 +493,14 @@ public class ProtocoleJoueur implements Runnable
     							// Il n'y a pas eu d'erreurs
     							objNoeudCommande.setAttribute("type", "Reponse");
     							objNoeudCommande.setAttribute("nom", "Ok");
-                                                     
+                                                        Vector liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
+                                                        for(int i=0; i<liste.size(); i++)
+                                                        {
+                                                            Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("musique");
+                                                            Text objNoeudTexteMusique = objDocumentXMLSortie.createTextNode((String)liste.get(i));
+                                                            objNoeudParametreMusique.appendChild(objNoeudTexteMusique);
+                                                            objNoeudCommande.appendChild(objNoeudParametreMusique);   
+                                                        }
 							}
 						}
 						else if (strResultatAuthentification.equals(ResultatAuthentification.JoueurDejaConnecte))
@@ -1348,17 +1355,6 @@ public class ProtocoleJoueur implements Runnable
 								// Il n'y a pas eu d'erreurs
 								objNoeudCommande.setAttribute("type", "Reponse");
 								objNoeudCommande.setAttribute("nom", "DemarrerMaintenant");
-                                                                
-                                                                InformationPartie objPartie = objJoueurHumain.obtenirPartieCourante();
-                                                                GestionnaireBD objGestionnaireBD = objPartie.obtenirGestionnaireBD();
-                                                                Vector liste = objGestionnaireBD.obtenirListeURLsMusique(objJoueurHumain);
-                                                                for(int i=0; i<liste.size(); i++)
-                                                                {
-                                                                    Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("musique");
-                                                                    Text objNoeudTexteMusique = objDocumentXMLSortie.createTextNode((String)liste.get(i));
-                                                                    objNoeudParametreMusique.appendChild(objNoeudTexteMusique);
-                                                                    objNoeudCommande.appendChild(objNoeudParametreMusique);   
-                                                                }
 							}
 							else if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.PartieEnCours))
 							{
@@ -2748,7 +2744,7 @@ public class ProtocoleJoueur implements Runnable
         // Créer l'événement contenant toutes les informations sur le plateau et
         // la partie
         EvenementPartieDemarree objEvenementPartieDemarree = new EvenementPartieDemarree(
-            objTable.obtenirTempsTotal(), lstPositionsJoueurs, objttPlateauJeu);
+            objTable.obtenirTempsTotal(), lstPositionsJoueurs, objttPlateauJeu, ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirPositionWinTheGame());
 
         // Créer l'objet information destination pour envoyer l'information à ce joueur
         InformationDestination objInformationDestination = new InformationDestination(obtenirNumeroCommande(), this);

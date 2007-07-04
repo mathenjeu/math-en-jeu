@@ -287,7 +287,7 @@ public class GestionnaireBD
         
         // This function queries the DB to find the player's musical preferences
         // and returns a Vector containing URLs of MP3s the player might like
-        public Vector obtenirListeURLsMusique(JoueurHumain joueur)
+        public Vector obtenirListeURLsMusique(int cleJoueur)
 	{
             Vector liste = new Vector();
             String URLMusique = GestionnaireConfiguration.obtenirInstance().obtenirString("musique.url");
@@ -295,7 +295,7 @@ public class GestionnaireBD
             strRequeteSQL       += "musique_Fichiers.cleFichier = musique_Fichiers_Categories.cleFichier AND ";
             strRequeteSQL       += "musique_Fichiers_Categories.cleCategorie = musique_Categories.cleCategorie AND ";
             strRequeteSQL       += "musique_Categories.cleCategorie = musique_Categorie_Joueur.cleCategorie AND ";
-            strRequeteSQL       += "musique_Categorie_Joueur.cleJoueur = " + Integer.toString(joueur.obtenirCleJoueur());
+            strRequeteSQL       += "musique_Categorie_Joueur.cleJoueur = " + Integer.toString(cleJoueur);
             try
             {
                     synchronized( requete )
