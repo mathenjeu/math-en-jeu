@@ -32,6 +32,7 @@ import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
 import ClassesUtilitaires.IntObj;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
+import ServeurJeu.Evenements.EvenementDeplacementWinTheGame;
 import java.util.Random;
 
 /**
@@ -1306,7 +1307,36 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
 		objGestionnaireEvenements.ajouterEvenement(majArgent);
 	}
-        
+
+	public void preparerEvenementDeplacementWinTheGame()
+	{
+                definirNouvellePositionWinTheGame();
+            //FRANCOIS, on doit appeler cette fonction quelque part...
+                //FRANCOIS on doit s'arranger pour que les AI veulent atteindre le WTG s'il le faut
+		EvenementDeplacementWinTheGame deplacementWTG = new EvenementDeplacementWinTheGame(positionWinTheGame.x, positionWinTheGame.y);
+		
+		// Créer un ensemble contenant tous les tuples de la liste des joueurs
+		// de la table
+		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		
+		// Obtenir un itérateur pour l'ensemble contenant les joueurs
+		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		
+		// Passser tous les joueurs de la table et leur envoyer l'événement
+		while (objIterateurListe.hasNext() == true)
+		{
+			// Créer une référence vers le joueur humain courant dans la liste
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			
+			// Obtenir un numéro de commande pour le joueur courant, créer
+			// un InformationDestination et l'ajouter à l'événement
+			deplacementWTG.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(), objJoueur.obtenirProtocoleJoueur()));
+		}
+		
+		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
+		objGestionnaireEvenements.ajouterEvenement(deplacementWTG);
+	}
+
 	public void preparerEvenementJoueurDeplacePersonnage( String nomUtilisateur, String collision, 
 	    Point anciennePosition, Point positionJoueur, int nouveauPointage, int nouvelArgent)
 	{
