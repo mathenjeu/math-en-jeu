@@ -212,7 +212,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 	}
 	
-	public void destruction() throws InterruptedException
+	public void destruction()
 	{
 		arreterPartie();
                 
