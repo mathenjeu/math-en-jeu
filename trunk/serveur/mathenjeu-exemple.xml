@@ -186,6 +186,7 @@
                 <temps-maximal>60</temps-maximal>
                 <deplacement-maximal>6</deplacement-maximal>
                 <max-possession-objets-et-pieces>10</max-possession-objets-et-pieces>
+                <intervalle-deplacement-winthegame>30</intervalle-deplacement-winthegame>
             </regles>
         </salles-initiales>
         

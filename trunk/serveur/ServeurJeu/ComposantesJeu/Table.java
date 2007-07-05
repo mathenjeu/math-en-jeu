@@ -580,8 +580,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// garder le plateau en mémoire dans la table
 		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, gameType);
                 
+                // FRANCOISEst-ce qu'on part le thread du WTG même si c'est pas un gametype approprié?
                 // On trouve une position initiale au WinTheGame
                 definirNouvellePositionWinTheGame();
+                WinTheGame winTheGame = new WinTheGame(this);
+                winTheGame.demarrer();
 
                 // Définir le prochain id pour les objets
                 objProchainIdObjet.intValue++;
