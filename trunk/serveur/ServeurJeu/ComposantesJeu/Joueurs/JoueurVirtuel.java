@@ -24,8 +24,6 @@ import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
 import ServeurJeu.Configuration.GestionnaireMessages;
-
-//import ServeurJeu.ComposantesJeu.Joueurs.TestJoueurVirtuel;
  
 /**
  * @author Jean-François Fournier
@@ -805,7 +803,6 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	            objPositionTrouvee.y);           
 	        System.out.println("Position a atteindre: " + objPositionFinaleVisee.x + "," + 
 	            objPositionFinaleVisee.y);
-//	        TestJoueurVirtuel.outputPlateau(objttPlateauJeu);
         }
         //--------------------------------
         

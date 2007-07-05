@@ -203,9 +203,6 @@ public class ControleurJeu
         // des joueurs virtuels
         objParametreIA = new ParametreIA();
 
-        // Démarrer la classe de test pour les joueurs virtuels
-        //TestJoueurVirtuel objTestJoueurVirtuel = new TestJoueurVirtuel(this);
-
 		//Demarrer une tache de monitoring
 		TacheLogMoniteur objTacheLogMoniteur = new TacheLogMoniteur();
 		int intStepMonitor = config.obtenirNombreEntier( "controleurjeu.monitoring.step" );
