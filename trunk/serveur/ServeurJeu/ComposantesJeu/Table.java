@@ -1650,7 +1650,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             //FRANCOIS À FINIR!!!!!!!!!!!!!!!!!
             Random objRandom = new Random();
             boolean pasTrouve = true;
-            int grandeurDeplacement = 3;
+            /*int grandeurDeplacement = 3;
             
             // On commence par regarder si les cases pas trop loin sont OK
             for(int i=objRandom.nextInt(objttPlateauJeu.length); pasTrouve; i = objRandom.nextInt(objttPlateauJeu.length))
@@ -1669,7 +1669,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                         }
                     }
                 }
-            }
+            }*/
             
             // Sinon, on prend une case quelconque
             for(int i=objRandom.nextInt(objttPlateauJeu.length); pasTrouve; i = objRandom.nextInt(objttPlateauJeu.length))
