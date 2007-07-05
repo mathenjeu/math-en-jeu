@@ -238,16 +238,17 @@ public class EvenementPartieDemarree extends Evenement
                                 //FRANCOIS est-ce qu'on envoie le gameType? (je pense que ce serait mieux de le faire
                                 // quand le joueur obtient la liste des tables et se connecte à une
                                 
-                                // FRANCOIS Envoie-t-on la position même si c'est pas un gametype WTG?
-                                
-                                // Créer le noeud contenant la position initiale du WinTheGame
-                                Element objNoeudParametrePositionWinTheGame = objDocumentXML.createElement("parametre");
-                                        objNoeudParametrePositionWinTheGame.setAttribute("type", "positionWinTheGame");
-                                objNoeudParametrePositionWinTheGame.setAttribute("x", Integer.toString(positionWinTheGame.x));
-                                objNoeudParametrePositionWinTheGame.setAttribute("y", Integer.toString(positionWinTheGame.y));
+                                // Créer le noeud contenant la position initiale du WinTheGame s'il a été initialisé
+                                if(positionWinTheGame.x != -1 && positionWinTheGame.y != -1)
+                                {
+                                    Element objNoeudParametrePositionWinTheGame = objDocumentXML.createElement("parametre");
+                                    objNoeudParametrePositionWinTheGame.setAttribute("type", "positionWinTheGame");
+                                    objNoeudParametrePositionWinTheGame.setAttribute("x", Integer.toString(positionWinTheGame.x));
+                                    objNoeudParametrePositionWinTheGame.setAttribute("y", Integer.toString(positionWinTheGame.y));
+                                    objNoeudCommande.appendChild(objNoeudParametrePositionWinTheGame);
+                                }
                                 
 				// Ajouter le noeud paramètre au noeud de commande
-                                objNoeudCommande.appendChild(objNoeudParametrePositionWinTheGame);
 				objNoeudCommande.appendChild(objNoeudParametreTempsPartie);
 				objNoeudCommande.appendChild(objNoeudParametreTaillePlateauJeu);
 				objNoeudCommande.appendChild(objNoeudParametrePositionJoueurs);

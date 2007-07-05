@@ -1647,47 +1647,79 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         public void definirNouvellePositionWinTheGame()
         {
             //FRANCOIS quand on deplace le winthegame, verifier si qqun est deja dessus et gagne
-            //FRANCOIS À FINIR!!!!!!!!!!!!!!!!!
+            //FRANCOIS vérifier pkoi la premiere partie marche pas souvent et si y'a dequoi à faire pour CRIOSS
             Random objRandom = new Random();
             boolean pasTrouve = true;
-            /*int grandeurDeplacement = 3;
+            int grandeurDeplacement = 2;
+            int nbEssaisI = 0;
+            int nbEssaisJ = 0;
+            int maxEssais = 100;
             
-            // On commence par regarder si les cases pas trop loin sont OK
-            for(int i=objRandom.nextInt(objttPlateauJeu.length); pasTrouve; i = objRandom.nextInt(objttPlateauJeu.length))
+            // On commence par regarder si les cases pas trop loin sont OK si on n'est pas en -1 -1
+            if(positionWinTheGame.x != -1 && positionWinTheGame.y != -1)
             {
-                for(int j=objRandom.nextInt(objttPlateauJeu[i].length); pasTrouve; j = objRandom.nextInt(objttPlateauJeu[i].length))
+                for(int i=positionWinTheGame.x-(objRandom.nextInt(grandeurDeplacement+1)-grandeurDeplacement/2); pasTrouve && nbEssaisI<maxEssais; i = positionWinTheGame.x-(objRandom.nextInt(grandeurDeplacement+1)-grandeurDeplacement/2))
                 {
-                    // Est-ce que la case existe? Est-ce que c'est une case couleur?
-                    if(objttPlateauJeu[i][j] != null && objttPlateauJeu[i][j] instanceof CaseCouleur)
+                    nbEssaisJ = 0;
+                    objRandom.setSeed(System.currentTimeMillis());
+                    if(i>=0 && i<objttPlateauJeu.length) for(int j=positionWinTheGame.y-(objRandom.nextInt(grandeurDeplacement+1)-grandeurDeplacement/2); pasTrouve && i >= 0 && nbEssaisJ < maxEssais; j = positionWinTheGame.y-(objRandom.nextInt(grandeurDeplacement+1)-grandeurDeplacement/2))
                     {
-                        CaseCouleur caseTemp = (CaseCouleur)objttPlateauJeu[i][j];
-                        // Est-ce qu'il n'y a rien dessus?
-                        if(caseTemp.obtenirObjetArme() == null && caseTemp.obtenirObjetCase() == null)
+                        objRandom.setSeed(System.currentTimeMillis());
+                        // Est-ce que la case existe? Est-ce que c'est une case couleur?
+                        if(j>=0 && j<objttPlateauJeu[i].length) if(j >= 0 && objttPlateauJeu[i][j] != null && objttPlateauJeu[i][j] instanceof CaseCouleur)
                         {
-                            pasTrouve = false;
-                            positionWinTheGame.move(i, j);
+                            CaseCouleur caseTemp = (CaseCouleur)objttPlateauJeu[i][j];
+                            // Est-ce qu'il n'y a rien dessus?
+                            if(caseTemp.obtenirObjetArme() == null && caseTemp.obtenirObjetCase() == null)
+                            {
+                                // Est-ce que c'est la même case? Est-ce dans les limites?
+                                if(i != positionWinTheGame.x && j != positionWinTheGame.y && i >= 0 && j >= 0 && i < objttPlateauJeu.length && j < objttPlateauJeu[i].length)
+                                {
+                                    // Tout est OK, on déplace le WinTheGame
+                                    pasTrouve = false;
+                                    positionWinTheGame.move(i, j);   
+                                }
+                            }
                         }
+                        nbEssaisJ++;
                     }
-                }
-            }*/
-            
-            // Sinon, on prend une case quelconque
-            for(int i=objRandom.nextInt(objttPlateauJeu.length); pasTrouve; i = objRandom.nextInt(objttPlateauJeu.length))
-            {
-                for(int j=objRandom.nextInt(objttPlateauJeu[i].length); pasTrouve; j = objRandom.nextInt(objttPlateauJeu[i].length))
-                {
-                    // Est-ce que la case existe? Est-ce que c'est une case couleur?
-                    if(objttPlateauJeu[i][j] != null && objttPlateauJeu[i][j] instanceof CaseCouleur)
-                    {
-                        CaseCouleur caseTemp = (CaseCouleur)objttPlateauJeu[i][j];
-                        // Est-ce qu'il n'y a rien dessus?
-                        if(caseTemp.obtenirObjetArme() == null && caseTemp.obtenirObjetCase() == null)
-                        {
-                            pasTrouve = false;
-                            positionWinTheGame.move(i, j);
-                        }
-                    }
+                    nbEssaisI++;
                 }
             }
+            
+            // Sinon, on prend une case quelconque
+            if(pasTrouve)
+            {
+                System.out.println("On a dû prendre une case au hasard!!");
+                nbEssaisI = 0;
+                for(int i=objRandom.nextInt(objttPlateauJeu.length); pasTrouve && nbEssaisI < maxEssais; i = objRandom.nextInt(objttPlateauJeu.length))
+                {
+                    nbEssaisJ = 0;
+                    objRandom.setSeed(System.currentTimeMillis());
+                    for(int j=objRandom.nextInt(objttPlateauJeu[i].length); pasTrouve && nbEssaisJ<maxEssais; j = objRandom.nextInt(objttPlateauJeu[i].length))
+                    {
+                        // Est-ce que la case existe? Est-ce que c'est une case couleur?
+                        if(objttPlateauJeu[i][j] != null && objttPlateauJeu[i][j] instanceof CaseCouleur)
+                        {
+                            CaseCouleur caseTemp = (CaseCouleur)objttPlateauJeu[i][j];
+                            // Est-ce qu'il n'y a rien dessus?
+                            if(caseTemp.obtenirObjetArme() == null && caseTemp.obtenirObjetCase() == null)
+                            {
+                                // Est-ce que c'est la même case? Est-ce dans les limites?
+                                if(i != positionWinTheGame.x && j != positionWinTheGame.y && i >= 0 && j >= 0 && i < objttPlateauJeu.length && j < objttPlateauJeu[i].length)
+                                {
+                                    // Tout est OK, on déplace le WinTheGame
+                                    pasTrouve = false;
+                                    positionWinTheGame.move(i, j);   
+                                }
+                            }
+                        }
+                        nbEssaisJ++;
+                    }
+                    nbEssaisI++;
+                }
+                if(nbEssaisI == maxEssais) System.out.println("CRIOSS");
+            }
+            System.out.println("Nouvelle position: x=" + Integer.toString(positionWinTheGame.x) + ", y=" + Integer.toString(positionWinTheGame.y));
         }
 }

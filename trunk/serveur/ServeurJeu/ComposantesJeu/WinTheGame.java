@@ -19,7 +19,6 @@ public class WinTheGame
             {
                 while(true)
                 {
-                    System.out.println("hey hey hey");
                     Thread.sleep(1000*intervalle);
                     table.preparerEvenementDeplacementWinTheGame();
                 }
