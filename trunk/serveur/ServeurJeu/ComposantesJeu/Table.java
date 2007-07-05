@@ -43,6 +43,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	// Déclaration d'une référence vers le gestionnaire d'événements
 	private GestionnaireEvenements objGestionnaireEvenements;
 	
+        // On déclare la classe qui permettra les déplacements du WinTheGame
+        WinTheGame winTheGame = new WinTheGame(this);
+        
 	// Déclaration d'une référence vers le contrôleur de jeu
 	private ControleurJeu objControleurJeu;
 	
@@ -209,9 +212,15 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 	}
 	
-	public void destruction()
+	public void destruction() throws InterruptedException
 	{
 		arreterPartie();
+                
+                // On doit aussi arrêter le thread du WinTheGame si nécessaire
+                if(winTheGame.thread.isAlive())
+                {
+                    winTheGame.arreter();
+                }
 	}
 	
 	/**
@@ -557,11 +566,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// représentant la position du joueur
 		TreeMap lstPositionsJoueurs = new TreeMap();
         
-        // Contient les noms des joueurs virtuels
-        String tNomsJoueursVirtuels[] = null;
-        
-        // Contiendra le dernier ID des objets
-        objProchainIdObjet = new IntObj();
+                // Contient les noms des joueurs virtuels
+                String tNomsJoueursVirtuels[] = null;
+
+                // Contiendra le dernier ID des objets
+                objProchainIdObjet = new IntObj();
         
 		//TODO: Peut-être devoir synchroniser cette partie, il 
 		//      faut voir avec les autres bouts de code qui 
@@ -580,11 +589,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// garder le plateau en mémoire dans la table
 		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, gameType);
                 
-                // FRANCOISEst-ce qu'on part le thread du WTG même si c'est pas un gametype approprié?
-                // On trouve une position initiale au WinTheGame
-                definirNouvellePositionWinTheGame();
-                WinTheGame winTheGame = new WinTheGame(this);
-                winTheGame.demarrer();
+                // On trouve une position initiale au WinTheGame et on part son thread si nécessaire
+                if(gameType.equals("winTheGameWithScore") || gameType.equals("winTheGameWithoutScore"))
+                {
+                    definirNouvellePositionWinTheGame();
+                    winTheGame.demarrer();
+                }
 
                 // Définir le prochain id pour les objets
                 objProchainIdObjet.intValue++;
@@ -1314,7 +1324,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	public void preparerEvenementDeplacementWinTheGame()
 	{
                 definirNouvellePositionWinTheGame();
-            //FRANCOIS, on doit appeler cette fonction quelque part...
+                
                 //FRANCOIS on doit s'arranger pour que les AI veulent atteindre le WTG s'il le faut
 		EvenementDeplacementWinTheGame deplacementWTG = new EvenementDeplacementWinTheGame(positionWinTheGame.x, positionWinTheGame.y);
 		
