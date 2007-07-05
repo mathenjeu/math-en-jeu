@@ -1647,24 +1647,44 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         public void definirNouvellePositionWinTheGame()
         {
             //FRANCOIS quand on deplace le winthegame, verifier si qqun est deja dessus et gagne
+            //FRANCOIS À FINIR!!!!!!!!!!!!!!!!!
             Random objRandom = new Random();
-            if(gameType.equals("winTheGameWithScore") || gameType.equals("winTheGameWithoutScore"))
+            boolean pasTrouve = true;
+            int grandeurDeplacement = 3;
+            
+            // On commence par regarder si les cases pas trop loin sont OK
+            for(int i=objRandom.nextInt(objttPlateauJeu.length); pasTrouve; i = objRandom.nextInt(objttPlateauJeu.length))
             {
-                boolean pasTrouve = true;
-                for(int i=objRandom.nextInt(objttPlateauJeu.length); pasTrouve; i = objRandom.nextInt(objttPlateauJeu.length))
+                for(int j=objRandom.nextInt(objttPlateauJeu[i].length); pasTrouve; j = objRandom.nextInt(objttPlateauJeu[i].length))
                 {
-                    for(int j=objRandom.nextInt(objttPlateauJeu[i].length); pasTrouve; j = objRandom.nextInt(objttPlateauJeu[i].length))
+                    // Est-ce que la case existe? Est-ce que c'est une case couleur?
+                    if(objttPlateauJeu[i][j] != null && objttPlateauJeu[i][j] instanceof CaseCouleur)
                     {
-                        // Est-ce que la case existe? Est-ce que c'est une case couleur?
-                        if(objttPlateauJeu[i][j] != null && objttPlateauJeu[i][j] instanceof CaseCouleur)
+                        CaseCouleur caseTemp = (CaseCouleur)objttPlateauJeu[i][j];
+                        // Est-ce qu'il n'y a rien dessus?
+                        if(caseTemp.obtenirObjetArme() == null && caseTemp.obtenirObjetCase() == null)
                         {
-                            CaseCouleur caseTemp = (CaseCouleur)objttPlateauJeu[i][j];
-                            // Est-ce qu'il n'y a rien dessus?
-                            if(caseTemp.obtenirObjetArme() == null && caseTemp.obtenirObjetCase() == null)
-                            {
-                                pasTrouve = false;
-                                positionWinTheGame.move(i, j);
-                            }
+                            pasTrouve = false;
+                            positionWinTheGame.move(i, j);
+                        }
+                    }
+                }
+            }
+            
+            // Sinon, on prend une case quelconque
+            for(int i=objRandom.nextInt(objttPlateauJeu.length); pasTrouve; i = objRandom.nextInt(objttPlateauJeu.length))
+            {
+                for(int j=objRandom.nextInt(objttPlateauJeu[i].length); pasTrouve; j = objRandom.nextInt(objttPlateauJeu[i].length))
+                {
+                    // Est-ce que la case existe? Est-ce que c'est une case couleur?
+                    if(objttPlateauJeu[i][j] != null && objttPlateauJeu[i][j] instanceof CaseCouleur)
+                    {
+                        CaseCouleur caseTemp = (CaseCouleur)objttPlateauJeu[i][j];
+                        // Est-ce qu'il n'y a rien dessus?
+                        if(caseTemp.obtenirObjetArme() == null && caseTemp.obtenirObjetCase() == null)
+                        {
+                            pasTrouve = false;
+                            positionWinTheGame.move(i, j);
                         }
                     }
                 }
