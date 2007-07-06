@@ -3431,7 +3431,7 @@ public class ProtocoleJoueur implements Runnable
                         positionDuWinTheGame = new Point(positionJoueurChoisi);
                         
                         // Distance (en cases) de l'éloignement souhaité du joueur
-                        int deCombienOnVeutEloigner = 2;
+                        int deCombienOnVeutEloigner = 12;
                         
                         // Obtention du plateau de jeu
                         Case[][] plateauDeJeu = obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirPlateauJeuCourant();
