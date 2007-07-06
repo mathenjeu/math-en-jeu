@@ -3474,7 +3474,7 @@ public class ProtocoleJoueur implements Runnable
                                 }
                             }
                         }
-                        
+/*                        
                         Element objNoeudParametreNouvellePositionX = objDocumentXMLSortie.createElement("parametre");
                         Element objNoeudParametreNouvellePositionY = objDocumentXMLSortie.createElement("parametre");
                         objNoeudParametreNouvellePositionX.setAttribute("type", "NouvellePositionX");
@@ -3502,6 +3502,20 @@ public class ProtocoleJoueur implements Runnable
                             obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(nomJoueurChoisi).definirPositionJoueurVirtuel(pointOptimal);
                         }
                         objNoeudCommande.appendChild(objNoeudParametreNomJoueurAffecte);
+ */
+                        int nouveauPointage;
+                        int nouvelArgent;
+                        if(estHumain)
+                        {
+                            nouveauPointage = obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().obtenirPointage();
+                            nouvelArgent = obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().obtenirArgent();
+                        }
+                        else
+                        {
+                            nouveauPointage = obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(nomJoueurChoisi).obtenirPointage();
+                            nouvelArgent = obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(nomJoueurChoisi).obtenirArgent();
+                        }
+                        objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementJoueurDeplacePersonnage(nomJoueurChoisi, "", positionJoueurChoisi, pointOptimal, nouveauPointage, nouvelArgent, "Banane");
                     }
 		}
     }

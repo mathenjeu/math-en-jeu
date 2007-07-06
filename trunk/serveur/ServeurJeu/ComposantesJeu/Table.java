@@ -1351,7 +1351,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	}
 
 	public void preparerEvenementJoueurDeplacePersonnage( String nomUtilisateur, String collision, 
-	    Point anciennePosition, Point positionJoueur, int nouveauPointage, int nouvelArgent)
+	    Point anciennePosition, Point positionJoueur, int nouveauPointage, int nouvelArgent, String objetUtilise)
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs qu'un joueur démarré une partie
@@ -1375,7 +1375,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			// Si le nom d'utilisateur du joueur courant n'est pas celui
 			// qui vient de démarrer la partie, alors on peut envoyer un 
 			// événement à cet utilisateur
-			if (objJoueur.obtenirNomUtilisateur().equals(nomUtilisateur) == false)
+			if (objJoueur.obtenirNomUtilisateur().equals(nomUtilisateur) == false || objetUtilise.equals("Banane"))
 			{
 			    // Obtenir un numéro de commande pour le joueur courant, créer 
 			    // un InformationDestination et l'ajouter à l'événement
@@ -1647,7 +1647,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         public void definirNouvellePositionWinTheGame()
         {
             //FRANCOIS quand on deplace le winthegame, verifier si qqun est deja dessus et gagne
-            //FRANCOIS vérifier pkoi la premiere partie marche pas souvent et si y'a dequoi à faire pour CRIOSS
+            //FRANCOIS vérifier pkoi la premiere partie marche pas souvent
             Random objRandom = new Random();
             boolean pasTrouve = true;
             int grandeurDeplacement = 2;
@@ -1660,10 +1660,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             {
                 for(int i=positionWinTheGame.x-(objRandom.nextInt(grandeurDeplacement+1)-grandeurDeplacement/2); pasTrouve && nbEssaisI<maxEssais; i = positionWinTheGame.x-(objRandom.nextInt(grandeurDeplacement+1)-grandeurDeplacement/2))
                 {
+                    //System.out.println("i: " + Integer.toString(i));
                     nbEssaisJ = 0;
                     objRandom.setSeed(System.currentTimeMillis());
                     if(i>=0 && i<objttPlateauJeu.length) for(int j=positionWinTheGame.y-(objRandom.nextInt(grandeurDeplacement+1)-grandeurDeplacement/2); pasTrouve && i >= 0 && nbEssaisJ < maxEssais; j = positionWinTheGame.y-(objRandom.nextInt(grandeurDeplacement+1)-grandeurDeplacement/2))
                     {
+                        //System.out.println("   j: " + Integer.toString(j));
                         objRandom.setSeed(System.currentTimeMillis());
                         // Est-ce que la case existe? Est-ce que c'est une case couleur?
                         if(j>=0 && j<objttPlateauJeu[i].length) if(j >= 0 && objttPlateauJeu[i][j] != null && objttPlateauJeu[i][j] instanceof CaseCouleur)
@@ -1718,7 +1720,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                     }
                     nbEssaisI++;
                 }
-                if(nbEssaisI == maxEssais) System.out.println("CRIOSS");
             }
             System.out.println("Nouvelle position: x=" + Integer.toString(positionWinTheGame.x) + ", y=" + Integer.toString(positionWinTheGame.y));
         }

@@ -695,7 +695,7 @@ public class InformationPartie
 				// Cette fonction va passer les joueurs et créer un 
 				// InformationDestination pour chacun et ajouter l'événement 
 				// dans la file de gestion d'événements
-				table.preparerEvenementJoueurDeplacePersonnage(nomJoueur, collision, positionJoueur, objPositionDesiree, intNouveauPointage, intNouvelArgent);
+				table.preparerEvenementJoueurDeplacePersonnage(nomJoueur, collision, positionJoueur, objPositionDesiree, intNouveauPointage, intNouvelArgent, "");
 						    	
 		    }
 		    
