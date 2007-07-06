@@ -35,7 +35,6 @@ import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
-import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Monitoring.Moniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
@@ -43,8 +42,6 @@ import ServeurJeu.Evenements.EvenementSynchroniserTemps;
  
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
-import ServeurJeu.ComposantesJeu.InformationPartie;
-import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.Evenements.EvenementPartieDemarree;
 import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.ComposantesJeu.Question;
@@ -53,6 +50,7 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import java.util.Calendar;
+import java.util.Random;
 
 /**
  * @author Jean-François Brind'Amour
@@ -3429,26 +3427,35 @@ public class ProtocoleJoueur implements Runnable
                         
                         // On obtient la position du WinTheGame
                         Point positionDuWinTheGame;
+                        //FRANCOIS c'est pas la position du wtg
                         positionDuWinTheGame = new Point(positionJoueurChoisi);
                         
                         // Distance (en cases) de l'éloignement souhaité du joueur
-                        int deCombienOnVeutEloigner = 15;
-                        
-                        // Distance optimale atteinte
-                        int distanceOptimale = 0;
+                        int deCombienOnVeutEloigner = 2;
                         
                         // Obtention du plateau de jeu
                         Case[][] plateauDeJeu = obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirPlateauJeuCourant();
                         
                         // Point optimal
-                        Point pointOptimal = new Point(0,0);
+                        Point pointOptimal = new Point(positionJoueurChoisi);
+                        
+                        // Distance optimale atteinte
+                        int distanceOptimale = 0;
                         
                         // On parcourt le plateau pour trouver la meilleure position où envoyer le joueur
                         // La case doit exister et être vide
-                        for(int i=0; i<plateauDeJeu.length; i++)
+                        int nbEssaisI = 0;
+                        int nbEssaisJ = 0;
+                        Random objRandom = new Random();
+                        Case[][] objttPlateauJeu = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirPlateauJeuCourant();
+                        int maxEssais = 5*objttPlateauJeu.length;
+                        for(int i=objRandom.nextInt(objttPlateauJeu.length); nbEssaisI < maxEssais && distanceOptimale != deCombienOnVeutEloigner; i=objRandom.nextInt(objttPlateauJeu.length))
                         {
-                            for(int j=0; j<plateauDeJeu[i].length; j++)
+                            nbEssaisI++;
+                            nbEssaisJ=0;
+                            for(int j=objRandom.nextInt(objttPlateauJeu[i].length); nbEssaisJ < maxEssais && distanceOptimale != deCombienOnVeutEloigner; j=objRandom.nextInt(objttPlateauJeu[i].length))
                             {
+                                nbEssaisJ++;
                                 // Est-ce que la case existe? Est-ce que c'est une case couleur?
                                 if(plateauDeJeu[i][j] != null && plateauDeJeu[i][j] instanceof CaseCouleur)
                                 {
