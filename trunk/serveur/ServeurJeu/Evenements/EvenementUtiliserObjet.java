@@ -92,7 +92,6 @@ public class EvenementUtiliserObjet extends Evenement
 			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
                         strCodeXML = strCodeXML.replaceAll("&lt;", "<");
                         strCodeXML = strCodeXML.replaceAll("&gt;", ">");
-                        System.out.println(strCodeXML);
 		}
 		catch (TransformerConfigurationException tce)
 		{
