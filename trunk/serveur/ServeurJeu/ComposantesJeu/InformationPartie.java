@@ -69,7 +69,10 @@ public class InformationPartie
         
         // Déclaration de la boîte de question personnelle au joueur possédant
         // cet objet
-        BoiteQuestions objBoiteQuestions;	
+        BoiteQuestions objBoiteQuestions;
+        
+        // Déclaration d'un boolean qui dit si le joueur est 'targeté' pour subir une banane
+        private boolean vaSubirUneBanane;
 	 
 	/**
 	 * Constructeur de la classe InformationPartie qui permet d'initialiser
@@ -77,6 +80,9 @@ public class InformationPartie
 	 */
 	public InformationPartie( GestionnaireEvenements gestionnaireEv, GestionnaireBD gestionnaireBD, JoueurHumain joueur, Table tableCourante)
 	{
+            // Au début, on ne subit pas de banane!
+            vaSubirUneBanane = false;
+            
             // Faire la référence vers le gestionnaire de base de données
             objGestionnaireBD = gestionnaireBD;
 
@@ -861,5 +867,15 @@ public class InformationPartie
         public GestionnaireBD obtenirGestionnaireBD()
         {
             return objGestionnaireBD;
+        }
+        
+        public boolean obtenirVaSubirUneBanane()
+        {
+            return vaSubirUneBanane;
+        }
+        
+        public void definirVaSubirUneBanane(boolean b)
+        {
+            vaSubirUneBanane = b;
         }
 }

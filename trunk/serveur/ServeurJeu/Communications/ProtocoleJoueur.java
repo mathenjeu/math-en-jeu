@@ -3429,6 +3429,11 @@ public class ProtocoleJoueur implements Runnable
                             if(estHumain) positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(max1User).obtenirPartieCourante().obtenirPositionJoueur());
                             else positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(max1User).obtenirPositionJoueur());
                         }
+                        if(estHumain) obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().definirVaSubirUneBanane(true);
+                        else obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(nomJoueurChoisi).definirVaSubirUneBanane(true);
+                        
+                        /* On a trouvé le joueur et on l'a setté à subir une banane;
+                         * le reste, on le fera au déplacement de la personne
                         
                         // On obtient la position du WinTheGame
                         Point positionDuWinTheGame;
@@ -3526,6 +3531,7 @@ public class ProtocoleJoueur implements Runnable
                         
                         // On prépare l'événement à envoyer à tous
                         objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliseObjet(objJoueurHumain.obtenirNomUtilisateur(), nomJoueurChoisi, "Banane", strCodeXML);
+                        */
                     }
 		}
     }
