@@ -33,6 +33,7 @@ import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
 import ClassesUtilitaires.IntObj;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.Evenements.EvenementDeplacementWinTheGame;
+import ServeurJeu.Evenements.EvenementUtiliserObjet;
 import java.util.Random;
 
 /**
@@ -1313,12 +1314,26 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			{
 				// Obtenir un numéro de commande pour le joueur courant, créer
 				// un InformationDestination et l'ajouter à l'événement
-				majArgent.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(), objJoueur.obtenirProtocoleJoueur()));      																	 
+				majArgent.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(), objJoueur.obtenirProtocoleJoueur()));
 			}
 		}
 		
 		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
 		objGestionnaireEvenements.ajouterEvenement(majArgent);
+	}
+        
+	public void preparerEvenementUtiliseObjet(String joueurQuiUtilise, String joueurAffecte, String objetUtilise, String autresInformations)
+	{
+                // Même chose que la fonction précédente, mais envoie plutôt les informations quant à l'utilisation d'un objet dont tous devront être au courant
+		EvenementUtiliserObjet utiliseObjet = new EvenementUtiliserObjet(joueurQuiUtilise, joueurAffecte, objetUtilise, autresInformations);
+		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		while (objIterateurListe.hasNext() == true)
+		{
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+                        utiliseObjet.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),objJoueur.obtenirProtocoleJoueur()));
+		}
+		objGestionnaireEvenements.ajouterEvenement(utiliseObjet);
 	}
 
 	public void preparerEvenementDeplacementWinTheGame()

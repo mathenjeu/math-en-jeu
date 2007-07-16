@@ -3283,8 +3283,8 @@ public class ProtocoleJoueur implements Runnable
                     // On prépare la réponse
                     objNoeudCommande.setAttribute("nom", "RetourUtiliserObjet");
                     
-                    // On retourne une confirmation et parfois d'autres infos
-                    bolDoitRetournerCommande = true;
+                    // De façon générale, on n'a pas à envoyer de réponse
+                    bolDoitRetournerCommande = false;
                     
                     // Enlever l'objet de la liste des objets du joueur
                     objJoueurHumain.enleverObjet(intIdObjet, strTypeObjet);
@@ -3307,6 +3307,7 @@ public class ProtocoleJoueur implements Runnable
                         objNoeudParametreMauvaiseReponse.appendChild(objNoeudTexteMauvaiseReponse);
                         objNoeudCommande.setAttribute("type", "Livre");
                         objNoeudCommande.appendChild(objNoeudParametreMauvaiseReponse);
+                        bolDoitRetournerCommande = true;
                     }
                     else if(strTypeObjet.equals("Boule"))
                     {
@@ -3334,22 +3335,26 @@ public class ProtocoleJoueur implements Runnable
                         objNoeudParametreNouvelleQuestion.appendChild(objNoeudParametreQuestion);
                         objNoeudCommande.setAttribute("type", "Boule");
                         objNoeudCommande.appendChild(objNoeudParametreNouvelleQuestion);
+                        bolDoitRetournerCommande = true;
                     }
                     else if(strTypeObjet.equals("PotionGros"))
                     {
                        // La PotionGros fait grossir le joueur
-                        objNoeudCommande.setAttribute("type", "PotionGros");
+                        objNoeudCommande.setAttribute("type", "OK");
+                        objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliseObjet(objJoueurHumain.obtenirNomUtilisateur(), objJoueurHumain.obtenirNomUtilisateur(), "PotionGros", "");
                     }
                     else if(strTypeObjet.equals("PotionPetit"))
                     {
                        // La PotionPetit fait rapetisser le joueur
-                        objNoeudCommande.setAttribute("type", "PotionPetit");
+                        objNoeudCommande.setAttribute("type", "OK");
+                        objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliseObjet(objJoueurHumain.obtenirNomUtilisateur(), objJoueurHumain.obtenirNomUtilisateur(), "PotionPetit", "");
                     }
                     else if(strTypeObjet.equals("Banane"))
                     {
                         //La Banane éloigne du WinTheGame le joueur le plus près du WinTheGame
                         //(sauf si c'est soi même, alors ça éloigne le 2ème)
-                        //NOTE: pour l'instant, on prend le pointage plutôt que la diatance au WTG
+                        
+                        objNoeudCommande.setAttribute("type", "OK");
                         
                         // Entiers et Strings pour garder en mémoire la distance la plus courte au WTG et les joueurs associés
                         int max1 = 0;
@@ -3474,35 +3479,8 @@ public class ProtocoleJoueur implements Runnable
                                 }
                             }
                         }
-/*                        
-                        Element objNoeudParametreNouvellePositionX = objDocumentXMLSortie.createElement("parametre");
-                        Element objNoeudParametreNouvellePositionY = objDocumentXMLSortie.createElement("parametre");
-                        objNoeudParametreNouvellePositionX.setAttribute("type", "NouvellePositionX");
-                        objNoeudParametreNouvellePositionY.setAttribute("type", "NouvellePositionY");
-                        Text objNoeudTexteNouvellePositionX = objDocumentXMLSortie.createTextNode(Integer.toString(pointOptimal.x));
-                        Text objNoeudTexteNouvellePositionY = objDocumentXMLSortie.createTextNode(Integer.toString(pointOptimal.y));
-                        objNoeudParametreNouvellePositionX.appendChild(objNoeudTexteNouvellePositionX);
-                        objNoeudParametreNouvellePositionY.appendChild(objNoeudTexteNouvellePositionY);
-                        objNoeudCommande.appendChild(objNoeudParametreNouvellePositionX);
-                        objNoeudCommande.appendChild(objNoeudParametreNouvellePositionY);
-                        objNoeudCommande.setAttribute("type", "Banane");
-                      
-                        Element objNoeudParametreNomJoueurAffecte = objDocumentXMLSortie.createElement("parametre");
-                        objNoeudParametreNomJoueurAffecte.setAttribute("type", "NomJoueurAffecte");
-                        if(estHumain)
-                        {
-                            Text objNoeudTexteNomJoueurAffecte = objDocumentXMLSortie.createTextNode(nomJoueurChoisi);
-                            objNoeudParametreNomJoueurAffecte.appendChild(objNoeudTexteNomJoueurAffecte);
-                            obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().definirPositionJoueur(pointOptimal);
-                        }
-                        else
-                        {
-                            Text objNoeudTexteNomJoueurAffecte = objDocumentXMLSortie.createTextNode(nomJoueurChoisi);
-                            objNoeudParametreNomJoueurAffecte.appendChild(objNoeudTexteNomJoueurAffecte);
-                            obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(nomJoueurChoisi).definirPositionJoueurVirtuel(pointOptimal);
-                        }
-                        objNoeudCommande.appendChild(objNoeudParametreNomJoueurAffecte);
- */
+                        
+                        // On déplace le joueur à l'interne
                         int nouveauPointage;
                         int nouvelArgent;
                         if(estHumain)
@@ -3516,6 +3494,38 @@ public class ProtocoleJoueur implements Runnable
                             nouvelArgent = obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(nomJoueurChoisi).obtenirArgent();
                         }
                         objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementJoueurDeplacePersonnage(nomJoueurChoisi, "", positionJoueurChoisi, pointOptimal, nouveauPointage, nouvelArgent, "Banane");
+                        
+                        Document objDocumentXMLTemp = UtilitaireXML.obtenirDocumentXML();
+                        Element objNoeudCommandeTemp = objDocumentXMLTemp.createElement("Banane");
+
+                        Element objNoeudParametreNouvellePositionX = objDocumentXMLTemp.createElement("parametre");
+                        Element objNoeudParametreNouvellePositionY = objDocumentXMLTemp.createElement("parametre");
+                        objNoeudParametreNouvellePositionX.setAttribute("type", "NouvellePositionX");
+                        objNoeudParametreNouvellePositionY.setAttribute("type", "NouvellePositionY");
+                        Text objNoeudTexteNouvellePositionX = objDocumentXMLTemp.createTextNode(Integer.toString(pointOptimal.x));
+                        Text objNoeudTexteNouvellePositionY = objDocumentXMLTemp.createTextNode(Integer.toString(pointOptimal.y));
+                        objNoeudParametreNouvellePositionX.appendChild(objNoeudTexteNouvellePositionX);
+                        objNoeudParametreNouvellePositionY.appendChild(objNoeudTexteNouvellePositionY);
+                        objNoeudCommandeTemp.appendChild(objNoeudParametreNouvellePositionX);
+                        objNoeudCommandeTemp.appendChild(objNoeudParametreNouvellePositionY);
+                        
+                        objDocumentXMLTemp.appendChild(objNoeudCommandeTemp);
+                        String strCodeXML = "";
+                        try
+                        {
+                            strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXMLTemp);
+                        }
+                        catch (TransformerConfigurationException tce)
+                        {
+                                System.out.println(GestionnaireMessages.message("evenement.XML_transformation"));
+                        }
+                        catch (TransformerException te)
+                        {
+                                System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
+                        }
+                        
+                        // On prépare l'événement à envoyer à tous
+                        objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliseObjet(objJoueurHumain.obtenirNomUtilisateur(), nomJoueurChoisi, "Banane", strCodeXML);
                     }
 		}
     }
