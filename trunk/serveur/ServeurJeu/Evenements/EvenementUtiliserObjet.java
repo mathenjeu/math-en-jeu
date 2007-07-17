@@ -39,10 +39,10 @@ public class EvenementUtiliserObjet extends Evenement
 	
 	protected String genererCodeXML(InformationDestination information)
 	{
-		Moniteur.obtenirInstance().debut("EvenementUtiliseObjet.genererCodeXML");
+		Moniteur.obtenirInstance().debut("EvenementUtiliserObjet.genererCodeXML");
 		
 		/*
-		 * <commande no="57" nom="UtiliseObjet" type="Evenement">
+		 * <commande no="57" nom="UtiliserObjet" type="Evenement">
 		 *     <parametre type="joueurQuiUtilise">AdversaireXYZ</parametre>
 		 *     <parametre type="joueurAffecte">AdversaireABC</parametre>
                  *     <parametre type="objetUtilise">Banane</parametre>    // ou PotionPetit, PotionGros...
@@ -61,7 +61,7 @@ public class EvenementUtiliserObjet extends Evenement
 			Element objNoeudCommande = objDocumentXML.createElement("commande");
 			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
 			objNoeudCommande.setAttribute("type", "Evenement");
-			objNoeudCommande.setAttribute("nom", "UtiliseObjet");
+			objNoeudCommande.setAttribute("nom", "UtiliserObjet");
 			
 			Element objNoeudParametreNomUtilise = objDocumentXML.createElement("parametre");
                         Element objNoeudParametreNomAffecte = objDocumentXML.createElement("parametre");

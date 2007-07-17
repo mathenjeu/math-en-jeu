@@ -32,9 +32,6 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	
 	// Cette variable va contenir le nom du joueur virtuel
 	private String strNom;
-        
-        // Va-t-il subir une banane au prochain déplacement?
-        private boolean vaSubirUneBanane;
 	
     // Déclaration d'une référence vers le gestionnaire d'evenements
 	private GestionnaireEvenements objGestionnaireEv;
@@ -160,7 +157,6 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	public JoueurVirtuel(String nom, int niveauDifficulte, Table tableCourante, 
 	    GestionnaireEvenements gestionnaireEv, ControleurJeu controleur, int idPersonnage)
 	{
-	    vaSubirUneBanane = false;
 	    objControleurJeu = controleur;
 	    
 	    objParametreIA = objControleurJeu.obtenirParametreIA();
@@ -2496,16 +2492,6 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     {
     	return (s.equals("Aucun") || s.equals("Facile") || s.equals("Intermediaire") ||
     			s.equals("Difficile") || s.equals("TresDifficile"));
-    }
-    
-    public boolean obtenirVaSubirUneBanane()
-    {
-        return vaSubirUneBanane;
-    }
-
-    public void definirVaSubirUneBanane(boolean b)
-    {
-        vaSubirUneBanane = b;
     }
 }
 

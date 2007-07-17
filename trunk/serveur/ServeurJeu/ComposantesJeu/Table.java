@@ -1322,18 +1322,18 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		objGestionnaireEvenements.ajouterEvenement(majArgent);
 	}
         
-	public void preparerEvenementUtiliseObjet(String joueurQuiUtilise, String joueurAffecte, String objetUtilise, String autresInformations)
+	public void preparerEvenementUtiliserObjet(String joueurQuiUtilise, String joueurAffecte, String objetUtilise, String autresInformations)
 	{
                 // Même chose que la fonction précédente, mais envoie plutôt les informations quant à l'utilisation d'un objet dont tous devront être au courant
-		EvenementUtiliserObjet utiliseObjet = new EvenementUtiliserObjet(joueurQuiUtilise, joueurAffecte, objetUtilise, autresInformations);
+		EvenementUtiliserObjet utiliserObjet = new EvenementUtiliserObjet(joueurQuiUtilise, joueurAffecte, objetUtilise, autresInformations);
 		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
 		while (objIterateurListe.hasNext() == true)
 		{
 			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
-                        utiliseObjet.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),objJoueur.obtenirProtocoleJoueur()));
+                        utiliserObjet.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),objJoueur.obtenirProtocoleJoueur()));
 		}
-		objGestionnaireEvenements.ajouterEvenement(utiliseObjet);
+		objGestionnaireEvenements.ajouterEvenement(utiliserObjet);
 	}
 
 	public void preparerEvenementDeplacementWinTheGame()

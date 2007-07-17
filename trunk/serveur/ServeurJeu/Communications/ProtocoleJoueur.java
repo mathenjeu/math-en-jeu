@@ -1511,6 +1511,14 @@ public class ProtocoleJoueur implements Runnable
 						// si une question lui a déjà été posée
 						objNoeudCommande.setAttribute("nom", "DeplacementNonAutorise");
 					}
+                                        // Si quelqu'un a utilisé une banane et c'est ce joueur qui la subit
+                                        else if(objJoueurHumain.obtenirPartieCourante().obtenirVaSubirUneBanane())
+                                        {
+                                            // Il ne doit pas subir une banane plus d'une fois!
+                                            objJoueurHumain.obtenirPartieCourante().definirVaSubirUneBanane(false);
+                                            
+                                            // Ici, on fait le déplacement en tant que tel
+                                        }
 					else
 					{
 						// Trouver la question à poser selon la difficulté et 
@@ -3341,13 +3349,13 @@ public class ProtocoleJoueur implements Runnable
                     {
                        // La PotionGros fait grossir le joueur
                         objNoeudCommande.setAttribute("type", "OK");
-                        objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliseObjet(objJoueurHumain.obtenirNomUtilisateur(), objJoueurHumain.obtenirNomUtilisateur(), "PotionGros", "");
+                        objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliserObjet(objJoueurHumain.obtenirNomUtilisateur(), objJoueurHumain.obtenirNomUtilisateur(), "PotionGros", "");
                     }
                     else if(strTypeObjet.equals("PotionPetit"))
                     {
                        // La PotionPetit fait rapetisser le joueur
                         objNoeudCommande.setAttribute("type", "OK");
-                        objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliseObjet(objJoueurHumain.obtenirNomUtilisateur(), objJoueurHumain.obtenirNomUtilisateur(), "PotionPetit", "");
+                        objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliserObjet(objJoueurHumain.obtenirNomUtilisateur(), objJoueurHumain.obtenirNomUtilisateur(), "PotionPetit", "");
                     }
                     else if(strTypeObjet.equals("Banane"))
                     {
@@ -3429,109 +3437,12 @@ public class ProtocoleJoueur implements Runnable
                             if(estHumain) positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(max1User).obtenirPartieCourante().obtenirPositionJoueur());
                             else positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(max1User).obtenirPositionJoueur());
                         }
-                        if(estHumain) obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().definirVaSubirUneBanane(true);
-                        else obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(nomJoueurChoisi).definirVaSubirUneBanane(true);
-                        
-                        /* On a trouvé le joueur et on l'a setté à subir une banane;
-                         * le reste, on le fera au déplacement de la personne
-                        
-                        // On obtient la position du WinTheGame
-                        Point positionDuWinTheGame;
-                        //FRANCOIS c'est pas la position du wtg
-                        positionDuWinTheGame = new Point(positionJoueurChoisi);
-                        
-                        // Distance (en cases) de l'éloignement souhaité du joueur
-                        int deCombienOnVeutEloigner = 12;
-                        
-                        // Obtention du plateau de jeu
-                        Case[][] plateauDeJeu = obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirPlateauJeuCourant();
-                        
-                        // Point optimal
-                        Point pointOptimal = new Point(positionJoueurChoisi);
-                        
-                        // Distance optimale atteinte
-                        int distanceOptimale = 0;
-                        
-                        // On parcourt le plateau pour trouver la meilleure position où envoyer le joueur
-                        // La case doit exister et être vide
-                        int nbEssaisI = 0;
-                        int nbEssaisJ = 0;
-                        Random objRandom = new Random();
-                        Case[][] objttPlateauJeu = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirPlateauJeuCourant();
-                        int maxEssais = 5*objttPlateauJeu.length;
-                        for(int i=objRandom.nextInt(objttPlateauJeu.length); nbEssaisI < maxEssais && distanceOptimale != deCombienOnVeutEloigner; i=objRandom.nextInt(objttPlateauJeu.length))
-                        {
-                            nbEssaisI++;
-                            nbEssaisJ=0;
-                            for(int j=objRandom.nextInt(objttPlateauJeu[i].length); nbEssaisJ < maxEssais && distanceOptimale != deCombienOnVeutEloigner; j=objRandom.nextInt(objttPlateauJeu[i].length))
-                            {
-                                nbEssaisJ++;
-                                // Est-ce que la case existe? Est-ce que c'est une case couleur?
-                                if(plateauDeJeu[i][j] != null && plateauDeJeu[i][j] instanceof CaseCouleur)
-                                {
-                                    CaseCouleur caseTemp = (CaseCouleur)plateauDeJeu[i][j];
-                                    // Est-ce qu'il n'y a rien dessus?
-                                    if(caseTemp.obtenirObjetArme() == null && caseTemp.obtenirObjetCase() == null)
-                                    {
-                                        // On regarde si c'est un meilleur point que l'optimal trouvé jusqu'à présent
-                                        int distanceActuelle = Math.abs(i-positionDuWinTheGame.x) + Math.abs(j-positionDuWinTheGame.y);
-                                        if(Math.abs(deCombienOnVeutEloigner - distanceActuelle) < Math.abs(deCombienOnVeutEloigner - distanceOptimale))
-                                        {
-                                            distanceOptimale = distanceActuelle;
-                                            pointOptimal.setLocation(i, j);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        
-                        // On déplace le joueur à l'interne
-                        int nouveauPointage;
-                        int nouvelArgent;
-                        if(estHumain)
-                        {
-                            nouveauPointage = obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().obtenirPointage();
-                            nouvelArgent = obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().obtenirArgent();
-                        }
+                        /*if(estHumain) obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().definirVaSubirUneBanane(objJoueurHumain.obtenirNomUtilisateur());
                         else
                         {
-                            nouveauPointage = obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(nomJoueurChoisi).obtenirPointage();
-                            nouvelArgent = obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(nomJoueurChoisi).obtenirArgent();
-                        }
-                        objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementJoueurDeplacePersonnage(nomJoueurChoisi, "", positionJoueurChoisi, pointOptimal, nouveauPointage, nouvelArgent, "Banane");
-                        
-                        Document objDocumentXMLTemp = UtilitaireXML.obtenirDocumentXML();
-                        Element objNoeudCommandeTemp = objDocumentXMLTemp.createElement("Banane");
-
-                        Element objNoeudParametreNouvellePositionX = objDocumentXMLTemp.createElement("parametre");
-                        Element objNoeudParametreNouvellePositionY = objDocumentXMLTemp.createElement("parametre");
-                        objNoeudParametreNouvellePositionX.setAttribute("type", "NouvellePositionX");
-                        objNoeudParametreNouvellePositionY.setAttribute("type", "NouvellePositionY");
-                        Text objNoeudTexteNouvellePositionX = objDocumentXMLTemp.createTextNode(Integer.toString(pointOptimal.x));
-                        Text objNoeudTexteNouvellePositionY = objDocumentXMLTemp.createTextNode(Integer.toString(pointOptimal.y));
-                        objNoeudParametreNouvellePositionX.appendChild(objNoeudTexteNouvellePositionX);
-                        objNoeudParametreNouvellePositionY.appendChild(objNoeudTexteNouvellePositionY);
-                        objNoeudCommandeTemp.appendChild(objNoeudParametreNouvellePositionX);
-                        objNoeudCommandeTemp.appendChild(objNoeudParametreNouvellePositionY);
-                        
-                        objDocumentXMLTemp.appendChild(objNoeudCommandeTemp);
-                        String strCodeXML = "";
-                        try
-                        {
-                            strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXMLTemp);
-                        }
-                        catch (TransformerConfigurationException tce)
-                        {
-                                System.out.println(GestionnaireMessages.message("evenement.XML_transformation"));
-                        }
-                        catch (TransformerException te)
-                        {
-                                System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
-                        }
-                        
-                        // On prépare l'événement à envoyer à tous
-                        objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliseObjet(objJoueurHumain.obtenirNomUtilisateur(), nomJoueurChoisi, "Banane", strCodeXML);
-                        */
+                            // Puisque ce n'est pas un joueur humain, on peut lui faire subir la banane tout de suite
+                            Banane.utiliserBanane(objJoueurHumain.obtenirNomUtilisateur(), positionJoueurChoisi, nomJoueurChoisi, objJoueurHumain.obtenirPartieCourante().obtenirTable(), false);
+                        }*/
                     }
 		}
     }
