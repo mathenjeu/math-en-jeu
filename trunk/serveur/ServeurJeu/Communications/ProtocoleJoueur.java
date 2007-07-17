@@ -1512,12 +1512,11 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudCommande.setAttribute("nom", "DeplacementNonAutorise");
 					}
                                         // Si quelqu'un a utilisé une banane et c'est ce joueur qui la subit
-                                        else if(objJoueurHumain.obtenirPartieCourante().obtenirVaSubirUneBanane())
+                                        else if(!objJoueurHumain.obtenirPartieCourante().obtenirVaSubirUneBanane().equals(""))
                                         {
                                             // Il ne doit pas subir une banane plus d'une fois!
-                                            objJoueurHumain.obtenirPartieCourante().definirVaSubirUneBanane(false);
-                                            
-                                            // Ici, on fait le déplacement en tant que tel
+                                            Banane.utiliserBanane(objJoueurHumain.obtenirPartieCourante().obtenirVaSubirUneBanane(), objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur(), objJoueurHumain.obtenirNomUtilisateur(), objJoueurHumain.obtenirPartieCourante().obtenirTable(), true);
+                                            objJoueurHumain.obtenirPartieCourante().definirVaSubirUneBanane("");
                                         }
 					else
 					{
@@ -3437,12 +3436,13 @@ public class ProtocoleJoueur implements Runnable
                             if(estHumain) positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(max1User).obtenirPartieCourante().obtenirPositionJoueur());
                             else positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(max1User).obtenirPositionJoueur());
                         }
-                        /*if(estHumain) obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().definirVaSubirUneBanane(objJoueurHumain.obtenirNomUtilisateur());
+                        if(estHumain) obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().definirVaSubirUneBanane(objJoueurHumain.obtenirNomUtilisateur());
                         else
                         {
+                            //FRANCOIS ça va faire chier le AI
                             // Puisque ce n'est pas un joueur humain, on peut lui faire subir la banane tout de suite
                             Banane.utiliserBanane(objJoueurHumain.obtenirNomUtilisateur(), positionJoueurChoisi, nomJoueurChoisi, objJoueurHumain.obtenirPartieCourante().obtenirTable(), false);
-                        }*/
+                        }
                     }
 		}
     }

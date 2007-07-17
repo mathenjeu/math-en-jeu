@@ -72,7 +72,8 @@ public class InformationPartie
         BoiteQuestions objBoiteQuestions;
         
         // Déclaration d'un boolean qui dit si le joueur est 'targeté' pour subir une banane
-        private boolean vaSubirUneBanane;
+        // (si le string n'est pas "", et alors le string dit qui l'a utilisée)
+        private String vaSubirUneBanane;
 	 
 	/**
 	 * Constructeur de la classe InformationPartie qui permet d'initialiser
@@ -81,7 +82,7 @@ public class InformationPartie
 	public InformationPartie( GestionnaireEvenements gestionnaireEv, GestionnaireBD gestionnaireBD, JoueurHumain joueur, Table tableCourante)
 	{
             // Au début, on ne subit pas de banane!
-            vaSubirUneBanane = false;
+            vaSubirUneBanane = "";
             
             // Faire la référence vers le gestionnaire de base de données
             objGestionnaireBD = gestionnaireBD;
@@ -869,12 +870,12 @@ public class InformationPartie
             return objGestionnaireBD;
         }
         
-        public boolean obtenirVaSubirUneBanane()
+        public String obtenirVaSubirUneBanane()
         {
             return vaSubirUneBanane;
         }
         
-        public void definirVaSubirUneBanane(boolean b)
+        public void definirVaSubirUneBanane(String b)
         {
             vaSubirUneBanane = b;
         }
