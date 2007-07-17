@@ -490,7 +490,7 @@ public class ProtocoleJoueur implements Runnable
     						  
     							// Il n'y a pas eu d'erreurs
     							objNoeudCommande.setAttribute("type", "Reponse");
-    							objNoeudCommande.setAttribute("nom", "Ok");
+    							objNoeudCommande.setAttribute("nom", "Musique");
                                                         Vector liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
                                                         for(int i=0; i<liste.size(); i++)
                                                         {

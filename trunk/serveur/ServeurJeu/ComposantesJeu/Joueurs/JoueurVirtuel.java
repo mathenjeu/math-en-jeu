@@ -32,6 +32,9 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	
 	// Cette variable va contenir le nom du joueur virtuel
 	private String strNom;
+        
+        // Le joueur virtuel est-il destiné à subir une banane?
+        public String vaSubirUneBanane;
 	
     // Déclaration d'une référence vers le gestionnaire d'evenements
 	private GestionnaireEvenements objGestionnaireEv;
@@ -162,6 +165,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    objParametreIA = objControleurJeu.obtenirParametreIA();
 	    
 		strNom = nom;
+                vaSubirUneBanane = "";
 		
 		// Cette variable sera utilisée dans la thread
 		objPositionFinaleVisee = null;
@@ -338,7 +342,17 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    			if (bolQuestionReussie == true)
 	    			{
 	    				// Déplacement du joueur virtuel
-	    				deplacerJoueurVirtuelEtMajPlateau(objPositionIntermediaire);
+                                    //FRANCOIS tABARNAC
+                                        if(!vaSubirUneBanane.equals(""))
+                                        {
+                                            deplacerJoueurVirtuelEtMajPlateau(objPositionIntermediaire);
+                                            Banane.utiliserBanane(vaSubirUneBanane, this.obtenirPositionJoueur(), this.obtenirNom(), this.obtenirTable(), false);
+                                            vaSubirUneBanane = "";
+                                        }
+                                        else
+                                        {
+                                            deplacerJoueurVirtuelEtMajPlateau(objPositionIntermediaire);
+                                        }
 	    				
 	    				// Obtenir le temps que le déplacement dure
 	    				intTempsDeplacement = obtenirTempsDeplacement(obtenirPointage(objPositionJoueur, objPositionIntermediaire));
