@@ -491,6 +491,8 @@ public class ProtocoleJoueur implements Runnable
     							// Il n'y a pas eu d'erreurs
     							objNoeudCommande.setAttribute("type", "Reponse");
     							objNoeudCommande.setAttribute("nom", "Musique");
+                                                        
+                                                        // On va envoyer dans le noeud la liste de chansons que le joueur pourrait aimer
                                                         Vector liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
                                                         for(int i=0; i<liste.size(); i++)
                                                         {
@@ -1870,7 +1872,7 @@ public class ProtocoleJoueur implements Runnable
 		    
 			// Ajouter le noeud de commande au noeud racine dans le document de sortie
 			objDocumentXMLSortie.appendChild(objNoeudCommande);
-
+                        if(objNoeudCommande.getAttribute("nom").equals("CommandeNonReconnue")) System.out.println("AHHHHHHHHHHHHH " + objNoeudCommandeEntree.getAttribute("nom"));
 	        // Retourner le document XML ne contenant pas l'entête XML ajoutée 
 	        // par défaut par le transformateur
 			return UtilitaireXML.transformerDocumentXMLEnString(objDocumentXMLSortie);
@@ -2500,7 +2502,6 @@ public class ProtocoleJoueur implements Runnable
 				bolCommandeValide = bolNoeudValide;
 			}
 		}
-		
 		return bolCommandeValide;
 	}
 		
@@ -3437,12 +3438,7 @@ public class ProtocoleJoueur implements Runnable
                             else positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(max1User).obtenirPositionJoueur());
                         }
                         if(estHumain) obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().definirVaSubirUneBanane(objJoueurHumain.obtenirNomUtilisateur());
-                        else
-                        {
-                            //FRANCOIS ça va faire chier le AI
-                            // Puisque ce n'est pas un joueur humain, on peut lui faire subir la banane tout de suite
-                            Banane.utiliserBanane(objJoueurHumain.obtenirNomUtilisateur(), positionJoueurChoisi, nomJoueurChoisi, objJoueurHumain.obtenirPartieCourante().obtenirTable(), false);
-                        }
+                        else obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(nomJoueurChoisi).vaSubirUneBanane = objJoueurHumain.obtenirNomUtilisateur();
                     }
 		}
     }
