@@ -108,9 +108,8 @@ if (isset($_SESSION['langage'])) {
   require_once(LANGAGE_DIR . $_SESSION['langage'] . "/lang_main.php"); 
 } else {
   require_once(LANGAGE_DIR . $config->langue . "/lang_main.php");
-  //$_SESSION['langage'] = $config->langue;
+  $_SESSION['langage'] = $config->langue;
 }
-
 
 
 //extension de la classe Smarty pour automatiquement
@@ -130,6 +129,7 @@ class MonSmarty extends Smarty
             
         global $lang;
         $this->assign('lang', $lang);
+        $this->assign('language',$_SESSION['langage']);
         $this->assign('template',TEMPLATE);
         $this->assign("sid",strip_tags(SID));
                 
