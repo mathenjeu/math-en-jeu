@@ -1,1 +1,0 @@
-Inspiré par le thème Seabreeze pour PostNuke de Vanessa Haakenson : vanessa@designs4nuke.com
