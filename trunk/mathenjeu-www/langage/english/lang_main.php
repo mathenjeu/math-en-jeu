@@ -1,4 +1,4 @@
-ï»¿<?php
+<?php
 /*******************************************************************************
 Fichier : lang_main.php
 Auteur : Maxime Bï¿½gin
@@ -11,7 +11,7 @@ Description : Tous les textes du site web sont regroupï¿½s ici
 *******************************************************************************/
 
 //
-//commun : ï¿½ usage multiple
+//commun : à usage multiple
 //
 $lang['math_en_jeu'] = "Math en jeu";
 
@@ -194,7 +194,7 @@ $lang['menu_mes_question'] = 'Add my questions';
 
 $lang['titre_index'] = 'Math en jeu';
 $lang['texte_index'] = '
-<span style="font-size:150%"><i>New!</i> <a href="demo.php">Watch the Math en jeu demo! (French Only)</a></span><p>
+<span style="font-size:150%"><i>New!</i> <a href="demo.php">Watch the Math en jeu demo!</a></span><p>
 <a target="_blank" href="img/screen2_big.jpg"><img src="img/screen2.jpg" alt="Capture d\'ï¿½cran" border="0" hspace="15" align="left"></a>		
 
 

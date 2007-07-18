@@ -1,0 +1,23 @@
+//création des question
+xalanj http://xml.apache.org/xalan-j/ 
+Xalan-Java is an XSLT processor for transforming XML documents into HTML, text, or other XML document types.
+
+xsltml http://xsltml.sourceforge.net/
+The XSLT MathML Library, xsltml, provides the XSLT developer with a set of XSLT templates for MathML 2.0 to LaTeX translation.
+
+//Libraire php 
+Smarty http://smarty.php.net/
+A template engine.
+
+phpMailer http://phpmailer.sourceforge.net/
+Full featured email transfer class for PHP
+
+Image_graph http://www.pear.php.net/package/Image_Graph/
+A package for displaying (numerical) data as a graph/chart/plot.
+
+
+Unix/Linux tool
+latex
+dvips
+
+http://netpbm.sourceforge.net/doc/index.html#programs
