@@ -1516,9 +1516,13 @@ public class ProtocoleJoueur implements Runnable
                                         // Si quelqu'un a utilisé une banane et c'est ce joueur qui la subit
                                         else if(!objJoueurHumain.obtenirPartieCourante().obtenirVaSubirUneBanane().equals(""))
                                         {
-                                            // Il ne doit pas subir une banane plus d'une fois!
+                                            System.out.println("Ancienne position: " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().x) + " " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().y));
                                             Banane.utiliserBanane(objJoueurHumain.obtenirPartieCourante().obtenirVaSubirUneBanane(), objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur(), objJoueurHumain.obtenirNomUtilisateur(), objJoueurHumain.obtenirPartieCourante().obtenirTable(), true);
+                                            // Il ne doit pas subir une banane plus d'une fois!
+                                            System.out.println("Nouvelle position: " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().x) + " " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().y));
                                             objJoueurHumain.obtenirPartieCourante().definirVaSubirUneBanane("");
+                                            objNoeudCommande.setAttribute("type", "Reponse");
+                                            objNoeudCommande.setAttribute("nom", "Banane");
                                         }
 					else
 					{

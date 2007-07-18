@@ -111,6 +111,7 @@ public class Banane extends ObjetUtilisable
                 nouveauPointage = table.obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().obtenirPointage();
                 nouvelArgent = table.obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().obtenirArgent();
                 table.preparerEvenementJoueurDeplacePersonnage(nomJoueurChoisi, "", positionJoueurChoisi, pointOptimal, nouveauPointage, nouvelArgent, "Banane");
+                table.obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().definirPositionJoueur(pointOptimal);
             }
             else
             {
