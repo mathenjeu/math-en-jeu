@@ -483,6 +483,15 @@ public class ProtocoleJoueur implements Runnable
                                 objNoeudCommande.setAttribute("type","Reponse");
                                 objNoeudCommande.setAttribute("nom","OkEtPartieDejaCommencee");
   
+                                // On va envoyer dans le noeud la liste de chansons que le joueur pourrait aimer
+                                Vector liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
+                                for(int i=0; i<liste.size(); i++)
+                                {
+                                    Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("musique");
+                                    Text objNoeudTexteMusique = objDocumentXMLSortie.createTextNode((String)liste.get(i));
+                                    objNoeudParametreMusique.appendChild(objNoeudTexteMusique);
+                                    objNoeudCommande.appendChild(objNoeudParametreMusique);   
+                                }
                             }
                             else
                             {
