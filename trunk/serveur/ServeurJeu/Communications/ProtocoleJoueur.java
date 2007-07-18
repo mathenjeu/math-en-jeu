@@ -3361,6 +3361,9 @@ public class ProtocoleJoueur implements Runnable
                     {
                         //La Banane éloigne du WinTheGame le joueur le plus près du WinTheGame
                         //(sauf si c'est soi même, alors ça éloigne le 2ème)
+                        // La partie ici ne fait que sélectionner le joueur qui sera affecté
+                        // Le reste se fait dans Banane.java (on attend que le joueur affecté clique
+                        // pour se déplacer avant de lui faire subir la banane pour être sûr que tout va bien
                         
                         objNoeudCommande.setAttribute("type", "OK");
                         

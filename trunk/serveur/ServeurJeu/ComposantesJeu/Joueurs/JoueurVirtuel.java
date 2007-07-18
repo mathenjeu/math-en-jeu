@@ -342,10 +342,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    			if (bolQuestionReussie == true)
 	    			{
 	    				// Déplacement du joueur virtuel
-                                    //FRANCOIS tABARNAC
                                         if(!vaSubirUneBanane.equals(""))
                                         {
-                                            deplacerJoueurVirtuelEtMajPlateau(objPositionIntermediaire);
                                             Banane.utiliserBanane(vaSubirUneBanane, this.obtenirPositionJoueur(), this.obtenirNom(), this.obtenirTable(), false);
                                             vaSubirUneBanane = "";
                                         }

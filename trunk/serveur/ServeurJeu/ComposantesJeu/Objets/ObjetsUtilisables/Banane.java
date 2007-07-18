@@ -110,13 +110,15 @@ public class Banane extends ObjetUtilisable
             {
                 nouveauPointage = table.obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().obtenirPointage();
                 nouvelArgent = table.obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().obtenirArgent();
+                table.preparerEvenementJoueurDeplacePersonnage(nomJoueurChoisi, "", positionJoueurChoisi, pointOptimal, nouveauPointage, nouvelArgent, "Banane");
             }
             else
             {
                 nouveauPointage = table.obtenirJoueurVirtuelParSonNom(nomJoueurChoisi).obtenirPointage();
                 nouvelArgent = table.obtenirJoueurVirtuelParSonNom(nomJoueurChoisi).obtenirArgent();
+                table.preparerEvenementJoueurDeplacePersonnage(nomJoueurChoisi, "", positionJoueurChoisi, pointOptimal, nouveauPointage, nouvelArgent, "Banane");
+                table.obtenirJoueurVirtuelParSonNom(nomJoueurChoisi).definirPositionJoueurVirtuel(pointOptimal);
             }
-            table.preparerEvenementJoueurDeplacePersonnage(nomJoueurChoisi, "", positionJoueurChoisi, pointOptimal, nouveauPointage, nouvelArgent, "Banane");
 
             Document objDocumentXMLTemp = UtilitaireXML.obtenirDocumentXML();
             Element objNoeudCommandeTemp = objDocumentXMLTemp.createElement("Banane");
