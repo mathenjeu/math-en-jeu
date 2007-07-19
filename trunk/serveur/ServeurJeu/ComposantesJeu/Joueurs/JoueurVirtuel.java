@@ -289,8 +289,13 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	            	objPositionFinaleVisee = trouverPositionFinaleVisee();	
 	            }
 	                    
-				// Trouver une case intermédiaire
-				objPositionIntermediaire = trouverPositionIntermediaire();
+				// Trouver une case intermédiaire (qui n'est pas le WTG'
+                                //FRANCOIS terminer
+                                do
+                                {
+                                    objPositionIntermediaire = trouverPositionIntermediaire();
+                                }
+                                while(objPositionIntermediaire.equals(this.obtenirTable().obtenirPositionWinTheGame()));
 	
 				// S'il y a erreur de recherche ou si le joueur virtuel est pris
 				// on ne le fait pas bouger

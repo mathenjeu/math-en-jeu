@@ -107,6 +107,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         
         // Defines what kind of game the players want to play (see config for details)
         private String gameType;
+        
+        // Score needed to reach the WinTheGame
+        private int pointagePourAtteindreWinTheGame;
 	
     // Cet objet est une liste des joueurs virtuels qui jouent sur cette table
     private Vector lstJoueursVirtuels;
@@ -166,6 +169,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		intNoTable = noTable;
 		strNomUtilisateurCreateur = nomUtilisateurCreateur;
 		intTempsTotal = tempsPartie;
+                pointagePourAtteindreWinTheGame = intTempsTotal*30;
 	    // intTempsRestant = tempsPartie;
 		
 		// Créer une nouvelle liste de joueurs
@@ -1646,7 +1650,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         // ayant accumulé assez de points et en ayant rejoint le WinTheGame
         public boolean aRejointLeWinTheGame(int pointageDuJoueur, Point positionDuJoueur)
         {
-            return (pointageDuJoueur >= 0) && (positionDuJoueur.equals(positionWinTheGame));
+            return (peutAllerSurLeWinTheGame(pointageDuJoueur) && (positionDuJoueur.equals(positionWinTheGame)));
         }
         
         public Point obtenirPositionWinTheGame()
@@ -1659,16 +1663,54 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             return gameType;
         }
         
+        public boolean peutAllerSurLeWinTheGame(int pointage)
+        {
+            if(gameType.equals("winTheGameWithScore")) return pointage >= pointagePourAtteindreWinTheGame;
+            else return true;
+        }
+        
         public void definirNouvellePositionWinTheGame()
         {
             //FRANCOIS quand on deplace le winthegame, verifier si qqun est deja dessus et gagne
             //FRANCOIS vérifier pkoi la premiere partie marche pas souvent
             Random objRandom = new Random();
             boolean pasTrouve = true;
-            int grandeurDeplacement = 2;
+            int grandeurDeplacement = 3;
             int nbEssaisI = 0;
             int nbEssaisJ = 0;
-            int maxEssais = 100;
+            int maxEssais = 9000;
+            
+            //FRANCOIS regarder si un joueur peut être créé sur le WTG
+            //FRANCOIS s'arranger pour que les AI tombent pas sur un WTG si y peuvent pas'
+            
+            // On obtient les positions des 4 joueurs afin de ne pas déplacer le WinTheGame
+            // sur un joueur, ou encore sur une case où un joueur voulait aller
+            Point positionsJoueurs[] = new Point[4];
+            Point positionsJoueursDesirees[] = new Point[4];
+            {
+                int i=0;
+                {
+                    Set nomsJoueursHumains = lstJoueurs.entrySet();
+                    Iterator objIterateurListeJoueurs = nomsJoueursHumains.iterator();
+                    while(objIterateurListeJoueurs.hasNext() == true)
+                    {
+                        JoueurHumain j = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
+                        positionsJoueurs[i] = j.obtenirPartieCourante().obtenirPositionJoueur();
+                        positionsJoueursDesirees[i] = j.obtenirPartieCourante().obtenirPositionJoueurDesiree();
+                        i++;
+                    }
+                }
+                {   
+                    if(lstJoueursVirtuels != null) for(int k=0; i<lstJoueursVirtuels.size(); k++)
+                    {
+                        JoueurVirtuel j = (JoueurVirtuel)lstJoueursVirtuels.get(k);
+                        positionsJoueurs[i] = j.obtenirPositionJoueur();
+                        positionsJoueursDesirees[i] = positionsJoueurs[i];
+                        i++;
+                    }
+                    else for(i=i; i<4; i++) {positionsJoueursDesirees[i] = positionsJoueursDesirees[i-1]; positionsJoueurs[i] = positionsJoueurs[i-1];}
+                }
+            }
             
             // On commence par regarder si les cases pas trop loin sont OK si on n'est pas en -1 -1
             if(positionWinTheGame.x != -1 && positionWinTheGame.y != -1)
@@ -1692,9 +1734,15 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                                 // Est-ce que c'est la même case? Est-ce dans les limites?
                                 if(i != positionWinTheGame.x && j != positionWinTheGame.y && i >= 0 && j >= 0 && i < objttPlateauJeu.length && j < objttPlateauJeu[i].length)
                                 {
-                                    // Tout est OK, on déplace le WinTheGame
-                                    pasTrouve = false;
-                                    positionWinTheGame.move(i, j);   
+                                    // Est-ce qu'un joueur est sur cette case ou veut s'y déplacer?
+                                    boolean presence = false;
+                                    for(int k=0; k<4 && !presence; k++) if((new Point(i, j)).equals(positionsJoueurs[k]) || (new Point(i, j)).equals(positionsJoueursDesirees[k])) presence = true;
+                                    if(!presence)
+                                    {
+                                        // Tout est OK, on déplace le WinTheGame
+                                        pasTrouve = false;
+                                        positionWinTheGame.move(i, j);
+                                    }
                                 }
                             }
                         }
@@ -1704,6 +1752,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 }
             }
             
+            maxEssais = 100;
             // Sinon, on prend une case quelconque
             if(pasTrouve)
             {
@@ -1725,9 +1774,15 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                                 // Est-ce que c'est la même case? Est-ce dans les limites?
                                 if(i != positionWinTheGame.x && j != positionWinTheGame.y && i >= 0 && j >= 0 && i < objttPlateauJeu.length && j < objttPlateauJeu[i].length)
                                 {
-                                    // Tout est OK, on déplace le WinTheGame
-                                    pasTrouve = false;
-                                    positionWinTheGame.move(i, j);   
+                                    // Est-ce qu'un joueur est sur cette case ou veut s'y déplacer?
+                                    boolean presence = false;
+                                    for(int k=0; k<4 && !presence; k++) if((new Point(i, j)).equals(positionsJoueurs[k]) || (new Point(i, j)).equals(positionsJoueursDesirees[k])) presence = true;
+                                    if(!presence)
+                                    {
+                                        // Tout est OK, on déplace le WinTheGame
+                                        pasTrouve = false;
+                                        positionWinTheGame.move(i, j);
+                                    }
                                 }
                             }
                         }
