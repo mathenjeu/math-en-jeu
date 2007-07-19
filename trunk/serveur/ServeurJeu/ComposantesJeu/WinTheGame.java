@@ -25,7 +25,8 @@ public class WinTheGame
             }
             catch(InterruptedException e)
             {
-                // Le thread du WinTheGame a été arrêté... ben coudonc
+                // Le thread du WinTheGame a été arrêté... ben coudonc,
+                // c'est vraiment pas grave, c'est même supposé arriver
             }
         }
     }
@@ -43,6 +44,5 @@ public class WinTheGame
     public void arreter()
     {
         thread.interrupt();
-        //thread.join(); //FRANCOIS utile?
     }
 }
