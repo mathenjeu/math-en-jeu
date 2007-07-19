@@ -1527,7 +1527,6 @@ public class ProtocoleJoueur implements Runnable
                                         {
                                             System.out.println("Ancienne position: " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().x) + " " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().y));
                                             Banane.utiliserBanane(objJoueurHumain.obtenirPartieCourante().obtenirVaSubirUneBanane(), objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur(), objJoueurHumain.obtenirNomUtilisateur(), objJoueurHumain.obtenirPartieCourante().obtenirTable(), true);
-                                            // Il ne doit pas subir une banane plus d'une fois!
                                             System.out.println("Nouvelle position: " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().x) + " " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().y));
                                             objJoueurHumain.obtenirPartieCourante().definirVaSubirUneBanane("");
                                             objNoeudCommande.setAttribute("type", "Reponse");
@@ -3414,7 +3413,7 @@ public class ProtocoleJoueur implements Runnable
                                 estHumain2 = true;
                             }
                         }
-                        for(int i=0; i<listeJoueursVirtuels.size(); i++)
+                        if(listeJoueursVirtuels != null) for(int i=0; i<listeJoueursVirtuels.size(); i++)
                         {
                             JoueurVirtuel j = (JoueurVirtuel)listeJoueursVirtuels.get(i);
                             if(j.obtenirPointage()>=max1)
