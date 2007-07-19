@@ -43,6 +43,6 @@ public class WinTheGame
     public void arreter()
     {
         thread.interrupt();
-        //thread.join();
+        //thread.join(); //FRANCOIS utile?
     }
 }
