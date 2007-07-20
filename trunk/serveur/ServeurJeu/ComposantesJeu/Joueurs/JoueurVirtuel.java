@@ -285,7 +285,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 				
                                 // Trouver une case intéressante à atteindre
                                 // Si on a assez de points pour atteindre le WinTheGame, allons-y!
-                                if(this.obtenirTable().peutAllerSurLeWinTheGame(this.obtenirPointage()))
+                                if(!this.obtenirTable().obtenirGameType().equals("original") && this.obtenirTable().peutAllerSurLeWinTheGame(this.obtenirPointage()))
                                 {
                                     objPositionFinaleVisee = this.obtenirTable().obtenirPositionWinTheGame();
                                 }
@@ -293,15 +293,29 @@ public class JoueurVirtuel extends Joueur implements Runnable {
                                 {
                                     if (reviserPositionFinaleVisee() == true)
                                     {
-                                        objPositionFinaleVisee = trouverPositionFinaleVisee();	
+                                        int essais = 0;
+                                        do
+                                        {
+                                            objPositionFinaleVisee = trouverPositionFinaleVisee();
+                                            essais++;
+                                        }while(!this.obtenirTable().obtenirGameType().equals("original") && essais < 50 && objPositionFinaleVisee.equals(this.obtenirTable().obtenirPositionWinTheGame()));
                                     }
                                 }
                                 
                                 // On trouve une position entre le joueur virtuel et son objectif
-                                objPositionIntermediaire = trouverPositionIntermediaire();
-	                    
-                                //FRANCOIS terminer s'arranger pour que les AI tombent pas sur un WTG si y peuvent pas'
-	
+                                {
+                                    int essais = 0;
+                                    if(this.obtenirTable().peutAllerSurLeWinTheGame(this.obtenirPointage())) objPositionIntermediaire = trouverPositionIntermediaire();
+                                    else
+                                    {
+                                        do
+                                        {
+                                            objPositionIntermediaire = trouverPositionIntermediaire();
+                                            essais++;
+                                        }while(!this.obtenirTable().obtenirGameType().equals("original") && essais < 50 && objPositionIntermediaire.equals(this.obtenirTable().obtenirPositionWinTheGame()));
+                                    }
+                                }
+
 				// S'il y a erreur de recherche ou si le joueur virtuel est pris
 				// on ne le fait pas bouger
 				if (objPositionIntermediaire.x != objPositionJoueur.x || 
