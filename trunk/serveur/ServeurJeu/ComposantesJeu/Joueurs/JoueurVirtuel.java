@@ -283,19 +283,24 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 				// Pause pour moment de réflexion de décision
 				pause(intTempsReflexionCoup);
 				
-	            // Trouver une case intéressante à atteindre
-	            if (reviserPositionFinaleVisee() == true)
-	            {
-	            	objPositionFinaleVisee = trouverPositionFinaleVisee();	
-	            }
-	                    
-				// Trouver une case intermédiaire (qui n'est pas le WTG'
-                                //FRANCOIS terminer s'arranger pour que les AI tombent pas sur un WTG si y peuvent pas'
-                                do
+                                // Trouver une case intéressante à atteindre
+                                // Si on a assez de points pour atteindre le WinTheGame, allons-y!
+                                if(this.obtenirTable().peutAllerSurLeWinTheGame(this.obtenirPointage()))
                                 {
-                                    objPositionIntermediaire = trouverPositionIntermediaire();
+                                    objPositionFinaleVisee = this.obtenirTable().obtenirPositionWinTheGame();
                                 }
-                                while(objPositionIntermediaire.equals(this.obtenirTable().obtenirPositionWinTheGame()));
+                                else
+                                {
+                                    if (reviserPositionFinaleVisee() == true)
+                                    {
+                                        objPositionFinaleVisee = trouverPositionFinaleVisee();	
+                                    }
+                                }
+                                
+                                // On trouve une position entre le joueur virtuel et son objectif
+                                objPositionIntermediaire = trouverPositionIntermediaire();
+	                    
+                                //FRANCOIS terminer s'arranger pour que les AI tombent pas sur un WTG si y peuvent pas'
 	
 				// S'il y a erreur de recherche ou si le joueur virtuel est pris
 				// on ne le fait pas bouger
@@ -604,6 +609,11 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	 */
 	private Point trouverPositionIntermediaire()
 	{
+            // Si on est déjà sur le WinTheGame et qu'on a le pointage requis, restons là!!
+            // Peut-être que les joueurs virtuels essaient ensuite de se déplacer
+            // mais le serveur refusera alors ils resteront vraiment là
+            if(this.obtenirTable().peutAllerSurLeWinTheGame(this.obtenirPointage()) && this.obtenirPositionJoueur().equals(this.obtenirTable().obtenirPositionWinTheGame())) return this.obtenirPositionJoueur();
+            
 	    // Variable contenant la position à retourner à la fonction appelante
 		Point objPositionTrouvee;
 

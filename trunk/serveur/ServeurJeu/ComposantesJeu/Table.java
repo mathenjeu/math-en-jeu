@@ -107,9 +107,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         
         // Defines what kind of game the players want to play (see config for details)
         private String gameType;
-        
-        // Score needed to reach the WinTheGame
-        private int pointagePourAtteindreWinTheGame;
 	
     // Cet objet est une liste des joueurs virtuels qui jouent sur cette table
     private Vector lstJoueursVirtuels;
@@ -169,8 +166,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		intNoTable = noTable;
 		strNomUtilisateurCreateur = nomUtilisateurCreateur;
 		intTempsTotal = tempsPartie;
-                pointagePourAtteindreWinTheGame = intTempsTotal*30;
-	    // intTempsRestant = tempsPartie;
+                // intTempsRestant = tempsPartie;
 		
 		// Créer une nouvelle liste de joueurs
 		lstJoueurs = new TreeMap();
@@ -1665,8 +1661,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         
         public boolean peutAllerSurLeWinTheGame(int pointage)
         {
-            if(gameType.equals("winTheGameWithScore")) return pointage >= pointagePourAtteindreWinTheGame;
-            else return true;
+            if(gameType.equals("winTheGameWithoutScore")) return true;
+            else return pointage >= intTempsTotal*15;
         }
         
         public void definirNouvellePositionWinTheGame()
@@ -1751,8 +1747,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             // Sinon, on prend une case quelconque
             if(pasTrouve)
             {
-                System.out.println("On a dû prendre une case au hasard!!");
-                for(int z=0; z<4; z++) System.out.println("Positions: " + Integer.toString(positionsJoueurs[z].x) + "," + Integer.toString(positionsJoueurs[z].y));
                 nbEssaisI = 0;
                 for(int i=objRandom.nextInt(objttPlateauJeu.length); pasTrouve && nbEssaisI < maxEssais; i = objRandom.nextInt(objttPlateauJeu.length))
                 {
@@ -1787,6 +1781,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                     nbEssaisI++;
                 }
             }
-            System.out.println("Nouvelle position: x=" + Integer.toString(positionWinTheGame.x) + ", y=" + Integer.toString(positionWinTheGame.y));
+            System.out.println("WinTheGame: Nouvelle position: x=" + Integer.toString(positionWinTheGame.x) + ", y=" + Integer.toString(positionWinTheGame.y));
         }
 }
