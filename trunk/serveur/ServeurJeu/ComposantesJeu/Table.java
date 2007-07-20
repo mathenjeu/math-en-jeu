@@ -593,13 +593,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Générer le plateau de jeu selon les règles de la table et 
 		// garder le plateau en mémoire dans la table
 		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, gameType);
-                
-                // On trouve une position initiale au WinTheGame et on part son thread si nécessaire
-                if(gameType.equals("winTheGameWithScore") || gameType.equals("winTheGameWithoutScore"))
-                {
-                    definirNouvellePositionWinTheGame();
-                    winTheGame.demarrer();
-                }
 
                 // Définir le prochain id pour les objets
                 objProchainIdObjet.intValue++;
@@ -788,6 +781,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     	    {
                 Thread threadJoueurVirtuel = new Thread((JoueurVirtuel) lstJoueursVirtuels.get(i));
                 threadJoueurVirtuel.start();
+            }
+            
+            // On trouve une position initiale au WinTheGame et on part son thread si nécessaire
+            if(gameType.equals("winTheGameWithScore") || gameType.equals("winTheGameWithoutScore"))
+            {
+                definirNouvellePositionWinTheGame();
+                winTheGame.demarrer();
             }
         }
         
@@ -1671,17 +1671,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         
         public void definirNouvellePositionWinTheGame()
         {
-            //FRANCOIS quand on deplace le winthegame, verifier si qqun est deja dessus et gagne
-            //FRANCOIS vérifier pkoi la premiere partie marche pas souvent
             Random objRandom = new Random();
             boolean pasTrouve = true;
             int grandeurDeplacement = 3;
             int nbEssaisI = 0;
             int nbEssaisJ = 0;
             int maxEssais = 9000;
-            
-            //FRANCOIS regarder si un joueur peut être créé sur le WTG
-            //FRANCOIS s'arranger pour que les AI tombent pas sur un WTG si y peuvent pas'
             
             // On obtient les positions des 4 joueurs afin de ne pas déplacer le WinTheGame
             // sur un joueur, ou encore sur une case où un joueur voulait aller
@@ -1697,18 +1692,18 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                         JoueurHumain j = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
                         positionsJoueurs[i] = j.obtenirPartieCourante().obtenirPositionJoueur();
                         positionsJoueursDesirees[i] = j.obtenirPartieCourante().obtenirPositionJoueurDesiree();
+                        if(positionsJoueursDesirees[i] == null) positionsJoueursDesirees[i] = positionsJoueurs[i];
                         i++;
                     }
                 }
                 {   
-                    if(lstJoueursVirtuels != null) for(int k=0; i<lstJoueursVirtuels.size(); k++)
+                    for(int k=0; k<lstJoueursVirtuels.size(); k++)
                     {
                         JoueurVirtuel j = (JoueurVirtuel)lstJoueursVirtuels.get(k);
                         positionsJoueurs[i] = j.obtenirPositionJoueur();
                         positionsJoueursDesirees[i] = positionsJoueurs[i];
                         i++;
                     }
-                    else for(i=i; i<4; i++) {positionsJoueursDesirees[i] = positionsJoueursDesirees[i-1]; positionsJoueurs[i] = positionsJoueurs[i-1];}
                 }
             }
             
@@ -1757,6 +1752,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             if(pasTrouve)
             {
                 System.out.println("On a dû prendre une case au hasard!!");
+                for(int z=0; z<4; z++) System.out.println("Positions: " + Integer.toString(positionsJoueurs[z].x) + "," + Integer.toString(positionsJoueurs[z].y));
                 nbEssaisI = 0;
                 for(int i=objRandom.nextInt(objttPlateauJeu.length); pasTrouve && nbEssaisI < maxEssais; i = objRandom.nextInt(objttPlateauJeu.length))
                 {

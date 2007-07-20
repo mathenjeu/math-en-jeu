@@ -49,13 +49,14 @@ public class Banane extends ObjetUtilisable
 	
         public static void utiliserBanane(String joueurQuiUtilise, Point positionJoueurChoisi, String nomJoueurChoisi, Table table, boolean estHumain)
         {
-            //n a trouvé le joueur et on l'a setté à subir une banane;
-            // * le reste, on le fera au déplacement de la personne
-            //FRANCOIS changer le boolean vaSubir... pour un string de celui qui a utilisé
+            // On a trouvé le joueur et on l'a setté à subir une banane;
+            // le reste, on le fera au déplacement de la personne
 
             // On obtient la position du WinTheGame
             Point positionDuWinTheGame;
-            //FRANCOIS c'est pas la position du wtg
+            
+            //FRANCOIS c'est pas encore la position du wtg, on va attendre qu'il
+            // soit bien implanté avant
             positionDuWinTheGame = new Point(positionJoueurChoisi);
 
             // Distance (en cases) de l'éloignement souhaité du joueur

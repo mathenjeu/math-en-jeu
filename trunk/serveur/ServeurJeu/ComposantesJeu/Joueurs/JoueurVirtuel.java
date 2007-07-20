@@ -290,7 +290,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	            }
 	                    
 				// Trouver une case intermédiaire (qui n'est pas le WTG'
-                                //FRANCOIS terminer
+                                //FRANCOIS terminer s'arranger pour que les AI tombent pas sur un WTG si y peuvent pas'
                                 do
                                 {
                                     objPositionIntermediaire = trouverPositionIntermediaire();

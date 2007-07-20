@@ -234,9 +234,6 @@ public class EvenementPartieDemarree extends Evenement
 						}
 					}
 				}
-
-                                //FRANCOIS est-ce qu'on envoie le gameType? (je pense que ce serait mieux de le faire
-                                // quand le joueur obtient la liste des tables et se connecte à une
                                 
                                 // Créer le noeud contenant la position initiale du WinTheGame s'il a été initialisé
                                 if(positionWinTheGame.x != -1 && positionWinTheGame.y != -1)
