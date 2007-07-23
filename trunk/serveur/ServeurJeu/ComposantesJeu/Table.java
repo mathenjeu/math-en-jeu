@@ -1340,11 +1340,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	{
                 definirNouvellePositionWinTheGame();
                 
-                //FRANCOIS on doit s'arranger pour que les AI veulent atteindre le WTG s'il le faut
 		EvenementDeplacementWinTheGame deplacementWTG = new EvenementDeplacementWinTheGame(positionWinTheGame.x, positionWinTheGame.y);
 		
-		// Créer un ensemble contenant tous les tuples de la liste des joueurs
-		// de la table
+		// Créer un ensemble contenant tous les tuples de la liste des joueurs de la table
 		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
