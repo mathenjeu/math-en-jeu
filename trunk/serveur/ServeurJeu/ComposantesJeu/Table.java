@@ -1789,6 +1789,5 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                     nbEssaisI++;
                 }
             }
-            System.out.println("WinTheGame: Nouvelle position: x=" + Integer.toString(positionWinTheGame.x) + ", y=" + Integer.toString(positionWinTheGame.y));
         }
 }

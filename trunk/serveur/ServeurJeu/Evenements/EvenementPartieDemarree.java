@@ -238,6 +238,7 @@ public class EvenementPartieDemarree extends Evenement
                                 // Créer le noeud contenant la position initiale du WinTheGame s'il a été initialisé
                                 if(positionWinTheGame.x != -1 && positionWinTheGame.y != -1)
                                 {
+                                    System.out.println("AHHHHHHHHHHHHHHH François c'est un maudit colon!!!");
                                     Element objNoeudParametrePositionWinTheGame = objDocumentXML.createElement("parametre");
                                     objNoeudParametrePositionWinTheGame.setAttribute("type", "positionWinTheGame");
                                     objNoeudParametrePositionWinTheGame.setAttribute("x", Integer.toString(positionWinTheGame.x));
