@@ -59,27 +59,12 @@ public class EvenementDeplacementWinTheGame extends Evenement
 			// Créer le noeud de commande à retourner
 			Element objNoeudCommande = objDocumentXML.createElement("commande");
 			
-			// Créer les noeuds des paramètres
-			Element objNoeudParametreX = objDocumentXML.createElement("parametre");
-			Element objNoeudParametreY = objDocumentXML.createElement("parametre");
-			
-			// Créer un noeud contenant le nom d'utilisateur du noeud paramètre
-			Text objNoeudTexteX = objDocumentXML.createTextNode(Integer.toString(x));
-			Text objNoeudTexteY = objDocumentXML.createTextNode(Integer.toString(y));
-			
 			// Définir les attributs du noeud de commande
 			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "DeplacementWinTheGame");
-			
-			objNoeudParametreX.setAttribute("type", "x");
-			objNoeudParametreX.appendChild(objNoeudTexteX);
-			objNoeudParametreY.setAttribute("type", "y");
-			objNoeudParametreY.appendChild(objNoeudTexteY);
-			
-			// Ajouter les noeuds paramètres au noeud de commande
-			objNoeudCommande.appendChild(objNoeudParametreX);
-			objNoeudCommande.appendChild(objNoeudParametreY);
+                        objNoeudCommande.setAttribute("x", Integer.toString(x));
+                        objNoeudCommande.setAttribute("y", Integer.toString(y));
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
 			objDocumentXML.appendChild(objNoeudCommande);
