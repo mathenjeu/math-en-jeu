@@ -362,8 +362,7 @@ public class ProtocoleJoueur implements Runnable
 	 * 				un autre joueur. Dans les autres cas, ce sont les
 	 * 				fonctions appelées qui vont être synchronisées.
 	 */
-	private String traiterCommandeJoueur(String message) throws TransformerConfigurationException,
-																TransformerException
+	private String traiterCommandeJoueur(String message) throws TransformerConfigurationException, TransformerException
 	{            
 		Moniteur.obtenirInstance().debut( "ProtocoleJoueur.traiterCommandeJoueur" );
 		
@@ -1650,6 +1649,14 @@ public class ProtocoleJoueur implements Runnable
 						// noeuds spécifiques au succès de la réponse
 						if (objRetour.deplacementEstAccepte() == true)
 						{
+                                                    // On vérifie d'abord si le joueur a atteint le WinTheGame;
+                                                    // Si c'est le cas, on arrête la partie
+                                                    if(!this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirGameType().equals("original") && objRetour.obtenirNouvellePosition().equals(this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirPositionWinTheGame()))
+                                                    {
+                                                        this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().arreterPartie(this.obtenirJoueurHumain().obtenirNomUtilisateur());
+                                                    }
+                                                    else
+                                                    {
 							Element objNoeudParametreObjetRamasse = objDocumentXMLSortie.createElement("parametre");
 							Element objNoeudParametreObjetSubi = objDocumentXMLSortie.createElement("parametre");
 							Element objNoeudParametreNouvellePosition = objDocumentXMLSortie.createElement("parametre");
@@ -1713,6 +1720,7 @@ public class ProtocoleJoueur implements Runnable
 							Text objNoeudTexteCollision = objDocumentXMLSortie.createTextNode(objRetour.obtenirCollision());
 							objNoeudParametreCollision.appendChild( objNoeudTexteCollision );
 							objNoeudCommande.appendChild( objNoeudParametreCollision );
+                                                    }
 						}
 						else
 						{

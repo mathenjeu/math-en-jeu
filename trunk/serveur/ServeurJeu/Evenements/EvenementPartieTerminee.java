@@ -29,12 +29,14 @@ public class EvenementPartieTerminee  extends Evenement
 {
 	private TreeMap lstJoueurs;
 	private Vector lstJoueursVirtuels;
+        private String joueurGagnant;
 	
-	public EvenementPartieTerminee( TreeMap joueurs, Vector joueursVirtuels )
+	public EvenementPartieTerminee( TreeMap joueurs, Vector joueursVirtuels, String joueurGagnant)
 	{
 		super();
 		lstJoueurs = joueurs;
 		lstJoueursVirtuels = joueursVirtuels;
+                this.joueurGagnant = joueurGagnant;
 	}
 	
 	protected String genererCodeXML(InformationDestination information)
@@ -58,12 +60,13 @@ public class EvenementPartieTerminee  extends Evenement
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "PartieTerminee");
 			
-           // Créer le noeud du paramètre
+                        // Créer le noeud du paramètre
 			Element objNoeudParametre = objDocumentXML.createElement("parametre");
-			
-			// On ajoute un attribut type qui va contenir le type
-			// du paramètre
 			objNoeudParametre.setAttribute("type", "StatistiqueJoueur");
+                        
+                        Element objNoeudARejointLeWinTheGame = objDocumentXML.createElement("joueurWinTheGame");
+                        objNoeudARejointLeWinTheGame.setAttribute("nom", joueurGagnant);
+                        objNoeudCommande.appendChild(objNoeudARejointLeWinTheGame);
 			
 			Iterator it = lstJoueurs.values().iterator();
 			while( it.hasNext() )
@@ -71,20 +74,10 @@ public class EvenementPartieTerminee  extends Evenement
 				JoueurHumain joueur = (JoueurHumain)it.next();
 				String nomUtilisateur = joueur.obtenirNomUtilisateur();
 				int pointage = joueur.obtenirPartieCourante().obtenirPointage();
-			
 				
 				Element objNoeudJoueur = objDocumentXML.createElement("joueur");
 				objNoeudJoueur.setAttribute("utilisateur", nomUtilisateur);
 				objNoeudJoueur.setAttribute("pointage", new Integer( pointage).toString());
-				
-				/*Element objNoeudNom = objDocumentXML.createElement("utilisateur");
-				Text objNoeudTexteNom = objDocumentXML.createTextNode( nomUtilisateur );
-				objNoeudNom.appendChild( objNoeudTexteNom );
-				
-				Element objNoeudPoint = objDocumentXML.createElement("pointage");
-				Text objNoeudTextePoint = objDocumentXML.createTextNode( new Integer( pointage).toString() );
-				objNoeudPoint.appendChild( objNoeudTextePoint );*/
-				
 				objNoeudParametre.appendChild( objNoeudJoueur );
 
 				// Ajouter le noeud paramètre au noeud de commande
@@ -95,15 +88,13 @@ public class EvenementPartieTerminee  extends Evenement
 			{
 				for (int i = 0; i < lstJoueursVirtuels.size(); i++)
 				{
-					JoueurVirtuel joueur = (JoueurVirtuel) lstJoueursVirtuels.get(i);
-					String nomUtilisateur = joueur.obtenirNom();
-					int pointage = joueur.obtenirPointage();
-				
-					
-					Element objNoeudJoueur = objDocumentXML.createElement("joueur");
-					objNoeudJoueur.setAttribute("utilisateur", nomUtilisateur);
-					objNoeudJoueur.setAttribute("pointage", new Integer( pointage).toString());
-					
+                                    JoueurVirtuel joueur = (JoueurVirtuel) lstJoueursVirtuels.get(i);
+                                    String nomUtilisateur = joueur.obtenirNom();
+                                    int pointage = joueur.obtenirPointage();
+
+                                    Element objNoeudJoueur = objDocumentXML.createElement("joueur");
+                                    objNoeudJoueur.setAttribute("utilisateur", nomUtilisateur);
+                                    objNoeudJoueur.setAttribute("pointage", new Integer( pointage).toString());
 				    objNoeudParametre.appendChild(objNoeudJoueur);
 
 				    // Ajouter le noeud paramètre au noeud de commande
@@ -111,7 +102,6 @@ public class EvenementPartieTerminee  extends Evenement
 					
 				}
 			}
-			
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
 			objDocumentXML.appendChild(objNoeudCommande);
@@ -128,6 +118,7 @@ public class EvenementPartieTerminee  extends Evenement
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
 		
+            System.out.println(strCodeXML);
 		return strCodeXML;
 	}
 }

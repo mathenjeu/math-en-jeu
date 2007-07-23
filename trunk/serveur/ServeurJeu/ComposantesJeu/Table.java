@@ -215,7 +215,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	
 	public void destruction()
 	{
-		arreterPartie();
+		arreterPartie("");
                 
                 // On doit aussi arrêter le thread du WinTheGame si nécessaire
                 if(winTheGame.thread.isAlive())
@@ -789,9 +789,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         
 	}
 	
-	public void arreterPartie()
+	public void arreterPartie(String joueurGagnant)
 	{
-		
 	    // bolEstArretee permet de savoir si cette fonction a déjà été appelée
 	    // de plus, bolEstArretee et bolEstCommencee permettent de connaître 
 	    // l'état de la partie
@@ -842,7 +841,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 						}
 					}
 			    	
-					preparerEvenementPartieTerminee();
+					preparerEvenementPartieTerminee(joueurGagnant);
 					
 					// Parcours des joueurs pour mise à jour de la BD et
 					// pour ajouter les infos de la partie complétée
@@ -853,15 +852,24 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 						JoueurHumain joueur = (JoueurHumain)it.next();
 						objGestionnaireBD.mettreAJourJoueur(joueur, intTempsTotal);
 						
-						// Vérififer si ce joueur a gagner
-						if (joueur.obtenirPartieCourante().obtenirPointage() == meilleurPointage)
-						{
-							bolGagnant = true;
-						}
-						else
-						{
-							bolGagnant = false;
-						}
+                                                // Si un joueur a atteint le WinTheGame, joueurGagnant contiendra le nom de ce joueur
+                                                if(!joueurGagnant.equals(""))
+                                                {
+                                                    // Vérififer si ce joueur a gagner
+                                                    if (joueur.obtenirPartieCourante().obtenirPointage() == meilleurPointage)
+                                                    {
+                                                            bolGagnant = true;
+                                                    }
+                                                    else
+                                                    {
+                                                            bolGagnant = false;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if(joueurGagnant.equals(joueur.obtenirNomUtilisateur())) bolGagnant = true;
+                                                    else bolGagnant = false;
+                                                }
 						
 						// Ajouter l'information pour cette partie et ce joueur
 						objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur.obtenirCleJoueur(), 
@@ -1432,11 +1440,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		objGestionnaireEvenements.ajouterEvenement(synchroniser);
 	}
 	
-	private void preparerEvenementPartieTerminee()
+	private void preparerEvenementPartieTerminee(String joueurGagnant)
 	{
-        // Créer un nouvel événement qui va permettre d'envoyer l'événement 
+            // joueurGagnant réfère à la personne qui a atteint le WinTheGame (s'il y a lieu)
+            
+            // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs de la table
-	    EvenementPartieTerminee partieTerminee = new EvenementPartieTerminee(lstJoueurs, lstJoueursVirtuels);
+	    EvenementPartieTerminee partieTerminee = new EvenementPartieTerminee(lstJoueurs, lstJoueursVirtuels, joueurGagnant);
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
@@ -1465,7 +1475,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	
 	public void tempsEcoule()
 	{
-		arreterPartie();
+		arreterPartie("");
 	}
 
 	public int getObservateurMinuterieId()

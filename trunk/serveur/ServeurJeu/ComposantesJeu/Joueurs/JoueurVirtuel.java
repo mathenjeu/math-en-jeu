@@ -1353,6 +1353,9 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	            objPositionJoueur.y);
         }
         
+        // Si le joueur virtuel a atteint le WinTheGame, on arrête la partie
+        if(!this.obtenirTable().obtenirGameType().equals("original") && objNouvellePosition.equals(this.obtenirTable().obtenirPositionWinTheGame())) this.obtenirTable().arreterPartie(this.obtenirNom());
+        
         if (objCaseDestination instanceof CaseSpeciale)
         {
         	// Émulation du mini-jeu

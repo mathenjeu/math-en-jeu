@@ -30,6 +30,9 @@ public class WinTheGame
             }
         }
     }
+    
+    //FRANCOIS s'arranger pour que le WinTheGame soit le plus loin possible de
+    // tous les joueurs lorsqu'il est créé (ou du moins, à peu près à la même distance de tous les joueurs)
 
     public WinTheGame(Table t)
     {
