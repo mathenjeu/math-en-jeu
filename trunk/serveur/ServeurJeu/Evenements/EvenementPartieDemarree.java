@@ -114,9 +114,10 @@ public class EvenementPartieDemarree extends Evenement
                                 System.out.println("On s'apprête à créer le noeud des infos initiales sur le WTG");
                                 if(positionWinTheGame.x != -1 && positionWinTheGame.y != -1) System.out.println("Vérification des conditions du if: OK!!");
                                 else System.out.println("Vérification des conditions du if: ERREUR!!");
+                                System.out.println("Le WTG est placé à " + Integer.toString(positionWinTheGame.x) + Integer.toString(positionWinTheGame.y));
                                 if(positionWinTheGame.x != -1 && positionWinTheGame.y != -1)
                                 {
-                                    System.out.println("On est dans le if! Le WTG est placé à " + Integer.toString(positionWinTheGame.x) + Integer.toString(positionWinTheGame.y));
+                                    System.out.println("On est dans le if!");
                                     Element objNoeudParametrePositionWinTheGame = objDocumentXML.createElement("parametre");
                                     objNoeudParametrePositionWinTheGame.setAttribute("type", "positionWinTheGame");
                                     objNoeudParametrePositionWinTheGame.setAttribute("x", Integer.toString(positionWinTheGame.x));
