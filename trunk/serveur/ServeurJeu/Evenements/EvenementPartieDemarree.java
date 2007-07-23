@@ -109,6 +109,20 @@ public class EvenementPartieDemarree extends Evenement
 				objNoeudParametreTaillePlateauJeu.setAttribute("type", "Taille");
 				objNoeudParametrePositionJoueurs.setAttribute("type", "PositionJoueurs");
 				objNoeudParametrePlateauJeu.setAttribute("type", "PlateauJeu");
+                                
+                                // Créer le noeud contenant la position initiale du WinTheGame s'il a été initialisé
+                                System.out.println("On s'apprête à créer le noeud des infos initiales sur le WTG");
+                                if(positionWinTheGame.x != -1 && positionWinTheGame.y != -1) System.out.println("Vérification des conditions du if: OK!!");
+                                else System.out.println("Vérification des conditions du if: ERREUR!!");
+                                if(positionWinTheGame.x != -1 && positionWinTheGame.y != -1)
+                                {
+                                    System.out.println("On est dans le if! Le WTG est placé à " + Integer.toString(positionWinTheGame.x) + Integer.toString(positionWinTheGame.y));
+                                    Element objNoeudParametrePositionWinTheGame = objDocumentXML.createElement("parametre");
+                                    objNoeudParametrePositionWinTheGame.setAttribute("type", "positionWinTheGame");
+                                    objNoeudParametrePositionWinTheGame.setAttribute("x", Integer.toString(positionWinTheGame.x));
+                                    objNoeudParametrePositionWinTheGame.setAttribute("y", Integer.toString(positionWinTheGame.y));
+                                    objNoeudCommande.appendChild(objNoeudParametrePositionWinTheGame);
+                                }
 				
 				// Créer les informations concernant la taille
 				objNoeudParametreTaille.setAttribute("nbLignes", Integer.toString(objttPlateauJeu.length));
@@ -235,17 +249,6 @@ public class EvenementPartieDemarree extends Evenement
 					}
 				}
                                 
-                                // Créer le noeud contenant la position initiale du WinTheGame s'il a été initialisé
-                                if(positionWinTheGame.x != -1 && positionWinTheGame.y != -1)
-                                {
-                                    System.out.println("AHHHHHHHHHHHHHHH François c'est un maudit colon!!!");
-                                    Element objNoeudParametrePositionWinTheGame = objDocumentXML.createElement("parametre");
-                                    objNoeudParametrePositionWinTheGame.setAttribute("type", "positionWinTheGame");
-                                    objNoeudParametrePositionWinTheGame.setAttribute("x", Integer.toString(positionWinTheGame.x));
-                                    objNoeudParametrePositionWinTheGame.setAttribute("y", Integer.toString(positionWinTheGame.y));
-                                    objNoeudCommande.appendChild(objNoeudParametrePositionWinTheGame);
-                                }
-                                
 				// Ajouter le noeud paramètre au noeud de commande
 				objNoeudCommande.appendChild(objNoeudParametreTempsPartie);
 				objNoeudCommande.appendChild(objNoeudParametreTaillePlateauJeu);
@@ -275,6 +278,7 @@ public class EvenementPartieDemarree extends Evenement
 		}
 		
 		Moniteur.obtenirInstance().fin();
+                System.out.println("EvenementPartieDemarrer: " + strCodeXML);
 		return strCodeXML;
 	}
 }
