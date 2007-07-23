@@ -53,17 +53,16 @@ public class Banane extends ObjetUtilisable
             // le reste, on le fera au déplacement de la personne
 
             // On obtient la position du WinTheGame
-            Point positionDuWinTheGame;
-            
-            //FRANCOIS c'est pas encore la position du wtg, on va attendre qu'il
-            // soit bien implanté avant
-            positionDuWinTheGame = new Point(positionJoueurChoisi);
-
-            // Distance (en cases) de l'éloignement souhaité du joueur
-            int deCombienOnVeutEloigner = 12;
+            Point positionDuWinTheGame = new Point(table.obtenirPositionWinTheGame());
 
             // Obtention du plateau de jeu
             Case[][] plateauDeJeu = table.obtenirPlateauJeuCourant();
+            
+            // Distance (en cases) de l'éloignement souhaité du joueur
+            // On prend la distance actuelle d'avec le WinTheGame
+            // et on lui ajoute une quantité qui dépend de la taille du plateau
+            int deCombienOnVeutEloigner = Math.abs(positionDuWinTheGame.x - positionJoueurChoisi.x) + Math.abs(positionDuWinTheGame.y - positionJoueurChoisi.y);
+            deCombienOnVeutEloigner += plateauDeJeu.length*4/3;
 
             // Point optimal
             Point pointOptimal = new Point(positionJoueurChoisi);

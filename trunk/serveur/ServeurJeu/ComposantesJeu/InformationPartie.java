@@ -879,4 +879,9 @@ public class InformationPartie
         {
             vaSubirUneBanane = b;
         }
+        
+        public int obtenirDistanceAuWinTheGame()
+        {
+            return Math.abs(objPositionJoueur.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(objPositionJoueur.y - objTable.obtenirPositionWinTheGame().y);
+        }
 }

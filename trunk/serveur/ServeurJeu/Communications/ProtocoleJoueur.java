@@ -3388,8 +3388,8 @@ public class ProtocoleJoueur implements Runnable
                         objNoeudCommande.setAttribute("type", "OK");
                         
                         // Entiers et Strings pour garder en mémoire la distance la plus courte au WTG et les joueurs associés
-                        int max1 = 0;
-                        int max2 = 0;
+                        int max1 = 666;
+                        int max2 = 666;
                         String max1User = "";
                         String max2User = "";
                         boolean estHumain1 = false;
@@ -3405,18 +3405,18 @@ public class ProtocoleJoueur implements Runnable
                         while(objIterateurListeJoueurs.hasNext() == true)
                         {
                             JoueurHumain j = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
-                            if(j.obtenirPartieCourante().obtenirPointage()>=max1)
+                            if(j.obtenirPartieCourante().obtenirDistanceAuWinTheGame()<=max1)
                             {
                                 max2 = max1;
                                 max2User = max1User;
                                 estHumain2 = estHumain1;
-                                max1 = j.obtenirPartieCourante().obtenirPointage();
+                                max1 = j.obtenirPartieCourante().obtenirDistanceAuWinTheGame();
                                 max1User = j.obtenirNomUtilisateur();
                                 estHumain1 = true;
                             }
-                            else if(j.obtenirPartieCourante().obtenirPointage()>=max2)
+                            else if(j.obtenirPartieCourante().obtenirDistanceAuWinTheGame()<=max2)
                             {
-                                max2 = j.obtenirPartieCourante().obtenirPointage();
+                                max2 = j.obtenirPartieCourante().obtenirDistanceAuWinTheGame();
                                 max2User = j.obtenirNomUtilisateur();
                                 estHumain2 = true;
                             }
@@ -3424,18 +3424,18 @@ public class ProtocoleJoueur implements Runnable
                         if(listeJoueursVirtuels != null) for(int i=0; i<listeJoueursVirtuels.size(); i++)
                         {
                             JoueurVirtuel j = (JoueurVirtuel)listeJoueursVirtuels.get(i);
-                            if(j.obtenirPointage()>=max1)
+                            if(j.obtenirDistanceAuWinTheGame()<=max1)
                             {
                                 max2 = max1;
                                 max2User = max1User;
                                 estHumain2 = estHumain1;
-                                max1 = j.obtenirPointage();
+                                max1 = j.obtenirDistanceAuWinTheGame();
                                 max1User = j.obtenirNom();
                                 estHumain1 = false;
                             }
-                            else if(j.obtenirPointage()>=max2)
+                            else if(j.obtenirPointage()<=max2)
                             {
-                                max2 = j.obtenirPointage();
+                                max2 = j.obtenirDistanceAuWinTheGame();
                                 max2User = j.obtenirNom();
                                 estHumain2 = false;
                             }

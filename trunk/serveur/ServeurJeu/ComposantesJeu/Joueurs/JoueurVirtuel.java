@@ -2537,5 +2537,10 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     	return (s.equals("Aucun") || s.equals("Facile") || s.equals("Intermediaire") ||
     			s.equals("Difficile") || s.equals("TresDifficile"));
     }
+    
+    public int obtenirDistanceAuWinTheGame()
+    {
+        return Math.abs(objPositionJoueur.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(objPositionJoueur.y - objTable.obtenirPositionWinTheGame().y);
+    }
 }
 
