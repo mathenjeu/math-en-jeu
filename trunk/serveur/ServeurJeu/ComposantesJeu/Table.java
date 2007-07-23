@@ -1232,7 +1232,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs de la table qu'un joueur a démarré une partie
-	    EvenementPartieDemarree partieDemarree = new EvenementPartieDemarree(intTempsTotal, listePositionJoueurs, objttPlateauJeu, positionWinTheGame);
+	    EvenementPartieDemarree partieDemarree = new EvenementPartieDemarree(intTempsTotal, listePositionJoueurs, objttPlateauJeu, this);
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)

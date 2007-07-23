@@ -2769,8 +2769,7 @@ public class ProtocoleJoueur implements Runnable
             
         // Créer l'événement contenant toutes les informations sur le plateau et
         // la partie
-        EvenementPartieDemarree objEvenementPartieDemarree = new EvenementPartieDemarree(
-            objTable.obtenirTempsTotal(), lstPositionsJoueurs, objttPlateauJeu, ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirPositionWinTheGame());
+        EvenementPartieDemarree objEvenementPartieDemarree = new EvenementPartieDemarree(objTable.obtenirTempsTotal(), lstPositionsJoueurs, objttPlateauJeu, this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable());
 
         // Créer l'objet information destination pour envoyer l'information à ce joueur
         InformationDestination objInformationDestination = new InformationDestination(obtenirNumeroCommande(), this);
