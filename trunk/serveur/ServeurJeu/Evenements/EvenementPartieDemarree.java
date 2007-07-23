@@ -17,6 +17,7 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ServeurJeu.Monitoring.Moniteur;
 import ClassesUtilitaires.UtilitaireXML;
+import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
@@ -37,7 +38,7 @@ public class EvenementPartieDemarree extends Evenement
 	
 	private Document objDocumentXML;
 	private Element objNoeudCommande;
-        private Point positionWinTheGame;
+        private Table table;
     
     /**
      * Constructeur de la classe EvenementPartieDemarree qui permet 
@@ -49,13 +50,13 @@ public class EvenementPartieDemarree extends Evenement
      * @param Case[][] plateauJeu : Un tableau à 2 dimensions représentant le 
      * 								plateau de jeu
      */
-    public EvenementPartieDemarree(int tempsPartie, TreeMap listePositionJoueurs, Case[][] plateauJeu, Point positionInitiale)
+    public EvenementPartieDemarree(int tempsPartie, TreeMap listePositionJoueurs, Case[][] plateauJeu, Table table)
     {
         // Définir le temps de la partie, le plateau de jeu et la liste des
     	// positions des joueurs
     	intTempsPartie = tempsPartie;
         objttPlateauJeu = plateauJeu;
-        positionWinTheGame = positionInitiale;
+        this.table = table;
         lstPositionJoueurs = listePositionJoueurs;
         objDocumentXML = null;
         objNoeudCommande = null;
@@ -110,20 +111,21 @@ public class EvenementPartieDemarree extends Evenement
 				objNoeudParametrePositionJoueurs.setAttribute("type", "PositionJoueurs");
 				objNoeudParametrePlateauJeu.setAttribute("type", "PlateauJeu");
                                 
-                                // Créer le noeud contenant la position initiale du WinTheGame s'il a été initialisé
-                                System.out.println("On s'apprête à créer le noeud des infos initiales sur le WTG");
-                                if(positionWinTheGame.x != -1 && positionWinTheGame.y != -1) System.out.println("Vérification des conditions du if: OK!!");
-                                else System.out.println("Vérification des conditions du if: ERREUR!!");
-                                System.out.println("Le WTG est placé à " + Integer.toString(positionWinTheGame.x) + Integer.toString(positionWinTheGame.y));
-                                if(positionWinTheGame.x != -1 && positionWinTheGame.y != -1)
+                                // Créer le noeud contenant la position initiale du WinTheGame
                                 {
-                                    System.out.println("On est dans le if!");
-                                    Element objNoeudParametrePositionWinTheGame = objDocumentXML.createElement("parametre");
-                                    objNoeudParametrePositionWinTheGame.setAttribute("type", "positionWinTheGame");
-                                    objNoeudParametrePositionWinTheGame.setAttribute("x", Integer.toString(positionWinTheGame.x));
-                                    objNoeudParametrePositionWinTheGame.setAttribute("y", Integer.toString(positionWinTheGame.y));
-                                    objNoeudCommande.appendChild(objNoeudParametrePositionWinTheGame);
+                                    int z=0;
+                                    while((table.obtenirPositionWinTheGame().x == -1 || table.obtenirPositionWinTheGame().y == -1) && z<100)
+                                    {
+                                        table.definirNouvellePositionWinTheGame();
+                                        z++;
+                                    }
                                 }
+                                
+                                Element objNoeudParametrePositionWinTheGame = objDocumentXML.createElement("parametre");
+                                objNoeudParametrePositionWinTheGame.setAttribute("type", "positionWinTheGame");
+                                objNoeudParametrePositionWinTheGame.setAttribute("x", Integer.toString(table.obtenirPositionWinTheGame().x));
+                                objNoeudParametrePositionWinTheGame.setAttribute("y", Integer.toString(table.obtenirPositionWinTheGame().y));
+                                objNoeudCommande.appendChild(objNoeudParametrePositionWinTheGame);
 				
 				// Créer les informations concernant la taille
 				objNoeudParametreTaille.setAttribute("nbLignes", Integer.toString(objttPlateauJeu.length));
