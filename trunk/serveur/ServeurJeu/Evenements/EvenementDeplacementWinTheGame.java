@@ -63,8 +63,11 @@ public class EvenementDeplacementWinTheGame extends Evenement
 			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "DeplacementWinTheGame");
-                        objNoeudCommande.setAttribute("x", Integer.toString(x));
-                        objNoeudCommande.setAttribute("y", Integer.toString(y));
+
+                        Element objNoeudParametre = objDocumentXML.createElement("parametre");
+                        objNoeudParametre.setAttribute("x", Integer.toString(x));
+                        objNoeudParametre.setAttribute("y", Integer.toString(y));
+                        objNoeudCommande.appendChild(objNoeudParametre);
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
 			objDocumentXML.appendChild(objNoeudCommande);
