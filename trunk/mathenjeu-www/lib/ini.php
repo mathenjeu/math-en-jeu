@@ -98,14 +98,15 @@ ini_set('session.use_trans_sid',1);
 //ini_set('session.use_only_cookies',1);
 
 //si la session n'existe pas on la d�bute
-if(session_id()=="")
-{
+if (session_id()=="") {
   //d�bute la session
   session_start();
 }
 
-if (isset($_SESSION['langage'])) {
-  require_once(LANGAGE_DIR . $_SESSION['langage'] . "/lang_main.php"); 
+//echo $_SESSION['langage'];
+
+if (isset($_SESSION['langage']) && $_SESSION['langage'] != "" ) {
+  require_once(LANGAGE_DIR . $_SESSION['langage'] . "/lang_main.php");
 } else {
   require_once(LANGAGE_DIR . $config->langue . "/lang_main.php");
   $_SESSION['langage'] = $config->langue;

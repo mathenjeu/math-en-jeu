@@ -18,10 +18,10 @@
 	</object>
 	{else}
 	<object width="425" height="350">
-		<param name="movie" value="http://www.youtube.com/v/L9ywO0GUWxk"></param>
-		<embed src="http://www.youtube.com/v/L9ywO0GUWxk" 
-				type="application/x-shockwave-flash" 
-				width="425" height="350"> 
+		<param name="movie" value="http://www.youtube.com/v/IQJn47Mvfqs"></param>
+		<embed src="http://www.youtube.com/v/IQJn47Mvfqs" 
+			   type="application/x-shockwave-flash" 
+			   width="425" height="350"> 
 		</embed> 
 	</object>
 	{/if}
