@@ -15,6 +15,7 @@ import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
+import ServeurJeu.ControleurJeu;
 import ServeurJeu.Monitoring.Moniteur;
 import ClassesUtilitaires.UtilitaireXML;
 import ServeurJeu.ComposantesJeu.Table;
@@ -281,7 +282,7 @@ public class EvenementPartieDemarree extends Evenement
 		}
 		
 		Moniteur.obtenirInstance().fin();
-                System.out.println("EvenementPartieDemarrer: " + strCodeXML);
+                if(ControleurJeu.modeDebug) System.out.println("EvenementPartieDemarrer: " + strCodeXML);
 		return strCodeXML;
 	}
 }
