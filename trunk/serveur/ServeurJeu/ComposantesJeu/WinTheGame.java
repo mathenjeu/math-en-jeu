@@ -14,12 +14,11 @@ public class WinTheGame
     {
         public void run()
         {
-            int intervalle = GestionnaireConfiguration.obtenirInstance().obtenirNombreEntier("controleurjeu.salles-initiales.regles.intervalle-deplacement-winthegame");
             try
             {
                 while(true)
                 {
-                    Thread.sleep(1000*intervalle);
+                    Thread.sleep(1000*(table.obtenirTempsTotal()*5+30));
                     table.preparerEvenementDeplacementWinTheGame();
                 }
             }
@@ -30,9 +29,6 @@ public class WinTheGame
             }
         }
     }
-    
-    //FRANCOIS s'arranger pour que le WinTheGame soit le plus loin possible de
-    // tous les joueurs lorsqu'il est créé (ou du moins, à peu près à la même distance de tous les joueurs)
 
     public WinTheGame(Table t)
     {

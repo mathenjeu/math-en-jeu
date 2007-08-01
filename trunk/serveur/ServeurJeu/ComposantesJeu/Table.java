@@ -45,7 +45,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	private GestionnaireEvenements objGestionnaireEvenements;
 	
         // On déclare la classe qui permettra les déplacements du WinTheGame
-        WinTheGame winTheGame = new WinTheGame(this);
+        private WinTheGame winTheGame;
         
 	// Déclaration d'une référence vers le contrôleur de jeu
 	private ControleurJeu objControleurJeu;
@@ -146,11 +146,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				 ControleurJeu controleurJeu, String type) 
 	{
 		super();
-                
                 positionWinTheGame = new Point(-1, -1);
                 gameType = type;
                 
-		
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		_MAX_NB_JOUEURS = config.obtenirNombreEntier( "table.max-nb-joueurs" );
 		
@@ -166,6 +164,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		intNoTable = noTable;
 		strNomUtilisateurCreateur = nomUtilisateurCreateur;
 		intTempsTotal = tempsPartie;
+                winTheGame = new WinTheGame(this);
                 // intTempsRestant = tempsPartie;
 		
 		// Créer une nouvelle liste de joueurs
@@ -1670,7 +1669,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         public boolean peutAllerSurLeWinTheGame(int pointage)
         {
             if(gameType.equals("winTheGameWithoutScore")) return true;
-            else return pointage >= intTempsTotal*15;
+            else return pointage >= pointageRequisPourAllerSurLeWinTheGame();
+        }
+        
+        public int pointageRequisPourAllerSurLeWinTheGame()
+        {
+            return intTempsTotal*15;
         }
         
         public void definirNouvellePositionWinTheGame()
@@ -1751,16 +1755,15 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 }
             }
             
-            maxEssais = 100;
-            // Sinon, on prend une case quelconque
+            // Sinon, on prend la case qui minimise la distance maximale à chacun des joueurs
             if(pasTrouve)
             {
-                nbEssaisI = 0;
-                for(int i=objRandom.nextInt(objttPlateauJeu.length); pasTrouve && nbEssaisI < maxEssais; i = objRandom.nextInt(objttPlateauJeu.length))
+                int meilleureDistMax = 666;
+                int meilleurI = positionWinTheGame.x;
+                int meilleurJ = positionWinTheGame.y;
+                for(int i=0; i < objttPlateauJeu.length; i++)
                 {
-                    nbEssaisJ = 0;
-                    objRandom.setSeed(System.currentTimeMillis());
-                    for(int j=objRandom.nextInt(objttPlateauJeu[i].length); pasTrouve && nbEssaisJ<maxEssais; j = objRandom.nextInt(objttPlateauJeu[i].length))
+                    for(int j=0; j < objttPlateauJeu[i].length; j++)
                     {
                         // Est-ce que la case existe? Est-ce que c'est une case couleur?
                         if(objttPlateauJeu[i][j] != null && objttPlateauJeu[i][j] instanceof CaseCouleur)
@@ -1769,25 +1772,26 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                             // Est-ce qu'il n'y a rien dessus?
                             if(caseTemp.obtenirObjetArme() == null && caseTemp.obtenirObjetCase() == null)
                             {
-                                // Est-ce que c'est la même case? Est-ce dans les limites?
-                                if(i != positionWinTheGame.x && j != positionWinTheGame.y && i >= 0 && j >= 0 && i < objttPlateauJeu.length && j < objttPlateauJeu[i].length)
+                                // Est-ce qu'un joueur est sur cette case ou veut s'y déplacer?
+                                boolean presence = false;
+                                for(int k=0; k<4 && !presence; k++) if((new Point(i, j)).equals(positionsJoueurs[k]) || (new Point(i, j)).equals(positionsJoueursDesirees[k])) presence = true;
+                                if(!presence)
                                 {
-                                    // Est-ce qu'un joueur est sur cette case ou veut s'y déplacer?
-                                    boolean presence = false;
-                                    for(int k=0; k<4 && !presence; k++) if((new Point(i, j)).equals(positionsJoueurs[k]) || (new Point(i, j)).equals(positionsJoueursDesirees[k])) presence = true;
-                                    if(!presence)
+                                    // On regarde la distance maximale aux joueurs
+                                    int distMax = Math.max(Math.max(Math.abs(i - positionsJoueurs[0].x) + Math.abs(j - positionsJoueurs[0].y), Math.abs(i - positionsJoueurs[1].x) + Math.abs(j - positionsJoueurs[1].y)), Math.max(Math.abs(i - positionsJoueurs[2].x) + Math.abs(j - positionsJoueurs[2].y), Math.abs(i - positionsJoueurs[3].x) + Math.abs(j - positionsJoueurs[3].y)));
+                                    if(distMax <= meilleureDistMax)
                                     {
-                                        // Tout est OK, on déplace le WinTheGame
-                                        pasTrouve = false;
-                                        positionWinTheGame.move(i, j);
+                                        meilleurI = i;
+                                        meilleurJ = j;
+                                        meilleureDistMax = distMax;
                                     }
                                 }
                             }
                         }
-                        nbEssaisJ++;
                     }
-                    nbEssaisI++;
                 }
+                // Tout est OK, on déplace le WinTheGame
+                positionWinTheGame.move(meilleurI, meilleurJ);
             }
         }
 }
