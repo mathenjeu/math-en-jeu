@@ -853,9 +853,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 						objGestionnaireBD.mettreAJourJoueur(joueur, intTempsTotal);
 						
                                                 // Si un joueur a atteint le WinTheGame, joueurGagnant contiendra le nom de ce joueur
-                                                if(!joueurGagnant.equals(""))
+                                                if(joueurGagnant.equals(""))
                                                 {
-                                                    // Vérififer si ce joueur a gagner
+                                                    // Vérififer si ce joueur a gagné par les points
                                                     if (joueur.obtenirPartieCourante().obtenirPointage() == meilleurPointage)
                                                     {
                                                             bolGagnant = true;

@@ -112,22 +112,26 @@ public class EvenementPartieDemarree extends Evenement
 				objNoeudParametrePositionJoueurs.setAttribute("type", "PositionJoueurs");
 				objNoeudParametrePlateauJeu.setAttribute("type", "PlateauJeu");
                                 
-                                // Créer le noeud contenant la position initiale du WinTheGame
-                                {
-                                    int z=0;
-                                    while((table.obtenirPositionWinTheGame().x == -1 || table.obtenirPositionWinTheGame().y == -1) && z<100)
-                                    {
-                                        table.definirNouvellePositionWinTheGame();
-                                        z++;
-                                    }
-                                }
                                 
-                                Element objNoeudParametrePositionWinTheGame = objDocumentXML.createElement("parametre");
-                                objNoeudParametrePositionWinTheGame.setAttribute("type", "positionWinTheGame");
-                                objNoeudParametrePositionWinTheGame.setAttribute("x", Integer.toString(table.obtenirPositionWinTheGame().x));
-                                objNoeudParametrePositionWinTheGame.setAttribute("y", Integer.toString(table.obtenirPositionWinTheGame().y));
-                                objNoeudParametrePositionWinTheGame.setAttribute("pointageRequis", Integer.toString(table.pointageRequisPourAllerSurLeWinTheGame()));
-                                objNoeudCommande.appendChild(objNoeudParametrePositionWinTheGame);
+                                if(!table.obtenirGameType().equals("original"))
+                                {
+                                    // Créer le noeud contenant la position initiale du WinTheGame
+                                    {
+                                        int z=0;
+                                        while((table.obtenirPositionWinTheGame().x == -1 || table.obtenirPositionWinTheGame().y == -1) && z<100)
+                                        {
+                                            table.definirNouvellePositionWinTheGame();
+                                            z++;
+                                        }
+                                    }
+
+                                    Element objNoeudParametrePositionWinTheGame = objDocumentXML.createElement("parametre");
+                                    objNoeudParametrePositionWinTheGame.setAttribute("type", "positionWinTheGame");
+                                    objNoeudParametrePositionWinTheGame.setAttribute("x", Integer.toString(table.obtenirPositionWinTheGame().x));
+                                    objNoeudParametrePositionWinTheGame.setAttribute("y", Integer.toString(table.obtenirPositionWinTheGame().y));
+                                     objNoeudParametrePositionWinTheGame.setAttribute("pointageRequis", Integer.toString(table.pointageRequisPourAllerSurLeWinTheGame()));
+                                    objNoeudCommande.appendChild(objNoeudParametrePositionWinTheGame);
+                                }
 				
 				// Créer les informations concernant la taille
 				objNoeudParametreTaille.setAttribute("nbLignes", Integer.toString(objttPlateauJeu.length));
