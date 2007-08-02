@@ -804,7 +804,7 @@ public class ProtocoleJoueur implements Runnable
 							{
 								// Il n'y a pas eu d'erreurs
 								objNoeudCommande.setAttribute("type", "Reponse");
-								objNoeudCommande.setAttribute("nom", "Ok");								
+								objNoeudCommande.setAttribute("nom", "Ok");
 							}
 							else
 							{
@@ -920,6 +920,7 @@ public class ProtocoleJoueur implements Runnable
 						// Ajouter le noeud paramètre au noeud de commande dans
 						// le document de sortie
 						objNoeudCommande.appendChild(objNoeudParametreListeJoueurs);
+                                                objNoeudCommande.setAttribute("chatPermis", Boolean.toString(obtenirJoueurHumain().obtenirSalleCourante().obtenirRegles().obtenirPermetChat()));
 					}
 				}
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.ObtenirListeTables))
@@ -1866,6 +1867,40 @@ public class ProtocoleJoueur implements Runnable
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.AcheterObjet))
 				{
 					traiterCommandeAcheterObjet(objNoeudCommandeEntree, objNoeudCommande, objDocumentXMLEntree, objDocumentXMLSortie, bolDoitRetournerCommande);
+				}
+                                else if(objNoeudCommandeEntree.getAttribute("nom").equals(Commande.ChatMessage))
+				{	
+                                    // Si le joueur n'est pas connecté au serveur de jeu
+                                    if (objJoueurHumain == null)
+                                    {
+                                            objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+                                    }
+                                    // Si le joueur n'est connecté à aucune salle
+                                    else if (objJoueurHumain.obtenirSalleCourante() == null)
+                                    {
+                                            objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");
+                                    }
+                                    // Si le joueur n'est pas dans aucune table
+                                    else if (objJoueurHumain.obtenirPartieCourante() == null)
+                                    {
+                                            objNoeudCommande.setAttribute("nom", "JoueurPasDansTable");
+                                    }
+                                    else if (!this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirRegles().obtenirPermetChat())
+                                    {
+                                            objNoeudCommande.setAttribute("nom", "ChatNonPermis");
+                                    }
+                                    else
+                                    {
+                                        //  Il n'y a pas eu d'erreurs
+                                        objNoeudCommande.setAttribute("type", "OK");
+                                        
+                                        // Obtenir le message à envoyer à tous et le nom du joueur qui l'envoie
+					String messageAEnvoyer = obtenirValeurParametre(objNoeudCommandeEntree, "messageAEnvoyer").getNodeValue();
+                                        String nomJoueur = this.obtenirJoueurHumain().obtenirNomUtilisateur();
+                                        
+                                        // On prépare l'événement qui enverra le message à tous
+                                        this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().preparerEvenementMessageChat(nomJoueur, messageAEnvoyer);
+                                    }
 				}
 			}
 

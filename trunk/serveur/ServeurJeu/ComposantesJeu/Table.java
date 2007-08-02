@@ -33,6 +33,7 @@ import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
 import ClassesUtilitaires.IntObj;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.Evenements.EvenementDeplacementWinTheGame;
+import ServeurJeu.Evenements.EvenementMessageChat;
 import ServeurJeu.Evenements.EvenementUtiliserObjet;
 import java.util.Random;
 
@@ -1341,6 +1342,20 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                         utiliserObjet.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),objJoueur.obtenirProtocoleJoueur()));
 		}
 		objGestionnaireEvenements.ajouterEvenement(utiliserObjet);
+	}
+        
+        public void preparerEvenementMessageChat(String joueurQuiEnvoieLeMessage, String messageAEnvoyer)
+	{
+                // Même chose que la fonction précédente, mais envoie plutôt un message de la part d'un joueur à tous les joueurs de la table
+		EvenementMessageChat messageChat = new EvenementMessageChat(joueurQuiEnvoieLeMessage, messageAEnvoyer);
+		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		while (objIterateurListe.hasNext() == true)
+		{
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+                        messageChat.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),objJoueur.obtenirProtocoleJoueur()));
+		}
+		objGestionnaireEvenements.ajouterEvenement(messageChat);
 	}
 
 	public void preparerEvenementDeplacementWinTheGame()
