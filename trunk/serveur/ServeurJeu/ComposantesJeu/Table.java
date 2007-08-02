@@ -165,7 +165,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		intNoTable = noTable;
 		strNomUtilisateurCreateur = nomUtilisateurCreateur;
 		intTempsTotal = tempsPartie;
-                winTheGame = new WinTheGame(this);
+                if(!this.gameType.equals("original")) winTheGame = new WinTheGame(this);
                 // intTempsRestant = tempsPartie;
 		
 		// Créer une nouvelle liste de joueurs
@@ -1689,7 +1689,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         
         public int pointageRequisPourAllerSurLeWinTheGame()
         {
-            return intTempsTotal*15;
+            if(this.gameType=="winTheGameWithoutScore") return 0;
+            else return intTempsTotal*15;
         }
         
         public void definirNouvellePositionWinTheGame()
