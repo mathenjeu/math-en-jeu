@@ -410,9 +410,9 @@ public class InformationPartie
                         {
                                 intDifficulte = Math.abs(nouvellePosition.y - objPositionJoueur.y);
                         }
+                 *
+                 *Eventuellement, on pourra mettre un peu de random...?
                 ################################################################*/
-                
-                //FRANCOIS mettre du random un peu?
                 
                 int distanceFuture = Math.abs(nouvellePosition.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(nouvellePosition.y - objTable.obtenirPositionWinTheGame().y);
                 int stepDifficulte = Math.max(Math.abs(this.objTable.obtenirPlateauJeuCourant()[0].length-objTable.obtenirPositionWinTheGame().y), Math.abs(objTable.obtenirPositionWinTheGame().y-this.objTable.obtenirPlateauJeuCourant()[0].length)) / 5;
@@ -424,8 +424,6 @@ public class InformationPartie
                 if(stepDifficulte * 3 <= distanceFuture && distanceFuture < stepDifficulte * 4) intDifficulte = 3;
                 if(stepDifficulte * 4 <= distanceFuture && distanceFuture < stepDifficulte * 5) intDifficulte = 2;
                 if(intDifficulte == 0) intDifficulte = 1;
-                
-                System.out.println("Difficulté: " + Integer.toString(intDifficulte));
 		
 		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
 		// une question
