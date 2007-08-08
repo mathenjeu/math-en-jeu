@@ -83,66 +83,19 @@
                 </case-speciale>
 
                 <!-- List of shops -->
-                <magasin>
-                        <priorite>1</priorite>
-                        <nom>Magasin1</nom>
-                </magasin>
-                <magasin>
-                        <priorite>2</priorite>
-                        <nom>Magasin2</nom>
-                </magasin>
-                <magasin>
-                        <priorite>3</priorite>
-                        <nom>Magasin3</nom>
-                </magasin>
-                <magasin>
-                        <priorite>4</priorite>
-                        <nom>Magasin4</nom>
-                </magasin>
-
-                <!-- List of objects to be sold in shops -->
-                <objet-a-vendre-Magasin1>
-                    <nom>Livre</nom>
-                </objet-a-vendre-Magasin1>
-                <objet-a-vendre-Magasin1>
-                    <nom>PotionGros</nom>
-                </objet-a-vendre-Magasin1>
-                <objet-a-vendre-Magasin1>
-                    <nom>Banane</nom>
-                </objet-a-vendre-Magasin1>
-                <objet-a-vendre-Magasin2>
-                    <nom>Livre</nom>
-                </objet-a-vendre-Magasin2>
-                <objet-a-vendre-Magasin2>
-                    <nom>PotionPetit</nom>
-                </objet-a-vendre-Magasin2>
-                <objet-a-vendre-Magasin2>
-                    <nom>Papillon</nom>
-                </objet-a-vendre-Magasin2>
-                <objet-a-vendre-Magasin3>
-                    <nom>Livre</nom>
-                </objet-a-vendre-Magasin3>
-                <objet-a-vendre-Magasin2>
-                    <nom>PotionPetit</nom>
-                </objet-a-vendre-Magasin2>
-                <objet-a-vendre-Magasin3>
-                    <nom>Papillon</nom>
-                </objet-a-vendre-Magasin3>
-                <objet-a-vendre-Magasin3>
-                    <nom>Boule</nom>
-                </objet-a-vendre-Magasin3>
-                <objet-a-vendre-Magasin4>
-                    <nom>Livre</nom>
-                </objet-a-vendre-Magasin4>
-                <objet-a-vendre-Magasin4>
-                    <nom>Papillon</nom>
-                </objet-a-vendre-Magasin4>
-                <objet-a-vendre-Magasin4>
-                    <nom>Boule</nom>
-                </objet-a-vendre-Magasin4>
-                <objet-a-vendre-Magasin4>
-                    <nom>Telephone</nom>
-                </objet-a-vendre-Magasin4>
+		<magasin nom="Magasin1" priorite="1">
+                    <objet-a-vendre>Livre</objet-a-vendre>
+                    <objet-a-vendre>Boule</objet-a-vendre>
+		</magasin>
+		<magasin nom="Magasin2" priorite="2">
+                    <objet-a-vendre>PotionGros</objet-a-vendre>
+                    <objet-a-vendre>PotionPetit</objet-a-vendre>
+		</magasin>
+		<magasin nom="Magasin3" priorite="3">
+                    <objet-a-vendre>Banane</objet-a-vendre>
+                    <objet-a-vendre>Livre</objet-a-vendre>
+                    <objet-a-vendre>Boule</objet-a-vendre>
+		</magasin>
 
                 <!-- List of objects to be placed randomly on the board -->
                 <objet-utilisable>
