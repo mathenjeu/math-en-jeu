@@ -33,6 +33,9 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
 import ServeurJeu.Configuration.GestionnaireMessages;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.NodeList;
 
 
 
@@ -636,12 +639,15 @@ public class ControleurJeu
 		TreeSet objetsUtilisables = objReglesSalle.obtenirListeObjetsUtilisablesPossibles();
                 TreeSet magasins = objReglesSalle.obtenirListeMagasinsPossibles();
                 
-                List propNomsMagasins = config.obtenirListe("controleurjeu.salles-initiales.regles.magasin.nom");
-                List propPrioriteMagasins = config.obtenirListe("controleurjeu.salles-initiales.regles.magasin.priorite");
-                for(i=1; i <= propNomsMagasins.size(); i++)
+                
+                // Get the list of shops
+                Document documentConfig = config.getDocument();
+                NodeList listeDeMagasins = documentConfig.getElementsByTagName("magasin");
+                for(i=0; i<listeDeMagasins.getLength(); i++)
                 {
-                    Integer tmp1 = Integer.valueOf((String)propPrioriteMagasins.get(i-1));
-                    String tmp2 = (String)propNomsMagasins.get(i-1);
+                    NamedNodeMap attributs = listeDeMagasins.item(i).getAttributes();
+                    Integer tmp1 = Integer.valueOf(attributs.getNamedItem("priorite").getNodeValue());
+                    String tmp2 = attributs.getNamedItem("nom").getNodeValue();
                     magasins.add(new ReglesMagasin(tmp1, tmp2));
                 }
                 

@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Vector;
-import java.util.List;
 import Enumerations.Visibilite;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
@@ -18,6 +17,9 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Jean-François Brind'Amour
@@ -430,48 +432,65 @@ public final class GenerateurPartie
 				// Aller chercher une référence vers le magasin que l'on vient de créer
 				Magasin objMagasin = (Magasin)((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).obtenirObjetCase();
 
-                                List lstNomsObjets = config.obtenirListe("controleurjeu.salles-initiales.regles.objet-a-vendre-" + objReglesMagasin.obtenirNomMagasin() + ".nom");
-                                for(int i=1; i<=lstNomsObjets.size(); i++)
+                                // Get the list of items to be sold by shops
+                                // getNodeType verifications are to ensure we're getting the kind of node we're looking for
+                                //   because a lot of things are considered "nodes" in XML!
+                                Document documentConfig = config.getDocument();
+                                NodeList listeDeMagasins = documentConfig.getElementsByTagName("magasin");
+                                for(int i=0; i<listeDeMagasins.getLength(); i++)
                                 {
-                                    // Incrémenter le compteur de ID pour les objets
-                                    intCompteurIdObjet++;
-                                    
-                                    // On crée un nouvel objet du type correspondant
-                                    // puis on l'ajoute dans la liste des objets utilisables du magasin
-                                    if(((String)lstNomsObjets.get(i-1)).equals("Livre"))
+                                    if(listeDeMagasins.item(i).getNodeType()==1 && objReglesMagasin.obtenirNomMagasin().equals(listeDeMagasins.item(i).getAttributes().getNamedItem("nom").getNodeValue()))
                                     {
-                                        Livre objAAjouter = new Livre(intCompteurIdObjet, true);
-                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                    }
-                                    else if(((String)lstNomsObjets.get(i-1)).equals("Papillon"))
-                                    {
-                                        Papillon objAAjouter = new Papillon(intCompteurIdObjet, true);
-                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                    }
-                                    else if(((String)lstNomsObjets.get(i-1)).equals("Boule"))
-                                    {
-                                        Boule objAAjouter = new Boule(intCompteurIdObjet, true);
-                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                    }
-                                    else if(((String)lstNomsObjets.get(i-1)).equals("Telephone"))
-                                    {
-                                        Telephone objAAjouter = new Telephone(intCompteurIdObjet, true);
-                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                    }
-                                    else if(((String)lstNomsObjets.get(i-1)).equals("PotionGros"))
-                                    {
-                                        PotionGros objAAjouter = new PotionGros(intCompteurIdObjet, true);
-                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                    }
-                                    else if(((String)lstNomsObjets.get(i-1)).equals("PotionPetit"))
-                                    {
-                                        PotionPetit objAAjouter = new PotionPetit(intCompteurIdObjet, true);
-                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                    }
-                                    else if(((String)lstNomsObjets.get(i-1)).equals("Banane"))
-                                    {
-                                        Banane objAAjouter = new Banane(intCompteurIdObjet, true);
-                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                                        NodeList listeDObjets = listeDeMagasins.item(i).getChildNodes();
+                                        for(int j=0; j<listeDObjets.getLength(); j++)
+                                        {
+                                            if(listeDObjets.item(j).getNodeType()==1)
+                                            {
+                                                // Incrémenter le compteur de ID pour les objets
+                                                intCompteurIdObjet++;
+
+                                                    // On obtient le nom de l'objet en cours de traitement
+                                                    String nomDeLObjet = listeDObjets.item(j).getChildNodes().item(0).getNodeValue();
+
+                                                    // On crée un nouvel objet du type correspondant
+                                                    // puis on l'ajoute dans la liste des objets utilisables du magasin
+                                                    if(nomDeLObjet.equals("Livre"))
+                                                    {
+                                                        Livre objAAjouter = new Livre(intCompteurIdObjet, true);
+                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                                                    }
+                                                    else if(nomDeLObjet.equals("Papillon"))
+                                                    {
+                                                        Papillon objAAjouter = new Papillon(intCompteurIdObjet, true);
+                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                                                    }
+                                                    else if(nomDeLObjet.equals("Boule"))
+                                                    {
+                                                        Boule objAAjouter = new Boule(intCompteurIdObjet, true);
+                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                                                    }
+                                                    else if(nomDeLObjet.equals("Telephone"))
+                                                    {
+                                                        Telephone objAAjouter = new Telephone(intCompteurIdObjet, true);
+                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                                                    }
+                                                    else if(nomDeLObjet.equals("PotionGros"))
+                                                    {
+                                                        PotionGros objAAjouter = new PotionGros(intCompteurIdObjet, true);
+                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                                                    }
+                                                    else if(nomDeLObjet.equals("PotionPetit"))
+                                                    {
+                                                        PotionPetit objAAjouter = new PotionPetit(intCompteurIdObjet, true);
+                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                                                    }
+                                                    else if(nomDeLObjet.equals("Banane"))
+                                                    {
+                                                        Banane objAAjouter = new Banane(intCompteurIdObjet, true);
+                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                                                    }
+                                            }
+                                        }
                                     }
                                 }
 				
