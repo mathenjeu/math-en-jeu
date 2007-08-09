@@ -229,6 +229,7 @@ public class GestionnaireBD
         // This function fills a Question box with the player's level, a specified difficulty and a question category
 	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, int intCategorie, int intDifficulte )
 	{
+                // Noter qu'on ne tient plus compte de la catégorie!!
                 String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
             
 		String strRequeteSQL = "SELECT " + nomTable + ".*,typereponse.nomType FROM " + nomTable + ",typereponse " +
