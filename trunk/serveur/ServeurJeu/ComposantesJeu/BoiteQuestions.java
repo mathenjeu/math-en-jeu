@@ -13,7 +13,7 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 import ClassesUtilitaires.UtilitaireNombres;
 import ServeurJeu.Configuration.GestionnaireMessages;
-import ServeurJeu.Configuration.GestionnaireConfiguration;
+import org.w3c.dom.Node;
 
 /**
  * @author Marc
@@ -29,10 +29,10 @@ public class BoiteQuestions
         // in the same language, we set a language field for question boxes
         private Langue langue;
 	
-	public BoiteQuestions(String langue)
+	public BoiteQuestions(String langue, Node noeudLangue, String nomSalle)
 	{
 		lstQuestions = new TreeMap<Integer, TreeMap<Integer, Vector<Question>>>();
-                this.langue = new Langue(langue, GestionnaireConfiguration.obtenirInstance());
+                this.langue = new Langue(langue, noeudLangue, nomSalle);
 	}
 	
 	public void ajouterQuestion( Question question )

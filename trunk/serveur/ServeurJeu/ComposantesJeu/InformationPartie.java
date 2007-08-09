@@ -18,6 +18,7 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ServeurJeu.ControleurJeu;
+import org.w3c.dom.Node;
 
 /**
  * @author Jean-François Brind'Amour
@@ -116,7 +117,7 @@ public class InformationPartie
 	    // Créer la liste des objets utilisables qui ont été ramassés
 	    lstObjetsUtilisablesRamasses = new TreeMap();
 
-            objBoiteQuestions = new BoiteQuestions(joueur.obtenirProtocoleJoueur().langue);
+            objBoiteQuestions = new BoiteQuestions(joueur.obtenirProtocoleJoueur().langue, joueur.obtenirSalleCourante().obtenirNoeudLangue(), joueur.obtenirSalleCourante().obtenirNomSalle());
             objGestionnaireBD.remplirBoiteQuestions(objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());
 	}
 

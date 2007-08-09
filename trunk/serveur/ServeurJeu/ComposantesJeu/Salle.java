@@ -19,6 +19,7 @@ import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
+import org.w3c.dom.Node;
 
 //TODO: Le mot de passe d'une salle ne doit pas être modifiée pendant le jeu,
 //      sinon il va falloir ajouter des synchronisations à chaque fois qu'on
@@ -59,6 +60,9 @@ public class Salle
 	// Cet objet permet de déterminer les règles de jeu pour cette salle
 	private Regles objRegles;
         
+        // Contenu du noeud langue de cette salle dans le fichier de configuration
+        private Node noeudLangue;
+        
         // This is the maximum number of coins and items a player can hold at one time
         public static int maxPossessionPieceEtObjet = Integer.parseInt(GestionnaireConfiguration.obtenirInstance().obtenirString("controleurjeu.salles-initiales.regles.max-possession-objets-et-pieces"));
 	
@@ -76,7 +80,7 @@ public class Salle
 	 */
 	public Salle(GestionnaireBD gestionnaireBD, 
 				 String nomSalle, String nomUtilisateurCreateur, String motDePasse, 
-				 Regles reglesSalle, ControleurJeu controleurJeu) 
+				 Regles reglesSalle, ControleurJeu controleurJeu, Node noeudLangue) 
 	{
 		super();
 		
@@ -98,11 +102,14 @@ public class Salle
 		
 		// Définir les règles de jeu pour la salle courante
 		objRegles = reglesSalle;
+                
+                // On définit le noeud XML contenant les paramètres de la langue
+                this.noeudLangue = noeudLangue;
 		
 		// Faire la référence vers le controleur de jeu
 		objControleurJeu = controleurJeu;
 		
-//		 Créer un thread pour le GestionnaireEvenements
+		// Créer un thread pour le GestionnaireEvenements
 		Thread threadEvenements = new Thread(objGestionnaireEvenements);
 		
 		// Démarrer le thread du gestionnaire d'événements
@@ -700,4 +707,9 @@ public class Salle
 	{
 		return !(strMotDePasse == null || strMotDePasse.equals(""));
 	}
+        
+        public Node obtenirNoeudLangue()
+        {
+            return noeudLangue;
+        }
 }

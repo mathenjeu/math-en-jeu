@@ -2,22 +2,6 @@
 
 <!-- Math en jeu configuration file -->
 <configuration>
-	
-    <!-- Everything that depends on the player's language -->
-    <langue>
-        <Anglais>
-            <nom-table-questions-BD></nom-table-questions-BD>
-            <url-questions-reponses></url-questions-reponses>
-            <cle-question-min></cle-question-min>
-            <cle-question-max></cle-question-max>
-        </Anglais>
-        <Francais>
-            <nom-table-questions-BD></nom-table-questions-BD>
-            <url-questions-reponses></url-questions-reponses>
-            <cle-question-min></cle-question-min>
-            <cle-question-max></cle-question-max>
-        </Francais>
-    </langue>
 
     <!-- Set the URL where the music files will be accessible by the client -->
     <musique>
@@ -53,6 +37,22 @@
                 <nom>Salle Newton</nom>
                 <createur></createur>
                 <mot-de-passe></mot-de-passe>
+                
+                <!-- Which languages does this room support? -->
+                <langue>
+                    <Anglais>
+                        <nom-table-questions-BD></nom-table-questions-BD>
+                        <url-questions-reponses></url-questions-reponses>
+                        <cle-question-min></cle-question-min>
+                        <cle-question-max></cle-question-max>
+                    </Anglais>
+                    <Francais>
+                        <nom-table-questions-BD></nom-table-questions-BD>
+                        <url-questions-reponses></url-questions-reponses>
+                        <cle-question-min></cle-question-min>
+                        <cle-question-max></cle-question-max>
+                    </Francais>
+                </langue>
             </salle>
 
             <regles>

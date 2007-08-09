@@ -35,6 +35,7 @@ import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 
@@ -461,9 +462,30 @@ public class ControleurJeu
 	 * 				l'ajout et/ou au retrait d'une salle, car ça ne peut pas
 	 * 				se produire.
 	 */
-	public TreeMap obtenirListeSalles()
+	public TreeMap obtenirListeSalles(String langue)
 	{
-		return lstSalles;
+            // Si on n'a pas spécifié de langue, on retourne toutes les salles
+            if(langue=="") return lstSalles;
+            
+            // Sinon, on enlève toutes les salles qui ne permettent pas de jouer
+            // dans la langue spécifiée
+            TreeMap copieListeSalles = (TreeMap)lstSalles.clone();
+            copieListeSalles.clear();
+            Set keySet = lstSalles.keySet();
+            Iterator it = keySet.iterator();
+            while (it.hasNext())
+            {
+                String key = (String)it.next();
+                Salle salle = (Salle)lstSalles.get(key);
+                Boolean permetCetteLangue = false;
+                NodeList listeDeLangues = salle.obtenirNoeudLangue().getChildNodes();
+                for(int j=0; j<listeDeLangues.getLength() && !permetCetteLangue; j++)
+                {
+                    if(listeDeLangues.item(j).getNodeType()==1 && listeDeLangues.item(j).getNodeName().equals(langue)) permetCetteLangue = true;
+                }
+                if(permetCetteLangue) copieListeSalles.put(key, salle);
+            }
+            return copieListeSalles;
 	}
 
 	/**
@@ -639,6 +661,7 @@ public class ControleurJeu
 		TreeSet objetsUtilisables = objReglesSalle.obtenirListeObjetsUtilisablesPossibles();
                 TreeSet magasins = objReglesSalle.obtenirListeMagasinsPossibles();
                 
+                // First, we load the rules that are the same for every room
                 
                 // Get the list of shops
                 Document documentConfig = config.getDocument();
@@ -661,10 +684,6 @@ public class ControleurJeu
 		objReglesSalle.definirTempsMinimal( config.obtenirNombreEntier( "controleurjeu.salles-initiales.regles.temps-minimal" ) );
 		objReglesSalle.definirTempsMaximal( config.obtenirNombreEntier( "controleurjeu.salles-initiales.regles.temps-maximal" ) );
 		objReglesSalle.definirDeplacementMaximal( config.obtenirNombreEntier( "controleurjeu.salles-initiales.regles.deplacement-maximal" ) );
-		
-		String nom = config.obtenirString( "controleurjeu.salles-initiales.salle.nom" );
-		String createur = config.obtenirString( "controleurjeu.salles-initiales.salle.createur" );
-		String motDePasse = config.obtenirString( "controleurjeu.salles-initiales.salle.mot-de-passe" );
 
                 List propTypeCaseSpeciale = config.obtenirListe("controleurjeu.salles-initiales.regles.case-speciale.type");
                 List propPrioriteCaseSpeciale = config.obtenirListe("controleurjeu.salles-initiales.regles.case-speciale.priorite");
@@ -693,12 +712,31 @@ public class ControleurJeu
                     objetsUtilisables.add(new ReglesObjetUtilisable(tmp1, tmp2, Visibilite.Aleatoire));
                 }
                 
-                Salle objSalle = new Salle(objGestionnaireBD, nom, createur, motDePasse, objReglesSalle, this);
-                ajouterNouvelleSalle( objSalle );
+                // Now, we load room-specific settings (as well as the actual rooms)
                 
-                //Si on veut des nouvelles salles (avec peut-être de nouvelles règles):
-                //Salle objSalle2 = new Salle(objGestionnaireBD, "J'aime ça les peanuts, moé!", createur, motDePasse, objReglesSalle, this);
-                //ajouterNouvelleSalle(objSalle2);
+                // Get the list of rooms
+                NodeList listeDeSalles = documentConfig.getElementsByTagName("salle");
+                for(i=0; i<listeDeSalles.getLength(); i++)
+                {
+                    String nom = "";
+                    String createur = "";
+                    String motDePasse = "";
+                    Node noeudLangue = listeDeSalles.item(i);
+                    NodeList parametresSalle = listeDeSalles.item(i).getChildNodes();
+                    for(int j=0; j<parametresSalle.getLength(); j++)
+                    {
+                        // If it's the kind of node we want, load the parameters
+                        if(parametresSalle.item(j).getNodeType()==1)
+                        {
+                            if(parametresSalle.item(j).getNodeName().equals("nom")) nom = parametresSalle.item(j).getTextContent();
+                            else if(parametresSalle.item(j).getNodeName().equals("createur")) createur = parametresSalle.item(j).getTextContent();
+                            else if(parametresSalle.item(j).getNodeName().equals("mot-de-passe")) motDePasse = parametresSalle.item(j).getTextContent();
+                            else if(parametresSalle.item(j).getNodeName().equals("langue")) noeudLangue = parametresSalle.item(j);
+                        }
+                    }
+                    Salle objSalle = new Salle(objGestionnaireBD, nom, createur, motDePasse, objReglesSalle, this, noeudLangue);
+                    ajouterNouvelleSalle(objSalle);
+                }
 	}
 	
 	public GestionnaireCommunication obtenirGestionnaireCommunication()

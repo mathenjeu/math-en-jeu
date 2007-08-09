@@ -1,6 +1,7 @@
 package ServeurJeu.ComposantesJeu;
 
-import ServeurJeu.Configuration.GestionnaireConfiguration;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author François Gingras
@@ -29,13 +30,28 @@ public class Langue
         
         // The constructor is called as soon as we know the player's language
         // The language is obtained in the method's arguments, and the rest is obtained from the server config file
-	public Langue(String langue, GestionnaireConfiguration config)
+	public Langue(String langue, Node noeudLangue, String nomSalle)
 	{
             this.langue = langue;
-            URLQuestionsReponses = config.obtenirString("langue." + langue + ".url-questions-reponses");
-            nomTableQuestionsBD = config.obtenirString("langue." + langue + ".nom-table-questions-BD");
-            cleQuestionMin = config.obtenirNombreEntier("langue." + langue + ".cle-question-min");
-            cleQuestionMax = config.obtenirNombreEntier("langue." + langue + ".cle-question-max");
+            NodeList listeDeLangues = noeudLangue.getChildNodes();
+            for(int i=0; i<listeDeLangues.getLength(); i++)
+            {
+                // If it's the kind of node we want and it's the right language...
+                if(listeDeLangues.item(i).getNodeType()==1 && listeDeLangues.item(i).getNodeName().equals(langue))
+                {
+                    NodeList listeDeParametres = listeDeLangues.item(i).getChildNodes();
+                    for(int j=0; j<listeDeParametres.getLength(); j++)
+                    {
+                        if(listeDeParametres.item(j).getNodeType()==1)
+                        {
+                            if(listeDeParametres.item(j).getNodeName().equals("url-questions-reponses")) URLQuestionsReponses = listeDeParametres.item(j).getTextContent();
+                            else if(listeDeParametres.item(j).getNodeName().equals("nom-table-questions-BD")) nomTableQuestionsBD = listeDeParametres.item(j).getTextContent();
+                            else if(listeDeParametres.item(j).getNodeName().equals("cle-question-min")) cleQuestionMin = Integer.parseInt(listeDeParametres.item(j).getTextContent());
+                            else if(listeDeParametres.item(j).getNodeName().equals("cle-question-max")) cleQuestionMax = Integer.parseInt(listeDeParametres.item(j).getTextContent());
+                        }
+                    }
+                }
+            }
 	}
         
         public String obtenirLangue()
