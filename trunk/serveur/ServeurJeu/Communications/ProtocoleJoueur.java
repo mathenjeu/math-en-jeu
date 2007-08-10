@@ -100,6 +100,9 @@ public class ProtocoleJoueur implements Runnable
         
         // On obtiendra la langue du joueur pour pouvoir construire la boîte de questions
         public String langue;
+        
+        // Type de jeu (ex. mathEnJeu)
+        public String gameType;
 	
 	
 	// Déclaration d'une variable qui va permettre de savoir si le joueur
@@ -470,6 +473,7 @@ public class ProtocoleJoueur implements Runnable
 						if (strResultatAuthentification.equals(ResultatAuthentification.Succes))
 						{
 						  langue = obtenirValeurParametre(objNoeudCommandeEntree, "Langue").getNodeValue();
+                                                  gameType = obtenirValeurParametre(objNoeudCommandeEntree, "GameType").getNodeValue();
                             if (objControleurJeu.estJoueurDeconnecte(obtenirValeurParametre(objNoeudCommandeEntree, 
                                                 "NomUtilisateur").getNodeValue()))
                             {
@@ -696,7 +700,7 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudParametreListeSalles.setAttribute("type", "ListeNomSalles");
 					    
 					    // Obtenir la liste des salles du serveur de jeu
-						TreeMap lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue);
+						TreeMap lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue, this.gameType);
 						
 						// Générer un nouveau numéro de commande qui sera 
 					    // retourné au client
@@ -2004,9 +2008,9 @@ public class ProtocoleJoueur implements Runnable
 		// à son mot de passe
 		if (noeudCommande.getAttribute("nom").equals(Commande.Connexion))
 		{
-			// Si le nombre d'enfants du noeud de commande est de 2, alors
+			// Si le nombre d'enfants du noeud de commande est de 4, alors
 			// le nombre de paramètres est correct et on peut continuer
-			if (noeudCommande.getChildNodes().getLength() == 3)
+			if (noeudCommande.getChildNodes().getLength() == 4)
 			{
 				// Déclarer une variable qui va permettre de savoir si les 
 				// noeuds enfants sont valides
@@ -2032,6 +2036,7 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudCourant.getAttributes().getNamedItem("type") == null ||
 						(objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("NomUtilisateur") == false &&
                                                 objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("Langue") == false &&
+                                                objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("GameType") == false &&
 						objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("MotDePasse") == false) ||
 						objNoeudCourant.getChildNodes().getLength() != 1 ||
 						objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false)

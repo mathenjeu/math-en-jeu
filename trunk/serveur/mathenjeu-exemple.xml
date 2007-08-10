@@ -37,6 +37,7 @@
                 <nom>Salle Newton</nom>
                 <createur></createur>
                 <mot-de-passe></mot-de-passe>
+                <gameType>mathEnJeu</gameType>
                 
                 <!-- Which languages does this room support? -->
                 <langue>

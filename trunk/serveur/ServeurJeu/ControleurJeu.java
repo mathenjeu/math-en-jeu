@@ -462,13 +462,9 @@ public class ControleurJeu
 	 * 				l'ajout et/ou au retrait d'une salle, car ça ne peut pas
 	 * 				se produire.
 	 */
-	public TreeMap obtenirListeSalles(String langue)
+	public TreeMap obtenirListeSalles(String langue, String gameType)
 	{
-            // Si on n'a pas spécifié de langue, on retourne toutes les salles
-            if(langue=="") return lstSalles;
-            
-            // Sinon, on enlève toutes les salles qui ne permettent pas de jouer
-            // dans la langue spécifiée
+            // On crée une liste de salles vide, et on parcourt toutes les salles connues
             TreeMap copieListeSalles = (TreeMap)lstSalles.clone();
             copieListeSalles.clear();
             Set keySet = lstSalles.keySet();
@@ -477,13 +473,24 @@ public class ControleurJeu
             {
                 String key = (String)it.next();
                 Salle salle = (Salle)lstSalles.get(key);
+                
+                // On vérifie si cette salle est du bon gameType
+                // et si elle permet de jouer dans la langue donnée
+                Boolean estDuBonGameType = gameType.equals(salle.obtenirGameType());
                 Boolean permetCetteLangue = false;
                 NodeList listeDeLangues = salle.obtenirNoeudLangue().getChildNodes();
                 for(int j=0; j<listeDeLangues.getLength() && !permetCetteLangue; j++)
                 {
                     if(listeDeLangues.item(j).getNodeType()==1 && listeDeLangues.item(j).getNodeName().equals(langue)) permetCetteLangue = true;
                 }
-                if(permetCetteLangue) copieListeSalles.put(key, salle);
+                
+                // Si les paramètres en entrée sont des strings vides,
+                // alors on ignore le paramètre correspondant
+                if(gameType.equals("")) estDuBonGameType = true;
+                if(langue.equals("")) permetCetteLangue = true;
+                
+                // On ajoute la salle à la liste si elle correspond à ce qu'on veut
+                if(permetCetteLangue && estDuBonGameType) copieListeSalles.put(key, salle);
             }
             return copieListeSalles;
 	}
@@ -721,6 +728,7 @@ public class ControleurJeu
                     String nom = "";
                     String createur = "";
                     String motDePasse = "";
+                    String gameType = "";
                     Node noeudLangue = listeDeSalles.item(i);
                     NodeList parametresSalle = listeDeSalles.item(i).getChildNodes();
                     for(int j=0; j<parametresSalle.getLength(); j++)
@@ -732,9 +740,10 @@ public class ControleurJeu
                             else if(parametresSalle.item(j).getNodeName().equals("createur")) createur = parametresSalle.item(j).getTextContent();
                             else if(parametresSalle.item(j).getNodeName().equals("mot-de-passe")) motDePasse = parametresSalle.item(j).getTextContent();
                             else if(parametresSalle.item(j).getNodeName().equals("langue")) noeudLangue = parametresSalle.item(j);
+                            else if(parametresSalle.item(j).getNodeName().equals("gameType")) gameType = parametresSalle.item(j).getTextContent();
                         }
                     }
-                    Salle objSalle = new Salle(objGestionnaireBD, nom, createur, motDePasse, objReglesSalle, this, noeudLangue);
+                    Salle objSalle = new Salle(objGestionnaireBD, nom, createur, motDePasse, objReglesSalle, this, noeudLangue, gameType);
                     ajouterNouvelleSalle(objSalle);
                 }
 	}

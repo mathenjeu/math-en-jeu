@@ -46,6 +46,9 @@ public class Salle
 	
 	// Cette variable va contenir le nom d'utilisateur du créateur de cette salle
 	private String strNomUtilisateurCreateur;
+        
+        // Contient le type de jeu (ex. mathEnJeu)
+        private String gameType;
 	
 	// Cet objet est une liste de numéros utilisés pour les tables (sert à 
 	// générer de nouvelles tables)
@@ -80,7 +83,7 @@ public class Salle
 	 */
 	public Salle(GestionnaireBD gestionnaireBD, 
 				 String nomSalle, String nomUtilisateurCreateur, String motDePasse, 
-				 Regles reglesSalle, ControleurJeu controleurJeu, Node noeudLangue) 
+				 Regles reglesSalle, ControleurJeu controleurJeu, Node noeudLangue, String gameType)
 	{
 		super();
 		
@@ -94,6 +97,9 @@ public class Salle
 		strNomSalle = nomSalle;
 		strNomUtilisateurCreateur = nomUtilisateurCreateur;
 		strMotDePasse = motDePasse;
+                
+                // Type de jeu de la salle
+                this.gameType = gameType;
 		
 		// Créer une nouvelle liste de joueurs, de tables et de numéros
 		lstJoueurs = new TreeMap();
@@ -711,5 +717,10 @@ public class Salle
         public Node obtenirNoeudLangue()
         {
             return noeudLangue;
+        }
+        
+        public String obtenirGameType()
+        {
+            return gameType;
         }
 }
