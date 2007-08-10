@@ -113,7 +113,7 @@ public class EvenementPartieDemarree extends Evenement
 				objNoeudParametrePlateauJeu.setAttribute("type", "PlateauJeu");
                                 
                                 
-                                if(!table.obtenirGameType().equals("original"))
+                                if(!table.obtenirButDuJeu().equals("original"))
                                 {
                                     // Créer le noeud contenant la position initiale du WinTheGame
                                     {

@@ -285,7 +285,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 				
                                 // Trouver une case intéressante à atteindre
                                 // Si on a assez de points pour atteindre le WinTheGame, allons-y!
-                                if(!this.obtenirTable().obtenirGameType().equals("original") && this.obtenirTable().peutAllerSurLeWinTheGame(this.obtenirPointage()))
+                                if(!this.obtenirTable().obtenirButDuJeu().equals("original") && this.obtenirTable().peutAllerSurLeWinTheGame(this.obtenirPointage()))
                                 {
                                     objPositionFinaleVisee = this.obtenirTable().obtenirPositionWinTheGame();
                                 }
@@ -298,7 +298,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
                                         {
                                             objPositionFinaleVisee = trouverPositionFinaleVisee();
                                             essais++;
-                                        }while(!this.obtenirTable().obtenirGameType().equals("original") && essais < 50 && objPositionFinaleVisee.equals(this.obtenirTable().obtenirPositionWinTheGame()));
+                                        }while(!this.obtenirTable().obtenirButDuJeu().equals("original") && essais < 50 && objPositionFinaleVisee.equals(this.obtenirTable().obtenirPositionWinTheGame()));
                                     }
                                 }
                                 
@@ -312,7 +312,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
                                         {
                                             objPositionIntermediaire = trouverPositionIntermediaire();
                                             essais++;
-                                        }while(!this.obtenirTable().obtenirGameType().equals("original") && essais < 50 && objPositionIntermediaire.equals(this.obtenirTable().obtenirPositionWinTheGame()));
+                                        }while(!this.obtenirTable().obtenirButDuJeu().equals("original") && essais < 50 && objPositionIntermediaire.equals(this.obtenirTable().obtenirPositionWinTheGame()));
                                     }
                                 }
 
@@ -1354,7 +1354,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         }
         
         // Si le joueur virtuel a atteint le WinTheGame, on arrête la partie
-        if(!this.obtenirTable().obtenirGameType().equals("original") && objNouvellePosition.equals(this.obtenirTable().obtenirPositionWinTheGame())) this.obtenirTable().arreterPartie(this.obtenirNom());
+        if(!this.obtenirTable().obtenirButDuJeu().equals("original") && objNouvellePosition.equals(this.obtenirTable().obtenirPositionWinTheGame())) this.obtenirTable().arreterPartie(this.obtenirNom());
         
         if (objCaseDestination instanceof CaseSpeciale)
         {

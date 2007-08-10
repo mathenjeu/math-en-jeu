@@ -46,7 +46,7 @@ public final class GenerateurPartie
      * @throws NullPointerException : Si la liste passée en paramètre qui doit 
      * 								  être remplie est nulle
      */
-    public static Case[][] genererPlateauJeu(Regles reglesPartie, int temps, Vector listePointsCaseLibre, IntObj objDernierIdObjets, String gameType) throws NullPointerException
+    public static Case[][] genererPlateauJeu(Regles reglesPartie, int temps, Vector listePointsCaseLibre, IntObj objDernierIdObjets, String butDuJeu) throws NullPointerException
     {
 		// Création d'un objet permettant de générer des nombres aléatoires
 		Random objRandom = new Random();
