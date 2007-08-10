@@ -10,6 +10,17 @@ Description : Tous les textes du site web sont regroupés ici
 *******************************************************************************/
 
 //
+//mail participation béta
+//
+$lang['message_bienvenue_beta'] = 'Bonjour,<p> Voici l\'adresse qui vous permettra de jouer à la 
+nouvelle version de Math en jeu : <a href="http://mathenjeu.mat.ulaval.ca/mathenjeu-beta">
+http://mathenjeu.mat.ulaval.ca/mathenjeu-beta</a></p><p>Pour pouvoir essayer cette nouvelle version 
+vous devez vous inscrire comme avec la précédente version. Mais avant de vous inscrire, essayer votre 
+nom d\'usager et mot de passe actuel de Math en jeu car certain usager ont déjà la permission d\'y jouer.</p>
+Si vous avez des questions/commentaires/suggestions vous n\'avez qu\'à écrire à : maxime.begin@smac.ulaval.ca';
+
+
+//
 //commun : à usage multiple
 //
 $lang['math_en_jeu'] = "Math en jeu";
@@ -269,7 +280,7 @@ etc.</p>
 $lang['instructions_title'] = 'Instructions';
 $lang['instructions_body'] ='
 	<div style="width:90%;align:center" class="hr"></div><p>
-	<h4>Comment débuter une partie : </h4>
+	<h2>Comment débuter une partie : </h2>
 	<ul>
 		<li>C\'est la première fois que tu joues à Math en jeu? Alors <a href="inscription-joueur.php">inscris-toi ici</a> pour créer ton nom d\'utilisateur et ton mot de passe. La prochaine fois que tu joueras à Math en Jeu, tu n\'auras qu\'à réutiliser ce nom d\'utilisateur et ce mot de passe.</li>
 		<li>Pour jouer, va sur le site de Math en jeu.  Clique sur Portail des joueurs. Pour le nom d\'utilisateur et le mot de passe, mets ceux que tu as créés lors de ton inscription.  Clique maintenant sur Jouer!</li>
@@ -282,17 +293,86 @@ $lang['instructions_body'] ='
 		<li>Il faut maintenant choisir un personnage.  En cliquant sur les flèches qui pointent vers la gauche et la droite sélectionne ton personnage.  Clique sur Ok.</li> 
 		<li>Si d\'autres personnes sont supposées se joindre à la table, attends qu\'elles arrivent.  Sinon, clique sur Démarrer et la partie commencera!</li>
 	</ul>
-	<h4>Règlements de Math en Jeu : </h4>
-	<ul>	
-		<li>Sur la planche de jeu, ton personnage apparaîtra plus gros que celui des autres joueurs.</li>
-		<li>Ton personnage peut se déplacer dans les quatre directions, vers l\'avant, vers l\'arrière, vers la gauche ou vers la droite sur une même ligne.  Il ne peut pas aller en diagonale.  Les cases accessibles sont plus pâles que les autres.</li>  
-		<li>Ton personnage peut se déplacer d\'une à six cases à la fois.  Plus le déplacement est long, plus la question est difficile, selon le niveau scolaire que tu as choisi en faisant ton inscription.</li>  
-		<li>Un déplacement d\'une case vaut un point, un déplacement de deux cases vaut deux points et ainsi de suite.</li>    
-		<li>Les cases d\'une même couleur te donneront toujours des questions mathématiques d\'une même catégorie.</li>  
-		<li>Les cases avec un point d\'interrogation t\'amènent à un jeu si la question est répondue correctement.   Les points gagnés dans ce jeu seront additionnés à ton pointage.</li>
-		<li>Les symboles mathématiques sur le jeu valent des points supplémentaires.</li>  
-		<li>Le gagnant est le joueur qui a le plus de points.</li>
-	</ul>';
+
+
+	<h2><b>Règlements de base :</b></h2>
+
+	<ul>
+	<li>Sur la planche de jeu, votre personnage apparaîtra plus gros que celui des autres joueurs.</li>
+	<li>Votre personnage peut se déplacer dans les quatre directions, vers l\'avant, vers l\'arrière, vers la gauche ou vers la droite sur une même ligne. Il ne peut pas bouger en diagonale. Les cases accessibles apparaissent en orange.</li>  
+	<li>Votre personnage peut se déplacer d\'une à six cases à la fois.  Plus le déplacement est long, plus la question est difficile, selon le niveau scolaire que vous avez choisi en faisant votre inscription.</li>
+	<li>La valeur d\'une question est proportionnelle au carré de la longueur du déplacement souhaité. Un déplacement d\'une case vaut un point, un déplacement de deux cases vaut quatre points et ainsi de suite.</li>
+	<li>Les cases avec un point d\'interrogation vous amènent à un jeu si la question est répondue correctement.   Les points gagnés dans ces jeux seront additionnés à votre pointage.</li>
+	<li>Le gagnant est le joueur qui a le plus de points ou le premier à atteindre la case "<i>Victoire! </i>" (voir les explications plus bas.)</li>
+	</ul>
+
+	<br>
+
+	<h2><b>Les objets :</b></h2>
+
+	<table>
+	<tr><td align="center"><img src="http://mathenjeu.mat.ulaval.ca/mathenjeu-beta/dessins-objets/winTheGame.png"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><h2 align = "center"><b>Victoire!</b></h2></td></tr>
+	</table>
+	<ul>
+	<li>
+	Le premier joueur à atteindre cette case gagne instantanément la partie! Mais, ce n\'est pas tout! Avant d\'avoir la possibilité de cliquer sur cette case, vous devez avoir accumulé un nombre minimal de points. 
+	Si le temps s\'écoule sans qu\'aucun joueur n\'ait atteint cette case, le joueur gagnant est bien entendu celui avec le plus de points.
+	</li>
+	</ul>
+
+	<table>
+	<tr><td align="center"><img src="http://mathenjeu.mat.ulaval.ca/mathenjeu-beta/dessins-objets/cent.png"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><h2 align = "center"><b>Les pièces de monnaie</b></h2></td></tr>
+	</table>
+	<ul>
+	<li>
+	Les pièces de monnaie que vous amassez vous permettent maintenant d’acheter des objets (au coût d’une pièce chacun.)</li>
+	</ul>
+
+	<table>
+	<tr><td align="center"><img src="http://mathenjeu.mat.ulaval.ca/mathenjeu-beta/dessins-objets/maisonBlanche.png"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td align = "center"><h2><b>Les magasins</b></h2></td></tr>
+	</table>
+	<ul>
+	<li>
+	C’est ici que vous pouvez dépenser vos pièces de monnaie!</li>
+	</ul>
+	
+
+	<br>
+	<h2><b>Les objets que vous pouvez acheter sont : </b></h2>
+	</br>
+
+	<table>
+	<tr><td align="center"><img src="http://mathenjeu.mat.ulaval.ca/mathenjeu-beta/dessins-objets/banane.png"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><h2><b>La banane</b></font></h2></tr>
+	</table>
+	<ul>
+	<li>
+	La banane vous permet de jouer un vilain tour à un adversaire. En effet, en utilisant cet objet, votre opposant qui est le plus proche de la case « <i>Victoire</i> ! » glisse sur la pelure et se retrouve catapulté à l’autre opposé de l’échiquier!</li>
+	</ul>
+
+	<table>
+	<tr><td align="center"><img src="http://mathenjeu.mat.ulaval.ca/mathenjeu-beta/dessins-objets/livre.png"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><h2><b>Le livre</b></h2></td></tr>
+	</table>
+	<ul>
+	<li>
+	Le livre vous permet d’éliminer un choix de réponse à une question à choix multiple. En utilisant cet objet, le nombre de choix passe de quatre à trois.</li>
+	</ul>
+
+	<table>
+	<tr><td align="center"><img src="http://mathenjeu.mat.ulaval.ca/mathenjeu-beta/dessins-objets/boule.png"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><h2><b>Le boule de cristal</b></font></h2></tr>
+	</table>
+	<ul>
+	<li>
+	Si vous vous sentez incapable de répondre à une question, vous pouvez utiliser la boule de cristal pour demander à l\'ordinateur de vous fournir une autre question.</li>
+	</ul>
+	<br>
+
+';
+
+
+
+
+
+
 
 //
 //Inscription des administrateur
@@ -726,17 +806,6 @@ $lang['question_fin'] = "Fin";
 $lang['question_debut'] = "Début";
 $lang['question_suivant'] = "Suivant";
 $lang['question_precedent'] = "Précédent";
-
-$lang['musique_ambiance'] = "Ambiance";
-$lang['musique_blues'] = "Blues";
-$lang['musique_classique'] = "Classique";
-$lang['musique_rock'] = "Rock";
-$lang['musique_metal'] = "Métal";
-
-$lang['licence_site'] = "Site web";
-$lang['licence_artiste'] = "Artiste";
-$lang['licence_nom_piste'] = "Titre de la piste";
-$lang['licence_licence'] = "Licence";
 
 
 $lang['question_resultat_recherche'] = 'Résultat de la recherche';

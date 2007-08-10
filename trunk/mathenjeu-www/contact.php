@@ -1,10 +1,10 @@
 <?php 
 /*******************************************************************************
 Fichier : contact.php
-Auteur : Maxime Bégin
+Auteur : Maxime Bï¿½gin
 Description : pour afficher la page qui permet aux joueurs de nous contacter
 ********************************************************************************
-11-24-2006 Maxime Bégin - Version initiale
+11-24-2006 Maxime Bï¿½gin - Version initiale
 *******************************************************************************/
 
 require_once("lib/ini.php");
@@ -41,18 +41,21 @@ function main()
 	$smarty->display('menu.tpl');
 
 	
-	//on vérifie si un action est en cour ou non
+	//on vï¿½rifie si un action est en cour ou non
 	//sinon on affiche le formulaire pour le contact
 	if(!isset($_GET['action']))
 	{
 	 	$smarty->assign('status',0);
 	 	$smarty->cache_lifetime = 0;
+	 	if (isset($_GET['sujet'])) {
+	 	  $smarty->assign('sujet',$_GET['sujet']);
+	 	}
 		$smarty->display('contact.tpl');
 	}
 	elseif($_GET['action']=="envoyer")
 	{
 	 	$erreur="";
-	 	//on vérifie que le sujet et le message ne sont pas vide
+	 	//on vï¿½rifie que le sujet et le message ne sont pas vide
 	 	if($_POST['sujet']=="")
 	 	{
 	 	 	$erreur = $lang['erreur_sujet_vide'];
@@ -81,15 +84,25 @@ function main()
 		}
 		else
 		{
+		  //si le sujet du courriel est beta on rÃ©envoit directement un nouveau courriel
+          
 			//on tente maintenant d'envoyer le courriel
-		 	//on affiche un message selon que le message a bien été envoyé
-		 	//ou bien qu'il y a eu un problème
+		 	//on affiche un message selon que le message a bien ï¿½tï¿½ envoyï¿½
+		 	//ou bien qu'il y a eu un problï¿½me
 			$mail = new Courriel($_POST['sujet'],$_POST['message'],ADRESSE_COURRIEL);
 			$mail->FromName = $_POST['nom'];
 			$mail->From = $_POST['courriel'];
 			if($mail->send())
 			{
 				$smarty->assign('status',1);
+				if ($_POST['sujet'] == "beta") {
+				  $mail = new Courriel("Participation au bÃ©ta",
+				    $lang['message_bienvenue_beta'],$_POST['courriel']);
+				  $mail->FromName = "Maxime BÃ©gin";
+			      $mail->From = "maxime.begin@smac.ulaval.ca";
+				  $mail->send();
+				}
+          
 			}
 			else
 			{
