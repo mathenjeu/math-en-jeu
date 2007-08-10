@@ -95,7 +95,7 @@ function main()
 			{
 				$smarty->assign('status',1);
 				//si le sujet du courriel est beta on réenvoit directement un nouveau courriel
-				if ($_POST['sujet'] == "beta") {
+				if ($_POST['sujet'] == "Version 2") {
 				  $mail = new Courriel("Participation au béta",
 				    $lang['message_bienvenue_beta'],$_POST['courriel']);
 				  $mail->FromName = "Maxime Bégin";
