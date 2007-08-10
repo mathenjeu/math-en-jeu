@@ -1794,7 +1794,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                                 if(!presence)
                                 {
                                     // On regarde la distance maximale aux joueurs
-                                    int distMax = Math.max(Math.max(Math.abs(i - positionsJoueurs[0].x) + Math.abs(j - positionsJoueurs[0].y), Math.abs(i - positionsJoueurs[1].x) + Math.abs(j - positionsJoueurs[1].y)), Math.max(Math.abs(i - positionsJoueurs[2].x) + Math.abs(j - positionsJoueurs[2].y), Math.abs(i - positionsJoueurs[3].x) + Math.abs(j - positionsJoueurs[3].y)));
+                                    int[] distances = {0,0,0,0};
+                                    for(int z=0; z<positionsJoueurs.length; z++) distances[z] = Math.abs(i - positionsJoueurs[z].x) + Math.abs(j - positionsJoueurs[z].y);
+                                    int distMax = Math.max(Math.max(distances[0], distances[1]), Math.max(distances[2], distances[3]));
                                     if(distMax <= meilleureDistMax)
                                     {
                                         meilleurI = i;
