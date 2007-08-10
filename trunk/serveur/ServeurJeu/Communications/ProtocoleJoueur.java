@@ -1656,7 +1656,7 @@ public class ProtocoleJoueur implements Runnable
 						{
                                                     // On vérifie d'abord si le joueur a atteint le WinTheGame;
                                                     // Si c'est le cas, on arrête la partie
-                                                    if(!this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirGameType().equals("original") && objRetour.obtenirNouvellePosition().equals(this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirPositionWinTheGame()))
+                                                    if(!this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirButDuJeu().equals("original") && objRetour.obtenirNouvellePosition().equals(this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirPositionWinTheGame()))
                                                     {
                                                         this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().arreterPartie(this.obtenirJoueurHumain().obtenirNomUtilisateur());
                                                     }

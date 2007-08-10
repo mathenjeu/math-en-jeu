@@ -107,7 +107,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         private Point positionWinTheGame;
         
         // Defines what kind of game the players want to play (see config for details)
-        private String gameType;
+        private String butDuJeu;
 	
     // Cet objet est une liste des joueurs virtuels qui jouent sur cette table
     private Vector lstJoueursVirtuels;
@@ -144,11 +144,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				 int tempsPartie, Regles reglesTable,
 				 GestionnaireTemps gestionnaireTemps, 
 				 TacheSynchroniser tacheSynchroniser,
-				 ControleurJeu controleurJeu, String type) 
+				 ControleurJeu controleurJeu, String butDuJeu) 
 	{
 		super();
                 positionWinTheGame = new Point(-1, -1);
-                gameType = type;
+                this.butDuJeu = butDuJeu;
                 
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		_MAX_NB_JOUEURS = config.obtenirNombreEntier( "table.max-nb-joueurs" );
@@ -165,7 +165,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		intNoTable = noTable;
 		strNomUtilisateurCreateur = nomUtilisateurCreateur;
 		intTempsTotal = tempsPartie;
-                if(!this.gameType.equals("original")) winTheGame = new WinTheGame(this);
+                if(!this.butDuJeu.equals("original")) winTheGame = new WinTheGame(this);
                 // intTempsRestant = tempsPartie;
 		
 		// Créer une nouvelle liste de joueurs
@@ -588,7 +588,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Générer le plateau de jeu selon les règles de la table et 
 		// garder le plateau en mémoire dans la table
-		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, gameType);
+		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, butDuJeu);
 
                 // Définir le prochain id pour les objets
                 objProchainIdObjet.intValue++;
@@ -780,7 +780,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             }
             
             // On trouve une position initiale au WinTheGame et on part son thread si nécessaire
-            if(gameType.equals("winTheGameWithScore") || gameType.equals("winTheGameWithoutScore"))
+            if(!butDuJeu.equals("original"))
             {
                 definirNouvellePositionWinTheGame();
                 winTheGame.demarrer();
@@ -1676,20 +1676,20 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             return positionWinTheGame;
         }
         
-        public String obtenirGameType()
+        public String obtenirButDuJeu()
         {
-            return gameType;
+            return butDuJeu;
         }
         
         public boolean peutAllerSurLeWinTheGame(int pointage)
         {
-            if(gameType.equals("winTheGameWithoutScore")) return true;
+            if(butDuJeu.equals("winTheGameWithoutScore")) return true;
             else return pointage >= pointageRequisPourAllerSurLeWinTheGame();
         }
         
         public int pointageRequisPourAllerSurLeWinTheGame()
         {
-            if(this.gameType=="winTheGameWithoutScore") return 0;
+            if(this.butDuJeu=="winTheGameWithoutScore") return 0;
             else return intTempsTotal*15;
         }
         
