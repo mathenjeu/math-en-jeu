@@ -13,8 +13,13 @@ Description : regroupe toutes les fonctions d'initialisation
 21-06-2006 Maxime B�gin - Ajout de commentaires.
 30-05-2006 Maxime B�gin - Version initiale
 *******************************************************************************/
-
 ini_set('display_errors','1');
+//d�finir les configurations de session
+ini_set('session.gc_maxlifetime',1800);
+//ini_set('session.cookie_lifetime',1800);
+ini_set('session.use_trans_sid',1);
+//ini_set('session.use_only_cookies',1);
+//ini_set('session.auto_start',true);
 
 
 define("SQL_DEBUG",1);      //mettre en commentaire pour passer au mode release
@@ -91,17 +96,20 @@ define("LOG_FILE",DOC_ROOT . "/log/log.txt");					//fichier pour les logs
 define("LANG_FRENCH",0);
 define("LANG_ENGLISH",1);
 
-//d�finir les configurations de session
-//ini_set('session.gc_maxlifetime',1800);
-ini_set('session.cookie_lifetime',1800);
-ini_set('session.use_trans_sid',1);
-//ini_set('session.use_only_cookies',1);
+
 
 //si la session n'existe pas on la d�bute
+
+
 if (session_id()=="") {
   //d�bute la session
+
   session_start();
+  
 }
+
+
+
 
 //echo $_SESSION['langage'];
 
