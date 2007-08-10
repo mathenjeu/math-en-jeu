@@ -84,8 +84,7 @@ function main()
 		}
 		else
 		{
-		  //si le sujet du courriel est beta on réenvoit directement un nouveau courriel
-          
+
 			//on tente maintenant d'envoyer le courriel
 		 	//on affiche un message selon que le message a bien �t� envoy�
 		 	//ou bien qu'il y a eu un probl�me
@@ -95,6 +94,7 @@ function main()
 			if($mail->send())
 			{
 				$smarty->assign('status',1);
+				//si le sujet du courriel est beta on réenvoit directement un nouveau courriel
 				if ($_POST['sujet'] == "beta") {
 				  $mail = new Courriel("Participation au béta",
 				    $lang['message_bienvenue_beta'],$_POST['courriel']);
