@@ -414,11 +414,11 @@ public class InformationPartie
                 int stepDifficulte = Math.max(Math.abs(this.objTable.obtenirPlateauJeuCourant()[0].length-objTable.obtenirPositionWinTheGame().y), Math.abs(objTable.obtenirPositionWinTheGame().y-this.objTable.obtenirPlateauJeuCourant()[0].length)) / 5;
                 intDifficulte = 0;
                 
-                if(stepDifficulte * 0 <= distanceFuture && distanceFuture < stepDifficulte * 1) intDifficulte = 6;
-                if(stepDifficulte * 1 <= distanceFuture && distanceFuture < stepDifficulte * 2) intDifficulte = 5;
-                if(stepDifficulte * 2 <= distanceFuture && distanceFuture < stepDifficulte * 3) intDifficulte = 4;
-                if(stepDifficulte * 3 <= distanceFuture && distanceFuture < stepDifficulte * 4) intDifficulte = 3;
-                if(stepDifficulte * 4 <= distanceFuture && distanceFuture < stepDifficulte * 5) intDifficulte = 2;
+                if(stepDifficulte * 0 <= distanceFuture && distanceFuture <= stepDifficulte * 1) intDifficulte = 6;
+                if(stepDifficulte * 1 < distanceFuture && distanceFuture <= stepDifficulte * 2) intDifficulte = 5;
+                if(stepDifficulte * 2 < distanceFuture && distanceFuture <= stepDifficulte * 3) intDifficulte = 4;
+                if(stepDifficulte * 3 < distanceFuture && distanceFuture <= stepDifficulte * 4) intDifficulte = 3;
+                if(stepDifficulte * 4 < distanceFuture && distanceFuture <= stepDifficulte * 5) intDifficulte = 2;
                 if(intDifficulte == 0) intDifficulte = 1;
                 intDifficulte = Math.max(intDifficulte, grandeurDeplacement);
 		
