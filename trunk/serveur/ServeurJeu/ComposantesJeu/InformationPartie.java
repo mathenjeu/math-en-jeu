@@ -411,6 +411,8 @@ public class InformationPartie
                 }
                 
                 int distanceFuture = Math.abs(nouvellePosition.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(nouvellePosition.y - objTable.obtenirPositionWinTheGame().y);
+                distanceFuture -= 1;
+                if(distanceFuture < 0) distanceFuture = 0;
                 int stepDifficulte = Math.max(Math.abs(this.objTable.obtenirPlateauJeuCourant()[0].length-objTable.obtenirPositionWinTheGame().y), Math.abs(objTable.obtenirPositionWinTheGame().y-this.objTable.obtenirPlateauJeuCourant()[0].length)) / 5;
                 intDifficulte = 0;
                 
