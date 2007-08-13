@@ -394,26 +394,21 @@ public class InformationPartie
 		// à poser, la difficulté et la question à retourner
 		int intCategorieQuestion = objTable.obtenirPlateauJeuCourant()[nouvellePosition.x][nouvellePosition.y].obtenirTypeCase();
 		int intDifficulte = 0;
+                int grandeurDeplacement = 0;
 		Question objQuestionTrouvee = null;
 		
-                
-                /* Vieux code pour déterminer la difficulté d'une question
-                ################################################################
-                        // Si la position en x est différente de celle désirée, alors
-                        // c'est qu'il y a eu un déplacement sur l'axe des x
-                        if (objPositionJoueur.x != nouvellePosition.x)
-                        {
-                                intDifficulte = Math.abs(nouvellePosition.x - objPositionJoueur.x);
-                        }
-                        // Si la position en y est différente de celle désirée, alors
-                        // c'est qu'il y a eu un déplacement sur l'axe des y
-                        else if (objPositionJoueur.y != nouvellePosition.y)
-                        {
-                                intDifficulte = Math.abs(nouvellePosition.y - objPositionJoueur.y);
-                        }
-                 *
-                 *Eventuellement, on pourra mettre un peu de random...?
-                ################################################################*/
+                // Si la position en x est différente de celle désirée, alors
+                // c'est qu'il y a eu un déplacement sur l'axe des x
+                if (objPositionJoueur.x != nouvellePosition.x)
+                {
+                        grandeurDeplacement = Math.abs(nouvellePosition.x - objPositionJoueur.x);
+                }
+                // Si la position en y est différente de celle désirée, alors
+                // c'est qu'il y a eu un déplacement sur l'axe des y
+                else if (objPositionJoueur.y != nouvellePosition.y)
+                {
+                        grandeurDeplacement = Math.abs(nouvellePosition.y - objPositionJoueur.y);
+                }
                 
                 int distanceFuture = Math.abs(nouvellePosition.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(nouvellePosition.y - objTable.obtenirPositionWinTheGame().y);
                 int stepDifficulte = Math.max(Math.abs(this.objTable.obtenirPlateauJeuCourant()[0].length-objTable.obtenirPositionWinTheGame().y), Math.abs(objTable.obtenirPositionWinTheGame().y-this.objTable.obtenirPlateauJeuCourant()[0].length)) / 5;
@@ -425,6 +420,7 @@ public class InformationPartie
                 if(stepDifficulte * 3 <= distanceFuture && distanceFuture < stepDifficulte * 4) intDifficulte = 3;
                 if(stepDifficulte * 4 <= distanceFuture && distanceFuture < stepDifficulte * 5) intDifficulte = 2;
                 if(intDifficulte == 0) intDifficulte = 1;
+                intDifficulte = Math.max(intDifficulte, grandeurDeplacement);
 		
 		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
 		// une question
@@ -621,7 +617,7 @@ public class InformationPartie
 			
 			// Calculer le nouveau pointage du joueur (on ajoute le carré 
 			// de la difficulté de la question au pointage)
-			intNouveauPointage += intDifficulteQuestion*intDifficulteQuestion;
+			intNouveauPointage += 3 + 2*intDifficulteQuestion;
 			
 			// Si la case de destination est une case de couleur, alors on 
 			// vérifie l'objet qu'il y a dessus et si c'est un objet utilisable, 
