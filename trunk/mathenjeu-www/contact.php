@@ -95,12 +95,15 @@ function main()
 			{
 				$smarty->assign('status',1);
 				//si le sujet du courriel est beta on réenvoit directement un nouveau courriel
+
 				if ($_POST['sujet'] == "Version 2") {
-				  $mail = new Courriel("Participation au béta",
+				  $mail2 = new Courriel("Participation au béta",
 				    $lang['message_bienvenue_beta'],$_POST['courriel']);
-				  $mail->FromName = "Maxime Bégin";
-			      $mail->From = "maxime.begin@smac.ulaval.ca";
-				  $mail->send();
+				  $mail2->FromName = "Maxime Bégin";
+			      $mail2->From = "maxime.begin@smac.ulaval.ca";
+				  if (!$mail2->send()) {
+				    echo "erreur";
+				  }
 				}
           
 			}

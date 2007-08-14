@@ -12,6 +12,7 @@
 				<!--<li><a target="_blank" href="jeu-popup.php" class="menu">{$lang.menu_jouer}</a><p/></li>-->
 				<li><a href="index.php" class=menu>{$lang.menu_accueil}</a></li>
 				<li><a href="nouvelles.php" class="menu">{$lang.menu_nouvelles}</a></li>
+				<li><a href="demo.php" class="menu">{$lang.menu_demo}</a></li>
 				<li><a href="instructions.php" class="menu">{$lang.menu_instructions}</a></li>
 				<li><a href="portail-joueur.php?action=stat" class="menu">{$lang.menu_stat_joueur}</a></li>
 				<li><a href="palmares.php" class="menu">{$lang.menu_palmares}</a></li>

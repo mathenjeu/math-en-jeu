@@ -156,6 +156,7 @@ $lang['menu_portail_joueur'] = 'Youth Portal';
 $lang['menu_connexion'] = 'Log in';
 $lang['menu_inscription_joueur'] = 'Sign up';
 $lang['menu_portail_prof'] = 'Teachers\' Portal';
+$lang['menu_demo'] = 'Demo';
 $lang['menu_inscription_prof'] = 'Teachers\' Registration';
 $lang['menu_info_dev'] = 'Development Information';
 $lang['menu_admin'] = 'Administration';

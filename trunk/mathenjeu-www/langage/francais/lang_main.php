@@ -163,6 +163,7 @@ $lang['titre_menu_couleur'] = 'Couleur';
 $lang['menu_accueil'] = 'Accueil';
 $lang['menu_portail_joueur'] = 'Portail des joueurs';
 $lang['menu_connexion'] = 'Connexion';
+$lang['menu_demo'] = 'Démonstration';
 $lang['menu_inscription_joueur'] = 'Inscris-toi';
 $lang['menu_portail_prof'] = 'Portail des enseignants';
 $lang['menu_inscription_prof'] = 'Inscription des enseignants';
@@ -203,7 +204,7 @@ $lang['menu_mes_question'] = 'Afficher mes questions';
 
 $lang['titre_index'] = 'Math en jeu';
 $lang['texte_index'] = '
-<span style="font-size:150%"><i>Nouveau!</i> <a href="demo.php">Voir la vidéo de démonstration de Math en jeu.</a></span><p>
+<span style="font-size:150%"><i>Nouveau!</i> <a href="nouvelles.php">Tester la nouvelle version de Math en jeu.</a></span><p>
 <a target="_blank" href="img/screen2_big.jpg"><img src="img/screen2.jpg" alt="Capture d\'écran" border="0" hspace="15" align="left"></a>
 
 <p>Peut-on s\'amuser en faisant des maths? L\'équipe de SMAC vous dit &laquo;oui&raquo;!
