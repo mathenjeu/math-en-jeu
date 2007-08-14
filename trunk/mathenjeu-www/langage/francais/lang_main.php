@@ -16,8 +16,8 @@ $lang['message_bienvenue_beta'] = 'Bonjour,<p> Voici l\'adresse qui vous permett
 nouvelle version de Math en jeu : <a href="http://mathenjeu.mat.ulaval.ca/mathenjeu-beta">
 http://mathenjeu.mat.ulaval.ca/mathenjeu-beta</a></p><p>Pour pouvoir essayer cette nouvelle version 
 vous devez vous inscrire comme avec la précédente version. Mais avant de vous inscrire, essayer votre 
-nom d\'usager et mot de passe actuel de Math en jeu car certain usager ont déjà la permission d\'y jouer.</p>
-Si vous avez des questions/commentaires/suggestions vous n\'avez qu\'à écrire à : maxime.begin@smac.ulaval.ca';
+nom d\'usager et mot de passe actuel de Math en jeu car certains usagers ont déjà la permission d\'y jouer.</p>
+Si vous avez des questions/commentaires/suggestions vous n\'avez qu\'à écrire à : mathenjeu@mat.ulaval.ca';
 
 
 //
