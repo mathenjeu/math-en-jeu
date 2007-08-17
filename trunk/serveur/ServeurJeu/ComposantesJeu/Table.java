@@ -1690,7 +1690,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         public int pointageRequisPourAllerSurLeWinTheGame()
         {
             if(this.butDuJeu=="winTheGameWithoutScore") return 0;
-            else return intTempsTotal*15;
+            else return intTempsTotal*5;
         }
         
         public void definirNouvellePositionWinTheGame()
