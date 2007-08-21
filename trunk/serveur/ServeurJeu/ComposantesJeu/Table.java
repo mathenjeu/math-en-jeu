@@ -1707,6 +1707,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             Point positionsJoueurs[] = new Point[4];
             Point positionsJoueursDesirees[] = new Point[4];
             {
+                for(int k=0; k<4; k++)
+                {
+                    positionsJoueurs[k] = new Point(0, 0);
+                    positionsJoueursDesirees[k] = new Point(0, 0);
+                }
                 int i=0;
                 {
                     Set nomsJoueursHumains = lstJoueurs.entrySet();
