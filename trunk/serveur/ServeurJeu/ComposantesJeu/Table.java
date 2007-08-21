@@ -1795,7 +1795,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                             {
                                 // Est-ce qu'un joueur est sur cette case ou veut s'y déplacer?
                                 boolean presence = false;
-                                for(int k=0; k<positionsJoueurs.length && !presence; k++) if((new Point(i, j)).equals(positionsJoueurs[k]) || (new Point(i, j)).equals(positionsJoueursDesirees[k])) presence = true;
+                                for(int k=0; k<4 && !presence; k++) if((new Point(i, j)).equals(positionsJoueurs[k]) || (new Point(i, j)).equals(positionsJoueursDesirees[k])) presence = true;
                                 if(!presence)
                                 {
                                     // On regarde la distance maximale aux joueurs
