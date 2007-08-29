@@ -1,13 +1,7 @@
 <?php
-/*******************************************************************************
-Fichier : lang_main.php
-Auteur : Maxime Bégin
-Description : Tous les textes du site web sont regroupés ici
-********************************************************************************
-15-01-2007 Sylvain Hallé - Correction et uniformisation des textes
-21-06-2006 Maxime Bégin - Ajout de commentaires.
-15-06-2006 Maxime Bégin - Version initiale
-*******************************************************************************/
+
+
+//header ('Content-Type: text/html; charset=iso-8859-1');
 
 //
 //mail participation béta
