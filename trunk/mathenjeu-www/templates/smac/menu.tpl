@@ -44,7 +44,7 @@
 				<li><a href="admin_faq.php">{$lang.menu_gestion_faq}</a></li>
 				<li><a target="_blank" href="/awstats/awstats.pl?config=mathenjeu" class="menu">{$lang.menu_stats_web}</a></li>
 				<li><a href="admin_statistiques.php" class="menu">{$lang.menu_statistiques}</a></li>
-				<li><a href="/stats/" target="_blank" class="menu">{$lang.menu_statistique2}</a></li>
+				<li><a href="stats/" target="_blank" class="menu">{$lang.menu_statistique2}</a></li>
 			</ul>
 		</div>
 		</p>

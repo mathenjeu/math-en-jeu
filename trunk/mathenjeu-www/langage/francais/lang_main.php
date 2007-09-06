@@ -278,7 +278,7 @@ $lang['instructions_body'] ='
 	<h2>Comment débuter une partie : </h2>
 	<ul>
 		<li>C\'est la première fois que tu joues à Math en jeu? Alors <a href="inscription-joueur.php">inscris-toi ici</a> pour créer ton nom d\'utilisateur et ton mot de passe. La prochaine fois que tu joueras à Math en Jeu, tu n\'auras qu\'à réutiliser ce nom d\'utilisateur et ce mot de passe.</li>
-		<li>Pour jouer, va sur le site de Math en jeu.  Clique sur Portail des joueurs. Pour le nom d\'utilisateur et le mot de passe, mets ceux que tu as créés lors de ton inscription.  Clique maintenant sur Jouer!</li>
+		<li>Pour jouer, va sur le site de Math en jeu.  Pour le nom d\'utilisateur et le mot de passe, mets ceux que tu as créés lors de ton inscription.  Clique maintenant sur Jouer!</li>
 		<li>Dans la nouvelle page, clique sur Lancer le jeu. Choisis une salle où jouer.  Par exemple, tu peux choisir la salle Newton.  Clique sur le nom de la salle.  La ligne deviendra verte. Clique ensuite sur Continuer.</li> 
 		<li>Tu dois maintenant choisir ou créer une table sur laquelle jouer.</li> 
 			<ul>  
