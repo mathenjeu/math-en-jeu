@@ -56,12 +56,12 @@
     </tr>
     <tr align="left">
         <td valign="top"><label for="courriel">{$lang.courriel}</label></td>
-        <td valign="top"><input id="courriel" type="text" name="courriel" size="40" value="{$courriel|lower}"> <span class="asterix">*</span><br>
+        <td valign="top"><input id="courriel" type="text" name="courriel" size="40" value="{$courriel|lower}"><br>
         <span class="commentaire">{$lang.inscription_info_courriel}</span></td>
     </tr>
     <tr align="left">
         <td><label for="courriel2">{$lang.courriel_confirm}</label></td>
-        <td><input id="courriel2" type="text" name="courriel2" size="40" value="{$courriel2}"> <span class="asterix">*</span></td>
+        <td><input id="courriel2" type="text" name="courriel2" size="40" value="{$courriel2}"></td>
     </tr>
     <tr>
         <td colspan="2" align=center><input type=submit value="{$lang.bouton_etape_suivante}" /></td>

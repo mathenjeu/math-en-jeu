@@ -102,7 +102,7 @@ function main()
 				  $mail2->FromName = "Maxime Bégin";
 			      $mail2->From = "maxime.begin@smac.ulaval.ca";
 				  if (!$mail2->send()) {
-				    echo "erreur";
+				    //echo "erreur";
 				  }
 				}
           

@@ -40,7 +40,7 @@ function Launch(page) {
 <body onload="configuerFenetre()" bgcolor="#000000" style="margin:0px;padding:0px;height:100%;width:100%;">
 
 
-<?
+<?php
 if(isset($_SESSION['langage']))
 {
 	$str_temp = ucfirst($_SESSION['langage']);
@@ -50,6 +50,8 @@ else
 	// En théorie, ceci n'arrive plus jamais
 	$str_temp = "Francais";
 }
+
+//FIXME: change the language to en,fr,...
 
 // Ici, on s'assure que la chaîne correspondant à la langue qui sera transmise au client est du bon format pour celui-ci
 if(strcmp($str_temp, "English") == 0) $str_temp = "Anglais";
@@ -61,11 +63,11 @@ if(strcmp($str_temp, "English") == 0) $str_temp = "Anglais";
 	classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 	codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"
 	WIDTH="100%" HEIGHT="100%" id="mathenjeu">
-	<PARAM NAME=movie VALUE="http://newton.mat.ulaval.ca/smac/flash/chargement_beta.swf?nomUtilisateur=<?php echo $_SESSION["joueur"]->reqAlias(); ?>&amp;motDePasse=<?php echo $_SESSION["joueur"]->reqMotDePasse(); ?>&amp;langue=<? echo $str_temp; ?>&amp;gameType=mathEnJeu&amp;path=<?php echo FLASH_DIR ?>">
+	<PARAM NAME=movie VALUE="<?php echo FLASH_DIR ?>/chargement_beta.swf?nomUtilisateur=<?php echo $_SESSION["joueur"]->reqAlias(); ?>&amp;motDePasse=<?php echo $_SESSION["joueur"]->reqMotDePasse(); ?>&amp;langue=<?php echo $str_temp; ?>&amp;gameType=mathEnJeu&amp;path=<?php echo FLASH_DIR ?>">
 	<PARAM NAME=quality VALUE=high>
 	<param name="bgcolor" value="#000000" />
 	<param name="allowFullScreen" value="true" />
-	<EMBED src="http://newton.mat.ulaval.ca/smac/flash/chargement_beta.swf?nomUtilisateur=<?php echo $_SESSION["joueur"]->reqAlias(); ?>&amp;motDePasse=<?php echo $_SESSION["joueur"]->reqMotDePasse(); ?>&amp;langue=<? echo $str_temp; ?>&amp;gameType=mathEnJeu&amp;path=<?php echo FLASH_DIR ?>" 
+	<EMBED src="<?php echo FLASH_DIR ?>/chargement_beta.swf?nomUtilisateur=<?php echo $_SESSION["joueur"]->reqAlias(); ?>&amp;motDePasse=<?php echo $_SESSION["joueur"]->reqMotDePasse(); ?>&amp;langue=<?php echo $str_temp; ?>&amp;gameType=mathEnJeu&amp;path=<?php echo FLASH_DIR ?>" 
 		quality=high bgcolor=#000000 WIDTH="100%" HEIGHT="100%"
 		NAME="mathenjeu" TYPE="application/x-shockwave-flash"
 		PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer">

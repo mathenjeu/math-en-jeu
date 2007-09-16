@@ -206,12 +206,13 @@ function validerEtape2($joueur)
 	//est r�server pour ce joueur, au cas ou 2 joueurs s'inscrive en m�me temps avec
 	//le m�me nom d'utlisateur
 	$joueur->asgAimeMaths(3);
-    $joueur->asgMathConsidere(3);
-    $joueur->asgMathEtudie(3);
-    $joueur->asgMathDecouvert(3);
-    if($joueur->insertionMySQL())
-    {
-		$joueur->envoyerCourrielConfirmation();
+  $joueur->asgMathConsidere(3);
+  $joueur->asgMathEtudie(3);
+  $joueur->asgMathDecouvert(3);
+  if($joueur->insertionMySQL()) {
+    if ($joueur->reqCourriel() != "") {
+		  $joueur->envoyerCourrielConfirmation(); 
+    }
 		$_SESSION["joueurInscription"] = $joueur;
 	}
     

@@ -1,12 +1,12 @@
 <?php
 /*******************************************************************************
 Fichier : courriel.class.php
-Auteur : Maxime Bégin
+Auteur : Maxime Bï¿½gin
 Description : classe courriel
 ********************************************************************************
-10-11-2006 Maxime Bégin - Modification pour utiliser la classe PHPMailer
-21-06-2006 Maxime Bégin - Ajout de commentaires.
-10-06-2006 Maxime Bégin - Version initiale
+10-11-2006 Maxime Bï¿½gin - Modification pour utiliser la classe PHPMailer
+21-06-2006 Maxime Bï¿½gin - Ajout de commentaires.
+10-06-2006 Maxime Bï¿½gin - Version initiale
 *******************************************************************************/
 
 require_once("ini.php");
@@ -28,7 +28,7 @@ class Courriel extends PHPMailer
 
     //**************************************************************************
     // Sommaire:    Constructeur
-    // Entrée:      $sujet
+    // Entrï¿½e:      $sujet
     //              $message
     //              $adresseDestination
     //              $adresseSource
@@ -45,8 +45,8 @@ class Courriel extends PHPMailer
     }
 
     //**************************************************************************
-    // Sommaire:    Vérifier les invariants de la classe
-    // Entrée:      
+    // Sommaire:    Vï¿½rifier les invariants de la classe
+    // Entrï¿½e:      
     // Sortie:
     // Note:        
     //**************************************************************************
@@ -60,9 +60,9 @@ class Courriel extends PHPMailer
 
     //**************************************************************************
     // Sommaire:    Assigner un sujet
-    // Entrée:      $sujet
+    // Entrï¿½e:      $sujet
     // Sortie:
-    // Note:        le sujet ne doit pas être vide
+    // Note:        le sujet ne doit pas ï¿½tre vide
     //**************************************************************************
     function asgSujet($sujet)
     {
@@ -73,9 +73,9 @@ class Courriel extends PHPMailer
     
     //**************************************************************************
     // Sommaire:    Assigner un messager
-    // Entrée:      $message
+    // Entrï¿½e:      $message
     // Sortie:
-    // Note:        le message ne doit pas être vide
+    // Note:        le message ne doit pas ï¿½tre vide
     //**************************************************************************
     function asgMessage($message)
     {
@@ -85,10 +85,10 @@ class Courriel extends PHPMailer
     }
 
     //**************************************************************************
-    // Sommaire:    Assigner un entête
-    // Entrée:      $header
+    // Sommaire:    Assigner un entï¿½te
+    // Entrï¿½e:      $header
     // Sortie:
-    // Note:        l'entête ne doit pas être vide
+    // Note:        l'entï¿½te ne doit pas ï¿½tre vide
     //**************************************************************************
 /*
     function asgHeader($header)
@@ -101,9 +101,9 @@ class Courriel extends PHPMailer
 
     //**************************************************************************
     // Sommaire:    Assigner une adresse de destination
-    // Entrée:      $adresse
+    // Entrï¿½e:      $adresse
     // Sortie:
-    // Note:        l'adresse doit être valide
+    // Note:        l'adresse doit ï¿½tre valide
     //**************************************************************************
     function asgAdresseDestination($adresse)
     {
@@ -115,9 +115,9 @@ class Courriel extends PHPMailer
 
     //**************************************************************************
     // Sommaire:    Assigner une adresse source
-    // Entrée:      $adresse
+    // Entrï¿½e:      $adresse
     // Sortie:
-    // Note:        l'adresse doit être valide
+    // Note:        l'adresse doit ï¿½tre valide
     //**************************************************************************
     function asgAdresseSource($adresse)
     {
@@ -127,10 +127,10 @@ class Courriel extends PHPMailer
     }
     
     //**************************************************************************
-    // Sommaire:    Envoie le courriel après avoir vérifier les invariants
-    // Entrée:      
+    // Sommaire:    Envoie le courriel aprï¿½s avoir vï¿½rifier les invariants
+    // Entrï¿½e:      
     // Sortie:
-    // Note:        retourne vrai si le courriel a pu être envoyé, faux sinon
+    // Note:        retourne vrai si le courriel a pu ï¿½tre envoyï¿½, faux sinon
     //**************************************************************************
     function envoyerCourriel()
     {
@@ -144,7 +144,7 @@ class Courriel extends PHPMailer
     
     //**************************************************************************
     // Sommaire:        Valide une adresse courriel
-    // Entrée:          $courriel
+    // Entrï¿½e:          $courriel
     // Sortie:          retourne vrai si l'adresse est valide, faux sinon
     // Note:
     //**************************************************************************
@@ -153,14 +153,18 @@ class Courriel extends PHPMailer
         $user = "[-a-z0-9_]";
         $domaine = '([a-z0-9]([-a-z0-9]*[a-z0-9]+)?)';
 
-        $valide = '^' .$user . '+' .      // un ou plusieurs caractère de user
-        '(\.' . $user . '+)*'.            // suivi de 0 ou plusieur set de caractère séparé de points
+        $valide = '^' .$user . '+' .      // un ou plusieurs caractï¿½re de user
+        '(\.' . $user . '+)*'.            // suivi de 0 ou plusieur set de caractï¿½re sï¿½parï¿½ de points
         '@'.                              // suivi du @
-        '(' . $domaine . '{1,63}\.)+'.    // suivi de 1 ou maximum 63 nom de domaine séparé par des point
-        $domaine . '{2,63}'.              // suivi d'un dernier domaine de 2 à 63 caractère'
+        '(' . $domaine . '{1,63}\.)+'.    // suivi de 1 ou maximum 63 nom de domaine sï¿½parï¿½ par des point
+        $domaine . '{2,63}'.              // suivi d'un dernier domaine de 2 ï¿½ 63 caractï¿½re'
         '$';
 
-        return(eregi($valide,$courriel));
+        $result = eregi($valide,$courriel);
+        if ($courriel == "") {
+          $result = 1;
+        }
+        return $result;
     }
 
 
