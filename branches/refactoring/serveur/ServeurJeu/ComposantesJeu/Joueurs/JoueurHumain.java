@@ -2,6 +2,7 @@ package ServeurJeu.ComposantesJeu.Joueurs;
 
 import ServeurJeu.Communications.ProtocoleJoueur;
 import ServeurJeu.ComposantesJeu.InformationPartie;
+import ServeurJeu.ComposantesJeu.Langue2;
 import ServeurJeu.ComposantesJeu.Salle;
 
 /**
@@ -34,6 +35,8 @@ public class JoueurHumain extends Joueur
 	private boolean bolPeutCreerSalle;
 	
 	private String cleNiveau;
+  
+  private Langue2 langue;
 	
 	// Déclaration d'une référence vers la salle dans laquelle le joueur se 
 	// trouve (null si le joueur n'est dans aucune salle)
@@ -57,7 +60,10 @@ public class JoueurHumain extends Joueur
 	 * @param boolean peutCreerSalle : Permet de savoir si le joueur peut créer
 	 * 								   de nouvelles salles
 	 */
-	public JoueurHumain(ProtocoleJoueur protocole, String nomUtilisateur, String adresseIP, String port) 
+	public JoueurHumain(ProtocoleJoueur protocole, 
+                      String nomUtilisateur, 
+                      String adresseIP, 
+                      String port) 
 	{
 		super();
 
@@ -261,4 +267,14 @@ public class JoueurHumain extends Joueur
 	{
 		this.cleNiveau = cleNiveau;
 	}
+
+  public Langue2 getLangue() {
+    return langue;
+  }
+
+  public void setLangue(Langue2 langue) {
+    this.langue = langue;
+  }
+  
+  
 }

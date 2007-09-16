@@ -1,10 +1,19 @@
 package ServeurJeu.Communications;
 
-import java.net.Socket;
-import java.net.SocketException;
+import java.awt.Point;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.Vector;
+
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
@@ -14,43 +23,35 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
-import java.util.Vector;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.GregorianCalendar;
-import java.awt.Point;
-import Enumerations.Filtre;
-import ClassesUtilitaires.UtilitaireXML;
+import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ClassesUtilitaires.UtilitaireEncodeurDecodeur;
 import ClassesUtilitaires.UtilitaireNombres;
+import ClassesUtilitaires.UtilitaireXML;
 import Enumerations.Commande;
+import Enumerations.Filtre;
 import Enumerations.RetourFonctions.ResultatAuthentification;
-import Enumerations.RetourFonctions.ResultatEntreeTable;
 import Enumerations.RetourFonctions.ResultatDemarrerPartie;
+import Enumerations.RetourFonctions.ResultatEntreeTable;
 import ServeurJeu.ControleurJeu;
+import ServeurJeu.BD.GestionnaireBD;
+import ServeurJeu.ComposantesJeu.Langue2;
+import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Table;
+import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
-import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
+import ServeurJeu.ComposantesJeu.Objets.Objet;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Banane;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
+import ServeurJeu.Configuration.GestionnaireMessages;
+import ServeurJeu.Evenements.EvenementPartieDemarree;
+import ServeurJeu.Evenements.EvenementSynchroniserTemps;
+import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.Monitoring.Moniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
-import ServeurJeu.Evenements.EvenementSynchroniserTemps;
- 
-import ServeurJeu.ComposantesJeu.Cases.Case;
-import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
-import ServeurJeu.Evenements.EvenementPartieDemarree;
-import ServeurJeu.Evenements.InformationDestination;
-import ServeurJeu.ComposantesJeu.Question;
-import ServeurJeu.ComposantesJeu.Objets.Objet;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
-import ServeurJeu.Configuration.GestionnaireMessages;
-import java.util.Calendar;
-import java.util.Random;
 
 /**
  * @author Jean-François Brind'Amour
@@ -99,7 +100,7 @@ public class ProtocoleJoueur implements Runnable
 	static private Logger objLogger = Logger.getLogger( ProtocoleJoueur.class );
         
         // On obtiendra la langue du joueur pour pouvoir construire la boîte de questions
-        public String langue;
+        public Langue2 langue;
         
         // Type de jeu (ex. mathEnJeu)
         public String gameType;
@@ -472,48 +473,53 @@ public class ProtocoleJoueur implements Runnable
 						// joueur est maintenant connecté
 						if (strResultatAuthentification.equals(ResultatAuthentification.Succes))
 						{
-						  langue = obtenirValeurParametre(objNoeudCommandeEntree, "Langue").getNodeValue();
-                                                  gameType = obtenirValeurParametre(objNoeudCommandeEntree, "GameType").getNodeValue();
-                            if (objControleurJeu.estJoueurDeconnecte(obtenirValeurParametre(objNoeudCommandeEntree, 
-                                                "NomUtilisateur").getNodeValue()))
-                            {
-                                // Le joueur a été déconnecté et tente de se reconnecter.
-                                // Il faut lui envoyer une réponse spéciale lui
-                                // permettant de choisir s'il veut se reconnecter
-                                
-                                bolEnTrainDeJouer = false;
-                                
-                                objNoeudCommande.setAttribute("type","Reponse");
-                                objNoeudCommande.setAttribute("nom","OkEtPartieDejaCommencee");
-  
-                                // On va envoyer dans le noeud la liste de chansons que le joueur pourrait aimer
-                                Vector liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
-                                for(int i=0; i<liste.size(); i++)
-                                {
-                                    Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("musique");
-                                    Text objNoeudTexteMusique = objDocumentXMLSortie.createTextNode((String)liste.get(i));
-                                    objNoeudParametreMusique.appendChild(objNoeudTexteMusique);
-                                    objNoeudCommande.appendChild(objNoeudParametreMusique);   
-                                }
-                            }
-                            else
-                            {
-                                bolEnTrainDeJouer = false;
-    						  
-    							// Il n'y a pas eu d'erreurs
-    							objNoeudCommande.setAttribute("type", "Reponse");
-    							objNoeudCommande.setAttribute("nom", "Musique");
-                                                        
-                                                        // On va envoyer dans le noeud la liste de chansons que le joueur pourrait aimer
-                                                        Vector liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
-                                                        for(int i=0; i<liste.size(); i++)
-                                                        {
-                                                            Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("musique");
-                                                            Text objNoeudTexteMusique = objDocumentXMLSortie.createTextNode((String)liste.get(i));
-                                                            objNoeudParametreMusique.appendChild(objNoeudTexteMusique);
-                                                            objNoeudCommande.appendChild(objNoeudParametreMusique);   
-                                                        }
-							}
+              GestionnaireBD lBD = new GestionnaireBD(objControleurJeu);
+              
+						  //langue = obtenirValeurParametre(objNoeudCommandeEntree, "Langue").getNodeValue();
+              //FIXME
+              //langue = lBD.loadLangue(obtenirValeurParametre(objNoeudCommandeEntree, "Langue").getNodeValue());
+              langue = lBD.loadLangueFromLongName(obtenirValeurParametre(objNoeudCommandeEntree, "Langue").getNodeValue());
+              
+						  gameType = obtenirValeurParametre(objNoeudCommandeEntree, "GameType").getNodeValue();
+						  if (objControleurJeu.estJoueurDeconnecte(obtenirValeurParametre(objNoeudCommandeEntree, "NomUtilisateur").getNodeValue()))
+						  {
+						    // Le joueur a été déconnecté et tente de se reconnecter.
+						    // Il faut lui envoyer une réponse spéciale lui
+						    // permettant de choisir s'il veut se reconnecter
+
+						    bolEnTrainDeJouer = false;
+
+						    objNoeudCommande.setAttribute("type","Reponse");
+						    objNoeudCommande.setAttribute("nom","OkEtPartieDejaCommencee");
+
+						    // On va envoyer dans le noeud la liste de chansons que le joueur pourrait aimer
+						    Vector liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
+						    for(int i=0; i<liste.size(); i++)
+						    {
+						      Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("musique");
+						      Text objNoeudTexteMusique = objDocumentXMLSortie.createTextNode((String)liste.get(i));
+						      objNoeudParametreMusique.appendChild(objNoeudTexteMusique);
+						      objNoeudCommande.appendChild(objNoeudParametreMusique);   
+						    }
+						  }
+						  else
+						  {
+						    bolEnTrainDeJouer = false;
+
+						    // Il n'y a pas eu d'erreurs
+						    objNoeudCommande.setAttribute("type", "Reponse");
+						    objNoeudCommande.setAttribute("nom", "Musique");
+
+						    // On va envoyer dans le noeud la liste de chansons que le joueur pourrait aimer
+						    Vector liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
+						    for(int i=0; i<liste.size(); i++)
+						    {
+						      Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("musique");
+						      Text objNoeudTexteMusique = objDocumentXMLSortie.createTextNode((String)liste.get(i));
+						      objNoeudParametreMusique.appendChild(objNoeudTexteMusique);
+						      objNoeudCommande.appendChild(objNoeudParametreMusique);   
+						    }
+						  }
 						}
 						else if (strResultatAuthentification.equals(ResultatAuthentification.JoueurDejaConnecte))
 						{
@@ -700,7 +706,8 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudParametreListeSalles.setAttribute("type", "ListeNomSalles");
 					    
 					    // Obtenir la liste des salles du serveur de jeu
-						TreeMap lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue, this.gameType);
+						//TreeMap lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue, this.gameType);
+            TreeMap lstListeSalles = objControleurJeu.obtenirListeSalles(langue, this.gameType);
 						
 						// Générer un nouveau numéro de commande qui sera 
 					    // retourné au client
