@@ -1,42 +1,43 @@
 package ServeurJeu;
 
-import java.util.TreeMap;
-import java.util.Set;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import ClassesUtilitaires.Espion;
 import Enumerations.Visibilite;
 import Enumerations.RetourFonctions.ResultatAuthentification;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Communications.GestionnaireCommunication;
 import ServeurJeu.Communications.ProtocoleJoueur;
+import ServeurJeu.ComposantesJeu.Langue2;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
-import ServeurJeu.Evenements.EvenementJoueurDeconnecte;
-import ServeurJeu.Evenements.EvenementJoueurConnecte;
-import ServeurJeu.Evenements.GestionnaireEvenements;
-import ServeurJeu.Evenements.InformationDestination;
-import ServeurJeu.Monitoring.TacheLogMoniteur;
-import ServeurJeu.Temps.GestionnaireTemps;
-import ServeurJeu.Temps.TacheSynchroniser;
-import ClassesUtilitaires.Espion;
+import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
-import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
 import ServeurJeu.Configuration.GestionnaireMessages;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import ServeurJeu.Evenements.EvenementJoueurConnecte;
+import ServeurJeu.Evenements.EvenementJoueurDeconnecte;
+import ServeurJeu.Evenements.GestionnaireEvenements;
+import ServeurJeu.Evenements.InformationDestination;
+import ServeurJeu.Monitoring.TacheLogMoniteur;
+import ServeurJeu.Temps.GestionnaireTemps;
+import ServeurJeu.Temps.TacheSynchroniser;
 
 
 
@@ -200,8 +201,8 @@ public class ControleurJeu
 		objEspion = new Espion(this, fichier, delai, ClassesUtilitaires.Espion.MODE_FICHIER_TEXTE);
 
         // Démarrer la thread de l'espion
-		Thread threadEspion = new Thread(objEspion);
-		threadEspion.start();
+		//Thread threadEspion = new Thread(objEspion);
+		//threadEspion.start();
 
         // Créer une instance de la classe regroupant tous les paramètres
         // des joueurs virtuels
@@ -464,6 +465,9 @@ public class ControleurJeu
 	 */
 	public TreeMap obtenirListeSalles(String langue, String gameType)
 	{
+    Langue2 lLangue = new Langue2(1,"francais", "fr");
+    return obtenirListeSalles(lLangue, gameType);
+    /*
             // On crée une liste de salles vide, et on parcourt toutes les salles connues
             TreeMap copieListeSalles = (TreeMap)lstSalles.clone();
             copieListeSalles.clear();
@@ -493,7 +497,63 @@ public class ControleurJeu
                 if(permetCetteLangue && estDuBonGameType) copieListeSalles.put(key, salle);
             }
             return copieListeSalles;
+            */
 	}
+  
+  /**
+   * Cette fonction permet d'obtenir la liste des salles du serveur de jeu.
+   * La vraie liste est retournée.
+   * 
+   * @return TreeMap : La liste des salles du serveur de jeu (c'est la 
+   *             référence vers la liste du ControleurJeu, il faut donc
+   *                   traiter le cas du multithreading)
+   * @synchronism Cette fonction n'est pas synchronisée ici et il n'est pas
+   *        vraiment nécessaire de le faire dans la fonction appelante
+   *        pour ce qui est de la corruption des données suite à 
+   *        l'ajout et/ou au retrait d'une salle, car ça ne peut pas
+   *        se produire.
+   */
+  public TreeMap obtenirListeSalles(Langue2 pLangue, String gameType)
+  {
+    /*
+    // On crée une liste de salles vide, et on parcourt toutes les salles connues
+    TreeMap copieListeSalles = (TreeMap)lstSalles.clone();
+    copieListeSalles.clear();
+    Set keySet = lstSalles.keySet();
+    Iterator it = keySet.iterator();
+    while (it.hasNext())
+    {
+      String key = (String)it.next();
+      Salle salle = (Salle)lstSalles.get(key);
+
+      // On vérifie si cette salle est du bon gameType
+      // et si elle permet de jouer dans la langue donnée
+      Boolean estDuBonGameType = gameType.equals(salle.obtenirGameType());
+      Boolean permetCetteLangue = false;
+      NodeList listeDeLangues = salle.obtenirNoeudLangue().getChildNodes();
+      for(int j=0; j<listeDeLangues.getLength() && !permetCetteLangue; j++)
+      {
+        if(listeDeLangues.item(j).getNodeType()==1 && listeDeLangues.item(j).getNodeName().equals(langue.getNom())) {
+          permetCetteLangue = true;
+        }
+      }
+
+      // Si les paramètres en entrée sont des strings vides,
+      // alors on ignore le paramètre correspondant
+      if(gameType.equals("")) estDuBonGameType = true;
+      if(langue.equals("")) permetCetteLangue = true;
+
+      // On ajoute la salle à la liste si elle correspond à ce qu'on veut
+      if(permetCetteLangue && estDuBonGameType) { 
+        copieListeSalles.put(key, salle);
+      }
+    }
+    return copieListeSalles;
+    */
+    
+    return objGestionnaireBD.loadRooms(pLangue, this);
+    
+  }
 
 	/**
 	 * Cette fonction permet de déterminer si la salle dont le nom est passé
@@ -660,92 +720,95 @@ public class ControleurJeu
 	 */
 	private void chargerSallesInitiales()
 	{
-                int i;
-		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
-                Regles objReglesSalle = new Regles();
-		TreeSet casesCouleur = objReglesSalle.obtenirListeCasesCouleurPossibles();
-		TreeSet casesSpeciale = objReglesSalle.obtenirListeCasesSpecialesPossibles();
-		TreeSet objetsUtilisables = objReglesSalle.obtenirListeObjetsUtilisablesPossibles();
-                TreeSet magasins = objReglesSalle.obtenirListeMagasinsPossibles();
-                
-                // First, we load the rules that are the same for every room
-                
-                // Get the list of shops
-                Document documentConfig = config.getDocument();
-                NodeList listeDeMagasins = documentConfig.getElementsByTagName("magasin");
-                for(i=0; i<listeDeMagasins.getLength(); i++)
-                {
-                    NamedNodeMap attributs = listeDeMagasins.item(i).getAttributes();
-                    Integer tmp1 = Integer.valueOf(attributs.getNamedItem("priorite").getNodeValue());
-                    String tmp2 = attributs.getNamedItem("nom").getNodeValue();
-                    magasins.add(new ReglesMagasin(tmp1, tmp2));
-                }
-                
-		objReglesSalle.definirPermetChat( config.obtenirValeurBooleenne( "controleurjeu.salles-initiales.regles.chat" ) );
-		objReglesSalle.definirRatioTrous( config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-trous" ) );
-		objReglesSalle.definirRatioMagasins( config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-magasins" ) );
-		objReglesSalle.definirRatioCasesSpeciales(config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-cases-speciales" ) );
-		objReglesSalle.definirRatioPieces( config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-pieces" ) );
-		objReglesSalle.definirRatioObjetsUtilisables(config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-objets-utilisables" ) );
-		objReglesSalle.definirValeurPieceMaximale(config.obtenirNombreEntier( "controleurjeu.salles-initiales.regles.valeur-piece-maximale" ) );
-		objReglesSalle.definirTempsMinimal( config.obtenirNombreEntier( "controleurjeu.salles-initiales.regles.temps-minimal" ) );
-		objReglesSalle.definirTempsMaximal( config.obtenirNombreEntier( "controleurjeu.salles-initiales.regles.temps-maximal" ) );
-		objReglesSalle.definirDeplacementMaximal( config.obtenirNombreEntier( "controleurjeu.salles-initiales.regles.deplacement-maximal" ) );
+    
+	  int i;
+	  GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+	  Regles objReglesSalle = new Regles();
+	  TreeSet casesCouleur = objReglesSalle.obtenirListeCasesCouleurPossibles();
+	  TreeSet casesSpeciale = objReglesSalle.obtenirListeCasesSpecialesPossibles();
+	  TreeSet objetsUtilisables = objReglesSalle.obtenirListeObjetsUtilisablesPossibles();
+	  TreeSet magasins = objReglesSalle.obtenirListeMagasinsPossibles();
 
-                List propTypeCaseSpeciale = config.obtenirListe("controleurjeu.salles-initiales.regles.case-speciale.type");
-                List propPrioriteCaseSpeciale = config.obtenirListe("controleurjeu.salles-initiales.regles.case-speciale.priorite");
-                for(i=1; i <= propTypeCaseSpeciale.size(); i++)
-                {
-                    Integer tmp1 = Integer.valueOf((String)propPrioriteCaseSpeciale.get(i-1));
-                    Integer tmp2 = Integer.valueOf((String)propTypeCaseSpeciale.get(i-1));
-                    casesSpeciale.add(new ReglesCaseSpeciale(tmp1, tmp2));
-                }
-                
-                List propTypeCaseCouleur = config.obtenirListe("controleurjeu.salles-initiales.regles.case-couleur.type");
-                List propPrioriteCaseCouleur = config.obtenirListe("controleurjeu.salles-initiales.regles.case-couleur.priorite");
-                for(i=1; i <= propTypeCaseCouleur.size(); i++)
-                {
-                    Integer tmp1 = Integer.valueOf((String)propPrioriteCaseCouleur.get(i-1));
-                    Integer tmp2 = Integer.valueOf((String)propTypeCaseCouleur.get(i-1));
-                    casesCouleur.add(new ReglesCaseCouleur(tmp1, tmp2));
-                }
-                
-                List propNomsObjetUtilisable = config.obtenirListe("controleurjeu.salles-initiales.regles.objet-utilisable.nom");
-                List propPrioriteObjetUtilisable = config.obtenirListe("controleurjeu.salles-initiales.regles.objet-utilisable.priorite");
-                for(i=1; i <= propNomsObjetUtilisable.size(); i++)
-                {
-                    Integer tmp1 = Integer.valueOf((String)propPrioriteObjetUtilisable.get(i-1));
-                    String tmp2 = (String)propNomsObjetUtilisable.get(i-1);
-                    objetsUtilisables.add(new ReglesObjetUtilisable(tmp1, tmp2, Visibilite.Aleatoire));
-                }
-                
-                // Now, we load room-specific settings (as well as the actual rooms)
-                
-                // Get the list of rooms
-                NodeList listeDeSalles = documentConfig.getElementsByTagName("salle");
-                for(i=0; i<listeDeSalles.getLength(); i++)
-                {
-                    String nom = "";
-                    String createur = "";
-                    String motDePasse = "";
-                    String gameType = "";
-                    Node noeudLangue = listeDeSalles.item(i);
-                    NodeList parametresSalle = listeDeSalles.item(i).getChildNodes();
-                    for(int j=0; j<parametresSalle.getLength(); j++)
-                    {
-                        // If it's the kind of node we want, load the parameters
-                        if(parametresSalle.item(j).getNodeType()==1)
-                        {
-                            if(parametresSalle.item(j).getNodeName().equals("nom")) nom = parametresSalle.item(j).getTextContent();
-                            else if(parametresSalle.item(j).getNodeName().equals("createur")) createur = parametresSalle.item(j).getTextContent();
-                            else if(parametresSalle.item(j).getNodeName().equals("mot-de-passe")) motDePasse = parametresSalle.item(j).getTextContent();
-                            else if(parametresSalle.item(j).getNodeName().equals("langue")) noeudLangue = parametresSalle.item(j);
-                            else if(parametresSalle.item(j).getNodeName().equals("gameType")) gameType = parametresSalle.item(j).getTextContent();
-                        }
-                    }
-                    Salle objSalle = new Salle(objGestionnaireBD, nom, createur, motDePasse, objReglesSalle, this, noeudLangue, gameType);
-                    ajouterNouvelleSalle(objSalle);
-                }
+	  // First, we load the rules that are the same for every room
+
+	  // Get the list of shops
+	  Document documentConfig = config.getDocument();
+	  NodeList listeDeMagasins = documentConfig.getElementsByTagName("magasin");
+	  for(i=0; i<listeDeMagasins.getLength(); i++)
+	  {
+	    NamedNodeMap attributs = listeDeMagasins.item(i).getAttributes();
+	    Integer tmp1 = Integer.valueOf(attributs.getNamedItem("priorite").getNodeValue());
+	    String tmp2 = attributs.getNamedItem("nom").getNodeValue();
+	    magasins.add(new ReglesMagasin(tmp1, tmp2));
+	  }
+
+	  objReglesSalle.definirPermetChat( config.obtenirValeurBooleenne( "controleurjeu.salles-initiales.regles.chat" ) );
+	  objReglesSalle.definirRatioTrous( config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-trous" ) );
+	  objReglesSalle.definirRatioMagasins( config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-magasins" ) );
+	  objReglesSalle.definirRatioCasesSpeciales(config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-cases-speciales" ) );
+	  objReglesSalle.definirRatioPieces( config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-pieces" ) );
+	  objReglesSalle.definirRatioObjetsUtilisables(config.obtenirNombreDecimal( "controleurjeu.salles-initiales.regles.ratio-objets-utilisables" ) );
+	  objReglesSalle.definirValeurPieceMaximale(config.obtenirNombreEntier( "controleurjeu.salles-initiales.regles.valeur-piece-maximale" ) );
+	  objReglesSalle.definirTempsMinimal( config.obtenirNombreEntier( "controleurjeu.salles-initiales.regles.temps-minimal" ) );
+	  objReglesSalle.definirTempsMaximal( config.obtenirNombreEntier( "controleurjeu.salles-initiales.regles.temps-maximal" ) );
+	  objReglesSalle.definirDeplacementMaximal( config.obtenirNombreEntier( "controleurjeu.salles-initiales.regles.deplacement-maximal" ) );
+
+	  List propTypeCaseSpeciale = config.obtenirListe("controleurjeu.salles-initiales.regles.case-speciale.type");
+	  List propPrioriteCaseSpeciale = config.obtenirListe("controleurjeu.salles-initiales.regles.case-speciale.priorite");
+	  for(i=1; i <= propTypeCaseSpeciale.size(); i++)
+	  {
+	    Integer tmp1 = Integer.valueOf((String)propPrioriteCaseSpeciale.get(i-1));
+	    Integer tmp2 = Integer.valueOf((String)propTypeCaseSpeciale.get(i-1));
+	    casesSpeciale.add(new ReglesCaseSpeciale(tmp1, tmp2));
+	  }
+
+	  List propTypeCaseCouleur = config.obtenirListe("controleurjeu.salles-initiales.regles.case-couleur.type");
+	  List propPrioriteCaseCouleur = config.obtenirListe("controleurjeu.salles-initiales.regles.case-couleur.priorite");
+	  for(i=1; i <= propTypeCaseCouleur.size(); i++)
+	  {
+	    Integer tmp1 = Integer.valueOf((String)propPrioriteCaseCouleur.get(i-1));
+	    Integer tmp2 = Integer.valueOf((String)propTypeCaseCouleur.get(i-1));
+	    casesCouleur.add(new ReglesCaseCouleur(tmp1, tmp2));
+	  }
+
+	  List propNomsObjetUtilisable = config.obtenirListe("controleurjeu.salles-initiales.regles.objet-utilisable.nom");
+	  List propPrioriteObjetUtilisable = config.obtenirListe("controleurjeu.salles-initiales.regles.objet-utilisable.priorite");
+	  for(i=1; i <= propNomsObjetUtilisable.size(); i++)
+	  {
+	    Integer tmp1 = Integer.valueOf((String)propPrioriteObjetUtilisable.get(i-1));
+	    String tmp2 = (String)propNomsObjetUtilisable.get(i-1);
+	    objetsUtilisables.add(new ReglesObjetUtilisable(tmp1, tmp2, Visibilite.Aleatoire));
+	  }
+
+	  // Now, we load room-specific settings (as well as the actual rooms)
+
+	  // Get the list of rooms
+	  NodeList listeDeSalles = documentConfig.getElementsByTagName("salle");
+	  for(i=0; i<listeDeSalles.getLength(); i++)
+	  {
+	    String nom = "";
+	    String createur = "";
+	    String motDePasse = "";
+	    String gameType = "";
+	    Node noeudLangue = listeDeSalles.item(i);
+	    NodeList parametresSalle = listeDeSalles.item(i).getChildNodes();
+	    for(int j=0; j<parametresSalle.getLength(); j++)
+	    {
+	      // If it's the kind of node we want, load the parameters
+	      if(parametresSalle.item(j).getNodeType()==1)
+	      {
+	        if(parametresSalle.item(j).getNodeName().equals("nom")) nom = parametresSalle.item(j).getTextContent();
+	        else if(parametresSalle.item(j).getNodeName().equals("createur")) createur = parametresSalle.item(j).getTextContent();
+	        else if(parametresSalle.item(j).getNodeName().equals("mot-de-passe")) motDePasse = parametresSalle.item(j).getTextContent();
+	        else if(parametresSalle.item(j).getNodeName().equals("langue")) noeudLangue = parametresSalle.item(j);
+	        else if(parametresSalle.item(j).getNodeName().equals("gameType")) gameType = parametresSalle.item(j).getTextContent();
+	      }
+	    }
+	    Salle objSalle = new Salle(objGestionnaireBD, nom, createur, motDePasse, objReglesSalle, this, noeudLangue, gameType);
+	    ajouterNouvelleSalle(objSalle);
+	  }
+    
+    
 	}
 	
 	public GestionnaireCommunication obtenirGestionnaireCommunication()

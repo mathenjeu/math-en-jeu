@@ -69,6 +69,8 @@ public class Salle
         // This is the maximum number of coins and items a player can hold at one time
         public static int maxPossessionPieceEtObjet = Integer.parseInt(GestionnaireConfiguration.obtenirInstance().obtenirString("controleurjeu.salles-initiales.regles.max-possession-objets-et-pieces"));
 	
+        private Langue2 langue;
+        
 	/**
 	 * Constructeur de la classe Salle qui permet d'initialiser les membres 
 	 * privés de la salle. Ce constructeur a en plus un mot de passe permettant
@@ -121,6 +123,64 @@ public class Salle
 		// Démarrer le thread du gestionnaire d'événements
 		threadEvenements.start();
 	}
+  
+  /**
+   * Constructeur de la classe Salle qui permet d'initialiser les membres 
+   * privés de la salle. Ce constructeur a en plus un mot de passe permettant
+   * d'accéder à la salle.
+   * 
+   * @param GestionnaireBD gestionnaireBD : Le gestionnaire de base de données
+   * @param String nomSalle : Le nom de la salle
+   * @param String nomUtilisateurCreateur : Le nom d'utilisateur du créateur
+   *                      de la salle
+   * @param String motDePasse : Le mot de passe
+   * @param Regles reglesSalle : Les règles de jeu pour la salle courante
+   */
+  public Salle(GestionnaireBD gestionnaireBD, 
+               String nomSalle, 
+               String nomUtilisateurCreateur, 
+               String motDePasse, 
+               Regles reglesSalle, 
+               ControleurJeu controleurJeu, 
+               Langue2 pLangue, 
+               String gameType)
+  {
+    super();
+    
+    // Faire la référence vers le gestionnaire d'événements et le 
+    // gestionnaire de base de données
+    objGestionnaireEvenements = new GestionnaireEvenements();
+    objGestionnaireBD = gestionnaireBD;
+    
+    // Garder en mémoire le nom de la salle, le nom d'utilisateur du 
+    // créateur de la salle et le mot de passe
+    strNomSalle = nomSalle;
+    strNomUtilisateurCreateur = nomUtilisateurCreateur;
+    strMotDePasse = motDePasse;
+                
+                // Type de jeu de la salle
+                this.gameType = gameType;
+    
+    // Créer une nouvelle liste de joueurs, de tables et de numéros
+    lstJoueurs = new TreeMap();
+    lstTables = new TreeMap();
+    lstNoTables = new TreeSet();
+    
+    // Définir les règles de jeu pour la salle courante
+    objRegles = reglesSalle;
+                
+                // On définit le noeud XML contenant les paramètres de la langue
+                this.langue = pLangue;
+    
+    // Faire la référence vers le controleur de jeu
+    objControleurJeu = controleurJeu;
+    
+    // Créer un thread pour le GestionnaireEvenements
+    Thread threadEvenements = new Thread(objGestionnaireEvenements);
+    
+    // Démarrer le thread du gestionnaire d'événements
+    threadEvenements.start();
+  }
 
 	/**
 	 * Cette fonction permet de générer un nouveau numéro de table.
