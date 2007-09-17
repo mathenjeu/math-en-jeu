@@ -51,10 +51,11 @@ else
 	$str_temp = "Francais";
 }
 
-//FIXME: change the language to en,fr,...
+//FIXME: change the language to en,fr,... (peut-etre partout ailleurs dans la page web?)
 
 // Ici, on s'assure que la chaîne correspondant à la langue qui sera transmise au client est du bon format pour celui-ci
-if(strcmp($str_temp, "English") == 0) $str_temp = "Anglais";
+if(strcmp($str_temp, "English") == 0) $str_temp = "en";
+if(strcmp($str_temp, "Francais") == 0) $str_temp = "fr";
 ?>
 
 <div style="height:100%">
