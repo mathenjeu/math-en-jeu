@@ -41,18 +41,18 @@
                 
                 <!-- Which languages does this room support? -->
                 <langue>
-                    <Anglais>
+                    <en>
                         <nom-table-questions-BD></nom-table-questions-BD>
                         <url-questions-reponses></url-questions-reponses>
                         <cle-question-min></cle-question-min>
                         <cle-question-max></cle-question-max>
-                    </Anglais>
-                    <Francais>
+                    </en>
+                    <fr>
                         <nom-table-questions-BD></nom-table-questions-BD>
                         <url-questions-reponses></url-questions-reponses>
                         <cle-question-min></cle-question-min>
                         <cle-question-max></cle-question-max>
-                    </Francais>
+                    </fr>
                 </langue>
             </salle>
 
