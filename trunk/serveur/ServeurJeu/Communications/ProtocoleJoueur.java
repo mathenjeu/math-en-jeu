@@ -3291,6 +3291,8 @@ public class ProtocoleJoueur implements Runnable
 		                	// Retourner une réponse positive au joueur
 		                	objNoeudCommande.setAttribute("type", "Reponse");
 		                	objNoeudCommande.setAttribute("nom", "Ok");
+                                        
+                                        creerListeObjetsMagasin((Magasin)objObjet, objDocumentXMLSortie, objNoeudCommande);
 		                	
 		                	// Ajouter l'objet acheté dans la réponse
 		                	Element objNoeudObjetAchete = objDocumentXMLSortie.createElement("objetAchete");
