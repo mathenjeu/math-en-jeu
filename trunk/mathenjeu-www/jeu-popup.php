@@ -1,13 +1,6 @@
-﻿<?php
-/*******************************************************************************
-Fichier : jeu-popup.php
-Auteur : Sylvain Hall�
-Description :   Affiche le jeu si le joueur est bien connect�
-********************************************************************************
-TODO : modification pour sp�cifiaction HTML 4.01/XHTML
-10-06-2006 Maxime B�gin - Modification.
-02-06-2006 Maxime B�gin - Sylvain Hall�
-*******************************************************************************/
+<?php
+
+
 require_once("lib/ini.php");
 
 // V�rifie si une session est en cours
@@ -51,11 +44,13 @@ else
 	$str_temp = "Francais";
 }
 
+/*
 //FIXME: change the language to en,fr,... (peut-etre partout ailleurs dans la page web?)
 
 // Ici, on s'assure que la chaîne correspondant à la langue qui sera transmise au client est du bon format pour celui-ci
 if(strcmp($str_temp, "English") == 0) $str_temp = "en";
 if(strcmp($str_temp, "Francais") == 0) $str_temp = "fr";
+*/
 ?>
 
 <div style="height:100%">
