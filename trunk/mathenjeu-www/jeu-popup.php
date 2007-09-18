@@ -1,12 +1,9 @@
 <?php
 
-
 require_once("lib/ini.php");
 
-// V�rifie si une session est en cours
-if (!isset($_SESSION["joueur"]))
-{
-  // Sinon, on ferme la fen�tre
+// check if there is a session for this player
+if (!isset($_SESSION["joueur"])) {
   echo "<script>window.close()</script>";
 }
 ?>
@@ -32,29 +29,6 @@ function Launch(page) {
 </head>
 <body onload="configuerFenetre()" bgcolor="#000000" style="margin:0px;padding:0px;height:100%;width:100%;">
 
-
-<?php
-/*
-if(isset($_SESSION['langage']))
-{
-	$str_temp = ucfirst($_SESSION['langage']);
-}
-else
-{
-	// En théorie, ceci n'arrive plus jamais
-	$str_temp = "Francais";
-}
-*/
-
-/*
-//FIXME: change the language to en,fr,... (peut-etre partout ailleurs dans la page web?)
-
-// Ici, on s'assure que la chaîne correspondant à la langue qui sera transmise au client est du bon format pour celui-ci
-/*
-if(strcmp($str_temp, "English") == 0) $str_temp = "en";
-if(strcmp($str_temp, "Francais") == 0) $str_temp = "fr";
-*/
-?>
 
 <div style="height:100%">
 
