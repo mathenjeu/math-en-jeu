@@ -14,7 +14,7 @@ main();
 
 function main()
 {
-  $smarty = new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   global $lang;
 
   try

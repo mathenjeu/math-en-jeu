@@ -10,7 +10,7 @@ Description : permet de g�rer les diff�rentes actions � effectuer
 *******************************************************************************/
 function main()
 {
-  $smarty=new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   global $lang;
   try
   {
@@ -97,7 +97,7 @@ Description : afficher tous les sondages avec le choix de supprimer celui-ci
 function formSondage()
 {
   	 global $lang;
-    $smarty=new MonSmarty();
+    $smarty = new MonSmarty($_SESSION['langage']);
     //on affiche les sondages
     $sql = "select cleSondage from sondage order by cleSondage desc";
     $resultSondage = $_SESSION["mysqli"]->query($sql);
@@ -142,7 +142,7 @@ function formAjoutsondage($nbChoix,$erreur)
         $nbChoix=5;
     }
         
-    $smarty=new MonSmarty();
+    $smarty = new MonSmarty($_SESSION['langage']);
     $smarty->assign('erreur',$erreur);
     $smarty->assign('action','ajout');
     $smarty->assign('nbChoix',$nbChoix);
@@ -278,7 +278,7 @@ Description : pr�par� et afficher le formulaire pour la modification d'un so
 *******************************************************************************/
 function formModifierSondage($cle,$erreur)
 {
-	$smarty=new MonSmarty();
+	$smarty = new MonSmarty($_SESSION['langage']);
 	$smarty->assign('erreur',$erreur);
   	$smarty->assign('action','modifier');
 	

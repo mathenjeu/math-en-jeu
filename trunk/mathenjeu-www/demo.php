@@ -16,7 +16,7 @@ function main()
 {
   try
   {
-	$smarty = new MonSmarty;
+	$smarty = new MonSmarty($_SESSION['langage']);;
 	global $lang;
 	
 	if(isset($_SESSION["joueur"]))
@@ -32,8 +32,6 @@ function main()
 	$smarty->cache_lifetime = 0;
 	$smarty->display('header.tpl');
 
-	if(isset($_SESSION['css']))
-		$smarty->assign('css',$_SESSION['css']);
 	
 	$smarty->cache_lifetime = 0;
 	$smarty->display('menu.tpl');

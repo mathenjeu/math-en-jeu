@@ -10,7 +10,7 @@ function main()
 {
   try
   {
-	$smarty = new MonSmarty;
+	$smarty = new MonSmarty($_SESSION['langage']);
 	global $lang;
 	
 	$smarty->assign('titre',$lang['titre_nouvelle']);
@@ -78,7 +78,7 @@ Description : affiche les nouvelles contenues dans l'objet $nouvelles
 function afficherNouvelles($nouvelles)
 {
 
-    $smarty = new MonSmarty;
+    $smarty = new MonSmarty($_SESSION['langage']);
     for($i=0;$i<$nouvelles->reqNbNouvelle();$i++)
     {
       $nouvelle = $nouvelles->reqNouvelle($i+1);

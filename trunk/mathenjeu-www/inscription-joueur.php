@@ -25,7 +25,7 @@ function main()
   try
   {
 	
-    $smarty = new MonSmarty();
+    $smarty = new MonSmarty($_SESSION['langage']);
     global $lang;
     $smarty->assign('titre',$lang['titre_inscription_joueur']);
     
@@ -257,7 +257,7 @@ Description : afficher le formulaire d'inscription pour l'�tape 1
 *******************************************************************************/
 function etape1($erreur)
 {
-    $smarty = new MonSmarty;
+    $smarty = new MonSmarty($_SESSION['langage']);
     if(isset($_POST["nom"]))
     {
       foreach($_POST as $cle => $valeur)
@@ -288,7 +288,7 @@ Description : afficher le formulaire d'inscription pour l'�tape 2
 *******************************************************************************/
 function etape2($erreur)
 {
-    $smarty = new MonSmarty;
+    $smarty = new MonSmarty($_SESSION['langage']);
     global $lang;
     
     $niveau=7;
@@ -351,7 +351,7 @@ Description : afficher le formulaire d'inscription pour l'�tape 3
 *******************************************************************************/
 function etape3()
 {
-    $smarty = new MonSmarty;
+    $smarty = new MonSmarty($_SESSION['langage']);
     $smarty->assign('etape',3);
     $smarty->cache_lifetime = 0;
     $smarty->display('inscription_joueur.tpl');

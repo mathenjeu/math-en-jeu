@@ -32,7 +32,7 @@ define('DOC_ROOT',(substr(LIB_DIR,0,strrpos(LIB_DIR,'/')+1)));		//dossier racine
 define('LOG_DIR',DOC_ROOT . "log/");
 
 //inclus les fichier requis pour faire fonctionner le site web
-require_once(LIB_DIR . "/Smarty/Smarty.class.php");
+//
 require_once(LIB_DIR . "/phpmailer/class.phpmailer.php");
 require_once(LIB_DIR . "/util.php");
 require_once(LIB_DIR . "/exception.class.php");
@@ -46,7 +46,7 @@ require_once(LIB_DIR . "/groupe.class.php");
 require_once(LIB_DIR . "/superadmin.class.php");
 require_once(LIB_DIR . "/faq.class.php");
 require_once(LIB_DIR . "/clog.class.php");
-
+require_once(LIB_DIR . "/mon_smarty.class.php");
 
 define("LANGAGE_DIR",DOC_ROOT . "langage/");
 define("CONFIG_FILE", DOC_ROOT . "/config/configuration.xml");
@@ -109,8 +109,6 @@ if (session_id()=="") {
 }
 
 
-
-
 //echo $_SESSION['langage'];
 
 if (isset($_SESSION['langage']) && $_SESSION['langage'] != "" ) {
@@ -121,52 +119,25 @@ if (isset($_SESSION['langage']) && $_SESSION['langage'] != "" ) {
 }
 
 
-//extension de la classe Smarty pour automatiquement
-//inclure les dossier de compilation et de templates
-class MonSmarty extends Smarty
-{
-     function MonSmarty()
-     {
-        // Constructeur de la classe.
-        // Appel� automatiquement � l'instanciation de la classe.
-        $this->Smarty();
-        $this->caching = 0;		//controle de la cache pour chaque fichier
-        $this->template_dir = TEMPLATE_DIR;
-        $this->compile_dir = LIB_DIR . '/Smarty/templates_c';
-        $this->config_dir = LIB_DIR . '/Smarty/configs';
-        $this->cache_dir = LIB_DIR . '/Smarty/cache';
-            
-        global $lang;
-        $this->assign('lang', $lang);
-        $this->assign('language',$_SESSION['langage']);
-        $this->assign('template',TEMPLATE);
-        $this->assign("sid",strip_tags(SID));
-                
-        if(isset($_SESSION['css']) && file_exists(TEMPLATE . $_SESSION['css']))
-        {
-        	$this->assign('fichier_css',TEMPLATE . $_SESSION['css']);
-        }
-        else
-        {
-          $_SESSION['css'] = CSS_FILE;
-          $this->assign('fichier_css',TEMPLATE . "/" . CSS_FILE);
-        }
-        	
-        $this->assign('loc_template',TEMPLATE);
-     }
-}
+
 
 //si l'objet mon_mysqli n'existe pas on le cr�e et l'ajoute
 //� la super-globale $_SESSION
 //if(!isset($_SESSION["mysqli"]))
 //{
-    $mysqli=new mon_mysqli((string)$config->dbHote,
+    
+//}
+
+if(isset($_SESSION["mysqli"])) {
+  $_SESSION["mysqli"]->close();
+}
+
+$mysqli=new mon_mysqli((string)$config->dbHote,
                 (string)$config->dbUtilisateur,
                 (string)$config->dbMotDePasse,
                 (string)$config->dbSchema);
     
-    $_SESSION["mysqli"]=$mysqli;
-//}
+$_SESSION["mysqli"]=$mysqli;
 
 //session_destroy();
 

@@ -16,7 +16,7 @@ function main()
 {
  	try
   	{
-  	 	$smarty = new MonSmarty;
+  	 	$smarty = new MonSmarty($_SESSION['langage']);
 		global $lang;
 	
 		$smarty->assign('titre',$lang['titre_faq']);
@@ -60,7 +60,7 @@ Description :
 *******************************************************************************/
 function afficherFaq()
 {
-  	$smarty=new MonSmarty();
+  	$smarty = new MonSmarty($_SESSION['langage']);
   
   	//on v�rifie si on a une copie valide dans la cache
 	//sinon on va chercher les informations dans la base de donn�es

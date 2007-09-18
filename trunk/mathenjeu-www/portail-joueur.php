@@ -29,7 +29,7 @@ function main()
 {
   try
   {
-      $smarty = new MonSmarty();
+      $smarty = new MonSmarty($_SESSION['langage']);
       global $lang;
     	
       //on v�rifie su le joueur est connect� et a la permission d'acc�d� � cette page
@@ -104,7 +104,7 @@ function main()
 
 function statJoueur()
 {
-  $smarty = new MonSmarty;
+  $smarty = new MonSmarty($_SESSION['langage']);
   $joueur=$_SESSION["joueur"];
   
   $joueur->calculNbPartieTempsJouee();
@@ -278,7 +278,7 @@ function formulaireModification($joueur,$erreur,$erreur_id,$message,$message_id)
       $niveau=$_POST["niveau"];
     }
 
-    $smarty = new MonSmarty;
+    $smarty = new MonSmarty($_SESSION['langage']);
     
     if(isset($_POST["etablissement"]))
 	{

@@ -10,7 +10,7 @@ Description : permet de gérer les différentes actions à effectuer
 *******************************************************************************/
 function main()
 {
-  $smarty=new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   global $lang;
   try
   {
@@ -80,7 +80,7 @@ Description : afficher les statistiques
 *******************************************************************************/
 function formStatistique()
 {
-  $smarty=new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   $smarty->cache_lifetime = 0;
   $smarty->display('statistiques.tpl');
 }

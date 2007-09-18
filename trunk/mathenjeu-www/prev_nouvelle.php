@@ -11,7 +11,7 @@ Description : fenêtre pop-up javacript qui permet de visualisé une nouvelle
 
 require_once("lib/ini.php");
 
-$smarty=new MonSmarty();
+$smarty = new MonSmarty($_SESSION['langage']);
 $arr[0]['titre'] = stripslashes($_GET['titre']);
 $arr[0]['date'] = $_GET['date'];
 echo $_GET['nouvelle'];

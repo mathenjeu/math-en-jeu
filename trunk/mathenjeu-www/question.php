@@ -15,7 +15,7 @@ function main()
 {
   try
   {
-	$smarty = new MonSmarty;
+	$smarty = new MonSmarty($_SESSION['langage']);
 	global $lang;
 	
 	if(isset($_SESSION["joueur"]))

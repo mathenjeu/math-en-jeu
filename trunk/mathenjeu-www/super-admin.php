@@ -35,7 +35,7 @@ Description : permet de gérer les différentes actions à effectuer
 *******************************************************************************/
 function main()
 {
-  $smarty=new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   global $lang;
   try
   {
@@ -195,7 +195,7 @@ Description : on affiche le formulaire de modification avec les données de la
 *******************************************************************************/
 function formModfierFaq($cle)
 {
-  $smarty = new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   $faq=new FAQ($_SESSION['mysqli']);
   if(!$faq->chargerMySQL($cle))
   {
@@ -218,7 +218,7 @@ Description : on modfie la faq corespondant à la clé, si une des données
 *******************************************************************************/
 function doModifierFaq($cle)
 {
-  $smarty = new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   if($_POST['question']=="")
   {
   	$smarty->assign('erreur',$lang['erreur_faq_question']);
@@ -263,7 +263,7 @@ Description : insérer une nouvelle faq dans la table, si une des données
 *******************************************************************************/
 function insertFaq()
 {
-  $smarty = new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   if($_POST['question']=="")
   {
   	$smarty->assign('erreur',$lang['erreur_faq_question']);
@@ -322,7 +322,7 @@ Description : charger les faqs et afficher la liste avec possibilité de modifier
 *******************************************************************************/
 function formFaq()
 {
-  $smarty = new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   
   $faqs = new FAQs($_SESSION['mysqli']);
   $faqs->chargerMySQL(0);
@@ -385,7 +385,7 @@ function doConfig()
 
   fwrite($fichier,$contenu);  
   fclose($fichier);
-  $smarty=new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   $smarty->clear_compiled_tpl();
   $smarty->clear_cache();
   
@@ -408,7 +408,7 @@ Description : afficher le formulaire pour changer les configurations
 *******************************************************************************/
 function config($erreur)
 {
-	$smarty=new MonSmarty();
+	$smarty = new MonSmarty($_SESSION['langage']);
 	$smarty->assign("erreur",$erreur);
 	if(!isset($_POST['nbNouvelles']))
 	{
@@ -495,7 +495,7 @@ Description : afficher les statistiques
 *******************************************************************************/
 function formStatistique()
 {
-  $smarty=new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   $smarty->cache_lifetime = 0;
   $smarty->display('statistiques.tpl');
 }
@@ -509,7 +509,7 @@ Description : vérifier les données entrées par l'utilisateur,
 function doLogin()
 {
     global $lang;
-    $smarty=new MonSmarty();
+    $smarty = new MonSmarty($_SESSION['langage']);
     $sAdmin = new SuperAdmin($_SESSION["mysqli"]);
     
     if(!$sAdmin->chargerMySQL($_POST["courriel"],$_POST["motDePasse"]))
@@ -536,7 +536,7 @@ Description : afficher un formulaire de login pour les super-administrateur
 *******************************************************************************/
 function login($erreur)
 {
-    $smarty=new MonSmarty();
+    $smarty = new MonSmarty($_SESSION['langage']);
     if(isset($_SESSION['css']))
     	$smarty->assign('css',$_SESSION['css']);
     
@@ -555,7 +555,7 @@ Description : afficher les question qui sont en attente de validation
 *******************************************************************************/
 function afficherQuestion()
 {
-  $smarty=new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   
     $mysqli=($_SESSION["mysqli"]);
   
@@ -661,7 +661,7 @@ Description : affiche les nouvelles avec des liens vers la modification
 function formNouvelle()
 {
   	global $lang;
-  	$smarty=new MonSmarty();
+  	$smarty = new MonSmarty($_SESSION['langage']);
   
     $nouvelles = new Nouvelles($_SESSION["mysqli"]);
     //on charge toutes les nouvelles
@@ -700,7 +700,7 @@ Description : afficher le formulaire pour la modification de la nouvelle
 *******************************************************************************/
 function formModifierNouvelle($cle,$erreur)
 {
-  $smarty=new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   $smarty->assign('erreur',$erreur);
   $smarty->assign('action','modifier');
 
@@ -770,7 +770,7 @@ Description : afficher le formulaire pour l'ajout d'une nouvelle
 *******************************************************************************/
 function formAjoutNouvelle($erreur)
 {
-  $smarty=new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   $smarty->assign('erreur',$erreur);
   $smarty->assign('action','ajout');
   if(isset($_POST["titre"]))
@@ -796,7 +796,7 @@ Description : afficher tous les sondages avec le choix de supprimer celui-ci
 function formSondage()
 {
   	 global $lang;
-    $smarty=new MonSmarty();
+    $smarty = new MonSmarty($_SESSION['langage']);
     //on affiche les sondages
     $sql = "select cleSondage from sondage order by cleSondage desc";
     $resultSondage = $_SESSION["mysqli"]->query($sql);
@@ -841,7 +841,7 @@ function formAjoutsondage($nbChoix,$erreur)
         $nbChoix=5;
     }
         
-    $smarty=new MonSmarty();
+    $smarty = new MonSmarty($_SESSION['langage']);
     $smarty->assign('erreur',$erreur);
     $smarty->assign('action','ajout');
     $smarty->assign('nbChoix',$nbChoix);
@@ -976,7 +976,7 @@ Description : préparé et afficher le formulaire pour la modification d'un sondsg
 *******************************************************************************/
 function formModifierSondage($cle,$erreur)
 {
-	$smarty=new MonSmarty();
+	$smarty = new MonSmarty($_SESSION['langage']);
 	$smarty->assign('erreur',$erreur);
   	$smarty->assign('action','modifier');
 	

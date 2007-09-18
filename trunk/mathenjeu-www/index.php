@@ -24,7 +24,7 @@ function main()
 {
   try
   {
-	$smarty = new MonSmarty;
+	$smarty = new MonSmarty($_SESSION['langage']);
 	global $lang;
 	
 	if(isset($_SESSION["joueur"]))
@@ -38,7 +38,7 @@ function main()
 	$smarty->assign('titre',$lang['titre_index']);
 	
 	if (!isset($_SESSION['langage'])) {
-	  $_SESSION['langage'] = "francais";
+	  $_SESSION['langage'] = "fr";
 	}
 	$smarty->cache_lifetime = 0;
 	$smarty->display('header.tpl');

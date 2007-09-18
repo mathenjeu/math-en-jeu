@@ -63,7 +63,7 @@ Description : affiche le sondage pass� en param�tre
 *******************************************************************************/
 function afficherSondage($sondage)
 {
-    $smarty = new MonSmarty;
+    $smarty = new MonSmarty($_SESSION['langage']);
     if(!$smarty->is_cached("sondage.tpl"))
     {
 	    $smarty->assign('titre',$sondage->reqTitre());
@@ -98,7 +98,7 @@ Description : affiche le r�sultat du sondage pass� en param�tre
 *******************************************************************************/
 function afficherResultatSondage($sondage)
 {
-    $smarty = new MonSmarty;
+    $smarty = new MonSmarty($_SESSION['langage']);
     global $lang;
     $smarty->assign('lang', $lang);
     $smarty->assign('titre',$sondage->reqTitre());

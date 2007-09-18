@@ -10,7 +10,7 @@ Description : permet de g�rer les diff�rentes actions � effectuer
 *******************************************************************************/
 function main()
 {
-  $smarty=new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   global $lang;
   try
   {
@@ -175,7 +175,7 @@ Description : affiche les nouvelles avec des liens vers la modification
 function formNouvelle()
 {
   	global $lang;
-  	$smarty=new MonSmarty();
+  	$smarty = new MonSmarty($_SESSION['langage']);
   
     $nouvelles = new Nouvelles($_SESSION["mysqli"]);
     //on charge toutes les nouvelles
@@ -214,7 +214,7 @@ Description : afficher le formulaire pour la modification de la nouvelle
 *******************************************************************************/
 function formModifierNouvelle($cle,$erreur)
 {
-  $smarty=new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   $smarty->assign('erreur',$erreur);
   $smarty->assign('action','modifier');
 
@@ -285,7 +285,7 @@ Description : afficher le formulaire pour l'ajout d'une nouvelle
 *******************************************************************************/
 function formAjoutNouvelle($erreur)
 {
-  $smarty=new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   $smarty->assign('erreur',$erreur);
   $smarty->assign('action','ajout');
   if(isset($_POST["titre"]))

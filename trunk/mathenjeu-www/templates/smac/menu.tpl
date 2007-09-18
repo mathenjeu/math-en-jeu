@@ -1,8 +1,8 @@
 <td class="menu" width="20%" valign="top">
 <div class="menu">
 	<div id="lang">
-		<a href="set_lang.php?lang=francais"><img border="0" src="{$template}img/flag_fr.gif"></a>
-		<a href="set_lang.php?lang=english"><img border="0" src="{$template}img/flag_en.gif"></a>
+		<a href="set_lang.php?lang=fr"><img alt="fr" border="0" src="{$template}img/flag_fr.gif"></a>
+		<a href="set_lang.php?lang=en"><img alt="en" border="0" src="{$template}img/flag_en.gif"></a>
 	</div>
 	{if $connecter eq 1}
 		<h4 class="titre_menu">{$lang.titre_menu_joueur}</h4>
@@ -56,6 +56,7 @@
 				<li><a style="font-size: 150%" href="inscription-joueur.php" class=menu>{$lang.menu_inscription_joueur}</a><br><br></li>
 			    <li><a href="index.php" class=menu>{$lang.menu_accueil}</a></li>
 			    <li><a href="nouvelles.php" class="menu">{$lang.menu_nouvelles}</a></li>
+			    <li><a href="demo.php" class="menu">{$lang.menu_demo}</a></li>
 			    <li><a href="instructions.php" class="menu">{$lang.menu_instructions}</a></li>
 			    <li><a href="login-joueur.php" class=menu>{$lang.menu_connexion}</a></li>
 			    <li><a href="palmares.php" class="menu">{$lang.menu_palmares}</a></li>

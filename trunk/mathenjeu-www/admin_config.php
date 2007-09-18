@@ -10,7 +10,7 @@ Description : permet de gérer les différentes actions à effectuer
 *******************************************************************************/
 function main()
 {
-  $smarty=new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   global $lang;
   try
   {
@@ -115,7 +115,7 @@ function doConfig()
 
   fwrite($fichier,$contenu);  
   fclose($fichier);
-  $smarty=new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   $smarty->clear_compiled_tpl();
   $smarty->clear_cache();
   
@@ -138,7 +138,7 @@ Description : afficher le formulaire pour changer les configurations
 *******************************************************************************/
 function config($erreur)
 {
-	$smarty=new MonSmarty();
+	$smarty = new MonSmarty($_SESSION['langage']);
 	$smarty->assign("erreur",$erreur);
 	if(!isset($_POST['nbNouvelles']))
 	{

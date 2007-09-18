@@ -12,7 +12,7 @@ Description : permet de g�rer les diff�rentes actions � effectuer
 *******************************************************************************/
 function main()
 {
-  $smarty=new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   global $lang;
   try
   {
@@ -101,7 +101,7 @@ Description : on affiche le formulaire de modification avec les donn�es de la
 *******************************************************************************/
 function formModfierFaq($cle)
 {
-  $smarty = new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   $faq=new FAQ($_SESSION['mysqli']);
   if(!$faq->chargerMySQL($cle))
   {
@@ -124,7 +124,7 @@ Description : on modfie la faq corespondant � la cl�, si une des donn�es
 *******************************************************************************/
 function doModifierFaq($cle)
 {
-  $smarty = new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   if($_POST['question']=="")
   {
   	$smarty->assign('erreur',$lang['erreur_faq_question']);
@@ -170,7 +170,7 @@ Description : ins�rer une nouvelle faq dans la table, si une des donn�es
 *******************************************************************************/
 function insertFaq()
 {
-  $smarty = new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   if($_POST['question']=="")
   {
   	$smarty->assign('erreur',$lang['erreur_faq_question']);
@@ -230,7 +230,7 @@ Description : charger les faqs et afficher la liste avec possibilit� de modifi
 *******************************************************************************/
 function formFaq()
 {
-  $smarty = new MonSmarty();
+  $smarty = new MonSmarty($_SESSION['langage']);
   
   $faqs = new FAQs($_SESSION['mysqli']);
   $faqs->chargerTouteMySQL();

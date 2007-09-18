@@ -179,20 +179,20 @@ function setLangage($cleLangage) {
   switch($cleLangage)
   {
 	case LANG_FRENCH:
-	  $_SESSION['langage'] = "francais";
+	  $_SESSION['langage'] = "fr";
 	  break;
 	case LANG_ENGLISH:
-		$_SESSION['langage'] = "english";
+		$_SESSION['langage'] = "en";
 		break;
 	default:
-		$_SESSION['langage'] = "francais";
+		$_SESSION['langage'] = "fr";
 		break;
   }
 }
 
 function getCleLangue($langage) {
   $ret=0;
-  if ($langage == "english") {
+  if ($langage == "en") {
     $ret = LANG_ENGLISH;
   } else {
     $ret = LANG_FRENCH;
