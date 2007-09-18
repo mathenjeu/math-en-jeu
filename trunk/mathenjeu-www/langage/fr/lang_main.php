@@ -198,8 +198,8 @@ $lang['menu_mes_question'] = 'Afficher mes questions';
 
 $lang['titre_index'] = 'Math en jeu';
 $lang['texte_index'] = '
-<span style="font-size:150%"><i>Nouveau!</i> <a href="nouvelles.php">Tester la nouvelle version de Math en jeu.</a></span><p>
-<a target="_blank" href="img/screen2_big.jpg"><img src="img/screen2.jpg" alt="Capture d\'écran" border="0" hspace="15" align="left"></a>
+
+<a target="_blank" href="img/screen1_big.png"><img src="img/screen1.png" alt="Capture d\'écran" border="0" hspace="15" align="left"></a>
 
 <p>Peut-on s\'amuser en faisant des maths? L\'équipe de SMAC vous dit &laquo;oui&raquo;!
 Tout juste sorti des cartons, Math en jeu est un jeu multimédia interactif
@@ -226,7 +226,7 @@ Pour pouvoir avancer et gagner des jetons, chacun doit répondre à des
 questions mathématiques: plus le déplacement souhaité est grand, plus la
 question posée est difficile, et plus elle rapporte!</p>
 
-<a target="_blank" href="img/screen1_big.jpg"><img src="img/screen1.jpg" alt="Capture d\'écran" border="0" hspace="15" align="right"></a>
+<a target="_blank" href="img/screen2_big.png"><img src="img/screen2.png" alt="Capture d\'écran" border="0" hspace="15" align="right"></a>
 
 <p>Dans le cas où le joueur n\'obtient pas la bonne réponse, une rétroaction
 unique à chaque question est affichée, expliquant au joueur la raison de son

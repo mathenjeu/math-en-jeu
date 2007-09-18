@@ -195,8 +195,8 @@ $lang['menu_mes_question'] = 'Add my questions';
 
 $lang['titre_index'] = 'Math en jeu';
 $lang['texte_index'] = '
-<span style="font-size:150%"><i>New!</i> <a href="demo.php">Watch the Math en jeu demo!</a></span><p>
-<a target="_blank" href="img/screen2_big.jpg"><img src="img/screen2.jpg" alt="Capture d\'écran" border="0" hspace="15" align="left"></a>		
+<!--<span style="font-size:150%"><i>New!</i> <a href="demo.php">Watch the Math en jeu demo!</a></span><p>-->
+<a target="_blank" href="img/screen1_big.png"><img src="img/screen2.png" alt="Capture d\'écran" border="0" hspace="15" align="left"></a>		
 
 
 <p>Is it possible to have fun doing maths? The SMAC team says &laquo;yes&raquo;!
@@ -222,7 +222,7 @@ time runs out. To be able to win coins, each player must answer mathematical
 questions. The longer the displacement, the harder the question, and the more 
 coins it is worth! </p>
 
-<a target="_blank" href="img/screen1_big.jpg"><img src="img/screen1.jpg" alt="Capture d\'écran" border="0" hspace="15" align="right"></a>    
+<a target="_blank" href="img/screen2_big.png"><img src="img/screen2.png" alt="Capture d\'écran" border="0" hspace="15" align="right"></a>    
 
 
 <p>In case a player answers a question  wrongly, a retroactive effect
