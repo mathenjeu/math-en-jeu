@@ -123,9 +123,12 @@ public class GestionnaireCommunication
 				
 				// Accepter une connexion et créer un objet ProtocoleJoueur
 				// qui va exécuter le protocole pour le joueur
-				ProtocoleJoueur objJoueur = new ProtocoleJoueur(objControleurJeu, this, objVerificateurConnexions,
-																objSocketServeur.accept(),
-																objGestionnaireTemps, objTacheSynchroniser);
+				ProtocoleJoueur objJoueur = new ProtocoleJoueur(objControleurJeu, 
+                                                        this, 
+                                                        objVerificateurConnexions,
+                                                        objSocketServeur.accept(),
+                                                        objGestionnaireTemps, 
+                                                        objTacheSynchroniser);
 				
 				// Créer un thread pour le joueur demandant la connexion
 				Thread threadJoueur = new Thread(objJoueur);

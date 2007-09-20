@@ -26,7 +26,8 @@ public class Maitre implements Runnable
 	
 	public Maitre()
 	{
-		objJeu = new ControleurJeu();
+		//objJeu = new ControleurJeu();
+    objJeu = ControleurJeu.getInstance();
 	}
 	
 	public static void traiterCommande( String commande )

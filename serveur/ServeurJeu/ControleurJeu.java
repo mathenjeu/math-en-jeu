@@ -67,6 +67,12 @@ import ServeurJeu.Temps.TacheSynchroniser;
  */
 public class ControleurJeu 
 {
+  
+  private static class ControlleurJeuHolder {
+    private final static ControleurJeu mControleurJeu = new ControleurJeu();
+  }
+  //private static ControleurJeu mControleurJeu = new ControleurJeu();
+  
         // Cette modeDebug est vraie, toute reponse des joueurs sera bonne, et
         // on affichera dans la console des informations sur les communications
         public static boolean modeDebug;
@@ -137,6 +143,11 @@ public class ControleurJeu
 	    */
 	//}
 	
+  public static ControleurJeu getInstance() {
+    return ControlleurJeuHolder.mControleurJeu;
+  }
+  
+  
 	/**
 	 * Constructeur de la classe ControleurJeu qui permet de créer le gestionnaire 
 	 * des communications, le gestionnaire d'événements et le gestionnaire de bases 
@@ -172,9 +183,12 @@ public class ControleurJeu
 		objGestionnaireBD = new GestionnaireBD(this);
 		
 		// Charger les salles par défaut
+    //TODO : remove this, rooms will now be loaded for each player because of user made rooms
 		chargerSallesInitiales();
+    //lstSalles = objGestionnaireBD.loadRooms();
 		
-		objGestionnaireTemps = new GestionnaireTemps();
+		//objGestionnaireTemps = new GestionnaireTemps();
+    objGestionnaireTemps = GestionnaireTemps.getInstance();
 		objTacheSynchroniser = new TacheSynchroniser();
 
 		// Créer un nouveau gestionnaire de communication
