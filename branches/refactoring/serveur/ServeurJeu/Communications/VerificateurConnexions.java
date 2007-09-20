@@ -2,12 +2,26 @@ package ServeurJeu.Communications;
 
 import java.util.Vector;
 
+import sun.security.jca.GetInstance;
+
 /**
  * @author Jean-François Brind'Amour
  */
 public class VerificateurConnexions implements Runnable
 {
+  
+  private VerificateurConnexions() {
+    //super();
+    lstClientsPresents = new Vector();
+    
+  }
+  
+  private static class VerificateurConnexionsHolder {
+    private final static VerificateurConnexions INSTANCE = new VerificateurConnexions();
+  }
+  
 	// Déclaration d'une référence vers le gestionnaire des communications
+  @Deprecated
 	private GestionnaireCommunication objGestionnaireCommunication;
 	
 	// Cette variable permet de savoir s'il faut arrêter le thread ou non
@@ -22,6 +36,13 @@ public class VerificateurConnexions implements Runnable
 	// ont répondu au ping
 	private Vector lstClientsPresents;
 	
+  
+
+  
+  public static VerificateurConnexions getInstance() {
+    return VerificateurConnexionsHolder.INSTANCE;
+  }
+  
 	/**
 	 * Constructeur de la classe VerificateurConnexions qui permet de garder une 
 	 * référence vers le gestionnaire de communication.
@@ -29,6 +50,7 @@ public class VerificateurConnexions implements Runnable
 	 * @param GestionnaireCommunication communication : Le gestionnaire des 
 	 * 													communications
 	 */
+  @Deprecated
 	public VerificateurConnexions(GestionnaireCommunication communication) 
 	{
 		super();
@@ -39,6 +61,7 @@ public class VerificateurConnexions implements Runnable
 		// Créer un nouveau vecteur
 		lstClientsPresents = new Vector();
 	}
+  
 	
 	/**
 	 * Cette méthode est appelée automatiquement par le thread du joueur et elle
@@ -47,6 +70,8 @@ public class VerificateurConnexions implements Runnable
 	 */
 	public void run()
 	{
+    GestionnaireCommunication objGestionnaireCommunication = GestionnaireCommunication.getInstance();
+    
 		// Boucler tant qu'il ne faut pas arrêter le thread
 		while (bolStopThread == false)
 		{

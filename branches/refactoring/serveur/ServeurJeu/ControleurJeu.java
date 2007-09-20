@@ -84,14 +84,16 @@ public class ControleurJeu
 	
 	// Cet objet permet de gérer toutes les communications entre le serveur et
 	// les clients (les joueurs)
+  @Deprecated
 	private GestionnaireCommunication objGestionnaireCommunication;
 	
 	// Cet objet permet de gérer tous les événements devant être envoyés du
 	// serveur aux clients (l'événement ping n'est pas géré par ce gestionnaire)
 	private GestionnaireEvenements objGestionnaireEvenements;
 	
+  @Deprecated
 	private TacheSynchroniser objTacheSynchroniser;
-	
+	@Deprecated
 	private GestionnaireTemps objGestionnaireTemps;
 	
 	
@@ -188,11 +190,13 @@ public class ControleurJeu
     //lstSalles = objGestionnaireBD.loadRooms();
 		
 		//objGestionnaireTemps = new GestionnaireTemps();
-    objGestionnaireTemps = GestionnaireTemps.getInstance();
-		objTacheSynchroniser = new TacheSynchroniser();
+    //objGestionnaireTemps = GestionnaireTemps.getInstance();
+		//objTacheSynchroniser = new TacheSynchroniser();
+    //objTacheSynchroniser = TacheSynchroniser.getInstance();
 
 		// Créer un nouveau gestionnaire de communication
-		objGestionnaireCommunication = new GestionnaireCommunication(this, objGestionnaireEvenements, objGestionnaireBD, objGestionnaireTemps, objTacheSynchroniser);
+		//objGestionnaireCommunication = new GestionnaireCommunication(this, objGestionnaireEvenements, objGestionnaireBD, objGestionnaireTemps, objTacheSynchroniser);
+    //objGestionnaireCommunication = GestionnaireCommunication.getInstance();
 	}
 	
 	public void demarrer()
@@ -200,9 +204,10 @@ public class ControleurJeu
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 
 		int intStepSynchro = config.obtenirNombreEntier( "controleurjeu.synchro.step" );
-		objGestionnaireTemps.ajouterTache( objTacheSynchroniser, intStepSynchro );
+		GestionnaireTemps.getInstance().ajouterTache( TacheSynchroniser.getInstance(), intStepSynchro );
 		
-        // Créer un thread pour le GestionnaireEvenements
+		
+    // Créer un thread pour le GestionnaireEvenements
 		Thread threadEvenements = new Thread(objGestionnaireEvenements);
 		
 		// Démarrer le thread du gestionnaire d'événements
@@ -225,19 +230,21 @@ public class ControleurJeu
 		//Demarrer une tache de monitoring
 		TacheLogMoniteur objTacheLogMoniteur = new TacheLogMoniteur();
 		int intStepMonitor = config.obtenirNombreEntier( "controleurjeu.monitoring.step" );
-		objGestionnaireTemps.ajouterTache( objTacheLogMoniteur, intStepMonitor );
+		GestionnaireTemps.getInstance().ajouterTache( objTacheLogMoniteur, intStepMonitor );
 		
 		//Démarrer l'écoute des connexions clientes
 		//Cette methode est la loop de l'application
 		//Au retour, l'application se termine
-		objGestionnaireCommunication.ecouterConnexions();
+    GestionnaireCommunication.getInstance().ecouterConnexions();
+		//objGestionnaireCommunication.ecouterConnexions();
 		System.out.println( "arret" );
 	}
 	
 	public void arreter()
 	{
 		System.out.println( "Le serveur arrete..." );
-		objGestionnaireCommunication.arreter();
+    GestionnaireCommunication.getInstance().arreter();
+		//objGestionnaireCommunication.arreter();
 	}
 	
 	/**
@@ -825,9 +832,11 @@ public class ControleurJeu
     
 	}
 	
+  @Deprecated
 	public GestionnaireCommunication obtenirGestionnaireCommunication()
 	{
-		return objGestionnaireCommunication;
+    return GestionnaireCommunication.getInstance();
+		//return objGestionnaireCommunication;
 	}
 	
 	public GestionnaireEvenements obtenirGestionnaireEvenements()
@@ -835,9 +844,11 @@ public class ControleurJeu
 	    return objGestionnaireEvenements;
 	}
 	
+  @Deprecated
 	public GestionnaireTemps obtenirGestionnaireTemps()
 	{
-	    return objGestionnaireTemps;
+    return GestionnaireTemps.getInstance();
+	    //return objGestionnaireTemps;
 	}
 	
 	public TacheSynchroniser obtenirTacheSynchroniser()

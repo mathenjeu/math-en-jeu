@@ -14,6 +14,8 @@ import java.util.Vector;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import sun.security.jca.GetInstance;
+
 import Enumerations.Visibilite;
 import Enumerations.Constant;
 import ServeurJeu.ControleurJeu;
@@ -35,7 +37,13 @@ import ServeurJeu.Configuration.GestionnaireMessages;
  */
 public class GestionnaireBD 
 {
+  
+  private static class GestionnaireBDHolder {
+    private static final GestionnaireBD INSTANCE = new GestionnaireBD();
+  }
+  
   // Déclaration d'une référence vers le contrôleur de jeu
+  @Deprecated
   private ControleurJeu objControleurJeu;
 
   // Objet Connection nécessaire pour le contact avec le serveur MySQL
@@ -48,10 +56,43 @@ public class GestionnaireBD
 
   private static final String strValeurGroupeAge = "valeurGroupeAge";
 
+  
+  private GestionnaireBD() {
+    super();
+
+    GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+
+    // Garder la référence vers le contrôleur de jeu
+    //objControleurJeu = controleur;
+
+    //Création du driver JDBC
+    try
+    {
+      String driver = config.obtenirString( "gestionnairebd.jdbc-driver" );
+      Class.forName( driver );
+    }
+    catch (Exception e)
+    {
+      // Une erreur est survenue lors de l'instanciation du pilote
+      objLogger.error(GestionnaireMessages.message("bd.erreur_creer_pilote1"));
+      objLogger.error(GestionnaireMessages.message("bd.erreur_creer_pilote2"));
+      objLogger.error( e.getMessage() );
+      e.printStackTrace();
+      return;     
+    }
+
+    connexionDB();
+  }
+  
+  public static GestionnaireBD getInstance() {
+    return GestionnaireBDHolder.INSTANCE;
+  }
+  
   /**
    * Constructeur de la classe GestionnaireBD qui permet de garder la 
    * référence vers le contrôleur de jeu
    */
+  @Deprecated
   public GestionnaireBD(ControleurJeu controleur)
   {
     super();

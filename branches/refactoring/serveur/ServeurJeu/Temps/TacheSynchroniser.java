@@ -16,6 +16,11 @@ import java.util.Iterator;
  */
 public class TacheSynchroniser extends Tache
 {
+  
+  private static class TacheSynchroniserHolder {
+    private static final TacheSynchroniser INSTANCE = new TacheSynchroniser();
+  }
+  
 	//Liste des observateurs qui seront notifiés pour la synchronisation
 	private TreeMap lstObservateurs;
 	
@@ -23,10 +28,20 @@ public class TacheSynchroniser extends Tache
 	 * Constructeur de la classe TacheSynchroniser
 	 * 
 	 */
+  /*
 	public TacheSynchroniser()
 	{
 		lstObservateurs = new TreeMap();
 	}
+  */
+  
+  private TacheSynchroniser() {
+    lstObservateurs = new TreeMap();
+  }
+  
+  public static TacheSynchroniser getInstance() {
+    return TacheSynchroniserHolder.INSTANCE;
+  }
 	
 	/**
 	 * Cette méthode est appelé pour ajouter un observateur qui va recevoir 
