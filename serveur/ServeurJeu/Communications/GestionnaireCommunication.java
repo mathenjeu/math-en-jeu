@@ -20,6 +20,13 @@ import ServeurJeu.Configuration.GestionnaireMessages;
  */
 public class GestionnaireCommunication 
 {
+  
+  private static class GestionnaireCommunicationHolder {
+    private final static GestionnaireCommunication INSTANCE = new GestionnaireCommunication();
+  }
+  
+  
+  
 	// Déclaration d'une référence vers le contrôleur de jeu
 	private ControleurJeu objControleurJeu;
 	
@@ -50,13 +57,37 @@ public class GestionnaireCommunication
 	
 	private static Logger objLogger = Logger.getLogger( GestionnaireCommunication.class );
 
+  
+  public static GestionnaireCommunication getInstance() {
+    return GestionnaireCommunicationHolder.INSTANCE;
+  }
+  
+  private GestionnaireCommunication() {
+    GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+    intPort = config.obtenirNombreEntier( "gestionnairecommunication.port" );
     
+    lstProtocoleJoueur = new Vector();
+    
+    objVerificateurConnexions = VerificateurConnexions.getInstance();// new VerificateurConnexions(this);
+    
+    Thread threadVerificateur = new Thread(objVerificateurConnexions);
+    
+    objGestionnaireTemps = GestionnaireTemps.getInstance();
+    objTacheSynchroniser = TacheSynchroniser.getInstance();
+    
+    threadVerificateur.start();
+    
+    miseAJourInfo();
+    
+    
+  }
 	
 	/**
 	 * Constructeur de la classe GestionnaireCommunication qui permet d'initialiser
 	 * le port d'écoute du serveur et la référence vers le contrôleur de jeu ainsi
 	 * que vers le gestionnaire d'événements.
 	 */
+  @Deprecated
 	public GestionnaireCommunication(ControleurJeu controleur, GestionnaireEvenements gestionnaireEv, 
 	        						 GestionnaireBD gestionnaireBD,
 									 GestionnaireTemps gestionnaireTemps, TacheSynchroniser tacheSynchroniser ) 

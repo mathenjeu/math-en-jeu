@@ -59,7 +59,7 @@ import ServeurJeu.Temps.TacheSynchroniser;
 public class ProtocoleJoueur implements Runnable
 {
 	// Déclaration d'une référence vers le contrôleur de jeu
-	private ControleurJeu objControleurJeu;
+	private ControleurJeu objControleurJeu = ControleurJeu.getInstance();
 	
 	// Déclaration d'une référence vers le gestionnaire des communications
 	private GestionnaireCommunication objGestionnaireCommunication;
@@ -130,9 +130,12 @@ public class ProtocoleJoueur implements Runnable
 		super();
 		
 		// Initialiser les valeurs du ProtocoleJoueur courant
-		objControleurJeu = controleur;
-		objGestionnaireCommunication = communication;
-		objVerificateurConnexions = verificateur;
+		//objControleurJeu = controleur;
+    objControleurJeu = ControleurJeu.getInstance();
+		//objGestionnaireCommunication = communication;
+    objGestionnaireCommunication = GestionnaireCommunication.getInstance();
+		//objVerificateurConnexions = verificateur;
+    objVerificateurConnexions = VerificateurConnexions.getInstance();
 		objSocketJoueur = socketJoueur;
 		objJoueurHumain = null;
 		bolStopThread = false;
