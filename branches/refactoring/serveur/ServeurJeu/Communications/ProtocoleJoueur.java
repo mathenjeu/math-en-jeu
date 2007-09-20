@@ -477,8 +477,8 @@ public class ProtocoleJoueur implements Runnable
               
 						  //langue = obtenirValeurParametre(objNoeudCommandeEntree, "Langue").getNodeValue();
               //FIXME
-              //langue = lBD.loadLangue(obtenirValeurParametre(objNoeudCommandeEntree, "Langue").getNodeValue());
-              langue = lBD.loadLangueFromLongName(obtenirValeurParametre(objNoeudCommandeEntree, "Langue").getNodeValue());
+              langue = lBD.loadLangue(obtenirValeurParametre(objNoeudCommandeEntree, "Langue").getNodeValue());
+              //langue = lBD.loadLangueFromLongName(obtenirValeurParametre(objNoeudCommandeEntree, "Langue").getNodeValue());
               
 						  gameType = obtenirValeurParametre(objNoeudCommandeEntree, "GameType").getNodeValue();
 						  if (objControleurJeu.estJoueurDeconnecte(obtenirValeurParametre(objNoeudCommandeEntree, "NomUtilisateur").getNodeValue()))

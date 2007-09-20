@@ -226,11 +226,11 @@ public class GestionnaireBD
   
   public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau ) {
     String strRequeteSQL = "SELECT question.*,question_details.* , typereponse.nomType FROM question, question_details" +
-      ",typereponse WHERE typereponse.cleType = question.typeReponse and question.valide = 1 " +
+      ",typereponse WHERE typereponse.cleType = question.typeReponse and question_details.valide = 1 " +
       "and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL and " +
       "question.cleQuestion = question_details.id and langue_id = " + boiteQuestions.obtenirLangue().getId();
     
-    strRequeteSQL += strValeurGroupeAge + niveau + " > 0";
+    strRequeteSQL += " and " + strValeurGroupeAge + niveau + " > 0";
     
     
     remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
