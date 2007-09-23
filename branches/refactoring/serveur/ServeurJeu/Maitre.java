@@ -22,6 +22,7 @@ public class Maitre implements Runnable
 			commande = args[0];
 		}
 		traiterCommande( commande );
+    
 	}
 	
 	public Maitre()
