@@ -2,7 +2,7 @@
 /*******************************************************************************
 Fichier : confirmation-courriel.php
 Description : afficher la page pour la confirmation de l'adresse courriel
-    le joueur reçoit dans un courriel à l'inscription  un lien vers cette page
+    le joueur reï¿½oit dans un courriel ï¿½ l'inscription  un lien vers cette page
 *******************************************************************************/
 
 require_once("lib/ini.php");
@@ -16,10 +16,10 @@ function main()
   
   try
   {
-    //on vérifier s'il y a un numéro de confirmation dans l'url
+    //on vï¿½rifier s'il y a un numï¿½ro de confirmation dans l'url
     if(!isset($_GET["ID"]))
     {
-      //aucun numéro de confirmation on retourne à la page principale
+      //aucun numï¿½ro de confirmation on retourne ï¿½ la page principale
       redirection("index.php",0);
     }
     else
