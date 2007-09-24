@@ -1,0 +1,158 @@
+
+<?xml version="1.0" encoding="UTF-8"?> 
+<Texte 
+	
+	chargement_beta_local = ""	
+
+		version = "Version 2.0"
+		boutonEntrer = "Enter"
+		barLabel = "Loading in progress..."
+
+	
+	mathemaQuoi_beta = ""
+	
+		frame1 = ""
+		
+			salle = "Choose a room."
+			boutonRetour = "Back"
+			boutonContinuer = "Continue"
+	
+		frame2 = ""
+
+			texteTables = "Choose an open table in the room : "	
+			btnCreerTable = "Create a new table"
+			choixTable = "or create a new one."
+			choixTemps = "Choose the duration of the game you wish to play."
+			sallesOuvertes = "Open rooms"
+			tablesOuvertes = "Open tables"
+
+			GUITemps = "How long would you like to play (in minutes) :"
+	
+		frame3 = ""
+
+			noTable = "Table number :"	
+			numSalle = "Room no."
+			temps = "Time :"
+			minutes = "minutes"
+
+			choixPerso = "Choose your character."
+			nonDisponible = "Unavailable"
+			inconnu = "Unknown"
+			demarrerMaintenant = "Start now"
+			attente = "Waiting for other players ..."
+
+			difficulte = "Difficulty"
+
+			choixNiveau = "Choose the level of your virtual opponents :"
+			niveauFacile = "Easy"
+			niveauInt = "Intermediate"
+			niveauDiff = "Difficult"
+			niveauTrDiff = "Very Difficult"
+
+			joueur = "Player"
+
+		frame4 = ""
+
+			sonsLabel = "Sounds"
+			musiqueLabel = "Music"
+
+			texteMauvaiseReponse = "Wrong !!!"
+			punitionTexte = "Time left to your penalty :"
+			penalite = "Penalty :"
+			secondes = "seconds"
+			reponse = "Answer :"
+			vrai = "true"
+			faux = "false"
+			pointage = "Scores"
+			objet = "Objects"
+		
+
+	
+		frame5 = ""
+
+			btn_rejouer = "Play again"
+			btn_quitter = "Quit"
+			joueurs = "Players"
+			pointage = "Score"
+			resultat = "Results"
+			
+
+
+		autre = ""
+
+			GUIdejaConnecte = "This user is already connected. Close this window and start again with another user."
+			GUIhorsService = "The server does not answer. Check you connection and start again. If the problem persist, please click on the following link to perform a connection test and then send the result to the SMAC technical team. We are sincerely sorry that you are experimenting this problem."
+			GUIhorsService2 = "Connection Test"
+			GUIhorsServiceURL = "http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_16466&sliceId=1"
+			
+			
+			GUIerreurQuestion = "Math en jeu is unable to load the question. Please check your internet connection or communicate with the SMAC technical team. We are sincerely sorry that you are experimenting this problem."
+			GUIerreurRetroaction = "Math en jeu is unable to load the retroaction. Please check your internet connection or communicate with the SMAC technical team. We are sincerely sorry that you are experimenting this problem."
+
+
+			GUIbanane = "A banana has been used. This character will be moved away from the «Win The Game» cell."	
+			
+			GUIbananeUser = "You used a banana."
+
+			GUIutiliserLivre = "Do you really want to use the book ?"
+			
+			btnOui = "YES"
+
+			btnNon = "NO"
+
+			deconnecte = "disconnected"
+			
+			
+			
+		menuAide = ""
+		
+			aideQuitter = "CLOSE"
+			
+			salleListe = "Room"
+			salleTitre = "1. Choosing a room"
+			salleTexte = "Choose a room to play in. For example, you can choose the Newton room. Click on the room’s name and then click on Continue."
+			
+			tableListe = "Table"
+			tableTitre = "2. Choosing a table"
+			tableTexte = "If there is a table open and you want to play with these people, click on this table. Then click on Continue. Otherwise, click on “Create a new table” and choose how many minutes you want to play."
+			
+			choixPersoListe = "Character"
+			choixPersoTitre = "3. Choosing un personnage"
+			choixPersoTexte = "By clicking on the left or on the right-pointing arrow, choose you character. Click on Continue."
+			
+			difficulteListe = "Difficulty"
+			difficulteTitre = "4. Choosing the difficulty level"
+			difficulteTexte = "The level you choose will not affect the difficulty of your questions. It modifies the capacity of the virtual opponents to answer the quesions. Click on the level you want and then click on Continue."
+			
+
+		
+		menuAide2 = ""
+			
+			elementsJeuListe = "Game"
+			elementsJeuTitre = "1. Elements of the game"
+			elementsJeuTexte = ""
+			
+			objetsListe = "Objects"
+			objetsTitre = "2. The objects"
+			objetsTexte = ""
+						
+			casesSpecialesListe = "Special cells"
+			casesSpecialesTitre = "3. The special cells"
+			casesSpecialesTexte = ""
+			
+			optionsListe = "Options"
+			optionsTitre = "4. The options"
+			optionsTexte = ""
+
+
+
+		menuAide3 = ""
+		
+			scoreListe = ""
+			scoreTitre = ""
+			scoreTexte = ""
+
+
+
+>
+</Texte>  

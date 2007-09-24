@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mots> 
+ <unmot>
+  <lemot>aire</lemot>
+  <description>est la mesure d'une surface, on l'appelle aussi la superficie.</description> 
+ </unmot> 
+ <unmot>
+  <lemot>angle</lemot>
+  <description>la figure formée par deux demi-droites ayant la même extrémité, cette extrémité s'appelle le sommet de l'angle.</description>  
+ </unmot> 
+ <unmot>
+  <lemot>arête</lemot>
+  <description>l'intersection de deux faces d'un solide.</description>
+ </unmot> 
+ <unmot>
+  <lemot>carré</lemot>
+  <description>un quadrilatère dont les angles sont droits et les côtés congrus.</description> 
+ </unmot> 
+ <unmot>
+  <lemot>cercle</lemot>
+  <description>une figure à deux dimensions dont l'ensemble de tous les points sont situés à distance égale du centre.</description> 
+ </unmot> 
+ <unmot>
+  <lemot>chiffre</lemot>
+  <description>un symbole utilisé pour écrire des nombres; dans notre systè me de numération à base de 10, il y a dix chiffres: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9.</description> 
+ </unmot> 
+ <unmot>
+  <lemot>cône</lemot>
+  <description>une figure à trois dimensions ayant une base circulaire délimitée par une surface courbe se terminant en pointe.</description> 
+ </unmot> 
+ <unmot>
+  <lemot>congru</lemot>
+  <description>deux figures ayant la même forme et la même taille sont dites congrues.</description> 
+ </unmot>  
+ <unmot>
+  <lemot>cube</lemot>
+  <description>un prisme rectangulaire dont les six faces sont des carrés.</description> 
+ </unmot> 
+  <unmot>
+  <lemot>droite</lemot>
+  <description>un ensemble de points en ligne droite, illimitée dans les deux sens.</description> 
+ </unmot> 
+ <unmot>
+  <lemot>facteur</lemot>
+  <description>les nombres entiers multipliés dans une multiplication sont des facteurs; dans l'équation 2 x 6 = 12, 2 et 6 sont des facteurs de 12.</description> 
+ </unmot> 
+ <unmot>
+  <lemot>infini</lemot>
+  <description>qui n'a pas de fin; l'ensemble des nombres naturels est infini, ce qui veut dire que même si on trouve ce qu'on croit être le plus grand nombre au monde, on peut toujours y ajouter un.</description> 
+ </unmot> 
+ <unmot>
+  <lemot>ligne</lemot>
+  <description>une figure géométrique à une dimension.</description> 
+ </unmot> 
+ <unmot>
+  <lemot>losange</lemot>
+  <description>un parallélogramme qui a quatre côtés congrus.</description> 
+ </unmot> 
+ <unmot>
+  <lemot>masse</lemot>
+  <description>La masse d'un objet est sa propriété d'être plus ou moins lourd. La masse d'un objet ne dépend que de son volume et de la matiére (des matières) dont l'objet est constitué. Par contre, le poids de cet objet, lui, dépend aussi du lieu où il se trouve (sur la Terre ou sur la Lune, au pôle ou à l'équateur...): le poids mesure la force avec laquelle l'objet est attirée.</description>  
+ </unmot> 
+ <unmot>
+  <lemot>nombre</lemot>
+  <description>un symbole qui représente une quantité, une grandeur, une position; les symboles utilisés peuvent être des chiffres (6), des lettres (six) ou autres (llll l).</description> 
+ </unmot> 
+ <unmot>
+  <lemot>paire</lemot>
+  <description>un ensemble qui contient deux éléments.</description>  
+ </unmot> 
+ <unmot>
+  <lemot>point</lemot>
+  <description>une figure géométrique sans dimension.</description>  
+ </unmot> 
+ <unmot>
+  <lemot>prisme</lemot>
+  <description>un polyèdre limité par deux polygones parallèles et congrus joints par des parallélogrammes.</description>  
+ </unmot> 
+ <unmot>
+  <lemot>produit</lemot>
+  <description>le résultat d'une multiplication.</description>  
+ </unmot> 
+ <unmot>
+  <lemot>rayon</lemot>
+  <description>le segment de droite qui joint le centre du cercle à un point quelconque situé sur la circonférence du cercle.</description>  
+ </unmot> 
+ <unmot>
+  <lemot>réseau</lemot>
+  <description>une représentation graphique formée de points reliés entre eux par des lignes.</description>  
+ </unmot> 
+ <unmot>
+  <lemot>reste</lemot>
+  <description>la quantité qui reste à la suite d'une division.</description>  
+ </unmot> 
+ <unmot>
+  <lemot>solide</lemot>
+  <description>une figure à trois dimensions.</description>  
+ </unmot> 
+ <unmot>
+  <lemot>somme</lemot>
+  <description>le résultat d'une addition.</description>  
+ </unmot> 
+ <unmot>
+  <lemot>sommet</lemot>
+  <description>le point de jonction de deux demi-droites d'un angle, de deux côtés d'un polygone, ou de trois (ou plus) arêtes d'un solide.</description>  
+ </unmot> 
+ <unmot>
+  <lemot>sondage</lemot>
+  <description>une enquête pour obtenir des données.</description>  
+ </unmot> 
+ <unmot>
+  <lemot>sphère</lemot>
+  <description>une figure à trois dimensions dont l'ensemble de tous les points sont situés à distance égale du centre.</description>  
+ </unmot> 
+ <unmot>
+  <lemot>total</lemot>
+  <description>le résultat d'une addition.</description>  
+ </unmot> 
+ <unmot>
+  <lemot>trapèze</lemot>
+  <description>un quadrilatère qui a deux côtés parallèles.</description>  
+ </unmot> 
+ <unmot>
+  <lemot>volume</lemot>
+  <description>en mathématiques, le volume d'un objet est défini comme étant la place que cet objet occupe dans l'espace et représente la mesure de cet espace. Par exemple, le volume d'une boîte est de 90 cm3.</description>
+ </unmot> 
+</mots>
