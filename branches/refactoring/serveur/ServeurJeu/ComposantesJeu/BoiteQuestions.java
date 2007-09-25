@@ -30,14 +30,14 @@ public class BoiteQuestions
   private Langue langue;
   private Langue2 mLangue;
   
-  private static String mUrl;  
+  //private static String mUrl;  
 
   public BoiteQuestions(String langue, Node noeudLangue, String nomSalle)
   {
     lstQuestions = new TreeMap<Integer, TreeMap<Integer, Vector<Question>>>();
     this.langue = new Langue(langue, noeudLangue, nomSalle);
     //FIXME:
-    this.mUrl = "test/";
+    //this.mUrl = "test/";
   }
   
   public BoiteQuestions(Langue2 langue, Node noeudLangue, String nomSalle)
@@ -113,7 +113,7 @@ public class BoiteQuestions
   private Vector<Question> obtenirQuestions( int intCategorieQuestion, int intDifficulte )
   {
     Vector<Question> questions = null;
-    TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );	
+    TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );  
     if( difficultes != null )
     {
       questions = difficultes.get( intDifficulte );
@@ -126,6 +126,7 @@ public class BoiteQuestions
     return mLangue;
   }
 
+  /*
   public static String getUrl() {
     return mUrl;
   }
@@ -133,6 +134,7 @@ public class BoiteQuestions
   public static void setUrl(String url) {
     mUrl = url;
   }
+  */
   
   
 
