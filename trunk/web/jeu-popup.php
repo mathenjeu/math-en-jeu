@@ -23,8 +23,8 @@ function Launch(page) {
  OpenWin = window.open(page, "Aide", "toolbar=no,menubar=no,location=no,scrollbars=auto,resizable=yes,width=350,height=250");
 }
 // End -->
-</script> 
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Math en jeu</title>
 </head>
 <body bgcolor="#000000" style="margin:0px;padding:0px;height:100%;width:100%;">
