@@ -27,7 +27,7 @@ function Launch(page) {
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>Math en jeu</title>
 </head>
-<body onload="configuerFenetre()" bgcolor="#000000" style="margin:0px;padding:0px;height:100%;width:100%;">
+<body bgcolor="#000000" style="margin:0px;padding:0px;height:100%;width:100%;">
 
 
 <div style="height:100%">
