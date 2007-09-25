@@ -7,62 +7,72 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
+import ServeurJeu.ControleurJeu;
+
 public class GestionnaireConfiguration 
 {
-	private static GestionnaireConfiguration _instance = null;
-	private XMLConfiguration _config = null;
-	private static final String _FICHIER_CONFIG = "mathenjeu.xml";
-	
-	private GestionnaireConfiguration()
-	{
-		init();
-	}
-	
-	private void init()
-	{	
-		try 
-		{
-			_config = new XMLConfiguration( _FICHIER_CONFIG );
-		} 
-		catch (ConfigurationException e) 
-		{
-			e.printStackTrace();
-		}
-	}
-	
-	public static GestionnaireConfiguration obtenirInstance()
-	{
-		if( _instance == null )
-		{
-			_instance = new GestionnaireConfiguration();
-		}
-	    return _instance;
-	}
-	
-	public int obtenirNombreEntier( String id )
-	{
-		return _config.getInt( id );
-	}
-	
-	public String obtenirString( String id )
-	{
-		return _config.getString( id );
-	}
-	
-	public float obtenirNombreDecimal( String id )
-	{
-		return _config.getFloat( id );
-	}
-	
-	public boolean obtenirValeurBooleenne( String id )
-	{
-		return _config.getBoolean( id );
-	}
+  
+  private static class GestionnaireConfigurationHolder {
+    private final static GestionnaireConfiguration INSTANCE = new GestionnaireConfiguration();
+  }
+  
+  private static GestionnaireConfiguration _instance = null;
+  private XMLConfiguration _config = null;
+  private static final String _FICHIER_CONFIG = "mathenjeu.xml";
+  
+  private GestionnaireConfiguration()
+  {
+    init();
+  }
+  
+  private void init()
+  { 
+    try 
+    {
+      _config = new XMLConfiguration( _FICHIER_CONFIG );
+    } 
+    catch (ConfigurationException e) 
+    {
+      e.printStackTrace();
+    }
+  }
+  
+  public static GestionnaireConfiguration obtenirInstance()
+  {
+    return GestionnaireConfigurationHolder.INSTANCE;
+    /*
+    if( _instance == null )
+    {
+      _instance = new GestionnaireConfiguration();
+    }
+      return _instance;
+      */
+  }
+  
+  public int obtenirNombreEntier( String id )
+  {
+    return _config.getInt( id );
+  }
+  
+  public String obtenirString( String id )
+  {
+    return _config.getString( id );
+  }
+  
+  public float obtenirNombreDecimal( String id )
+  {
+    return _config.getFloat( id );
+  }
+  
+  public boolean obtenirValeurBooleenne( String id )
+  {
+    return _config.getBoolean( id );
+  }
         
-	public List obtenirListe( String id )
-	{
-		return _config.getList( id );
-	}
+  public List obtenirListe( String id )
+  {
+    return _config.getList( id );
+  }
         
         public Document getDocument()
         {
