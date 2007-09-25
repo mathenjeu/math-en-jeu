@@ -22,4 +22,5 @@
    	   <appender-ref ref="SERVEUR" />
 	</root>
 	
+	
 </log4j:configuration>
