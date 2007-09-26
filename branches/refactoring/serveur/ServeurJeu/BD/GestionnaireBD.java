@@ -59,148 +59,14 @@ public class GestionnaireBD
 
   private static final String strValeurGroupeAge = "valeurGroupeAge";
 
-  private Connection mConnection;
+  private static Connection mConnection;
   
   public GestionnaireBD(Connection pConnection) {
     mConnection = pConnection;
   }
-  /*
-  private GestionnaireBD() {
-    super();
 
-    GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
-    String driver = config.obtenirString( "gestionnairebd.jdbc-driver" );
-    String hote = config.obtenirString( "gestionnairebd.hote" );
-    String utilisateur = config.obtenirString( "gestionnairebd.utilisateur" );
-    String motDePasse = config.obtenirString( "gestionnairebd.mot-de-passe" );
-    
-    // Garder la référence vers le contrôleur de jeu
-    //objControleurJeu = controleur;
-
-    BasicDataSource lDataSource = new BasicDataSource();
-    lDataSource.setDriverClassName(driver);
-    lDataSource.setUsername(utilisateur);
-    lDataSource.setPassword(motDePasse);
-    lDataSource.setUrl(hote);
-    
-    try {
-      connexion = lDataSource.getConnection();
-    } catch (SQLException e) {
-      objLogger.log(Level.FATAL, e.getMessage(), e);
-    }
-    
-    
-    //connexion = mDataSource.getConnection(username, password);
-    
-    //connexion.get
-    //Création du driver JDBC
-    try
-    {
-      String driver = config.obtenirString( "gestionnairebd.jdbc-driver" );
-      Class.forName( driver );
-    }
-    catch (Exception e)
-    {
-      // Une erreur est survenue lors de l'instanciation du pilote
-      objLogger.error(GestionnaireMessages.message("bd.erreur_creer_pilote1"));
-      objLogger.error(GestionnaireMessages.message("bd.erreur_creer_pilote2"));
-      objLogger.error( e.getMessage() );
-      e.printStackTrace();
-      return;     
-    }
-
-    connexionDB();
-    
-  }
-*/
   
-  /*
-  public static GestionnaireBD getInstance() {
-    return GestionnaireBDHolder.INSTANCE;
-  }
-  */
-  
-  /**
-   * Constructeur de la classe GestionnaireBD qui permet de garder la 
-   * référence vers le contrôleur de jeu
-   */
-  /*
-  @Deprecated
-  public GestionnaireBD(ControleurJeu controleur)
-  {
-    super();
 
-    GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
-
-    // Garder la référence vers le contrôleur de jeu
-    objControleurJeu = controleur;
-
-    //Création du driver JDBC
-    try
-    {
-      String driver = config.obtenirString( "gestionnairebd.jdbc-driver" );
-      Class.forName( driver );
-    }
-    catch (Exception e)
-    {
-      // Une erreur est survenue lors de l'instanciation du pilote
-      objLogger.error(GestionnaireMessages.message("bd.erreur_creer_pilote1"));
-      objLogger.error(GestionnaireMessages.message("bd.erreur_creer_pilote2"));
-      objLogger.error( e.getMessage() );
-      e.printStackTrace();
-      return;     
-    }
-
-    connexionDB();
-
-  }
-  */
-
-  /**
-   * Cette fonction permet d'initialiser une connexion avec le serveur MySQL
-   * et de créer un objet requête
-   */
-  /*
-  private void connexionDB()
-  {
-    GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
-
-    String hote = config.obtenirString( "gestionnairebd.hote" );
-    String utilisateur = config.obtenirString( "gestionnairebd.utilisateur" );
-    String motDePasse = config.obtenirString( "gestionnairebd.mot-de-passe" );
-
-    // Établissement de la connexion avec la base de données
-    try
-    {
-      connexion = DriverManager.getConnection( hote, utilisateur, motDePasse);
-    }
-    catch (SQLException e)
-    {
-      // Une erreur est survenue lors de la connexion à la base de données
-      objLogger.error(GestionnaireMessages.message("bd.erreur_connexion"));
-      objLogger.error(GestionnaireMessages.message("bd.trace"));
-      objLogger.error( e.getMessage() );
-      e.printStackTrace();
-      return;     
-    }
-
-    // Création de l'objet "requête"
-    try
-    {
-      requete = connexion.createStatement();
-    }
-    catch (SQLException e)
-    {
-      // Une erreur est survenue lors de la création d'une requête
-      objLogger.error(GestionnaireMessages.message("bd.erreur_creer_requete"));
-      objLogger.error(GestionnaireMessages.message("bd.trace"));
-      objLogger.error( e.getMessage() );
-      e.printStackTrace();
-      return;     
-    }
-
-  }
-  */
 
   /**
    * Cette fonction permet de chercher dans la BD si le joueur dont le nom
@@ -273,8 +139,7 @@ public class GestionnaireBD
     try
     {
       Statement requete = mConnection.createStatement();
-      synchronized( requete )
-      {
+
         ResultSet rs = requete.executeQuery("SELECT cleJoueur, prenom, nom, cleNiveau, peutCreerSalles FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
         if (rs.next())
         {
@@ -291,7 +156,7 @@ public class GestionnaireBD
           joueur.definirCleJoueur(cle);
           joueur.definirCleNiveau( cleNiveau );
         }
-      }
+      
     }
     catch (SQLException e)
     {
@@ -304,6 +169,7 @@ public class GestionnaireBD
   }
 
   
+  //TODO : load questions using the groups for the current rooms
   public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau ) {
     String strRequeteSQL = "SELECT question.*,question_details.* , typereponse.nomType FROM question, question_details" +
       ",typereponse WHERE typereponse.cleType = question.typeReponse and question_details.valide = 1 " +
@@ -317,7 +183,8 @@ public class GestionnaireBD
     
   }
   
-  public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, int intCategorie, int intDifficulte )
+  
+  public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, int intDifficulte )
   {
     // Noter qu'on ne tient plus compte de la catégorie!!
     String nomTable = "question"; //boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
@@ -330,11 +197,13 @@ public class GestionnaireBD
     strRequeteSQL += "and cleQuestion >= " +
     boiteQuestions.obtenirLangue().obtenirCleQuestionMin() + " and cleQuestion <= " +
     boiteQuestions.obtenirLangue().obtenirCleQuestionMax() + " and ";
-*/
-    
+
+    */
     strRequeteSQL += strValeurGroupeAge + niveau + " = " + intDifficulte;
+    
     remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
   }
+  
   
   // This method fills a Question box with only the player's level
   /*
@@ -387,8 +256,6 @@ public class GestionnaireBD
     try
     {
       Statement requete = mConnection.createStatement();
-      synchronized( requete )
-      {
         ResultSet rs = requete.executeQuery( strRequeteSQL );
         while(rs.next())
         {
@@ -402,7 +269,7 @@ public class GestionnaireBD
           //TODO la categorie???
           boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, lUrl+question, reponse, lUrl+explication));
         }
-      }
+      
     }
     catch (SQLException e)
     {
@@ -426,7 +293,8 @@ public class GestionnaireBD
   // and returns a Vector containing URLs of MP3s the player might like
   public Vector obtenirListeURLsMusique(int cleJoueur)
   {
-    Vector liste = new Vector();
+    Vector<String> liste = new Vector<String>();
+    
     String URLMusique = GestionnaireConfiguration.obtenirInstance().obtenirString("musique.url");
     String strRequeteSQL = "SELECT musique_Fichiers.nomFichier FROM musique_Fichiers,musique_Fichiers_Categories,musique_Categories,musique_Categorie_Joueur WHERE ";
     strRequeteSQL       += "musique_Fichiers.cleFichier = musique_Fichiers_Categories.cleFichier AND ";
@@ -436,14 +304,13 @@ public class GestionnaireBD
     try
     {
       Statement requete = mConnection.createStatement();
-      synchronized( requete )
-      {
+
         ResultSet rs = requete.executeQuery(strRequeteSQL);
         while(rs.next())
         {
           liste.add(URLMusique + rs.getString("nomFichier"));
         }
-      }
+      
     }
     catch (SQLException e)
     {
@@ -470,8 +337,7 @@ public class GestionnaireBD
     try
     {
       Statement requete = mConnection.createStatement();
-      synchronized( requete )
-      {
+
         ResultSet rs = requete.executeQuery("SELECT partiesCompletes, meilleurPointage, tempsPartie FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
         if (rs.next())
         {
@@ -488,7 +354,6 @@ public class GestionnaireBD
           //mise-a-jour
           int result = requete.executeUpdate( "UPDATE joueur SET partiesCompletes=" + partiesCompletes + ",meilleurPointage=" + meilleurPointage + ",tempsPartie=" + tempsPartie + " WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
         }
-      }
     }
     catch (SQLException e)
     {
@@ -500,28 +365,6 @@ public class GestionnaireBD
     }
   }
 
-  /**
-   * Cette méthode permet de fermer la connexion de base de données qui 
-   * est ouverte.
-   */
-  @Deprecated
-  public void arreterGestionnaireBD()
-  {
-    /*
-    try
-    {
-      connexion.close();
-    }
-    catch (SQLException e)
-    {
-      // Une erreur est survenue lors de la fermeture de la connexion
-      objLogger.error(GestionnaireMessages.message("bd.erreur_fermeture_conn"));
-      objLogger.error(GestionnaireMessages.message("bd.trace"));
-      objLogger.error( e.getMessage() );
-      e.printStackTrace();      
-    }
-    */
-  }
 
   /* Cette fonction permet d'ajouter les information sur une partie dans 
    * la base de données dans la table partie. 
@@ -544,8 +387,7 @@ public class GestionnaireBD
     try
     {
       Statement requete = mConnection.createStatement();
-      synchronized(requete)
-      {
+
 
         // Ajouter l'information pour cette partie
         requete.executeUpdate(strSQL, Statement.RETURN_GENERATED_KEYS);
@@ -556,7 +398,7 @@ public class GestionnaireBD
         // On retourne la clé de partie
         rs.next();
         return Integer.parseInt(rs.getString("GENERATED_KEY"));
-      }
+      
     }
     catch (Exception e)
     {
@@ -587,11 +429,9 @@ public class GestionnaireBD
     {
 
       Statement requete = mConnection.createStatement();
-      synchronized(requete)
-      {
+
         // Ajouter l'information pour ce joueur
         requete.executeUpdate(strSQL);
-      }
     }
     catch (Exception e)
     {
@@ -625,22 +465,13 @@ public class GestionnaireBD
     
     return lResult;
   }
-  
-  @Deprecated
-  public Langue2 loadLangueFromLongName(String pName) {
     
-    Langue2 lResult = null;
-    
-    if (pName.equals("Francais")) {
-      lResult = loadLangue("fr");
-    } else if (pName.equals("Anglais")) {
-      lResult =  loadLangue("en");
-    }
-
-    return lResult;
-  }
   
-  
+  /**
+   * Add the rules for the color squares and return the modified object
+   * @param pRules
+   * @return the modified TreeSet containing the rules for the color squares
+   */
   private TreeSet<ReglesCaseCouleur> loadRuleColorSquare(Regles pRules) {
     
     TreeSet<ReglesCaseCouleur> lResult = pRules.obtenirListeCasesCouleurPossibles();
@@ -671,6 +502,11 @@ public class GestionnaireBD
     return lResult;
   }
   
+  /**
+   * Add the rules for the special squares and return the modified object
+   * @param pRules
+   * @return the modified TreeSet containing the rules for the special squares
+   */
   private TreeSet<ReglesCaseSpeciale> loadRuleSpecialSquare(Regles pRules) {
         
     TreeSet<ReglesCaseSpeciale> lResult = pRules.obtenirListeCasesSpecialesPossibles();
@@ -706,7 +542,6 @@ public class GestionnaireBD
    * @param pGameType the type of game to load room for
    */
   public void loadRooms(String pGameType) {
-    //TreeMap<String, Salle> lResult = new TreeMap<String, Salle>();
     
     String lSql = "select r.*, s.id as salle_id, s.nom as table_name, s.password,j.alias "
                   + " from salles s, type_jeu tj, joueur j, regles r " 
@@ -736,8 +571,8 @@ public class GestionnaireBD
           TreeSet<ReglesObjetUtilisable> objetsUtilisables = objReglesSalle.obtenirListeObjetsUtilisablesPossibles();
           TreeSet<ReglesMagasin> magasins = objReglesSalle.obtenirListeMagasinsPossibles();
   
-          TreeSet<ReglesCaseCouleur> casesCouleur = loadRuleColorSquare(objReglesSalle);
-          TreeSet<ReglesCaseSpeciale> casesSpeciale = loadRuleSpecialSquare(objReglesSalle);
+          loadRuleColorSquare(objReglesSalle);
+          loadRuleSpecialSquare(objReglesSalle);
           
           objReglesSalle.definirPermetChat(lRs.getInt("chat") == 1 ? true : false);
           objReglesSalle.definirRatioTrous(lRs.getFloat("ratio_trou"));
@@ -786,8 +621,10 @@ public class GestionnaireBD
                                    objReglesSalle,
                                    pGameType);
           
+          
+          
           ControleurJeu.getInstance().ajouterNouvelleSalle(lSalle);
-          //lResult.put(lSalle.obtenirNomSalle(), lSalle);
+          
         }
 
       }
@@ -804,91 +641,8 @@ public class GestionnaireBD
       }
     }
     
-
-    //return lResult;
   }
   
-  
-  /*
-  @Deprecated
-  public TreeMap loadRooms(Langue2 pLangue, ControleurJeu controleurJeu) {
-    TreeMap<String, Salle> lResult = new TreeMap<String, Salle>();
-    
-    
-    //load all the rooms
-    String lSql = "select s.id as salle_id, s.nom as nom, s.description as description, s.password , j.alias as alias, tj.nom as type_jeu, " +
-        "r.chat as chat, r.ratio_trou as ratio_trou, r.ratio_magasin as ratio_magasin, r.ratio_case_special as ratio_case_special, r.ratio_piece as ratio_piece, " +
-        "r.ratio_objet_utilisable as ratio_objet_utilisable, r.valeur_maximal_piece as valeur_maximal_piece, r.temps_minimal as temps_minimal, r.temps_maximal as temps_maximal, " +
-        "r.deplacement_maximal as deplacement_maximal" +
-        " from salles s , regles r, joueur j, type_jeu tj " +
-        " where langue_id=" + pLangue.getId() + " and tj.id = s.type_jeu_id" +
-        " and s.regle_id = r.id and j.cleJoueur = s.joueur_id";
-    
-    Statement lStatement = null;
-    try {
 
-      lStatement = connexion.createStatement();
-      ResultSet lRs = lStatement.executeQuery(lSql);
-
-      while (lRs.next()) {
-        Regles objReglesSalle = new Regles();
-        TreeSet<ReglesObjetUtilisable> objetsUtilisables = objReglesSalle.obtenirListeObjetsUtilisablesPossibles();
-        TreeSet<ReglesMagasin> magasins = objReglesSalle.obtenirListeMagasinsPossibles();
-
-        TreeSet<ReglesCaseCouleur> casesCouleur = loadRuleColorSquare(objReglesSalle);
-        TreeSet<ReglesCaseSpeciale> casesSpeciale = loadRuleSpecialSquare(objReglesSalle);
-
-        objReglesSalle.definirPermetChat(lRs.getInt("chat") == 1 ? true : false);
-        objReglesSalle.definirRatioTrous(lRs.getFloat("ratio_trou"));
-        objReglesSalle.definirRatioMagasins(lRs.getFloat("ratio_magasin"));
-        objReglesSalle.definirRatioCasesSpeciales(lRs.getFloat("ratio_case_special"));
-        objReglesSalle.definirRatioPieces(lRs.getFloat("ratio_piece"));
-        objReglesSalle.definirRatioObjetsUtilisables(lRs.getFloat("ratio_objet_utilisable"));
-        objReglesSalle.definirValeurPieceMaximale(lRs.getInt("valeur_maximal_piece"));
-        objReglesSalle.definirTempsMinimal(lRs.getInt("temps_minimal"));
-        objReglesSalle.definirTempsMaximal(lRs.getInt("temps_maximal"));
-        objReglesSalle.definirDeplacementMaximal(lRs.getInt("deplacement_maximal"));
-
-        //load the usable object for this room
-        lSql = "select o.nom, so.priorite from objets o, salles_objets so, salles s where " 
-          + "o.id = so.objet_id and so.salle_id = s.id and s.id=" + lRs.getInt("salle_id");
-        ResultSet lRsObjet = requete.executeQuery(lSql);
-        while (lRsObjet.next()) {
-          objetsUtilisables.add(new ReglesObjetUtilisable(lRsObjet.getInt("priorite"), lRsObjet.getString("nom"), Visibilite.Aleatoire));
-        }
-
-        //load the shops
-
-        lSql = "select m.nom, sm.priorite from salles s, magasins m, salles_magasins sm where "
-          + "m.id = sm.magasin_id and sm.salle_id = s.id and s.id=" + lRs.getInt("salle_id");
-
-        ResultSet lRsMagasin = requete.executeQuery(lSql);
-        while (lRsMagasin.next()) {
-          magasins.add(new ReglesMagasin(lRsMagasin.getInt("priorite"), lRsMagasin.getString("nom")));
-        }
-
-        //FIXME: change the game type to be more than just mathenjeu
-        Salle lSalle = new Salle(this, lRs.getString("nom"), lRs.getString("alias"), lRs.getString("password"), objReglesSalle, controleurJeu, pLangue, Constant.GAME_TYPE_MATH_EN_JEU);
-        //controleurJeu.ajouterNouvelleSalle(lSalle);
-        lResult.put(lSalle.obtenirNomSalle(), lSalle);
-
-      }
-
-    } catch (SQLException e) {
-      objLogger.log(Level.FATAL, e.getMessage(), e);
-    } finally {
-      if (lStatement != null) {
-        try {
-          lStatement.close();
-        } catch (SQLException e) {
-          objLogger.log(Level.FATAL, e.getMessage(), e);
-        }
-      }
-    }
-    
-    
-    return lResult;
-  }
-  */
 }
 

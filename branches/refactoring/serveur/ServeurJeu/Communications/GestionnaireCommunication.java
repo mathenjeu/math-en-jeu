@@ -281,7 +281,7 @@ public class GestionnaireCommunication
     
     // Fermer toutes les connexions ouvertes pour le gestionnaire de base de données
     //FIXME: close the connection to the db
-    //GestionnaireBD.getInstance().arreterGestionnaireBD();
+    ControleurJeu.getInstance().closeDbConnection();
   }
 
 }
