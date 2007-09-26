@@ -117,7 +117,7 @@ public class InformationPartie
     GestionnaireBD lBd = new GestionnaireBD(ControleurJeu.getInstance().getConnection());
     lBd.remplirBoiteQuestions(objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());
     
-    
+
   }
   /**
    * Constructeur de la classe InformationPartie qui permet d'initialiser
@@ -493,7 +493,7 @@ public class InformationPartie
     else if (intDifficulte > 0)
     {
       GestionnaireBD lBd = new GestionnaireBD(ControleurJeu.getInstance().getConnection());
-      lBd.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau(), intCategorieQuestion, intDifficulte);
+      lBd.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau(), intDifficulte);
       objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
       
       lstQuestionsRepondues.clear();
@@ -511,6 +511,7 @@ public class InformationPartie
       {
         // en théorie on ne devrait plus entrer dans ce else 
         System.out.println( "Ça va mal : aucune question" );
+        
       }
     }
     
