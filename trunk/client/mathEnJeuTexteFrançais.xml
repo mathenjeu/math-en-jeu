@@ -1,0 +1,187 @@
+
+<?xml version="1.0" encoding="UTF-8"?> 
+<Texte 
+	
+	chargement_beta_local = ""	
+
+		version = "Version 2.0"
+		boutonEntrer = "Entrer"
+		barLabel = "Chargement en cours..."
+
+	
+	mathemaQuoi_beta = ""
+	
+		frame1 = ""
+		
+			salle = "Choisissez une salle."
+			boutonRetour = "Retour"
+			boutonContinuer = "Continuer"
+	
+		frame2 = ""
+
+			texteTables = "Choisissez une table ouverte dans la salle"	
+			btnCreerTable = "Nouvelle table"
+			choixTable = "ou créez-en une nouvelle."
+			choixTemps = "Choisissez la durée de la partie que vous désirez jouer."
+			sallesOuvertes = "Salles ouvertes"
+			tablesOuvertes = "Tables ouvertes"
+
+			GUITemps = "Choisissez le temps de la partie que vous désirez jouer (en minutes) :"
+	
+		frame3 = ""
+
+			noTable = "Numéro de table"	
+			numSalle = "Salle no."
+			temps = "Temps :"
+			minutes = "minutes"
+			
+			choixPerso = "Choisissez votre personnage."
+
+			nonDisponible = "Non disponible"
+
+			inconnu = "Inconnu"
+			demarrerMaintenant = "Démarrer maintenant"
+			attente = "En attente des autres joueurs ..."
+
+			difficulte = "Difficulté"
+			
+			choixNiveau = "Choisissez le niveau de vos adversaires virtuels."
+			niveauFacile = "Facile"
+			niveauInt = "Intermédiaire"
+			niveauDiff = "Difficile"
+			niveauTrDiff = "Très difficile"
+
+			joueur = "Joueur"
+	
+	
+		frame4 = ""
+
+			sonsLabel = "Sons"
+			musiqueLabel = "Musique"
+
+			texteMauvaiseReponse = "Mauvaise réponse !"
+			punitionTexte = "Temps restant à votre pénalité :"
+			penalite = "Pénalité :"
+			secondes = "secondes"
+			reponse = "Réponse :"
+			vrai = "vrai"
+			faux = "faux"
+			pointage = "Pointages"
+			objet = "Objets"
+
+		
+		frame5 = ""
+
+			btn_rejouer = "Rejouer"
+			btn_quitter = "Quitter"
+			joueurs = "Joueurs"
+			pointage = "Pointages"
+			resultat = "Résultats"
+
+
+		autre = ""
+
+
+			GUIdejaConnecte = "Cet utilisateur est déjà connecté. Veuillez fermer la fenêtre et recommencer avec un autre nom d'utilisateur."
+			GUIhorsService = "Le serveur ne répond pas. Veuillez vérifier votre connexion et recommencer. Si le problème persiste, veuillez s'il-vous-plaît cliquer sur le lien suivant afin d'exécuter un test de connexion. Faites ensuite parvenir les résultats de ce test à l'équipe technique de SMAC. Nous sommes sincèrement désolés que vous éprouviez de telles difficultés."
+			GUIhorsService2 = "Test de Connexion"
+			GUIhorsServiceURL = "http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_16466&sliceId=1"
+
+			GUIerreurQuestion = "Math en jeu est incapable de télécharger la question. S'il-vous-plait veillez vérifier votre connexion internet. Si le problème persiste, communiquez avec l'équipe technique de SMAC. Nous sommes sincèrement désolé que vous éprouviez de telles difficultés."
+			GUIerreurRetroaction = "Math en jeu est incapable de télécharger la rétroaction. S'il-vous-plait veillez vérifier votre connexion internet. Si le problème persiste, communiquez avec l'équipe technique de SMAC. Nous sommes sincèrement désolé que vous éprouviez de telles difficultés."	
+			
+			GUIbanane = "Une banane a été utilisée. Ce personnage sera déplacé à une plus grande distance de la case «Gagne La Partie»."
+			
+			GUIbananeUser = "Vous avez utilisé une banane."
+			
+
+			GUIutiliserLivre = "Voulez-vous vraiment utiliser le livre ?"
+			
+			btnOui = "OUI"
+
+			btnNon = "NON"
+
+			deconnecte = "déconnecté"
+
+	
+	
+	
+		menuAide = "Menu d'aide"
+		
+			aideQuitter = "FERMER"
+			
+			salleListe = "Avant de jouer"
+			salleTitre = "1. Préparer la partie"
+			salleTexte = "•Choisir une salle
+Choisis une salle où jouer. Par exemple, tu peux choisir la salle Newton. Clique sur le nom de la salle et clique ensuite sur Continuer.
+			
+•Choisir une table
+S'il y a une table ouverte et que tu veux jouer avec ces personnes, clique sur cette table. Clique ensuite sur Continuer. Sinon, clique sur Créer une nouvelle table et entre un nombre de minutes pour jouer.
+			
+•Choisir un personnage
+En cliquant sur les flèches qui pointent vers la gauche et la droite, sélectionne ton personnage. Clique sur OK.
+			
+•Choisir le niveau de difficulté
+Le niveau choisi n'affecte pas la difficulté des questions. Il modifie la capacité des joueurs virtuels à bien répondre aux questions. Clique sur le niveau de ton choix et clique ensuite sur Continuer."
+		
+			elementsJeuListe = "Jeu"
+			elementsJeuTitre = "2. Éléments du jeu"
+			elementsJeuTexte = "Basic rules:
+•On the game board, you character appears bigger than the other player’s.
+
+•You character can move in four directions. To the front, to the back, to the left, and to the right the same line. The accessible cells appear in orange.
+
+•Your character can move between one and six cells at once. The bigger the displacement, the harder the question, relative to the academic level on your registration.
+
+•The number of points a question is worth is proportional to the square of the length of the displacement. A one cell displacement is worth one point, a two cell displacement is worth four points, and so on.
+
+•The cells with a question mark bring you to a game if the question is answered correctly. The points won in that game will be added to your score.
+
+•The winner is the player with the most points, or the one that reaches the ''Instant Victory'' sign first (see in the 'Special Cells' section)."
+			
+			objetsListe = "Objets"
+			objetsTitre = "3. Les objets"
+			objetsTexte = "The objects you can buy are:
+
+The banana
+•The banana allows you to play a wicked trick on another player! When you use this object, you opponent that is the closest to the ''Instant Victory'' sign slides on the banana, and gets thrown at the opposite end of the board!
+
+The book
+•The book eliminates an answer choice for you on a multiple choice question. The number of choices then decreases from four to three.
+     
+The crystal ball
+•If you feel unable to answer a question, you may use the crystal ball. The computer will then give you a new question."
+						
+			casesSpecialesListe = "Cases spéciales"
+			casesSpecialesTitre = "4. Les cases spéciales"
+			casesSpecialesTexte = "There are 4 special cells in the game:
+    
+Instant Victory!
+•The player that first reaches this cell instantly wins the game! But, there is a twist to it! Before being allowed to click on this cell, you must have accumulated a minimum number of points. This amount of points depends on the length of the game. If no player has reached this cell when time is up, the winner is of course the player with the most points.  
+   
+The coins
+•The coins you pick up on your way allow you to buy objects (they cost one coin each.)
+ 
+The shops
+•It is here that you can spend your coins!
+
+?
+•Something special happens when you step on this cell..."
+			
+			optionsListe = "Options"
+			optionsTitre = "5. Les options"
+			optionsTexte = "Durant la partie, vous pouvez avoir accès au menu d'options de Math en Jeu en cliquant sur le boutons situé au coin inférieur droit de l'écran.
+			
+Vous pourrez alors changer les configurations suivantes de votre écran de jeu:
+
+Activer ou de désactiver les effets sonores durant la partie
+
+Activer ou de désactiver la musique durant la partie
+
+S'approcher ou s'éloigner de la planche de jeu
+
+Déplacer l'écran de jeu dans la direction de votre choix"
+			
+			
+>
+</Texte> 
