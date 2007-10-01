@@ -126,53 +126,52 @@ Le niveau choisi n'affecte pas la difficulté des questions. Il modifie la capac
 		
 			elementsJeuListe = "Jeu"
 			elementsJeuTitre = "2. Éléments du jeu"
-			elementsJeuTexte = "Basic rules:
-•On the game board, you character appears bigger than the other player’s.
+			elementsJeuTexte = "Règles de base:
+•Ton personnage peut se déplacer dans 4 directions. Les cases accessibles sont d'une couleur différentes des autres et apparaissent en jaune.
 
-•You character can move in four directions. To the front, to the back, to the left, and to the right the same line. The accessible cells appear in orange.
+•Ton personnage peut se déplacer de 1 à 6 cases à la fois. Plus le déplacement est grand, plus la question est difficile, mais toujours adaptée au niveau académique choisi lors de l'enregistrement du profile.
 
-•Your character can move between one and six cells at once. The bigger the displacement, the harder the question, relative to the academic level on your registration.
+•Le nombre de points attribués à une bonne réponse dépend de la longueur d'un déplacement. Un déplacement d'une case vaut 3 points, un déplacement de deux cases vaut 5 points et ainsi de suite.
 
-•The number of points a question is worth is proportional to the square of the length of the displacement. A one cell displacement is worth one point, a two cell displacement is worth four points, and so on.
+•Si tu te rends sur une case contenant un point d'interrogation, tu cours la chance de remporter encore plus de points.
 
-•The cells with a question mark bring you to a game if the question is answered correctly. The points won in that game will be added to your score.
-
-•The winner is the player with the most points, or the one that reaches the ''Instant Victory'' sign first (see in the 'Special Cells' section)."
+•Le gagnant est le joueur qui a le plus de points ou celui qui atteint la case ''Victoire Instantanée'' en premier (voir la section ''Cases spéciales'')."
 			
 			objetsListe = "Objets"
 			objetsTitre = "3. Les objets"
-			objetsTexte = "The objects you can buy are:
+			objetsTexte = "Les objets que tu peux acheter sont:
 
-The banana
-•The banana allows you to play a wicked trick on another player! When you use this object, you opponent that is the closest to the ''Instant Victory'' sign slides on the banana, and gets thrown at the opposite end of the board!
+La banane
+•La banane te permet de jouer un tour à un des joueur ! Quand tu l'utilises, ton adversaire qui est le plus près de la case ''Victoire Instantanée'' glisse alors sur la banane et se retrouve à l'autre bout de la planche de jeu lors de son prochain déplacement!
 
-The book
-•The book eliminates an answer choice for you on a multiple choice question. The number of choices then decreases from four to three.
-     
-The crystal ball
-•If you feel unable to answer a question, you may use the crystal ball. The computer will then give you a new question."
+Le livre
+•Le livre élimine un mauvais choix de réponse lors d'une question à choix multiples. Le nombre de choix possible passe alors de quatre à trois.
+
+La boule de cristal
+•Si tu te sens incapable de répondre à une question, utilise la boule de cristal. Tu recevras alors une question différente."
 						
 			casesSpecialesListe = "Cases spéciales"
 			casesSpecialesTitre = "4. Les cases spéciales"
-			casesSpecialesTexte = "There are 4 special cells in the game:
+			casesSpecialesTexte = "Il y a 4 cases spéciales dans le jeu:
     
-Instant Victory!
-•The player that first reaches this cell instantly wins the game! But, there is a twist to it! Before being allowed to click on this cell, you must have accumulated a minimum number of points. This amount of points depends on the length of the game. If no player has reached this cell when time is up, the winner is of course the player with the most points.  
-   
-The coins
-•The coins you pick up on your way allow you to buy objects (they cost one coin each.)
+Victoire Instantanée!
+•Le premier joueur à atteindre cette case gagne instantanément la partie! Attention, c'est plus facile à dire qu'à faire! Avant d'accéder à cette case, tu dois avoir assez de points. Le nombre nécéssaire dépend de la durée de la partie. Si personne ne l'atteint avant la fin du décompte, le gagnant est celui qui a le plus de points.
+
+Les pièces
+•Les pièces que tu trouves sur la planche de jeu te permettent d'acheter des objets.
  
-The shops
-•It is here that you can spend your coins!
+Les magasins
+•Tu peux y échanger tes pièces contre des objets.
 
 ?
-•Something special happens when you step on this cell..."
+•Quelque chose de spécial survient lorsque tu tombes sur cette case..."
+
 			
 			optionsListe = "Options"
 			optionsTitre = "5. Les options"
-			optionsTexte = "Durant la partie, vous pouvez avoir accès au menu d'options de Math en Jeu en cliquant sur le boutons situé au coin inférieur droit de l'écran.
+			optionsTexte = "Durant la partie, tu peux avoir accès au menu d'options de Math en Jeu en cliquant sur le boutons situé au coin inférieur droit de l'écran.
 			
-Vous pourrez alors changer les configurations suivantes de votre écran de jeu:
+Tu peux alors changer les configurations suivantes de ton écran de jeu:
 
 Activer ou de désactiver les effets sonores durant la partie
 
@@ -180,7 +179,7 @@ Activer ou de désactiver la musique durant la partie
 
 S'approcher ou s'éloigner de la planche de jeu
 
-Déplacer l'écran de jeu dans la direction de votre choix"
+Déplacer l'écran de jeu dans la direction de ton choix"
 			
 			
 >

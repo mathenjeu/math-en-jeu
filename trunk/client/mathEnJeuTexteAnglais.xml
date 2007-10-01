@@ -101,56 +101,88 @@
 			btnNon = "NO"
 
 			deconnecte = "disconnected"
-			
-			
-			
-		menuAide = ""
+
+
+
+
+
+
+
+		menuAide = "Help menu"
 		
 			aideQuitter = "CLOSE"
 			
-			salleListe = "Room"
-			salleTitre = "1. Choosing a room"
-			salleTexte = "Choose a room to play in. For example, you can choose the Newton room. Click on the room’s name and then click on Continue."
+			salleListe = "Before playing"
+			salleTitre = "1. Set the game"
+			salleTexte = "•Choosing a room
+Choose a room to play in. For example, you can choose the Newton room. Click on the room’s name and then click on Continue.
 			
-			tableListe = "Table"
-			tableTitre = "2. Choosing a table"
-			tableTexte = "If there is a table open and you want to play with these people, click on this table. Then click on Continue. Otherwise, click on “Create a new table” and choose how many minutes you want to play."
+•Choosing a table
+If there is a table open and you want to play with these people, click on this table. Then click on Continue. Otherwise, click on “Create a new table” and choose how many minutes you want to play.
 			
-			choixPersoListe = "Character"
-			choixPersoTitre = "3. Choosing un personnage"
-			choixPersoTexte = "By clicking on the left or on the right-pointing arrow, choose you character. Click on Continue."
+•Choosing a character
+By clicking on the left or on the right-pointing arrow, choose you character. Click on Continue.
 			
-			difficulteListe = "Difficulty"
-			difficulteTitre = "4. Choosing the difficulty level"
-			difficulteTexte = "The level you choose will not affect the difficulty of your questions. It modifies the capacity of the virtual opponents to answer the quesions. Click on the level you want and then click on Continue."
-			
-
+•Choosing the difficulty level
+The level you choose will not affect the difficulty of your questions. It modifies the capacity of the virtual opponents to answer the quesions. Click on the level you want and then click on Continue."
 		
-		menuAide2 = ""
-			
 			elementsJeuListe = "Game"
-			elementsJeuTitre = "1. Elements of the game"
-			elementsJeuTexte = ""
+			elementsJeuTitre = "2. Elements of the game"
+			elementsJeuTexte = "Basic rules:
+•On the game board, you character appears bigger than the other player’s.
+
+•You character can move in four directions. To the front, to the back, to the left, and to the right the same line. The accessible cells appear in yellow.
+
+•Your character can move between one and six cells at once. The bigger the displacement, the harder the question, relative to the academic level on your registration.
+
+•The number of points a question is worth depends on the length of the displacement. A one cell displacement is worth three point, a two cells displacement is worth five points, and so on.
+
+•The cells with a question mark bring you to a game if the question is answered correctly. The points won in that game will be added to your score.
+
+•The winner is the player with the most points, or the one that reaches the ''Instant Victory'' sign first (see in the 'Special Cells' section)."
 			
 			objetsListe = "Objects"
-			objetsTitre = "2. The objects"
-			objetsTexte = ""
+			objetsTitre = "3. The objects"
+			objetsTexte = "The objects you can buy are:
+
+The banana
+•The banana allows you to play a wicked trick on another player! When you use this object, you opponent that is the closest to the ''Instant Victory'' sign slides on the banana, and gets thrown at the opposite end of the board!
+
+The book
+•The book eliminates an answer choice for you on a multiple choice question. The number of choices then decreases from four to three.
+     
+The crystal ball
+•If you feel unable to answer a question, you may use the crystal ball. The computer will then give you a new question."
 						
 			casesSpecialesListe = "Special cells"
-			casesSpecialesTitre = "3. The special cells"
-			casesSpecialesTexte = ""
+			casesSpecialesTitre = "4. The special cells"
+			casesSpecialesTexte = "There are 4 special cells in the game:
+    
+Instant Victory!
+•The player that first reaches this cell instantly wins the game! But, there is a twist to it! Before being allowed to click on this cell, you must have accumulated a minimum number of points. This amount of points depends on the length of the game. If no player has reached this cell when time is up, the winner is of course the player with the most points.  
+   
+The coins
+•The coins you pick up on your way allow you to buy objects (they cost one coin each).
+ 
+The shops
+•It is here that you can spend your coins!
+
+?
+•Something special happens when you step on this cell..."
 			
 			optionsListe = "Options"
-			optionsTitre = "4. The options"
-			optionsTexte = ""
+			optionsTitre = "5. The options"
+			optionsTexte = "During the game, you can access Math en Jeu's help menu by clicking on the button at the bottom right of the screen. 
+			
+Then, you can change different settings of the game:
 
+Activate or deactivate sound effects during the game
 
+Activate or deactivate music during the game
 
-		menuAide3 = ""
-		
-			scoreListe = ""
-			scoreTitre = ""
-			scoreTexte = ""
+Zoom in or zoom out from the board
+
+Move the screen in the direction of you choice to explore the board"
 
 
 
