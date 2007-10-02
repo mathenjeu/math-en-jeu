@@ -5,26 +5,31 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import ServeurJeu.BD.GestionnaireBD;
-import ServeurJeu.Evenements.GestionnaireEvenements;
-import ServeurJeu.ComposantesJeu.Cases.Case;
-import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
-import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
-import ServeurJeu.ComposantesJeu.Objets.Objet;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
-import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
+
+import org.apache.log4j.Logger;
+
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ServeurJeu.ControleurJeu;
-import org.w3c.dom.Node;
+import ServeurJeu.BD.GestionnaireBD;
+import ServeurJeu.ComposantesJeu.Cases.Case;
+import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
+import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
+import ServeurJeu.ComposantesJeu.Objets.Objet;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
+import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
+import ServeurJeu.Evenements.GestionnaireEvenements;
+import exception.NoQuestionException;
 
 /**
  * @author Jean-François Brind'Amour
  */
 public class InformationPartie
 {
+  
+  private  static Logger objLogger = Logger.getLogger( ControleurJeu.class );
   // Déclaration d'une référence vers le gestionnaire de bases de données
   //private GestionnaireBD objGestionnaireBD;
   
@@ -112,10 +117,10 @@ public class InformationPartie
     // Créer la liste des objets utilisables qui ont été ramassés
     lstObjetsUtilisablesRamasses = new TreeMap();
 
-    objBoiteQuestions = new BoiteQuestions(joueur.obtenirProtocoleJoueur().langue, joueur.obtenirSalleCourante().obtenirNoeudLangue(), joueur.obtenirSalleCourante().obtenirNomSalle());
+    objBoiteQuestions = new BoiteQuestions(joueur.obtenirProtocoleJoueur().langue, joueur.obtenirSalleCourante().obtenirNomSalle());
     //objGestionnaireBD.remplirBoiteQuestions(objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());
     GestionnaireBD lBd = new GestionnaireBD(ControleurJeu.getInstance().getConnection());
-    lBd.remplirBoiteQuestions(objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());
+    lBd.remplirBoiteQuestions(objJoueurHumain, objBoiteQuestions);
     
 
   }
@@ -437,14 +442,20 @@ public class InformationPartie
    * @return Question : La question trouvée, s'il n'y a pas eu de déplacement,
    *            alors la question retournée est null
    */
-  public Question trouverQuestionAPoser(Point nouvellePosition, boolean doitGenererNoCommandeRetour)
+  public Question trouverQuestionAPoser(Point nouvellePosition, boolean doitGenererNoCommandeRetour) throws NoQuestionException
   {
+    
+    //FIXME : change the way questions are loaded when no more questions are available
+    
+    
     // Déclarations de variables qui vont contenir la catégorie de question 
     // à poser, la difficulté et la question à retourner
     int intCategorieQuestion = objTable.obtenirPlateauJeuCourant()[nouvellePosition.x][nouvellePosition.y].obtenirTypeCase();
     int intDifficulte = 0;
                 int grandeurDeplacement = 0;
     Question objQuestionTrouvee = null;
+    
+    //check to see if the questions box is empty or not
     
                 // Si la position en x est différente de celle désirée, alors
                 // c'est qu'il y a eu un déplacement sur l'axe des x
@@ -477,6 +488,7 @@ public class InformationPartie
     // une question
     if (intDifficulte > 0)
     {
+      
       objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
     }
     
@@ -493,7 +505,8 @@ public class InformationPartie
     else if (intDifficulte > 0)
     {
       GestionnaireBD lBd = new GestionnaireBD(ControleurJeu.getInstance().getConnection());
-      lBd.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau(), intDifficulte);
+      //lBd.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau(), intDifficulte);
+      lBd.remplirBoiteQuestions(objJoueurHumain, objBoiteQuestions);
       objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
       
       lstQuestionsRepondues.clear();
@@ -509,8 +522,24 @@ public class InformationPartie
       }
       else
       {
-        // en théorie on ne devrait plus entrer dans ce else 
-        System.out.println( "Ça va mal : aucune question" );
+        
+        //check for a question of a lower difficulty level
+        while (intDifficulte > 0 && objQuestionTrouvee == null) {
+          intDifficulte--;
+          objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
+        }
+        
+        if (objQuestionTrouvee != null)
+        {
+          lstQuestionsRepondues.put(new Integer(objQuestionTrouvee.obtenirCodeQuestion()), objQuestionTrouvee);
+          objQuestionCourante = objQuestionTrouvee;
+          objPositionJoueurDesiree = nouvellePosition;
+        } else {
+        
+          //should not end up here anymore
+          throw new NoQuestionException("Unable to get a question.");
+          
+        }
         
       }
     }
@@ -538,6 +567,7 @@ public class InformationPartie
    * @param intDifficulte
    * @return la question trouver ou null si aucune question n'a pu être pigée
    */
+  
   private Question trouverQuestion(int intCategorieQuestion, int intDifficulte)
   {
     

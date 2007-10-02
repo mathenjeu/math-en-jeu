@@ -6,7 +6,8 @@ public class Langue2 {
   private String nomCourt;
   
   
-  public Langue2(int pId, String pNom, String pNomCourt) {
+  public Langue2(int pId, String pNom, String pNomCourt) {    
+    super();
     id = pId;
     nom = pNom;
     nomCourt = pNomCourt;

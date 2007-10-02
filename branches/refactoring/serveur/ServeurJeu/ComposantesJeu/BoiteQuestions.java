@@ -27,25 +27,16 @@ public class BoiteQuestions
 
   // Since there is a question box for each player, and all players might not want to play
   // in the same language, we set a language field for question boxes
-  private Langue langue;
+
   private Langue2 mLangue;
   
-  //private static String mUrl;  
-
-  public BoiteQuestions(String langue, Node noeudLangue, String nomSalle)
-  {
-    lstQuestions = new TreeMap<Integer, TreeMap<Integer, Vector<Question>>>();
-    this.langue = new Langue(langue, noeudLangue, nomSalle);
-    //FIXME:
-    //this.mUrl = "test/";
-  }
-  
-  public BoiteQuestions(Langue2 langue, Node noeudLangue, String nomSalle)
+  public BoiteQuestions(Langue2 langue, String nomSalle)
   {
     lstQuestions = new TreeMap<Integer, TreeMap<Integer, Vector<Question>>>();
     this.mLangue = langue;
   }
 
+  
   public void ajouterQuestion( Question question )
   {
     int intCategorieQuestion = 1;// = question.obtenirCategorie();
@@ -68,6 +59,7 @@ public class BoiteQuestions
     questions.add( question );
   }
 
+  
   public Question pigerQuestion( int intCategorieQuestion, int intDifficulte )
   {
     int intPointageQuestion = intDifficulte;
@@ -87,11 +79,40 @@ public class BoiteQuestions
     }
     else
     {
-      objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+      //there is no question of this difficulty, try to find one
+      int newDif = intDifficulte;
+      int i = 0;
+      do
+      {
+        if(i%2==0) {
+          newDif+=i;
+        } else {
+          newDif-=i;
+        }
+        
+        i++;
+        
+        if(newDif>0) {
+          questions = obtenirQuestions( intCategorieQuestion, newDif );
+        }
+        
+        /*
+        if(i>=5) {
+          break;
+        }
+        */
+
+      } while( questions==null && i < 5);
+      
+      if (questions == null) {
+        objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+      }
+      
     }
 
     return question;
   }
+  
 
   public boolean estVide( int intCategorieQuestion, int intDifficulte )
   {

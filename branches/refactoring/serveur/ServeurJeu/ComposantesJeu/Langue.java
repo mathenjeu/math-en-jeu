@@ -15,6 +15,7 @@ import org.w3c.dom.NodeList;
 
 public class Langue
 {
+  /*
 	// Le nom de la langue
 	private String langue;
 	
@@ -78,4 +79,6 @@ public class Langue
         {
             return cleQuestionMax;
         }
+        
+        */
 }

@@ -1,7 +1,7 @@
 package ServeurJeu.BD;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,9 +12,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import javax.sql.DataSource;
-
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -24,36 +21,24 @@ import ServeurJeu.ComposantesJeu.BoiteQuestions;
 import ServeurJeu.ComposantesJeu.Langue2;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ComposantesJeu.Salle;
+import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
+import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesComparator;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.Configuration.GestionnaireMessages;
+
 
 /**
  * @author Jean-François Brind'Amour
  */
 public class GestionnaireBD 
 {
-  
-  /*
-  private static class GestionnaireBDHolder {
-    private static final GestionnaireBD INSTANCE = new GestionnaireBD();
-  }
-  */
-  
-  // Déclaration d'une référence vers le contrôleur de jeu
-  //@Deprecated
-  //private ControleurJeu objControleurJeu;
 
-  // Objet Connection nécessaire pour le contact avec le serveur MySQL
-  //private Connection connexion;
-
-  // Objet Statement nécessaire pour envoyer une requête au serveur MySQL
-  //private Statement requete;
 
   static private Logger objLogger = Logger.getLogger( GestionnaireBD.class );
 
@@ -135,31 +120,36 @@ public class GestionnaireBD
    */
   public void remplirInformationsJoueur(JoueurHumain joueur)
   {
-    
-    try
-    {
-      Statement requete = mConnection.createStatement();
 
-        ResultSet rs = requete.executeQuery("SELECT cleJoueur, prenom, nom, cleNiveau, peutCreerSalles FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
-        if (rs.next())
+    String lSql = "SELECT l.id as langue_id, l.nom as langue_nom, l.nom_court, cleJoueur, prenom, j.nom, cleNiveau, peutCreerSalles " +
+    " FROM joueur j, langues l " +
+    " WHERE alias = ? and j.cleLangue = l.id;";
+
+    try {
+
+      PreparedStatement requete = mConnection.prepareStatement(lSql);
+      requete.setString(1, joueur.obtenirNomUtilisateur());
+
+      ResultSet rs = requete.executeQuery();
+      if (rs.next())
+      {
+        if (rs.getInt("peutCreerSalles") != 0)
         {
-          if (rs.getInt("peutCreerSalles") != 0)
-          {
-            joueur.definirPeutCreerSalles(true);
-          }
-          String prenom = rs.getString("prenom");
-          String nom = rs.getString("nom");
-          int cle = Integer.parseInt(rs.getString("cleJoueur"));
-          String cleNiveau = rs.getString( "cleNiveau" );
-          joueur.definirPrenom(prenom);
-          joueur.definirNomFamille(nom);
-          joueur.definirCleJoueur(cle);
-          joueur.definirCleNiveau( cleNiveau );
+          joueur.definirPeutCreerSalles(true);
         }
-      
-    }
-    catch (SQLException e)
-    {
+        String prenom = rs.getString("prenom");
+        String nom = rs.getString("nom");
+        Langue2 lLangue = new Langue2(rs.getInt("langue_id"),rs.getString("langue_nom"),rs.getString("nom_court"));
+        int cle = Integer.parseInt(rs.getString("cleJoueur"));
+        String cleNiveau = rs.getString( "cleNiveau" );
+        joueur.definirPrenom(prenom);
+        joueur.definirNomFamille(nom);
+        joueur.definirCleJoueur(cle);
+        joueur.definirCleNiveau( cleNiveau );
+        joueur.setLangue(lLangue);
+      }
+
+    } catch (SQLException e) {
       // Une erreur est survenue lors de l'exécution de la requête
       objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
       objLogger.error(GestionnaireMessages.message("bd.trace"));
@@ -169,130 +159,143 @@ public class GestionnaireBD
   }
 
   
-  //TODO : load questions using the groups for the current rooms
-  public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau ) {
-    String strRequeteSQL = "SELECT question.*,question_details.* , typereponse.nomType FROM question, question_details" +
-      ",typereponse WHERE typereponse.cleType = question.typeReponse and question_details.valide = 1 " +
-      "and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL and " +
-      "question.cleQuestion = question_details.id and langue_id = " + boiteQuestions.obtenirLangue().getId();
-    
-    strRequeteSQL += " and " + strValeurGroupeAge + niveau + " > 0";
-    
-    
-    remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
-    
-  }
-  
-  
-  public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, int intDifficulte )
-  {
-    // Noter qu'on ne tient plus compte de la catégorie!!
-    String nomTable = "question"; //boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
-
-    String strRequeteSQL = "SELECT " + nomTable + ".*,typereponse.nomType FROM " + nomTable + ",typereponse " +
-    "WHERE typereponse.cleType = " + nomTable + ".typeReponse and " + nomTable + ".valide = 1 " +
-    "and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL ";
-
-    /*
-    strRequeteSQL += "and cleQuestion >= " +
-    boiteQuestions.obtenirLangue().obtenirCleQuestionMin() + " and cleQuestion <= " +
-    boiteQuestions.obtenirLangue().obtenirCleQuestionMax() + " and ";
-
-    */
-    strRequeteSQL += strValeurGroupeAge + niveau + " = " + intDifficulte;
-    
-    remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
-  }
-  
-  
-  // This method fills a Question box with only the player's level
-  /*
-  public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau )
-  {
-      
-    
-    String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
-    String strRequeteSQL = "SELECT " + nomTable + ".*,typereponse.nomType FROM " + nomTable +
-    ",typereponse WHERE typereponse.cleType = " + nomTable + ".typeReponse and " + nomTable + ".valide = 1 " +
-    "and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL and ";
-
-
-    strRequeteSQL += "cleQuestion >= " + boiteQuestions.obtenirLangue().obtenirCleQuestionMin()
-    + " and cleQuestion <= " + boiteQuestions.obtenirLangue().obtenirCleQuestionMax()
-    + " and ";
-
-    strRequeteSQL += strValeurGroupeAge + niveau + " > 0";
-    
-    
-
-    remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
-  }
-*/
-  /*
-  // This function fills a Question box with the player's level, a specified difficulty and a question category
-  public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, int intCategorie, int intDifficulte )
-  {
-    // Noter qu'on ne tient plus compte de la catégorie!!
-    String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
-
-    String strRequeteSQL = "SELECT " + nomTable + ".*,typereponse.nomType FROM " + nomTable + ",typereponse " +
-    "WHERE typereponse.cleType = " + nomTable + ".typeReponse and " + nomTable + ".valide = 1 " +
-    "and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL ";
-
-    strRequeteSQL += "and cleQuestion >= " +
-    boiteQuestions.obtenirLangue().obtenirCleQuestionMin() + " and cleQuestion <= " +
-    boiteQuestions.obtenirLangue().obtenirCleQuestionMax() + " and ";
-
-    strRequeteSQL += strValeurGroupeAge + niveau + " = " + intDifficulte;
-    remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
-  }
-  */
-
-  // This function follows one of the two previous functions. It queries the database and
-  // does the actual filling of the question box.
-  private void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, String strRequeteSQL )
-  { 
+  /**
+   * Load all the question for this player questions box.
+   * @param pJoueur the current player
+   * @param boiteQuestions the questions box.
+   */
+  private void remplirBoiteQuestionAll(JoueurHumain pJoueur, BoiteQuestions boiteQuestions) {
     String lUrl = GestionnaireConfiguration.obtenirInstance().obtenirString("controleurjeu.url-question");
-    try
-    {
-      Statement requete = mConnection.createStatement();
-        ResultSet rs = requete.executeQuery( strRequeteSQL );
-        while(rs.next())
-        {
-          int codeQuestion = rs.getInt("cleQuestion");
-          //String typeQuestion = TypeQuestion.ChoixReponse; //TODO aller chercher code dans bd
-          String typeQuestion = rs.getString( "nomType" );
-          String question = rs.getString( "FichierFlashQuestion" );
-          String reponse = rs.getString("bonneReponse");
-          String explication = rs.getString("FichierFlashReponse");
-          int difficulte = rs.getInt( strValeurGroupeAge + niveau );
-          //TODO la categorie???
-          boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, lUrl+question, reponse, lUrl+explication));
-        }
+    
+    String lSql = "SELECT distinct q.*, qd.*, tr.nomType FROM question q, question_details qd, langues l, typereponse tr " +
+      "where q.cleQuestion = qd.question_id and qd.langue_id = l.id and l.nom_court = ? " +
+      "and tr.cleType = q.typeReponse and qd.valide = 1 " +
+      "and qd.FichierFlashQuestion is not NULL and qd.FichierFlashReponse is not NULL " +
+      "and q.cleQuestion = qd.id " +
+      "and q.valeurGroupeAge" + pJoueur.obtenirCleNiveau() + " > 0";
+    
+    PreparedStatement lStatement = null;
+    
+    try {
+
+      lStatement = mConnection.prepareStatement(lSql);
+      lStatement.setString(1, pJoueur.getLangue().getNomCourt());
+      ResultSet rs = lStatement.executeQuery();
       
+      while(rs.next()) {
+        int codeQuestion = rs.getInt("cleQuestion");
+        String typeQuestion = rs.getString( "nomType" );
+        String question = rs.getString( "FichierFlashQuestion" );
+        String reponse = rs.getString("bonneReponse");
+        String explication = rs.getString("FichierFlashReponse");
+        int difficulte = rs.getInt( strValeurGroupeAge + pJoueur.obtenirCleNiveau() );
+        boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, lUrl+question, reponse, lUrl+explication));
+      }
+      
+      
+    } catch (SQLException e) {
+      // Une erreur est survenue lors de l'exécution de la requête
+      objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+      objLogger.error(GestionnaireMessages.message("bd.trace"));
+      objLogger.error( e.getMessage() );  
+    } finally {
+      if (lStatement != null) {
+        try {
+          lStatement.close();
+        } catch (SQLException e) {
+          objLogger.log(Level.FATAL, e.getMessage(), e);
+        }
+      }
     }
-    catch (SQLException e)
-    {
+  }
+  
+  /**
+   * Load a question box for the player
+   * @param pJoueur the player to load the questions for
+   * @param boiteQuestions the box to load the questions into
+   */
+  public void remplirBoiteQuestions( JoueurHumain pJoueur, BoiteQuestions boiteQuestions) {
+    
+    String lUrl = GestionnaireConfiguration.obtenirInstance().obtenirString("controleurjeu.url-question");
+    
+    String lSql = "SELECT distinct q.*, qd.*, tr.nomType FROM question q, question_details qd, langues l, typereponse tr " +
+                  "where " +
+                     "(q.cleQuestion in (select qgq.question_id " +
+                           "from questions_groups_questions qgq, questions_groups qg, questions_groups_salles qgs, salles s " +
+                           "where qgq.questions_group_id = qg.id and qgs.questions_group_id = qg.id and qgs.salle_id = s.id and s.id = ?) " +
+                  "or q.cleQuestion in (select sq.question_id " +
+                           "from salles s, salles_question sq " +
+                           "where s.id = sq.salle_id and s.id = ?)) " +
+                  "and q.cleQuestion = qd.question_id and qd.langue_id = l.id and l.nom_court = ? " +
+                  "and tr.cleType = q.typeReponse and qd.valide = 1 " +
+                  "and qd.FichierFlashQuestion is not NULL and qd.FichierFlashReponse is not NULL " +
+                  "and q.cleQuestion = qd.id " +
+                  "and q.valeurGroupeAge" + pJoueur.obtenirCleNiveau() + " > 0";
+    
+    PreparedStatement lStatement = null;
+    
+    try {
+
+      lStatement = mConnection.prepareStatement(lSql);
+      lStatement.setInt(1, pJoueur.obtenirSalleCourante().getId());
+      lStatement.setInt(2, pJoueur.obtenirSalleCourante().getId());
+      lStatement.setString(3, pJoueur.getLangue().getNomCourt());
+
+
+      ResultSet rs = lStatement.executeQuery();
+      boolean lHasSome = false;
+      while(rs.next())
+      {
+        int codeQuestion = rs.getInt("cleQuestion");
+        String typeQuestion = rs.getString( "nomType" );
+        String question = rs.getString( "FichierFlashQuestion" );
+        String reponse = rs.getString("bonneReponse");
+        String explication = rs.getString("FichierFlashReponse");
+        int difficulte = rs.getInt( strValeurGroupeAge + pJoueur.obtenirCleNiveau() );
+        lHasSome = true;
+        boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, lUrl+question, reponse, lUrl+explication));
+      }
+
+      if (!lHasSome) {
+        remplirBoiteQuestionAll(pJoueur,boiteQuestions);
+      }
+
+    } catch (SQLException e) {
       // Une erreur est survenue lors de l'exécution de la requête
       objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
       objLogger.error(GestionnaireMessages.message("bd.trace"));
       objLogger.error( e.getMessage() );
       e.printStackTrace();      
-    }
-    catch( RuntimeException e)
-    {
+    } catch( RuntimeException e) {
       //Une erreur est survenue lors de la recherche de la prochaine question
       objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question"));
       objLogger.error(GestionnaireMessages.message("bd.trace"));
       objLogger.error( e.getMessage() );
       e.printStackTrace();
+    } finally {
+      if (lStatement != null) {
+        try {
+          lStatement.close();
+        } catch (SQLException e) {
+          objLogger.log(Level.FATAL, e.getMessage(), e);
+        }
+      }
     }
+
   }
 
-  // This function queries the DB to find the player's musical preferences
-  // and returns a Vector containing URLs of MP3s the player might like
+
+
+  /**
+   * This function queries the DB to find the player's musical preferences
+   * and returns a Vector containing URLs of MP3s the player might like
+   * @param cleJoueur the user id
+   * @return a list of url to mp3 files
+   */
   public Vector obtenirListeURLsMusique(int cleJoueur)
   {
+    
+
     Vector<String> liste = new Vector<String>();
     
     String URLMusique = GestionnaireConfiguration.obtenirInstance().obtenirString("musique.url");
@@ -450,14 +453,13 @@ public class GestionnaireBD
     
     try {
       Statement requete = mConnection.createStatement();
-      synchronized (requete) {
+
         ResultSet lRs = requete.executeQuery(lSql);
         
         if (lRs.next()) {
           lResult = new Langue2(lRs.getInt("id"), lRs.getString("nom"),lRs.getString("nom_court"));
           
         }
-      }
 
     } catch (SQLException e) {
       objLogger.log(Level.FATAL, e.getMessage(), e);
@@ -537,6 +539,140 @@ public class GestionnaireBD
   }
   
   
+  private void loadShopObjects(ReglesMagasin lReglesMagasin, int pShopId) {
+    
+    PreparedStatement lStatement = null;
+    
+    String lSql = "select o.tag from objets o, magasins_objets_utilisable mo, magasins m " +
+      " where o.id = mo.id and mo.magasin_id = m.id and m.id = ?";
+  
+    
+    try {
+      lStatement = mConnection.prepareStatement(lSql);
+      lStatement.setInt(1, pShopId);
+
+      ResultSet lResultSet = lStatement.executeQuery();
+      while (lResultSet.next()) {
+        lReglesMagasin.ajouterReglesObjetUtilisable(new ReglesObjetUtilisable(lResultSet.getString("tag"), Visibilite.Aleatoire));
+      }
+      
+    } catch (SQLException e) {
+      objLogger.log(Level.FATAL, e.getMessage(), e);
+    } finally {
+      if (lStatement != null) {
+        try {
+          lStatement.close();
+        } catch (SQLException e) {
+          objLogger.log(Level.FATAL, e.getMessage(), e);
+        }
+      }
+    }   
+    
+  }
+  
+  
+  
+  private void loadShop(TreeSet<ReglesMagasin> pMagasin, int pRoomId) {
+    PreparedStatement lStatement = null;
+
+    String lSql = "select m.id as magasin_id, m.nom, sm.priorite from salles s, magasins m, salles_magasins sm where "
+      + "m.id = sm.magasin_id and sm.salle_id = s.id and s.id=?";
+    
+    try {
+      
+      lStatement = mConnection.prepareStatement(lSql);
+      lStatement.setInt(1, pRoomId);
+
+      ResultSet lResultSet = lStatement.executeQuery();
+      
+      while (lResultSet.next()) {
+        ReglesMagasin lReglesMagasin = new ReglesMagasin(lResultSet.getInt("priorite"), lResultSet.getString("nom"));
+        
+        //load the usable objet for this room
+        loadShopObjects(lReglesMagasin, lResultSet.getInt("magasin_id"));
+
+        pMagasin.add(lReglesMagasin);
+      }
+      
+      
+    } catch (SQLException e) {
+      objLogger.log(Level.FATAL, e.getMessage(), e);
+    } finally {
+      if (lStatement != null) {
+        try {
+          lStatement.close();
+        } catch (SQLException e) {
+          objLogger.log(Level.FATAL, e.getMessage(), e);
+        }
+      }
+    }
+    
+  }
+  
+  
+  private void loadUsableObjet(TreeSet<ReglesObjetUtilisable> pObject, int pRoomId) {
+    
+    Statement lStatement = null;
+    
+    //load the usable object for this room
+    String lSql = "select o.tag, so.priorite from objets o, salles_objets so, salles s where " 
+      + "o.id = so.objet_id and so.salle_id = s.id and s.id=" + pRoomId;
+    
+    try {
+      lStatement = mConnection.createStatement();
+      
+      ResultSet lRsObjet = lStatement.executeQuery(lSql);
+      while (lRsObjet.next()) {
+        pObject.add(new ReglesObjetUtilisable(lRsObjet.getInt("priorite"), lRsObjet.getString("tag"), Visibilite.Aleatoire));
+      }
+    } catch (SQLException e) {
+      objLogger.log(Level.FATAL, e.getMessage(), e);
+    } finally {
+      if (lStatement != null) {
+        try {
+          lStatement.close();
+        } catch (SQLException e) {
+          objLogger.log(Level.FATAL, e.getMessage(), e);
+        }
+      }
+    }
+    
+  }
+  
+  
+  private Map<String, String> loadDescription(int pRoomId) {
+    
+    Statement lStatement = null;
+    
+    Map<String, String> lResult = new TreeMap<String, String>();
+    
+    String lSql = "select sd.description, l.nom_court from langues l, salles s, salle_detail sd "
+      + " where sd.salle_id = s.id and l.id = sd.langue_id and s.id =" + pRoomId;
+
+    try {
+      lStatement = mConnection.createStatement();
+      
+      ResultSet lRsDescription = lStatement.executeQuery(lSql);
+      
+      while (lRsDescription.next()) {
+        lResult.put(lRsDescription.getString("nom_court"), lRsDescription.getString("description"));
+      }
+    } catch (SQLException e) {
+      objLogger.log(Level.FATAL, e.getMessage(), e);
+    } finally {
+      if (lStatement != null) {
+        try {
+          lStatement.close();
+        } catch (SQLException e) {
+          objLogger.log(Level.FATAL, e.getMessage(), e);
+        }
+      }
+    }
+    
+    return lResult;
+    
+  }
+  
   /**
    * Rooms are loaded directly in the ControleurJeu list of rooms 
    * @param pGameType the type of game to load room for
@@ -548,18 +684,12 @@ public class GestionnaireBD
                   + " where s.type_jeu_id = tj.id and j.cleJoueur = s.joueur_id and s.regle_id = r.id and tj.nom = '" + pGameType + "'"
                   + " order by s.nom";
     
-    Statement lStatement = null;
-    Statement lStatShop = null;
-    Statement lStatObject = null;
-    Statement lStatDescription = null;
-    
+    Statement lStatement = null;    
 
     try {
 
       lStatement = mConnection.createStatement();
-      lStatShop = mConnection.createStatement();
-      lStatObject = mConnection.createStatement();
-      lStatDescription = mConnection.createStatement();
+      
       ResultSet lRs = lStatement.executeQuery(lSql);
       
       while (lRs.next()) {
@@ -586,49 +716,28 @@ public class GestionnaireBD
           objReglesSalle.definirDeplacementMaximal(lRs.getInt("deplacement_maximal"));
           objReglesSalle.definirMaxObjet(lRs.getInt("max_possession_objets_pieces"));
           
-          //load the usable object for this room
-          
-          lSql = "select o.nom, so.priorite from objets o, salles_objets so, salles s where " 
-            + "o.id = so.objet_id and so.salle_id = s.id and s.id=" + lRs.getInt("salle_id");
-          ResultSet lRsObjet = lStatShop.executeQuery(lSql);
-          while (lRsObjet.next()) {
-            objetsUtilisables.add(new ReglesObjetUtilisable(lRsObjet.getInt("priorite"), lRsObjet.getString("nom"), Visibilite.Aleatoire));
-          }
+
+          //load the object
+          loadUsableObjet(objetsUtilisables, lRs.getInt("salle_id"));
   
           //load the shops
-          lSql = "select m.nom, sm.priorite from salles s, magasins m, salles_magasins sm where "
-            + "m.id = sm.magasin_id and sm.salle_id = s.id and s.id=" + lRs.getInt("salle_id");
-  
-          ResultSet lRsMagasin = lStatObject.executeQuery(lSql);
-          while (lRsMagasin.next()) {
-            magasins.add(new ReglesMagasin(lRsMagasin.getInt("priorite"), lRsMagasin.getString("nom")));
-          }
+          loadShop(magasins, lRs.getInt("salle_id"));
           
           //load the description for this room
-          lSql = "select sd.description, l.nom_court from langues l, salles s, salle_detail sd "
-                 + " where sd.salle_id = s.id and l.id = sd.langue_id and s.id =" + lRs.getInt("salle_id");
+          Map<String, String> lDescriptions = loadDescription(lRs.getInt("salle_id"));
           
-          ResultSet lRsDescription = lStatDescription.executeQuery(lSql);
-          Map<String, String> lDescriptions = new TreeMap<String, String>();
-          while (lRsDescription.next()) {
-            lDescriptions.put(lRsDescription.getString("nom_court"), lRsDescription.getString("description"));
-          }
-          
-          Salle lSalle = new Salle(lRs.getString("table_name"), 
+          Salle lSalle = new Salle(lRs.getInt("salle_id"),
+                                   lRs.getString("table_name"), 
                                    lRs.getString("alias"), 
                                    lRs.getString("password"),
                                    lDescriptions,
                                    objReglesSalle,
                                    pGameType);
           
-          
-          
           ControleurJeu.getInstance().ajouterNouvelleSalle(lSalle);
           
         }
-
       }
-      
     } catch (SQLException e) {
       objLogger.log(Level.FATAL, e.getMessage(), e);
     } finally {
