@@ -2,7 +2,7 @@ package ServeurJeu.ComposantesJeu.Joueurs;
 
 import ServeurJeu.Communications.ProtocoleJoueur;
 import ServeurJeu.ComposantesJeu.InformationPartie;
-import ServeurJeu.ComposantesJeu.Langue2;
+import ServeurJeu.ComposantesJeu.Langue;
 import ServeurJeu.ComposantesJeu.Salle;
 
 /**
@@ -36,7 +36,7 @@ public class JoueurHumain extends Joueur
 	
 	private String cleNiveau;
   
-  private Langue2 langue;
+  private Langue langue;
 	
 	// Déclaration d'une référence vers la salle dans laquelle le joueur se 
 	// trouve (null si le joueur n'est dans aucune salle)
@@ -268,11 +268,11 @@ public class JoueurHumain extends Joueur
 		this.cleNiveau = cleNiveau;
 	}
 
-  public Langue2 getLangue() {
+  public Langue getLangue() {
     return langue;
   }
 
-  public void setLangue(Langue2 langue) {
+  public void setLangue(Langue langue) {
     this.langue = langue;
   }
   

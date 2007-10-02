@@ -35,7 +35,7 @@ import Enumerations.RetourFonctions.ResultatDemarrerPartie;
 import Enumerations.RetourFonctions.ResultatEntreeTable;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.BD.GestionnaireBD;
-import ServeurJeu.ComposantesJeu.Langue2;
+import ServeurJeu.ComposantesJeu.Langue;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Table;
@@ -102,7 +102,7 @@ public class ProtocoleJoueur implements Runnable
   static private Logger objLogger = Logger.getLogger( ProtocoleJoueur.class );
         
         // On obtiendra la langue du joueur pour pouvoir construire la boîte de questions
-        public Langue2 langue;
+        public Langue langue;
         
         // Type de jeu (ex. mathEnJeu)
         public String gameType;

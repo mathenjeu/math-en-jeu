@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 import Enumerations.Visibilite;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.BoiteQuestions;
-import ServeurJeu.ComposantesJeu.Langue2;
+import ServeurJeu.ComposantesJeu.Langue;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
@@ -139,7 +139,7 @@ public class GestionnaireBD
         }
         String prenom = rs.getString("prenom");
         String nom = rs.getString("nom");
-        Langue2 lLangue = new Langue2(rs.getInt("langue_id"),rs.getString("langue_nom"),rs.getString("nom_court"));
+        Langue lLangue = new Langue(rs.getInt("langue_id"),rs.getString("langue_nom"),rs.getString("nom_court"));
         int cle = Integer.parseInt(rs.getString("cleJoueur"));
         String cleNiveau = rs.getString( "cleNiveau" );
         joueur.definirPrenom(prenom);
@@ -446,8 +446,8 @@ public class GestionnaireBD
    * @param pShortName the short name of a langage (ex : fr,en,jp
    * @return a langue object
    */
-  public Langue2 loadLangue(String pShortName) {
-    Langue2 lResult = null;
+  public Langue loadLangue(String pShortName) {
+    Langue lResult = null;
     
     String lSql = "select * from langues where nom_court = '" + pShortName + "'";
     
@@ -457,7 +457,7 @@ public class GestionnaireBD
         ResultSet lRs = requete.executeQuery(lSql);
         
         if (lRs.next()) {
-          lResult = new Langue2(lRs.getInt("id"), lRs.getString("nom"),lRs.getString("nom_court"));
+          lResult = new Langue(lRs.getInt("id"), lRs.getString("nom"),lRs.getString("nom_court"));
           
         }
 

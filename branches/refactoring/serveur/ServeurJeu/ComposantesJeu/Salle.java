@@ -87,7 +87,7 @@ public class Salle
         // This is the maximum number of coins and items a player can hold at one time
         //public static int maxPossessionPieceEtObjet; // = Integer.parseInt(GestionnaireConfiguration.obtenirInstance().obtenirString("controleurjeu.salles-initiales.regles.max-possession-objets-et-pieces"));
   
-        private Langue2 langue;
+        private Langue langue;
         
   /**
    * Constructeur de la classe Salle qui permet d'initialiser les membres 
@@ -162,7 +162,7 @@ public class Salle
                String motDePasse, 
                Regles reglesSalle, 
                ControleurJeu controleurJeu, 
-               Langue2 pLangue, 
+               Langue pLangue, 
                String gameType)
   {
     super();

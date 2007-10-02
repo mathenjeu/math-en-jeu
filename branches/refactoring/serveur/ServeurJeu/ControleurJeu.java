@@ -24,7 +24,7 @@ import Enumerations.RetourFonctions.ResultatAuthentification;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Communications.GestionnaireCommunication;
 import ServeurJeu.Communications.ProtocoleJoueur;
-import ServeurJeu.ComposantesJeu.Langue2;
+import ServeurJeu.ComposantesJeu.Langue;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
