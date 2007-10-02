@@ -35,13 +35,13 @@ import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
+import ClassesUtilitaires.IntObj;
 import ServeurJeu.Monitoring.Moniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
 import ServeurJeu.Evenements.EvenementSynchroniserTemps;
  
 import ServeurJeu.ComposantesJeu.Cases.Case;
-import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.Evenements.EvenementPartieDemarree;
 import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.ComposantesJeu.Question;
@@ -50,7 +50,6 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import java.util.Calendar;
-import java.util.Random;
 
 /**
  * @author Jean-François Brind'Amour
@@ -3275,7 +3274,8 @@ public class ProtocoleJoueur implements Runnable
 	                	else
 	                	{
 		                	// Acheter l'objet
-		                	ObjetUtilisable objObjetAcheter = ((Magasin)objObjet).acheterObjet(intIdObjet, objTable.obtenirProchainIdObjet());
+                                        IntObj idProchainObjet = objTable.obtenirProchainIdObjet();
+		                	ObjetUtilisable objObjetAcheter = ((Magasin)objObjet).acheterObjet(intIdObjet, idProchainObjet);
 		                	
 		                	// L'ajouter à la liste des objets du joueur
 		                	objJoueurHumain.obtenirPartieCourante().ajouterObjetUtilisableListe(objObjetAcheter);
@@ -3291,14 +3291,17 @@ public class ProtocoleJoueur implements Runnable
 		                	// Retourner une réponse positive au joueur
 		                	objNoeudCommande.setAttribute("type", "Reponse");
 		                	objNoeudCommande.setAttribute("nom", "Ok");
-                                        
-                                        creerListeObjetsMagasin((Magasin)objObjet, objDocumentXMLSortie, objNoeudCommande);
 		                	
 		                	// Ajouter l'objet acheté dans la réponse
 		                	Element objNoeudObjetAchete = objDocumentXMLSortie.createElement("objetAchete");
 		                	objNoeudObjetAchete.setAttribute("type", objObjetAcheter.obtenirTypeObjet());
 		                	objNoeudObjetAchete.setAttribute("id", Integer.toString(intIdObjet));
 		                	objNoeudCommande.appendChild(objNoeudObjetAchete);
+                                        
+		                	// Ajouter l'id du nouvel objet dans la réponse
+		                	Element objNoeudNouveauID = objDocumentXMLSortie.createElement("nouveauID");
+		                	objNoeudNouveauID.setAttribute("id", Integer.toString(idProchainObjet.intValue));
+		                	objNoeudCommande.appendChild(objNoeudNouveauID);
                                         
                                         Element objNoeudParametreArgent = objDocumentXMLSortie.createElement("parametre");
 					Text objNoeudTexteArgent = objDocumentXMLSortie.createTextNode(Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirArgent()));
