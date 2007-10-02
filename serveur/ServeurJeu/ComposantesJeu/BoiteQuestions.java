@@ -28,9 +28,9 @@ public class BoiteQuestions
   // Since there is a question box for each player, and all players might not want to play
   // in the same language, we set a language field for question boxes
 
-  private Langue2 mLangue;
+  private Langue mLangue;
   
-  public BoiteQuestions(Langue2 langue, String nomSalle)
+  public BoiteQuestions(Langue langue, String nomSalle)
   {
     lstQuestions = new TreeMap<Integer, TreeMap<Integer, Vector<Question>>>();
     this.mLangue = langue;
@@ -142,7 +142,7 @@ public class BoiteQuestions
     return questions;
   }
 
-  public Langue2 obtenirLangue()
+  public Langue obtenirLangue()
   {
     return mLangue;
   }
