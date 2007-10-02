@@ -116,6 +116,7 @@ public class Regles
      return lstMagasinsPossibles;
   }
   
+  
   /**
    * Cette fonction permet de retourner la liste des cases spéciales 
    * possibles.

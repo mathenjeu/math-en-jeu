@@ -1,5 +1,7 @@
 package ServeurJeu.ComposantesJeu.ReglesJeu;
 
+import java.util.TreeSet;
+
 /**
  * @author Jean-François Brind'Amour
  */
@@ -7,6 +9,8 @@ public class ReglesMagasin extends ReglesObjet
 {
 	// Déclaration d'une variable qui va contenir le nom du magasin
 	private String strNomMagasin;
+  
+  private TreeSet<ReglesObjetUtilisable> mObjetUtilisable;
 	
 	/**
 	 * Constructeur de la classe ReglesMagasin qui permet d'initialiser
@@ -32,6 +36,10 @@ public class ReglesMagasin extends ReglesObjet
 	public ReglesMagasin(int priorite, String nom)
 	{
 		super(priorite);
+    
+    ReglesComparator objReglesComparator = new ReglesComparator();
+    mObjetUtilisable = new TreeSet<ReglesObjetUtilisable>(objReglesComparator);
+    
 		
 		// Initialiser les propriétés de la règle du magasin
 		strNomMagasin = nom;
@@ -46,4 +54,12 @@ public class ReglesMagasin extends ReglesObjet
 	{
 	   return strNomMagasin;
 	}
+  
+  public void ajouterReglesObjetUtilisable(ReglesObjetUtilisable pRegleObjet) {
+    mObjetUtilisable.add(pRegleObjet);
+  }
+  
+  public TreeSet<ReglesObjetUtilisable> getReglesObjetUtilisable () {
+    return mObjetUtilisable;
+  }
 }

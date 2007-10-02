@@ -17,6 +17,7 @@ import java.util.Vector;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -52,6 +53,7 @@ import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.Monitoring.Moniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
+import exception.NoQuestionException;
 
 /**
  * @author Jean-François Brind'Amour
@@ -1565,37 +1567,42 @@ public class ProtocoleJoueur implements Runnable
           {
             // Trouver la question à poser selon la difficulté et 
             // le type de case sur laquelle on veut se diriger
-            Question objQuestionAPoser = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoser(objNouvellePosition, true);
-            
-            // Il n'y a pas eu d'erreurs
-            objNoeudCommande.setAttribute("type", "Reponse");
-            objNoeudCommande.setAttribute("nom", "Question");
-            
-            // Créer le noeud paramètre de la question
-            Element objNoeudParametreQuestion = objDocumentXMLSortie.createElement("parametre"); 
-            
-            // Définir les attributs pour le noeud paramètre et question
-            objNoeudParametreQuestion.setAttribute("type", "Question");
-            
-            // Si aucune question n'a été trouvée, alors c'est que
-            // le joueur ne s'est pas déplacé, on ne renvoit donc
-            // que le paramètre sans la question, sinon on renvoit
-            // également l'information sur la question
-            if (objQuestionAPoser != null)
-            {
-              // Créer un noeud texte contenant l'information sur la question
-              Element objNoeudQuestion = objDocumentXMLSortie.createElement("question");
-                          
-              objNoeudQuestion.setAttribute("id", Integer.toString(objQuestionAPoser.obtenirCodeQuestion()));
-              objNoeudQuestion.setAttribute("type", objQuestionAPoser.obtenirTypeQuestion().toString());
-              objNoeudQuestion.setAttribute("url", objQuestionAPoser.obtenirURLQuestion());
+            try {
+              Question objQuestionAPoser = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoser(objNouvellePosition, true);
+
+              // Il n'y a pas eu d'erreurs
+              objNoeudCommande.setAttribute("type", "Reponse");
+              objNoeudCommande.setAttribute("nom", "Question");
               
-              // Ajouter le noeud question au noeud paramètre
-              objNoeudParametreQuestion.appendChild(objNoeudQuestion);
+              // Créer le noeud paramètre de la question
+              Element objNoeudParametreQuestion = objDocumentXMLSortie.createElement("parametre"); 
+              
+              // Définir les attributs pour le noeud paramètre et question
+              objNoeudParametreQuestion.setAttribute("type", "Question");
+              
+              // Si aucune question n'a été trouvée, alors c'est que
+              // le joueur ne s'est pas déplacé, on ne renvoit donc
+              // que le paramètre sans la question, sinon on renvoit
+              // également l'information sur la question
+              if (objQuestionAPoser != null)
+              {
+                // Créer un noeud texte contenant l'information sur la question
+                Element objNoeudQuestion = objDocumentXMLSortie.createElement("question");
+                            
+                objNoeudQuestion.setAttribute("id", Integer.toString(objQuestionAPoser.obtenirCodeQuestion()));
+                objNoeudQuestion.setAttribute("type", objQuestionAPoser.obtenirTypeQuestion().toString());
+                objNoeudQuestion.setAttribute("url", objQuestionAPoser.obtenirURLQuestion());
+                
+                // Ajouter le noeud question au noeud paramètre
+                objNoeudParametreQuestion.appendChild(objNoeudQuestion);
+              }
+              
+              // Ajouter le noeud paramètre au noeud de commande
+              objNoeudCommande.appendChild(objNoeudParametreQuestion);
+              
+            } catch (NoQuestionException e) {
+              objLogger.log(Level.FATAL, e.getMessage(), e);
             }
-            
-            // Ajouter le noeud paramètre au noeud de commande
-            objNoeudCommande.appendChild(objNoeudParametreQuestion);
           }
         }
         else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.RepondreQuestion))
@@ -3436,8 +3443,11 @@ public class ProtocoleJoueur implements Runnable
                     }
                     else if(strTypeObjet.equals("Boule"))
                     {
+                      
+                      try {
                         // La boule permettra à un joueur de changer de question si celle
                         // qu'il s'est fait envoyer ne lui tente pas
+
 
                         // On trouve une nouvelle question à poser
                         Question nouvelleQuestion = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoser(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueurDesiree(), true);
@@ -3461,6 +3471,10 @@ public class ProtocoleJoueur implements Runnable
                         objNoeudCommande.setAttribute("type", "Boule");
                         objNoeudCommande.appendChild(objNoeudParametreNouvelleQuestion);
                         bolDoitRetournerCommande = true;
+                        
+                      } catch (NoQuestionException e) {
+                        objLogger.log(Level.FATAL, e.getMessage(), e);
+                      }
                     }
                     else if(strTypeObjet.equals("PotionGros"))
                     {

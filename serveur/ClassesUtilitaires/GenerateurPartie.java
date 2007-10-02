@@ -3,13 +3,29 @@ package ClassesUtilitaires;
 import java.awt.Point;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.TreeSet;
 import java.util.Vector;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
 import Enumerations.Visibilite;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.*;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin1;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin2;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin3;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin4;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Banane;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Boule;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Livre;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Papillon;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.PotionGros;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.PotionPetit;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Telephone;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
@@ -17,9 +33,6 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.NodeList;
 
 /**
  * @author Jean-François Brind'Amour
@@ -432,67 +445,18 @@ public final class GenerateurPartie
         // Aller chercher une référence vers le magasin que l'on vient de créer
         Magasin objMagasin = (Magasin)((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).obtenirObjetCase();
 
-                                // Get the list of items to be sold by shops
-                                // getNodeType verifications are to ensure we're getting the kind of node we're looking for
-                                //   because a lot of things are considered "nodes" in XML!
-                                Document documentConfig = config.getDocument();
-                                NodeList listeDeMagasins = documentConfig.getElementsByTagName("magasin");
-                                for(int i=0; i<listeDeMagasins.getLength(); i++)
-                                {
-                                    if(listeDeMagasins.item(i).getNodeType()==1 && objReglesMagasin.obtenirNomMagasin().equals(listeDeMagasins.item(i).getAttributes().getNamedItem("nom").getNodeValue()))
-                                    {
-                                        NodeList listeDObjets = listeDeMagasins.item(i).getChildNodes();
-                                        for(int j=0; j<listeDObjets.getLength(); j++)
-                                        {
-                                            if(listeDObjets.item(j).getNodeType()==1)
-                                            {
-                                                // Incrémenter le compteur de ID pour les objets
-                                                intCompteurIdObjet++;
-
-                                                    // On obtient le nom de l'objet en cours de traitement
-                                                    String nomDeLObjet = listeDObjets.item(j).getChildNodes().item(0).getNodeValue();
-
-                                                    // On crée un nouvel objet du type correspondant
-                                                    // puis on l'ajoute dans la liste des objets utilisables du magasin
-                                                    if(nomDeLObjet.equals("Livre"))
-                                                    {
-                                                        Livre objAAjouter = new Livre(intCompteurIdObjet, true);
-                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                                    }
-                                                    else if(nomDeLObjet.equals("Papillon"))
-                                                    {
-                                                        Papillon objAAjouter = new Papillon(intCompteurIdObjet, true);
-                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                                    }
-                                                    else if(nomDeLObjet.equals("Boule"))
-                                                    {
-                                                        Boule objAAjouter = new Boule(intCompteurIdObjet, true);
-                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                                    }
-                                                    else if(nomDeLObjet.equals("Telephone"))
-                                                    {
-                                                        Telephone objAAjouter = new Telephone(intCompteurIdObjet, true);
-                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                                    }
-                                                    else if(nomDeLObjet.equals("PotionGros"))
-                                                    {
-                                                        PotionGros objAAjouter = new PotionGros(intCompteurIdObjet, true);
-                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                                    }
-                                                    else if(nomDeLObjet.equals("PotionPetit"))
-                                                    {
-                                                        PotionPetit objAAjouter = new PotionPetit(intCompteurIdObjet, true);
-                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                                    }
-                                                    else if(nomDeLObjet.equals("Banane"))
-                                                    {
-                                                        Banane objAAjouter = new Banane(intCompteurIdObjet, true);
-                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                                    }
-                                            }
-                                        }
-                                    }
-                                }
+        
+        
+        // load the shops objects
+        TreeSet<ReglesObjetUtilisable> lReglesObjetUtilisable = objReglesMagasin.getReglesObjetUtilisable();
+        Iterator lIter = lReglesObjetUtilisable.iterator();
+        while (lIter.hasNext()) {
+          ReglesObjetUtilisable lObjetUtilisable = (ReglesObjetUtilisable)lIter.next();
+          ObjetUtilisable lObjet = ObjectFactory.createUsableObject(intCompteurIdObjet, lObjetUtilisable.obtenirNomObjetUtilisable());
+          if (lObjet != null) {
+            objMagasin.ajouterObjetUtilisable(lObjet);
+          }
+        }
         
         // Incrémenter le nombre de cases passées
         intCompteurCases++;
@@ -599,35 +563,10 @@ public final class GenerateurPartie
         // Si le nom de l'objet est Livre, alors on met un objet 
         // Livre sur la case, sinon on fait le même genre de 
         // vérifications pour les autres types de magasins
-                                // On définit la valeur de la case au point spécifié à la case d'identification
-        if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Livre"))
-        {
-          ((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Livre(intCompteurIdObjet, bolEstVisible));         
-        }
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Papillon"))
-        {
-          ((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Papillon(intCompteurIdObjet, bolEstVisible));          
-        }
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Telephone"))
-        {
-          ((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Telephone(intCompteurIdObjet, bolEstVisible));         
-        }
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Boule"))
-        {
-          ((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Boule(intCompteurIdObjet, bolEstVisible));         
-        }
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("PotionGros"))
-        {
-          ((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new PotionGros(intCompteurIdObjet, bolEstVisible));          
-        }
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("PotionPetit"))
-        {
-          ((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new PotionPetit(intCompteurIdObjet, bolEstVisible));         
-        }
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Banane"))
-        {
-          ((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Banane(intCompteurIdObjet, bolEstVisible));          
-        }
+        // On définit la valeur de la case au point spécifié à la case d'identification
+        ObjetUtilisable lObjetUtilisable = ObjectFactory.createUsableObject(intCompteurIdObjet, objReglesObjetUtilisable.obtenirNomObjetUtilisable());
+        ((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(lObjetUtilisable);
+        
         
         // Incrémenter le nombre de cases passées
         intCompteurCases++;
@@ -665,19 +604,19 @@ public final class GenerateurPartie
      */
     public static Point[] genererPositionJoueurs(int nbJoueurs, Vector listePointsCaseLibre)
     {
-    // Créer un tableau contenant les nbJoueurs points
-    Point[] objtPositionJoueurs = new Point[nbJoueurs];
-    
-    // Création d'un objet permettant de générer des nombres aléatoires
-    Random objRandom = new Random();
-    
-    // Pour tous les joueurs de la partie, on va générer des positions de joueurs
-    for (int i = 0; i < nbJoueurs; i++)
-    {
-      // Obtenir un point aléatoirement
-      objtPositionJoueurs[i] = (Point) listePointsCaseLibre.remove(objRandom.nextInt(listePointsCaseLibre.size()));
-    }
-    
-    return objtPositionJoueurs;
+      // Créer un tableau contenant les nbJoueurs points
+      Point[] objtPositionJoueurs = new Point[nbJoueurs];
+      
+      // Création d'un objet permettant de générer des nombres aléatoires
+      Random objRandom = new Random();
+      
+      // Pour tous les joueurs de la partie, on va générer des positions de joueurs
+      for (int i = 0; i < nbJoueurs; i++)
+      {
+        // Obtenir un point aléatoirement
+        objtPositionJoueurs[i] = (Point) listePointsCaseLibre.remove(objRandom.nextInt(listePointsCaseLibre.size()));
+      }
+      
+      return objtPositionJoueurs;
     }
 }

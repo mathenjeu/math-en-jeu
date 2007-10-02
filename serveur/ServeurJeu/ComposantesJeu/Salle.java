@@ -41,6 +41,8 @@ public class Salle
   // Déclaration d'une référence vers le gestionnaire de bases de données
   private GestionnaireBD objGestionnaireBD;
   
+  private int mId;
+  
   // Cette variable va contenir le nom de la salle
   private String strNomSalle;
 
@@ -200,7 +202,8 @@ public class Salle
     threadEvenements.start();
   }
   
-  public Salle(String pName, 
+  public Salle(int pId,
+               String pName, 
                String pCreator,
                String pPassword,
                Map<String, String> pDescriptions,
@@ -212,6 +215,7 @@ public class Salle
     objGestionnaireEvenements = new GestionnaireEvenements();
     
     //mLangue = pLangues;
+    mId = pId;
     mName = pName;
     mDescription = pDescriptions;
     strNomUtilisateurCreateur = pCreator;
@@ -837,4 +841,8 @@ public class Salle
         {
             return gameType;
         }
+        
+  public int getId() {
+    return mId;
+  }
 }
