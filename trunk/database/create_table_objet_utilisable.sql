@@ -1,8 +1,0 @@
-﻿CREATE TABLE `objet_utilisable` (
-  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  `description` VARCHAR(512) NOT NULL,
-  `nom` VARCHAR(45) NOT NULL,
-  `priorite` INTEGER UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`)
-)
-ENGINE = InnoDB;
