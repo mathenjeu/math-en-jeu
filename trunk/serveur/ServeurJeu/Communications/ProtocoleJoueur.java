@@ -3300,7 +3300,7 @@ public class ProtocoleJoueur implements Runnable
                                         
 		                	// Ajouter l'id du nouvel objet dans la réponse
 		                	Element objNoeudNouveauID = objDocumentXMLSortie.createElement("nouveauID");
-		                	objNoeudNouveauID.setAttribute("id", Integer.toString(idProchainObjet.intValue));
+		                	objNoeudNouveauID.setAttribute("id", Integer.toString(idProchainObjet.intValue-1));
 		                	objNoeudCommande.appendChild(objNoeudNouveauID);
                                         
                                         Element objNoeudParametreArgent = objDocumentXMLSortie.createElement("parametre");
