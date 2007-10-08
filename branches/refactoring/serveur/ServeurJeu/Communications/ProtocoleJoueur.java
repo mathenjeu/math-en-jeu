@@ -46,6 +46,7 @@ import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Banane;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
+import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import ServeurJeu.Evenements.EvenementPartieDemarree;
 import ServeurJeu.Evenements.EvenementSynchroniserTemps;
@@ -113,6 +114,8 @@ public class ProtocoleJoueur implements Runnable
   // ne déconnectera pas un joeur en train de joueur via le vérification de connexion
   private boolean bolEnTrainDeJouer;
   
+  
+  private static final String POLICY_REQUEST_STRING = "<policy-file-request/>";
   
   
   
@@ -237,22 +240,39 @@ public class ProtocoleJoueur implements Runnable
             // client et mettre le résultat à retourner dans une variable
             objLogger.info( GestionnaireMessages.message("protocole.message_recu") + strMessageRecu );
 
-                                                // If we're in debug mode (can be set in mathenjeu.xml), print communications
-                                                GregorianCalendar calendar = new GregorianCalendar();
-                                                if(ControleurJeu.modeDebug)
-                                                {
-                                                    String timeB = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
-                                                    System.out.println("(" + timeB + ") Reçu:  " + strMessageRecu);
-                                                }
+            // If we're in debug mode (can be set in mathenjeu.xml), print communications
+            GregorianCalendar calendar = new GregorianCalendar();
+            if(ControleurJeu.modeDebug)
+            {
+              String timeB = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
+              System.out.println("(" + timeB + ") Reçu:  " + strMessageRecu);
+            }
+            
+            
+            String strMessageAEnvoyer = "";
+            
+            //check if the message is a policy request
+            if (strMessageRecu.toString().contains(POLICY_REQUEST_STRING)) {
+              System.out.println("policy request");
+              objLogger.info(GestionnaireMessages.message("protocole.policy_request"));
+              strMessageAEnvoyer = "<?xml version=\"1.0\"?><cross-domain-policy>" +
+                  "<allow-access-from domain=\"*\" to-ports=\"" 
+                    + GestionnaireConfiguration.getInstance().getString("gestionnairecommunication.port") + "\" />" +
+                  "</cross-domain-policy>\u0000";
+ 
+            } else if (strMessageRecu.toString().contains("hello")){
+              System.out.println("hello");
+            } else {
+              strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
+            }
 
-                                                String strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
-                                                
-                                                // If we're in debug mode (can be set in mathenjeu.xml), print communications
-                                                if(ControleurJeu.modeDebug)
-                                                {
-                                                    String timeA = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
-                                                    System.out.println("(" + timeA + ") Envoi: " + strMessageAEnvoyer);
-                                                }
+
+            // If we're in debug mode (can be set in mathenjeu.xml), print communications
+            if(ControleurJeu.modeDebug)
+            {
+              String timeA = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
+              System.out.println("(" + timeA + ") Envoi: " + strMessageAEnvoyer);
+            }
 
             // On remet la variable contenant le numéro de commande
             // à retourner à -1, pour dire qu'il n'est pas initialisé
@@ -379,6 +399,7 @@ public class ProtocoleJoueur implements Runnable
     GestionnaireTemps objGestionnaireTemps = GestionnaireTemps.getInstance();
     
     Moniteur.obtenirInstance().debut( "ProtocoleJoueur.traiterCommandeJoueur" );
+    
     
     // Déclaration d'une variable qui permet de savoir si on doit retourner 
     // une commande au client ou si ce n'était qu'une réponse du client 

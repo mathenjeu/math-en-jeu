@@ -52,6 +52,7 @@
     <!-- Pour la classe ServeurJeu.Communications.ProtocoleJoueur -->
     <protocole>
         <connexion>Le client $$CLIENT$$ est connecte</connexion>
+        <policy_request>policy request</policy_request>
         <canal_ferme>Le canal de communication entre le serveur et le client est ferme</canal_ferme>
         <message_recu>Message recu :&#160;</message_recu>
         <erreur_reception>Une erreur est survenue lors de la reception du message du client</erreur_reception>
