@@ -63,7 +63,7 @@ public class GestionnaireCommunication
   }
   
   private GestionnaireCommunication() {
-    GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+    GestionnaireConfiguration config = GestionnaireConfiguration.getInstance();
     
     
     intPort = config.obtenirNombreEntier( "gestionnairecommunication.port" );

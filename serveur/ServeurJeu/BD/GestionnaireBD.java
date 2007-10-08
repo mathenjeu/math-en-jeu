@@ -66,7 +66,7 @@ public class GestionnaireBD
   public boolean joueurExiste(String nomUtilisateur, String motDePasse)
   {
 
-    GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+    GestionnaireConfiguration config = GestionnaireConfiguration.getInstance();
     String codeErreur = config.obtenirString( "gestionnairebd.code_erreur_inactivite" );
 
     int count=0;  //compteur du nombre d'essai de la requête
@@ -80,13 +80,13 @@ public class GestionnaireBD
         if(count!=0)
         {
           //connexionDB();
+          ControleurJeu.getInstance().createDbConnexion();
         }
-        //synchronized( requete )
-        //{
+
           Statement stmt = mConnection.createStatement();
           ResultSet rs = stmt.executeQuery("SELECT * FROM joueur WHERE alias = '" + nomUtilisateur + "' AND motDePasse = '" + motDePasse + "';");
           return rs.next();
-        //}
+          
       }
       catch (SQLException e)
       {
@@ -96,6 +96,7 @@ public class GestionnaireBD
         if(e.getSQLState().equals(codeErreur))
         {
           count++;
+          
         }
         else
         {
@@ -165,7 +166,7 @@ public class GestionnaireBD
    * @param boiteQuestions the questions box.
    */
   private void remplirBoiteQuestionAll(JoueurHumain pJoueur, BoiteQuestions boiteQuestions) {
-    String lUrl = GestionnaireConfiguration.obtenirInstance().obtenirString("controleurjeu.url-question");
+    String lUrl = GestionnaireConfiguration.getInstance().obtenirString("controleurjeu.url-question");
     
     String lSql = "SELECT distinct q.*, qd.*, tr.nomType FROM question q, question_details qd, langues l, typereponse tr " +
       "where q.cleQuestion = qd.question_id and qd.langue_id = l.id and l.nom_court = ? " +
@@ -216,7 +217,7 @@ public class GestionnaireBD
    */
   public void remplirBoiteQuestions( JoueurHumain pJoueur, BoiteQuestions boiteQuestions) {
     
-    String lUrl = GestionnaireConfiguration.obtenirInstance().obtenirString("controleurjeu.url-question");
+    String lUrl = GestionnaireConfiguration.getInstance().obtenirString("controleurjeu.url-question");
     
     String lSql = "SELECT distinct q.*, qd.*, tr.nomType FROM question q, question_details qd, langues l, typereponse tr " +
                   "where " +
@@ -298,7 +299,7 @@ public class GestionnaireBD
 
     Vector<String> liste = new Vector<String>();
     
-    String URLMusique = GestionnaireConfiguration.obtenirInstance().obtenirString("musique.url");
+    String URLMusique = GestionnaireConfiguration.getInstance().obtenirString("musique.url");
     String strRequeteSQL = "SELECT musique_Fichiers.nomFichier FROM musique_Fichiers,musique_Fichiers_Categories,musique_Categories,musique_Categorie_Joueur WHERE ";
     strRequeteSQL       += "musique_Fichiers.cleFichier = musique_Fichiers_Categories.cleFichier AND ";
     strRequeteSQL       += "musique_Fichiers_Categories.cleCategorie = musique_Categories.cleCategorie AND ";

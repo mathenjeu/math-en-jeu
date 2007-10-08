@@ -65,7 +65,7 @@ public final class GenerateurPartie
     Random objRandom = new Random();
                 
                 // Obtention de la configuration du serveur pour savoir ce que vont vendre les magasins
-                GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+                GestionnaireConfiguration config = GestionnaireConfiguration.getInstance();
                 
                 // Obtention du nombre d'objets maximal en vente par magasin
                 int maxNbObjetsAVendre = reglesPartie.obtenirMaxObjetsVente();//Integer.valueOf(config.obtenirString("controleurjeu.salles-initiales.regles.max-objet-en-vente-par-magasin"));

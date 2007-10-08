@@ -19,7 +19,7 @@ public class Moniteur
 	
 	private Moniteur()
 	{
-		_fichier = GestionnaireConfiguration.obtenirInstance().obtenirString( "monitor.fichier-sortie" );
+		_fichier = GestionnaireConfiguration.getInstance().obtenirString( "monitor.fichier-sortie" );
 	}
 	
 	public static Moniteur obtenirInstance()

@@ -151,7 +151,7 @@ public class ParametreIA {
 	public ParametreIA()
 	{
 		// Aller chercher la référence vers le gestionnaire de configuration
-		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+		GestionnaireConfiguration config = GestionnaireConfiguration.getInstance();
 		
 		// Créer le tableau contenant l'info pour chaque objet utilisable
 		tParametresIAObjetUtilisable = new ParametreIAObjet[1];
