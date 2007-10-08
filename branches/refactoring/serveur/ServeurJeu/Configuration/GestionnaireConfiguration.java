@@ -1,81 +1,81 @@
 package ServeurJeu.Configuration;
 
 import java.util.List;
+
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.NodeList;
 
-import ServeurJeu.ControleurJeu;
-
-public class GestionnaireConfiguration 
+//TODO : remove the obtenirXXX and let the 
+public class GestionnaireConfiguration extends XMLConfiguration
 {
   
   private static class GestionnaireConfigurationHolder {
     private final static GestionnaireConfiguration INSTANCE = new GestionnaireConfiguration();
   }
   
-  private static GestionnaireConfiguration _instance = null;
-  private XMLConfiguration _config = null;
-  private static final String _FICHIER_CONFIG = "mathenjeu.xml";
+  static private Logger objLogger = Logger.getLogger( GestionnaireConfiguration.class );
   
-  private GestionnaireConfiguration()
-  {
-    init();
+  //private static GestionnaireConfiguration _instance = null;
+  //private XMLConfiguration _config = null;
+  private static final String FICHIER_CONFIG = "mathenjeu.xml";
+  
+  private GestionnaireConfiguration() {
+    try {
+      load(FICHIER_CONFIG);
+    } catch (ConfigurationException e) {
+      objLogger.log(Level.FATAL, e.getMessage(), e);
+    }
+
   }
   
-  private void init()
-  { 
+  /*
+  private void init() { 
     try 
     {
-      _config = new XMLConfiguration( _FICHIER_CONFIG );
+      _config = new XMLConfiguration( FICHIER_CONFIG );
     } 
     catch (ConfigurationException e) 
     {
       e.printStackTrace();
     }
   }
+  */
   
-  public static GestionnaireConfiguration obtenirInstance()
+  public static GestionnaireConfiguration getInstance()
   {
     return GestionnaireConfigurationHolder.INSTANCE;
-    /*
-    if( _instance == null )
-    {
-      _instance = new GestionnaireConfiguration();
-    }
-      return _instance;
-      */
   }
   
   public int obtenirNombreEntier( String id )
   {
-    return _config.getInt( id );
+    return getInt( id );
   }
   
   public String obtenirString( String id )
   {
-    return _config.getString( id );
+    return getString( id );
   }
   
   public float obtenirNombreDecimal( String id )
   {
-    return _config.getFloat( id );
+    return getFloat( id );
   }
   
   public boolean obtenirValeurBooleenne( String id )
   {
-    return _config.getBoolean( id );
+    return getBoolean( id );
   }
         
   public List obtenirListe( String id )
   {
-    return _config.getList( id );
+    return getList( id );
   }
         
         public Document getDocument()
         {
-            return _config.getDocument();
+            return getDocument();
         }
 }

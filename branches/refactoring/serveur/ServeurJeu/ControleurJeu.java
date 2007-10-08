@@ -141,7 +141,7 @@ public class ControleurJeu
   {
     super();
 
-    GestionnaireConfiguration lConfig = GestionnaireConfiguration.obtenirInstance();
+    GestionnaireConfiguration lConfig = GestionnaireConfiguration.getInstance();
 
     modeDebug = lConfig.obtenirValeurBooleenne("controleurjeu.debug");
 
@@ -177,8 +177,8 @@ public class ControleurJeu
    * Create a connexion to the database
    *
    */
-  private void createDbConnexion() {
-    GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+  public void createDbConnexion() {
+    GestionnaireConfiguration config = GestionnaireConfiguration.getInstance();
     String driver = config.obtenirString( "gestionnairebd.jdbc-driver" );
     String hote = config.obtenirString( "gestionnairebd.hote" );
     String utilisateur = config.obtenirString( "gestionnairebd.utilisateur" );
@@ -202,7 +202,7 @@ public class ControleurJeu
 
   public void demarrer()
   {
-    GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+    GestionnaireConfiguration config = GestionnaireConfiguration.getInstance();
 
     int intStepSynchro = config.obtenirNombreEntier( "controleurjeu.synchro.step" );
     GestionnaireTemps.getInstance().ajouterTache( TacheSynchroniser.getInstance(), intStepSynchro );
@@ -478,7 +478,7 @@ public class ControleurJeu
 
 
   public TreeMap getRooms() {
-    GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+    GestionnaireConfiguration config = GestionnaireConfiguration.getInstance();
     GestionnaireBD lBD = new GestionnaireBD(mConnection);
     lBD.loadRooms(config.obtenirString("controleurjeu.gametype"));
     return (TreeMap)lstSalles.clone();

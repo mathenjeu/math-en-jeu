@@ -137,7 +137,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     positionWinTheGame = new Point(-1, -1);
     this.butDuJeu = butDuJeu;
     
-    GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+    GestionnaireConfiguration config = GestionnaireConfiguration.getInstance();
     _MAX_NB_JOUEURS = config.obtenirNombreEntier( "table.max-nb-joueurs" );
     
     // Faire la référence vers le gestionnaire d'événements et le 
@@ -669,7 +669,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     // Contient le niveau de difficulté que le joueur désire pour
     // les joueurs virtuels
     // on obtient la difficulté par défaut à partir du fichier de configuration
-    GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+    GestionnaireConfiguration config = GestionnaireConfiguration.getInstance();
     
     int intDifficulteJoueurVirtuel = config.obtenirNombreEntier("joueurs-virtuels.difficulte_defaut");
     //int intDifficulteJoueurVirtuel = ParametreIA.DIFFICULTE_MOYEN;
