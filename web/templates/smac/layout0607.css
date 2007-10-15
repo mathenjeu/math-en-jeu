@@ -1,0 +1,340 @@
+/**
+
+ * Cascading style sheet (CSS 1.0) pour SMAC
+
+ * Auteur: Sylvain Halle <sylvain@leduotang.com>
+
+ * Date:   2005-06-04
+
+ * Modif:  2006-08-08a
+
+ */
+
+
+
+html, body {
+
+	color: black;
+
+  height: 100%;
+
+  width: 100%;
+
+  margin: 0px;
+
+}
+
+
+
+body {
+
+	font-size: 12px;
+
+	font-family: Arial, Helvetica, sans-serif;
+
+	color: black;
+
+}
+
+
+
+a.topmenu, a.topmenu:visited, a.topmenu:active {
+
+  text-decoration: none;
+
+  color: white;
+
+  font-size:125%;
+
+  margin-left: 2pt;
+
+  margin-right: 2pt;
+
+}
+
+
+
+a.topmenu:hover {
+
+  color: orange;
+
+  text-decoration:underline;
+
+}
+
+
+
+a.submenu, a.submenu:visited, a.submenu:active {
+
+  text-decoration: none;
+
+  color: black;
+
+  font-size:125%;
+
+  margin-left: 2pt;
+
+  margin-right: 2pt;
+
+}
+
+
+
+a.submenu:hover {
+
+  color: darkblue;
+
+  text-decoration:underline;
+
+}
+
+
+
+.header {
+
+  height:157px;
+
+  width:100%;
+
+}
+
+
+
+#header-l {
+
+  width:356px;
+
+  height:157px;
+
+
+}
+
+
+
+#header-b {
+
+  
+
+  vertical-align:bottom;
+
+  text-align:right;
+
+  color:white;
+
+}
+
+
+
+#header-r {
+
+  width:25px;
+
+  
+
+}
+
+
+
+#content-border-l {
+
+  width:32px;
+
+}
+
+
+
+#content {
+
+  vertical-align:top;
+
+  color:black;
+
+}
+
+
+
+#content-border-r {
+
+  width:32px;
+
+
+}
+
+
+
+.footer {
+
+  height:57px;
+
+  width:100%;
+
+}
+
+
+
+#footer-l {
+
+  width:27px;
+
+  height:57px;
+
+
+}
+
+
+
+#footer-b {
+
+
+  vertical-align:middle;
+
+  text-align:left;
+
+  font-size:80%;
+
+  color:white;
+
+}
+
+
+
+#footer-r {
+
+  width:220px;
+
+}
+
+
+
+#div-topmenu {
+
+  margin-bottom:14px;
+
+}
+
+
+
+#div-submenu {
+
+  margin-bottom:12px;
+
+}
+
+
+
+div.fait-main p {
+
+  font-family: Comic Sans MS, Helvetica, sans-serif;
+
+  font-size: 11pt;
+
+  font-weight: normal;
+
+  font-style: normal;
+
+}
+
+
+
+.nom-collaborateur {
+
+  color: #042;
+
+  font-weight: bold;
+
+}
+
+
+
+.auteur {
+
+  font-style: italic;
+
+}
+
+
+
+span.formule {
+
+  font-family: Times New Roman, Times, serif;
+
+  font-size: 120%; /* To compensate for Times being smaller than Helv */
+
+  color: #600;
+
+}
+
+
+
+p.formule {
+
+  font-family: Times New Roman, Times, serif;
+
+  font-size: 120%; /* To compensate for Times being smaller than Helv */
+
+  text-align: center;
+
+  color: #600;
+
+}
+
+
+
+span.theoreme {
+
+  color:darkgreen;
+
+  font-weight: bold;
+
+}
+
+
+
+span.demonstration {
+
+  color:darkorange;
+
+  font-weight: bold;
+
+}
+
+
+
+span.enonce {
+
+  color:#222;
+
+  font-style: italic;
+
+}
+
+
+
+h1.titre-fait-mathematique {
+
+  margin-bottom: 0pt;
+
+}
+
+
+
+p.titre-fait-mathematique {
+
+  margin-top: 6pt;
+
+  font-size: 125%;
+
+  color: #222;
+
+  font-weight: bold;
+
+}
+
+.imageCentre
+{
+  text-align:center;
+  margin-top:5px;
+  margin-bottom:5px;
+  padding:0px;
+}
+
