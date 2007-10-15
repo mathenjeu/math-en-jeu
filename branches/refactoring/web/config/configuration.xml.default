@@ -1,0 +1,82 @@
+<?xml version ='1.0' encoding='UTF-8' ?>
+<config>
+	<langue></langue>
+	<adresseWeb></adresseWeb>
+	<nbNouvelles></nbNouvelles>
+	<nbJoueurs></nbJoueurs>
+	<minParties></minParties>
+	<nbJours></nbJours>
+	<template></template>
+	<css></css>
+	<nomCourriel></nomCourriel>
+	<courriel></courriel>
+	<serveurSMTP></serveurSMTP>
+	<portSMTP></portSMTP>
+	<utilisateurSMTP></utilisateurSMTP>
+	<motDePasseSMTP></motDePasseSMTP>
+	<sujet_courriel_inscription><![CDATA[Confirmation de l'inscription √† Math en jeu.]]></sujet_courriel_inscription>
+	<courriel_inscription><![CDATA[Bonjour [ALIAS],<p>
+Ce courriel confirme que votre inscription √† math en jeu s'est bien d√©roul√©e.<br>
+Vous n'avez maintenant qu'√† suivre le lien ci-dessous pour confirmer votre inscription.<br>
+Si vous ne pouvez cliquer directement sur le lien vous pouvez le copier et le coller dans votre navigateur.<p>
+<a target="_blank" href="[ADRESSE_SITE_WEB]confirmation-courriel.php?ID=[CLE_CONFIRMATION]"> [ADRESSE_SITE_WEB]confirmation-courriel.php?ID=[CLE_CONFIRMATION]</a><p>
+Merci et bon Math en jeu!]]></courriel_inscription>
+	<sujet_courriel_pass_perdu><![CDATA[Math en jeu!]]></sujet_courriel_pass_perdu>
+	<courriel_pass_perdu><![CDATA[Voici vos informations personnelles.<br>
+Votre alias : [ALIAS]<br>
+Votre Mot de passe : [MOT_DE_PASSE]]]></courriel_pass_perdu>
+
+	<tempDir>/tmp</tempDir>
+	<latexApp><![CDATA[openin_any=p /usr/bin/latex]]></latexApp>
+	<xslFile></xslFile>
+	<xalanApp></xalanApp>
+	<latexHeader><![CDATA[%% PREAMBULE POUR GENERATION FICHIERS QUESTIONS
+%% Sylvain Halle 2006-10-18
+%% Ce fichier est recopie au dÈbut de toutes les questions et retroactions
+%% generees individuellement
+\documentclass[legalpaper, 12pt]{article}
+\usepackage[francais]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage[latin1]{inputenc}
+\usepackage{multirow}
+\usepackage{wasysym}
+
+%% Changements SH
+%% Marges LaTeX par dÈfaut
+%\setlength{\topmargin}{-2cm}
+%\setlength{\textheight}{23.5cm}
+\setlength{\textwidth}{12cm}
+%\setlength{\oddsidemargin}{-1cm}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+
+%% Changements SH
+\usepackage{helvet} %% Remplace sans-serif par Helvetica
+\renewcommand{\familydefault}{\sfdefault} %% Fonte par dÈfaut = sans-serif
+\usepackage{sfmath} %% Utilise le sans-serif mÍme en mode math
+\pagestyle{empty} %% Pas de numÈro de page
+
+%% Redefinition du compteur des environnements enumerate pour afficher a), b), ...
+\renewcommand{\labelenumi}{\alph{enumi})}
+
+%\pdfoutput=1
+
+\begin{document}]]></latexHeader>
+	<latexFooter><![CDATA[\begin{flushright}\textcolor{white}{.}\end{flushright}
+\end{document}]]></latexFooter>
+	
+	<epsDir></epsDir>
+	<flashDir></flashDir>
+	<epsWebDir></epsWebDir>
+	<flashWebDir></flashWebDir>
+	
+	<dbHote></dbHote>
+	<dbUtilisateur></dbUtilisateur>
+	<dbMotDePasse></dbMotDePasse>
+	<dbSchema></dbSchema>
+</config>
