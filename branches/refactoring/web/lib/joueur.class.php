@@ -30,21 +30,15 @@ class Joueur extends Utilisateur
     private $province;
     private $dateInscription;
     private $dateDernierAccess;
-    private $aliasAdministrateur;
-    private $cleAdministrateur;
-    private $cleGroupe;
     private $cleLangue;
+    
+    private $languageShortName;
     //var $peutCreerSalle;
     
     private $partiesCompletes;
     private $tempsPartie;
     private $nbVictoire;
     private $totalPoints;
-    
-    private $aimeMaths;
-    private $mathConsidere;
-    private $mathEtudie;
-    private $mathDecouvert;
 
 
     //**************************************************************************
@@ -197,6 +191,7 @@ class Joueur extends Utilisateur
     // Sortie:          retourne faux si l'administrateur n'existe pas, vrai sinon
     // Note:            l'alias doit être dans la table administrateur
     //**************************************************************************
+    /*
     function asgAdministrateur($alias)
     {
       if($alias!="")
@@ -219,7 +214,8 @@ class Joueur extends Utilisateur
       return true;
       
     }
-
+*/
+    
     //**************************************************************************
     // Sommaire:        Assigner un administrateur au joueur courant avec la clé
     //                  de l'administrateur
@@ -227,6 +223,7 @@ class Joueur extends Utilisateur
     // Sortie:          
     // Note:            
     //**************************************************************************
+    /*
     function asgAdministrateurCle($cle)
     {
 
@@ -245,6 +242,7 @@ class Joueur extends Utilisateur
         }
 
     }
+    */
     
     //**************************************************************************
     // Sommaire:        assigner toutes les informations au joueur
@@ -270,12 +268,12 @@ class Joueur extends Utilisateur
     // Note:            on apelle la focntion parente pour une partie des données
     //**************************************************************************
     function asgJoueur($nom,$prenom,$alias,$motDePasse,$courriel,
-        $estConfirmer,$etablissement,$niveau,$sexe,$ville,$pays,$province,
-        $dateInscription,$categorie,$aimeMaths,$mathConsidere,$mathEtudie,$mathDecouvert)
+        $estConfirmer,$etablissement,$sexe,$ville,$pays,$province,
+        $dateInscription)
     {
       
         parent::asgUtilisateur($nom,$prenom,$alias,$motDePasse,$courriel,
-            $estConfirmer,$etablissement,$niveau,$categorie);
+            $estConfirmer,$etablissement);
 		
 		$this->asgSexe($sexe);
         $this->asgVille($ville);
@@ -283,14 +281,28 @@ class Joueur extends Utilisateur
         $this->asgProvince($province);
         $this->asgDateInscription($dateInscription);
         
-        $this->aimeMaths = $aimeMaths;
-        $this->mathConsidere=$mathConsidere;
-        $this->mathEtudie=$mathEtudie;
-        $this->mathDecouvert=$mathDecouvert;
         
         $this->INVARIANTS();
     }
 
+    
+    /**
+     * Set the language for the current user 
+     *
+     * @param string $short_name : the short name of a language(fr, en ,...)
+     */
+    function setLanguage($short_name) {
+      $this->languageShortName = $short_name;  
+      
+      $sql="select language_id from language where short_name='" . $short_name . "'";
+      $result=$this->mysqli->query($sql);
+      
+      if ($result) {
+        $row=$result->fetch_row();
+        $this->cleLangue = $row[0];
+      }
+    }
+    
     /*******************************************************************************
     Fonction : suggestionAlias($alias)
     Paramètre :
@@ -359,13 +371,13 @@ class Joueur extends Utilisateur
     function calculNbPartieTempsJouee()
     {
 
-        $sql="SELECT sum( partie.dureePartie ) AS temps,
-                count( partie.clePartie ) AS nbPartie,
-                sum( partiejoueur.gagner ) AS victoire,
-                sum( partiejoueur.pointage) AS totalPoints
-              FROM partiejoueur, partie
-              WHERE partiejoueur.clePartie = partie.clePartie
-              AND cleJoueur=" . $this->reqCle();
+        $sql="SELECT sum( game.duration ) AS temps,
+                count( game.game_id ) AS nbPartie,
+                sum( game_user.has_won ) AS victoire,
+                sum( game_user.score) AS totalPoints
+              FROM game_user, game
+              WHERE game_user.game_id = game.game_id
+              AND user_id=" . $this->reqCle();
               
         $result=$this->mysqli->query($sql);
         $row=$result->fetch_object();
@@ -388,7 +400,7 @@ class Joueur extends Utilisateur
     function chargerMySQL($alias,$motDePasse)
     {
 
-        $sql="select cleJoueur,motDePasse from joueur where alias='" . addslashes($alias) . "' and motDePasse=password('" . addslashes($motDePasse) . "')";
+        $sql="select user_id,password from user where username='" . addslashes($alias) . "' and password=password('" . addslashes($motDePasse) . "')";
         $result=$this->mysqli->query($sql);
 
         if($result->num_rows==0)
@@ -398,7 +410,7 @@ class Joueur extends Utilisateur
         else
         {
 		  $row=$result->fetch_object();
-		  $this->chargerMySQLCle($row->cleJoueur);
+		  $this->chargerMySQLCle($row->user_id);
 		  return true;
 		}
     }
@@ -413,7 +425,7 @@ class Joueur extends Utilisateur
     function chargerMySQLCle($cle)
     {
 
-        $sql="select * from joueur where cleJoueur=" . $cle;
+        $sql="select * from user where user_id=" . $cle;
         $result=$this->mysqli->query($sql);
 
         if($result->num_rows==0)
@@ -421,33 +433,25 @@ class Joueur extends Utilisateur
 
         $row=$result->fetch_object();
         $this->asgJoueur(
-			stripcslashes($row->nom),
-			stripcslashes($row->prenom),
-			$row->alias,
-			stripcslashes($row->motDePasse),
-	        $row->adresseCourriel,
-			$row->estConfirme,
-			$row->cleEtablissement,
-			$row->cleNiveau,
+			stripcslashes($row->last_name),
+			stripcslashes($row->name),
+			$row->username,
+			stripcslashes($row->password),
+	        $row->email,
+			$row->email_is_confirmed,
+			$row->school_id,
 			$row->sexe,
-	        stripcslashes($row->ville),
-			stripcslashes($row->pays),
+	        stripcslashes($row->city),
+			stripcslashes($row->country),
 			stripcslashes($row->province),
-			$row->dateInscription,
-			$row->cleCategorie,
-	        $row->sondageQ1,
-			$row->sondageQ2,
-			$row->sondageQ3,
-			$row->sondageQ4);
+			$row->inscription_date);
         
-        $this->asgCle($row->cleJoueur);
-        $this->asgAdministrateurCle($row->cleAdministrateur);
-        $this->cleGroupe=$row->cleGroupe;
+        $this->asgCle($row->user_id);
         $this->calculNbPartieTempsJouee();
-        $this->cleConfirmation=$row->cleConfirmation;
+        $this->cleConfirmation=$row->email_confirmation_key;
 
-	    $this->cleLangue=$row->cleLangue;
-	
+	    $this->cleLangue=$row->language_id;
+	    $this->languageShortName = $this->getLanguageShortName();
 
         return true;
 
@@ -468,7 +472,7 @@ class Joueur extends Utilisateur
         do
         {
             $cle = $this->genererChaineAleatoire(30);
-            $sql = "select cleConfirmation from joueur where cleConfirmation='" . $cle . "'";
+            $sql = "select email_confirmation_key from user where email_confirmation_key='" . $cle . "'";
             $result=$this->mysqli->query($sql);
         }
         while($result->num_rows!=0);
@@ -496,32 +500,27 @@ class Joueur extends Utilisateur
             || $this->validerCourrielUnique($this->reqCourriel())==false)
         return false;
 
+        
+        //TODO : fix the level for the user
 
-      $sql = "INSERT INTO joueur (prenom, nom, alias,
-            motDePasse, adresseCourriel, ville, province, pays, cleNiveau, sexe,
-            sondageQ1, sondageQ2, sondageQ3, sondageQ4, dateInscription,
-            cleConfirmation,estConfirme,cleEtablissement,cleGroupe,cleAdministrateur,cleLangue) VALUES(";
+      $sql = "INSERT INTO user (name, last_name, username,
+            password, email, city, province, country, sexe,
+            date, email_confirmation_key,email_is_confirmed,
+            school_id, language_id) VALUES(";
       
       $sql .= "'"
             .addslashes($this->reqPrenom())."', '"
             .addslashes($this->reqNom())."', '"
-            .$this->reqAlias()."',password('"
+            .$this->reqAlias(). "',password('"
             .addslashes($this->reqMotdepasse())."'), '"
             .$this->reqCourriel()."', '"
             .addslashes($this->reqVille())."','"
             .addslashes($this->reqProvince())."', '"
             .addslashes($this->reqPays())."', "
-            .$this->reqNiveau().","
             .$this->reqSexe().","
-            .$this->reqAimeMaths().", "
-            .$this->reqMathConsidere().", "
-            .$this->reqMathEtudie().", "
-            .$this->reqMathDecouvert().",'"
             .$this->reqDateInscription()."','"
             .$this->reqCleConfirmation() . "',0,"
             .addslashes($this->reqEtablissement()) . ","
-            .$this->reqCleGroupe() . ","
-            .$this->reqCleAdministrateur() . ","
             .$this->reqCleLangue() . ")";
 
         $result=$this->mysqli->query($sql);
@@ -545,7 +544,7 @@ class Joueur extends Utilisateur
     function validerAliasUnique($alias)
     {
 
-        $sql="select * from joueur where alias='" . addslashes(strtolower($alias)) . "'";
+        $sql="select * from user where username='" . addslashes(strtolower($alias)) . "'";
         $result=$this->mysqli->query($sql);
 
         if($result->num_rows!=0)
@@ -563,8 +562,8 @@ class Joueur extends Utilisateur
     //**************************************************************************
     function validerCourrielUnique($courriel)
     {
-
-        $sql="select * from joueur where adresseCourriel='" . strtolower($courriel) . "'";
+      echo get_class($this);
+        $sql = "select 1 from `user` where email='" . strtolower($courriel) . "'";
         $result=$this->mysqli->query($sql);
         if($result->num_rows!=0)
             return false;
@@ -604,7 +603,7 @@ class Joueur extends Utilisateur
       	if($this->validerCourrielUnique($courriel)==true)
         	return false;
 
-        $sql="select * from joueur where adresseCourriel='" . $courriel . "'";
+        $sql="select * from user where email='" . $courriel . "'";
         $result=$this->mysqli->query($sql);
         $row = $result->fetch_object();
         
@@ -634,27 +633,20 @@ class Joueur extends Utilisateur
       $this->INVARIANTS();
       PRECONDITION($this->reqCle()>=0);
 
-      $sql ="update joueur set nom='" . addslashes($this->reqNom()) .
-            "',prenom='" . addslashes($this->reqPrenom()) .
-            "',ville='" . addslashes($this->reqVille()) .
-            "',pays='" .addslashes($this->reqPays()) .
+      $sql ="update user set last_name='" . addslashes($this->reqNom()) .
+            "',name='" . addslashes($this->reqPrenom()) .
+            "',city='" . addslashes($this->reqVille()) .
+            "',country='" .addslashes($this->reqPays()) .
             "',province='" . addslashes($this->reqProvince()) .
-            "',cleNiveau=" . $this->reqNiveau() .
-            ",motDePasse='" . addslashes($this->reqMotDePasse()) .
-            "',cleEtablissement=" . addslashes($this->reqEtablissement()) .
-            ",adresseCourriel='" . $this->reqCourriel() .
-            "',cleConfirmation='" . $this->reqCleConfirmation() .
-            "',estConfirme=" . $this->reqEstConfirmer() .
-            ",alias='" . $this->reqAlias() .
+            "',password='" . addslashes($this->reqMotDePasse()) .
+            "',school_id=" . addslashes($this->reqEtablissement()) .
+            ",email='" . $this->reqCourriel() .
+            "',email_confirmation_key='" . $this->reqCleConfirmation() .
+            "',email_is_confirmed=" . $this->reqEstConfirmer() .
+            ",username='" . $this->reqAlias() .
             "',sexe=" . $this->reqSexe() .
-            ",cleLangue=" . $this->reqCleLangue() .
-            ",cleAdministrateur=" . $this->reqCleAdministrateur() .
-            ",cleGroupe=" . $this->reqCleGroupe() .
-            ",sondageQ1=" . $this->reqAimeMaths() .
-            ",sondageQ2=" . $this->reqMathConsidere() .
-            ",sondageQ3=" . $this->reqMathEtudie() .
-            ",sondageQ4=" . $this->reqMathDecouvert() .
-            " where cleJoueur=" . $this->reqCle();
+            ",langue_id=" . $this->reqCleLangue() .
+            " where user_id=" . $this->reqCle();
 
         $result=$this->mysqli->query($sql);
 
@@ -671,7 +663,7 @@ class Joueur extends Utilisateur
     //**************************************************************************
     function miseAJourMotDePasseMySQL($motDePasse)
     {
-      $sql ="update joueur set motDePasse=password('" . addslashes($motDePasse) . "') where cleJoueur=" . $this->reqCle();
+      $sql ="update user set password=password('" . addslashes($motDePasse) . "') where user_id=" . $this->reqCle();
       $result=$this->mysqli->query($sql);
       $this->chargerMySQLCle($this->reqCle());
 	}
@@ -687,7 +679,7 @@ class Joueur extends Utilisateur
     {
       PRECONDITION($this->reqCle()>=0);
 
-        $sql="delete from joueur where cleJoueur=" . $this->reqCle();
+        $sql="delete from user where user_id=" . $this->reqCle();
         $result=$this->mysqli->query($sql);
 
 
@@ -771,6 +763,10 @@ class Joueur extends Utilisateur
     function reqTotalPoints()
     {
 	  return $this->totalPoints;
+	}
+	
+	function getLanguageShortName() {
+	  return $this->languageShortName;
 	}
 
 }

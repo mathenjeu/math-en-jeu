@@ -44,8 +44,8 @@ function main()
     if(!isset($_GET["action"]))
     {
       etape1("");
-      $joueur=new Joueur($_SESSION["mysqli"]);
-      $_SESSION["joueurInscription"]=$joueur;
+      $joueur = new Joueur($_SESSION["mysqli"]);
+      $_SESSION["joueurInscription"] = $joueur;
     }
     else
     {
@@ -56,10 +56,7 @@ function main()
         redirection("cookie.php",0);
         exit(0);
       }
-      else
-      {
-        $joueur=$_SESSION["joueurInscription"];
-      }
+      
 		
 	  //changement de niveau scolaire, il faut rafr�chir la liste des �tablissements
       if($_GET["action"]=="etablissement")
@@ -68,7 +65,7 @@ function main()
       }
       elseif($_GET["action"]=="etape2")
       {
-      	(($erreur = validerEtape1($joueur)))!="" ? etape1($erreur) : etape2("");
+      	(($erreur = validerEtape1()))!="" ? etape1($erreur) : etape2("");
       }
       elseif($_GET["action"]=="etape3")
       {
@@ -114,28 +111,31 @@ Fonction : validerEtape1
 Param�tre : $joueur : le joueur qui est en train de s'inscrire
 Description : valider et assign� les informations de l'�tape 1
 *******************************************************************************/
-function validerEtape1($joueur)
+function validerEtape1()
 {
     global $lang;
-
-    if($_POST["prenom"]=="")
-        return $lang['erreur_prenom'];
-    elseif($_POST["nom"]=="")
-        return $lang['erreur_nom'];
-    elseif($_POST["ville"]=="")
-        return $lang['erreur_ville'];
-    elseif($_POST["province"]=="")
-        return $lang['erreur_province'];
-    elseif($_POST["pays"]=="")
-        return $lang['erreur_pays'];
-    elseif(!Courriel::validerCourriel($_POST["courriel"]))
-        return $lang['erreur_courriel'];
-    elseif($joueur->validerCourrielUnique($_POST["courriel"])==false)
-        return $lang['doublon_courriel'];
-    elseif($_POST["courriel"]!=$_POST["courriel2"])
-        return $lang['erreur_resaisie_courriel'];
-    else
-    {
+    $error = "";
+    $joueur = $_SESSION["joueurInscription"];
+    
+    if($_POST["prenom"]=="") {
+      $error = $lang['erreur_prenom'];
+    } elseif($_POST["nom"]=="") {
+      $error = $lang['erreur_nom'];
+    } elseif($_POST["ville"]=="") {
+      $error = $lang['erreur_ville'];
+    } elseif($_POST["province"]=="") {
+      $error = $lang['erreur_province'];
+    } elseif($_POST["pays"]=="") {
+      $error = $lang['erreur_pays'];
+    } elseif(!Courriel::validerCourriel($_POST["courriel"])) {
+      $error = $lang['erreur_courriel'];
+    } elseif($joueur->validerCourrielUnique($_POST["courriel"])==false) {
+      $error = $lang['doublon_courriel'];
+    } elseif($_POST["courriel"]!=$_POST["courriel2"]) {
+      $error = $lang['erreur_resaisie_courriel'];
+    }
+     
+    if ($error == "") {
         $joueur->asgNom($_POST["nom"]);
         $joueur->asgPrenom($_POST["prenom"]);
         $joueur->asgVille($_POST["ville"]);
@@ -145,14 +145,13 @@ function validerEtape1($joueur)
         $joueur->validerCourrielUnique($_POST["courriel"]);
         $joueur->asgCourriel($_POST["courriel"]);
         
-        $joueur->asgCleLangue(LANG_FRENCH);
-        if(isset($_SESSION['langage'])) {
-          if ($_SESSION['langage'] == "english") {
-            $joueur->asgCleLangue(LANG_ENGLISH);
-          }
-        }
+        $joueur->setLanguage($_SESSION['langage']);
+
         $_SESSION["joueurInscription"] = $joueur;
         return "";
+        
+    } else {
+      return $error;
     }
 }
 /*******************************************************************************
@@ -160,9 +159,12 @@ Fonction : validerEtape2
 Param�tre : $joueur : le joueur qui est en train de s'inscrire
 Description : valider et assign� les informations de l'�tape 2
 *******************************************************************************/
-function validerEtape2($joueur)
+function validerEtape2()
 {
   global $lang;
+  
+
+  $joueur = $_SESSION['joueurInscription'];
 
   if(!$joueur->validerAliasUnique($_POST["alias"]))
     return $lang['doublon_alias'];
@@ -179,13 +181,7 @@ function validerEtape2($joueur)
    	{
 		return $lang['doublon_alias'];
 	}
-    if(isset($_POST["aliasProf"]))
-    {
-    	if(!$joueur->asgAdministrateur($_POST["aliasProf"]))
-    	{
-	  		return $lang['alias_prof_introuvable'];
-	 	}
-	}
+    
 	$joueur->asgAlias($_POST["alias"]);
 	$joueur->asgMotDePasse($_POST["motDePasse"]);
 	
@@ -201,14 +197,8 @@ function validerEtape2($joueur)
 	$joueur->asgNiveau($_POST["niveau"]);
 	
 	
-	
-	//on inscrit le joueur � cet �tape pour s'assurer que le nom d'utlisateur
-	//est r�server pour ce joueur, au cas ou 2 joueurs s'inscrive en m�me temps avec
-	//le m�me nom d'utlisateur
-	$joueur->asgAimeMaths(3);
-  $joueur->asgMathConsidere(3);
-  $joueur->asgMathEtudie(3);
-  $joueur->asgMathDecouvert(3);
+
+
   if($joueur->insertionMySQL()) {
     if ($joueur->reqCourriel() != "") {
 		  $joueur->envoyerCourrielConfirmation(); 
@@ -291,22 +281,19 @@ function etape2($erreur)
     $smarty = new MonSmarty($_SESSION['langage']);
     global $lang;
     
-    $niveau=7;
-    if(isset($_POST["niveau"]))
+    //$niveau=7;
+    if(isset($_POST["school_type"]))
     {
-      $niveau=$_POST["niveau"];
-      $smarty->assign('niveau',$niveau);
+      $selected_school_type_id=$_POST["school_type"];
+      $smarty->assign('selected_school_type_id',$selected_school_type_id);
       $smarty->assign('alias',$_POST["alias"]);
       $smarty->assign('motDePasse',$_POST["motDePasse"]);
       $smarty->assign('motDePasse2',$_POST["motDePasse2"]);
-      if(isset($_POST['aliasProf']))
-      {
-	  		$smarty->assign('aliasProf',$_POST["aliasProf"]);
-	  }
+
     }
     else
     {
-        $smarty->assign('niveau',$niveau);
+        $smarty->assign('selected_school_type_id',0);
     }
 
     $smarty->assign('erreur',$erreur);
@@ -316,23 +303,32 @@ function etape2($erreur)
         $smarty->assign('suggestion_alias',$_SESSION["joueurInscription"]->suggestionAlias($_POST["alias"]));
     }
 
+    $arrET = getSchoolType();
+    $smarty->assign('school_type_id',array_keys($arrET[0]));
+    $smarty->assign('school_type_name',$arrET[1]);
+    
+    
     //
     // on g�n�re la liste des niveau scolaire
     // on enleve les niveau primaire,coll�gial,universitaire,grand public temporairement
+    /*
     for($i=7;$i<=11;$i++)
     {
         $niveauTexte[$i] = $lang["niveau_$i"];
     }
     $smarty->assign('niveauID',array_keys($niveauTexte));
     $smarty->assign('niveauTexte',$niveauTexte);
+    */
     
     //
     // g�n�rer la liste d'�tablissement
     //
-    $arrE = genererListeEtablissement($niveau);
+    
+    /*
+    $arrE = genererListeEtablissement($school_type_id);
     $smarty->assign('etablissementID',$arrE[0]);
     $smarty->assign('etablissementTexte',$arrE[1]);
-    
+    */
     if(isset($_POST["etablissement"]))
     {
         $smarty->assign('etablissement',$_POST["etablissement"]);

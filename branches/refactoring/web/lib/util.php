@@ -58,6 +58,58 @@ function redirection($page,$temps)
   }
 }
 
+
+
+/**
+ * Return the list of school type for the current language
+ *
+ * @return an array containing school type id and school type name
+ */
+function getSchoolType() {
+  $sql = "select st.school_type_id, st.name from school_type st , language lg where st.language_id=lg.language_id and " . 
+      "lg.short_name='" . $_SESSION['langage'] . "'";
+  
+  
+  $result = $_SESSION['mysqli']->query($sql);
+  $nb=$result->num_rows;
+  
+    
+  for($i=0;$i<=$nb;$i++) {
+    $row = $result->fetch_array(MYSQLI_NUM);
+    $arr[$i][0] = $row[0];
+    $arr[$i][1] = $row[1];
+    echo $row[0];
+  }
+      
+  
+  return $arr;
+  
+  
+}
+
+function getLevels() {
+  $sql = "select lvl.level_id, lvl.name from level lvl , language lg where lvl.languague_id=lg.language_id and " . 
+      "lg.short_name='" . $_SESSION['langage'] . "'";
+  
+  
+  $result = $_SESSION['mysqli']->query($sql);
+  $nb=$result->num_rows;
+  
+    
+  for($i=0;$i<=$nb;$i++) {
+    $row = $result->fetch_array(MYSQLI_NUM);
+    $arr[$i][0] = $row[0];
+    $arr[$i][1] = $row[1];
+  }
+      
+  
+  return $arr;
+   
+  
+  
+}
+
+
 /*******************************************************************************
 Fonction : genererListeEtablissement($niveau)
 Param�tre :
@@ -66,7 +118,7 @@ Param�tre :
 Description :
         - rediriger le client vers une autre page.
 *******************************************************************************/
-function genererListeEtablissement($niveau)
+function genererListeEtablissement($school_type_id)
 {
   	 global $lang;
     if($niveau<=6){
@@ -85,9 +137,8 @@ function genererListeEtablissement($niveau)
         $typeEtablissement="";
     }
 
-    $sql="select cleEtablissement,nom,ville from etablissement,typeetablissement
-        where typeetablissement.cleTypeEtablissement=etablissement.cleTypeEtablissement
-        AND identificateurTypeEtablissement='" . $typeEtablissement . "' ORDER BY nom";
+    $sql="select s.school_id, s.name, s.city from school s , school_type st
+        where s.school_type_id=" . $school_type_id . " ORDER BY s.name";
         
     $result = $_SESSION['mysqli']->query($sql);
     $nb=$result->num_rows;
@@ -174,6 +225,7 @@ function templates_dir(&$smarty,$dir)
 	$smarty->assign('templates',$arr);
 }
 
+/*
 function setLangage($cleLangage) {
   
   switch($cleLangage)
@@ -189,7 +241,9 @@ function setLangage($cleLangage) {
 		break;
   }
 }
+*/
 
+/*
 function getCleLangue($langage) {
   $ret=0;
   if ($langage == "en") {
@@ -200,3 +254,4 @@ function getCleLangue($langage) {
   
   return $ret;
 }
+*/

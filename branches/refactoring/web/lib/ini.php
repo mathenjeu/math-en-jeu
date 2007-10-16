@@ -60,7 +60,7 @@ define("MIN_NB_PARTIE_PALMARES",(int)$config->minParties);     	//nombre de part
 define("NB_JOUR_PALMARES",(int)$config->nbJours);          		//nombre de jour dans le calcul des palmar�s
 define("ADRESSE_SITE_WEB",(string)$config->adresseWeb);			//"http://www.smac.ulaval.ca/mathenjeu/jeu_version2/");
 define('TEMPLATES_DIR',DOC_ROOT . "templates/");				//dossier des templates
-define('TEMPLATE','templates/' . $config->template . "/");  	//dossier du template utilis�
+define('TEMPLATE','templates/' . (string)$config->template . "/");  	//dossier du template utilis�
 define('TEMPLATE_DIR',DOC_ROOT . "/" . TEMPLATE);				//chemin complet du template utilis�
 define('CSS_FILE',(string)$config->css);						//fichier css utilis�
 define("FLASH_DIR", ADRESSE_SITE_WEB . "flash/");
@@ -72,10 +72,10 @@ define("SERVEUR_SMTP",(string)$config->serveurSMTP);			//l'adresse du serveur SM
 define("USER_SMTP",(string)$config->utilisateurSMTP);			//le nom d'utilisateur du serveur SMTP
 define("PASS_SMTP",(string)$config->motDePasseSMTP);			//le mot de passe du serveur SMTP
 
-define('SUJET_COURRIEL_INSCRIPTION',utf8_decode((string)$config->sujet_courriel_inscription));	//sujet du courriel de l'inscription
-define('COURRIEL_INSCRIPTION',utf8_decode((string)$config->courriel_inscription));				//courriel envoy� lors de l'inscription
-define('SUJET_COURRIEL_PASS_PERDU',utf8_decode((string)$config->sujet_courriel_pass_perdu));	//sujet du courriel de r�cup�ration de mot de passe
-define('COURRIEL_PASS_PERDU',utf8_decode((string)$config->courriel_pass_perdu));				//courriel envoy� pour les nom d'usager ou les mot de passe perdu
+define('SUJET_COURRIEL_INSCRIPTION',(string)utf8_decode((string)$config->sujet_courriel_inscription));	//sujet du courriel de l'inscription
+define('COURRIEL_INSCRIPTION',(string)utf8_decode((string)$config->courriel_inscription));				//courriel envoy� lors de l'inscription
+define('SUJET_COURRIEL_PASS_PERDU',(string)utf8_decode((string)$config->sujet_courriel_pass_perdu));	//sujet du courriel de r�cup�ration de mot de passe
+define('COURRIEL_PASS_PERDU',(string)utf8_decode((string)$config->courriel_pass_perdu));				//courriel envoy� pour les nom d'usager ou les mot de passe perdu
 
 //constante utile pour la cr�ation des questions
 define("TEMP_DIR",(string)$config->tempDir);					//temporary dir for the questions creation
@@ -93,17 +93,13 @@ define("IMAGE_DIR",DOC_ROOT . "img/sujet");						//dossier des images pour les n
 define("LOG_FILE",DOC_ROOT . "/log/log.txt");					//fichier pour les logs
 
 
-define("LANG_FRENCH",0);
-define("LANG_ENGLISH",1);
+//define("LANG_FRENCH",0);
+//define("LANG_ENGLISH",1);
 
 
 
-//si la session n'existe pas on la d�bute
-
-
-if (session_id()=="") {
-  //d�bute la session
-
+if (session_id() == "") {
+  //start the session
   session_start();
   
 }
@@ -114,8 +110,8 @@ if (session_id()=="") {
 if (isset($_SESSION['langage']) && $_SESSION['langage'] != "" ) {
   require_once(LANGAGE_DIR . $_SESSION['langage'] . "/lang_main.php");
 } else {
-  require_once(LANGAGE_DIR . $config->langue . "/lang_main.php");
-  $_SESSION['langage'] = $config->langue;
+  require_once(LANGAGE_DIR . (string)$config->langue . "/lang_main.php");
+  $_SESSION['langage'] = (string)$config->langue;
 }
 
 
@@ -128,6 +124,28 @@ if (isset($_SESSION['langage']) && $_SESSION['langage'] != "" ) {
     
 //}
 
+/*
+if (!isset($_SESSION["mysqli"])) {
+  $mysqli=new mon_mysqli((string)$config->dbHote,
+                (string)$config->dbUtilisateur,
+                (string)$config->dbMotDePasse,
+                (string)$config->dbSchema);
+    
+  $_SESSION["mysqli"]=$mysqli;
+}
+*/
+if(isset($_SESSION["mysqli"])) {
+  $_SESSION["mysqli"]->close();
+}
+
+  $mysqli=new mon_mysqli((string)$config->dbHote,
+                (string)$config->dbUtilisateur,
+                (string)$config->dbMotDePasse,
+                (string)$config->dbSchema);
+    
+  $_SESSION["mysqli"]=$mysqli;
+  
+/*
 if(isset($_SESSION["mysqli"])) {
   $_SESSION["mysqli"]->close();
 }
@@ -138,7 +156,7 @@ $mysqli=new mon_mysqli((string)$config->dbHote,
                 (string)$config->dbSchema);
     
 $_SESSION["mysqli"]=$mysqli;
-
+*/
 //session_destroy();
 
 

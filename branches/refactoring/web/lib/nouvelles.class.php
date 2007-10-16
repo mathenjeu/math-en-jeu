@@ -26,7 +26,6 @@ class UneNouvelle
     private $date;              //date de la nouvelle
     private $titre;             //titre de la nouvelle
     private $image;             //chemin de l'image
-    private $destinataire;      //qui s'adresse la nouvelle
     private $cleLangue;
     private $mysqli;            //objet monmysqli
 
@@ -57,7 +56,7 @@ class UneNouvelle
       $dateEx = explode("-",$this->date);
       INVARIANT(checkdate($dateEx[1],$dateEx[2],$dateEx[0]));
       INVARIANT($this->cleNouvelle>=0);
-      INVARIANT($this->destinataire==0 || $this->destinataire==1 || $this->destinataire==2);
+      //INVARIANT($this->destinataire==0 || $this->destinataire==1 || $this->destinataire==2);
     }
 
     //**************************************************************************
@@ -68,12 +67,11 @@ class UneNouvelle
     // Sortie:
     // Note:
     //**************************************************************************
-    function asgUneNouvelle($nouvelle,$date,$titre,$destinataire,$image)
+    function asgUneNouvelle($nouvelle,$date,$titre,$image)
     {
       $this->asgNouvelle($nouvelle);
       $this->asgTitre($titre);
       $this->asgDate($date);
-      $this->asgDestinataire($destinataire);
       $this->asgImage($image);
       $this->INVARIANTS();
     }
@@ -170,11 +168,10 @@ class UneNouvelle
     {
       $this->date=date("Y-m-d");
       $this->INVARIANTS();
-      $sql="insert into nouvelle(titre,dateNouvelle,nouvelle,destinataire,image,cleLangue) values('" .
+      $sql="insert into news(title,date,body,image,language_id) values('" .
             $this->titre . "','" 
 			. $this->date . "','" 
-            . $this->nouvelle . "'," 
-			. $this->destinataire . ",'" 
+            . $this->nouvelle . "','" 
 			. $this->image . "'," . $this->cleLangue . ")";
       $result = $this->mysqli->query($sql);
       $this->asgCleNouvelle($this->mysqli->insert_id);
@@ -190,7 +187,7 @@ class UneNouvelle
     function chargerMySQL($cleNouvelle)
     {
 
-      $sql="select * from nouvelle where cleNouvelle=" . $cleNouvelle;
+      $sql="select * from news where news_id=" . $cleNouvelle;
       $result = $this->mysqli->query($sql);
       
       if($result->num_rows==0)
@@ -218,12 +215,11 @@ class UneNouvelle
     function miseAJourMySQL()
     {
       $this->INVARIANTS();
-      $sql="update nouvelle set titre='" . $this->titre .
-            "',dateNouvelle='" . $this->date .
-            "',nouvelle='" . $this->nouvelle .
+      $sql="update news set title='" . $this->titre .
+            "',date='" . $this->date .
+            "',body='" . $this->nouvelle .
             "',image='" . $this->image .
-            "',destinataire=" . $this->destinataire .
-            ",cleLangue=" . $this->reqCleLangue() .
+            "',language_id=" . $this->reqCleLangue() .
             " where cleNouvelle=" . $this->cleNouvelle;
 
       $this->mysqli->query($sql);
@@ -239,7 +235,7 @@ class UneNouvelle
     //**************************************************************************
     function deleteMySQL()
     {
-        $sql = "delete from nouvelle where cleNouvelle=" . $this->cleNouvelle;
+        $sql = "delete from news where news_id=" . $this->cleNouvelle;
         $this->mysqli->query($sql);
         return($this->mysqli->affected_rows);
     }
@@ -325,21 +321,13 @@ class Nouvelles
     // Note:        si $nbNouvelle = -1 on charge toutes les nouvelles
     //
     //**************************************************************************
-    function chargerMySQL($nbNouvelle,$destinataire, $cleLangue)
+    function chargerMySQL($nbNouvelle,$destinataire, $languageShortName)
     {
 
-      $sql = "select * from nouvelle where (";
-      $nb=count($destinataire);
-      for($i=0;$i<$nb;$i++)
-      {
-        $sql.= "destinataire=" . $destinataire[$i];
-        if($i+1<$nb)
-            $sql.= " or ";
-      }
+      $sql = "select n.news_id, n.date, n.body, n.title, n.image, n.language_id from news n, language l " .
+        " where n.language_id = l.language_id and l.short_name='" . $languageShortName . "'" .
+        " order by date desc, news_id desc";
       
-      $sql.= ") and cleLangue=" . $cleLangue;
-
-      $sql.= " order by dateNouvelle desc, cleNouvelle desc";
       
       if($nbNouvelle!=-1)
         $sql.= " limit " . $nbNouvelle;
@@ -351,17 +339,17 @@ class Nouvelles
       {
         $row=$result->fetch_object();
         $uneNouvelle=new uneNouvelle($this->mysqli);
-        $uneNouvelle->asgUneNouvelle($row->nouvelle,$row->dateNouvelle,
-            $row->titre,$row->destinataire,$row->image);
-        $uneNouvelle->asgCleNouvelle($row->cleNouvelle);
-        $uneNouvelle->asgCleLangue($row->cleLangue);
+        $uneNouvelle->asgUneNouvelle($row->body,$row->date,
+            $row->title,$row->image);
+        $uneNouvelle->asgCleNouvelle($row->news_id);
+        $uneNouvelle->asgCleLangue($row->language_id);
         $this->ajoutNouvelle($uneNouvelle);
       }
 
     }
     
     function chargerTouteMySQL() {
-      $sql = "select * from nouvelle order by dateNouvelle desc, cleNouvelle desc";
+      $sql = "select * from news order by date desc, news_id desc";
       
       $result = $this->mysqli->query($sql);
       $nbNouvelle = $result->num_rows;

@@ -9,14 +9,6 @@ Description : affiche l'index
 
 require_once("lib/ini.php");
 
-$fp=fopen("compteur.txt","a+"); //OUVRE LE FICHIER compteur.txt
-$num=fgets($fp,4096); // RECUPERE LE CONTENUE DU COMPTEUR
-fclose($fp); // FERME LE FICHIER
-$hits=$num - -1;  // TRAITEMENT
-$fp=fopen("compteur.txt","w");  // OUVRE DE NOUVEAU LE FICHIER
-fputs($fp,$hits); // MET LA NOUVELLE VALEUR
-fclose($fp);  // FERME LE FICHIER
-
 
 main();
 
@@ -43,8 +35,9 @@ function main()
 	$smarty->cache_lifetime = 0;
 	$smarty->display('header.tpl');
 
-	if(isset($_SESSION['css']))
+	if(isset($_SESSION['css'])) {
 		$smarty->assign('css',$_SESSION['css']);
+	}
 	
 	$smarty->cache_lifetime = 0;
 	$smarty->display('menu.tpl');
