@@ -3,14 +3,14 @@
 <database-model alias="" author="" begin-script="" end-script="" name="mathenjeu" remarks="" sql-dialect-id="jp.azzurri.clay.dialect.MySQL_5_0_Dialect" uid="89cb3b:115a0782492:-8000" version="1.0">
 <database-model-description></database-model-description>
 <schema-list>
-<schema alias="" name="DEFAULT_SCHEMA" remarks="" uid="89cb3b:115a0782492:-7ffe">
+<schema alias="mathenjeu" name="mathenjeu" remarks="" uid="89cb3b:115a0782492:-7ffe">
 <schema-description></schema-description>
 <domain-list/>
 <table-list>
 <table alias="" name="role" remarks="" uid="89cb3b:115a0782492:-7ffd">
 <table-description>The role of a user. &#13;
 Ex : simple user, administrator, etc...</table-description>
-<table-figure-bounds height="-1" width="-1" x="371" y="11"/>
+<table-figure-bounds height="-1" width="-1" x="111" y="56"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="role_id" remarks="" uid="89cb3b:115a0782492:-7ffb">
 <column-description></column-description>
@@ -31,32 +31,6 @@ Ex : simple user, administrator, etc...</table-description>
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="name_id" remarks="" uid="89cb3b:115a0782492:-7d68">
-<column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
-</data-type>
-</column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description_id" remarks="" uid="89cb3b:115a0782492:-7d12">
-<column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
-</data-type>
-</column>
 </column-list>
 <primary-key alias="" name="PK_CATEGORIEJOUEUR_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7ffc">
 <primary-key-description></primary-key-description>
@@ -66,49 +40,9 @@ Ex : simple user, administrator, etc...</table-description>
 <foreign-key-list/>
 <index-list/>
 </table>
-<table alias="" name="question_category" remarks="" uid="89cb3b:115a0782492:-7ff9">
-<table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="892" y="441"/>
-<column-list>
-<column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="question_category_id" remarks="" uid="89cb3b:115a0782492:-7ff7">
-<column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
-</data-type>
-</column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name_id" remarks="" uid="89cb3b:115a0782492:-7ff5">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
-<variant type-name-pattern="TEXT"/>
-</data-type>
-</column>
-<column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="false" name="description_id" remarks="" uid="89cb3b:115a0782492:-7ef9">
-<column-description></column-description>
-<data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
-<variant type-name-pattern="CHAR"/>
-<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
-<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n) BINARY"/>
-</data-type>
-</column>
-</column-list>
-<primary-key alias="" name="PK_CATEGORIEQUESTION_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7ff8">
-<primary-key-description></primary-key-description>
-<primary-key-column name="question_category_id"/>
-</primary-key>
-<unique-key-list/>
-<foreign-key-list/>
-<index-list/>
-</table>
 <table alias="" name="user_pool_choice" remarks="" uid="89cb3b:115a0782492:-7ff4">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="194" y="495"/>
+<table-figure-bounds height="-1" width="-1" x="137" y="459"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="user_id" remarks="" uid="89cb3b:115a0782492:-7ff2">
 <column-description></column-description>
@@ -144,26 +78,26 @@ Ex : simple user, administrator, etc...</table-description>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
-<foreign-key alias="" name="FK_user_pool_choice_1" on-delete="" on-update="" referenced-key="PK_JOUEUR_PRIMARY" referenced-table="user" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7247">
-<foreign-key-description></foreign-key-description>
-<foreign-key-figure>
-<fk-fig-bendpoint-list/>
-</foreign-key-figure>
-<foreign-key-column column-name="user_id" referenced-key-column-name="user_id"/>
-</foreign-key>
-<foreign-key alias="" name="FK_user_pool_choice_2" on-delete="" on-update="" referenced-key="PK_SONDAGE_PRIMARY" referenced-table="pool" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6fc3">
+<foreign-key alias="" name="FK_user_pool_choice_pool" on-delete="" on-update="" referenced-key="PK_SONDAGE_PRIMARY" referenced-table="pool" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6fc3">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="pool_id" referenced-key-column-name="pool_id"/>
 </foreign-key>
+<foreign-key alias="" name="FK_user_pool_choice_user" on-delete="" on-update="" referenced-key="PK_JOUEUR_PRIMARY" referenced-table="user" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7247">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="user_id" referenced-key-column-name="user_id"/>
+</foreign-key>
 </foreign-key-list>
 <index-list/>
 </table>
 <table alias="" name="school" remarks="" uid="89cb3b:115a0782492:-7fef">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="12" y="251"/>
+<table-figure-bounds height="-1" width="-1" x="-140" y="201"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="school_id" remarks="" uid="89cb3b:115a0782492:-7fed">
 <column-description></column-description>
@@ -222,7 +156,7 @@ Ex : simple user, administrator, etc...</table-description>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
-<foreign-key alias="" name="FK_school_1" on-delete="" on-update="" referenced-key="PK_TYPEETABLISSEMENT_PRIMARY" referenced-table="school_type" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7299">
+<foreign-key alias="" name="FK_school_school_type" on-delete="" on-update="" referenced-key="PK_TYPEETABLISSEMENT_PRIMARY" referenced-table="school_type" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7299">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
@@ -234,7 +168,7 @@ Ex : simple user, administrator, etc...</table-description>
 </table>
 <table alias="" name="faq" remarks="" uid="89cb3b:115a0782492:-7fe7">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="13" y="942"/>
+<table-figure-bounds height="-1" width="-1" x="-13" y="1001"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="faq_id" remarks="" uid="89cb3b:115a0782492:-7fe5">
 <column-description></column-description>
@@ -303,7 +237,7 @@ Ex : simple user, administrator, etc...</table-description>
 </table>
 <table alias="" name="user" remarks="" uid="89cb3b:115a0782492:-7fdf">
 <table-description>A user of the system.</table-description>
-<table-figure-bounds height="-1" width="-1" x="318" y="135"/>
+<table-figure-bounds height="-1" width="-1" x="281" y="101"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="user_id" remarks="" uid="89cb3b:115a0782492:-7fdd">
 <column-description></column-description>
@@ -367,7 +301,7 @@ Ex : simple user, administrator, etc...</table-description>
 <variant type-name-pattern="TINYTEXT"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="email" remarks="" uid="89cb3b:115a0782492:-7fd4">
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="email" remarks="" uid="89cb3b:115a0782492:-7fd4">
 <column-description></column-description>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
@@ -386,20 +320,7 @@ Ex : simple user, administrator, etc...</table-description>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="level_id" remarks="" uid="89cb3b:115a0782492:-7fd2">
-<column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
-</data-type>
-</column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="inscription_date" remarks="" uid="89cb3b:115a0782492:-7fd1">
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="inscription_date" remarks="" uid="89cb3b:115a0782492:-7fd1">
 <column-description></column-description>
 <data-type jdbc-type="91" literal-prefix="'" literal-suffix="'" name="DATE" selected-variant-pattern="DATE">
 <variant type-name-pattern="DATE"/>
@@ -514,29 +435,14 @@ Ex : simple user, administrator, etc...</table-description>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
-<foreign-key alias="" name="FK_USER_LANGUAGE" on-delete="" on-update="" referenced-key="PK_LANGUES_PRIMARY" referenced-table="language" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7e0f">
-<foreign-key-description></foreign-key-description>
-<foreign-key-figure>
-<fk-fig-source-terminal x="180" y="40"/>
-<fk-fig-bendpoint-list/>
-</foreign-key-figure>
-<foreign-key-column column-name="language_id" referenced-key-column-name="language_id"/>
-</foreign-key>
-<foreign-key alias="" name="FK_USER_ROLE" on-delete="" on-update="" referenced-key="PK_CATEGORIEJOUEUR_PRIMARY" referenced-table="role" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7d9f">
+<foreign-key alias="" name="FK_USER_ROLE" on-delete="" on-update="" referenced-key="PK_CATEGORIEJOUEUR_PRIMARY" referenced-table="role" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7d9f">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="role_id" referenced-key-column-name="role_id"/>
 </foreign-key>
-<foreign-key alias="" name="FK_user_3" on-delete="" on-update="" referenced-key="PK_LEVEL" referenced-table="level" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7a63">
-<foreign-key-description></foreign-key-description>
-<foreign-key-figure>
-<fk-fig-bendpoint-list/>
-</foreign-key-figure>
-<foreign-key-column column-name="level_id" referenced-key-column-name="level_id"/>
-</foreign-key>
-<foreign-key alias="" name="FK_USER_SCHOOL" on-delete="" on-update="" referenced-key="PK_ETABLISSEMENT_PRIMARY" referenced-table="school" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7506">
+<foreign-key alias="" name="FK_USER_SCHOOL" on-delete="" on-update="" referenced-key="PK_ETABLISSEMENT_PRIMARY" referenced-table="school" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7506">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
@@ -548,7 +454,7 @@ Ex : simple user, administrator, etc...</table-description>
 </table>
 <table alias="" name="language" remarks="" uid="89cb3b:115a0782492:-7fc0">
 <table-description>All the language usable on the system.</table-description>
-<table-figure-bounds height="-1" width="-1" x="375" y="538"/>
+<table-figure-bounds height="-1" width="-1" x="84" y="801"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-7fbe">
 <column-description></column-description>
@@ -588,7 +494,7 @@ Ex : simple user, administrator, etc...</table-description>
 </table>
 <table alias="" name="shop" remarks="" uid="89cb3b:115a0782492:-7fbb">
 <table-description>Representing a shop in the game.</table-description>
-<table-figure-bounds height="-1" width="-1" x="527" y="614"/>
+<table-figure-bounds height="-1" width="-1" x="717" y="929"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="shop_id" remarks="" uid="89cb3b:115a0782492:-7fb9">
 <column-description></column-description>
@@ -603,7 +509,7 @@ Ex : simple user, administrator, etc...</table-description>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="45" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-7fb8">
+<column alias="" auto-increment="false" column-size="45" decimal-digits="0" default-value="" mandatory="true" name="tag" remarks="" uid="89cb3b:115a0782492:-7fb8">
 <column-description></column-description>
 <data-type jdbc-type="12" literal-prefix="'" literal-suffix="'" name="VARCHAR" selected-variant-pattern="VARCHAR(%n)">
 <variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n)"/>
@@ -621,21 +527,8 @@ Ex : simple user, administrator, etc...</table-description>
 </table>
 <table alias="" name="shop_object" remarks="" uid="89cb3b:115a0782492:-7fb7">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="657" y="661"/>
+<table-figure-bounds height="-1" width="-1" x="711" y="1056"/>
 <column-list>
-<column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="shop_object_id" remarks="" uid="89cb3b:115a0782492:-7fb5">
-<column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
-</data-type>
-</column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="shop_id" remarks="" uid="89cb3b:115a0782492:-7fb4">
 <column-description></column-description>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
@@ -665,18 +558,19 @@ Ex : simple user, administrator, etc...</table-description>
 </column-list>
 <primary-key alias="" name="PK_MAGASINS_OBJETS_UTILISABLE_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7fb6">
 <primary-key-description></primary-key-description>
-<primary-key-column name="shop_object_id"/>
+<primary-key-column name="shop_id"/>
+<primary-key-column name="object_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
-<foreign-key alias="" name="FK_shop_object_1" on-delete="" on-update="" referenced-key="PK_OBJETS_PRIMARY" referenced-table="object" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6ea5">
+<foreign-key alias="" name="FK_shop_object_object" on-delete="" on-update="" referenced-key="PK_OBJETS_PRIMARY" referenced-table="object" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6ea5">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="object_id" referenced-key-column-name="object_id"/>
 </foreign-key>
-<foreign-key alias="" name="FK_shop_object_2" on-delete="" on-update="" referenced-key="PK_MAGASINS_PRIMARY" referenced-table="shop" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6e61">
+<foreign-key alias="" name="FK_shop_object_shop" on-delete="" on-update="" referenced-key="PK_MAGASINS_PRIMARY" referenced-table="shop" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6e61">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
@@ -686,11 +580,11 @@ Ex : simple user, administrator, etc...</table-description>
 </foreign-key-list>
 <index-list/>
 </table>
-<table alias="" name="musique_categorie_joueur" remarks="" uid="89cb3b:115a0782492:-7fb2">
+<table alias="" name="music_category_user" remarks="" uid="89cb3b:115a0782492:-7fb2">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="1451" y="718"/>
+<table-figure-bounds height="-1" width="-1" x="293" y="-40"/>
 <column-list>
-<column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="cleJoueur" remarks="" uid="89cb3b:115a0782492:-7fb0">
+<column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="user_id" remarks="" uid="89cb3b:115a0782492:-7fb0">
 <column-description></column-description>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant type-name-pattern="INT"/>
@@ -703,7 +597,7 @@ Ex : simple user, administrator, etc...</table-description>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="4" decimal-digits="0" default-value="" mandatory="true" name="cleCategorie" remarks="" uid="89cb3b:115a0782492:-7faf">
+<column alias="" auto-increment="false" column-size="4" decimal-digits="0" default-value="" mandatory="true" name="music_category_id" remarks="" uid="89cb3b:115a0782492:-7faf">
 <column-description></column-description>
 <data-type jdbc-type="-6" name="TINYINT" selected-variant-pattern="TINYINT(%n)">
 <variant type-name-pattern="TINYINT"/>
@@ -717,18 +611,35 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 </column-list>
-<primary-key alias="" name="PK_MUSIQUE_CATEGORIE_JOUEUR" remarks="" uid="89cb3b:115a0782492:-7fb1">
+<primary-key alias="" name="PK_MUSIC_CATEGORY_USER" remarks="" uid="89cb3b:115a0782492:-7fb1">
 <primary-key-description></primary-key-description>
+<primary-key-column name="user_id"/>
+<primary-key-column name="music_category_id"/>
 </primary-key>
 <unique-key-list/>
-<foreign-key-list/>
+<foreign-key-list>
+<foreign-key alias="" name="FK_music_category_user_1" on-delete="" on-update="" referenced-key="PK_MUSIQUE_CATEGORIES_PRIMARY" referenced-table="music_category" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6284">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="music_category_id" referenced-key-column-name="music_category_id"/>
+</foreign-key>
+<foreign-key alias="" name="FK_music_category_user_2" on-delete="" on-update="" referenced-key="PK_JOUEUR_PRIMARY" referenced-table="user" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6262">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="user_id" referenced-key-column-name="user_id"/>
+</foreign-key>
+</foreign-key-list>
 <index-list/>
 </table>
-<table alias="" name="musique_categories" remarks="" uid="89cb3b:115a0782492:-7fae">
+<table alias="" name="music_category" remarks="" uid="89cb3b:115a0782492:-7fae">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="1464" y="610"/>
+<table-figure-bounds height="-1" width="-1" x="291" y="-209"/>
 <column-list>
-<column alias="" auto-increment="true" column-size="4" decimal-digits="0" default-value="" mandatory="true" name="cleCategorie" remarks="" uid="89cb3b:115a0782492:-7fac">
+<column alias="" auto-increment="true" column-size="4" decimal-digits="0" default-value="" mandatory="true" name="music_category_id" remarks="" uid="89cb3b:115a0782492:-7fac">
 <column-description></column-description>
 <data-type jdbc-type="-6" name="TINYINT" selected-variant-pattern="TINYINT(%n)">
 <variant type-name-pattern="TINYINT"/>
@@ -739,28 +650,22 @@ Ex : simple user, administrator, etc...</table-description>
 <variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n) UNSIGNED"/>
 <variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n) UNSIGNED ZEROFILL"/>
 <variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n) ZEROFILL"/>
-</data-type>
-</column>
-<column alias="" auto-increment="false" column-size="255" decimal-digits="0" default-value="" mandatory="true" name="nomCategorie" remarks="" uid="89cb3b:115a0782492:-7fab">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TINYTEXT" selected-variant-pattern="TINYTEXT">
-<variant type-name-pattern="TINYTEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_MUSIQUE_CATEGORIES_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7fad">
 <primary-key-description></primary-key-description>
-<primary-key-column name="cleCategorie"/>
+<primary-key-column name="music_category_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list/>
 <index-list/>
 </table>
-<table alias="" name="musique_fichiers" remarks="" uid="89cb3b:115a0782492:-7faa">
+<table alias="" name="music_file" remarks="" uid="89cb3b:115a0782492:-7faa">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="1618" y="712"/>
+<table-figure-bounds height="-1" width="-1" x="-33" y="-363"/>
 <column-list>
-<column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="cleFichier" remarks="" uid="89cb3b:115a0782492:-7fa8">
+<column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="music_file_id" remarks="" uid="89cb3b:115a0782492:-7fa8">
 <column-description></column-description>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant type-name-pattern="INT"/>
@@ -773,7 +678,7 @@ Ex : simple user, administrator, etc...</table-description>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="255" decimal-digits="0" default-value="" mandatory="true" name="nomFichier" remarks="" uid="89cb3b:115a0782492:-7fa7">
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="filename" remarks="" uid="89cb3b:115a0782492:-7fa7">
 <column-description></column-description>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TINYTEXT" selected-variant-pattern="TINYTEXT">
 <variant type-name-pattern="TINYTEXT"/>
@@ -782,19 +687,19 @@ Ex : simple user, administrator, etc...</table-description>
 </column-list>
 <primary-key alias="" name="PK_MUSIQUE_FICHIERS_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7fa9">
 <primary-key-description></primary-key-description>
-<primary-key-column name="cleFichier"/>
+<primary-key-column name="music_file_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list/>
 <index-list/>
 </table>
-<table alias="" name="musique_fichiers_categories" remarks="" uid="89cb3b:115a0782492:-7fa6">
+<table alias="" name="music_file_category" remarks="" uid="89cb3b:115a0782492:-7fa6">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="1752" y="712"/>
+<table-figure-bounds height="-1" width="-1" x="-53" y="-220"/>
 <column-list>
-<column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="cleFichier" remarks="" uid="89cb3b:115a0782492:-7fa4">
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="music_category_id" remarks="" uid="89cb3b:115a0782492:-7fa3">
 <column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
@@ -805,31 +710,42 @@ Ex : simple user, administrator, etc...</table-description>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="4" decimal-digits="0" default-value="" mandatory="true" name="cleCategorie" remarks="" uid="89cb3b:115a0782492:-7fa3">
+<column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="music_file_id" remarks="" uid="89cb3b:115a0782492:-62d8">
 <column-description></column-description>
-<data-type jdbc-type="-6" name="TINYINT" selected-variant-pattern="TINYINT(%n)">
-<variant type-name-pattern="TINYINT"/>
-<variant type-name-pattern="TINYINT UNSIGNED"/>
-<variant type-name-pattern="TINYINT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="TINYINT ZEROFILL"/>
-<variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n)"/>
-<variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n) UNSIGNED"/>
-<variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n) ZEROFILL"/>
+<data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
+<variant type-name-pattern="CHAR"/>
+<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
+<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n) BINARY"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_MUSIQUE_FICHIERS_CATEGORIES_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7fa5">
 <primary-key-description></primary-key-description>
-<primary-key-column name="cleFichier"/>
+<primary-key-column name="music_category_id"/>
+<primary-key-column name="music_file_id"/>
 </primary-key>
 <unique-key-list/>
-<foreign-key-list/>
+<foreign-key-list>
+<foreign-key alias="" name="FK_music_file_category_music_category" on-delete="" on-update="" referenced-key="PK_MUSIQUE_CATEGORIES_PRIMARY" referenced-table="music_category" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-62fa">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="music_category_id" referenced-key-column-name="music_category_id"/>
+</foreign-key>
+<foreign-key alias="" name="FK_music_file_category_music_file" on-delete="" on-update="" referenced-key="PK_MUSIQUE_FICHIERS_PRIMARY" referenced-table="music_file" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-62b9">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="music_file_id" referenced-key-column-name="music_file_id"/>
+</foreign-key>
+</foreign-key-list>
 <index-list/>
 </table>
 <table alias="" name="news" remarks="" uid="89cb3b:115a0782492:-7f9e">
 <table-description></table-description>
-<table-figure-bounds height="117" width="183" x="9" y="801"/>
+<table-figure-bounds height="117" width="183" x="-27" y="877"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="news_id" remarks="" uid="89cb3b:115a0782492:-7f9c">
 <column-description></column-description>
@@ -897,24 +813,11 @@ Ex : simple user, administrator, etc...</table-description>
 </table>
 <table alias="" name="object" remarks="" uid="89cb3b:115a0782492:-7f94">
 <table-description>An object in the game.</table-description>
-<table-figure-bounds height="75" width="159" x="661" y="838"/>
+<table-figure-bounds height="53" width="86" x="424" y="1056"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="object_id" remarks="" uid="89cb3b:115a0782492:-7f92">
 <column-description></column-description>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
-</data-type>
-</column>
-<column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="description_id" remarks="" uid="89cb3b:115a0782492:-7f91">
-<column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT UNSIGNED">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
@@ -932,14 +835,6 @@ Ex : simple user, administrator, etc...</table-description>
 <variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n) BINARY"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="false" name="name_id" remarks="" uid="89cb3b:115a0782492:-7b8b">
-<column-description></column-description>
-<data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
-<variant type-name-pattern="CHAR"/>
-<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
-<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n) BINARY"/>
-</data-type>
-</column>
 </column-list>
 <primary-key alias="" name="PK_OBJETS_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f93">
 <primary-key-description></primary-key-description>
@@ -951,7 +846,7 @@ Ex : simple user, administrator, etc...</table-description>
 </table>
 <table alias="" name="game" remarks="" uid="89cb3b:115a0782492:-7f8f">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="13" y="14"/>
+<table-figure-bounds height="-1" width="-1" x="-121" y="-77"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="game_id" remarks="" uid="89cb3b:115a0782492:-7f8d">
 <column-description></column-description>
@@ -1002,7 +897,7 @@ Ex : simple user, administrator, etc...</table-description>
 </table>
 <table alias="" name="game_user" remarks="" uid="89cb3b:115a0782492:-7f89">
 <table-description></table-description>
-<table-figure-bounds height="76" width="119" x="17" y="152"/>
+<table-figure-bounds height="76" width="119" x="-155" y="86"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="game_id" remarks="" uid="89cb3b:115a0782492:-7f87">
 <column-description></column-description>
@@ -1064,14 +959,14 @@ Ex : simple user, administrator, etc...</table-description>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
-<foreign-key alias="" name="FK_GAME_USER_GAME" on-delete="" on-update="" referenced-key="PK_PARTIE_PRIMARY" referenced-table="game" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-780b">
+<foreign-key alias="" name="FK_GAME_USER_GAME" on-delete="" on-update="" referenced-key="PK_PARTIE_PRIMARY" referenced-table="game" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-780b">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="game_id" referenced-key-column-name="game_id"/>
 </foreign-key>
-<foreign-key alias="" name="FK_GAME_USER_USER" on-delete="" on-update="" referenced-key="PK_JOUEUR_PRIMARY" referenced-table="user" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7865">
+<foreign-key alias="" name="FK_GAME_USER_USER" on-delete="" on-update="" referenced-key="PK_JOUEUR_PRIMARY" referenced-table="user" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7865">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
@@ -1083,7 +978,7 @@ Ex : simple user, administrator, etc...</table-description>
 </table>
 <table alias="" name="question" remarks="" uid="89cb3b:115a0782492:-7f82">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="784" y="188"/>
+<table-figure-bounds height="-1" width="-1" x="1118" y="112"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="question_id" remarks="" uid="89cb3b:115a0782492:-7f80">
 <column-description></column-description>
@@ -1131,19 +1026,26 @@ Ex : simple user, administrator, etc...</table-description>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
-<foreign-key alias="" name="FK_question_1" on-delete="" on-update="" referenced-key="PK_TYPEREPONSE_PRIMARY" referenced-table="awnser_type" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7267">
+<foreign-key alias="" name="FK_question_awnser_type" on-delete="" on-update="" referenced-key="PK_TYPEREPONSE_PRIMARY" referenced-table="awnser_type" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7267">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="awnser_type_id" referenced-key-column-name="awnser_type_id"/>
 </foreign-key>
+<foreign-key alias="" name="FK_question_subject_id" on-delete="" on-update="" referenced-key="PK_SUBJECT" referenced-table="subject" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-64c9">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="subject_id" referenced-key-column-name="subject_id"/>
+</foreign-key>
 </foreign-key-list>
 <index-list/>
 </table>
 <table alias="" name="question_group" remarks="" uid="89cb3b:115a0782492:-7f6c">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="379" y="1253"/>
+<table-figure-bounds height="-1" width="-1" x="1128" y="535"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="question_group_id" remarks="" uid="89cb3b:115a0782492:-7f6a">
 <column-description></column-description>
@@ -1156,20 +1058,6 @@ Ex : simple user, administrator, etc...</table-description>
 <variant type-name-pattern="INT UNSIGNED"/>
 <variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
 <variant type-name-pattern="INT ZEROFILL"/>
-</data-type>
-</column>
-<column alias="" auto-increment="false" column-size="45" decimal-digits="0" default-value="" mandatory="true" name="name_id" remarks="" uid="89cb3b:115a0782492:-7f69">
-<column-description></column-description>
-<data-type jdbc-type="12" literal-prefix="'" literal-suffix="'" name="VARCHAR" selected-variant-pattern="VARCHAR(%n)">
-<variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n)"/>
-<variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n) BINARY"/>
-</data-type>
-</column>
-<column alias="" auto-increment="false" column-size="512" decimal-digits="0" default-value="" mandatory="true" name="description_id" remarks="" uid="89cb3b:115a0782492:-7f68">
-<column-description></column-description>
-<data-type jdbc-type="12" literal-prefix="'" literal-suffix="'" name="VARCHAR" selected-variant-pattern="VARCHAR(%n)">
-<variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n)"/>
-<variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n) BINARY"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-7f67">
@@ -1185,6 +1073,18 @@ Ex : simple user, administrator, etc...</table-description>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-7f69">
+<column-description></column-description>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-7f68">
+<column-description></column-description>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
+<variant type-name-pattern="LONGTEXT"/>
+</data-type>
+</column>
 </column-list>
 <primary-key alias="" name="PK_QUESTIONS_GROUPS_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f6b">
 <primary-key-description></primary-key-description>
@@ -1194,26 +1094,14 @@ Ex : simple user, administrator, etc...</table-description>
 <foreign-key-list/>
 <index-list/>
 </table>
-<table alias="" name="questions_groups_questions" remarks="" uid="89cb3b:115a0782492:-7f66">
-<table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="830" y="666"/>
+<table alias="" name="question_group_question" remarks="" uid="89cb3b:115a0782492:-7f66">
+<table-description>This is the table that do the link between a question_group and the question. &#13;
+A question can be in more than one group, and a group can have multiple questions.</table-description>
+<table-figure-bounds height="-1" width="-1" x="1121" y="413"/>
 <column-list>
-<column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="id" remarks="" uid="89cb3b:115a0782492:-7f64">
+<column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="question_group_id" remarks="" uid="89cb3b:115a0782492:-7f63">
 <column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT UNSIGNED">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
-</data-type>
-</column>
-<column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="questions_group_id" remarks="" uid="89cb3b:115a0782492:-7f63">
-<column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT UNSIGNED">
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
@@ -1226,7 +1114,7 @@ Ex : simple user, administrator, etc...</table-description>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="question_id" remarks="" uid="89cb3b:115a0782492:-7f62">
 <column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT UNSIGNED">
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
@@ -1240,29 +1128,32 @@ Ex : simple user, administrator, etc...</table-description>
 </column-list>
 <primary-key alias="" name="PK_QUESTIONS_GROUPS_QUESTIONS_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f65">
 <primary-key-description></primary-key-description>
-<primary-key-column name="id"/>
+<primary-key-column name="question_group_id"/>
+<primary-key-column name="question_id"/>
 </primary-key>
 <unique-key-list/>
-<foreign-key-list/>
+<foreign-key-list>
+<foreign-key alias="" name="FK_question_group_question_question" on-delete="" on-update="" referenced-key="PK_QUESTION_PRIMARY" referenced-table="question" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-683f">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="question_id" referenced-key-column-name="question_id"/>
+</foreign-key>
+<foreign-key alias="" name="FK_question_group_question_question_group" on-delete="" on-update="" referenced-key="PK_QUESTIONS_GROUPS_PRIMARY" referenced-table="question_group" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-686d">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="question_group_id" referenced-key-column-name="question_group_id"/>
+</foreign-key>
+</foreign-key-list>
 <index-list/>
 </table>
 <table alias="" name="question_group_room" remarks="" uid="89cb3b:115a0782492:-7f61">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="362" y="1131"/>
+<table-figure-bounds height="-1" width="-1" x="1119" y="676"/>
 <column-list>
-<column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="question_group_room_id" remarks="" uid="89cb3b:115a0782492:-7f5f">
-<column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
-</data-type>
-</column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="question_group_id" remarks="" uid="89cb3b:115a0782492:-7f5e">
 <column-description></column-description>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
@@ -1292,18 +1183,19 @@ Ex : simple user, administrator, etc...</table-description>
 </column-list>
 <primary-key alias="" name="PK_QUESTIONS_GROUPS_SALLES_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f60">
 <primary-key-description></primary-key-description>
-<primary-key-column name="question_group_room_id"/>
+<primary-key-column name="question_group_id"/>
+<primary-key-column name="room_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
-<foreign-key alias="" name="FK_question_group_room_room" on-delete="" on-update="" referenced-key="PK_SALLES_PRIMARY" referenced-table="room" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6c1a">
+<foreign-key alias="" name="FK_question_group_room_room" on-delete="" on-update="" referenced-key="PK_SALLES_PRIMARY" referenced-table="room" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6c1a">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="room_id" referenced-key-column-name="room_id"/>
 </foreign-key>
-<foreign-key alias="" name="FK_question_group_room_question_group" on-delete="" on-update="" referenced-key="PK_QUESTIONS_GROUPS_PRIMARY" referenced-table="question_group" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6b9c">
+<foreign-key alias="" name="FK_question_group_room_question_group" on-delete="" on-update="" referenced-key="PK_QUESTIONS_GROUPS_PRIMARY" referenced-table="question_group" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6b9c">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
@@ -1315,7 +1207,7 @@ Ex : simple user, administrator, etc...</table-description>
 </table>
 <table alias="" name="rule" remarks="" uid="89cb3b:115a0782492:-7f5c">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="886" y="864"/>
+<table-figure-bounds height="-1" width="-1" x="-137" y="801"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="rule_id" remarks="" uid="89cb3b:115a0782492:-7f5a">
 <column-description></column-description>
@@ -1428,7 +1320,7 @@ Ex : simple user, administrator, etc...</table-description>
 <variant type-name-pattern="FLOAT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="12" decimal-digits="0" default-value="" mandatory="true" name="win_the_game_tick" remarks="" uid="89cb3b:115a0782492:-7f53">
+<column alias="" auto-increment="false" column-size="12" decimal-digits="0" default-value="" mandatory="true" name="win_the_game_tick" remarks="Interval of time between the &quot;win the game&quot; move" uid="89cb3b:115a0782492:-7f53">
 <column-description></column-description>
 <data-type jdbc-type="7" name="FLOAT" selected-variant-pattern="FLOAT(%n)">
 <variant type-name-pattern="FLOAT"/>
@@ -1534,7 +1426,7 @@ Ex : simple user, administrator, etc...</table-description>
 </table>
 <table alias="" name="color_square_rule" remarks="" uid="89cb3b:115a0782492:-7f4c">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="7" y="725"/>
+<table-figure-bounds height="-1" width="-1" x="-29" y="801"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="color_square_rule_id" remarks="" uid="89cb3b:115a0782492:-7f4a">
 <column-description></column-description>
@@ -1586,7 +1478,7 @@ Ex : simple user, administrator, etc...</table-description>
 </table>
 <table alias="" name="special_square_rule" remarks="" uid="89cb3b:115a0782492:-7f47">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="7" y="1040"/>
+<table-figure-bounds height="-1" width="-1" x="-138" y="1016"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="special_square_rule_id" remarks="" uid="89cb3b:115a0782492:-7f45">
 <column-description></column-description>
@@ -1638,7 +1530,7 @@ Ex : simple user, administrator, etc...</table-description>
 </table>
 <table alias="" name="pool_awnser" remarks="" uid="89cb3b:115a0782492:-7f42">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="22" y="495"/>
+<table-figure-bounds height="-1" width="-1" x="-128" y="483"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="pool_awnser_id" remarks="" uid="89cb3b:115a0782492:-7f3f">
 <column-description></column-description>
@@ -1687,7 +1579,7 @@ Ex : simple user, administrator, etc...</table-description>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
-<foreign-key alias="" name="FK_pool_awnser_1" on-delete="" on-update="" referenced-key="PK_SONDAGE_PRIMARY" referenced-table="pool" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7039">
+<foreign-key alias="" name="FK_pool_awnser_pool" on-delete="" on-update="" referenced-key="PK_SONDAGE_PRIMARY" referenced-table="pool" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7039">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
@@ -1697,11 +1589,24 @@ Ex : simple user, administrator, etc...</table-description>
 </foreign-key-list>
 <index-list/>
 </table>
-<table alias="" name="room_detail" remarks="" uid="89cb3b:115a0782492:-7f3c">
+<table alias="" name="room_info" remarks="" uid="89cb3b:115a0782492:-7f3c">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="264" y="760"/>
+<table-figure-bounds height="-1" width="-1" x="210" y="612"/>
 <column-list>
-<column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="room_id" remarks="" uid="89cb3b:115a0782492:-7f39">
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="room_id" remarks="" uid="89cb3b:115a0782492:-66db">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-7f37">
 <column-description></column-description>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant type-name-pattern="INT"/>
@@ -1714,39 +1619,40 @@ Ex : simple user, administrator, etc...</table-description>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="512" decimal-digits="0" default-value="" mandatory="true" name="description" remarks="" uid="89cb3b:115a0782492:-7f38">
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-66d6">
 <column-description></column-description>
-<data-type jdbc-type="12" literal-prefix="'" literal-suffix="'" name="VARCHAR" selected-variant-pattern="VARCHAR(%n)">
-<variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n)"/>
-<variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n) BINARY"/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="langue_id" remarks="" uid="89cb3b:115a0782492:-7f37">
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-7f38">
 <column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT UNSIGNED">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
+<variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_SALLE_DETAIL_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f3b">
 <primary-key-description></primary-key-description>
 <primary-key-column name="room_id"/>
+<primary-key-column name="language_id"/>
 </primary-key>
 <unique-key-list/>
-<foreign-key-list/>
+<foreign-key-list>
+<foreign-key alias="" name="FK_room_detail_room" on-delete="" on-update="" referenced-key="PK_SALLES_PRIMARY" referenced-table="room" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6a69">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="room_id" referenced-key-column-name="room_id"/>
+</foreign-key>
+</foreign-key-list>
 <index-list/>
 </table>
 <table alias="" name="room" remarks="" uid="89cb3b:115a0782492:-7f36">
 <table-description>A room in the game. &#13;
 A room can be associated with question_groups.</table-description>
-<table-figure-bounds height="-1" width="-1" x="440" y="861"/>
+<table-figure-bounds height="-1" width="-1" x="430" y="595"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="room_id" remarks="" uid="89cb3b:115a0782492:-7f34">
 <column-description></column-description>
@@ -1820,19 +1726,6 @@ A room can be associated with question_groups.</table-description>
 <variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n) ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="45" decimal-digits="0" default-value="" mandatory="true" name="name_id" remarks="" uid="89cb3b:115a0782492:-7f2e">
-<column-description></column-description>
-<data-type jdbc-type="12" literal-prefix="'" literal-suffix="'" name="VARCHAR" selected-variant-pattern="VARCHAR(%n)">
-<variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n)"/>
-<variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n) BINARY"/>
-</data-type>
-</column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description_id" remarks="" uid="89cb3b:115a0782492:-7b84">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
-<variant type-name-pattern="TEXT"/>
-</data-type>
-</column>
 </column-list>
 <primary-key alias="" name="PK_SALLES_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f35">
 <primary-key-description></primary-key-description>
@@ -1840,7 +1733,7 @@ A room can be associated with question_groups.</table-description>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
-<foreign-key alias="" name="FK_ROOM_GAME_TYPE" on-delete="" on-update="" referenced-key="PK_TYPE_JEU_PRIMARY" referenced-table="game_type" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7345">
+<foreign-key alias="" name="FK_ROOM_GAME_TYPE" on-delete="" on-update="" referenced-key="PK_TYPE_JEU_PRIMARY" referenced-table="game_type" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7345">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
@@ -1852,7 +1745,7 @@ A room can be associated with question_groups.</table-description>
 </table>
 <table alias="" name="room_shop" remarks="" uid="89cb3b:115a0782492:-7f2d">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="344" y="637"/>
+<table-figure-bounds height="-1" width="-1" x="706" y="787"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="room_id" remarks="" uid="89cb3b:115a0782492:-7f2a">
 <column-description></column-description>
@@ -1901,33 +1794,27 @@ A room can be associated with question_groups.</table-description>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
-<foreign-key alias="" name="FK_room_shop_1" on-delete="" on-update="" referenced-key="PK_MAGASINS_PRIMARY" referenced-table="shop" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6c83">
+<foreign-key alias="" name="FK_room_shop_shop" on-delete="" on-update="" referenced-key="PK_MAGASINS_PRIMARY" referenced-table="shop" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6c83">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="shop_id" referenced-key-column-name="shop_id"/>
 </foreign-key>
+<foreign-key alias="" name="FK_room_shop_room" on-delete="" on-update="" referenced-key="PK_SALLES_PRIMARY" referenced-table="room" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6217">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="room_id" referenced-key-column-name="room_id"/>
+</foreign-key>
 </foreign-key-list>
 <index-list/>
 </table>
 <table alias="" name="room_object" remarks="" uid="89cb3b:115a0782492:-7f27">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="87" y="1177"/>
+<table-figure-bounds height="-1" width="-1" x="433" y="882"/>
 <column-list>
-<column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="room_object_id" remarks="" uid="89cb3b:115a0782492:-7f25">
-<column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
-</data-type>
-</column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="room_id" remarks="" uid="89cb3b:115a0782492:-7f24">
 <column-description></column-description>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
@@ -1954,9 +1841,9 @@ A room can be associated with question_groups.</table-description>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="priorite" remarks="" uid="89cb3b:115a0782492:-7f22">
+<column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="priority" remarks="" uid="89cb3b:115a0782492:-7f22">
 <column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT UNSIGNED">
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
@@ -1970,11 +1857,19 @@ A room can be associated with question_groups.</table-description>
 </column-list>
 <primary-key alias="" name="PK_SALLES_OBJETS_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f26">
 <primary-key-description></primary-key-description>
-<primary-key-column name="room_object_id"/>
+<primary-key-column name="room_id"/>
+<primary-key-column name="object_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
-<foreign-key alias="" name="FK_room_object_1" on-delete="" on-update="" referenced-key="PK_SALLES_PRIMARY" referenced-table="room" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6b1c">
+<foreign-key alias="" name="FK_room_object_object" on-delete="" on-update="" referenced-key="PK_OBJETS_PRIMARY" referenced-table="object" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-69dd">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="object_id" referenced-key-column-name="object_id"/>
+</foreign-key>
+<foreign-key alias="" name="FK_room_object_room" on-delete="" on-update="" referenced-key="PK_SALLES_PRIMARY" referenced-table="room" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6b1c">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
@@ -1986,7 +1881,7 @@ A room can be associated with question_groups.</table-description>
 </table>
 <table alias="" name="room_question" remarks="" uid="89cb3b:115a0782492:-7f21">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="273" y="906"/>
+<table-figure-bounds height="-1" width="-1" x="896" y="578"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="room_id" remarks="" uid="89cb3b:115a0782492:-7f1e">
 <column-description></column-description>
@@ -2021,12 +1916,27 @@ A room can be associated with question_groups.</table-description>
 <primary-key-column name="question_id"/>
 </primary-key>
 <unique-key-list/>
-<foreign-key-list/>
+<foreign-key-list>
+<foreign-key alias="" name="FK_room_question_room" on-delete="" on-update="" referenced-key="PK_SALLES_PRIMARY" referenced-table="room" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-696f">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="room_id" referenced-key-column-name="room_id"/>
+</foreign-key>
+<foreign-key alias="" name="FK_room_question_question" on-delete="" on-update="" referenced-key="PK_QUESTION_PRIMARY" referenced-table="question" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-67d3">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="question_id" referenced-key-column-name="question_id"/>
+</foreign-key>
+</foreign-key-list>
 <index-list/>
 </table>
 <table alias="" name="pool" remarks="" uid="89cb3b:115a0782492:-7f1c">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="4" y="616"/>
+<table-figure-bounds height="-1" width="-1" x="-134" y="629"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="pool_id" remarks="" uid="89cb3b:115a0782492:-7f1a">
 <column-description></column-description>
@@ -2041,7 +1951,7 @@ A room can be associated with question_groups.</table-description>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="pool" remarks="" uid="89cb3b:115a0782492:-7f19">
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="question" remarks="" uid="89cb3b:115a0782492:-7f19">
 <column-description></column-description>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
@@ -2090,7 +2000,7 @@ A room can be associated with question_groups.</table-description>
 </table>
 <table alias="" name="game_type" remarks="" uid="89cb3b:115a0782492:-7f14">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="676" y="1120"/>
+<table-figure-bounds height="-1" width="-1" x="319" y="814"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="game_type_id" remarks="" uid="89cb3b:115a0782492:-7f12">
 <column-description></column-description>
@@ -2105,7 +2015,7 @@ A room can be associated with question_groups.</table-description>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="45" decimal-digits="0" default-value="" mandatory="true" name="nom" remarks="" uid="89cb3b:115a0782492:-7f11">
+<column alias="" auto-increment="false" column-size="45" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-7f11">
 <column-description></column-description>
 <data-type jdbc-type="12" literal-prefix="'" literal-suffix="'" name="VARCHAR" selected-variant-pattern="VARCHAR(%n)">
 <variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n)"/>
@@ -2123,7 +2033,7 @@ A room can be associated with question_groups.</table-description>
 </table>
 <table alias="" name="school_type" remarks="" uid="89cb3b:115a0782492:-7f10">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="22" y="420"/>
+<table-figure-bounds height="-1" width="-1" x="-141" y="383"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="school_type_id" remarks="" uid="89cb3b:115a0782492:-7f0e">
 <column-description></column-description>
@@ -2138,30 +2048,24 @@ A room can be associated with question_groups.</table-description>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name_id" remarks="" uid="89cb3b:115a0782492:-7f0d">
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-7f0d">
 <column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description_id" remarks="" uid="89cb3b:115a0782492:-72c7">
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="description" remarks="" uid="89cb3b:115a0782492:-72c7">
 <column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
+<variant type-name-pattern="LONGTEXT"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-647e">
+<column-description></column-description>
+<data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
+<variant type-name-pattern="CHAR"/>
+<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
+<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n) BINARY"/>
 </data-type>
 </column>
 </column-list>
@@ -2175,9 +2079,9 @@ A room can be associated with question_groups.</table-description>
 </table>
 <table alias="" name="awnser_type" remarks="" uid="89cb3b:115a0782492:-7f0c">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="791" y="330"/>
+<table-figure-bounds height="-1" width="-1" x="1227" y="-139"/>
 <column-list>
-<column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="awnser_type_id" remarks="" uid="89cb3b:115a0782492:-7f0a">
+<column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="awnser_type_id" remarks="" uid="89cb3b:115a0782492:-7f0a">
 <column-description></column-description>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant type-name-pattern="INT"/>
@@ -2205,99 +2109,9 @@ A room can be associated with question_groups.</table-description>
 <foreign-key-list/>
 <index-list/>
 </table>
-<table alias="" name="name" remarks="" uid="89cb3b:115a0782492:-7ef8">
-<table-description>A table that will contain all the name for the different language.</table-description>
-<table-figure-bounds height="-1" width="-1" x="597" y="230"/>
-<column-list>
-<column alias="" auto-increment="true" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name_id" remarks="" uid="89cb3b:115a0782492:-7ef4">
-<column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
-</data-type>
-</column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-7ef3">
-<column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
-</data-type>
-</column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="value" remarks="" uid="89cb3b:115a0782492:-7ef2">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
-<variant type-name-pattern="TEXT"/>
-</data-type>
-</column>
-</column-list>
-<primary-key alias="" name="PK_NAME" remarks="" uid="89cb3b:115a0782492:-7ef7">
-<primary-key-description></primary-key-description>
-<primary-key-column name="name_id"/>
-</primary-key>
-<unique-key-list/>
-<foreign-key-list/>
-<index-list/>
-</table>
-<table alias="" name="description" remarks="" uid="89cb3b:115a0782492:-7ef1">
-<table-description>This table contains all the description for all the language.</table-description>
-<table-figure-bounds height="-1" width="-1" x="589" y="322"/>
-<column-list>
-<column alias="" auto-increment="true" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="description_id" remarks="" uid="89cb3b:115a0782492:-7eed">
-<column-description></column-description>
-<data-type jdbc-type="4" name="INTEGER" selected-variant-pattern="INTEGER">
-<variant type-name-pattern="INTEGER"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INTEGER(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INTEGER(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INTEGER(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INTEGER(%n) ZEROFILL"/>
-<variant type-name-pattern="INTEGER UNSIGNED"/>
-<variant type-name-pattern="INTEGER UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INTEGER ZEROFILL"/>
-</data-type>
-</column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="value" remarks="" uid="89cb3b:115a0782492:-7eeb">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
-<variant type-name-pattern="LONGTEXT"/>
-</data-type>
-</column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-7eec">
-<column-description></column-description>
-<data-type jdbc-type="4" name="INTEGER" selected-variant-pattern="INTEGER">
-<variant type-name-pattern="INTEGER"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INTEGER(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INTEGER(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INTEGER(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INTEGER(%n) ZEROFILL"/>
-<variant type-name-pattern="INTEGER UNSIGNED"/>
-<variant type-name-pattern="INTEGER UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INTEGER ZEROFILL"/>
-</data-type>
-</column>
-</column-list>
-<primary-key alias="" name="PK_DESCRIPTION" remarks="" uid="89cb3b:115a0782492:-7ef0">
-<primary-key-description></primary-key-description>
-<primary-key-column name="description_id"/>
-</primary-key>
-<unique-key-list/>
-<foreign-key-list/>
-<index-list/>
-</table>
-<table alias="" name="question_detail" remarks="" uid="89cb3b:115a0782492:-7b17">
-<table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="1073" y="39"/>
+<table alias="" name="question_info" remarks="" uid="89cb3b:115a0782492:-7b17">
+<table-description>Information for a question for a particular language.</table-description>
+<table-figure-bounds height="-1" width="-1" x="1458" y="-41"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="question_id" remarks="" uid="89cb3b:115a0782492:-7b14">
 <column-description></column-description>
@@ -2487,7 +2301,7 @@ A room can be associated with question_groups.</table-description>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
-<foreign-key alias="" name="FK_question_detail_1" on-delete="" on-update="" referenced-key="PK_QUESTION_PRIMARY" referenced-table="question" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7604">
+<foreign-key alias="" name="FK_question_detail_question" on-delete="" on-update="" referenced-key="PK_QUESTION_PRIMARY" referenced-table="question" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7604">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
@@ -2499,7 +2313,7 @@ A room can be associated with question_groups.</table-description>
 </table>
 <table alias="" name="level" remarks="" uid="89cb3b:115a0782492:-7af0">
 <table-description>Scholastic level.</table-description>
-<table-figure-bounds height="-1" width="-1" x="560" y="25"/>
+<table-figure-bounds height="-1" width="-1" x="626" y="-198"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="level_id" remarks="" uid="89cb3b:115a0782492:-7aec">
 <column-description></column-description>
@@ -2514,7 +2328,7 @@ A room can be associated with question_groups.</table-description>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="name_id" remarks="" uid="89cb3b:115a0782492:-7aeb">
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-623b">
 <column-description></column-description>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
@@ -2527,17 +2341,16 @@ A room can be associated with question_groups.</table-description>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description_id" remarks="" uid="89cb3b:115a0782492:-7aea">
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="name" remarks="" uid="89cb3b:115a0782492:-7aeb">
 <column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
-<variant type-name-pattern="INT"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
-<variant type-name-pattern="INT UNSIGNED"/>
-<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
-<variant type-name-pattern="INT ZEROFILL"/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-7aea">
+<column-description></column-description>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
+<variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 </column-list>
@@ -2551,7 +2364,7 @@ A room can be associated with question_groups.</table-description>
 </table>
 <table alias="" name="question_level" remarks="" uid="89cb3b:115a0782492:-77c7">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="805" y="24"/>
+<table-figure-bounds height="-1" width="-1" x="891" y="-191"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="question_id" remarks="" uid="89cb3b:115a0782492:-77c3">
 <column-description></column-description>
@@ -2600,14 +2413,14 @@ A room can be associated with question_groups.</table-description>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
-<foreign-key alias="" name="FK_QUESTION_LEVEL_LEVEL" on-delete="" on-update="" referenced-key="PK_LEVEL" referenced-table="level" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-77a7">
+<foreign-key alias="" name="FK_QUESTION_LEVEL_LEVEL" on-delete="" on-update="" referenced-key="PK_LEVEL" referenced-table="level" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-77a7">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="level_id" referenced-key-column-name="level_id"/>
 </foreign-key>
-<foreign-key alias="" name="FK_QUESTION_LEVEL_QUESTION" on-delete="" on-update="" referenced-key="PK_QUESTION_PRIMARY" referenced-table="question" referenced-table-schema="DEFAULT_SCHEMA" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7777">
+<foreign-key alias="" name="FK_QUESTION_LEVEL_QUESTION" on-delete="" on-update="" referenced-key="PK_QUESTION_PRIMARY" referenced-table="question" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7777">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
@@ -2617,19 +2430,11 @@ A room can be associated with question_groups.</table-description>
 </foreign-key-list>
 <index-list/>
 </table>
-<table alias="" name="room_language" remarks="" uid="89cb3b:115a0782492:-6adc">
+<table alias="" name="object_info" remarks="" uid="89cb3b:115a0782492:-6754">
 <table-description></table-description>
-<table-figure-bounds height="-1" width="-1" x="426" y="732"/>
+<table-figure-bounds height="-1" width="-1" x="191" y="1047"/>
 <column-list>
-<column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="room_language_id" remarks="" uid="89cb3b:115a0782492:-6ad8">
-<column-description></column-description>
-<data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
-<variant type-name-pattern="CHAR"/>
-<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
-<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n) BINARY"/>
-</data-type>
-</column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="room_id" remarks="" uid="89cb3b:115a0782492:-6ad7">
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="object_id" remarks="" uid="89cb3b:115a0782492:-6749">
 <column-description></column-description>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
@@ -2642,7 +2447,186 @@ A room can be associated with question_groups.</table-description>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-6ad6">
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-674f">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-674e">
+<column-description></column-description>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="description" remarks="" uid="89cb3b:115a0782492:-674d">
+<column-description></column-description>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
+<variant type-name-pattern="LONGTEXT"/>
+</data-type>
+</column>
+</column-list>
+<primary-key alias="" name="PK_OBJECT_INFO" remarks="" uid="89cb3b:115a0782492:-6753">
+<primary-key-description></primary-key-description>
+<primary-key-column name="object_id"/>
+<primary-key-column name="language_id"/>
+</primary-key>
+<unique-key-list/>
+<foreign-key-list>
+<foreign-key alias="" name="FK_object_info_object" on-delete="" on-update="" referenced-key="PK_OBJETS_PRIMARY" referenced-table="object" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6713">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="object_id" referenced-key-column-name="object_id"/>
+</foreign-key>
+</foreign-key-list>
+<index-list/>
+</table>
+<table alias="" name="classes" remarks="" uid="89cb3b:115a0782492:-66cd">
+<table-description>Classes can be : math, physic, ...</table-description>
+<table-figure-bounds height="-1" width="-1" x="826" y="-42"/>
+<column-list>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="classes_id" remarks="" uid="89cb3b:115a0782492:-66bf">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-66be">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-66bd">
+<column-description></column-description>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-66bc">
+<column-description></column-description>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
+<variant type-name-pattern="LONGTEXT"/>
+</data-type>
+</column>
+</column-list>
+<primary-key alias="" name="PK_CLASSES" remarks="" uid="89cb3b:115a0782492:-66cc">
+<primary-key-description></primary-key-description>
+<primary-key-column name="classes_id"/>
+</primary-key>
+<unique-key-list/>
+<foreign-key-list/>
+<index-list/>
+</table>
+<table alias="" name="subject" remarks="" uid="89cb3b:115a0782492:-66bb">
+<table-description>This table represent subject of question for a particular classes_type. &#13;
+For example : mathematic can have these subcategory : Math history, algebra, statistic, ...</table-description>
+<table-figure-bounds height="-1" width="-1" x="826" y="240"/>
+<column-list>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="subject_id" remarks="" uid="89cb3b:115a0782492:-66b7">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="classes_id" remarks="" uid="89cb3b:115a0782492:-66b2">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-66b6">
+<column-description></column-description>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-66b5">
+<column-description></column-description>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
+<variant type-name-pattern="LONGTEXT"/>
+</data-type>
+</column>
+</column-list>
+<primary-key alias="" name="PK_SUBJECT" remarks="" uid="89cb3b:115a0782492:-66ba">
+<primary-key-description></primary-key-description>
+<primary-key-column name="subject_id"/>
+</primary-key>
+<unique-key-list/>
+<foreign-key-list>
+<foreign-key alias="" name="FK_classes_category_classes" on-delete="" on-update="" referenced-key="PK_CLASSES" referenced-table="classes" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6689">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="classes_id" referenced-key-column-name="classes_id"/>
+</foreign-key>
+</foreign-key-list>
+<index-list/>
+</table>
+<table alias="" name="user_classes_level" remarks="" uid="89cb3b:115a0782492:-6672">
+<table-description>This is a table that hold user level for each classes.</table-description>
+<table-figure-bounds height="-1" width="-1" x="620" y="213"/>
+<column-list>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="user_id" remarks="" uid="89cb3b:115a0782492:-6661">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="classes_id" remarks="" uid="89cb3b:115a0782492:-6660">
+<column-description></column-description>
+<data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
+<variant type-name-pattern="CHAR"/>
+<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
+<variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n) BINARY"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="level_id" remarks="" uid="89cb3b:115a0782492:-665f">
 <column-description></column-description>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
@@ -2656,12 +2640,318 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 </column-list>
-<primary-key alias="" name="PK_ROOM_LANGUAGE" remarks="" uid="89cb3b:115a0782492:-6adb">
+<primary-key alias="" name="PK_USER_CLASSES_LEVEL" remarks="" uid="89cb3b:115a0782492:-6671">
 <primary-key-description></primary-key-description>
-<primary-key-column name="room_language_id"/>
+<primary-key-column name="user_id"/>
+<primary-key-column name="classes_id"/>
+<primary-key-column name="level_id"/>
 </primary-key>
 <unique-key-list/>
-<foreign-key-list/>
+<foreign-key-list>
+<foreign-key alias="" name="FK_user_classes_level_user" on-delete="" on-update="" referenced-key="PK_JOUEUR_PRIMARY" referenced-table="user" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-65f0">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="user_id" referenced-key-column-name="user_id"/>
+</foreign-key>
+<foreign-key alias="" name="FK_user_classes_level_2" on-delete="" on-update="" referenced-key="PK_CLASSES_LEVEL" referenced-table="classes_level" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-619f">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="classes_id" referenced-key-column-name="classes_id"/>
+<foreign-key-column column-name="level_id" referenced-key-column-name="level_id"/>
+</foreign-key>
+</foreign-key-list>
+<index-list/>
+</table>
+<table alias="" name="subject_info" remarks="" uid="89cb3b:115a0782492:-658a">
+<table-description></table-description>
+<table-figure-bounds height="-1" width="-1" x="777" y="415"/>
+<column-list>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="subject_id" remarks="" uid="89cb3b:115a0782492:-6585">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-6584">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-6583">
+<column-description></column-description>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-6582">
+<column-description></column-description>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
+<variant type-name-pattern="LONGTEXT"/>
+</data-type>
+</column>
+</column-list>
+<primary-key alias="" name="PK_SUBJECT_INFO" remarks="" uid="89cb3b:115a0782492:-6589">
+<primary-key-description></primary-key-description>
+<primary-key-column name="subject_id"/>
+<primary-key-column name="language_id"/>
+</primary-key>
+<unique-key-list/>
+<foreign-key-list>
+<foreign-key alias="" name="FK_subject_info_subject" on-delete="" on-update="" referenced-key="PK_SUBJECT" referenced-table="subject" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-64e6">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="subject_id" referenced-key-column-name="subject_id"/>
+</foreign-key>
+</foreign-key-list>
+<index-list/>
+</table>
+<table alias="" name="role_info" remarks="" uid="89cb3b:115a0782492:-647b">
+<table-description></table-description>
+<table-figure-bounds height="-1" width="-1" x="97" y="-88"/>
+<column-list>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="role_info_id" remarks="" uid="89cb3b:115a0782492:-6477">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="role_id" remarks="" uid="89cb3b:115a0782492:-6476">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-6475">
+<column-description></column-description>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-6474">
+<column-description></column-description>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
+<variant type-name-pattern="LONGTEXT"/>
+</data-type>
+</column>
+</column-list>
+<primary-key alias="" name="PK_ROLE_INFO" remarks="" uid="89cb3b:115a0782492:-647a">
+<primary-key-description></primary-key-description>
+<primary-key-column name="role_info_id"/>
+</primary-key>
+<unique-key-list/>
+<foreign-key-list>
+<foreign-key alias="" name="FK_role_info_1" on-delete="" on-update="" referenced-key="PK_CATEGORIEJOUEUR_PRIMARY" referenced-table="role" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6465">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="role_id" referenced-key-column-name="role_id"/>
+</foreign-key>
+</foreign-key-list>
+<index-list/>
+</table>
+<table alias="" name="music_category_info" remarks="" uid="89cb3b:115a0782492:-6459">
+<table-description></table-description>
+<table-figure-bounds height="-1" width="-1" x="286" y="-367"/>
+<column-list>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="music_category_id" remarks="" uid="89cb3b:115a0782492:-63cd">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-6454">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-6453">
+<column-description></column-description>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
+</data-type>
+</column>
+</column-list>
+<primary-key alias="" name="PK_MUSIC_CATEGORY_INFO" remarks="" uid="89cb3b:115a0782492:-6458">
+<primary-key-description></primary-key-description>
+<primary-key-column name="music_category_id"/>
+<primary-key-column name="language_id"/>
+</primary-key>
+<unique-key-list/>
+<foreign-key-list>
+<foreign-key alias="" name="FK_music_category_info_music_category" on-delete="" on-update="" referenced-key="PK_MUSIQUE_CATEGORIES_PRIMARY" referenced-table="music_category" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-632e">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="music_category_id" referenced-key-column-name="music_category_id"/>
+</foreign-key>
+</foreign-key-list>
+<index-list/>
+</table>
+<table alias="" name="classes_level" remarks="" uid="89cb3b:115a0782492:-61fb">
+<table-description></table-description>
+<table-figure-bounds height="-1" width="-1" x="628" y="-31"/>
+<column-list>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="classes_id" remarks="" uid="89cb3b:115a0782492:-61f7">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="level_id" remarks="" uid="89cb3b:115a0782492:-61f6">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+</column-list>
+<primary-key alias="" name="PK_CLASSES_LEVEL" remarks="" uid="89cb3b:115a0782492:-61fa">
+<primary-key-description></primary-key-description>
+<primary-key-column name="classes_id"/>
+<primary-key-column name="level_id"/>
+</primary-key>
+<unique-key-list/>
+<foreign-key-list>
+<foreign-key alias="" name="FK_classes_level_1" on-delete="" on-update="" referenced-key="PK_CLASSES" referenced-table="classes" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-61ea">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="classes_id" referenced-key-column-name="classes_id"/>
+</foreign-key>
+<foreign-key alias="" name="FK_classes_level_2" on-delete="" on-update="" referenced-key="PK_LEVEL" referenced-table="level" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-61bf">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="level_id" referenced-key-column-name="level_id"/>
+</foreign-key>
+</foreign-key-list>
+<index-list/>
+</table>
+<table alias="" name="shop_info" remarks="" uid="89cb3b:115a0782492:-6176">
+<table-description></table-description>
+<table-figure-bounds height="-1" width="-1" x="975" y="914"/>
+<column-list>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="shop_id" remarks="" uid="89cb3b:115a0782492:-6172">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-6171">
+<column-description></column-description>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-6170">
+<column-description></column-description>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-616f">
+<column-description></column-description>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
+<variant type-name-pattern="LONGTEXT"/>
+</data-type>
+</column>
+</column-list>
+<primary-key alias="" name="PK_SHOP_INFO" remarks="" uid="89cb3b:115a0782492:-6175">
+<primary-key-description></primary-key-description>
+<primary-key-column name="shop_id"/>
+<primary-key-column name="language_id"/>
+</primary-key>
+<unique-key-list/>
+<foreign-key-list>
+<foreign-key alias="" name="FK_shop_info_shop" on-delete="" on-update="" referenced-key="PK_MAGASINS_PRIMARY" referenced-table="shop" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6162">
+<foreign-key-description></foreign-key-description>
+<foreign-key-figure>
+<fk-fig-bendpoint-list/>
+</foreign-key-figure>
+<foreign-key-column column-name="shop_id" referenced-key-column-name="shop_id"/>
+</foreign-key>
+</foreign-key-list>
 <index-list/>
 </table>
 </table-list>
