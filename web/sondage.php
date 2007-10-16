@@ -11,7 +11,7 @@ require_once("lib/ini.php");
 try
 {
  	$sondage=new Sondage($_SESSION["mysqli"]);
-	if(!$sondage->chargerPlusRecentSondageMySQL(array(0,1),getCleLangue($_SESSION['langage'])))
+	if(!$sondage->chargerPlusRecentSondageMySQL(array(0,1),$_SESSION['langage']))
 	{
 		return;
 	}

@@ -67,7 +67,7 @@ function afficherFaq()
 	if(!$smarty->is_cached("faq.tpl"))
 	{
   		$faqs = new FAQs($_SESSION['mysqli']);
-  		$faqs->chargerMySQL(0,getCleLangue($_SESSION['langage']));
+  		$faqs->chargerMySQL(0,$_SESSION['langage']);
 	  	$nb = $faqs->reqNbFaq();
 	  	for($i=0;$i<$nb;$i++)
 	  	{

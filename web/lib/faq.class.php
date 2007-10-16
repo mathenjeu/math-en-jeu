@@ -180,7 +180,7 @@ class FAQ
 	function chargerMySQL($cle)
 	{
 	  PRECONDITION($cle>0);
-	  $sql="select * from faq where cleFaq=" . $cle;
+	  $sql="select * from faq where faq_id=" . $cle;
 	  $result = $this->mysqli->query($sql);
 	  if($result->num_rows==0)
 	  	return false;
@@ -256,7 +256,7 @@ class FAQs
     //**************************************************************************
 	function chargerMySQL($nbFaq,$langue)
 	{
-	  $sql="select * from faq where cleLangue=" . $langue . " order by numero asc"; 
+	  $sql="select * from faq where language_id=(select language_id from language where short_name='" . $langue . "') order by number asc"; 
 	  if($nbFaq!=0)
         $sql.= " limit $nbFaq";
         
@@ -268,10 +268,10 @@ class FAQs
         $row=$result->fetch_object();
         $faq=new FAQ($this->mysqli);
         
-		$faq->asgCle($row->cleFaq);
+		$faq->asgCle($row->faq_id);
         $faq->asgQuestion($row->question);
-        $faq->asgReponse($row->reponse);
-        $faq->asgNumero($row->numero);
+        $faq->asgReponse($row->awnser);
+        $faq->asgNumero($row->number);
         
         $this->ajoutFaq($faq);
 	  }
@@ -279,7 +279,7 @@ class FAQs
 	
     function chargerTouteMySQL()
 	{
-	  $sql="select * from faq order by numero asc";
+	  $sql="select * from faq order by number asc";
 	  
       $result = $this->mysqli->query($sql);
       $nbFaq = $result->num_rows;

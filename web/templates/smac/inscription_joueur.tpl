@@ -113,6 +113,17 @@
         <td><input type="password" name="motDePasse2" size="20" maxlength="20" value="{$motDePasse2}"> <span class="asterix">*</span></td>
     </tr>
     <tr align="left">
+    	<td>{$lang.school_type}</td>
+    	<td>
+    		<select name="school_type" />
+    		{html_options values=$school_type_id output=$school_type_name selected=$selected_school_type_id}
+    		</select>
+    	</td>
+    	<span class="asterix">*</span>
+        &nbsp;<a target="blank" href="http://isef.ntic.org/equivalence.html">{$lang.inscription_equivalence}</a>
+        </td>
+    </tr>
+    <tr align="left">
         <td>{$lang.niveau_scolaire}</td>
         <td>
         <select name="niveau" style="width: 200px;"

@@ -99,7 +99,7 @@ class ReponseSondage
     function chargerMySQL($cleReponse)
     {
       PRECONDITION($cleReponse>0);
-      $sql="select * from reponsesondage where cleReponse=" . $cleReponse;
+      $sql="select * from pool_awnser where pool_awnser_id=" . $cleReponse;
       $result = $this->mysqli->query($sql);
       
       if($result->num_rows==0)
@@ -127,7 +127,7 @@ class ReponseSondage
       PRECONDITION($cleSondage>0);
       $this->INVARIANTS();
 
-      $sql="insert into reponsesondage(cleSondage,reponse,compteur)
+      $sql="insert into pool_awnser(pool_id,awnser,count)
             values($cleSondage,'" . $this->reqReponse() . "'," . $this->compteur . ")";
       $result = $this->mysqli->query($sql);
       $this->asgCleReponse($this->mysqli->insert_id);
@@ -145,8 +145,8 @@ class ReponseSondage
     {
       PRECONDITION($this->cleReponse!=0);
 
-      $sql="update reponsesondage set reponse='" . $this->reponse .
-        "',compteur=" .  $this->compteur . " where cleReponse=" .
+      $sql="update pool_awnser set awnser='" . $this->reponse .
+        "',count=" .  $this->compteur . " where awnser_id=" .
       $this->cleReponse;
       $result = $this->mysqli->query($sql);
 
@@ -160,7 +160,7 @@ class ReponseSondage
     //**************************************************************************
     function deleteMySQL()
     {
-      $sql="delete from reponsesondage where cleReponse=" . $this->cleReponse;
+      $sql="delete from pool_awnser where awnser_id=" . $this->cleReponse;
       $result = $this->mysqli->query($sql);
     }
     
@@ -174,13 +174,13 @@ class ReponseSondage
     function ajoutReponseUtilisateurMySQL($cleUtilisateur,$cleSondage,$table)
     {
         $this->compteur++;
-        $sql="update reponsesondage set compteur=" . $this->compteur .
-            " where cleReponse=" . $this->cleReponse;
+        $sql="update pool_awnser set count=" . $this->compteur .
+            " where awnser_id=" . $this->cleReponse;
         
         $result = $this->mysqli->query($sql);
         
-        $sql="insert into $table(cleUtilisateur,cleSondage,cleReponse)
-            values($cleUtilisateur,$cleSondage," . $this->cleReponse . ")";
+        $sql="insert into user_pool_choice(user_id, pool_id) " .
+            "values($cleUtilisateur,$cleSondage)";
         $result = $this->mysqli->query($sql);
     }
 
@@ -324,9 +324,9 @@ class Sondage
     function insertionSondageMySQL()
     {
       PRECONDITION($this->nbReponse>=2);
-      $sql="insert into sondage(sondage,dateSondage,nbChoix,destinataire,cleLangue) values('"
-            . $this->titre . "','" . $this->date . "'," . $this->nbReponse . ","
-            . $this->destinataire . "," . $this->cleLangue . ")";
+      $sql="insert into pool(question,date,number_of_choice,language_id) values('"
+            . $this->titre . "','" . $this->date . "'," . $this->nbReponse 
+            . "," . $this->cleLangue . ")";
       $result = $this->mysqli->query($sql);
         
       //on obtient la cle du dernier sondage ajout�
@@ -346,10 +346,10 @@ class Sondage
     //**************************************************************************
     function miseAJourMySQL()
     {
-    	$sql="UPDATE sondage set sondage='" . $this->titre . "',dateSondage='" . 
-    		$this->date . "',nbChoix=" . $this->nbReponse . ",destinataire=" . $this->destinataire .
-    		",cleLangue=" . $this->cleLangue .
-			" where cleSondage=" . $this->cleSondage;
+    	$sql="UPDATE pool set question='" . $this->titre . "',date='" . 
+    		$this->date . "',number_of_choice=" . $this->nbReponse .
+    		",language_id=" . $this->cleLangue .
+			" where pool_id=" . $this->cleSondage;
     	
     	$result = $this->mysqli->query($sql);
 
@@ -369,7 +369,7 @@ class Sondage
     function chargerSondageMySQL($cleSondage)
     {
         PRECONDITION($cleSondage>0);
-        $sql="select * from sondage where cleSondage=" . $cleSondage;
+        $sql="select * from pool where pool_id=" . $cleSondage;
         $result = $this->mysqli->query($sql);
 
         if($result->num_rows==0)
@@ -384,8 +384,8 @@ class Sondage
         $this->asgDestinataire($row->destinataire);
 
         //on va chercher les diff�rents choix de r�ponse pour ce sondage
-        $sql="SELECT cleReponse from reponsesondage where cleSondage=" . $this->cleSondage 
-        	. " ORDER BY cleReponse";
+        $sql="SELECT pool_awnser_id from pool_awnser where pool_id=" . $this->cleSondage 
+        	. " ORDER BY pool_id";
         $result = $this->mysqli->query($sql);
       
         //on obtient le nombre de r�ponse
@@ -411,21 +411,17 @@ class Sondage
     // Sortie:      retourne faux si aucun sondage dans la table
     // Note:        appel de la fonction chargerSondageMySQL
     //**************************************************************************
-    function chargerPlusRecentSondageMySQL($destinataire,$cleLangue)
+    function chargerPlusRecentSondageMySQL($destinataire,$language)
     {
-        $sql="select cleSondage from sondage where (";
-        $nb=count($destinataire);
-        for($i=0;$i<$nb;$i++)
-        {
-          $sql.="destinataire=" . $destinataire[$i];
-          if($i+1<$nb)
-            $sql.=" or ";
-        }
-        $sql.=") and cleLangue=" . $cleLangue . " order by dateSondage desc, cleSondage desc limit 1";
+        $sql="select pool_id from pool p, language l " .
+          " where p.language_id=l.language_id " . 
+          " and l.short_name='" . $language . "'" .
+          " order by `date` desc, pool_id desc limit 1";
         
         $result = $this->mysqli->query($sql);
-        if($result->num_rows==0)
+        if($result->num_rows==0) {
             return false;
+        }
         $row=$result->fetch_object();
         return $this->chargerSondageMySQL($row->cleSondage);
     }
@@ -438,16 +434,16 @@ class Sondage
     //**************************************************************************
     function deleteSondageMySQL()
     {
-        $sql="delete from choixjoueursondage where cleSondage=" . $this->reqCleSondage();
+        $sql="delete from user_pool_choice where pool_id=" . $this->reqCleSondage();
         $this->mysqli->query($sql);
         
-        $sql="delete from choixadminsondage where cleSondage=" . $this->reqCleSondage();
-        $this->mysqli->query($sql);
+        //$sql="delete from choixadminsondage where cleSondage=" . $this->reqCleSondage();
+        //$this->mysqli->query($sql);
         
-        $sql="delete from reponsesondage where cleSondage=" . $this->reqCleSondage();
+        $sql="delete from pool_awnser where pool_id=" . $this->reqCleSondage();
         $this->mysqli->query($sql);
       
-        $sql="delete from sondage where cleSondage=" . $this->reqCleSondage();
+        $sql="delete from pool where pool_id=" . $this->reqCleSondage();
         $this->mysqli->query($sql);
       
         $this->Sondage($this->mysqli);
@@ -481,6 +477,7 @@ class Sondage
     //                    ( entre 1 et le nombre total de r�ponse)
     // Sortie:      faux si le choix n'a pas �t� ajout�
     // Note:        on v�rifie
+    // @deprecated
     //**************************************************************************
     function ajoutChoixAdministrateur($cleAdministrateur,$noReponse)
     {
@@ -504,8 +501,8 @@ class Sondage
     //**************************************************************************
     function joueurDejaRepondu($cleJoueur)
     {
-        $sql="select * from choixjoueursondage where cleSondage=" . $this->cleSondage
-            . " and cleUtilisateur=" . $cleJoueur;
+        $sql="select * from user_pool_choice where pool_id=" . $this->cleSondage
+            . " and user_id=" . $cleJoueur;
         $result = $this->mysqli->query($sql);
         if($result->num_rows==0)
             return false;
@@ -519,6 +516,7 @@ class Sondage
     // Sortie:      retourne faux si le joueur n'a pas encore r�pondu
     //              vrai dans le cas contraire
     // Note:
+    // @deprecated
     //**************************************************************************
     function adminDejaRepondu($cleAdmin)
     {

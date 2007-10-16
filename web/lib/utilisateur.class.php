@@ -60,7 +60,7 @@ abstract class Utilisateur
       INVARIANT(strlen($this->prenom)>0);
       INVARIANT($this->estConfirmer==0 || $this->estConfirmer==1);
       INVARIANT($this->etablissement >= 0);
-      INVARIANT(($this->niveau > 0) && ($this->niveau < 15));
+      //INVARIANT(($this->niveau > 0) && ($this->niveau < 15));
       INVARIANT(Courriel::validerCourriel($this->courriel));
       INVARIANT(eregi("^[a-zA-Z0-9_-]{4,8}$",$this->alias));
 
@@ -133,7 +133,7 @@ abstract class Utilisateur
     //Note : on appel les fonctions d'assignations
     //**************************************************************************
     function asgUtilisateur($nom,$prenom,$alias,$motDePasse,$courriel,
-        $estConfirmer,$etablissement,$niveau,$categorie)
+        $estConfirmer,$etablissement)
     {
       $this->asgNom($nom);
       $this->asgPrenom($prenom);
@@ -141,9 +141,9 @@ abstract class Utilisateur
       $this->asgMotDePasse($motDePasse);
       $this->asgCourriel($courriel);
       $this->asgEstConfirmer($estConfirmer);
-      $this->asgNiveau($niveau);
+
       $this->asgEtablissement($etablissement);
-      $this->asgcategorie($categorie);
+      
       
       $this->INVARIANTS();
     }

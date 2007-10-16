@@ -38,7 +38,7 @@ function main()
 	{
 		//on charge les nouvelles
 	    $nouvelles = new Nouvelles($_SESSION["mysqli"]);
-	    $nouvelles->chargerMySQL(MAX_NB_NOUVELLES,array(0,1),getCleLangue($_SESSION['langage']));
+	    $nouvelles->chargerMySQL(MAX_NB_NOUVELLES,array(0,1),$_SESSION['langage']);
 	    
 	    for($i=0;$i<$nouvelles->reqNbNouvelle();$i++)
 	    {

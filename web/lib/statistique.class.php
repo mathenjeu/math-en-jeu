@@ -137,12 +137,12 @@ class Statistique
     {
       global $lang;
       
-      $sql="select sondage from sondage where cleSondage=" . $cle;
+      $sql="select question from pool where pool_is=" . $cle;
       $result = $this->mysqli->query($sql);
       $row=$result->fetch_array();
       $titre=$row[0];
       
-      $sql="select * from reponsesondage where cleSondage=" . $cle;
+      $sql="select * from pool_awnser where pool_id=" . $cle;
       $result = $this->mysqli->query($sql);
       $nb=$result->num_rows;
       $total=0;
@@ -297,9 +297,9 @@ class Statistique
     {
       global $lang;
 
-      $sql="select count(datePartie) as nbPartie,datePartie from partie where
-            DATE_SUB(CURDATE(),INTERVAL " . $nbJour . " DAY) <= datePartie
-            GROUP BY datePartie ORDER by datePartie asc";
+      $sql="select count(date) as nbPartie,date from game where
+            DATE_SUB(CURDATE(),INTERVAL " . $nbJour . " DAY) <= date
+            GROUP BY date ORDER by date asc";
 
       $result = $this->mysqli->query($sql);
       $nb=$result->num_rows;
@@ -353,9 +353,9 @@ class Statistique
         $lang['aou'],$lang['sep'],$lang['oct'],
         $lang['nov'],$lang['dec']);
 
-      $sql="select count(datePartie) as nbPartie, Month(datePartie) as mois,Year(datePartie) as annee from partie where
-            DATE_SUB(CURDATE(),INTERVAL $nbMois MONTH) <= datePartie
-            GROUP BY Month(datePartie) ORDER by datePartie asc";
+      $sql="select count(date) as nbPartie, Month(date) as mois,Year(date) as annee from game where
+            DATE_SUB(CURDATE(),INTERVAL $nbMois MONTH) <= date
+            GROUP BY Month(date) ORDER by date asc";
       $result = $this->mysqli->query($sql);
       
 	  if(!$result)

@@ -71,13 +71,13 @@ function joueurPlusGagner(&$smarty)
 {
   global $lang;
 
-  $sql ="SELECT DISTINCT alias,ville,
-            (sum( partiejoueur.gagner ) / count( pointage )) AS moyVictoire,
-            count( pointage ) as nbPartie
-            FROM partiejoueur, partie, joueur
-            WHERE partiejoueur.clePartie = partie.clePartie AND joueur.cleJoueur = partiejoueur.cleJoueur
-            AND DATE_SUB(CURDATE(),INTERVAL " . NB_JOUR_PALMARES . " DAY) <= datePartie
-            GROUP BY partiejoueur.cleJoueur
+  $sql ="SELECT DISTINCT username,city,
+            (sum( game_user.has_won ) / count( score )) AS moyVictoire,
+            count( score ) as nbPartie
+            FROM game_user, game, user
+            WHERE game_user.game_id = game.game_id AND user.user_id = game_user.user_id
+            AND DATE_SUB(CURDATE(),INTERVAL " . NB_JOUR_PALMARES . " DAY) <= date
+            GROUP BY game_user.user_id
             HAVING nbPartie>=" . MIN_NB_PARTIE_PALMARES . "
             ORDER BY moyVictoire DESC, nbPartie desc
             LIMIT " . MAX_NB_JOUEURS_PALMARES;
@@ -110,13 +110,13 @@ function joueurPlusJouee(&$smarty)
 {
   global $lang;
 
-  $sql ="SELECT DISTINCT alias,ville,
-            sum( partie.dureePartie ) AS totalTemps,
-            count( pointage ) AS nbPartie
-            FROM partiejoueur, partie, joueur
-            WHERE partiejoueur.clePartie = partie.clePartie AND joueur.cleJoueur = partiejoueur.cleJoueur
-            AND DATE_SUB(CURDATE(),INTERVAL " . NB_JOUR_PALMARES . " DAY) <= datePartie
-            GROUP BY partiejoueur.cleJoueur
+  $sql ="SELECT DISTINCT username,city,
+            sum( game.duration ) AS totalTemps,
+            count( score ) AS nbPartie
+            FROM game_user, game, user
+            WHERE game_user.game_id = game.game_id AND user.user_id = game_user.user_id
+            AND DATE_SUB(CURDATE(),INTERVAL " . NB_JOUR_PALMARES . " DAY) <= date
+            GROUP BY game_user.user_id
             HAVING nbPartie>=" . MIN_NB_PARTIE_PALMARES . "
             ORDER BY totalTemps DESC
             LIMIT " . MAX_NB_JOUEURS_PALMARES;
@@ -149,13 +149,13 @@ function meilleurMoy(&$smarty)
 {
   global $lang;
 
-  $sql ="SELECT DISTINCT alias,ville,
-            (sum( partiejoueur.pointage ) / sum( partie.dureePartie )) AS moy,
-            count( pointage ) AS nbPartie
-            FROM partiejoueur, partie, joueur
-            WHERE partiejoueur.clePartie = partie.clePartie AND joueur.cleJoueur = partiejoueur.cleJoueur
-            AND DATE_SUB(CURDATE(),INTERVAL " . NB_JOUR_PALMARES . " DAY) <= datePartie
-            GROUP BY partiejoueur.cleJoueur
+  $sql ="SELECT DISTINCT username,city,
+            (sum( game_user.score ) / sum( game.duration )) AS moy,
+            count( score ) AS nbPartie
+            FROM game_user, game, user
+            WHERE game_user.game_id = game.game_id AND user.user_id = user.user_id
+            AND DATE_SUB(CURDATE(),INTERVAL " . NB_JOUR_PALMARES . " DAY) <= date
+            GROUP BY game_user.user_id
             HAVING nbPartie>=" . MIN_NB_PARTIE_PALMARES . "
             ORDER BY moy DESC
             LIMIT " . MAX_NB_JOUEURS_PALMARES;
