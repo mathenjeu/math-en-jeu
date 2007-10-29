@@ -998,11 +998,11 @@ Ex : simple user, administrator, etc...</table-description>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="subject_id" remarks="" uid="89cb3b:115a0782492:-7f7f">
+<column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="category_id" remarks="" uid="89cb3b:115a0782492:-7f7f">
 <column-description></column-description>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
@@ -1043,7 +1043,7 @@ Ex : simple user, administrator, etc...</table-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
-<foreign-key-column column-name="subject_id" referenced-key-column-name="category_id"/>
+<foreign-key-column column-name="category_id" referenced-key-column-name="category_id"/>
 </foreign-key>
 </foreign-key-list>
 <index-list/>
