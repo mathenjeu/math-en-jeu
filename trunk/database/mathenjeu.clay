@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <clay-model clay-version="1.4.0">
 <database-model alias="" author="" begin-script="" end-script="" name="mathenjeu" remarks="" sql-dialect-id="jp.azzurri.clay.dialect.MySQL_5_0_Dialect" uid="89cb3b:115a0782492:-8000" version="1.0">
-<database-model-description></database-model-description>
+<database-model-description/>
 <schema-list>
 <schema alias="mathenjeu" name="mathenjeu" remarks="" uid="89cb3b:115a0782492:-7ffe">
-<schema-description></schema-description>
+<schema-description/>
 <domain-list/>
 <table-list>
 <table alias="" name="role" remarks="" uid="89cb3b:115a0782492:-7ffd">
@@ -13,7 +13,7 @@ Ex : simple user, administrator, etc...</table-description>
 <table-figure-bounds height="-1" width="-1" x="111" y="56"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="role_id" remarks="" uid="89cb3b:115a0782492:-7ffb">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -26,14 +26,14 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="tag" remarks="" uid="89cb3b:115a0782492:-7ffa">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_CATEGORIEJOUEUR_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7ffc">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="role_id"/>
 </primary-key>
 <unique-key-list/>
@@ -41,11 +41,11 @@ Ex : simple user, administrator, etc...</table-description>
 <index-list/>
 </table>
 <table alias="" name="user_pool_choice" remarks="" uid="89cb3b:115a0782492:-7ff4">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="137" y="459"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="user_id" remarks="" uid="89cb3b:115a0782492:-7ff2">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -58,7 +58,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="pool_id" remarks="" uid="89cb3b:115a0782492:-7ff1">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -72,21 +72,21 @@ Ex : simple user, administrator, etc...</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_USER_POOL_CHOICE" remarks="" uid="89cb3b:115a0782492:-7ff3">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="user_id"/>
 <primary-key-column name="pool_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_user_pool_choice_pool" on-delete="" on-update="" referenced-key="PK_SONDAGE_PRIMARY" referenced-table="pool" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6fc3">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="pool_id" referenced-key-column-name="pool_id"/>
 </foreign-key>
 <foreign-key alias="" name="FK_user_pool_choice_user" on-delete="" on-update="" referenced-key="PK_JOUEUR_PRIMARY" referenced-table="user" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7247">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -96,11 +96,11 @@ Ex : simple user, administrator, etc...</table-description>
 <index-list/>
 </table>
 <table alias="" name="school" remarks="" uid="89cb3b:115a0782492:-7fef">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="-140" y="201"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="school_id" remarks="" uid="89cb3b:115a0782492:-7fed">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -113,13 +113,13 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-7fec">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TINYTEXT" selected-variant-pattern="TINYTEXT">
 <variant type-name-pattern="TINYTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="0" mandatory="true" name="school_type_id" remarks="" uid="89cb3b:115a0782492:-7feb">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -132,32 +132,32 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="city" remarks="" uid="89cb3b:115a0782492:-7fea">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TINYTEXT" selected-variant-pattern="TINYTEXT">
 <variant type-name-pattern="TINYTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="255" decimal-digits="0" default-value="" mandatory="true" name="province" remarks="" uid="89cb3b:115a0782492:-7fe9">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TINYTEXT" selected-variant-pattern="TINYTEXT">
 <variant type-name-pattern="TINYTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="country" remarks="" uid="89cb3b:115a0782492:-7fe8">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TINYTEXT" selected-variant-pattern="TINYTEXT">
 <variant type-name-pattern="TINYTEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_ETABLISSEMENT_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7fee">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="school_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_school_school_type" on-delete="" on-update="" referenced-key="PK_TYPEETABLISSEMENT_PRIMARY" referenced-table="school_type" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7299">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -167,11 +167,11 @@ Ex : simple user, administrator, etc...</table-description>
 <index-list/>
 </table>
 <table alias="" name="faq" remarks="" uid="89cb3b:115a0782492:-7fe7">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="43" y="1001"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="faq_id" remarks="" uid="89cb3b:115a0782492:-7fe5">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -184,19 +184,19 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="65535" decimal-digits="0" default-value="" mandatory="true" name="question" remarks="" uid="89cb3b:115a0782492:-7fe4">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="awnser" remarks="" uid="89cb3b:115a0782492:-7fe3">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="4" decimal-digits="0" default-value="" mandatory="true" name="number" remarks="The number of the faq used for order." uid="89cb3b:115a0782492:-7fe2">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-6" name="TINYINT" selected-variant-pattern="TINYINT(%n)">
 <variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n)"/>
 <variant type-name-pattern="TINYINT"/>
@@ -209,7 +209,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="4" decimal-digits="0" default-value="0" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-7fe1">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-6" name="TINYINT" selected-variant-pattern="TINYINT(%n)">
 <variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n)"/>
 <variant type-name-pattern="TINYINT"/>
@@ -223,14 +223,14 @@ Ex : simple user, administrator, etc...</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_FAQ_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7fe6">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="faq_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list/>
 <index-list>
 <index alias="" name="IDX_FAQ_NUMBER" remarks="" uid="89cb3b:115a0782492:-7fe0" unique="false">
-<index-description></index-description>
+<index-description/>
 <index-column name="number" sort="ASC"/>
 </index>
 </index-list>
@@ -240,7 +240,7 @@ Ex : simple user, administrator, etc...</table-description>
 <table-figure-bounds height="-1" width="-1" x="281" y="101"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="user_id" remarks="" uid="89cb3b:115a0782492:-7fdd">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -253,19 +253,19 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-7fdb">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TINYTEXT" selected-variant-pattern="TINYTEXT">
 <variant type-name-pattern="TINYTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="last_name" remarks="" uid="89cb3b:115a0782492:-7fda">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TINYTEXT" selected-variant-pattern="TINYTEXT">
 <variant type-name-pattern="TINYTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="4" decimal-digits="0" default-value="" mandatory="false" name="sexe" remarks="" uid="89cb3b:115a0782492:-7fd9">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-6" name="TINYINT" selected-variant-pattern="TINYINT(%n)">
 <variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n)"/>
 <variant type-name-pattern="TINYINT"/>
@@ -278,37 +278,37 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="username" remarks="" uid="89cb3b:115a0782492:-7fd8">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="password" remarks="" uid="89cb3b:115a0782492:-7fd7">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TINYTEXT" selected-variant-pattern="TINYTEXT">
 <variant type-name-pattern="TINYTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="city" remarks="" uid="89cb3b:115a0782492:-7fd6">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TINYTEXT" selected-variant-pattern="TINYTEXT">
 <variant type-name-pattern="TINYTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="country" remarks="" uid="89cb3b:115a0782492:-7fd5">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TINYTEXT" selected-variant-pattern="TINYTEXT">
 <variant type-name-pattern="TINYTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="email" remarks="" uid="89cb3b:115a0782492:-7fd4">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="school_id" remarks="" uid="89cb3b:115a0782492:-7fd3">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -321,25 +321,25 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="inscription_date" remarks="" uid="89cb3b:115a0782492:-7fd1">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="91" literal-prefix="'" literal-suffix="'" name="DATE" selected-variant-pattern="DATE">
 <variant type-name-pattern="DATE"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="last_access_date" remarks="" uid="89cb3b:115a0782492:-7fd0">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="91" literal-prefix="'" literal-suffix="'" name="DATE" selected-variant-pattern="DATE">
 <variant type-name-pattern="DATE"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="last_access_time" remarks="" uid="89cb3b:115a0782492:-7fcf">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="92" literal-prefix="'" literal-suffix="'" name="TIME" selected-variant-pattern="TIME">
 <variant type-name-pattern="TIME"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="number_of_completed_game" remarks="" uid="89cb3b:115a0782492:-7fce">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -352,7 +352,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="best_score" remarks="" uid="89cb3b:115a0782492:-7fcd">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -365,7 +365,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="" mandatory="false" name="total_time_played" remarks="" uid="89cb3b:115a0782492:-7fcc">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -378,19 +378,19 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="255" decimal-digits="0" default-value="" mandatory="true" name="province" remarks="" uid="89cb3b:115a0782492:-7fc6">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TINYTEXT" selected-variant-pattern="TINYTEXT">
 <variant type-name-pattern="TINYTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="email_confirmation_key" remarks="" uid="89cb3b:115a0782492:-7fc5">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="4" decimal-digits="0" default-value="1" mandatory="true" name="email_is_confirmed" remarks="" uid="89cb3b:115a0782492:-7fc4">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-6" name="TINYINT" selected-variant-pattern="TINYINT(%n)">
 <variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n)"/>
 <variant type-name-pattern="TINYINT"/>
@@ -403,7 +403,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="0" mandatory="true" name="role_id" remarks="" uid="89cb3b:115a0782492:-7fc2">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -416,7 +416,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="0" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-7fc1">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -430,20 +430,20 @@ Ex : simple user, administrator, etc...</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_JOUEUR_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7fde">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="user_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_USER_ROLE" on-delete="" on-update="" referenced-key="PK_CATEGORIEJOUEUR_PRIMARY" referenced-table="role" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7d9f">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="role_id" referenced-key-column-name="role_id"/>
 </foreign-key>
 <foreign-key alias="" name="FK_USER_SCHOOL" on-delete="" on-update="" referenced-key="PK_ETABLISSEMENT_PRIMARY" referenced-table="school" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7506">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -457,7 +457,7 @@ Ex : simple user, administrator, etc...</table-description>
 <table-figure-bounds height="-1" width="-1" x="-134" y="730"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-7fbe">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -470,14 +470,14 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="50" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-7fbd">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="12" literal-prefix="'" literal-suffix="'" name="VARCHAR" selected-variant-pattern="VARCHAR(%n)">
 <variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n)"/>
 <variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n) BINARY"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="5" decimal-digits="0" default-value="" mandatory="true" name="short_name" remarks="" uid="89cb3b:115a0782492:-7fbc">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="12" literal-prefix="'" literal-suffix="'" name="VARCHAR" selected-variant-pattern="VARCHAR(%n)">
 <variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n)"/>
 <variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n) BINARY"/>
@@ -485,7 +485,7 @@ Ex : simple user, administrator, etc...</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_LANGUES_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7fbf">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="language_id"/>
 </primary-key>
 <unique-key-list/>
@@ -497,7 +497,7 @@ Ex : simple user, administrator, etc...</table-description>
 <table-figure-bounds height="-1" width="-1" x="712" y="930"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="shop_id" remarks="" uid="89cb3b:115a0782492:-7fb9">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -510,7 +510,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="45" decimal-digits="0" default-value="" mandatory="true" name="tag" remarks="" uid="89cb3b:115a0782492:-7fb8">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="12" literal-prefix="'" literal-suffix="'" name="VARCHAR" selected-variant-pattern="VARCHAR(%n)">
 <variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n)"/>
 <variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n) BINARY"/>
@@ -518,7 +518,7 @@ Ex : simple user, administrator, etc...</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_MAGASINS_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7fba">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="shop_id"/>
 </primary-key>
 <unique-key-list/>
@@ -526,11 +526,11 @@ Ex : simple user, administrator, etc...</table-description>
 <index-list/>
 </table>
 <table alias="" name="shop_object" remarks="" uid="89cb3b:115a0782492:-7fb7">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="704" y="1056"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="shop_id" remarks="" uid="89cb3b:115a0782492:-7fb4">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -543,7 +543,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="object_id" remarks="" uid="89cb3b:115a0782492:-7fb3">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -557,21 +557,21 @@ Ex : simple user, administrator, etc...</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_MAGASINS_OBJETS_UTILISABLE_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7fb6">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="shop_id"/>
 <primary-key-column name="object_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_shop_object_object" on-delete="" on-update="" referenced-key="PK_OBJETS_PRIMARY" referenced-table="object" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6ea5">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="object_id" referenced-key-column-name="object_id"/>
 </foreign-key>
 <foreign-key alias="" name="FK_shop_object_shop" on-delete="" on-update="" referenced-key="PK_MAGASINS_PRIMARY" referenced-table="shop" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6e61">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -581,11 +581,11 @@ Ex : simple user, administrator, etc...</table-description>
 <index-list/>
 </table>
 <table alias="" name="music_category_user" remarks="" uid="89cb3b:115a0782492:-7fb2">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="293" y="-40"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="user_id" remarks="" uid="89cb3b:115a0782492:-7fb0">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -598,7 +598,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="music_category_id" remarks="" uid="89cb3b:115a0782492:-7faf">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -612,21 +612,21 @@ Ex : simple user, administrator, etc...</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_MUSIC_CATEGORY_USER" remarks="" uid="89cb3b:115a0782492:-7fb1">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="user_id"/>
 <primary-key-column name="music_category_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_music_category_user_1" on-delete="" on-update="" referenced-key="PK_MUSIQUE_CATEGORIES_PRIMARY" referenced-table="music_category" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6284">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="music_category_id" referenced-key-column-name="music_category_id"/>
 </foreign-key>
 <foreign-key alias="" name="FK_music_category_user_2" on-delete="" on-update="" referenced-key="PK_JOUEUR_PRIMARY" referenced-table="user" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6262">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -636,11 +636,11 @@ Ex : simple user, administrator, etc...</table-description>
 <index-list/>
 </table>
 <table alias="" name="music_category" remarks="" uid="89cb3b:115a0782492:-7fae">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="291" y="-209"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="music_category_id" remarks="" uid="89cb3b:115a0782492:-7fac">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -654,7 +654,7 @@ Ex : simple user, administrator, etc...</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_MUSIQUE_CATEGORIES_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7fad">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="music_category_id"/>
 </primary-key>
 <unique-key-list/>
@@ -662,11 +662,11 @@ Ex : simple user, administrator, etc...</table-description>
 <index-list/>
 </table>
 <table alias="" name="music_file" remarks="" uid="89cb3b:115a0782492:-7faa">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="-33" y="-363"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="music_file_id" remarks="" uid="89cb3b:115a0782492:-7fa8">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -679,14 +679,14 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="filename" remarks="" uid="89cb3b:115a0782492:-7fa7">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TINYTEXT" selected-variant-pattern="TINYTEXT">
 <variant type-name-pattern="TINYTEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_MUSIQUE_FICHIERS_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7fa9">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="music_file_id"/>
 </primary-key>
 <unique-key-list/>
@@ -694,11 +694,11 @@ Ex : simple user, administrator, etc...</table-description>
 <index-list/>
 </table>
 <table alias="" name="music_file_category" remarks="" uid="89cb3b:115a0782492:-7fa6">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="-53" y="-220"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="music_category_id" remarks="" uid="89cb3b:115a0782492:-7fa3">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -711,7 +711,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="music_file_id" remarks="" uid="89cb3b:115a0782492:-62d8">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -725,21 +725,21 @@ Ex : simple user, administrator, etc...</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_MUSIQUE_FICHIERS_CATEGORIES_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7fa5">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="music_category_id"/>
 <primary-key-column name="music_file_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_music_file_category_music_category" on-delete="" on-update="" referenced-key="PK_MUSIQUE_CATEGORIES_PRIMARY" referenced-table="music_category" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-62fa">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="music_category_id" referenced-key-column-name="music_category_id"/>
 </foreign-key>
 <foreign-key alias="" name="FK_music_file_category_music_file" on-delete="" on-update="" referenced-key="PK_MUSIQUE_FICHIERS_PRIMARY" referenced-table="music_file" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-62b9">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -749,11 +749,11 @@ Ex : simple user, administrator, etc...</table-description>
 <index-list/>
 </table>
 <table alias="" name="news" remarks="" uid="89cb3b:115a0782492:-7f9e">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="117" width="183" x="40" y="879"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="news_id" remarks="" uid="89cb3b:115a0782492:-7f9c">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -766,31 +766,31 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="0000-00-00" mandatory="true" name="date" remarks="" uid="89cb3b:115a0782492:-7f9b">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="91" literal-prefix="'" literal-suffix="'" name="DATE" selected-variant-pattern="DATE">
 <variant type-name-pattern="DATE"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="body" remarks="" uid="89cb3b:115a0782492:-7f9a">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="title" remarks="" uid="89cb3b:115a0782492:-7f99">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="65535" decimal-digits="0" default-value="" mandatory="true" name="image" remarks="" uid="89cb3b:115a0782492:-7f97">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="4" decimal-digits="0" default-value="0" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-7f96">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-6" name="TINYINT" selected-variant-pattern="TINYINT(%n)">
 <variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n)"/>
 <variant type-name-pattern="TINYINT"/>
@@ -804,14 +804,14 @@ Ex : simple user, administrator, etc...</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_NOUVELLE_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f9d">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="news_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list/>
 <index-list>
 <index alias="" name="IDX_NEWS_DATE" remarks="" uid="89cb3b:115a0782492:-7f95" unique="false">
-<index-description></index-description>
+<index-description/>
 <index-column name="date" sort="ASC"/>
 </index>
 </index-list>
@@ -821,7 +821,7 @@ Ex : simple user, administrator, etc...</table-description>
 <table-figure-bounds height="53" width="86" x="424" y="1056"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="object_id" remarks="" uid="89cb3b:115a0782492:-7f92">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -834,7 +834,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="45" decimal-digits="0" default-value="" mandatory="true" name="tag" remarks="" uid="89cb3b:115a0782492:-7f90">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="12" literal-prefix="'" literal-suffix="'" name="VARCHAR" selected-variant-pattern="VARCHAR(%n)">
 <variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n)"/>
 <variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n) BINARY"/>
@@ -842,7 +842,7 @@ Ex : simple user, administrator, etc...</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_OBJETS_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f93">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="object_id"/>
 </primary-key>
 <unique-key-list/>
@@ -850,11 +850,11 @@ Ex : simple user, administrator, etc...</table-description>
 <index-list/>
 </table>
 <table alias="" name="game" remarks="" uid="89cb3b:115a0782492:-7f8f">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="-121" y="-77"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="game_id" remarks="" uid="89cb3b:115a0782492:-7f8d">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -867,19 +867,19 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="0000-00-00" mandatory="true" name="date" remarks="" uid="89cb3b:115a0782492:-7f8c">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="91" literal-prefix="'" literal-suffix="'" name="DATE" selected-variant-pattern="DATE">
 <variant type-name-pattern="DATE"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="00:00:00" mandatory="true" name="hour" remarks="" uid="89cb3b:115a0782492:-7f8b">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="92" literal-prefix="'" literal-suffix="'" name="TIME" selected-variant-pattern="TIME">
 <variant type-name-pattern="TIME"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="duration" remarks="" uid="89cb3b:115a0782492:-7f8a">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -893,7 +893,7 @@ Ex : simple user, administrator, etc...</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_PARTIE_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f8e">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="game_id"/>
 </primary-key>
 <unique-key-list/>
@@ -901,11 +901,11 @@ Ex : simple user, administrator, etc...</table-description>
 <index-list/>
 </table>
 <table alias="" name="game_user" remarks="" uid="89cb3b:115a0782492:-7f89">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="76" width="119" x="-155" y="86"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="game_id" remarks="" uid="89cb3b:115a0782492:-7f87">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -918,7 +918,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="user_id" remarks="" uid="89cb3b:115a0782492:-7f85">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -931,7 +931,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="score" remarks="" uid="89cb3b:115a0782492:-7f84">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -944,7 +944,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="4" decimal-digits="0" default-value="0" mandatory="true" name="has_won" remarks="" uid="89cb3b:115a0782492:-7f83">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-6" name="TINYINT" selected-variant-pattern="TINYINT(%n)">
 <variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n)"/>
 <variant type-name-pattern="TINYINT"/>
@@ -958,21 +958,21 @@ Ex : simple user, administrator, etc...</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_PARTIEJOUEUR_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f88">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="game_id"/>
 <primary-key-column name="user_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_GAME_USER_GAME" on-delete="" on-update="" referenced-key="PK_PARTIE_PRIMARY" referenced-table="game" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-780b">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="game_id" referenced-key-column-name="game_id"/>
 </foreign-key>
 <foreign-key alias="" name="FK_GAME_USER_USER" on-delete="" on-update="" referenced-key="PK_JOUEUR_PRIMARY" referenced-table="user" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7865">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -982,11 +982,11 @@ Ex : simple user, administrator, etc...</table-description>
 <index-list/>
 </table>
 <table alias="" name="question" remarks="" uid="89cb3b:115a0782492:-7f82">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="1118" y="112"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="question_id" remarks="" uid="89cb3b:115a0782492:-7f80">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -999,7 +999,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="category_id" remarks="" uid="89cb3b:115a0782492:-7f7f">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1012,7 +1012,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="awnser_type_id" remarks="" uid="89cb3b:115a0782492:-7f7d">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1026,20 +1026,20 @@ Ex : simple user, administrator, etc...</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_QUESTION_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f81">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="question_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_question_awnser_type" on-delete="" on-update="" referenced-key="PK_TYPEREPONSE_PRIMARY" referenced-table="awnser_type" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7267">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="awnser_type_id" referenced-key-column-name="awnser_type_id"/>
 </foreign-key>
 <foreign-key alias="" name="FK_question_subject_id" on-delete="" on-update="" referenced-key="PK_CATEGORY" referenced-table="category" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-64c9">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -1049,11 +1049,11 @@ Ex : simple user, administrator, etc...</table-description>
 <index-list/>
 </table>
 <table alias="" name="question_group" remarks="" uid="89cb3b:115a0782492:-7f6c">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="1128" y="535"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="question_group_id" remarks="" uid="89cb3b:115a0782492:-7f6a">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1066,7 +1066,7 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-7f67">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1079,20 +1079,20 @@ Ex : simple user, administrator, etc...</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-7f69">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-7f68">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
-<variant type-name-pattern="LONGTEXT"/>
+<column-description/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_QUESTIONS_GROUPS_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f6b">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="question_group_id"/>
 </primary-key>
 <unique-key-list/>
@@ -1105,7 +1105,7 @@ A question can be in more than one group, and a group can have multiple question
 <table-figure-bounds height="-1" width="-1" x="1121" y="413"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="question_group_id" remarks="" uid="89cb3b:115a0782492:-7f63">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1118,7 +1118,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="question_id" remarks="" uid="89cb3b:115a0782492:-7f62">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1132,21 +1132,21 @@ A question can be in more than one group, and a group can have multiple question
 </column>
 </column-list>
 <primary-key alias="" name="PK_QUESTIONS_GROUPS_QUESTIONS_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f65">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="question_group_id"/>
 <primary-key-column name="question_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_question_group_question_question" on-delete="" on-update="" referenced-key="PK_QUESTION_PRIMARY" referenced-table="question" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-683f">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="question_id" referenced-key-column-name="question_id"/>
 </foreign-key>
 <foreign-key alias="" name="FK_question_group_question_question_group" on-delete="" on-update="" referenced-key="PK_QUESTIONS_GROUPS_PRIMARY" referenced-table="question_group" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-686d">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -1156,11 +1156,11 @@ A question can be in more than one group, and a group can have multiple question
 <index-list/>
 </table>
 <table alias="" name="question_group_room" remarks="" uid="89cb3b:115a0782492:-7f61">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="1119" y="676"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="question_group_id" remarks="" uid="89cb3b:115a0782492:-7f5e">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1173,7 +1173,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="room_id" remarks="" uid="89cb3b:115a0782492:-7f5d">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1187,21 +1187,21 @@ A question can be in more than one group, and a group can have multiple question
 </column>
 </column-list>
 <primary-key alias="" name="PK_QUESTIONS_GROUPS_SALLES_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f60">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="question_group_id"/>
 <primary-key-column name="room_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_question_group_room_room" on-delete="" on-update="" referenced-key="PK_SALLES_PRIMARY" referenced-table="room" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6c1a">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="room_id" referenced-key-column-name="room_id"/>
 </foreign-key>
 <foreign-key alias="" name="FK_question_group_room_question_group" on-delete="" on-update="" referenced-key="PK_QUESTIONS_GROUPS_PRIMARY" referenced-table="question_group" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6b9c">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -1211,11 +1211,11 @@ A question can be in more than one group, and a group can have multiple question
 <index-list/>
 </table>
 <table alias="" name="rule" remarks="" uid="89cb3b:115a0782492:-7f5c">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="-137" y="801"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="rule_id" remarks="" uid="89cb3b:115a0782492:-7f5a">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1228,7 +1228,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="1" mandatory="true" name="chat" remarks="" uid="89cb3b:115a0782492:-7f59">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT UNSIGNED">
 <variant type-name-pattern="INT UNSIGNED"/>
 <variant type-name-pattern="INT"/>
@@ -1241,7 +1241,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="12" decimal-digits="0" default-value="" mandatory="true" name="hole_ratio" remarks="" uid="89cb3b:115a0782492:-7f58">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="7" name="FLOAT" selected-variant-pattern="FLOAT(%n)">
 <variant precision-max="53" precision-min="0" precision-variable="%n" type-name-pattern="FLOAT(%n)"/>
 <variant type-name-pattern="FLOAT"/>
@@ -1258,7 +1258,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="12" decimal-digits="0" default-value="" mandatory="true" name="shop_ratio" remarks="" uid="89cb3b:115a0782492:-7f57">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="7" name="FLOAT" selected-variant-pattern="FLOAT(%n)">
 <variant precision-max="53" precision-min="0" precision-variable="%n" type-name-pattern="FLOAT(%n)"/>
 <variant type-name-pattern="FLOAT"/>
@@ -1275,7 +1275,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="12" decimal-digits="0" default-value="" mandatory="true" name="object_ratio" remarks="" uid="89cb3b:115a0782492:-7f56">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="7" name="FLOAT" selected-variant-pattern="FLOAT(%n)">
 <variant precision-max="53" precision-min="0" precision-variable="%n" type-name-pattern="FLOAT(%n)"/>
 <variant type-name-pattern="FLOAT"/>
@@ -1292,7 +1292,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="12" decimal-digits="0" default-value="" mandatory="true" name="special_square_ratio" remarks="" uid="89cb3b:115a0782492:-7f55">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="7" name="FLOAT" selected-variant-pattern="FLOAT(%n)">
 <variant precision-max="53" precision-min="0" precision-variable="%n" type-name-pattern="FLOAT(%n)"/>
 <variant type-name-pattern="FLOAT"/>
@@ -1309,7 +1309,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="12" decimal-digits="0" default-value="" mandatory="true" name="coin_ratio" remarks="" uid="89cb3b:115a0782492:-7f54">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="7" name="FLOAT" selected-variant-pattern="FLOAT(%n)">
 <variant precision-max="53" precision-min="0" precision-variable="%n" type-name-pattern="FLOAT(%n)"/>
 <variant type-name-pattern="FLOAT"/>
@@ -1326,7 +1326,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="12" decimal-digits="0" default-value="" mandatory="true" name="win_the_game_tick" remarks="Interval of time between the &quot;win the game&quot; move" uid="89cb3b:115a0782492:-7f53">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="7" name="FLOAT" selected-variant-pattern="FLOAT(%n)">
 <variant precision-max="53" precision-min="0" precision-variable="%n" type-name-pattern="FLOAT(%n)"/>
 <variant type-name-pattern="FLOAT"/>
@@ -1343,7 +1343,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="4" mandatory="true" name="max_object_shop" remarks="" uid="89cb3b:115a0782492:-7f52">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1356,7 +1356,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="25" mandatory="true" name="max_coin_value" remarks="" uid="89cb3b:115a0782492:-7f51">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1369,7 +1369,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="10" mandatory="true" name="minimal_time" remarks="" uid="89cb3b:115a0782492:-7f50">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1382,7 +1382,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="60" mandatory="true" name="maximal_time" remarks="" uid="89cb3b:115a0782492:-7f4f">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1395,7 +1395,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="10" mandatory="true" name="max_objet_coin" remarks="The maximal number of object/coin a user can have." uid="89cb3b:115a0782492:-7f4e">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1408,7 +1408,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="6" mandatory="true" name="max_movement" remarks="" uid="89cb3b:115a0782492:-7f4d">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1422,7 +1422,7 @@ A question can be in more than one group, and a group can have multiple question
 </column>
 </column-list>
 <primary-key alias="" name="PK_REGLES_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f5b">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="rule_id"/>
 </primary-key>
 <unique-key-list/>
@@ -1430,11 +1430,11 @@ A question can be in more than one group, and a group can have multiple question
 <index-list/>
 </table>
 <table alias="" name="color_square_rule" remarks="" uid="89cb3b:115a0782492:-7f4c">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="39" y="810"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="color_square_rule_id" remarks="" uid="89cb3b:115a0782492:-7f4a">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1447,7 +1447,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="type" remarks="" uid="89cb3b:115a0782492:-7f49">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT UNSIGNED">
 <variant type-name-pattern="INT UNSIGNED"/>
 <variant type-name-pattern="INT"/>
@@ -1460,7 +1460,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="priority" remarks="" uid="89cb3b:115a0782492:-7f48">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1474,7 +1474,7 @@ A question can be in more than one group, and a group can have multiple question
 </column>
 </column-list>
 <primary-key alias="" name="PK_REGLES_CASE_COULEUR_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f4b">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="color_square_rule_id"/>
 </primary-key>
 <unique-key-list/>
@@ -1482,11 +1482,11 @@ A question can be in more than one group, and a group can have multiple question
 <index-list/>
 </table>
 <table alias="" name="special_square_rule" remarks="" uid="89cb3b:115a0782492:-7f47">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="-138" y="1016"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="special_square_rule_id" remarks="" uid="89cb3b:115a0782492:-7f45">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1499,7 +1499,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="type" remarks="" uid="89cb3b:115a0782492:-7f44">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT UNSIGNED">
 <variant type-name-pattern="INT UNSIGNED"/>
 <variant type-name-pattern="INT"/>
@@ -1512,7 +1512,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="priority" remarks="" uid="89cb3b:115a0782492:-7f43">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1526,7 +1526,7 @@ A question can be in more than one group, and a group can have multiple question
 </column>
 </column-list>
 <primary-key alias="" name="PK_REGLES_CASE_SPECIAL_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f46">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="special_square_rule_id"/>
 </primary-key>
 <unique-key-list/>
@@ -1534,11 +1534,11 @@ A question can be in more than one group, and a group can have multiple question
 <index-list/>
 </table>
 <table alias="" name="pool_awnser" remarks="" uid="89cb3b:115a0782492:-7f42">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="-128" y="483"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="pool_awnser_id" remarks="" uid="89cb3b:115a0782492:-7f3f">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1551,7 +1551,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="pool_id" remarks="" uid="89cb3b:115a0782492:-707a">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -1564,13 +1564,13 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="awnser" remarks="" uid="89cb3b:115a0782492:-7f3e">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="count" remarks="" uid="89cb3b:115a0782492:-7f3d">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1584,13 +1584,13 @@ A question can be in more than one group, and a group can have multiple question
 </column>
 </column-list>
 <primary-key alias="" name="PK_REPONSESONDAGE_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f41">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="pool_awnser_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_pool_awnser_pool" on-delete="" on-update="" referenced-key="PK_SONDAGE_PRIMARY" referenced-table="pool" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7039">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -1600,11 +1600,11 @@ A question can be in more than one group, and a group can have multiple question
 <index-list/>
 </table>
 <table alias="" name="room_info" remarks="" uid="89cb3b:115a0782492:-7f3c">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="210" y="612"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="room_id" remarks="" uid="89cb3b:115a0782492:-66db">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -1617,7 +1617,7 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-7f37">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1630,27 +1630,27 @@ A question can be in more than one group, and a group can have multiple question
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-66d6">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-7f38">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
-<variant type-name-pattern="LONGTEXT"/>
+<column-description/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_SALLE_DETAIL_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f3b">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="room_id"/>
 <primary-key-column name="language_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_room_detail_room" on-delete="" on-update="" referenced-key="PK_SALLES_PRIMARY" referenced-table="room" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6a69">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -1665,7 +1665,7 @@ A room can be associated with question_groups.</table-description>
 <table-figure-bounds height="-1" width="-1" x="430" y="595"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="room_id" remarks="" uid="89cb3b:115a0782492:-7f34">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1678,14 +1678,14 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="45" decimal-digits="0" default-value="" mandatory="false" name="password" remarks="" uid="89cb3b:115a0782492:-7f33">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="12" literal-prefix="'" literal-suffix="'" name="VARCHAR" selected-variant-pattern="VARCHAR(%n)">
 <variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n)"/>
 <variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n) BINARY"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="game_type_id" remarks="" uid="89cb3b:115a0782492:-7f32">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1698,7 +1698,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="user_id" remarks="The creator of the room" uid="89cb3b:115a0782492:-7f31">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1711,7 +1711,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="rule_id" remarks="" uid="89cb3b:115a0782492:-7f30">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1724,7 +1724,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="3" decimal-digits="0" default-value="" mandatory="true" name="official" remarks="" uid="89cb3b:115a0782492:-7f2f">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-6" name="TINYINT" selected-variant-pattern="TINYINT(%n)">
 <variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n)"/>
 <variant type-name-pattern="TINYINT"/>
@@ -1738,13 +1738,13 @@ A room can be associated with question_groups.</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_SALLES_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f35">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="room_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_ROOM_GAME_TYPE" on-delete="" on-update="" referenced-key="PK_TYPE_JEU_PRIMARY" referenced-table="game_type" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7345">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -1754,11 +1754,11 @@ A room can be associated with question_groups.</table-description>
 <index-list/>
 </table>
 <table alias="" name="room_shop" remarks="" uid="89cb3b:115a0782492:-7f2d">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="706" y="787"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="room_id" remarks="" uid="89cb3b:115a0782492:-7f2a">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1771,7 +1771,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="shop_id" remarks="" uid="89cb3b:115a0782492:-7f29">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1784,7 +1784,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="priorite" remarks="" uid="89cb3b:115a0782492:-7f28">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT UNSIGNED">
 <variant type-name-pattern="INT UNSIGNED"/>
 <variant type-name-pattern="INT"/>
@@ -1798,21 +1798,21 @@ A room can be associated with question_groups.</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_SALLES_MAGASINS_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f2c">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="room_id"/>
 <primary-key-column name="shop_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_room_shop_shop" on-delete="" on-update="" referenced-key="PK_MAGASINS_PRIMARY" referenced-table="shop" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6c83">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="shop_id" referenced-key-column-name="shop_id"/>
 </foreign-key>
 <foreign-key alias="" name="FK_room_shop_room" on-delete="" on-update="" referenced-key="PK_SALLES_PRIMARY" referenced-table="room" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6217">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -1822,11 +1822,11 @@ A room can be associated with question_groups.</table-description>
 <index-list/>
 </table>
 <table alias="" name="room_object" remarks="" uid="89cb3b:115a0782492:-7f27">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="433" y="882"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="room_id" remarks="" uid="89cb3b:115a0782492:-7f24">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1839,7 +1839,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="object_id" remarks="" uid="89cb3b:115a0782492:-7f23">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1852,7 +1852,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="priority" remarks="" uid="89cb3b:115a0782492:-7f22">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1866,21 +1866,21 @@ A room can be associated with question_groups.</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_SALLES_OBJETS_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f26">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="room_id"/>
 <primary-key-column name="object_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_room_object_object" on-delete="" on-update="" referenced-key="PK_OBJETS_PRIMARY" referenced-table="object" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-69dd">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="object_id" referenced-key-column-name="object_id"/>
 </foreign-key>
 <foreign-key alias="" name="FK_room_object_room" on-delete="" on-update="" referenced-key="PK_SALLES_PRIMARY" referenced-table="room" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6b1c">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -1890,11 +1890,11 @@ A room can be associated with question_groups.</table-description>
 <index-list/>
 </table>
 <table alias="" name="room_question" remarks="" uid="89cb3b:115a0782492:-7f21">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="896" y="578"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="room_id" remarks="" uid="89cb3b:115a0782492:-7f1e">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1907,7 +1907,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="question_id" remarks="" uid="89cb3b:115a0782492:-7f1d">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1921,21 +1921,21 @@ A room can be associated with question_groups.</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_SALLES_QUESTION_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f20">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="room_id"/>
 <primary-key-column name="question_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_room_question_room" on-delete="" on-update="" referenced-key="PK_SALLES_PRIMARY" referenced-table="room" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-696f">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="room_id" referenced-key-column-name="room_id"/>
 </foreign-key>
 <foreign-key alias="" name="FK_room_question_question" on-delete="" on-update="" referenced-key="PK_QUESTION_PRIMARY" referenced-table="question" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-67d3">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -1945,11 +1945,11 @@ A room can be associated with question_groups.</table-description>
 <index-list/>
 </table>
 <table alias="" name="pool" remarks="" uid="89cb3b:115a0782492:-7f1c">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="-134" y="629"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="pool_id" remarks="" uid="89cb3b:115a0782492:-7f1a">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -1962,19 +1962,19 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="question" remarks="" uid="89cb3b:115a0782492:-7f19">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="0000-00-00" mandatory="true" name="date" remarks="" uid="89cb3b:115a0782492:-7f18">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="91" literal-prefix="'" literal-suffix="'" name="DATE" selected-variant-pattern="DATE">
 <variant type-name-pattern="DATE"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="4" decimal-digits="0" default-value="0" mandatory="true" name="number_of_choice" remarks="" uid="89cb3b:115a0782492:-7f17">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-6" name="TINYINT" selected-variant-pattern="TINYINT(%n)">
 <variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n)"/>
 <variant type-name-pattern="TINYINT"/>
@@ -1987,7 +1987,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="4" decimal-digits="0" default-value="0" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-7f15">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-6" name="TINYINT" selected-variant-pattern="TINYINT(%n)">
 <variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n)"/>
 <variant type-name-pattern="TINYINT"/>
@@ -2001,7 +2001,7 @@ A room can be associated with question_groups.</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_SONDAGE_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f1b">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="pool_id"/>
 </primary-key>
 <unique-key-list/>
@@ -2009,11 +2009,11 @@ A room can be associated with question_groups.</table-description>
 <index-list/>
 </table>
 <table alias="" name="game_type" remarks="" uid="89cb3b:115a0782492:-7f14">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="319" y="814"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="game_type_id" remarks="" uid="89cb3b:115a0782492:-7f12">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -2026,7 +2026,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="45" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-7f11">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="12" literal-prefix="'" literal-suffix="'" name="VARCHAR" selected-variant-pattern="VARCHAR(%n)">
 <variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n)"/>
 <variant precision-max="255" precision-min="1" precision-variable="%n" type-name-pattern="VARCHAR(%n) BINARY"/>
@@ -2034,7 +2034,7 @@ A room can be associated with question_groups.</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_TYPE_JEU_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f13">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="game_type_id"/>
 </primary-key>
 <unique-key-list/>
@@ -2042,11 +2042,11 @@ A room can be associated with question_groups.</table-description>
 <index-list/>
 </table>
 <table alias="" name="school_type" remarks="" uid="89cb3b:115a0782492:-7f10">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="-141" y="383"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="school_type_id" remarks="" uid="89cb3b:115a0782492:-7f0e">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -2059,19 +2059,19 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-7f0d">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-72c7">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
-<variant type-name-pattern="LONGTEXT"/>
+<column-description/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-647e">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
 <variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
 <variant type-name-pattern="CHAR"/>
@@ -2080,7 +2080,7 @@ A room can be associated with question_groups.</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_TYPEETABLISSEMENT_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f0f">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="school_type_id"/>
 </primary-key>
 <unique-key-list/>
@@ -2088,11 +2088,11 @@ A room can be associated with question_groups.</table-description>
 <index-list/>
 </table>
 <table alias="" name="awnser_type" remarks="" uid="89cb3b:115a0782492:-7f0c">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="1175" y="-221"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="11" decimal-digits="0" default-value="" mandatory="true" name="awnser_type_id" remarks="" uid="89cb3b:115a0782492:-7f0a">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -2105,14 +2105,14 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="tag" remarks="" uid="89cb3b:115a0782492:-7f09">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_TYPEREPONSE_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f0b">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="awnser_type_id"/>
 </primary-key>
 <unique-key-list/>
@@ -2124,7 +2124,7 @@ A room can be associated with question_groups.</table-description>
 <table-figure-bounds height="-1" width="-1" x="1368" y="-32"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="question_id" remarks="" uid="89cb3b:115a0782492:-7b14">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -2137,7 +2137,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-7b13">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -2150,140 +2150,140 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="2147483647" decimal-digits="0" default-value="" mandatory="false" name="texteASCII" remarks="" uid="89cb3b:115a0782492:-7b11">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="question_latex" remarks="" uid="89cb3b:115a0782492:-7b10">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="question_mathml" remarks="" uid="89cb3b:115a0782492:-7b0f">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="answer_a_ascii" remarks="" uid="89cb3b:115a0782492:-7b0e">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="answer_a_latex" remarks="" uid="89cb3b:115a0782492:-7b0d">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="answer_a_mathml" remarks="" uid="89cb3b:115a0782492:-7b0c">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="answer_b_ascii" remarks="" uid="89cb3b:115a0782492:-7b0b">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="answer_b_latex" remarks="" uid="89cb3b:115a0782492:-7b0a">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="answer_b_mathml" remarks="" uid="89cb3b:115a0782492:-7b09">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="answer_c_ascii" remarks="" uid="89cb3b:115a0782492:-7b08">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="answer_c_latex" remarks="" uid="89cb3b:115a0782492:-7b07">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="answer_c_mathml" remarks="" uid="89cb3b:115a0782492:-7b06">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="answer_d_ascii" remarks="" uid="89cb3b:115a0782492:-7b05">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="answer_d_latex" remarks="" uid="89cb3b:115a0782492:-7b04">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="answer_d_mathml" remarks="" uid="89cb3b:115a0782492:-7b03">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="good_answer" remarks="" uid="89cb3b:115a0782492:-7b02">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="question_flash_file" remarks="" uid="89cb3b:115a0782492:-7b00">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="answer_flash_file" remarks="" uid="89cb3b:115a0782492:-7aff">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="feed_back_ascii" remarks="" uid="89cb3b:115a0782492:-7afa">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="feedback_latex" remarks="" uid="89cb3b:115a0782492:-7af9">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="feedback_mathml" remarks="" uid="89cb3b:115a0782492:-7af8">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
 <variant type-name-pattern="LONGTEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="1" decimal-digits="0" default-value="0" mandatory="true" name="is_valid" remarks="La question est valide ou non" uid="89cb3b:115a0782492:-7af7">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-7" name="BIT" selected-variant-pattern="BIT(%n)">
 <variant precision-max="64" precision-min="0" precision-variable="%n" type-name-pattern="BIT(%n)"/>
 <variant type-name-pattern="BIT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="user_id" remarks="The creator of the question." uid="89cb3b:115a0782492:-7af6">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
@@ -2296,7 +2296,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="0" mandatory="true" name="is_animated" remarks="Is the question animated or not." uid="89cb3b:115a0782492:-7af3">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
 <variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
 <variant type-name-pattern="CHAR"/>
@@ -2305,14 +2305,14 @@ A room can be associated with question_groups.</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_QUESTION_DETAILS_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7b16">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="question_id"/>
 <primary-key-column name="language_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_question_detail_question" on-delete="" on-update="" referenced-key="PK_QUESTION_PRIMARY" referenced-table="question" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7604">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -2326,7 +2326,7 @@ A room can be associated with question_groups.</table-description>
 <table-figure-bounds height="-1" width="-1" x="589" y="-202"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="level_id" remarks="" uid="89cb3b:115a0782492:-7aec">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2339,7 +2339,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-623b">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2352,20 +2352,20 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="name" remarks="" uid="89cb3b:115a0782492:-7aeb">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-7aea">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
-<variant type-name-pattern="LONGTEXT"/>
+<column-description/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_LEVEL" remarks="" uid="89cb3b:115a0782492:-7aef">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="level_id"/>
 </primary-key>
 <unique-key-list/>
@@ -2373,11 +2373,11 @@ A room can be associated with question_groups.</table-description>
 <index-list/>
 </table>
 <table alias="" name="question_level" remarks="" uid="89cb3b:115a0782492:-77c7">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="891" y="-191"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="question_id" remarks="" uid="89cb3b:115a0782492:-77c3">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2390,7 +2390,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="level_id" remarks="" uid="89cb3b:115a0782492:-77be">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2403,7 +2403,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="value" remarks="" uid="89cb3b:115a0782492:-77bd">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2417,21 +2417,21 @@ A room can be associated with question_groups.</table-description>
 </column>
 </column-list>
 <primary-key alias="" name="PK_QUESTION_LEVEL" remarks="" uid="89cb3b:115a0782492:-77c6">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="question_id"/>
 <primary-key-column name="level_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_QUESTION_LEVEL_LEVEL" on-delete="" on-update="" referenced-key="PK_LEVEL" referenced-table="level" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-77a7">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="level_id" referenced-key-column-name="level_id"/>
 </foreign-key>
 <foreign-key alias="" name="FK_QUESTION_LEVEL_QUESTION" on-delete="" on-update="" referenced-key="PK_QUESTION_PRIMARY" referenced-table="question" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-7777">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -2441,11 +2441,11 @@ A room can be associated with question_groups.</table-description>
 <index-list/>
 </table>
 <table alias="" name="object_info" remarks="" uid="89cb3b:115a0782492:-6754">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="191" y="1047"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="object_id" remarks="" uid="89cb3b:115a0782492:-6749">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2458,7 +2458,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-674f">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2471,27 +2471,27 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-674e">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="description" remarks="" uid="89cb3b:115a0782492:-674d">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
-<variant type-name-pattern="LONGTEXT"/>
+<column-description/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_OBJECT_INFO" remarks="" uid="89cb3b:115a0782492:-6753">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="object_id"/>
 <primary-key-column name="language_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_object_info_object" on-delete="" on-update="" referenced-key="PK_OBJETS_PRIMARY" referenced-table="object" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6713">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -2505,7 +2505,7 @@ A room can be associated with question_groups.</table-description>
 <table-figure-bounds height="-1" width="-1" x="826" y="-42"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="subject_id" remarks="" uid="89cb3b:115a0782492:-66bf">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2518,7 +2518,7 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-66be">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2531,20 +2531,20 @@ A room can be associated with question_groups.</table-description>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-66bd">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-66bc">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
-<variant type-name-pattern="LONGTEXT"/>
+<column-description/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_SUBJECT" remarks="" uid="89cb3b:115a0782492:-66cc">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="subject_id"/>
 </primary-key>
 <unique-key-list/>
@@ -2557,7 +2557,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 <table-figure-bounds height="-1" width="-1" x="826" y="240"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="category_id" remarks="" uid="89cb3b:115a0782492:-66b7">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2570,7 +2570,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="subject_id" remarks="" uid="89cb3b:115a0782492:-66b2">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2583,26 +2583,26 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-66b6">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-66b5">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
-<variant type-name-pattern="LONGTEXT"/>
+<column-description/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_CATEGORY" remarks="" uid="89cb3b:115a0782492:-66ba">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="category_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_category_subject" on-delete="" on-update="" referenced-key="PK_SUBJECT" referenced-table="subject" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6689">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -2616,7 +2616,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 <table-figure-bounds height="-1" width="-1" x="586" y="215"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="user_id" remarks="" uid="89cb3b:115a0782492:-6661">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2629,7 +2629,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="subject_id" remarks="" uid="89cb3b:115a0782492:-6660">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2642,7 +2642,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="level_id" remarks="" uid="89cb3b:115a0782492:-665f">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2656,7 +2656,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </column>
 </column-list>
 <primary-key alias="" name="PK_USER_SUBJECT_LEVEL" remarks="" uid="89cb3b:115a0782492:-6671">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="user_id"/>
 <primary-key-column name="subject_id"/>
 <primary-key-column name="level_id"/>
@@ -2664,14 +2664,14 @@ For example : mathematic can have these category : Math history, algebra, statis
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_user_classes_level_user" on-delete="" on-update="" referenced-key="PK_JOUEUR_PRIMARY" referenced-table="user" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-65f0">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="user_id" referenced-key-column-name="user_id"/>
 </foreign-key>
 <foreign-key alias="" name="FK_user_subject_level_subject_level" on-delete="" on-update="" referenced-key="PK_SUBJECT_LEVEL" referenced-table="subject_level" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-619f">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -2682,11 +2682,11 @@ For example : mathematic can have these category : Math history, algebra, statis
 <index-list/>
 </table>
 <table alias="" name="category_info" remarks="" uid="89cb3b:115a0782492:-658a">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="777" y="415"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="category_id" remarks="" uid="89cb3b:115a0782492:-6585">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2699,7 +2699,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-6584">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2712,27 +2712,27 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-6583">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-6582">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
-<variant type-name-pattern="LONGTEXT"/>
+<column-description/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_CATEGORY_INFO" remarks="" uid="89cb3b:115a0782492:-6589">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="category_id"/>
 <primary-key-column name="language_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_subject_info_subject" on-delete="" on-update="" referenced-key="PK_CATEGORY" referenced-table="category" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-64e6">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -2742,11 +2742,11 @@ For example : mathematic can have these category : Math history, algebra, statis
 <index-list/>
 </table>
 <table alias="" name="role_info" remarks="" uid="89cb3b:115a0782492:-647b">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="93" y="-97"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="role_info_id" remarks="" uid="89cb3b:115a0782492:-6477">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2759,7 +2759,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="role_id" remarks="" uid="89cb3b:115a0782492:-6476">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2772,7 +2772,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="a6a283:115a9bf3b85:-7fd0">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2785,26 +2785,26 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-6475">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-6474">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
-<variant type-name-pattern="LONGTEXT"/>
+<column-description/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_ROLE_INFO" remarks="" uid="89cb3b:115a0782492:-647a">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="role_info_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_role_info_1" on-delete="" on-update="" referenced-key="PK_CATEGORIEJOUEUR_PRIMARY" referenced-table="role" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6465">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -2814,11 +2814,11 @@ For example : mathematic can have these category : Math history, algebra, statis
 <index-list/>
 </table>
 <table alias="" name="music_category_info" remarks="" uid="89cb3b:115a0782492:-6459">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="286" y="-367"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="music_category_id" remarks="" uid="89cb3b:115a0782492:-63cd">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2831,7 +2831,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-6454">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2844,21 +2844,21 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-6453">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_MUSIC_CATEGORY_INFO" remarks="" uid="89cb3b:115a0782492:-6458">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="music_category_id"/>
 <primary-key-column name="language_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_music_category_info_music_category" on-delete="" on-update="" referenced-key="PK_MUSIQUE_CATEGORIES_PRIMARY" referenced-table="music_category" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-632e">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -2868,11 +2868,11 @@ For example : mathematic can have these category : Math history, algebra, statis
 <index-list/>
 </table>
 <table alias="" name="subject_level" remarks="" uid="89cb3b:115a0782492:-61fb">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="596" y="-30"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="subject_id" remarks="" uid="89cb3b:115a0782492:-61f7">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2885,7 +2885,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="level_id" remarks="" uid="89cb3b:115a0782492:-61f6">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2899,21 +2899,21 @@ For example : mathematic can have these category : Math history, algebra, statis
 </column>
 </column-list>
 <primary-key alias="" name="PK_SUBJECT_LEVEL" remarks="" uid="89cb3b:115a0782492:-61fa">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="subject_id"/>
 <primary-key-column name="level_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_subject_level_level" on-delete="" on-update="" referenced-key="PK_LEVEL" referenced-table="level" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-61bf">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="level_id" referenced-key-column-name="level_id"/>
 </foreign-key>
 <foreign-key alias="" name="FK_subject_level_subject" on-delete="" on-update="" referenced-key="PK_SUBJECT" referenced-table="subject" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-61ea">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -2923,11 +2923,11 @@ For example : mathematic can have these category : Math history, algebra, statis
 <index-list/>
 </table>
 <table alias="" name="shop_info" remarks="" uid="89cb3b:115a0782492:-6176">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="975" y="914"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="shop_id" remarks="" uid="89cb3b:115a0782492:-6172">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2940,7 +2940,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="89cb3b:115a0782492:-6171">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -2953,27 +2953,27 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="89cb3b:115a0782492:-6170">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="89cb3b:115a0782492:-616f">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
-<variant type-name-pattern="LONGTEXT"/>
+<column-description/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_SHOP_INFO" remarks="" uid="89cb3b:115a0782492:-6175">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="shop_id"/>
 <primary-key-column name="language_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_shop_info_shop" on-delete="" on-update="" referenced-key="PK_MAGASINS_PRIMARY" referenced-table="shop" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="89cb3b:115a0782492:-6162">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -2983,11 +2983,11 @@ For example : mathematic can have these category : Math history, algebra, statis
 <index-list/>
 </table>
 <table alias="" name="comment" remarks="" uid="8c4b5f:115a8cc4bbf:-7fb4">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="1361" y="-274"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="comment_id" remarks="" uid="8c4b5f:115a8cc4bbf:-7fb0">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -3000,7 +3000,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="question_id" remarks="" uid="8c4b5f:115a8cc4bbf:-7ea4">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -3013,7 +3013,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="user_id" remarks="" uid="8c4b5f:115a8cc4bbf:-7fad">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -3026,7 +3026,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="8c4b5f:115a8cc4bbf:-7edc">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="1" literal-prefix="'" literal-suffix="'" name="CHAR" selected-variant-pattern="CHAR(%n)">
 <variant precision-max="255" precision-min="0" precision-variable="%n" type-name-pattern="CHAR(%n)"/>
 <variant type-name-pattern="CHAR"/>
@@ -3034,26 +3034,26 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="datetime" remarks="" uid="8c4b5f:115a8cc4bbf:-7faf">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="93" literal-prefix="'" literal-suffix="'" name="DATETIME" selected-variant-pattern="DATETIME">
 <variant type-name-pattern="DATETIME"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="comment" remarks="" uid="8c4b5f:115a8cc4bbf:-7fae">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
-<variant type-name-pattern="LONGTEXT"/>
+<column-description/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_COMMENT" remarks="" uid="8c4b5f:115a8cc4bbf:-7fb3">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="comment_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_comment_question_info" on-delete="" on-update="" referenced-key="PK_QUESTION_DETAILS_PRIMARY" referenced-table="question_info" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="8c4b5f:115a8cc4bbf:-7d7f">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -3064,11 +3064,11 @@ For example : mathematic can have these category : Math history, algebra, statis
 <index-list/>
 </table>
 <table alias="" name="awnser_type_info" remarks="" uid="8c4b5f:115a8cc4bbf:-7de0">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="1171" y="-372"/>
 <column-list>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="awnser_type_id" remarks="" uid="8c4b5f:115a8cc4bbf:-7ddc">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -3081,7 +3081,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="8c4b5f:115a8cc4bbf:-7ddb">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -3094,27 +3094,27 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="name" remarks="" uid="8c4b5f:115a8cc4bbf:-7dda">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="8c4b5f:115a8cc4bbf:-7dd9">
-<column-description></column-description>
-<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="LONGTEXT" selected-variant-pattern="LONGTEXT">
-<variant type-name-pattern="LONGTEXT"/>
+<column-description/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 </column-list>
 <primary-key alias="" name="PK_AWNSER_TYPE_INFO" remarks="" uid="8c4b5f:115a8cc4bbf:-7ddf">
-<primary-key-description></primary-key-description>
+<primary-key-description/>
 <primary-key-column name="awnser_type_id"/>
 <primary-key-column name="language_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_awnser_type_info_1" on-delete="" on-update="" referenced-key="PK_TYPEREPONSE_PRIMARY" referenced-table="awnser_type" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="8c4b5f:115a8cc4bbf:-7dc5">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
@@ -3123,12 +3123,12 @@ For example : mathematic can have these category : Math history, algebra, statis
 </foreign-key-list>
 <index-list/>
 </table>
-<table alias="" name="attachment" remarks="" uid="8c4b5f:115a8cc4bbf:-7d8f">
-<table-description></table-description>
+<table alias="" name="image" remarks="" uid="8c4b5f:115a8cc4bbf:-7d8f">
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="1384" y="635"/>
 <column-list>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="attachment_id" remarks="" uid="8c4b5f:115a8cc4bbf:-7d8b">
-<column-description></column-description>
+<column alias="" auto-increment="true" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="image_id" remarks="" uid="8c4b5f:115a8cc4bbf:-7d8b">
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -3141,7 +3141,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="user_id" remarks="" uid="8c4b5f:115a8cc4bbf:-7d8a">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -3154,19 +3154,19 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="logical_name" remarks="" uid="8c4b5f:115a8cc4bbf:-7d89">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="physical_name" remarks="" uid="8c4b5f:115a8cc4bbf:-7d88">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="1" mandatory="true" name="is_public" remarks="" uid="8c4b5f:115a8cc4bbf:-7d87">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="-6" name="TINYINT" selected-variant-pattern="TINYINT">
 <variant type-name-pattern="TINYINT"/>
 <variant type-name-pattern="TINYINT UNSIGNED"/>
@@ -3178,21 +3178,27 @@ For example : mathematic can have these category : Math history, algebra, statis
 <variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n) ZEROFILL"/>
 </data-type>
 </column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="false" name="description" remarks="" uid="737f58:115ee2038cd:-7f63">
+<column-description/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
+</data-type>
+</column>
 </column-list>
-<primary-key alias="" name="PK_ATTACHMENT" remarks="" uid="8c4b5f:115a8cc4bbf:-7d8e">
-<primary-key-description></primary-key-description>
-<primary-key-column name="attachment_id"/>
+<primary-key alias="" name="PK_IMAGE" remarks="" uid="8c4b5f:115a8cc4bbf:-7d8e">
+<primary-key-description/>
+<primary-key-column name="image_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list/>
 <index-list/>
 </table>
 <table alias="" name="question_info_attachment" remarks="" uid="8c4b5f:115a8cc4bbf:-7d84">
-<table-description></table-description>
+<table-description/>
 <table-figure-bounds height="-1" width="-1" x="1387" y="431"/>
 <column-list>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="attachment_id" remarks="" uid="8c4b5f:115a8cc4bbf:-7d73">
-<column-description></column-description>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="image_id" remarks="" uid="8c4b5f:115a8cc4bbf:-7d73">
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -3205,7 +3211,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="question_id" remarks="" uid="8c4b5f:115a8cc4bbf:-7d72">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -3218,7 +3224,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </data-type>
 </column>
 <column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="8c4b5f:115a8cc4bbf:-7d71">
-<column-description></column-description>
+<column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
@@ -3232,27 +3238,27 @@ For example : mathematic can have these category : Math history, algebra, statis
 </column>
 </column-list>
 <primary-key alias="" name="PK_QUESTION_INFO_ATTACHMENT" remarks="" uid="8c4b5f:115a8cc4bbf:-7d83">
-<primary-key-description></primary-key-description>
-<primary-key-column name="attachment_id"/>
+<primary-key-description/>
+<primary-key-column name="image_id"/>
 <primary-key-column name="question_id"/>
 <primary-key-column name="language_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
 <foreign-key alias="" name="FK_question_info_attachment_1" on-delete="" on-update="" referenced-key="PK_QUESTION_DETAILS_PRIMARY" referenced-table="question_info" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="8c4b5f:115a8cc4bbf:-7d61">
-<foreign-key-description></foreign-key-description>
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
 <foreign-key-column column-name="question_id" referenced-key-column-name="question_id"/>
 <foreign-key-column column-name="language_id" referenced-key-column-name="language_id"/>
 </foreign-key>
-<foreign-key alias="" name="FK_question_info_attachment_2" on-delete="" on-update="" referenced-key="PK_ATTACHMENT" referenced-table="attachment" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="8c4b5f:115a8cc4bbf:-7d2d">
-<foreign-key-description></foreign-key-description>
+<foreign-key alias="" name="FK_question_info_image_image" on-delete="" on-update="" referenced-key="PK_IMAGE" referenced-table="image" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="8c4b5f:115a8cc4bbf:-7d2d">
+<foreign-key-description/>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
 </foreign-key-figure>
-<foreign-key-column column-name="attachment_id" referenced-key-column-name="attachment_id"/>
+<foreign-key-column column-name="image_id" referenced-key-column-name="image_id"/>
 </foreign-key>
 </foreign-key-list>
 <index-list/>

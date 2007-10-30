@@ -6,6 +6,8 @@ truncate table subject_level;
 truncate table subject;
 truncate table level;
 truncate table language; 
+truncate table image;
+
 insert into language(name, short_name) values('français','fr');
 insert into language(name, short_name) values('english','en');
 
@@ -89,3 +91,8 @@ insert into subject_level (subject_id, level_id)
 insert into subject_level (subject_id, level_id) 
 	values((select subject_id from subject where name='Mathématiques'),
 		   (select level_id from level where name = "Secondaire 5 (536)"));
+
+
+insert into image(user_id, logical_name, physical_name, is_public, description)
+    values ((select user_id from user where username='maxime'),
+            "test.jpg", "1.jpg", 1, "Une image de test");
