@@ -40,6 +40,7 @@ require_once(LIB_DIR . "/mon_mysqli.class.php");
 require_once(LIB_DIR . "/utilisateur.class.php");
 require_once(LIB_DIR . "/joueur.class.php");
 require_once(LIB_DIR . "/admin.class.php");
+require_once(LIB_DIR . "/dao.php");
 require_once(LIB_DIR . "/nouvelles.class.php");
 require_once(LIB_DIR . "/sondage.class.php");
 require_once(LIB_DIR . "/groupe.class.php");
