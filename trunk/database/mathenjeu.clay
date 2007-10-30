@@ -1001,8 +1001,8 @@ Ex : simple user, administrator, etc...</table-description>
 <column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="category_id" remarks="" uid="89cb3b:115a0782492:-7f7f">
 <column-description></column-description>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
-<variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
@@ -2504,7 +2504,7 @@ A room can be associated with question_groups.</table-description>
 <table-description>subject can be : math, physic, ...</table-description>
 <table-figure-bounds height="-1" width="-1" x="826" y="-42"/>
 <column-list>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="subject_id" remarks="" uid="89cb3b:115a0782492:-66bf">
+<column alias="" auto-increment="true" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="subject_id" remarks="" uid="89cb3b:115a0782492:-66bf">
 <column-description></column-description>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
 <variant type-name-pattern="INT"/>
@@ -3052,7 +3052,7 @@ For example : mathematic can have these category : Math history, algebra, statis
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
-<foreign-key alias="" name="FK_comment_1" on-delete="" on-update="" referenced-key="PK_QUESTION_DETAILS_PRIMARY" referenced-table="question_info" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="8c4b5f:115a8cc4bbf:-7d7f">
+<foreign-key alias="" name="FK_comment_question_info" on-delete="" on-update="" referenced-key="PK_QUESTION_DETAILS_PRIMARY" referenced-table="question_info" referenced-table-schema="mathenjeu" remarks="" source-entity-role="" source-multiplicity="0..*" source-relationship-type="" target-entity-role="" target-multiplicity="1" target-relationship-type="" uid="8c4b5f:115a8cc4bbf:-7d7f">
 <foreign-key-description></foreign-key-description>
 <foreign-key-figure>
 <fk-fig-bendpoint-list/>
