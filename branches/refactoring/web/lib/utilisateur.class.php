@@ -1,15 +1,15 @@
 <?php
 /*******************************************************************************
 Fichier : utilisateur.class.php
-Auteur : Maxime Bégin
+Auteur : Maxime Bï¿½gin
 Description :
-    classe abstraire qui ne peut pas être utilisé directement
+    classe abstraire qui ne peut pas ï¿½tre utilisï¿½ directement
     elle contient les fonctions relative aux utilisateurs du site web de math enjeu
     c'est la classe de base pour les joueurs et les administrateurs
 ********************************************************************************
-14-08-2006 Maxime Bégin - ajout du chiffrement de mot de passe
-21-06-2006 Maxime Bégin - ajout de quelques commentaires
-25-05-2006 Maxime Bégin - Version initiale
+14-08-2006 Maxime Bï¿½gin - ajout du chiffrement de mot de passe
+21-06-2006 Maxime Bï¿½gin - ajout de quelques commentaires
+25-05-2006 Maxime Bï¿½gin - Version initiale
 *******************************************************************************/
 
 require_once("exception.class.php");
@@ -26,16 +26,16 @@ abstract class Utilisateur
     private $prenom;
     private $estConfirmer;
     private $etablissement;
-    private $niveau;
+    //private $niveau;
     private $categorie;
     protected $cleConfirmation;
     protected $mysqli;
 
 
     //**************************************************************************
-    //Somaire : met la cle à -1 ce qui signifie que le joueur n'est pas encore
+    //Somaire : met la cle ï¿½ -1 ce qui signifie que le joueur n'est pas encore
     //          valide
-    //Entrée:
+    //Entrï¿½e:
     //Sortie:
     //Note: 
     //**************************************************************************
@@ -47,8 +47,8 @@ abstract class Utilisateur
     }
     
     //**************************************************************************
-    // Sommaire:    Vérifier les invariants de la classe
-    // Entrée:
+    // Sommaire:    Vï¿½rifier les invariants de la classe
+    // Entrï¿½e:
     // Sortie:
     // Note:
     //**************************************************************************
@@ -68,7 +68,7 @@ abstract class Utilisateur
     
     //**************************************************************************
     //Somaire : Valider un alias
-    //Entrée: $alias : l'alias à valider
+    //Entrï¿½e: $alias : l'alias ï¿½ valider
     //Sortie: retourne vrai si l'alias est valide faux sinon
     //Note:
     //**************************************************************************
@@ -79,9 +79,9 @@ abstract class Utilisateur
 
     //**************************************************************************
     //Somaire : Valider un mot de passe
-    //Entrée: $alias : l'alias à valider
+    //Entrï¿½e: $alias : l'alias ï¿½ valider
     //Sortie: retourne vrai si le mot de passe est valide faux sinon
-    //Note: le mot de passe doit avoir entre 5 et caractères
+    //Note: le mot de passe doit avoir entre 5 et caractï¿½res
     //**************************************************************************
     static function validerMotDePasse($pass)
     {
@@ -90,10 +90,10 @@ abstract class Utilisateur
     }
     
     //**************************************************************************
-    // Sommaire:        Assigner l'alias à l'utilisateur
-    // Entrée:          $alias
+    // Sommaire:        Assigner l'alias ï¿½ l'utilisateur
+    // Entrï¿½e:          $alias
     // Sortie:          
-    // Note:            une exception est lancé si l'alias est invalide
+    // Note:            une exception est lancï¿½ si l'alias est invalide
     //                  l'alias est convertie en minuscule
     //**************************************************************************
     function asgAlias($alias)
@@ -105,7 +105,7 @@ abstract class Utilisateur
     
     //**************************************************************************
     // Sommaire:        Assigner une adresse courriel au joueur
-    // Entrée:          $courriel
+    // Entrï¿½e:          $courriel
     // Sortie:
     // Note:            le courriel est convertie en minuscule
     //**************************************************************************
@@ -119,15 +119,15 @@ abstract class Utilisateur
 
 
     //**************************************************************************
-    //Sommaire : Assigne les valeurs à l'utilisateur courant
-    //Entrée:
+    //Sommaire : Assigne les valeurs ï¿½ l'utilisateur courant
+    //Entrï¿½e:
     //    $nom
     //    $prenom
     //    $alias
     //    $motDePasse
     //    $courriel
-    //    $estConfirmer       : si le courriel est confirmé ou non
-    //    $etablissement      : clé de l'établissement
+    //    $estConfirmer       : si le courriel est confirmï¿½ ou non
+    //    $etablissement      : clï¿½ de l'ï¿½tablissement
     //    $niveau             : le niveau scolaire
     //Sortie:
     //Note : on appel les fonctions d'assignations
@@ -150,10 +150,10 @@ abstract class Utilisateur
     
 
     //**************************************************************************
-    // Sommaire:        Assigner le mot de passe à l'utilisateur
-    // Entrée:          $motDePasse
+    // Sommaire:        Assigner le mot de passe ï¿½ l'utilisateur
+    // Entrï¿½e:          $motDePasse
     // Sortie:
-    // Note:            une exception est lancé si le mot de passe est invalide
+    // Note:            une exception est lancï¿½ si le mot de passe est invalide
     //**************************************************************************
     function asgMotDePasse($motDePasse)
     {
@@ -161,10 +161,10 @@ abstract class Utilisateur
       POSTCONDITION($this->reqMotDePasse()==$motDePasse);
     }
     //**************************************************************************
-    // Sommaire:        Assigner la clé unique à l'utilisateur
-    // Entrée:          $cle
+    // Sommaire:        Assigner la clï¿½ unique ï¿½ l'utilisateur
+    // Entrï¿½e:          $cle
     // Sortie:
-    // Note:            la clé doit être > 0
+    // Note:            la clï¿½ doit ï¿½tre > 0
     //**************************************************************************
     protected function asgCle($cle)
     {
@@ -174,10 +174,10 @@ abstract class Utilisateur
     }
 
     //**************************************************************************
-    // Sommaire:        Assigne le nom à l'utilisateur
-    // Entrée:          $nom
+    // Sommaire:        Assigne le nom ï¿½ l'utilisateur
+    // Entrï¿½e:          $nom
     // Sortie:
-    // Note:            la longueur du nom ne doit pas être nulle
+    // Note:            la longueur du nom ne doit pas ï¿½tre nulle
     //**************************************************************************
     function asgNom($nom)
     {
@@ -187,10 +187,10 @@ abstract class Utilisateur
     }
 
     //**************************************************************************
-    // Sommaire:        Assigne le prénom à l'utilisateur
-    // Entrée:          $prenom
+    // Sommaire:        Assigne le prï¿½nom ï¿½ l'utilisateur
+    // Entrï¿½e:          $prenom
     // Sortie:
-    // Note:            la longueur du prénom ne doit pas être nulle
+    // Note:            la longueur du prï¿½nom ne doit pas ï¿½tre nulle
     //**************************************************************************
     function asgPrenom($prenom)
     {
@@ -200,8 +200,8 @@ abstract class Utilisateur
     }
 
     //**************************************************************************
-    // Sommaire:        asigne à l'utilisateur le status de confirmer ou non
-    // Entrée:          $estConfirmer : 0 pour non confirmer, 1 pour confirmer
+    // Sommaire:        asigne ï¿½ l'utilisateur le status de confirmer ou non
+    // Entrï¿½e:          $estConfirmer : 0 pour non confirmer, 1 pour confirmer
     // Sortie:          
     // Note:
     //**************************************************************************
@@ -213,10 +213,10 @@ abstract class Utilisateur
     }
 
     //**************************************************************************
-    // Sommaire:        asigne à l'utilisateur le numéro d'établissement
-    // Entrée:          $etablissement : le numéro d'établissement
+    // Sommaire:        asigne ï¿½ l'utilisateur le numï¿½ro d'ï¿½tablissement
+    // Entrï¿½e:          $etablissement : le numï¿½ro d'ï¿½tablissement
     // Sortie:
-    // Note:            le # d'établissement doit être positif
+    // Note:            le # d'ï¿½tablissement doit ï¿½tre positif
     //**************************************************************************
     function asgEtablissement($etablissement)
     {
@@ -225,25 +225,14 @@ abstract class Utilisateur
       POSTCONDITION($this->reqEtablissement()==$etablissement);
     }
 
-    //**************************************************************************
-    // Sommaire:        asigne à l'utilisateur le niveau scolaire
-    // Entrée:          $niveau
-    // Sortie:
-    // Note:            le niveau doit être entre 1 et 15 inclusivement
-    //**************************************************************************
-    function asgNiveau($niveau)
-    {
-      PRECONDITION($niveau > 0 && $niveau <= 15);
-      $this->niveau=$niveau;
-      POSTCONDITION($this->reqNiveau()==$niveau);
-    }
+    
     
     //**************************************************************************
-    // Sommaire:        asigne à l'utilisateur le niveau d'accès
-	//				(catégorie de l'utilisateur)
-    // Entrée:          $acces
+    // Sommaire:        asigne ï¿½ l'utilisateur le niveau d'accï¿½s
+	//				(catï¿½gorie de l'utilisateur)
+    // Entrï¿½e:          $acces
     // Sortie:
-    // Note:            le niveau d'accès doit être entre 0 et 5 inclusivement
+    // Note:            le niveau d'accï¿½s doit ï¿½tre entre 0 et 5 inclusivement
     //**************************************************************************    
     function asgCategorie($categorie)
     {
@@ -253,8 +242,8 @@ abstract class Utilisateur
 	}
     
     //**************************************************************************
-    // Sommaire:        générer une chaîne aléatoire
-    // Entrée:          $longueur : la longueur de la chaîne
+    // Sommaire:        gï¿½nï¿½rer une chaï¿½ne alï¿½atoire
+    // Entrï¿½e:          $longueur : la longueur de la chaï¿½ne
     // Sortie:
     // Note:            
     //**************************************************************************
@@ -272,7 +261,7 @@ abstract class Utilisateur
     
     //**************************************************************************
     // Sommaire:        encrypter le mot de passe courant
-    // Entrée:          
+    // Entrï¿½e:          
     // Sortie:
     // Note:            on conserve le mot de passe non chiffrer pour envoie 
 	//					par mail
@@ -284,9 +273,9 @@ abstract class Utilisateur
 	}
 	
 	//**************************************************************************
-    // Sommaire:        vérifier si le mot de passe est valide
-    // Entrée:          $passChiffrer = le mot de passe chiffre
-	//					$pass : le mot de passe non-chiffrer qu'on doit vérifier
+    // Sommaire:        vï¿½rifier si le mot de passe est valide
+    // Entrï¿½e:          $passChiffrer = le mot de passe chiffre
+	//					$pass : le mot de passe non-chiffrer qu'on doit vï¿½rifier
     // Sortie:			$vrai si le mot de passe est valide, faux sinon
     // Note:            on conserve le mot de passe non chiffrer pour l'envoie 
 	//					par courriel.
@@ -302,7 +291,7 @@ abstract class Utilisateur
 	}
 
 
-    //les fonctions à déveloper dans les classes filles
+    //les fonctions ï¿½ dï¿½veloper dans les classes filles
 
     abstract function genererCleConfirmation();
     abstract function validerAliasUnique($alias);
