@@ -12,7 +12,13 @@
 	mathemaQuoi_beta = ""
 	
 		frame1 = ""
-		
+			
+			descriptionNewton = "It's the heart of Math en Jeu. There is a huge questions library for each of the specific mathematic domains."
+			
+			descriptionAccromath = "The questions library is built from the various subjets presented in the Accromath's magazine."
+			
+			descriptionDefault = "This questions libray has been created by a person or a group not affiliated with the Math en Jeu's team."
+			
 			salle = "Choose a room."
 			boutonRetour = "Back"
 			boutonContinuer = "Continue"
@@ -106,14 +112,14 @@
 
 
 
-
-
 		menuAide = "Help menu"
 		
-			aideQuitter = "CLOSE"
-			
+			aideQuitter = "Close"
+			nomCasesSpeciales  = "    Instant Victory                       Store"
+			nomCasesSpeciales2 = "        Coin                          '?' Cell"
+			nomObjets 		   = " Banana                 Book              Crystal ball"
 			salleListe = "Before playing"
-			salleTitre = "1. Set the game"
+			salleTitre = "1. Setting the game"
 			salleTexte = "•Choosing a room
 Choose a room to play in. For example, you can choose the Newton room. Click on the room’s name and then click on Continue.
 			
@@ -143,7 +149,10 @@ The level you choose will not affect the difficulty of your questions. It modifi
 			
 			objetsListe = "Objects"
 			objetsTitre = "3. The objects"
-			objetsTexte = "The objects you can buy are:
+			objetsTexte = "
+						
+
+The objects you can buy are:
 
 The banana
 •The banana allows you to play a wicked trick on another player! When you use this object, you opponent that is the closest to the ''Instant Victory'' sign slides on the banana, and gets thrown at the opposite end of the board!
@@ -154,9 +163,14 @@ The book
 The crystal ball
 •If you feel unable to answer a question, you may use the crystal ball. The computer will then give you a new question."
 						
-			casesSpecialesListe = "Special cells"
+			casesSpecialesListe = "   Special cells"
 			casesSpecialesTitre = "4. The special cells"
-			casesSpecialesTexte = "There are 4 special cells in the game:
+			casesSpecialesTexte = "
+			
+				
+				
+
+There are 4 special cells in the game:
     
 Instant Victory!
 •The player that first reaches this cell instantly wins the game! But, there is a twist to it! Before being allowed to click on this cell, you must have accumulated a minimum number of points. This amount of points depends on the length of the game. If no player has reached this cell when time is up, the winner is of course the player with the most points.  

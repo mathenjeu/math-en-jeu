@@ -13,6 +13,12 @@
 	
 		frame1 = ""
 		
+			descriptionNewton = "C'est le coeur de Math en Jeu. Une immense banque de questions se penche sur tous les domaines des mathématiques."
+			
+			descriptionAccromath = "La banque de questions construite à partir des multiples sujets traités dans la revue Accromath."
+			
+			descriptionDefault = "La banque de questions a été créée par une personne ou un groupe indépendant de l'équipe de Math en Jeu."
+			
 			salle = "Choisissez une salle."
 			boutonRetour = "Retour"
 			boutonContinuer = "Continuer"
@@ -108,8 +114,10 @@
 	
 		menuAide = "Menu d'aide"
 		
-			aideQuitter = "FERMER"
-			
+			aideQuitter = "Fermer"
+			nomCasesSpeciales  = "  Victoire Instantanée              Magasin"
+			nomCasesSpeciales2 = "        Pièce                          Case '?' "			
+			nomObjets 		   = " Banane                 Livre            Boule de cristal"
 			salleListe = "Avant de jouer"
 			salleTitre = "1. Préparer la partie"
 			salleTexte = "•Choisir une salle
@@ -139,10 +147,13 @@ Le niveau choisi n'affecte pas la difficulté des questions. Il modifie la capac
 			
 			objetsListe = "Objets"
 			objetsTitre = "3. Les objets"
-			objetsTexte = "Les objets que tu peux acheter sont:
+			objetsTexte = "
+									
+
+Les objets que tu peux acheter sont:
 
 La banane
-•La banane te permet de jouer un tour à un des joueur ! Quand tu l'utilises, ton adversaire qui est le plus près de la case ''Victoire Instantanée'' glisse alors sur la banane et se retrouve à l'autre bout de la planche de jeu lors de son prochain déplacement!
+•La banane te permet de jouer un tour à un des joueurs ! Quand tu l'utilises, ton adversaire qui est le plus près de la case ''Victoire Instantanée'' glisse alors sur la banane et se retrouve à l'autre bout de la planche de jeu lors de son prochain déplacement!
 
 Le livre
 •Le livre élimine un mauvais choix de réponse lors d'une question à choix multiples. Le nombre de choix possible passe alors de quatre à trois.
@@ -152,7 +163,12 @@ La boule de cristal
 						
 			casesSpecialesListe = "Cases spéciales"
 			casesSpecialesTitre = "4. Les cases spéciales"
-			casesSpecialesTexte = "Il y a 4 cases spéciales dans le jeu:
+			casesSpecialesTexte = "
+			
+
+						
+
+Il y a 4 cases spéciales dans le jeu:
     
 Victoire Instantanée!
 •Le premier joueur à atteindre cette case gagne instantanément la partie! Attention, c'est plus facile à dire qu'à faire! Avant d'accéder à cette case, tu dois avoir assez de points. Le nombre nécéssaire dépend de la durée de la partie. Si personne ne l'atteint avant la fin du décompte, le gagnant est celui qui a le plus de points.
