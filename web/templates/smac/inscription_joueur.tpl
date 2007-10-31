@@ -2,13 +2,13 @@
 <table width="100%" border="0" cellspacing="0">
     <tr>
         <td align="left" colspan="2"><h2>{$lang.inscription_joueur}</h2></td>
-        <td width="30%" align="center"><h3>{$lang.inscription_etape} {$etape} / 4</h3></td>
+        <!-- <td width="30%" align="center"><h3>{$lang.inscription_etape} {$etape} / 4</h3></td> -->
     </tr>
 </table>
 <div style="width:90%;align:center" class="hr"></div><p>
 <div class="centre">
 {if $etape eq 1}
-    <form name="inscription" method="post" action="inscription-joueur.php?action=etape2#top">
+    <form name="inscription" method="post" action="inscription-joueur.php?action=soumettre">
     <table width="80%" border="0" cellspacing="5">
     <tr>
         <td align="left" colspan="2">{$lang.inscription_joueur_texte}</td>
@@ -64,18 +64,8 @@
         <td><input id="courriel2" type="text" name="courriel2" size="40" value="{$courriel2}"></td>
     </tr>
     <tr>
-        <td colspan="2" align=center><input type=submit value="{$lang.bouton_etape_suivante}" /></td>
+        <td colspan="2" align=center><hr><!--<input type=submit value="{$lang.bouton_etape_suivante}" />--></td>
     </tr>
-    </table>
-    </form>
-    {if $erreur eq ""}
-    <script type="text/javascript" language="JavaScript">
-        document.inscription.prenom.focus();
-    </script>
-    {/if}
-{elseif $etape eq 2}
-    <form name="inscription" method="post" action="inscription-joueur.php?action=etape3#2">
-    <table width="100%" border="0" cellspacing="5">
     <tr>
         <td colspan="2"><h2 id="2">{$lang.inscription_joueur_profil}</h2></td>
     </tr>
@@ -112,114 +102,50 @@
         <td>{$lang.mot_passe_confirm}</td>
         <td><input type="password" name="motDePasse2" size="20" maxlength="20" value="{$motDePasse2}"> <span class="asterix">*</span></td>
     </tr>
-    <tr align="left">
-    	<td>{$lang.school_type}</td>
-    	<td>
-    		<select name="school_type" />
-    		{html_options values=$school_type_id output=$school_type_name selected=$selected_school_type_id}
-    		</select>
-    	</td>
-    	<span class="asterix">*</span>
-        &nbsp;<a target="blank" href="http://isef.ntic.org/equivalence.html">{$lang.inscription_equivalence}</a>
-        </td>
-    </tr>
-    <tr align="left">
-        <td>{$lang.niveau_scolaire}</td>
-        <td>
-        <select name="niveau" style="width: 200px;"
-            onChange='document.inscription.action="inscription-joueur.php?action=etablissement";
-            document.inscription.submit()'>
-        {html_options values=$niveauID output=$niveauTexte selected=$niveau}
-        </select>
-        <span class="asterix">*</span>
-        &nbsp;<a target="blank" href="http://isef.ntic.org/equivalence.html">{$lang.inscription_equivalence}</a>
-        </td>
-    </tr>
-    {if $niveau ne 14}
-    <tr align="left">
-        <td>{$lang.etablissement}</td>
-        <td>
-        <select name="etablissement" STYLE="width: 400px">
-            {html_options values=$etablissementID output=$etablissementTexte selected=$etablissement}
-        </select>
-        </td>
-    </tr>
-    <tr align="left">
-		<!--<td>{$lang.inscription_alias_prof}</td>-->
-	    <td><input type="hidden" name="aliasProf" value="{$aliasProf}"/><br>
-	    <!--<span class="commentaire">{$lang.inscription_alias_prof_info}--></td>
-	</tr>
-	{/if}
     <tr>
-        <td colspan="2" align="center"><input type="submit" value="{$lang.bouton_etape_suivante}" /></td>
+    	<td valign="top">
+    		{$lang.niveau_scolaire}
+    	</td>
+    	<td>
+    		<table>
+    		{foreach name=outer item=subject from=$subjects}
+    		<tr>
+        	<td>{$subject.subject.name}</td>
+        	<td>
+            <select name="subject[{$subject.subject.subject_id}]">
+            	{foreach key=key item=item from=$subject.levels}
+            		{if $subject.selected eq $item.level_id}
+              		<option value="{$item.level_id}" selected>{$item.name}</option>
+              	{else}
+              		<option value="{$item.level_id}">{$item.name}</option>
+              	{/if}
+            	{/foreach}
+            </select>
+            &nbsp;<span class="asterix">*</span>
+          </td>
+        </tr>
+      	{/foreach}
+      	<tr>
+      		<td>
+      			<a target="blank" href="http://isef.ntic.org/equivalence.html">{$lang.inscription_equivalence}</a>
+        	</td>
+      	</tr>
+      	</table>
+    	</td>
+    </tr>
+    
+    <tr>
+    	<td>
+    		<center><input type="submit" value="{$lang.bouton_inscription_terminer}"> &nbsp;</center>
+    	</td>
     </tr>
     </table>
     </form>
     {if $erreur eq ""}
-	    <script type="text/javascript" language="JavaScript">
-	        document.inscription.alias.focus();
-	    </script>
-	 {/if}
-{elseif $etape eq 3}
-    <form name="inscription" method="post" action="inscription-joueur.php?action=soumettre">
-    <table width="100%" border="0" cellspacing="5">
-    <tr>
-        <td colspan=3><h2 id="3">{$lang.inscription_quelques_questions}</h2></td>
-    </tr>
-    <tr>
-        <td colspan=3>{$lang.inscription_quelques_questions_info}</td>
-    </tr>
-    <tr>
-        <td colspan=3>
-        <p class="question">{$lang.inscription_math_aime}</p>
-        <blockquote>
-        {$lang.inscription_math_deteste}&nbsp;
-        <input type="radio" name="aimeMaths" value="1"> 1
-        <input type="radio" name="aimeMaths" value="2"> 2
-        <input type="radio" name="aimeMaths" value="3" checked="checked"> 3
-        <input type="radio" name="aimeMaths" value="4"> 4
-        <input type="radio" name="aimeMaths" value="5"> 5
-        &nbsp; {$lang.inscription_math_adore}
-        </blockquote>
-
-        <p class="question">{$lang.inscription_math_considere}</p>
-        <blockquote>
-        {$lang.inscription_math_difficulte}&nbsp;
-        <input type="radio" name="mathConsidere" value="1"> 1
-        <input type="radio" name="mathConsidere" value="2"> 2
-        <input type="radio" name="mathConsidere" value="3" checked="checked"> 3
-        <input type="radio" name="mathConsidere" value="4"> 4
-        <input type="radio" name="mathConsidere" value="5"> 5
-        &nbsp; {$lang.inscription_math_excellent}
-        </blockquote>
-
-        <p class="question">{$lang.inscription_math_etudie}</p>
-        <blockquote>
-        {$lang.inscription_math_jamais}&nbsp;
-        <input type="radio" name="mathEtudie" value="1"> 1
-        <input type="radio" name="mathEtudie" value="2"> 2
-        <input type="radio" name="mathEtudie" value="3" checked="checked"> 3
-        <input type="radio" name="mathEtudie" value="4"> 4
-        <input type="radio" name="mathEtudie" value="5"> 5
-        &nbsp;{$lang.inscription_math_certainement}
-        </blockquote>
-
-        <p class="question">{$lang.inscription_math_decouvert}</p>
-        <blockquote>
-        <input type="radio" name="mathDecouvert" value="1"> {$lang.inscription_math_moteur}<br>
-        <input type="radio" name="mathDecouvert" value="2"> {$lang.inscription_math_prof}<br>
-        <input type="radio" name="mathDecouvert" value="3"> {$lang.inscription_math_pub}<br>
-        <input type="radio" name="mathDecouvert" value="4"> {$lang.inscription_math_recommendation}<br>
-        <input type="radio" name="mathDecouvert" value="5" checked="checked"> {$lang.inscription_math_autre}<br>
-        </blockquote>
-
-        <center>
-        <input type="submit" value="{$lang.bouton_inscription_terminer}"> &nbsp;
-        </center>
-        </td>
-    </tr>
-    </table>
-    </form>
+    <script type="text/javascript" language="JavaScript">
+        document.inscription.prenom.focus();
+    </script>
+    {/if}
 {elseif $etape eq 4}
     {$lang.inscription_succes_inscription}
 {/if}

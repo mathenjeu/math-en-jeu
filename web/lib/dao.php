@@ -24,9 +24,8 @@ class Dao {
     
     $mysqli_result = $this->mysqli->query($sql);
     
-    while($row=$mysqli_result->fetch_row()) {
-      $result[$i][0] = $row[0];
-      $result[$i][1] = $row[1];
+    while($row=$mysqli_result->fetch_assoc()) {
+      $result[$i] = $row;
       $i++;
     }
 
@@ -44,14 +43,30 @@ class Dao {
     $i=0;
     
     $mysqli_result = $this->mysqli->query($sql);
-    while($row=$mysqli_result->fetch_row()) {
-      $result[$i][0] = $row[0];
-      $result[$i][1] = $row[1];
+    while($row=$mysqli_result->fetch_assoc()) {
+      $result[$i]=$row;
       $i++;
     }
 
     return $result;
   }
+  
+  
+  public function getSubjectsLevels($language) {
+    $sql = "select subject.subject_id,subject.name from subject,language " .
+      " where subject.language_id = language.language_id and language.short_name='" . $language . "'";
+    
+    $result = array();
+    
+    $mysqli_result = $this->mysqli->query($sql);
+    while($row=$mysqli_result->fetch_assoc()) {
+      $result[$row['subject_id']]=array('subject' => $row, 'levels' => $this->getLevelsForSubject($row['subject_id'], $language));
+
+    }
+
+    return $result;
+  }
+  
   
  
   
