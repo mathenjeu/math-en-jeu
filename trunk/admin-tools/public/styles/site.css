@@ -1,6 +1,12 @@
 @CHARSET "ISO-8859-1";
 
+body {
+	background: #ddd url(../images/html.png);
+}
+
 body,html {
+	height: 100%;
+	margin: 0;
 	font-size:100%;
 	margin: 0;
 	font-family: Verdana,Arial,Helvetica,sans-serif;
@@ -8,15 +14,62 @@ body,html {
 	background-color: #fff;
 }
 
+
+
 h1 {
 	font-size:1.4em;
 	color: #800000;
 	background-color: transparent;
 }
 
-#content {
-	width: 770px;
+div#wrapper {
+	min-height: 100%;
+	width: 750px;
+	padding: 0 10px;
 	margin: 0 auto;
+	position: relative;
+	padding: 0 10px;
+	background: url(../images/global.png) center repeat-y;
+}
+
+div#header {
+	background: #7fcf2e url(../images/header.jpg) no-repeat;
+	color: #fff;
+	height: 201px;
+	position: relative;
+}
+
+div#header h1 {
+	margin: 0;
+}
+	
+div#center {
+	/* Pour éviter la superposition 
+	du pied de page et du contenu : */
+	padding-bottom: 50px; 
+	overflow: auto;
+}
+
+div#footer {
+	position: absolute;
+	width: 98%;
+	bottom: 0;
+	background: #7fcf2e url(../images/footer.png) repeat-x;
+	color: #fff;
+}
+
+div#content {
+	float: left;
+	width: 530px;
+}
+
+div#menu {
+	float: right;
+	width: 200px;
+}
+
+.message {
+	font-weight: bold;	
 }
 
 label {

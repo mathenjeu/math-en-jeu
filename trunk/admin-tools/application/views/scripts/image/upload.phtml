@@ -1,0 +1,29 @@
+<?php echo $this->render('header.phtml'); ?>
+<div id="content">
+	<div id="message">
+    <span class="message"><?php echo $this->escape($this->message);?></span>
+  </div>
+  
+  <form action="<?php echo $this->baseUrl ?>/image/upload" enctype='multipart/form-data' method="post">
+    
+    <div>
+      <label for="file">File</label>
+      <input type="file" name="file" />
+    </div>
+    <!-- 
+    <div>
+      <label for="name">Name</label>
+      <input type="text" name="name" value=""/>
+    </div>
+    -->
+    <div>
+      <label for="description">description</label>
+      <input type="text" name="description" value=""/>
+    </div>
+    <div id="formbutton">
+      <input type="submit" name="upload" value="Upload" />
+    </div>
+  </form>
+</div>
+<?php echo $this->render('image/_menu.phtml'); ?>
+<?php echo $this->render('footer.phtml'); ?>

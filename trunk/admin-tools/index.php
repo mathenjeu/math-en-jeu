@@ -13,6 +13,7 @@ Zend_Loader::loadClass('Zend_Config_Ini');
 Zend_Loader::loadClass('Zend_Registry');
 Zend_Loader::loadClass('Zend_Db');
 Zend_Loader::loadClass('Zend_Db_Table');
+Zend_Loader::loadClass('Zend_Auth');
 
 
 // load configuration
@@ -20,9 +21,11 @@ $config = new Zend_Config_Ini('./application/config.ini', 'general');
 $registry = Zend_Registry::getInstance();
 $registry->set('config', $config);
 
+
 // setup database
 $db = Zend_Db::factory($config->db->adapter, $config->db->config->toArray());
 Zend_Db_Table::setDefaultAdapter($db);
+Zend_Registry::set('db', $db);
 
 // setup controller
 $frontController = Zend_Controller_Front::getInstance();
