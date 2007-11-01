@@ -103,7 +103,7 @@
  	</VraiFaux> 	
  	 		
 	<VraiFaux>
-  		<question>The internal angles in an hexagon total 4π.</question>
+  		<question>The internal angles of an hexagon total 4π.</question>
   		<reponse>true</reponse>
  	</VraiFaux>  		
 

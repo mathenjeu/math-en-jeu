@@ -26,7 +26,7 @@
 		frame2 = ""
 
 			texteTables = "Choose an open table in the room : "	
-			btnCreerTable = "Create a new table"
+			btnCreerTable = "New table"
 			choixTable = "or create a new one."
 			choixTemps = "Choose the duration of the game you wish to play."
 			sallesOuvertes = "Open rooms"
