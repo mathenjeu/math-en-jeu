@@ -77,6 +77,7 @@
 		frame5 = ""
 
 			btn_rejouer = "Play again"
+			btn_retourSite = "Return to Math en Jeu"
 			btn_quitter = "Quit"
 			joueurs = "Players"
 			pointage = "Score"
