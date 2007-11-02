@@ -15,5 +15,12 @@ class QuestionController extends Zend_Controller_Action {
     $this->view->user = Zend_Auth::getInstance()->getIdentity();
   }
   
+  function indexAction() {
+    $this->view->title = "Image index";
+    
+    $image = new Image();
+    $this->view->images = $image->fetchAll();
+  }
+  
 	
 }
