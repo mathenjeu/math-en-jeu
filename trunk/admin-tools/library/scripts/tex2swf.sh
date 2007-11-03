@@ -23,7 +23,7 @@ dvips -q -E ${filename}.dvi -o ${filename}.eps 2>> convert.log
 epstopdf ${filename}.eps 2>> convert.log
 
 #convert the file to swf
-pdf2swf -q ${filename}.pdf 2>> convert.log
+pdf2swf -qs ${filename}.pdf 2>> convert.log
 
 mv ${filename}.swf $2
 
