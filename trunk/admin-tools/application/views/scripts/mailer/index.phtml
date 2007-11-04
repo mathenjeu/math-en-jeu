@@ -1,0 +1,23 @@
+<?php echo $this->render('header.phtml'); ?>
+	<div id="content">
+		<h1><?php echo $this->escape($this->title); ?></h1>
+		<form action="<?php echo $this->baseUrl ?>/mailer/send" method="post">
+  		<div>
+        <label for="file">Subject</label>
+        <input type="text" name="subject" />
+      </div>
+      <div>
+        <label for="file">Body</label>
+        <textarea name="body" rows="10" cols="50"></textarea>
+      </div>
+      <div>
+        <label for="file">To</label>
+        <textarea name="to" rows="20" cols="50"></textarea>
+      </div>
+      <div>
+        <input type="submit">
+      </div>
+		</form>
+	</div>
+<?php echo $this->render('mailer/_menu.phtml'); ?>
+<?php echo $this->render('footer.phtml'); ?>
