@@ -1,0 +1,50 @@
+<?php echo $this->render('header.phtml'); ?>
+<div id="content">
+  <h1><?php echo $this->escape($this->title); ?></h1>
+  
+  <div id="question">
+  	<div>
+  		<label>ID</label>
+  	  <?php echo $this->question->question_id; ?>
+  	</div>
+  	<div>
+  		<label>Question text</label>
+  		<?php echo $this->question_info->question_latex; ?>
+  	</div>
+  	<div>
+  		<label>Feedback text</label>
+  		<?php echo $this->question_info->feedback_latex; ?>
+  	</div>
+  	
+  	<div id="flash">
+  		<div id="question_flash">
+  			<?php 
+  			  if($this->question_info->question_flash_file != null) {
+  			?>
+  			  <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" width="500" height="300">
+          <param name="movie" value="<?php echo $this->flashUrl . $this->question_info->question_flash_file;?>"><param name="quality" value="high">
+          <embed src="<?php echo $this->flashUrl . $this->question_info->question_flash_file;?>" quality="high" width="500" height="300" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" />
+          </object>
+        <?php 
+  			  }
+  			?>
+  		</div>
+  		<div id="feedback_flash">
+  			<?php 
+  			  if($this->question_info->feedback_flash_file != null) {
+  			?>
+  			  <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" width="500" height="300">
+          <param name="movie" value="<?php echo $this->flashUrl . $this->question_info->feedback_flash_file;?>"><param name="quality" value="high">
+          <embed src="<?php echo $this->flashUrl . $this->question_info->feedback_flash_file;?>" quality="high" width="500" height="300" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" />
+          </object>
+        <?php 
+  			  }
+  			?>
+  		</div>
+  	</div>
+  	
+	</div>
+
+</div> <!--  end content -->
+<?php echo $this->render('question/_menu.phtml'); ?>
+<?php echo $this->render('footer.phtml'); ?>

@@ -1,0 +1,31 @@
+@CHARSET "ISO-8859-1";
+
+table.question {
+	border: solid #000 3px;
+}
+
+thead.question {
+	background-color : #ddffdd;
+}
+
+thead.question_info {
+	background-color : #ddddff;
+
+}
+
+li.question_group {
+	list-style-type: none;
+}
+
+div#question_flash {
+	//float: left;
+}
+
+div#feedback_flash {
+	//float: right;
+}
+
+div#flash {
+	//float: left;
+}
+

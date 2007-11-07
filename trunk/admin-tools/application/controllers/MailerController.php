@@ -43,12 +43,13 @@ class MailerController extends Zend_Controller_Action {
       // format is "Full name" <mail@adress.com>,
       $lines = explode(",", $this->_request->getPost('to'));
       foreach($lines as $line) {
-        preg_match("/\"(.*)\" <(.*)>/", $line, $matches);        
-        $mail->addTo($matches[2], $matches[1]);
+        preg_match("/\"(.*)\" <(.*)>/", $line, $matches);
+        $copy = clone $mail; 
+        $copy->addTo($matches[2], $matches[1]); 
+        $copy->send($transport); 
+        unset($copy);       
       }
-      
-      $mail->send($transport);
-      
+            
     }
     
     

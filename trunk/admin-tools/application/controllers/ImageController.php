@@ -30,7 +30,7 @@ class ImageController extends Zend_Controller_Action {
         //load the registry to get the destination directory for the images
         $registry = Zend_Registry::getInstance();
         $config = $registry->get('config');
-        $newname = tempnam($config->image->dir, "image");
+        $newname = tempnam($config->file->image->dir, "image");
         
         //convert the filename.tmp to filename.eps
         $path_info = pathinfo($newname);

@@ -1,0 +1,43 @@
+<div>
+	<form method="post" action="add">
+		<input type="hidden" name="step" value="4" />
+		<div>
+			<label for="questionLatex">Latex Question</label>
+			<textarea name="questionLatex" rows="15" cols="50"></textarea>
+		</div>
+		<div>
+			<label for="feedbackLatex">Feedback latex</label>
+			<textarea name="feedbackLatex" rows="15" cols="50"></textarea>
+		</div>
+		<div>
+			<?php if ($this->answer_type_tag == 'MULTIPLE_CHOICE') : ?>
+				<label for="choiceA">Choice A</label>
+				<input type="text" name="choiceA">
+				<label for="choiceB">Choice B</label>
+				<input type="text" name="choiceB">
+				<label for="choiceC">Choice C</label>
+				<input type="text" name="choiceC">
+				<label for="choiceD">Choice D</label>
+				<input type="text" name="choiceD">
+			<?php endif; ?>
+		</div>
+		<div>
+			<label for="goodAnswer">Good answer</label>
+			<input type="text" name="goodAnswer">
+		</div>
+		<div>
+			<?php foreach($this->levels as $level) : ?>
+				<?php echo $level->name ?><input type="checkbox" name="level[<?php echo $level->level_id; ?>]" value="<?php echo $level->level_id; ?>">
+				<input type="text" name="levelValue[<?php echo $level->level_id; ?>]" value="0" /><br/>
+			<?php endforeach; ?>
+		</div>
+		
+		<div>
+			<label for="comment">Comment (optional)</label>
+			<textarea name="comment" rows="7" cols="50"></textarea>
+		</div>
+		<div>
+			<input type="submit" />
+		</div>
+	</form>
+</div>

@@ -2,7 +2,7 @@
 class Image extends Zend_Db_Table_Abstract
 {
   protected $_name = 'image';
-  protected $_dependentTables = array('User');
+  //protected $_dependentTables = array('User');
   
   
   protected $_referenceMap    = array(
