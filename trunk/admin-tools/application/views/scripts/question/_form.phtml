@@ -1,6 +1,8 @@
 <div>
 	<form method="post" action="add">
 		<input type="hidden" name="step" value="4" />
+		<fieldset>  
+			<legend>Question/answer details</legend>
 		<div>
 			<label for="questionLatex">Latex Question</label>
 			<textarea name="questionLatex" rows="15" cols="50"></textarea>
@@ -25,16 +27,32 @@
 			<label for="goodAnswer">Good answer</label>
 			<input type="text" name="goodAnswer">
 		</div>
+		</fieldset>
 		<div>
+			<fieldset>  
+			<legend>Levels</legend>
 			<?php foreach($this->levels as $level) : ?>
 				<?php echo $level->name ?><input type="checkbox" name="level[<?php echo $level->level_id; ?>]" value="<?php echo $level->level_id; ?>">
 				<input type="text" name="levelValue[<?php echo $level->level_id; ?>]" value="0" /><br/>
 			<?php endforeach; ?>
+			</fieldset>
 		</div>
-		
 		<div>
-			<label for="comment">Comment (optional)</label>
-			<textarea name="comment" rows="7" cols="50"></textarea>
+  		<fieldset>  
+  			<legend>Conversion options</legend>
+  			<input type="checkbox" name="usejpeg" />
+  			<label for="usejpeg">Use jpeg conversion. <strong>quality loss and bigger file size. Only use if you enconter problem with the normal conversion</strong></label><br/>
+  			
+  			<input type="checkbox" name="noswf" />
+  			<label for="usejpeg">Do not generate swf.</label><br/>
+  			
+  		</fieldset>
+		</div>
+		<div>
+			<fieldset>  
+				<legend>Comment (optional)</legend>
+				<textarea name="comment" rows="7" cols="50"></textarea>
+			</fieldset>
 		</div>
 		<div>
 			<input type="submit" />

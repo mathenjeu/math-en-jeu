@@ -166,14 +166,29 @@ class QuestionController extends Zend_Controller_Action {
           $result=0;
           $output = array();
           
+          //TODO: change this to run each operation one by one and not to call a script
+          // and also be able to generate swf using png instead of pdf
+          
+          $convertmethod = "pdf";
+          if ($this->_request->getPost('usejpeg') != null) {
+            $convertmethod = "jpeg";
+          }
+          /*
+          //convert he eps to png and then convert the png to swf
+          if ($this->_request->getPost('usepng') != null) {
+            exec("cd " . $config->file->tempdir);
+            exec("mv " . $questionFile->getFullPath() . " " );
+          }
+          */
+          
           //run the script that build the swf for the question
-          exec($config->file->scriptdir . "/tex2swf.sh " . $questionFile->getFullPath() . " " . $config->file->flash->dir, $output, $result);
+          exec($config->file->scriptdir . "/tex2swf.sh " . $questionFile->getFullPath() . " " . $config->file->flash->dir . " " . $convertmethod);
           if (file_exists($config->file->flash->dir . DIRECTORY_SEPARATOR . "Q-" . $question_id . "-" . $session->language_short_name . ".swf")) {
             $data['question_flash_file'] = "Q-" . $question_id . "-" . $session->language_short_name . ".swf";
           }
           
           //run the script that build the swf for the feedback
-          exec($config->file->scriptdir . "/tex2swf.sh " . $feedbackFile->getFullPath() . " " . $config->file->flash->dir, $output, $result);
+          exec($config->file->scriptdir . "/tex2swf.sh " . $feedbackFile->getFullPath() . " " . $config->file->flash->dir . " " . $convertmethod);
           if (file_exists($config->file->flash->dir . DIRECTORY_SEPARATOR . "F-" . $question_id . "-" . $session->language_short_name . ".swf")) {
             $data['feedback_flash_file'] = "F-" . $question_id . "-" . $session->language_short_name . ".swf";
           }
