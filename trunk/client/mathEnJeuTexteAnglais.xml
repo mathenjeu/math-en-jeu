@@ -13,9 +13,9 @@
 	
 		frame1 = ""
 			
-			descriptionNewton = "It's the heart of Math en Jeu. There is a huge questions library for each of the specific mathematic domains."
+			descriptionSophieGermain = "It's the heart of Math en Jeu. There is a huge questions library for each of the specific mathematic domains."
 			
-			descriptionAccromath = "The questions library is built from the various subjets presented in the Accromath's magazine."
+			descriptionAccromath = "More advanced questions related to the various subjets presented in the Accromath's magazine."
 			
 			descriptionDefault = "This questions libray has been created by a person or a group not affiliated with the Math en Jeu's team."
 			

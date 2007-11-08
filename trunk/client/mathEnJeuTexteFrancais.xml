@@ -13,9 +13,9 @@
 	
 		frame1 = ""
 		
-			descriptionNewton = "C'est le coeur de Math en Jeu. Une immense banque de questions se penche sur tous les domaines des mathématiques."
+			descriptionSophieGermain = "C'est le coeur de Math en Jeu. Une immense banque de questions se penche sur tous les domaines des mathématiques."
 			
-			descriptionAccromath = "La banque de questions construite à partir des multiples sujets traités dans la revue Accromath."
+			descriptionAccromath = "Questions plus avancées en lien avec multiples sujets traités dans la revue Accromath."
 			
 			descriptionDefault = "La banque de questions a été créée par une personne ou un groupe indépendant de l'équipe de Math en Jeu."
 			
