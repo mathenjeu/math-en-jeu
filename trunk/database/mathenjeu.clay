@@ -831,7 +831,7 @@ Ex : simple user, administrator, etc...</table-description>
 </table>
 <table alias="" name="object" remarks="" uid="89cb3b:115a0782492:-7f94">
 <table-description>An object in the game.</table-description>
-<table-figure-bounds height="53" width="86" x="424" y="1056"/>
+<table-figure-bounds height="53" width="127" x="424" y="1056"/>
 <column-list>
 <column alias="" auto-increment="true" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="object_id" remarks="" uid="89cb3b:115a0782492:-7f92">
 <column-description></column-description>
@@ -1774,6 +1774,19 @@ A room can be associated with question_groups.</table-description>
 <variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n) ZEROFILL"/>
 </data-type>
 </column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="0" mandatory="true" name="deleted" remarks="If this filed is at one that mean that this room is going to be deleted by the server when there is no player in it." uid="83a95d:11636348198:-7fca">
+<column-description></column-description>
+<data-type jdbc-type="-6" name="TINYINT" selected-variant-pattern="TINYINT">
+<variant type-name-pattern="TINYINT"/>
+<variant type-name-pattern="TINYINT UNSIGNED"/>
+<variant type-name-pattern="TINYINT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="TINYINT ZEROFILL"/>
+<variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n)"/>
+<variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n) UNSIGNED"/>
+<variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="1" precision-min="0" precision-variable="%n" type-name-pattern="TINYINT(%n) ZEROFILL"/>
+</data-type>
+</column>
 </column-list>
 <primary-key alias="" name="PK_SALLES_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f35">
 <primary-key-description></primary-key-description>
@@ -1821,15 +1834,15 @@ A room can be associated with question_groups.</table-description>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="priorite" remarks="" uid="89cb3b:115a0782492:-7f28">
+<column alias="" auto-increment="false" column-size="10" decimal-digits="0" default-value="" mandatory="true" name="priority" remarks="" uid="89cb3b:115a0782492:-7f28">
 <column-description></column-description>
-<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT UNSIGNED">
-<variant type-name-pattern="INT UNSIGNED"/>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
 <variant type-name-pattern="INT"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
 <variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
