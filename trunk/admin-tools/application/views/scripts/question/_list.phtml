@@ -45,7 +45,7 @@
       			<th>Creation date</th>
         		<th>Question text</th>
         		<th>Answer text</th>
-        		<th>Created/translated by</th>
+        		<th>Created / translated by</th>
         		<th>Is valid</th>
         		<th>Is animated</th>
         		<th>SWF question</th>
@@ -63,8 +63,8 @@
         <tr>
         	<td><strong><?php echo strtoupper($question_info->findParentLanguage()->short_name); ?></strong></td>
         	<td><?php echo $this->escape($question_info->creation_date); ?></td>
-          <td><?php echo $this->escape(substr($question_info->question_latex,0,30)); ?></td>
-          <td><?php echo $this->escape(substr($question_info->feedback_latex,0,30)); ?></td>
+          <td><?php echo $this->escape(substr($question_info->question_latex,0,60)); ?></td>
+          <td><?php echo $this->escape(substr($question_info->feedback_latex,0,60)); ?></td>
           <td><?php echo $this->escape($question_info->findParentUser()->username); ?></td>
           <td><?php echo $this->escape($question_info->is_valid); ?></td>
           <td><?php echo $this->escape($question_info->is_animated); ?></td>
@@ -99,11 +99,11 @@
             <?php } else { echo $comment_count; } ?>
 					</td>
           <td>
-          	<a href="<?php echo $this->baseUrl; ?>/question/view/question_id/<?php echo $this->escape($question->question_id); ?>/language_id/<?php echo $question_info->language_id; ?>">View</a>
-          	<a href="<?php echo $this->baseUrl; ?>/question/edit/question_id/<?php echo $this->escape($question->question_id); ?>/language_id/<?php echo $question_info->language_id; ?>">Edit</a>
-          	<a href="<?php echo $this->baseUrl; ?>/question/disable/question_id/<?php echo $this->escape($question->question_id); ?>/language_id/<?php echo $question_info->language_id; ?>">Disable</a>
-          	<a href="<?php echo $this->baseUrl; ?>/question/delete/question_id/<?php echo $this->escape($question->question_id); ?>/language_id/<?php echo $question_info->language_id; ?>">Delete</a>
-          	<a href="<?php echo $this->baseUrl; ?>/question/upload/question_id/<?php echo $this->escape($question->question_id); ?>/language_id/<?php echo $question_info->language_id; ?>">Upload SWF</a>
+          	<a href="<?php echo $this->baseUrl; ?>/question/view/question_id/<?php echo $this->escape($question->question_id); ?>/language_id/<?php echo $question_info->language_id; ?>">View</a><br/>
+          	<a href="<?php echo $this->baseUrl; ?>/question/edit/question_id/<?php echo $this->escape($question->question_id); ?>/language_id/<?php echo $question_info->language_id; ?>">Edit</a><br/>
+          	<a href="<?php echo $this->baseUrl; ?>/question/disable/question_id/<?php echo $this->escape($question->question_id); ?>/language_id/<?php echo $question_info->language_id; ?>">Disable</a><br/>
+          	<a href="<?php echo $this->baseUrl; ?>/question/delete/question_id/<?php echo $this->escape($question->question_id); ?>/language_id/<?php echo $question_info->language_id; ?>">Delete</a><br/>
+          	<a href="<?php echo $this->baseUrl; ?>/question/upload/question_id/<?php echo $this->escape($question->question_id); ?>/language_id/<?php echo $question_info->language_id; ?>">Upload SWF</a><br/>
           </td>
         </tr>
       <?php endforeach; ?>
@@ -111,4 +111,5 @@
       </td>
     </tr> 
   </table>
+  <br/>
   <?php endforeach; ?>

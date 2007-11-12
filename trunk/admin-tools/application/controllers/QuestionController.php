@@ -255,6 +255,16 @@ class QuestionController extends Zend_Controller_Action {
     $this->view->question = $question->fetchRow('question_id=' . $questionId);
     $this->view->question_info = $questionInfo->fetchRow('question_id=' . $questionId . ' and language_id=' . $languageId);
     
+    $this->view->previous_question = $questionInfo->fetchRow('question_id<' . $questionId . ' and language_id=' . $languageId, 'question_id desc');
+    $this->view->next_question = $questionInfo->fetchRow('question_id>' . $questionId . ' and language_id=' . $languageId, 'question_id asc');
+    
+    
+  }
+  
+  function translateAction() {
+    $languages = new Language();
+    $this->view->languages = $languages->fetchAll(" language_id not in (select language_id from question_info where question_id=" . $this->_request->getParam('question_id') . ")");
+    
   }
 	
 }

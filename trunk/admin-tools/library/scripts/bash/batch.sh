@@ -6,7 +6,7 @@ echo !!!! Starting process !!!!
 
 for i in $( ls | grep MP.*\.tex);
 do
-	tex2swf.sh $i $1
+	tex2swf.sh $i $1 pdf
 done
 
 echo !!!! DONE !!!!

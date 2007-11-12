@@ -1,0 +1,13 @@
+<?php echo $this->render('header.phtml'); ?>
+<div id="content">
+	<form method="post" action="<?php echo $this->baseUrl ?>/question/translate/">
+		<select>
+			<?php foreach($this->languages as $language) : ?>
+				<option><?php echo $language->name; ?></option>
+			<?php endforeach; ?>
+		</select>
+		<input type="submit">
+	</form>
+</div>
+<?php echo $this->render('question/_menu.phtml'); ?>
+<?php echo $this->render('footer.phtml'); ?>
