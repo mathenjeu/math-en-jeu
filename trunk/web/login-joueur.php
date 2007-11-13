@@ -51,8 +51,8 @@ function main()
         	if($joueur->chargerMySQL($_POST["alias"],$_POST["motDePasse"]))
         	{
             	$_SESSION["joueur"] = $joueur;
-        	    setLangage($joueur->reqCleLangue());
-            	
+        	    $_SESSION['langage'] = $joueur->getLanguageShortName();
+        	                	
             	//on v�rifie si on a le sexe du joueur dans notre base de donn�es
             	if($joueur->reqSexe()==null)
             	{
