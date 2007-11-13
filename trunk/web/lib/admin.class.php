@@ -112,7 +112,7 @@ class Admin extends Utilisateur
     // Sortie:      retourn faux si l'alias n'est pas unique,vrai sinon
     // Note:        
     //**************************************************************************
-    function validerAliasUnique($alias)
+    function validerAliasUnique($alias, $mysqli)
     {
         $sql="select * from administrateur where alias='" . $alias . "'";
         $result = $this->mysqli->query($sql);
@@ -129,7 +129,7 @@ class Admin extends Utilisateur
     // Sortie:      retourne vrai si le courriel est disponible,faux sinon
     // Note:        
     //**************************************************************************
-    function validerCourrielUnique($courriel)
+    function validerCourrielUnique($courriel, $mysqli)
     {
         $sql="select * from administrateur where courriel='" . $courriel . "'";
         $result = $this->mysqli->query($sql);

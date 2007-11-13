@@ -28,7 +28,7 @@ function Launch(page) {
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Math en jeu</title>
 </head>
-<body onunload="window.opener.location='http://mathenjeu.mat.ulaval.ca/mathenjeu-beta/palmares.php';" bgcolor="#000000" style="margin:0px;padding:0px;height:100%;width:100%;">
+<body onunload="window.opener.location='<?php echo ADRESSE_SITE_WEB; ?>portail-joueur.php?action=stat';" bgcolor="#000000" style="margin:0px;padding:0px;height:100%;width:100%;">
 
 
 <div style="height:100%">

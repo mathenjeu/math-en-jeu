@@ -45,7 +45,7 @@ function main()
     {
       etape1("");
       $joueur=new Joueur($_SESSION["mysqli"]);
-      $_SESSION["joueurInscription"]=$joueur;
+      $_SESSION["joueurInscription"]=0;
     }
     else
     {
@@ -130,12 +130,17 @@ function validerEtape1($joueur)
         return $lang['erreur_pays'];
     elseif(!Courriel::validerCourriel($_POST["courriel"]))
         return $lang['erreur_courriel'];
-    elseif($joueur->validerCourrielUnique($_POST["courriel"])==false)
+    elseif(Joueur::validerCourrielUnique($_POST["courriel"], $_SESSION['mysqli'])==false)
         return $lang['doublon_courriel'];
     elseif($_POST["courriel"]!=$_POST["courriel2"])
         return $lang['erreur_resaisie_courriel'];
     else
     {
+      foreach($_POST as $cle => $value) {
+        $_SESSION[$cle] = $value;
+      }
+      /*
+      $_SESSION['nom'] = 
         $joueur->asgNom($_POST["nom"]);
         $joueur->asgPrenom($_POST["prenom"]);
         $joueur->asgVille($_POST["ville"]);
@@ -144,14 +149,17 @@ function validerEtape1($joueur)
         $joueur->asgSexe($_POST['sexe']);
         $joueur->validerCourrielUnique($_POST["courriel"]);
         $joueur->asgCourriel($_POST["courriel"]);
-        
+        */
+      /*
+      $_SESSION
         $joueur->asgCleLangue(LANG_FRENCH);
         if(isset($_SESSION['langage'])) {
           if ($_SESSION['langage'] == "english") {
             $joueur->asgCleLangue(LANG_ENGLISH);
           }
         }
-        $_SESSION["joueurInscription"] = $joueur;
+*/
+        //$_SESSION["joueurInscription"] = $joueur;
         return "";
     }
 }
@@ -164,7 +172,7 @@ function validerEtape2($joueur)
 {
   global $lang;
 
-  if(!$joueur->validerAliasUnique($_POST["alias"]))
+  if(!Joueur::validerAliasUnique($_POST["alias"], $_SESSION['mysqli']))
     return $lang['doublon_alias'];
   elseif(!Joueur::validerAlias($_POST["alias"]))
     return $lang['erreur_alias'];
@@ -177,28 +185,51 @@ function validerEtape2($joueur)
 
    	if(isset($GLOBALS[$_POST["alias"]]))
    	{
-		return $lang['doublon_alias'];
-	}
+		  return $lang['doublon_alias'];
+	  }
+	  /*
     if(isset($_POST["aliasProf"]))
     {
     	if(!$joueur->asgAdministrateur($_POST["aliasProf"]))
     	{
 	  		return $lang['alias_prof_introuvable'];
-	 	}
-	}
-	$joueur->asgAlias($_POST["alias"]);
-	$joueur->asgMotDePasse($_POST["motDePasse"]);
+	 	  }
+	  }
+*/
+	  
+	  $joueur = new Joueur($_SESSION['mysqli']);
+	  $joueur->asgNom($_SESSION["nom"]);
+    $joueur->asgPrenom($_SESSION["prenom"]);
+    $joueur->asgVille($_SESSION["ville"]);
+    $joueur->asgProvince($_SESSION["province"]);
+    $joueur->asgPays($_SESSION["pays"]);
+    $joueur->asgSexe($_SESSION['sexe']);
+    //$joueur->validerCourrielUnique($_SESSION["courriel"], $_SESS);
+    $joueur->asgCourriel($_SESSION["courriel"]);
+    
+    
+    
+    $joueur->asgCleLangue(LANG_FRENCH);
+    if(isset($_SESSION['langage'])) {
+      if ($_SESSION['langage'] == "en") {
+        $joueur->asgCleLangue(LANG_ENGLISH);
+      }
+    }
+
+	  
+	  $joueur->asgAlias($_POST["alias"]);
+	  $joueur->asgMotDePasse($_POST["motDePasse"]);
 	
-	if(!isset($_POST["etablissement"]))
-	{
+    if(!isset($_POST["etablissement"]))
+	  {
 	    $joueur->asgEtablissement(0);
-	}
-	else
-	{
+	  }
+	  else
+	  {
 	    $joueur->asgEtablissement($_POST["etablissement"]);
-	}
+	  }
 	
-	$joueur->asgNiveau($_POST["niveau"]);
+	  $joueur->asgNiveau($_POST["niveau"]);
 	
 	
 	
@@ -213,7 +244,7 @@ function validerEtape2($joueur)
     if ($joueur->reqCourriel() != "") {
 		  $joueur->envoyerCourrielConfirmation(); 
     }
-		$_SESSION["joueurInscription"] = $joueur;
+		$_SESSION["joueurInscription"] = $joueur->reqCle();
 	}
     
 	return "";
@@ -227,9 +258,11 @@ Fonction : validerEtape3
 Param�tre : $joueur : le joueur qui est en train de s'inscrire
 Description : valider et assign� les informations de l'�tape 3
 *******************************************************************************/
-function validerEtape3($joueur)
+function validerEtape3()
 {
- 	$joueur->chargerMySQLCle($joueur->reqCle());
+  $joueur = new Joueur($_SESSION['mysqli']);
+  
+ 	$joueur->chargerMySQLCle($_SESSION['joueurInscription']);
  	if($joueur->reqCle()==0)
  	{
 		$log = new clog(LOG_FILE);
@@ -245,7 +278,7 @@ function validerEtape3($joueur)
 	    	$joueur->asgMathDecouvert($_POST["mathDecouvert"]);
 	    }
 		$joueur->miseAJourMySQL();
-    }
+  }
     return "";
 }
 
@@ -313,7 +346,7 @@ function etape2($erreur)
     
     if($erreur==$lang['doublon_alias'])
     {
-        $smarty->assign('suggestion_alias',$_SESSION["joueurInscription"]->suggestionAlias($_POST["alias"]));
+        $smarty->assign('suggestion_alias',Joueur::suggestionAlias($_POST["alias"], $_SESSION['mysqli']));
     }
 
     //

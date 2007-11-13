@@ -166,7 +166,7 @@ function doModificationPerso($joueur)
         formulaireModification($joueur,$lang['erreur_courriel'],1,"",0);
     }
     elseif($joueur->reqCourriel()!=$_POST["courriel"] &&
-        $joueur->validerCourrielUnique($_POST["courriel"])==false){
+        $joueur->validerCourrielUnique($_POST["courriel"], $_SESSION['mysqli'])==false){
         formulaireModification($joueur,$lang['doublon_courriel'],1,"",0);
     }
     else

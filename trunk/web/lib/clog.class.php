@@ -18,7 +18,7 @@ class clog
 	{
 	 	if(!$this->handleFichier=fopen($fichier,"a+"))
 		{
-			echo "erreur";
+			//echo "erreur";
 		}	
 	 	$this->nomFichier=$fichier;
 	}

@@ -305,8 +305,8 @@ abstract class Utilisateur
     //les fonctions à déveloper dans les classes filles
 
     abstract function genererCleConfirmation();
-    abstract function validerAliasUnique($alias);
-    abstract function validerCourrielUnique($courriel);
+    abstract function validerAliasUnique($alias, $mysqli);
+    abstract function validerCourrielUnique($courriel, $mysqli);
     abstract function envoyerCourrielConfirmation();
     abstract function envoyerCourrielInfoPerdu($courriel);
     abstract function miseAJourMotDePasseMySQL($motDePasse);

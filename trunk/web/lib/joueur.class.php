@@ -301,7 +301,7 @@ class Joueur extends Utilisateur
           v�rifier dans la base de donn�es pour s'assurer
           que l'alias est effectivement libre
     *******************************************************************************/
-    function suggestionAlias($alias)
+    function suggestionAlias($alias, $mysqli)
     {
       settype($i,"integer");
       $i=1;
@@ -316,7 +316,7 @@ class Joueur extends Utilisateur
          $nouvelAlias = substr($nouvelAlias,0,strlen($nouvelAlias)-strlen($i)-1).$i;
 		}
         $sql = "select alias from joueur where alias='" . $nouvelAlias . "'";
-        $result = $this->mysqli->query($sql);
+        $result = $mysqli->query($sql);
         $i = $i+1;
       }while($result->num_rows>0);
 
@@ -492,8 +492,8 @@ class Joueur extends Utilisateur
 
 	  //echo "test";
       //v�rifier la possibilit� de doublon
-      if($this->validerAliasUnique($this->reqAlias())==false
-            || $this->validerCourrielUnique($this->reqCourriel())==false)
+      if($this->validerAliasUnique($this->reqAlias(), $this->mysqli)==false
+            || $this->validerCourrielUnique($this->reqCourriel(), $this->mysqli)==false)
         return false;
 
 
@@ -542,11 +542,11 @@ class Joueur extends Utilisateur
     // Sortie:      retourne vrai si l'alias est libre faux sinon
     // Note:        
     //**************************************************************************
-    function validerAliasUnique($alias)
+    function validerAliasUnique($alias, $mysqli)
     {
 
         $sql="select * from joueur where alias='" . addslashes(strtolower($alias)) . "'";
-        $result=$this->mysqli->query($sql);
+        $result=$mysqli->query($sql);
 
         if($result->num_rows!=0)
             return false;
@@ -561,11 +561,11 @@ class Joueur extends Utilisateur
     // Sortie:      retourne vrai si le courriel est libre, faux sinon
     // Note:        
     //**************************************************************************
-    function validerCourrielUnique($courriel)
+    function validerCourrielUnique($courriel, $mysqli)
     {
       if ($courriel != "") {
         $sql="select * from joueur where adresseCourriel='" . strtolower($courriel) . "'";
-        $result=$this->mysqli->query($sql);
+        $result=$mysqli->query($sql);
         if($result->num_rows!=0)
             return false;
         else
@@ -604,7 +604,7 @@ class Joueur extends Utilisateur
     //**************************************************************************
     function envoyerCourrielInfoPerdu($courriel)
     {
-      	if($this->validerCourrielUnique($courriel)==true)
+      	if($this->validerCourrielUnique($courriel, $this->mysqli)==true)
         	return false;
 
         $sql="select * from joueur where adresseCourriel='" . $courriel . "'";
