@@ -585,11 +585,17 @@ class Joueur extends Utilisateur
     //**************************************************************************
     function envoyerCourrielConfirmation()
     {
-        $sujet = SUJET_COURRIEL_INSCRIPTION;
+      if($this->reqCleLangue() == LANG_FRENCH) {
+        $sujet = SUJET_COURRIEL_INSCRIPTION_FR;
+        $body = COURRIEL_INSCRIPTION_FR;
+      } else {
+        $sujet = SUJET_COURRIEL_INSCRIPTION_EN;
+        $body = COURRIEL_INSCRIPTION_EN;
+      }
         
         $a_chercher = array('[ALIAS]','[MOT_DE_PASSE]','[NOM]','[PRENOM]','[CLE_CONFIRMATION]','[ADRESSE_SITE_WEB]');
         $remplacement = array($this->reqAlias(),$this->reqMotDePasse(),$this->reqNom(),$this->reqPrenom(),$this->reqCleConfirmation(),ADRESSE_SITE_WEB);
-        $message = str_replace($a_chercher,$remplacement,COURRIEL_INSCRIPTION);
+        $message = str_replace($a_chercher,$remplacement,$body);
 
         $courriel = new Courriel($sujet,$message,$this->reqCourriel());
         return $courriel->envoyerCourriel();
@@ -613,13 +619,20 @@ class Joueur extends Utilisateur
         
         $this->chargerMySQLCle($row->cleJoueur);
         
-        $sujet = SUJET_COURRIEL_PASS_PERDU;
+      if($this->reqCleLangue() == LANG_FRENCH) {
+          $sujet = SUJET_COURRIEL_PASS_PERDU_FR;
+          $body = COURRIEL_PASS_PERDU_FR;
+        } else {
+          $sujet = SUJET_COURRIEL_PASS_PERDU_EN;
+          $body = COURRIEL_PASS_PERDU_EN;
+        }
+
         $nouveauPass = $this->genererChaineAleatoire(10);
         $this->miseAJourMotDePasseMySQL($nouveauPass);
                 
         $a_chercher = array('[ALIAS]','[MOT_DE_PASSE]','[NOM]','[PRENOM]','[CLE_CONFIRMATION]','[ADRESSE_SITE_WEB]');
         $remplacement = array($row->alias,$nouveauPass,$this->reqNom(),$this->reqPrenom(),$this->reqCleConfirmation(),ADRESSE_SITE_WEB);
-        $message = str_replace($a_chercher,$remplacement,COURRIEL_PASS_PERDU);
+        $message = str_replace($a_chercher,$remplacement,$body);
 		
         $courriel = new Courriel($sujet,$message,$courriel);
         $courriel->envoyerCourriel();

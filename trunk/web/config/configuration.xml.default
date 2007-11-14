@@ -14,17 +14,31 @@
 	<portSMTP></portSMTP>
 	<utilisateurSMTP></utilisateurSMTP>
 	<motDePasseSMTP></motDePasseSMTP>
-	<sujet_courriel_inscription><![CDATA[Confirmation de l'inscription Ã  Math en jeu.]]></sujet_courriel_inscription>
-	<courriel_inscription><![CDATA[Bonjour [ALIAS],<p>
-Ce courriel confirme que votre inscription Ã  math en jeu s'est bien dÃ©roulÃ©e.<br>
-Vous n'avez maintenant qu'Ã  suivre le lien ci-dessous pour confirmer votre inscription.<br>
+	
+	<courriel_inscription_fr><![CDATA[Bonjour [ALIAS],<p>
+Ce courriel confirme que votre inscription à math en jeu s'est bien déroulée.<br>
+Vous n'avez maintenant qu'à suivre le lien ci-dessous pour confirmer votre inscription.<br>
 Si vous ne pouvez cliquer directement sur le lien vous pouvez le copier et le coller dans votre navigateur.<p>
 <a target="_blank" href="[ADRESSE_SITE_WEB]confirmation-courriel.php?ID=[CLE_CONFIRMATION]"> [ADRESSE_SITE_WEB]confirmation-courriel.php?ID=[CLE_CONFIRMATION]</a><p>
-Merci et bon Math en jeu!]]></courriel_inscription>
-	<sujet_courriel_pass_perdu><![CDATA[Math en jeu!]]></sujet_courriel_pass_perdu>
-	<courriel_pass_perdu><![CDATA[Voici vos informations personnelles.<br>
-Votre alias : [ALIAS]<br>
-Votre Mot de passe : [MOT_DE_PASSE]]]></courriel_pass_perdu>
+Merci et bon Math en jeu!]]>
+	</courriel_inscription_fr>
+
+	<courriel_inscription_en><![CDATA[Hello [ALIAS],<p>
+This email confirm that you now have a Math en jeu account.
+To confirm your email adress, simply follow this link.<p>
+<a target="_blank" href="[ADRESSE_SITE_WEB]confirmation-courriel.php?ID=[CLE_CONFIRMATION]"> [ADRESSE_SITE_WEB]confirmation-courriel.php?ID=[CLE_CONFIRMATION]</a><p>
+Thank you and have fun playing Math en jeu!]]>
+	</courriel_inscription_en>
+	<sujet_courriel_pass_perdu_fr><![CDATA[Math en jeu!]]></sujet_courriel_pass_perdu_fr>
+	<courriel_pass_perdu_fr><![CDATA[Voici vos informations personnelles.<br>
+Votre nom d'usager: [ALIAS]<br>
+Votre nouveau mot de passe : [MOT_DE_PASSE]]]></courriel_pass_perdu_fr>
+
+	<sujet_courriel_pass_perdu_en><![CDATA[Math en jeu!]]></sujet_courriel_pass_perdu_en>
+	<courriel_pass_perdu_en><![CDATA[Your username and your new password.<br>
+username : [ALIAS]<br>
+password : [MOT_DE_PASSE]]]></courriel_pass_perdu_en>
+
 
 	<tempDir>/tmp</tempDir>
 	<latexApp><![CDATA[openin_any=p /usr/bin/latex]]></latexApp>

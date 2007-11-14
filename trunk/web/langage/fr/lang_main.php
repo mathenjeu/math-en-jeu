@@ -19,6 +19,8 @@ Si vous avez des questions/commentaires/suggestions vous n\'avez qu\'à écrire à 
 //
 $lang['math_en_jeu'] = "Math en jeu";
 
+$lang['fr'] = "Français";
+$lang['en'] = "English";
 
 $lang['joueur'] = 'Joueur';
 $lang['total'] = 'Total';

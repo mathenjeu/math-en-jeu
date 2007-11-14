@@ -11,10 +11,12 @@ Description : Tous les textes du site web sont regroupï¿½s ici
 *******************************************************************************/
 
 //
-//commun : à usage multiple
+//commun : ï¿½ usage multiple
 //
 $lang['math_en_jeu'] = "Math en jeu";
 
+$lang['fr'] = "FranÃ§ais";
+$lang['en'] = "English";
 
 $lang['joueur'] = 'Player';
 $lang['total'] = 'Total';
@@ -77,18 +79,18 @@ $lang['etablissement'] = 'Institution';
 $lang['autre'] = 'Other';
 $lang['nouvelles'] = 'News';
 
-$lang['niveau_1'] = 'Primaire, 1re année';
-$lang['niveau_2'] = 'Primaire, 2e année';
-$lang['niveau_3'] = 'Primaire, 3e année';
-$lang['niveau_4'] = 'Primaire, 4e année';
-$lang['niveau_5'] = 'Primaire, 5e année';
-$lang['niveau_6'] = 'Primaire, 6e année';
+$lang['niveau_1'] = 'Primaire, 1re annï¿½e';
+$lang['niveau_2'] = 'Primaire, 2e annï¿½e';
+$lang['niveau_3'] = 'Primaire, 3e annï¿½e';
+$lang['niveau_4'] = 'Primaire, 4e annï¿½e';
+$lang['niveau_5'] = 'Primaire, 5e annï¿½e';
+$lang['niveau_6'] = 'Primaire, 6e annï¿½e';
 $lang['niveau_7'] = 'Secondaire I';
 $lang['niveau_8'] = 'Secondaire II';
 $lang['niveau_9'] = 'Secondaire III';
 $lang['niveau_10'] = 'Secondaire IV';
 $lang['niveau_11'] = 'Secondaire V';
-$lang['niveau_12'] = 'Collégial';
+$lang['niveau_12'] = 'Collï¿½gial';
 $lang['niveau_13'] = 'Universitaire';
 $lang['niveau_14'] = 'Grand public';
 
@@ -196,7 +198,7 @@ $lang['menu_mes_question'] = 'Add my questions';
 $lang['titre_index'] = 'Math en jeu';
 $lang['texte_index'] = '
 <!--<span style="font-size:150%"><i>New!</i> <a href="demo.php">Watch the Math en jeu demo!</a></span><p>-->
-<a target="_blank" href="img/screen1_big.png"><img src="img/screen1.png" alt="Capture d\'écran" border="0" hspace="15" align="left"></a>		
+<a target="_blank" href="img/screen1_big.png"><img src="img/screen1.png" alt="Capture d\'ï¿½cran" border="0" hspace="15" align="left"></a>		
 
 
 <p>Is it possible to have fun doing maths? The SMAC team says &laquo;yes&raquo;!
@@ -222,7 +224,7 @@ time runs out. To be able to win coins, each player must answer mathematical
 questions. The longer the displacement, the harder the question, and the more 
 coins it is worth! </p>
 
-<a target="_blank" href="img/screen2_big.png"><img src="img/screen2.png" alt="Capture d\'écran" border="0" hspace="15" align="right"></a>    
+<a target="_blank" href="img/screen2_big.png"><img src="img/screen2.png" alt="Capture d\'ï¿½cran" border="0" hspace="15" align="right"></a>    
 
 
 <p>In case a player answers a question  wrongly, a retroactive effect
@@ -239,8 +241,8 @@ three virtual opponents.</p>
 <p>The content of Math en Jeu is based on a question bank of 1500 questions
 divided into 8 categories (geometry, logic, algebra, arithmetics, probability 
 and statistics, history of science, functions, and general questions.) Each 
-question corresponds to a specific objective of the mathematics program of Québec\'s 
-Ministère de l\'éducation, du loisir et du sport, and has points that corresponds to
+question corresponds to a specific objective of the mathematics program of Quï¿½bec\'s 
+Ministï¿½re de l\'ï¿½ducation, du loisir et du sport, and has points that corresponds to
 it\'s degree of difficulty relative to the academic level of the player. It is 
 thus possible for two players of different academic levels to confront each other
 in a same game because they are given questions adapted to their levels. Every 
@@ -294,7 +296,7 @@ $lang['instructions_body'] ='
 	
 
 	<ul>
-	<li>On the game board, you character appears bigger than the other player’s.</li>
+	<li>On the game board, you character appears bigger than the other playerï¿½s.</li>
 	<li>You character can move in four directions. To the front, to the back, to the left, and to the right the same line. The accessible cells appear in orange.</li>  
 	<li>Your character can move between one and six cells at once. The bigger the displacement, the harder the question, relative to the academic level on your registration.</li>
 	<li>The number of points a question is worth is proportional to the square of the length of the displacement. A one cell displacement is worth one point, a two cell displacement is worth four points, and so on.</li>
@@ -853,7 +855,7 @@ $lang['install_erreur_prenom'] = 'Invalid first name.';
 $lang['install_titre'] = 'Math en jeu website installation.';
 $lang['install_suivant'] = 'Next step';
 $lang['install_precedent'] = 'Previous step';
-$lang['install_message_fin'] = 'Voilà! The installation is basically finished. You can now go to the <a href="../super-admin.php">administration section</a> to complete the configuration.';
+$lang['install_message_fin'] = 'Voilï¿½! The installation is basically finished. You can now go to the <a href="../super-admin.php">administration section</a> to complete the configuration.';
 $lang['install_admin_exist'] = 'This administrator already exists in the table.';
 $lang['install_erreur_ecriture_config'] = 'The configuration file /config/configuration.xml is not available to write.';
 

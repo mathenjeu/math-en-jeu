@@ -72,10 +72,17 @@ define("SERVEUR_SMTP",(string)$config->serveurSMTP);			//l'adresse du serveur SM
 define("USER_SMTP",(string)$config->utilisateurSMTP);			//le nom d'utilisateur du serveur SMTP
 define("PASS_SMTP",(string)$config->motDePasseSMTP);			//le mot de passe du serveur SMTP
 
-define('SUJET_COURRIEL_INSCRIPTION',utf8_decode((string)$config->sujet_courriel_inscription));	//sujet du courriel de l'inscription
-define('COURRIEL_INSCRIPTION',utf8_decode((string)$config->courriel_inscription));				//courriel envoy� lors de l'inscription
-define('SUJET_COURRIEL_PASS_PERDU',utf8_decode((string)$config->sujet_courriel_pass_perdu));	//sujet du courriel de r�cup�ration de mot de passe
-define('COURRIEL_PASS_PERDU',utf8_decode((string)$config->courriel_pass_perdu));				//courriel envoy� pour les nom d'usager ou les mot de passe perdu
+define('SUJET_COURRIEL_INSCRIPTION_FR',utf8_decode((string)$config->sujet_courriel_inscription_fr));	//sujet du courriel de l'inscription
+define('COURRIEL_INSCRIPTION_FR',utf8_decode((string)$config->courriel_inscription_fr));				//courriel envoy� lors de l'inscription
+define('SUJET_COURRIEL_INSCRIPTION_EN',utf8_decode((string)$config->sujet_courriel_inscription_en));	//sujet du courriel de l'inscription
+define('COURRIEL_INSCRIPTION_EN',utf8_decode((string)$config->courriel_inscription_en));				//courriel envoy� lors de l'inscription
+
+
+define('SUJET_COURRIEL_PASS_PERDU_FR',utf8_decode((string)$config->sujet_courriel_pass_perdu_fr));	//sujet du courriel de r�cup�ration de mot de passe
+define('COURRIEL_PASS_PERDU_FR',utf8_decode((string)$config->courriel_pass_perdu_fr));				//courriel envoy� pour les nom d'usager ou les mot de passe perdu
+define('SUJET_COURRIEL_PASS_PERDU_EN',utf8_decode((string)$config->sujet_courriel_pass_perdu_en));	//sujet du courriel de r�cup�ration de mot de passe
+define('COURRIEL_PASS_PERDU_EN',utf8_decode((string)$config->courriel_pass_perdu_en));				//courriel envoy� pour les nom d'usager ou les mot de passe perdu
+
 
 //constante utile pour la cr�ation des questions
 define("TEMP_DIR",(string)$config->tempDir);					//temporary dir for the questions creation
@@ -111,13 +118,13 @@ if (session_id()=="") {
 
 //echo $_SESSION['langage'];
 
+
 if (isset($_SESSION['langage']) && $_SESSION['langage'] != "" ) {
   require_once(LANGAGE_DIR . $_SESSION['langage'] . "/lang_main.php");
 } else {
   require_once(LANGAGE_DIR . $config->langue . "/lang_main.php");
   $_SESSION['langage'] = $config->langue;
 }
-
 
 
 
@@ -138,6 +145,12 @@ $mysqli=new mon_mysqli((string)$config->dbHote,
                 (string)$config->dbSchema);
     
 $_SESSION["mysqli"]=$mysqli;
+
+
+  	if (!isset($_SESSION['language_choose'])) {
+  	  redirection('choose_language.php', 0);
+  	  return;
+  	}
 
 //session_destroy();
 
