@@ -1,0 +1,206 @@
+
+<?xml version="1.0" encoding="UTF-8"?> 
+<Texte 
+	
+	chargement_beta_local = ""	
+
+		version = "Version 2.0"
+		boutonEntrer = "Enter"
+		barLabel = "Loading in progress..."
+
+	
+	mathemaQuoi_beta = ""
+	
+		frame1 = ""
+			
+			descriptionPrincipale = "It's the heart of Math en Jeu. There is a huge questions library for each of the specific mathematic domains."
+			
+			descriptionAccromath = "More advanced questions related to the various subjets presented in the Accromath's magazine."
+			
+			descriptionDefault = "This questions libray has been created by a person or a group not affiliated with the Math en Jeu's team."
+			
+			salle = "Choose a room."
+			boutonRetour = "Back"
+			boutonContinuer = "Continue"
+	
+		frame2 = ""
+
+			texteTables = "Choose an open table in the room : "	
+			btnCreerTable = "New table"
+			choixTable = "or create a new one."
+			choixTemps = "Choose the duration of the game you wish to play."
+			sallesOuvertes = "Open rooms"
+			tablesOuvertes = "Open tables"
+
+			GUITemps = "How long would you like to play (in minutes) :"
+	
+		frame3 = ""
+
+			noTable = "Table number :"	
+			numSalle = "Room no."
+			temps = "Time :"
+			minutes = "minutes"
+
+			choixPerso = "Choose your character."
+			nonDisponible = "Unavailable"
+			inconnu = "Unknown"
+			demarrerMaintenant = "Start now"
+			attente = "Waiting for other players ..."
+
+			difficulte = "Difficulty"
+
+			choixNiveau = "Choose the level of your virtual opponents :"
+			niveauFacile = "Easy"
+			niveauInt = "Intermediate"
+			niveauDiff = "Difficult"
+			niveauTrDiff = "Very Difficult"
+
+			joueur = "Player"
+
+		frame4 = ""
+
+			sonsLabel = "Sounds"
+			musiqueLabel = "Music"
+
+			texteMauvaiseReponse = "Wrong !!!"
+			punitionTexte = "Time left to your penalty :"
+			penalite = "Penalty :"
+			secondes = "seconds"
+			reponse = "Answer :"
+			vrai = "true"
+			faux = "false"
+			pointage = "Scores"
+			objet = "Objects"
+		
+
+	
+		frame5 = ""
+
+			btn_rejouer = "Play again"
+			btn_retourSite = "Return to Math en Jeu"
+			btn_quitter = "Quit"
+			joueurs = "Players"
+			pointage = "Score"
+			resultat = "Results"
+			
+
+
+		autre = ""
+
+			GUIdejaConnecte = "This user is already connected. Close this window and start again with another user."
+			GUIhorsService = "The server does not answer. Check you connection and start again. If the problem persist, please click on the following link to perform a connection test and then send the result to the SMAC technical team. We are sincerely sorry that you are experimenting this problem."
+			GUIhorsService2 = "Connection Test"
+			GUIhorsServiceURL = "http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_16466&sliceId=1"
+			
+			
+			GUIerreurQuestion = "Math en jeu is unable to load the question. Please check your internet connection or communicate with the SMAC technical team. We are sincerely sorry that you are experimenting this problem."
+			GUIerreurRetroaction = "Math en jeu is unable to load the retroaction. Please check your internet connection or communicate with the SMAC technical team. We are sincerely sorry that you are experimenting this problem."
+
+
+			GUIbanane = "A banana has been used. This character will be moved away from the «Win The Game» cell."	
+			
+			GUIbananeUser = "You used a banana."
+
+			GUIutiliserLivre = "Do you really want to use the book ?"
+			
+			btnOui = "YES"
+
+			btnNon = "NO"
+
+			deconnecte = "disconnected"
+
+
+
+
+
+		menuAide = "Help menu"
+		
+			aideQuitter = "Close"
+			nomCasesSpeciales  = "    Instant Victory                       Store"
+			nomCasesSpeciales2 = "        Coin                          '?' Cell"
+			nomObjets 		   = " Banana                 Book              Crystal ball"
+			salleListe = "Before playing"
+			salleTitre = "1. Setting the game"
+			salleTexte = "•Choosing a room
+Choose a room to play in. For example, you can choose the Newton room. Click on the room’s name and then click on Continue.
+			
+•Choosing a table
+If there is a table open and you want to play with these people, click on this table. Then click on Continue. Otherwise, click on “Create a new table” and choose how many minutes you want to play.
+			
+•Choosing a character
+By clicking on the left or on the right-pointing arrow, choose you character. Click on Continue.
+			
+•Choosing the difficulty level
+The level you choose will not affect the difficulty of your questions. It modifies the capacity of the virtual opponents to answer the quesions. Click on the level you want and then click on Continue."
+		
+			elementsJeuListe = "Game"
+			elementsJeuTitre = "2. Elements of the game"
+			elementsJeuTexte = "Basic rules:
+•On the game board, you character appears bigger than the other player’s.
+
+•You character can move in four directions. To the front, to the back, to the left, and to the right the same line. The accessible cells appear in yellow.
+
+•Your character can move between one and six cells at once. The bigger the displacement, the harder the question, relative to the academic level on your registration.
+
+•The number of points a question is worth depends on the length of the displacement. A one cell displacement is worth three point, a two cells displacement is worth five points, and so on.
+
+•The cells with a question mark bring you to a game if the question is answered correctly. The points won in that game will be added to your score.
+
+•The winner is the player with the most points, or the one that reaches the ''Instant Victory'' sign first (see in the 'Special Cells' section)."
+			
+			objetsListe = "Objects"
+			objetsTitre = "3. The objects"
+			objetsTexte = "
+						
+
+The objects you can buy are:
+
+The banana
+•The banana allows you to play a wicked trick on another player! When you use this object, you opponent that is the closest to the ''Instant Victory'' sign slides on the banana, and gets thrown at the opposite end of the board!
+
+The book
+•The book eliminates an answer choice for you on a multiple choice question. The number of choices then decreases from four to three.
+     
+The crystal ball
+•If you feel unable to answer a question, you may use the crystal ball. The computer will then give you a new question."
+						
+			casesSpecialesListe = "   Special cells"
+			casesSpecialesTitre = "4. The special cells"
+			casesSpecialesTexte = "
+			
+				
+				
+				
+
+There are 4 special cells in the game:
+    
+Instant Victory!
+•The player that first reaches this cell instantly wins the game! But, there is a twist to it! Before being allowed to click on this cell, you must have accumulated a minimum number of points. This amount of points depends on the length of the game. If no player has reached this cell when time is up, the winner is of course the player with the most points.  
+   
+The coins
+•The coins you pick up on your way allow you to buy objects (they cost one coin each).
+ 
+The shops
+•It is here that you can spend your coins!
+
+?
+•Something special happens when you step on this cell..."
+			
+			optionsListe = "Options"
+			optionsTitre = "5. The options"
+			optionsTexte = "During the game, you can access Math en Jeu's help menu by clicking on the button at the bottom right of the screen. 
+			
+Then, you can change different settings of the game:
+
+Activate or deactivate sound effects during the game
+
+Activate or deactivate music during the game
+
+Zoom in or zoom out from the board
+
+Move the screen in the direction of you choice to explore the board"
+
+
+
+>
+</Texte>  

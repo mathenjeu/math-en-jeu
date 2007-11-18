@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ileTresor> 
+
+	<VraiFaux>
+  		<question>127 est un nombre premier.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>11 × 17 = 287</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>Sur un lancé de deux dés, la somme la plus probable est 7.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>Le 4 terme de la suite commençant par 1, 4, 9 est 25.</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux>
+ 	
+	<VraiFaux>
+  		<question>Le nombre 3456 est divisible par 9.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux> 	
+ 	 		
+	<VraiFaux>
+  		<question>Le produit de deux nombres, chacun divisible par 5, est divisible par 25.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux> 	 	
+
+	<VraiFaux>
+  		<question>La racine cubique de 1009 est égale à 9.</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>Le carré de 2451 est égal à 6007402.</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>L’intersection de l’ensemble des nombres pairs et de l’ensemble des nombres premiers est constituée d’un seul élément.</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux>
+ 	
+	<VraiFaux>
+  		<question>Le quotient de 3/4 par 8/9 est égal à 1/2.</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux> 	
+ 	 		
+ 	 <VraiFaux>
+  		<question>L’aire d’un parallélogrammme dont la base mesure 5 cm et la hauteur 6 cm est égale à 32.</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux>
+ 	
+	<VraiFaux>
+  		<question>Le plus petit commun multiple des nombres 4 et 6 est égal à 12.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux> 	
+ 	 		
+	<VraiFaux>
+  		<question>9 est un diviseur de 12345.</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux> 	
+ 	
+ 	<VraiFaux>
+  		<question>Le cardinal de l’ensemble vide est 0.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux> 	
+ 	 		
+	<VraiFaux>
+  		<question>L’ensemble des nombres premiers est un ensemble infini.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux>  	
+ 	 	
+   	<VraiFaux>
+  		<question>Un octogone est un polygone régulier à 9 côtés.</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux> 	
+ 	 		
+	<VraiFaux>
+  		<question>Un décagone est un polygone régulier à 10 côtés.</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux>  		
+ 	 	
+ 	 	
+ 	 <VraiFaux>
+  		<question>Chaque angle intérieur d’un pentagone régulier est de 108 degrés.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux> 	
+ 	 		
+	<VraiFaux>
+  		<question>Dans un pentagone, on peut tracer 5 sécantes.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux>  	
+ 	 	
+   	<VraiFaux>
+  		<question>Un polygone régulier à 7 côtés est appelé un heptagone.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux> 	
+ 	 		
+	<VraiFaux>
+  		<question>La somme des angles intérieurs d’un hexagone est égale à 4π.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux>  		
+
+</ileTresor>

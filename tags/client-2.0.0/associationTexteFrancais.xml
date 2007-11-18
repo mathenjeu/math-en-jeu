@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<Texte 
+	
+	consignes = "Le but du jeu est simple. Il faut associer chaque mot avec la bonne définition. Il suffit de cliquer sur la bille associée à un mot et de la glisser jusqu'à la bonne définition. Clique sur 'Valider' quand tu penses que tes réponses sont justes. Attention : tu as 30 secondes pour réussir ce jeu."
+	
+	boutonJouer = "Débuter"
+	instruction = "I  N  S  T  R  U  C  T  I  O  N  S"
+	temps = "Temps"
+	boutonValider = "Valider"
+	boutonTerminer = "Terminer"
+	
+>
+</Texte> 

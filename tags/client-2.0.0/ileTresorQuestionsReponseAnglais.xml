@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ileTresor> 
+
+	<VraiFaux>
+  		<question>127 is a prime number.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>11 × 17 = 287</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>With two dice rolls, the most frequent sum is 7.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>The 4th term of the suite starting with 1, 4, 9 is 25</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux>
+ 	
+	<VraiFaux>
+  		<question>The number 3456 is divisible by 9.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux> 	
+ 	 		
+	<VraiFaux>
+  		<question>The product of two numbers, each one divisible by 5, is divisible by 25.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux> 	 	
+
+	<VraiFaux>
+  		<question>The cube root of 1009 is 9.</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>The square of 2451 is 6007402.</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>The intersection of the even numbers ensemble and the odd numbers ensemble contains only one element.</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux>
+ 	
+	<VraiFaux>
+  		<question>The quotient of 3/4 by 8/9 is 1/2.</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux> 	
+ 	
+ 	 <VraiFaux>
+  		<question>The surface area of the parallelogram where the base measure 5cm and the height is 6cm equals 32.</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux>
+ 	
+	<VraiFaux>
+  		<question>The least common multiple of 4 and 6 is 12.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux> 	
+ 	 		
+	<VraiFaux>
+  		<question>9 divides 12345.</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux> 	
+ 	
+ 	<VraiFaux>
+  		<question>The cardinal of the empty set is 0.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux> 	
+ 	 		
+	<VraiFaux>
+  		<question>The prime numbers set is infinite.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux>  	
+ 	 	
+   	<VraiFaux>
+  		<question>An octogon is a regular polygon with 9 edges.</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux> 	
+ 	 		
+	<VraiFaux>
+  		<question>A dodecagon is a regular polygon with 10 edges</question>
+  		<reponse>false</reponse>
+ 	</VraiFaux>  		
+ 	 	
+ 	 	
+ 	 <VraiFaux>
+  		<question>Each internal angle in a regular pentagon total 108 degrees.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux> 	
+ 	 		
+	<VraiFaux>
+  		<question>It is possible to draw 5 secant lines in a pentagon.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux>  	
+ 	 	
+   	<VraiFaux>
+  		<question>A heptagon is a regular polygon with 7 edges.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux> 	
+ 	 		
+	<VraiFaux>
+  		<question>The internal angles of an hexagon total 4π.</question>
+  		<reponse>true</reponse>
+ 	</VraiFaux>  		
+
+</ileTresor>

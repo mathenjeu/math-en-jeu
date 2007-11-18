@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<Texte 
+
+	bulle = "Bienvenue au magasin, que désirez-vous?"
+
+	bullePolitesse = "Que puis-je faire pour vous?"
+
+	bulleChoix = "Choisissez un objet s'il-vous-plaît."
+
+	bulleDejaObjet =  "Vous avez déjà cet objet."
+
+	bullePasArgent = "Vous n'avez pas assez d'argent."
+	
+	bulleLimiteObjets = "Vous avez atteint le maximum de 10 objets."
+
+	bulleAjoutListe = "Cet objet a été ajouté à votre liste d'objets."	
+
+	boutonAcheter = "Acheter"
+
+	boutonRetour = "Retour au jeu"
+
+	Livre = "Le livre coûte 1 piece. Utilisez le lors d'une question à choix multiples pour éliminer une mauvaise réponse."
+
+	Papillon = "Le papillon coûte 1 piece. Il permet de se téléporter n'importe où sur la planche de jeu."
+
+	Telephone = "Le téléphone coûte 1 piece. Il permet de : pouvoir du téléphone"
+
+	Boule = "La boule de cristal coûte 1 piece. Utilisez la lorsqu'une fenêtre de question est ouverte si vous désirez changer de question."
+
+	PotionGros = "La Potion Bleue coûte 1 piece. Elle permet de devenir momentanément plus grand que tout le monde."
+
+	PotionPetit = "La Potion Rouge coûte 1 piece. Elle permet de devenir momentanément plus petit que tout le monde."
+
+	Banane = "La banane coûte 1 piece. Elle permet d'éloigner votre adversaire ayant le plus de points de la case 'Victoire'."
+
+	PasObjet = "Désolé, nous n'avons plus cet objet."
+	
+	tLivre = "Livre"
+
+	tPapillon = "Papillon"
+
+	tTelephone = "Téléphone"
+
+	tBoule = "Boule"
+
+	tPotionGros = "Potion Rouge"
+
+	tPotionPetit = "Potion Bleue"
+
+	tBanane = "Banane"
+
+	tPasObjet = ""
+
+>
+</Texte> 
