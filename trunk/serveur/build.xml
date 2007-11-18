@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     Nov 17, 2007 10:35:44 PM                                                        
+
+     mathenjeu    
+     description
+                   
+     Maxime                                                                
+     ====================================================================== -->
+<project name="mathenjeu" default="release">
+    <description>
+            description
+    </description>
+
+    <!-- ================================= 
+          target: default              
+         ================================= -->
+    <target name="release" depends="depends" description="--> description">
+    		
+        <tar destfile="serveur-2.0.0.tar">
+        	<fileset dir="classes">
+        		<exclude name="**/mathenjeu.xml" />
+						<exclude name="**/build.xml" />
+						<exclude name="log/serveur.log*" />
+						<exclude name="**/.cvsignore" />
+						<exclude name="**/.classpath" />
+						<exclude name="**/.project" />
+					</fileset>
+        </tar>
+				<gzip zipfile="serveur-2.0.0.tar.gz" src="serveur-2.0.0.tar" />
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: depends                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="depends">
+    </target>
+
+</project>
