@@ -1,0 +1,225 @@
+/*** The Essential Code ***/
+
+body {
+  margin: 0;
+  padding-left: 200px;    /* LC fullwidth */
+  padding-right: 190px;   /* RC fullwidth + CC padding */
+  min-width: 240px;       /* LC fullwidth + CC padding */
+}
+
+#header, #footer {
+  margin-left: -200px;    /* LC fullwidth */
+  margin-right: -190px;   /* RC fullwidth + CC padding */
+}
+
+.column {
+  position: relative;
+  float: left;
+}
+
+#center {
+  padding: 0 20px;
+  width: 100%;
+}
+
+#left {
+  width: 180px;           /* LC width */
+  padding: 0 10px;        /* LC padding */
+  right: 240px;           /* LC fullwidth + CC padding */
+  margin-left: -100%;
+}
+
+#right {
+  width: 130px;           /* RC width */
+  padding: 0 10px;        /* RC padding */
+  margin-right: -100%;
+}
+
+#footer {
+  clear: both;
+}
+
+/*** IE Fix ***/
+* html #left {
+  left: 150px;            /* RC fullwidth */
+}
+
+/*** Just for Looks ***/
+
+body {
+  background: white url('roll-filigrane.png') no-repeat top right;
+  font-family: Verdana, sans-serif;
+  font-size: 10pt;
+}
+
+#header {
+  background-image: url('fond.jpg');
+}
+
+#footer {
+  font-size: 80%;
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+#left {
+}
+
+#center {
+  padding-bottom: 10px;
+}
+
+#right {
+}
+
+.column {
+  padding-top: 1em;
+  text-align: justify;
+}
+
+div.nw {
+  margin: 0;
+  width: 300px;
+  height:63px;
+  background: url('logo.jpg') top left no-repeat;
+}
+
+#left-inside {
+  margin: 5px;
+  margin-top: 20pt;
+  border: solid 1px grey;
+  padding: 2px;
+}
+
+#left-inside h2 {
+  margin: 0;
+  font-size: 10pt;
+  text-align: center;
+  font-variant: small-caps;
+  height: 20pt;
+  vertical-align: middle;
+}
+
+#around-h2 {
+  background: orange;
+}
+
+#left ul {
+  margin-top: 0;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+#left ul li {
+  list-style-type: none;
+  background: url('bullet.png') white top left no-repeat;
+  padding: 0;
+  padding-left: 19px;
+  margin-left: 0;
+  border-bottom: dotted 1px grey;
+}
+
+#left ul li:hover {
+  background: url('bullet.png') #ccf top left no-repeat;
+  
+}
+
+#left ul li a {
+  text-decoration: none;
+  color: black;
+}
+
+hr {
+  width: 80%;
+}
+
+#right h2 {
+  font-variant: small-caps;
+  font-style: italic;
+  line-height: 85%;
+}
+
+#right p.newsentry {
+  border: solid 1px grey;
+  background: lightyellow;
+  padding: 3px;
+  font-size: 8pt;
+  text-align: left;
+}
+
+#right p.newsentry strong {
+  display: block;
+  text-align: center;
+  color: darkred;
+  margin-bottom: 10pt;
+}
+
+.right-image {
+  float: right;
+  margin-left: 10px;
+  border: solid white 2px;
+}
+
+.right-image:hover {
+  border: solid blue 2px;
+}
+
+ul.image-table {
+  padding-left: 0;
+}
+
+ul.image-table li {
+  display: block;
+  text-align: left;
+  font-size: 8pt;
+  float: left;
+  width: 300px;
+  margin-bottom: 8px;
+  margin-left: 0;
+}
+
+ul.image-table li img {
+  float: left;
+  margin-right: 8px;
+}
+
+table {
+  border: solid 1px;
+}
+
+table td {
+  margin: 0;
+  padding: 3px;
+  border: solid grey 1px;
+}
+
+div#graphique table {
+  border: none;
+  margin: 0;
+  padding: 0;
+  border-bottom: solid 1px;
+}
+
+div#graphique table tr td {
+  margin: 0;
+  padding: 0;
+  border: none;
+  bottom: 0px;
+}
+
+div#graphique table tr {
+  margin: 0;
+  padding: 0;
+}
+
+div#graphique table tr td.axe {
+  border-right: solid 1px;
+}
+
+div#graphique table tr td img {
+  background: blue;
+  width: 4px;
+}

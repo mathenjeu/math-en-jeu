@@ -1,0 +1,96 @@
+<?xml version ='1.0' encoding='UTF-8' ?>
+<config>
+	<langue></langue>
+	<adresseWeb></adresseWeb>
+	<nbNouvelles></nbNouvelles>
+	<nbJoueurs></nbJoueurs>
+	<minParties></minParties>
+	<nbJours></nbJours>
+	<template></template>
+	<css></css>
+	<nomCourriel></nomCourriel>
+	<courriel></courriel>
+	<serveurSMTP></serveurSMTP>
+	<portSMTP></portSMTP>
+	<utilisateurSMTP></utilisateurSMTP>
+	<motDePasseSMTP></motDePasseSMTP>
+	
+	<courriel_inscription_fr><![CDATA[Bonjour [ALIAS],<p>
+Ce courriel confirme que votre inscription à math en jeu s'est bien déroulée.<br>
+Vous n'avez maintenant qu'à suivre le lien ci-dessous pour confirmer votre inscription.<br>
+Si vous ne pouvez cliquer directement sur le lien vous pouvez le copier et le coller dans votre navigateur.<p>
+<a target="_blank" href="[ADRESSE_SITE_WEB]confirmation-courriel.php?ID=[CLE_CONFIRMATION]"> [ADRESSE_SITE_WEB]confirmation-courriel.php?ID=[CLE_CONFIRMATION]</a><p>
+Merci et bon Math en jeu!]]>
+	</courriel_inscription_fr>
+
+	<courriel_inscription_en><![CDATA[Hello [ALIAS],<p>
+This email confirm that you now have a Math en jeu account.
+To confirm your email adress, simply follow this link.<p>
+<a target="_blank" href="[ADRESSE_SITE_WEB]confirmation-courriel.php?ID=[CLE_CONFIRMATION]"> [ADRESSE_SITE_WEB]confirmation-courriel.php?ID=[CLE_CONFIRMATION]</a><p>
+Thank you and have fun playing Math en jeu!]]>
+	</courriel_inscription_en>
+	<sujet_courriel_pass_perdu_fr><![CDATA[Math en jeu!]]></sujet_courriel_pass_perdu_fr>
+	<courriel_pass_perdu_fr><![CDATA[Voici vos informations personnelles.<br>
+Votre nom d'usager: [ALIAS]<br>
+Votre nouveau mot de passe : [MOT_DE_PASSE]]]></courriel_pass_perdu_fr>
+
+	<sujet_courriel_pass_perdu_en><![CDATA[Math en jeu!]]></sujet_courriel_pass_perdu_en>
+	<courriel_pass_perdu_en><![CDATA[Your username and your new password.<br>
+username : [ALIAS]<br>
+password : [MOT_DE_PASSE]]]></courriel_pass_perdu_en>
+
+
+	<tempDir>/tmp</tempDir>
+	<latexApp><![CDATA[openin_any=p /usr/bin/latex]]></latexApp>
+	<xslFile></xslFile>
+	<xalanApp></xalanApp>
+	<latexHeader><![CDATA[%% PREAMBULE POUR GENERATION FICHIERS QUESTIONS
+%% Sylvain Halle 2006-10-18
+%% Ce fichier est recopie au début de toutes les questions et retroactions
+%% generees individuellement
+\documentclass[legalpaper, 12pt]{article}
+\usepackage[francais]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage[latin1]{inputenc}
+\usepackage{multirow}
+\usepackage{wasysym}
+
+%% Changements SH
+%% Marges LaTeX par défaut
+%\setlength{\topmargin}{-2cm}
+%\setlength{\textheight}{23.5cm}
+\setlength{\textwidth}{12cm}
+%\setlength{\oddsidemargin}{-1cm}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+
+%% Changements SH
+\usepackage{helvet} %% Remplace sans-serif par Helvetica
+\renewcommand{\familydefault}{\sfdefault} %% Fonte par défaut = sans-serif
+\usepackage{sfmath} %% Utilise le sans-serif même en mode math
+\pagestyle{empty} %% Pas de numéro de page
+
+%% Redefinition du compteur des environnements enumerate pour afficher a), b), ...
+\renewcommand{\labelenumi}{\alph{enumi})}
+
+%\pdfoutput=1
+
+\begin{document}]]></latexHeader>
+	<latexFooter><![CDATA[\begin{flushright}\textcolor{white}{.}\end{flushright}
+\end{document}]]></latexFooter>
+	
+	<epsDir></epsDir>
+	<flashDir></flashDir>
+	<epsWebDir></epsWebDir>
+	<flashWebDir></flashWebDir>
+	
+	<dbHote></dbHote>
+	<dbUtilisateur></dbUtilisateur>
+	<dbMotDePasse></dbMotDePasse>
+	<dbSchema></dbSchema>
+</config>
