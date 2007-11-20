@@ -1,4 +1,38 @@
 <?php echo $this->render('header.phtml'); ?>
-
+  <div id="content">
+    <h2><?php echo $this->escape($this->title); ?></h2>
+    <table>
+    <tr>
+      <td>
+        <form action="<?php echo $this->baseUrl ?>/mailer/send" method="post">
+          <table>
+          <thead>
+            <tr>
+              <th>Recipient list</th>
+             </tr>
+          </thead>
+          <tr>
+            <td>
+              <input type="hidden" name="id" value="<?php echo $this->mail->mail_template_id; ?>" />
+              <span><i>Example</i><br/> "Name1" &lt;mail1@adress.com&gt;,"Name2" &lt;mail2@adress.com&gt;, ...</span><br/>
+              <textarea name="to" rows="20" cols="50"></textarea><br/>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="submit" value="Send"></td>
+          </tr>
+          </table>
+          
+        </form>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span><strong>Subject : </strong></span><span><?php echo utf8_encode($this->mail->subject); ?></span><br/>
+        <span><?php echo utf8_encode($this->mail->body); ?></span>
+      </td>
+    </tr>
+    </table>
+  </div>
 <?php echo $this->render('mailer/_menu.phtml'); ?>
 <?php echo $this->render('footer.phtml'); ?>

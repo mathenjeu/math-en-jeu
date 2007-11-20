@@ -5,24 +5,21 @@
   </div>
   
   <form action="<?php echo $this->baseUrl ?>/image/upload" enctype='multipart/form-data' method="post">
-    
-    <div>
-      <label for="file">File</label>
-      <input type="file" name="file" />
-    </div>
-    <!-- 
-    <div>
-      <label for="name">Name</label>
-      <input type="text" name="name" value=""/>
-    </div>
-    -->
-    <div>
-      <label for="description">description</label>
-      <input type="text" name="description" value=""/>
-    </div>
-    <div id="formbutton">
-      <input type="submit" name="upload" value="Upload" />
-    </div>
+    <table>
+    <tr>
+      <td><label for="file">File</label></td>
+      <td><input type="file" name="file" /></td>
+    </tr>
+    <tr>
+      <td><label for="description">Description</label></td>
+      <td><input type="text" name="description" value=""/></td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <input type="submit" name="upload" value="Upload" />
+      </td>
+    </tr>
+    </table>
   </form>
 </div>
 <?php echo $this->render('image/_menu.phtml'); ?>

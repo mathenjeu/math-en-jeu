@@ -8,7 +8,8 @@
       <th>Logical Name</th>
       <th>Filesystem name</th>
       <th>Creator</th>
-      <th>&nbsp;</th>
+      <th>Description</th>
+      <th>Action</th>
     </tr>
   
   <?php foreach($this->images as $image) : ?>
@@ -16,15 +17,13 @@
       <td><?php echo $this->escape($image->logical_name);?></td>
       <td><?php echo $this->escape($image->physical_name);?></td>
       <td><?php echo $image->findParentRow('User')->username; ?></td>
+      <td><?php echo $this->escape($image->description); ?></td>
       <td>
         <a href="<?php echo $this->baseUrl; ?>/image/edit/id/<?php
         echo $image->image_id;?>">Edit</a>
         <a href="<?php echo $this->baseUrl; ?>/image/delete/id/<?php
         echo $image->image_id;?>">Delete</a>
       </td>
-    </tr>
-    <tr>
-      <td colspan="2"><?php echo $this->escape($image->description); ?></td>
     </tr>
   <?php endforeach; ?>
   
