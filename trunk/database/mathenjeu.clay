@@ -1571,15 +1571,15 @@ A question can be in more than one group, and a group can have multiple question
 <foreign-key-list/>
 <index-list/>
 </table>
-<table alias="" name="pool_awnser" remarks="" uid="89cb3b:115a0782492:-7f42">
+<table alias="" name="pool_answer" remarks="" uid="89cb3b:115a0782492:-7f42">
 <table-description/>
 <table-figure-bounds height="-1" width="-1" x="-128" y="483"/>
 <column-list>
-<column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="pool_awnser_id" remarks="" uid="89cb3b:115a0782492:-7f3f">
+<column alias="" auto-increment="false" column-size="11" decimal-digits="0" default-value="0" mandatory="true" name="pool_answer_id" remarks="" uid="89cb3b:115a0782492:-7f3f">
 <column-description/>
 <data-type jdbc-type="4" name="INT" selected-variant-pattern="INT(%n)">
-<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
 <variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
@@ -1601,7 +1601,7 @@ A question can be in more than one group, and a group can have multiple question
 <variant type-name-pattern="INT ZEROFILL"/>
 </data-type>
 </column>
-<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="awnser" remarks="" uid="89cb3b:115a0782492:-7f3e">
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="answer" remarks="" uid="89cb3b:115a0782492:-7f3e">
 <column-description/>
 <data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
 <variant type-name-pattern="TEXT"/>
@@ -1623,7 +1623,7 @@ A question can be in more than one group, and a group can have multiple question
 </column-list>
 <primary-key alias="" name="PK_REPONSESONDAGE_PRIMARY" remarks="" uid="89cb3b:115a0782492:-7f41">
 <primary-key-description/>
-<primary-key-column name="pool_awnser_id"/>
+<primary-key-column name="pool_answer_id"/>
 </primary-key>
 <unique-key-list/>
 <foreign-key-list>
@@ -3305,6 +3305,63 @@ For example : mathematic can have these category : Math history, algebra, statis
 <foreign-key-column column-name="subject_id" referenced-key-column-name="subject_id"/>
 </foreign-key>
 </foreign-key-list>
+<index-list/>
+</table>
+<table alias="" name="mail_template" remarks="" uid="6f404e:1165d944d63:-7fce">
+<table-description/>
+<table-figure-bounds height="-1" width="-1" x="39" y="700"/>
+<column-list>
+<column alias="" auto-increment="true" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="mail_template_id" remarks="" uid="6f404e:1165d944d63:-7fca">
+<column-description/>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="subject" remarks="" uid="6f404e:1165d944d63:-7fc7">
+<column-description/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="body" remarks="" uid="6f404e:1165d944d63:-7fc6">
+<column-description/>
+<data-type jdbc-type="-1" literal-prefix="'" literal-suffix="'" name="TEXT" selected-variant-pattern="TEXT">
+<variant type-name-pattern="TEXT"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="language_id" remarks="" uid="6f404e:1165d944d63:-7fc5">
+<column-description/>
+<data-type jdbc-type="4" name="INT" selected-variant-pattern="INT">
+<variant type-name-pattern="INT"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n)"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) UNSIGNED ZEROFILL"/>
+<variant precision-max="10" precision-min="0" precision-variable="%n" type-name-pattern="INT(%n) ZEROFILL"/>
+<variant type-name-pattern="INT UNSIGNED"/>
+<variant type-name-pattern="INT UNSIGNED ZEROFILL"/>
+<variant type-name-pattern="INT ZEROFILL"/>
+</data-type>
+</column>
+<column alias="" auto-increment="false" column-size="0" decimal-digits="0" default-value="" mandatory="true" name="creation_date" remarks="" uid="6f404e:1165d944d63:-7fbe">
+<column-description/>
+<data-type jdbc-type="91" literal-prefix="'" literal-suffix="'" name="DATE" selected-variant-pattern="DATE">
+<variant type-name-pattern="DATE"/>
+</data-type>
+</column>
+</column-list>
+<primary-key alias="" name="PK_MAIL_TEMPLATE" remarks="" uid="6f404e:1165d944d63:-7fcd">
+<primary-key-description/>
+<primary-key-column name="mail_template_id"/>
+</primary-key>
+<unique-key-list/>
+<foreign-key-list/>
 <index-list/>
 </table>
 </table-list>
