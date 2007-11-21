@@ -38,7 +38,46 @@ class MailerController extends Zend_Controller_Action {
       
     } else {
       $language = new Language();
+      $this->view->action = "add";
       $this->view->languages = $language->fetchAll();
+    }
+  }
+  
+  function editAction() {
+    if ($this->_request->isPost()) {
+      $data = array(
+            'language_id' => $this->_request->getPost('language'),
+            'subject' => utf8_decode($this->_request->getPost('subject')),
+            'body' => utf8_decode($this->_request->getPost('body')));
+      $mailTemplate = new MailTemplate();
+      $id = Zend_Filter::get($this->_request->getPost('id'), 'Digits');
+      $where = $mailTemplate->getAdapter()->quoteInto('mail_template_id = ?', $id);
+      $mailTemplate->update($data, $where);
+      
+      $this->_redirect('/mailer/');
+    } else {
+      
+      $language = new Language();
+      $this->view->languages = $language->fetchAll();
+      $this->view->action = "edit";
+      
+      $id = Zend_Filter::get($this->_request->getParam('id'), 'Digits');
+
+      if ($id > 0) {
+        $mailTemplate = new MailTemplate();
+        $row = $mailTemplate->fetchAll("mail_template_id=" . $id)->current();
+        if ($row != null) {
+          $this->view->id = $id;
+          $this->view->subject = utf8_encode($row->subject);
+          $this->view->body = utf8_encode($row->body);
+          $this->view->language_id = $row->language_id;
+        } else {
+          $this->_redirect('/mailer/');
+        }
+      } else {
+        $this->_redirect('/mailer/');
+      }
+
     }
   }
   
@@ -97,7 +136,11 @@ class MailerController extends Zend_Controller_Action {
         if(preg_match("/\"(.*)\" <(.*)>/", $line, $matches) != 0) {
           $copy = clone $mail; 
           $copy->addTo($matches[2], utf8_decode($matches[1])); 
-          $copy->send($transport); 
+          try {
+            $copy->send($transport);
+          } catch (Zend_Mail_Protocol_Exception $e) {
+             //do nothing probably just a banned adress response
+          }
           unset($copy);
         }
       }

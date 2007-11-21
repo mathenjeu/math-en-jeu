@@ -18,7 +18,7 @@
       <td><?php echo Zend_Filter::get(substr($mail->body,0, 200), 'HtmlEntities'); ?></td>
       <td>
         <a href="<?php echo $this->baseUrl ?>/mailer/send/id/<?php echo $mail->mail_template_id; ?>">Send</a><br/>
-        <a href="">Edit(not working)</a><br/>
+        <a href="<?php echo $this->baseUrl ?>/mailer/edit/id/<?php echo $mail->mail_template_id; ?>">Edit</a><br/>
         <a href="<?php echo $this->baseUrl ?>/mailer/delete/id/<?php echo $mail->mail_template_id; ?>">Delete</a><br/>
       </td>
     </tr>
