@@ -17,7 +17,6 @@ class MailerController extends Zend_Controller_Action {
     Zend_Loader::loadClass('MailTemplate');
     Zend_Loader::loadClass('Language');
     Zend_Loader::loadClass('Zend_Filter');
-    
   }
 
   /**
@@ -129,6 +128,7 @@ class MailerController extends Zend_Controller_Action {
       $mail->setFrom($config->mail->from, $config->mail->fromname);
       
         
+      $message = array();
       // parse the textarea data to get email
       // format is "Full name" <mail@adress.com>,
       $lines = explode(",", $this->_request->getPost('to'));
@@ -138,15 +138,28 @@ class MailerController extends Zend_Controller_Action {
           $copy->addTo($matches[2], utf8_decode($matches[1])); 
           try {
             $copy->send($transport);
+            $message[$matches[1] . $matches[2]] = array('recipient' => Zend_Filter::get(utf8_decode($line), 'HtmlEntities'),
+                                    'success' => 1);
           } catch (Zend_Mail_Protocol_Exception $e) {
-             //do nothing probably just a banned adress response
+
+            $message[$line] = array('recipient' => Zend_Filter::get(utf8_decode($line), 'HtmlEntities'),
+                                    'success' => 0,
+                                    'message' => $e->getMessage());
+                                                  
           }
           unset($copy);
         }
       }
-      $this->view->message = "Mail sent.";
-      $this->_redirect('/mailer/');
+      $this->view->title = "Send a mail.";
+      $mail = new MailTemplate();
+      $row = $mail->fetchAll("mail_template_id=" . $id)->current();
+      if ($row != null) {
+        $this->view->mail = $row;
+      }
+      $this->view->message = $message;
+
     } else {
+      
       $id = Zend_Filter::get($this->_request->getParam('id'), 'Digits');
       if ($id > 0) {
         $this->view->title = "Send a mail.";
@@ -160,11 +173,9 @@ class MailerController extends Zend_Controller_Action {
       } else {
         $this->_redirect('/mailer/');
       }
-      
-      
+
     }
-    
-    
+
   }
   
 }
