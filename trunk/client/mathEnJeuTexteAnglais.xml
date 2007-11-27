@@ -37,7 +37,7 @@
 		frame3 = ""
 
 			noTable = "Table number :"	
-			numSalle = "Room no."
+			numSalle = "Table no."
 			temps = "Time :"
 			minutes = "minutes"
 
