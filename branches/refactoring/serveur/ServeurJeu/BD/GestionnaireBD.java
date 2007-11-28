@@ -84,7 +84,7 @@ public class GestionnaireBD
         }
 
           Statement stmt = mConnection.createStatement();
-          ResultSet rs = stmt.executeQuery("SELECT * FROM joueur WHERE alias = '" + nomUtilisateur + "' AND motDePasse = '" + motDePasse + "';");
+          ResultSet rs = stmt.executeQuery("SELECT * FROM user WHERE username = '" + nomUtilisateur + "' AND password = '" + motDePasse + "';");
           return rs.next();
           
       }
@@ -122,9 +122,9 @@ public class GestionnaireBD
   public void remplirInformationsJoueur(JoueurHumain joueur)
   {
 
-    String lSql = "SELECT l.id as langue_id, l.nom as langue_nom, l.nom_court, cleJoueur, prenom, j.nom, cleNiveau, peutCreerSalles " +
-    " FROM joueur j, langues l " +
-    " WHERE alias = ? and j.cleLangue = l.id;";
+    String lSql = "SELECT l.language_id, l.name as language_name, l.short_name, user_id, u.name, u.last_name " + //cleNiveau, peutCreerSalles " +
+    " FROM user u, language l " +
+    " WHERE username = ? and u.language_id = l.language_id;";
 
     try {
 
@@ -134,19 +134,21 @@ public class GestionnaireBD
       ResultSet rs = requete.executeQuery();
       if (rs.next())
       {
+        /*
         if (rs.getInt("peutCreerSalles") != 0)
         {
           joueur.definirPeutCreerSalles(true);
         }
-        String prenom = rs.getString("prenom");
-        String nom = rs.getString("nom");
-        Langue lLangue = new Langue(rs.getInt("langue_id"),rs.getString("langue_nom"),rs.getString("nom_court"));
-        int cle = Integer.parseInt(rs.getString("cleJoueur"));
-        String cleNiveau = rs.getString( "cleNiveau" );
+        */
+        String prenom = rs.getString("name");
+        String nom = rs.getString("last_name");
+        Langue lLangue = new Langue(rs.getInt("language_id"),rs.getString("language_name"),rs.getString("short_name"));
+        int cle = Integer.parseInt(rs.getString("user_id"));
+        //String cleNiveau = rs.getString( "cleNiveau" );
         joueur.definirPrenom(prenom);
         joueur.definirNomFamille(nom);
         joueur.definirCleJoueur(cle);
-        joueur.definirCleNiveau( cleNiveau );
+        //joueur.definirCleNiveau( cleNiveau );
         joueur.setLangue(lLangue);
       }
 
@@ -168,9 +170,9 @@ public class GestionnaireBD
   private void remplirBoiteQuestionAll(JoueurHumain pJoueur, BoiteQuestions boiteQuestions) {
     String lUrl = GestionnaireConfiguration.getInstance().obtenirString("controleurjeu.url-question");
     
-    String lSql = "SELECT distinct q.*, qd.*, tr.nomType FROM question q, question_details qd, langues l, typereponse tr " +
-      "where q.cleQuestion = qd.question_id and qd.langue_id = l.id and l.nom_court = ? " +
-      "and tr.cleType = q.typeReponse and qd.valide = 1 " +
+    String lSql = "SELECT distinct q.*, qd.*, tr.nomType FROM question q, question_info qd, language l, answer_type at " +
+      "where q.question_id = qd.question_id and qd.language_id = l.id and l.short_name = ? " +
+      "and at.answer_type_id = q.answer_type_id and qd.is_valid = 1 " +
       "and qd.FichierFlashQuestion is not NULL and qd.FichierFlashReponse is not NULL " +
       "and q.cleQuestion = qd.id " +
       "and q.valeurGroupeAge" + pJoueur.obtenirCleNiveau() + " > 0";
@@ -184,12 +186,13 @@ public class GestionnaireBD
       ResultSet rs = lStatement.executeQuery();
       
       while(rs.next()) {
-        int codeQuestion = rs.getInt("cleQuestion");
-        String typeQuestion = rs.getString( "nomType" );
-        String question = rs.getString( "FichierFlashQuestion" );
-        String reponse = rs.getString("bonneReponse");
-        String explication = rs.getString("FichierFlashReponse");
-        int difficulte = rs.getInt( strValeurGroupeAge + pJoueur.obtenirCleNiveau() );
+        int codeQuestion = rs.getInt("question_id");
+        String typeQuestion = rs.getString( "tag" );
+        String question = rs.getString( "question_flash_file" );
+        String reponse = rs.getString("good_answer");
+        String explication = rs.getString("question_flash_file");
+        //TODO : change the way difficulty is calculated
+        int difficulte = 1;//rs.getInt( strValeurGroupeAge + pJoueur.obtenirCleNiveau() );
         boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, lUrl+question, reponse, lUrl+explication));
       }
       
@@ -342,21 +345,21 @@ public class GestionnaireBD
     {
       Statement requete = mConnection.createStatement();
 
-        ResultSet rs = requete.executeQuery("SELECT partiesCompletes, meilleurPointage, tempsPartie FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+        ResultSet rs = requete.executeQuery("SELECT number_of_completed_game, best_score, total_time_played FROM user WHERE username = '" + joueur.obtenirNomUtilisateur() + "';");
         if (rs.next())
         {
-          int partiesCompletes = rs.getInt( "partiesCompletes" ) + 1;
-          int meilleurPointage = rs.getInt( "meilleurPointage" );
+          int partiesCompletes = rs.getInt( "number_of_completed_game" ) + 1;
+          int meilleurPointage = rs.getInt( "best_score" );
           int pointageActuel = joueur.obtenirPartieCourante().obtenirPointage();
           if( meilleurPointage < pointageActuel )
           {
             meilleurPointage = pointageActuel;
           }
 
-          int tempsPartie = tempsTotal + rs.getInt("tempsPartie");
+          int tempsPartie = tempsTotal + rs.getInt("total_time_played");
 
           //mise-a-jour
-          int result = requete.executeUpdate( "UPDATE joueur SET partiesCompletes=" + partiesCompletes + ",meilleurPointage=" + meilleurPointage + ",tempsPartie=" + tempsPartie + " WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+          int result = requete.executeUpdate( "UPDATE user SET number_of_completed_game=" + partiesCompletes + ",best_score=" + meilleurPointage + ",total_time_played=" + tempsPartie + " WHERE username = '" + joueur.obtenirNomUtilisateur() + "';");
         }
     }
     catch (SQLException e)
@@ -385,7 +388,7 @@ public class GestionnaireBD
     String strHeure = objFormatHeure.format(dateDebut);
 
     // Création du SQL pour l'ajout
-    String strSQL = "INSERT INTO partie(datePartie, heurePartie, dureePartie) VALUES ('" + 
+    String strSQL = "INSERT INTO game(date, hour, duration) VALUES ('" + 
     strDate + "','" + strHeure + "'," + dureePartie + ")";
 
     try
@@ -426,7 +429,7 @@ public class GestionnaireBD
     }
 
     // Création du SQL pour l'ajout
-    String strSQL = "INSERT INTO partiejoueur(clePartie, cleJoueur, pointage, gagner) VALUES " +
+    String strSQL = "INSERT INTO game_user(game_is, user_is, score, has_won) VALUES " +
     "(" + clePartie + "," + cleJoueur + "," + pointage + "," + intGagner + ");";
 
     try
@@ -450,7 +453,7 @@ public class GestionnaireBD
   public Langue loadLangue(String pShortName) {
     Langue lResult = null;
     
-    String lSql = "select * from langues where nom_court = '" + pShortName + "'";
+    String lSql = "select * from language where short_name = '" + pShortName + "'";
     
     try {
       Statement requete = mConnection.createStatement();
@@ -458,7 +461,7 @@ public class GestionnaireBD
         ResultSet lRs = requete.executeQuery(lSql);
         
         if (lRs.next()) {
-          lResult = new Langue(lRs.getInt("id"), lRs.getString("nom"),lRs.getString("nom_court"));
+          lResult = new Langue(lRs.getInt("language_id"), lRs.getString("name"),lRs.getString("short_name"));
           
         }
 
@@ -480,14 +483,14 @@ public class GestionnaireBD
     TreeSet<ReglesCaseCouleur> lResult = pRules.obtenirListeCasesCouleurPossibles();
     
     Statement lStatement = null;
-    String lSql = "select * from regles_case_couleur";
+    String lSql = "select * from color_square_rule";
     try {
       
       lStatement = mConnection.createStatement();
       ResultSet lRs = lStatement.executeQuery(lSql);
         
       while (lRs.next()) {
-        lResult.add(new ReglesCaseCouleur(lRs.getInt("priorite"), lRs.getInt("type")));
+        lResult.add(new ReglesCaseCouleur(lRs.getInt("priority"), lRs.getInt("type")));
       }
 
     } catch (SQLException e) {
@@ -515,13 +518,13 @@ public class GestionnaireBD
     TreeSet<ReglesCaseSpeciale> lResult = pRules.obtenirListeCasesSpecialesPossibles();
     
     Statement lStatement = null;
-    String lSql = "select * from regles_case_special";
+    String lSql = "select * from special_square_rule";
     try {
       lStatement = mConnection.createStatement();
       ResultSet lRs = lStatement.executeQuery(lSql);
 
       while (lRs.next()) {
-        lResult.add(new ReglesCaseSpeciale(lRs.getInt("priorite"), lRs.getInt("type")));
+        lResult.add(new ReglesCaseSpeciale(lRs.getInt("priority"), lRs.getInt("type")));
       }
       
     } catch (SQLException e) {
@@ -544,8 +547,8 @@ public class GestionnaireBD
     
     PreparedStatement lStatement = null;
     
-    String lSql = "select o.tag from objets o, magasins_objets_utilisable mo, magasins m " +
-      " where o.id = mo.id and mo.magasin_id = m.id and m.id = ?";
+    String lSql = "select o.tag from object o, shop_object so, shop s " +
+      " where o.object_id = so.object_id and so.shop_id = s.shop_id and s.shop_id = ?";
   
     
     try {
@@ -576,8 +579,8 @@ public class GestionnaireBD
   private void loadShop(TreeSet<ReglesMagasin> pMagasin, int pRoomId) {
     PreparedStatement lStatement = null;
 
-    String lSql = "select m.id as magasin_id, m.nom, sm.priorite from salles s, magasins m, salles_magasins sm where "
-      + "m.id = sm.magasin_id and sm.salle_id = s.id and s.id=?";
+    String lSql = "select s.shop_id, s.name, sm.priority from room r, shop s, room_shop rs where "
+      + "s.shop_id = rs.shop_id and rs.room_id = r.room_id and r.room_id=?";
     
     try {
       
@@ -587,10 +590,10 @@ public class GestionnaireBD
       ResultSet lResultSet = lStatement.executeQuery();
       
       while (lResultSet.next()) {
-        ReglesMagasin lReglesMagasin = new ReglesMagasin(lResultSet.getInt("priorite"), lResultSet.getString("nom"));
+        ReglesMagasin lReglesMagasin = new ReglesMagasin(lResultSet.getInt("priority"), lResultSet.getString("name"));
         
         //load the usable objet for this room
-        loadShopObjects(lReglesMagasin, lResultSet.getInt("magasin_id"));
+        loadShopObjects(lReglesMagasin, lResultSet.getInt("shop_id"));
 
         pMagasin.add(lReglesMagasin);
       }
@@ -616,15 +619,15 @@ public class GestionnaireBD
     Statement lStatement = null;
     
     //load the usable object for this room
-    String lSql = "select o.tag, so.priorite from objets o, salles_objets so, salles s where " 
-      + "o.id = so.objet_id and so.salle_id = s.id and s.id=" + pRoomId;
+    String lSql = "select o.tag, ro.priority from objets o, room_objet ro, room r where " 
+      + "o.object_id = ro.objet_id and ro.room_id = r.room_id and r.room_id=" + pRoomId;
     
     try {
       lStatement = mConnection.createStatement();
       
       ResultSet lRsObjet = lStatement.executeQuery(lSql);
       while (lRsObjet.next()) {
-        pObject.add(new ReglesObjetUtilisable(lRsObjet.getInt("priorite"), lRsObjet.getString("tag"), Visibilite.Aleatoire));
+        pObject.add(new ReglesObjetUtilisable(lRsObjet.getInt("priority"), lRsObjet.getString("tag"), Visibilite.Aleatoire));
       }
     } catch (SQLException e) {
       objLogger.log(Level.FATAL, e.getMessage(), e);
@@ -641,14 +644,14 @@ public class GestionnaireBD
   }
   
   
-  private Map<String, String> loadDescription(int pRoomId) {
+  private Map<String, String> loadRoomDescriptions(int pRoomId) {
     
     Statement lStatement = null;
     
     Map<String, String> lResult = new TreeMap<String, String>();
     
-    String lSql = "select sd.description, l.nom_court from langues l, salles s, salle_detail sd "
-      + " where sd.salle_id = s.id and l.id = sd.langue_id and s.id =" + pRoomId;
+    String lSql = "select ri.description, l.short_name from language l, room r, room_info ri "
+      + " where ri.room_id = room.room_id and l.language_id = ri.language_id and r.room_id =" + pRoomId;
 
     try {
       lStatement = mConnection.createStatement();
@@ -656,8 +659,10 @@ public class GestionnaireBD
       ResultSet lRsDescription = lStatement.executeQuery(lSql);
       
       while (lRsDescription.next()) {
-        lResult.put(lRsDescription.getString("nom_court"), lRsDescription.getString("description"));
+        lResult.put(lRsDescription.getString("short_name"), lRsDescription.getString("description"));
       }
+      
+      
     } catch (SQLException e) {
       objLogger.log(Level.FATAL, e.getMessage(), e);
     } finally {
@@ -673,6 +678,40 @@ public class GestionnaireBD
     return lResult;
     
   }
+    
+  private Map<String, String> loadRoomNames(int pRoomId) {
+
+    Statement lStatement = null;
+
+    Map<String, String> lResult = new TreeMap<String, String>();
+
+    String lSql = "select ri.name, l.short_name from language l, room_info ri "
+      + " where l.language_id = ri.language_id and ri.room_id =" + pRoomId;
+
+    try {
+      lStatement = mConnection.createStatement();
+
+      ResultSet lRsNames = lStatement.executeQuery(lSql);
+
+      while (lRsNames.next()) {
+        lResult.put(lRsNames.getString("short_name"), lRsNames.getString("name"));
+        objLogger.log(Level.INFO, "Adding room name " + lRsNames.getString("name") + ", language short_name=" + lRsNames.getString("short_name"));
+      }
+    } catch (SQLException e) {
+      objLogger.log(Level.FATAL, e.getMessage(), e);
+    } finally {
+      if (lStatement != null) {
+        try {
+          lStatement.close();
+        } catch (SQLException e) {
+          objLogger.log(Level.FATAL, e.getMessage(), e);
+        }
+      }
+    }
+
+    return lResult;
+
+  }
   
   /**
    * Rooms are loaded directly in the ControleurJeu list of rooms 
@@ -680,10 +719,10 @@ public class GestionnaireBD
    */
   public void loadRooms(String pGameType) {
     
-    String lSql = "select r.*, s.id as salle_id, s.nom as table_name, s.password,j.alias "
-                  + " from salles s, type_jeu tj, joueur j, regles r " 
-                  + " where s.type_jeu_id = tj.id and j.cleJoueur = s.joueur_id and s.regle_id = r.id and tj.nom = '" + pGameType + "'"
-                  + " order by s.nom";
+    String lSql = "select rule.*, room.room_id, room_info.name as room_name, room_info.description, room.password, user.username "
+                  + " from room, room_info, game_type, user, rule" 
+                  + " where room.game_type_id = game_type.game_type_id and user.user_id = room.user_id and room.rule_id = rule.rule_id and game_type.name = '" + pGameType + "'"
+                  + " order by room_name";
     
     Statement lStatement = null;    
 
@@ -696,7 +735,7 @@ public class GestionnaireBD
       while (lRs.next()) {
         
         //check if the room is not already loaded
-        if (!ControleurJeu.getInstance().salleExiste(lRs.getString("table_name"))) {
+        if (!ControleurJeu.getInstance().salleExiste(String.valueOf(lRs.getInt("room_id")))) {
         
           Regles objReglesSalle = new Regles();
           TreeSet<ReglesObjetUtilisable> objetsUtilisables = objReglesSalle.obtenirListeObjetsUtilisablesPossibles();
@@ -706,30 +745,33 @@ public class GestionnaireBD
           loadRuleSpecialSquare(objReglesSalle);
           
           objReglesSalle.definirPermetChat(lRs.getInt("chat") == 1 ? true : false);
-          objReglesSalle.definirRatioTrous(lRs.getFloat("ratio_trou"));
-          objReglesSalle.definirRatioMagasins(lRs.getFloat("ratio_magasin"));
-          objReglesSalle.definirRatioCasesSpeciales(lRs.getFloat("ratio_case_special"));
-          objReglesSalle.definirRatioPieces(lRs.getFloat("ratio_piece"));
-          objReglesSalle.definirRatioObjetsUtilisables(lRs.getFloat("ratio_objet_utilisable"));
-          objReglesSalle.definirValeurPieceMaximale(lRs.getInt("valeur_maximal_piece"));
-          objReglesSalle.definirTempsMinimal(lRs.getInt("temps_minimal"));
-          objReglesSalle.definirTempsMaximal(lRs.getInt("temps_maximal"));
-          objReglesSalle.definirDeplacementMaximal(lRs.getInt("deplacement_maximal"));
-          objReglesSalle.definirMaxObjet(lRs.getInt("max_possession_objets_pieces"));
+          objReglesSalle.definirRatioTrous(lRs.getFloat("hole_ratio"));
+          objReglesSalle.definirRatioMagasins(lRs.getFloat("shop_ratio"));
+          objReglesSalle.definirRatioCasesSpeciales(lRs.getFloat("special_square_ratio"));
+          objReglesSalle.definirRatioPieces(lRs.getFloat("coin_ratio"));
+          objReglesSalle.definirRatioObjetsUtilisables(lRs.getFloat("object_ratio"));
+          objReglesSalle.definirValeurPieceMaximale(lRs.getInt("max_coin_value"));
+          objReglesSalle.definirTempsMinimal(lRs.getInt("minimal_time"));
+          objReglesSalle.definirTempsMaximal(lRs.getInt("maximal_time"));
+          objReglesSalle.definirDeplacementMaximal(lRs.getInt("max_movement"));
+          objReglesSalle.definirMaxObjet(lRs.getInt("max_object_coin"));
           
 
           //load the object
-          loadUsableObjet(objetsUtilisables, lRs.getInt("salle_id"));
+          loadUsableObjet(objetsUtilisables, lRs.getInt("room_id"));
   
           //load the shops
-          loadShop(magasins, lRs.getInt("salle_id"));
+          loadShop(magasins, lRs.getInt("room_id"));
           
           //load the description for this room
-          Map<String, String> lDescriptions = loadDescription(lRs.getInt("salle_id"));
+          Map<String, String> lDescriptions = new TreeMap<String, String>();
+          lDescriptions = loadRoomDescriptions(lRs.getInt("room_id"));
+          Map<String, String> lNames = new TreeMap<String, String>();
+          lNames = loadRoomNames(lRs.getInt("room_id"));
           
-          Salle lSalle = new Salle(lRs.getInt("salle_id"),
-                                   lRs.getString("table_name"), 
-                                   lRs.getString("alias"), 
+          Salle lSalle = new Salle(lRs.getInt("room_id"),
+                                   lNames, 
+                                   lRs.getString("username"), 
                                    lRs.getString("password"),
                                    lDescriptions,
                                    objReglesSalle,

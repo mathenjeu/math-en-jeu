@@ -117,7 +117,7 @@ public class InformationPartie
     // Créer la liste des objets utilisables qui ont été ramassés
     lstObjetsUtilisablesRamasses = new TreeMap();
 
-    objBoiteQuestions = new BoiteQuestions(joueur.obtenirProtocoleJoueur().langue, joueur.obtenirSalleCourante().obtenirNomSalle());
+    objBoiteQuestions = new BoiteQuestions(joueur.obtenirProtocoleJoueur().langue, joueur.obtenirSalleCourante().getName(joueur.getLangue().getNomCourt()));
     //objGestionnaireBD.remplirBoiteQuestions(objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());
     GestionnaireBD lBd = new GestionnaireBD(ControleurJeu.getInstance().getConnection());
     lBd.remplirBoiteQuestions(objJoueurHumain, objBoiteQuestions);
