@@ -1,7 +1,7 @@
 <?php
 
-//error_reporting(E_ALL|E_STRICT);
-error_reporting(E_ALL);
+error_reporting(E_ALL|E_STRICT);
+
 date_default_timezone_set('America/Montreal');
 set_include_path('.' . PATH_SEPARATOR . './library' 
   . PATH_SEPARATOR . './application/models/'

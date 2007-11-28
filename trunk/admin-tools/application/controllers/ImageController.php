@@ -15,6 +15,11 @@ class ImageController extends Zend_Controller_Action {
     Zend_Loader::loadClass('Zend_Filter');
     //Zend_Loader::loadClass('Zend_Registry');
     $this->view->user = Zend_Auth::getInstance()->getIdentity();
+    
+    $registry = Zend_Registry::getInstance();
+    $config = $registry->get('config');
+    
+    $this->view->image_url = $config->file->image->url;
   }
 
   function indexAction() {
@@ -30,19 +35,24 @@ class ImageController extends Zend_Controller_Action {
       if ($id > 0) {
         $image = new Image();
         $where = $image->getAdapter()->quoteInto('image_id = ?', $id);
-        $image->delete($where);
+        
         
         //delete the file
         $registry = Zend_Registry::getInstance();
         $config = $registry->get('config');
-        unlink($config->file->image->dir . DIRECTORY_SEPARATOR . $image->physical_name);
-        unlink($config->file->image->html->dir . DIRECTORY_SEPARATOR . current(explode(".",$image->physical_name))) . ".jpeg" ;
-        $this->_redirect('/image/');
+        if (!@unlink($config->file->image->dir . DIRECTORY_SEPARATOR . $image->physical_name)) {
+          $this->view->message = "Unable to physicaly remove the file : " . $config->file->image->dir . DIRECTORY_SEPARATOR . $image->physical_name;
+        }
+        @unlink($config->file->image->html->dir . DIRECTORY_SEPARATOR . str_replace(".eps",".jpeg",$image->physical_name));
+        
+        $image->delete($where);
+        //$this->_redirect('/image/');
       }
     }
   }
   
   function uploadAction() {
+    $this->view->title = "Add an image.";
     if ($this->_request->isPost()) {
       if (is_uploaded_file($_FILES["file"]["tmp_name"])) {
         
