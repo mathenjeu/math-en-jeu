@@ -72,7 +72,7 @@ public class Salle
   //private List<Langue2> mLangue;
   
   /** The Map of name for this table, the key is the langage 2 letter name */
-  private String mName;
+  private Map<String, String> mName;
   
   /** The Map of description for this table, the key is the langage 2 letter name */
   private Map<String, String> mDescription;
@@ -203,7 +203,7 @@ public class Salle
   }
   
   public Salle(int pId,
-               String pName, 
+               Map<String, String> pName, 
                String pCreator,
                String pPassword,
                Map<String, String> pDescriptions,
@@ -804,11 +804,16 @@ public class Salle
    * Cette fonction permet de retourner le nom de la salle courante.
    * 
    * @return String : Le nom de la salle
+   * 
    */
+  /*
+  @Deprecated
   public String obtenirNomSalle()
   {
     return mName;
   }
+  */
+  
   
   public Regles obtenirRegles()
   {
@@ -829,6 +834,15 @@ public class Salle
   
   public String getDescription(String pShortLangageTag) {
     return mDescription.get(pShortLangageTag);
+  }
+  
+  public Map<String, String> getNames() {
+    return mName;
+  }
+  
+  
+  public String getName(String pShortLangageTag) {
+    return mName.get(pShortLangageTag);
   }
         
         @Deprecated

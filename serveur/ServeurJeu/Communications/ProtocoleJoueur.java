@@ -509,11 +509,10 @@ public class ProtocoleJoueur implements Runnable
               GestionnaireBD lBD = new GestionnaireBD(ControleurJeu.getInstance().getConnection());
               
               
-              
-              //langue = obtenirValeurParametre(objNoeudCommandeEntree, "Langue").getNodeValue();
-              //FIXME
+              //override the informations in the database
               langue = lBD.loadLangue(obtenirValeurParametre(objNoeudCommandeEntree, "Langue").getNodeValue());
-              //langue = lBD.loadLangueFromLongName(obtenirValeurParametre(objNoeudCommandeEntree, "Langue").getNodeValue());
+              objJoueurHumain.setLangue(langue);
+              
               
               gameType = obtenirValeurParametre(objNoeudCommandeEntree, "GameType").getNodeValue();
               
@@ -773,13 +772,17 @@ public class ProtocoleJoueur implements Runnable
               
               // On ajoute un attribut nom qui va contenir le nom
               // de la salle
-              objNoeudSalle.setAttribute("nom", objSalle.obtenirNomSalle());
+              objLogger.log(Level.INFO, "Player language is : " + objJoueurHumain.getLangue().getNomCourt());
+              objNoeudSalle.setAttribute("nom", objSalle.getName(objJoueurHumain.getLangue().getNomCourt()));
               
               // On ajoute un attribut protegee qui va contenir
               // une valeur booléenne permettant de savoir si la
               // salle est protégée par un mot de passe ou non
               objNoeudSalle.setAttribute("protegee", Boolean.toString(objSalle.protegeeParMotDePasse()));
 
+              //add the room description
+              objNoeudSalle.setAttribute("description", objSalle.getDescription(objJoueurHumain.getLangue().getNomCourt()));
+              
               // Ajouter le noeud de la salle au noeud du paramètre
               objNoeudParametreListeSalles.appendChild(objNoeudSalle);
             }

@@ -2,24 +2,18 @@ package ServeurJeu;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import ClassesUtilitaires.Espion;
-import Enumerations.Visibilite;
 import Enumerations.RetourFonctions.ResultatAuthentification;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Communications.GestionnaireCommunication;
@@ -28,11 +22,6 @@ import ServeurJeu.ComposantesJeu.Langue;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
-import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import ServeurJeu.Evenements.EvenementJoueurConnecte;
@@ -106,7 +95,7 @@ public class ControleurJeu
 
   // Cet objet est une liste des salles créées qui se trouvent dans le serveur
   // de jeu. Chaque élément de cette liste a comme clé le nom de la salle
-  private TreeMap lstSalles;
+  private TreeMap<String, Salle> lstSalles;
 
   // Déclaration de l'objet Espion qui va inscrire des informationsà proppos
   // du serveur en parallète
@@ -195,6 +184,7 @@ public class ControleurJeu
 
     try {
       mConnection = lDataSource.getConnection();
+      objLogger.log(Level.INFO, "Database connection created.");
     } catch (SQLException e) {
       objLogger.log(Level.FATAL, e.getMessage(), e);
     }
@@ -483,6 +473,26 @@ public class ControleurJeu
     lBD.loadRooms(config.obtenirString("controleurjeu.gametype"));
     return (TreeMap)lstSalles.clone();
   }
+  
+  
+  public TreeMap<String, Salle> getRooms(Langue lLangue) {
+    TreeMap<String, Salle> lResult = new TreeMap<String, Salle>();
+    
+    GestionnaireConfiguration config = GestionnaireConfiguration.getInstance();
+    GestionnaireBD lBD = new GestionnaireBD(mConnection);
+    lBD.loadRooms(config.obtenirString("controleurjeu.gametype"));
+    
+
+    Iterator<Salle> lIter = lstSalles.values().iterator();
+    while(lIter.hasNext()) {
+      Salle s = (Salle)lIter.next();
+      
+      lResult.put(String.valueOf(s.getId()), s);
+    }
+    
+    return lResult;
+    
+  }
 
 
   /**
@@ -499,9 +509,35 @@ public class ControleurJeu
    */
   public boolean salleExiste(String nomSalle)
   {
+    boolean lResult = false;
     // Retourner si la salle existe déjà ou non
-    return lstSalles.containsKey(nomSalle);         
+    Collection<Salle> lSalles = lstSalles.values();
+    Iterator<Salle> lIter = lSalles.iterator();
+    while (lIter.hasNext()) {
+      Salle lSalle = lIter.next();
+      if (lSalle.getNames().containsValue(nomSalle)) {
+        lResult = true;
+        break;
+      }
+    }
+    return lResult;         
   }
+  
+  
+  public Salle getRoomByName(String pName) {
+    Salle lResult = null;
+    Collection<Salle> lSalles = lstSalles.values();
+    Iterator<Salle> lIter = lSalles.iterator();
+    while (lIter.hasNext()) {
+      Salle lSalle = lIter.next();
+      if (lSalle.getNames().containsValue(pName)) {
+        lResult = lSalle;
+        break;
+      }
+    }
+    return lResult; 
+  }
+  
 
   /**
    * Cette méthode permet d'ajouter une nouvelle salle dans la liste des 
@@ -515,7 +551,7 @@ public class ControleurJeu
     // Ajouter la nouvelle salle dans la liste des salles du 
     // contrôleur de jeu
     synchronized (lstSalles) {
-      lstSalles.put(nouvelleSalle.obtenirNomSalle(), nouvelleSalle); 
+      lstSalles.put(String.valueOf(nouvelleSalle.getId()), nouvelleSalle); 
     }
 
   }
@@ -544,7 +580,7 @@ public class ControleurJeu
       String motDePasse, boolean doitGenererNoCommandeRetour)
   {
     // On retourne le résultat de l'entrée du joueur dans la salle
-    return ((Salle) lstSalles.get(nomSalle)).entrerSalle(joueur, motDePasse, doitGenererNoCommandeRetour);
+    return getRoomByName(nomSalle).entrerSalle(joueur, motDePasse, doitGenererNoCommandeRetour);
   }
 
   /**
