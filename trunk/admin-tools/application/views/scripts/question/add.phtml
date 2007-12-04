@@ -78,22 +78,6 @@
 	<?php endif; ?>
 	
 	<?php if ($this->step == 4) :?>
-	<div>
-		<span>Language</span>
-		<span><?php echo $this->session->language_name; ?></span>
-	</div>
-	<div>
-		<span>Subject</span>
-		<span><?php echo $this->session->subject_name; ?></span>
-	</div>
-	<div>
-		<span>Answer type</span>
-		<span><?php echo $this->session->answer_type_name; ?></span>
-	</div>
-	<div>
-		<span>Category</span>
-		<span><?php echo $this->session->category_name; ?></span>
-	</div>
 		<?php echo $this->render('question/_form.phtml'); ?>
 	<?php endif; ?>
 	
