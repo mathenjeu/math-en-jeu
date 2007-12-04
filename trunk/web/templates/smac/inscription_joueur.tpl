@@ -115,9 +115,12 @@
     <tr align="left">
         <td>{$lang.niveau_scolaire}</td>
         <td>
+        <!-- 
         <select name="niveau" style="width: 200px;"
             onChange='document.inscription.action="inscription-joueur.php?action=etablissement";
             document.inscription.submit()'>
+        -->
+        <select name="niveau" style="width: 200px;">
         {html_options values=$niveauID output=$niveauTexte selected=$niveau}
         </select>
         <span class="asterix">*</span>

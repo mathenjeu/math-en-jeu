@@ -8,7 +8,7 @@
 	<embed src="video.swf" quality="high" bgcolor="#ffffff" width="720" height="518" name="video" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
 	</object>
 	-->
-	{if $language eq "francais"}
+	{if $language eq "fr"}
 	<object width="425" height="350"> 
 		<param name="movie" value="http://www.youtube.com/v/0pBX7KbzykU"></param>
 		<embed src="http://www.youtube.com/v/0pBX7KbzykU" 

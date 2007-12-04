@@ -352,7 +352,7 @@ function etape2($erreur)
     //
     // on g�n�re la liste des niveau scolaire
     // on enleve les niveau primaire,coll�gial,universitaire,grand public temporairement
-    for($i=7;$i<=11;$i++)
+    for($i=7;$i<=12;$i++)
     {
         $niveauTexte[$i] = $lang["niveau_$i"];
     }
