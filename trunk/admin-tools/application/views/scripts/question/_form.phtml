@@ -1,63 +1,68 @@
 <div>
-  <form method="post" action="add">
-    <input type="hidden" name="step" value="4" />
+	<?php if($this->action == "edit") : ?>
+		<form method="post" action="edit">
+	<?php else : ?>
+  	<form method="post" action="add">
+  	<input type="hidden" name="step" value="4" />
+  <?php endif; ?>
+    
     <fieldset>  
         <legend>Question details</legend>
     <table>
      <tr>
        <td>Language</td>
-       <td><?php echo $this->session->language_name; ?></td>
+       <td><?php echo $this->language_name; ?></td>
      </tr>
      <tr>
        <td>Subject</td>
-       <td><?php echo $this->session->subject_name; ?></td>
+       <td><?php echo $this->subject_name; ?></td>
      </tr>
      <tr>
        <td>Answer type</td>
-       <td><?php echo $this->session->answer_type_name; ?></td>
+       <td><?php echo $this->answer_type_name; ?></td>
      </tr>
      <tr>
        <td>Category</td>
-       <td><?php echo $this->session->category_name; ?></td>
+       <td><?php echo $this->category_name; ?></td>
      </tr>
 
 		<tr>
 			<td><label for="questionLatex">Latex Question</label></td>
-			<td><textarea name="questionLatex" rows="15" cols="50"></textarea></td>
+			<td><textarea name="questionLatex" rows="15" cols="50"><?php echo $this->question_latex; ?></textarea></td>
 		</tr>
 		<tr>
 			<td><label for="feedbackLatex">Feedback latex</label></td>
-			<td><textarea name="feedbackLatex" rows="15" cols="50"></textarea></td>
+			<td><textarea name="feedbackLatex" rows="15" cols="50"><?php echo $this->feedback_latex; ?></textarea></td>
 		</tr>
-		<?php if ($this->session->answer_type_tag == 'MULTIPLE_CHOICE') : ?>
+		<?php if ($this->answer_type_tag == 'MULTIPLE_CHOICE') : ?>
 				<tr>
 				  <td><label for="choiceA">Choice A</label></td>
-				  <td><textarea rows="3" cols="50" name="choiceA"></textarea></td>
+				  <td><textarea rows="3" cols="50" name="choiceA"><?php echo $this->answer_a_latex; ?></textarea></td>
 				</tr>
 				<tr>
 				  <td><label for="choiceB">Choice B</label></td>
-				  <td><textarea rows="3" cols="50" name="choiceB"></textarea></td>
+				  <td><textarea rows="3" cols="50" name="choiceB"><?php echo $this->answer_b_latex; ?></textarea></td>
 				</tr>
 				<tr>
 				  <td><label for="choiceC">Choice C</label></td>
-				  <td><textarea rows="3" cols="50" name="choiceC"></textarea></td>
+				  <td><textarea rows="3" cols="50" name="choiceC"><?php echo $this->answer_c_latex; ?></textarea></td>
 				</tr>
 				<tr>
 				  <td><label for="choiceD">Choice D</label></td>
-				  <td><textarea rows="3" cols="50" name="choiceD"></textarea></td>
+				  <td><textarea rows="3" cols="50" name="choiceD"><?php echo $this->answer_d_latex; ?></textarea></td>
 				</tr>
 				<tr>
           <td><label for="goodAnswer">Good answer</label></td>
-          <td><input type="text" name="goodAnswer"></td>
+          <td><input type="text" name="goodAnswer" value="<?php echo $this->good_answer; ?>"></td>
         </tr>
 		<?php endif; ?>
-		<?php if ($this->session->answer_type_tag == 'TRUE_FALSE') : ?>
+		<?php if ($this->answer_type_tag == 'TRUE_FALSE') : ?>
 		  <tr>
         <td><label for="goodAnswer">Answer</label></td>
         <td>True <input type="radio" name="goodAnswer" value="true"><br/>False<input type="radio" name="goodAnswer" value="false"></td>
       </tr>
 		<?php endif; ?>
-		<?php if ($this->session->answer_type_tag == 'SHORT_TEXT') : ?>
+		<?php if ($this->answer_type_tag == 'SHORT_TEXT') : ?>
       <tr>
         <td><label for="goodAnswer">Answer</label></td>
         <td><input type="text" name="goodAnswer" /></td>
@@ -77,8 +82,26 @@
 			   <th>Difficulty</th>
 			 </tr>
 			</thead>
-  			<?php foreach($this->levels as $level) : ?>
-  			 <tr>
+				<?php if($this->action == "edit") : ?>
+					<?php foreach($this->levels as $level) : ?>
+    			 <tr>
+    			   <td><?php echo $level->findParentLevel()->name ?></td>
+    			   <td>
+    			     <select name="levelValue[<?php echo $level->level_id; ?>]" />
+    			       <option <?php if($level->value == 0) echo "selected" ?>>0</option>
+    			       <option <?php if($level->value == 1) echo "selected" ?>>1</option>
+    			       <option <?php if($level->value == 2) echo "selected" ?>>2</option>
+    			       <option <?php if($level->value == 3) echo "selected" ?>>3</option>
+    			       <option <?php if($level->value == 4) echo "selected" ?>>4</option>
+    			       <option <?php if($level->value == 5) echo "selected" ?>>5</option>
+    			       <option <?php if($level->value == 6) echo "selected" ?>>6</option>
+    			     </select>
+    			   </td>
+    			</tr>  			
+  			  <?php endforeach; ?>
+				<?php else : ?>
+  			  <?php foreach($this->levels as $level) : ?>
+  			 	<tr>
   			   <td><?php echo $level->name ?></td>
   			   <td>
   			     <select name="levelValue[<?php echo $level->level_id; ?>]" />
@@ -91,28 +114,15 @@
   			       <option>6</option>
   			     </select>
   			   </td>
-  			</tr>  			
-  			<?php endforeach; ?>
+  				</tr>  			
+  			  <?php endforeach; ?>
+  			<?php endif; ?>
 			</table>
 			</fieldset>
 		</div>
-		<div>
-  		<fieldset>  
-  			<legend>Conversion options</legend>
-  			<input type="checkbox" name="usejpeg" />
-  			<label for="usejpeg">Use jpeg conversion. <strong>quality loss and bigger file size. Only use if you enconter problem with the normal conversion</strong></label><br/>
-  			
-  			<input type="checkbox" name="noswf" />
-  			<label for="usejpeg">Do not generate swf.</label><br/>
-  			
-  		</fieldset>
-		</div>
-		<div>
-			<fieldset>  
-				<legend>Comment (optional)</legend>
-				<textarea name="comment" rows="8" cols="80"></textarea>
-			</fieldset>
-		</div>
+		<?php echo $this->render('question/_conversion_option.phtml'); ?>
+		<?php echo $this->render('question/_comment_box.phtml'); ?>
+		
 		<div>
 			<input type="submit" />
 		</div>

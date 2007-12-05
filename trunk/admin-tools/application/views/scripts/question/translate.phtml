@@ -1,7 +1,7 @@
 <?php echo $this->render('header.phtml'); ?>
 <div id="content">
   <?php if ($this->step == 1) :?>
-	<form method="post" action="translate">
+	<form method="post" action="<?php echo $this->baseUrl; ?>/question/translate/">
     <input type="hidden" name="step" value="1" />
     Do translation from 
     <select name="from_language_id">
@@ -9,7 +9,7 @@
         <option value="<?php echo $language->language_id; ?>"><?php echo $language->name; ?></option>
       <?php endforeach; ?>
     </select>
-    To 
+    to 
 		<select name="to_language_id">
 			<?php foreach($this->to_languages as $language) : ?>
 				<option value="<?php echo $language->language_id; ?>"><?php echo $language->name; ?></option>
@@ -22,8 +22,11 @@
 	<?php endif; ?>
 	
 	<?php if ($this->step == 2) :?>
+
 	<form method="post" action="translate">
     <input type="hidden" name="step" value="2" />
+    	<fieldset>  
+        <legend>Question details</legend>
     <table>
     <thead>
       <tr>
@@ -51,17 +54,17 @@
         <tr>
           <td><label for="choiceB">Choice B</label></td>
           <td><textarea rows="3" cols="50" name="choiceB"></textarea></td>
-          <td><?php echo $this->question_info_from->answer_a_latex; ?></td>
+          <td><?php echo $this->question_info_from->answer_b_latex; ?></td>
         </tr>
         <tr>
           <td><label for="choiceC">Choice C</label></td>
           <td><textarea rows="3" cols="50" name="choiceC"></textarea></td>
-          <td><?php echo $this->question_info_from->answer_a_latex; ?></td>
+          <td><?php echo $this->question_info_from->answer_c_latex; ?></td>
         </tr>
         <tr>
           <td><label for="choiceD">Choice D</label></td>
           <td><textarea rows="3" cols="50" name="choiceD"></textarea></td>
-          <td><?php echo $this->question_info_from->answer_a_latex; ?></td>
+          <td><?php echo $this->question_info_from->answer_d_latex; ?></td>
         </tr>
         <tr>
           <td><label for="goodAnswer">Good answer</label></td>
@@ -86,17 +89,33 @@
     
     <tr>
       <td>Levels</td>
-      <td></td>
+      <td>
+      	<?php foreach($this->levels_to as $level) : ?>
+  			 <?php echo $level->name ?>
+  			 	<select name="levelValue[<?php echo $level->level_id; ?>]" />
+  			       <option>0</option>
+  			       <option>1</option>
+  			       <option>2</option>
+  			       <option>3</option>
+  			       <option>4</option>
+  			       <option>5</option>
+  			       <option>6</option>
+  			     </select>			
+  			<?php endforeach; ?>
+      </td>
       <td>
       <?php foreach($this->levels_from as $level) : ?>
          <?php echo $level->findParentLevel()->name ?> : <?php echo $level->value ?><br />
         <?php endforeach; ?>
       </td>
     </tr>
-      <tr>
-        <td colspan="3"><input type="submit" value="Send"></td>
-      </tr>
     </table>
+    </fieldset>
+    <?php echo $this->render('question/_conversion_option.phtml'); ?>
+		<?php echo $this->render('question/_comment_box.phtml'); ?>
+		<div>
+			<input type="submit" />
+		</div>
     
     
   </form>

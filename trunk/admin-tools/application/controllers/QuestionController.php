@@ -50,7 +50,8 @@ class QuestionController extends Zend_Controller_Action {
         $offset = $this->_request->getParam('from');
       }
     }
-    $this->view->questions = $question->fetchAll(null, null ,$limit, $offset);
+    
+    $this->view->questions = $question->fetchAll(null, 'question_id asc',$limit, $offset);
   }
   
   function indexAction() {
@@ -71,11 +72,14 @@ class QuestionController extends Zend_Controller_Action {
           $language = new Language();
           
           $session->language_id = $this->_request->getPost('language');
+          $this->view_language_id = $session->language_id;
           
           $row = $language->fetchRow('language_id=' . $session->language_id);
-          $session->language_name = $row->name;
-          $session->language_short_name = $row->short_name;
+          $session->language_name = utf8_encode($row->name);
+          $this->view->language_name = $session->language_name;
           
+          $session->language_short_name = $row->short_name;
+          $this->view->language_short_name = $session->language_short_name;
           
           $subject = new SubjectInfo();
           $this->view->subjects = $subject->fetchAll("language_id=" . $session->language_id);
@@ -86,23 +90,33 @@ class QuestionController extends Zend_Controller_Action {
           $this->view->step = 2;
         } elseif ($this->_request->getPost('step') == 2) {
           
+          $this->view->language_name = $session->language_name;
+          //$this->view->language_short_name = $session->language_short_name;
+                    
           //set the value to the session
           $session->subject_id = $this->_request->getPost('subject');
+          $this->view->subject_id = $session->subject_id;
+          
           $session->answer_type_id = $this->_request->getPost('answerType');
+          $this->view->answer_type_id = $session->answer_type_id;
           
           //fetch the name for the subject and the answerType
           $subject = new SubjectInfo();
           $row = $subject->fetchRow('subject_id=' . $session->subject_id . " and language_id=" . $session->language_id);
-          $session->subject_name = $row->name;
+          $session->subject_name = utf8_encode($row->name);
+          $this->view->subject_name = $session->subject_name;
           
           $answerTypes = new AnswerTypeInfo();
           $row = $answerTypes->fetchRow('answer_type_id=' . $session->answer_type_id . " and language_id=" . $session->language_id);
           $session->answer_type_tag = $row->findParentAnswerType()->tag;
-          $session->answer_type_name = $row->name;
+          $this->view->answer_type_tag = $session->answer_type_tag;
+          
+          $session->answer_type_name = utf8_encode($row->name);
+          $this->view->answer_type_name = $session->answer_type_name;
           
           $answerTypes = new AnswerType();
           $row = $answerTypes->fetchRow('answer_type_id=' . $session->answer_type_id);
-          $session->answer_type_tag = $row->tag;
+          //$session->answer_type_tag = $row->tag;
           
           //load the category for this subject and language
           $category = new CategoryInfo();
@@ -112,12 +126,19 @@ class QuestionController extends Zend_Controller_Action {
           $this->view->step = 3;
           
         } elseif ($this->_request->getPost('step') == 3) {
+          
+          $this->view->language_name = $session->language_name;
+          $this->view->answer_type_name = $session->answer_type_name;
+          $this->view->answer_type_tag = $session->answer_type_tag;
+          $this->view->subject_name = $session->subject_name;
+          
           $session->category_id = $this->_request->getPost('category');
+          $this->view->category_id = $this->_request->getPost('category');
           
           $category = new CategoryInfo();
           $row = $category->fetchRow('category_id=' . $session->category_id . " and language_id=" . $session->language_id);
-          $session->category_name = $row->name;
-          
+          $session->category_name = utf8_encode($row->name);
+          $this->view->category_name = $row->name;
           
           //load the possible level
           $level = new Level();
@@ -183,24 +204,19 @@ class QuestionController extends Zend_Controller_Action {
           $feedbackFile->addText($config->latex->footer);
           $feedbackFile->close();
           
-          //call the convert script
+          //check for eps to include in this swf
+          $this->copyImage($this->_request->getPost('questionLatex'));
+          $this->copyImage($this->_request->getPost('feedbackLatex'));
+
+          
           $result=0;
           $output = array();
           
-          //TODO: change this to run each operation one by one and not to call a script
-          // and also be able to generate swf using png instead of pdf
           
           $convertmethod = "pdf";
           if ($this->_request->getPost('usejpeg') != null) {
             $convertmethod = "jpeg";
           }
-          /*
-          //convert he eps to png and then convert the png to swf
-          if ($this->_request->getPost('usepng') != null) {
-            exec("cd " . $config->file->tempdir);
-            exec("mv " . $questionFile->getFullPath() . " " );
-          }
-          */
           
           //run the script that build the swf for the question
           exec($config->file->scriptdir . "/tex2swf.sh " . $questionFile->getFullPath() . " " . $config->file->flash->dir . " " . $convertmethod);
@@ -236,7 +252,6 @@ class QuestionController extends Zend_Controller_Action {
               unset($data);
             }
           }
-          
           $this->_redirect('question/view/question_id/' . $question_id . '/language_id/' . $session->language_id);
           
         }
@@ -250,6 +265,78 @@ class QuestionController extends Zend_Controller_Action {
     
     $this->view->session = $session;
     
+  }
+  
+  /**
+   * Copy the eps found in the text to the temp directory
+   *
+   * @param unknown_type $text
+   */
+  private function copyImage($text) {
+    $registry = Zend_Registry::getInstance();
+    $config = $registry->get('config');
+    
+    $n = preg_match_all('/\includegraphics.*\{(.*\.eps)\}/i', $text  , $matches);
+    for ($i=0;$i < $n; $i++) {
+       copy($config->file->image->dir . DIRECTORY_SEPARATOR . $matches[1][$i], 
+             $config->file->tempdir . DIRECTORY_SEPARATOR . $matches[1][$i]);
+    }
+
+  }
+  
+  function editAction() {
+    $this->view->action = "edit";
+    
+    if (!$this->_request->isPost()) {
+      $question_id = Zend_Filter::get($this->_request->getParam('question_id'), 'Digits');
+      $language_id = Zend_Filter::get($this->_request->getParam('language_id'), 'Digits');
+      
+      
+      if ($question_id > 0 && $language_id > 0) {
+        
+        $question = new Question();
+        $questionInfo = new QuestionInfo();
+        $rowQ = $question->fetchRow('question_id=' . $question_id);
+        $this->view->question_id = $question_id;
+        
+        $row = $questionInfo->fetchRow('question_id=' . $question_id . ' and ' . 'language_id=' . $language_id);
+        
+        $this->view->question_latex = $row->question_latex;
+        $this->view->feedback_latex = $row->feedback_latex;
+        
+        $this->view->answer_a_latex = $row->answer_a_latex;
+        $this->view->answer_b_latex = $row->answer_b_latex;
+        $this->view->answer_c_latex = $row->answer_c_latex;
+        $this->view->answer_d_latex = $row->answer_d_latex;
+
+        //assign answer_type_tag
+        $answerType = new AnswerTypeInfo();
+        $rowAT = $answerType->fetchRow('answer_type_id=' . $rowQ->answer_type_id . ' and language_id=' . $language_id);
+        $this->view->answer_type_tag = $rowAT->findParentAnswerType()->tag;
+        $this->view->answer_type_name = utf8_encode($rowAT->name);
+        
+        //assign category
+        $categoryInfo = new CategoryInfo();
+        $rowSI = $categoryInfo->fetchRow('category_id=' . $rowQ->category_id . ' and language_id=' . $language_id);
+        $this->view->category_name = utf8_encode($rowSI->name);
+        
+        //assign subject
+        //$this->view->subject_name = $rowSI->findParentCategory()->findParentSubject()->subject_id;
+        
+        
+        //assign language
+        $lang =  new Language();
+        $this->view->language_name = utf8_encode($lang->fetchRow('language_id=' . $language_id)->name);
+        
+        
+        //assign level
+        $level = new QuestionLevel();
+        $this->view->levels = $level->fetchAll('level_id in (select level_id from level where language_id=' . $language_id . ")" .
+            " and question_id = " . $question_id);
+        
+        
+      }
+    }
   }
   
   function showCommentAction() {
@@ -274,11 +361,7 @@ class QuestionController extends Zend_Controller_Action {
         
         $questionInfo = new QuestionInfo();
         $row = $questionInfo->fetchRow($where);
-        
-        //$where = $question->getAdapter()->quoteInto('question_id = ?', $question_id);
-        //$where += $question->getAdapter()->quoteInto('language_id = ?', $language_id);
-        
-        
+                
         //delete the file
         $registry = Zend_Registry::getInstance();
         $config = $registry->get('config');
@@ -363,8 +446,11 @@ class QuestionController extends Zend_Controller_Action {
           
           //load question level informations
           $level = new QuestionLevel();
-          $this->view->levels_from = $level->fetchAll('level_id in (select level_id from level where language_id=' . $session->from_language_id . ")");
+          $this->view->levels_from = $level->fetchAll('level_id in (select level_id from level where language_id=' . $session->from_language_id . ")" .
+            " and question_id = " . $questionId);
 
+          $level = new Level();
+          $this->view->levels_to = $level->fetchAll('language_id=' . $session->to_language_id);
           
         } elseif ($this->_request->getPost('step') == 2) {
           
