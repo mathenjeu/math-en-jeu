@@ -19,6 +19,15 @@ truncate table subject_level;
 truncate table subject;
 truncate table level;
 
+truncate table rule;
+truncate table color_square_rule;
+truncate table special_square_rule;
+
+truncate table room;
+truncate table room_info;
+
+truncate table game_type;
+
 
 insert into language(name, short_name) values('français','fr');
 insert into language(name, short_name) values('english','en');
@@ -154,3 +163,20 @@ insert into question_group_question(question_group_id, question_id, language_id)
 insert into question_group_question(question_group_id, question_id, language_id) values(2, 1, 2);
 insert into question_group_question(question_group_id, question_id, language_id) values(3, 1, 1);
 
+insert into rule(name, description, chat, hole_ratio, shop_ratio, object_ratio, special_square_ratio, coin_ratio, win_the_game_tick, max_object_shop, max_coin_value, minimal_time, maximal_time, max_object_coin, max_movement) 
+values ("Basic", "Basic rule", 1, 0.3, 0.05, 0.05, 0.05, 0.1, 30, 4, 25, 1, 60, 10, 6);
+
+insert into color_square_rule (type, priority) values(1, 2);
+insert into color_square_rule (type, priority) values(2, 1);
+insert into color_square_rule (type, priority) values(3, 3);
+insert into color_square_rule (type, priority) values(4, 4);
+insert into color_square_rule (type, priority) values(5, 5);
+
+insert into special_square_rule (type, priority) values(1, 1);
+
+
+insert into room(password, game_type_id, user_id, rule_id, official) values(null, 1, 1, 1, 1);
+insert into room_info(room_id, language_id, name, description) values(1, 1, "Nom de la salle 1 en français", "Description de salle en français");
+insert into room_info(room_id, language_id, name, description) values(1, 2, "Room 1 name in english", "Description if the room in english");
+
+insert into game_type(name) values("mathEnJeu");
