@@ -1,10 +1,19 @@
 package ServeurJeu.Communications;
 
-import java.net.Socket;
-import java.net.SocketException;
+import java.awt.Point;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.Vector;
+
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
@@ -14,42 +23,35 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
-import java.util.Vector;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.GregorianCalendar;
-import java.awt.Point;
-import Enumerations.Filtre;
-import ClassesUtilitaires.UtilitaireXML;
-import ClassesUtilitaires.UtilitaireEncodeurDecodeur;
-import ClassesUtilitaires.UtilitaireNombres;
-import Enumerations.Commande;
-import Enumerations.RetourFonctions.ResultatAuthentification;
-import Enumerations.RetourFonctions.ResultatEntreeTable;
-import Enumerations.RetourFonctions.ResultatDemarrerPartie;
-import ServeurJeu.ControleurJeu;
-import ServeurJeu.ComposantesJeu.Salle;
-import ServeurJeu.ComposantesJeu.Table;
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ClassesUtilitaires.IntObj;
+import ClassesUtilitaires.UtilitaireEncodeurDecodeur;
+import ClassesUtilitaires.UtilitaireNombres;
+import ClassesUtilitaires.UtilitaireXML;
+import Enumerations.Commande;
+import Enumerations.Filtre;
+import Enumerations.RetourFonctions.ResultatAuthentification;
+import Enumerations.RetourFonctions.ResultatDemarrerPartie;
+import Enumerations.RetourFonctions.ResultatEntreeTable;
+import ServeurJeu.ControleurJeu;
+import ServeurJeu.ComposantesJeu.Question;
+import ServeurJeu.ComposantesJeu.Salle;
+import ServeurJeu.ComposantesJeu.Table;
+import ServeurJeu.ComposantesJeu.Cases.Case;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
+import ServeurJeu.ComposantesJeu.Objets.Objet;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Banane;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
+import ServeurJeu.Configuration.GestionnaireConfiguration;
+import ServeurJeu.Configuration.GestionnaireMessages;
+import ServeurJeu.Evenements.EvenementPartieDemarree;
+import ServeurJeu.Evenements.EvenementSynchroniserTemps;
+import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.Monitoring.Moniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
-import ServeurJeu.Evenements.EvenementSynchroniserTemps;
- 
-import ServeurJeu.ComposantesJeu.Cases.Case;
-import ServeurJeu.Evenements.EvenementPartieDemarree;
-import ServeurJeu.Evenements.InformationDestination;
-import ServeurJeu.ComposantesJeu.Question;
-import ServeurJeu.ComposantesJeu.Objets.Objet;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
-import ServeurJeu.Configuration.GestionnaireMessages;
-import java.util.Calendar;
 
 /**
  * @author Jean-François Brind'Amour
@@ -108,6 +110,9 @@ public class ProtocoleJoueur implements Runnable
 	// en en train de joueur une partie ou non. Cet état sera utile car on
 	// ne déconnectera pas un joeur en train de joueur via le vérification de connexion
 	private boolean bolEnTrainDeJouer;
+	
+	
+	private static final String POLICY_REQUEST_STRING = "<policy-file-request/>";
 	
 	/**
 	 * Constructeur de la classe ProtocoleJoueur qui permet de garder une 
@@ -228,22 +233,38 @@ public class ProtocoleJoueur implements Runnable
 						// client et mettre le résultat à retourner dans une variable
 						objLogger.info( GestionnaireMessages.message("protocole.message_recu") + strMessageRecu );
 
-                                                // If we're in debug mode (can be set in mathenjeu.xml), print communications
-                                                GregorianCalendar calendar = new GregorianCalendar();
-                                                if(ControleurJeu.modeDebug)
-                                                {
-                                                    String timeB = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
-                                                    System.out.println("(" + timeB + ") Reçu:  " + strMessageRecu);
-                                                }
+						// If we're in debug mode (can be set in mathenjeu.xml), print communications
+						GregorianCalendar calendar = new GregorianCalendar();
+						if(ControleurJeu.modeDebug)
+						{
+						  String timeB = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
+						  System.out.println("(" + timeB + ") Reçu:  " + strMessageRecu);
+						}
 
-                                                String strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
-                                                
-                                                // If we're in debug mode (can be set in mathenjeu.xml), print communications
-                                                if(ControleurJeu.modeDebug)
-                                                {
-                                                    String timeA = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
-                                                    System.out.println("(" + timeA + ") Envoi: " + strMessageAEnvoyer);
-                                                }
+						String strMessageAEnvoyer = "";
+
+						//check if the message is a policy request
+						if (strMessageRecu.toString().contains(POLICY_REQUEST_STRING)) {
+						  //objLogger.info("Policy request from the flash client");
+						  //System.out.println("policy request");
+						  objLogger.info(GestionnaireMessages.message("protocole.policy_request"));
+						  strMessageAEnvoyer = "<?xml version=\"1.0\"?><cross-domain-policy>" +
+						  "<allow-access-from domain=\"*\" to-ports=\"" 
+						  + GestionnaireConfiguration.obtenirInstance().obtenirString("gestionnairecommunication.port") + "\" />" +
+						  "</cross-domain-policy>\u0000";
+
+						} else {
+						  strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
+						}
+
+						//String strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
+
+						// If we're in debug mode (can be set in mathenjeu.xml), print communications
+						if(ControleurJeu.modeDebug)
+						{
+						  String timeA = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
+						  System.out.println("(" + timeA + ") Envoi: " + strMessageAEnvoyer);
+						}
 
 						// On remet la variable contenant le numéro de commande
 						// à retourner à -1, pour dire qu'il n'est pas initialisé

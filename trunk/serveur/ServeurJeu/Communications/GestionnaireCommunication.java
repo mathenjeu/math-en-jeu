@@ -2,7 +2,9 @@ package ServeurJeu.Communications;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.net.UnknownHostException;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
@@ -10,10 +12,10 @@ import org.apache.log4j.Logger;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
+import ServeurJeu.Configuration.GestionnaireMessages;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
-import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
  * @author Jean-François Brind'Amour
@@ -40,6 +42,8 @@ public class GestionnaireCommunication
 	// recevoir les connexions clientes
 	private int intPort;
 	
+	private String bindAddress;
+	
 	// Déclaration d'un socket pour le serveur
 	private ServerSocket objSocketServeur;
 	
@@ -65,6 +69,7 @@ public class GestionnaireCommunication
 		
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		intPort = config.obtenirNombreEntier( "gestionnairecommunication.port" );
+		bindAddress = config.obtenirString( "gestionnairecommunication.address" );
 		
 		// Garder la référence vers le contrôleur de jeu
 		objControleurJeu = controleur;
@@ -103,7 +108,7 @@ public class GestionnaireCommunication
 			// Créer un socket pour le serveur qui va écouter sur le port définit
 			// par la variable "intPort"
 			boolStopThread = false;
-			objSocketServeur = new ServerSocket(intPort);
+			objSocketServeur = new ServerSocket(intPort, 0, InetAddress.getByName(bindAddress));
 		}
 		catch (IOException e)
 		{

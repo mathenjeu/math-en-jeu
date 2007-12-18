@@ -152,6 +152,7 @@
     <gestionnairecommunication>
         <!-- TCP/IP port to be used by the server-->
         <port>6100</port>
+        <address>hostname</address>
     </gestionnairecommunication>
 
     <!-- Information about the database -->
