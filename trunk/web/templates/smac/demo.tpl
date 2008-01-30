@@ -9,20 +9,8 @@
 	</object>
 	-->
 	{if $language eq "fr"}
-	<object width="425" height="350"> 
-		<param name="movie" value="http://www.youtube.com/v/0pBX7KbzykU"></param>
-		<embed src="http://www.youtube.com/v/0pBX7KbzykU" 
-			   type="application/x-shockwave-flash" 
-			   width="425" height="350"> 
-		</embed> 
-	</object>
+	<object width="425" height="355"><param name="movie" value="http://www.youtube.com/v/dERTP7fgXBw&rel=1"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/dERTP7fgXBw&rel=1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="355"></embed></object>
 	{else}
-	<object width="425" height="350">
-		<param name="movie" value="http://www.youtube.com/v/IQJn47Mvfqs"></param>
-		<embed src="http://www.youtube.com/v/IQJn47Mvfqs" 
-			   type="application/x-shockwave-flash" 
-			   width="425" height="350"> 
-		</embed> 
-	</object>
+	<object width="425" height="355"><param name="movie" value="http://www.youtube.com/v/HD1SyTBUzdQ&rel=1"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/HD1SyTBUzdQ&rel=1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="355"></embed></object>
 	{/if}
 </td>
