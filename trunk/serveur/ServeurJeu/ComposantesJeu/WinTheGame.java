@@ -22,7 +22,7 @@ public class WinTheGame
         	 *  ********************
         	 */
         	
-           /*
+           
             try
             {
                 while(true)
@@ -36,7 +36,7 @@ public class WinTheGame
                 // Le thread du WinTheGame a été arrêté... ben coudonc,
                 // c'est vraiment pas grave, c'est même supposé arriver
             }
-            */
+            
         }
     }
 
