@@ -21,8 +21,14 @@ public class EvenementDeplacementWinTheGame extends Evenement
     
     public EvenementDeplacementWinTheGame(int x, int y)
     {
-        this.x = x;
-        this.y = y;
+        //this.x = x;
+        //this.y = y;
+    	
+    	// TODO : CHANGE BACK !!!
+    	// **********************
+        this.x = -999;
+        this.y = -999;
+
     }
 	
 	/**
