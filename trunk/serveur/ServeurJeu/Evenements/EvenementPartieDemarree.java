@@ -112,7 +112,14 @@ public class EvenementPartieDemarree extends Evenement
 				objNoeudParametrePositionJoueurs.setAttribute("type", "PositionJoueurs");
 				objNoeudParametrePlateauJeu.setAttribute("type", "PlateauJeu");
                                 
-                                
+						/*
+						 * *****************
+						 * TODO 
+						 * REPLACE THIS CODE TO 
+						 * USE THE WIN THE GAME AGAIN
+						 * *****************
+						 */
+                                /*
                                 if(!table.obtenirButDuJeu().equals("original"))
                                 {
                                     // Créer le noeud contenant la position initiale du WinTheGame
@@ -132,6 +139,8 @@ public class EvenementPartieDemarree extends Evenement
                                      objNoeudParametrePositionWinTheGame.setAttribute("pointageRequis", Integer.toString(table.pointageRequisPourAllerSurLeWinTheGame()));
                                     objNoeudCommande.appendChild(objNoeudParametrePositionWinTheGame);
                                 }
+                                 */
+				
 				
 				// Créer les informations concernant la taille
 				objNoeudParametreTaille.setAttribute("nbLignes", Integer.toString(objttPlateauJeu.length));
