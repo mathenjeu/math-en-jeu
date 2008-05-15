@@ -14,6 +14,15 @@ public class WinTheGame
     {
         public void run()
         {
+        	/*
+        	 *  ********************
+        	 *  TODO 
+        	 *  REPLACE THIS CODE TO START USING THE WIN THE GAME AGAIN.
+        	 *  VERY IMPORTANT !!!
+        	 *  ********************
+        	 */
+        	
+           /*
             try
             {
                 while(true)
@@ -27,6 +36,7 @@ public class WinTheGame
                 // Le thread du WinTheGame a été arrêté... ben coudonc,
                 // c'est vraiment pas grave, c'est même supposé arriver
             }
+            */
         }
     }
 
