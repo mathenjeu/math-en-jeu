@@ -21,13 +21,13 @@ public class EvenementDeplacementWinTheGame extends Evenement
     
     public EvenementDeplacementWinTheGame(int x, int y)
     {
-        //this.x = x;
-        //this.y = y;
+        this.x = x;
+        this.y = y;
     	
     	// TODO : CHANGE BACK !!!
     	// **********************
-        this.x = -999;
-        this.y = -999;
+        //this.x = -9999;
+        //this.y = -9999;
 
     }
 	
@@ -73,6 +73,12 @@ public class EvenementDeplacementWinTheGame extends Evenement
                         Element objNoeudParametre = objDocumentXML.createElement("parametre");
                         objNoeudParametre.setAttribute("x", Integer.toString(x));
                         objNoeudParametre.setAttribute("y", Integer.toString(y));
+                        
+                    	// TODO : CHANGE BACK !!!
+                    	// **********************
+                        //objNoeudParametre.setAttribute("x", Integer.toString(-9999));
+                        //objNoeudParametre.setAttribute("y", Integer.toString(-9999));
+                        
                         objNoeudCommande.appendChild(objNoeudParametre);
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
