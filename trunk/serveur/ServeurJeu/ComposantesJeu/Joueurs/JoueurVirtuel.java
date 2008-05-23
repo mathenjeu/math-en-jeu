@@ -277,12 +277,52 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 			
 			while(bolStopThread == false)
 			{		
+
+				//System.out.println("bolStopThead == false"); // trace
+			
 				// Déterminer le temps de réflexion pour le prochain coup
 				intTempsReflexionCoup = obtenirTempsReflexionCoup();
 	
 				// Pause pour moment de réflexion de décision
 				pause(intTempsReflexionCoup);
 				
+				
+				// CHANGES WIN THE GAME - OFF
+				// **********************************************************
+				
+                // Trouver une case intéressante à atteindre
+ 
+                if (reviserPositionFinaleVisee() == true)
+                {
+                    int essais = 0;
+                    do
+                    {
+                        objPositionFinaleVisee = trouverPositionFinaleVisee();
+                        essais++;
+                    }while(essais < 50 && objPositionFinaleVisee.equals(this.obtenirTable().obtenirPositionWinTheGame()));
+                }
+
+                
+                // On trouve une position entre le joueur virtuel et son objectif
+                {
+                    int essais = 0;
+                    if(this.obtenirTable().peutAllerSurLeWinTheGame(this.obtenirPointage())) objPositionIntermediaire = trouverPositionIntermediaire();
+                    else
+                    {
+                        do
+                        {
+                            objPositionIntermediaire = trouverPositionIntermediaire();
+                            essais++;
+                        }while(essais < 50 && objPositionIntermediaire.equals(this.obtenirTable().obtenirPositionWinTheGame()));
+                    }
+                }
+                /* **********************************************************
+                 
+                
+                 
+                // ORIGINAL CODE - TODO CHANGE BACK TO GET WIN THE GAME
+                // AS WELL AS THE CHANGES IN SALLE.JAVA
+				/* **********************************************************
                                 // Trouver une case intéressante à atteindre
                                 // Si on a assez de points pour atteindre le WinTheGame, allons-y!
                                 if(!this.obtenirTable().obtenirButDuJeu().equals("original") && this.obtenirTable().peutAllerSurLeWinTheGame(this.obtenirPointage()))
@@ -315,7 +355,9 @@ public class JoueurVirtuel extends Joueur implements Runnable {
                                         }while(!this.obtenirTable().obtenirButDuJeu().equals("original") && essais < 50 && objPositionIntermediaire.equals(this.obtenirTable().obtenirPositionWinTheGame()));
                                     }
                                 }
-
+				 ********************************************************** */
+				
+				
 				// S'il y a erreur de recherche ou si le joueur virtuel est pris
 				// on ne le fait pas bouger
 				if (objPositionIntermediaire.x != objPositionJoueur.x || 
@@ -365,6 +407,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    			// réussi à répondre à la question
 	    			if (bolQuestionReussie == true)
 	    			{
+	    				//System.out.println("Question reussie"); // trace
+	    				
 	    				// Déplacement du joueur virtuel
                                         if(!vaSubirUneBanane.equals(""))
                                         {
