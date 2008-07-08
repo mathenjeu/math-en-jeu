@@ -778,6 +778,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 Thread threadJoueurVirtuel = new Thread((JoueurVirtuel) lstJoueursVirtuels.get(i));
                 threadJoueurVirtuel.start();
             }
+	    }
             
             // On trouve une position initiale au WinTheGame et on part son thread si nécessaire
             if(!butDuJeu.equals("original"))
@@ -785,8 +786,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 definirNouvellePositionWinTheGame();
                 winTheGame.demarrer();
             }
-        }
-        
+	
 	}
 	
 	public void arreterPartie(String joueurGagnant)
@@ -1726,7 +1726,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                     }
                 }
                 {   
-                    for(int k=0; k<lstJoueursVirtuels.size(); k++)
+                    for(int k=0; k<intNombreJoueursVirtuels; k++)
                     {
                         JoueurVirtuel j = (JoueurVirtuel)lstJoueursVirtuels.get(k);
                         positionsJoueurs[i] = j.obtenirPositionJoueur();
