@@ -2,170 +2,212 @@
 <mots> 
  <unmot>
   <lemot>addition</lemot>
-  <description>une des quatre opérations de base en arithmétique, on ajoute un nombre à un autre.</description>
+  <description>Une des quatre opérations de base en arithmétique, on ajoute un nombre à un autre.</description>
+  <hint>Une des quatre opérations de base en arithmétique.</hint>
  </unmot> 
  <unmot>
   <lemot>aire</lemot>
-  <description>est la mesure d'une surface, on l'appelle aussi la superficie.</description> 
+  <description>La mesure d'une surface, on l'appelle aussi la superficie.</description>
+  <hint>Synonyme de superficie.</hint> 
  </unmot> 
  <unmot>
   <lemot>angle</lemot>
-  <description>la figure formée par deux demi-droites ayant la même extrémité, cette extrémité s'appelle le sommet de l'angle.</description>  
+  <description>La figure formée par deux demi-droites ayant la même extrémité, cette extrémité s'appelle le sommet de l'angle.</description>  
+  <hint>Figure formée par deux demi-droites qui se croisent.</hint> 
  </unmot> 
  <unmot>
   <lemot>angle aigu</lemot>
-  <description>un angle qui mesure moins de 90 degrés.</description>
+  <description>Un angle qui mesure moins de 90 degrés.</description>
+  <hint>Type d'angle.</hint>
  </unmot> 
  <unmot>
   <lemot>angle droit</lemot>
-  <description>un angle qui mesure 90 degrés, ou l'angle formé à l'intersection de deux droites perpendiculaires.</description>  
+  <description>Un angle qui mesure 90 degrés, ou l'angle formé à l'intersection de deux droites perpendiculaires.</description>  
+  <hint>Type d'angle.</hint>
  </unmot> 
  <unmot>
   <lemot>angle obtus</lemot>
-  <description>un angle qui mesure plus de 90 degrés mais moins de 180 degrés.</description>  
+  <description>Un angle qui mesure plus de 90 degrés mais moins de 180 degrés.</description>  
  </unmot> 
  <unmot>
   <lemot>angle plat</lemot>
-  <description>un angle qui mesure 180 degrés.</description>  
+  <description>Un angle qui mesure 180 degrés.</description>  
+  <hint>Type d'angle.</hint>
  </unmot> 
  <unmot>
   <lemot>arête</lemot>
-  <description>l'intersection de deux faces d'un solide.</description>
+  <description>L'intersection de deux faces d'un solide.</description>
+  <hint>Un solide euclidien en compte plusieurs.</hint>
  </unmot> 
  <unmot>
   <lemot>arithmétique</lemot>
-  <description>la branche des mathématiques consacrée aux règles de calcul.</description> 
+  <description>La branche des mathématiques consacrée aux règles de calcul.</description>
+  <hint>Une branche des mathématiques.</hint>  
  </unmot> 
  <unmot>
   <lemot>arrondir</lemot>
-  <description>donner une approximation de la valeur d'un nombre.</description> 
+  <description>Donner une approximation de la valeur d'un nombre.</description>
+  <hint>Synonyme de approximer.</hint>  
  </unmot> 
  <unmot>
   <lemot>axe de symétrie</lemot>
-  <description>la droite qui sépare une figure de sa réflexion ou son rabattement.</description>  
+  <description>La droite qui sépare une figure de sa réflexion ou son rabattement.</description>
+  <hint>Type de droite.</hint>    
  </unmot> 
  <unmot>
   <lemot>carré</lemot>
-  <description>un quadrilatère dont les angles sont droits et les côtés congrus.</description> 
+  <description>Un quadrilatère dont les angles sont droits et les côtés congrus.</description>
+  <hint>Type de figure plane.</hint>   
  </unmot> 
  <unmot>
   <lemot>cercle</lemot>
-  <description>une figure à deux dimensions dont l'ensemble de tous les points sont situés à distance égale du centre.</description> 
+  <description>Une figure à deux dimensions dont l'ensemble de tous les points sont situés à distance égale du centre.</description> 
+  <hint>Type de figure plane.</hint> 
  </unmot> 
  <unmot>
   <lemot>chiffre</lemot>
-  <description>un symbole utilisé pour écrire des nombres; dans notre systè me de numération à base de 10, il y a dix chiffres: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9.</description> 
+  <description>Un symbole utilisé pour écrire des nombres; dans notre système de numération à base de 10, il y a dix chiffres: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9.</description> 
+  <hint>Un symbole utilisé pour écrire des nombres.</hint> 
  </unmot> 
  <unmot>
   <lemot>circonférence</lemot>
-  <description>la mesure de la ligne courbe du cercle; on peut dire que c'est le périmètre du cercle.</description> 
+  <description>La mesure de la ligne courbe du cercle; on peut dire que c'est le périmètre du cercle.</description>
+  <hint>Un des paramètres utilisé pour décrire un cercle.</hint>  
  </unmot> 
  <unmot>
   <lemot>cône</lemot>
   <description>une figure à trois dimensions ayant une base circulaire délimitée par une surface courbe se terminant en pointe.</description> 
+  <hint>Type de figure à trois dimensions.</hint> 
  </unmot> 
  <unmot>
   <lemot>congru</lemot>
-  <description>deux figures ayant la même forme et la même taille sont dites congrues.</description> 
+  <description>Deux figures ayant la même forme et la même taille sont dites congrues.</description>
+  <hint>Deux figures ayant la même forme et la même taille sont dites ...</hint> 
  </unmot> 
  <unmot>
-  <lemot>consécutif</lemot>
+  <lemot>consécutifs</lemot>
   <description>des nombres consécutifs sont des nombres qui se suivent; 3, 4, 5, et 6 sont des nombres consécutifs.</description>  
+  <hint>Qui se suivent.</hint>
  </unmot> 
  <unmot>
   <lemot>cube</lemot>
-  <description>un prisme rectangulaire dont les six faces sont des carrés.</description> 
+  <description>Un prisme rectangulaire dont les six faces sont des carrés.</description>
+  <hint>Type de figure à trois dimensions.</hint>  
  </unmot> 
  <unmot>
   <lemot>cylindre</lemot>
-  <description>une figure à trois dimensions formée d'une surface courbe et de deux surfaces planes circulaires congrues.</description>  
+  <description>Une figure à trois dimensions formée d'une surface courbe et de deux surfaces planes circulaires congrues.</description>  
+  <hint>Type de figure à trois dimensions.</hint>
  </unmot> 
  <unmot>
   <lemot>dénominateur</lemot>
-  <description>le nombre entier qui indique en combien de parties égales l'unité a été divisée; dans la fraction 1/4 , le dénominateur est le nombre 4.</description>  
+  <description>Le nombre entier qui indique en combien de parties égales l'unité a été divisée; dans la fraction 1/4 , le dénominateur est le nombre 4.</description>  
+  <hint>Un élément d'une fraction.</hint>
  </unmot> 
  <unmot>
   <lemot>diagonale</lemot>
-  <description>un segment de droite qui relie deux sommets non consécutifs d'un polygone.</description> 
+  <description>Un segment de droite qui relie deux sommets non consécutifs d'un polygone.</description>
+  <hint>Un type de segment de droite.</hint> 
  </unmot> 
  <unmot>
   <lemot>diamètre</lemot>
-  <description>le segment de droite qui joint deux points du cercle en passant par le centre du cercle.</description> 
+  <description>Le segment de droite qui joint deux points du cercle en passant par le centre du cercle.</description> 
+  <hint>Un des paramètres utilisé pour décrire un cercle.</hint>  
  </unmot> 
  <unmot>
   <lemot>différence</lemot>
-  <description>le résultat d'une soustraction.</description>
+  <description>Le résultat d'une soustraction.</description>
+  <hint>Le résulat d'une des opérations arithmétiques de base.</hint>  
  </unmot> 
  <unmot>
   <lemot>dividende</lemot>
-  <description>le nombre à diviser dans une opération de division; dans l'opération 18 ÷ 9 = 2, 18 est le dividende.</description> 
+  <description>Le nombre à diviser dans une opération de division; dans l'opération 18 ÷ 9 = 2, 18 est le dividende.</description> 
+  <hint>Un élément d'une division.</hint>  
  </unmot> 
  <unmot>
   <lemot>diviseur</lemot>
-  <description>le second terme de la division; dans l'opération 18 ÷ 9 = 2, 9 est le diviseur.</description>  
+  <description>Le second terme de la division; dans l'opération 18 ÷ 9 = 2, 9 est le diviseur.</description>
+  <hint>Un élément d'une division.</hint>    
  </unmot> 
  <unmot>
   <lemot>division</lemot>
-  <description>une des quatre opérations de base en arithmétique, on cherche combien de fois un nombre est contenu dans un autre nombre ou on fait un partage.</description> 
+  <description>Une des quatre opérations de base en arithmétique, on cherche combien de fois un nombre est contenu dans un autre nombre ou on fait un partage.</description> 
+  <hint>Une des quatre opérations de base en arithmétique.</hint> 
  </unmot> 
  <unmot>
   <lemot>dodécaèdre</lemot>
-  <description>un polèdre à douze faces.</description>  
+  <description>Un polyèdre à douze faces.</description>
+  <hint>Type de polyèdre.</hint>   
  </unmot> 
  <unmot>
   <lemot>dodécagone</lemot>
-  <description>un polygone ayant douze côtés.</description>  
+  <description>Un polygone ayant douze côtés.</description>
+  <hint>Type de polygone.</hint>    
  </unmot> 
  <unmot>
   <lemot>droite</lemot>
-  <description>un ensemble de points en ligne droite, illimitée dans les deux sens.</description> 
+  <description>Un ensemble de points en ligne droite, illimitée dans les deux sens.</description>
+  <hint>Ce terme peut être représenté dans le plan par une fonction linéaire.</hint>   
  </unmot> 
  <unmot>
   <lemot>échantillon</lemot>
-  <description>un ensemble de personnes choisies comme étant représentatives d'une population.</description>
+  <description>Un ensemble de personnes choisies comme étant représentatives d'une population.</description>
+  <hint>Concept couramment utilisé en statistique.</hint> 
  </unmot> 
  <unmot>  
   <lemot>ennéagone</lemot>
-  <description>un polygone ayant neuf côtés.</description>  
+  <description>Un polygone ayant neuf côtés.</description> 
+  <hint>Type de polygone.</hint>  
  </unmot> 
  <unmot>
   <lemot>estimation</lemot>
-  <description>le résultat approximatif d'une opération; peut se faire à l'écrit ou mentalement.</description>  
+  <description>Le résultat approximatif d'une opération; peut se faire à l'écrit ou mentalement.</description>
+  <hint>Synonyme d'approximation.</hint>   
  </unmot> 
  <unmot>
   <lemot>facteur</lemot>
-  <description>les nombres entiers multipliés dans une multiplication sont des facteurs; dans l'équation 2 x 6 = 12, 2 et 6 sont des facteurs de 12.</description> 
+  <description>Les nombres entiers multipliés dans une multiplication sont des facteurs; dans l'équation 2 x 6 = 12, 2 et 6 sont des facteurs de 12.</description> 
+  <hint>Les nombres entiers multipliés dans une multiplication sont des ...</hint> 
  </unmot> 
  <unmot>
   <lemot>fraction</lemot>
-  <description>représente les parties d'un tout ou d'un ensemble, un rapport entre deux nombres entiers, ou une division.</description>  
+  <description>Représente les parties d'un tout ou d'un ensemble, un rapport entre deux nombres entiers, ou une division.</description>  
+  <hint>Représente les parties d'un tout ou d'un ensemble, un rapport entre deux nombres entiers, ou une division.</hint> 
  </unmot> 
  <unmot>
   <lemot>graphique</lemot>
-  <description>un tableau qui permet de représenter des données.</description> 
+  <description>Un type de représentation visuelle d'un ensemble de données.</description>
+  <hint>Un type de représentation visuelle d'un ensemble de données.</hint>  
  </unmot> 
  <unmot>
   <lemot>heptagone</lemot>
-  <description>un polygone ayant sept côtés.</description>  
+  <description>Un polygone ayant sept côtés.</description>
+  <hint>Un type de polygone.</hint>    
  </unmot> 
  <unmot>
   <lemot>hexaèdre</lemot>
-  <description>un polyèdre à six faces.</description>   </unmot> 
+  <description>Un polyèdre à six faces.</description>   
+  <hint>Un type de polyèdre.</hint>  
+ </unmot> 
  <unmot>
   <lemot>hexagone</lemot>
-  <description>un polygone ayant six côtés.</description>  
+  <description>Un polygone ayant six côtés.</description>
+  <hint>Un type de polygone.</hint>    
  </unmot> 
  <unmot>
   <lemot>infini</lemot>
-  <description>qui n'a pas de fin; l'ensemble des nombres naturels est infini, ce qui veut dire que même si on trouve ce qu'on croit être le plus grand nombre au monde, on peut toujours y ajouter un.</description> 
+  <description>Qui n'a pas de fin; l'ensemble des nombres naturels est infini, ce qui veut dire que même si on trouve ce qu'on croit être le plus grand nombre au monde, on peut toujours y ajouter un.</description> 
+  <hint>Antonyme de fini.</hint>
  </unmot> 
  <unmot>
   <lemot>ligne</lemot>
-  <description>une figure géométrique à une dimension.</description> 
+  <description>Une figure géométrique à une dimension.</description>
+  <hint>Une figure géométrique à une dimension.</hint>  
  </unmot> 
  <unmot>
   <lemot>losange</lemot>
-  <description>un parallélogramme qui a quatre côtés congrus.</description> 
+  <description>Un parallélogramme qui a quatre côtés congrus.</description>
+  <hint>Un type de figure plane.</hint>  
  </unmot> 
  <unmot>
   <lemot>multiple</lemot>
