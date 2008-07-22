@@ -1,0 +1,104 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1036{\fonttbl{\f0\fswiss\fcharset0 Arial;}}
+{\*\generator Msftedit 5.41.15.1515;}\viewkind4\uc1\pard\f0\fs20\par
+\b ( Fran\'e7ais : )\line\par
+\fs24 Fait math\'e9matique #4\fs20\par
+\par
+\b0 Les lecteurs MP3 utilisent des transform\'e9es de Fourier pour restituer les morceaux musicaux qu'ils contiennent.\par
+\par
+Ce sujet est abord\'e9 dans le spectacle Show Math.\par
+\par
+Par \'c9rik Pronovost\par
+\par
+La compression de donn\'e9es traite de la mani\'e8re dont on peut r\'e9duire l'espace n\'e9cessaire \'e0 la repr\'e9sentation d'une certaine quantit\'e9 d'information. Elle a donc sa place aussi bien lors de la transmission que lors du stockage des donn\'e9es.\par
+\par
+Premi\'e8rement, il faut savoir que le son est une onde. La fr\'e9quence d'un son est exprim\'e9e en Hertz (Hz), elle est directement li\'e9e \'e0 la hauteur d'un son per\'e7u, mais n'en est qu'une des composantes. \'c0 une fr\'e9quence faible correspond un son grave, \'e0 une fr\'e9quence \'e9lev\'e9e un son aigu.\par
+\par
+Le son \'e9mis par un diapason en vibration est (quasiment) pur. Sa repr\'e9sentation est un beau sinus simple et r\'e9gulier.\par
+\par
+Sinus\par
+\par
+Une fonction sinus est une donn\'e9e qui demande tr\'e8s peu d'espace d'emmagasinage. Ainsi, si on veut enregistrer le son du diapason en vibration, on a qu'\'e0 rentrer la fonction sinus correspondante dans nos donn\'e9es et ceci prendra tr\'e8s peu d'espace.\par
+\par
+Si on ajoute un son harmonique (en pointill\'e9 sur le sch\'e9ma ci-dessous) \'e0 ce son simple (\'e9galement en pointill\'e9), les deux se superposent pour donner un r\'e9sultat global repr\'e9sent\'e9 par la courbe suivante (en noir gras).\par
+\par
+Sinus\par
+\par
+L'onde obtenue est plus compliqu\'e9e que celle du diapason en vibration, mais puisqu'on peut l'exprimer comme la somme de deux simples sinus, on a qu'\'e0 rentrer les deux fonctions sinus correspondantes dans nos donn\'e9es et ceci prendra encore tr\'e8s peu d'espace.\par
+\par
+Le diapason est un instrument qui donne un son fixe servant de r\'e9f\'e9rence au La plac\'e9 dans le deuxi\'e8me interligne de la port\'e9e en cl\'e9 de Sol deuxi\'e8me ligne. Sa fr\'e9quence est de 440 Hz (440 vibrations par seconde). Il s'agit du m\'eame son que le La du t\'e9l\'e9phone en France.\par
+\par
+Cependant, la plupart des sons que l'on entend en \'e9coutant de la musique sont beaucoup plus complexes.\par
+\par
+Sinus\par
+\par
+C'est l\'e0 que vont intervenir les transform\'e9es de Fourier. En effet, les transform\'e9es de Fourier permettent d'exprimer de telles ondes en sommes de simples sinus et cosinus. On pourra donc rentrer ces fonctions sinus et cosinus dans nos donn\'e9es pour enregistrer notre son.\par
+\par
+De plus, tout \'eatre vivant ne peut percevoir qu'une partie du spectre sonore. En effet, les physiologistes s'accordent \'e0 dire que l'oreille humaine moyenne per\'e7oit seulement les sons dans une certaine plage de fr\'e9quences situ\'e9e environ (selon l'\'e2ge, la culture, etc...), entre 20 Hz (au-de\'e7\'e0 les sons sont qualifi\'e9s d'infrasons) et 20 kHz (au-del\'e0 les sons sont qualifi\'e9s d'ultrasons). Aussi, si l'intensit\'e9 du son n'est pas suffisante, l'oreille humaine ne percevra pas le son. De plus, si l'intensit\'e9 du son est trop grande, le son risque fortement d'endommager l'oreille humaine. Voici un graphique qui illustre bien cette situation.\par
+\par
+Intensit\'e9\par
+\par
+Ainsi, on pourra \'e9liminer de nos donn\'e9es toutes les fonctions sinus et cosinus qui ne sont pas perceptibles par l'oreille humaine. On sauvera alors beaucoup d'espace et l'oreille humaine n'y verra aucune diff\'e9rence. Ce ne sera pas le cas cependant pour l'oreille de d'autres esp\'e8ces animales. En effet, la chauve-souris et le dauphin peuvent percevoir les sons de fr\'e9quence 100 kHz. Ainsi, lorsqu'un dauphin \'e9coute de la musique compress\'e9e en MP3, il n'entend pas la m\'eame chose que la version originale contrairement \'e0 l'humain. Voici un graphique qui repr\'e9sente la fr\'e9quence en hertz du cri de la chauve-souris par rapport au temps.\par
+\par
+Cri de la chauve-souris\par
+\par
+On a aussi que certains sons enterrent d'autres sons. Ceci implique donc que les sons enterr\'e9s sont inutilement emmagasin\'e9s. On peut donc faire une \'e9conomie suppl\'e9mentaire d'espace en \'e9liminant ces sons. Voila, grossi\'e8rement, les grandes id\'e9es qui se cachent derri\'e8re l'algorithme de compression MP3. Notons que ces id\'e9es reviennent souvent dans d'autres algorithmes de compression. Les transform\'e9es de Fourier ont de nombreuses autres applications. En effet, cela a permis \'e0 Fourier, en 1807, de r\'e9soudre l'\'e9quation de propagation de la chaleur. Elles permettent aussi de d\'e9terminer le spectre d'un signal. Les transform\'e9es de Fourier ont \'e9galement des applications importantes en astronomie. En effet, elle permet, en faisant interf\'e9rer des ondes de plusieurs t\'e9lescopes, de reconstruire une image \'e9quivalente \'e0 celle obtenue en utilisant un grand t\'e9lescope tr\'e8s co\'fbteux, voir impossible \'e0 construire. On peut ainsi d\'e9tecter des \'e9toiles doubles qui n'aurait pas pu \'eatre d\'e9tect\'e9es autrement :\par
+\par
+\'e9toiles doubles\par
+\par
+Les transform\'e9es de Fourier ont \'e9galement des applications importantes en m\'e9decine. En effet, elles sont utilis\'e9es plus particuli\'e8rement en tomographie, c'est-\'e0-dire la reconstruction d'objet \'e0 deux dimensions \'e0 partir de ses projections. Voici d'ailleurs un exemple de reconstruction d'objet en tomographie :\par
+\par
+Tomographie\par
+\par
+Terminons en mentionnant que les transform\'e9es de Fourier sont aussi utilis\'e9es en r\'e9sonance magn\'e9tique nucl\'e9aire. En effet, elle permettent de d\'e9duire la densit\'e9 des atomes cherch\'e9s en fonction d'une direction et de reconstituer un objet \'e0 partir des ces diff\'e9rentes mesures. Voici un exemple d'image obtenue (d'une pr\'e9cision de l'ordre du millim\'e8tre) :\par
+\par
+R\'e9sonance magn\'e9tique nucl\'e9aire \b\par
+\par
+(Anglais : )\par
+\par
+\par
+\fs32 Math Fact #4\par
+\par
+\fs20\par
+\b0 Mp3 players use Fourier transforms to restore the musical pieces they contain.\par
+\par
+This subject is addressed in Show Math.\par
+\par
+By \'c9rik Pronovost\par
+\par
+\b Data compression\b0  deals with the way the space needed to represent a certain quantity of information can be reduced. It intervenes in both data transmission and data storage. \par
+\par
+First, you have to know that sound is a wave. The frequency of sound is often expressed in Hertz (Hz.) Frequency is directly linked to the perceived pitch\b  \b0 of a sound, but it is not the only parameter characterizing it. Very low frequencies correspond to low pitches and very high frequencies correspond to high pitches.\par
+\par
+The sound emitted by a vibrating tuning fork is (almost) pure. It can be represented by a simple smooth sine function.\par
+\par
+A sine function requires very little storage place. Thus, to record the sound emitted by a vibrating tuning fork, only the corresponding sine function is required.\par
+\par
+If a harmonic sound (dotted curve) is added to this simple sound (also dotted), both superimpose to form the global sound represented by the curve below (in bold).\par
+\par
+The combined wave is more complex then the vibrating tuning fork's wave, but since it can be expressed as the sum of two sine functions, one simply needs to store both these functions into the database.\par
+\par
+A tuning fork is an instrument that gives a fixed sound used as a reference to the note of A placed in the second space of the treble clef staff. Its frequency is 440 Hz (440 vibrations per second). This sound can be heard when a French telephone is picked up.\par
+\par
+However, most sound we hear when listenning to music are a lot more complex.\par
+\par
+This is where Fourier transforms come into play. A Fourier transform is a mathematical operation that turns a given wave into a simple sum of sine and cosine functions. To record a sound, these sine and cosine functions are simply stored into a database.\par
+\par
+Moreover, living beings can only perceive a limited range of the sound spectrum. According to physiologists, the average human ear only perceives sounds within a range of 20 Hz (under this frequency, sound waves are called infrasounds.) to 20 kHz (over this frequency, sound waves are called ultrasounds.). This range varies slightly with age, culture, etc. If the intensity of a sound is too low, the human ear will not perceive it. If it is too high, the sound will very likely cause ear damage. Here is a plot illustrating this reality.  \par
+\par
+This brings us back to data compression. When compressing a sound wave, the sine and cosine functions that are not perceptible to the human ear can safely be ignored. A large amount of space can be saved nd the human ear will hear no difference. This would not be the case for the ear of other animal species. For example, bats and dolphins can perceive sounds of frquencies up to 100 kHz. Thus, as opposed to a human being, when a dolphin listens to MP3 compressed music, it does not quite hear the same as the original version. Here is a plot representing the frequency (in Hertz) of the sound emitted by a bat with respect to time. \par
+\par
+\par
+\par
+On a aussi que certains sons enterrent d'autres sons. Ceci implique donc que les sons enterr\'e9s sont inutilement emmagasin\'e9s. On peut donc faire une \'e9conomie suppl\'e9mentaire d'espace en \'e9liminant ces sons. Voila, grossi\'e8rement, les grandes id\'e9es qui se cachent derri\'e8re l'algorithme de compression MP3. Notons que ces id\'e9es reviennent souvent dans d'autres algorithmes de compression. Les transform\'e9es de Fourier ont de nombreuses autres applications. En effet, cela a permis \'e0 Fourier, en 1807, de r\'e9soudre l'\'e9quation de propagation de la chaleur. Elles permettent aussi de d\'e9terminer le spectre d'un signal. Les transform\'e9es de Fourier ont \'e9galement des applications importantes en astronomie. En effet, elle permet, en faisant interf\'e9rer des ondes de plusieurs t\'e9lescopes, de reconstruire une image \'e9quivalente \'e0 celle obtenue en utilisant un grand t\'e9lescope tr\'e8s co\'fbteux, voir impossible \'e0 construire. On peut ainsi d\'e9tecter des \'e9toiles doubles qui n'aurait pas pu \'eatre d\'e9tect\'e9es autrement :\par
+\par
+\'e9toiles doubles\par
+\par
+Les transform\'e9es de Fourier ont \'e9galement des applications importantes en m\'e9decine. En effet, elles sont utilis\'e9es plus particuli\'e8rement en tomographie, c'est-\'e0-dire la reconstruction d'objet \'e0 deux dimensions \'e0 partir de ses projections. Voici d'ailleurs un exemple de reconstruction d'objet en tomographie :\par
+\par
+Tomographie\par
+\par
+Terminons en mentionnant que les transform\'e9es de Fourier sont aussi utilis\'e9es en r\'e9sonance magn\'e9tique nucl\'e9aire. En effet, elle permettent de d\'e9duire la densit\'e9 des atomes cherch\'e9s en fonction d'une direction et de reconstituer un objet \'e0 partir des ces diff\'e9rentes mesures. Voici un exemple d'image obtenue (d'une pr\'e9cision de l'ordre du millim\'e8tre) :\par
+\par
+R\'e9sonance magn\'e9tique nucl\'e9aire \par
+}
+ 
