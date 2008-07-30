@@ -49,7 +49,7 @@
  	
  	<VraiFaux>
   		<question>The sum of the interior angles of a hexagon is 720 degrees.</question>
-  		<reponse>false</reponse>
+  		<reponse>true</reponse>
 	        <Id>9</Id>
  	</VraiFaux>
 	<VraiFaux>
@@ -200,7 +200,7 @@
  	</VraiFaux>
  	
  	<VraiFaux>
-  		<question> A parallelogram is a trapezoid.</question>
+  		<question>A parallelogram is a trapezoid.</question>
   		<reponse>true</reponse>
 	        <Id>36</Id>
  	</VraiFaux>
