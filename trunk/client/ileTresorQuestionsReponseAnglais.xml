@@ -255,7 +255,7 @@
  	</VraiFaux>
 	<VraiFaux>
   		<question>A bisector splits an angle into two halves.</question>
-  		<reponse>false</reponse>
+  		<reponse>true</reponse>
 		<Id>46</Id>
  	</VraiFaux>
  	<VraiFaux>
@@ -350,12 +350,12 @@
 		<Id>65</Id>
  	</VraiFaux>
  	<VraiFaux>
-  		<question>21 574 is divisible by 3.</question>
+  		<question>The number 21,574 is divisible by 3.</question>
   		<reponse>true</reponse>
 		<Id>66</Id>
  	</VraiFaux>
 	<VraiFaux>
-  		<question>133 is divisible by 3.</question>
+  		<question>The number 133 is divisible by 3.</question>
   		<reponse>false</reponse>
 	        <Id>67</Id>
  	</VraiFaux>
@@ -371,7 +371,7 @@
  	</VraiFaux>
 	<VraiFaux>
   		<question>7 is an hexagonal number.</question>
-  		<reponse>true</reponse>
+  		<reponse>false</reponse>
 	        <Id>70</Id>
  	</VraiFaux>
 	<VraiFaux>
