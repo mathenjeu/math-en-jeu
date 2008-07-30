@@ -546,7 +546,7 @@
 		<Id>102</Id>
  	</VraiFaux> 	 		
 	<VraiFaux>
-  		<question>9 is a divisor of 12345.</question>
+  		<question>9 is a divisor of 12,345.</question>
   		<reponse>false</reponse>
 		<Id>103</Id>
  	</VraiFaux> 	
