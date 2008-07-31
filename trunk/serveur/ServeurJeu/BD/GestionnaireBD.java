@@ -208,6 +208,7 @@ public class GestionnaireBD
 		}
 	}
 
+	
         // This method fills a Question box with only the player's level
 	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau )
 	{
