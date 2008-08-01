@@ -1175,13 +1175,7 @@ R\'etroaction : \\
 This random experiments has two steps. Each step has 6 possible outcomes. By the multiplication rule, there are
 $6\times6=36$ possible results. Therefore, the answer is c).\\
 
-326-- In a multi-step random experiment, the first step has $m$ possible results, the second step has $n$ possible results, the third step has $p$ possible results, the fourth step has $q$ possible results, $\ldots$, and the last step has $k$ possible results. What is the total number of possible results of this experiment?  
-
-Dans une exp\'erience al\'eatoire en plusieurs \'etapes, la
-premi\`ere \'etape a $m$ r\'esultats possibles, la deuxi\`eme \'etape $n$
-r\'esultats possibles, la troisi\`eme $p$ r\'esultats, la quatri\`eme $q$,
-$\ldots$ et la derni\`ere \'etape a $k$ r\'esultats possibles.  Combien y
-a-t-il de r\'esultats possibles dans cette exp\'erience?\\
+326-- In a multi-step random experiment, the first step has $m$ possible results, the second step has $n$ possible results, the third step has $p$ possible results, the fourth step has $q$ possible results, $\ldots$, and the last step has $k$ possible results. What is the total number of possible results of this experiment?\\
 
 a) $m+n+p+q+\ldots+k$\\
 b) $m\times n\times p\times q\times \ldots \times k$\\
@@ -1191,14 +1185,10 @@ d) $m+n+p+q+k$\\
 R\'eponse : b)\\
 
 R\'etroaction : \\
-La question explicite les conditions d'application de la r\`egle de la
-multiplication.  La r\'eponse est b).\\
+This question exemplifies the conditions of application of the multiplication rule in probabilities. The answer is b).\\
 
-327-- Le nouveau menu du jour d'un restaurant offre en entr\'ee la soupe, la
-fondue parmesan ou le jus de l\'egumes.  Pour le plat principal, il offre le
-spaghetti, la lasagne ou la pizza.  Finalement, pour le dessert, il offre la
-cr\`eme glac\'ee ou la tarte aux pommes.  Combien de repas diff\'erents
-est-il possible de manger avec ce menu du jour?\\
+327-- In a restaurant, the menu of the day offers a soup, cheese sticks, or vegetable juice for the appetizer, spaghetti, lasagna, or pizza for the entree, and ice cream or apple pie for dessert. How many possible different meals can be ordered with this menu?\\
+
 a) 8\\
 b) 12\\
 c) 18\\
@@ -1207,12 +1197,12 @@ d) 27\\
 R\'eponse : c)\\
 
 R\'etroaction : \\
-Il faut utiliser la r\`egle de la multiplication.  \\
+One must use the multiplication rule.\\
 $3\times3\times2=18$\\
-La r\'eponse est donc c).\\
+Therefore, the answer is c).\\
 
 
-328-- En base 10, combien y a-t-il de nombres \`a deux chiffres?\\
+328-- How many two-digit numbers are there in base 10?\\
 
 R\'eponse : 90\\
 
@@ -1227,119 +1217,99 @@ Les nombres \`a deux chiffres sont :\\
 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, \\
 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, \\
 90, 91, 92, 93, 94, 95, 96, 97, 98, 99. \\
-Il existe un moyen pour trouver la quantit\'e de nombres \`a deux chiffres
-sans les \'enum\'erer.  Il suffit de penser \`a la r\`egle de la
-multiplication.\\
-\`A la position des unit\'es, il y a 10 choix possibles, soit 0, 1, 2, 3, 4,
-5, 6, 7, 8 ou 9.  \`A la position des dizaines, il n'y a que 9 choix
-possibles, car un nombre ne peut pas commencer par z\'ero.  Il y a donc
-$9\times10=90$ nombres \`a deux chiffres.\\
 
-329-- En base 10, combien y a-t-il de nombres \`a trois chiffres?\\
+There is a way to find how many two-digit numbers there are without listing them.
+Simply think about the multiplication rule. There are 10 possible choices in the unit position, i.e. 0, 1, 2, 3, 4,
+5, 6, 7, 8 or 9. There are only 9 possible choices in the tens' position because a two-digit number cannot start with 0. Therefore, there are $9\times10=90$ two digit numbers.\\
+
+329-- How many three digit numbers are there in base 10?\\
+
 a) 729\\
 b) 900\\
 c) 999\\
-d) 1000\\
+d) 1,000\\
 
 R\'eponse : b)\\
 
 R\'etroaction : \\
-Les nombres \`a trois chiffres sont 100, 101, 102, 103, \ldots  , 998, 999.
-Il n'est cependant pas n\'ecessaire d'\'enum\'erer tous ces nombres.  Il
-suffit de penser \`a la r\`egle de la multiplication.
-\`A la position des unit\'es, il y a 10 choix possibles, soit 0, 1, 2, 3, 4,
-5, 6, 7, 8 ou 9.  \`A la position des dizaines, il y a encore 10 choix
-possibles.  Par contre, \`a la position des centaines, il n'y a que 9 choix
-possibles, car un nombre ne peut pas commencer par z\'ero.  Il y a donc
-$9\times10\times10=900$ nombres \`a trois chiffres. Par cons\'equent, la
-r\'eponse est b).\\
+The three digit numbers are 100, 101, 102, 103, \ldots , 998, 999.
+It is not necessary to list all of them to answer this question. Simply think about the multiplication rule. There are 10 possible choices in the units' position, i.e. 0, 1, 2, 3, 4, 5, 6, 7, 8 or 9. There are also 10 possible choices in the tens' position and the hundreds' position only has 9 possible choices because a three digit number cannot start with 0. Therefore, there are $9\times10\times10=900$ three digit numbers and the answer is b).\\
 
-330-- En base 10, combien y a-t-il de nombres \`a 6 chiffres?\\
-a) $46\,656$\\
-b) $600\,000$\\
-c) $900\,000$\\
-d) $1\,000\,000$\\
+
+330-- How many 6 digit numbers are there in base 10?\\
+
+a) $46,656$\\
+b) $600,000$\\
+c) $900,000$\\
+d) $1,000,000$\\
 
 R\'eponse : c)\\
 
 R\'etroaction : \\
-Les nombres \`a 6 chiffres sont $100\,000, 100\,001, 100\,002, \ldots
-999\,998, 999\,999$.  Il n'est cependant pas n\'ecessaire ni r\'ealiste
-d'\'enum\'erer tous ces nombres.  Il suffit de penser \`a la r\`egle de la
-multiplication.\\
-\`A la position des unit\'es, il y a 10 choix possibles, soit 0, 1, 2, 3, 4,
-5, 6, 7, 8 ou 9.  \`A la position des dizaines, des centaines, des milliers
-et des dizaines de milliers, il y a encore 10 choix possibles.  Par contre,
-\`a la position des centaines de milliers, il n'y a que 9 choix possibles,
-car un nombre ne peut pas commencer par z\'ero.  Il y a donc
-$9\times10\times10\times10\times10\times10=900\,000$ nombres \`a six
-chiffres.  Par cons\'equent, la r\'eponse est c).\\
+The 6 digit numbers are $100,000, 100,001, 100,002, \ldots
+999,998, 999,999$. It is not necessary to list them all to find how many there are. Simply think about the multiplication rule.\\
+There are 10 possible choices in the units' position, i.e. 0, 1, 2, 3, 4,
+5, 6, 7, 8 or 9. There are also 10 possible choices in the tens', hundreds' thousands', and ten thousands' positions.
+However, the hundred thousands' position onlu has 9 possible choices because a 6 digit number cannot start with 0. Therefore, the are $9\times10\times10\times10\times10\times10=900,000$ 6 digit numbers and the answer is c).\\
 
 
-332-- Dans la Quotidienne \`a trois chiffres, il y a trois bouliers
-contenant chacun des boules num\'erot\'ees de 0 \`a 9.  Une seule boule est
-tir\'ee par boulier.  Combien y a-t-il de r\'esultats possibles?\\
+332-- In the \emph{three digit daily}, there are three plastic boxes each containing balls numbered from 0 to 9. Only one ball is drawn per box. How many possible results are there?\\
+
 a) 30\\
 b) 300\\
 c) 900\\
-d) 1000\\
+d) 1,000\\
 
 R\'eponse : d)\\
 
 R\'etroaction : \\
-Il faut penser \`a la r\`egle de la multiplication.  \\
-Premier boulier : 10 choix possibles.\\
-Deuxi\`eme boulier : 10 choix possibles.\\
-Troisi\`eme boulier : 10 choix possibles.\\
-La r\`egle de la multiplication dit qu'il faut multiplier le nombre de choix
-possibles \`a chacune des \'etapes.\\
-$10\times10\times10=1000$\\
-Il y a 1000 r\'esultats possibles.  Par cons\'equent, la r\'eponse est d).\\
+One must think about the multiplication rule.\\
+First box : 10 possible choices.\\
+Second box : 10 possible choices.\\
+Third box : 10 possible choices.\\
+The multiplication rule says that the number of choices at each step must ne multiplied.\\
+$10\times10\times10=1,000$\\
+Therefore, there are 1,000 possible results and the answer is d).\\
 
-333-- Parmi les quatre choix ci-dessous, lequel compl\`ete
-correctement l'\'enonc\'e suivant : \og Dans une exp\'erience
-al\'eatoire \'equiprobable, $\ldots$\fg ?\\
-a) le premier r\'esultat a le plus de chances de se produire.\\
-b) le dernier r\'esultat a le plus de chances de se produire.\\
-c) les r\'esultats ont tous la m\^eme chance de se produire.\\
-d) les r\'esultats n'ont pas tous la m\^eme chance de se produire.\\
+333-- Which answer choice correctly completes the following statement : \og In an equiprobable random experiment,  $\ldots$\fg ?\\
+
+a) the first event has the highest probability to happen.\\
+b) the last event has the highest probability to happen.\\
+c) all the events have the same probability to happen.\\
+d) the events don't all have the same probability to happen.\\
 
 R\'eponse : c)\\
 
 R\'etroaction : \\
-Le pr\'efixe \og\'equi\fg\ veut dire \'egal.  Les r\'esultats ont la
-m\^eme
-chance de se produire.  La r\'eponse est c).\\
+The prefix \og\'equi\fg\ means equal. The events all have the same probability to happen and the answer is c).\\
 
-334-- Parmi les quatre nombres d\'ecimaux suivants, lequel peut \^etre la
-probabilit\'e d'un r\'esultat?\\
-a) $-1,53$\\
-b) $-0,53$\\
-c) 0,53\\
-d) 1,53\\
+334-- Out of the following four decimal numbers, which one can represent the probability of an event?\\
+
+a) $-1.53$\\
+b) $-0.53$\\
+c) 0.53\\
+d) 1.53\\
 
 R\'eponse : c)\\
 
 R\'etroaction : \\
-La probabilit\'e d'un r\'esultat est un nombre compris entre 0 et 1 ou
-\'egal \`a 0 ou \`a 1.  La r\'eponse est donc c).\\
+The probability of an event is a number between 0 and 1 or
+equal to 0 or 1. Therefore, the answer is c).\\
 
-335-- Parmi les quatre choix ci-dessous, lequel compl\`ete
-correctement l'\'enonc\'e suivant : \og La probabilit\'e d'un
-r\'esultat est un nombre compris entre $\ldots$ ou \'egal \`a 0 ou \`a 1.\fg ?\\
-a) 0 et 10\\
-b) 0 et 1\\
-c) 1 et 2\\
-d) 1 et 10\\
+335-- Which answer choice correctly completes the following statement : \og The probability of an event is a number between $\ldots$ or equal to 0 or 1.\fg ?\\
+
+a) 0 and 10.\\
+b) 0 and 1.\\
+c) 1 and 2.\\
+d) 1 and 10.\\
 
 R\'eponse : b)\\
 
 R\'etroaction : \\
-La probabilit\'e d'un r\'esultat est un nombre compris entre 0 et 1 ou
-\'egal \`a 0 ou \`a 1.  La r\'eponse est donc b).\\
+The probability of an event is a number between 0 and 1 or equal to 0 or 1. Therefore, the answer is b).\\
 
-336-- Dans un jeu ordinaire de 52 cartes, quelle est la probabilit\'e de
-tirer l'as de pique?\\
+336-- In an ordinary 52 card deck, what is the probability to draw the ace of spade with a single draw?\\
+
 a) $\frac{1}{52}$\\[2mm]
 b) $\frac{4}{52}$\\[2mm]
 c) $\frac{1}{13}$\\[2mm]
@@ -1348,12 +1318,10 @@ d) $\frac{1}{4}$\\
 R\'eponse : a)\\
 
 R\'etroaction : \\
-Dans un jeu de cartes, il y a un seul as de pique alors que le jeu contient
-52 cartes.  Il y a donc 1 chance sur 52 de tirer l'as de pique.  La
-r\'eponse est a).\\
+A 52 card deck has a single ace of spade. Therefore, the is 1 chance out of 52 to draw it. The answer is a).\\
 
-337-- Parmi les quatre fractions ci-dessous, laquelle peut  \^etre la
-probabilit\'e d'un r\'esultat?\\
+337-- Our of the four following fractions, which one can represent the probability of an event?\\
+
 a) $\frac{9}{8}$\\[2mm]
 b) $\frac{10}{9}$\\[2mm]
 c) $\frac{2}{1}$\\[2mm]
@@ -1362,13 +1330,12 @@ d) $\frac{8}{8}$\\
 R\'eponse : d)\\
 
 R\'etroaction : \\
-La probabilit\'e d'un r\'esultat est un nombre compris entre 0 et 1 ou
-\'egal \`a 0 ou \`a 1.  \\[2mm]
+The probability of an event is a number between 0 and 1 or equal to 0 or 1.\\[2mm]
 $\frac{8}{8}=1$\\[2mm]
-Par cons\'equent, la r\'eponse est d).\\
+Therefore, the answer is d).\\
 
-338-- Dans un jeu de cartes ordinaire, quelle est la probabilit\'e de tirer
-une dame?\\
+338-- In an ordinary 52 card deck, what is the probability to draw a queen with a single draw?\\
+
 a) $\frac{1}{52}$\\[2mm]
 b) $\frac{1}{26}$\\[2mm]
 c) $\frac{1}{13}$\\[2mm]
@@ -1377,45 +1344,39 @@ d) $\frac{1}{4}$\\
 R\'eponse : c)\\
 
 R\'etroaction : \\
-Un jeu de cartes ordinaire contient 4 dames.  Il y a par cons\'equent 4
-chances sur 52 d'obtenir une dame.\\[2mm]
+An ordinary card deck contains 4 queens. Therefore, there are 4 chances out of 52 to draw a queen.\\[2mm]
 $\frac{4}{52}=\frac{1}{13}$\\[2mm]
-La r\'eponse est donc c).\\
+Thus, the answer is c).\\
 
-339-- On tire au hasard une lettre du mot \og hasard\fg.  Quelle est
-la
-probabilit\'e d'obtenir la lettre a?\\
-a) $\frac{1}{6}$\\[2mm]
-b) $\frac{1}{3}$\\[2mm]
-c) $\frac{2}{5}$\\[2mm]
-d) $\frac{1}{2}$\\
+339-- A letter of the word \og probability\fg. is picked out randomly. What is the probability of getting the letter a?\\
+
+a) $\frac{1}{11}$\\[2mm]
+b) $\frac{2}{11}$\\[2mm]
+c) $\frac{2}{10}$\\[2mm]
+d) $\frac{1}{10}$\\
 
 R\'eponse : b)\\
 
 R\'etroaction : \\
-Dans le mot \og hasard\fg, il y a six lettres, dont deux lettres
-\og a\fg. Par cons\'equent, il y a deux chances sur six d'obtenir cette lettre.\\[2mm]
-$\frac{2}{6}=\frac{1}{3}$\\[2mm]
-La r\'eponse est donc b).\\
+The word \og probability\fg contains 11 letters, 2 of which are \og a\fg's. Therefore, there are 2 chances out of 11 to get this letter.\\[2mm]
+The answer is b).\\
 
-340-- Garfield vient de lancer sept fois une pi\`ece de monnaie et il a
-toujours obtenu pile.  Parmi les \'enonc\'es suivants, lequel d\'ecrit
-correctement la situation au huiti\`eme lancer?\\
-a) Garfield a autant de chances d'obtenir \og pile\fg\ que \og face\fg.\\
-b) Garfield a plus de chances d'obtenir \og pile\fg\ que \og face\fg.\\
-c) Garfield a plus de chances d'obtenir \og face\fg\ que \og pile\fg.\\
-d) Garfield a moins de chances d'obtenir \og face\fg\ que \og pile\fg.\\
+340-- Garfield has just tossed a coin 7 times and it has landed on tail each time. Which statement correctly describe the situation for eh eighth toss?\\
+
+a) Garfield has just as many chances to get \og head\fg\ or\og tail\fg.\\
+b) It is more likely that Garfield gets \og head\fg\ than\og tail\fg.\\
+c) It is more likely that Garfield gets\og tail\fg\ than\og head\fg.\\
+d) It is less likely that Garfield gets\og tail\fg\ than\og head\fg.\\
 
 R\'eponse : a)\\
 
 R\'etroaction : \\
-\`A chaque lancer, Garfield a autant de chances d'obtenir pile que face. En
-effet, chaque lancer est ind\'ependant.  La r\'eponse est a).\\
+Each toss is independent. Garfield Garfield has just as many chances to get \og head\fg\ or\og tail\fg on any toss. The answer is a).\\
 
 
-342--  Une exp\'erience al\'eatoire a six r\'esultats possibles.  Quelle est
-la somme des probabilit\'es des six r\'esultats possibles?\\
-a) 0,99\\
+342-- A random experiment has 6 possible results. What is the sum of the probabilities of those 6 results?\\
+
+a) 0.99\\
 b) 1\\
 c) 3 \\
 d) 6\\
@@ -1423,13 +1384,10 @@ d) 6\\
 R\'eponse : b)\\
 
 R\'etroaction : \\
-La somme des probabilit\'es des six r\'esultats possibles est 1.  La
-r\'eponse est b).\\
+The sum of the probabilities of the 6 possible results is 1. The answer is b).\\
 
-343-- Une exp\'erience al\'eatoire n'a que trois r\'esultats possibles.  La
-probabilit\'e du premier r\'esultat est $\frac{3}{16}$ et la probabilit\'e
-du deuxi\`eme r\'esultat est $\frac{7}{16}$.  Quelle est la probabilit\'e du
-troisi\`eme r\'esultat?\\
+343-- A random experiment has only three possible results. The probability of the first result is $\frac{3}{16}$ and the probability of the second result is $\frac{7}{16}$. What is the probability of the third result?\\
+
 a) $\frac{10}{16}$\\[2mm]
 b) $\frac{13}{16}$\\[2mm]
 c) $\frac{9}{16}$\\[2mm]
@@ -1438,15 +1396,15 @@ d) $\frac{3}{8}$\\
 R\'eponse : d)\\
 
 R\'etroaction : \\
-La somme des probabilit\'es des deux premiers r\'esultats est
+The sum of the probabilities of the first two results is: 
 $\frac{3}{16}+\frac{7}{16}=\frac{10}{16}$.\\[2mm]
-La somme des probabilit\'es des trois r\'esultats est 1.\\[2mm]
-La probabilit\'e du troisi\`eme r\'esultat est donc
+The sum of the probabilities of the three results must be 1.\\[2mm]
+Therefore, the probability of the third result is:
 $1-\frac{10}{16}=\frac{16}{16}-\frac{10}{16}=\frac{6}{16}=\frac{3}{8}.$\\[2mm]
-Par cons\'equent, la r\'eponse est d).\\
+The answer is d).\\
 
-344-- Dans un jeu, on lance une pi\`ece de monnaie et un d\'e.  Quelle est
-la probabilit\'e d'obtenir le r\'esultat (face, 1)?\\
+344-- A game consist in tossing a coin and rolling a dice. What is the probabity to get the result (tail, 1)?\\
+
 a) $\frac{1}{12}$\\[2mm]
 b) $\frac{1}{8}$\\[2mm]
 c) $\frac{1}{4}$\\[2mm]
@@ -1455,17 +1413,11 @@ d) $\frac{2}{3}$\\[2mm]
 R\'eponse : a)\\
 
 R\'etroaction : \\
-Dans cette exp\'erience al\'eatoire, lancer la pi\`ece de monnaie et
-lancer le d\'e sont deux \'ev\'enements ind\'ependants.  Il faut
-donc multiplier la probabilit\'e de chacun de ces \'ev\'enements.
-Or, la probabilit\'e d'obtenir \og face\fg\ lors du lancer de la
-pi\`ece est $\frac{1}{2}$, alors que la probabilit\'e d'obtenir
-\og1\fg\ avec
-le d\'e est $\frac{1}{6}$.\\[2mm]
-Comme $\frac{1}{2}\times \frac{1}{6}=\frac{1}{12}$, la r\'eponse est a).\\
+In this random experiment, tossing the coin and rolling the dice are two independent events. The probability of each of these events must be multiplied. The probability to get\og tail\fg\ on a coin's toss is $\frac{1}{2}$ and the probability to get \og1\fg\ on a dice's roll is $\frac{1}{6}$.\\[2mm]
+Since $\frac{1}{2}\times \frac{1}{6}=\frac{1}{12}$, the answer is a).\\
 
-345-- Le hamster femelle de Pinocchio a eu quatre b\'eb\'es.  Quelle est la
-probabilit\'e que tous les b\'eb\'es hamsters soient des femelles?\\
+345-- Pinocchio's female hamster has four offsprings. What is the probability that all the offsprings are also female?\\
+
 a) $\frac{1}{32}$\\[2mm]
 b) $\frac{1}{16}$\\[2mm]
 c) $\frac{1}{8}$\\[2mm]
@@ -1474,14 +1426,12 @@ d) $\frac{1}{2}$\\
 R\'eponse : b)\\
 
 R\'etroaction : \\
-Pour chacun des b\'eb\'es hamsters, il y a une chance sur deux qu'il soit
-une femelle, ind\'ependamment du sexe de ses fr\`eres et soeurs.  En
-multipliant les probabilit\'es des quatre \'ev\'enements, on obtient\\[2mm]
+Each new born hamster has one chance out of 2 to be a female, independently of the sex of its siblings. By multiplying the probability of the four events, we get:\\[2mm]
 $\frac{1}{2}\times\frac{1}{2}\times\frac{1}{2}\times\frac{1}{2}=\frac{1}{16}$\\[2mm]
-La r\'eponse est donc b).\\
+Therefore, the answer is b).\\
 
-346-- La probabilit\'e qu'un r\'esultat se produise est $p$.  Quelle est la
-probabilit\'e que ce r\'esultat ne se produise pas?\\
+346-- The probability that a particular event happens is $p$. What is the probability that this event does not happen?\\
+
 a) $2p$\\
 b) $p$\\
 c) $1-p$\\
@@ -1490,13 +1440,11 @@ d) $-p$\\
 R\'eponse : c)\\
 
 R\'etroaction : \\
-La somme des probabilit\'es que le r\'esultat se produise et qu'il ne se
-produise pas est 1. \\
-On a donc P(produise) + P(produise pas) = 1\\
-1 -- P(produise) = P(produise pas) \\
-$1 - p$ = P(produise pas)\\
-Ainsi, la probabilit\'e que le r\'esultat ne se produise pas est $1-p$.  La
-r\'eponse est c).\\
+The sum of the probabilities that the event happens and does not happen is 1.\\
+Thus, we have P(happens) + P(does not happen) = 1\\
+1 -- P(happens) = P(does not happen) \\
+$1 - p$ = P(does not happen)\\
+Thus, the probability that the event does not happen is $1-p$. The answer is c).\\
 
 347-- Dans une exp\'erience al\'eatoire \`a trois \'etapes, P(F) =
 $\frac{1}{a}$, P(3) = $\frac{1}{b}$ et P($\alpha$) = $\frac{1}{c}$.  Quelle
