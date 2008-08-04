@@ -302,8 +302,15 @@ public class Salle
 	    // cette salle pendant la création de la table
 	    synchronized (lstTables)
 	    {
+	    		////////////
+	    	// ATTENTION TODO 
+	    	// changer cette ligne pour modifier le but du jeu (la variable butDuJeu)
+	    		////////////
+	    	
 	    	// Créer une nouvelle table en passant les paramètres appropriés
-	    	Table objTable = new Table( objGestionnaireBD, this, genererNoTable(), joueur.obtenirNomUtilisateur(), tempsPartie, objRegles, gestionnaireTemps, tacheSynchroniser, objControleurJeu, "winTheGameWithScore");
+	    
+	    	Table objTable = new Table( objGestionnaireBD, this, genererNoTable(), joueur.obtenirNomUtilisateur(), tempsPartie, objRegles, gestionnaireTemps, tacheSynchroniser, objControleurJeu, "original");
+	    	//Table objTable = new Table( objGestionnaireBD, this, genererNoTable(), joueur.obtenirNomUtilisateur(), tempsPartie, objRegles, gestionnaireTemps, tacheSynchroniser, objControleurJeu, "winTheGameWithScore");
 	    	objTable.creation();
 	    	// Ajouter la table dans la liste des tables
 	    	lstTables.put(new Integer(objTable.obtenirNoTable()), objTable);
