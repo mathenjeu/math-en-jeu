@@ -38,5 +38,7 @@
 	psi = "psi"
 	omega = "oméga"
 
+	finVictoire = "Félicitations! Vous êtes passé à travers l'alphabet grec en moins de 60 secondes. Vous vous méritez 100 points!"
+
 >
 </Texte> 
