@@ -39,6 +39,8 @@
 	omega = "oméga"
 
 	finVictoire = "Félicitations! Vous êtes passé à travers l'alphabet grec en moins de 60 secondes. Vous vous méritez 100 points!"
+	finTemps = "Le temps est écoulé! Vous avez accumulé "
+	quitter = "Quitter"
 
 >
 </Texte> 
