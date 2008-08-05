@@ -2,7 +2,7 @@
 <Texte 
 	
 	titre = "Jeu de mémoire"
-	instructions = "Pour gagner des points dans ce jeu, vous devez identifier les paires de cartes. Faites vite!"
+	instructions = "Pour gagner des points dans ce jeu, vous devez associer les symboles grecs à leurs noms français. Faites vite, vous n'avez que 60 secondes!"
 	jouer = "Jouer!"	
 
  	pointage = "Pointage : "
