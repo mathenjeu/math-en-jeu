@@ -3,7 +3,7 @@
 	
 	titre = "Jeu de mémoire"
 	instructions = "Pour gagner des points dans ce jeu, vous devez identifier les paires de cartes. Faites vite!"
-	commencer = "Commencer"	
+	jouer = "Jouer!"	
 
  	pointage = "Pointage : "
 	niveau = "Niveau : "
