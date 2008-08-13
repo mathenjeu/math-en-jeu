@@ -40,7 +40,8 @@ public class Question
 	 * @param String reponse : La réponse à la question
 	 * @param String urlExplication : Le URL de l'explication de la réponse
 	 */
-	public Question(int codeQuestion, String typeQuestion, int difficulte, String urlQuestion, String reponse, String urlExplication)
+	//public Question(int codeQuestion, String typeQuestion, int difficulte, String urlQuestion, String reponse, String urlExplication)
+	public Question(int codeQuestion, String typeQuestion, int difficulte, String urlQuestion, String reponse, String urlExplication, int categorie)
 	{
 		// Définir les propriétés des questions
 		intCodeQuestion = codeQuestion;
@@ -49,7 +50,10 @@ public class Question
 		strURLQuestion = urlQuestion;
 		strReponse = reponse;
 		strURLExplication = urlExplication;
-		intCategorie = 1;
+		// ajout acouet
+		// tient en compte les categories de questions de la BD
+		//intCategorie = 1;
+		intCategorie = categorie;
 	}
 	
 	/**
