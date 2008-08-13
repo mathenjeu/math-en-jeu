@@ -443,7 +443,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				// un ÈvÈnement qui indique que la partie est commencÈe
 				if (lstJoueursEnAttente.size() == intNbJoueurDemande)
 				{
-					laPartieCommence("Aucun");			
+					// modif acouet
+					laPartieCommence("Aucun", joueur);			
 				}
 	    	}
 		}
@@ -493,7 +494,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				// un ÈvÈnement qui indique que la partie est commencÈe
 				if (lstJoueursEnAttente.size() == intNbJoueurDemande)
 				{
-					laPartieCommence(strParamJoueurVirtuel);			
+					// modif acouet
+					laPartieCommence(strParamJoueurVirtuel, joueur);			
 				}
 	    	}
 	    }
@@ -552,7 +554,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
        return tRetour;
 	}
 	
-	private void laPartieCommence(String strParamJoueurVirtuel)
+	// modif acouet : nécessaire d'avoir le joueurHumain pour la fonction
+	// 				qui génère le plateau. Elle a besoin des champs de
+	//				catégories désirées
+	private void laPartieCommence(String strParamJoueurVirtuel, JoueurHumain joueur)
 	{
         // CrÈer une nouvelle liste qui va garder les points des 
 		// cases libres (n'ayant pas d'objets dessus)
@@ -588,7 +593,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// GÈnÈrer le plateau de jeu selon les rËgles de la table et 
 		// garder le plateau en mÈmoire dans la table
-		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, butDuJeu);
+		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, butDuJeu, joueur);
 
                 // DÈfinir le prochain id pour les objets
                 objProchainIdObjet.intValue++;
