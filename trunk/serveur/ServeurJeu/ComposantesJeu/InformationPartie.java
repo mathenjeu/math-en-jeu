@@ -118,7 +118,7 @@ public class InformationPartie
 	    lstObjetsUtilisablesRamasses = new TreeMap();
 
             objBoiteQuestions = new BoiteQuestions(joueur.obtenirProtocoleJoueur().langue, joueur.obtenirSalleCourante().obtenirNoeudLangue(), joueur.obtenirSalleCourante().obtenirNomSalle());
-            objGestionnaireBD.remplirBoiteQuestions(objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());
+            objGestionnaireBD.remplirBoiteQuestions(objBoiteQuestions, objJoueurHumain.obtenirCleNiveau(), joueur);
 	}
 
 	/**
@@ -394,8 +394,9 @@ public class InformationPartie
 		// à poser, la difficulté et la question à retourner
 		int intCategorieQuestion = objTable.obtenirPlateauJeuCourant()[nouvellePosition.x][nouvellePosition.y].obtenirTypeCase();
 		int intDifficulte = 0;
-                int grandeurDeplacement = 0;
-		Question objQuestionTrouvee = null;
+        int grandeurDeplacement = 0;
+
+        Question objQuestionTrouvee = null;
 		
                 // Si la position en x est différente de celle désirée, alors
                 // c'est qu'il y a eu un déplacement sur l'axe des x
@@ -443,7 +444,7 @@ public class InformationPartie
 		}
 		else if (intDifficulte > 0)
 		{
-			objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau(), intCategorieQuestion, intDifficulte);
+			objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau(), intCategorieQuestion, intDifficulte, objJoueurHumain);
 			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
 			
 			lstQuestionsRepondues.clear();
@@ -460,7 +461,7 @@ public class InformationPartie
 			else
 			{
 				// en théorie on ne devrait plus entrer dans ce else 
-				System.out.println( "Ça va mal : aucune question" );
+				System.out.println( "ca va mal : aucune question" );
 			}
 		}
 		
