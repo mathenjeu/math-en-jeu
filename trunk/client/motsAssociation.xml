@@ -54,7 +54,7 @@
  </unmot> 
  <unmot>
   <lemot>chiffre</lemot>
-  <description>un symbole utilisé pour écrire des nombres; dans notre systè me de numération à base de 10, il y a dix chiffres: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9.</description> 
+  <description>un symbole utilisé pour écrire des nombres; dans notre système de numération à base de 10, il y en a dix.</description> 
  </unmot> 
  <unmot>
   <lemot>circonférence</lemot>
@@ -110,7 +110,7 @@
  </unmot> 
  <unmot>
   <lemot>dodécaèdre</lemot>
-  <description>un polèdre à douze faces.</description>  
+  <description>un polyèdre à douze faces.</description>  
  </unmot> 
  <unmot>
   <lemot>dodécagone</lemot>
@@ -150,7 +150,8 @@
  </unmot> 
  <unmot>
   <lemot>hexaèdre</lemot>
-  <description>un polyèdre à six faces.</description>   </unmot> 
+  <description>un polyèdre à six faces.</description>   
+ </unmot> 
  <unmot>
   <lemot>hexagone</lemot>
   <description>un polygone ayant six côtés.</description>  
@@ -297,7 +298,7 @@
  </unmot>
  <unmot>
   <lemot>rotation</lemot>
-  <description>un déplacement dans lequel chaque point se déplace selon le même angle autour d'un point appelé centre de rotation; par exemple : le mouvement d'une roue de bicyclette.</description> 
+  <description>un déplacement dans lequel chaque point se déplace selon le même angle autour d'un point; par exemple : le mouvement d'une roue de bicyclette.</description> 
  </unmot> 
  <unmot>
   <lemot>segment de droite</lemot>
@@ -333,12 +334,8 @@
  </unmot> 
  <unmot>
   <lemot>symétrique</lemot>
-  <description>une figure à deux ou trois dimensions l'est si elle possèe un axe ou un plan de symétrie.</description>  
- </unmot> 
- <unmot>
-  <lemot>total</lemot>
-  <description>le résultat d'une addition.</description>  
- </unmot> 
+  <description>une figure à deux ou trois dimensions l'est si elle possède un axe ou un plan de symétrie.</description>  
+ </unmot>
  <unmot>
   <lemot>translation</lemot>
   <description>le déplacement en ligne droite d'un objet ou d'une figure; le mouvement d'ascenseur est un exemple.</description>  
