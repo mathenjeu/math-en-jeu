@@ -243,7 +243,7 @@
  <unmot>
   <lemot>experience</lemot>
   <description>épreuve, essai effectués pour étudier un phénomène.</description>
-  <hint>Indice à venir.</hint>
+  <hint>Des résultats en découlent.</hint>
  </unmot>
  <unmot>
   <lemot>exposant</lemot>
@@ -428,7 +428,7 @@
  <unmot>
   <lemot>numerique</lemot>
   <description>qui relève des nombres.</description>
-  <hint>Indice à venir.</hint>
+  <hint>Qui relève des nombres.</hint>
  </unmot>
  <unmot>
   <lemot>obtus</lemot>
@@ -628,7 +628,7 @@
  <unmot>
   <lemot>resultat</lemot>
   <description>ce qui résulte d'un calcul, d'une expérience.</description>
-  <hint>Indice à venir.</hint>
+  <hint>Ce qui découle d'une expérience.</hint>
  </unmot>
  <unmot>
   <lemot>rotation</lemot>
