@@ -4,11 +4,12 @@
 	
 	boutonJouer = "Débuter"
 	instruction = "I  N  S  T  R  U  C  T  I  O  N  S"
+	clue = "Indice : "
 	pointage = "Pointage"
 	boutonMotSuivant = "Mot suivant"
 	boutonTerminer = "Terminer"
 
-       indice = "Indice : "	
+
 
 >
 </Texte> 
