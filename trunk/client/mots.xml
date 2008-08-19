@@ -3,7 +3,7 @@
   <unmot>
     <lemot>addition</lemot>
     <description>Une des quatre oprations de base en arithmétique, on ajoute un nombre à un autre.</description>
-    <hint>Une des quatre opérations de base en arithmétique.</hint>
+    <hint>Une des opérations de base en arithmétique.</hint>
   </unmot>
   <unmot>
     <lemot>aire</lemot>
@@ -28,6 +28,7 @@
   <unmot>
     <lemot>angle obtus</lemot>
     <description>Un angle qui mesure plus de 90 degrés mais moins de 180 degrés.</description>
+    <hint>Type d'angle.</hint>
   </unmot>
   <unmot>
     <lemot>angle plat</lemot>
@@ -57,7 +58,7 @@
   <unmot>
     <lemot>carré</lemot>
     <description>Un quadrilatère dont les angles sont droits et les côtés congrus.</description>
-    <hint>Type de figure plane.</hint>
+    <hint>Type de polygone.</hint>
   </unmot>
   <unmot>
     <lemot>cercle</lemot>
@@ -117,22 +118,22 @@
   <unmot>
     <lemot>différence</lemot>
     <description>Le résultat d'une soustraction.</description>
-    <hint>Le résultat d'une des opérations arithmétiques de base.</hint>
+    <hint>Le résultat d'une des opérations de base en arithmétique.</hint>
   </unmot>
   <unmot>
     <lemot>dividende</lemot>
     <description>Le nombre à diviser dans une opération de division; dans l'opération 18 / 9 = 2, 18 est le dividende.</description>
-    <hint>Un élément d'une division.</hint>
+    <hint>Un des éléments d'une division.</hint>
   </unmot>
   <unmot>
     <lemot>diviseur</lemot>
     <description>Le second terme de la division; dans l'opération 18 / 9 = 2, 9 est le diviseur.</description>
-    <hint>Un élément d'une division.</hint>
+    <hint>Un des éléments d'une division.</hint>
   </unmot>
   <unmot>
     <lemot>division</lemot>
     <description>Une des quatre opérations de base en arithmétique, on cherche combien de fois un nombre est contenu dans un autre nombre ou on fait un partage.</description>
-    <hint>Une des quatre opérations de base en arithmétique.</hint>
+    <hint>Une des opérations de base en arithmétique.</hint>
   </unmot>
   <unmot>
     <lemot>dodécaèdre</lemot>
@@ -167,12 +168,12 @@
   <unmot>
     <lemot>facteur</lemot>
     <description>Les nombres entiers multipliés dans une multiplication sont des facteurs; dans l'équation 2 x 6 = 12, 2 et 6 sont des facteurs de 12.</description>
-    <hint>Les nombres entiers multipliés dans une multiplication sont des ...</hint>
+    <hint>Un des éléments d'une multiplication.</hint>
   </unmot>
   <unmot>
     <lemot>fraction</lemot>
     <description>Représente les parties d'un tout ou d'un ensemble, un rapport entre deux nombres entiers, ou une division.</description>
-    <hint>Représente les parties d'un tout ou d'un ensemble, un rapport entre deux nombres entiers, ou une division.</hint>
+    <hint>Peut représenter les parties d'un tout ou d'un ensemble.</hint>
   </unmot>
   <unmot>
     <lemot>graphique</lemot>
@@ -182,17 +183,17 @@
   <unmot>
     <lemot>heptagone</lemot>
     <description>Un polygone ayant sept côtés.</description>
-    <hint>Un type de polygone.</hint>
+    <hint>Type de polygone.</hint>
   </unmot>
   <unmot>
     <lemot>hexaèdre</lemot>
     <description>Un polyèdre à six faces.</description>
-    <hint>Un type de polyèdre.</hint>
+    <hint>Type de polyèdre.</hint>
   </unmot>
   <unmot>
     <lemot>hexagone</lemot>
     <description>Un polygone ayant six côtés.</description>
-    <hint>Un type de polygone.</hint>
+    <hint>Type de polygone.</hint>
   </unmot>
   <unmot>
     <lemot>infini</lemot>
@@ -207,7 +208,7 @@
   <unmot>
     <lemot>losange</lemot>
     <description>Un parallélogramme qui a quatre côtés congrus.</description>
-    <hint>Un type de figure plane.</hint>
+    <hint>Le carré en est un.</hint>
   </unmot>
   <unmot>
     <lemot>multiple</lemot>
@@ -227,7 +228,7 @@
   <unmot>
     <lemot>multiplication</lemot>
     <description>Une des quatre opérations de base en arithmétique, on trouve le produit de deux ou plusieurs termes; la multiplication est une addition r�p�t�e: 8 x 4, est la m�me chose que 8 + 8 + 8 + 8.</description>
-    <hint>Une des quatre opérations de base en arithmétique.</hint>
+    <hint>Une des opérations de base en arithmétique.</hint>
   </unmot>
   <unmot>
     <lemot>nombre</lemot>
@@ -242,42 +243,42 @@
   <unmot>
     <lemot>nombre impair</lemot>
     <description>Un nombre entier qui n'est pas un multiple de 2.</description>
-    <hint>Type de nombre.</hint>
+    <hint>5 en est un.</hint>
   </unmot>
   <unmot>
     <lemot>nombre irrationnel</lemot>
     <description>Un nombre qui ne peut s'écrire sous la forme d'un rapport de deux nombres entiers, tels que pi.</description>
-    <hint>Un nombre qui ne peut s'écrire sous la forme d'un rapport de deux nombres entiers.</hint>
+    <hint>La racine carrée de 3 en est un.</hint>
   </unmot>
   <unmot>
     <lemot>nombre pair</lemot>
     <description>Un nombre entier qui est un multiple de deux.</description>
-    <hint>Type de nombre.</hint>
+    <hint>8 en est un.</hint>
   </unmot>
   <unmot>
     <lemot>nombre premier</lemot>
     <description>Un nombre entier supérieur à 1, qui n'est divisible que par 1 et lui-même.</description>
-    <hint>Un nombre entier supérieur à 1, qui n'est divisible que par 1 et lui-même.</hint>
+    <hint>7 en est un; 9 n'en est pas un.</hint>
   </unmot>
   <unmot>
     <lemot>nombre rationnel</lemot>
     <description>Un nombre qui peut s'exprimer sous la forme d'un rapport entre deux nombres entiers (le deuxième nombre étant autre que zéro).</description>
-    <hint>Un nombre qui peut s'exprimer sous la forme d'un rapport entre deux nombres entiers (le deuxième nombre étant autre que zéro).</hint>
+    <hint>Chaque nombre fractionnaire en est un.</hint>
   </unmot>
   <unmot>
     <lemot>nombres entiers</lemot>
     <description>Ce sont les nombres naturels et leurs opposés: ...-3, -2, -1, 0, 1, 2, 3... .</description>
-    <hint>Ce sont les nombres naturels et leurs opposés.</hint>
+    <hint>4 en est un; -5 aussi.</hint>
   </unmot>
   <unmot>
     <lemot>nombres naturels</lemot>
     <description>Ce sont les nombres avec lesquels on compte: 0, 1, 2, 3... .</description>
-    <hint>Ce sont les nombres avec lesquels on compte.</hint>
+    <hint>4 en est un; -5 n'en est pas un.</hint>
   </unmot>
   <unmot>
     <lemot>numérateur</lemot>
     <description>Indique le nombre de parties en considération; dans la fraction 4/5, le numérateur est le nombre 4.</description>
-    <hint>Un des éléments d'une division.</hint>
+    <hint>Un élément d'une fraction.</hint>
   </unmot>
   <unmot>
     <lemot>octogone</lemot>
@@ -287,7 +288,7 @@
   <unmot>
     <lemot>paire</lemot>
     <description>Un ensemble qui contient deux éléments.</description>
-    <hint>Un ensemble qui contient deux éléments.</hint>
+    <hint>Un ensemble.</hint>
   </unmot>
   <unmot>
     <lemot>pentagone</lemot>
@@ -297,7 +298,7 @@
   <unmot>
     <lemot>périmètre</lemot>
     <description>La distance autour d'une figure fermée.</description>
-    <hint>Une des caractéristiques d'une figure à deux dimensions.</hint>
+    <hint>Une des caractéristiques d'une figure plane.</hint>
   </unmot>
   <unmot>
     <lemot>pictogramme</lemot>
@@ -312,12 +313,12 @@
   <unmot>
     <lemot>polyèdre</lemot>
     <description>Un solide limité par des polygones plats.</description>
-    <hint>Un solide limité par des polygones plats.</hint>
+    <hint>Type de figure à trois dimensions.</hint>
   </unmot>
   <unmot>
     <lemot>polygone</lemot>
     <description>Une surface plane fermée limitée par des segments de droite.</description>
-    <hint>Une surface plane fermée limitée par des segments de droite.</hint>
+    <hint>Type de figure plane.</hint>
   </unmot>
   <unmot>
     <lemot>prisme</lemot>
@@ -327,17 +328,17 @@
   <unmot>
     <lemot>probabilité</lemot>
     <description>Le rapport entre le nombre de cas favorables et le nombre de cas possibles d'une expérience dont le résultat est déterminé par le hasard; la probabilité d'obtenir le nombre quatre en lançant un dé est 1/6.</description>
-    <hint>Le rapport entre le nombre de cas favorables et le nombre de cas possibles d'une expérience dont le résultat est déterminé par la hasard.</hint>
+    <hint>Terme commun en statistique.</hint>
   </unmot>
   <unmot>
     <lemot>produit</lemot>
     <description>Le résultat d'une multiplication.</description>
-    <hint>Le résultat d'une multiplication.</hint>
+    <hint>Le résultat d'une des opérations de base en arithmétique.</hint>
   </unmot>
   <unmot>
     <lemot>pyramide</lemot>
     <description>Un polyèdre ayant comme base un polygone et comme côtés des triangles qui se réunissent à un sommet commun.</description>
-    <hint>Un type de polyèdre.</hint>
+    <hint>Type de polyèdre.</hint>
   </unmot>
   <unmot>
     <lemot>quadrant</lemot>
@@ -347,12 +348,12 @@
   <unmot>
     <lemot>quadrilatère</lemot>
     <description>Un polygone ayant quatre côtés.</description>
-    <hint>Un type de polygone.</hint>
+    <hint>Type de polygone.</hint>
   </unmot>
   <unmot>
     <lemot>quotient</lemot>
     <description>Le résultat d'une division.</description>
-    <hint>Le résultat d'une division.</hint>
+    <hint>Le résultat d'une des opérations de base en arithmétique.</hint>
   </unmot>
   <unmot>
     <lemot>rapporteur</lemot>
@@ -362,12 +363,12 @@
   <unmot>
     <lemot>rayon</lemot>
     <description>Le segment de droite qui joint le centre du cercle à un point quelconque situé sur la circonférence du cercle.</description>
-    <hint>Un des paramètres définissant un cercle.</hint>
+    <hint>Un des paramètres utilisé pour décrire un cercle.</hint>
   </unmot>
   <unmot>
     <lemot>réseau</lemot>
     <description>Une représentation graphique formée de points reliés entre eux par des lignes.</description>
-    <hint>Une représentation graphique formée de points reliés entre eux par des lignes.</hint>
+    <hint>Une représentation graphique.</hint>
   </unmot>
   <unmot>
     <lemot>reste</lemot>
@@ -382,12 +383,12 @@
   <unmot>
     <lemot>segment de droite</lemot>
     <description>Une partie de droite, limitée par deux points.</description>
-    <hint>Une partie de droite, limitée par deux points.</hint>
+    <hint>Une partie de droite.</hint>
   </unmot>
   <unmot>
     <lemot>semblable</lemot>
     <description>On dit que deux figures sont semblables si l'une est un agrandissement ou une réduction de l'autre.</description>
-    <hint>On dit que deux figures sont ... si l'une est un agrandissement ou une réduction de l'autre.</hint>
+    <hint>Deux figures congrues sont aussi ... .</hint>
   </unmot>
   <unmot>
     <lemot>solide</lemot>
@@ -397,7 +398,7 @@
   <unmot>
     <lemot>somme</lemot>
     <description>Le résultat d'une addition.</description>
-    <hint>Le résultat d'une addition.</hint>
+    <hint>Le résultat d'une des opérations de base en arithmétique.</hint>
   </unmot>
   <unmot>
     <lemot>sommet</lemot>
@@ -417,17 +418,17 @@
   <unmot>
     <lemot>sphère</lemot>
     <description>Une figure à trois dimensions dont l'ensemble de tous les points sont situés à distance égale du centre.</description>
-    <hint>Une type de figure à trois dimensions.</hint>
+    <hint>Type de figure à trois dimensions.</hint>
   </unmot>
   <unmot>
     <lemot>symétrique</lemot>
     <description>une figure à deux ou trois dimensions est dite symétrique si elle possède un axe ou un plan de symétrie.</description>
-    <hint>Se dit de choses semblables et opposées l'une par rapport à l'autre..</hint>
+    <hint>Se dit de choses semblables et opposées l'une par rapport à l'autre.</hint>
   </unmot>
   <unmot>
     <lemot>total</lemot>
     <description>Le résultat d'une addition.</description>
-    <hint>Le résultat d'une addition.</hint>
+    <hint>Le résultat d'une des opérations de base en arithmétique.</hint>
   </unmot>
   <unmot>
     <lemot>translation</lemot>
@@ -442,7 +443,7 @@
   <unmot>
     <lemot>triangle</lemot>
     <description>Un polygone à trois côtés.</description>
-    <description>Type de polygone.</description>
+    <hint>Type de polygone.</hint>
   </unmot>
   <unmot>
     <lemot>volume</lemot>
