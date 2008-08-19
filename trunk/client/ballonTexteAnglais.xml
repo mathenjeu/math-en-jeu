@@ -8,7 +8,7 @@
 	boutonMotSuivant = "Next word"
 	boutonTerminer = "Quit"
 
-	indice = "Hint : "
+	indiceTexte = "Hint : "
 
 >
 </Texte> 
