@@ -1,0 +1,8 @@
+<?php echo $this->render('header.phtml'); ?>
+<div id="content">
+  <?php echo $this->escape($this->message); ?>
+    <br/>
+  <a href="<?php echo $this->baseUrl ?>/question/">Return to the questions list</a>
+</div> 
+<?php echo $this->render('image/_menu.phtml'); ?>
+<?php echo $this->render('footer.phtml'); ?>

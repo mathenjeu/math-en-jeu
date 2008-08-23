@@ -1,0 +1,8 @@
+<?php echo $this->render('header.phtml'); ?>
+<a href="<?php echo $this->baseUrl ?>/mailer">Return</a>
+  <div id="content">
+    <h1><?php echo $this->escape($this->title); ?></h1>
+    <?php echo $this->render('mailer/_form.phtml'); ?>
+  </div>
+<?php echo $this->render('mailer/_menu.phtml'); ?>
+<?php echo $this->render('footer.phtml'); ?>
