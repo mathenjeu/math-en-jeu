@@ -23,6 +23,7 @@ San Francisco, CA 94107, USA.
 /******************************************************************************
 Classe pour le jeu Anagram (version1)
 
+27-08-2008 Hugo Drouin-Vaillanourt - Ajout de Hint
 02-07-2007 Alexandre Couët - Version initiale
 ******************************************************************************/
 class Anagram
@@ -63,10 +64,12 @@ class Anagram
 		{  
 			var subnodes = nodes[i].childNodes;
 			this.mots[i] = new Array(3);
-			this.mots[i][0] = subnodes[0].firstChild.nodeValue.toString().toUpperCase();
-			this.mots[i][1] = this.calculerValeurMot(this.mots[i][0]);
-			this.mots[i][2] = subnodes[1].firstChild.nodeValue.toString();
-        }
+			this.mots[i][0] = subnodes[0].firstChild.nodeValue.toString().toUpperCase();   //mot
+			this.mots[i][1] = this.calculerValeurMot(this.mots[i][0]);    //valeur
+			this.mots[i][2] = subnodes[1].firstChild.nodeValue.toString();   // description
+			this.mots[i][3] = subnodes[2].firstChild.nodeValue.toString();  //hint
+        	trace(this.mots[i][3]);
+		}
 	}
 
 	
@@ -270,6 +273,10 @@ class Anagram
 	public function retDescription()
 	{
 		return this.mots[this.noMot][2];
+	}
+	public function retHint()
+	{
+		return this.mots[this.noMot][3];
 	}
 	public function retMotEnCours()
 	{
