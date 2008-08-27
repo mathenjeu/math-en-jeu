@@ -22,6 +22,8 @@ San Francisco, CA 94107, USA.
 
 /******************************************************************************
 Classe pour le jeu du pendu (version2)
+16-02-2008 Hugo Drouin-Vaillancourt Ajout de "Hint", i.e. d'indices (ne pas confondre avec 
+          les 2-3 lettres qui sont fournies au départ)																	 
 16-08-2006 Maxime Bégin - Ajout du paramêtre de nombre d'essaie max dans le
 	constructeur
 15-08-2006 Maxime Bégin - optimisation ,clean-up et ajout de commentaire
@@ -379,7 +381,6 @@ class pendu
 	{
 		return this.mots[this.noMot][3];
 	}
-	
 	public function retMotEnCours()
 	{
 		return this.motEnCours;
