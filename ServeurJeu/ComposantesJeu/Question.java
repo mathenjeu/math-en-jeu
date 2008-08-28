@@ -18,6 +18,12 @@ public class Question
 	
 	// Déclaration d'une variable qui va garder la difficulté de la question
 	private int intDifficulte;
+
+	// Déclaration d'une variable qui va garder le sujet de la question
+	private int intSujet;
+	
+	// Déclaration d'une variable qui va garder la categorie de la question
+	private int intCategorie;
 	
 	// Déclaration d'une variable qui va contenir la réponse à la question
 	private String strReponse;
@@ -25,9 +31,6 @@ public class Question
 	// Déclaration d'une variable qui va contenir l'url de l'explication de 
 	// la réponse
 	private String strURLExplication;
-	
-    // Déclaration d'une variable qui va contenir la catégorie de la question
-	private int intCategorie;
 	
 	/**
 	 * Constructeur de la classe Question qui initialise les propriétés de 
@@ -41,7 +44,7 @@ public class Question
 	 * @param String urlExplication : Le URL de l'explication de la réponse
 	 */
 	//public Question(int codeQuestion, String typeQuestion, int difficulte, String urlQuestion, String reponse, String urlExplication)
-	public Question(int codeQuestion, String typeQuestion, int difficulte, String urlQuestion, String reponse, String urlExplication, int categorie)
+	public Question(int codeQuestion, String typeQuestion, int difficulte, String urlQuestion, String reponse, String urlExplication, int sujet, int categorie)
 	{
 		// Définir les propriétés des questions
 		intCodeQuestion = codeQuestion;
@@ -53,6 +56,7 @@ public class Question
 		// ajout acouet
 		// tient en compte les categories de questions de la BD
 		//intCategorie = 1;
+		intSujet = sujet;
 		intCategorie = categorie;
 	}
 	
@@ -176,6 +180,16 @@ public class Question
 	public void definirCategorie( int categorie ) 
 	{
 		intCategorie = categorie;
+	}
+	
+	public int obtenirSujet() 
+	{
+		return intSujet;
+	}
+
+	public void definirSujet( int sujet ) 
+	{
+		intSujet = sujet;
 	}
 
 }

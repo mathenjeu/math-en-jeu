@@ -35,14 +35,19 @@ public class BoiteQuestions
                 this.langue = new Langue(langue, noeudLangue, nomSalle);
 	}
 	
+	/**
+	 *  This method adds a question to the question box
+	 * 
+	 * @param Question question : la question à ajouter
+	 */
 	public void ajouterQuestion( Question question )
 	{
 		//int intCategorieQuestion = 1;
 		// ajout acouet - tient en compte la categorie de la question
 		int intCategorieQuestion = question.obtenirCategorie();
-		
+		int intSujetQuestion = question.obtenirSujet();
 		int difficulte = question.obtenirDifficulte();
-		
+	
 		TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );
 		if( difficultes == null )
 		{
@@ -60,6 +65,15 @@ public class BoiteQuestions
 		questions.add( question );
 	}
 	
+    /**
+     * Cette fonction permet de sélectionner une question dans la
+     * boite de questions selon sa catégorie et son niveau de
+     * difficulté
+     *
+     * @param int intDifficulte : la difficulte de la question
+     * @param int intCategorieQuestion : la categorie de la question
+     * @return Question : La question pigée
+     */
 	public Question pigerQuestion( int intCategorieQuestion, int intDifficulte )
 	{
 		int intPointageQuestion = intDifficulte;
@@ -76,7 +90,8 @@ public class BoiteQuestions
 			int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
 			question = (Question)questions.elementAt( intRandom );
 			questions.remove( intRandom );
-                        question.definirDifficulte(intPointageQuestion);
+                        
+			question.definirDifficulte(intPointageQuestion);
 		}
 		else
 		{
@@ -88,6 +103,16 @@ public class BoiteQuestions
 		return question;
 	}
 	
+
+	/**
+	 * Cette fonction permet de determiner si la boite a question
+	 * est vide pour une certaine difficulte et catégorie
+	 * -----  Ne semble pas être appelée pour l'instant  -----
+	 *
+	 * @param int intDifficulte : la difficulte de la question
+	 * @param int intCategorieQuestion : la categorie de la question
+	 * @return boolean : si la boite est vide ou non
+	 */
 	public boolean estVide( int intCategorieQuestion, int intDifficulte )
 	{
 		boolean ret = true;
@@ -104,7 +129,16 @@ public class BoiteQuestions
 		
 		return ret;
 	}
-	
+
+
+	/**
+	 * Cette fonction permet de retourner toutes les questions 
+	 * correspondant aux paramètres (difficulte, categorie)
+	 *
+	 * @param int intDifficulte : la difficulte de la question
+	 * @param int intCategorieQuestion : la categorie de la question
+	 * @return Vector<Question> : un vecteur contenant les questions sélectionnées
+	 */
 	private Vector<Question> obtenirQuestions( int intCategorieQuestion, int intDifficulte )
 	{
 		Vector<Question> questions = null;
@@ -115,9 +149,15 @@ public class BoiteQuestions
 		}
 		return questions;
 	}
-        
-        public Langue obtenirLangue()
-        {
-            return langue;
-        }
+     
+
+	/**
+	 * Cette fonction retourne la langue
+	 *
+	 * @return Langue : la langue
+	 */
+    public Langue obtenirLangue()
+    {
+        return langue;
+    }
 }

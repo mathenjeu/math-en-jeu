@@ -38,15 +38,23 @@ public class JoueurHumain extends Joueur
 	
 	private String cleNiveau;
 	
-	// Cette variable définit les catégories désirées par le joueur
-	private Vector cleCategorie;
+	// Cette variable définit les sujets désirés par le joueur
+	private Vector lstNiveauSujet;
 	
-	// Cette variable définit les sous-catégories désirées par le joueur
-	private Vector cleSousCategorie;
+	// Cette variable définit les catégories désirées par le joueur
+	private Vector lstNiveauCategorie;
 	
 	// Cette variable indique si le mode avance est choisi
 	// Il s'agit du mode dans lequel on indique en detail les choix de niveaux
-	private boolean bolModeAvance;
+	private int bolModeAvance;
+	
+	// constantes servant au choix de mode par l'utilisateur
+	public static final int MODE_AVANCE = 1;
+	public static final int MODE_NORMAL = 0;
+	
+	// constantes definies pour declarer les vecteurs NiveauxSujets et NiveauxCategories
+	public static final int TAILLE_LISTE_SUJET = 8;
+	public static final int TAILLE_LISTE_CATEGORIE = 91;
 	
 	// DÈclaration d'une rÈfÈrence vers la salle dans laquelle le joueur se 
 	// trouve (null si le joueur n'est dans aucune salle)
@@ -88,10 +96,10 @@ public class JoueurHumain extends Joueur
 		strNomFamille = "";
 		bolPeutCreerSalle = false;
 		
-		// TODO
-		// lorsque le client sera mis a jour, on devra utiliser cette variable
-		bolModeAvance = false;
+		bolModeAvance = MODE_NORMAL;
 		
+		lstNiveauSujet = new Vector(TAILLE_LISTE_SUJET);
+		lstNiveauCategorie = new Vector(TAILLE_LISTE_CATEGORIE);
 		
 		// Au dÈbut, le joueur n'est dans aucune salle ni table
 		objSalleCourante = null;
@@ -280,32 +288,68 @@ public class JoueurHumain extends Joueur
 		this.cleNiveau = cleNiveau;
 	}
 
-	public Vector obtenirCleCategorie() 
+	/**
+	 * Cette methode permet de retourner la liste des niveaux académiques
+	 * du joueur pour chaque sujet contenu dans la base de donneés
+	 * 
+	 * @return Vector : La liste des niveaux pour chaque sujet
+	 */
+	public Vector obtenirListeNiveauSujets() 
 	{
-		return cleCategorie;
+		return lstNiveauSujet;
 	}
 
-	public void definirCleCategorie(Vector cleCategorie) 
+	/**
+	 * Cette methode permet de definir la liste des niveaux académiques
+	 * du joueur pour chaque sujet contenu dans la base de donneés
+	 * 
+	 * @param Vector lstNiveauSujet : La liste des niveaux pour chaque sujet
+	 */
+	public void definirListeNiveauSujets(Vector lstNiveauSujet) 
 	{
-		this.cleCategorie = cleCategorie;
-	}
-
-	public Vector obtenirCleSousCategorie() 
-	{
-		return cleSousCategorie;
-	}
-
-	public void definirCleSousCategorie(Vector cleSousCategorie) 
-	{
-		this.cleSousCategorie = cleSousCategorie;
+		this.lstNiveauSujet = lstNiveauSujet;
 	}
 	
-	public boolean obtenirModeAvance() 
+	/**
+	 * Cette methode permet de retourner la liste des niveaux académiques
+	 * du joueur pour chaque catégorie contenue dans la base de donneés
+	 * 
+	 * @return Vector : La liste des niveaux pour chaque catégorie
+	 */
+	public Vector obtenirListeNiveauCategorie() 
+	{
+		return lstNiveauCategorie;
+	}
+
+	/**
+	 * Cette methode permet de definir la liste des niveaux académiques
+	 * du joueur pour chaque catégorie contenue dans la base de donneés
+	 * 
+	 * @param Vector lstNiveauCategorie : La liste des niveaux pour chaque catégorie
+	 */
+	public void definirListeNiveauCategorie(Vector lstNiveauCategorie) 
+	{
+		this.lstNiveauCategorie = lstNiveauCategorie;
+	}
+
+	/**
+	 * Cette fonction permet de retourner le mode de jeu pour les choix de 
+	 * questions durant la partie
+	 * 
+	 * @return boolean : le mode de jeu
+	 */
+	public int obtenirModeAvance() 
 	{
 		return bolModeAvance;
 	}
 
-	public void definirModeAvance(boolean modeAvance) 
+	/**
+	 * Cette mÈthode permet de définir si on est en mode avancé
+	 * (influence dans le choix des questions reçues)
+	 * 
+	 * @param boolean modeAvance : la valeur du mode choisi
+	 */
+	public void definirModeAvance(int modeAvance) 
 	{
 		this.bolModeAvance = modeAvance;
 	}
