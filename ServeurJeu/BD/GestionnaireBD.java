@@ -5,19 +5,18 @@ import java.sql.*;
 import org.apache.log4j.Logger;
 
 import ServeurJeu.ComposantesJeu.BoiteQuestions;
-import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import java.util.Date;
-import java.util.StringTokenizer;
 import java.text.SimpleDateFormat; 
 import ServeurJeu.Configuration.GestionnaireMessages;
 import java.util.Vector;
 
 /**
  * @author Jean-FranÁois Brind'Amour
+ * @author Alexandre Couët - modifications été 2008
  */
 public class GestionnaireBD 
 {
@@ -33,7 +32,35 @@ public class GestionnaireBD
 	static private Logger objLogger = Logger.getLogger( GestionnaireBD.class );
 	
 	private static final String strValeurGroupeAge = "valeurGroupeAge";
-
+	private static final String strSubjectLevel = "subject_level";
+	private static final String strCategoryLevel = "category_level";
+	
+	// les indices de toutes les categories pour faciliter 
+	// les requetes dans la base de données tout en ayant
+	// une structure de sa structure
+	// TODO - ajuster les indices
+	
+	private static final int IND_SUJ_INI = 1;	// mode normal - seulement les sujets
+	private static final int IND_SUJ_FIN = 8;
+	private static final int IND_ALG_INI = 11;	// algèbre
+	private static final int IND_ALG_FIN = 14;
+	private static final int IND_ARI_INI = 21;	// arithmétique
+	private static final int IND_ARI_FIN = 26;
+	private static final int IND_LOG_INI = 31;	// énigmes de logique
+	private static final int IND_LOG_FIN = 31;
+	private static final int IND_GEO_INI = 41;	// géométrie
+	private static final int IND_GEO_FIN = 44;
+	private static final int IND_FCT_INI = 51;	// fonctions
+	private static final int IND_FCT_FIN = 58;
+	private static final int IND_PRO_INI = 61;	// probabilités
+	private static final int IND_PRO_FIN = 65;
+	private static final int IND_STT_INI = 71;	// statistiques
+	private static final int IND_STT_FIN = 76;
+	private static final int IND_HST_INI = 81;	// histoire
+	private static final int IND_HST_FIN = 86;
+	private static final int IND_ACC_INI = 91;	// accromath
+	private static final int IND_ACC_FIN = 91;
+	
 	/**
 	 * Constructeur de la classe GestionnaireBD qui permet de garder la 
 	 * rÈfÈrence vers le contrÙleur de jeu
@@ -141,7 +168,7 @@ public class GestionnaireBD
 				}
 				synchronized( requete )
 				{
-					ResultSet rs = requete.executeQuery("SELECT * FROM joueur WHERE alias = '" + nomUtilisateur + "' AND motDePasse = '" + motDePasse + "';");
+					ResultSet rs = requete.executeQuery("SELECT * FROM user WHERE username = '" + nomUtilisateur + "' AND password = '" + motDePasse + "';");
 					return rs.next();
 				}
 			}
@@ -182,44 +209,71 @@ public class GestionnaireBD
 			synchronized( requete )
 			{
 				// modif acouet
-				ResultSet rs = requete.executeQuery("SELECT cleJoueur, cleCatQuestionChoix, cleSousCategorieQuestion, prenom, nom, cleNiveau, peutCreerSalles FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+				ResultSet rs = requete.executeQuery("SELECT user.* FROM user WHERE username = '" + joueur.obtenirNomUtilisateur() + "';"); /*enlever cleNiveau peutCreerSalles cleCatQuestionChoix cleSousCategorieQuestion*/
 				if (rs.next())
 				{
-					if (rs.getInt("peutCreerSalles") != 0)
-					{
-						joueur.definirPeutCreerSalles(true);
-					}
-					String prenom = rs.getString("prenom");
-					String nom = rs.getString("nom");
-					int cle = Integer.parseInt(rs.getString("cleJoueur"));
-					String cleNiveau = rs.getString( "cleNiveau" );
+					String prenom = rs.getString("name");
+					String nom = rs.getString("last_name");
+					int cle = Integer.parseInt(rs.getString("user_id"));
+				
 					joueur.definirPrenom(prenom);
 					joueur.definirNomFamille(nom);
 					joueur.definirCleJoueur(cle);
-					joueur.definirCleNiveau( cleNiveau );
 					
-					// modif acouet
-					Vector lstCat = new Vector() ;
+					int i=1;
 					
-					StringTokenizer st = new StringTokenizer(rs.getString("cleCatQuestionChoix"), ",");
-				    while (st.hasMoreTokens()) 
-				    {
-				    	lstCat.add(Integer.parseInt(st.nextToken()));
-				    }
-
-				    joueur.definirCleCategorie(lstCat);
-				    
-				    
-					// modif acouet pour les sous-catégories
-					//Vector lstSousCat = new Vector() ;
+					// requête pour le niveau du joueur à chaque SUBJECT
+					String strRequeteSQL = "SELECT " + strSubjectLevel + i;
+					for(i = 2; i <= 8; i++)
+					{
+						strRequeteSQL += ", " + strSubjectLevel + i;
+					}
 					
-					// Le serveur obtient toutes les sous-catégories désirées par le joueur et les range dans un vector
-					//StringTokenizer st1 = new StringTokenizer(rs.getString("cleSousCategorieQuestion"), ",");
-				    //while (st1.hasMoreTokens()) 
-				    //{
-				    //	lstSousCat.add(Integer.parseInt(st1.nextToken()));
-				    //}
-				    //joueur.definirCleSousCategorie(lstSousCat);	
+					// dans la base de données, les indices des categories ne sont pas
+					// continues. On fait alors plusieurs appels en utilisant les
+					// indices appropriés. C'est plus simple en general dans la BD
+					// puisque les sujets sont clairement distingables.
+					strRequeteSQL += obtenirNiveauxCategoriesBD(IND_ALG_INI, IND_ALG_FIN);
+					strRequeteSQL += obtenirNiveauxCategoriesBD(IND_ARI_INI, IND_ARI_FIN);
+					strRequeteSQL += obtenirNiveauxCategoriesBD(IND_LOG_INI, IND_LOG_FIN);
+					strRequeteSQL += obtenirNiveauxCategoriesBD(IND_GEO_INI, IND_GEO_FIN);
+					strRequeteSQL += obtenirNiveauxCategoriesBD(IND_FCT_INI, IND_FCT_FIN);
+					strRequeteSQL += obtenirNiveauxCategoriesBD(IND_PRO_INI, IND_PRO_FIN);
+					strRequeteSQL += obtenirNiveauxCategoriesBD(IND_STT_INI, IND_STT_FIN);
+					strRequeteSQL += obtenirNiveauxCategoriesBD(IND_HST_INI, IND_HST_FIN);
+					strRequeteSQL += obtenirNiveauxCategoriesBD(IND_ACC_INI, IND_ACC_FIN);
+					
+					strRequeteSQL += " FROM user WHERE username = '" + joueur.obtenirNomUtilisateur() + "';";
+					
+					Vector<Integer> lstNiveauSujet = new Vector<Integer>();
+					Vector<Integer> lstNiveauCategorie = new Vector<Integer>();
+					
+					//System.out.println(strRequeteSQL);
+					
+					// exécuter la requête et garder les niveaux en mémoire
+					ResultSet rs2 = requete.executeQuery( strRequeteSQL );
+					if (rs2.next())
+					{
+						
+						for(i = 1; i <=8; i++)
+						{
+							lstNiveauSujet.add(Integer.parseInt(rs2.getString(strSubjectLevel+i)));
+						}
+						
+						definirNiveauxCategoriesBD(lstNiveauCategorie, rs2, IND_ALG_INI, IND_ALG_FIN);
+						definirNiveauxCategoriesBD(lstNiveauCategorie, rs2, IND_ARI_INI, IND_ARI_FIN);
+						definirNiveauxCategoriesBD(lstNiveauCategorie, rs2, IND_LOG_INI, IND_LOG_FIN);
+						definirNiveauxCategoriesBD(lstNiveauCategorie, rs2, IND_GEO_INI, IND_GEO_FIN);
+						definirNiveauxCategoriesBD(lstNiveauCategorie, rs2, IND_FCT_INI, IND_FCT_FIN);
+						definirNiveauxCategoriesBD(lstNiveauCategorie, rs2, IND_PRO_INI, IND_PRO_FIN);
+						definirNiveauxCategoriesBD(lstNiveauCategorie, rs2, IND_STT_INI, IND_STT_FIN);
+						definirNiveauxCategoriesBD(lstNiveauCategorie, rs2, IND_HST_INI, IND_HST_FIN);
+						definirNiveauxCategoriesBD(lstNiveauCategorie, rs2, IND_ACC_INI, IND_ACC_FIN);
+						
+					}
+					
+					joueur.definirListeNiveauSujets(lstNiveauSujet);
+					joueur.definirListeNiveauCategorie(lstNiveauCategorie);
 				}
 			}
 		}
@@ -232,96 +286,214 @@ public class GestionnaireBD
 		    e.printStackTrace();			
 		}
 	}
-
 	
-        // This method fills a Question box with only the player's level
-	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, JoueurHumain joueur )
+	// Fonction utilitaire
+	private String obtenirNiveauxCategoriesBD(int indiceInferieur, int indiceSuperieur)
 	{
-		//System.out.println("ds gest BD");
-		//System.out.println(joueur.obtenirCleSousCategorie().toString());
-		
-		
-        String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
-		String strRequeteSQL = "SELECT " + nomTable + ".*,typereponse.nomType FROM " + nomTable +",typereponse " +
-			"WHERE typereponse.cleType = " + nomTable + ".typeReponse and " + nomTable + ".valide = 1 " +
-			"and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL and ";
-		
-
-        strRequeteSQL += "cleQuestion >= " + boiteQuestions.obtenirLangue().obtenirCleQuestionMin()
-                         + " and cleQuestion <= " + boiteQuestions.obtenirLangue().obtenirCleQuestionMax()
-                         + " and ";
-
-        strRequeteSQL += strValeurGroupeAge + niveau + " > 0";
-
-		remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
+		String strReqSQL = "";
+		// requête pour le niveau du joueur à chaque CATEGORY
+		for(int i = indiceInferieur; i <= indiceSuperieur; i++)
+		{
+			strReqSQL += ", " + strCategoryLevel + i;
+		}
+		return strReqSQL;
 	}
 	
-	// NOUVELLES REQUÊTES
-
-	// il faut traiter les catégories et sous-catégories dans remplirBoiteQuestions
-	// pour ne plus avoir à s'en occuper par la suite.
-
-	// aller chercher si le mode de choix de catégorie est Normal ou Avancé
-	// aller chercher les choix de sous-catégories selon le cas
+	// Fonction utilitaire
+	private void definirNiveauxCategoriesBD(Vector<Integer> lstNiveauCategorie, ResultSet rs, int indiceInferieur, int indiceSuperieur) throws SQLException
+	{
+		// garder les niveaux en mémoire
+		for(int i = indiceInferieur; i <= indiceSuperieur; i++)
+		{
+			lstNiveauCategorie.add(Integer.parseInt(rs.getString(strCategoryLevel+i)));
+		}
+	}
 	
+	// Fonction utilitaire de remplirBoiteQuestions
+	private void genererRequeteSQL(int intDifficulte, int modeAvance, BoiteQuestions boiteQuestions, JoueurHumain joueur, String nomTable, int indiceInferieur, int indiceSuperieur)
+	{
+		int i,j;
+		//System.out.println("JOUEUR MODE : " + joueur.obtenirModeAvance());
+		
+		if(modeAvance == 1)
+		{
+			// récupérer les niveaux académiques pour toutes les catégories
+			Vector lstNiveauCategorie = new Vector(92);
+
+			lstNiveauCategorie = joueur.obtenirListeNiveauCategorie();
+			// System.out.println("vecteur : " + lstNiveauCategorie.toString());
+			
+			for(i = indiceInferieur; i <= indiceSuperieur; i++)
+			{
+				// make sure the players asked for questions from this category
+				if(Integer.parseInt(lstNiveauCategorie.get(i).toString()) > 0 && Integer.parseInt(lstNiveauCategorie.get(i).toString()) < 16)
+				{
+					// c'est ici que l'on construit la requete pour la BD
+					// selon les differentes tables qu'elle contient.
+					j = i+1;
+					String strRequeteSQL =  "SELECT " + nomTable + ".*, answer_type_info.name, answer_type_info.answer_type_id, answer_type_info.language_id, question.question_id, question.answer_type_id " +
+						"FROM " + nomTable + ", answer_type_info, question, user " +
+						"WHERE answer_type_info.answer_type_id = question.answer_type_id and " +
+						nomTable + ".question_id = question.question_id and " +
+						nomTable + ".is_valid = 1 and " +
+						nomTable + ".question_id >= 1 and " +
+						nomTable + ".question_id <= 100 " +
+						"and user.username = " + "'" + joueur.obtenirNomUtilisateur() + "'" + " " +
+						"and answer_type_info.language_id = user.language_id " +
+						"and question_flash_file is not NULL and feedback_flash_file is not NULL " +
+						"and question_info.category_id = " + j + " ";
+						if(intDifficulte == -1)
+							strRequeteSQL += "and question_info.valueLevel" + lstNiveauCategorie.get(i)  + " > 0";
+						else
+							strRequeteSQL += "and question_info.valueLevel" + lstNiveauCategorie.get(i)  + " = " + intDifficulte;
+						
+						remplirBoiteQuestions( boiteQuestions, lstNiveauCategorie.get(i).toString(), strRequeteSQL );	
+				}
+				else
+				{
+					System.out.println("ds else - question demandée pour categorie : " + lstNiveauCategorie.get(i) + "indice : " + i);
+				}
+			}
+		}
+				
+		else if(modeAvance == 0)
+		{
+			// récupérer les niveaux académiques pour tous les sujets
+			Vector lstNiveauSujet = joueur.obtenirListeNiveauSujets();
+			
+			for(i = indiceInferieur; i < indiceSuperieur; i++)
+			{
+				j = i+1;
+				String strRequeteSQL =  "SELECT " + nomTable + ".*, answer_type_info.name, answer_type_info.answer_type_id, answer_type_info.language_id, question.question_id, question.answer_type_id " +
+					"FROM " + nomTable + ", answer_type_info, question, user " +
+					"WHERE answer_type_info.answer_type_id = question.answer_type_id and " +
+					nomTable + ".question_id = question.question_id and " +
+					nomTable + ".is_valid = 1 and " +
+					nomTable + ".question_id >= 1 and " +
+					nomTable + ".question_id <= 20 " +
+					"and user.username = " + "'" + joueur.obtenirNomUtilisateur() + "'" + " " +
+					"and answer_type_info.language_id = user.language_id " +
+					"and question_flash_file is not NULL and feedback_flash_file is not NULL " +
+					"and question_info.subject_id = " + j + " ";
+					if(intDifficulte == -1)
+						strRequeteSQL += "and question_info.valueLevel" + lstNiveauSujet.get(i)  + " > 0";
+					else
+						strRequeteSQL += "and question_info.valueLevel" + lstNiveauSujet.get(i)  + " = " + intDifficulte;
+			
+				remplirBoiteQuestions( boiteQuestions, lstNiveauSujet.get(i).toString(), strRequeteSQL );
+			}
+		}
+		else
+		{
+			System.out.println("ERREUR - mode inconnu");
+		}
+	}
+	
+	/**
+	 *  This method fills a Question box with only the player's level
+	 * 
+	 * @param BoiteQuestions boiteQuestions : La boîte à remplir de questions
+	 * @param JoueurHumain joueur : Le joueur duquel il faut trouver les
+	 * 								informations et les dÈfinir dans l'objet
+	 */
+	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, JoueurHumain joueur )
+	{
+		// pour savoir si on utilise le mode avancé ou non dans le remplissage
+		// de la boîte de questions
+		int modeAvance = joueur.obtenirModeAvance();
+		// modeAvance = getModeAvance();
+		
+		// cette valeur indique qu'on ne considère pas le niveau de difficulté 
+		// de la question dans notre requête
+		// sert pour éviter de d'ajouter du code inutilement
+		int DIFFICULTE_OFF = -1;
+		String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
+			
+		if(modeAvance == 0) // mode normal
+		{
+			genererRequeteSQL(DIFFICULTE_OFF, modeAvance, boiteQuestions, joueur, nomTable, IND_SUJ_INI-1, IND_SUJ_FIN-1);
+		}
+		else if(modeAvance == 1) // mode avance
+		{
+			genererRequeteSQL(DIFFICULTE_OFF, modeAvance, boiteQuestions, joueur, nomTable, IND_ALG_INI-1, IND_ALG_FIN-1);
+			genererRequeteSQL(DIFFICULTE_OFF, modeAvance, boiteQuestions, joueur, nomTable, IND_ARI_INI-1, IND_ARI_FIN-1);
+			genererRequeteSQL(DIFFICULTE_OFF, modeAvance, boiteQuestions, joueur, nomTable, IND_LOG_INI-1, IND_LOG_FIN-1);
+			genererRequeteSQL(DIFFICULTE_OFF, modeAvance, boiteQuestions, joueur, nomTable, IND_GEO_INI-1, IND_GEO_FIN-1);
+			genererRequeteSQL(DIFFICULTE_OFF, modeAvance, boiteQuestions, joueur, nomTable, IND_FCT_INI-1, IND_FCT_FIN-1);
+			genererRequeteSQL(DIFFICULTE_OFF, modeAvance, boiteQuestions, joueur, nomTable, IND_PRO_INI-1, IND_PRO_FIN-1);
+			genererRequeteSQL(DIFFICULTE_OFF, modeAvance, boiteQuestions, joueur, nomTable, IND_STT_INI-1, IND_STT_FIN-1);
+			genererRequeteSQL(DIFFICULTE_OFF, modeAvance, boiteQuestions, joueur, nomTable, IND_HST_INI-1, IND_HST_FIN-1);
+			genererRequeteSQL(DIFFICULTE_OFF, modeAvance, boiteQuestions, joueur, nomTable, IND_ACC_INI-1, IND_ACC_FIN-1);
+			
+			
+		}
+	}
+
 
     // This function fills a Question box with the player's level, a specified difficulty and a question category
-	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, int intCategorie, int intDifficulte, JoueurHumain joueur)
+	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, int intDifficulte, JoueurHumain joueur)
 	{
 
-		// ds remplirBoiteQuestion, on récupère ces valeurs  
-		//Vector lstSousCat = new Vector();
-		//lstSousCat = joueur.obtenirCleSousCategorie();
-	       
-		// Noter qu'on ne tient plus compte de la catÈgorie!!
-        String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
-            
-		String strRequeteSQL = "SELECT " + nomTable + ".*,typereponse.nomType FROM " + nomTable + ",typereponse " +
-			"WHERE typereponse.cleType = " + nomTable + ".typeReponse and " + nomTable + ".valide = 1 " +
-			"and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL ";
-	
-        strRequeteSQL += "and cleQuestion >= " +
-	    boiteQuestions.obtenirLangue().obtenirCleQuestionMin() + " and cleQuestion <= " +
-	    boiteQuestions.obtenirLangue().obtenirCleQuestionMax() + " and ";
-		    
-          //for(int i=0; i<lstSousCat.size(); i++)
-            //{
-            //	strRequeteSQL += "cleSousCategorie == " + lstSousCat.get(i) + " and ";
-            //}
-            //    strRequeteSQL += "(cleSousCategorie == 9 or " + "cleSousCategorie == 10) and ";
-                
-		strRequeteSQL += strValeurGroupeAge + niveau + " = " + intDifficulte;
-		remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
+		// pour savoir si on utilise le mode avancé ou non dans le remplissage
+		// de la boîte de questions
+		int modeAvance = joueur.obtenirModeAvance();
+		// modeAvance = getModeAvance();
+		
+		String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
+			
+		if(modeAvance == 0) // mode normal
+		{
+			genererRequeteSQL(intDifficulte, modeAvance, boiteQuestions, joueur, nomTable, IND_SUJ_INI-1, IND_SUJ_FIN-1);
+		}
+		else if(modeAvance == 1) // mode avance
+		{
+			genererRequeteSQL(intDifficulte, modeAvance, boiteQuestions, joueur, nomTable, IND_ALG_INI-1, IND_ALG_FIN-1);
+			genererRequeteSQL(intDifficulte, modeAvance, boiteQuestions, joueur, nomTable, IND_ARI_INI-1, IND_ARI_FIN-1);
+			genererRequeteSQL(intDifficulte, modeAvance, boiteQuestions, joueur, nomTable, IND_LOG_INI-1, IND_LOG_FIN-1);
+			genererRequeteSQL(intDifficulte, modeAvance, boiteQuestions, joueur, nomTable, IND_GEO_INI-1, IND_GEO_FIN-1);
+			genererRequeteSQL(intDifficulte, modeAvance, boiteQuestions, joueur, nomTable, IND_FCT_INI-1, IND_FCT_FIN-1);
+			genererRequeteSQL(intDifficulte, modeAvance, boiteQuestions, joueur, nomTable, IND_PRO_INI-1, IND_PRO_FIN-1);
+			genererRequeteSQL(intDifficulte, modeAvance, boiteQuestions, joueur, nomTable, IND_STT_INI-1, IND_STT_FIN-1);
+			genererRequeteSQL(intDifficulte, modeAvance, boiteQuestions, joueur, nomTable, IND_HST_INI-1, IND_HST_FIN-1);
+			genererRequeteSQL(intDifficulte, modeAvance, boiteQuestions, joueur, nomTable, IND_ACC_INI-1, IND_ACC_FIN-1);
+			
+			
+		}
 	}
 	
-        // This function follows one of the two previous functions. It queries the database and
-        // does the actual filling of the question box.
+
+	/**
+	 * This function follows one of the two previous functions. 
+	 * It queries the database and does the actual filling of the question box.
+	 * 
+	 * @param BoiteQuestions boiteQuestions : La boîte à remplir de questions
+	 * @param String niveau 		: le niveau de la question
+	 * @param String strRequeteSQL  : la requete SQL complete a soumettre a la base de données 
+	 */
 	private void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, String strRequeteSQL )
 	{	
 		try
 		{
 			synchronized( requete )
 			{
+				//System.out.println(strRequeteSQL);
 				ResultSet rs = requete.executeQuery( strRequeteSQL );
 				while(rs.next())
 				{
-					int codeQuestion = rs.getInt("cleQuestion");
-					//String typeQuestion = TypeQuestion.ChoixReponse; //TODO aller chercher code dans bd
-					String typeQuestion = rs.getString( "nomType" );
-					String question = rs.getString( "FichierFlashQuestion" );
-					String reponse = rs.getString("bonneReponse");
-					String explication = rs.getString("FichierFlashReponse");
-					int difficulte = rs.getInt( strValeurGroupeAge + niveau );
+					int codeQuestion = rs.getInt("question_id");
+					String typeQuestion = rs.getString( "name" );
+					String question = rs.getString( "question_flash_file" );
+					String reponse = rs.getString("good_answer");
+					String explication = rs.getString("feedback_flash_file");
 					
-					//TODO la categorie???
-		// ajout acouet pour la categorie
-		int categorie = rs.getInt("cleSujet");
-		//System.out.println("categorie : " + categorie);
-					
+					int sujet = rs.getInt( "subject_id" );
+					int categorie = rs.getInt( "category_id" );
+					int difficulte = rs.getInt( "valueLevel" + niveau );
+		
                     String URL = boiteQuestions.obtenirLangue().obtenirURLQuestionsReponses();
-					//boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication));
-                    boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, categorie));
-                        				
+					boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, sujet, categorie));
+                       
+					//System.out.println("q_type : " + typeQuestion);
 				}
 			}
 		}
@@ -343,17 +515,23 @@ public class GestionnaireBD
 		}
 	}
         
-        // This function queries the DB to find the player's musical preferences
-        // and returns a Vector containing URLs of MP3s the player might like
+	
+	/**
+	 * This function queries the DB to find the player's musical preferences
+	 * and returns a Vector containing URLs of MP3s the player might like
+	 *
+	 * @param int cleJoueur : le id du joueur
+	 * @param Vector 		: URL des MP3 que le joueur souhaite entendre
+	 */
         public Vector obtenirListeURLsMusique(int cleJoueur)
 	{
             Vector liste = new Vector();
             String URLMusique = GestionnaireConfiguration.obtenirInstance().obtenirString("musique.url");
-            String strRequeteSQL = "SELECT musique_Fichiers.nomFichier FROM musique_Fichiers,musique_Fichiers_Categories,musique_Categories,musique_Categorie_Joueur WHERE ";
-            strRequeteSQL       += "musique_Fichiers.cleFichier = musique_Fichiers_Categories.cleFichier AND ";
-            strRequeteSQL       += "musique_Fichiers_Categories.cleCategorie = musique_Categories.cleCategorie AND ";
-            strRequeteSQL       += "musique_Categories.cleCategorie = musique_Categorie_Joueur.cleCategorie AND ";
-            strRequeteSQL       += "musique_Categorie_Joueur.cleJoueur = " + Integer.toString(cleJoueur);
+            String strRequeteSQL = "SELECT music_file.filename FROM music_file, music_file_category, music_category, music_category_user WHERE ";
+            strRequeteSQL       += "music_file.music_file_id = music_file_category.music_file_id AND ";
+            strRequeteSQL       += "music_file_category.music_category_id = music_category.music_category_id AND ";
+            strRequeteSQL       += "music_category.music_category_id= music_category_user.music_category_id AND ";
+            strRequeteSQL       += "music_category_user.user_id = " + Integer.toString(cleJoueur);
             try
             {
                     synchronized( requete )
@@ -361,7 +539,7 @@ public class GestionnaireBD
                             ResultSet rs = requete.executeQuery(strRequeteSQL);
                             while(rs.next())
                             {
-                                liste.add(URLMusique + rs.getString("nomFichier"));
+                                liste.add(URLMusique + rs.getString("filename"));
                             }
                     }
             }
@@ -383,29 +561,35 @@ public class GestionnaireBD
             }
             return liste;
 	}
-	
-        // This method updates a player's information in the DB
+
+        
+	/**
+	 * This method updates a player's information in the DB
+	 *
+	 * @param JoueurHumain joueur : le joueur (humain) a mettre a jour
+	 * @param int tempsTotal : le temps total de jeu du joueur
+	 */
 	public void mettreAJourJoueur( JoueurHumain joueur, int tempsTotal )
 	{
 		try
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery("SELECT partiesCompletes, meilleurPointage, tempsPartie FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+				ResultSet rs = requete.executeQuery("SELECT number_of_completed_game, best_score, total_time_played FROM user WHERE username = '" + joueur.obtenirNomUtilisateur() + "';");
 				if (rs.next())
 				{
-					int partiesCompletes = rs.getInt( "partiesCompletes" ) + 1;
-					int meilleurPointage = rs.getInt( "meilleurPointage" );
+					int number_of_completed_game = rs.getInt( "number_of_completed_game" ) + 1;
+					int best_score = rs.getInt( "best_score" );
 					int pointageActuel = joueur.obtenirPartieCourante().obtenirPointage();
-					if( meilleurPointage < pointageActuel )
+					if( best_score < pointageActuel )
 					{
-						meilleurPointage = pointageActuel;
+						best_score = pointageActuel;
 					}
 					
-					int tempsPartie = tempsTotal + rs.getInt("tempsPartie");
+					int total_time_played = tempsTotal + rs.getInt("total_time_played");
 					
 					//mise-a-jour
-					int result = requete.executeUpdate( "UPDATE joueur SET partiesCompletes=" + partiesCompletes + ",meilleurPointage=" + meilleurPointage + ",tempsPartie=" + tempsPartie + " WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+					int result = requete.executeUpdate( "UPDATE user SET number_of_completed_game=" + number_of_completed_game + ",best_score=" + best_score + ",total_time_played=" + total_time_played + " WHERE username = '" + joueur.obtenirNomUtilisateur() + "';");
 				}
 			}
 		}
@@ -438,12 +622,15 @@ public class GestionnaireBD
 		    e.printStackTrace();			
 		}
 	}
-	
-	/* Cette fonction permet d'ajouter les information sur une partie dans 
-	 * la base de donnÈes dans la table partie. 
-	 *
-	 * Retour: la clÈ de partie qui servira pour la table partieJoueur
-	 */
+
+    /**
+     * Cette fonction permet d'ajouter les information sur une partie dans 
+	 * la base de donnÈes dans la table game. 
+     *
+     * @param Date dateDebut : la date de la partie
+     * @param int dureePartie : la duree de la partie
+     * @return int : la cle de partie qui servira pour la table game_user
+     */
 	public int ajouterInfosPartiePartieTerminee(Date dateDebut, int dureePartie)
 	{
 
@@ -454,7 +641,7 @@ public class GestionnaireBD
         String strHeure = objFormatHeure.format(dateDebut);
 
         // CrÈation du SQL pour l'ajout
-		String strSQL = "INSERT INTO partie(datePartie, heurePartie, dureePartie) VALUES ('" + 
+		String strSQL = "INSERT INTO game(date, hour, duration) VALUES ('" + 
 		    strDate + "','" + strHeure + "'," + dureePartie + ")";
 
 		try
@@ -479,14 +666,20 @@ public class GestionnaireBD
         	System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos") + e.getMessage());
         }
         
-        // Au cas o˘ il y aurait erreur, on retourne -1
+        // Au cas ou il y aurait erreur, on retourne -1
         return -1;
 	}
 
-	/* Cette fonction permet d'ajouter les informations sur une partie pour
-	 * un joueur dans la table partieJoueur;
-	 *
-	 */
+	
+    /**
+     * Cette fonction permet d'ajouter les informations sur une partie pour
+	 * un joueur dans la table game_user;
+     *
+     * @param int clePartie : la cle de la partie
+     * @param int cleJoueur : le id du joueur
+     * @param int pointage  : le pointage final
+     * @param boolean gagner: indique si le joueur a gagne ou non
+     */
 	public void ajouterInfosJoueurPartieTerminee(int clePartie, int cleJoueur, int pointage, boolean gagner)
 	{
 		int intGagner = 0;
@@ -496,7 +689,7 @@ public class GestionnaireBD
 		}
 		
 		// CrÈation du SQL pour l'ajout
-		String strSQL = "INSERT INTO partiejoueur(clePartie, cleJoueur, pointage, gagner) VALUES " +
+		String strSQL = "INSERT INTO game_user(game_id, user_id, score, has_won) VALUES " +
 		    "(" + clePartie + "," + cleJoueur + "," + pointage + "," + intGagner + ");";
 		
 		try
