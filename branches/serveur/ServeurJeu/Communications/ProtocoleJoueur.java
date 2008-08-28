@@ -467,6 +467,7 @@ public class ProtocoleJoueur implements Runnable
 				// On va ensuite traiter la demande du client
 				if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.Connexion))
 				{
+					
 					// Si le joueur est déjà connecté au serveur de jeu, alors
 					// il y a une erreur, sinon on peut valider les informations
 					// sur ce joueur pour ensuite le connecter (même si cette 
@@ -489,6 +490,7 @@ public class ProtocoleJoueur implements Runnable
 									obtenirValeurParametre(objNoeudCommandeEntree, "NomUtilisateur").getNodeValue(), 
 									obtenirValeurParametre(objNoeudCommandeEntree, "MotDePasse").getNodeValue(), true);
 						
+
 						// Si le résultat de l'authentification est true alors le
 						// joueur est maintenant connecté
 						if (strResultatAuthentification.equals(ResultatAuthentification.Succes))
@@ -519,21 +521,30 @@ public class ProtocoleJoueur implements Runnable
                             }
                             else
                             {
+	
                                 bolEnTrainDeJouer = false;
     						  
     							// Il n'y a pas eu d'erreurs
     							objNoeudCommande.setAttribute("type", "Reponse");
     							objNoeudCommande.setAttribute("nom", "Musique");
                                                         
-                                                        // On va envoyer dans le noeud la liste de chansons que le joueur pourrait aimer
-                                                        Vector liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
-                                                        for(int i=0; i<liste.size(); i++)
-                                                        {
-                                                            Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("musique");
-                                                            Text objNoeudTexteMusique = objDocumentXMLSortie.createTextNode((String)liste.get(i));
-                                                            objNoeudParametreMusique.appendChild(objNoeudTexteMusique);
-                                                            objNoeudCommande.appendChild(objNoeudParametreMusique);   
-                                                        }
+                                            // On va envoyer dans le noeud la liste de chansons que le joueur pourrait aimer
+                                            Vector liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
+                                            for(int i=0; i<liste.size(); i++)
+                                            {
+                                                Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("musique");
+                                                Text objNoeudTexteMusique = objDocumentXMLSortie.createTextNode((String)liste.get(i));
+                                                objNoeudParametreMusique.appendChild(objNoeudTexteMusique);
+                                                objNoeudCommande.appendChild(objNoeudParametreMusique);   
+                                            }
+	                                                    
+		                        //modif acouet ici
+								Vector lstNiveauCategorie = objJoueurHumain.obtenirListeNiveauCategorie();
+								System.out.println(lstNiveauCategorie);
+								
+								// permet de transmettre au client les niveaux acadŽmiques du joueur 
+								// stockŽs dans la base de donnŽes
+								objNoeudCommande.setAttribute("niveaux", lstNiveauCategorie.toString());
 							}
 						}
 						else if (strResultatAuthentification.equals(ResultatAuthentification.JoueurDejaConnecte))
@@ -782,26 +793,33 @@ public class ProtocoleJoueur implements Runnable
 						// du mot de passe permettant d'accéder à la salle (s'il 
 						// n'y en a pas, alors le mot de passe sera vide)
 						Node objMotDePasse = obtenirValeurParametre(objNoeudCommandeEntree, "MotDePasse");
-					
-			// modif acouet
+				
+			// modif acouet TODO
 			// Déclaration d'une variable qui va contenir le noeud
 			// des niveaux permettant de fournir au joueur des questions
 			// appropriŽes selon ses choix
 			Node objNiveaux = obtenirValeurParametre(objNoeudCommandeEntree, "Niveaux");
-			//System.out.println(objNiveaux.toString());
+			System.out.println(objNiveaux.toString());
 			
 			Vector lstNiveaux = new Vector();
 			
-			StringTokenizer st = new StringTokenizer (objNiveaux.toString(), ",]");
+			StringTokenizer st = new StringTokenizer (objNiveaux.toString(), ",[]#text: ");
 		    while (st.hasMoreTokens()) 
 		    {
 		    	lstNiveaux.add(st.nextToken());
 		    }
-		    //lstNiveaux.remove(0);
+		    
+		    int modeAvance = Integer.parseInt(lstNiveaux.get(0).toString());
+		    objJoueurHumain.definirModeAvance(modeAvance);
 		    // le serveur ne considre pas cette valeur pour correspondre aux 
 		    // indices de la BD, alors pas besoin de le supprimer
-		    objJoueurHumain.definirCleSousCategorie(lstNiveaux);
+		    lstNiveaux.remove(0);
+		    //objJoueurHumain.definirCleSousCategorie(lstNiveaux);
 
+		    if(modeAvance == 1)
+		    {
+		    	 objJoueurHumain.definirListeNiveauCategorie(lstNiveaux);
+		    }
 		    
 						// Déclaration d'une variable qui va contenir le mot de
 						// passe pour accéder à la salle (peut être vide)

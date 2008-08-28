@@ -118,7 +118,7 @@ public class InformationPartie
 	    lstObjetsUtilisablesRamasses = new TreeMap();
 
             objBoiteQuestions = new BoiteQuestions(joueur.obtenirProtocoleJoueur().langue, joueur.obtenirSalleCourante().obtenirNoeudLangue(), joueur.obtenirSalleCourante().obtenirNomSalle());
-            objGestionnaireBD.remplirBoiteQuestions(objBoiteQuestions, objJoueurHumain.obtenirCleNiveau(), joueur);
+            objGestionnaireBD.remplirBoiteQuestions(objBoiteQuestions, joueur);
 	}
 
 	/**
@@ -444,7 +444,10 @@ public class InformationPartie
 		}
 		else if (intDifficulte > 0)
 		{
-			objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau(), intCategorieQuestion, intDifficulte, objJoueurHumain);
+			// modif acouet - pour le nouveau serveur
+			//objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau(), intCategorieQuestion, intDifficulte, objJoueurHumain);
+			objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, intDifficulte, objJoueurHumain);
+			
 			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
 			
 			lstQuestionsRepondues.clear();
