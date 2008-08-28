@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import ClassesUtilitaires.UtilitaireNombres;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import org.w3c.dom.Node;
 
@@ -24,15 +25,23 @@ public class BoiteQuestions
 {
 	static private Logger objLogger = Logger.getLogger( BoiteQuestions.class );
 	private TreeMap<Integer, TreeMap<Integer, Vector<Question>>> lstQuestions;
-        
+	
+	// Déclaration d'une référence vers un joueur humain correspondant à cet
+	// objet d'information de partie
+	private JoueurHumain objJoueurHumain;
+	
+
 	    // Since there is a question box for each player, and all players might not want to play
 	    // in the same language, we set a language field for question boxes
 	    private Langue langue;
 	
-	public BoiteQuestions(String langue, Node noeudLangue, String nomSalle)
+	public BoiteQuestions(String langue, Node noeudLangue, String nomSalle, JoueurHumain joueur)
 	{
 		lstQuestions = new TreeMap<Integer, TreeMap<Integer, Vector<Question>>>();
                 this.langue = new Langue(langue, noeudLangue, nomSalle);
+    	
+        // Faire la référence vers le joueur humain courant
+        objJoueurHumain = joueur;
 	}
 	
 	/**
@@ -77,6 +86,8 @@ public class BoiteQuestions
 	public Question pigerQuestion( int intCategorieQuestion, int intDifficulte )
 	{
 		int intPointageQuestion = intDifficulte;
+		int i = 0;
+		boolean questionOK = false;
 		
 		// ajout acouet - tient en compte la categorie
 		//intCategorieQuestion = 1;
@@ -84,11 +95,31 @@ public class BoiteQuestions
 		Question question = null;
 	    Vector<Question> questions = obtenirQuestions( intCategorieQuestion, intDifficulte );
 		
-		if( questions != null && questions.size() > 0 )
-		{
+		
+//			int intRandom;
+//			do
+//			{
+//				intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
+//				question = (Question)questions.elementAt( intRandom );
+//				
+//				System.out.println("sujet : " + question.obtenirSujet());
+//				
+//				// le sujet de l'histoire a bien 6 comme ID ?
+//				if(question.obtenirSujet() != 6 || objJoueurHumain.peutPoserQuestionHistoire())
+//				{
+//					questionOK = true;
+//				}
+//				
+//				i++;
+//				
+//			} while(i < 10 && questionOK != true);
+			
 			// Let's choose a question among the possible ones
-			int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
-			question = (Question)questions.elementAt( intRandom );
+	    	
+	    if( questions != null && questions.size() > 0 )
+		{
+	    	int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
+	    	question = (Question)questions.elementAt( intRandom );
 			questions.remove( intRandom );
                         
 			question.definirDifficulte(intPointageQuestion);

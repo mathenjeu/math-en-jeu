@@ -65,6 +65,17 @@ public class JoueurHumain extends Joueur
 	// n'est dans aucune table)
 	private InformationPartie objPartieCourante;
         
+	// les compteurs servent ˆ s'assurer que le sujet HISTOIRE
+	// n'est pas pige plus souvent que les autres sujets lorsque le 
+	// serveur pige une question a poser.
+	private int compteurQuestionPosee;
+	private int compteurHistoirePosee;
+	
+	// le seuil est la valeur utilisee dans la methode
+	// peutPoserQuestionHistoire(). Elle indique qu'il faut poser
+	// SEUIL fois plus de questions que de questions d'histoire.
+	private static final int SEUIL_QUESTION_HISTOIRE = 7;
+	
 	/**
 	 * Constructeur de la classe JoueurHumain qui permet d'initialiser les 
 	 * membres privés du joueur humain et de garder une référence vers l'objet
@@ -100,6 +111,9 @@ public class JoueurHumain extends Joueur
 		
 		lstNiveauSujet = new Vector(TAILLE_LISTE_SUJET);
 		lstNiveauCategorie = new Vector(TAILLE_LISTE_CATEGORIE);
+		
+		compteurHistoirePosee = 0;
+		compteurQuestionPosee = 0;
 		
 		// Au début, le joueur n'est dans aucune salle ni table
 		objSalleCourante = null;
@@ -354,5 +368,42 @@ public class JoueurHumain extends Joueur
 		this.bolModeAvance = modeAvance;
 	}
 	
+	
+	
+	/**
+	 * Cette fonction permet d'incrementer le compteur
+	 * gardant en memoire le nombre de questions posees au joueur
+	 * 
+	 */
+	public void incrementeCompteurQuestionPosee() 
+	{
+		compteurQuestionPosee++;
+	}
+	
+	
+	/**
+	 * Cette fonction permet d'incrementer le compteur
+	 * gardant en memoire le nombre de questions d'histoire posees au joueur
+	 * 
+	 */
+	public void incrementeCompteurHistoirePosee() 
+	{
+		compteurHistoirePosee++;
+	}
+	
+	
+	/**
+	 * Cette fonction permet de dŽterminer si l'on 
+	 * peut poser une question d'histoire.
+	 * 
+	 * @return boolean : si on peut poser une question d'histoire
+	 */
+	public boolean peutPoserQuestionHistoire() 
+	{
+		if(compteurQuestionPosee == 0) 
+			return true;
+		else 
+			return (compteurQuestionPosee / compteurHistoirePosee) >= SEUIL_QUESTION_HISTOIRE ;
+	}
 	
 }
