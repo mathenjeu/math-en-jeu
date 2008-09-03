@@ -1,110 +1,570 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+﻿<?xml version="1.0" encoding="UTF-8"?> 
 <ileTresor> 
 
+	<truefalse>
+  		<question>La dimension d'un cube est 3.</question>
+  		<reponse>true</reponse>
+		<Id>1</Id>
+ 	</truefalse>
+ 	
+ 	<truefalse>
+  		<question>La dimension d'une pyramide à base hexagonale est 6.</question>
+  		<reponse>false</reponse>
+		<Id>2</Id>
+ 	</truefalse>
+ 	
+ 	<truefalse>
+  		<question>La dimension d'un prisme rectangulaire est 3.</question>
+  		<reponse>true</reponse>
+	        <Id>3</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>La dimension d'une sphère est 1.</question>
+  		<reponse>false</reponse>
+		<Id>4</Id>
+ 	</truefalse>
+ 	
+ 	<truefalse>
+  		<question>Le nombre de sommets plus le nombre de faces moins le nombre d'arêtes d'un polyèdre convexe est égal à 2.</question>
+  		<reponse>true</reponse>
+		<Id>5</Id>
+ 	</truefalse>
+ 	
+ 	<truefalse>
+  		<question>La somme des angles intérieurs d'un triangle est égale à 270 degrés.</question>
+  		<reponse>false</reponse>
+	        <Id>6</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>La somme des angles intérieurs d'un carré est égale à 180 degrés.</question>
+  		<reponse>false</reponse>
+		<Id>7</Id>
+ 	</truefalse>
+ 	
+ 	<truefalse>
+  		<question>La somme des angles intérieurs d'un pentagone est égale à 540 degrés.</question>
+  		<reponse>true</reponse>
+		<Id>8</Id>
+ 	</truefalse>
+ 	
+ 	<truefalse>
+  		<question>La somme des angles intérieurs d'un hexagone est égale à 720 degrés.</question>
+  		<reponse>true</reponse>
+	        <Id>9</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>La somme des angles intérieurs d'un heptagone est égale à 1260 degrés.</question>
+  		<reponse>false</reponse>
+		<Id>10</Id>
+ 	</truefalse>
+ 	
+ 	<truefalse>
+  		<question>La somme des angles intérieurs d'un octogone est égale à 1080 degrés.</question>
+  		<reponse>true</reponse>
+		<Id>11</Id>
+ 	</truefalse>
+ 	
+ 	<truefalse>
+  		<question>La somme des angles intérieurs d'un nonagone est égale à 1080 degrés.</question>
+  		<reponse>false</reponse>
+	        <Id>12</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>La somme des angles intérieurs d'un dodécagone est égale à 1440 degrés.</question>
+  		<reponse>true</reponse>
+		<Id>13</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Un pentagone régulier est un polygone dont les 5 côtés sont congrus.</question>
+  		<reponse>true</reponse>
+		<Id>14</Id>
+ 	</truefalse>
+ 	
+ 	<truefalse>
+  		<question>Un hexagone régulier est un polygone dont les 6 côtés sont congrus.</question>
+  		<reponse>true</reponse>
+	        <Id>15</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Un heptagone régulier est un polygone dont les 6 côtés sont congrus.</question>
+  		<reponse>false</reponse>
+		<Id>16</Id>
+ 	</truefalse>
+ 	
+ 	<truefalse>
+  		<question>Un octogone régulier est un polygone dont les 8 côtés sont congrus.</question>
+  		<reponse>true</reponse>
+		<Id>17</Id>
+ 	</truefalse>
+ 	
+ 	<truefalse>
+  		<question>Un nonagone régulier est un polygone dont les 7 côtés sont congrus.</question>
+  		<reponse>false</reponse>
+	        <Id>18</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Un dodécagone régulier est un polygone dont les 9 côtés sont congrus.</question>
+  		<reponse>false</reponse>
+		<Id>19</Id>
+ 	</truefalse>
+ 	
+ 	<truefalse>
+  		<question>Un triangle scalène est un triangle dont tous les côtés sont congrus.</question>
+  		<reponse>false</reponse>
+		<Id>20</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Un triangle obtus possède un angle mesurant moins de 90 degrés.</question>
+  		<reponse>false</reponse>
+	        <Id>21</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Il n’existe pas de triangle rectangle et obtus.</question>
+  		<reponse>true</reponse>
+		<Id>22</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Un triangle rectangle possédant un angle de 45 degrés est isoangle.</question>
+  		<reponse>true</reponse>
+		<Id>23</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Les angles opposés d'un parallélogramme sont congrus.</question>
+  		<reponse>true</reponse>
+	        <Id>24</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Tous les parallélogrammes possède 2 axes de symétrie.</question>
+  		<reponse>false</reponse>
+		<Id>25</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Un carré est un losange.</question>
+  		<reponse>true</reponse>
+		<Id>26</Id>
+ 	</truefalse>
+ 	
+ 	<truefalse>
+  		<question>Tous les rectangles dont des carrés.</question>
+  		<reponse>false</reponse>
+	        <Id>27</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Tous les rectangles possèdent 4 axes de symétrie.</question>
+  		<reponse>false</reponse>
+		<Id>28</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Un carré possède 4 axes de symétrie.</question>
+  		<reponse>true</reponse>
+		<Id>29</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Un trapèze possède un seul axe de symétrie.</question>
+  		<reponse>false</reponse>
+	        <Id>30</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>La somme des angles intérieurs d’un trapèze rectangle est de 450 degrés.</question>
+  		<reponse>false</reponse>
+		<Id>31</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Le diamètre d’un cercle circonscrit à un carré est congru au côté du carré.</question>
+  		<reponse>false</reponse>
+		<Id>32</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Le diamètre d’un cercle circonscrit à un carré est congru à la diagonale du carré.</question>
+  		<reponse>true</reponse>
+	        <Id>33</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Le diamètre d’un cercle inscrit dans un carré est congru au côté du carré.</question>
+  		<reponse>true</reponse>
+		<Id>34</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Le diamètre d’un cercle inscrit dans un carré est congru à la diagonale du carré.</question>
+  		<reponse>false</reponse>
+		<Id>35</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Un parallélogramme est un trapèze.</question>
+  		<reponse>true</reponse>
+	        <Id>36</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Un parallélogramme possède 2 paires de côtés parallèles.</question>
+  		<reponse>true</reponse>
+		<Id>37</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Un trapèze possède 2 paires de côtés parallèles.</question>
+  		<reponse>false</reponse>
+		<Id>38</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Les diagonales d’un losange sont congrues.</question>
+  		<reponse>false</reponse>
+	        <Id>39</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Les diagonales d’un losange se coupent perpendiculairement.</question>
+  		<reponse>true</reponse>
+		<Id>40</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Les diagonales d’un losange ne sont pas les bissectrices des angles.</question>
+  		<reponse>false</reponse>
+		<Id>41</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Un losange est un parallélogramme.</question>
+  		<reponse>true</reponse>
+	        <Id>42</Id>
+ 	</truefalse>	
+	<truefalse>
+  		<question>Si les diagonales d’un quadrilatère se coupent perpendiculairement, c’est un losange.</question>
+  		<reponse>false</reponse>
+		<Id>43</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Le rayon d’un cercle vaut 2 fois le diamètre du même cercle.</question>
+  		<reponse>false</reponse>
+		<Id>44</Id>
+ 	</truefalse>	
+ 	<truefalse>
+  		<question>Une médiatrice passe toujours par le sommet d’un polygone et coupe le côté opposé en son milieu.</question>
+  		<reponse>false</reponse>
+	        <Id>45</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Une bissectrice coupe un angle en 2 angles.</question>
+  		<reponse>true</reponse>
+		<Id>46</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Une médiane passe toujours par le sommet d’un polygone et coupe le côté opposé en son milieu.</question>
+  		<reponse>true</reponse>
+		<Id>47</Id>
+ 	</truefalse>	
+ 	<truefalse>
+  		<question>La hauteur d’un triangle passe par un sommet et coupe le côté opposé perpendiculairement en son milieu.</question>
+  		<reponse>false</reponse>
+	        <Id>48</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>(-550)-(-28)=-578.</question>
+  		<reponse>false</reponse>
+		<Id>49</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>1982 est divisible par 4.</question>
+  		<reponse>false</reponse>
+		<Id>50</Id>
+ 	</truefalse>	
+ 	<truefalse>
+  		<question>1 025 756 est divisible par 4.</question>
+  		<reponse>true</reponse>
+	        <Id>51</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Une fraction est un nombre rationnel.</question>
+  		<reponse>true</reponse>
+		<Id>52</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Pi est un nombre irrationnel.</question>
+  		<reponse>true</reponse>
+		<Id>53</Id>
+ 	</truefalse>
+
+	<truefalse>
+  		<question>Un nombre parfait est un nombre entier strictement supérieur à 1 qui est égal à la somme de ses diviseurs stricts.</question>
+  		<reponse>true</reponse>
+	        <Id>55</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Un nombre premier de Mersenne est un nombre premier s’´ecrivant sous la forme 2^p−1, p étant un nombre premier.</question>
+  		<reponse>true</reponse>
+		<Id>56</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>47 est un nombre premier.</question>
+  		<reponse>true</reponse>
+		<Id>57</Id>
+ 	</truefalse>	
+	<truefalse>
+  		<question>49 est un nombre premier.</question>
+  		<reponse>false</reponse>
+	        <Id>58</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>5 litres est équivalent à 5 dm³.</question>
+  		<reponse>true</reponse>
+		<Id>59</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>1 L est équivalent à 1000 cm³.</question>
+  		<reponse>true</reponse>
+		<Id>60</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>500 ml est équivalent à 500 dm³.</question>
+  		<reponse>false</reponse>
+	        <Id>61</Id>
+ 	</truefalse>
+ 	</truefalse>
+ 	
+	<truefalse>
+  		<question>0! = 0.</question>
+  		<reponse>false</reponse>
+		<Id>63</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>7!= 7*6*5*4*3*2*1.</question>
+  		<reponse>true</reponse>
+	        <Id>64</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>0, 1, 3, 6, 10, 15, 21, 28, 36, 45 et 55 sont des nombres triangulaires.</question>
+  		<reponse>true</reponse>
+		<Id>65</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Le nombre 21 574 est divisible par 3.</question>
+  		<reponse>true</reponse>
+		<Id>66</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Le nombre 133 est divisible par 3.</question>
+  		<reponse>false</reponse>
+	        <Id>67</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Un nombre carré est un nombre entier strictement positif qui peut être représenté géométriquement par un carré.</question>
+  		<reponse>true</reponse>
+		<Id>68</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Un nombre figuré est un nombre entier qui peut être représenté par un ensemble de points disposés de façon à former une figure géométrique.</question>
+  		<reponse>true</reponse>
+		<Id>69</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>7 est un nombre hexagonal.</question>
+  		<reponse>false</reponse>
+	        <Id>70</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>9 est un nombre triangulaire.</question>
+  		<reponse>false</reponse>
+		<Id>71</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>La cardinalité est une notion de taille pour les ensembles mathématiques.</question>
+  		<reponse>true</reponse>
+		<Id>72</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Il y a un nombre fini de nombres dans l’ensemble des nombres naturels.</question>
+  		<reponse>false</reponse>
+	        <Id>73</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Les nombres 2, 4 et 8 sont les seuls diviseurs de 16.</question>
+  		<reponse>false</reponse>
+		<Id>74</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Les nombres 2, 4 et 8 sont des facteurs de 16.</question>
+  		<reponse>true</reponse>
+		<Id>75</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Les nombres 1, 2, 4, 8, 9, 36 et 72 sont tous les diviseurs de 72.</question>
+  		<reponse>true</reponse>
+	        <Id>76</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Les nombres 1, 2, 4, 8, 9, 36 et 72 sont tous les multiples de 72.</question>
+  		<reponse>false</reponse>
+		<Id>77</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>34 est le plus petit commun multiple de 2 et 17.</question>
+  		<reponse>true</reponse>
+		<Id>78</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>66 est le plus petit commun multiple de 2 et 11.</question>
+  		<reponse>false</reponse>
+	        <Id>79</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>3 est le plus grand commun diviseur de 12 et 24.</question>
+  		<reponse>false</reponse>
+		<Id>80</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>22 est le plus grand commun diviseur de 44 et 66.</question>
+  		<reponse>true</reponse>
+		<Id>81</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Le plus grand commun diviseur de deux entiers naturels est le plus grand entier naturel qui divise simultanément ces deux entiers.</question>
+  		<reponse>true</reponse>
+	        <Id>82</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>Le plus petit commun multiple de deux entiers naturels est le plus petit entier qui soit à la fois multiple de ces deux nombres.</question>
+  		<reponse>true</reponse>
+		<Id>83</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>L’addition de nombres entiers est commutative.</question>
+  		<reponse>true</reponse>
+		<Id>84</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>L'expression a × (b + c) = a × b + a × c représente l’associativité de la multiplication sur l’addition.</question>
+  		<reponse>false</reponse>
+	        <Id>85</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>L'epression a × b × c = (a × b) × c = a × (b × c) représente la distributivité de la multiplication.</question>
+  		<reponse>false</reponse>
+		<Id>86</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>Le reste de la division de 1234 par 5 est de 5.</question>
+  		<reponse>false</reponse>
+		<Id>87</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>324 est un nombre carré.</question>
+  		<reponse>true</reponse>
+	        <Id>88</Id>
+ 	</truefalse>
+	<truefalse>
+  		<question>La racine cubique de 729 vaut 9.</question>
+  		<reponse>true</reponse>
+		<Id>89</Id>
+ 	</truefalse>
+ 	<truefalse>
+  		<question>La racine cubique de 64 n’est pas un entier.</question>
+  		<reponse>false</reponse>
+		<Id>90</Id>
+ 	</truefalse>
+	
 	<VraiFaux>
   		<question>127 est un nombre premier.</question>
   		<reponse>true</reponse>
+		<Id>91</Id>
  	</VraiFaux>
- 	
  	<VraiFaux>
   		<question>11 × 17 = 287</question>
   		<reponse>false</reponse>
+		<Id>92</Id>
  	</VraiFaux>
- 	
+
  	<VraiFaux>
   		<question>Sur un lancé de deux dés, la somme la plus probable est 7.</question>
   		<reponse>true</reponse>
+		<Id>93</Id>
  	</VraiFaux>
  	
  	<VraiFaux>
   		<question>Le 4 terme de la suite commençant par 1, 4, 9 est 25.</question>
   		<reponse>false</reponse>
+		<Id>94</Id>
  	</VraiFaux>
  	
 	<VraiFaux>
   		<question>Le nombre 3456 est divisible par 9.</question>
   		<reponse>true</reponse>
+		<Id>95</Id>
  	</VraiFaux> 	
  	 		
 	<VraiFaux>
   		<question>Le produit de deux nombres, chacun divisible par 5, est divisible par 25.</question>
   		<reponse>true</reponse>
+		<Id>96</Id>
  	</VraiFaux> 	 	
-
 	<VraiFaux>
   		<question>La racine cubique de 1009 est égale à 9.</question>
   		<reponse>false</reponse>
+		<Id>97</Id>
  	</VraiFaux>
  	
  	<VraiFaux>
   		<question>Le carré de 2451 est égal à 6007402.</question>
   		<reponse>false</reponse>
+		<Id>98</Id>
  	</VraiFaux>
  	
  	<VraiFaux>
   		<question>L’intersection de l’ensemble des nombres pairs et de l’ensemble des nombres premiers est constituée d’un seul élément.</question>
   		<reponse>false</reponse>
+		<Id>99</Id>
  	</VraiFaux>
  	
 	<VraiFaux>
   		<question>Le quotient de 3/4 par 8/9 est égal à 1/2.</question>
   		<reponse>false</reponse>
- 	</VraiFaux> 	
- 	 		
- 	 <VraiFaux>
-  		<question>L’aire d’un parallélogrammme dont la base mesure 5 cm et la hauteur 6 cm est égale à 32.</question>
+		<Id>100</Id>
+ 	</VraiFaux> 			
+ 	<VraiFaux>
+  		<question>L’aire d’un parallélogramme dont la base mesure 5 cm et la hauteur 6 cm est égale à 32.</question>
   		<reponse>false</reponse>
+		<Id>101</Id>
  	</VraiFaux>
- 	
 	<VraiFaux>
   		<question>Le plus petit commun multiple des nombres 4 et 6 est égal à 12.</question>
   		<reponse>true</reponse>
- 	</VraiFaux> 	
- 	 		
+		<Id>102</Id>
+ 	</VraiFaux> 			
 	<VraiFaux>
   		<question>9 est un diviseur de 12345.</question>
   		<reponse>false</reponse>
+		<Id>103</Id>
  	</VraiFaux> 	
- 	
  	<VraiFaux>
   		<question>Le cardinal de l’ensemble vide est 0.</question>
   		<reponse>true</reponse>
- 	</VraiFaux> 	
- 	 		
+		<Id>104</Id>
+ 	</VraiFaux> 		
 	<VraiFaux>
   		<question>L’ensemble des nombres premiers est un ensemble infini.</question>
   		<reponse>true</reponse>
+		<Id>105</Id>
  	</VraiFaux>  	
- 	 	
    	<VraiFaux>
   		<question>Un octogone est un polygone régulier à 9 côtés.</question>
   		<reponse>false</reponse>
- 	</VraiFaux> 	
- 	 		
+		<Id>106</Id>
+ 	</VraiFaux> 		
 	<VraiFaux>
   		<question>Un décagone est un polygone régulier à 10 côtés.</question>
   		<reponse>false</reponse>
+		<Id>107</Id>
  	</VraiFaux>  		
- 	 	
- 	 	
- 	 <VraiFaux>
+ 	<VraiFaux>
   		<question>Chaque angle intérieur d’un pentagone régulier est de 108 degrés.</question>
   		<reponse>true</reponse>
+		<Id>108</Id>
  	</VraiFaux> 	
- 	 		
-	<VraiFaux>
-  		<question>Dans un pentagone, on peut tracer 5 sécantes.</question>
-  		<reponse>true</reponse>
- 	</VraiFaux>  	
- 	 	
    	<VraiFaux>
   		<question>Un polygone régulier à 7 côtés est appelé un heptagone.</question>
   		<reponse>true</reponse>
- 	</VraiFaux> 	
- 	 		
+		<Id>109</Id>
+ 	</VraiFaux> 			
 	<VraiFaux>
-  		<question>La somme des angles intérieurs d’un hexagone est égale à 4π.</question>
+  		<question>La somme des angles intérieurs d’un hexagone est égale à 720 degrés.</question>
   		<reponse>true</reponse>
- 	</VraiFaux>  		
+		<Id>110</Id>
+ 	</VraiFaux>  	
+
 
 </ileTresor>

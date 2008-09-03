@@ -1,366 +1,452 @@
-ï»¿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <mots> 
 <unmot>
   <lemot>addition</lemot>
   <description>One of the four basic arithmetic operations. A number is added to another.</description>
+  <hint>One of the four basic arithmetic operations.</hint>
  </unmot> 
 <unmot>
   <lemot>surface area</lemot>
-  <description>the measure of a surface.</description> 
+  <description>The measure of the exposed area of an object.</description>
+  <hint>The measure of the exposed area of an object.</hint>  
  </unmot> 
 <unmot>
   <lemot>angle</lemot>
-  <description>the figure formed by two line segments extending from a given point.</description>  
+  <description>The figure formed by two line segments extending from a given point.</description>
+  <hint>The figure formed by two line segments extending from a given point.</hint>   
  </unmot> 
 <unmot>
   <lemot>acute angle</lemot>
-  <description>an angle smaller than 90 degrees.</description>
+  <description>An angle smaller than 90 degrees.</description>
+  <hint>Type of angle.</hint>
  </unmot> 
 <unmot>
   <lemot>straight angle</lemot>
-  <description>a 90 degree angle, or the angle made by the intersection of two perpendicular straight lines.</description>  
+  <description>A 90 degree angle, or the angle made by the intersection of two perpendicular straight lines.</description>
+  <hint>Type of angle.</hint>  
  </unmot> 
 <unmot>
   <lemot>obtuse angle</lemot>
-  <description>an angle measuring between 90 and 180 degrees.</description>  
+  <description>An angle measuring between 90 and 180 degrees.</description>
+  <hint>Type of angle.</hint>    
  </unmot> 
 <unmot>
   <lemot>flat angle</lemot>
-  <description>a 180 degree angle.</description>  
+  <description>A 180 degree angle.</description>
+  <hint>Type of angle.</hint>    
  </unmot> 
 <unmot>
   <lemot>edge</lemot>
-  <description>the intersection of two faces of a solid.</description>
+  <description>The intersection of two faces of a solid.</description>
+  <hint>A polyhedron has many of those.</hint>  
  </unmot> 
 <unmot>
   <lemot>arithmetic</lemot>
-  <description>the branch of mathematics dealing with computation rules </description> 
+  <description>The branch of mathematics that deals with computation rules.</description>
+  <hint>A branch of mathematics.</hint> 
  </unmot> 
 <unmot>
   <lemot>rounding up</lemot>
-  <description>giving the approximation of a numberâ€™s value.</description> 
+  <description>Giving the approximation of a number’s value.</description>
+  <hint>Approximating.</hint>  
  </unmot> 
 <unmot>
   <lemot>axis of symmetry</lemot>
-  <description>the line separating a figure from its reflexion or from its fold.</description>  
+  <description>The line perpendicularly separating a figure from its reflexion or from its fold.</description>
+  <hint>A type of straight line.</hint>   
  </unmot> 
 <unmot>
   <lemot>square</lemot>
-  <description>a quadrilateral whose angles are straight and whose sides are congruent.</description> 
+  <description>A quadrilateral whose angles are straight and whose sides are congruent.</description>
+  <hint>A type of polygon.</hint>  
  </unmot> 
 <unmot>
   <lemot>circle</lemot>
-  <description>a two-dimensional figure whose points are located at an equal distance of the center.</description> 
+  <description>A two-dimensional figure whose points are located at an equal distance of the center.</description>
+  <hint>A type of two-dimensional figure.</hint>  
  </unmot> 
 <unmot>
-  <lemot>numeral</lemot>
-  <description>a symbol used for writing numbers. The base 10 number system has 10 numerals : 0, 1, 2, 3, 4, 5, 6,  7, 8 and 9</description> 
- </unmot> 
+  <lemot>digit</lemot>
+  <description>A symbol used for writing numbers. The base 10 number system has 10 digits : 0, 1, 2, 3, 4, 5, 6,  7, 8 and 9</description> 
+  <hint>A symbol widely used in mathematics.</hint> 
+</unmot> 
 <unmot>
   <lemot>circumference</lemot>
-  <description>the measure of the curve line of a circle. Also the perimeter of a circle.</description> 
+  <description>The measure of the curve line of a circle. Also the perimeter of a circle.</description>
+  <hint>One of the parameters that defines a circle.</hint> 
  </unmot> 
 <unmot>
   <lemot>cone</lemot>
-  <description>a three-dimensional figure with a circular base, and bound by a curved surface culminating into a vertex.</description> 
+  <description>A three-dimensional figure with a circular base, and bound by a curved surface culminating into a vertex.</description>
+  <hint>Type of three-dimensional figure with a circular base.</hint>  
  </unmot> 
 <unmot>
   <lemot>congruent</lemot>
-  <description>two figures with the same shape and the same size are said to be congruent.</description> 
+  <description>Two figures with the same shape and the same size are said to be congruent.</description>
+  <hint>Two figures with the same shape and the same size are said to be ...</hint>  
  </unmot> 
 <unmot>
   <lemot>consecutive</lemot>
-  <description>consecutive numbers are numbers that follow one another. For example, 3,4,5 and 6 are consecutive numbers.</description>  
+  <description>Consecutive numbers are numbers that follow one another. For example, 3,4,5 and 6 are consecutive numbers.</description>
+  <hint>That follow one another.</hint>  
  </unmot> 
 <unmot>
   <lemot>cube</lemot>
-  <description>a rectangular prism that has six squares as faces.</description> 
+  <description>A rectangular prism that has six squares as faces.</description>
+  <hint>A type of polyhedron.</hint>  
  </unmot> 
 <unmot>
   <lemot>cylinder</lemot>
-  <description>a three-dimensional figure bounded by two circular congruent planes and a curve plane.</description>  
+  <description>A three-dimensional figure bounded by two circular congruent planes and a curve plane.</description>
+  <hint>A three-dimensional figure.</hint>    
  </unmot> 
 <unmot>
   <lemot>denominator</lemot>
-  <description> The expression written below the line in a common fraction.</description>  
+  <description>The expression written below the line in a common fraction.</description>
+  <hint>An element of a division.</hint>    
  </unmot> 
 <unmot>
   <lemot>diagonal</lemot>
-  <description>a line segment connecting two nonadjacent vertices of a polygon.</description> 
+  <description>A line segment connecting two nonadjacent vertices of a polygon.</description>
+  <hint>A type of line segment.</hint>  
  </unmot> 
 <unmot>
   <lemot>diameter</lemot>
-  <description>a line segment connecting two points of a circle, and passing through its center.</description> 
+  <description>A line segment connecting two points of a circle, and passing through its center.</description>
+  <hint>One of the parameters that defines a circle.</hint>  
  </unmot> 
 <unmot>
   <lemot>difference</lemot>
-  <description>the result of a substraction.</description>
+  <description>The result of a substraction.</description>
+  <hint>The result of a substraction.</hint>
  </unmot> 
 <unmot>
   <lemot>dividend</lemot>
-  <description>the number to be divided in a division operation. In the operation 18 Ã· 9 = 2, 18 is the dividend.</description> 
+  <description>The number to be divided in a division operation. In the operation 18 ÷ 9 = 2, 18 is the dividend.</description>
+  <hint>An element of a division.</hint> 
  </unmot> 
 <unmot>
   <lemot>divisor</lemot>
-  <description>the second term of  a division. In the operation 18 Ã· 9 = 2, 9 is the divisor.</description>  
+  <description>The second term of a division. In the operation 18 ÷ 9 = 2, 9 is the divisor.</description>
+  <hint>An element of a division.</hint>  
  </unmot> 
 <unmot>
   <lemot>division</lemot>
-  <description>one of the four basic arithmetic operations. It corresponds to the number of times a number is contained in another number.</description> 
+  <description>One of the four basic arithmetic operations. It corresponds to the number of times a number is contained in another number.</description>
+  <hint>One of the four basic arithmetic operations.</hint> 
  </unmot> 
 <unmot>
   <lemot>dodecahedron</lemot>
-  <description>a polyhedron with twelve faces.</description>  
+  <description>A polyhedron with twelve faces.</description>
+  <hint>A type of polyhedron.</hint>  
  </unmot> 
 <unmot>
   <lemot>dodecagon</lemot>
-  <description>a polygon with twelve sides.</description>  
+  <description>A polygon with twelve sides.</description>
+  <hint>A type of polyhedron.</hint>    
  </unmot> 
 <unmot>
-  <lemot>line</lemot>
-  <description>a straight one-dimensional figure having no thickness and extending infinitely in both directions.</description> 
+  <lemot>straight line</lemot>
+  <description>A straight one-dimensional figure having no thickness and extending infinitely in both directions.</description>
+  <hint>This one-dimensional figure can be represented by a linear function.</hint> 
  </unmot> 
 <unmot>
   <lemot>sample</lemot>
-  <description>a set of people chosen for being representatives of a population.</description>
+  <description>A set of people chosen for being representatives of a population.</description>
+  <hint>Concept widely used in statistics.</hint>
  </unmot> 
 <unmot>  
   <lemot>nonagon</lemot>
-  <description>a polygon with nine sides.</description>  
+  <description>A polygon with nine sides.</description>
+  <hint>A type of polygon.</hint>  
  </unmot> 
 <unmot>
   <lemot>approximation</lemot>
-  <description>the approximate result of an operation. It can be written down or calculated mentally.</description>  
+  <description>The approximate result of an operation.</description>
+  <hint>Synonym of estimation.</hint>   
  </unmot> 
 <unmot>
   <lemot>factor</lemot>
-  <description>the whole numbers multiplied in a multiplication are factors. In the equation 2 x 6 = 12, 2 and 6 are factors of 12.</description> 
- </unmot> 
+  <description>The whole numbers multiplied in a multiplication are factors. In the equation 2 x 6 = 12, 2 and 6 are factors of 12.</description> 
+  <hint>The whole numbers multiplied in a multiplication are ... of the product.</.</hint>  
+</unmot> 
 <unmot>
   <lemot>fraction</lemot>
-  <description>a fraction represents the parts of a whole, or of a set, the ratio between two whole numbers, or a quotient.</description>  
+  <description>A fraction represents the parts of a whole, or of a set, the ratio between two whole numbers, or a quotient.</description>
+  <hint>Synonym of ratio.</hint>  
  </unmot> 
 <unmot>
   <lemot>plot</lemot>
-  <description>a diagram that exhibits a relationship between two sets of numbers.</description> 
+  <description>A diagram that exhibits a relationship between two sets of numbers.</description>
+  <hint>A way to represent a data set.</hint>  
  </unmot> 
 <unmot>
   <lemot>heptahedron</lemot>
-  <description>a polygon with seven sides.</description>  
+  <description>A polygon with seven sides.</description>
+  <hint>A type of polygon.</hint>  
  </unmot> 
 <unmot>
   <lemot>hexahedron</lemot>
-  <description>a polyhedron, such as a cube, that has six faces.</description>   </unmot> 
+  <description>A polyhedron, such as a cube, that has six faces.</description>
+  <hint>A type of polyhedron.</hint>    
+</unmot> 
 <unmot>
   <lemot>hexagon</lemot>
-  <description>a polygon with six sides.</description>  
+  <description>A polygon with six sides.</description>
+  <hint>A type of polygon.</hint>   
  </unmot> 
 <unmot>
   <lemot>infinite</lemot>
-  <description>that has no end. For example, the set of all naturel numbers is infinite.</description> 
+  <description>That has no end. For example, the set of all naturel numbers is infinite.</description>
+  <hint>Antonym of finite.</hint> 
  </unmot> 
 <unmot>
   <lemot>line</lemot>
-  <description>a one-dimensional geometrical figure.</description> 
+  <description>A one-dimensional geometrical figure.</description>
+  <hint>A one-dimensional geometrical figure.</hint>  
  </unmot> 
 <unmot>
-  <lemot>lozenge</lemot>
-  <description> a parallelogram that has four congruent sides.</description> 
- </unmot> 
-<unmot>
-  <lemot>mass</lemot>
-  <description>the mass of an object corresponds to his property of being more or less heavy. The mass of an object is a function of its volume, and of the kind of matter it is made of. On the other hand, the weight of an object also depends on its position relative to a gravity field (Is the object on Earth, on the Moon, at the equator, or at the north pole?) The weight is a measure of the gravitational force acting on an object.</description>  
- </unmot> 
+  <lemot>rhombus</lemot>
+  <description>A parallelogram that has four congruent sides.</description>
+  <hint>A type of parallelogram.</hint> 
+ </unmot>  
 <unmot>
   <lemot>multiple</lemot>
-  <description>the multiple of a whole number is the product of this number with another whole number. For example, 0,4,8,16 â€¦ are multiples of 4.</description>
- </unmot> 
+  <description>The multiple of a whole number is the product of this number with another whole number. For example, 0,4,8,16 … are multiples of 4.</description>
+  <hint>The ... of a whole number is the product of this number with another whole number.</hint>
+</unmot> 
 <unmot>
   <lemot>multiplicand</lemot>
-  <description>a quanity that is multiplied by another. In 8 x 4 = 32, 8 is the multiplicand.</description>  
+  <description>A quantity that is multiplied by another. In 8 x 4 = 32, 8 is the multiplicand.</description>
+  <hint>An element of a multiplication.</hint>   
  </unmot> 
 <unmot>
   <lemot>multiplier</lemot>
-  <description> a quantity by which another is multiplied. In 8 x 4 = 32, 4 is the multiplier.</description> 
+  <description>A quantity by which another is multiplied. In 8 x 4 = 32, 4 is the multiplier.</description>
+  <hint>An element of a multiplication.</hint> 
  </unmot> 
 <unmot>
   <lemot>multiplication</lemot>
-  <description>of the four basic arithmetic operation.The product of two or more terms is made. Multiplication is a repeated addition : 8 x 4 is the same as 8 + 8 +8 + 8.</description>  
+  <description>One of the four basic arithmetic operations. The product of two or more terms is made. Multiplication is a repeated addition : 8 x 4 is the same as 8 + 8 +8 + 8.</description>
+  <hint>One of the four basic arithmetic operations.</hint>    
  </unmot> 
 <unmot>
   <lemot>number</lemot>
-  <description> a symbol representing a quantity, a size, a position. The symbols used may be numerical(6), letters (six) or else (1111 1).</description> 
+  <description>A symbol representing a quantity, a size, or a position. The symbols used may be numerical(6), letters (six) or else (1111 1).</description>
+  <hint>A symbol representing a quantity, a size, or a position.</hint>  
  </unmot> 
 <unmot>
   <lemot>decimal number</lemot>
-  <description> a number represented in its decimal expansion, like 2.1, and 129.87.</description> 
+  <description>A number represented in its decimal expansion, like 2.1, and 129.87.</description>
+  <hint>A type of number.</hint>  
  </unmot> 
 <unmot>
   <lemot>odd number</lemot>
-  <description>a whole number that is not a multiple of 2.</description>  
+  <description>A whole number that is not a multiple of 2.</description>
+  <hint>A type of number.</hint>    
  </unmot> 
 <unmot>
   <lemot>irrational number</lemot>
-  <description>a number that cannot be expressed as the ratio of two integers, like pi.</description>  
+  <description>A number that cannot be expressed as the ratio of two integers, like pi.</description>
+  <hint>A type of number.</hint>    
  </unmot> 
 <unmot>
   <lemot>even number</lemot>
-  <description>a whole number that is a multiple of two.</description>  
+  <description>A whole number that is a multiple of two.</description>
+  <hint>A type of number.</hint>    
  </unmot> 
 <unmot>
   <lemot>prime number</lemot>
-  <description>a whole number greater than 1, which is only divisible by 1 and itself.</description>  
+  <description>A whole number greater than 1, which is only divisible by 1 and itself.</description>
+  <hint>A type of number.</hint>    
  </unmot> 
 <unmot>
   <lemot>rational number</lemot>
-  <description>a number that can be expressed as the ratio of two integers (the second integer being non-zero).</description>  
+  <description>a number that can be expressed as the ratio of two integers (the second integer being non-zero).</description>
+  <hint>A type of number.</hint>    
  </unmot> 
 <unmot>
   <lemot>integers</lemot>
-  <description>the natural numbers, and their opposites: ...-3, -2, -1, 0, 1, 2, 3.. .</description>  
+  <description>The natural numbers, and their opposites: ...-3, -2, -1, 0, 1, 2, 3.. .</description>  
  </unmot>
 <unmot>
   <lemot>natural numbers</lemot>
-  <description>the numbers which one counts with: 0, 1, 2, 3... .</description>  
+  <description>The numbers one counts with: 0, 1, 2, 3... .</description>
+  <hint>Type of number.</hint>   
  </unmot> 
 <unmot>
   <lemot>numerator</lemot>
-  <description>the expression written above the line in a common fraction to indicate the number of parts of the whole. In the fraction 4/5, the numerator is the number 4.</description>  
- </unmot> 
+  <description>The expression written above the line in a common fraction to indicate the number of parts of the whole. In the fraction 4/5, the numerator is the number 4.</description>  
+  <hint>Element of a fraction.</hint> 
+</unmot> 
 <unmot>
   <lemot>octagon</lemot>
-  <description>a polygon with eight sides.</description>  
+  <description>A polygon with eight sides.</description>
+  <hint>Type of polygon.</hint>  
  </unmot> 
 <unmot>
   <lemot>pair</lemot>
-  <description>a set that contains two elements.</description>   
+  <description>A set that contains two elements.</description>
+  <hint>A set that contains two elements.</hint>    
  </unmot> 
 <unmot>
   <lemot>pentagon</lemot>
-  <description>a polygon with five sides.</description>  
+  <description>A polygon with five sides.</description>
+  <hint>A type of polygon.</hint>   
  </unmot> 
 <unmot>
   <lemot>perimeter</lemot>
-  <description>the distance around a closed figure.</description>  
+  <description>The distance around a closed figure.</description>
+  <hint>One of the values that define a closed figure.</hint>   
  </unmot> 
 <unmot>
   <lemot>pictogram</lemot>
-  <description>a graph in which data is represented by drawings or images.</description>  
+  <description>A graph in which data is represented by drawings or images.</description>
+  <hint>A type of graph.</hint>  
  </unmot> 
 <unmot>
   <lemot>point</lemot>
-  <description>a geometrical figure without dimension.</description>  
+  <description>A geometrical figure with dimension 0.</description>
+  <hint>A geometrical figure with dimension 0.</hint>   
  </unmot> 
 <unmot>
-  <lemot>polyehdron</lemot>
-  <description>a solid limited by flat polygons.</description>  
+  <lemot>polyhedron</lemot>
+  <description>A solid bounded by flat polygons.</description>
+  <hint>A solid bounded by flat polygons.</hint>  
  </unmot> 
 <unmot>
   <lemot>polygon</lemot>
-  <description>a closed plane figure limited by line segments.</description>  
+  <description>A closed plane figure limited by line segments.</description>
+  <hint>A closed plane figure limited by line segments.</hint>   
  </unmot> 
 <unmot>
   <lemot>prism</lemot>
-  <description>a polyhedron limited by two parallel congruent polygons linked by parallelograms.</description>  
+  <description>A polyhedron limited by two parallel congruent polygons linked by parallelograms.</description>
+  <hint>A type of polyhedron.</hint>    
  </unmot>
 <unmot>
   <lemot>probability</lemot>
-  <description> the ratio of the number of successful outcomes to the number of possible cases of an experiment whose result is determined by chance. The probability of obtaining the number four when throwing a dice is 1/6.</description>  
+  <description>The ratio of the number of successful outcomes to the number of possible cases of an experiment whose result is determined by chance. The probability of obtaining the number four when throwing a dice is 1/6.</description>
+  <hint>The ratio of the number of successful outcomes to the number of possible cases of an experiment whose result is determined by chance.</hint>    
  </unmot> 
 <unmot>
   <lemot>product</lemot>
-  <description>the result of a multiplication.</description>  
+  <description>The result of a multiplication.</description>
+  <hint>The result of a multiplication.</hint>  
  </unmot> 
 <unmot>
   <lemot>pyramid</lemot>
-  <description>a polyhedron  that has  polygon as a base, and triangles that meet at a common point as sides.</description>  
+  <description>A polyhedron that has a polygon as a base and triangles that meet at a common point as sides.</description>
+  <hint>A type of polyhedron.</hint>   
  </unmot> 
 <unmot>
   <lemot>quadrant</lemot>
-  <description>one the four regions of the plane defined by the four possible combinations of sign for (x,y).</description>  
+  <description>One the four regions of the plane defined by the four possible combinations of sign of x and y.</description>
+  <description>One the four regions of the plane.</description>   
  </unmot> 
 <unmot>
   <lemot>quadrilateral</lemot>
-  <description>a four-sided polygon.</description>  
+  <description>A four-sided polygon.</description>
+  <hint>A type of polygon.</hint>    
  </unmot> 
 <unmot>
   <lemot>quotient</lemot>
-  <description>the result of a division.</description>  
+  <description>The result of a division.</description>
+  <hint>The result of a division.</hint>   
  </unmot> 
 <unmot>
   <lemot>protactor</lemot>
-  <description>a device used to measure angles.</description>  
+  <description>A geometrical instrument used to measure angles.</description>
+  <hint>A type of geometrical instrument.</hint>    
  </unmot> 
 <unmot>
   <lemot>radius</lemot>
-  <description>the line segment between the center of a circle and any point on the circumference.</description>  
+  <description>The line segment between the center of a circle and any point on the circumference.</description>
+  <hint>One of the parameters that defines a circle.</hint>  
  </unmot> 
 <unmot>
   <lemot>graph</lemot>
-  <description>a collection of points and lines connecting some of them.</description>  
+  <description>A collection of points and lines connecting some of them.</description>
+  <hint>A collection of points and lines connecting some of them.</hint>   
  </unmot>
 <unmot>
   <lemot>remainder</lemot>
-  <description>the quantity left over after an integer division.</description>  
+  <description>The quantity left over after an integer division.</description>
+  <hint>An element of a division.</hint>  
  </unmot> 
 <unmot>
   <lemot>rotation</lemot>
-  <description>a displacement in which each point moves a certain angle around a point called center of rotation. For example, the motion of a bicycle wheel is a rotation.</description>  
+  <description>A displacement in which each point moves a certain angle around a point called center of rotation. For example, the motion of a bicycle wheel is a rotation.</description>
+<description>A type of displacement.</hint>    
  </unmot> 
 <unmot>
   <lemot>line segment</lemot>
-  <description>part of a line limited by two points.</description>  
+  <description>A part of a line limited by two points.</description>
+  <hint>A part of a line limited by two points.</hint>    
  </unmot> 
 <unmot>
   <lemot>similar</lemot>
-  <description>two figures are similar if one is an enlarging or a reduction of the other.</description>  
+  <description>Two figures are similar if one is an enlarging or a reduction of the other.</description>
+  <hint>Two figures are called ... if one is an enlarging or a reduction of the other.</hint>    
  </unmot> 
 <unmot>
   <lemot>solid</lemot>
-  <description>a three-dimensional figure.</description>  
+  <description>A three-dimensional figure.</description>
+  <hint>A three-dimensional figure.</hint>    
  </unmot> 
 <unmot>
   <lemot>sum</lemot>
-  <description>the result of an addition.</description>  
+  <description>The result of an addition.</description>
+  <hint>The result of an addition.</hint>   
  </unmot> 
 <unmot>
   <lemot>vertex</lemot>
-  <description>the junction point of the two line segments of an angle, of two sides of a polygon, or three (or more) edges of a solid .</description>  
- </unmot> 
+  <description>The junction point of the two line segments of an angle, of two sides of a polygon, or three or more edges of a solid.</description>  
+   <hint>An Euclidean solid has many of those.</hint>   
+</unmot> 
 <unmot>
   <lemot>survey</lemot>
-  <description>a gathering of a sample of data.</description>  
+  <description>A gathering of a sample of data.</description>
+  <hint>Concept widely used in statistics.</hint>   
  </unmot> 
 <unmot>
   <lemot>substraction</lemot>
-  <description>one of the four basic arithmetic operations. A number is substracted from another.</description>  
+  <description>One of the four basic arithmetic operations. A number is substracted from another.</description>
+  <hint>One of the four basic arithmetic operations.</hint>    
  </unmot> 
 <unmot>
   <lemot>sphere</lemot>
-  <description>a three-dimensional figure for which each point is located at an equal distance of the center.</description>  
+  <description>A three-dimensional figure whose points are all located at an equal distance of the center.</description>
+  <hint>A type of three-dimensional figure.</hint>   
  </unmot> 
 <unmot>
   <lemot>symmetrical</lemot>
-  <description> a figure with two or three dimensions is known as symmetrical if it has an axis of  plane of  symmetry.</description>  
+  <description>A figure is known as symmetrical if it has an axis or plane of symmetry.</description>
+  <hint>A figure is known as ... if it has an axis or plane of symmetry.</int>   
  </unmot> 
 <unmot>
   <lemot>total</lemot>
-  <description>the result of an addition.</description>  
+  <description>The result of an addition.</description>
+  <hint>The result of an addition.</hint>   
  </unmot> 
 <unmot>
   <lemot>translation</lemot>
-  <description> displacement in straight line of an object or a figure; the motion an elevator is an example of a translation.</description>  
- </unmot> 
+  <description>Displacement in straight line of an object or a figure; the motion an elevator is an example of a translation.</description>  
+   <hint>Type of displacement.</hint>   
+</unmot> 
 <unmot>
   <lemot>trapezoid</lemot>
-  <description>a quadrilateral which has two parallel sides.</description>  
+  <description>A quadrilateral which has two parallel sides.</description>
+  <hint>A type of polygon.</hint>   
  </unmot>
 <unmot>
   <lemot>triangle</lemot>
-  <description>a polygon with three sides.</description>  
+  <description>A polygon with three sides.</description>
+  <hint>A type of polygon.</hint>  
  </unmot>
 <unmot>
   <lemot>volume</lemot>
-  <description>Mathematically, the volume of an object is defined as the space an object occupies and represents the measure of that space. For example, the volume of a given box is 90cm3. </description>
- </unmot>
+  <description>The volume of an object is defined as the space an object occupies and represents the measure of that space. For example, the volume of a given box is 90cm3.</description>
+   <description>This quantity is sometimes measured with liters.</hint> 
+</unmot>
 </mots>

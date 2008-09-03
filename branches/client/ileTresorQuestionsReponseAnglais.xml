@@ -2,109 +2,587 @@
 <ileTresor> 
 
 	<VraiFaux>
-  		<question>127 is a prime number.</question>
+  		<question>The dimension of a cube is 3.</question>
   		<reponse>true</reponse>
+		<Id>1</Id>
  	</VraiFaux>
  	
  	<VraiFaux>
-  		<question>11 Ã— 17 = 287</question>
+  		<question>The dimension of a hexagonal base pyramid is 6.</question>
   		<reponse>false</reponse>
+		<Id>2</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>The dimension of a rectangular prism is 3.</question>
+  		<reponse>true</reponse>
+	        <Id>3</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The dimension of a sphere is 1.</question>
+  		<reponse>false</reponse>
+		<Id>4</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>The number of vertices plus the number of faces minus the number of edges of any convex polygon is equal to 2.</question>
+  		<reponse>true</reponse>
+		<Id>5</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>The sum of the interior angles of a triangle is 270 degrees.</question>
+  		<reponse>false</reponse>
+	        <Id>6</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The sum of the interior angles of a square is 180 degrees.</question>
+  		<reponse>false</reponse>
+		<Id>7</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>The sum of the interior angles of a pentagon is 540 degrees.</question>
+  		<reponse>true</reponse>
+		<Id>8</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>The sum of the interior angles of a hexagon is 720 degrees.</question>
+  		<reponse>true</reponse>
+	        <Id>9</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The sum of the interior angles of a heptagon is 1260 degrees.</question>
+  		<reponse>false</reponse>
+		<Id>10</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>The sum of the interior angles of a octagon is 1080 degrees.</question>
+  		<reponse>true</reponse>
+		<Id>11</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>The sum of the interior angles of a nonagon is 1080 degrees.</question>
+  		<reponse>false</reponse>
+	        <Id>12</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The sum of the interior angles of a decagon is 1440 degrees.</question>
+  		<reponse>true</reponse>
+		<Id>13</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>A regular pentagon is a polygon with 5 congruent sides.</question>
+  		<reponse>true</reponse>
+		<Id>14</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>A regular hexagon is a polygon with 6 congruent sides.</question>
+  		<reponse>true</reponse>
+	        <Id>15</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>A regular heptagon is a polygon with 6 congruent sides.</question>
+  		<reponse>false</reponse>
+		<Id>16</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>A regular octagon is a polygon with 8 congruent sides.</question>
+  		<reponse>true</reponse>
+		<Id>17</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>A regular nonagon is a polygon with 7 congruent sides.</question>
+  		<reponse>false</reponse>
+	        <Id>18</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>A regular decagon is a polygon with 9 congruent sides.</question>
+  		<reponse>false</reponse>
+		<Id>19</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>A scalene triangle is one whose sides are all congruent.</question>
+  		<reponse>false</reponse>
+		<Id>20</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>An obtuse triangle is one whoses angles are all smaller than 90 degrees.</question>
+  		<reponse>false</reponse>
+	        <Id>21</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>There is no triangle that is both right and obtuse.</question>
+  		<reponse>true</reponse>
+		<Id>22</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>A right triangle having a 45 degree angle is isosceles.</question>
+  		<reponse>true</reponse>
+		<Id>23</Id>
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>The opposite angles of a parallelogram are congruent.</question>
+  		<reponse>true</reponse>
+	        <Id>24</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>A parallelogram has 2 axes of symmetry.</question>
+  		<reponse>false</reponse>
+		<Id>25</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>A square is a rhombus.</question>
+  		<reponse>true</reponse>
+		<Id>26</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>A rectangle is always a square.</question>
+  		<reponse>false</reponse>
+	        <Id>27</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>A rectangle has 4 axes of symmetry.</question>
+  		<reponse>false</reponse>
+		<Id>28</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>A square has 4 axes of symmetry.</question>
+  		<reponse>true</reponse>
+		<Id>29</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>A trapezoid has a single axis of symmetry.</question>
+  		<reponse>false</reponse>
+	        <Id>30</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The sum of all the interior angles of a right trapezoid is 450 degrees.</question>
+  		<reponse>false</reponse>
+		<Id>31</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>The diameter of a circle circumscribing a square is equal to the length of the square's side.</question>
+  		<reponse>false</reponse>
+		<Id>32</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>The diameter of a circle circumscribing a square is equal to the length of the square's diagonal.</question>
+  		<reponse>true</reponse>
+	        <Id>33</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The diameter of a circle inscribed in a square is equal to the length of the square's side.</question>
+  		<reponse>true</reponse>
+		<Id>34</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>The diameter of a circle inscribed in a square is equal to the length of the square's diagonal.</question>
+  		<reponse>false</reponse>
+		<Id>35</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>A parallelogram is a trapezoid.</question>
+  		<reponse>true</reponse>
+	        <Id>36</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>A parallelogram has 2 pairs of parallel sides.</question>
+  		<reponse>true</reponse>
+		<Id>37</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>A trapezoid has 2 pairs of parallel sides.</question>
+  		<reponse>false</reponse>
+		<Id>38</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>The diagonals of a rhombus are congruent.</question>
+  		<reponse>false</reponse>
+	        <Id>39</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The diagonals of a rhombus are perpendicular.</question>
+  		<reponse>true</reponse>
+		<Id>40</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>The diagonals of a rhombus are not the angles' bisectors.</question>
+  		<reponse>false</reponse>
+		<Id>41</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>A rhombus is a parallelogram.</question>
+  		<reponse>true</reponse>
+	        <Id>42</Id>
+ 	</VraiFaux>	
+	<VraiFaux>
+  		<question>If a quadrilateral's diagonals are perpendicular, then it is a rhombus.</question>
+  		<reponse>false</reponse>
+		<Id>43</Id>
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>The length of the radius of a circle is equal to twice that of its diameter.</question>
+  		<reponse>false</reponse>
+		<Id>44</Id>
+ 	</VraiFaux>	
+ 	<VraiFaux>
+  		<question>A right bisector always starts at the vertex of a polygon and cuts the opposite side in two halves.</question>
+  		<reponse>false</reponse>
+	        <Id>45</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>A bisector splits an angle into two halves.</question>
+  		<reponse>true</reponse>
+		<Id>46</Id>
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>A median always starts at the vertex of a polygon and cuts the opposite side in two halves.</question>
+  		<reponse>true</reponse>
+		<Id>47</Id>
+ 	</VraiFaux>	
+ 	<VraiFaux>
+  		<question>The height of a triangle starts at a vertex and cuts the opposite side perpendicularly in halves.</question>
+  		<reponse>false</reponse>
+	        <Id>48</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>(-550)-(-28)=-578.</question>
+  		<reponse>false</reponse>
+		<Id>49</Id>
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>1982 is divisible by 4.</question>
+  		<reponse>false</reponse>
+		<Id>50</Id>
+ 	</VraiFaux>	
+ 	<VraiFaux>
+  		<question>1 025 756 is divisible by 4.</question>
+  		<reponse>true</reponse>
+	        <Id>51</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>A fraction is a rational number.</question>
+  		<reponse>true</reponse>
+		<Id>52</Id>
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>Pi is an irrational number.</question>
+  		<reponse>true</reponse>
+		<Id>53</Id>
+ 	</VraiFaux>
+ 	
+
+	<VraiFaux>
+  		<question>A perfect number is an integer greater than 1 and equal to the sum of its proper divisors.</question>
+  		<reponse>true</reponse>
+	        <Id>55</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>A Mersenne prime is a prime number of the form 2^p-1 where p is a prime.</question>
+  		<reponse>true</reponse>
+		<Id>56</Id>
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>47 is a prime number.</question>
+  		<reponse>true</reponse>
+		<Id>57</Id>
+ 	</VraiFaux>	
+	<VraiFaux>
+  		<question>49 is a prime number.</question>
+  		<reponse>false</reponse>
+	        <Id>58</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>5 liters is equivalent to 5 dm³.</question>
+  		<reponse>true</reponse>
+		<Id>59</Id>
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>1 liter is equivalent to 1000 cm³.</question>
+  		<reponse>true</reponse>
+		<Id>60</Id>
+ 	</VraiFaux>
+
+	<VraiFaux>
+  		<question>500 mL is equivalent to 500 dm³.</question>
+  		<reponse>false</reponse>
+	        <Id>61</Id>
+ 	</VraiFaux>
+
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>0! = 0.</question>
+  		<reponse>false</reponse>
+		<Id>63</Id>
+ 	</VraiFaux>
+
+	<VraiFaux>
+  		<question>7!= 7*6*5*4*3*2*1.</question>
+  		<reponse>true</reponse>
+	        <Id>64</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>0, 1, 3, 6, 10, 15, 21, 28, 36, 45 and 55 are all triangular numbers.</question>
+  		<reponse>true</reponse>
+		<Id>65</Id>
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>The number 21,574 is divisible by 3.</question>
+  		<reponse>true</reponse>
+		<Id>66</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The number 133 is divisible by 3.</question>
+  		<reponse>false</reponse>
+	        <Id>67</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>A square number is a positive integer that can be represented geometrically by a square.</question>
+  		<reponse>true</reponse>
+		<Id>68</Id>
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>A figurate number is a number that can be represented as a regular and discrete geometric pattern.</question>
+  		<reponse>true</reponse>
+		<Id>69</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>7 is an hexagonal number.</question>
+  		<reponse>false</reponse>
+	        <Id>70</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>9 is a triangular number.</question>
+  		<reponse>false</reponse>
+		<Id>71</Id>
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>The cardinality of a set is a measure of the number of elements of the set.</question>
+  		<reponse>true</reponse>
+		<Id>72</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The set of the natural numbers contains a finite number of elements.</question>
+  		<reponse>false</reponse>
+	        <Id>73</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The integers 2,4, and 8 are the only divisors of 16.</question>
+  		<reponse>false</reponse>
+		<Id>74</Id>
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>The numbers 2, 4, and 8 are divisors of 16.</question>
+  		<reponse>true</reponse>
+		<Id>75</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The numbers 1,2,4,8,9,36,and 72 are all divisors of 72.</question>
+  		<reponse>true</reponse>
+	        <Id>76</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The numbers 1,2,4,8,9,36, and 72 are all multiples of 72.</question>
+  		<reponse>false</reponse>
+		<Id>77</Id>
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>34 is the smallest common multiple of 2 and 17.</question>
+  		<reponse>true</reponse>
+		<Id>78</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>66 is the lowest common multiple of 2 and 11.</question>
+  		<reponse>false</reponse>
+	        <Id>79</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>3 is the highest common divisor of 12 and 24.</question>
+  		<reponse>false</reponse>
+		<Id>80</Id>
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>22 is the highest common divisor of 44 and 66.</question>
+  		<reponse>true</reponse>
+		<Id>81</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The highest common divisor of two natural numbers is the highest natural integer that divides these two integers.</question>
+  		<reponse>true</reponse>
+	        <Id>82</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The smallest common multiple of two natural integers is the smallest integer that is a multiple of both these numbers.</question>
+  		<reponse>true</reponse>
+		<Id>83</Id>
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>The addition of integers is commutative.</question>
+  		<reponse>true</reponse>
+		<Id>84</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The expression a*(b+c) = a*b+a*c expresses the associativity of multiplication and addition.</question>
+  		<reponse>false</reponse>
+	        <Id>85</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The expression a*b*c=(a*b)*c = a*(b*c) expresses the distributivity of multiplication.</question>
+  		<reponse>false</reponse>
+		<Id>86</Id>
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>The remainder of the division of 1234 by 5 is 5.</question>
+  		<reponse>false</reponse>
+		<Id>87</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>324 is a square number.</question>
+  		<reponse>true</reponse>
+	        <Id>88</Id>
+ 	</VraiFaux>
+	<VraiFaux>
+  		<question>The cubic root of 729 is 9.</question>
+  		<reponse>true</reponse>
+		<Id>89</Id>
+ 	</VraiFaux>
+ 	<VraiFaux>
+  		<question>The cubic root of 64 is not an integer.</question>
+  		<reponse>false</reponse>
+		<Id>90</Id>
+ 	</VraiFaux>
+	
+	<VraiFaux>
+  		<question>127 is a prime number.</question>
+  		<reponse>true</reponse>
+		<Id>91</Id>
+ 	</VraiFaux>
+ 	
+ 	<VraiFaux>
+  		<question>11 × 17 = 287</question>
+  		<reponse>false</reponse>
+		<Id>92</Id>
  	</VraiFaux>
  	
  	<VraiFaux>
   		<question>With two dice rolls, the most frequent sum is 7.</question>
   		<reponse>true</reponse>
+		<Id>93</Id>
  	</VraiFaux>
- 	
  	<VraiFaux>
-  		<question>The 4th term of the suite starting with 1, 4, 9 is 25</question>
+  		<question>The 4th term of the sequence starting with 1, 4, 9 is 25</question>
   		<reponse>false</reponse>
+		<Id>94</Id>
  	</VraiFaux>
  	
 	<VraiFaux>
   		<question>The number 3456 is divisible by 9.</question>
   		<reponse>true</reponse>
+		<Id>95</Id>
  	</VraiFaux> 	
  	 		
 	<VraiFaux>
   		<question>The product of two numbers, each one divisible by 5, is divisible by 25.</question>
   		<reponse>true</reponse>
+		<Id>96</Id>
  	</VraiFaux> 	 	
 
 	<VraiFaux>
   		<question>The cube root of 1009 is 9.</question>
   		<reponse>false</reponse>
+		<Id>97</Id>
  	</VraiFaux>
  	
  	<VraiFaux>
   		<question>The square of 2451 is 6007402.</question>
   		<reponse>false</reponse>
+		<Id>98</Id>
  	</VraiFaux>
  	
  	<VraiFaux>
-  		<question>The intersection of the even numbers ensemble and the odd numbers ensemble contains only one element.</question>
+  		<question>The intersection of the set of even numbers and the set of odd numbers contains only one element.</question>
   		<reponse>false</reponse>
+		<Id>99</Id>
  	</VraiFaux>
  	
 	<VraiFaux>
   		<question>The quotient of 3/4 by 8/9 is 1/2.</question>
   		<reponse>false</reponse>
+		<Id>100</Id>
  	</VraiFaux> 	
  	
  	 <VraiFaux>
-  		<question>The surface area of the parallelogram where the base measure 5cm and the height is 6cm equals 32.</question>
+  		<question>The surface area of the parallelogram whose base measures 5cm and whose height is 6cm is equal to 32.</question>
   		<reponse>false</reponse>
+		<Id>101</Id>
  	</VraiFaux>
  	
 	<VraiFaux>
   		<question>The least common multiple of 4 and 6 is 12.</question>
   		<reponse>true</reponse>
+		<Id>102</Id>
+ 	</VraiFaux> 	 		
+	<VraiFaux>
+  		<question>9 is a divisor of 12,345.</question>
+  		<reponse>false</reponse>
+		<Id>103</Id>
  	</VraiFaux> 	
  	 		
 	<VraiFaux>
-  		<question>9 divides 12345.</question>
+  		<question>There are infinitely many prime numbers.</question>
+  		<reponse>true</reponse>
+		<Id>105</Id>
+ 	</VraiFaux>  	
+ 	 	
+   	<VraiFaux>
+  		<question>An octogon is a regular polygon with 9 sides.</question>
   		<reponse>false</reponse>
+		<Id>106</Id>
  	</VraiFaux> 	
- 	
+ 	 		
+	<VraiFaux>
+  		<question>A dodecagon is a regular polygon with 10 sides.</question>
+  		<reponse>false</reponse>
+		<Id>107</Id>
+ 	</VraiFaux>  			
  	<VraiFaux>
-  		<question>The cardinal of the empty set is 0.</question>
+  		<question>The size of every interior angle of a regular pentagon is 108 degrees.</question>
   		<reponse>true</reponse>
- 	</VraiFaux> 	
- 	 		
-	<VraiFaux>
-  		<question>The prime numbers set is infinite.</question>
-  		<reponse>true</reponse>
- 	</VraiFaux>  	
- 	 	
+		<Id>108</Id>
+ 	</VraiFaux> 		  	
    	<VraiFaux>
-  		<question>An octogon is a regular polygon with 9 edges.</question>
-  		<reponse>false</reponse>
- 	</VraiFaux> 	
- 	 		
+  		<question>A heptagon is a regular polygon with 7 sides.</question>
+  		<reponse>true</reponse>
+		<Id>109</Id>
+ 	</VraiFaux> 	 		
 	<VraiFaux>
-  		<question>A dodecagon is a regular polygon with 10 edges</question>
-  		<reponse>false</reponse>
- 	</VraiFaux>  		
- 	 	
- 	 	
- 	 <VraiFaux>
-  		<question>Each internal angle in a regular pentagon total 108 degrees.</question>
+  		<question>The sum of the interior angles of an hexagon is equal to 720 degrees.</question>
   		<reponse>true</reponse>
- 	</VraiFaux> 	
- 	 		
-	<VraiFaux>
-  		<question>It is possible to draw 5 secant lines in a pentagon.</question>
-  		<reponse>true</reponse>
- 	</VraiFaux>  	
- 	 	
-   	<VraiFaux>
-  		<question>A heptagon is a regular polygon with 7 edges.</question>
-  		<reponse>true</reponse>
- 	</VraiFaux> 	
- 	 		
-	<VraiFaux>
-  		<question>The internal angles of an hexagon total 4Ï€.</question>
-  		<reponse>true</reponse>
- 	</VraiFaux>  		
+		<Id>110</Id>
+ 	</VraiFaux>  
+
 
 </ileTresor>
