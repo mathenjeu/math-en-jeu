@@ -7,8 +7,5 @@
 	pointage = "Score"
 	boutonMotSuivant = "Next word"
 	boutonTerminer = "Quit"
-
-	indiceTexte = "Hint : "
-
 >
 </Texte> 
