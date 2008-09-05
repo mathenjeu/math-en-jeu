@@ -2,8 +2,8 @@
 <Texte 
 	
 	titre = "Jeu de mémoire"
-	instructions = "Pour gagner des points dans ce jeu, vous devez identifier les paires de cartes. Faites vite!"
-	commencer = "Commencer"	
+	instructions = "Pour gagner des points dans ce jeu, vous devez associer les symboles grecs à leurs noms français. Faites vite, vous n'avez que 60 secondes!"
+	jouer = "Jouer!"	
 
  	pointage = "Pointage : "
 	niveau = "Niveau : "
@@ -37,6 +37,10 @@
 	khi = "khi"
 	psi = "psi"
 	omega = "oméga"
+
+	finVictoire = "Félicitations! Vous êtes passé à travers l'alphabet grec en moins de 60 secondes. Vous vous méritez 100 points!"
+	finTemps = "Le temps est écoulé! Vous avez accumulé "
+	quitter = "Quitter"
 
 >
 </Texte> 
