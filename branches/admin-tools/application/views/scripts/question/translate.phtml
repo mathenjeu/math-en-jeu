@@ -1,0 +1,92 @@
+<?php echo $this->render('header.phtml'); ?>
+<a href="<?php echo $this->baseUrl ?>/question">Return</a>
+
+<div id="content">
+  <?php if ($this->step == 1) :?>
+	<form method="post" action="<?php echo $this->baseUrl; ?>/question/<?php echo $this->action ?>">
+    <input type="hidden" name="step" value="1" />
+    Do translation from 
+    <select name="from_language_id">
+      <?php foreach($this->from_languages as $language) : ?>
+        <option value="<?php echo $language->language_id; ?>"><?php echo $language->name; ?></option>
+      <?php endforeach; ?>
+    </select>
+    to 
+    <select name="to_language_id">
+      <?php foreach($this->to_languages as $language) : ?>
+        <option value="<?php echo $language->language_id; ?>"><?php echo $language->name; ?></option>
+      <?php endforeach; ?>
+    </select>
+		<br/>
+		<input type="submit" name="next" value="Next" >
+	</form>
+	
+	<?php endif; ?>
+	
+	<?php if ($this->step == 2) :?>
+
+	<form method="post" action="translate">
+    <input type="hidden" name="step" value="2" />
+    	<fieldset>  
+        <legend>Question details</legend>
+    <table>
+    <thead>
+      <tr>
+        <th>ID : <?php echo $this->question->question_id; ?></th>
+        <th>New question</th>
+        <th>Original question</th>
+      </tr>
+    </thead>
+    <tr>
+      <td><label for="questionLatex">Question latex</label></td>
+      <td><textarea name="questionLatex" rows="15" cols="50"></textarea></td>
+      <td><?php echo $this->escape(substr($this->question_info_from->question_latex,0,60)); ?></td>
+    </tr>
+    <tr>
+      <td><label for="feedbackLatex">Feedback latex</label></td>
+      <td><textarea name="feedbackLatex" rows="15" cols="50"></textarea></td>
+      <td><?php echo $this->escape(substr($this->question_info_from->feedback_latex,0,60)); ?></td>
+    </tr>
+    <?php if ($this->answer_type_tag == 'MULTIPLE_CHOICE') : ?>
+    <tr>
+      <td><label for="choiceA">Choice A</label></td>
+          <td><textarea rows="3" cols="50" name="choiceA"></textarea></td>
+          <td><?php echo $this->question_info_from->answer_a_latex; ?></td>
+        </tr>
+        <tr>
+          <td><label for="choiceB">Choice B</label></td>
+          <td><textarea rows="3" cols="50" name="choiceB"></textarea></td>
+          <td><?php echo $this->question_info_from->answer_b_latex; ?></td>
+        </tr>
+        <tr>
+          <td><label for="choiceC">Choice C</label></td>
+          <td><textarea rows="3" cols="50" name="choiceC"></textarea></td>
+          <td><?php echo $this->question_info_from->answer_c_latex; ?></td>
+        </tr>
+        <tr>
+          <td><label for="choiceD">Choice D</label></td>
+          <td><textarea rows="3" cols="50" name="choiceD"></textarea></td>
+          <td><?php echo $this->question_info_from->answer_d_latex; ?></td>
+        </tr>
+    <?php endif; ?>
+    <?php if ($this->answer_type_tag == 'SHORT_ANSWER') : ?>
+      <tr>
+        <td><label for="goodAnswer">Correct answer</label></td>
+        <td><input type="text" name="goodAnswer" /></td>
+        <td><?php echo $this->question_info_from->good_answer; ?></td>
+      </tr>
+    <?php endif; ?>
+    </table>
+    </fieldset>
+    <?php echo $this->render('question/_conversion_option.phtml'); ?>
+		<?php echo $this->render('question/_comment_box.phtml'); ?>
+		<div>
+			<input type="submit" value="Finish" />
+		</div>
+    
+    
+  </form>
+	<?php endif; ?>
+</div>
+<?php echo $this->render('question/_menu.phtml'); ?>
+<?php echo $this->render('footer.phtml'); ?>

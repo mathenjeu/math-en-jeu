@@ -1,0 +1,35 @@
+<?php echo $this->render('header.phtml'); ?>
+<div id="content">
+  <h1><?php echo $this->escape($this->title); ?></h1>
+  
+  <p><a href="<?php echo $this->baseUrl; ?>/image/upload">Add new image</a></p>
+  <table>
+    <tr>
+      <th>Logical Name</th>
+      <th>Filesystem name</th>
+      <th>Creator</th>
+      <th>Description</th>
+      <th>Image</th>
+      <th>Action</th>
+    </tr>
+  
+  <?php foreach($this->images as $image) : ?>
+    <tr>
+      <td><?php echo $this->escape($image->logical_name);?></td>
+      <td><?php echo $this->escape($image->physical_name);?></td>
+      <td><?php echo $image->findParentRow('User')->username; ?></td>
+      <td><?php echo $this->escape($image->description); ?></td>
+      <td><img alt="Image" src="<?php echo $this->image_url . str_replace(".eps",".jpeg",$image->physical_name); ?>" />
+      <td>
+        <a href="<?php echo $this->baseUrl; ?>/image/edit/id/<?php
+        echo $image->image_id;?>">Edit</a>
+        <a href="<?php echo $this->baseUrl; ?>/image/delete/id/<?php
+        echo $image->image_id;?>">Delete</a>
+      </td>
+    </tr>
+  <?php endforeach; ?>
+  
+  </table>
+</div>
+<?php echo $this->render('image/_menu.phtml'); ?>
+<?php echo $this->render('footer.phtml'); ?>
