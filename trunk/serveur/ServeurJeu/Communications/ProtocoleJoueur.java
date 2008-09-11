@@ -11,7 +11,6 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -782,27 +781,7 @@ public class ProtocoleJoueur implements Runnable
 						// du mot de passe permettant d'accéder à la salle (s'il 
 						// n'y en a pas, alors le mot de passe sera vide)
 						Node objMotDePasse = obtenirValeurParametre(objNoeudCommandeEntree, "MotDePasse");
-					
-			// modif acouet
-			// Déclaration d'une variable qui va contenir le noeud
-			// des niveaux permettant de fournir au joueur des questions
-			// appropriŽes selon ses choix
-			Node objNiveaux = obtenirValeurParametre(objNoeudCommandeEntree, "Niveaux");
-			//System.out.println(objNiveaux.toString());
-			
-			Vector lstNiveaux = new Vector();
-			
-			StringTokenizer st = new StringTokenizer (objNiveaux.toString(), ",]");
-		    while (st.hasMoreTokens()) 
-		    {
-		    	lstNiveaux.add(st.nextToken());
-		    }
-		    //lstNiveaux.remove(0);
-		    // le serveur ne considre pas cette valeur pour correspondre aux 
-		    // indices de la BD, alors pas besoin de le supprimer
-		    objJoueurHumain.definirCleSousCategorie(lstNiveaux);
-
-		    
+						
 						// Déclaration d'une variable qui va contenir le mot de
 						// passe pour accéder à la salle (peut être vide)
 						String strMotDePasse = "";
@@ -2131,7 +2110,7 @@ public class ProtocoleJoueur implements Runnable
 		{
 			// Si le nombre d'enfants du noeud de commande est de 2, alors
 			// le nombre de paramètres est correct et on peut continuer
-			if (noeudCommande.getChildNodes().getLength() == 3)
+			if (noeudCommande.getChildNodes().getLength() == 2)
 			{
 				// Déclarer une variable qui va permettre de savoir si les 
 				// noeuds enfants sont valides
@@ -2157,13 +2136,8 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudCourant.getAttributes().getLength() != 1 ||
 						objNoeudCourant.getAttributes().getNamedItem("type") == null ||
 						(objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("NomSalle") == false &&
-						//ajout
-						objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("Niveaux") == false &&
 						objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("MotDePasse") == false) ||
 						(objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("NomSalle") &&
-						objNoeudCourant.getChildNodes().getLength() != 1) ||
-						// ajout
-						(objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("Niveaux") &&
 						objNoeudCourant.getChildNodes().getLength() != 1) ||
 						(objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("MotDePasse") &&
 						objNoeudCourant.getChildNodes().getLength() > 1) ||
