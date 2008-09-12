@@ -8,7 +8,6 @@ import Enumerations.Visibilite;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.*;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
@@ -47,7 +46,7 @@ public final class GenerateurPartie
      * @throws NullPointerException : Si la liste passée en paramètre qui doit 
      * 								  être remplie est nulle
      */
-    public static Case[][] genererPlateauJeu(Regles reglesPartie, int temps, Vector listePointsCaseLibre, IntObj objDernierIdObjets, String butDuJeu, JoueurHumain joueur) throws NullPointerException
+    public static Case[][] genererPlateauJeu(Regles reglesPartie, int temps, Vector listePointsCaseLibre, IntObj objDernierIdObjets, String butDuJeu) throws NullPointerException
     {
 		// Création d'un objet permettant de générer des nombres aléatoires
 		Random objRandom = new Random();
@@ -281,7 +280,7 @@ public final class GenerateurPartie
 			// triées par priorité (c'est certain que la première fois il y a au 
 			// moins une règle de case)
 			Iterator objIterateurListePriorite = reglesPartie.obtenirListeCasesSpecialesPossibles().iterator();
-
+			
 			// On va choisir des cases spéciales en commençant par la case
 			// la plus prioritaire et on va faire ça tant qu'on n'a pas atteint 
 			// le pourcentage de cases spéciales devant se trouver sur le plateau 

@@ -3,61 +3,53 @@ package ServeurJeu.ComposantesJeu;
 import ClassesUtilitaires.UtilitaireNombres;
 
 /**
- * @author Jean-FranÁois Brind'Amour
+ * @author Jean-François Brind'Amour
  */
 public class Question
 {
-	// DÈclaration d'une variable qui va contenir le code de la question
+	// Déclaration d'une variable qui va contenir le code de la question
 	private int intCodeQuestion;
 	
-	// DÈclaration d'une variable qui va contenir l'URL de la question
+	// Déclaration d'une variable qui va contenir l'URL de la question
 	private String strURLQuestion;
 	
-	// DÈclaration d'une variable qui va garder le type de la question
+	// Déclaration d'une variable qui va garder le type de la question
 	private String objTypeQuestion;
 	
-	// DÈclaration d'une variable qui va garder la difficultÈ de la question
+	// Déclaration d'une variable qui va garder la difficulté de la question
 	private int intDifficulte;
-
-	// DÈclaration d'une variable qui va garder le sujet de la question
-	private int intSujet;
 	
-	// DÈclaration d'une variable qui va garder la categorie de la question
-	private int intCategorie;
-	
-	// DÈclaration d'une variable qui va contenir la rÈponse ‡ la question
+	// Déclaration d'une variable qui va contenir la réponse à la question
 	private String strReponse;
 	
-	// DÈclaration d'une variable qui va contenir l'url de l'explication de 
-	// la rÈponse
+	// Déclaration d'une variable qui va contenir l'url de l'explication de 
+	// la réponse
 	private String strURLExplication;
 	
+    // Déclaration d'une variable qui va contenir la catégorie de la question
+	private int intCategorie;
+	
 	/**
-	 * Constructeur de la classe Question qui initialise les propriÈtÈs de 
+	 * Constructeur de la classe Question qui initialise les propriétés de 
 	 * la question.
 	 * 
 	 * @param int codeQuestion : Le code de la question
 	 * @param String typeQuestion : Le type de la question
 	 * @param int difficulte : La difficulte de la question
 	 * @param String urlQuestion : Le URL de la question
-	 * @param String reponse : La rÈponse ‡ la question
-	 * @param String urlExplication : Le URL de l'explication de la rÈponse
+	 * @param String reponse : La réponse à la question
+	 * @param String urlExplication : Le URL de l'explication de la réponse
 	 */
-	//public Question(int codeQuestion, String typeQuestion, int difficulte, String urlQuestion, String reponse, String urlExplication)
-	public Question(int codeQuestion, String typeQuestion, int difficulte, String urlQuestion, String reponse, String urlExplication, int sujet, int categorie)
+	public Question(int codeQuestion, String typeQuestion, int difficulte, String urlQuestion, String reponse, String urlExplication)
 	{
-		// DÈfinir les propriÈtÈs des questions
+		// Définir les propriétés des questions
 		intCodeQuestion = codeQuestion;
 		objTypeQuestion = typeQuestion;
 		intDifficulte = difficulte;
 		strURLQuestion = urlQuestion;
 		strReponse = reponse;
 		strURLExplication = urlExplication;
-		// ajout acouet
-		// tient en compte les categories de questions de la BD
-		//intCategorie = 1;
-		intSujet = sujet;
-		intCategorie = categorie;
+		intCategorie = 1;
 	}
 	
 	/**
@@ -82,9 +74,9 @@ public class Question
 	}
 	
 	/**
-	 * Cette fonction retourne la difficultÈ de la question.
+	 * Cette fonction retourne la difficulté de la question.
 	 * 
-	 * @return String : La difficultÈ de la question
+	 * @return String : La difficulté de la question
 	 */
 	public int obtenirDifficulte()
 	{
@@ -102,9 +94,9 @@ public class Question
 	}
 	
 	/**
-	 * Cette fonction retourne si oui ou non la rÈponse est valide.
+	 * Cette fonction retourne si oui ou non la réponse est valide.
 	 * 
-	 * @return boolean : true si la rÈponse est valide
+	 * @return boolean : true si la réponse est valide
 	 * 					 false sinon
 	 */
 	public boolean reponseEstValide(String reponse)
@@ -114,20 +106,20 @@ public class Question
 	
 	
 	/**
-	 * Cette fonction retourne une mauvaise rÈponse. UtilisÈ lorsqu'un
-	 * joueur utilise l'objet "Livre" qui permet d'Èliminer un choix
-	 * de rÈponse. Dans le cas d'une question sans choix de rÈponse, la 
+	 * Cette fonction retourne une mauvaise réponse. Utilisé lorsqu'un
+	 * joueur utilise l'objet "Livre" qui permet d'éliminer un choix
+	 * de réponse. Dans le cas d'une question sans choix de réponse, la 
 	 * fonction retourne "PasUnChoixDeReponse"
 	 */
 	 public String obtenirMauvaiseReponse()
 	 {
-	 	// VÈrifier si la rÈponse est un choix de rÈponse
+	 	// Vérifier si la réponse est un choix de réponse
 	 	if (strReponse.toUpperCase().equals("A") ||
 	 	    strReponse.toUpperCase().equals("B") ||
 	 	    strReponse.toUpperCase().equals("C") ||
 	 	    strReponse.toUpperCase().equals("D") )
 	 	{
-	 		// Choisir alÈatoirement une mauvaise rÈponse
+	 		// Choisir aléatoirement une mauvaise réponse
 	 	    int arrShuffle[] = {0,1,2,3};
 	 	    for (int x = 1; x < 10; x++)
 	 	    {
@@ -157,10 +149,10 @@ public class Question
 	 }
 	 
 	/**
-	 * Cette fonction retourne le URL de l'explication de la rÈponse ‡ la 
+	 * Cette fonction retourne le URL de l'explication de la réponse à la 
 	 * question courante.
 	 * 
-	 * @return String : Le URL de l'explication de la rÈponse
+	 * @return String : Le URL de l'explication de la réponse
 	 */
 	public String obtenirURLExplication()
 	{
@@ -180,16 +172,6 @@ public class Question
 	public void definirCategorie( int categorie ) 
 	{
 		intCategorie = categorie;
-	}
-	
-	public int obtenirSujet() 
-	{
-		return intSujet;
-	}
-
-	public void definirSujet( int sujet ) 
-	{
-		intSujet = sujet;
 	}
 
 }
