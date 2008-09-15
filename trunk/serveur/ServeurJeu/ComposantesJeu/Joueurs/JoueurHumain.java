@@ -1,8 +1,5 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
-import java.util.Vector;
-
-
 import ServeurJeu.Communications.ProtocoleJoueur;
 import ServeurJeu.ComposantesJeu.InformationPartie;
 import ServeurJeu.ComposantesJeu.Salle;
@@ -37,16 +34,6 @@ public class JoueurHumain extends Joueur
 	private boolean bolPeutCreerSalle;
 	
 	private String cleNiveau;
-	
-	// Cette variable définit les catégories désirées par le joueur
-	private Vector cleCategorie;
-	
-	// Cette variable définit les sous-catégories désirées par le joueur
-	private Vector cleSousCategorie;
-	
-	// Cette variable indique si le mode avance est choisi
-	// Il s'agit du mode dans lequel on indique en detail les choix de niveaux
-	private boolean bolModeAvance;
 	
 	// DÈclaration d'une rÈfÈrence vers la salle dans laquelle le joueur se 
 	// trouve (null si le joueur n'est dans aucune salle)
@@ -87,11 +74,6 @@ public class JoueurHumain extends Joueur
 		strPrenom = "";
 		strNomFamille = "";
 		bolPeutCreerSalle = false;
-		
-		// TODO
-		// lorsque le client sera mis a jour, on devra utiliser cette variable
-		bolModeAvance = false;
-		
 		
 		// Au dÈbut, le joueur n'est dans aucune salle ni table
 		objSalleCourante = null;
@@ -279,36 +261,4 @@ public class JoueurHumain extends Joueur
 	{
 		this.cleNiveau = cleNiveau;
 	}
-
-	public Vector obtenirCleCategorie() 
-	{
-		return cleCategorie;
-	}
-
-	public void definirCleCategorie(Vector cleCategorie) 
-	{
-		this.cleCategorie = cleCategorie;
-	}
-
-	public Vector obtenirCleSousCategorie() 
-	{
-		return cleSousCategorie;
-	}
-
-	public void definirCleSousCategorie(Vector cleSousCategorie) 
-	{
-		this.cleSousCategorie = cleSousCategorie;
-	}
-	
-	public boolean obtenirModeAvance() 
-	{
-		return bolModeAvance;
-	}
-
-	public void definirModeAvance(boolean modeAvance) 
-	{
-		this.bolModeAvance = modeAvance;
-	}
-	
-	
 }

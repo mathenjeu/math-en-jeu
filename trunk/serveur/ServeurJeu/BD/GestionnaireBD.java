@@ -11,7 +11,6 @@ import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import java.util.Date;
-import java.util.StringTokenizer;
 import java.text.SimpleDateFormat; 
 import ServeurJeu.Configuration.GestionnaireMessages;
 import java.util.Vector;
@@ -181,8 +180,7 @@ public class GestionnaireBD
 		{
 			synchronized( requete )
 			{
-				// modif acouet
-				ResultSet rs = requete.executeQuery("SELECT cleJoueur, cleCatQuestionChoix, cleSousCategorieQuestion, prenom, nom, cleNiveau, peutCreerSalles FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+				ResultSet rs = requete.executeQuery("SELECT cleJoueur, prenom, nom, cleNiveau, peutCreerSalles FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
 				if (rs.next())
 				{
 					if (rs.getInt("peutCreerSalles") != 0)
@@ -197,29 +195,6 @@ public class GestionnaireBD
 					joueur.definirNomFamille(nom);
 					joueur.definirCleJoueur(cle);
 					joueur.definirCleNiveau( cleNiveau );
-					
-					// modif acouet
-					Vector lstCat = new Vector() ;
-					
-					StringTokenizer st = new StringTokenizer(rs.getString("cleCatQuestionChoix"), ",");
-				    while (st.hasMoreTokens()) 
-				    {
-				    	lstCat.add(Integer.parseInt(st.nextToken()));
-				    }
-
-				    joueur.definirCleCategorie(lstCat);
-				    
-				    
-					// modif acouet pour les sous-catŽgories
-					//Vector lstSousCat = new Vector() ;
-					
-					// Le serveur obtient toutes les sous-catŽgories dŽsirŽes par le joueur et les range dans un vector
-					//StringTokenizer st1 = new StringTokenizer(rs.getString("cleSousCategorieQuestion"), ",");
-				    //while (st1.hasMoreTokens()) 
-				    //{
-				    //	lstSousCat.add(Integer.parseInt(st1.nextToken()));
-				    //}
-				    //joueur.definirCleSousCategorie(lstSousCat);	
 				}
 			}
 		}
@@ -233,63 +208,38 @@ public class GestionnaireBD
 		}
 	}
 
-	
         // This method fills a Question box with only the player's level
-	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, JoueurHumain joueur )
+	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau )
 	{
-		//System.out.println("ds gest BD");
-		//System.out.println(joueur.obtenirCleSousCategorie().toString());
-		
-		
-        String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
-		String strRequeteSQL = "SELECT " + nomTable + ".*,typereponse.nomType FROM " + nomTable +",typereponse " +
-			"WHERE typereponse.cleType = " + nomTable + ".typeReponse and " + nomTable + ".valide = 1 " +
+                String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
+		String strRequeteSQL = "SELECT " + nomTable + ".*,typereponse.nomType FROM " + nomTable +
+                        ",typereponse WHERE typereponse.cleType = " + nomTable + ".typeReponse and " + nomTable + ".valide = 1 " +
 			"and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL and ";
 		
-
-        strRequeteSQL += "cleQuestion >= " + boiteQuestions.obtenirLangue().obtenirCleQuestionMin()
-                         + " and cleQuestion <= " + boiteQuestions.obtenirLangue().obtenirCleQuestionMax()
-                         + " and ";
-
-        strRequeteSQL += strValeurGroupeAge + niveau + " > 0";
-
+		
+                strRequeteSQL += "cleQuestion >= " + boiteQuestions.obtenirLangue().obtenirCleQuestionMin()
+                                 + " and cleQuestion <= " + boiteQuestions.obtenirLangue().obtenirCleQuestionMax()
+                                 + " and ";
+		    
+		strRequeteSQL += strValeurGroupeAge + niveau + " > 0";
+		
 		remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
 	}
 	
-	// NOUVELLES REQUæTES
-
-	// il faut traiter les catŽgories et sous-catŽgories dans remplirBoiteQuestions
-	// pour ne plus avoir ˆ s'en occuper par la suite.
-
-	// aller chercher si le mode de choix de catŽgorie est Normal ou AvancŽ
-	// aller chercher les choix de sous-catŽgories selon le cas
-	
-
-    // This function fills a Question box with the player's level, a specified difficulty and a question category
-	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, int intCategorie, int intDifficulte, JoueurHumain joueur)
+        // This function fills a Question box with the player's level, a specified difficulty and a question category
+	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, int intCategorie, int intDifficulte )
 	{
-
-		// ds remplirBoiteQuestion, on rŽcupre ces valeurs  
-		//Vector lstSousCat = new Vector();
-		//lstSousCat = joueur.obtenirCleSousCategorie();
-	       
-		// Noter qu'on ne tient plus compte de la catégorie!!
-        String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
+                // Noter qu'on ne tient plus compte de la catégorie!!
+                String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
             
 		String strRequeteSQL = "SELECT " + nomTable + ".*,typereponse.nomType FROM " + nomTable + ",typereponse " +
 			"WHERE typereponse.cleType = " + nomTable + ".typeReponse and " + nomTable + ".valide = 1 " +
 			"and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL ";
-	
-        strRequeteSQL += "and cleQuestion >= " +
-	    boiteQuestions.obtenirLangue().obtenirCleQuestionMin() + " and cleQuestion <= " +
-	    boiteQuestions.obtenirLangue().obtenirCleQuestionMax() + " and ";
+		
+                strRequeteSQL += "and cleQuestion >= " +
+		    boiteQuestions.obtenirLangue().obtenirCleQuestionMin() + " and cleQuestion <= " +
+		    boiteQuestions.obtenirLangue().obtenirCleQuestionMax() + " and ";
 		    
-          //for(int i=0; i<lstSousCat.size(); i++)
-            //{
-            //	strRequeteSQL += "cleSousCategorie == " + lstSousCat.get(i) + " and ";
-            //}
-            //    strRequeteSQL += "(cleSousCategorie == 9 or " + "cleSousCategorie == 10) and ";
-                
 		strRequeteSQL += strValeurGroupeAge + niveau + " = " + intDifficulte;
 		remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
 	}
@@ -312,16 +262,9 @@ public class GestionnaireBD
 					String reponse = rs.getString("bonneReponse");
 					String explication = rs.getString("FichierFlashReponse");
 					int difficulte = rs.getInt( strValeurGroupeAge + niveau );
-					
 					//TODO la categorie???
-		// ajout acouet pour la categorie
-		int categorie = rs.getInt("cleSujet");
-		//System.out.println("categorie : " + categorie);
-					
-                    String URL = boiteQuestions.obtenirLangue().obtenirURLQuestionsReponses();
-					//boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication));
-                    boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, categorie));
-                        				
+                                        String URL = boiteQuestions.obtenirLangue().obtenirURLQuestionsReponses();
+					boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication));
 				}
 			}
 		}
