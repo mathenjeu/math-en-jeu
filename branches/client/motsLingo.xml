@@ -48,7 +48,7 @@
  <unmot>
   <lemot>centre</lemot>
   <description>point situé à égale distance de tous les points d’un cercle ou d’une sphère.</description> 
-  <hint>Un des paramètres utilisé pour décrire un cercleou une sphère.</hint>
+  <hint>Un des paramètres utilisé pour décrire un cercle ou une sphère.</hint>
  </unmot>
  <unmot>
   <lemot>cercle</lemot>
@@ -593,7 +593,7 @@
  <unmot>
   <lemot>rayon</lemot>
   <description>le segment de droite qui joint le centre du cercle à un point quelconque situé sur la circonférence du cercle.</description>
-  <hint>Un des paramètres utilisé pour décrire un cercle.</hint>
+  <hint>Un des paramètres utilisé pour décrire un cercle ou une sphère.</hint>
  </unmot>
  <unmot>
   <lemot>reflexion</lemot>

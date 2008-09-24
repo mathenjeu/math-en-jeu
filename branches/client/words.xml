@@ -47,7 +47,7 @@
  </unmot> 
 <unmot>
   <lemot>rounding up</lemot>
-  <description>Giving the approximation of a number’s value.</description>
+  <description>Giving the approximation of a number's value.</description>
   <hint>Approximating.</hint>  
  </unmot> 
 <unmot>
@@ -122,12 +122,12 @@
  </unmot> 
 <unmot>
   <lemot>dividend</lemot>
-  <description>The number to be divided in a division operation. In the operation 18 ÷ 9 = 2, 18 is the dividend.</description>
+  <description>The number to be divided in a division operation. In the operation 18  9 = 2, 18 is the dividend.</description>
   <hint>An element of a division.</hint> 
  </unmot> 
 <unmot>
   <lemot>divisor</lemot>
-  <description>The second term of a division. In the operation 18 ÷ 9 = 2, 9 is the divisor.</description>
+  <description>The second term of a division. In the operation 18 / 9 = 2, 9 is the divisor.</description>
   <hint>An element of a division.</hint>  
  </unmot> 
 <unmot>
@@ -168,7 +168,7 @@
 <unmot>
   <lemot>factor</lemot>
   <description>The whole numbers multiplied in a multiplication are factors. In the equation 2 x 6 = 12, 2 and 6 are factors of 12.</description> 
-  <hint>The whole numbers multiplied in a multiplication are ... of the product.</.</hint>  
+  <hint>The whole numbers multiplied in a multiplication are ... of the product.</hint>  
 </unmot> 
 <unmot>
   <lemot>fraction</lemot>
@@ -212,7 +212,7 @@
  </unmot>  
 <unmot>
   <lemot>multiple</lemot>
-  <description>The multiple of a whole number is the product of this number with another whole number. For example, 0,4,8,16 … are multiples of 4.</description>
+  <description>The multiple of a whole number is the product of this number with another whole number. For example, 0,4,8,16  are multiples of 4.</description>
   <hint>The ... of a whole number is the product of this number with another whole number.</hint>
 </unmot> 
 <unmot>
@@ -377,7 +377,7 @@
 <unmot>
   <lemot>rotation</lemot>
   <description>A displacement in which each point moves a certain angle around a point called center of rotation. For example, the motion of a bicycle wheel is a rotation.</description>
-<description>A type of displacement.</hint>    
+  <hint>A type of displacement.</hint>    
  </unmot> 
 <unmot>
   <lemot>line segment</lemot>
@@ -402,7 +402,7 @@
 <unmot>
   <lemot>vertex</lemot>
   <description>The junction point of the two line segments of an angle, of two sides of a polygon, or three or more edges of a solid.</description>  
-   <hint>An Euclidean solid has many of those.</hint>   
+  <hint>An Euclidean solid has many of those.</hint>   
 </unmot> 
 <unmot>
   <lemot>survey</lemot>
@@ -422,7 +422,7 @@
 <unmot>
   <lemot>symmetrical</lemot>
   <description>A figure is known as symmetrical if it has an axis or plane of symmetry.</description>
-  <hint>A figure is known as ... if it has an axis or plane of symmetry.</int>   
+  <hint>A figure is known as ... if it has an axis or plane of symmetry.</hint>   
  </unmot> 
 <unmot>
   <lemot>total</lemot>
@@ -432,7 +432,7 @@
 <unmot>
   <lemot>translation</lemot>
   <description>Displacement in straight line of an object or a figure; the motion an elevator is an example of a translation.</description>  
-   <hint>Type of displacement.</hint>   
+  <hint>Type of displacement.</hint>   
 </unmot> 
 <unmot>
   <lemot>trapezoid</lemot>
@@ -447,6 +447,6 @@
 <unmot>
   <lemot>volume</lemot>
   <description>The volume of an object is defined as the space an object occupies and represents the measure of that space. For example, the volume of a given box is 90cm3.</description>
-   <description>This quantity is sometimes measured with liters.</hint> 
+  <hint>This quantity is sometimes measured with liters.</hint> 
 </unmot>
 </mots>
