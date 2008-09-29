@@ -1,4 +1,4 @@
-﻿
+
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
 	
@@ -23,6 +23,80 @@
 			boutonRetour = "Back"
 			boutonContinuer = "Continue"
 	
+		
+			explication = "The advanced mode allows for the more experienced player to select his level among the various mathematical categories of the game. If desired, he can personnalize his gaming experience by choosing only the subjects he is interested in."
+			
+			pasQuestion = "No question"
+			primaire1 = "Primary 1"
+			primaire2 = "Primary 2"
+			primaire3 = "Primary 3"
+			primaire4 = "Primary 4"
+			primaire5 = "Primary 5"
+			primaire6 = "Primary 6"
+			secondaire1 = "High school 1"
+			secondaire2 = "High school 2"
+			secondaire3 = "High school 3"
+			secondaire4_CST = "High school 4 - Culture"
+			secondaire4_TS = "High school 4 - Society & Tech"
+			secondaire4_SN = "High school 4 - Natural Sc."
+			secondaire5_CST = "High school 5 - Culture"
+			secondaire5_TS = "High school 5 - Society & Tech"
+			secondaire5_SN = "High school 5 - Natural Sc."
+			
+			
+			algebre = "Algebra"
+				conceptsAlgebre = "Concepts"
+				manipulation = "Algebraic manipulations"
+				systemesEquations = "Systems of equations"
+				modelisation = "Problem modelling"
+			
+			arithmetique = "Arithmetics"
+				nombresNaturels = "Natural numbers"
+				fractionsDecimauxPourcentage = "Fractions, decimal numbers, and percentages"
+				nombresEntiers = "Integers"	
+				nombresReels = "Real numbers"
+				proportions = "Proportions"
+				puissancesRadicauxLogarithmes = "Powers, roots, and logarithms"
+				
+			fonctions = "Functions"
+				conceptsFonctions = "Concepts"
+				polynomiale012 = "Polynomials of degree 0, 1, and 2"
+				valeurAbsolue = "Absolute value functions"
+				rationnelle = "Rational functions"
+				parParties = "Functions defined by parts"
+				partieEntiere = "Greatest integer function (floor function)"
+				periodique = "Periodic functions"
+				exponentielleLogarithmique = "Exponential and logarithmic"
+				
+			
+			geometrie = "Geometry"
+				geometriePlane = "Plane geometry"
+				geometrie3D = "3D geometry"
+				transformations = "Transformations"
+				distancePointDePartage = "Distances and midpoints"
+				
+			
+			probabilites = "Probabilities"
+				conceptsProbabilités = "Concepts"
+				denombrement = "Counting"
+				calculProbabilite = "Probability calculations"
+				esperanceEquite = "Expected values and equity"
+				chance = "Chance"
+							
+			statistiques = "Statistics"
+				conceptsStatistiques = "Concepts"
+				diagrammesTableaux = "Diagrams et tables"
+				mesureTendanceCentrale = "Measures of central tendency"
+				mesureDispersion = "Measures of variation"
+				mesurePosition = "Measures of position"
+				correlation = "Correlation"									
+							
+			logique = "Logic enigmas"
+			
+			histoire = "History of maths"
+			
+			accromath = "Accromath"
+
 		frame2 = ""
 
 			texteTables = "Choose an open table in the room : "	
