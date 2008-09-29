@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <config
 
 	url_server="localhost"
@@ -10,6 +10,11 @@
 	url_server_tunneling="newton.mat.ulaval.ca"
 	port_tunneling="80"
 
+	username="demo-155"
+	password="3437a2cf2af95fe8"
+	
+	gameType="mathEnJeu"
+		
 	gamepath="mathemaQuoi_beta.swf"
 >
  
