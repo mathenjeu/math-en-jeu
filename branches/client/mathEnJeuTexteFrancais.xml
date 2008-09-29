@@ -22,8 +22,8 @@
 			salle = "Choisissez une salle."
 			boutonRetour = "Retour"
 			boutonContinuer = "Continuer"
-	
-		explication = "Le mode avancé permet au joueur plus expérimenté de sélectionner uniquement les catégories de questions qu'il désire. Il peut ainsi personnaliser son expérience de jeu en choisissant son niveau pour chaque thème mathématique présent dans le jeu."
+			
+			explication = "Le mode avancé permet au joueur plus expérimenté de sélectionner uniquement les catégories de questions qu'il désire. Il peut ainsi personnaliser son expérience de jeu en choisissant son niveau pour chaque thème mathématique présent dans le jeu."
 			
 			pasQuestion = "Pas de question"
 			primaire1 = "Primaire 1"
@@ -95,7 +95,6 @@
 			
 			accromath = "Accromath"
 	
-
 	
 		frame2 = ""
 

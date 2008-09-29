@@ -23,7 +23,6 @@
 			boutonRetour = "Back"
 			boutonContinuer = "Continue"
 	
-		
 			explication = "The advanced mode allows for the more experienced player to select his level among the various mathematical categories of the game. If desired, he can personnalize his gaming experience by choosing only the subjects he is interested in."
 			
 			pasQuestion = "No question"
@@ -64,7 +63,7 @@
 				valeurAbsolue = "Absolute value functions"
 				rationnelle = "Rational functions"
 				parParties = "Functions defined by parts"
-				partieEntiere = "Greatest integer function (floor function)"
+				partieEntiere = "Greatest integer function"
 				periodique = "Periodic functions"
 				exponentielleLogarithmique = "Exponential and logarithmic"
 				
@@ -77,7 +76,7 @@
 				
 			
 			probabilites = "Probabilities"
-				conceptsProbabilités = "Concepts"
+				conceptsProbabilites = "Concepts"
 				denombrement = "Counting"
 				calculProbabilite = "Probability calculations"
 				esperanceEquite = "Expected values and equity"
@@ -96,7 +95,7 @@
 			histoire = "History of maths"
 			
 			accromath = "Accromath"
-
+	
 		frame2 = ""
 
 			texteTables = "Choose an open table in the room : "	
