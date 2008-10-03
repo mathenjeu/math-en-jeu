@@ -8,6 +8,7 @@
 	texteInstruction = "Write your answer in the box"
 	pointage = "Score"
 	temps = "Time"
+  indice ="Hint : " 
 	boutonMotSuivant = "Next Word"
 	boutonValider = "Answer"
 	boutonTerminer = "Quit"

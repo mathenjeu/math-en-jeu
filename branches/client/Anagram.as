@@ -59,17 +59,37 @@ class Anagram
 	{
 		var root = myXML.firstChild;
         var nodes = root.childNodes;
-		this.mots = new Array(nodes.length);
+		this.mots = new Array();
+		
         for(var i=0; i<nodes.length; i++)
 		{  
 			var subnodes = nodes[i].childNodes;
-			this.mots[i] = new Array(3);
-			this.mots[i][0] = subnodes[0].firstChild.nodeValue.toString().toUpperCase();   //mot
-			this.mots[i][1] = this.calculerValeurMot(this.mots[i][0]);    //valeur
-			this.mots[i][2] = subnodes[1].firstChild.nodeValue.toString();   // description
-			this.mots[i][3] = subnodes[2].firstChild.nodeValue.toString();  //hint
-        	trace(this.mots[i][3]);
+			var motActuel = new Array(4);
+			motActuel[0] = subnodes[0].firstChild.nodeValue.toString().toUpperCase();   //mot
+			if(this.motAccepte(motActuel[0]))
+			{
+				motActuel[1] = this.calculerValeurMot(motActuel[0]);    //valeur
+				motActuel[2] = subnodes[1].firstChild.nodeValue.toString();   // description
+				motActuel[3] = subnodes[2].firstChild.nodeValue.toString();  //hint
+				this.mots.push(motActuel);
+			}
 		}
+		trace("Nombre de mots chargés: " + mots.length + " sur " + nodes.length);
+	}
+	
+	private function motAccepte(mot:String)
+	{
+		for(var i=0; i<mot.length; i++)
+		{
+			if(mot.charAt(i) == ' ')
+			{
+				trace(mot + " - mot refusé");
+				return false;
+			}
+		}
+		
+		trace(mot + " - mot accepté");
+		return true;
 	}
 
 	
@@ -186,7 +206,7 @@ class Anagram
 			this.motEnCours[i]='?';
 		}
 
-		trace('Le mot à trouvé est : ' + this.mots[this.noMot][0]);
+		trace('Le mot à trouver est : ' + this.mots[this.noMot][0]);
 		
 		return true;
 	}

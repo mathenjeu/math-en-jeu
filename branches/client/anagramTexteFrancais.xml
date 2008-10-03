@@ -8,6 +8,7 @@
 	texteInstruction = "Écrivez votre réponse dans le rectangle"
 	pointage = "Pointage"
 	temps = "Temps"
+  indice = "Indice : " 
 	boutonMotSuivant = "Mot suivant"
 	boutonValider = "Valider"
 	boutonTerminer = "Terminer"
