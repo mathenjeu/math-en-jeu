@@ -77,6 +77,13 @@ class Anagram
 		trace("Nombre de mots chargés: " + mots.length + " sur " + nodes.length);
 	}
 	
+	/*****************************************************************************
+	Fonction : motAccepte
+	Paramètre :
+		- mot : le mot à vérifier
+	Description : on vérifie si le terme est adéquat pour le mini-jeu. Les
+		termes adéquats pour ce jeu sont des termes à un seul mot.
+	******************************************************************************/
 	private function motAccepte(mot:String)
 	{
 		for(var i=0; i<mot.length; i++)

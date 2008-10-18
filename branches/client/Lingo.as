@@ -42,16 +42,119 @@ class Lingo
 	{
 		var root = myXML.firstChild;
         var nodes = root.childNodes;
-		this.mots = new Array(nodes.length);
+		this.mots = new Array();
+		
         for(var i=0; i<nodes.length; i++)
 		{  
 			var subnodes = nodes[i].childNodes;
-			this.mots[i] = new Array(4);
-			this.mots[i][0] = subnodes[0].firstChild.nodeValue.toString();  //mot
-			this.mots[i][1] = this.calculerValeurMot(this.mots[i][0]);  	//valeur
-			this.mots[i][2] = subnodes[1].firstChild.nodeValue.toString();  //description
-			this.mots[i][3] = subnodes[2].firstChild.nodeValue.toString();  //hint
-        }
+			var motActuel = new Array(4);
+			motActuel[0] = subnodes[0].firstChild.nodeValue.toString();   //mot
+			if(this.motAccepte(motActuel[0]))
+			{
+				motActuel[0] = convertirMotAccent(motActuel[0]);	//on retire les accents au mot
+				motActuel[1] = this.calculerValeurMot(motActuel[0]);    //valeur
+				motActuel[2] = subnodes[1].firstChild.nodeValue.toString();   // description
+				motActuel[3] = subnodes[2].firstChild.nodeValue.toString();  //hint
+				this.mots.push(motActuel);
+			}
+		}
+		trace("Nombre de mots chargés: " + mots.length + " sur " + nodes.length);
+	}
+	
+	/*****************************************************************************
+	Fonction : motAccepte
+	Paramètre :
+		- mot : le mot à vérifier
+	Description : on vérifie si le terme est adéquat pour le mini-jeu. Les
+		termes adéquats pour ce jeu sont des termes à un seul mot, de longueur
+		variant entre 5 et 10 lettres.
+	******************************************************************************/
+	private function motAccepte(mot:String)
+	{
+		//On vérifie d'abord si le terme est un mot simple
+		for(var i=0; i<mot.length; i++)
+		{
+			if(mot.charAt(i) == ' ')
+			{
+				trace(mot + " - mot refusé");
+				return false;
+			}
+		}
+		
+		//On vérifie ensuite si le mot possède entre 5 et 10 lettres.
+		if(mot.length < 5 || mot.length > 10)
+		{
+			trace(mot + " - mot refusé");
+			return false;
+		}
+		
+		trace(mot + " - mot accepté");
+		return true;
+	}
+	
+	/*****************************************************************************
+	Fonction : convertirMotAccent
+	Paramêtre :
+		- mot : le mot à convertir
+	Description : on vérifie si chacun des lettres du mot passé en 
+		paramètre est une lettre avec accent ou cédille. Si c'est le 
+		cas on la convertit en lettre normale. 
+	******************************************************************************/
+	private function convertirMotAccent(mot:String)
+	{
+		var t:Array = motVersArray(mot);
+		
+		for(var i = 0; i < t.length; i++)
+		{
+			t[i] = convertirLettreAccent(t[i]);
+		}
+		
+		mot = arrayVersMot(t, t.length);;
+		
+		return mot;
+	}
+	
+	/*****************************************************************************
+	Fonction : convertirLettreAccent
+	Paramêtre :
+		- l : la lettre à convertir
+	Description : on vérifie si la lettre passé en paramètre est 
+		une lettre avec accent ou cédille. Si c'est le cas on la 
+		convertit en lettre normale. Sinon on retourne simplement 
+		la lettre
+	******************************************************************************/
+	private function convertirLettreAccent(l)
+	{
+		l = l.toLowerCase();
+		if(l == 'é' || l == 'ê' || l == 'è')
+		{
+			return 'e';			
+		}
+		else if(l == 'à' || l == 'â')
+		{
+			return 'a';
+		}
+		else if(l == 'î' || l == 'ï')
+		{
+			return 'i';
+		}
+		else if(l == 'ò' || l == 'ô')
+		{
+			return 'o';
+		}
+		else if(l == 'ç')
+		{
+			return 'c';
+		}
+		else if(l == 'ù' || l == 'û')
+		{
+			return 'u';
+		}
+		else
+		{
+			return l;
+		}
+		
 	}
 
 	
@@ -291,5 +394,40 @@ class Lingo
 	public function retNbMotTrouve()
 	{
 		return this.nbMotTrouve;
+	}
+	
+	/*****************************************************************************
+	Fonction : motVersArray
+	Paramêtre :
+		- m : un mot que l'on veut stocker dans un tableau
+	Description : on push les lettres dans le tableau une à une
+	******************************************************************************/
+	function motVersArray(m:String):Array
+	{
+		var t:Array = new Array();
+		
+		for(var i:Number = 0; i < m.length; i++)
+		{
+			t.push(m.charAt(i));
+		}
+		return t;
+	}
+	
+	/*****************************************************************************
+	Fonction : arrayVersMot
+	Paramêtre :
+		- t : un tableau contenant un mot que l'on veut transformer en String
+		- len : la longueur du mot
+	Description : on parcours le tableau et on le range dans un String
+	******************************************************************************/	
+	function arrayVersMot(t:Array, len:Number):String
+	{
+		var m:String = new String();
+		
+		for(var i:Number = 0; i < len; i++)
+		{
+			m += t[i];
+		}
+		return m;
 	}
 }
