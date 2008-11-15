@@ -114,7 +114,7 @@
 		<Id>20</Id>
  	</truefalse>
  	<truefalse>
-  		<question>Un triangle obtus possède un angle mesurant moins de 90 degrés.</question>
+  		<question>Un triangle obtus possède exactement un angle mesurant moins de 90 degrés.</question>
   		<reponse>false</reponse>
 	        <Id>21</Id>
  	</truefalse>
@@ -279,14 +279,13 @@
   		<reponse>true</reponse>
 		<Id>53</Id>
  	</truefalse>
-
 	<truefalse>
   		<question>Un nombre parfait est un nombre entier strictement supérieur à 1 qui est égal à la somme de ses diviseurs stricts.</question>
   		<reponse>true</reponse>
 	        <Id>55</Id>
  	</truefalse>
 	<truefalse>
-  		<question>Un nombre premier de Mersenne est un nombre premier s’´ecrivant sous la forme 2^p−1, p étant un nombre premier.</question>
+  		<question>Un nombre premier de Mersenne est un nombre premier s'écrivant sous la forme 2^p−1, p étant un nombre premier.</question>
   		<reponse>true</reponse>
 		<Id>56</Id>
  	</truefalse>
@@ -315,8 +314,6 @@
   		<reponse>false</reponse>
 	        <Id>61</Id>
  	</truefalse>
- 	</truefalse>
- 	
 	<truefalse>
   		<question>0! = 0.</question>
   		<reponse>false</reponse>
@@ -476,7 +473,7 @@
  	</VraiFaux>
  	
  	<VraiFaux>
-  		<question>Le 4 terme de la suite commençant par 1, 4, 9 est 25.</question>
+  		<question>Le quatrième terme de la suite commençant par 1, 4, 9 est 25.</question>
   		<reponse>false</reponse>
 		<Id>94</Id>
  	</VraiFaux>
