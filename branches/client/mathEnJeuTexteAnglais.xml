@@ -20,6 +20,7 @@
 			descriptionDefault = "This questions libray has been created by a person or a group not affiliated with the Math en Jeu's team."
 			
 			salle = "Choose a room."
+      chargementSalles = "Room list is loading..." 
 			boutonRetour = "Back"
 			boutonContinuer = "Continue"
 	
@@ -36,10 +37,10 @@
 			secondaire2 = "High school 2"
 			secondaire3 = "High school 3"
 			secondaire4_CST = "High school 4 - Culture"
-			secondaire4_TS = "High school 4 - Society & Tech"
+			secondaire4_TS = "High school 4 - Society and Tech"
 			secondaire4_SN = "High school 4 - Natural Sc."
 			secondaire5_CST = "High school 5 - Culture"
-			secondaire5_TS = "High school 5 - Society & Tech"
+			secondaire5_TS = "High school 5 - Society and Tech"
 			secondaire5_SN = "High school 5 - Natural Sc."
 			
 			
@@ -99,6 +100,8 @@
 		frame2 = ""
 
 			texteTables = "Choose an open table in the room : "	
+      chargementTables = "Table list is loading..." 
+      aucuneTable = "There's no open table in this room"
 			btnCreerTable = "New table"
 			choixTable = "or create a new one."
 			choixTemps = "Choose the duration of the game you wish to play."

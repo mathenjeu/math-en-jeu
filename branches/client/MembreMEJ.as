@@ -12,23 +12,19 @@
 	private var _niveauScolaire:String;
 	private var _etablissement:String;
 	
-	public function MembreMEJ(prenom:String, nom:String, sexe:Number,
-							  ville:String, province:String, pays:String,
-							  courriel:String, idUtilisateur:String,
-							  motDePasse:String, niveauScolaire:String,
-							  etablissement:String)
+	public function MembreMEJ(attributs:Array)
 	{
-		_prenom = prenom;
-		_nom = nom;
-		_sexe = sexe;
-		_ville = ville;
-		_province = province;
-		_pays = pays;
-		_courriel = courriel;
-		_idUtilisateur = idUtilisateur;
-		_motDePasse = motDePasse;
-		_niveauScolaire = niveauScolaire;
-		_etablissement = etablissement;
+		_prenom = attributs[0];
+		_nom = attributs[1];
+		_sexe = attributs[2];
+		_ville = attributs[3];
+		_province = attributs[4];
+		_pays = attributs[5];
+		_courriel = attributs[6];
+		_idUtilisateur = attributs[7];
+		_motDePasse = attributs[8];
+		_niveauScolaire = attributs[9];
+		_etablissement = attributs[10];
 	}
 	
 	public function retPrenom()

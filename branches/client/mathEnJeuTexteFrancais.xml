@@ -20,6 +20,7 @@
 			descriptionDefault = "La banque de questions a été créée par une personne ou un groupe indépendant de l'équipe de Math en Jeu."
 			
 			salle = "Choisissez une salle."
+      chargementSalles = "Chargement de la liste des salles en cours" 
 			boutonRetour = "Retour"
 			boutonContinuer = "Continuer"
 			
@@ -98,7 +99,9 @@
 	
 		frame2 = ""
 
-			texteTables = "Choisissez une table ouverte dans la salle"	
+			texteTables = "Choisissez une table ouverte dans la salle"
+      chargementTables = "Chargement de la liste des tables en cours" 
+      aucuneTable = "Il n'y a aucune table ouverte dans cette salle" 
 			btnCreerTable = "Nouvelle table"
 			choixTable = "ou créez-en une nouvelle."
 			choixTemps = "Choisissez la durée de la partie que vous désirez jouer."
