@@ -1181,7 +1181,7 @@ return this.objGestionnaireCommunication;
   
 			case "Ok":
 
-			_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet("pieceFixe");
+			//_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet("pieceFixe");
 			
 			if(_level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet() <= 10)
 			{
@@ -1334,7 +1334,7 @@ return this.objGestionnaireCommunication;
 				// modifier le pointage
 				_level0.loader.contentHolder.argentJoueur = objetEvenement.argent;
 				_level0.loader.contentHolder.planche.obtenirPerso().modifierArgent(objetEvenement.argent);
-		_level0.loader.contentHolder.planche.obtenirPerso().ajouterImageBanque(_level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet(), "pieceFixe", _level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet(), 75);
+				//_level0.loader.contentHolder.planche.obtenirPerso().ajouterImageBanque(_level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet(), "pieceFixe", _level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet(), 75);
 //todo corriger la ligne précédente si problème
 
 		// il faut mettre à jour le pointage
