@@ -8,6 +8,9 @@
 	temps = "Time"
 	boutonValider = "Validate"
 	boutonTerminer = "Quit"
+  bonneReponse = "Well done! You earned 10 pts."
+  mauvaiseReponse = "Wrong guess! Here is the correct answer:"
+  tempsEcoule = "Time over! Here is the correct answer:"
 	
 >
 </Texte> 
