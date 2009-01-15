@@ -1,10 +1,11 @@
 package ServeurJeu.BD;
 
 import java.sql.*;
-
 import org.apache.log4j.Logger;
 
+import ClassesUtilitaires.UtilitaireNombres;
 import ServeurJeu.ComposantesJeu.BoiteQuestions;
+import ServeurJeu.ComposantesJeu.Langue;
 import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ControleurJeu;
@@ -16,76 +17,78 @@ import ServeurJeu.Configuration.GestionnaireMessages;
 import java.util.Vector;
 
 /**
- * @author Jean-François Brind'Amour
+ * @author Jean-FranÁois Brind'Amour
  */
+
+
 public class GestionnaireBD 
 {
-	// Déclaration d'une référence vers le contrôleur de jeu
+	// DÈclaration d'une rÈfÈrence vers le contrÙleur de jeu
 	private ControleurJeu objControleurJeu;
 	
-        // Objet Connection nécessaire pour le contact avec le serveur MySQL
+    // Objet Connection nÈcessaire pour le contact avec le serveur MySQL
 	private Connection connexion;
 	
-	// Objet Statement nécessaire pour envoyer une requête au serveur MySQL
+	// Objet Statement nÈcessaire pour envoyer une requËte au serveur MySQL
 	private Statement requete;
 	
 	static private Logger objLogger = Logger.getLogger( GestionnaireBD.class );
 	
-	private static final String strValeurGroupeAge = "valeurGroupeAge";
+	//private static final String strCategoryLevel = "category_level";
 
 	/**
 	 * Constructeur de la classe GestionnaireBD qui permet de garder la 
-	 * référence vers le contrôleur de jeu
+	 * rÈfÈrence vers le contrÙleur de jeu
 	 */
 	public GestionnaireBD(ControleurJeu controleur)
 	{
-		super();
+	  	super();
 		
-		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+		  GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		
-		// Garder la référence vers le contrôleur de jeu
-		objControleurJeu = controleur;
+		  // Garder la rÈfÈrence vers le contrÙleur de jeu
+		  objControleurJeu = controleur;
 		
-		//Création du driver JDBC
-		try
-		{
-			String driver = config.obtenirString( "gestionnairebd.jdbc-driver" );
-			Class.forName( driver );
-		}
-		catch (Exception e)
-		{
+		  //CrÈation du driver JDBC
+		  try
+		  {
+			   String driver = config.obtenirString( "gestionnairebd.jdbc-driver" );
+			   Class.forName( driver );
+		  }
+		  catch (Exception e)
+		  {
 			// Une erreur est survenue lors de l'instanciation du pilote
 		    objLogger.error(GestionnaireMessages.message("bd.erreur_creer_pilote1"));
 		    objLogger.error(GestionnaireMessages.message("bd.erreur_creer_pilote2"));
 		    objLogger.error( e.getMessage() );
 		    e.printStackTrace();
 		    return;			
-		}
+		  }
 		
-		connexionDB();
-				
+		   connexionDB();
 	}
 	
-	/**
-	 * Cette fonction permet d'initialiser une connexion avec le serveur MySQL
-	 * et de créer un objet requête
-	 */
+	
+   /**
+	* Cette fonction permet d'initialiser une connexion avec le serveur MySQL
+	* et de crÈer un objet requËte
+	*/
 	private void connexionDB()
 	{
-		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+		  GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		
-		String hote = config.obtenirString( "gestionnairebd.hote" );
-		String utilisateur = config.obtenirString( "gestionnairebd.utilisateur" );
-		String motDePasse = config.obtenirString( "gestionnairebd.mot-de-passe" );
+		  String hote = config.obtenirString( "gestionnairebd.hote" );
+		  String utilisateur = config.obtenirString( "gestionnairebd.utilisateur" );
+		  String motDePasse = config.obtenirString( "gestionnairebd.mot-de-passe" );
 		
-		// Établissement de la connexion avec la base de données
+		// Ètablissement de la connexion avec la base de donnÈes
 		try
 		{
 			connexion = DriverManager.getConnection( hote, utilisateur, motDePasse);
 		}
 		catch (SQLException e)
 		{
-			// Une erreur est survenue lors de la connexion à la base de données
+			// Une erreur est survenue lors de la connexion à la base de donnÈes
 			objLogger.error(GestionnaireMessages.message("bd.erreur_connexion"));
 			objLogger.error(GestionnaireMessages.message("bd.trace"));
 			objLogger.error( e.getMessage() );
@@ -93,14 +96,14 @@ public class GestionnaireBD
 		    return;			
 		}
 		
-		// Création de l'objet "requête"
+		// CrÈation de l'objet "requËte"
 		try
 		{
 			requete = connexion.createStatement();
 		}
 		catch (SQLException e)
 		{
-			// Une erreur est survenue lors de la création d'une requête
+			// Une erreur est survenue lors de la crÈation d'une requËte
 			objLogger.error(GestionnaireMessages.message("bd.erreur_creer_requete"));
 			objLogger.error(GestionnaireMessages.message("bd.trace"));
 			objLogger.error( e.getMessage() );
@@ -112,7 +115,7 @@ public class GestionnaireBD
 	
 	/**
 	 * Cette fonction permet de chercher dans la BD si le joueur dont le nom
-	 * d'utilisateur et le mot de passe sont passés en paramètres existe.
+	 * d'utilisateur et le mot de passe sont passÈs en paramËtres existe.
 	 * 
 	 * @param String nomUtilisateur : Le nom d'utilisateur du joueur
 	 * @param String motDePasse : Le mot de passe du joueur
@@ -126,10 +129,10 @@ public class GestionnaireBD
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		String codeErreur = config.obtenirString( "gestionnairebd.code_erreur_inactivite" );
 			
-		int count=0;	//compteur du nombre d'essai de la requête
+		int count=0;	//compteur du nombre d'essai de la requËte
 
-		//boucler la requête jusqu'à 5 fois si la connexion à MySQL
-		//a été interrompu du à un manque d'activité de la connexion
+		//boucler la requËte jusqu'‡ 5 fois si la connexion ‡ MySQL
+		//a ÈtÈ interrompu du ‡ un manque d'activitÈ de la connexion
 		while(count<5)
 		{
 			try
@@ -140,22 +143,21 @@ public class GestionnaireBD
 				}
 				synchronized( requete )
 				{
-					ResultSet rs = requete.executeQuery("SELECT * FROM joueur WHERE alias = '" + nomUtilisateur + "' AND motDePasse = '" + motDePasse + "';");
+					ResultSet rs = requete.executeQuery("SELECT * FROM user WHERE username = '" + nomUtilisateur + "' AND password = '" + motDePasse + "';");
 					return rs.next();
 				}
 			}
 			catch (SQLException e)
 			{
-				//on vérifie l'état de l'exception 
-				//si l'état est égal au codeErreur
-				//on peut réesayer la connexion
+				//on vÈrifie l'Ètat de l'exception 
+				//si l'Ètat est Ègal au codeErreur on peut rÈesayer la connexion
 				if(e.getSQLState().equals(codeErreur))
 				{
 					count++;
 				}
 				else
 				{
-					// Une erreur est survenue lors de l'exécution de la requête
+					// Une erreur est survenue lors de l'exÈcution de la requËte
 					objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
 					objLogger.error(GestionnaireMessages.message("bd.trace"));
 					objLogger.error( e.getMessage() );
@@ -172,7 +174,7 @@ public class GestionnaireBD
 	 * les champs restants du joueur.
 	 * 
 	 * @param JoueurHumain joueur : Le joueur duquel il faut trouver les
-	 * 								informations et les définir dans l'objet
+	 * 								informations et les dÈfinir dans l'objet
 	 */
 	public void remplirInformationsJoueur(JoueurHumain joueur)
 	{
@@ -180,73 +182,135 @@ public class GestionnaireBD
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery("SELECT cleJoueur, prenom, nom, cleNiveau, peutCreerSalles FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+				ResultSet rs = requete.executeQuery("SELECT user_id, last_name, name  FROM user WHERE username = '" + joueur.obtenirNomUtilisateur() + "';");
 				if (rs.next())
 				{
-					if (rs.getInt("peutCreerSalles") != 0)
-					{
-						joueur.definirPeutCreerSalles(true);
-					}
-					String prenom = rs.getString("prenom");
-					String nom = rs.getString("nom");
-					int cle = Integer.parseInt(rs.getString("cleJoueur"));
-					String cleNiveau = rs.getString( "cleNiveau" );
+					
+					String prenom = rs.getString("last_name");
+					String nom = rs.getString("name");
+					int cle = Integer.parseInt(rs.getString("user_id"));
+					
 					joueur.definirPrenom(prenom);
 					joueur.definirNomFamille(nom);
 					joueur.definirCleJoueur(cle);
-					joueur.definirCleNiveau( cleNiveau );
+					
 				}
+				
 			}
 		}
 		catch (SQLException e)
 		{
-			// Une erreur est survenue lors de l'exécution de la requête
+			// Une erreur est survenue lors de l'exÈcution de la requËte
 			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
 			objLogger.error(GestionnaireMessages.message("bd.trace"));
 			objLogger.error( e.getMessage() );
 		    e.printStackTrace();			
 		}
-	}
+		
+		/*//////////////// mon code  /////////////////////
+		try
+		{
+			synchronized( requete )
+			{
+				ResultSet rsl = requete.executeQuery("SELECT category_level*  FROM user_subject_level WHERE user_id = '" + joueur.obtenirCleJoueur() + "';");
+				if (rsl.next())
+				{
+														
+					String cleNiveau = rsl.getString("category_level");
+					//joueur.definirCleNiveau(cleNiveau);
+				          
+				}
+				
+			}
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exÈcution de la requËte
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();			
+		}*/
+		
+		/// simulaton niveaux du joueur
+		int[] cleNiveau = {2,3,4,4,5,7,8,9,6,7,3,12,11,3,5,6,7,8,9,6,5,4,3,2,4,5,6,7,8,9,11,14,15,12};
+		joueur.definirCleNiveau(cleNiveau);
+	}// fin mÈthode
 
-        // This method fills a Question box with only the player's level
-	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau )
+ 
+	/*// This method fills a Question box with only the player's level
+	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, int[] niveau )
 	{
                 String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
-		String strRequeteSQL = "SELECT " + nomTable + ".*,typereponse.nomType FROM " + nomTable +
-                        ",typereponse WHERE typereponse.cleType = " + nomTable + ".typeReponse and " + nomTable + ".valide = 1 " +
-			"and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL and ";
+		String strRequeteSQL = "SELECT " + nomTable + ".*,answer_type.tag FROM " + nomTable +
+                        ",answer_type WHERE answer_type.answer_type_id = " + nomTable + ".tag and " + nomTable + ".valide = 1 " +
+			"and question_flash_file is not NULL and feedback_flash_file is not NULL and ";
 		
-		
-                strRequeteSQL += "cleQuestion >= " + boiteQuestions.obtenirLangue().obtenirCleQuestionMin()
-                                 + " and cleQuestion <= " + boiteQuestions.obtenirLangue().obtenirCleQuestionMax()
-                                 + " and ";
-		    
+		         	    
 		strRequeteSQL += strValeurGroupeAge + niveau + " > 0";
 		
 		remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
-	}
+	}*/
 	
-        // This function fills a Question box with the player's level, a specified difficulty and a question category
-	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, int intCategorie, int intDifficulte )
+    /** This function fills a Question box with the player's level, a specified difficulty and a question category
+     * 
+     */
+	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, int[] niveau )
 	{
-                // Noter qu'on ne tient plus compte de la catégorie!!
-                String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
-            
-		String strRequeteSQL = "SELECT " + nomTable + ".*,typereponse.nomType FROM " + nomTable + ",typereponse " +
-			"WHERE typereponse.cleType = " + nomTable + ".typeReponse and " + nomTable + ".valide = 1 " +
-			"and FichierFlashQuestion is not NULL and FichierFlashReponse is not NULL ";
 		
-                strRequeteSQL += "and cleQuestion >= " +
-		    boiteQuestions.obtenirLangue().obtenirCleQuestionMin() + " and cleQuestion <= " +
-		    boiteQuestions.obtenirLangue().obtenirCleQuestionMax() + " and ";
-		    
-		strRequeteSQL += strValeurGroupeAge + niveau + " = " + intDifficulte;
-		remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
-	}
+        // Noter qu'on ne tient plus compte de la catÈgorie!!
+        String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
+        int cleLang = 1;
+        // pour catÈgories des questions
+        int[] tab = {11,12,13,14,21,22,23,24,31,32,33,34,35,36,37,38,41,42,43,44,45,46,47,48,49,51,52,53,54,61,62,63,64,65};
+        
+        // il faux choisir aussi la langue du question
+        Langue lang = boiteQuestions.obtenirLangue();
+        String langue = lang.obtenirLangue();
+        if (langue.equalsIgnoreCase("fr")) 
+            cleLang = 1;
+        else if (langue.equalsIgnoreCase("en"))
+        	cleLang = 2;
+        
+        
+        
+     /*   // pour chaque catÈgorie on prend le niveau scolaire du joueur
+        for(int i = 0; i < tab.length; i++){
+       	   String strRequeteSQL = "SELECT question_info.*,answer_type_info.name,question_level.value,question_level.level_id " +
+           "FROM question_info,answer_type_info,question_level,question " +
+           "WHERE  question_info.language_id = " + cleLang +
+           " AND question_info.category_id = " + tab[i]  +
+           " AND question_info.question_id = question_level.question_id " +
+           " AND  question_info.question_id = question.question_id " +
+           "AND question_info.category_id = question.category_id " + 
+           " AND answer_type_info.answer_type_id = question.answer_type_id " +
+           " and question_info.is_valid = 1 " +
+           " and question_info.question_flash_file is not NULL " +
+           " and question_info.feedback_flash_file is not NULL "   +
+           " and question_level.level_id = " + niveau[i]  +
+           " and question_level.value != 0";   */
+        
+        // ine version simulation !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //  on ne prend pas  les niveaux scolaire du joueur
+        
+       	   String strRequeteSQL = "SELECT DISTINCT question_info.*,answer_type.tag,question_level.value " +
+           " FROM question_info,answer_type,question_level,question " +
+           " WHERE question_info.question_id = question.question_id " +
+           " AND answer_type.answer_type_id = question.answer_type_id " +
+           " AND question_info.language_id = " + cleLang +
+           " and question_info.is_valid = 1 " +
+           " and question_info.question_flash_file is not NULL " +
+           " and question_info.feedback_flash_file is not NULL"  +
+           " and question_level.value = 1 AND question_info.question_id NOT IN (6135,6136,6137,6138,6149,6150)";
+           
+				   
+		    remplirBoiteQuestions( boiteQuestions, strRequeteSQL );
+        //}//fin for
+	}// fin mÈthode
 	
-        // This function follows one of the two previous functions. It queries the database and
-        // does the actual filling of the question box.
-	private void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String niveau, String strRequeteSQL )
+    // This function follows one of the two previous functions. It queries the database and
+    // does the actual filling of the question box.
+	private void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String strRequeteSQL )
 	{	
 		try
 		{
@@ -255,22 +319,25 @@ public class GestionnaireBD
 				ResultSet rs = requete.executeQuery( strRequeteSQL );
 				while(rs.next())
 				{
-					int codeQuestion = rs.getInt("cleQuestion");
-					//String typeQuestion = TypeQuestion.ChoixReponse; //TODO aller chercher code dans bd
-					String typeQuestion = rs.getString( "nomType" );
-					String question = rs.getString( "FichierFlashQuestion" );
-					String reponse = rs.getString("bonneReponse");
-					String explication = rs.getString("FichierFlashReponse");
-					int difficulte = rs.getInt( strValeurGroupeAge + niveau );
-					//TODO la categorie???
-                                        String URL = boiteQuestions.obtenirLangue().obtenirURLQuestionsReponses();
-					boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication));
+					int codeQuestion = rs.getInt("question_id");
+					//System.out.println(codeQuestion);
+					int categorie = UtilitaireNombres.genererNbAleatoire(7); // simulation !!!!!!!!! rs.getInt("category_id");
+					//System.out.println(categorie);
+					String typeQuestion = rs.getString( "tag" );
+					String question = rs.getString( "question_flash_file" );
+					String reponse = rs.getString("good_answer");
+					String explication = rs.getString("feedback_flash_file");
+					int difficulte = UtilitaireNombres.genererNbAleatoire(6); // simulation !!!!!!!!! rs.getInt("value");
+					
+                    String URL = boiteQuestions.obtenirLangue().obtenirURLQuestionsReponses();
+                    System.out.println(URL+explication);
+					boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, categorie));
 				}
 			}
 		}
 		catch (SQLException e)
 		{
-			// Une erreur est survenue lors de l'exécution de la requête
+			// Une erreur est survenue lors de l'exÈcution de la requËte
 			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
 			objLogger.error(GestionnaireMessages.message("bd.trace"));
 			objLogger.error( e.getMessage() );
@@ -284,19 +351,21 @@ public class GestionnaireBD
 			objLogger.error( e.getMessage() );
 		    e.printStackTrace();
 		}
-	}
+	}// fin mÈthode
         
-        // This function queries the DB to find the player's musical preferences
-        // and returns a Vector containing URLs of MP3s the player might like
-        public Vector obtenirListeURLsMusique(int cleJoueur)
+  
+  /** This function queries the DB to find the player's musical preferences
+   * and returns a Vector containing URLs of MP3s the player might like
+   */
+  public Vector obtenirListeURLsMusique(int cleJoueur)
 	{
             Vector liste = new Vector();
             String URLMusique = GestionnaireConfiguration.obtenirInstance().obtenirString("musique.url");
-            String strRequeteSQL = "SELECT musique_Fichiers.nomFichier FROM musique_Fichiers,musique_Fichiers_Categories,musique_Categories,musique_Categorie_Joueur WHERE ";
-            strRequeteSQL       += "musique_Fichiers.cleFichier = musique_Fichiers_Categories.cleFichier AND ";
-            strRequeteSQL       += "musique_Fichiers_Categories.cleCategorie = musique_Categories.cleCategorie AND ";
-            strRequeteSQL       += "musique_Categories.cleCategorie = musique_Categorie_Joueur.cleCategorie AND ";
-            strRequeteSQL       += "musique_Categorie_Joueur.cleJoueur = " + Integer.toString(cleJoueur);
+            String strRequeteSQL = "SELECT music_file.filename FROM music_file,music_file_category,music_category,music_category_user WHERE ";
+            strRequeteSQL       += "music_file.music_file_id = music_file_category.music_file_id AND ";
+            strRequeteSQL       += "music_file_category.music_category_id = music_category.music_category_id AND ";
+            strRequeteSQL       += "music_category.music_category_id = music_category_user.music_category_id AND ";
+            strRequeteSQL       += "music_category_user.user_id = " + Integer.toString(cleJoueur);
             try
             {
                     synchronized( requete )
@@ -304,13 +373,13 @@ public class GestionnaireBD
                             ResultSet rs = requete.executeQuery(strRequeteSQL);
                             while(rs.next())
                             {
-                                liste.add(URLMusique + rs.getString("nomFichier"));
+                                liste.add(URLMusique + rs.getString("filename"));
                             }
                     }
             }
             catch (SQLException e)
             {
-                    // Une erreur est survenue lors de l'exécution de la requête
+                    // Une erreur est survenue lors de l'exÈcution de la requËte
                     objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
                     objLogger.error(GestionnaireMessages.message("bd.trace"));
                     objLogger.error( e.getMessage() );
@@ -327,34 +396,34 @@ public class GestionnaireBD
             return liste;
 	}
 	
-        // This method updates a player's information in the DB
+  // This method updates a player's information in the DB
 	public void mettreAJourJoueur( JoueurHumain joueur, int tempsTotal )
 	{
 		try
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery("SELECT partiesCompletes, meilleurPointage, tempsPartie FROM joueur WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+				ResultSet rs = requete.executeQuery("SELECT number_of_completed_game, best_score, total_time_played FROM user WHERE username = '" + joueur.obtenirNomUtilisateur() + "';");
 				if (rs.next())
 				{
-					int partiesCompletes = rs.getInt( "partiesCompletes" ) + 1;
-					int meilleurPointage = rs.getInt( "meilleurPointage" );
+					int partiesCompletes = rs.getInt( "number_of_completed_game" ) + 1;
+					int meilleurPointage = rs.getInt( "best_score" );
 					int pointageActuel = joueur.obtenirPartieCourante().obtenirPointage();
 					if( meilleurPointage < pointageActuel )
 					{
 						meilleurPointage = pointageActuel;
 					}
 					
-					int tempsPartie = tempsTotal + rs.getInt("tempsPartie");
+					int tempsPartie = tempsTotal + rs.getInt("total_time_played");
 					
 					//mise-a-jour
-					int result = requete.executeUpdate( "UPDATE joueur SET partiesCompletes=" + partiesCompletes + ",meilleurPointage=" + meilleurPointage + ",tempsPartie=" + tempsPartie + " WHERE alias = '" + joueur.obtenirNomUtilisateur() + "';");
+					int result = requete.executeUpdate( "UPDATE user SET number_of_completed_game =" + partiesCompletes + ",best_score =" + meilleurPointage + ",total_time_played =" + tempsPartie + " WHERE username = '" + joueur.obtenirNomUtilisateur() + "';");
 				}
 			}
 		}
 		catch (SQLException e)
 		{
-			// Une erreur est survenue lors de l'exécution de la requête
+			// Une erreur est survenue lors de l'exÈcution de la requËte
 			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
 		    objLogger.error(GestionnaireMessages.message("bd.trace"));
 		    objLogger.error( e.getMessage() );
@@ -363,7 +432,7 @@ public class GestionnaireBD
 	}
 	
 	/**
-	 * Cette méthode permet de fermer la connexion de base de données qui 
+	 * Cette mÈthode permet de fermer la connexion de base de donnÈes qui 
 	 * est ouverte.
 	 */
 	public void arreterGestionnaireBD()
@@ -383,9 +452,9 @@ public class GestionnaireBD
 	}
 	
 	/* Cette fonction permet d'ajouter les information sur une partie dans 
-	 * la base de données dans la table partie. 
+	 * la base de donnÈes dans la table partie. 
 	 *
-	 * Retour: la clé de partie qui servira pour la table partieJoueur
+	 * Retour: la clÈ de partie qui servira pour la table partieJoueur
 	 */
 	public int ajouterInfosPartiePartieTerminee(Date dateDebut, int dureePartie)
 	{
@@ -396,8 +465,8 @@ public class GestionnaireBD
         String strDate = objFormatDate.format(dateDebut);
         String strHeure = objFormatHeure.format(dateDebut);
 
-        // Création du SQL pour l'ajout
-		String strSQL = "INSERT INTO partie(datePartie, heurePartie, dureePartie) VALUES ('" + 
+        // CrÈation du SQL pour l'ajout
+		String strSQL = "INSERT INTO game(date, hour, duration) VALUES ('" + 
 		    strDate + "','" + strHeure + "'," + dureePartie + ")";
 
 		try
@@ -409,10 +478,10 @@ public class GestionnaireBD
 				// Ajouter l'information pour cette partie
 	            requete.executeUpdate(strSQL, Statement.RETURN_GENERATED_KEYS);
 	            
-	            // Aller chercher la clé de partie qu'on vient d'ajouter
+	            // Aller chercher la clÈ de partie qu'on vient d'ajouter
 	            ResultSet  rs = requete.getGeneratedKeys();
 	            
-	            // On retourne la clé de partie
+	            // On retourne la clÈ de partie
 	            rs.next();
 	           	return Integer.parseInt(rs.getString("GENERATED_KEY"));
 			}
@@ -422,7 +491,7 @@ public class GestionnaireBD
         	System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos") + e.getMessage());
         }
         
-        // Au cas où il y aurait erreur, on retourne -1
+        // Au cas o˘ il y aurait erreur, on retourne -1
         return -1;
 	}
 
@@ -438,8 +507,8 @@ public class GestionnaireBD
 			intGagner = 1;
 		}
 		
-		// Création du SQL pour l'ajout
-		String strSQL = "INSERT INTO partiejoueur(clePartie, cleJoueur, pointage, gagner) VALUES " +
+		// CrÈation du SQL pour l'ajout
+		String strSQL = "INSERT INTO game_user(game_id, user_id, score, has_won) VALUES " +
 		    "(" + clePartie + "," + cleJoueur + "," + pointage + "," + intGagner + ");";
 		
 		try
@@ -453,6 +522,7 @@ public class GestionnaireBD
         }
         catch (Exception e)
             {
+               System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
             }
 	}
 }

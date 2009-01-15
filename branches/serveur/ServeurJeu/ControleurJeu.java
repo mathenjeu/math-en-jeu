@@ -68,7 +68,7 @@ public class ControleurJeu
 {
         // Cette modeDebug est vraie, toute reponse des joueurs sera bonne, et
         // on affichera dans la console des informations sur les communications
-        public static boolean modeDebug;
+    public static boolean modeDebug;
         
 	static private Logger objLogger = Logger.getLogger( ControleurJeu.class );
 	
@@ -153,7 +153,7 @@ public class ControleurJeu
 		objLogger.info(GestionnaireMessages.message("controleur_jeu.serveur_demarre"));
 		
 		// Préparer l'objet pour créer les nombres aléatoires
-                objRandom = new Random();
+        objRandom = new Random();
 		
 		// Créer une liste des joueurs
 		lstJoueursConnectes = new TreeMap();

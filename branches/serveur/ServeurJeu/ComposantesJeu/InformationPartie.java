@@ -17,115 +17,120 @@ import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
+import ClassesUtilitaires.UtilitaireNombres;
 import ServeurJeu.ControleurJeu;
 import org.w3c.dom.Node;
 
 /**
- * @author Jean-François Brind'Amour
+ * @author Jean-FranÁois Brind'Amour
  */
 public class InformationPartie
 {
-	// Déclaration d'une référence vers le gestionnaire de bases de données
+	// DÈclaration d'une rÈfÈrence vers le gestionnaire de bases de donnÈes
 	private GestionnaireBD objGestionnaireBD;
 	
-        // Déclaration d'une référence vers le gestionnaire d'evenements
+    // DÈclaration d'une rÈfÈrence vers le gestionnaire d'evenements
 	private GestionnaireEvenements objGestionnaireEv;
 	
-	// Déclaration d'une référence vers un joueur humain correspondant à cet
+	// DÈclaration d'une rÈfÈrence vers un joueur humain correspondant à cet
 	// objet d'information de partie
 	private JoueurHumain objJoueurHumain;
 	
-	// Déclaration d'une référence vers la table courante
+	// DÈclaration d'une rÈfÈrence vers la table courante
 	private Table objTable;
 	
-        // Déclaration d'une variable qui va contenir le numéro Id du personnage 
+    // DÈclaration d'une variable qui va contenir le numÈro Id du personnage 
 	// choisit par le joueur
 	private int intIdPersonnage;
 	
-        // Déclaration d'une variable qui va contenir le pointage de la 
-        // partie du joueur possédant cet objet
+    // DÈclaration d'une variable qui va contenir le pointage de la 
+    // partie du joueur possÈdant cet objet
 	private int intPointage;
         
-        // Combien d'argent ce joueur a-t-il?
-        private int intArgent;
+    // Combien d'argent ce joueur a-t-il?
+    private int intArgent;
 	
-	// Déclaration d'une position du joueur dans le plateau de jeu
+	// DÈclaration d'une position du joueur dans le plateau de jeu
 	private Point objPositionJoueur;
 	
-	// Déclaration d'un point qui va garder la position où le joueur
+	// DÈclaration d'un point qui va garder la position o˘ le joueur
 	// veut aller
 	private Point objPositionJoueurDesiree;
 	
-	// Déclaration d'une liste de questions qui ont été répondues 
+	// DÈclaration d'une liste de questions qui ont ÈtÈ rÈpondues 
 	// par le joueur
 	private TreeMap lstQuestionsRepondues;
 	
-	// Déclaration d'une variable qui va garder la question qui est 
-	// présentement posée au joueur. S'il n'y en n'a pas, alors il y a 
+	// DÈclaration d'une variable qui va garder la question qui est 
+	// prÈsentement posÈe au joueur. S'il n'y en n'a pas, alors il y a 
 	// null dans cette variable
 	private Question objQuestionCourante;
 	
-	// Déclaration d'une liste d'objets utilisables ramassés par le joueur
+	// DÈclaration d'une liste d'objets utilisables ramassÈs par le joueur
 	private TreeMap lstObjetsUtilisablesRamasses;
         
-        // Déclaration de la boîte de question personnelle au joueur possédant
-        // cet objet
-        BoiteQuestions objBoiteQuestions;
+    // DÈclaration de la boÓte de question personnelle au joueur possÈdant
+    // cet objet
+    BoiteQuestions objBoiteQuestions;
         
-        // Déclaration d'un boolean qui dit si le joueur est 'targeté' pour subir une banane
-        // (si le string n'est pas "", et alors le string dit qui l'a utilisée)
-        private String vaSubirUneBanane;
+    // DÈclaration d'un boolean qui dit si le joueur est 'targetÈ' pour subir une banane
+    // (si le string n'est pas "", et alors le string dit qui l'a utilisÈe)
+    private String vaSubirUneBanane;
+        
+    // DÈclaration d'un int qui va garder le mode du jeu : Normal - 0 et AvancÈe - 1
+    private int modeJeu;
+  
 	 
 	/**
 	 * Constructeur de la classe InformationPartie qui permet d'initialiser
-	 * les propriétés de la partie et de faire la référence vers la table.
+	 * les propriÈtÈs de la partie et de faire la rÈfÈrence vers la table.
 	 */
 	public InformationPartie( GestionnaireEvenements gestionnaireEv, GestionnaireBD gestionnaireBD, JoueurHumain joueur, Table tableCourante)
 	{
-            // Au début, on ne subit pas de banane!
+            // Au dÈbut, on ne subit pas de banane!
             vaSubirUneBanane = "";
             
-            // Faire la référence vers le gestionnaire de base de données
+            // Faire la rÈfÈrence vers le gestionnaire de base de donnÈes
             objGestionnaireBD = gestionnaireBD;
 
-            // Faire la référence vers le gestionnaire d'evenements
+            // Faire la rÈfÈrence vers le gestionnaire d'evenements
             objGestionnaireEv = gestionnaireEv;
 
-            // Faire la référence vers le joueur humain courant
+            // Faire la rÈfÈrence vers le joueur humain courant
             objJoueurHumain = joueur;
 		
-	    // Définir les propriétés de l'objet InformationPartie
-	    intPointage = 0;
+	        // DÈfinir les propriÈtÈs de l'objet InformationPartie
+	        intPointage = 0;
             intArgent = 0;
-	    intIdPersonnage = 0;
+	        intIdPersonnage = 0;
 	    
-	    // Faire la référence vers la table courante
-	    objTable = tableCourante;
+	        // Faire la rÈfÈrence vers la table courante
+	        objTable = tableCourante;
 	    
-	    // Au départ, le joueur est nul part
-	    objPositionJoueur = null;
+	        // Au dÈpart, le joueur est nul part
+	        objPositionJoueur = null;
 	    
-	    // Au départ, le joueur ne veut aller nul part
-	    objPositionJoueurDesiree = null;
+	        // Au dÈpart, le joueur ne veut aller nul part
+	       objPositionJoueurDesiree = null;
 	    
-	    // Au départ, aucune question n'est posée au joueur
-	    objQuestionCourante = null;
+	        // Au dÈpart, aucune question n'est posÈe au joueur
+	        objQuestionCourante = null;
 	    
-	    // Créer la liste des questions qui ont été répondues
-	    lstQuestionsRepondues = new TreeMap();
+	        // CrÈer la liste des questions qui ont ÈtÈ rÈpondues
+	        lstQuestionsRepondues = new TreeMap();
 	    
-	    // Créer la liste des objets utilisables qui ont été ramassés
-	    lstObjetsUtilisablesRamasses = new TreeMap();
+	        // CrÈer la liste des objets utilisables qui ont ÈtÈ ramassÈs
+	        lstObjetsUtilisablesRamasses = new TreeMap();
 
-            objBoiteQuestions = new BoiteQuestions(joueur.obtenirProtocoleJoueur().langue, joueur.obtenirSalleCourante().obtenirNoeudLangue(), joueur.obtenirSalleCourante().obtenirNomSalle());
-            objGestionnaireBD.remplirBoiteQuestions(objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());
-	}
+            objBoiteQuestions = new BoiteQuestions(joueur.obtenirProtocoleJoueur().langue, joueur.obtenirSalleCourante().obtenirNoeudLangue(), joueur.obtenirSalleCourante().obtenirNomSalle(), joueur);
+            objGestionnaireBD.remplirBoiteQuestions(objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());  
+	}// fin constructeur
 
 	/**
-	 * Cette fonction permet de retourner la référence vers la table courante 
+	 * Cette fonction permet de retourner la rÈfÈrence vers la table courante 
 	 * du joueur.
 	 * 
-	 * @return Table : La référence vers la table de cette partie
+	 * @return Table : La rÈfÈrence vers la table de cette partie
 	 */
 	public Table obtenirTable()
 	{
@@ -143,7 +148,7 @@ public class InformationPartie
 	}
 	
 	/**
-	 * Cette fonction permet de redéfinir le pointage du joueur.
+	 * Cette fonction permet de redÈfinir le pointage du joueur.
 	 * 
 	 * @param int pointage : Le pointage du joueur courant
 	 */
@@ -161,8 +166,9 @@ public class InformationPartie
 	{
 	   return intArgent;
 	}
+	
 	/**
-	 * Cette fonction permet de redéfinir l'argent du joueur.
+	 * Cette fonction permet de redÈfinir l'argent du joueur.
 	 * 
 	 * @param int argent : L'argent du joueur courant
 	 */
@@ -182,9 +188,9 @@ public class InformationPartie
 	}
 	
 	/**
-	 * Cette fonction permet de redéfinir le personnage choisi par le joueur.
+	 * Cette fonction permet de redÈfinir le personnage choisi par le joueur.
 	 * 
-	 * @param int idPersonnage : Le numéro Id du personnage choisi 
+	 * @param int idPersonnage : Le numÈro Id du personnage choisi 
 	 * 							 pour cette partie
 	 */
 	public void definirIdPersonnage(int idPersonnage)
@@ -204,7 +210,7 @@ public class InformationPartie
 	}
 	
 	/**
-	 * Cette fonction permet de redéfinir la nouvelle position du joueur.
+	 * Cette fonction permet de redÈfinir la nouvelle position du joueur.
 	 * 
 	 * @param Point positionJoueur : La position du joueur
 	 */
@@ -214,9 +220,9 @@ public class InformationPartie
 	}
 	
 	/**
-	 * Cette fonction permet de retourner la liste des questions répondues.
+	 * Cette fonction permet de retourner la liste des questions rÈpondues.
 	 * 
-	 * @return TreeMap : La liste des questions qui ont été répondues
+	 * @return TreeMap : La liste des questions qui ont ÈtÈ rÈpondues
 	 */
 	public TreeMap obtenirListeQuestionsRepondues()
 	{
@@ -224,10 +230,10 @@ public class InformationPartie
 	}
 	
 	/**
-	 * Cette fonction permet de retourner la question qui est présentement 
-	 * posée au joueur.
+	 * Cette fonction permet de retourner la question qui est prÈsentement 
+	 * posÈe au joueur.
 	 * 
-	 * @return Question : La question qui est présentement posée au joueur
+	 * @return Question : La question qui est prÈsentement posÈe au joueur
 	 */
 	public Question obtenirQuestionCourante()
 	{
@@ -235,11 +241,11 @@ public class InformationPartie
 	}
 	
 	/**
-	 * Cette fonction permet de redéfinir la question présentement posée 
+	 * Cette fonction permet de redÈfinir la question prÈsentement posÈe 
 	 * au joueur.
 	 * 
-	 * @param Question questionCourante : La question qui est présentement 
-	 * 									  posée au joueur
+	 * @param Question questionCourante : La question qui est prÈsentement 
+	 * 									  posÈe au joueur
 	 */
 	public void definirQuestionCourante(Question questionCourante)
 	{
@@ -247,52 +253,52 @@ public class InformationPartie
 	}
 	
 	/**
-	 * Cette fonction détermine si le déplacement vers une certaine
-	 * case est permis ou non. Pour être permis, il faut que le déplacement
-	 * désiré soit en ligne droite, qu'il n'y ait pas de trous le séparant
-	 * de sa position désirée et que la distance soit acceptée comme niveau
-	 * de difficulté pour la salle. La distance minimale à parcourir est 1.
+	 * Cette fonction dÈtermine si le dÈplacement vers une certaine
+	 * case est permis ou non. Pour Ítre permis, il faut que le dÈplacement
+	 * dÈsirÈ soit en ligne droite, qu'il n'y ait pas de trous le sÈparant
+	 * de sa position dÈsirÈe et que la distance soit acceptÈe comme niveau
+	 * de difficultÈ pour la salle. La distance minimale à parcourir est 1.
 	 * 
 	 * @param Point nouvellePosition : La position vers laquelle le joueur
 	 * 								   veut aller
-	 * @return boolean : true si le déplacement est permis
+	 * @return boolean : true si le dÈplacement est permis
 	 * 					 false sinon
 	 */
 	public boolean deplacementEstPermis(Point nouvellePosition)
 	{
 		boolean bolEstPermis = true;
 		
-		// Si la position de départ est la même que celle d'arrivée, alors
-		// il y a une erreur, car le personnage doit faire un déplacement d'au
+		// Si la position de dÈpart est la mÍme que celle d'arrivÈe, alors
+		// il y a une erreur, car le personnage doit faire un dÈplacement d'au
 		// moins 1 case
 		if (nouvellePosition.x == objPositionJoueur.x && nouvellePosition.y == objPositionJoueur.y)
 		{
 			bolEstPermis = false;
 		}
 		
-		// Déterminer si la position désirée est en ligne droite par rapport 
+		// DÈterminer si la position dÈsirÈe est en ligne droite par rapport 
 		// à la position actuelle
 		if (bolEstPermis == true && nouvellePosition.x != objPositionJoueur.x && nouvellePosition.y != objPositionJoueur.y)
 		{
 			bolEstPermis = false;
 		}
 
-		// Si la distance parcourue dépasse le nombre de cases maximal possible, alors il y a une erreur
+		// Si la distance parcourue dÈpasse le nombre de cases maximal possible, alors il y a une erreur
 		if (bolEstPermis == true && ((nouvellePosition.x != objPositionJoueur.x && Math.abs(nouvellePosition.x - objPositionJoueur.x) > objTable.obtenirRegles().obtenirDeplacementMaximal()) || 
 									 (nouvellePosition.y != objPositionJoueur.y && Math.abs(nouvellePosition.y - objPositionJoueur.y) > objTable.obtenirRegles().obtenirDeplacementMaximal())))
 		{
 			bolEstPermis = false;
 		}
 		
-		// Si le déplacement est toujours permis jusqu'à maintenant, alors on 
-		// va vérifier qu'il n'y a pas de trous séparant le joueur de la 
+		// Si le dÈplacement est toujours permis jusqu'à maintenant, alors on 
+		// va vÈrifier qu'il n'y a pas de trous sÈparant le joueur de la 
 		// position qu'il veut aller
 		if (bolEstPermis == true)
 		{
-			// Si on se déplace vers la gauche
+			// Si on se dÈplace vers la gauche
 			if (nouvellePosition.x != objPositionJoueur.x && nouvellePosition.x > objPositionJoueur.x)
 			{
-				// On commence le déplacement à la case juste à gauche de la 
+				// On commence le dÈplacement à la case juste à gauche de la 
 				// position courante
 				int i = objPositionJoueur.x + 1;
 				
@@ -301,7 +307,7 @@ public class InformationPartie
 				while (i <= nouvellePosition.x && bolEstPermis == true)
 				{
 					// S'il n'y a aucune case à la position courante, alors on 
-					// a trouvé un trou et le déplacement n'est pas possible
+					// a trouvÈ un trou et le dÈplacement n'est pas possible
 					if (objTable.obtenirPlateauJeuCourant()[i][objPositionJoueur.y] == null)
 					{
 						bolEstPermis = false;
@@ -310,10 +316,10 @@ public class InformationPartie
 					i++;
 				}
 			}
-			// Si on se déplace vers la droite
+			// Si on se dÈplace vers la droite
 			else if (nouvellePosition.x != objPositionJoueur.x && nouvellePosition.x < objPositionJoueur.x)
 			{
-				// On commence le déplacement à la case juste à droite de la 
+				// On commence le dÈplacement à la case juste à droite de la 
 				// position courante
 				int i = objPositionJoueur.x - 1;
 				
@@ -322,7 +328,7 @@ public class InformationPartie
 				while (i >= nouvellePosition.x && bolEstPermis == true)
 				{
 					// S'il n'y a aucune case à la position courante, alors on 
-					// a trouvé un trou et le déplacement n'est pas possible
+					// a trouvÈ un trou et le dÈplacement n'est pas possible
 					if (objTable.obtenirPlateauJeuCourant()[i][objPositionJoueur.y] == null)
 					{
 						bolEstPermis = false;
@@ -331,10 +337,10 @@ public class InformationPartie
 					i--;
 				}
 			}
-			// Si on se déplace vers le bas
+			// Si on se dÈplace vers le bas
 			else if (nouvellePosition.y != objPositionJoueur.y && nouvellePosition.y > objPositionJoueur.y)
 			{
-				// On commence le déplacement à la case juste en bas de la 
+				// On commence le dÈplacement à la case juste en bas de la 
 				// position courante
 				int i = objPositionJoueur.y + 1;
 				
@@ -343,7 +349,7 @@ public class InformationPartie
 				while (i <= nouvellePosition.y && bolEstPermis == true)
 				{
 					// S'il n'y a aucune case à la position courante, alors on 
-					// a trouvé un trou et le déplacement n'est pas possible
+					// a trouvÈ un trou et le dÈplacement n'est pas possible
 					if (objTable.obtenirPlateauJeuCourant()[objPositionJoueur.x][i] == null)
 					{
 						bolEstPermis = false;
@@ -352,10 +358,10 @@ public class InformationPartie
 					i++;
 				}
 			}
-			// Si on se déplace vers le haut
+			// Si on se dÈplace vers le haut
 			else if (nouvellePosition.y != objPositionJoueur.y && nouvellePosition.y < objPositionJoueur.y)
 			{
-				// On commence le déplacement à la case juste en haut de la 
+				// On commence le dÈplacement à la case juste en haut de la 
 				// position courante
 				int i = objPositionJoueur.y - 1;
 				
@@ -364,7 +370,7 @@ public class InformationPartie
 				while (i >= nouvellePosition.y && bolEstPermis == true)
 				{
 					// S'il n'y a aucune case à la position courante, alors on 
-					// a trouvé un trou et le déplacement n'est pas possible
+					// a trouvÈ un trou et le dÈplacement n'est pas possible
 					if (objTable.obtenirPlateauJeuCourant()[objPositionJoueur.x][i] == null)
 					{
 						bolEstPermis = false;
@@ -376,35 +382,44 @@ public class InformationPartie
 		}
 		
 		return bolEstPermis;
-	}
+	} // fin mÈthode
+	
 	
 	/**
-	 * Cette fonction permet de trouver une question selon la difficulté
-	 * et le type de question à poser.
+	 * Cette fonction permet de trouver une question selon la difficultÈ
+	 * et le type de question ‡ poser.
 	 * 
-	 * @param Point nouvellePosition : La position où le joueur désire se déplacer
+	 * @param Point nouvellePosition : La position o˘ le joueur dÈsire se dÈplacer
 	 * @param boolean doitGenererNoCommandeRetour : Permet de savoir si on doit 
-	 * 						générer un numéro de commande à retourner
-	 * @return Question : La question trouvée, s'il n'y a pas eu de déplacement,
-	 * 					  alors la question retournée est null
+	 * 						gÈnÈrer un numÈro de commande ‡ retourner
+	 * @return Question : La question trouvÈe, s'il n'y a pas eu de dÈplacement,
+	 * 					  alors la question retournÈe est null
 	 */
 	public Question trouverQuestionAPoser(Point nouvellePosition, boolean doitGenererNoCommandeRetour)
 	{
-		// Déclarations de variables qui vont contenir la catégorie de question 
-		// à poser, la difficulté et la question à retourner
-		int intCategorieQuestion = objTable.obtenirPlateauJeuCourant()[nouvellePosition.x][nouvellePosition.y].obtenirTypeCase();
+		// DÈclarations de variables qui vont contenir la catÈgorie de question 
+		// ‡ poser, la difficultÈ et la question ‡ retourner
+		//***************************************************************************************
+		int[] tab = {11,12,13,14,21,22,23,24,31,32,33,34,35,36,37,38,41,42,43,44,45,46,47,48,49,51,52,53,54,61,62,63,64,65};
+		
+		int i = objTable.obtenirPlateauJeuCourant()[nouvellePosition.x][nouvellePosition.y].obtenirTypeCase();
+		//System.out.println(i);
+		int intCategorieQuestion = i;//tab[UtilitaireNombres.genererNbAleatoire(34)]; 
+		System.out.println("Categorie: " + intCategorieQuestion);
+		//***************************************************************************************
+		
 		int intDifficulte = 0;
-                int grandeurDeplacement = 0;
+        int grandeurDeplacement = 0;
 		Question objQuestionTrouvee = null;
 		
-                // Si la position en x est différente de celle désirée, alors
-                // c'est qu'il y a eu un déplacement sur l'axe des x
+                // Si la position en x est diffÈrente de celle dÈsirÈe, alors
+                // c'est qu'il y a eu un dÈplacement sur l'axe des x
                 if (objPositionJoueur.x != nouvellePosition.x)
                 {
                         grandeurDeplacement = Math.abs(nouvellePosition.x - objPositionJoueur.x);
                 }
-                // Si la position en y est différente de celle désirée, alors
-                // c'est qu'il y a eu un déplacement sur l'axe des y
+                // Si la position en y est diffÈrente de celle dÈsirÈe, alors
+                // c'est qu'il y a eu un dÈplacement sur l'axe des y
                 else if (objPositionJoueur.y != nouvellePosition.y)
                 {
                         grandeurDeplacement = Math.abs(nouvellePosition.y - objPositionJoueur.y);
@@ -424,17 +439,17 @@ public class InformationPartie
                 if(intDifficulte == 0) intDifficulte = 1;
                 intDifficulte = Math.max(intDifficulte, grandeurDeplacement);
 		
-		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
+		// Il faut que la difficultÈ soit plus grande que 0 pour pouvoir trouver 
 		// une question
 		if (intDifficulte > 0)
 		{
 			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
 		}
 		
-		// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
-		// des questions posées et on la garde en mémoire pour pouvoir ensuite
-		// traiter la réponse du joueur, on va aussi garder la position que le
-		// joueur veut se déplacer
+		// S'il y a eu une question trouvÈe, alors on l'ajoute dans la liste 
+		// des questions posÈes et on la garde en mÈmoire pour pouvoir ensuite
+		// traiter la rÈponse du joueur, on va aussi garder la position que le
+		// joueur veut se dÈplacer
 		if (objQuestionTrouvee != null)
 		{
 			lstQuestionsRepondues.put(new Integer(objQuestionTrouvee.obtenirCodeQuestion()), objQuestionTrouvee);
@@ -443,14 +458,14 @@ public class InformationPartie
 		}
 		else if (intDifficulte > 0)
 		{
-			objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau(), intCategorieQuestion, intDifficulte);
+			objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());
 			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
 			
 			lstQuestionsRepondues.clear();
 			
-			// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
-			// des questions posées et on la garde en mémoire pour pouvoir ensuite
-			// traiter la réponse du joueur
+			// S'il y a eu une question trouvÈe, alors on l'ajoute dans la liste 
+			// des questions posÈes et on la garde en mÈmoire pour pouvoir ensuite
+			// traiter la rÈponse du joueur
 			if (objQuestionTrouvee != null)
 			{
 				lstQuestionsRepondues.put(new Integer(objQuestionTrouvee.obtenirCodeQuestion()), objQuestionTrouvee);
@@ -459,18 +474,18 @@ public class InformationPartie
 			}
 			else
 			{
-				// en théorie on ne devrait plus entrer dans ce else 
+				// en thÈorie on ne devrait plus entrer dans ce else 
 				System.out.println( "Ça va mal : aucune question" );
 			}
 		}
 		
-		// Si on doit générer le numéro de commande de retour, alors
-		// on le génère, sinon on ne fait rien (ça devrait toujours
-		// être vrai, donc on le génère tout le temps)
+		// Si on doit gÈnÈrer le numÈro de commande de retour, alors
+		// on le gÈnÍre, sinon on ne fait rien (˘a devrait toujours
+		// Ítre vrai, donc on le gÈnÍre tout le temps)
 		if (doitGenererNoCommandeRetour == true)
 		{
-			// Générer un nouveau numéro de commande qui sera 
-		    // retourné au client
+			// GÈnÈrer un nouveau numÈro de commande qui sera 
+		    // retournÈ au client
 		    objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();					    
 		}
 		
@@ -478,14 +493,14 @@ public class InformationPartie
 	}
 	
 	/**
-	 * Cette fonction essaie de de piger une question du niveau de dificulté proche 
-	 * de intDifficulte, si on y arrive pas, ça veut dire qu'il ne 
-	 * reste plus de questions de niveau de difficulté proche 
+	 * Cette fonction essaie de de piger une question du niveau de dificultÈ proche 
+	 * de intDifficulte, si on y arrive pas, ˘a veut dire qu'il ne 
+	 * reste plus de questions de niveau de difficultÈ proche 
 	 * de intDifficulte
 	 * 
 	 * @param intCategorieQuestion
 	 * @param intDifficulte
-	 * @return la question trouver ou null si aucune question n'a pu être pigée
+	 * @return la question trouver ou null si aucune question n'a pu Ítre pigÈe
 	 */
 	private Question trouverQuestion(int intCategorieQuestion, int intDifficulte)
 	{
@@ -521,20 +536,20 @@ public class InformationPartie
 	}
 	
 	/**
-	 * Cette fonction met à jour le plateau de jeu si le joueur a bien répondu
-	 * à la question. Les objets sur la nouvelle case sont enlevés et le pointage et l'argent
-	 * du joueur sont mis à jour. Utilisé par les joueurs humains et les joueurs virtuels
+	 * Cette fonction met ‡ jour le plateau de jeu si le joueur a bien rÈpondu
+	 * ‡ la question. Les objets sur la nouvelle case sont enlevÈs et le pointage et l'argent
+	 * du joueur sont mis ‡ jour. UtilisÈ par les joueurs humains et les joueurs virtuels
 	 *
 	 */
 	public static RetourVerifierReponseEtMettreAJourPlateauJeu verifierReponseEtMettreAJourPlateauJeu(String reponse, 
 	    Point objPositionDesiree, Joueur objJoueur)
     {
         
-		// Déclaration de l'objet de retour 
+		// DÈclaration de l'objet de retour 
 		RetourVerifierReponseEtMettreAJourPlateauJeu objRetour = null;
 		
 		int intPointageCourant; 
-                int intArgentCourant;
+        int intArgentCourant;
 		Table table;
 		int intDifficulteQuestion;
 		TreeMap objListeObjetsUtilisablesRamasses; 
@@ -544,15 +559,15 @@ public class InformationPartie
 		String nomJoueur; 
 		boolean bolReponseEstBonne; 
 		
-		// Obtenir les divers informations à utiliser dépendamment de si
-		// la fonction s'applique à un joueur humain ou un joueur virtuel
+		// Obtenir les divers informations ‡ utiliser dÈpendamment de si
+		// la fonction s'applique ‡ un joueur humain ou un joueur virtuel
 		if (objJoueur instanceof JoueurHumain)
 		{
 			InformationPartie objPartieCourante = ((JoueurHumain)objJoueur).obtenirPartieCourante();
 			
 			// Obtenir les informations du joueur humain
 			intPointageCourant = objPartieCourante.obtenirPointage();
-                        intArgentCourant = objPartieCourante.obtenirArgent();
+            intArgentCourant = objPartieCourante.obtenirArgent();
 		    table = objPartieCourante.obtenirTable();
 		    intDifficulteQuestion = objPartieCourante.obtenirQuestionCourante().obtenirDifficulte();
 		    objListeObjetsUtilisablesRamasses = objPartieCourante.obtenirListeObjets();
@@ -578,7 +593,7 @@ public class InformationPartie
 			
 			// Obtenir les informations du joueur virtuel
 			intPointageCourant = objJoueurVirtuel.obtenirPointage();
-                        intArgentCourant   = objJoueurVirtuel.obtenirArgent();
+            intArgentCourant   = objJoueurVirtuel.obtenirArgent();
 		    table = objJoueurVirtuel.obtenirTable();
 		    intDifficulteQuestion = objJoueurVirtuel.obtenirPointage(objJoueurVirtuel.obtenirPositionJoueur(), objPositionDesiree);
 		    objListeObjetsUtilisablesRamasses = objJoueurVirtuel.obtenirListeObjetsRamasses();
@@ -598,23 +613,23 @@ public class InformationPartie
 		// Le nouveau pointage est initialement le pointage courant
 		int intNouveauPointage = intPointageCourant;
                 
-                int intNouvelArgent = intArgentCourant;
+        int intNouvelArgent = intArgentCourant;
 		
-		// Déclaration d'une référence vers l'objet ramassé
+		// DÈclaration d'une rÈfÈrence vers l'objet ramassÈ
 		ObjetUtilisable objObjetRamasse = null;
 		
-		// Déclaration d'une référence vers l'objet subi
+		// DÈclaration d'une rÈfÈrence vers l'objet subi
 		ObjetUtilisable objObjetSubi = null;
 		
 		String collision = "";
 		
-		// Déclaration d'une référence vers le magasin recontré
+		// DÈclaration d'une rÈfÈrence vers le magasin recontrÈ
 		Magasin objMagasinRencontre = null;
 		
-		// Si la réponse est bonne, alors on modifie le plateau de jeu
+		// Si la rÈponse est bonne, alors on modifie le plateau de jeu
 		if (bolReponseEstBonne == true)
 		{
-			// Faire la référence vers la case de destination
+			// Faire la rÈfÈrence vers la case de destination
 			Case objCaseDestination = table.obtenirPlateauJeuCourant()[objPositionDesiree.x][objPositionDesiree.y];
 			
 			// Calculer le nouveau pointage du joueur
@@ -641,32 +656,32 @@ public class InformationPartie
                         }
 			
 			// Si la case de destination est une case de couleur, alors on 
-			// vérifie l'objet qu'il y a dessus et si c'est un objet utilisable, 
-			// alors on l'enlève et on le donne au joueur, sinon si c'est une 
-			// pièce on l'enlève et on met à jour le pointage du joueur, sinon 
+			// vÈrifie l'objet qu'il y a dessus et si c'est un objet utilisable, 
+			// alors on l'enlÍve et on le donne au joueur, sinon si c'est une 
+			// piÍce on l'enlÍve et on met ‡ jour le pointage du joueur, sinon 
 			// on ne fait rien
 			if (objCaseDestination instanceof CaseCouleur)
 			{
-				// Faire la référence vers la case de couleur
+				// Faire la rÈfÈrence vers la case de couleur
 				CaseCouleur objCaseCouleurDestination = (CaseCouleur) objCaseDestination;
 				
 				// S'il y a un objet sur la case, alors on va faire l'action 
-				// tout dépendant de l'objet (pièce, objet utilisable ou autre)
+				// tout dÈpendant de l'objet (piÍce, objet utilisable ou autre)
 				if (objCaseCouleurDestination.obtenirObjetCase() != null)
 				{
-					// Si l'objet est un objet utilisable, alors on l'ajoute à 
+					// Si l'objet est un objet utilisable, alors on l'ajoute ‡ 
 					// la liste des objets utilisables du joueur
 					if (objCaseCouleurDestination.obtenirObjetCase() instanceof ObjetUtilisable)
 					{
                                                 if(Salle.maxPossessionPieceEtObjet > intNouvelArgent + objListeObjetsUtilisablesRamasses.size())
                                                 {
-                                                    // Faire la référence vers l'objet utilisable
+                                                    // Faire la rÈfÈrence vers l'objet utilisable
                                                     ObjetUtilisable objObjetUtilisable = (ObjetUtilisable) objCaseCouleurDestination.obtenirObjetCase();
 
-                                                    // Garder la référence vers l'objet utilisable pour l'ajouter à l'objet de retour
+                                                    // Garder la rÈfÈrence vers l'objet utilisable pour l'ajouter ‡ l'objet de retour
                                                     objObjetRamasse = objObjetUtilisable;
 
-                                                    // Ajouter l'objet ramassé dans la liste des objets du joueur courant
+                                                    // Ajouter l'objet ramassÈ dans la liste des objets du joueur courant
                                                     objListeObjetsUtilisablesRamasses.put(new Integer(objObjetUtilisable.obtenirId()), objObjetUtilisable);
 
                                                     // Enlever l'objet de la case du plateau de jeu
@@ -680,40 +695,40 @@ public class InformationPartie
 					{
                                                 if(Salle.maxPossessionPieceEtObjet > intNouvelArgent + objListeObjetsUtilisablesRamasses.size())
                                                 {
-                                                    // Faire la référence vers la pièce
+                                                    // Faire la rÈfÈrence vers la piÍce
                                                     Piece objPiece = (Piece) objCaseCouleurDestination.obtenirObjetCase();
 
-                                                    // Mettre à jour l'argent du joueur
+                                                    // Mettre ‡ jour l'argent du joueur
                                                     intNouvelArgent += objPiece.obtenirMonnaie();
 
-                                                    // Enlever la pièce de la case du plateau de jeu
+                                                    // Enlever la piÍce de la case du plateau de jeu
                                                     objCaseCouleurDestination.definirObjetCase(null);
 
                                                     collision = "piece";
 
-                                                    // TODO: Il faut peut-être lancer un algo qui va placer 
-                                                    // 		 les pièces sur le plateau de jeu s'il n'y en n'a
+                                                    // TODO: Il faut peut-Ítre lancer un algo qui va placer 
+                                                    // 		 les piÍces sur le plateau de jeu s'il n'y en n'a
                                                     //		 plus
                                                 }
 					}
 					else if (objCaseCouleurDestination.obtenirObjetCase() instanceof Magasin)
 					{
-						// Définir la collision
+						// DÈfinir la collision
 						collision = "magasin";
 						
-						// Définir la référence vers le magasin rencontré
+						// DÈfinir la rÈfÈrence vers le magasin rencontrÈ
 						objMagasinRencontre = (Magasin) objCaseCouleurDestination.obtenirObjetCase();
 					}
 				}
 				
-				// S'il y a un objet à subir sur la case, alors on va faire une
-				// certaine action (TODO: à compléter)
+				// S'il y a un objet ‡ subir sur la case, alors on va faire une
+				// certaine action (TODO: ‡ complÈter)
 				if (objCaseCouleurDestination.obtenirObjetArme() != null)
 				{
-					// Faire la référence vers l'objet utilisable
+					// Faire la rÈfÈrence vers l'objet utilisable
 					ObjetUtilisable objObjetUtilisable = (ObjetUtilisable) objCaseCouleurDestination.obtenirObjetArme();
 					
-					// Garder la référence vers l'objet utilisable à subir
+					// Garder la rÈfÈrence vers l'objet utilisable ‡ subir
 					objObjetSubi = objObjetUtilisable;
 					
 					//TODO: Faire une certaine action au joueur
@@ -723,7 +738,7 @@ public class InformationPartie
 				}
 			}
 			
-			// Créer l'objet de retour
+			// CrÈer l'objet de retour
 			objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, intNouveauPointage, intNouvelArgent);
 			objRetour.definirObjetRamasse(objObjetRamasse);
 			objRetour.definirObjetSubi(objObjetSubi);
@@ -733,10 +748,10 @@ public class InformationPartie
 			
 			synchronized (table.obtenirListeJoueurs())
 		    {
-				// Préparer l'événement de deplacement de personnage. 
-				// Cette fonction va passer les joueurs et créer un 
-				// InformationDestination pour chacun et ajouter l'événement 
-				// dans la file de gestion d'événements
+				// PrÈparer l'ÈvÈnement de deplacement de personnage. 
+				// Cette fonction va passer les joueurs et crÈer un 
+				// InformationDestination pour chacun et ajouter l'ÈvÈnement 
+				// dans la file de gestion d'ÈvÈnements
 				table.preparerEvenementJoueurDeplacePersonnage(nomJoueur, collision, positionJoueur, objPositionDesiree, intNouveauPointage, intNouvelArgent, "");
 						    	
 		    }
@@ -757,7 +772,7 @@ public class InformationPartie
 		}
 		else
 		{
-			// Créer l'objet de retour
+			// CrÈer l'objet de retour
 			objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, intNouveauPointage, intNouvelArgent);
 			
 			// La question sera nulle pour les joueurs virtuels
@@ -772,15 +787,15 @@ public class InformationPartie
 	}
 	
 	/**
-	 * Cette fonction met à jour le plateau de jeu si le joueur a bien répondu
-	 * à la question. Les objets sur la nouvelle case sont enlevés et le pointage
-	 * et l'argent du joueur sont mis à jour.
+	 * Cette fonction met ‡ jour le plateau de jeu si le joueur a bien rÈpondu
+	 * ‡ la question. Les objets sur la nouvelle case sont enlevÈs et le pointage
+	 * et l'argent du joueur sont mis ‡ jour.
 	 * 
-	 * @param String reponse : La réponse du joueur
+	 * @param String reponse : La rÈponse du joueur
 	 * @param boolean doitGenererNoCommandeRetour : Permet de savoir si on doit 
-	 * 						générer un numéro de commande à retourner
+	 * 						gÈnÈrer un numÈro de commande ‡ retourner
 	 * @return RetourVerifierReponseEtMettreAJourPlateauJeu : Un objet contenant 
-	 * 				toutes les valeurs à retourner au client
+	 * 				toutes les valeurs ‡ retourner au client
 	 */
 	public RetourVerifierReponseEtMettreAJourPlateauJeu verifierReponseEtMettreAJourPlateauJeu(String reponse, boolean doitGenererNoCommandeRetour)
 	{
@@ -788,13 +803,13 @@ public class InformationPartie
 		RetourVerifierReponseEtMettreAJourPlateauJeu objRetour =
 		    verifierReponseEtMettreAJourPlateauJeu(reponse, objPositionJoueurDesiree, objJoueurHumain);
 		
-		// Si on doit générer le numéro de commande de retour, alors
-		// on le génère, sinon on ne fait rien (ça devrait toujours
-		// être vrai, donc on le génère tout le temps)
+		// Si on doit gÈnÈrer le numÈro de commande de retour, alors
+		// on le gÈnÍre, sinon on ne fait rien (˘a devrait toujours
+		// Ítre vrai, donc on le gÈnÍre tout le temps)
 		if (doitGenererNoCommandeRetour == true)
 		{
-			// Générer un nouveau numéro de commande qui sera 
-		    // retourné au client
+			// GÈnÈrer un nouveau numÈro de commande qui sera 
+		    // retournÈ au client
 		    objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();					    
 		}
 		
@@ -804,7 +819,7 @@ public class InformationPartie
 	}
 	
 	/*
-	 * Retourne une référence vers la liste des objets ramassés
+	 * Retourne une rÈfÈrence vers la liste des objets ramassÈs
 	 */
 	public TreeMap obtenirListeObjets()
 	{
@@ -817,7 +832,7 @@ public class InformationPartie
 	}
 	
 	/* 
-	 * Aller chercher une référence vers un objet de la liste des objets selon
+	 * Aller chercher une rÈfÈrence vers un objet de la liste des objets selon
 	 * son id
 	 */
 	public ObjetUtilisable obtenirObjetUtilisable(int intObjetId)
@@ -839,12 +854,12 @@ public class InformationPartie
 	}
 	
 	/*
-	 * Détermine si le joueur possède un certain objet, permet
-	 * de valider l'information envoyé par le client lorsqu'il utiliser l'objet
+	 * DÈtermine si le joueur possÍde un certain objet, permet
+	 * de valider l'information envoyÈ par le client lorsqu'il utiliser l'objet
 	 */
 	 public boolean joueurPossedeObjet(int id)
 	 {
-	     // Préparation pour parcourir la liste d'objets
+	     // PrÈparation pour parcourir la liste d'objets
 	     Set lstEnsembleObjets = lstObjetsUtilisablesRamasses.entrySet();
 	     Iterator objIterateurListeObjets = lstEnsembleObjets.iterator();
 	     
@@ -876,13 +891,13 @@ public class InformationPartie
 	
 	public Objet obtenirObjetCaseCourante()
 	{
-		// L'objet à retourné
+		// L'objet ‡ retournÈ
 		Objet objObjet = null;
 		
 		// Aller chercher le plateau de jeu
 		Case[][] objPlateauJeu = objTable.obtenirPlateauJeuCourant();
 		
-		// Aller chercher la case où le joueur se trouve
+		// Aller chercher la case o˘ le joueur se trouve
 		Case objCaseJoueur = objPlateauJeu[objPositionJoueur.x][objPositionJoueur.y];
 		
 		// Si c'est une case couleur, retourner l'objet, sinon on va retourner null
@@ -919,4 +934,12 @@ public class InformationPartie
         {
             return Math.abs(objPositionJoueur.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(objPositionJoueur.y - objTable.obtenirPositionWinTheGame().y);
         }
+
+		private void setModeJeu(int modeJeu) {
+			this.modeJeu = modeJeu;
+		}
+
+		private int getModeJeu() {
+			return modeJeu;
+		}
 }

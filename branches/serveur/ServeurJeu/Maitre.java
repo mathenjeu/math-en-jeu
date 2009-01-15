@@ -51,7 +51,7 @@ public class Maitre implements Runnable
 			System.out.println( "arreter" );
 			try 
 			{
-				Socket socket = new Socket( "localhost", 6101 );
+				Socket socket = new Socket( "localhost", 6100 );     //    OL
 				byte [] buffer = new byte[2];
 				buffer[0] = (byte)_ARRETER;
 				buffer[1] = (byte)0;
@@ -75,7 +75,7 @@ public class Maitre implements Runnable
 			System.out.println( "status" );
 			try 
 			{
-				Socket socket = new Socket( "localhost", 6101 );
+				Socket socket = new Socket( "localhost", 6100 );  // OL
 				byte [] buffer = new byte[256];
 				buffer[0] = (byte)_STATUS;
 				buffer[1] = (byte)0;
@@ -108,7 +108,7 @@ public class Maitre implements Runnable
 		try 
 		{
 			boolean arret = false;
-			ServerSocket socketServeur = new ServerSocket( 6101 );
+			ServerSocket socketServeur = new ServerSocket( 6101 );  // OL
 			while( !arret )
 			{
 				Socket socket = socketServeur.accept();

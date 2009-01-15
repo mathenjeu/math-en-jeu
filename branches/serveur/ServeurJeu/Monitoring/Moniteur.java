@@ -2,9 +2,7 @@ package ServeurJeu.Monitoring;
 
 import java.io.FileWriter;
 import org.apache.log4j.Logger;
-
 import ServeurJeu.Configuration.GestionnaireConfiguration;
-
 import com.jamonapi.Monitor;
 import com.jamonapi.MonitorComposite;
 import com.jamonapi.MonitorFactory;
