@@ -5,17 +5,17 @@ import ServeurJeu.ComposantesJeu.InformationPartie;
 import ServeurJeu.ComposantesJeu.Salle;
 
 /**
- * @author Jean-François Brind'Amour
+ * @author Jean-FranÁois Brind'Amour
  */
 public class JoueurHumain extends Joueur
 {
-	// Déclaration d'une référence vers le protocole du joueur
+	// DÈclaration d'une rÈfÈrence vers le protocole du joueur
 	private ProtocoleJoueur objProtocoleJoueur;
 	
 	// Cette variable va contenir le nom d'utilisateur du joueur
 	private String strNomUtilisateur;
 	
-	// Cetta variable contient la clé de la table joueur
+	// Cetta variable contient la clÈ de la table joueur
 	private int intCleJoueur;
 	
 	// Cette variable va contenir l'adresse IP du joueur
@@ -24,68 +24,73 @@ public class JoueurHumain extends Joueur
 	// Cette variable va contenir le port du joueur
 	private String strPort;
 	
-	// Cette variable va contenir le prénom du joueur
+	// Cette variable va contenir le prÈnom du joueur
 	private String strPrenom;
 	
 	// Cette variable va contenir le nom de famille du joueur
 	private String strNomFamille;
 	
-	//Cette variable défini si un jouer peut creer une salle
+	//Cette variable dÈfini si un jouer peut creer une salle ??? utiliser encore??
 	private boolean bolPeutCreerSalle;
 	
-	private String cleNiveau;
+	/**
+	 * DÈclaration d'un tableau qui contient les valeurs des niveaux des catÈgories
+	 * pour le profil du joueur - informaton garder dans BD -> user_subject_level
+	 * valeurs possibles -> entre 1 et 15
+	 */
+	private int[] cleNiveau;
 	
-	// Déclaration d'une référence vers la salle dans laquelle le joueur se 
+	// DÈclaration d'une rÈfÈrence vers la salle dans laquelle le joueur se 
 	// trouve (null si le joueur n'est dans aucune salle)
 	private Salle objSalleCourante;
 	
-	// Déclaration d'une référence vers l'objet gardant l'information sur la
-	// partie courant de la table où le joueur se trouve (null si le joueur 
+	// DÈclaration d'une rÈfÈrence vers l'objet gardant l'information sur la
+	// partie courant de la table o˘ le joueur se trouve (null si le joueur 
 	// n'est dans aucune table)
 	private InformationPartie objPartieCourante;
         
 	/**
 	 * Constructeur de la classe JoueurHumain qui permet d'initialiser les 
-	 * membres privés du joueur humain et de garder une référence vers l'objet
+	 * membres privÈs du joueur humain et de garder une rÈfÈrence vers l'objet
 	 * permettant de faire la gestion du protocole du joueur
 	 * 
-	 * @param ProtocoleJoueur protocole : L'objet gérant le protocole de 
+	 * @param ProtocoleJoueur protocole : L'objet gÈrant le protocole de 
 	 * 									  communication du joueur
 	 * @param String nomUtilisateur : Le nom d'utilisateur du joueur
 	 * @param String adresseIP : L'adresse IP du joueur
 	 * @param String port : Le port du joueur
-	 * @param boolean peutCreerSalle : Permet de savoir si le joueur peut créer
+	 * @param boolean peutCreerSalle : Permet de savoir si le joueur peut crÈer
 	 * 								   de nouvelles salles
 	 */
 	public JoueurHumain(ProtocoleJoueur protocole, String nomUtilisateur, String adresseIP, String port) 
 	{
 		super();
 
-		// Faire la référence vers le protocole du joueur
+		// Faire la rÈfÈrence vers le protocole du joueur
 		objProtocoleJoueur = protocole;
 		
-		// Garder en mémoire le nom d'utilisateur, l'adresse IP et le port du
+		// Garder en mÈmoire le nom d'utilisateur, l'adresse IP et le port du
 		// joueur
 		strNomUtilisateur = nomUtilisateur;
 		strAdresseIP = adresseIP;
 		strPort = port;
 		
-		// Initialiser les caractéristiques du joueur
+		// Initialiser les caractÈristiques du joueur
 		strPrenom = "";
 		strNomFamille = "";
 		bolPeutCreerSalle = false;
 		
-		// Au début, le joueur n'est dans aucune salle ni table
+		// Au dÈbut, le joueur n'est dans aucune salle ni table
 		objSalleCourante = null;
 		objPartieCourante = null;
 	}
 
 	/**
-	 * Cette fonction permet de retourner l'objet ProtocoleJoueur qui sert à
-	 * exécuter le protocole de communication du jeu entre le joueur et le 
+	 * Cette fonction permet de retourner l'objet ProtocoleJoueur qui sert ‡
+	 * exÈcuter le protocole de communication du jeu entre le joueur et le 
 	 * serveur.
 	 * 
-	 * @return ProtocoleJoueur : L'objet ProtocoleJoueur lié au joueur humain
+	 * @return ProtocoleJoueur : L'objet ProtocoleJoueur liÈ au joueur humain
 	 */
 	public ProtocoleJoueur obtenirProtocoleJoueur()
 	{
@@ -123,9 +128,9 @@ public class JoueurHumain extends Joueur
 	}
 	
 	/**
-	 * Cette fonction permet de retourner le prénom du joueur.
+	 * Cette fonction permet de retourner le prÈnom du joueur.
 	 * 
-	 * @return String : La prénom du joueur
+	 * @return String : La prÈnom du joueur
 	 */
 	public String obtenirPrenom()
 	{
@@ -143,9 +148,9 @@ public class JoueurHumain extends Joueur
 	}
 	
 	/**
-	 * Cette méthode permet de définir le prénom du joueur.
+	 * Cette mÈthode permet de dÈfinir le prÈnom du joueur.
 	 * 
-	 * @param String prenom : Le prénom du joueur à définir
+	 * @param String prenom : Le prÈnom du joueur ‡ dÈfinir
 	 */
 	public void definirPrenom(String prenom)
 	{
@@ -163,9 +168,9 @@ public class JoueurHumain extends Joueur
 	}
 
 	/**
-	 * Cette méthode permet de définir le nom de famille du joueur.
+	 * Cette mÈthode permet de dÈfinir le nom de famille du joueur.
 	 * 
-	 * @param String prenom : Le nom de famille du joueur à définir
+	 * @param String prenom : Le nom de famille du joueur ‡ dÈfinir
 	 */
 	public void definirNomFamille(String nomFamille)
 	{
@@ -173,7 +178,7 @@ public class JoueurHumain extends Joueur
 	}
 	
 	/**
-	 * Cette méthode permet de définir si un joueur peut creer une salle.
+	 * Cette mÈthode permet de dÈfinir si un joueur peut creer une salle.
 	 * 
 	 * @param boolean peutCreerSalle : peut ou peux pas creer salle
 	 */
@@ -183,11 +188,11 @@ public class JoueurHumain extends Joueur
 	}
 	
 	/**
-	 * Cette fonction permet de retourner la référence vers la salle dans 
-	 * laquelle se trouve le joueur présentement.
+	 * Cette fonction permet de retourner la rÈfÈrence vers la salle dans 
+	 * laquelle se trouve le joueur prÈsentement.
 	 * 
 	 * @return Salle : La salle courante dans laquelle se trouve le joueur.
-	 * 				   Si null est retourné, alors le joueur ne se trouve dans
+	 * 				   Si null est retournÈ, alors le joueur ne se trouve dans
 	 * 				   aucune salle.
 	 */
 	public Salle obtenirSalleCourante()
@@ -196,11 +201,11 @@ public class JoueurHumain extends Joueur
 	}
 		
 	/**
-	 * Cette méthode permet de définir la référence vers la salle dans laquelle
+	 * Cette mÈthode permet de dÈfinir la rÈfÈrence vers la salle dans laquelle
 	 * le joueur se trouve.
 	 * 
 	 * @param Salle salleCourante : La salle dans laquelle le joueur se
-	 * 								trouve présentement. Si la salle est null
+	 * 								trouve prÈsentement. Si la salle est null
 	 * 								alors c'est que le joueur n'est dans aucune
 	 * 								salle.
 	 */
@@ -210,11 +215,11 @@ public class JoueurHumain extends Joueur
 	}
 	
 	/**
-	 * Cette fonction permet de retourner la référence vers l'information sur
-	 * la partie courante de la table dans laquelle se trouve le joueur présentement.
+	 * Cette fonction permet de retourner la rÈfÈrence vers l'information sur
+	 * la partie courante de la table dans laquelle se trouve le joueur prÈsentement.
 	 * 
 	 * @return InformationPartie : L'information sur la partie courante du joueur.
-	 * 				   Si null est retourné, alors le joueur ne se trouve dans
+	 * 				   Si null est retournÈ, alors le joueur ne se trouve dans
 	 * 				   aucune table.
 	 */
 	public InformationPartie obtenirPartieCourante()
@@ -223,7 +228,7 @@ public class JoueurHumain extends Joueur
 	}
 		
 	/**
-	 * Cette méthode permet de définir la référence vers l'information sur la 
+	 * Cette mÈthode permet de dÈfinir la rÈfÈrence vers l'information sur la 
 	 * partie courante du joueur.
 	 * 
 	 * @param InformationPartie partieCourante : L'information sur la partie
@@ -252,12 +257,12 @@ public class JoueurHumain extends Joueur
 	}
 
 
-	public String obtenirCleNiveau() 
+	public int[] obtenirCleNiveau() 
 	{
 		return cleNiveau;
 	}
 
-	public void definirCleNiveau(String cleNiveau) 
+	public void definirCleNiveau(int[] cleNiveau) 
 	{
 		this.cleNiveau = cleNiveau;
 	}

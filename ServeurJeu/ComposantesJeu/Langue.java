@@ -21,15 +21,15 @@ public class Langue
 	// L'URL qui donne où se trouvent les fichiers Flash pour les questions et réponses
 	private String URLQuestionsReponses;
         
-        // Le nom de la table de questions dans la base de données
-        private String nomTableQuestionsBD;
+    // Le nom de la table de questions dans la base de données
+    private String nomTableQuestionsBD;
         
-        // Les valeurs de clés minimale et maximale pour les questions
-        private int cleQuestionMin;
-        private int cleQuestionMax;
+    // Les valeurs de clés minimale et maximale pour les questions
+    private int cleQuestionMin;
+    private int cleQuestionMax;
         
-        // The constructor is called as soon as we know the player's language
-        // The language is obtained in the method's arguments, and the rest is obtained from the server config file
+    // The constructor is called as soon as we know the player's language
+    // The language is obtained in the method's arguments, and the rest is obtained from the server config file
 	public Langue(String langue, Node noeudLangue, String nomSalle)
 	{
             this.langue = langue;
