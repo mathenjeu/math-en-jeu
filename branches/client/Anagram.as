@@ -218,7 +218,30 @@ class Anagram
 		return true;
 	}
 	
-	
+	/*****************************************************************************
+	Fonction : standardiserMot
+	Paramêtre :
+		- mot : le mot à standardiser
+	Description : on met d'abord tous les lettres du mot passé en paramètre
+	    en minuscule. Ensuite, on vérifie si chacun des lettres du mot 
+		transformé est une lettre avec accent ou cédille. Si c'est le 
+		cas, on la convertit en lettre normale. 
+	******************************************************************************/
+	public function standardiserMot(mot:String)
+	{
+		mot = mot.toLowerCase();
+		
+		var t:Array = motVersArray(mot);
+		
+		for(var i = 0; i < t.length; i++)
+		{
+			t[i] = convertirLettreAccent(t[i]);
+		}
+		
+		mot = arrayVersMot(t, t.length);
+		trace("Mot standardisé: " + mot);
+		return mot;
+	}
 	
 	
 	/*****************************************************************************
