@@ -67,11 +67,11 @@ public class EvenementJoueurEntreSalle extends Evenement
 			// Ajouter le noeud texte au noeud du paramètre
 			objNoeudParametre.appendChild(objNoeudTexte);
 			
-			/*********************** client n'a besoin de reponse ***************************************
+			/*********************** client n'a pas besoin de réponse *********
 			Text objNoeudTexteNiveaux = objDocumentXML.createTextNode("0");
 			objNoeudParametre.setAttribute("type", "Niveaux");
 			objNoeudParametre.appendChild(objNoeudTexteNiveaux);
-			***********************************************************/
+			******************************************************************/
 			
 			// Ajouter le noeud paramètre au noeud de commande
 			objNoeudCommande.appendChild(objNoeudParametre);

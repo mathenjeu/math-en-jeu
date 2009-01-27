@@ -47,7 +47,6 @@ public class BoiteQuestions
 	{
 		// ajout acouet - tient en compte la categorie de la question
 		int intCategorieQuestion = question.obtenirCategorie();
-		//System.out.println(intCategorieQuestion);
 		int difficulte = question.obtenirDifficulte();
 	
 		TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );

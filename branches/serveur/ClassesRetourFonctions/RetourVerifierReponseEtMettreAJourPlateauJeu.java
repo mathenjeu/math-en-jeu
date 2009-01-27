@@ -34,7 +34,7 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 	// Déclaration d'une variable qui va contenir le nouveau pointage
 	private int intNouveauPointage;
         
-        private int intNouvelArgent;
+    private int intNouvelArgent;
 	
 	private String strCollision;
 	
@@ -53,7 +53,7 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 		objObjetSubi = null;
 		objNouvellePosition = null;
 		intNouveauPointage = nouveauPointage;
-                intNouvelArgent = nouvelArgent;
+        intNouvelArgent = nouvelArgent;
 		strCollision = "vide";
 	}
 	

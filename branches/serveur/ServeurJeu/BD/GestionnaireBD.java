@@ -2,16 +2,23 @@ package ServeurJeu.BD;
 
 import java.sql.*;
 import org.apache.log4j.Logger;
-
-import ClassesUtilitaires.UtilitaireNombres;
+import org.w3c.dom.Node;
+import Enumerations.Categories;
+import Enumerations.Visibilite;
 import ServeurJeu.ComposantesJeu.BoiteQuestions;
 import ServeurJeu.ComposantesJeu.Langue;
-import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
+import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
+import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
+import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
+import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
+import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import java.util.Date;
+import java.util.TreeSet;
 import java.text.SimpleDateFormat; 
 import ServeurJeu.Configuration.GestionnaireMessages;
 import java.util.Vector;
@@ -24,13 +31,13 @@ import java.util.Vector;
 public class GestionnaireBD 
 {
 	// Déclaration d'une référence vers le contrôleur de jeu
-	private ControleurJeu objControleurJeu;
+	private  ControleurJeu objControleurJeu;
 	
     // Objet Connection nécessaire pour le contact avec le serveur MySQL
 	private Connection connexion;
 	
 	// Objet Statement nécessaire pour envoyer une requète au serveur MySQL
-	private Statement requete;
+	private  Statement requete;
 	
 	static private Logger objLogger = Logger.getLogger( GestionnaireBD.class );
 	
@@ -182,7 +189,9 @@ public class GestionnaireBD
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery("SELECT user_id, last_name, name  FROM user WHERE username = '" + joueur.obtenirNomUtilisateur() + "';");
+				ResultSet rs = requete.executeQuery("SELECT user.user_id,last_name,name,user_subject_level.*  FROM user,user_subject_level " +
+						" WHERE username = '" + joueur.obtenirNomUtilisateur() + 
+						"' AND user.user_id = user_subject_level.user_id;"); //
 				if (rs.next())
 				{
 					
@@ -194,6 +203,17 @@ public class GestionnaireBD
 					joueur.definirNomFamille(nom);
 					joueur.definirCleJoueur(cle);
 					
+					// on prend dans BD les niveaux scolaires du joueur en utilisant enum Categories
+					Categories[] catValues = Categories.values();
+					
+					int[] cleNiveau = new int[34];
+					for(int i = 0; i < catValues.length; i++)
+					{
+						cleNiveau[i] = Integer.parseInt(rs.getString(catValues[i].name()));
+					}
+					
+					joueur.definirCleNiveau(cleNiveau);
+				   
 				}
 				
 			}
@@ -207,105 +227,69 @@ public class GestionnaireBD
 		    e.printStackTrace();			
 		}
 		
-		/*//////////////// mon code  /////////////////////
-		try
-		{
-			synchronized( requete )
-			{
-				ResultSet rsl = requete.executeQuery("SELECT category_level*  FROM user_subject_level WHERE user_id = '" + joueur.obtenirCleJoueur() + "';");
-				if (rsl.next())
-				{
-														
-					String cleNiveau = rsl.getString("category_level");
-					//joueur.definirCleNiveau(cleNiveau);
-				          
-				}
-				
-			}
-		}
-		catch (SQLException e)
-		{
-			// Une erreur est survenue lors de l'exécution de la requète
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error( e.getMessage() );
-		    e.printStackTrace();			
-		}*/
-		
-		/// simulaton niveaux du joueur
-		int[] cleNiveau = {2,3,4,4,5,7,8,9,6,7,3,12,11,3,5,6,7,8,9,6,5,4,3,2,4,5,6,7,8,9,11,14,15,12};
-		joueur.definirCleNiveau(cleNiveau);
 	}// fin méthode
 
  
-	/*// This method fills a Question box with only the player's level
-	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, int[] niveau )
-	{
-                String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
-		String strRequeteSQL = "SELECT " + nomTable + ".*,answer_type.tag FROM " + nomTable +
-                        ",answer_type WHERE answer_type.answer_type_id = " + nomTable + ".tag and " + nomTable + ".valide = 1 " +
-			"and question_flash_file is not NULL and feedback_flash_file is not NULL and ";
-		
-		         	    
-		strRequeteSQL += strValeurGroupeAge + niveau + " > 0";
-		
-		remplirBoiteQuestions( boiteQuestions, niveau, strRequeteSQL );
-	}*/
-	
-    /** This function fills a Question box with the player's level, a specified difficulty and a question category
-     * 
+	/** 
+	 * La fonction rempli la boiteQuestions avec des questions que correspond
+	 * a niveaux scolaires du joueur
+     * This function fills a Question box with the questions of player's level 
+     * for each category and player's lang 
      */
 	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, int[] niveau )
 	{
 		
-        // Noter qu'on ne tient plus compte de la catégorie!!
-        String nomTable = boiteQuestions.obtenirLangue().obtenirNomTableQuestionsBD();
-        int cleLang = 1;
-        // pour catégories des questions
-        int[] tab = {11,12,13,14,21,22,23,24,31,32,33,34,35,36,37,38,41,42,43,44,45,46,47,48,49,51,52,53,54,61,62,63,64,65};
-        
-        // il faux choisir aussi la langue du question
+        // Pour tenir compte de la langue
+        int cleLang = 1;   
         Langue lang = boiteQuestions.obtenirLangue();
         String langue = lang.obtenirLangue();
         if (langue.equalsIgnoreCase("fr")) 
             cleLang = 1;
         else if (langue.equalsIgnoreCase("en"))
         	cleLang = 2;
+       
+        // pour catégories des questions on utilise enum Categories
         
-        
-        
-     /*   // pour chaque catégorie on prend le niveau scolaire du joueur
-        for(int i = 0; i < tab.length; i++){
-       	   String strRequeteSQL = "SELECT question_info.*,answer_type_info.name,question_level.value,question_level.level_id " +
-           "FROM question_info,answer_type_info,question_level,question " +
-           "WHERE  question_info.language_id = " + cleLang +
-           " AND question_info.category_id = " + tab[i]  +
+        Categories[] catValues = Categories.values();
+        int[] catScolaires = new int[catValues.length];
+        for(int i = 0; i < catValues.length; i++)
+		{
+			catScolaires[i] = catValues[i].getCode();
+		}
+              
+     // pour chaque catégorie on prend le niveau scolaire du joueur
+        for(int i = 0; i < catValues.length; i++)
+		{
+       	   String strRequeteSQL = "SELECT DISTINCT question_info.*,answer_type.tag,question_level.value,question_level.level_id " +
+           "FROM question_info,answer_type_info,question_level,question,answer_type " +
+           "WHERE  question_info.language_id = 1 " + //cleLang +
+           " AND question_info.category_id = " + catScolaires[i] +
            " AND question_info.question_id = question_level.question_id " +
-           " AND  question_info.question_id = question.question_id " +
-           "AND question_info.category_id = question.category_id " + 
+           " AND question_info.question_id = question.question_id " +
+           " AND question_info.category_id = question.category_id " + 
            " AND answer_type_info.answer_type_id = question.answer_type_id " +
            " and question_info.is_valid = 1 " +
            " and question_info.question_flash_file is not NULL " +
            " and question_info.feedback_flash_file is not NULL "   +
-           " and question_level.level_id = " + niveau[i]  +
-           " and question_level.value != 0";   */
+           " and question_level.level_id =  " + niveau[i] + 
+           " and question_level.value != 0 ";   
         
-        // ine version simulation !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      /*// ine version simulation 
         //  on ne prend pas  les niveaux scolaire du joueur
         
        	   String strRequeteSQL = "SELECT DISTINCT question_info.*,answer_type.tag,question_level.value " +
            " FROM question_info,answer_type,question_level,question " +
            " WHERE question_info.question_id = question.question_id " +
            " AND answer_type.answer_type_id = question.answer_type_id " +
-           " AND question_info.language_id = " + cleLang +
+           " AND question_info.language_id = 1 " + //cleLang +
            " and question_info.is_valid = 1 " +
            " and question_info.question_flash_file is not NULL " +
-           " and question_info.feedback_flash_file is not NULL"  +
-           " and question_level.value = 1 AND question_info.question_id NOT IN (6135,6136,6137,6138,6149,6150)";
+           " and question_info.feedback_flash_file is not NULL"  + 
+           " and question_level.value = 1 AND question_info.question_id NOT IN (6135,6136,6137,6138,6149,6150,6172)LIMIT 5000"; */
            
 				   
 		    remplirBoiteQuestions( boiteQuestions, strRequeteSQL );
-        //}//fin for
+		}//fin for
 	}// fin méthode
 	
     // This function follows one of the two previous functions. It queries the database and
@@ -319,15 +303,13 @@ public class GestionnaireBD
 				ResultSet rs = requete.executeQuery( strRequeteSQL );
 				while(rs.next())
 				{
-					int codeQuestion = rs.getInt("question_id");
-					//System.out.println(codeQuestion);
-					int categorie = UtilitaireNombres.genererNbAleatoire(7); // simulation !!!!!!!!! rs.getInt("category_id");
-					//System.out.println(categorie);
+					int codeQuestion = Integer.parseInt(rs.getString("question_id"));
+					int categorie =  Integer.parseInt(rs.getString("category_id"));// simulation !!!!!!!!! UtilitaireNombres.genererNbAleatoire(7);
 					String typeQuestion = rs.getString( "tag" );
 					String question = rs.getString( "question_flash_file" );
 					String reponse = rs.getString("good_answer");
 					String explication = rs.getString("feedback_flash_file");
-					int difficulte = UtilitaireNombres.genererNbAleatoire(6); // simulation !!!!!!!!! rs.getInt("value");
+					int difficulte = Integer.parseInt(rs.getString("value")); // simulation !!!!!!!!! UtilitaireNombres.genererNbAleatoire(6);
 					
                     String URL = boiteQuestions.obtenirLangue().obtenirURLQuestionsReponses();
                     System.out.println(URL+explication);
@@ -525,4 +507,319 @@ public class GestionnaireBD
                System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
             }
 	}
-}
+
+    /**
+     * Méthode utilisé pour charger les salles avec les propriétes 
+     * et les regles de la salle 
+     * @param noeudLangue
+     */
+	public void chargerSalle( Node noeudLangue)
+	{
+		int langId = 1; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		Regles objReglesSalle = new Regles();
+		int roomId = 0;
+		String nom = "";
+		String motDePasse = "";
+		String createur = "";
+		String gameType = "";
+		
+		try
+		{
+			synchronized( requete )
+			{
+				ResultSet rs = requete.executeQuery( "SELECT room_info.name, room.password, game_type.name,user.name, room.room_id " +
+					" FROM room_info,room, game_type,user " +
+					" WHERE room.game_type_id = game_type.game_type_id " +
+					"  AND room.room_id = room_info.room_id " +
+					"  AND user.user_id = room.user_id " +
+					"  AND room_info.language_id = 2 ;" );
+				if(rs.next())
+				{
+					nom = rs.getString( "room_info.name" );
+					motDePasse = rs.getString( "password" );
+					createur = rs.getString("user.name");
+					gameType = rs.getString("game_type.name");
+					roomId = rs.getInt("room.room_id");
+				}	
+                    
+					this.chargerRegllesSalle(objReglesSalle, roomId, langId);
+					
+					Salle objSalle = new Salle(this, nom, createur, motDePasse, objReglesSalle, objControleurJeu, noeudLangue, gameType);
+					//this.chargerMaxObjets(objSalle, roomId);
+					//System.out.println(objReglesSalle.obtenirPermetChat());
+					objControleurJeu.ajouterNouvelleSalle(objSalle);
+					//System.out.println(roomId);
+					//System.out.println("mot de passe :" + gameType);
+					//System.out.println("max pieces: " + objSalle.getMaxPossessionPieceEtObjet());	
+			}
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exécution de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();			
+		}
+		catch( RuntimeException e)
+		{
+			//Une erreur est survenue lors de la recherche de la prochaine salle
+			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();
+		}
+			
+	}// fin méthode chargerSalle
+
+   /**
+    * 
+    * @param roomId
+    */
+	public void chargerMaxObjets() {
+		
+		try
+		{
+			synchronized( requete )
+			{
+				ResultSet rs = requete.executeQuery( "SELECT rule.max_object_coin FROM rule, room" +
+					" WHERE room.room_id = " + 1 +
+					" AND rule.rule_id = room.rule_id ;" );
+				if(rs.next())
+				{
+					
+					int maxPiecesObjects = rs.getInt( "max_object_coin" );
+					Salle.setMaxPossessionPieceEtObjet(maxPiecesObjects);					
+                }
+			}
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exécution de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();			
+		}
+		
+	}
+
+   /**
+    * 
+    * @param objReglesSalle
+    * @param roomId
+ * @param langId 
+    */
+	@SuppressWarnings("unchecked")
+	private void chargerRegllesSalle(Regles objReglesSalle, int roomId, int langId) {
+				
+        try
+		{
+			synchronized( requete )
+			{
+				ResultSet rs = requete.executeQuery( "SELECT rule.* FROM rule, room" +
+						" WHERE room.room_id = " + roomId +
+				        " AND rule.rule_id = room.rule_id ;" );
+				while(rs.next())
+				{
+					boolean chat = Boolean.parseBoolean(rs.getString( "chat" ));
+					Float ratioTrous  = Float.parseFloat( rs.getString( "hole_ratio" ));
+					Float ratioMagasins  = Float.parseFloat( rs.getString( "shop_ratio" ));
+					Float ratioCasesSpeciales  = Float.parseFloat( rs.getString( "special_square_ratio" ));
+					Float ratioPieces  = Float.parseFloat( rs.getString( "coin_ratio" ));
+					Float ratioObjetsUtilisables  = Float.parseFloat( rs.getString( "object_ratio" ));
+					int valeurPieceMax = rs.getInt( "max_coin_value" );
+					int tempsMin = rs.getInt( "minimal_time" );
+					int tempsMax = rs.getInt( "maximal_time" );
+					int deplacementMax = rs.getInt( "max_movement" );
+					
+					objReglesSalle.definirPermetChat( chat );
+					objReglesSalle.definirRatioTrous( ratioTrous );
+					objReglesSalle.definirRatioMagasins( ratioMagasins );
+					objReglesSalle.definirRatioCasesSpeciales( ratioCasesSpeciales );
+					objReglesSalle.definirRatioPieces( ratioPieces );
+					objReglesSalle.definirRatioObjetsUtilisables(ratioObjetsUtilisables );
+					objReglesSalle.definirValeurPieceMaximale( valeurPieceMax );
+					objReglesSalle.definirTempsMinimal( tempsMin );
+					objReglesSalle.definirTempsMaximal( tempsMax );
+					objReglesSalle.definirDeplacementMaximal( deplacementMax );
+					
+					//System.out.println("temp min: " + objReglesSalle.obtenirDeplacementMaximal());
+									
+                }
+			}
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exécution de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();			
+		}
+		
+		// charger autres regles
+		TreeSet magasins = objReglesSalle.obtenirListeMagasinsPossibles();
+		TreeSet casesCouleur = objReglesSalle.obtenirListeCasesCouleurPossibles();
+		TreeSet casesSpeciale = objReglesSalle.obtenirListeCasesSpecialesPossibles();
+		TreeSet objetsUtilisables = objReglesSalle.obtenirListeObjetsUtilisablesPossibles();
+		
+		this.chargerReglesMagasins(magasins, roomId, langId);
+		this.chargerReglesCasesCouleur(casesCouleur, roomId);
+		this.chargerReglesCasesSpeciale(casesSpeciale, roomId);
+		this.chargerReglesObjetsUtilisables(objetsUtilisables, roomId, langId);
+		
+	}// fin méthode chargerReglesSalle
+	
+	
+	/**
+	 * Méthode utilisée pour charger la liste des objets utilisables
+	 * @param objetsUtilisables 
+	 * @param roomId
+	 * @param langId 
+	 */
+	private void chargerReglesObjetsUtilisables(TreeSet objetsUtilisables, int roomId, int langId ) {
+		try
+  		{
+  			synchronized( requete )
+  			{
+  				ResultSet rst = requete.executeQuery( "SELECT room_object.priority, object_info.name " +
+  					" FROM room_object, object_info " +
+  					" WHERE room_object.room_id = " + roomId +
+  					" AND room_object.object_id = object_info.object_id " +
+  					" AND object_info.language_id = " + langId +
+  					";");
+  				while(rst.next())
+  				{
+  					Integer tmp1 = rst.getInt( "priority" );
+  			        String tmp2 = rst.getString( "name" );
+  			        
+  			        objetsUtilisables.add(new ReglesObjetUtilisable(tmp1, tmp2, Visibilite.Aleatoire));
+  			      												
+                  }
+  			}
+  		}
+  		catch (SQLException e)
+  		{
+  			// Une erreur est survenue lors de l'exécution de la requète
+  			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+  			objLogger.error(GestionnaireMessages.message("bd.trace"));
+  			objLogger.error( e.getMessage() );
+  		    e.printStackTrace();			
+  		}// fin catch
+		
+    }// fin méthode
+
+
+	/**
+	 * Méthode utilisée pour charger la liste des cases spéciales 
+	 * @param casesSpeciale 
+	 * @param roomId
+	 */
+	private void chargerReglesCasesSpeciale(TreeSet casesSpeciale, int roomId) {
+		try
+  		{
+  			synchronized( requete )
+  			{
+  				ResultSet rst = requete.executeQuery( "SELECT color_square_rule.priority, color_square_rule.type " +
+  					" FROM color_square_rule " +
+  					" WHERE color_square_rule.room_id = " + roomId +
+  					 ";");
+  				while(rst.next())
+  				{
+  					Integer tmp1 = rst.getInt( "priority" );
+  			        Integer tmp2 = rst.getInt( "type" );
+  			        
+  			        casesSpeciale.add(new ReglesCaseSpeciale(tmp1, tmp2));
+  					 														
+                  }
+  			}
+  		}
+  		catch (SQLException e)
+  		{
+  			// Une erreur est survenue lors de l'exécution de la requète
+  			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+  			objLogger.error(GestionnaireMessages.message("bd.trace"));
+  			objLogger.error( e.getMessage() );
+  		    e.printStackTrace();			
+  		}// fin catch
+	
+    }// fin méthode
+
+
+	/**
+     * Méthode utilisée pour charger la liste des cases couleur 
+     * dans les Regles du partie
+     * @param casesCouleur 
+	 * @param roomId
+     */
+     private void chargerReglesCasesCouleur(TreeSet casesCouleur, int roomId) {
+                   
+        try
+  		{
+  			synchronized( requete )
+  			{
+  				ResultSet rst = requete.executeQuery( "SELECT color_square_rule.priority, color_square_rule.type " +
+  					" FROM color_square_rule " +
+  					" WHERE color_square_rule.room_id = " + roomId +
+  					 ";");
+  				while(rst.next())
+  				{
+  					Integer tmp1 = rst.getInt( "priority" );
+  			        Integer tmp2 = rst.getInt( "type" );
+  			        
+  			        casesCouleur.add(new ReglesCaseCouleur(tmp1, tmp2));
+  					 														
+                  }
+  			}
+  		}
+  		catch (SQLException e)
+  		{
+  			// Une erreur est survenue lors de l'exécution de la requète
+  			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+  			objLogger.error(GestionnaireMessages.message("bd.trace"));
+  			objLogger.error( e.getMessage() );
+  		    e.printStackTrace();			
+  		}// fin catch
+	
+     }// fin méthode
+
+
+    /**
+     * Méthode utilisée pour charger la liste des magasins dans les Regles du partie
+     * @param magasins 
+     * @param roomId
+     * @param langId 
+     */
+     @SuppressWarnings("unchecked")
+	private void chargerReglesMagasins(TreeSet magasins, int roomId, int langId) {
+    	 	
+         try
+ 		{
+ 			synchronized( requete )
+ 			{
+ 				ResultSet rst = requete.executeQuery( "SELECT room_shop.priority, shop_info.name " +
+ 					" FROM room_shop, shop_info " +
+ 					" WHERE room_shop.room_id = " + roomId +
+ 					" AND room_shop.shop_id = shop_info.shop_id " +
+ 					" AND shop_info.language_id = " + langId + ";");
+ 				while(rst.next())
+ 				{
+ 					Integer tmp1 = rst.getInt( "priority" );
+ 			        String tmp2 = rst.getString("name");
+ 			        
+ 			        magasins.add(new ReglesMagasin(tmp1, tmp2));
+ 					 														
+                 }
+ 			}
+ 		}
+ 		catch (SQLException e)
+ 		{
+ 			// Une erreur est survenue lors de l'exécution de la requète
+ 			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+ 			objLogger.error(GestionnaireMessages.message("bd.trace"));
+ 			objLogger.error( e.getMessage() );
+ 		    e.printStackTrace();			
+ 		}
+     }// fin méthode
+}// fin class

@@ -22,7 +22,7 @@ import ServeurJeu.Configuration.GestionnaireConfiguration;
 import org.w3c.dom.Node;
 
 //TODO: Le mot de passe d'une salle ne doit pas être modifiée pendant le jeu,
-//      sinon il va falloir ajouter des synchronisations ˆ chaque fois qu'on
+//      sinon il va falloir ajouter des synchronisations à chaque fois qu'on
 //      fait des validations avec le mot de passe de la salle.
 /**
  * @author Jean-François Brind'Amour
@@ -41,16 +41,16 @@ public class Salle
 	// Cette variable va contenir le nom de la salle
 	private String strNomSalle;
 
-	// Cette variable va contenir le mot de passe permettant d'accéder ˆ la salle
+	// Cette variable va contenir le mot de passe permettant d'accéder à la salle
 	private String strMotDePasse;
 	
 	// Cette variable va contenir le nom d'utilisateur du créateur de cette salle
 	private String strNomUtilisateurCreateur;
         
-        // Contient le type de jeu (ex. mathEnJeu)
-        private String gameType;
+    // Contient le type de jeu (ex. mathEnJeu)
+    private String gameType;
 	
-	// Cet objet est une liste de numéros utilisés pour les tables (sert ˆ 
+	// Cet objet est une liste de numéros utilisés pour les tables (sert à 
 	// générer de nouvelles tables)
 	private TreeSet lstNoTables;
 	
@@ -63,16 +63,18 @@ public class Salle
 	// Cet objet permet de déterminer les règles de jeu pour cette salle
 	private Regles objRegles;
         
-        // Contenu du noeud langue de cette salle dans le fichier de configuration
-        private Node noeudLangue;
+    // Contenu du noeud langue de cette salle dans le fichier de configuration
+    private Node noeudLangue;
+    
+    // This is the maximum number of coins and items a player can hold at one time
+    private static int maxPossessionPieceEtObjet; 
         
-        // This is the maximum number of coins and items a player can hold at one time
-        public static int maxPossessionPieceEtObjet = Integer.parseInt(GestionnaireConfiguration.obtenirInstance().obtenirString("controleurjeu.salles-initiales.regles.max-possession-objets-et-pieces"));
+    
 	
 	/**
 	 * Constructeur de la classe Salle qui permet d'initialiser les membres 
 	 * privés de la salle. Ce constructeur a en plus un mot de passe permettant
-	 * d'accéder ˆ la salle.
+	 * d'accéder à la salle.
 	 * 
 	 * @param GestionnaireBD gestionnaireBD : Le gestionnaire de base de données
 	 * @param String nomSalle : Le nom de la salle
@@ -120,6 +122,7 @@ public class Salle
 		
 		// Démarrer le thread du gestionnaire d'événements
 		threadEvenements.start();
+		
 	}
 
 	/**
@@ -159,13 +162,13 @@ public class Salle
 	 * 								l'appel de fonction
 	 * @return false : Le mot de passe pour entrer dans la salle n'est pas
 	 * 				   le bon
-	 * 		   true  : Le joueur a réussi ˆ entrer dans la salle
+	 * 		   true  : Le joueur a réussi à entrer dans la salle
 	 * 
 	 * @synchronism Cette fonction est synchronisée pour éviter que deux 
 	 * 				puissent entrer ou quitter une salle en même temps.
-	 * 				On n'a pas ˆ s'inquiéter que le joueur soit modifié
+	 * 				On n'a pas à s'inquiéter que le joueur soit modifié
 	 * 				pendant le temps qu'on exécute cette fonction. De plus
-	 * 				on n'a pas ˆ revérifier que la salle existe bien (car
+	 * 				on n'a pas à revérifier que la salle existe bien (car
 	 * 				elle ne peut être supprimée) et que le joueur n'est 
 	 * 				pas toujours dans une autre salle (car le protocole
 	 * 				ne peut pas exécuter plusieurs fonctions en même temps)
@@ -177,7 +180,7 @@ public class Salle
 		// joueurs de cette salle pour leur dire qu'il y a un nouveau joueur
 		if (strMotDePasse.equals(motDePasse))
 		{
-		    // Empêcher d'autres thread de toucher ˆ la liste des joueurs de 
+		    // Empêcher d'autres thread de toucher à la liste des joueurs de 
 		    // cette salle pendant l'ajout du nouveau joueur dans cette salle
 		    synchronized (lstJoueurs)
 		    {
@@ -188,7 +191,7 @@ public class Salle
 				joueur.definirSalleCourante(this);
 				
 				// Si on doit générer le numéro de commande de retour, alors
-				// on le génère, sinon on ne fait rien (a devrait toujours
+				// on le génère, sinon on ne fait rien (ça devrait toujours
 				// être vrai, donc on le génère tout le temps)
 				if (doitGenererNoCommandeRetour == true)
 				{
@@ -226,9 +229,9 @@ public class Salle
 	 * 
 	 * @synchronism Cette fonction est synchronisée pour éviter que deux 
 	 * 				puissent entrer ou quitter une salle en même temps.
-	 * 				On n'a pas ˆ s'inquiéter que le joueur soit modifié
+	 * 				On n'a pas à s'inquiéter que le joueur soit modifié
 	 * 				pendant le temps qu'on exécute cette fonction. De plus
-	 * 				on n'a pas ˆ revérifier que la salle existe bien (car
+	 * 				on n'a pas à revérifier que la salle existe bien (car
 	 * 				elle ne peut être supprimée) et que le joueur n'est 
 	 * 				pas toujours dans une autre salle (car le protocole
 	 * 				ne peut pas exécuter plusieurs fonctions en même temps)
@@ -245,7 +248,7 @@ public class Salle
 		    joueur.obtenirPartieCourante().obtenirTable().quitterTable(joueur, false, detruirePartieCourante);
 		}
 	    
-	    // Empêcher d'autres thread de toucher ˆ la liste des joueurs de 
+	    // Empêcher d'autres thread de toucher à la liste des joueurs de 
 	    // cette salle pendant que le joueur quitte cette salle
 	    synchronized (lstJoueurs)
 	    {
@@ -256,7 +259,7 @@ public class Salle
 			joueur.definirSalleCourante(null);
 			
 			// Si on doit générer le numéro de commande de retour, alors
-			// on le génère, sinon on ne fait rien (a se peut que ce soit
+			// on le génère, sinon on ne fait rien (ça se peut que ce soit
 			// faux)
 			if (doitGenererNoCommandeRetour == true)
 			{
@@ -298,13 +301,16 @@ public class Salle
 		// Déclaration d'une variable qui va contenir le numéro de la table
 		int intNoTable;
 		
-	    // Empêcher d'autres thread de toucher ˆ la liste des tables de 
+	    // Empêcher d'autres thread de toucher à la liste des tables de 
 	    // cette salle pendant la création de la table
 	    synchronized (lstTables)
 	    {
+	    	
 	    	// Créer une nouvelle table en passant les paramètres appropriés
 	    	Table objTable = new Table( objGestionnaireBD, this, genererNoTable(), joueur.obtenirNomUtilisateur(), tempsPartie, objRegles, gestionnaireTemps, tacheSynchroniser, objControleurJeu, "winTheGameWithScore");
+	    		    	
 	    	objTable.creation();
+	    		    	
 	    	// Ajouter la table dans la liste des tables
 	    	lstTables.put(new Integer(objTable.obtenirNoTable()), objTable);
 	    	
@@ -312,7 +318,7 @@ public class Salle
 	    	lstNoTables.add(new Integer(objTable.obtenirNoTable()));
 	    	
 			// Si on doit générer le numéro de commande de retour, alors
-			// on le génère, sinon on ne fait rien (a devrait toujours
+			// on le génère, sinon on ne fait rien (ça devrait toujours
 			// être vrai, donc on le génère tout le temps)
 			if (doitGenererNoCommandeRetour == true)
 			{
@@ -321,7 +327,7 @@ public class Salle
 			    joueur.obtenirProtocoleJoueur().genererNumeroReponse();					    
 			}
 
-		    // Empêcher d'autres thread de toucher ˆ la liste des tables de 
+		    // Empêcher d'autres thread de toucher à la liste des tables de 
 		    // cette salle pendant la création de la table
 		    synchronized (lstJoueurs)
 		    {
@@ -359,28 +365,28 @@ public class Salle
 	 * 		   			TableNonExistante : Le joueur a tenté d'entrer dans une
 	 * 										table non existante
 	 * 					TableComplete : Le joueur a tenté d'entrer dans une 
-	 * 									table ayant déjˆ le maximum de joueurs
-	 * 					PartieEnCours : Une partie est déjˆ en cours dans la 
+	 * 									table ayant déjà le maximum de joueurs
+	 * 					PartieEnCours : Une partie est déjà en cours dans la 
 	 * 									table désirée
 	 * 
 	 * @synchronism Cette fonction est synchronisée sur la liste des tables
-	 * 				pour éviter qu'un joueur puisse commencer ˆ quitter et 
+	 * 				pour éviter qu'un joueur puisse commencer à quitter et 
 	 * 				que le joueur courant débute son entrée dans la table 
 	 * 				courante qui a des chances d'être détruite si le joueur 
 	 * 				qui veut quitter est le dernier de la table.
 	 */
 	public String entrerTable(JoueurHumain joueur, int noTable, boolean doitGenererNoCommandeRetour, TreeMap listePersonnageJoueurs)
 	{
-	    // Déclaration d'une variable qui va contenir le résultat ˆ retourner
-	    // ˆ la fonction appelante, soit les valeurs de l'énumération 
+	    // Déclaration d'une variable qui va contenir le résultat à retourner
+	    // à la fonction appelante, soit les valeurs de l'énumération 
 	    // ResultatEntreeTable
 	    String strResultatEntreeTable;
 	    
-	    // Empêcher d'autres thread de toucher ˆ la liste des tables de 
+	    // Empêcher d'autres thread de toucher à la liste des tables de 
 	    // cette salle pendant que le joueur entre dans la table
 	    synchronized (lstTables)
 	    {
-			// Si la table n'existe pas dans la salle o se trouve le joueur, 
+			// Si la table n'existe pas dans la salle où se trouve le joueur, 
 			// alors il y a une erreur
 			if (lstTables.containsKey(new Integer(noTable)) == false)
 			{
@@ -388,10 +394,10 @@ public class Salle
 				strResultatEntreeTable = ResultatEntreeTable.TableNonExistante;
 			}
 			// Si la table est complète, alors il y a une erreur (aucune 
-			// synchronisation supplémentaire ˆ faire car elle ne peut devenir 
+			// synchronisation supplémentaire à faire car elle ne peut devenir 
 			// complète ou ne plus l'être que par l'entrée ou la sortie d'un 
 			// joueur dans la table. Or ces actions sont synchronisées avec 
-			// lstTables, donc a va.
+			// lstTables, donc ça va.
 			else if (((Table) lstTables.get(new Integer(noTable))).estComplete() == true)
 			{
 				// La table est complète
@@ -424,13 +430,13 @@ public class Salle
 	 * Cette méthode permet de détruire la table passée en paramètres. 
 	 * On suppose que la table n'a plus aucuns joueurs.
 	 * 
-	 * @param Table tableADetruire : La table ˆ détruire
+	 * @param Table tableADetruire : La table à détruire
 	 * 
 	 * @synchronism Cette fonction n'est pas synchronisée car elle l'est par
 	 * 				la fonction qui l'appelle. On synchronise seulement
 	 * 				la liste des joueurs de cette salle lorsque va venir
 	 * 				le temps d'envoyer l'événement que la table est détruite
-	 * 				aux joueurs de la salle. On n'a pas ˆ s'inquiéter que la 
+	 * 				aux joueurs de la salle. On n'a pas à s'inquiéter que la 
 	 * 				table soit modifiée pendant le temps qu'on exécute cette 
 	 * 				fonction, car il n'y a plus personne dans la table.
 	 */
@@ -448,7 +454,7 @@ public class Salle
 		// pour le rendre disponible pour une autre table
 		lstNoTables.remove(new Integer(tableADetruire.obtenirNoTable()));
 		
-		// Empêcher d'autres thread de toucher ˆ la liste des joueurs de 
+		// Empêcher d'autres thread de toucher à la liste des joueurs de 
 	    // cette salle pendant qu'on parcourt tous les joueurs de la salle
 		// pour leur envoyer un événement
 	    synchronized (lstJoueurs)
@@ -527,17 +533,17 @@ public class Salle
 			
 			// Si le nom d'utilisateur du joueur courant n'est pas celui
 			// qui vient d'entrer dans la salle, alors on peut envoyer un 
-			// événement ˆ cet utilisateur
+			// événement à cet utilisateur
 			if (objJoueur.obtenirNomUtilisateur().equals(nomUtilisateur) == false)
 			{
 			    // Obtenir un numéro de commande pour le joueur courant, créer 
-			    // un InformationDestination et l'ajouter ˆ l'événement
+			    // un InformationDestination et l'ajouter à l'événement
 			    joueurEntreSalle.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
 			            											objJoueur.obtenirProtocoleJoueur()));
 			}
 		}
 		
-		// Ajouter le nouvel événement créé dans la liste d'événements ˆ traiter
+		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
 		objGestionnaireEvenements.ajouterEvenement(joueurEntreSalle);
 	}
 
@@ -577,17 +583,17 @@ public class Salle
 			
 			// Si le nom d'utilisateur du joueur courant n'est pas celui
 			// qui vient de quitter la salle, alors on peut envoyer un 
-			// événement ˆ cet utilisateur
+			// événement à cet utilisateur
 			if (objJoueur.obtenirNomUtilisateur().equals(nomUtilisateur) == false)
 			{
 			    // Obtenir un numéro de commande pour le joueur courant, créer 
-			    // un InformationDestination et l'ajouter ˆ l'événement
+			    // un InformationDestination et l'ajouter à l'événement
 			    joueurQuitteSalle.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
 			            											objJoueur.obtenirProtocoleJoueur()));
 			}
 		}
 		
-		// Ajouter le nouvel événement créé dans la liste d'événements ˆ traiter
+		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
 		objGestionnaireEvenements.ajouterEvenement(joueurQuitteSalle);
 	}
 	
@@ -630,17 +636,17 @@ public class Salle
 			
 			// Si le nom d'utilisateur du joueur courant n'est pas celui
 			// qui vient de créer la table, alors on peut envoyer un 
-			// événement ˆ cet utilisateur
+			// événement à cet utilisateur
 			if (objJoueur.obtenirNomUtilisateur().equals(nomUtilisateur) == false)
 			{
 			    // Obtenir un numéro de commande pour le joueur courant, créer 
-			    // un InformationDestination et l'ajouter ˆ l'événement
+			    // un InformationDestination et l'ajouter à l'événement
 				nouvelleTable.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
 			            											objJoueur.obtenirProtocoleJoueur()));
 			}
 		}
 		
-		// Ajouter le nouvel événement créé dans la liste d'événements ˆ traiter
+		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
 		objGestionnaireEvenements.ajouterEvenement(nouvelleTable);
 	}
 	
@@ -678,12 +684,12 @@ public class Salle
 			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
 			
 		    // Obtenir un numéro de commande pour le joueur courant, créer 
-		    // un InformationDestination et l'ajouter ˆ l'événement
+		    // un InformationDestination et l'ajouter à l'événement
 			tableDetruite.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
 		            											objJoueur.obtenirProtocoleJoueur()));
 		}
 		
-		// Ajouter le nouvel événement créé dans la liste d'événements ˆ traiter
+		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
 		objGestionnaireEvenements.ajouterEvenement(tableDetruite);
 	}
 
@@ -723,4 +729,14 @@ public class Salle
         {
             return gameType;
         }
+
+		public static void setMaxPossessionPieceEtObjet(
+				int maxPossessionPieceEtObjet) {
+			Salle.maxPossessionPieceEtObjet = maxPossessionPieceEtObjet;
+		}
+
+		public static int getMaxPossessionPieceEtObjet() {
+			return maxPossessionPieceEtObjet;
+		}
+
 }

@@ -18,8 +18,8 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ClassesUtilitaires.UtilitaireNombres;
+import Enumerations.Categories;
 import ServeurJeu.ControleurJeu;
-import org.w3c.dom.Node;
 
 /**
  * @author Jean-François Brind'Amour
@@ -79,7 +79,8 @@ public class InformationPartie
         
     // Déclaration d'un int qui va garder le mode du jeu : Normal - 0 et Avancée - 1
     private int modeJeu;
-  
+    
+     
 	 
 	/**
 	 * Constructeur de la classe InformationPartie qui permet d'initialiser
@@ -103,6 +104,9 @@ public class InformationPartie
 	        intPointage = 0;
             intArgent = 0;
 	        intIdPersonnage = 0;
+	        
+	        // mode de jeu par default ????????
+	        modeJeu = 0;
 	    
 	        // Faire la référence vers la table courante
 	        objTable = tableCourante;
@@ -124,6 +128,7 @@ public class InformationPartie
 
             objBoiteQuestions = new BoiteQuestions(joueur.obtenirProtocoleJoueur().langue, joueur.obtenirSalleCourante().obtenirNoeudLangue(), joueur.obtenirSalleCourante().obtenirNomSalle(), joueur);
             objGestionnaireBD.remplirBoiteQuestions(objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());  
+            
 	}// fin constructeur
 
 	/**
@@ -400,12 +405,16 @@ public class InformationPartie
 		// Déclarations de variables qui vont contenir la catégorie de question 
 		// à poser, la difficulté et la question à retourner
 		//***************************************************************************************
-		int[] tab = {11,12,13,14,21,22,23,24,31,32,33,34,35,36,37,38,41,42,43,44,45,46,47,48,49,51,52,53,54,61,62,63,64,65};
 		
-		int i = objTable.obtenirPlateauJeuCourant()[nouvellePosition.x][nouvellePosition.y].obtenirTypeCase();
-		//System.out.println(i);
-		int intCategorieQuestion = i;//tab[UtilitaireNombres.genererNbAleatoire(34)]; 
-		System.out.println("Categorie: " + intCategorieQuestion);
+		Categories[] catValues = Categories.values();
+        int[] catScolaires = new int[catValues.length];
+        for(int i = 0; i < catValues.length; i++)
+		{
+			catScolaires[i] = catValues[i].getCode();
+		}
+		
+		int intCategorieQuestion = catScolaires[UtilitaireNombres.genererNbAleatoire(33)]; 
+		
 		//***************************************************************************************
 		
 		int intDifficulte = 0;
@@ -493,8 +502,8 @@ public class InformationPartie
 	}
 	
 	/**
-	 * Cette fonction essaie de de piger une question du niveau de dificulté proche 
-	 * de intDifficulte, si on y arrive pas, ùa veut dire qu'il ne 
+	 * Cette fonction essaie de piger une question du niveau de dificulté proche 
+	 * de intDifficulte, si on y arrive pas, ça veut dire qu'il ne 
 	 * reste plus de questions de niveau de difficulté proche 
 	 * de intDifficulte
 	 * 
@@ -505,35 +514,61 @@ public class InformationPartie
 	private Question trouverQuestion(int intCategorieQuestion, int intDifficulte)
 	{
 		
-		int intDifficulteTmp=intDifficulte;
 		Question objQuestionTrouvee = null;
-		int i=0;
-		do
+		
+		
+		// pour le premier on voir la catégorie et difficulté demandées
+		objQuestionTrouvee = objBoiteQuestions.pigerQuestion( intCategorieQuestion, intDifficulte);
+		
+		//on prend les catégories scolaires en utilisant enum Categories
+		Categories[] catValues = Categories.values();
+        int[] catScolaires = new int[catValues.length];
+        for(int i = 0; i < catValues.length; i++)
 		{
-			if(i%2==0)
-			{
-				intDifficulteTmp+=i;
-			}
-			else
-			{
-				intDifficulteTmp-=i;
-			}
-			
-			i++;
-			
-			if(intDifficulteTmp>0)
-			{
-				objQuestionTrouvee = objBoiteQuestions.pigerQuestion( intCategorieQuestion, intDifficulteTmp );
-			}
-			if(i>=5)
-			{
-				break;
-			}
-		}while(objQuestionTrouvee==null);
+			catScolaires[i] = catValues[i].getCode();
+		}
+        
+		//sinon on cherche pour toutes les catégories de la même difficulté 
+		int i = 0;
+	    while(i < catScolaires.length && objQuestionTrouvee == null)
+	    {
+	   	   intCategorieQuestion = catScolaires[i];
+	   	   objQuestionTrouvee = objBoiteQuestions.pigerQuestion( intCategorieQuestion, intDifficulte);
+	   	   i++;
+	    }
+	    
+	    //après pour les difficultés moins grands 
+		int intDifficulteTemp = intDifficulte;
+		while(objQuestionTrouvee == null && intDifficulteTemp > 0 ) 
+		{
+			intDifficulteTemp--;
+			i = 0;
+		    while(i < catScolaires.length && objQuestionTrouvee == null)
+		    {
+		   	   intCategorieQuestion = catScolaires[i];
+		   	   objQuestionTrouvee = objBoiteQuestions.pigerQuestion( intCategorieQuestion, intDifficulteTemp);
+		   	   i++;
+		    }
+		}// fin while
+		
+		//après pour les difficultés plus grands
+		intDifficulteTemp = intDifficulte;
+		while(objQuestionTrouvee == null && intDifficulteTemp < 7 ) 
+		{
+			intDifficulteTemp++;
+			i = 0;
+		    while(i < catScolaires.length && objQuestionTrouvee == null)
+		    {
+		   	   intCategorieQuestion = catScolaires[i];
+		   	   objQuestionTrouvee = objBoiteQuestions.pigerQuestion( intCategorieQuestion, intDifficulteTemp);
+		   	   i++;
+		    }
+		}// fin while
+		
 		
 		return objQuestionTrouvee;
 		
-	}
+	}// fin méthode
 	
 	/**
 	 * Cette fonction met à jour le plateau de jeu si le joueur a bien répondu
@@ -673,7 +708,8 @@ public class InformationPartie
 					// la liste des objets utilisables du joueur
 					if (objCaseCouleurDestination.obtenirObjetCase() instanceof ObjetUtilisable)
 					{
-                                                if(Salle.maxPossessionPieceEtObjet > intNouvelArgent + objListeObjetsUtilisablesRamasses.size())
+						
+                                                if(Salle.getMaxPossessionPieceEtObjet() > intNouvelArgent + objListeObjetsUtilisablesRamasses.size())   ///// 
                                                 {
                                                     // Faire la référence vers l'objet utilisable
                                                     ObjetUtilisable objObjetUtilisable = (ObjetUtilisable) objCaseCouleurDestination.obtenirObjetCase();
@@ -693,7 +729,7 @@ public class InformationPartie
 					}
 					else if (objCaseCouleurDestination.obtenirObjetCase() instanceof Piece)
 					{
-                                                if(Salle.maxPossessionPieceEtObjet > intNouvelArgent + objListeObjetsUtilisablesRamasses.size())
+                                                if(Salle.getMaxPossessionPieceEtObjet() > intNouvelArgent + objListeObjetsUtilisablesRamasses.size())   ///// 
                                                 {
                                                     // Faire la référence vers la piêce
                                                     Piece objPiece = (Piece) objCaseCouleurDestination.obtenirObjetCase();
@@ -935,11 +971,19 @@ public class InformationPartie
             return Math.abs(objPositionJoueur.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(objPositionJoueur.y - objTable.obtenirPositionWinTheGame().y);
         }
 
-		private void setModeJeu(int modeJeu) {
+        /**
+         * Setter pour mode de jeu
+         * @param modeJeu
+         */
+		public void setModeJeu(int modeJeu) {
 			this.modeJeu = modeJeu;
 		}
 
-		private int getModeJeu() {
+		/**
+		 * Getter pour mode de jeu
+		 * @return
+		 */
+		public int getModeJeu() {
 			return modeJeu;
 		}
 }

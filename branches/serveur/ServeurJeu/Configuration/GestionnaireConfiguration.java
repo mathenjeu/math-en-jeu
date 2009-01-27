@@ -4,8 +4,6 @@ import java.util.List;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.NodeList;
 
 public class GestionnaireConfiguration 
 {
@@ -59,6 +57,7 @@ public class GestionnaireConfiguration
 		return _config.getBoolean( id );
 	}
         
+	@SuppressWarnings("unchecked")
 	public List obtenirListe( String id )
 	{
 		return _config.getList( id );

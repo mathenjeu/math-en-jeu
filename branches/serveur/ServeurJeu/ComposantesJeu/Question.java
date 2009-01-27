@@ -16,20 +16,22 @@ public class Question
 	// Déclaration d'une variable qui va garder le type de la question
 	private String objTypeQuestion;
 	
-	// Déclaration d'une variable qui va contenir la réponse ˆ la question
+	// Déclaration d'une variable qui va contenir la réponse à la question
 	private String strReponse;
 	
 	// Déclaration d'une variable qui va contenir l'url de l'explication de 
 	// la réponse
 	private String strURLExplication;
 	
-    /** Déclaration d'une variable qui va contenir la catégorie de la question
+    /**
+     *  Déclaration d'une variable qui va contenir la catégorie de la question
      * 
      */
 	private int intCategorie;
 	
 	
-	/** Déclaration d'une variable qui va garder la difficulté de la question.
+	/**
+	 *  Déclaration d'une variable qui va garder la difficulté de la question.
 	 *	Peut avoir une valeur entre 1 et 6, que dépend de niveau scolaire du 
 	 *  joueur pour cette categorie, si 0 est pas applicable pour joueur
      */
@@ -115,7 +117,13 @@ public class Question
 	 */
 	public boolean reponseEstValide(String reponse)
 	{
-		return strReponse.toUpperCase().replace(".",",").equals(reponse.toUpperCase());
+		// MEJ-91 standartisation des réponses
+		reponse = reponse.trim().toLowerCase().replace("ç","c").replace("ù","u");
+		reponse = reponse.replace("û", "u").replace("ô","o").replace("ò","o");
+		reponse = reponse.replace("é", "e").replace("ê","e").replace("è","e");
+		reponse = reponse.replace("à", "a").replace("â","a").replace(".",",");
+		reponse = reponse.replace("ï", "i").replace("î","i");
+		return strReponse.toLowerCase().replace(".",",").equals(reponse);
 	}
 	
 	

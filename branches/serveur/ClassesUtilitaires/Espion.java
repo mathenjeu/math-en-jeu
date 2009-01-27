@@ -18,6 +18,7 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
+ * L'espion qui écrit dans un fichier périodiquement les informations du serveur
  * @author Jean-François Fournier
  */
 public class Espion implements Runnable{
