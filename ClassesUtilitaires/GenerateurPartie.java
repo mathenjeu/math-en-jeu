@@ -18,7 +18,6 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
 /**
@@ -46,47 +45,47 @@ public final class GenerateurPartie
      * @throws NullPointerException : Si la liste passée en paramètre qui doit 
      * 								  être remplie est nulle
      */
-    public static Case[][] genererPlateauJeu(Regles reglesPartie, int temps, Vector listePointsCaseLibre, IntObj objDernierIdObjets, String butDuJeu) throws NullPointerException
+    public static Case[][] genererPlateauJeu(Regles reglesPartie, int temps, Vector<Point> listePointsCaseLibre, IntObj objDernierIdObjets, String butDuJeu) throws NullPointerException
     {
 		// Création d'un objet permettant de générer des nombres aléatoires
 		Random objRandom = new Random();
                 
-                // Obtention de la configuration du serveur pour savoir ce que vont vendre les magasins
-                GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+        // Obtention de la configuration du serveur pour savoir ce que vont vendre les magasins
+        GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
                 
-                // Obtention du nombre d'objets maximal en vente par magasin
-                int maxNbObjetsAVendre = Integer.valueOf(config.obtenirString("controleurjeu.salles-initiales.regles.max-objet-en-vente-par-magasin"));
+        // Obtention du nombre d'objets maximal en vente par magasin
+                int maxNbObjetsAVendre = Integer.valueOf(config.obtenirString("controleurjeu.salles-initiales.regles.max-objet-en-vente-par-magasin")); 
 		
 		// Déclaration de points
 		Point objPoint;
 		Point objPointFile;
 		
 		// Déclaration d'une file qui va contenir des points
-		Vector lstFile = new Vector();
+		Vector<Point> lstFile = new Vector<Point>();
 		
 		// Déclaration d'une liste de points contenant les points qui ont 
 		// été passés
-		Vector lstPointsCasesPresentes = new Vector();
+		Vector<Point> lstPointsCasesPresentes = new Vector<Point>();
 
 		// Déclaration d'une liste de points contenant les points qui 
 		// contiennent des cases spéciales
-		Vector lstPointsCasesSpeciales = new Vector();
+		Vector<Point> lstPointsCasesSpeciales = new Vector<Point>();
 		
 		// Déclaration d'une liste de points contenant les points qui 
 		// contiennent des cases de couleur
-		Vector lstPointsCasesCouleur = new Vector();
+		Vector<Point> lstPointsCasesCouleur = new Vector<Point>();
 		
 		// Déclaration d'une liste de points contenant les points qui 
 		// contiennent des magasins
-		Vector lstPointsMagasins = new Vector();
+		Vector<Point> lstPointsMagasins = new Vector<Point>();
 		
 		// Déclaration d'une liste de points contenant les points qui 
 		// contiennent des pièces
-		Vector lstPointsPieces = new Vector();
+		Vector<Point> lstPointsPieces = new Vector<Point>();
 		
 		// Déclaration d'une liste de points contenant les points qui 
 		// contiennent des objets utilisables
-		Vector lstPointsObjetsUtilisables = new Vector();
+		Vector<Point> lstPointsObjetsUtilisables = new Vector<Point>();
 		
 		// Déclarations du nombre de lignes et de colonnes du vecteur
 		int intNbLignes = 0;
@@ -123,6 +122,8 @@ public final class GenerateurPartie
 		int intNbPieces = (int) Math.floor(intNbLignes * intNbColonnes * reglesPartie.obtenirRatioPieces());
 		int intNbObjetsUtilisables = (int) Math.floor(intNbLignes * intNbColonnes * reglesPartie.obtenirRatioObjetsUtilisables());
 
+		System.out.println("Generateur partie: " + reglesPartie.obtenirRatioMagasins());
+		
 		// Maintenant qu'on a le nombre de lignes et de colonnes, on va créer
 		// le tableau à 2 dimensions représentant le plateau de jeu (null est 
 		// mis par défaut dans chaque élément)
@@ -254,21 +255,7 @@ public final class GenerateurPartie
 			}
 		}
 		
-		/*// Passer tous les points qui n'ont pas été traités et les remettre à 
-		// null dans le plateau de jeu
-		for (int i = 0; i < lstFile.size(); i++)
-		{
-			// Faire la référence vers le point courant
-			objPointFile = (Point) lstFile.get(i);
-			
-			// Enlever le point courant dans la liste des cases présentes (car 
-			// il ne doit pas être disponible, il doit être libre)
-			lstPointsCasesPresentes.remove(objPointFile);
-			
-			// On remet null dans la case courante
-			objttPlateauJeu[objPointFile.x][objPointFile.y] = null;			
-		}*/
-		
+				
 		// Si on doit afficher des cases spéciales dans le plateau de jeu, 
 		// alors on fait le code suivant
 		if (reglesPartie.obtenirListeCasesSpecialesPossibles().size() > 0)
@@ -507,10 +494,9 @@ public final class GenerateurPartie
 			}			
 		}
 		
-		// Bloc de code qui va s'assurer de créer les pièces dans le plateau 
+		// Bloc de code qui va s'assurer de créer les pièces dans le plateau //???????????
 		// de jeu
-		{
-			// Réinitialiser le compteur de cases
+		// Réinitialiser le compteur de cases
 			intCompteurCases = 1;
 			
 			// On va choisir des pièces dont la valeur est aléatoire selon 
@@ -538,7 +524,8 @@ public final class GenerateurPartie
 				// Incrémenter le nombre de cases passées
 				intCompteurCases++;
 			}			
-		}
+		
+			
 		
 		// Si on doit afficher des objets utilisables dans le plateau de jeu, 
 		// alors on fait le code suivant
@@ -647,7 +634,7 @@ public final class GenerateurPartie
 		
 		// Ajouter les points restants dans la liste des points représentant 
 		// les cases sans objets et n'étant pas des cases spéciales
-		listePointsCaseLibre.addAll(lstPointsCasesPresentes);
+		 listePointsCaseLibre.addAll(lstPointsCasesPresentes);
 		
 		// Indiquer quel a été le dernier id des objets
 		objDernierIdObjets.intValue = intCompteurIdObjet;
@@ -663,7 +650,7 @@ public final class GenerateurPartie
      * @param Vector listePointsCaseLibre : La liste des points des cases libres
      * @return Point[] : Un tableau de points pour chaque joueur 
      */
-    public static Point[] genererPositionJoueurs(int nbJoueurs, Vector listePointsCaseLibre)
+    public static Point[] genererPositionJoueurs(int nbJoueurs, Vector<Point> listePointsCaseLibre)
     {
 		// Créer un tableau contenant les nbJoueurs points
 		Point[] objtPositionJoueurs = new Point[nbJoueurs];

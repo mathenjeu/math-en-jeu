@@ -4,7 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.UnknownHostException;
 import java.util.Vector;
 import org.apache.log4j.Logger;
 import ServeurJeu.ControleurJeu;

@@ -36,7 +36,7 @@ public class JoueurHumain extends Joueur
 	/**
 	 * Déclaration d'un tableau qui contient les valeurs des niveaux des catégories
 	 * pour le profil du joueur - informaton garder dans BD -> user_subject_level
-	 * valeurs possibles -> entre 1 et 15
+	 * valeurs possibles -> entre 1 et 16
 	 */
 	private int[] cleNiveau;
 	
@@ -181,7 +181,7 @@ public class JoueurHumain extends Joueur
 	 * Cette méthode permet de définir si un joueur peut creer une salle.
 	 * 
 	 * @param boolean peutCreerSalle : peut ou peux pas creer salle
-	 */
+	 */ 
 	public void definirPeutCreerSalles( boolean peutCreerSalle)
 	{
 		bolPeutCreerSalle = peutCreerSalle;
