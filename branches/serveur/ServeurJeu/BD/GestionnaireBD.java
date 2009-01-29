@@ -2,11 +2,10 @@ package ServeurJeu.BD;
 
 import java.sql.*;
 import org.apache.log4j.Logger;
-import org.w3c.dom.Node;
 import Enumerations.Categories;
 import Enumerations.Visibilite;
 import ServeurJeu.ComposantesJeu.BoiteQuestions;
-import ServeurJeu.ComposantesJeu.Langue;
+import ServeurJeu.ComposantesJeu.Lang;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ControleurJeu;
@@ -41,7 +40,7 @@ public class GestionnaireBD
 	
 	static private Logger objLogger = Logger.getLogger( GestionnaireBD.class );
 	
-	//private static final String strCategoryLevel = "category_level";
+	//private static final String strCategoryLevel = "category_level";   // not used any more!!!!!!!!!!!!
 
 	/**
 	 * Constructeur de la classe GestionnaireBD qui permet de garder la 
@@ -206,7 +205,7 @@ public class GestionnaireBD
 					// on prend dans BD les niveaux scolaires du joueur en utilisant enum Categories
 					Categories[] catValues = Categories.values();
 					
-					int[] cleNiveau = new int[34];
+					int[] cleNiveau = new int[catValues.length];
 					for(int i = 0; i < catValues.length; i++)
 					{
 						cleNiveau[i] = Integer.parseInt(rs.getString(catValues[i].name()));
@@ -241,8 +240,8 @@ public class GestionnaireBD
 		
         // Pour tenir compte de la langue
         int cleLang = 1;   
-        Langue lang = boiteQuestions.obtenirLangue();
-        String langue = lang.obtenirLangue();
+        Lang lang = boiteQuestions.obtenirLangue();
+        String langue = lang.getLanguage();
         if (langue.equalsIgnoreCase("fr")) 
             cleLang = 1;
         else if (langue.equalsIgnoreCase("en"))
@@ -262,7 +261,7 @@ public class GestionnaireBD
 		{
        	   String strRequeteSQL = "SELECT DISTINCT question_info.*,answer_type.tag,question_level.value,question_level.level_id " +
            "FROM question_info,answer_type_info,question_level,question,answer_type " +
-           "WHERE  question_info.language_id = 1 " + //cleLang +
+           "WHERE  question_info.language_id = " + cleLang +
            " AND question_info.category_id = " + catScolaires[i] +
            " AND question_info.question_id = question_level.question_id " +
            " AND question_info.question_id = question.question_id " +
@@ -274,19 +273,7 @@ public class GestionnaireBD
            " and question_level.level_id =  " + niveau[i] + 
            " and question_level.value != 0 ";   
         
-      /*// ine version simulation 
-        //  on ne prend pas  les niveaux scolaire du joueur
-        
-       	   String strRequeteSQL = "SELECT DISTINCT question_info.*,answer_type.tag,question_level.value " +
-           " FROM question_info,answer_type,question_level,question " +
-           " WHERE question_info.question_id = question.question_id " +
-           " AND answer_type.answer_type_id = question.answer_type_id " +
-           " AND question_info.language_id = 1 " + //cleLang +
-           " and question_info.is_valid = 1 " +
-           " and question_info.question_flash_file is not NULL " +
-           " and question_info.feedback_flash_file is not NULL"  + 
-           " and question_level.value = 1 AND question_info.question_id NOT IN (6135,6136,6137,6138,6149,6150,6172)LIMIT 5000"; */
-           
+      
 				   
 		    remplirBoiteQuestions( boiteQuestions, strRequeteSQL );
 		}//fin for
@@ -304,14 +291,14 @@ public class GestionnaireBD
 				while(rs.next())
 				{
 					int codeQuestion = Integer.parseInt(rs.getString("question_id"));
-					int categorie =  Integer.parseInt(rs.getString("category_id"));// simulation !!!!!!!!! UtilitaireNombres.genererNbAleatoire(7);
+					int categorie =  Integer.parseInt(rs.getString("category_id"));
 					String typeQuestion = rs.getString( "tag" );
 					String question = rs.getString( "question_flash_file" );
 					String reponse = rs.getString("good_answer");
 					String explication = rs.getString("feedback_flash_file");
-					int difficulte = Integer.parseInt(rs.getString("value")); // simulation !!!!!!!!! UtilitaireNombres.genererNbAleatoire(6);
+					int difficulte = Integer.parseInt(rs.getString("value")); 
 					
-                    String URL = boiteQuestions.obtenirLangue().obtenirURLQuestionsReponses();
+                    String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
                     System.out.println(URL+explication);
 					boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, categorie));
 				}
@@ -513,11 +500,12 @@ public class GestionnaireBD
      * et les regles de la salle 
      * @param noeudLangue
      */
-	public void chargerSalle( Node noeudLangue)
+	public void fillsRooms(String language)
 	{
-		int langId = 1; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		Regles objReglesSalle = new Regles();
+		
 		int roomId = 0;
+		int langId = 0;
 		String nom = "";
 		String motDePasse = "";
 		String createur = "";
@@ -527,30 +515,29 @@ public class GestionnaireBD
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery( "SELECT room_info.name, room.password, game_type.name,user.name, room.room_id " +
-					" FROM room_info,room, game_type,user " +
+				ResultSet rs = requete.executeQuery( "SELECT room_info.name, room.password, game_type.name,user.name, room.room_id, room_info.language_id " +
+					" FROM room_info,room, game_type,user,language " +
 					" WHERE room.game_type_id = game_type.game_type_id " +
 					"  AND room.room_id = room_info.room_id " +
 					"  AND user.user_id = room.user_id " +
-					"  AND room_info.language_id = 2 ;" );
+					"  AND room_info.language_id = language.language_id " +
+					"  AND language.short_name = '" + language + "';" );
 				if(rs.next())
 				{
 					nom = rs.getString( "room_info.name" );
+					System.out.println(nom);
 					motDePasse = rs.getString( "password" );
 					createur = rs.getString("user.name");
 					gameType = rs.getString("game_type.name");
 					roomId = rs.getInt("room.room_id");
-				}	
+					langId = rs.getInt("room_info.language_id");
+				}		
                     
 					this.chargerRegllesSalle(objReglesSalle, roomId, langId);
-					
-					Salle objSalle = new Salle(this, nom, createur, motDePasse, objReglesSalle, objControleurJeu, noeudLangue, gameType);
-					//this.chargerMaxObjets(objSalle, roomId);
-					//System.out.println(objReglesSalle.obtenirPermetChat());
+					Salle objSalle = new Salle(this, nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType);
+					this.chargerMaxObjets(objSalle, roomId);
 					objControleurJeu.ajouterNouvelleSalle(objSalle);
-					//System.out.println(roomId);
-					//System.out.println("mot de passe :" + gameType);
-					//System.out.println("max pieces: " + objSalle.getMaxPossessionPieceEtObjet());	
+				
 			}
 		}
 		catch (SQLException e)
@@ -574,9 +561,11 @@ public class GestionnaireBD
 
    /**
     * 
-    * @param roomId
+    * @param roomId 
+ * @param objSalle 
+ * @param roomId
     */
-	public void chargerMaxObjets() {
+	public void chargerMaxObjets(Salle objSalle, int roomId) {
 		
 		try
 		{
@@ -608,7 +597,7 @@ public class GestionnaireBD
     * 
     * @param objReglesSalle
     * @param roomId
- * @param langId 
+    * @param langId 
     */
 	@SuppressWarnings("unchecked")
 	private void chargerRegllesSalle(Regles objReglesSalle, int roomId, int langId) {
@@ -802,7 +791,8 @@ public class GestionnaireBD
  					" FROM room_shop, shop_info " +
  					" WHERE room_shop.room_id = " + roomId +
  					" AND room_shop.shop_id = shop_info.shop_id " +
- 					" AND shop_info.language_id = " + langId + ";");
+ 					" AND shop_info.language_id = " + langId + 
+ 					";");
  				while(rst.next())
  				{
  					Integer tmp1 = rst.getInt( "priority" );
@@ -822,4 +812,76 @@ public class GestionnaireBD
  		    e.printStackTrace();			
  		}
      }// fin méthode
-}// fin class
+
+ 
+    /**
+     * Methode that 
+     * @param user's language 
+     * @return URL of Questions-Answers on server
+     */
+	public String transmitUrl(String language) {
+		String url = "";
+		try
+ 		{
+ 			synchronized( requete )
+ 			{
+ 				ResultSet rs = requete.executeQuery( "SELECT language.url FROM language " +
+ 					" WHERE language.short_name = '" + language + "';");
+ 				while(rs.next())
+ 				{
+ 					url = rs.getString("url");
+                }
+ 			}
+ 		}
+ 		catch (SQLException e)
+ 		{
+ 			// Une erreur est survenue lors de l'exécution de la requète
+ 			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+ 			objLogger.error(GestionnaireMessages.message("bd.trace"));
+ 			objLogger.error( e.getMessage() );
+ 		    e.printStackTrace();			
+ 		}
+		return url;
+	}//end methode
+
+
+	/**
+	 * Used to control if room has a language
+	 * @param salle
+	 * @param language
+	 * @param Boulean
+	 * @return
+	 */
+	public Boolean roomLangControl(Salle salle, String language) {
+		
+		String answer = "";
+		String nom = salle.obtenirNomSalle();
+		try
+ 		{
+ 			synchronized( requete )
+ 			{
+ 				ResultSet rs = requete.executeQuery( "SELECT language.short_name FROM language, room_info " +
+ 					" WHERE  room_info.name = '" + nom + 
+ 					"' AND room_info.language_id = language.language_id ;");
+ 				if(rs.next())
+ 				{
+ 					answer = rs.getString("language.short_name");
+                }
+ 			}
+ 		}
+ 		catch (SQLException e)
+ 		{
+ 			// Une erreur est survenue lors de l'exécution de la requète
+ 			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+ 			objLogger.error(GestionnaireMessages.message("bd.trace"));
+ 			objLogger.error( e.getMessage() );
+ 		    e.printStackTrace();			
+ 		}
+		
+		return language.equalsIgnoreCase(answer);
+	}//end methode
+
+
+	
+	
+}// end class

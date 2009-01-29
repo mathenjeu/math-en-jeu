@@ -100,7 +100,7 @@ public class ProtocoleJoueur implements Runnable
 
 	static private Logger objLogger = Logger.getLogger( ProtocoleJoueur.class );
 
-    // On obtiendra la langue du joueur pour pouvoir construire la bo”te de questions
+    // On obtiendra la langue du joueur pour pouvoir construire la boîte de questions
     public String langue;
 
     // Type de jeu (ex. mathEnJeu)

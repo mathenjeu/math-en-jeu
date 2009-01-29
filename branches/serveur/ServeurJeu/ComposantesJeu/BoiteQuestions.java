@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import ClassesUtilitaires.UtilitaireNombres;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.Configuration.GestionnaireMessages;
-import org.w3c.dom.Node;
 
 /**
  * @author Marc
@@ -26,12 +25,12 @@ public class BoiteQuestions
 	
 	// Since there is a question box for each player, and all players might not want to play
 	// in the same language, we set a language field for question boxes
-	private Langue langue;
+	private Lang language;
 	
-	public BoiteQuestions(String langue, Node noeudLangue, String nomSalle, JoueurHumain joueur)
+	public BoiteQuestions(String language, String url, JoueurHumain joueur)
 	{
 		lstQuestions = new TreeMap<Integer, TreeMap<Integer, Vector<Question>>>();
-        this.langue = new Langue(langue, noeudLangue, nomSalle);
+        this.language = new Lang(language, url);
     	
         // Faire la référence vers le joueur humain courant
         objJoueurHumain = joueur;
@@ -148,8 +147,8 @@ public class BoiteQuestions
 	 *
 	 * @return Langue : la langue
 	 */
-    public Langue obtenirLangue()
+    public Lang obtenirLangue()
     {
-        return langue;
+        return language;
     }
 }

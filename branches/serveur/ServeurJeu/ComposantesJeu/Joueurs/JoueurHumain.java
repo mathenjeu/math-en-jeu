@@ -31,7 +31,7 @@ public class JoueurHumain extends Joueur
 	private String strNomFamille;
 	
 	//Cette variable défini si un jouer peut creer une salle ??? utiliser encore??
-	private boolean bolPeutCreerSalle;
+	//private boolean bolPeutCreerSalle;
 	
 	/**
 	 * Déclaration d'un tableau qui contient les valeurs des niveaux des catégories
@@ -78,7 +78,7 @@ public class JoueurHumain extends Joueur
 		// Initialiser les caractéristiques du joueur
 		strPrenom = "";
 		strNomFamille = "";
-		bolPeutCreerSalle = false;
+		//bolPeutCreerSalle = false;
 		
 		// Au début, le joueur n'est dans aucune salle ni table
 		objSalleCourante = null;
@@ -141,11 +141,11 @@ public class JoueurHumain extends Joueur
 	 * Cette fonction permet de retourner si un joueur peut creer une salle.
 	 * 
 	 * @return boolean : peut ou peut pas creer une salle
-	 */
+	 
 	public boolean obtenirPeutCreerSalle()
 	{
 		return bolPeutCreerSalle;
-	}
+	}*/
 	
 	/**
 	 * Cette méthode permet de définir le prénom du joueur.
@@ -181,11 +181,11 @@ public class JoueurHumain extends Joueur
 	 * Cette méthode permet de définir si un joueur peut creer une salle.
 	 * 
 	 * @param boolean peutCreerSalle : peut ou peux pas creer salle
-	 */ 
+	  
 	public void definirPeutCreerSalles( boolean peutCreerSalle)
 	{
 		bolPeutCreerSalle = peutCreerSalle;
-	}
+	}*/
 	
 	/**
 	 * Cette fonction permet de retourner la référence vers la salle dans 
