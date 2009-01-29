@@ -18,8 +18,6 @@ import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
 import ServeurJeu.ControleurJeu;
-import ServeurJeu.Configuration.GestionnaireConfiguration;
-import org.w3c.dom.Node;
 
 //TODO: Le mot de passe d'une salle ne doit pas être modifiée pendant le jeu,
 //      sinon il va falloir ajouter des synchronisations à chaque fois qu'on
@@ -42,10 +40,10 @@ public class Salle
 	private String strNomSalle;
 
 	// Cette variable va contenir le mot de passe permettant d'accéder à la salle
-	private String strMotDePasse;
+	private String strPassword;
 	
 	// Cette variable va contenir le nom d'utilisateur du créateur de cette salle
-	private String strNomUtilisateurCreateur;
+	private String strCreatorUserName;
         
     // Contient le type de jeu (ex. mathEnJeu)
     private String gameType;
@@ -63,11 +61,8 @@ public class Salle
 	// Cet objet permet de déterminer les règles de jeu pour cette salle
 	private Regles objRegles;
         
-    // Contenu du noeud langue de cette salle dans le fichier de configuration
-    private Node noeudLangue;
-    
     // This is the maximum number of coins and items a player can hold at one time
-    private static int maxPossessionPieceEtObjet; 
+    private static int maxPossessionPieceEtObjet;   // will be changed to instance var
         
     
 	
@@ -85,7 +80,7 @@ public class Salle
 	 */
 	public Salle(GestionnaireBD gestionnaireBD, 
 				 String nomSalle, String nomUtilisateurCreateur, String motDePasse, 
-				 Regles reglesSalle, ControleurJeu controleurJeu, Node noeudLangue, String gameType)
+				 Regles reglesSalle, ControleurJeu controleurJeu, String gameType)
 	{
 		super();
 		
@@ -97,11 +92,12 @@ public class Salle
 		// Garder en mémoire le nom de la salle, le nom d'utilisateur du 
 		// créateur de la salle et le mot de passe
 		strNomSalle = nomSalle;
-		strNomUtilisateurCreateur = nomUtilisateurCreateur;
-		strMotDePasse = motDePasse;
+		 
+		strCreatorUserName = nomUtilisateurCreateur;
+		strPassword = motDePasse;
                 
-                // Type de jeu de la salle
-                this.gameType = gameType;
+        // Type de jeu de la salle
+        this.gameType = gameType;
 		
 		// Créer une nouvelle liste de joueurs, de tables et de numéros
 		lstJoueurs = new TreeMap();
@@ -111,10 +107,7 @@ public class Salle
 		// Définir les règles de jeu pour la salle courante
 		objRegles = reglesSalle;
                 
-                // On définit le noeud XML contenant les paramètres de la langue
-                this.noeudLangue = noeudLangue;
-		
-		// Faire la référence vers le controleur de jeu
+        // Faire la référence vers le controleur de jeu
 		objControleurJeu = controleurJeu;
 		
 		// Créer un thread pour le GestionnaireEvenements
@@ -178,7 +171,7 @@ public class Salle
 		// Si le mot de passe est le bon, alors on ajoute le joueur dans la liste
 		// des joueurs de cette salle et on envoit un événement aux autres
 		// joueurs de cette salle pour leur dire qu'il y a un nouveau joueur
-		if (strMotDePasse.equals(motDePasse))
+		if (strPassword.equals(motDePasse))
 		{
 		    // Empêcher d'autres thread de toucher à la liste des joueurs de 
 		    // cette salle pendant l'ajout du nouveau joueur dans cette salle
@@ -717,14 +710,10 @@ public class Salle
 	 */
 	public boolean protegeeParMotDePasse()
 	{
-		return !(strMotDePasse == null || strMotDePasse.equals(""));
+		return !(strPassword == null || strPassword.equals(""));
 	}
         
-        public Node obtenirNoeudLangue()
-        {
-            return noeudLangue;
-        }
-        
+               
         public String obtenirGameType()
         {
             return gameType;
@@ -739,4 +728,4 @@ public class Salle
 			return maxPossessionPieceEtObjet;
 		}
 
-}
+}// end class 

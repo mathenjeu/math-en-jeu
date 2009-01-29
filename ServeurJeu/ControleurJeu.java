@@ -4,11 +4,8 @@ import java.util.TreeMap;
 import java.util.Set;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.TreeSet;
-import java.util.List;
 import java.util.Random;
 import org.apache.log4j.Logger;
-import Enumerations.Visibilite;
 import Enumerations.RetourFonctions.ResultatAuthentification;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Communications.GestionnaireCommunication;
@@ -23,18 +20,9 @@ import ServeurJeu.Monitoring.TacheLogMoniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
 import ClassesUtilitaires.Espion;
-import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
 import ServeurJeu.Configuration.GestionnaireMessages;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 
 
@@ -112,28 +100,9 @@ public class ControleurJeu
 	// pour les joueurs virtuels
 	private ParametreIA objParametreIA;
 	
-	/**
-	 * Cette méthode est le point d'entrée du serveur. Elle ne fait que créer 
-	 * un nouveau contrôleur de jeu.
-	 * 
-	 * @param String[] args : les arguments passés en paramètre lors de l'appel
-	 * 						  de l'application 
-	 */
-	//public static void main(String[] args) 
-	//{
-        /* Cette fonction n'est plus utilisée, on utiliser Maitre.java
-         * maintenant
-         *
-        // Initialiser la classe statique GestionnaireMessages
-        GestionnaireMessages.initialiser();
-        
-		System.out.println(GestionnaireMessages.message("controleur_jeu.serveur_demarre"));
-		ControleurJeu objJeu = new ControleurJeu();
-		objJeu.demarrer();
-		System.out.println(GestionnaireMessages.message("controleur_jeu.serveur_arrete"));
-	    */
-	//}
 	
+	
+		
 	/**
 	 * Constructeur de la classe ControleurJeu qui permet de créer le gestionnaire 
 	 * des communications, le gestionnaire d'événements et le gestionnaire de bases 
@@ -156,6 +125,8 @@ public class ControleurJeu
 		// Créer une liste des joueurs
 		lstJoueursConnectes = new TreeMap();
 		
+		
+			
 		// Créer une liste des joueurs déconnectés
 		lstJoueursDeconnectes = new TreeMap();
 		
@@ -168,9 +139,7 @@ public class ControleurJeu
 		// Créer un nouveau gestionnaire de base de données MySQL
 		objGestionnaireBD = new GestionnaireBD(this);
 		
-		// Charger les salles par défaut
-		chargerSallesInitiales();
-		
+								
 		objGestionnaireTemps = new GestionnaireTemps();
 		objTacheSynchroniser = new TacheSynchroniser();
 
@@ -276,6 +245,7 @@ public class ControleurJeu
 	public String authentifierJoueur(ProtocoleJoueur protocole, String nomUtilisateur, 
 	        						 String motDePasse, boolean doitGenererNoCommandeRetour)
 	{
+				
 	    // Déclaration d'une variable qui va contenir le résultat à retourner
 	    // à la fonction appelante, soit les valeurs de l'énumération 
 	    // ResultatAuthentification
@@ -297,6 +267,8 @@ public class ControleurJeu
 			// Trouver les informations sur le joueur dans la BD et remplir le 
 			// reste des champs tels que les droits
 			objGestionnaireBD.remplirInformationsJoueur(objJoueurHumain);
+			
+			
 			
 			// À ce moment, comme il se peut que le même joueur tente de se 
 			// connecter en même temps par 2 protocoles de joueur, alors si
@@ -347,6 +319,7 @@ public class ControleurJeu
 				}
 			}
 		}
+		
 		
 		return strResultatAuthentification;
 	}
@@ -460,8 +433,11 @@ public class ControleurJeu
 	 * 				l'ajout et/ou au retrait d'une salle, car ça ne peut pas
 	 * 				se produire.
 	 */
-	public TreeMap obtenirListeSalles(String langue, String gameType)
+	public TreeMap obtenirListeSalles(String language, String gameType)
 	{
+		// Charger les salles par défaut
+		objGestionnaireBD.fillsRooms(language);   /// non complete for the case of more rooms!!!!!!!!!!!!!!!
+		
             // On crée une liste de salles vide, et on parcourt toutes les salles connues
             TreeMap copieListeSalles = (TreeMap)lstSalles.clone();
             copieListeSalles.clear();
@@ -475,21 +451,17 @@ public class ControleurJeu
                 // On vérifie si cette salle est du bon gameType
                 // et si elle permet de jouer dans la langue donnée
                 Boolean estDuBonGameType = gameType.equals(salle.obtenirGameType());
-                Boolean permetCetteLangue = false;
-                NodeList listeDeLangues = salle.obtenirNoeudLangue().getChildNodes();
-                for(int j=0; j<listeDeLangues.getLength() && !permetCetteLangue; j++)
-                {
-                    if(listeDeLangues.item(j).getNodeType()==1 && listeDeLangues.item(j).getNodeName().equals(langue)) permetCetteLangue = true;
-                }
-                
+                Boolean permetCetteLangue = objGestionnaireBD.roomLangControl(salle, language);
+                                
                 // Si les paramètres en entrée sont des strings vides,
                 // alors on ignore le paramètre correspondant
                 if(gameType.equals("")) estDuBonGameType = true;
-                if(langue.equals("")) permetCetteLangue = true;
+                if(language.equals("")) permetCetteLangue = true;
                 
                 // On ajoute la salle à la liste si elle correspond à ce qu'on veut
                 if(permetCetteLangue && estDuBonGameType) copieListeSalles.put(key, salle);
             }
+            
             return copieListeSalles;
 	}
 
@@ -652,45 +624,7 @@ public class ControleurJeu
 		objGestionnaireEvenements.ajouterEvenement(joueurDeconnecte);
 	}
 	
-	/**
-	 * Cette méthode permet de charger les salles initiales en mémoire 
-	 * à partir de la configuration XML
-	 */
-	private void chargerSallesInitiales()
-	{
-        int i;
-		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
-        
 		
-                
-                // First, we load the rules that are the same for every room
-                // Get the list of shops
-                Document documentConfig = config.getDocument();
-                
-                // Now, we load room-specific settings (as well as the actual rooms)
-                // Get the list of rooms
-                NodeList listeDeSalles = documentConfig.getElementsByTagName("salle");
-                for(i=0; i<listeDeSalles.getLength(); i++)
-                {
-               
-                    Node noeudLangue = listeDeSalles.item(i);
-                    NodeList parametresSalle = listeDeSalles.item(i).getChildNodes();
-                    for(int j=0; j<parametresSalle.getLength(); j++)
-                    {
-                        // If it's the kind of node we want, load the parameters
-                        if(parametresSalle.item(j).getNodeType()==1)
-                        {
-                       
-                             if(parametresSalle.item(j).getNodeName().equals("langue")) noeudLangue = parametresSalle.item(j);
-                         }
-                    }
-                    objGestionnaireBD.chargerSalle(noeudLangue);
-                    //System.out.println(lstSalles.));
-                    
-                }
-                
-	}// fin méthode
-	
 	public GestionnaireCommunication obtenirGestionnaireCommunication()
 	{
 		return objGestionnaireCommunication;

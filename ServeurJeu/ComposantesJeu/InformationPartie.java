@@ -126,7 +126,8 @@ public class InformationPartie
 	        // Créer la liste des objets utilisables qui ont été ramassés
 	        lstObjetsUtilisablesRamasses = new TreeMap();
 
-            objBoiteQuestions = new BoiteQuestions(joueur.obtenirProtocoleJoueur().langue, joueur.obtenirSalleCourante().obtenirNoeudLangue(), joueur.obtenirSalleCourante().obtenirNomSalle(), joueur);
+	        String language = joueur.obtenirProtocoleJoueur().langue;
+            objBoiteQuestions = new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language) , joueur);
             objGestionnaireBD.remplirBoiteQuestions(objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());  
             
 	}// fin constructeur
@@ -413,7 +414,7 @@ public class InformationPartie
 			catScolaires[i] = catValues[i].getCode();
 		}
 		
-		int intCategorieQuestion = catScolaires[UtilitaireNombres.genererNbAleatoire(33)]; 
+		int intCategorieQuestion = catScolaires[UtilitaireNombres.genererNbAleatoire(catValues.length - 1)]; 
 		
 		//***************************************************************************************
 		
