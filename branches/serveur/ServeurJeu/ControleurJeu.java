@@ -450,7 +450,7 @@ public class ControleurJeu
                 
                 // On vérifie si cette salle est du bon gameType
                 // et si elle permet de jouer dans la langue donnée
-                Boolean estDuBonGameType = gameType.equals(salle.obtenirGameType());
+                Boolean estDuBonGameType = gameType.equals(salle.getGameType());
                 Boolean permetCetteLangue = objGestionnaireBD.roomLangControl(salle, language);
                                 
                 // Si les paramètres en entrée sont des strings vides,
