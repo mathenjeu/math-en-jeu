@@ -54,7 +54,7 @@ public final class GenerateurPartie
         GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
                 
         // Obtention du nombre d'objets maximal en vente par magasin
-                int maxNbObjetsAVendre = Integer.valueOf(config.obtenirString("controleurjeu.salles-initiales.regles.max-objet-en-vente-par-magasin")); 
+        int maxNbObjetsAVendre = Integer.valueOf(config.obtenirString("controleurjeu.salles-initiales.regles.max-objet-en-vente-par-magasin")); 
 		
 		// Déclaration de points
 		Point objPoint;
@@ -94,8 +94,8 @@ public final class GenerateurPartie
 		// Déclaration d'un compteur de cases
 		int intCompteurCases = 1;
 
-                // Déclaration d'un compteur des id des objets
-                int intCompteurIdObjet = 1;
+        // Déclaration d'un compteur des id des objets
+        int intCompteurIdObjet = 1;
         
 		// Déclaration d'une case dont le type est -1 (ça n'existe pas) qui
 		// va nous servir pour identifier les cases qui ont été passées
@@ -122,8 +122,7 @@ public final class GenerateurPartie
 		int intNbPieces = (int) Math.floor(intNbLignes * intNbColonnes * reglesPartie.obtenirRatioPieces());
 		int intNbObjetsUtilisables = (int) Math.floor(intNbLignes * intNbColonnes * reglesPartie.obtenirRatioObjetsUtilisables());
 
-		System.out.println("Generateur partie: " + reglesPartie.obtenirRatioMagasins());
-		
+				
 		// Maintenant qu'on a le nombre de lignes et de colonnes, on va créer
 		// le tableau à 2 dimensions représentant le plateau de jeu (null est 
 		// mis par défaut dans chaque élément)
@@ -393,18 +392,21 @@ public final class GenerateurPartie
 				// Si le nom du magasin est Magasin1, alors on met un objet 
 				// Magasin(1) sur la case, sinon on fait le même genre de 
 				// vérifications pour les autres types de magasins                                
-				if (objReglesMagasin.obtenirNomMagasin().equals("Magasin1"))
+				if (objReglesMagasin.obtenirNomMagasin().equals("Magasin1") || 
+						objReglesMagasin.obtenirNomMagasin().equals("Shop1"))
 				{
 					// Définir la valeur de la case au point spécifié à la case 
 					// d'identification
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Magasin1());
 				}
-				else if (objReglesMagasin.obtenirNomMagasin().equals("Magasin2"))
+				else if (objReglesMagasin.obtenirNomMagasin().equals("Magasin2") || 
+						objReglesMagasin.obtenirNomMagasin().equals("Shop2"))
 				{
 					// Définir la valeur de la case au point spécifié à la case 
 					// d'identification
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Magasin2());
-				}else if (objReglesMagasin.obtenirNomMagasin().equals("Magasin3"))
+				}else if (objReglesMagasin.obtenirNomMagasin().equals("Magasin3") || 
+						objReglesMagasin.obtenirNomMagasin().equals("Shop3"))
 				{
 					// Définir la valeur de la case au point spécifié à la case 
 					// d'identification
@@ -661,7 +663,7 @@ public final class GenerateurPartie
 		// Pour tous les joueurs de la partie, on va générer des positions de joueurs
 		for (int i = 0; i < nbJoueurs; i++)
 		{
-			// Obtenir un point aléatoirement
+		// Obtenir un point aléatoirement
 			objtPositionJoueurs[i] = (Point) listePointsCaseLibre.remove(objRandom.nextInt(listePointsCaseLibre.size()));
 		}
 		
