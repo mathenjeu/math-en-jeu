@@ -714,7 +714,7 @@ public class Salle
 	}
         
                
-        public String obtenirGameType()
+        public String getGameType()
         {
             return gameType;
         }
