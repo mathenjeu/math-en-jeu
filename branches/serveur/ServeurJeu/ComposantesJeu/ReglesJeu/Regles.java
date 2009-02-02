@@ -60,6 +60,11 @@ public class Regles
 	private int intDeplacementMaximal;
 	
 	/**
+	 * Max of objects that shop can sale
+	 */
+	private int intMaxSaledObjects;
+	
+	/**
 	 * Constructeur de la classe Regles qui permet d'initialiser
 	 * les règles.
 	 */
@@ -334,5 +339,13 @@ public class Regles
 	public void definirDeplacementMaximal(int deplacement)
 	{
 		intDeplacementMaximal = deplacement;
+	}
+
+	public void setIntMaxSaledObjects(int intMaxSaledObjects) {
+		this.intMaxSaledObjects = intMaxSaledObjects;
+	}
+
+	public int getIntMaxSaledObjects() {
+		return intMaxSaledObjects;
 	}
 }
