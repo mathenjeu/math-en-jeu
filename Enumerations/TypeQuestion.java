@@ -6,9 +6,9 @@ package Enumerations;
 public final class TypeQuestion
 {
 	// Déclaration des membres de cette énumération
-	public static final String ChoixReponse = "ChoixReponse";  //  "MULTIPLE_CHOICE";
-	public static final String VraiFaux = "VraiFaux";        //  "TRUE_OR_FALSE"; 
-	public static final String ReponseCourte = "ReponseCourte";   //"SHORT_ANSWER"; 
+	public static final String ChoixReponse = "MULTIPLE_CHOICE";  // "ChoixReponse"; 
+	public static final String VraiFaux =  "TRUE_OR_FALSE";        //  "VraiFaux";
+	public static final String ReponseCourte =   "SHORT_ANSWER"; // "ReponseCourte";
 	
 	/**
 	 * Constructeur par défaut est privé pour empêcher de pourvoir créer des 
