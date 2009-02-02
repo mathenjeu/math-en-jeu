@@ -299,7 +299,7 @@ public class GestionnaireBD
 					int difficulte = Integer.parseInt(rs.getString("value")); 
 					
                     String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
-                    System.out.println(URL+explication);
+                   // System.out.println(URL+explication);
 					boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, categorie));
 				}
 			}
@@ -621,6 +621,7 @@ public class GestionnaireBD
 					int tempsMin = rs.getInt( "minimal_time" );
 					int tempsMax = rs.getInt( "maximal_time" );
 					int deplacementMax = rs.getInt( "max_movement" );
+					int maxShopObjects = rs.getInt( "max_object_shop" );
 					
 					objReglesSalle.definirPermetChat( chat );
 					objReglesSalle.definirRatioTrous( ratioTrous );
@@ -632,6 +633,7 @@ public class GestionnaireBD
 					objReglesSalle.definirTempsMinimal( tempsMin );
 					objReglesSalle.definirTempsMaximal( tempsMax );
 					objReglesSalle.definirDeplacementMaximal( deplacementMax );
+					objReglesSalle.setIntMaxSaledObjects(maxShopObjects);
 					
 					//System.out.println("temp min: " + objReglesSalle.obtenirDeplacementMaximal());
 									
@@ -882,6 +884,6 @@ public class GestionnaireBD
 	}//end methode
 
 
-	
+		
 	
 }// end class
