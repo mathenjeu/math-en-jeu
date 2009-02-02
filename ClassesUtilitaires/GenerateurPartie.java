@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Vector;
 import Enumerations.Visibilite;
+import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
@@ -54,7 +55,7 @@ public final class GenerateurPartie
         GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
                 
         // Obtention du nombre d'objets maximal en vente par magasin
-        int maxNbObjetsAVendre = Integer.valueOf(config.obtenirString("controleurjeu.salles-initiales.regles.max-objet-en-vente-par-magasin")); 
+        int maxNbObjetsAVendre = reglesPartie.getIntMaxSaledObjects();
 		
 		// Déclaration de points
 		Point objPoint;
@@ -589,11 +590,13 @@ public final class GenerateurPartie
 				// Livre sur la case, sinon on fait le même genre de 
 				// vérifications pour les autres types de magasins
                                 // On définit la valeur de la case au point spécifié à la case d'identification
-				if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Livre"))
+				if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Livre") || 
+						objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Book"))
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Livre(intCompteurIdObjet, bolEstVisible));					
 				}
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Papillon"))
+                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Papillon") ||
+                                		objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Butterfly"))
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Papillon(intCompteurIdObjet, bolEstVisible));					
 				}
@@ -601,19 +604,23 @@ public final class GenerateurPartie
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Telephone(intCompteurIdObjet, bolEstVisible));					
 				}
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Boule"))
+                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Boule") ||
+                                		objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Sphere"))
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Boule(intCompteurIdObjet, bolEstVisible));					
 				}
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("PotionGros"))
+                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("PotionGros") ||
+                                		objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Big mixture"))
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new PotionGros(intCompteurIdObjet, bolEstVisible));					
 				}
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("PotionPetit"))
+                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("PotionPetit") ||
+                                		objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Small mixture"))
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new PotionPetit(intCompteurIdObjet, bolEstVisible));					
 				}
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Banane"))
+                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Banane") ||
+                                		objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Banana"))
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Banane(intCompteurIdObjet, bolEstVisible));					
 				}
