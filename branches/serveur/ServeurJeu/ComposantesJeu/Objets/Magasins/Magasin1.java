@@ -1,5 +1,7 @@
 package ServeurJeu.ComposantesJeu.Objets.Magasins;
 
+import java.util.Vector;
+
 /**
  * @author Jean-François Brind'Amour
  */
