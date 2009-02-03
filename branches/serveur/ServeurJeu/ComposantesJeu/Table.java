@@ -588,7 +588,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Générer le plateau de jeu selon les rçgles de la table et 
 		// garder le plateau en mémoire dans la table
-		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, butDuJeu);
+		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objGestionnaireBD,objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, butDuJeu);
 
                 // Définir le prochain id pour les objets
                 objProchainIdObjet.intValue++;
