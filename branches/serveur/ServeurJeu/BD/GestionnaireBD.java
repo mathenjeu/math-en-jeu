@@ -10,12 +10,15 @@ import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.TreeSet;
 import java.text.SimpleDateFormat; 
@@ -522,7 +525,7 @@ public class GestionnaireBD
 					"  AND user.user_id = room.user_id " +
 					"  AND room_info.language_id = language.language_id " +
 					"  AND language.short_name = '" + language + "';" );
-				if(rs.next())
+				while(rs.next())
 				{
 					nom = rs.getString( "room_info.name" );
 					System.out.println(nom);
@@ -531,11 +534,11 @@ public class GestionnaireBD
 					gameType = rs.getString("game_type.name");
 					roomId = rs.getInt("room.room_id");
 					langId = rs.getInt("room_info.language_id");
-				}		
-                    
-					this.chargerRegllesSalle(objReglesSalle, roomId, langId);
+						
+                 }   
+					chargerRegllesSalle(objReglesSalle, roomId, langId);
 					Salle objSalle = new Salle(this, nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType);
-					this.chargerMaxObjets(objSalle, roomId);
+					chargerMaxObjets(objSalle, roomId);
 					objControleurJeu.ajouterNouvelleSalle(objSalle);
 				
 			}
@@ -791,15 +794,15 @@ public class GestionnaireBD
  			{
  				ResultSet rst = requete.executeQuery( "SELECT room_shop.priority, shop_info.name " +
  					" FROM room_shop, shop_info " +
- 					" WHERE room_shop.room_id = " + roomId +
+ 					" WHERE shop_info.language_id = " + langId + 
  					" AND room_shop.shop_id = shop_info.shop_id " +
- 					" AND shop_info.language_id = " + langId + 
+ 					" AND  room_shop.room_id = " + roomId +
  					";");
  				while(rst.next())
  				{
- 					Integer tmp1 = rst.getInt( "priority" );
+ 					
  			        String tmp2 = rst.getString("name");
- 			        
+ 			        Integer tmp1 = rst.getInt( "priority" );
  			        magasins.add(new ReglesMagasin(tmp1, tmp2));
  					 														
                  }
@@ -882,6 +885,39 @@ public class GestionnaireBD
 		
 		return language.equalsIgnoreCase(answer);
 	}//end methode
+
+
+	public void fillShopObjects(String nomMagasin, ArrayList<String> listObjects) {
+		
+		
+		 try
+	 		{
+	 			synchronized( requete )
+	 			{
+	 				ResultSet rst = requete.executeQuery( "SELECT object_info.name " +
+	 					" FROM shop_info, shop_object, object_info " +
+	 					" WHERE shop_info.name = '" + nomMagasin + 
+	 					"' AND shop_info.shop_id = shop_object.shop_id " +
+	 					" AND  shop_object.object_id = object_info.object_id ;");
+	 				while(rst.next())
+	 				{
+	 					
+	 			        String object = rst.getString("name");
+	 			       
+	 			        listObjects.add(object);
+	 			    	 														
+	                }
+	 			}
+	 		}
+	 		catch (SQLException e)
+	 		{
+	 			// Une erreur est survenue lors de l'exécution de la requète
+	 			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+	 			objLogger.error(GestionnaireMessages.message("bd.trace"));
+	 			objLogger.error( e.getMessage() );
+	 		    e.printStackTrace();			
+	 		}
+	}// end methode
 
 
 		
