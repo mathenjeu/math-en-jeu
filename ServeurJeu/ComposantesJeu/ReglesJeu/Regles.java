@@ -91,6 +91,7 @@ public class Regles
 	    intTempsMinimal = 0;
 	    intTempsMaximal = 0;
 	    intDeplacementMaximal = 1;
+	    intMaxSaledObjects = 0;
 	}
 
 	/**
