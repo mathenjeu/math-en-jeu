@@ -1,6 +1,7 @@
 package ClassesUtilitaires;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Vector;
@@ -36,6 +37,7 @@ public final class GenerateurPartie
      * Cette fonction permet de retourner une matrice à deux dimensions
      * représentant le plateau de jeu qui contient les informations sur 
      * chaque case selon des paramètres.
+     * @param objGestionnaireBD 
      *
      * @param Regles reglesPartie : L'ensemble des règles pour la partie
      * @param int temps : Le temps de la partie
@@ -46,14 +48,11 @@ public final class GenerateurPartie
      * @throws NullPointerException : Si la liste passée en paramètre qui doit 
      * 								  être remplie est nulle
      */
-    public static Case[][] genererPlateauJeu(Regles reglesPartie, int temps, Vector<Point> listePointsCaseLibre, IntObj objDernierIdObjets, String butDuJeu) throws NullPointerException
+    public static Case[][] genererPlateauJeu(GestionnaireBD objGestionnaireBD, Regles reglesPartie, int temps, Vector<Point> listePointsCaseLibre, IntObj objDernierIdObjets, String butDuJeu) throws NullPointerException
     {
 		// Création d'un objet permettant de générer des nombres aléatoires
 		Random objRandom = new Random();
-                
-        // Obtention de la configuration du serveur pour savoir ce que vont vendre les magasins
-        GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
-                
+               
         // Obtention du nombre d'objets maximal en vente par magasin
         int maxNbObjetsAVendre = reglesPartie.getIntMaxSaledObjects();
 		
@@ -107,12 +106,15 @@ public final class GenerateurPartie
 		
 		// Modifier le temps pour qu'il soit au plus le maximum de minutes
 		temps = Math.min(temps, reglesPartie.obtenirTempsMaximal());
+		
+		//to have a more equilibrate dimension of game table
+		temps = (int) Math.ceil(temps * 8 / 10) + 5;
 
 		// Le nombre de lignes sera de ceiling(temps / 2) à temps
 		intNbLignes = objRandom.nextInt(temps - ((int) Math.ceil(temps / 2)) + 1) + ((int) Math.ceil(temps / 2));
 
 		// Le nombre de colonnes sera de temps à 2 * temps 
-		intNbColonnes = (int) Math.ceil((temps * temps) / intNbLignes);
+		intNbColonnes = (int) Math.ceil((temps * temps ) / intNbLignes );
 
 		// Déclaration de variables qui vont garder le nombre de trous, 
 		// le nombre de cases spéciales, le nombres de magasins,
@@ -422,67 +424,55 @@ public final class GenerateurPartie
 				// Aller chercher une référence vers le magasin que l'on vient de créer
 				Magasin objMagasin = (Magasin)((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).obtenirObjetCase();
 
-                                // Get the list of items to be sold by shops
-                                // getNodeType verifications are to ensure we're getting the kind of node we're looking for
-                                //   because a lot of things are considered "nodes" in XML!
-                                Document documentConfig = config.getDocument();
-                                NodeList listeDeMagasins = documentConfig.getElementsByTagName("magasin");
-                                for(int i=0; i<listeDeMagasins.getLength(); i++)
-                                {
-                                    if(listeDeMagasins.item(i).getNodeType()==1 && objReglesMagasin.obtenirNomMagasin().equals(listeDeMagasins.item(i).getAttributes().getNamedItem("nom").getNodeValue()))
-                                    {
-                                        NodeList listeDObjets = listeDeMagasins.item(i).getChildNodes();
-                                        for(int j=0; j<listeDObjets.getLength(); j++)
-                                        {
-                                            if(listeDObjets.item(j).getNodeType()==1)
-                                            {
-                                                // Incrémenter le compteur de ID pour les objets
-                                                intCompteurIdObjet++;
+				
+				// Get the list of items to be sold by shops
+				ArrayList<String> listObjects = new ArrayList<String>();
+				objGestionnaireBD.fillShopObjects(objReglesMagasin.obtenirNomMagasin(), listObjects);
+				
+				for(String nomDeLObjet : listObjects)
+				{
+                   	// Incrémenter le compteur de ID pour les objets
+                    intCompteurIdObjet++;
 
-                                                    // On obtient le nom de l'objet en cours de traitement
-                                                    String nomDeLObjet = listeDObjets.item(j).getChildNodes().item(0).getNodeValue();
-
-                                                    // On crée un nouvel objet du type correspondant
-                                                    // puis on l'ajoute dans la liste des objets utilisables du magasin
-                                                    if(nomDeLObjet.equals("Livre"))
-                                                    {
-                                                        Livre objAAjouter = new Livre(intCompteurIdObjet, true);
-                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                                    }
-                                                    else if(nomDeLObjet.equals("Papillon"))
-                                                    {
-                                                        Papillon objAAjouter = new Papillon(intCompteurIdObjet, true);
-                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                                    }
-                                                    else if(nomDeLObjet.equals("Boule"))
-                                                    {
-                                                        Boule objAAjouter = new Boule(intCompteurIdObjet, true);
-                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                                    }
-                                                    else if(nomDeLObjet.equals("Telephone"))
-                                                    {
-                                                        Telephone objAAjouter = new Telephone(intCompteurIdObjet, true);
-                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                                    }
-                                                    else if(nomDeLObjet.equals("PotionGros"))
-                                                    {
-                                                        PotionGros objAAjouter = new PotionGros(intCompteurIdObjet, true);
-                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                                    }
-                                                    else if(nomDeLObjet.equals("PotionPetit"))
-                                                    {
-                                                        PotionPetit objAAjouter = new PotionPetit(intCompteurIdObjet, true);
-                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                                    }
-                                                    else if(nomDeLObjet.equals("Banane"))
-                                                    {
-                                                        Banane objAAjouter = new Banane(intCompteurIdObjet, true);
-                                                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                                                    }
-                                            }
-                                        }
-                                    }
-                                }
+                    
+                    // On crée un nouvel objet du type correspondant
+                    // puis on l'ajoute dans la liste des objets utilisables du magasin
+                    if(nomDeLObjet.equals("Livre"))
+                    {
+                        Livre objAAjouter = new Livre(intCompteurIdObjet, true);
+                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                    }
+                    else if(nomDeLObjet.equals("Papillon"))
+                    {
+                        Papillon objAAjouter = new Papillon(intCompteurIdObjet, true);
+                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                    }
+                    else if(nomDeLObjet.equals("Boule"))
+                    {
+                        Boule objAAjouter = new Boule(intCompteurIdObjet, true);
+                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                    }
+                    else if(nomDeLObjet.equals("Telephone"))
+                    {
+                        Telephone objAAjouter = new Telephone(intCompteurIdObjet, true);
+                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                    }
+                    else if(nomDeLObjet.equals("PotionGros"))
+                    {
+                        PotionGros objAAjouter = new PotionGros(intCompteurIdObjet, true);
+                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                    }
+                    else if(nomDeLObjet.equals("PotionPetit"))
+                    {
+                        PotionPetit objAAjouter = new PotionPetit(intCompteurIdObjet, true);
+                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                    }
+                    else if(nomDeLObjet.equals("Banane"))
+                    {
+                        Banane objAAjouter = new Banane(intCompteurIdObjet, true);
+                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                    }
+				}// end for              
 				
 				// Incrémenter le nombre de cases passées
 				intCompteurCases++;
