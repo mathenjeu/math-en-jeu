@@ -48,19 +48,17 @@ class Personnage
 	private var SCALE_BOX_OBJET:Number = 75;
    
 	////////////////////////////////////////////////////////////
-	 function obtenirNom():String
-	 {
+	function obtenirNom():String
+	{
 		return this.nom;
-	 }
-	   
-	    
+	}
+	       
 	////////////////////////////////////////////////////////////
 	function acheterObjet(o:ObjetSurCase, id:Number)
 	{
 		listeDesObjets.push(o);
 		listeDesIDObjets.push(id);
 	}
-	
 	
 	////////////////////////////////////////////////////////////
 	function afficherObjets()
@@ -121,13 +119,11 @@ class Personnage
 		return listeDesIDObjets[i];
 	}
 	
-	
 	////////////////////////////////////////////////////////////
 	function obtenirNombreObjet()
 	{
 		return listeDesObjets.length;
 	}
-	
 	
 	////////////////////////////////////////////////////////////
 	function ajouterObjet(o:ObjetSurCase, id:Number)
@@ -141,11 +137,12 @@ class Personnage
 	{
 		return this.listeDesObjets;
 	}
+	
+	////////////////////////////////////////////////////////////
 	function obtenirListeDesIDObjets():Array
 	{
 		return this.listeDesIDObjets;
 	}
-	
 	
 	////////////////////////////////////////////////////////////
 	// - sert à ajouter une image à la banque d'objets du personnage
@@ -154,11 +151,11 @@ class Personnage
 	// 
 	function ajouterImageBanque(i:Number, nomObj:String, profondeur:Number, scale:Number)
 	{		
-	trace("--- ds ajouterImageBanque ! ---");
-	trace(i);
-	trace(nomObj);
-	trace(profondeur);
-	trace(scale);
+		trace("--- ds ajouterImageBanque ! ---");
+		trace(i);
+		trace(nomObj);
+		trace(profondeur);
+		trace(scale);
 	
 		// dans mathemaquoi, les indices des tags sont de 1 à 10 : ils ne commencent pas à 0.
 		_level0.loader.contentHolder.menuObjets.createEmptyMovieClip("objCase" + i, profondeur);
@@ -244,9 +241,8 @@ class Personnage
 		trace("liste d'objets avant avoir enlever 1 obj :");
 		for(i=0;i<listeDesObjets.length;i++)
 		{
-trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
+			trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		}
-		
 		
 		for(i=0;i<listeDesObjets.length;i++)
 		{
@@ -262,11 +258,11 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 				// on décale les objets.
 				// ex : on a 3 objets et on enlève celui du milieu
 				// alors l'objet3 va à la position 2 et on décale les image
-		//for (var j:Number = i+1; j <= this.obtenirNombreObjet()+1; j++)
+				//for (var j:Number = i+1; j <= this.obtenirNombreObjet()+1; j++)
 				for (var j:Number = i+1; j <= this.obtenirNombreObjet(); j++)
 				{
 					var k:Number = j+1;
-//trace(this.obtenirRangObjet(j-1));
+					//trace(this.obtenirRangObjet(j-1));
 					//ajouterImageBanque(j, this.obtenirRangObjet(j-1), this.obtenirRangIDObjet(j-1)+j, SCALE_BOX_OBJET);
 					ajouterImageBanque(j, this.obtenirRangObjet(j-1), j, SCALE_BOX_OBJET);
 					enleverImageBanque(k);
@@ -282,10 +278,9 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		trace("liste d'objets après avoir enlever 1 obj :");
 		for(i=0;i<listeDesObjets.length;i++)
 		{
-trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
+			trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		}
 	}
-	
 	
 	////////////////////////////////////////////////////////////
 	function zoomer(valeur:Number)
@@ -306,14 +301,11 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		this.prochainePosition.definirY(prochainePosition.obtenirY()+ha);
 	}
 	
-	
-	
 	////////////////////////////////////////////////////////////
 	function obtenirL():Number
 	{
 		return l;
 	}
-	
 	
 	////////////////////////////////////////////////////////////
 	function definirL(ll:Number)
@@ -321,13 +313,11 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		l = ll;
 	}
 	
-	
 	////////////////////////////////////////////////////////////
 	function obtenirC():Number
 	{
 		return c;
 	}
-	
 	
 	////////////////////////////////////////////////////////////
 	function definirC(cc:Number)
@@ -335,13 +325,11 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		c = cc;
 	}
 	
-	
 	////////////////////////////////////////////////////////////
 	function obtenirNumero():Number
 	{
 		return numero;
 	}
-	
 	
 	////////////////////////////////////////////////////////////
 	function definirNumero(n:Number)
@@ -349,13 +337,11 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		numero = n;
 	}
 	
-	
 	////////////////////////////////////////////////////////////
 	function obtenirPointage():Number
 	{
 		return pointage;
 	}
-	
 	
 	////////////////////////////////////////////////////////////
 	function modifierPointage(x:Number)
@@ -364,13 +350,11 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		_level0.loader.contentHolder.pointageJoueur = x;
 	}
 	
-	
 	////////////////////////////////////////////////////////////
 	function obtenirArgent():Number
 	{
 		return argent;
 	}
-	
 	
 	////////////////////////////////////////////////////////////
 	function modifierArgent(x:Number)
@@ -379,13 +363,11 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		_level0.loader.contentHolder.argentJoueur = x;
 	}
 	
-	
 	////////////////////////////////////////////////////////////
 	function obtenirImage():MovieClip
 	{
 		return image;
 	}
-	
 	
 	////////////////////////////////////////////////////////////
 	function definirImage(i:MovieClip)
@@ -393,13 +375,11 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		image = i;
 	}
 	
-	
 	////////////////////////////////////////////////////////////
 	function obtenirPosition():Point
 	{
 		return position;
 	}
-	
 	
 	////////////////////////////////////////////////////////////
 	function definirPosition(p:Point, ll:Number, cc:Number)
@@ -412,13 +392,11 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		this.c = cc;
 	}
 
-	
 	////////////////////////////////////////////////////////////
 	function obtenirProchainePosition():Point
 	{
 		return prochainePosition;
 	}
-	
 	
 	////////////////////////////////////////////////////////////
 	// retourne la liste des objets que le magasin où on se trouve contient
@@ -427,7 +405,6 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 	{
 		return listeSurMagasin;
 	}
-	
 	
 	////////////////////////////////////////////////////////////
 	// fixe les objets contenus dans un magasin
@@ -487,10 +464,8 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 			} 
 			cpt++;
 		}
-
 	}
 
-	
 	////////////////////////////////////////////////////////////
 	// Cette fonction ramène la taille du mClip à sa taille normale
 	// prend les valeurs x et y pour l'échelle
@@ -504,7 +479,6 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		twMove1 = new Tween(mClip1, "_xscale", Bounce.easeIn, x, 100, 2, true);
 		twMove2 = new Tween(mClip1, "_yscale", Bounce.easeIn, y, 100, 2, true);
 	}
-
 
 	////////////////////////////////////////////////////////////
 	// cette fonction transforme des données stockées dans un array
@@ -525,12 +499,10 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 			objMagasin["objet"+j].id = objNoeudObjMagasin.attributes.id;
 			objMagasin["objet"+j].type = objNoeudObjMagasin.attributes.type;
 		
-		trace("id : " + objMagasin["objet"+j].id);
+			trace("id : " + objMagasin["objet"+j].id);
 		}
 		return objMagasin;
 	}
-	
-	
 	
 	function genererListeMagasinXML2(lstObjMagasin:Array, nouveauID:Number, vieuxID:Number):Object
 	{
@@ -556,7 +528,7 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 				objMagasin["objet"+j].id = objNoeudObjMagasin.attributes.id;
 			}
 		
-		//trace("id ds generer #2 : " + objMagasin["objet"+j].id);
+			//trace("id ds generer #2 : " + objMagasin["objet"+j].id);
 		}
 		return objMagasin;
 	}
@@ -606,7 +578,6 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		
 		if ((dx == 0) && (dy == 0))
 		{
-		
 			if(image._currentFrame != 1)
 			{
 				// place le personnage au repos et de face
@@ -614,180 +585,165 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		
 				switch(this.faireCollision)
 				{
+					case "piece":
+						// l'argent est ajouté au personnage dans les fichiers gestEve et gestComm
+						// en gros, ici, on enlève l'image du board
 				
-				case "piece":
-				// l'argent est ajouté au personnage dans les fichiers gestEve et gestComm
-				// en gros, ici, on enlève l'image du board
-				
-				
-					/////////////////////////////////////////
-					//fuck : si c'est pas moi qui tombe dessus la piece
-					//aussi, est-ce que les ordis utilisent des pieces ?
-					/////////////////////////////////////////
+						/////////////////////////////////////////
+						//fuck : si c'est pas moi qui tombe dessus la piece
+						//aussi, est-ce que les ordis utilisent des pieces ?
+						/////////////////////////////////////////
 					
-					/*if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-					{
-						if(this.obtenirNombreObjet() < 11)
-						{					
-							ajouterImageBanque(this.obtenirNombreObjet(), "pieceFixe", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
-						}
-					}*/
+						/*if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						{
+							if(this.obtenirNombreObjet() < 11)
+							{					
+								ajouterImageBanque(this.obtenirNombreObjet(), "pieceFixe", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
+							}
+						}*/
 	
-					_level0.loader.contentHolder.planche.enleverPiece(this.l, this.c);
-					_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -10000);
-					this.faireCollision = null;
-
-				break;
-				
-				case "magasin":
-				
-					//si notre personnage tombe sur un magasin, on charge le GUI_magasin
-					if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-					{
-						this.minigameLoade = true;
-						reafficher1 = false;
-						_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-						_root.objGestionnaireInterface.effacerBoutons(1);			
-							
-						// on charge le magasin : on ajuste sa position à l'écran
-						// on indique qu'il ne s'agit pas d'un mini-game.
-						
-						var minigame:MovieClip;   
-						minigame = _level0.loader.contentHolder.miniGameLayer.attachMovie("GUI_magasin", "magasin", 9997);
-						minigame._x = -6;
-						minigame._y = -20;
-						minigame._xscale = 115;
-						minigame._yscale = 115;
-						//minigame._width = 550;
-						//minigame._height= 400;
-						minigame._visible = false;
-						
-						
-						//variables qui servent pour un fade-in/fade-out à l'entrée du magasin
-						var oListener:Object = new Object();  
-						var twMove:Tween;
-						var twMove2:Tween;
-						var mClip1:MovieClip;
-	
-						mClip1 = _level0.loader.contentHolder.attachMovie("masque", "masqueA", 1,{_x:270, _y: 200});
-						mClip1._alpha = 0;
-						
-						twMove = new Tween(mClip1, "_alpha", Regular.easeOut, 0, 100, 1, true);
-						twMove.addListener(oListener);
-	
-						oListener.onMotionFinished = function():Void 
-						{ 
-							twMove2 = new Tween(mClip1, "_alpha", Regular.easeOut, 100, 0, 1, true);
-							_level0.loader.contentHolder.menuOutils._visible = false;
-							_level0.loader.contentHolder.enteteHolder._visible = false;
-							_level0.loader.contentHolder.horloge._visible = false;
-							minigame._visible = true;
-						}
-						
+						_level0.loader.contentHolder.planche.enleverPiece(this.l, this.c);
+						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -10000);
 						this.faireCollision = null;
-					}
-					else
-					{
-						faireCollision = null;
-					}
-				break;
+					break;
 				
-
-				// Pour tous les objets, on se comporte de la même manière :
-				// on enlève l'objet (même si on en a 10 : parce que le serveur nous dit qu'on l'enlève)
-				// si nécéssaire, on l'ajoute à nos objets
+					case "magasin":
+						//si notre personnage tombe sur un magasin, on charge le GUI_magasin
+						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						{
+							this.minigameLoade = true;
+							reafficher1 = false;
+							_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+							_root.objGestionnaireInterface.effacerBoutons(1);			
+							
+							// on charge le magasin : on ajuste sa position à l'écran
+							// on indique qu'il ne s'agit pas d'un mini-game.
+						
+							var minigame:MovieClip;   
+							minigame = _level0.loader.contentHolder.miniGameLayer.attachMovie("GUI_magasin", "magasin", 9997);
+							minigame._x = -6;
+							minigame._y = -20;
+							minigame._xscale = 115;
+							minigame._yscale = 115;
+							//minigame._width = 550;
+							//minigame._height= 400;
+							minigame._visible = false;
+						
+						
+							//variables qui servent pour un fade-in/fade-out à l'entrée du magasin
+							var oListener:Object = new Object();  
+							var twMove:Tween;
+							var twMove2:Tween;
+							var mClip1:MovieClip;
+	
+							mClip1 = _level0.loader.contentHolder.attachMovie("masque", "masqueA", 1,{_x:270, _y: 200});
+							mClip1._alpha = 0;
+						
+							twMove = new Tween(mClip1, "_alpha", Regular.easeOut, 0, 100, 1, true);
+							twMove.addListener(oListener);
+	
+							oListener.onMotionFinished = function():Void 
+							{ 
+								twMove2 = new Tween(mClip1, "_alpha", Regular.easeOut, 100, 0, 1, true);
+								_level0.loader.contentHolder.menuOutils._visible = false;
+								_level0.loader.contentHolder.enteteHolder._visible = false;
+								_level0.loader.contentHolder.horloge._visible = false;
+								minigame._visible = true;
+							}
+						
+							this.faireCollision = null;
+						}
+						else
+						{
+							faireCollision = null;
+						}
+					break;
 				
-				case "Livre":
-
-					_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
-					_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
-					this.faireCollision = null;
+					// Pour tous les objets, on se comporte de la même manière :
+					// on enlève l'objet (même si on en a 10 : parce que le serveur nous dit qu'on l'enlève)
+					// si nécéssaire, on l'ajoute à nos objets
 					
-					if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-					{
-						ajouterImageBanque(this.obtenirNombreObjet(), "Livre", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
-					}
-
-				break;
+					case "Livre":
+						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
+						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
+						this.faireCollision = null;
+					
+						if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						{
+							ajouterImageBanque(this.obtenirNombreObjet(), "Livre", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
+						}
+					break;
 				
-				case "Telephone":
-					_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
-					_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
-					this.faireCollision = null;
+					case "Telephone":
+						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
+						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
+						this.faireCollision = null;
 
-					if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-					{
-						ajouterImageBanque(this.obtenirNombreObjet(), "Telephone", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
-					}
-
-				break;
+						if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						{
+							ajouterImageBanque(this.obtenirNombreObjet(), "Telephone", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
+						}
+					break;
 				
-				case "Papillon":
-					_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
-					_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
-					this.faireCollision = null;
+					case "Papillon":
+						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
+						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
+						this.faireCollision = null;
 
-					if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-					{
-						ajouterImageBanque(this.obtenirNombreObjet(), "Papillon", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
-					}
-
-				break;
+						if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						{
+							ajouterImageBanque(this.obtenirNombreObjet(), "Papillon", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
+						}
+					break;
 				
-				case "Boule":
-					_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
-					_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
-					this.faireCollision = null;
+					case "Boule":
+						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
+						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
+						this.faireCollision = null;
 
-					if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-					{
-						ajouterImageBanque(this.obtenirNombreObjet(), "Boule", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
-					}
-
-				break;
+						if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						{
+							ajouterImageBanque(this.obtenirNombreObjet(), "Boule", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
+						}
+					break;
 				
+					case "PotionGros":
+						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
+						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
+						this.faireCollision = null;
+
+						if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						{
+							ajouterImageBanque(this.obtenirNombreObjet(), "PotionGros", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
+						}
+					break;
 				
-				case "PotionGros":
-					_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
-					_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
-					this.faireCollision = null;
+					case "PotionPetit":
+						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
+						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
+						this.faireCollision = null;
 
-					if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-					{
-						ajouterImageBanque(this.obtenirNombreObjet(), "PotionGros", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
-					}
-
-				break;
+						if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						{
+							ajouterImageBanque(this.obtenirNombreObjet(), "PotionPetit", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
+						}
+					break;
 				
-				case "PotionPetit":
-					_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
-					_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
-					this.faireCollision = null;
+					case "Banane":
+						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
+						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
+						this.faireCollision = null;
 
-					if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-					{
-						ajouterImageBanque(this.obtenirNombreObjet(), "PotionPetit", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
-					}
-
-				break;
+						if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						{
+							ajouterImageBanque(this.obtenirNombreObjet(), "Banane", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
+						}
+					break;
 				
-				case "Banane":
-					_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
-					_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
-					this.faireCollision = null;
-
-					if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-					{
-						ajouterImageBanque(this.obtenirNombreObjet(), "Banane", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
-					}
-
-				break;
-				
-				default :
-					//trace("pas de collision");	
-				break;
+					default :
+						//trace("pas de collision");	
+					break;
 				}
-			
 			
 				if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 				{
@@ -811,7 +767,6 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 						var minigame:MovieClip;
 						minigame = _level0.loader.contentHolder.miniGameLayer.attachMovie("GUI_minigame", "Minigame", 9997);
 						minigame._visible = false;
-
 					
 						switch(_level0.loader.contentHolder.minigameToLoad)
 						{
@@ -837,13 +792,11 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 							break;
 						}
 						
-						
 						twMove = new Tween(mClip1, "_alpha", Regular.easeOut, 0, 100, 1, true);
 						twMove.addListener(oListener);
 	
 						oListener.onMotionFinished = function():Void 
 						{ 
-							
 							twMove2 = new Tween(mClip1, "_alpha", Regular.easeOut, 100, 0, 1, true);
 							minigame._visible = true;
 						}
@@ -863,7 +816,6 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 			}
 			
 			return; // pour ne pas faire le reste des vérifications inutilement si dx == dy == 0
-			
 		}
 		
 		//pour le reste, ((dx == 0)&&(dy == 0) != 1)
@@ -876,9 +828,6 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 				dx *= pourcent;
 				dy *= pourcent;
 			}
-			else
-			{
-			}
 		}
 		else
 		{
@@ -887,9 +836,6 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 				pourcent = 10/Math.abs(dy);
 				dx *= pourcent;
 				dy *= pourcent;
-			}
-			else
-			{
 			}
 		}
 
@@ -907,20 +853,17 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 				this.image.gotoAndPlay(10);
 			}
 		}
-			
 				
 		if (dx >= 0)
 		{
 			// assure que le clip a la bonne orientation
 			image._xscale = -Math.abs(image._xscale);
 		}
-	
 		else
 		{
 			// flip le clip pour aller vers la gauche
 			image._xscale = Math.abs(image._xscale);
 		}
-		
 		
 		
 		// deplace le clip
@@ -938,25 +881,22 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		}
 	}
 
-
-//////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
 	function afficher()
 	{
 		image._visible = true;
 		image._x = position.obtenirX();  
 		image._y = position.obtenirY();
 	}
-		
 	
-//////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
 	function cachePersonnage()
 	{
 		image._visible = false;
-	}
+	}	
 	
-	
-//////////////////////////////////////////////////////////////////////////////////////
-////  pt contient la ligne et la colonne PAS LES X et Y
+	//////////////////////////////////////////////////////////////////////////////////////
+	////  pt contient la ligne et la colonne PAS LES X et Y
 	function definirProchainePosition(pt:Point, str:String)
 	{
 		_level0.loader.contentHolder.planche.tableauDesCases[this.l][this.c].retirerPersonnage(this);
@@ -973,21 +913,18 @@ trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		this.boardCentre = false;
 	}
 
-	
 	//////////////////////////////////////////////////////////////////////////////////////
 	function obtenirX():Number
 	{
 		return position.obtenirX();
 	}
 
-	
 	//////////////////////////////////////////////////////////////////////////////////////
 	function obtenirY():Number
 	{
 		return position.obtenirY();
 	}
 		
-	
 	//////////////////////////////////////////////////////////////////////////////////////
 	function rire()
 	{

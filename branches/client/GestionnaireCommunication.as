@@ -109,11 +109,6 @@ class GestionnaireCommunication
     private var objCommandeEnTraitement:Object;
 	
 	
-	function definirIntEtatClient(intEtat:Number)
-	{
-		this.intEtatClient = intEtat;
-	}
-	
     /**
      * Constructeur de la classe GestionnaireCommunication qui prend le
      * gestionnaire de commandes en paramètre.
@@ -164,6 +159,7 @@ class GestionnaireCommunication
         // Essayer de se connecter au serveur de jeu
 		objSocketClient.connect(url_serveur, port);
     }
+	
     /**
      * Cet événement est appelé lorsque la connexion a réussi ou échoué.
      *
@@ -194,6 +190,7 @@ class GestionnaireCommunication
         // Enlever l'écouteur de l'événement de connexion physique
         this.removeEventListener("ConnexionPhysique", objConnexionPhysiqueDelegate);
     }
+	
     /**
      * Cet événement est appelé lorsque la connexion a été coupée.
      */
@@ -244,6 +241,7 @@ class GestionnaireCommunication
         // Enlever l'écouteur de l'événement de déconnexion physique
         this.removeEventListener("DeconnexionPhysique", objDeconnexionPhysiqueDelegate);
     }
+	
     /**
      * Cet événement est appelé lorsqu'un message XML est reçu par le client.
      * Un document XML est passé en paramètres. Si une commande reçue n'est
@@ -271,7 +269,6 @@ class GestionnaireCommunication
             // bons paramètres
             else if (objNoeudCommande.nodeName == "commande")
             {
-
                 //TODO: À améliorer
                 // Mettre à jour le numéro de la dernière commande envoyée par
                 // le serveur seulement si ce numéro est le suivant qui devrait
@@ -285,7 +282,6 @@ class GestionnaireCommunication
                 // attente ou le traiter immédiatement
                 if (objNoeudCommande.attributes.type == "Evenement")
                 {
-					
 					trace("C'est un évenement: " + objNoeudCommande.attributes.nom);
 					
                     // Appeler une fonction qui va traiter l'événement
@@ -381,6 +377,7 @@ class GestionnaireCommunication
             }
         }
     }
+	
     /**
      * Cette fonction permet d'obtenir le prochain numéro de commande à
      * envoyer au serveur. Ce numéro est de 0 au maximum. Si le numéro devient
@@ -449,8 +446,6 @@ class GestionnaireCommunication
         // est acceptable, alors on envoie l'événement. Si il y a
         // une commande en traitement et que l'événement est acceptable
         // pour cette commande, alors on va l'envoyer
-		
-		
         if ((objCommandeEnTraitement == null &&
              ExtendedArray.fromArray(Etat.obtenirEvenementsAcceptablesEtat(intEtatClient)).contains(noeudCommande.attributes.nom) == true) ||
             (objCommandeEnTraitement != null &&
@@ -471,6 +466,7 @@ class GestionnaireCommunication
             lstEvenementsRecus.push(noeudCommande);
         }
     }
+	
     /**
      * Cette fonction permet de traiter la prochaine commande en la chargeant
      * en mémoire. Si la prochaine commande n'est pas une commande valide
@@ -534,6 +530,7 @@ class GestionnaireCommunication
             objCommandeEnTraitement = null;
         }
     }
+	
     /**
      * Cette fonction permet d'envoyer l'événement de retour de commande,
      * d'enlever l'écouteur pour le retour de la commande, d'envoyer tous
@@ -634,14 +631,12 @@ class GestionnaireCommunication
             // Passer la liste des delegate et enlever tous les handlers
             for (var i:Number = lstDelegateEvenements.tableau.length - 1; i >= 0; i--)
             {
-                
-		// Si l'événement courant n'est pas accepté dans l'état courant
+                // Si l'événement courant n'est pas accepté dans l'état courant
                 // (l'état est déjà modifié), alors on peut enlever l'écouteur
                 if (ExtendedArray.fromArray(Etat.obtenirEvenementsAcceptablesEtat(intEtatClient)).contains(lstDelegateEvenements.tableau[i]) == false)
                 {
                     // Enlever l'écouteur pour l'événement courant
-
-			    this.removeEventListener(lstDelegateEvenements.tableau[i], lstDelegateEvenements[lstDelegateEvenements.tableau[i]]);
+					this.removeEventListener(lstDelegateEvenements.tableau[i], lstDelegateEvenements[lstDelegateEvenements.tableau[i]]);
 		    
                     // Supprimer l'objet delegate courant
                     delete lstDelegateEvenements[lstDelegateEvenements.tableau[i]];
@@ -650,6 +645,7 @@ class GestionnaireCommunication
             }
         }
     }
+	
     /**
      * Cette fonction permet de transformer le noeud XML de l'événement en un
      * objet événement et d'envoyer cet événement aux écouteurs.
@@ -668,11 +664,11 @@ class GestionnaireCommunication
 		// garder en mémoire la position du win the game
 		var xWinGame:Number;
 		var yWinGame:Number;
-		
+		/*
 		for(var j:Number = 0; j<lstChildNodes.length; j++)
 		{
-			//trace(lstChildNodes[j]);
-		}
+			trace(lstChildNodes[j]);
+		}*/
 		
         // Définir le type d'événement et le target
         objEvenement.type = noeudEvenement.attributes.nom;
@@ -681,7 +677,7 @@ class GestionnaireCommunication
         // dans l'objet d'événement
         for (var i:Number = 0; i < lstChildNodes.length; i++)
         {
-		//trace("ds for envoyer evenement");
+			//trace("ds for envoyer evenement");
             // Déclarer une chaîne de caractère qui va garder le type courant
             var strNomType:String = String(lstChildNodes[i].attributes.type);
             // Si l'événement n'est pas PartieDemarree, alors on peut simplement
@@ -691,8 +687,7 @@ class GestionnaireCommunication
             if (noeudEvenement.attributes.nom != "PartieDemarree")
             {
 				if(noeudEvenement.attributes.nom == "JoueurDeplacePersonnage")
-					{
-
+				{
 			    	//trace("if = JoueurDeplacePersonnage,  avant le switch : "+strNomType);
 					switch(strNomType)
 			    	{
@@ -719,17 +714,14 @@ class GestionnaireCommunication
 
 				    	case "NouvellePosition":
 				    		objEvenement["nouvellePosition"] = new Object();
-				    
 				    		objEvenement["nouvellePosition"].x = Number(lstChildNodes[i].firstChild.attributes.x);
-				    		//trace("case NouvellePosition  "+objEvenement.nouvellePosition.x+"   "+Number(lstChildNodes[i].firstChild.attributes.x));
-				    
+				    		//trace("case NouvellePosition  "+objEvenement.nouvellePosition.x+"   "+Number(lstChildNodes[i].firstChild.attributes.x));	    
 							objEvenement["nouvellePosition"].y = Number(lstChildNodes[i].firstChild.attributes.y);
 				    		//trace("case NouvellePosition  "+objEvenement.nouvellePosition.y+"   "+Number(lstChildNodes[i].firstChild.attributes.y));
 				    	break;
 				    
 				    	case "AnciennePosition":
 				    		objEvenement["anciennePosition"] = new Object();
-				    
 				    		objEvenement["anciennePosition"].x = Number(lstChildNodes[i].firstChild.attributes.x);
 				    		//trace("case anciennePosition  "+objEvenement.anciennePosition.x+"   "+Number(lstChildNodes[i].firstChild.attributes.x));
 				    		objEvenement["anciennePosition"].y = Number(lstChildNodes[i].firstChild.attributes.y);
@@ -737,8 +729,8 @@ class GestionnaireCommunication
 				    	break;
 				    
 			    	}// fin du switch
-			    
 		    	}	// fin du if(noeudEvenement.attributes.nom == "JoueurDeplacePersonnage")
+				
 				else if(noeudEvenement.attributes.nom == "DeplacementWinTheGame")
 				{
 					//trouver la case actuelle du win the game, corriger le numéro de la case
@@ -765,77 +757,64 @@ class GestionnaireCommunication
 						{
 							for(var n:Number = 0; n < tabCases[m].length; n++)
 							{
-							   if( (tabCases[m][n].obtenirL() == p.obtenirX()) && (tabCases[m][n].obtenirC() == p.obtenirY()) )
-							   {
-								   tabCases[m][n].definirType(tabCases[m][n].obtenirType()+41000);
-								   tabCases[m][n].definirWinTheGame(winTheGame);
-								   tabCases[m][n].obtenirClipCase().attachMovie("winTheGame", "winTheGame1", 100);
-								   twMove1 = new Tween(tabCases[m][n].obtenirClipCase()["winTheGame1"], "_y", Bounce.easeOut, -500,  tabCases[m][n].obtenirClipCase()["winTheGame1"]._y, 2, true);
+								if( (tabCases[m][n].obtenirL() == p.obtenirX()) && (tabCases[m][n].obtenirC() == p.obtenirY()) )
+								{
+									tabCases[m][n].definirType(tabCases[m][n].obtenirType()+41000);
+									tabCases[m][n].definirWinTheGame(winTheGame);
+									tabCases[m][n].obtenirClipCase().attachMovie("winTheGame", "winTheGame1", 100);
+									twMove1 = new Tween(tabCases[m][n].obtenirClipCase()["winTheGame1"], "_y", Bounce.easeOut, -500,  tabCases[m][n].obtenirClipCase()["winTheGame1"]._y, 2, true);
 								   
-								   if(intEtatClient == Etat.ATTENTE_REPONSE_QUESTION.no)
-								   {
-									   
-								   }
-								   else
-								   {
+									if(intEtatClient != Etat.ATTENTE_REPONSE_QUESTION.no)
+									{
 								   		_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-								   }
+									}
 								}
 							}
 						}
-						
 					}
 					
-//					si tu veux le faire disparaitre dans les airs, il faut se rappeler de son m et n.
-					
+					// si tu veux le faire disparaitre dans les airs, il faut se rappeler de son m et n.
 					for(var m:Number = 0; m < tabCases.length; m++)
 					{
 						for(var n:Number = 0; n < tabCases[m].length; n++)
 						{
-						   if(tabCases[m][n].obtenirWinTheGame() != null)
-						   {
-							   tabCases[m][n].effacerWinTheGame();   
+							if(tabCases[m][n].obtenirWinTheGame() != null)
+							{
+								tabCases[m][n].effacerWinTheGame();   
 								
 								twMove1 = new Tween(tabCases[m][n].obtenirClipCase()["winTheGame1"], "_y", Bounce.easeIn, tabCases[m][n].obtenirClipCase()["winTheGame1"]._y, -500, 2, true);
 								twMove1.addListener(oListener);
 								
 								mMemoire = m;
 								nMemoire = n;
-						   }
+							}
 						}
 					}
-					
-						
-					
-					
 				}	// fin du if(noeudEvenement.attributes.nom == "DeplacementWinTheGame")
+				
 				else if(noeudEvenement.attributes.nom == "UtiliserObjet")
 				{
 					switch(strNomType)
 			    	{
 				    	case "joueurQuiUtilise":
 							trace(strNomType);
-							
 				    		objEvenement["joueurQuiUtilise"] = lstChildNodes[i].firstChild.nodeValue;
 				    		//trace("case NomUtilisateur  "+objEvenement.nomUtilisateur+ "   "+lstChildNodes[i].firstChild.nodeValue);
 				    	break;
 				    
 				    	case "joueurAffecte":
 							trace(strNomType);
-							
 							objEvenement["joueurAffecte"] = lstChildNodes[i].firstChild.nodeValue;
-				    		
 						break;
 				    
 						case "objetUtilise":
 							trace(strNomType);
-							
+							var tabPersonnages:Array = _level0.loader.contentHolder.planche.obtenirTableauDesPersonnages();
 							objEvenement["objetUtilise"] = lstChildNodes[i].firstChild.nodeValue;
 							
 							switch(objEvenement["objetUtilise"])
 							{
 								case "Banane":
-
 									definirIntEtatClient(10);
 									
 									objEvenement["NouvellePositionX"] = noeudEvenement.firstChild.nextSibling.nextSibling.nextSibling.firstChild.firstChild.firstChild;
@@ -849,26 +828,22 @@ class GestionnaireCommunication
 									_level0.loader.contentHolder["banane"].nomCible = objEvenement["joueurAffecte"];
 									
 									twMove = new Tween(guiBanane, "_alpha", Strong.easeOut, 40, 100, 1, true);
-
 								break;
 								
 								case "PotionPetit":
-								// lorsqu'on utilise une potionPetit,
-								// on devient petit pour 30 secondes.
+									// lorsqu'on utilise une potionPetit,
+									// on devient petit pour 30 secondes.
 									trace("on utilise la potionPetit ici.");
 									
-									for(var i:Number = 0; i < _level0.loader.contentHolder.planche.obtenirTableauDesPersonnages().length; i++)
+									for(var i:Number = 0; i < tabPersonnages.length; i++)
 									{
-										if(String(objEvenement.joueurQuiUtilise) == String(_level0.loader.contentHolder.planche.obtenirTableauDesPersonnages()[i].obtenirNom()))
+										if(String(objEvenement.joueurQuiUtilise) == String(tabPersonnages[i].obtenirNom()))
 										{
-
-											var xBonhomme:Number = _level0.loader.contentHolder.planche.obtenirTableauDesPersonnages()[i].obtenirImage()._xscale;
-											var yBonhomme:Number = _level0.loader.contentHolder.planche.obtenirTableauDesPersonnages()[i]._yscale;
-											_level0.loader.contentHolder.planche.obtenirTableauDesPersonnages()[i].shrinkBonhommeSpecial(_level0.loader.contentHolder.planche.obtenirTableauDesPersonnages()[i].obtenirImage(), 40, 40);
-																
+											var xBonhomme:Number = tabPersonnages[i].obtenirImage()._xscale;
+											var yBonhomme:Number = tabPersonnages[i]._yscale;
+											tabPersonnages[i].shrinkBonhommeSpecial(tabPersonnages[i].obtenirImage(), 40, 40);
 										}
 									}
-								
 								break;
 								
 								case "PotionGros":
@@ -876,100 +851,88 @@ class GestionnaireCommunication
 								// on devient gros pour 30 secondes.
 									trace("on utilise la potionGros ici.");
 									
-									for(var i:Number = 0; i < _level0.loader.contentHolder.planche.obtenirTableauDesPersonnages().length; i++)
+									for(var i:Number = 0; i < tabPersonnages.length; i++)
 									{
-										if(String(objEvenement.joueurQuiUtilise) == String(_level0.loader.contentHolder.planche.obtenirTableauDesPersonnages()[i].obtenirNom()))
+										if(String(objEvenement.joueurQuiUtilise) == String(tabPersonnages[i].obtenirNom()))
 										{
-
-											var xBonhomme:Number = _level0.loader.contentHolder.planche.obtenirTableauDesPersonnages()[i].obtenirImage()._xscale;
-											var yBonhomme:Number = _level0.loader.contentHolder.planche.obtenirTableauDesPersonnages()[i]._yscale;
-											_level0.loader.contentHolder.planche.obtenirTableauDesPersonnages()[i].shrinkBonhommeSpecial(_level0.loader.contentHolder.planche.obtenirTableauDesPersonnages()[i].obtenirImage(), 150, 150);
-																
+											var xBonhomme:Number = tabPersonnages[i].obtenirImage()._xscale;
+											var yBonhomme:Number = tabPersonnages[i]._yscale;
+											tabPersonnages[i].shrinkBonhommeSpecial(tabPersonnages[i].obtenirImage(), 150, 150);
 										}
 									}
 								break;
 								
 								default:
-									trace("Erreur : impossible... ... ...");
+									trace("Erreur : impossible...");
 								break;
 							}
-							
 				    		
 						break;					
+			    	} // fin du switch(strNomType)
+				} // fin du if(noeudEvenement.attributes.nom == "UtiliserObjet")
 				
-			    	}// fin du switch
-				}
-		    	else
-		    	{
-			    	if(noeudEvenement.attributes.nom == "PartieTerminee")
-			    	{
-				    	//trace("if = partieTerminee,  avant le switch : "+strNomType);
-				    	
-						trace(noeudEvenement.firstChild);
+		    	else if(noeudEvenement.attributes.nom == "PartieTerminee")
+			    {
+				   	//trace("if = partieTerminee,  avant le switch : "+strNomType);
+					trace(noeudEvenement.firstChild);
 	
-						switch(strNomType)
-				    	{
-							case "StatistiqueJoueur":
-					    		var lstChildNodesStatistique:Array = lstChildNodes[i].childNodes;
-					    		
-					    		objEvenement["statistiqueJoueur"] = new Array();
-					    
-					    		//trace("taille de la liste de stat :  "+lstChildNodesStatistique.length);
-					    
-					    		for(var j:Number =0; j < lstChildNodesStatistique.length; j++)
-					    		{
-						    		objEvenement.statistiqueJoueur.push({nomUtilisateur:lstChildNodesStatistique[j].attributes.utilisateur, pointage:lstChildNodesStatistique[j].attributes.pointage});	
-					    		}
-								
-								if(noeudEvenement.firstChild.attributes.nom != "")
+					switch(strNomType)
+				   	{
+						case "StatistiqueJoueur":
+					   		var lstChildNodesStatistique:Array = lstChildNodes[i].childNodes;
+					   		
+					   		objEvenement["statistiqueJoueur"] = new Array();
+					   
+				    		//trace("taille de la liste de stat :  "+lstChildNodesStatistique.length);
+				    
+				    		for(var j:Number =0; j < lstChildNodesStatistique.length; j++)
+				    		{
+					    		objEvenement.statistiqueJoueur.push({nomUtilisateur:lstChildNodesStatistique[j].attributes.utilisateur, pointage:lstChildNodesStatistique[j].attributes.pointage});	
+				    		}
+							
+							if(noeudEvenement.firstChild.attributes.nom != "")
+							{
+								for(var j:Number =0; j < objEvenement.statistiqueJoueur.length; j++)
 								{
-									for(var j:Number =0; j < objEvenement.statistiqueJoueur.length; j++)
+									if(objEvenement.statistiqueJoueur[j].nomUtilisateur == noeudEvenement.firstChild.attributes.nom)
 									{
-										if(objEvenement.statistiqueJoueur[j].nomUtilisateur == noeudEvenement.firstChild.attributes.nom)
+										if(_level0.loader.contentHolder.langue == "Francais")
 										{
-											if(_level0.loader.contentHolder.langue == "Francais")
-											{
-												objEvenement.statistiqueJoueur[j].pointage = "Gagnant";
-											}
-											else
-											{
-												objEvenement.statistiqueJoueur[j].pointage = "Winner";
-											}
+											objEvenement.statistiqueJoueur[j].pointage = "Gagnant";
+										}
+										else //en anglais
+										{
+											objEvenement.statistiqueJoueur[j].pointage = "Winner";
 										}
 									}
 								}
-								else
-								{
-								}
+							}
 									
-					    	break;
+					    break;
 							
-							default:
-								trace("ds switch(strNomType) pour Partie Terminée - valeur invalide");
-							break
-				    	}		//fin du switch
-				    
-			    	}
-			    	else	// donc (noeudEvenement.attributes.nom != "PartieDemarree" NI "JoueurDeplacePersonnage" NI "PartieTerminee")
-			    	{
-				 		//trace("ds if ds for envoyer evenement  :  "+noeudEvenement.attributes.nom+"   "+lstChildNodes[i].firstChild.nodeValue+"   "+strNomType.substring(0, 1).toLowerCase() + strNomType.substring(1, strNomType.length));
-						// Le firstChild va pointer vers un noeud texte
-						objEvenement[strNomType.substring(0, 1).toLowerCase() + strNomType.substring(1, strNomType.length)] = lstChildNodes[i].firstChild.nodeValue;
-			    	}
-		    	}// fin du else du if(noeudEvenement.attributes.nom == "JoueurDeplacePersonnage")
+						default:
+							trace("ds switch(strNomType) pour Partie Terminée - valeur invalide");
+						break
+				    }	// fin du switch
+			    } // fin du if(noeudEvenement.attributes.nom == "PartieTerminee")
+			    
+				else	// donc (noeudEvenement.attributes.nom != "PartieDemarree" NI "JoueurDeplacePersonnage" NI "PartieTerminee")
+			    {
+				 	//trace("ds if ds for envoyer evenement  :  "+noeudEvenement.attributes.nom+"   "+lstChildNodes[i].firstChild.nodeValue+"   "+strNomType.substring(0, 1).toLowerCase() + strNomType.substring(1, strNomType.length));
+					// Le firstChild va pointer vers un noeud texte
+					objEvenement[strNomType.substring(0, 1).toLowerCase() + strNomType.substring(1, strNomType.length)] = lstChildNodes[i].firstChild.nodeValue;
+			    }
 				
-				
-	    	}// fin du if (noeudEvenement.attributes.nom != "PartieDemarree")
+	    	} // fin du if (noeudEvenement.attributes.nom != "PartieDemarree")
+			
             else	//donc (noeudEvenement.attributes.nom == "PartieDemarree")
             {
-				
-		    //trace("ds else ds for envoyer evenement : "+strNomType);
+				//trace("ds else ds for envoyer evenement : "+strNomType);
                 // Traiter les différents cas et créer leurs objets dans objEvenement
                 switch (strNomType)
                 {
 					// Si le cas est positionWinTheGame, alors on initialise la position du WinTheGame
                     case "positionWinTheGame":
-
 						xWinGame = lstChildNodes[i].attributes.x;
 						yWinGame = lstChildNodes[i].attributes.y;
 						_level0.loader.contentHolder.objGestionnaireEvenements.setPointageMinimalWinTheGame(lstChildNodes[i].attributes.pointageRequis);
@@ -977,7 +940,6 @@ class GestionnaireCommunication
 						trace("xWinGame : " + xWinGame);
 						trace("yWinGame : " + yWinGame);
 						trace("PointageRequis : " + lstChildNodes[i].attributes.pointageRequis);
-						
 					break;
 					
                     // Si le cas est TempsPartie, alors on initialise le temps de la partie
@@ -985,6 +947,7 @@ class GestionnaireCommunication
                         // Le firstChild va pointer vers un noeud texte
                         objEvenement["tempsPartie"] = lstChildNodes[i].firstChild.nodeValue;
                     break;
+					
                     // Si le cas est Taille, alors on initialise le plateau de jeu
                     case "Taille":
                         // Déclaration de variables qui contiennent le nombre de lignes et
@@ -1007,7 +970,8 @@ class GestionnaireCommunication
                                 objEvenement.plateauJeu[j].push(0);
                             }
                         }
-                        break;
+                    break;
+					
                     // Si le cas est PositionJoueurs, alors on crée la liste des
                     // positions des joueurs
                     case "PositionJoueurs":
@@ -1024,7 +988,8 @@ class GestionnaireCommunication
                             // position x, y
                             objEvenement.positionJoueurs.push({nom:lstChildNodesPosition[j].attributes.nom, x:lstChildNodesPosition[j].attributes.x, y:lstChildNodesPosition[j].attributes.y});
                         }
-                        break;
+                    break;
+					
                     // Si le cas est PlateauJeu, alors on définit les valeurs dans
                     // chaque case du plateau
                     case "PlateauJeu":
@@ -1033,9 +998,6 @@ class GestionnaireCommunication
                         var lstChildNodesCase:Array = lstChildNodes[i].childNodes;
                         // Passer tous les noeuds case et les ajouter dans
                         // le plateau de jeu
-						
-						
-						
                         for (var j:Number = 0; j < lstChildNodesCase.length; j++)
                         {
                             // Déclaration d'une variable qui va contenir la
@@ -1080,10 +1042,6 @@ class GestionnaireCommunication
                                     {
                                         // On dit qu'il y a un magasin de type 3
                                         intValeurCase += 300;
-                                    }
-                                    else
-                                    {
-
                                     }
                                 }
                                 // Si l'objet est un objet utilisable
@@ -1146,7 +1104,7 @@ class GestionnaireCommunication
                             // Mettre la valeur calculée à la position x, y de la case
                             objEvenement.plateauJeu[lstChildNodesCase[j].attributes.x][lstChildNodesCase[j].attributes.y] = intValeurCase;
                         }
-                        break;
+                    break;
                 }
                 // Il faut maintenant mettre à jour l'état courant et commencer
                 // à accepter les événements propres à la partie
@@ -1159,14 +1117,15 @@ class GestionnaireCommunication
                 //envoyerEtMettreAJourEvenements(noeudCommande, objEvenement);
                 // Traiter la prochaine commande
                 //traiterProchaineCommande();
-            }
-	    
-	    
-        }
+            } //fin du (noeudEvenement.attributes.nom == "PartieDemarree")
+        
+		} // fin de la boucle for
+		
 		trace("fin Evenement envoye : " + objEvenement.type);
         // Envoyer l'événement aux écouteurs
         dispatchEvent(objEvenement);
     }
+	
     /**
      * Cet événement est appelé à chaque fois que le timer a atteint la fin de
      * son temps. Cette méthode n'est pas appelée si le timer est arrêté
@@ -1174,7 +1133,7 @@ class GestionnaireCommunication
      */
     private function objTimerEnvoiCommandes_tempsEcoule()
     {
-//trace("Temps ecoule");
+		//trace("Temps ecoule");
         // S'il y a bel et bien une commande en traitement, alors on renvoit
         // la commande et automatiquement le timer recommence son décompte
         // de TEMPS_TIMER/1000 secondes
@@ -1199,6 +1158,7 @@ class GestionnaireCommunication
             }
         }
     }
+	
     /**
      * Cette méthode permet de se connecter au serveur de jeu.
      *
@@ -1278,6 +1238,7 @@ class GestionnaireCommunication
             // TODO: Dire qu'on n'est pas connecté
         }
     }
+	
     /**
      * Cette méthode permet de déconnecter le joueur du serveur de jeu.
      *
@@ -1286,7 +1247,7 @@ class GestionnaireCommunication
      */
     public function deconnexion(deconnexionDelegate:Function)
     {
-trace(this.intEtatClient);
+		trace(this.intEtatClient);
         // Si on a obtenu la liste des joueurs, alors on peut continuer le code
         // de la fonction
         if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("Deconnexion", "nom") == true)
@@ -1335,6 +1296,7 @@ trace(this.intEtatClient);
             // TODO: Dire qu'on n'est pas connecté
         }
     }
+	
     /**
      * Cette méthode permet d'obtenir la liste des joueurs connectés au
      * serveur de jeu.
@@ -1400,6 +1362,7 @@ trace(this.intEtatClient);
             // TODO: Dire qu'on ne peut pas faire la commande tout de suite
         }
     }
+	
     /**
      * Cette méthode permet d'obtenir la liste des salles .
      *
@@ -1456,6 +1419,7 @@ trace(this.intEtatClient);
             // TODO: Dire qu'on n'est pas connecté
         }
     }
+	
     /**
      * Cette méthode permet au joueur d'entrer dans une salle.
      *
@@ -1657,6 +1621,7 @@ trace(this.intEtatClient);
             // TODO: Dire qu'on ne peut pas faire la commande tout de suite
         }
     }
+	
     /**
      * Cette méthode permet d'obtenir la liste des tables de la salle courante.
      *
@@ -1738,6 +1703,7 @@ trace(this.intEtatClient);
             // TODO: Dire qu'on n'est pas connecté
         }
     }
+	
     /**
      * Cette méthode permet au joueur de créer une table.
      *
@@ -1787,7 +1753,7 @@ trace(this.intEtatClient);
             objObjetCommande.nom = "CreerTable";
             objObjetCommande.objetXML = objObjetXML;
             objObjetCommande.listeDelegate = lstDelegateCommande;
-//trace(objObjetXML);
+			//trace(objObjetXML);
             // Ajouter l'objet de commande à envoyer courant à la fin du tableau
             var intNbElements:Number = lstCommandesAEnvoyer.push(objObjetCommande);
             // Si le nombre d'éléments dans la liste est de 1 (celui qu'on vient
@@ -1807,6 +1773,7 @@ trace(this.intEtatClient);
             // TODO: Dire qu'on n'est pas connecté
         }
     }
+	
     /**
      * Cette méthode permet au joueur d'entrer dans une table.
      *
@@ -1875,6 +1842,7 @@ trace(this.intEtatClient);
             // TODO: Dire qu'on n'est pas connecté
         }
     }
+	
     /**
      * Cette méthode permet au joueur de quitter la table dans laquelle il se
      * trouve.
@@ -1934,7 +1902,7 @@ trace(this.intEtatClient);
     }
 	
 	
-	   /**
+	/**
      * Cette méthode permet au joueur de demarrer la partie avant qu'il n'y ait
      * 4 joueurs a la table.
      *
@@ -1963,23 +1931,23 @@ trace(this.intEtatClient);
             var objObjetXML:XML = new XML();
             // Créer tous les noeuds de la commande
             var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
-	    var objNoeudParametreIdPersonnage:XMLNode = objObjetXML.createElement("parametre");
-	    var objNoeudParametreNiveau:XMLNode = objObjetXML.createElement("parametre");
+	    	var objNoeudParametreIdPersonnage:XMLNode = objObjetXML.createElement("parametre");
+	    	var objNoeudParametreNiveau:XMLNode = objObjetXML.createElement("parametre");
 	    
             var objNoeudParametreIdPersonnageText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(idPersonnage)));
-	    var objNoeudParametreNiveauText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(niveau));
+	    	var objNoeudParametreNiveauText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(niveau));
             // Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "DemarrerMaintenant";
 	    
-	    objNoeudParametreIdPersonnage.attributes.type = "IdPersonnage";
+	    	objNoeudParametreIdPersonnage.attributes.type = "IdPersonnage";
             objNoeudParametreIdPersonnage.appendChild(objNoeudParametreIdPersonnageText);
 	    
-	    objNoeudParametreNiveau.attributes.type = "NiveauJoueurVirtuel";  //JoueurVirtuel
-	    objNoeudParametreNiveau.appendChild(objNoeudParametreNiveauText);
+	    	objNoeudParametreNiveau.attributes.type = "NiveauJoueurVirtuel";  //JoueurVirtuel
+	    	objNoeudParametreNiveau.appendChild(objNoeudParametreNiveauText);
 	    
             objNoeudCommande.appendChild(objNoeudParametreIdPersonnage);
-	    objNoeudCommande.appendChild(objNoeudParametreNiveau);
+	    	objNoeudCommande.appendChild(objNoeudParametreNiveau);
 	    
             objObjetXML.appendChild(objNoeudCommande);
             // Déclaration d'un nouvel objet qui va contenir les informations sur
@@ -2023,7 +1991,7 @@ trace(this.intEtatClient);
      * @param Function evenementJoueurDeplacePersonnageDelegate : Un pointeur
      *          sur la fonction permettant de lancer un événement
      * @param Funtion evenementSyncroniserTemps : Un pointeur sur la fonction
-     		permettant de syncroniser le temps.
+     *		permettant de syncroniser le temps.
      * @param Number idPersonnage : Le numéro Id du personnage
      */
     public function demarrerPartie(demarrerPartieDelegate:Function,
@@ -2046,9 +2014,9 @@ trace(this.intEtatClient);
             lstDelegateCommande.push({nom:"PartieDemarree", delegate:evenementPartieDemarreeDelegate});
             //TODO: À enlever ou à penser s'il faut le laisser là
             lstDelegateCommande.push({nom:"JoueurDeplacePersonnage", delegate:evenementJoueurDeplacePersonnageDelegate});
-	    lstDelegateCommande.push({nom:"SynchroniserTemps", delegate:evenementSynchroniserTempsDelegate});
+	    	lstDelegateCommande.push({nom:"SynchroniserTemps", delegate:evenementSynchroniserTempsDelegate});
 	    
-	    lstDelegateCommande.push({nom:"PartieTerminee", delegate:evenementPartieTermineeDelegate});
+	    	lstDelegateCommande.push({nom:"PartieTerminee", delegate:evenementPartieTermineeDelegate});
             
             // Déclaration d'une variable qui va contenir le numéro de la commande
             // générée
@@ -2096,11 +2064,10 @@ trace(this.intEtatClient);
             // TODO: Dire qu'on n'est pas connecté
         }
     }
-	
-	
+
 	
     /**
-     * Cette méthode permet au joueur de délacer un personnage.
+     * Cette méthode permet au joueur de déplacer un personnage.
      *
      * @param Function deplacerPersonnageDelegate : Un pointeur sur la
      *          fonction permettant au joueur de déplacer son personnage
@@ -2115,7 +2082,7 @@ trace(this.intEtatClient);
 		trace("intEtatClient : " + intEtatClient);
         if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("DeplacerPersonnage", "nom") == true)
         {
-        trace("ds gestCom deplacerPersonnage    ds if");
+        	trace("ds gestCom deplacerPersonnage    ds if");
             // Déclaration d'un tableau dont le contenu est un Delegate
             var lstDelegateCommande:ExtendedArray = new ExtendedArray();
             // Ajouter le Delegate de retour dans le tableau des delegate pour
@@ -2169,7 +2136,7 @@ trace(this.intEtatClient);
     }
 	
 	
-	   /**
+	/**
      * Cette méthode permet au joueur d'acheter un objet.
      *
      * @param Function acheterObjetDelegate : Un pointeur sur la
@@ -2185,7 +2152,7 @@ trace(this.intEtatClient);
 		trace("intEtatClient : " + intEtatClient);
         if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("AcheterObjet", "nom") == true)
         {
-        trace("ds gestCom acheterObjet    ds if");
+        	trace("ds gestCom acheterObjet    ds if");
             // Déclaration d'un tableau dont le contenu est un Delegate
             var lstDelegateCommande:ExtendedArray = new ExtendedArray();
             // Ajouter le Delegate de retour dans le tableau des delegate pour
@@ -2237,7 +2204,7 @@ trace(this.intEtatClient);
         }
     }
 	
-	 /**
+	/**
      * Cette méthode permet au joueur d'utiliser un objet.
      *
      * @param Function utilserObjetDelegate : Un pointeur sur la
@@ -2372,18 +2339,14 @@ trace(this.intEtatClient);
         }
     }
     
-    
-    
-     public function definirPointageApresMinigame(definirPointageApresMinigameDelegate:Function, 
+    public function definirPointageApresMinigame(definirPointageApresMinigameDelegate:Function, 
      						  points:Number)
     {
-	    
 	    trace("on est dans la fct defPointMini de gestComm");
 	    
         // Si on est connecté alors on peut continuer le code de la fonction
         if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("Pointage", "nom") == true)
         {
-			
             // Déclaration d'un tableau dont le contenu est un Delegate
             var lstDelegateCommande:ExtendedArray = new ExtendedArray();
             // Ajouter le Delegate de retour dans le tableau des delegate pour
@@ -2436,20 +2399,16 @@ trace(this.intEtatClient);
             // TODO: Dire qu'on ne peut pas faire la commande tout de suite
         }
     }
-    
-	
-	
-	
-	   public function definirArgentApresMinigame(definirArgentApresMinigameDelegate:Function, 
+
+
+	public function definirArgentApresMinigame(definirArgentApresMinigameDelegate:Function, 
      						  argent:Number)
     {
-	    
 	    trace("on est dans la fct defArgentMini de gestComm");
 	    
         // Si on est connecté alors on peut continuer le code de la fonction
         if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("Argent", "nom") == true)
         {
-			
             // Déclaration d'un tableau dont le contenu est un Delegate
             var lstDelegateCommande:ExtendedArray = new ExtendedArray();
             // Ajouter le Delegate de retour dans le tableau des delegate pour
@@ -2532,7 +2491,7 @@ trace(this.intEtatClient);
      */
     private function retourConnexion(noeudCommande:XMLNode)
     {
-trace("Retour Connexion");
+		trace("Retour Connexion");
         // Construire l'objet événement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
@@ -2554,21 +2513,17 @@ trace("Retour Connexion");
 			}
 	
         }
-	else
-	{
-		trace("erreur connexion  : "+noeudCommande.attributes.type);
-	}
+		else
+		{
+			trace("erreur connexion  : "+noeudCommande.attributes.type);
+		}
         // Appeler la fonction qui va envoyer tous les événements et
         // retirer leurs écouteurs
         envoyerEtMettreAJourEvenements(noeudCommande, objEvenement);
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
-	
-	
-	
 
-	
 	
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
@@ -2582,7 +2537,7 @@ trace("Retour Connexion");
      */
     private function retourDeconnexion(noeudCommande:XMLNode)
     {
-trace("Retour Deconnexion");
+		trace("Retour Deconnexion");
         // Construire l'objet événement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
@@ -2599,6 +2554,7 @@ trace("Retour Deconnexion");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+	
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
@@ -2611,7 +2567,7 @@ trace("Retour Deconnexion");
      */
     private function retourObtenirListeJoueurs(noeudCommande:XMLNode)
     {
-trace("Retour ObtenirListeJoueurs");
+		trace("Retour ObtenirListeJoueurs");
         // Construire l'objet événement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
@@ -2644,6 +2600,7 @@ trace("Retour ObtenirListeJoueurs");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+	
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
@@ -2656,7 +2613,7 @@ trace("Retour ObtenirListeJoueurs");
      */
     private function retourObtenirListeSalles(noeudCommande:XMLNode)
     {
-trace("Retour ObtenirListeSalles");
+		trace("Retour ObtenirListeSalles");
         // Construire l'objet événement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
@@ -2690,6 +2647,7 @@ trace("Retour ObtenirListeSalles");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+	
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
@@ -2702,7 +2660,7 @@ trace("Retour ObtenirListeSalles");
      */
     private function retourEntrerSalle(noeudCommande:XMLNode)
     {
-trace("Retour EntrerSalle");
+		trace("Retour EntrerSalle");
         // Construire l'objet événement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
@@ -2719,6 +2677,7 @@ trace("Retour EntrerSalle");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+	
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
@@ -2731,7 +2690,7 @@ trace("Retour EntrerSalle");
      */
     private function retourQuitterSalle(noeudCommande:XMLNode)
     {
-trace("Retour QuitterSalle");
+		trace("Retour QuitterSalle");
         // Construire l'objet événement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
@@ -2748,6 +2707,7 @@ trace("Retour QuitterSalle");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+	
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
@@ -2760,7 +2720,7 @@ trace("Retour QuitterSalle");
      */
     private function retourObtenirListeJoueursSalle(noeudCommande:XMLNode)
     {
-trace("Retour ObtenirListeJoueursSalle");
+		trace("Retour ObtenirListeJoueursSalle");
         // Construire l'objet événement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
@@ -2793,6 +2753,7 @@ trace("Retour ObtenirListeJoueursSalle");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+	
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
@@ -2805,7 +2766,7 @@ trace("Retour ObtenirListeJoueursSalle");
      */
     private function retourObtenirListeTables(noeudCommande:XMLNode)
     {
-trace("Retour ObtenirListeTables");
+		trace("Retour ObtenirListeTables");
         // Construire l'objet événement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
@@ -2855,10 +2816,7 @@ trace("Retour ObtenirListeTables");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
-    
-    
-    
-    
+
     
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
@@ -2895,13 +2853,12 @@ trace("Retour ObtenirListeTables");
         envoyerEtMettreAJourEvenements(noeudCommande, objEvenement);
         // Traiter la prochaine commande
         traiterProchaineCommande();
-		
     }
     
     
 	
 	
-	    /**
+	/**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
      * écouteur à la fonction
@@ -2936,11 +2893,8 @@ trace("Retour ObtenirListeTables");
         envoyerEtMettreAJourEvenements(noeudCommande, objEvenement);
         // Traiter la prochaine commande
         traiterProchaineCommande();
-		
     }
-    
-	
-	
+
     
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
@@ -2978,9 +2932,7 @@ trace("Retour ObtenirListeTables");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
-	
-	
-	
+
 	
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
@@ -3042,7 +2994,7 @@ trace("Retour ObtenirListeTables");
      */
     private function retourQuitterTable(noeudCommande:XMLNode)
     {
-trace("Retour QuitterTable");
+		trace("Retour QuitterTable");
         // Construire l'objet événement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
@@ -3059,6 +3011,7 @@ trace("Retour QuitterTable");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+	
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
@@ -3071,7 +3024,7 @@ trace("Retour QuitterTable");
      */
     private function retourDemarrerPartie(noeudCommande:XMLNode)
     {
-trace("Retour DemarrerPartie");
+		trace("Retour DemarrerPartie");
         // Construire l'objet événement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
@@ -3106,18 +3059,13 @@ trace("Retour DemarrerPartie");
         // Construire l'objet événement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
-       
 
         // Appeler la fonction qui va envoyer tous les événements et
         // retirer leurs écouteurs
         envoyerEtMettreAJourEvenements(noeudCommande, objEvenement);
         // Traiter la prochaine commande
         traiterProchaineCommande();
-		
-		
-		
-		
-		}
+	}
 
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
@@ -3131,7 +3079,7 @@ trace("Retour DemarrerPartie");
      */
     private function retourDeplacerPersonnage(noeudCommande:XMLNode)
     {
-trace("Retour DeplacerPersonnage");
+		trace("Retour DeplacerPersonnage");
         // Construire l'objet événement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
@@ -3164,9 +3112,7 @@ trace("Retour DeplacerPersonnage");
         traiterProchaineCommande();
     }
 	
-	
-	
-	
+
 	private function retourAcheterObjet(noeudCommande:XMLNode)
     {
 		trace("ds gesComm Retour AcheterObjet");
@@ -3209,8 +3155,7 @@ trace("Retour DeplacerPersonnage");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
-	
-	
+
 	
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
@@ -3252,7 +3197,6 @@ trace("Retour DeplacerPersonnage");
 				break;
 				
 				case "Boule":
-
 					objEvenement.objetUtilise = new Object();
 					// Ajouter les paramètres de l'objet dans l'objet d'événement
 					objEvenement.objetUtilise.typeObjet = noeudCommande.attributes.type;
@@ -3261,24 +3205,20 @@ trace("Retour DeplacerPersonnage");
 					
 					trace(objEvenement.objetUtilise.url);
 					trace(objEvenement.objetUtilise.type);
-				
 				break;
 				
 				case "OK":
-
 					objEvenement.objetUtilise = new Object();
 					// Ajouter les paramètres de l'objet dans l'objet d'événement
 					objEvenement.objetUtilise.typeObjet = noeudCommande.attributes.type;
 					
 					trace(objEvenement.objetUtilise.typeObjet);
-
 				break;
 				
 				default:
 					trace("pas objet valide ds retourUtiliserObj ds gestComm");
 				break;
 			}
-				
         }
 		
         // Appeler la fonction qui va envoyer tous les événements et
@@ -3287,7 +3227,6 @@ trace("Retour DeplacerPersonnage");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
-	
 	
 	
     /**
@@ -3356,8 +3295,7 @@ trace("Retour DeplacerPersonnage");
                         {
                             objEvenement.objetRamasse = new Object();
                             objEvenement.objetRamasse.id = Number(objNoeudParametre.firstChild.attributes.id);
-
-													
+							
 							var o:ObjetSurCase = new ObjetSurCase();
 							o.definirNom(objNoeudParametre.firstChild.attributes.type);
 							_level0.loader.contentHolder.planche.obtenirPerso().ajouterObjet(o, objEvenement.objetRamasse.id);
@@ -3395,14 +3333,12 @@ trace("Retour DeplacerPersonnage");
 		    		case "Argent":
                         objEvenement.argent = Number(objNoeudParametre.firstChild.nodeValue);
 						trace("Argent ds gestComm   "+objEvenement.argent);
-				
 						break;
 		   
 		   
 		   			case "Collision":  
 						if (objNoeudParametre.hasChildNodes() == true)
                         {
-
 							if(objNoeudParametre.firstChild.nodeValue == "magasin")
 							{
 								var objEvenementMagasin:Object;
@@ -3462,6 +3398,11 @@ trace("Retour DeplacerPersonnage");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+	
+	function definirIntEtatClient(intEtat:Number)
+	{
+		this.intEtatClient = intEtat;
+	}
 	
 	public function obtenirEtatClient():Number
 	{
