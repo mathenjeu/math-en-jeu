@@ -1,15 +1,20 @@
 <?php echo $this->render('header.phtml'); ?>
-<a href="<?php echo $this->baseUrl ?>/question">Return</a>
+
 <div id="content">
   <h1><?php echo $this->escape($this->title); ?></h1>
+  <p><a href="<?php echo $this->baseUrl ?>/question">Return to question index</a></p>
   
-  <?php if ($this->previous_question != null) : ?>
-  <div><a href="<?php echo $this->baseUrl ?>/question/view/question_id/<?php echo $this->previous_question->question_id; ?>/language_id/<?php echo $this->question_info->language_id; ?>">Previous</a></div>
-  <?php endif; ?>
+  <?php if ($this->previous_question != null) { ?>
+  <div><p><a href="<?php echo $this->baseUrl ?>/question/view/question_id/<?php echo $this->previous_question->question_id; ?>/language_id/<?php echo $this->question_info->language_id; ?>">Previous</a>&nbsp;&nbsp;&nbsp;&nbsp;
+  <?php } else { ?>
+  <div><p>
+  <?php } ?>
   
-  <?php if ($this->next_question != null) : ?>
-  <div><a href="<?php echo $this->baseUrl ?>/question/view/question_id/<?php echo $this->next_question->question_id; ?>/language_id/<?php echo $this->question_info->language_id; ?>">Next</a></div>
-  <?php endif; ?>
+  <?php if ($this->next_question != null) { ?>
+  <a href="<?php echo $this->baseUrl ?>/question/view/question_id/<?php echo $this->next_question->question_id; ?>/language_id/<?php echo $this->question_info->language_id; ?>">Next</a></p></div>
+  <?php } else { ?>
+  </p></div>
+  <?php } ?>
   
   
   

@@ -146,7 +146,7 @@ class QuestionController extends Zend_Controller_Action {
 				} elseif ($this->_request->getPost('step') == 4) {
 
 					$question = new Question();
-					$data = array('category_id' => $session->category_id,
+					$data = array('subject_id' => $session->subject_id, 'category_id' => $session->category_id,
                         'answer_type_id' => $session->answer_type_id);
 
 
@@ -156,15 +156,15 @@ class QuestionController extends Zend_Controller_Action {
 
 					//create the question info data
 					$data = array(
-          	'question_id' => $question_id,
-            'language_id' => $session->language_id,
-            'subject_id' => $session->subject_id,
-            'category_id' => $session->category_id,
-            'creation_date' => new Zend_Db_Expr('CURDATE()'),
-            'question_latex' => $this->_request->getPost('questionLatex'),
-            'feedback_latex' => $this->_request->getPost('feedbackLatex'),
-            'good_answer' => $this->_request->getPost('goodAnswer'),
-            'user_id' => $this->view->user->user_id);
+					'question_id' => $question_id,
+					'language_id' => $session->language_id,
+					'subject_id' => $session->subject_id,
+					'category_id' => $session->category_id,
+					'creation_date' => new Zend_Db_Expr('CURDATE()'),
+					'question_latex' => $this->_request->getPost('questionLatex'),
+					'feedback_latex' => $this->_request->getPost('feedbackLatex'),
+					'good_answer' => $this->_request->getPost('goodAnswer'),
+					'user_id' => $this->view->user->user_id);
 
 					$extraHeaderTex = "";
 					$extraTex = "";
@@ -187,7 +187,7 @@ class QuestionController extends Zend_Controller_Action {
 					$config = $registry->get('config');
 
 					//try to generate the swf's for this question and feedback
-					$filename = $config->file->tempdir . DIRECTORY_SEPARATOR . "Q-" . $question_id . "-" . $session->language_short_name . ".tex";
+					$filename = $config->file->tempdir . "Q-" . $question_id . "-" . $session->language_short_name . ".tex";
 
 					$questionFile = new QuestionFile($filename);
 					$questionFile->addText($config->latex->header);
@@ -197,7 +197,7 @@ class QuestionController extends Zend_Controller_Action {
 					$questionFile->addText($config->latex->footer);
 					$questionFile->close();
 
-					$filename = $config->file->tempdir . DIRECTORY_SEPARATOR . "F-" . $question_id . "-" . $session->language_short_name . ".tex";
+					$filename = $config->file->tempdir . "F-" . $question_id . "-" . $session->language_short_name . ".tex";
 					$feedbackFile = new QuestionFile($filename);
 					$feedbackFile->addText($config->latex->header);
 					$feedbackFile->addText($this->_request->getPost('feedbackLatex'));
@@ -219,15 +219,24 @@ class QuestionController extends Zend_Controller_Action {
 					}
 
 					//run the script that build the swf for the question
-					exec($config->file->scriptdir . "/tex2swf.sh " . $questionFile->getFullPath() . " " . $config->file->flash->dir . " " . $convertmethod);
-					if (file_exists($config->file->flash->dir . DIRECTORY_SEPARATOR . "Q-" . $question_id . "-" . $session->language_short_name . ".swf")) {
+					exec($config->file->scriptdir . "tex2swf.sh " . $questionFile->getFullPath() . " " . $config->file->flash->dir . " " . $convertmethod);
+					if (file_exists($config->file->flash->dir . "Q-" . $question_id . "-" . $session->language_short_name . ".swf")) {
 						$data['question_flash_file'] = "Q-" . $question_id . "-" . $session->language_short_name . ".swf";
+					}
+					else
+					{
+						
+						//$data['question_flash_file'] = "echec.swf";
 					}
 
 					//run the script that build the swf for the feedback
-					exec($config->file->scriptdir . "/tex2swf.sh " . $feedbackFile->getFullPath() . " " . $config->file->flash->dir . " " . $convertmethod);
-					if (file_exists($config->file->flash->dir . DIRECTORY_SEPARATOR . "F-" . $question_id . "-" . $session->language_short_name . ".swf")) {
+					exec($config->file->scriptdir . "tex2swf.sh " . $feedbackFile->getFullPath() . " " . $config->file->flash->dir . " " . $convertmethod);
+					if (file_exists($config->file->flash->dir . "F-" . $question_id . "-" . $session->language_short_name . ".swf")) {
 						$data['feedback_flash_file'] = "F-" . $question_id . "-" . $session->language_short_name . ".swf";
+					}
+					else
+					{
+						//$data['feedback_flash_file'] = "conversion tex2swf echouee";
 					}
 
 					$questionInfo = new QuestionInfo();
@@ -244,7 +253,7 @@ class QuestionController extends Zend_Controller_Action {
 					if ($levels != null) {
 						foreach($levels as $level) {
 							$value = $levelValues[$level->level_id];
-							if($value!=0) {
+							if($value!= null) {
 								$questionLevel = new QuestionLevel();
 								$data = array('value' => $value,
                             						'level_id' => $level->level_id,

@@ -1,6 +1,8 @@
 ﻿<?php echo $this->render('header.phtml'); ?>
-<a href="<?php echo $this->baseUrl ?>/question">Return</a>
 <div id="content">
+  <h1><?php echo $this->escape($this->title); ?></h1>
+
+  <p><a href="<?php echo $this->baseUrl ?>/question">Cancel and go back to question index</a></p>
 	<?php if ($this->step == 1) :?>
 	<form method="post" action="add">
 		<input type="hidden" name="step" value="1" />
@@ -20,7 +22,7 @@
 	
 	<?php if ($this->step == 2) :?>
 	<div>
-		<span>Language</span>
+		<span>Language:</span>
 		<span><?php echo $this->language_name; ?></span>
 	</div>
 	<form method="post" action="add">
@@ -50,15 +52,15 @@
 	
 	<?php if ($this->step == 3) :?>
 	<div>
-		<span>Language</span>
+		<span>Language:</span>
 		<span><?php echo $this->language_name; ?></span>
 	</div>
 	<div>
-		<span>Subject</span>
+		<span>Subject:</span>
 		<span><?php echo $this->subject_name; ?></span>
 	</div>
 	<div>
-		<span>Answer type</span>
+		<span>Answer type:</span>
 		<span><?php echo $this->answer_type_name; ?></span>
 	</div>
 	

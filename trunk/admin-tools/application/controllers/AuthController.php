@@ -37,35 +37,47 @@ class AuthController extends Zend_Controller_Action {
 				// Set the input credential values to authenticate against
 				$authAdapter->setIdentity($username);
 				$authAdapter->setCredentialTreatment('password(?)');
-				$authAdapter->setCredential($password);
+				$authAdapter->setCredential($password);				
 
-				// verify if the user have access to the tool
-				$user = new User();
-	//			$rowU = $user->fetchAll('username=' . $username);
+				// do the authentication
+				$auth = Zend_Auth::getInstance();
+				$result = $auth->authenticate($authAdapter);
+				
+				if ($result->isValid()) {
+					// verify if the user have access to the tool
+					$user = new User();
 
-	//			if ($rowU->question_group_id != 1) {	// not public
+					$select = $user->select();
+					$select->from($user, 'question_group_id')
+						   ->where('username="' . $username . '"');
+					
+					$rowU = $user->fetchAll($select);
+										
+					$rowsetArray = $rowU->toArray();
+					foreach ($rowsetArray as $rowArray) {
+						foreach ($rowArray as $column => $value) {
+							$question_group_id_value = $value;
+						}
+					
+					}
 
-					// do the authentication
-					$auth = Zend_Auth::getInstance();
-					$result = $auth->authenticate($authAdapter);
-
-
-					if ($result->isValid()) {
+					if ($question_group_id_value != 1) {	// not public
+					
 						// success: store database row to auth's storage
 						// system. (Not the password though!)
-						$data = $authAdapter->getResultRowObject(null,
-          'password');
+						$data = $authAdapter->getResultRowObject(null, 'password');
 						$auth->getStorage()->write($data);
 						$this->_redirect('/');
 					} else {
-						// failure: clear database row from session
-						$this->view->message = 'Login failed.';
+						// failure: access denied for this user
+						$this->view->message = 'Access denied.';
 					}
-	/*			} else {
-					// failure: access denied for this user
-					$this->view->message = 'Access denied.';
+				} else {
+					// failure: clear database row from session
+					$this->view->message = 'Login failed.';
 				}
-	*/		}
+				
+			}
 		}
 
 		$this->view->title = "Log in";
