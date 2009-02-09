@@ -10,14 +10,12 @@ import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TreeSet;
@@ -43,8 +41,7 @@ public class GestionnaireBD
 	
 	static private Logger objLogger = Logger.getLogger( GestionnaireBD.class );
 	
-	//private static final String strCategoryLevel = "category_level";   // not used any more!!!!!!!!!!!!
-
+	
 	/**
 	 * Constructeur de la classe GestionnaireBD qui permet de garder la 
 	 * référence vers le contrôleur de jeu
@@ -467,7 +464,8 @@ public class GestionnaireBD
         return -1;
 	}
 
-	/* Cette fonction permet d'ajouter les informations sur une partie pour
+	/**
+	 * Cette fonction permet d'ajouter les informations sur une partie pour
 	 * un joueur dans la table partieJoueur;
 	 *
 	 */
@@ -481,7 +479,7 @@ public class GestionnaireBD
 		
 		// Création du SQL pour l'ajout
 		String strSQL = "INSERT INTO game_user(game_id, user_id, score, has_won) VALUES " +
-		    "(" + clePartie + "," + cleJoueur + "," + pointage + "," + intGagner + ");";
+		    "(" + clePartie + "," + cleJoueur + "," + pointage + "," + intGagner + ");"; 
 		
 		try
 		{
@@ -496,7 +494,67 @@ public class GestionnaireBD
             {
                System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
             }
+        
+        
+	}// end methode
+	
+	/**
+	 * Methode used to update in DB the player's money 
+	 * @param cleJoueur
+	 * @param newMoney
+	 */
+	public void setNewPlayersMoney(int cleJoueur, int newMoney) {
+		// Update the money in player's account
+		String strMoney = " UPDATE user SET money = " + newMoney + " WHERE user_id = " + cleJoueur + ";"; 
+		
+		try
+		{
+			
+			synchronized(requete)
+			{
+				// Ajouter l'information pour ce joueur
+	            requete.executeUpdate(strMoney);
+			}
+        }
+        catch (Exception e)
+            {
+               System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_update_money") + e.getMessage());
+            }
+		
+	}//end methode
+	
+	/**
+	 * Methode used to charge to player's money from DB for current game
+	 * option can be disabled with
+	 * @param userId 
+	 */
+	public int getPlayersMoney(int userId) {
+		int money = 0;
+		try
+		{
+			synchronized( requete )
+			{
+				ResultSet rs = requete.executeQuery("SELECT user.money  FROM user WHERE user_id = " + userId + ";"); 
+				if (rs.next())
+				{
+					
+					money = Integer.parseInt(rs.getString("money"));
+										  
+				}
+				
+			}
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exécution de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_get_money"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();			
+		}
+		return money;
 	}
+
 
     /**
      * Méthode utilisé pour charger les salles avec les propriétes 
@@ -506,20 +564,24 @@ public class GestionnaireBD
 	public void fillsRooms(String language)
 	{
 		Regles objReglesSalle = new Regles();
-		
-		int roomId = 0;
+		ArrayList<Integer> rooms = new ArrayList();
 		int langId = 0;
+		if (language.equalsIgnoreCase("fr")) 
+            langId = 1;
+        else if (language.equalsIgnoreCase("en"))
+        	langId = 2;
 		String nom = "";
 		String motDePasse = "";
 		String createur = "";
 		String gameType = "";
 		
+		//find all rooms with requested language and fill in ArrayList
 		try
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery( "SELECT room_info.name, room.password, game_type.name,user.name, room.room_id, room_info.language_id " +
-					" FROM room_info,room, game_type,user,language " +
+				ResultSet rs = requete.executeQuery( "SELECT room_info.name, room.password, game_type.name, user.name, room.room_id, room_info.language_id " +
+					" FROM room_info,room, game_type, user, language " +
 					" WHERE room.game_type_id = game_type.game_type_id " +
 					"  AND room.room_id = room_info.room_id " +
 					"  AND user.user_id = room.user_id " +
@@ -527,20 +589,11 @@ public class GestionnaireBD
 					"  AND language.short_name = '" + language + "';" );
 				while(rs.next())
 				{
-					nom = rs.getString( "room_info.name" );
-					System.out.println(nom);
-					motDePasse = rs.getString( "password" );
-					createur = rs.getString("user.name");
-					gameType = rs.getString("game_type.name");
-					roomId = rs.getInt("room.room_id");
-					langId = rs.getInt("room_info.language_id");
-						
-                 }   
-					chargerRegllesSalle(objReglesSalle, roomId, langId);
-					Salle objSalle = new Salle(this, nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType);
-					chargerMaxObjets(objSalle, roomId);
-					objControleurJeu.ajouterNouvelleSalle(objSalle);
-				
+					int roomId = rs.getInt("room.room_id");
+									
+					rooms.add(roomId);
+				}   
+							
 			}
 		}
 		catch (SQLException e)
@@ -560,7 +613,57 @@ public class GestionnaireBD
 		    e.printStackTrace();
 		}
 			
+		//now fill all the rooms with properties and add this rooms to the game
+		for (int room : rooms){
+			try
+			{
+				synchronized( requete )
+				{
+					ResultSet rs = requete.executeQuery( "SELECT room_info.name, room.password, game_type.name, user.name, room.room_id, room_info.language_id " +
+							" FROM room_info,room, game_type, user, language " +
+							" WHERE room.game_type_id = game_type.game_type_id " +
+							"  AND room.room_id = room_info.room_id " +
+							"  AND user.user_id = room.user_id " +
+							"  AND room_info.language_id = language.language_id " +
+							"  AND room.room_id = " + room +
+							"  AND language.short_name = '" + language + "';" );
+					if(rs.next())
+					{
+						nom = rs.getString( "room_info.name" );
+						System.out.println(nom);
+						motDePasse = rs.getString( "password" );
+						createur = rs.getString("user.name");
+						gameType = rs.getString("game_type.name");
+
+						chargerRegllesSalle(objReglesSalle, room, langId);
+						Salle objSalle = new Salle(this, nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType);
+						chargerMaxObjets(objSalle, room);
+						objControleurJeu.ajouterNouvelleSalle(objSalle);
+					}   
+
+				}
+			}
+			catch (SQLException e)
+			{
+				// Une erreur est survenue lors de l'exécution de la requète
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+				objLogger.error(GestionnaireMessages.message("bd.trace"));
+				objLogger.error( e.getMessage() );
+				e.printStackTrace();			
+			}
+			catch( RuntimeException e)
+			{
+				//Une erreur est survenue lors de la recherche de la prochaine salle
+				objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"));
+				objLogger.error(GestionnaireMessages.message("bd.trace"));
+				objLogger.error( e.getMessage() );
+				e.printStackTrace();
+			}
+
+		}//end for
+				
 	}// fin méthode chargerSalle
+	
 
    /**
     * 
@@ -920,6 +1023,40 @@ public class GestionnaireBD
 	}// end methode
 
 
+	/**
+	 * Methode to determine from DB if is permited to charge money from user's 
+	 * account in DB
+	 * @param roomName
+	 * @return permit
+	 */
+	public boolean getMoneyRule(String roomName) {
 		
+		boolean permit = true; // as default is permited to take money from DB
+		try
+		{
+			synchronized( requete )
+			{
+				ResultSet rs = requete.executeQuery( "SELECT rule.money_permit FROM rule, room, room_info " +
+                " WHERE room_info.name = '" + roomName + "' AND room_info.room_id = room.room_id " +
+                " AND rule.rule_id = room.rule_id;" );
+				while(rs.next())
+				{
+					permit = Boolean.parseBoolean(rs.getString( "money_permit" ));
+													
+                }
+			}
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exécution de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();			
+		}
+	
+		return permit;
+	}
+	
 	
 }// end class

@@ -1629,7 +1629,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    		    {
 	    		    	System.out.println("***************** Objet acheté: " + objObjet.obtenirTypeObjet());
 	    		        System.out.println("***************** Cout: " + objObjet.obtenirPrix());
-	    		        System.out.println("***************** Prochain id: " + objTable.obtenirProchainIdObjet().intValue);
+	    		        System.out.println("***************** Prochain id: " + objTable.obtenirProchainIdObjet());
 	    		        
 	    		        System.out.print("***** Liste objets dans le magasin après achat:");
 	    		        for (int i = 0; i < objMagasin.obtenirListeObjetsUtilisables().size(); i++)

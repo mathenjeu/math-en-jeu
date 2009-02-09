@@ -34,7 +34,6 @@ import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
-import ClassesUtilitaires.IntObj;
 import ServeurJeu.Monitoring.Moniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
@@ -2911,7 +2910,7 @@ public class ProtocoleJoueur implements Runnable
 					}
 
 				}
-                         else if(objNoeudCommandeEntree.getAttribute("nom").equals(Commande.Argent))
+				else if(objNoeudCommandeEntree.getAttribute("nom").equals(Commande.Argent))
 				{
                     // Obtenir argent
 					int argent = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "Argent").getNodeValue());
@@ -2934,21 +2933,15 @@ public class ProtocoleJoueur implements Runnable
 					{
 
 						// Le joueur ne peut pas répondre à aucune question 
-
 						// s'il n'est pas dans une salle
-
 						objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");
 
 					}
 
 					//TODO: Il va falloir synchroniser cette validation lorsqu'on va 
-
 					// avoir codé la commande SortirJoueurTable -> èa va ressembler au
-
-					// processus d'authentification
-
+    				// processus d'authentification
 					// Si le joueur n'est pas dans aucune table, alors il y a 
-
 					// une erreur
 
 					else if (objJoueurHumain.obtenirPartieCourante() == null)
@@ -2956,162 +2949,120 @@ public class ProtocoleJoueur implements Runnable
 					{
 
 						// Le joueur ne peut pas répondre à aucune question 
-
 						// s'il n'est dans aucune table
-
 						objNoeudCommande.setAttribute("nom", "JoueurPasDansTable");
 
 					}
 
 					// Si la partie n'est pas commencée, alors il y a une erreur
-
 					else if (objJoueurHumain.obtenirPartieCourante().obtenirTable().estCommencee() == false)
 
 					{
 
 						// Le joueur ne peut pas répondre à aucune question 
-
 						// si la partie n'est pas commencée
-
 						objNoeudCommande.setAttribute("nom", "PartiePasDemarree");
 
 					}
 
 					else
-
 					{
-
 						int nouvelArgent = objJoueurHumain.obtenirPartieCourante().obtenirArgent();
-
 						nouvelArgent += argent;
-
 						objJoueurHumain.obtenirPartieCourante().definirArgent( nouvelArgent );
 
-                        
-
-                                                //	Il n'y a pas eu d'erreurs
-
+						//	Il n'y a pas eu d'erreurs
 						objNoeudCommande.setAttribute("type", "Reponse");
-
 						objNoeudCommande.setAttribute("nom", "Argent");
 
-						
-
 						Element objNoeudParametreArgent = objDocumentXMLSortie.createElement("parametre");
-
 						Text objNoeudTexteArgent = objDocumentXMLSortie.createTextNode(Integer.toString(nouvelArgent));
-
 						objNoeudParametreArgent.setAttribute("type", "Argent");
-
 						objNoeudParametreArgent.appendChild(objNoeudTexteArgent);
-
-						objNoeudCommande.appendChild(objNoeudParametreArgent);
-
-						
+    					objNoeudCommande.appendChild(objNoeudParametreArgent);
 
 						// Préparer un événement pour les autres joueurs de la table
-
 						// pour qu'il se tienne à jour de l'argent de ce joueur
-
 						objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementMAJArgent(objJoueurHumain.obtenirNomUtilisateur(), 
-
-						    objJoueurHumain.obtenirPartieCourante().obtenirArgent());
-
+								objJoueurHumain.obtenirPartieCourante().obtenirArgent());
 					}
 
 				}
+                else if(objNoeudCommandeEntree.getAttribute("nom").equals(Commande.UtiliserObjet))
+                {
 
-				    else if(objNoeudCommandeEntree.getAttribute("nom").equals(Commande.UtiliserObjet))
+                	traiterCommandeUtiliserObjet(objNoeudCommandeEntree, objNoeudCommande, objDocumentXMLEntree, objDocumentXMLSortie, bolDoitRetournerCommande);
 
-				{
+                }
 
-					traiterCommandeUtiliserObjet(objNoeudCommandeEntree, objNoeudCommande, objDocumentXMLEntree, objDocumentXMLSortie, bolDoitRetournerCommande);
+                         else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.AcheterObjet))
 
-				}
+                         {
 
-				    else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.AcheterObjet))
+                        	 traiterCommandeAcheterObjet(objNoeudCommandeEntree, objNoeudCommande, objDocumentXMLEntree, objDocumentXMLSortie, bolDoitRetournerCommande);
 
-				{
+                         }
 
-					traiterCommandeAcheterObjet(objNoeudCommandeEntree, objNoeudCommande, objDocumentXMLEntree, objDocumentXMLSortie, bolDoitRetournerCommande);
+                         else if(objNoeudCommandeEntree.getAttribute("nom").equals(Commande.ChatMessage))
 
-				}
+                         {	
 
-                                else if(objNoeudCommandeEntree.getAttribute("nom").equals(Commande.ChatMessage))
+                        	 // Si le joueur n'est pas connecté au serveur de jeu
 
-				{	
+                        	 if (objJoueurHumain == null)
 
-                                    // Si le joueur n'est pas connecté au serveur de jeu
+                        	 {
 
-                                    if (objJoueurHumain == null)
+                        		 objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
 
-                                    {
+                        	 }
 
-                                            objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+                        	 // Si le joueur n'est connecté à aucune salle
 
-                                    }
+                        	 else if (objJoueurHumain.obtenirSalleCourante() == null)
 
-                                    // Si le joueur n'est connecté à aucune salle
+                        	 {
 
-                                    else if (objJoueurHumain.obtenirSalleCourante() == null)
+                        		 objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");
 
-                                    {
+                        	 }
 
-                                            objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");
+                        	 // Si le joueur n'est pas dans aucune table
 
-                                    }
+                        	 else if (objJoueurHumain.obtenirPartieCourante() == null)
 
-                                    // Si le joueur n'est pas dans aucune table
+                        	 {
 
-                                    else if (objJoueurHumain.obtenirPartieCourante() == null)
+                        		 objNoeudCommande.setAttribute("nom", "JoueurPasDansTable");
 
-                                    {
+                        	 }
 
-                                            objNoeudCommande.setAttribute("nom", "JoueurPasDansTable");
+                        	 else if (!this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirRegles().obtenirPermetChat())
 
-                                    }
+                        	 {
 
-                                    else if (!this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirRegles().obtenirPermetChat())
+                        		 objNoeudCommande.setAttribute("nom", "ChatNonPermis");
 
-                                    {
+                        	 }
 
-                                            objNoeudCommande.setAttribute("nom", "ChatNonPermis");
+                        	 else
 
-                                    }
+                        	 {
 
-                                    else
+                        		 //  Il n'y a pas eu d'erreurs
+                        		 objNoeudCommande.setAttribute("type", "OK");
 
-                                    {
+                        		 // Obtenir le message à envoyer à tous et le nom du joueur qui l'envoie
+                        		 String messageAEnvoyer = obtenirValeurParametre(objNoeudCommandeEntree, "messageAEnvoyer").getNodeValue();
+                        		 String nomJoueur = this.obtenirJoueurHumain().obtenirNomUtilisateur();
 
-                                        //  Il n'y a pas eu d'erreurs
+                        		 // On prépare l'événement qui enverra le message à tous
+                        		 this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().preparerEvenementMessageChat(nomJoueur, messageAEnvoyer);
+                        	 }
 
-                                        objNoeudCommande.setAttribute("type", "OK");
-
-                                        
-
-                                        // Obtenir le message à envoyer à tous et le nom du joueur qui l'envoie
-
-					String messageAEnvoyer = obtenirValeurParametre(objNoeudCommandeEntree, "messageAEnvoyer").getNodeValue();
-
-                                        String nomJoueur = this.obtenirJoueurHumain().obtenirNomUtilisateur();
-
-                                        
-
-                                        // On prépare l'événement qui enverra le message à tous
-
-                                        this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().preparerEvenementMessageChat(nomJoueur, messageAEnvoyer);
-
-                                    }
-
-				}
-
+                         }
 			}
-
-
-
 		}
-
-		
 
 		Moniteur.obtenirInstance().fin();
 
@@ -3148,7 +3099,6 @@ public class ProtocoleJoueur implements Runnable
 			return UtilitaireXML.transformerDocumentXMLEnString(objDocumentXMLSortie);
 
 		}
-
 		else
 		{
 			// Si on ne doit rien retourner, alors on retourne null
@@ -5689,7 +5639,7 @@ public class ProtocoleJoueur implements Runnable
 
 		                	// Acheter l'objet
 
-                                        IntObj idProchainObjet = objTable.obtenirProchainIdObjet();
+                                        Integer idProchainObjet = objTable.obtenirProchainIdObjet();
 
 		                	ObjetUtilisable objObjetAcheter = ((Magasin)objObjet).acheterObjet(intIdObjet, idProchainObjet);
 
@@ -5741,7 +5691,7 @@ public class ProtocoleJoueur implements Runnable
 
 		                	Element objNoeudNouveauID = objDocumentXMLSortie.createElement("nouveauID");
 
-		                	objNoeudNouveauID.setAttribute("id", Integer.toString(idProchainObjet.intValue-1));
+		                	objNoeudNouveauID.setAttribute("id", Integer.toString(idProchainObjet-1));
 
 		                	objNoeudCommande.appendChild(objNoeudNouveauID);
 

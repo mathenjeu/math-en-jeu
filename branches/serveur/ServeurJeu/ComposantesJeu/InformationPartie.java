@@ -80,6 +80,10 @@ public class InformationPartie
     // Déclaration d'un int qui va garder le mode du jeu : Normal - 0 et Avancée - 1
     private int modeJeu;
     
+    // If is true intArgent is taken from DB and at the end 
+    //of the game is writen to the DB
+    private boolean moneyPermit;
+    
      
 	 
 	/**
@@ -102,8 +106,19 @@ public class InformationPartie
 		
 	        // Définir les propriétés de l'objet InformationPartie
 	        intPointage = 0;
-            intArgent = 0;
-	        intIdPersonnage = 0;
+	        
+	        // is permited or not to charge money from DB
+	        setMoneyPermit(objGestionnaireBD.getMoneyRule(joueur.obtenirSalleCourante().obtenirNomSalle()));
+	        
+	        // charge money from DB if is permited
+	        if (isMoneyPermit()){
+	        	intArgent = objGestionnaireBD.getPlayersMoney(joueur.obtenirCleJoueur());
+		    }else {
+		       	intArgent = 0;
+		    }
+	        
+	        
+            intIdPersonnage = 0;
 	        
 	        // mode de jeu par default ????????
 	        modeJeu = 0;
@@ -180,7 +195,7 @@ public class InformationPartie
 	 */
 	public void definirArgent(int argent)
 	{
-	   intArgent = argent;
+		intArgent = argent;
 	}
 	
 	/**
@@ -986,5 +1001,13 @@ public class InformationPartie
 		 */
 		public int getModeJeu() {
 			return modeJeu;
+		}
+
+		public void setMoneyPermit(boolean moneyPermit) {
+			this.moneyPermit = moneyPermit;
+		}
+
+		public boolean isMoneyPermit() {
+			return moneyPermit;
 		}
 }

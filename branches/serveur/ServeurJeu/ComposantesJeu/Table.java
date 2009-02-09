@@ -7,7 +7,6 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.awt.Point;
 import java.util.Date;
-
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
@@ -30,7 +29,6 @@ import ServeurJeu.Evenements.EvenementSynchroniserTemps;
 import ServeurJeu.Evenements.EvenementPartieTerminee;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
-import ClassesUtilitaires.IntObj;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.Evenements.EvenementDeplacementWinTheGame;
 import ServeurJeu.Evenements.EvenementMessageChat;
@@ -45,8 +43,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	// Déclaration d'une référence vers le gestionnaire d'événements
 	private GestionnaireEvenements objGestionnaireEvenements;
 	
-        // On déclare la classe qui permettra les déplacements du WinTheGame
-        private WinTheGame winTheGame;
+    // On déclare la classe qui permettra les déplacements du WinTheGame
+    private WinTheGame winTheGame;
         
 	// Déclaration d'une référence vers le contr™leur de jeu
 	private ControleurJeu objControleurJeu;
@@ -125,7 +123,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     
     // Déclaration d'une variable qui permettra de créer des id pour les objets
     // On va initialisé cette variable lorsque le plateau de jeu sera créé
-    private IntObj objProchainIdObjet;
+    private Integer objProchainIdObjet;
     
 	/**
 	 * Constructeur de la classe Table qui permet d'initialiser les membres 
@@ -266,6 +264,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			// créer un objet InformationPartie qui va pointer sur la table
 			// courante)
 			joueur.definirPartieCourante(new InformationPartie(objGestionnaireEvenements, objGestionnaireBD, joueur, this));
+			
+		/*	//Get the player's money from DB
+			joueur.obtenirPartieCourante().definirArgent(objGestionnaireBD.getPlayersMoney(joueur.obtenirCleJoueur()));
+			preparerEvenementMAJArgent(joueur.obtenirNomUtilisateur(), joueur.obtenirPartieCourante().obtenirArgent()); ********/
+			
 			
 			// Si on doit générer le numéro de commande de retour, alors
 			// on le génçre, sinon on ne fait rien
@@ -478,6 +481,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				// Garder en mémoire le Id du personnage choisi par le joueur
 				joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
 				
+							
 	    		// Si on doit générer le numéro de commande de retour, alors
 				// on le génçre, sinon on ne fait rien (ça se peut que ce soit
 				// faux)
@@ -571,7 +575,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 String tNomsJoueursVirtuels[] = null;
 
                 // Contiendra le dernier ID des objets
-                objProchainIdObjet = new IntObj();
+                objProchainIdObjet = new Integer(0);
         
 		//TODO: Peut-çtre devoir synchroniser cette partie, il 
 		//      faut voir avec les autres bouts de code qui 
@@ -591,7 +595,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objGestionnaireBD,objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, butDuJeu);
 
                 // Définir le prochain id pour les objets
-                objProchainIdObjet.intValue++;
+                objProchainIdObjet++;
         
 		// Obtenir la position des joueurs de cette table
 		int nbJoueur = lstJoueursEnAttente.size(); //TODO a vérifier
@@ -680,7 +684,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     			// prochain, car on a généré la position des joueurs 
     			// selon cette liste
     			JoueurHumain objJoueur = (JoueurHumain) (((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
-    			
+    			    			    			
     			// Définir la position du joueur courant
     			objJoueur.obtenirPartieCourante().definirPositionJoueur(objtPositionsJoueurs[i]);
     			
@@ -851,6 +855,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 						// Mettre a jour les données des joueurs
 						JoueurHumain joueur = (JoueurHumain)it.next();
 						objGestionnaireBD.mettreAJourJoueur(joueur, intTempsTotal);
+						
+						// if the game was with the permission to use user's money from DB
+						if (joueur.obtenirPartieCourante().isMoneyPermit())
+						{
+						   objGestionnaireBD.setNewPlayersMoney(joueur.obtenirCleJoueur(), joueur.obtenirPartieCourante().obtenirArgent());
+						} 
 						
                                                 // Si un joueur a atteint le WinTheGame, joueurGagnant contiendra le nom de ce joueur
                                                 if(joueurGagnant.equals(""))
@@ -1385,14 +1395,24 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		objGestionnaireEvenements.ajouterEvenement(deplacementWTG);
 	}
 
+	/**
+	 * Methode that is used to prepare event of move of player
+	 * @param nomUtilisateur
+	 * @param collision
+	 * @param oldPosition
+	 * @param positionJoueur
+	 * @param nouveauPointage
+	 * @param nouvelArgent
+	 * @param objetUtilise
+	 */
 	public void preparerEvenementJoueurDeplacePersonnage( String nomUtilisateur, String collision, 
-	    Point anciennePosition, Point positionJoueur, int nouveauPointage, int nouvelArgent, String objetUtilise)
+	    Point oldPosition, Point positionJoueur, int nouveauPointage, int nouvelArgent, String objetUtilise)
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs qu'un joueur démarré une partie
 		
 		EvenementJoueurDeplacePersonnage joueurDeplacePersonnage = new EvenementJoueurDeplacePersonnage( nomUtilisateur, 
-		    anciennePosition, positionJoueur, collision, nouveauPointage, nouvelArgent);
+		    oldPosition, positionJoueur, collision, nouveauPointage, nouvelArgent);
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
@@ -1423,6 +1443,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		objGestionnaireEvenements.ajouterEvenement(joueurDeplacePersonnage);
 	}
 	
+	/**
+	 * 
+	 */
 	private void preparerEvenementSynchroniser()
 	{
 		//Créer un nouvel événement qui va permettre d'envoyer l'événement 
@@ -1454,6 +1477,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		objGestionnaireEvenements.ajouterEvenement(synchroniser);
 	}
 	
+	/**
+	 * 
+	 * @param joueurGagnant
+	 */
 	private void preparerEvenementPartieTerminee(String joueurGagnant)
 	{
             // joueurGagnant réfçre à la personne qui a atteint le WinTheGame (s'il y a lieu)
@@ -1565,12 +1592,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		return lstJoueursDeconnectes;
 	}
 	
-	public IntObj obtenirProchainIdObjet()
+	public Integer obtenirProchainIdObjet()
 	{
 		return objProchainIdObjet;
 	}
 	
-	/* 
+	/** 
 	 * Aller chercher dans la liste des joueurs sur cette table
 	 * les ID des personnages choisi et vérifier si le id intID est
 	 * déjà choisi
@@ -1603,7 +1630,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
    	    return true;
 	}
 	
-	/* 
+	/**
 	 * Aller chercher dans la liste des joueurs en attente
 	 * les ID des personnages choisi et vérifier si le id intID est
 	 * déjà choisi
@@ -1641,7 +1668,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// trouvé ce id de personnage, donc le id est libre
 		return true;		
 	}
-        
+     
+	/**
+	 * 
+	 * @param username
+	 * @return
+	 */
 	public JoueurHumain obtenirJoueurHumainParSonNom(String username)
 	{
             Set nomsJoueursHumains = lstJoueurs.entrySet();
@@ -1653,7 +1685,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             }
             return (JoueurHumain)null;
 	}
-        
+      
+	/**
+	 * 
+	 * @param username
+	 * @return
+	 */
 	public JoueurVirtuel obtenirJoueurVirtuelParSonNom(String username)
 	{
             for(int i=0; i<lstJoueursVirtuels.size(); i++)
@@ -1693,6 +1730,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             else return intTempsTotal*5;
         }
         
+        
+        /**
+         * 
+         */
         public void definirNouvellePositionWinTheGame()
         {
             Random objRandom = new Random();

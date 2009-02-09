@@ -3,7 +3,6 @@ package ServeurJeu.ComposantesJeu.Objets.Magasins;
 import java.util.Vector;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
-import ClassesUtilitaires.IntObj;
 
 
 /**
@@ -135,7 +134,7 @@ public abstract class Magasin extends Objet
 		return null;	
 	}
 	
-	public ObjetUtilisable acheterObjet(int intObjetId, IntObj objProchainId)
+	public ObjetUtilisable acheterObjet(int intObjetId, Integer objProchainId)
 	{
 
     	// Enlever l'objet de la liste du magasin
@@ -152,49 +151,49 @@ public abstract class Magasin extends Objet
     			// Créer un nouvel objet de type Livre
     			synchronized (objProchainId)
     			{
-    				objObjetRemplacement = new Livre(objProchainId.intValue, true);
+    				objObjetRemplacement = new Livre(objProchainId, true);
     			}
     		}
                 else if (objObjetAchete instanceof Papillon)
                 {
     			synchronized (objProchainId)
     			{
-    				objObjetRemplacement = new Papillon(objProchainId.intValue, true);
+    				objObjetRemplacement = new Papillon(objProchainId, true);
     			}
                 }
                 else if (objObjetAchete instanceof Boule)
                 {
     			synchronized (objProchainId)
     			{
-    				objObjetRemplacement = new Boule(objProchainId.intValue, true);
+    				objObjetRemplacement = new Boule(objProchainId, true);
     			}
                 }
                 else if (objObjetAchete instanceof Telephone)
                 {
     			synchronized (objProchainId)
     			{
-    				objObjetRemplacement = new Telephone(objProchainId.intValue, true);
+    				objObjetRemplacement = new Telephone(objProchainId, true);
     			}
                 }
                 else if (objObjetAchete instanceof PotionGros)
                 {
     			synchronized (objProchainId)
     			{
-    				objObjetRemplacement = new PotionGros(objProchainId.intValue, true);
+    				objObjetRemplacement = new PotionGros(objProchainId, true);
     			}
                 }
                 else if (objObjetAchete instanceof PotionPetit)
                 {
     			synchronized (objProchainId)
     			{
-    				objObjetRemplacement = new PotionPetit(objProchainId.intValue, true);
+    				objObjetRemplacement = new PotionPetit(objProchainId, true);
     			}
                 }
                 else if (objObjetAchete instanceof Banane)
                 {
     			synchronized (objProchainId)
     			{
-    				objObjetRemplacement = new Banane(objProchainId.intValue, true);
+    				objObjetRemplacement = new Banane(objProchainId, true);
     			}
                 }
     		
@@ -204,7 +203,7 @@ public abstract class Magasin extends Objet
     		// Incrémenter le ID pour le prochain objet
     		synchronized (objProchainId)
             {
-            	objProchainId.intValue++;
+            	objProchainId++;
             }
     	}
     	

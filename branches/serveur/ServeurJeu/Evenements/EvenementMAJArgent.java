@@ -48,14 +48,7 @@ public class EvenementMAJArgent extends Evenement
 	{
 		Moniteur.obtenirInstance().debut( "EvenementMAJArgent.genererCodeXML" );
 		
-		/*
-		 * <commande no="57" nom="MiseAJourArgent" type="Evenement">
-		 *     <parametre type="NomUtilisateur">AdversaireXYZ</parametre>
-		 *     <parametre type="Argent">154</parametre>
-		 * </commande>
-		 *
-		 */
-		 
+				 
 	    // Déclaration d'une variable qui va contenir le code XML à retourner
 	    String strCodeXML = "";
 	    
