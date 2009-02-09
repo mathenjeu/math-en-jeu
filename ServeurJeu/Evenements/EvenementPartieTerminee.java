@@ -29,14 +29,14 @@ public class EvenementPartieTerminee  extends Evenement
 {
 	private TreeMap lstJoueurs;
 	private Vector lstJoueursVirtuels;
-        private String joueurGagnant;
+    private String joueurGagnant;
 	
 	public EvenementPartieTerminee( TreeMap joueurs, Vector joueursVirtuels, String joueurGagnant)
 	{
 		super();
 		lstJoueurs = joueurs;
 		lstJoueursVirtuels = joueursVirtuels;
-                this.joueurGagnant = joueurGagnant;
+        this.joueurGagnant = joueurGagnant;
 	}
 	
 	protected String genererCodeXML(InformationDestination information)

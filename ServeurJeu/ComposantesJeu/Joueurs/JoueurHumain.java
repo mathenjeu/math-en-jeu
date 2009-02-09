@@ -30,6 +30,7 @@ public class JoueurHumain extends Joueur
 	// Cette variable va contenir le nom de famille du joueur
 	private String strNomFamille;
 	
+		
 	//Cette variable défini si un jouer peut creer une salle ??? utiliser encore??
 	//private boolean bolPeutCreerSalle;
 	
@@ -78,6 +79,7 @@ public class JoueurHumain extends Joueur
 		// Initialiser les caractéristiques du joueur
 		strPrenom = "";
 		strNomFamille = "";
+		
 		//bolPeutCreerSalle = false;
 		
 		// Au début, le joueur n'est dans aucune salle ni table
@@ -266,4 +268,6 @@ public class JoueurHumain extends Joueur
 	{
 		this.cleNiveau = cleNiveau;
 	}
+
+	
 }

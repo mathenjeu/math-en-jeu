@@ -15,21 +15,21 @@ public class Piece extends Objet
 	// Cette variable va contenir la valeur en points de la pièce
 	private int intValeur;
         
-        // Cette variable va contenir la valeur en dollars de la pièce
-        private int intMonnaie;
+    // Cette variable va contenir la valeur en dollars de la pièce
+    private int intMonnaie;
 	
 	/**
 	 * Constructeur de la classe Piece qui permet d'initialiser
 	 * les valeurs de la pièce.
 	 * 
 	 * @param int valeur : La valeur en points de la pièce
-         * @param int monnaie : La valeur en dollars de la pièce
+     * @param int monnaie : La valeur en dollars de la pièce
 	 */
 	public Piece(int valeur, int monnaie)
 	{
 		// Initialiser la valeur de la pièce
 		intValeur = 0;
-                intMonnaie = 1;
+        intMonnaie = 1;
 	}
 
 	/**
@@ -42,8 +42,8 @@ public class Piece extends Objet
 	   return intValeur;
 	}
         
-        public int obtenirMonnaie()
-        {
-            return intMonnaie;
-        }
+    public int obtenirMonnaie()
+    {
+        return intMonnaie;
+    }
 }
