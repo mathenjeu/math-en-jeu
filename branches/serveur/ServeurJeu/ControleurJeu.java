@@ -435,8 +435,8 @@ public class ControleurJeu
 	 */
 	public TreeMap obtenirListeSalles(String language, String gameType)
 	{
-		// Charger les salles par défaut
-		objGestionnaireBD.fillsRooms(language);   /// non complete for the case of more rooms!!!!!!!!!!!!!!!
+		// Fills the rooms from DB
+		objGestionnaireBD.fillsRooms(language);   
 		
             // On crée une liste de salles vide, et on parcourt toutes les salles connues
             TreeMap copieListeSalles = (TreeMap)lstSalles.clone();
