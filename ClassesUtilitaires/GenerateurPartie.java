@@ -18,9 +18,6 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
-import ServeurJeu.Configuration.GestionnaireConfiguration;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
 /**
  * @author Jean-François Brind'Amour
@@ -48,7 +45,7 @@ public final class GenerateurPartie
      * @throws NullPointerException : Si la liste passée en paramètre qui doit 
      * 								  être remplie est nulle
      */
-    public static Case[][] genererPlateauJeu(GestionnaireBD objGestionnaireBD, Regles reglesPartie, int temps, Vector<Point> listePointsCaseLibre, IntObj objDernierIdObjets, String butDuJeu) throws NullPointerException
+    public static Case[][] genererPlateauJeu(GestionnaireBD objGestionnaireBD, Regles reglesPartie, int temps, Vector<Point> listePointsCaseLibre, Integer objDernierIdObjets, String butDuJeu) throws NullPointerException
     {
 		// Création d'un objet permettant de générer des nombres aléatoires
 		Random objRandom = new Random();
@@ -119,7 +116,7 @@ public final class GenerateurPartie
 		// Déclaration de variables qui vont garder le nombre de trous, 
 		// le nombre de cases spéciales, le nombres de magasins,
 		// le nombre de pièces, le nombre de
-		int intNbTrous = (intNbLignes * intNbColonnes) - ((int) Math.ceil(intNbLignes * intNbColonnes * (1 - reglesPartie.obtenirRatioTrous())));
+		int intNbTrous = ((int) Math.ceil(intNbLignes * intNbColonnes * reglesPartie.obtenirRatioTrous()));
 		int intNbCasesSpeciales = (int) Math.floor(intNbLignes * intNbColonnes * reglesPartie.obtenirRatioCasesSpeciales());
 		int intNbMagasins = (int) Math.floor(intNbLignes * intNbColonnes * reglesPartie.obtenirRatioMagasins());
 		int intNbPieces = (int) Math.floor(intNbLignes * intNbColonnes * reglesPartie.obtenirRatioPieces());
@@ -132,8 +129,8 @@ public final class GenerateurPartie
 		Case[][] objttPlateauJeu = new Case[intNbLignes][intNbColonnes];		
 		
 		// Trouver un point aléatoire dans le plateau de jeu et le garder 
-		// en mémoire (ça va être le point de départ)
-		objPoint = new Point(objRandom.nextInt(intNbLignes), objRandom.nextInt(intNbColonnes));
+		// en mémoire (ça va être le point de départ) --- why random when we can begin from 0
+		objPoint = new Point(0, 0);
 		
 		// Au point calculé, on va définir la case spéciale qui sert 
 		// d'identification et dont le type est -1
@@ -163,6 +160,9 @@ public final class GenerateurPartie
 				// déjà été passés
 				objPointFile = (Point) lstPointsCasesPresentes.get(objRandom.nextInt(lstPointsCasesPresentes.size()));
 			}
+			
+			//***************************************** !!!!!!!!!!!!!!!!!!!!!!!!!!!
+			
 			
 			// S'il y a une case à gauche, et que cette case n'a pas encore été
 			// passée et que une valeur aléatoire retourne true, alors on va
@@ -487,8 +487,7 @@ public final class GenerateurPartie
 			}			
 		}
 		
-		// Bloc de code qui va s'assurer de créer les pièces dans le plateau //???????????
-		// de jeu
+		// Bloc de code qui va s'assurer de créer les pièces dans le plateau de jeu
 		// Réinitialiser le compteur de cases
 			intCompteurCases = 1;
 			
@@ -636,7 +635,7 @@ public final class GenerateurPartie
 		 listePointsCaseLibre.addAll(lstPointsCasesPresentes);
 		
 		// Indiquer quel a été le dernier id des objets
-		objDernierIdObjets.intValue = intCompteurIdObjet;
+		objDernierIdObjets = intCompteurIdObjet;
 		
 		return objttPlateauJeu;
     }
