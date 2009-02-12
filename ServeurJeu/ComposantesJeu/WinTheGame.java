@@ -1,6 +1,5 @@
 package ServeurJeu.ComposantesJeu;
 
-import ServeurJeu.Configuration.GestionnaireConfiguration;
 /**
  * @author François Gingras
  */
@@ -8,19 +7,19 @@ import ServeurJeu.Configuration.GestionnaireConfiguration;
 public class WinTheGame
 {
     protected Table table;
-    Thread thread = new Thread(new theMainLoop());
+   /* Thread thread = new Thread(new theMainLoop());
     
     private class theMainLoop implements Runnable
     {
         public void run()
         {
-        	/*
+        	
         	 *  ********************
         	 *  TODO 
         	 *  REPLACE THIS CODE TO START USING THE WIN THE GAME AGAIN.
         	 *  VERY IMPORTANT !!!
         	 *  ********************
-        	 */
+        	
         	
            
             try
@@ -37,8 +36,8 @@ public class WinTheGame
                 // c'est vraiment pas grave, c'est même supposé arriver
             }
             
-        }
-    }
+        } 
+    }  */ 
 
     public WinTheGame(Table t)
     {
@@ -47,11 +46,11 @@ public class WinTheGame
     
     public void demarrer()
     {
-        thread.start();
+        //thread.start();
     }
     
     public void arreter()
     {
-        thread.interrupt();
+       // thread.interrupt();
     }
 }
