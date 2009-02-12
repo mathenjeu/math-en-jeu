@@ -4,7 +4,6 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Text;
 import ServeurJeu.Monitoring.Moniteur;
 import ClassesUtilitaires.UtilitaireXML;
 import ServeurJeu.Configuration.GestionnaireMessages;
@@ -42,13 +41,7 @@ public class EvenementDeplacementWinTheGame extends Evenement
 	{
 		Moniteur.obtenirInstance().debut( "EvenementMAJArgent.genererCodeXML" );
 		
-		/*
-		 * <commande no="57" nom="DeplacementWinTheGame" type="Evenement">
-		 *     <parametre type="x">18</parametre>
-		 *     <parametre type="y">15</parametre>
-		 * </commande>
-		 *
-		 */
+	
                 // Noter que le déplacement ne se fait pas ici, on ne fait
                 // qu'envoyer les nouvelles informations
 		 
@@ -73,10 +66,7 @@ public class EvenementDeplacementWinTheGame extends Evenement
                         objNoeudParametre.setAttribute("x", Integer.toString(x));
                         objNoeudParametre.setAttribute("y", Integer.toString(y));
                         
-                    	// TODO : CHANGE BACK !!!
-                    	// **********************
-                        //objNoeudParametre.setAttribute("x", Integer.toString(-9999));
-                        //objNoeudParametre.setAttribute("y", Integer.toString(-9999));
+                    
                         
                         objNoeudCommande.appendChild(objNoeudParametre);
 			
