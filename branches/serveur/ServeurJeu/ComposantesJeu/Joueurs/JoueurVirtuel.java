@@ -2582,9 +2582,10 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     			s.equals("Difficile") || s.equals("TresDifficile"));
     }
     
+    // it is not absolutely correct because PositionWinTheGame is a array, but it is not so important 
     public int obtenirDistanceAuWinTheGame()
     {
-        return Math.abs(objPositionJoueur.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(objPositionJoueur.y - objTable.obtenirPositionWinTheGame().y);
+        return Math.abs(objPositionJoueur.x - objTable.obtenirPositionWinTheGame()[0].x) + Math.abs(objPositionJoueur.y - objTable.obtenirPositionWinTheGame()[0].y);
     }
 }
 

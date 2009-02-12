@@ -53,10 +53,11 @@ public class Banane extends ObjetUtilisable
             // le reste, on le fera au déplacement de la personne
 
             // On obtient la position du WinTheGame
-            Point positionDuWinTheGame = new Point(table.obtenirPositionWinTheGame());
+            Point positionDuWinTheGame = new Point(table.obtenirPositionWinTheGame()[0]);
 
             // Obtention du plateau de jeu
             Case[][] plateauDeJeu = table.obtenirPlateauJeuCourant();
+            
             
             // Distance (en cases) de l'éloignement souhaité du joueur
             // On prend la distance actuelle d'avec le WinTheGame
