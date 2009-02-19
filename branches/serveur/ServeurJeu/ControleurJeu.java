@@ -11,6 +11,7 @@ import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Communications.GestionnaireCommunication;
 import ServeurJeu.Communications.ProtocoleJoueur;
 import ServeurJeu.ComposantesJeu.Salle;
+import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.Evenements.EvenementJoueurDeconnecte;
 import ServeurJeu.Evenements.EvenementJoueurConnecte;
@@ -19,7 +20,6 @@ import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.Monitoring.TacheLogMoniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
-import ClassesUtilitaires.Espion;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
 import ServeurJeu.Configuration.GestionnaireMessages;
@@ -125,8 +125,6 @@ public class ControleurJeu
 		// Créer une liste des joueurs
 		lstJoueursConnectes = new TreeMap();
 		
-		
-			
 		// Créer une liste des joueurs déconnectés
 		lstJoueursDeconnectes = new TreeMap();
 		
@@ -160,9 +158,10 @@ public class ControleurJeu
 		// Démarrer le thread du gestionnaire d'événements
 		threadEvenements.start();
 		
+		/***********************
 		// Démarrer l'espion qui écrit dans un fichier périodiquement les
 		// informations du serveur
-		/***********************
+		
 		String fichier = config.obtenirString( "controleurjeu.info.fichier-sortie" );
 		int delai = config.obtenirNombreEntier( "controleurjeu.info.delai" );
 		objEspion = new Espion(this, fichier, delai, ClassesUtilitaires.Espion.MODE_FICHIER_TEXTE);
@@ -171,6 +170,7 @@ public class ControleurJeu
 		Thread threadEspion = new Thread(objEspion);
 		threadEspion.start();
         *********************************/
+		
         // Créer une instance de la classe regroupant tous les paramètres
         // des joueurs virtuels
         objParametreIA = new ParametreIA();
@@ -451,16 +451,16 @@ public class ControleurJeu
                 
                 // On vérifie si cette salle est du bon gameType
                 // et si elle permet de jouer dans la langue donnée
-                Boolean estDuBonGameType = gameType.equals(salle.getGameType());
+                //Boolean estDuBonGameType = gameType.equals(salle.getGameType());
                 Boolean permetCetteLangue = objGestionnaireBD.roomLangControl(salle, language);
                                 
                 // Si les paramètres en entrée sont des strings vides,
                 // alors on ignore le paramètre correspondant
-                if(gameType.equals("")) estDuBonGameType = true;
+                //if(gameType.equals("")) estDuBonGameType = true;
                 if(language.equals("")) permetCetteLangue = true;
                 
                 // On ajoute la salle à la liste si elle correspond à ce qu'on veut
-                if(permetCetteLangue && estDuBonGameType) copieListeSalles.put(key, salle);
+                if(permetCetteLangue) copieListeSalles.put(key, salle);
             }
             
             return copieListeSalles;
