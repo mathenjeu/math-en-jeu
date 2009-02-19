@@ -731,7 +731,7 @@ class GestionnaireCommunication
 			    	}// fin du switch
 		    	}	// fin du if(noeudEvenement.attributes.nom == "JoueurDeplacePersonnage")
 				
-				else if(noeudEvenement.attributes.nom == "DeplacementWinTheGame")
+				/* else if(noeudEvenement.attributes.nom == "DeplacementWinTheGame")
 				{
 					//trouver la case actuelle du win the game, corriger le numéro de la case
 					//déplacer le win the game et corriger le numéro de la case
@@ -790,7 +790,7 @@ class GestionnaireCommunication
 							}
 						}
 					}
-				}	// fin du if(noeudEvenement.attributes.nom == "DeplacementWinTheGame")
+				}	// fin du if(noeudEvenement.attributes.nom == "DeplacementWinTheGame") */
 				
 				else if(noeudEvenement.attributes.nom == "UtiliserObjet")
 				{
