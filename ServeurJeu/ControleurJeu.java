@@ -90,7 +90,7 @@ public class ControleurJeu
 	
 	// Déclaration de l'objet Espion qui va inscrire des informationsà proppos
 	// du serveur en parallète
-	private Espion objEspion;
+	//private Espion objEspion;
 	
 	
 	// Déclaration d'un objet random pour générer des nombres aléatoires
@@ -162,6 +162,7 @@ public class ControleurJeu
 		
 		// Démarrer l'espion qui écrit dans un fichier périodiquement les
 		// informations du serveur
+		/***********************
 		String fichier = config.obtenirString( "controleurjeu.info.fichier-sortie" );
 		int delai = config.obtenirNombreEntier( "controleurjeu.info.delai" );
 		objEspion = new Espion(this, fichier, delai, ClassesUtilitaires.Espion.MODE_FICHIER_TEXTE);
@@ -169,7 +170,7 @@ public class ControleurJeu
         // Démarrer la thread de l'espion
 		Thread threadEspion = new Thread(objEspion);
 		threadEspion.start();
-
+        *********************************/
         // Créer une instance de la classe regroupant tous les paramètres
         // des joueurs virtuels
         objParametreIA = new ParametreIA();
