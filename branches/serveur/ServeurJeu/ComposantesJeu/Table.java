@@ -30,8 +30,6 @@ import ServeurJeu.Evenements.EvenementSynchroniserTemps;
 import ServeurJeu.Evenements.EvenementPartieTerminee;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
-import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
-import ServeurJeu.Evenements.EvenementDeplacementWinTheGame;
 import ServeurJeu.Evenements.EvenementMessageChat;
 import ServeurJeu.Evenements.EvenementUtiliserObjet;
 import java.util.Random;
@@ -76,10 +74,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	// cette table
 	private int intTempsTotal;
 	
-	// Déclaration d'une variable qui va garder le temps restant (au départ 
-	// il vaut la mçme chose que intTempsTotal)
-	//private int intTempsRestant;
-	
 	// Cet objet est une liste des joueurs qui sont présentement sur cette table
 	private TreeMap lstJoueurs;
 	
@@ -98,7 +92,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	// sur les cases du jeu
 	private Case[][] objttPlateauJeu;
 	
-	// Cet objet permet de déterminer les rçgles de jeu pour cette table
+	// This object determine the rules of the game for this board
 	private Regles objRegles;
 	
 	private GestionnaireTemps objGestionnaireTemps;
@@ -106,11 +100,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	private Minuterie objMinuterie;
         
     // Position where is placed WinTheGame
-    private Point[] positionWinTheGame;
+    private Point positionWinTheGame;
         
-    // Defines what kind of game the players want to play (see config for details)
-    private String butDuJeu;
-	
     // Cet objet est une liste des joueurs virtuels qui jouent sur cette table
     private Vector lstJoueursVirtuels;
     
@@ -139,14 +130,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @param String nomUtilisateurCreateur : Le nom d'utilisateur du créateur
 	 * 										  de la table
 	 * @param int tempsPartie : Le temps de la partie en minute
-	 * @param Regles reglesTable : Les rçgles pour une partie sur cette table
+	 * @param Regles reglesTable : Les règles pour une partie sur cette table
 	 */
-	public Table(GestionnaireBD gestionnaireBD, 
-				 Salle salleParente, int noTable, String nomUtilisateurCreateur, 
-				 int tempsPartie, Regles reglesTable,
-				 GestionnaireTemps gestionnaireTemps, 
-				 TacheSynchroniser tacheSynchroniser,
-				 ControleurJeu controleurJeu, String butDuJeu) 
+	public Table(GestionnaireBD gestionnaireBD, Salle salleParente, int noTable,
+			String nomUtilisateurCreateur, int tempsPartie, Regles reglesTable,
+			GestionnaireTemps gestionnaireTemps, TacheSynchroniser tacheSynchroniser,
+				 ControleurJeu controleurJeu) 
 	{
 		super();
                 
@@ -154,8 +143,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		_MAX_NB_JOUEURS = config.obtenirNombreEntier( "table.max-nb-joueurs" );
 		
-		positionWinTheGame = new Point[_MAX_NB_JOUEURS];
-        this.butDuJeu = butDuJeu;
+		positionWinTheGame = new Point(-1, -1); 		
+        //this.butDuJeu = butDuJeu;
         
 		// Faire la référence vers le gestionnaire d'événements et le 
 		// gestionnaire de base de données
@@ -165,7 +154,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Garder en mémoire la référence vers la salle parente, le numéro de 
 		// la table, le nom d'utilisateur du créateur de la table et le temps
 		// total d'une partie
-		objSalle = salleParente;
+		setObjSalle(salleParente);
 		intNoTable = noTable;
 		strNomUtilisateurCreateur = nomUtilisateurCreateur;
 		intTempsTotal = tempsPartie;
@@ -179,12 +168,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Au départ, aucune partie ne se joue sur la table
 		bolEstCommencee = false;
 		bolEstArretee = true;
-		intNbJoueurDemande = _MAX_NB_JOUEURS;//TODO intNbJoueurDemande = intNbJoueur; validation avec MAX_NB_JOUEURS
+		intNbJoueurDemande = _MAX_NB_JOUEURS;
 		
 		// Définir les rçgles de jeu pour la salle courante
 		objRegles = reglesTable;
 		
-		// Initialiser le plateau de jeu ˆ null
+		// initialaise gameboard - set null
 		objttPlateauJeu = null;
 		
 		objGestionnaireTemps = gestionnaireTemps;
@@ -284,7 +273,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			// Empçcher d'autres thread de toucher ˆ la liste des joueurs de 
 		    // cette salle pendant qu'on parcourt tous les joueurs de la salle
 			// pour leur envoyer un événement
-		    synchronized (objSalle.obtenirListeJoueurs())
+		    synchronized (getObjSalle().obtenirListeJoueurs())
 		    {
 				// Préparer l'événement de nouveau joueur dans la table. 
 				// Cette fonction va passer les joueurs et créer un 
@@ -319,7 +308,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	{
 	    // Empçcher d'autres thread de toucher ˆ la liste des tables de 
 	    // cette salle pendant que le joueur quitte cette table
-	    synchronized (objSalle.obtenirListeTables())
+	    synchronized (getObjSalle().obtenirListeTables())
 	    {
 		    // Empçcher d'autres thread de toucher ˆ la liste des joueurs de 
 		    // cette table pendant que le joueur quitte cette table
@@ -347,7 +336,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				// Empçcher d'autres thread de toucher ˆ la liste des joueurs de 
 			    // cette salle pendant qu'on parcourt tous les joueurs de la salle
 				// pour leur envoyer un événement
-			    synchronized (objSalle.obtenirListeJoueurs())
+			    synchronized (getObjSalle().obtenirListeJoueurs())
 			    {
 					// Préparer l'événement qu'un joueur a quitté la table. 
 					// Cette fonction va passer les joueurs et créer un 
@@ -364,7 +353,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			    	//objGestionnaireTemps.arreterGestionnaireTemps();
 			    	// Détruire la table courante et envoyer les événements 
 			    	// appropriés
-			    	objSalle.detruireTable(this);
+			    	getObjSalle().detruireTable(this);
 			    }
 		    }
 		}
@@ -562,7 +551,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	{
         // Créer une nouvelle liste qui va garder les points des 
 		// cases libres (n'ayant pas d'objets dessus)
-		Vector lstPointsCaseLibre = new Vector();
+		ArrayList<Point> lstPointsCaseLibre = new ArrayList<Point>();
 		
 				
 		// Créer un tableau de points qui va contenir la position 
@@ -596,10 +585,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Générer le plateau de jeu selon les règles de la table et 
 		// garder le plateau en mémoire dans la table
 		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objGestionnaireBD, 
-				objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, butDuJeu, _MAX_NB_JOUEURS, lstPointsFinish);
+				objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, _MAX_NB_JOUEURS, lstPointsFinish, getObjSalle().getGameType());
 
-                // Définir le prochain id pour les objets
-                objProchainIdObjet++;
+        // Définir le prochain id pour les objets
+        objProchainIdObjet++;
         
 		// Obtenir la position des joueurs de cette table
 		int nbJoueur = lstJoueursEnAttente.size(); //TODO a vérifier
@@ -610,7 +599,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		
 		int intDifficulteJoueurVirtuel = config.obtenirNombreEntier("joueurs-virtuels.difficulte_defaut");
-		//int intDifficulteJoueurVirtuel = ParametreIA.DIFFICULTE_MOYEN;
+		
 		
 		// Obtenir le nombre de joueurs virtuel requis
 		// Vérifier d'abord le paramçtre envoyer par le joueur
@@ -646,9 +635,14 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			}
 		}
 		
-		// Aller chercher les positions de départ pour les joueurs humains et virtuels
-        objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels, lstPointsCaseLibre);
 		
+		// Aller chercher les positions de départ pour les joueurs humains et virtuels
+        if(getObjSalle().getGameType().equals("Tournament"))
+        {
+		   objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels);
+        }else{
+           objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels, lstPointsCaseLibre);	
+        }
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// lstJoueursEnAttente (chaque élément est un Map.Entry)
 		Set lstEnsembleJoueurs = lstJoueursEnAttente.entrySet();
@@ -786,15 +780,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 Thread threadJoueurVirtuel = new Thread((JoueurVirtuel) lstJoueursVirtuels.get(i));
                 threadJoueurVirtuel.start();
             }
-            
-            // On trouve une position initiale au WinTheGame et on part son thread si nécessaire
-            if(!butDuJeu.equals("original"))
-            {
-                definirNouvellePositionWinTheGame();
-                //winTheGame.demarrer();
-            }
+                 
         }
-        
+         // On trouve une position initiale au WinTheGame et on part son thread si nécessaire
+         definirNouvellePositionWinTheGame();
+                //winTheGame.demarrer();
+          
 	}
 	
 	public void arreterPartie(String joueurGagnant)
@@ -920,7 +911,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		    {
 		    	// Détruire la table courante et envoyer les événements 
 		    	// appropriés
-		    	objSalle.detruireTable(this);
+		    	getObjSalle().detruireTable(this);
 		    }
 		}
 	}
@@ -1016,7 +1007,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	/**
 	 * Cette fonction retourne les rçgles pour la table courante.
 	 * 
-	 * @return Regles : Les rçgles pour la table courante
+	 * @return Regles : Les règles pour la table courante
 	 */
 	public Regles obtenirRegles()
 	{
@@ -1101,7 +1092,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la salle (chaque élément est un Map.Entry)
-		Set lstEnsembleJoueurs = objSalle.obtenirListeJoueurs().entrySet();
+		Set lstEnsembleJoueurs = getObjSalle().obtenirListeJoueurs().entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
@@ -1151,7 +1142,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la salle (chaque élément est un Map.Entry)
-		Set lstEnsembleJoueurs = objSalle.obtenirListeJoueurs().entrySet();
+		Set lstEnsembleJoueurs = getObjSalle().obtenirListeJoueurs().entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
@@ -1246,7 +1237,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs de la table qu'un joueur a démarré une partie
-	    EvenementPartieDemarree partieDemarree = new EvenementPartieDemarree(intTempsTotal, listePositionJoueurs, objttPlateauJeu, this);
+	    EvenementPartieDemarree partieDemarree = new EvenementPartieDemarree(intTempsTotal, listePositionJoueurs, this);
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
@@ -1346,7 +1337,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         
 	public void preparerEvenementUtiliserObjet(String joueurQuiUtilise, String joueurAffecte, String objetUtilise, String autresInformations)
 	{
-                // Mçme chose que la fonction précédente, mais envoie plut™t les informations quant à l'utilisation d'un objet dont tous devront çtre au courant
+        // Mçme chose que la fonction précédente, mais envoie plut™t les informations quant à l'utilisation d'un objet dont tous devront çtre au courant
 		EvenementUtiliserObjet utiliserObjet = new EvenementUtiliserObjet(joueurQuiUtilise, joueurAffecte, objetUtilise, autresInformations);
 		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
@@ -1358,9 +1349,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		objGestionnaireEvenements.ajouterEvenement(utiliserObjet);
 	}
         
-        public void preparerEvenementMessageChat(String joueurQuiEnvoieLeMessage, String messageAEnvoyer)
+    
+	public void preparerEvenementMessageChat(String joueurQuiEnvoieLeMessage, String messageAEnvoyer)
 	{
-                // Mçme chose que la fonction précédente, mais envoie plut™t un message de la part d'un joueur à tous les joueurs de la table
+        // Meme chose que la fonction précédente, mais envoie plut™t un message de la part d'un joueur à tous les joueurs de la table
 		EvenementMessageChat messageChat = new EvenementMessageChat(joueurQuiEnvoieLeMessage, messageAEnvoyer);
 		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
@@ -1371,12 +1363,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		}
 		objGestionnaireEvenements.ajouterEvenement(messageChat);
 	}
-/*
-	public void preparerEvenementDeplacementWinTheGame()
+
+/*	public void preparerEvenementDeplacementWinTheGame()
 	{
-               // definirNouvellePositionWinTheGame();
+        definirNouvellePositionWinTheGame();
                 
-		//EvenementDeplacementWinTheGame deplacementWTG = new EvenementDeplacementWinTheGame(positionWinTheGame.x, positionWinTheGame.y);
+		EvenementDeplacementWinTheGame deplacementWTG = new EvenementDeplacementWinTheGame(positionWinTheGame.x, positionWinTheGame.y);
 		
 		// Créer un ensemble contenant tous les tuples de la liste des joueurs de la table
 		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
@@ -1392,11 +1384,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			
 			// Obtenir un numéro de commande pour le joueur courant, créer
 			// un InformationDestination et l'ajouter à l'événement
-			//deplacementWTG.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(), objJoueur.obtenirProtocoleJoueur()));
+		deplacementWTG.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(), objJoueur.obtenirProtocoleJoueur()));
 		}
 		
 		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
-		//objGestionnaireEvenements.ajouterEvenement(deplacementWTG);
+		objGestionnaireEvenements.ajouterEvenement(deplacementWTG);
 	}  */
 
 	/**
@@ -1705,41 +1697,46 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             return (JoueurVirtuel)null;
 	}
         
-        // Cette méthode permettra de dire si un joueur a gagné la partie en
-        // ayant accumulé assez de points et en ayant rejoint le WinTheGame
-        public boolean aRejointLeWinTheGame(int pointageDuJoueur, Point positionDuJoueur)
-        {
-        	boolean resultat = false;
+  /*  // Cette méthode permettra de dire si un joueur a gagné la partie en
+    // ayant accumulé assez de points et en ayant rejoint le WinTheGame
+    public boolean aRejointLeWinTheGame(int pointageDuJoueur, Point positionDuJoueur)
+    {
         	
-        	for(int i = 0; i <positionWinTheGame.length; i++)
-        	{
-        		if(positionDuJoueur.equals(positionWinTheGame[i]))
-        			resultat = true;
-        	}
-            return (peutAllerSurLeWinTheGame(pointageDuJoueur) && (resultat));
-        }
+      	boolean resultat = true;
+       	if (getObjSalle().getGameType().equals("Tournament"))
+       	{
+       	   for(int i = 0; i < positionWinTheGameTournament.length; i++)
+       	   {
+       		   if(positionDuJoueur.equals(positionWinTheGameTournament[i]))
+       			resultat = true;
+        		   
+       	   }
+       	   return (peutAllerSurLeWinTheGame(pointageDuJoueur) && (resultat));
+       	} else{
+       	   return (peutAllerSurLeWinTheGame(pointageDuJoueur) && (positionDuJoueur.equals(positionWinTheGame)));
+       	}
+            
+    } //end method */
         
-        public Point[] obtenirPositionWinTheGame()
+        public Point obtenirPositionWinTheGame()
         {
             return positionWinTheGame;
         }
         
-        public String obtenirButDuJeu()
+   /*     public String obtenirButDuJeu()
         {
             return butDuJeu;
-        }
+        }*/
         
         public boolean peutAllerSurLeWinTheGame(int pointage)
         {
-            if(butDuJeu.equals("winTheGameWithoutScore")) return true;
-            else return pointage >= pointageRequisPourAllerSurLeWinTheGame();
+            return pointage >= pointageRequisPourAllerSurLeWinTheGame();
         }
         
         public int pointageRequisPourAllerSurLeWinTheGame()
         {
-            if(this.butDuJeu=="winTheGameWithoutScore") return 0;
-            else return intTempsTotal*5;
-        }
+            return intTempsTotal*5;
+        }   
         
         
         /**
@@ -1747,29 +1744,31 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
          */ 
         public void definirNouvellePositionWinTheGame()
         {
-        	for(int i =_MAX_NB_JOUEURS; i > 0 ; i--)
-        	{
-        		positionWinTheGame[i-1] = lstPointsFinish.remove(i-1);
-        	}
+        	if (getObjSalle().getGameType().equals("Tournament"))
+    		{
+        	  positionWinTheGame = new Point(objttPlateauJeu.length - 1,objttPlateauJeu[0].length - 1);
+        	   
+    		}else{
         	
-        	
-          /*  Random objRandom = new Random();
-            boolean pasTrouve = true;
-            int grandeurDeplacement = 3;
-            int nbEssaisI = 0;
-            int nbEssaisJ = 0;
-            int maxEssais = 9000;
+    			positionWinTheGame = new Point(-1,-1);
+    			
+            /*   Random objRandom = new Random();
+               boolean pasTrouve = true;
+               int grandeurDeplacement = 3;
+               int nbEssaisI = 0;
+               int nbEssaisJ = 0;
+               int maxEssais = 9000;
             
-            // On obtient les positions des 4 joueurs afin de ne pas déplacer le WinTheGame
-            // sur un joueur, ou encore sur une case oç un joueur voulait aller
-            Point positionsJoueurs[] = new Point[4];
-            Point positionsJoueursDesirees[] = new Point[4];
-            {
-                for(int k=0; k<4; k++)
-                {
+               // On obtient les positions des 4 joueurs afin de ne pas déplacer le WinTheGame
+               // sur un joueur, ou encore sur une case oç un joueur voulait aller
+               Point positionsJoueurs[] = new Point[4];
+               Point positionsJoueursDesirees[] = new Point[4];
+               {
+                   for(int k=0; k<4; k++)
+               {
                     positionsJoueurs[k] = new Point(0, 0);
                     positionsJoueursDesirees[k] = new Point(0, 0);
-                }
+               }
                 int i=0;
                 {
                     Set nomsJoueursHumains = lstJoueurs.entrySet();
@@ -1792,13 +1791,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                         i++;
                     }
                 }
-            }
+               }
             
-            // On commence par regarder si les cases pas trop loin sont OK si on n'est pas en -1 -1
-            if(positionWinTheGame.x != -1 && positionWinTheGame.y != -1)
-            {
-                for(int i=positionWinTheGame.x-(objRandom.nextInt(grandeurDeplacement+1)-grandeurDeplacement/2); pasTrouve && nbEssaisI<maxEssais; i = positionWinTheGame.x-(objRandom.nextInt(grandeurDeplacement+1)-grandeurDeplacement/2))
-                {
+               // On commence par regarder si les cases pas trop loin sont OK si on n'est pas en -1 -1
+               if(positionWinTheGame.x != -1 && positionWinTheGame.y != -1)
+               {
+                  for(int i= positionWinTheGame.x-(objRandom.nextInt(grandeurDeplacement+1)-grandeurDeplacement/2); pasTrouve && nbEssaisI<maxEssais; i = positionWinTheGame.x-(objRandom.nextInt(grandeurDeplacement+1)-grandeurDeplacement/2))
+                  {
                     //System.out.println("i: " + Integer.toString(i));
                     nbEssaisJ = 0;
                     objRandom.setSeed(System.currentTimeMillis());
@@ -1875,4 +1874,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 positionWinTheGame.move(meilleurI, meilleurJ);
             } */
         }
-}    
+    }// end 
+
+		public void setObjSalle(Salle objSalle) {
+			this.objSalle = objSalle;
+		}
+
+		public Salle getObjSalle() {
+			return objSalle;
+		}
+}// end class    

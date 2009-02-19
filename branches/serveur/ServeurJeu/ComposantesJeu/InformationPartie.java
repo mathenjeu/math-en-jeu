@@ -450,10 +450,10 @@ public class InformationPartie
                         grandeurDeplacement = Math.abs(nouvellePosition.y - objPositionJoueur.y);
                 }
                 
-                int distanceFuture = Math.abs(nouvellePosition.x - objTable.obtenirPositionWinTheGame()[0].x) + Math.abs(nouvellePosition.y - objTable.obtenirPositionWinTheGame()[0].y);
+                int distanceFuture = Math.abs(nouvellePosition.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(nouvellePosition.y - objTable.obtenirPositionWinTheGame().y);
                 distanceFuture -= 1;
                 if(distanceFuture < 0) distanceFuture = 0;
-                int stepDifficulte = Math.max(Math.abs(this.objTable.obtenirPlateauJeuCourant()[0].length-objTable.obtenirPositionWinTheGame()[0].y), Math.abs(objTable.obtenirPositionWinTheGame()[0].y-this.objTable.obtenirPlateauJeuCourant()[0].length)) / 5;
+                int stepDifficulte = Math.max(Math.abs(this.objTable.obtenirPlateauJeuCourant()[0].length-objTable.obtenirPositionWinTheGame().y), Math.abs(objTable.obtenirPositionWinTheGame().y-this.objTable.obtenirPlateauJeuCourant()[0].length)) / 5;
                 intDifficulte = 0;
                 
                 if(stepDifficulte * 0 <= distanceFuture && distanceFuture <= stepDifficulte * 1) intDifficulte = 6;
@@ -984,7 +984,7 @@ public class InformationPartie
         
         public int obtenirDistanceAuWinTheGame()
         {
-            return Math.abs(objPositionJoueur.x - objTable.obtenirPositionWinTheGame()[0].x) + Math.abs(objPositionJoueur.y - objTable.obtenirPositionWinTheGame()[0].y);
+            return Math.abs(objPositionJoueur.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(objPositionJoueur.y - objTable.obtenirPositionWinTheGame().y);
         }
 
         /**
