@@ -29,10 +29,6 @@ public class EvenementPartieDemarree extends Evenement
 	// Déclaration d'une variable qui va garder le temps de la partie
     private int intTempsPartie;
     
-	// Déclaration d'un tableau à 2 dimensions qui va contenir les informations 
-	// sur les cases du jeu
-	private Case[][] objttPlateauJeu;
-	
 	// Déclaration d'une liste contenant les positions des joueurs et dont la 
 	// clé est le nom d'utilisateur du joueur
 	private TreeMap lstPositionJoueurs;
@@ -51,12 +47,11 @@ public class EvenementPartieDemarree extends Evenement
      * @param Case[][] plateauJeu : Un tableau à 2 dimensions représentant le 
      * 								plateau de jeu
      */
-    public EvenementPartieDemarree(int tempsPartie, TreeMap listePositionJoueurs, Case[][] plateauJeu, Table table)
+    public EvenementPartieDemarree(int tempsPartie, TreeMap listePositionJoueurs, Table table)
     {
         // Définir le temps de la partie, le plateau de jeu et la liste des
     	// positions des joueurs
     	intTempsPartie = tempsPartie;
-        objttPlateauJeu = plateauJeu;
         this.table = table;
         lstPositionJoueurs = listePositionJoueurs;
         objDocumentXML = null;
@@ -119,32 +114,33 @@ public class EvenementPartieDemarree extends Evenement
 						 * USE THE WIN THE GAME AGAIN
 						 * *****************
 						 */
+				
                                 
-                                if(!table.obtenirButDuJeu().equals("original"))
+                                if(table.getObjSalle().getGameType().equals("Tournament")) //!table.obtenirButDuJeu().equals("original")&&
                                 {
                                     // Créer le noeud contenant la position initiale du WinTheGame
-                                    {
+                                    
                                         int z=0;
-                                        while((table.obtenirPositionWinTheGame()[0].x == -1 || table.obtenirPositionWinTheGame()[0].y == -1) && z<100)
+                                        while((table.obtenirPositionWinTheGame().x == -1 || table.obtenirPositionWinTheGame().y == -1) && z<100)
                                         {
                                             table.definirNouvellePositionWinTheGame();
                                             z++;
                                         }
-                                    }
+                                    
 
                                     Element objNoeudParametrePositionWinTheGame = objDocumentXML.createElement("parametre");
                                     objNoeudParametrePositionWinTheGame.setAttribute("type", "positionWinTheGame");
-                                    objNoeudParametrePositionWinTheGame.setAttribute("x", Integer.toString(table.obtenirPositionWinTheGame()[0].x));
-                                    objNoeudParametrePositionWinTheGame.setAttribute("y", Integer.toString(table.obtenirPositionWinTheGame()[0].y));
-                                     objNoeudParametrePositionWinTheGame.setAttribute("pointageRequis", Integer.toString(table.pointageRequisPourAllerSurLeWinTheGame()));
+                                    objNoeudParametrePositionWinTheGame.setAttribute("x", Integer.toString(table.obtenirPositionWinTheGame().x));
+                                    objNoeudParametrePositionWinTheGame.setAttribute("y", Integer.toString(table.obtenirPositionWinTheGame().y));
+                                    objNoeudParametrePositionWinTheGame.setAttribute("pointageRequis", Integer.toString(table.pointageRequisPourAllerSurLeWinTheGame()));
                                     objNoeudCommande.appendChild(objNoeudParametrePositionWinTheGame);
                                 }
                                  
 				
 				
 				// Créer les informations concernant la taille
-				objNoeudParametreTaille.setAttribute("nbLignes", Integer.toString(objttPlateauJeu.length));
-				objNoeudParametreTaille.setAttribute("nbColonnes", Integer.toString(objttPlateauJeu[0].length));
+				objNoeudParametreTaille.setAttribute("nbLignes", Integer.toString(table.obtenirPlateauJeuCourant().length));
+				objNoeudParametreTaille.setAttribute("nbColonnes", Integer.toString(table.obtenirPlateauJeuCourant()[0].length));
 				
 				// Ajouter les noeuds enfants aux noeuds paramètres
 				objNoeudParametreTaillePlateauJeu.appendChild(objNoeudParametreTaille);
@@ -180,21 +176,21 @@ public class EvenementPartieDemarree extends Evenement
 				
 				// Passer toutes les lignes du plateau de jeu et créer toutes 
 				// les cases
-				for (int i = 0; i < objttPlateauJeu.length; i++)
+				for (int i = 0; i < table.obtenirPlateauJeuCourant().length; i++)
 				{
 					// Passer toutes les colonnes du plateau de jeu
-					for (int j = 0; j < objttPlateauJeu[0].length; j++)
+					for (int j = 0; j < table.obtenirPlateauJeuCourant()[0].length; j++)
 					{
 						// S'il y a une case au point courant, alors on peut la 
 						// créer en XML, sinon on ne fait rien
-						if (objttPlateauJeu[i][j] != null)
+						if (table.obtenirPlateauJeuCourant()[i][j] != null)
 						{
 							// Déclaration d'un noeud de case
 							Element objNoeudCase;
 							
 							// Si la classe de l'objet courant est CaseCouleur,
 							// alors on va créer l'élément en passant le bon nom
-							if (objttPlateauJeu[i][j] instanceof CaseCouleur)
+							if (table.obtenirPlateauJeuCourant()[i][j] instanceof CaseCouleur)
 							{
 								// Créer le noeud de case en passant le bon nom
 								objNoeudCase = objDocumentXML.createElement("caseCouleur");
@@ -208,16 +204,16 @@ public class EvenementPartieDemarree extends Evenement
 							// Créer les informations de la case
 							objNoeudCase.setAttribute("x", Integer.toString(i));
 							objNoeudCase.setAttribute("y", Integer.toString(j));
-							objNoeudCase.setAttribute("type", Integer.toString(objttPlateauJeu[i][j].obtenirTypeCase()));
+							objNoeudCase.setAttribute("type", Integer.toString(table.obtenirPlateauJeuCourant()[i][j].obtenirTypeCase()));
 							
 							// Si la case courante est une case couleur, alors
 							// on définit son objet, sinon on ne fait rien de 
 							// plus pour une case spéciale
-							if (objttPlateauJeu[i][j] instanceof CaseCouleur)
+							if (table.obtenirPlateauJeuCourant()[i][j] instanceof CaseCouleur)
 							{
 								// Créer une référence vers la case couleur 
 								// courante
-								CaseCouleur objCaseCouleur = (CaseCouleur) objttPlateauJeu[i][j];
+								CaseCouleur objCaseCouleur = (CaseCouleur) table.obtenirPlateauJeuCourant()[i][j];
 								
 								// S'il y a un objet sur la case, alors on va 
 								// créer le code XML pour cet objet (il ne peut 
