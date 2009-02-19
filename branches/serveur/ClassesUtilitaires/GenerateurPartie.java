@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
-import java.util.Vector;
 import Enumerations.Visibilite;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.Cases.Case;
@@ -37,8 +36,9 @@ public final class GenerateurPartie
      * représentant le plateau de jeu qui contient les informations sur 
      * chaque case selon des paramètres.
      * @param objGestionnaireBD 
-     * @param max_nb_joueurs 
+     * @param max_nb_players 
      * @param lstPointsFinish 
+     * @param gameType 
      *
      * @param Regles reglesPartie : L'ensemble des règles pour la partie
      * @param int temps : Le temps de la partie
@@ -50,9 +50,9 @@ public final class GenerateurPartie
      * 								  être remplie est nulle
      */
     public static Case[][] genererPlateauJeu(GestionnaireBD objGestionnaireBD, 
-    		Regles reglesPartie, int temps, Vector<Point> listePointsCaseLibre,
-    		Integer objDernierIdObjets, String butDuJeu, int max_nb_joueurs, 
-    		ArrayList<Point> lstPointsFinish) throws NullPointerException
+    		Regles reglesPartie, int temps, ArrayList<Point> lstPointsCaseLibre,
+    		Integer objDernierIdObjets, int max_nb_players, 
+    		ArrayList<Point> lstPointsFinish, String gameType) throws NullPointerException
     {
 		// Création d'un objet permettant de générer des nombres aléatoires
 		Random objRandom = new Random();
@@ -65,32 +65,29 @@ public final class GenerateurPartie
 		
 		// Déclaration d'une liste de points contenant les points qui ont 
 		// été passés
-		Vector<Point> lstPointsCasesPresentes = new Vector<Point>();
+		ArrayList<Point> lstPointsCasesPresentes = new ArrayList<Point>();
 
 		// Déclaration d'une liste de points contenant les points qui 
 		// contiennent des cases spéciales
-		Vector<Point> lstPointsCasesSpeciales = new Vector<Point>();
+		ArrayList<Point> lstPointsCasesSpeciales = new ArrayList<Point>();
 		
 		// Déclaration d'une liste de points contenant les points qui 
 		// contiennent des cases de couleur
-		Vector<Point> lstPointsCasesCouleur = new Vector<Point>();
+		ArrayList<Point> lstPointsCasesCouleur = new ArrayList<Point>();
 		
 		// Déclaration d'une liste de points contenant les points qui 
 		// contiennent des magasins
-		Vector<Point> lstPointsMagasins = new Vector<Point>();
+		ArrayList<Point> lstPointsMagasins = new ArrayList<Point>();
 		
 		// Déclaration d'une liste de points contenant les points qui 
 		// contiennent des pièces
-		Vector<Point> lstPointsPieces = new Vector<Point>();
+		ArrayList<Point> lstPointsPieces = new ArrayList<Point>();
 		
 		// Déclaration d'une liste de points contenant les points qui 
 		// contiennent des objets utilisables
-		Vector<Point> lstPointsObjetsUtilisables = new Vector<Point>();
+		ArrayList<Point> lstPointsObjetsUtilisables = new ArrayList<Point>();
 		
-		// Déclarations du nombre de lignes et de colonnes du vecteur
-		int intNbLignes = 0;
-		int intNbColonnes = 0;
-		
+				
 		// Déclaration d'un compteur de cases
 		int intCompteurCases = 0;
 
@@ -108,296 +105,79 @@ public final class GenerateurPartie
 		temps = Math.min(temps, reglesPartie.obtenirTempsMaximal());
 		
 		//to have a more equilibrate dimension of game table
-		temps = (int) Math.ceil(temps * 6 / 10) + 10;
+		temps = (int) Math.ceil(temps * 5 / 10) + 10;
+		
+		int factor = objRandom.nextInt((int) Math.ceil(temps /4)) + (int) Math.ceil(temps /5);
+		if(factor % 2 == 0)
+		   factor = factor + 1;
 
-		// Le nombre de lignes sera de ceiling(temps / 2) à temps
-		intNbLignes = objRandom.nextInt(temps - ((int) Math.ceil(temps / 2)) + 1) + ((int) Math.ceil(temps / 2));
+		int intNbColumns;
+		int intNbLines;
+		
+		// calculate number of lines and of columns
+		if (gameType.equals("Tournament"))
+		{
+		   intNbColumns = (max_nb_players + 1) * factor - 1;
 
-		// Le nombre de colonnes sera de temps à 2 * temps 
-		intNbColonnes = (int) Math.ceil((temps * temps ) / ((max_nb_joueurs + 1)*intNbLignes) )*(max_nb_joueurs + 1);
+    	   intNbLines = (int) Math.ceil((temps * temps * 3/2 ) / intNbColumns);
+		
+		}else { //if gametype = mathenjeu
+		
+		   // Le nombre de lignes sera de ceiling(temps / 2) à temps
+		   intNbLines = objRandom.nextInt(temps - ((int) Math.ceil(temps /2)) + 1) + ((int) Math.ceil(temps /2 ));
 
+		   // Le nombre de colonnes sera de temps à 2 * temps 
+		   intNbColumns = (int) Math.ceil((temps * temps ) / intNbLines); 
+		}
+				
 		// Déclaration de variables qui vont garder le nombre de trous, 
 		// le nombre de cases spéciales, le nombres de magasins,
 		// le nombre de pièces, le nombre de
-		int intNbTrous = ((int) Math.ceil(intNbLignes * intNbColonnes * reglesPartie.obtenirRatioTrous()));
-		int intNbCasesSpeciales = (int) Math.floor(intNbLignes * intNbColonnes * reglesPartie.obtenirRatioCasesSpeciales());
-		int intNbMagasins = (int) Math.floor(intNbLignes * intNbColonnes * reglesPartie.obtenirRatioMagasins());
-		int intNbPieces = (int) Math.floor(intNbLignes * intNbColonnes * reglesPartie.obtenirRatioPieces());
-		int intNbObjetsUtilisables = (int) Math.floor(intNbLignes * intNbColonnes * reglesPartie.obtenirRatioObjetsUtilisables());
+		int intNbTrous = ((int) Math.ceil(intNbLines * intNbColumns * reglesPartie.obtenirRatioTrous()));
+		int intNbCasesSpeciales = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioCasesSpeciales());
+		int intNbMagasins = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioMagasins());
+		int intNbPieces = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioPieces());
+		int intNbObjetsUtilisables = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioObjetsUtilisables());
 
 				
 		// Maintenant qu'on a le nombre de lignes et de colonnes, on va créer
 		// le tableau à 2 dimensions représentant le plateau de jeu (null est 
 		// mis par défaut dans chaque élément)
-		Case[][] objttPlateauJeu = new Case[intNbLignes][intNbColonnes];	
+		Case[][] objttPlateauJeu = new Case[intNbLines][intNbColumns];	
 		
-		// we build table of game with the houls for the borders
-		for(int x = 0; x < intNbLignes; x++){
-			for(int y = 0; y < intNbColonnes; y++){
-			
-				if(ifNotBorder(x, y, intNbLignes, intNbColonnes, max_nb_joueurs)){
-					// Créer le point de la case courante
-					objPoint = new Point(x, y);
-					
-					// Définir la valeur de la case au point spécifié à la case 
-					// d'identification
-					objttPlateauJeu[objPoint.x][objPoint.y] = objCaseParcourue;
-					
-					// Ajouter le point dans la file de priorité et dans la liste des 
-					// points passés
-					//lstFile.add(objPoint);
-					lstPointsCasesPresentes.add(objPoint);
-					intCompteurCases++;
-				}
-				
-			}
-		}// end first for
-		
-	
-		// fill list with points for finish
-		for(int i = 0; i < max_nb_joueurs; i++)
+		if (gameType.equals("Tournament"))
 		{
-			objPoint = (Point) lstPointsCasesPresentes.remove(lstPointsCasesPresentes.size()-1);
-			lstPointsFinish.add(objPoint);
+		   // we build table of game with the houls for the borders
+		   intCompteurCases = boardCreation(objRandom,max_nb_players, lstPointsCasesPresentes, 
+				   intCompteurCases, objCaseParcourue, intNbColumns, intNbLines, 
+				   intNbTrous ,objttPlateauJeu);
+		   // fill list with points for finish
+			for(int i = 0; i < max_nb_players; i++)
+			{
+				objPoint = (Point) lstPointsCasesPresentes.remove(lstPointsCasesPresentes.size()-1);
+				lstPointsFinish.add(objPoint);
+			}
+			lstPointsCasesPresentes = caseDefinition(reglesPartie, max_nb_players,
+					objRandom, lstPointsCasesPresentes, lstPointsCasesSpeciales,
+					lstPointsCasesCouleur, intCompteurCases, intNbCasesSpeciales,
+					objttPlateauJeu);
+			
+						
+		}else{ //if gametype = mathenjeu
+			
+		   intCompteurCases = 1;	
+		   intCompteurCases = boardCreation(objRandom, lstPointsCasesPresentes,
+				intCompteurCases, objCaseParcourue, intNbColumns, intNbLines,
+				intNbTrous, objttPlateauJeu); 
+		   lstPointsCasesPresentes = caseDefinition(reglesPartie, 
+					objRandom, lstPointsCasesPresentes, lstPointsCasesSpeciales,
+					lstPointsCasesCouleur, intCompteurCases, intNbCasesSpeciales,
+					objttPlateauJeu, intNbLines, intNbColumns, intNbTrous);
 		}
 		
 		
-		/* **************************************** !!!!!!!!!!!!!!!!!!!!!!!!!!!
-		 
-		// Trouver un point aléatoire dans le plateau de jeu et le garder 
-		// en mémoire (ça va être le point de départ) 
-		objPoint = new Point(0, 0);
 		
-		// Au point calculé, on va définir la case spéciale qui sert 
-		// d'identification et dont le type est -1
-		objttPlateauJeu[objPoint.x][objPoint.y] = objCaseParcourue;
 		
-		// Ajouter le point dans la file de priorité et dans la liste des 
-		// points passés
-		lstFile.add(objPoint);
-		lstPointsCasesPresentes.add(objPoint);
-		
-		// On choisi des cases dans le plateau en leur mettant la case spéciale 
-		// d'identification comme valeur tant qu'on ne passe pas un certain 
-		// pourcentage du nombre de cases totales possibles
-		while (intCompteurCases <= (intNbLignes * intNbColonnes) - intNbTrous)
-		{
-			// S'il y a au moins un point dans la file, alors on va retirer 
-			// ce point et le traiter, sinon il faut prendre un point 
-			// aléatoirement parmis les points qui ont été passés
-			if (lstFile.size() > 0)
-			{
-				// Prendre le point au début de la file
-				objPointFile = (Point) lstFile.remove(0);
-			}
-			else
-			{
-				// Obtenir un point aléatoirement parmi les points qui ont 
-				// déjà été passés
-				objPointFile = (Point) lstPointsCasesPresentes.get(objRandom.nextInt(lstPointsCasesPresentes.size()));
-			}
-			
-			
-			
-			
-			// S'il y a une case à gauche, et que cette case n'a pas encore été
-			// passée et que une valeur aléatoire retourne true, alors on va
-			// choisir cette case
-			
-			if ((objPointFile.x - 1 >= 0) && 
-				(objttPlateauJeu[objPointFile.x - 1][objPointFile.y] == null) &&
-				(objRandom.nextBoolean() == true) && ifNotBorder(objPointFile.x - 1,objPointFile.y, intNbLignes))
-			{
-				// Créer le point à gauche de la case courante
-				objPoint = new Point(objPointFile.x - 1, objPointFile.y);
-				
-				// Définir la valeur de la case au point spécifié à la case 
-				// d'identification
-				objttPlateauJeu[objPoint.x][objPoint.y] = objCaseParcourue;
-				
-				// Ajouter le point dans la file de priorité et dans la liste des 
-				// points passés
-				lstFile.add(objPoint);
-				lstPointsCasesPresentes.add(objPoint);
-				
-				// Incrémenter le nombre de points passés
-				intCompteurCases++;
-			}
-			
-			// S'il y a une case à droite, et que cette case n'a pas encore été
-			// passée et que une valeur aléatoire retourne true, alors on va
-			// choisir cette case
-			if ((objPointFile.x + 1 < intNbLignes) && 
-				(objttPlateauJeu[objPointFile.x + 1][objPointFile.y] == null) && 
-				(objRandom.nextBoolean() == true) && ifNotBorder(objPointFile.x + 1,objPointFile.y, intNbLignes))
-			{
-				// Créer le point à droite de la case courante
-				objPoint = new Point(objPointFile.x + 1, objPointFile.y);
-				
-				// Définir la valeur de la case au point spécifié à la case 
-				// d'identification
-				objttPlateauJeu[objPoint.x][objPoint.y] = objCaseParcourue;
-				
-				// Ajouter le point dans la file de priorité et dans la liste des 
-				// points passés
-				lstFile.add(objPoint);
-				lstPointsCasesPresentes.add(objPoint);
-				
-				// Incrémenter le nombre de points passés
-				intCompteurCases++;
-			}
-			
-			// S'il y a une case en haut, et que cette case n'a pas encore été
-			// passée et que une valeur aléatoire retourne true, alors on va
-			// choisir cette case
-			if ((objPointFile.y - 1 >= 0) && 
-				(objttPlateauJeu[objPointFile.x][objPointFile.y - 1] == null) && 
-				(objRandom.nextBoolean() == true)&& ifNotBorder(objPointFile.x ,objPointFile.y - 1, intNbLignes))
-			{
-				// Créer le point en haut de la case courante
-				objPoint = new Point(objPointFile.x, objPointFile.y - 1);
-				
-				// Définir la valeur de la case au point spécifié à la case 
-				// d'identification
-				objttPlateauJeu[objPoint.x][objPoint.y] = objCaseParcourue;
-				
-				// Ajouter le point dans la file de priorité et dans la liste des 
-				// points passés
-				lstFile.add(objPoint);
-				lstPointsCasesPresentes.add(objPoint);
-				
-				// Incrémenter le nombre de points passés
-				intCompteurCases++;
-			}
-			
-			// S'il y a une case en bas, et que cette case n'a pas encore été
-			// passée et que une valeur aléatoire retourne true, alors on va
-			// choisir cette case
-			if ((objPointFile.y + 1 < intNbColonnes) && 
-				(objttPlateauJeu[objPointFile.x][objPointFile.y + 1] == null) && 
-				(objRandom.nextBoolean() == true) && ifNotBorder(objPointFile.x ,objPointFile.y + 1, intNbLignes))
-			{
-				// Créer le point en bas de la case courante
-				objPoint = new Point(objPointFile.x, objPointFile.y + 1);
-				
-				// Définir la valeur de la case au point spécifié à la case 
-				// d'identification
-				objttPlateauJeu[objPoint.x][objPoint.y] = objCaseParcourue;
-				
-				// Ajouter le point dans la file de priorité et dans la liste des 
-				// points passés
-				lstFile.add(objPoint);
-				lstPointsCasesPresentes.add(objPoint);
-				
-				// Incrémenter le nombre de points passés
-				intCompteurCases++;
-			}
-		}  // end while                 */////////////////
-		
-				
-		// Si on doit afficher des cases spéciales dans le plateau de jeu, 
-		// alors on fait le code suivant
-		if (reglesPartie.obtenirListeCasesSpecialesPossibles().size() > 0)
-		{
-			// Réinitialiser le compteur de cases
-			int intCompteurCasesSpeciale = 0;
-			
-			// Obtenir un itérateur pour la liste des règles de cases spéciales
-			// triées par priorité (c'est certain que la première fois il y a au 
-			// moins une règle de case)
-			Iterator objIterateurListePriorite = reglesPartie.obtenirListeCasesSpecialesPossibles().iterator();
-			
-			// On va choisir des cases spéciales en commençant par la case
-			// la plus prioritaire et on va faire ça tant qu'on n'a pas atteint 
-			// le pourcentage de cases spéciales devant se trouver sur le plateau 
-			// de jeu. Si on atteint la fin de la liste de cases spéciales, on 
-			// recommence depuis le début
-			while (intCompteurCasesSpeciale < intNbCasesSpeciales)
-			{
-				// Faire la référence vers la règle de la case spéciale 
-				// courante
-				ReglesCaseSpeciale objReglesCaseSpeciale = (ReglesCaseSpeciale) objIterateurListePriorite.next();
-				
-				// Obtenir un point aléatoirement parmi les points restants
-				// qui n'ont pas de cases spéciales et enlever en même temps 
-				// ce point de la liste
-				objPoint = (Point) lstPointsCasesPresentes.remove(objRandom.nextInt(lstPointsCasesPresentes.size()));
-				
-				// Ajouter le point trouvé dans la liste des points de cases 
-				// spéciales trouvées
-				lstPointsCasesSpeciales.add(objPoint);
-
-				// Définir la valeur de la case au point spécifié à la case 
-				// d'identification
-				objttPlateauJeu[objPoint.x][objPoint.y] = new CaseSpeciale(objReglesCaseSpeciale.obtenirTypeCase());				
-				
-				// Incrémenter le nombre de cases passées
-				intCompteurCasesSpeciale++;
-				
-				// Si on est arrivé à la fin de la liste, alors il faut 
-				// retourner au début
-				if (objIterateurListePriorite.hasNext() == false)
-				{
-					// Obtenir un autre itérateur pour la liste
-					objIterateurListePriorite = reglesPartie.obtenirListeCasesSpecialesPossibles().iterator();
-				}
-			}			
-		}
-		
-		// Bloc de code qui va s'assurer de créer les cases de couleur dans le 
-		// plateau de jeu (il y en a au moins un type)
-		{
-			// Réinitialiser le compteur de cases
-			int intCompteurCasesCouleur = 0;
-			
-			// Obtenir un itérateur pour la liste des règles de cases de couleur
-			// triées par priorité (c'est certain que la première fois il y a au 
-			// moins une règle de case)
-			Iterator objIterateurListePriorite = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
-			
-			// On va choisir des cases de couleur en commençant par la case
-			// la plus prioritaire et on va faire ça tant qu'on n'a pas atteint 
-			// le pourcentage de cases spéciales devant se trouver sur le plateau 
-			// de jeu. Si on atteint la fin de la liste de cases de couleur, on 
-			// recommence depuis le début
-			while (intCompteurCasesCouleur < intCompteurCases - intNbCasesSpeciales - max_nb_joueurs)
-			{
-				
-				// Faire la référence vers la règle de la case de couleur 
-				// courante
-				ReglesCaseCouleur objReglesCaseCouleur = (ReglesCaseCouleur) objIterateurListePriorite.next();
-				
-				// Obtenir un point aléatoirement parmi les points restants
-				// qui n'ont pas de cases spéciales et de cases de couleur 
-				// et enlever en même temps ce point de la liste
-				objPoint = (Point) lstPointsCasesPresentes.remove(objRandom.nextInt(lstPointsCasesPresentes.size()));
-				
-				// Ajouter le point trouvé dans la liste des points de cases 
-				// de couleur trouvées
-				lstPointsCasesCouleur.add(objPoint);
-
-				// Définir la valeur de la case au point spécifié à la case 
-				// d'identification
-				objttPlateauJeu[objPoint.x][objPoint.y] = new CaseCouleur(objReglesCaseCouleur.obtenirTypeCase());				
-				
-				// Incrémenter le nombre de cases passées
-				intCompteurCasesCouleur++;
-				
-				// Si on est arrivé à la fin de la liste, alors il faut 
-				// retourner au début
-				if (objIterateurListePriorite.hasNext() == false)
-				{
-					// Obtenir un autre itérateur pour la liste
-					objIterateurListePriorite = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
-				}
-			}
-			
-			// La liste des cases présentes est maintenant la liste des cases 
-			// de couleur, car tous les points de la liste ont été copiés dans 
-			// l'autre liste
-			lstPointsCasesPresentes = lstPointsCasesCouleur;
-			lstPointsCasesCouleur = null;
-		}
 		
 		// Si on doit afficher des magasins dans le plateau de jeu, 
 		// alors on fait le code suivant
@@ -670,7 +450,7 @@ public final class GenerateurPartie
 		
 		// Ajouter les points restants dans la liste des points représentant 
 		// les cases sans objets et n'étant pas des cases spéciales
-		 listePointsCaseLibre.addAll(lstPointsCasesPresentes);
+		 lstPointsCaseLibre.addAll(lstPointsCasesPresentes);
 		
 		// Indiquer quel a été le dernier id des objets
 		objDernierIdObjets = intCompteurIdObjet;
@@ -679,13 +459,471 @@ public final class GenerateurPartie
     }
 
     /**
-     * Methode used to create the game board
+     * Method
+     * @param reglesPartie
+     * @param objRandom
+     * @param lstPointsCasesPresentes
+     * @param lstPointsCasesSpeciales
+     * @param lstPointsCasesCouleur
+     * @param intCompteurCases
+     * @param intNbCasesSpeciales
+     * @param objttPlateauJeu
+     * @param intNbLignes
+     * @param intNbColonnes
+     * @param intNbTrous
+     * @return
+     */
+	private static ArrayList<Point> caseDefinition(Regles reglesPartie, 
+			Random objRandom, ArrayList<Point> lstPointsCasesPresentes,
+			ArrayList<Point> lstPointsCasesSpeciales, 
+			ArrayList<Point> lstPointsCasesCouleur, int intCompteurCases,
+			int intNbCasesSpeciales, Case[][] objttPlateauJeu, int intNbLignes, int intNbColonnes, int intNbTrous) {
+		Point objPoint;
+		// Si on doit afficher des cases spéciales dans le plateau de jeu, 
+		// alors on fait le code suivant
+		if (reglesPartie.obtenirListeCasesSpecialesPossibles().size() > 0)
+		{
+			// Réinitialiser le compteur de cases
+			intCompteurCases = 1;
+			
+			// Obtenir un itérateur pour la liste des règles de cases spéciales
+			// triées par priorité (c'est certain que la première fois il y a au 
+			// moins une règle de case)
+			Iterator objIterateurListePriorite = reglesPartie.obtenirListeCasesSpecialesPossibles().iterator();
+			
+			// On va choisir des cases spéciales en commençant par la case
+			// la plus prioritaire et on va faire ça tant qu'on n'a pas atteint 
+			// le pourcentage de cases spéciales devant se trouver sur le plateau 
+			// de jeu. Si on atteint la fin de la liste de cases spéciales, on 
+			// recommence depuis le début
+			while (intCompteurCases <= intNbCasesSpeciales)
+			{
+				// Faire la référence vers la règle de la case spéciale 
+				// courante
+				ReglesCaseSpeciale objReglesCaseSpeciale = (ReglesCaseSpeciale) objIterateurListePriorite.next();
+				
+				// Obtenir un point aléatoirement parmi les points restants
+				// qui n'ont pas de cases spéciales et enlever en même temps 
+				// ce point de la liste
+				objPoint = (Point) lstPointsCasesPresentes.remove(objRandom.nextInt(lstPointsCasesPresentes.size()));
+				
+				// Ajouter le point trouvé dans la liste des points de cases 
+				// spéciales trouvées
+				lstPointsCasesSpeciales.add(objPoint);
+
+				// Définir la valeur de la case au point spécifié à la case 
+				// d'identification
+				objttPlateauJeu[objPoint.x][objPoint.y] = new CaseSpeciale(objReglesCaseSpeciale.obtenirTypeCase());				
+				
+				// Incrémenter le nombre de cases passées
+				intCompteurCases++;
+				
+				// Si on est arrivé à la fin de la liste, alors il faut 
+				// retourner au début
+				if (objIterateurListePriorite.hasNext() == false)
+				{
+					// Obtenir un autre itérateur pour la liste
+					objIterateurListePriorite = reglesPartie.obtenirListeCasesSpecialesPossibles().iterator();
+				}
+			}			
+		}
+		
+		// Bloc de code qui va s'assurer de créer les cases de couleur dans le 
+		// plateau de jeu (il y en a au moins un type)
+		{
+			// Réinitialiser le compteur de cases
+			intCompteurCases = 1;
+			
+			// Obtenir un itérateur pour la liste des règles de cases de couleur
+			// triées par priorité (c'est certain que la première fois il y a au 
+			// moins une règle de case)
+			Iterator objIterateurListePriorite = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
+			
+			// On va choisir des cases de couleur en commençant par la case
+			// la plus prioritaire et on va faire ça tant qu'on n'a pas atteint 
+			// le pourcentage de cases spéciales devant se trouver sur le plateau 
+			// de jeu. Si on atteint la fin de la liste de cases de couleur, on 
+			// recommence depuis le début
+			while (intCompteurCases <= (intNbLignes * intNbColonnes) - intNbTrous - intNbCasesSpeciales)
+			{
+				// Faire la référence vers la règle de la case de couleur 
+				// courante
+				ReglesCaseCouleur objReglesCaseCouleur = (ReglesCaseCouleur) objIterateurListePriorite.next();
+				
+				// Obtenir un point aléatoirement parmi les points restants
+				// qui n'ont pas de cases spéciales et de cases de couleur 
+				// et enlever en même temps ce point de la liste
+				objPoint = (Point) lstPointsCasesPresentes.remove(objRandom.nextInt(lstPointsCasesPresentes.size()));
+				
+				// Ajouter le point trouvé dans la liste des points de cases 
+				// de couleur trouvées
+				lstPointsCasesCouleur.add(objPoint);
+
+				// Définir la valeur de la case au point spécifié à la case 
+				// d'identification
+				objttPlateauJeu[objPoint.x][objPoint.y] = new CaseCouleur(objReglesCaseCouleur.obtenirTypeCase());				
+				
+				// Incrémenter le nombre de cases passées
+				intCompteurCases++;
+				
+				// Si on est arrivé à la fin de la liste, alors il faut 
+				// retourner au début
+				if (objIterateurListePriorite.hasNext() == false)
+				{
+					// Obtenir un autre itérateur pour la liste
+					objIterateurListePriorite = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
+				}
+			}
+			
+			// La liste des cases présentes est maintenant la liste des cases 
+			// de couleur, car tous les points de la liste ont été copiés dans 
+			// l'autre liste
+			lstPointsCasesPresentes = lstPointsCasesCouleur;
+			lstPointsCasesCouleur = null;
+		}
+		return  lstPointsCasesPresentes;
+	}
+
+	/**
+	 * Method
+	 * @param reglesPartie
+	 * @param max_nb_players
+	 * @param objRandom
+	 * @param lstPointsCasesPresentes
+	 * @param lstPointsCasesSpeciales
+	 * @param lstPointsCasesCouleur
+	 * @param intCompteurCases
+	 * @param intNbCasesSpeciales
+	 * @param objttPlateauJeu
+	 * @return
+	 */
+	private static ArrayList<Point> caseDefinition(Regles reglesPartie,
+			int max_nb_players, Random objRandom,
+			ArrayList<Point> lstPointsCasesPresentes,
+			ArrayList<Point> lstPointsCasesSpeciales,
+			ArrayList<Point> lstPointsCasesCouleur, int intCompteurCases,
+			int intNbCasesSpeciales, Case[][] objttPlateauJeu) {
+		Point objPoint;
+		// Si on doit afficher des cases spéciales dans le plateau de jeu, 
+		// alors on fait le code suivant
+		if (reglesPartie.obtenirListeCasesSpecialesPossibles().size() > 0)
+		{
+			// Réinitialiser le compteur de cases
+			int intCompteurCasesSpeciale = 0;
+			
+			// Obtenir un itérateur pour la liste des règles de cases spéciales
+			// triées par priorité (c'est certain que la première fois il y a au 
+			// moins une règle de case)
+			Iterator objIterateurListePriorite = reglesPartie.obtenirListeCasesSpecialesPossibles().iterator();
+			
+			// On va choisir des cases spéciales en commençant par la case
+			// la plus prioritaire et on va faire ça tant qu'on n'a pas atteint 
+			// le pourcentage de cases spéciales devant se trouver sur le plateau 
+			// de jeu. Si on atteint la fin de la liste de cases spéciales, on 
+			// recommence depuis le début
+			while (intCompteurCasesSpeciale < intNbCasesSpeciales)
+			{
+				// Faire la référence vers la règle de la case spéciale 
+				// courante
+				ReglesCaseSpeciale objReglesCaseSpeciale = (ReglesCaseSpeciale) objIterateurListePriorite.next();
+				
+				// Obtenir un point aléatoirement parmi les points restants
+				// qui n'ont pas de cases spéciales et enlever en même temps 
+				// ce point de la liste
+				objPoint = (Point) lstPointsCasesPresentes.remove(objRandom.nextInt(lstPointsCasesPresentes.size()));
+				
+				// Ajouter le point trouvé dans la liste des points de cases 
+				// spéciales trouvées
+				lstPointsCasesSpeciales.add(objPoint);
+
+				// Définir la valeur de la case au point spécifié à la case 
+				// d'identification
+				objttPlateauJeu[objPoint.x][objPoint.y] = new CaseSpeciale(objReglesCaseSpeciale.obtenirTypeCase());				
+				
+				// Incrémenter le nombre de cases passées
+				intCompteurCasesSpeciale++;
+				
+				// Si on est arrivé à la fin de la liste, alors il faut 
+				// retourner au début
+				if (objIterateurListePriorite.hasNext() == false)
+				{
+					// Obtenir un autre itérateur pour la liste
+					objIterateurListePriorite = reglesPartie.obtenirListeCasesSpecialesPossibles().iterator();
+				}
+			}			
+		}
+		
+		// Bloc de code qui va s'assurer de créer les cases de couleur dans le 
+		// plateau de jeu (il y en a au moins un type)
+		{
+			// Réinitialiser le compteur de cases
+			int intCompteurCasesCouleur = 0;
+			
+			// Obtenir un itérateur pour la liste des règles de cases de couleur
+			// triées par priorité (c'est certain que la première fois il y a au 
+			// moins une règle de case)
+			Iterator objIterateurListePriorite = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
+			
+			// On va choisir des cases de couleur en commençant par la case
+			// la plus prioritaire et on va faire ça tant qu'on n'a pas atteint 
+			// le pourcentage de cases spéciales devant se trouver sur le plateau 
+			// de jeu. Si on atteint la fin de la liste de cases de couleur, on 
+			// recommence depuis le début
+			while (intCompteurCasesCouleur < intCompteurCases - intNbCasesSpeciales - max_nb_players)
+			{
+				
+				// Faire la référence vers la règle de la case de couleur 
+				// courante
+				ReglesCaseCouleur objReglesCaseCouleur = (ReglesCaseCouleur) objIterateurListePriorite.next();
+				
+				// Obtenir un point aléatoirement parmi les points restants
+				// qui n'ont pas de cases spéciales et de cases de couleur 
+				// et enlever en même temps ce point de la liste
+				objPoint = (Point) lstPointsCasesPresentes.remove(objRandom.nextInt(lstPointsCasesPresentes.size()));
+				
+				// Ajouter le point trouvé dans la liste des points de cases 
+				// de couleur trouvées
+				lstPointsCasesCouleur.add(objPoint);
+
+				// Définir la valeur de la case au point spécifié à la case 
+				// d'identification
+				objttPlateauJeu[objPoint.x][objPoint.y] = new CaseCouleur(objReglesCaseCouleur.obtenirTypeCase());				
+				
+				// Incrémenter le nombre de cases passées
+				intCompteurCasesCouleur++;
+				
+				// Si on est arrivé à la fin de la liste, alors il faut 
+				// retourner au début
+				if (objIterateurListePriorite.hasNext() == false)
+				{
+					// Obtenir un autre itérateur pour la liste
+					objIterateurListePriorite = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
+				}
+			}
+			
+			// La liste des cases présentes est maintenant la liste des cases 
+			// de couleur, car tous les points de la liste ont été copiés dans 
+			// l'autre liste
+			lstPointsCasesPresentes = lstPointsCasesCouleur;
+			lstPointsCasesCouleur = null;
+		}
+		return lstPointsCasesPresentes;
+	}
+
+    /**
+     * Method used to create the game board for the game type "Tournament"
+     * @param max_nb_joueurs
+     * @param lstPointsCasesPresentes
+     * @param intCompteurCases
+     * @param objCaseParcourue
+     * @param intNbColonnes
+     * @param intNbLignes
+     * @param intNbTrous 
+     * @param objttPlateauJeu
+     * @return
+     */
+	private static int boardCreation(Random objRandom,int max_nb_joueurs,
+			ArrayList<Point> lstPointsCasesPresentes, int intCompteurCases,
+			CaseCouleur objCaseParcourue, int intNbColonnes, int intNbLignes,
+			int intNbTrous, Case[][] objttPlateauJeu) {
+		
+		Point objPoint;
+		for(int x = 0; x < intNbLignes; x++){
+			for(int y = 0; y < intNbColonnes; y++){
+			
+				if(ifNotBorder(x, y, intNbLignes, intNbColonnes, max_nb_joueurs)){
+					// Créer le point de la case courante
+					objPoint = new Point(x, y);
+					
+					// Définir la valeur de la case au point spécifié à la case 
+					// d'identification
+					objttPlateauJeu[objPoint.x][objPoint.y] = objCaseParcourue;
+					
+					// Ajouter le point dans la liste des points passés
+					lstPointsCasesPresentes.add(objPoint);
+					intCompteurCases++;
+				}
+				
+			}
+		}
+		
+		// random holes
+		int intCompteur = 1;
+		while (intCompteur < intNbTrous/3 - (intNbLignes*intNbColonnes - intCompteurCases) )
+		{
+			
+		    objPoint = (Point) lstPointsCasesPresentes.remove(objRandom.nextInt(lstPointsCasesPresentes.size()));
+		    if(!(objPoint.x == 0 || objPoint.x == intNbLignes - 1 || objPoint.y % 3 == 0)){
+		       objttPlateauJeu[objPoint.x][objPoint.y] = null;
+		       intCompteurCases--;
+		    }else {
+			   lstPointsCasesPresentes.add(objPoint);
+		    }
+		}
+				
+		return intCompteurCases;
+	}// end method
+
+	/**
+	 * Method used to create the game board for the game type "mathEnJeu"
+	 * @param objRandom
+	 * @param lstPointsCasesPresentes
+	 * @param intCompteurCases
+	 * @param objCaseParcourue
+	 * @param intNbColonnes
+	 * @param intNbLignes
+	 * @param intNbTrous
+	 * @param objttPlateauJeu
+	 * @return
+	 */
+	private static int boardCreation(Random objRandom,
+			ArrayList<Point> lstPointsCasesPresentes, int intCompteurCases,
+			CaseCouleur objCaseParcourue, int intNbColonnes, int intNbLignes,
+			int intNbTrous, Case[][] objttPlateauJeu) {
+		Point objPoint;
+        Point objPointFile;
+		
+		// Déclaration d'une file qui va contenir des points
+		ArrayList<Point> lstFile = new ArrayList<Point>();
+		
+		// Trouver un point aléatoire dans le plateau de jeu et le garder 
+		// en mémoire (ça va être le point de départ) 
+		objPoint = new Point(objRandom.nextInt(intNbLignes), objRandom.nextInt(intNbColonnes));
+		
+		// Au point calculé, on va définir la case spéciale qui sert 
+		// d'identification et dont le type est -1
+		objttPlateauJeu[objPoint.x][objPoint.y] = objCaseParcourue;
+		
+		// Ajouter le point dans la file de priorité et dans la liste des 
+		// points passés
+		lstFile.add(objPoint);
+		lstPointsCasesPresentes.add(objPoint);
+		
+		// On choisi des cases dans le plateau en leur mettant la case spéciale 
+		// d'identification comme valeur tant qu'on ne passe pas un certain 
+		// pourcentage du nombre de cases totales possibles
+		while (intCompteurCases <= (intNbLignes * intNbColonnes) - intNbTrous)
+		{
+			// S'il y a au moins un point dans la file, alors on va retirer 
+			// ce point et le traiter, sinon il faut prendre un point 
+			// aléatoirement parmis les points qui ont été passés
+			if (lstFile.size() > 0)
+			{
+				// Prendre le point au début de la file
+				objPointFile = (Point) lstFile.remove(0);
+			}
+			else
+			{
+				// Obtenir un point aléatoirement parmi les points qui ont 
+				// déjà été passés
+				objPointFile = (Point) lstPointsCasesPresentes.get(objRandom.nextInt(lstPointsCasesPresentes.size()));
+			}
+			
+					
+			// S'il y a une case à gauche, et que cette case n'a pas encore été
+			// passée et que une valeur aléatoire retourne true, alors on va
+			// choisir cette case
+			
+			if ((objPointFile.x - 1 >= 0) && 
+				(objttPlateauJeu[objPointFile.x - 1][objPointFile.y] == null) &&
+				(objRandom.nextBoolean() == true))
+			{
+				// Créer le point à gauche de la case courante
+				objPoint = new Point(objPointFile.x - 1, objPointFile.y);
+				
+				// Définir la valeur de la case au point spécifié à la case 
+				// d'identification
+				objttPlateauJeu[objPoint.x][objPoint.y] = objCaseParcourue;
+				
+				// Ajouter le point dans la file de priorité et dans la liste des 
+				// points passés
+				lstFile.add(objPoint);
+				lstPointsCasesPresentes.add(objPoint);
+				
+				// Incrémenter le nombre de points passés
+				intCompteurCases++;
+			}
+			
+			// S'il y a une case à droite, et que cette case n'a pas encore été
+			// passée et que une valeur aléatoire retourne true, alors on va
+			// choisir cette case
+			if ((objPointFile.x + 1 < intNbLignes) && 
+				(objttPlateauJeu[objPointFile.x + 1][objPointFile.y] == null) && 
+				(objRandom.nextBoolean() == true))
+			{
+				// Créer le point à droite de la case courante
+				objPoint = new Point(objPointFile.x + 1, objPointFile.y);
+				
+				// Définir la valeur de la case au point spécifié à la case 
+				// d'identification
+				objttPlateauJeu[objPoint.x][objPoint.y] = objCaseParcourue;
+				
+				// Ajouter le point dans la file de priorité et dans la liste des 
+				// points passés
+				lstFile.add(objPoint);
+				lstPointsCasesPresentes.add(objPoint);
+				
+				// Incrémenter le nombre de points passés
+				intCompteurCases++;
+			}
+			
+			// S'il y a une case en haut, et que cette case n'a pas encore été
+			// passée et que une valeur aléatoire retourne true, alors on va
+			// choisir cette case
+			if ((objPointFile.y - 1 >= 0) && 
+				(objttPlateauJeu[objPointFile.x][objPointFile.y - 1] == null) && 
+				(objRandom.nextBoolean() == true))
+			{
+				// Créer le point en haut de la case courante
+				objPoint = new Point(objPointFile.x, objPointFile.y - 1);
+				
+				// Définir la valeur de la case au point spécifié à la case 
+				// d'identification
+				objttPlateauJeu[objPoint.x][objPoint.y] = objCaseParcourue;
+				
+				// Ajouter le point dans la file de priorité et dans la liste des 
+				// points passés
+				lstFile.add(objPoint);
+				lstPointsCasesPresentes.add(objPoint);
+				
+				// Incrémenter le nombre de points passés
+				intCompteurCases++;
+			}
+			
+			// S'il y a une case en bas, et que cette case n'a pas encore été
+			// passée et que une valeur aléatoire retourne true, alors on va
+			// choisir cette case
+			if ((objPointFile.y + 1 < intNbColonnes) && 
+				(objttPlateauJeu[objPointFile.x][objPointFile.y + 1] == null) && 
+				(objRandom.nextBoolean() == true))
+			{
+				// Créer le point en bas de la case courante
+				objPoint = new Point(objPointFile.x, objPointFile.y + 1);
+				
+				// Définir la valeur de la case au point spécifié à la case 
+				// d'identification
+				objttPlateauJeu[objPoint.x][objPoint.y] = objCaseParcourue;
+				
+				// Ajouter le point dans la file de priorité et dans la liste des 
+				// points passés
+				lstFile.add(objPoint);
+				lstPointsCasesPresentes.add(objPoint);
+				
+				// Incrémenter le nombre de points passés
+				intCompteurCases++;
+			}
+		}
+		return intCompteurCases;
+	}
+
+    /**
+     * Method used to create the semilinear game board
      * @param x
      * @param y
      * @param intNbLignes
      * @param intNbColonnes
      * @param max_nb_joueurs 
-     * @return
+     * @return boolean if the point will be or not used
      */
     private static boolean ifNotBorder(int x, int y, int intNbLignes, int intNbColonnes, int max_nb_joueurs) {
 		
@@ -717,7 +955,7 @@ public final class GenerateurPartie
      * @param Vector listePointsCaseLibre : La liste des points des cases libres
      * @return Point[] : Un tableau de points pour chaque joueur 
      */
-    public static Point[] genererPositionJoueurs(int nbJoueurs, Vector<Point> listePointsCaseLibre)
+    public static Point[] genererPositionJoueurs(int nbJoueurs)
     {
 		// Créer un tableau contenant les nbJoueurs points
 		Point[] objtPositionJoueurs = new Point[nbJoueurs];
@@ -728,6 +966,32 @@ public final class GenerateurPartie
 		{
 		
 			objtPositionJoueurs[i] = new Point(0,i);
+		}
+		
+		return objtPositionJoueurs;
+    }
+    
+    /**
+     * Cette fonction permet de générer la position des joueurs. Chaque joueur 
+     * est généré sur une case vide.
+     * 
+     * @param int nbJoueurs : Le nombre de joueurs dont générer la position
+     * @param Vector listePointsCaseLibre : La liste des points des cases libres
+     * @return Point[] : Un tableau de points pour chaque joueur 
+     */
+    public static Point[] genererPositionJoueurs(int nbJoueurs, ArrayList<Point> lstPointsCaseLibre)
+    {
+    	// Créer un tableau contenant les nbJoueurs points
+		Point[] objtPositionJoueurs = new Point[nbJoueurs];
+		
+		// Création d'un objet permettant de générer des nombres aléatoires
+		Random objRandom = new Random();
+		
+		// Pour tous les joueurs de la partie, on va générer des positions de joueurs
+		for (int i = 0; i < nbJoueurs; i++)
+		{
+			// Obtenir un point aléatoirement
+			objtPositionJoueurs[i] = (Point) lstPointsCaseLibre.remove(objRandom.nextInt(lstPointsCaseLibre.size()));
 		}
 		
 		return objtPositionJoueurs;
