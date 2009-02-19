@@ -165,7 +165,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    objParametreIA = objControleurJeu.obtenirParametreIA();
 	    
 		strNom = nom;
-                vaSubirUneBanane = "";
+        vaSubirUneBanane = "";
 		
 		// Cette variable sera utilisée dans la thread
 		objPositionFinaleVisee = null;
@@ -193,7 +193,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		
 		// Initialisation du pointage
 		intPointage = 0;
-                intArgent = 0;
+        intArgent = 0;
 		
 		// Initialisation à null de la position, le joueur virtuel n'est nul part
 		objPositionJoueur = null;
@@ -316,16 +316,16 @@ public class JoueurVirtuel extends Joueur implements Runnable {
                         }while(essais < 50 && objPositionIntermediaire.equals(this.obtenirTable().obtenirPositionWinTheGame()));
                     }
                 }
-                /* **********************************************************
+              
                  
                 
                  
                 // ORIGINAL CODE - TODO CHANGE BACK TO GET WIN THE GAME
                 // AS WELL AS THE CHANGES IN SALLE.JAVA
-				/* **********************************************************
+				
                                 // Trouver une case intéressante à atteindre
                                 // Si on a assez de points pour atteindre le WinTheGame, allons-y!
-                                if(!this.obtenirTable().obtenirButDuJeu().equals("original") && this.obtenirTable().peutAllerSurLeWinTheGame(this.obtenirPointage()))
+                                if(this.obtenirTable().getObjSalle().getGameType().equals("Tournament") && this.obtenirTable().peutAllerSurLeWinTheGame(this.obtenirPointage()))
                                 {
                                     objPositionFinaleVisee = this.obtenirTable().obtenirPositionWinTheGame();
                                 }
@@ -338,7 +338,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
                                         {
                                             objPositionFinaleVisee = trouverPositionFinaleVisee();
                                             essais++;
-                                        }while(!this.obtenirTable().obtenirButDuJeu().equals("original") && essais < 50 && objPositionFinaleVisee.equals(this.obtenirTable().obtenirPositionWinTheGame()));
+                                        }while(this.obtenirTable().getObjSalle().getGameType().equals("Tournament") && essais < 50 && objPositionFinaleVisee.equals(this.obtenirTable().obtenirPositionWinTheGame()));
                                     }
                                 }
                                 
@@ -352,10 +352,10 @@ public class JoueurVirtuel extends Joueur implements Runnable {
                                         {
                                             objPositionIntermediaire = trouverPositionIntermediaire();
                                             essais++;
-                                        }while(!this.obtenirTable().obtenirButDuJeu().equals("original") && essais < 50 && objPositionIntermediaire.equals(this.obtenirTable().obtenirPositionWinTheGame()));
+                                        }while(this.obtenirTable().getObjSalle().getGameType().equals("Tournament")&& essais < 50 && objPositionIntermediaire.equals(this.obtenirTable().obtenirPositionWinTheGame()));
                                     }
                                 }
-				 ********************************************************** */
+				
 				
 				
 				// S'il y a erreur de recherche ou si le joueur virtuel est pris
@@ -1398,7 +1398,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         }
         
         // Si le joueur virtuel a atteint le WinTheGame, on arrête la partie
-        if(!this.obtenirTable().obtenirButDuJeu().equals("original") && objNouvellePosition.equals(this.obtenirTable().obtenirPositionWinTheGame())) this.obtenirTable().arreterPartie(this.obtenirNom());
+        if(this.obtenirTable().getObjSalle().getGameType().equals("Tournament") && objNouvellePosition.equals(this.obtenirTable().obtenirPositionWinTheGame())) this.obtenirTable().arreterPartie(this.obtenirNom());
         
         if (objCaseDestination instanceof CaseSpeciale)
         {
@@ -2585,7 +2585,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     // it is not absolutely correct because PositionWinTheGame is a array, but it is not so important 
     public int obtenirDistanceAuWinTheGame()
     {
-        return Math.abs(objPositionJoueur.x - objTable.obtenirPositionWinTheGame()[0].x) + Math.abs(objPositionJoueur.y - objTable.obtenirPositionWinTheGame()[0].y);
+        return Math.abs(objPositionJoueur.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(objPositionJoueur.y - objTable.obtenirPositionWinTheGame().y);
     }
 }
 

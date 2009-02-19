@@ -300,7 +300,7 @@ public class Salle
 	    {
 	    	
 	    	// Créer une nouvelle table en passant les paramètres appropriés
-	    	Table objTable = new Table( objGestionnaireBD, this, genererNoTable(), joueur.obtenirNomUtilisateur(), tempsPartie, objRegles, gestionnaireTemps, tacheSynchroniser, objControleurJeu, "winTheGameWithScore");
+	    	Table objTable = new Table( objGestionnaireBD, this, genererNoTable(), joueur.obtenirNomUtilisateur(), tempsPartie, objRegles, gestionnaireTemps, tacheSynchroniser, objControleurJeu);
 	    		    	
 	    	objTable.creation();
 	    		    	
