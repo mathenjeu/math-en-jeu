@@ -2650,7 +2650,7 @@ public class ProtocoleJoueur implements Runnable
     					{
                             // On vérifie d'abord si le joueur a atteint le WinTheGame;
                             // Si c'est le cas, on arrète la partie
-                            if(!this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirButDuJeu().equals("original") && objRetour.obtenirNouvellePosition().equals(this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirPositionWinTheGame()))
+                            if(this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().getObjSalle().getGameType().equals("Tournament") && objRetour.obtenirNouvellePosition().equals(this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirPositionWinTheGame()))
                             {
                                 this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().arreterPartie(this.obtenirJoueurHumain().obtenirNomUtilisateur());
                             }
@@ -4838,7 +4838,7 @@ public class ProtocoleJoueur implements Runnable
 
         // la partie
 
-        EvenementPartieDemarree objEvenementPartieDemarree = new EvenementPartieDemarree(objTable.obtenirTempsTotal(), lstPositionsJoueurs, objttPlateauJeu, this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable());
+        EvenementPartieDemarree objEvenementPartieDemarree = new EvenementPartieDemarree(objTable.obtenirTempsTotal(), lstPositionsJoueurs, this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable());
 
 
 
