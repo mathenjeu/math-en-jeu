@@ -1,4 +1,4 @@
-﻿/*******************************************************************
+/*******************************************************************
 Math en jeu
 Copyright (C) 2007 Projet SMAC
 
@@ -34,71 +34,90 @@ import mx.events.EventDispatcher;
 import mx.utils.Delegate;
 // TODO : Un moment donné il va falloir intégrer le reply à un événement
 //        comme pour le ping
+
 class GestionnaireCommunicationTunneling extends GestionnaireCommunication
 {
     // Déclaration d'une fonction qui va prendre en paramètre un écouteur
     // et qui va le garder en mémoire et l'appeler lorsque nécessaire
     public var addEventListener:Function;
+
     // Déclaration d'une fonction qui va permettre d'enlever une fonction
     // qui écoute l'événement
     public var removeEventListener:Function;
+
     // Déclaration d'une fonction qui va permettre d'envoyer un événement
     // aux fonctions qui ont été ajoutées par addEventListener
     private var dispatchEvent:Function;
+
     // Déclaration d'un objet DispatchingXMLSocket qui va servir à communiquer
     // avec le serveur de jeu
     private var objSocketClient:DispatchingTunneling;
+
     // Déclaration d'une contante gardant le délai que le timer doit attendre
     // pour déterminer si une commande envoyée s'est perdue en chemin
     private var TEMPS_TIMER:Number = 8000;
+
     // Déclaration d'un delegate qui va pointer vers la fonction qui gère
     // l'événement de temps écoulé
     private var objTimerDelegate:Function;
+
     // Déclaration d'un Timer qui va servir à vérifier si une commande
     // a bien été envoyée au serveur (il faut que le serveur ait renvoyé
     // un accusé réception de notre commande)
     private var objTimerEnvoiCommandes:Timer;
+
     // Déclaration d'un delegate qui va pointer vers la fonction qui gère
     // l'événement de connexion physique
     private var objConnexionPhysiqueDelegate:Function;
+
     // Déclaration d'un delegate qui va pointer vers la fonction qui gère
     // l'événement de déconnexion physique
     private var objDeconnexionPhysiqueDelegate:Function;
+
     // Déclaration d'une variable qui va permettre de garder l'état courant du
     // client (les valeurs sont définies dans la classe Etat)
     private var intEtatClient:Number;
+
     // Déclaration d'un tableau où chaque élément est un objet ayant les
     // champs no pour le numéro de la commande, nom pour le nom de la commande,
     // objectXML pour garder la commande à envoyer en XML et listeDelegate pour
     // la liste des fonctions à appeler lors de l'arrivée des événements.
     // listeDelegate est un tableau ExtendedArray et non une liste associative.
     private var lstCommandesAEnvoyer:ExtendedArray;
+
     // Déclaration d'une liste dont les indices sont le nom de la commande ou
     // événement à appeler et le contenu est un Delegate. Cette liste contient
     // un élément spécial qui est identifié par la chaîne "tableau" et qui
     // a comme valeur un ExtendedArray contenant tous les noms clés de cette
     // liste
     private var lstDelegateEvenements:Object;
+
     // Déclaration d'un tableau où le contenu est un objet XMLNode
     private var lstEvenementsRecus:ExtendedArray;
+
     // Déclaration d'un tableau où le contenu est un objet XMLNode
     // Cette liste contient les événements à vérifier et à envoyer
     private var lstEvenementsAVerifier:ExtendedArray;
+
     // Déclaration d'une contante gardant le maximum possible pour le
     // compteur de commandes du client
     private var MAX_COMPTEUR:Number = 100;
+ 
     // Déclaration d'une variable qui va servir de compteur pour envoyer des
     // commandes serveur de jeu (sa valeur maximale est 100, après 100 on
     // recommence à 0)
     private var intCompteurCommande:Number;
+ 
     // Déclaration d'une variable qui va contenir le dernier numéro envoyé
     // par le serveur. Cette variable va servir à traiter les événements
     // reçus dans l'ordre. Ce compteur va également jusqu'à 100
     private var intDerniereCommandeServeur:Number;
+ 
     // Déclaration d'une variable qui va contenir le nombre d'erreurs de
     // suite étant survenues. Après 3 erreurs, un message est envoyé au
     // client
     private var intCompteurErreurs:Number;
+ 
     // Déclaration d'une référence vers un objet qui garde en mémoire le
     // numéro de la commande par le champ no, le nom de la commande par
     // le champ nom, l'objet XML de la commande par le champ objectXML
@@ -114,56 +133,76 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
 		this.intEtatClient = intEtat;
 	}
 	
-    /**
-     * Constructeur de la classe GestionnaireCommunication qui prend le
-     * gestionnaire de commandes en paramètre.
-     */
+  
+  /**
+    * Constructeur de la classe GestionnaireCommunication qui prend le
+    * gestionnaire de commandes en paramètre.
+    */
     function GestionnaireCommunicationTunneling(connexionPhysiqueDelegate:Function, deconnexionPhysiqueDelegate:Function, url_serveur:String, port:Number)
     {
         // Initialiser le dispatcher d'événements (ajoute les fonctions
         // addEventListener, removeEventListener et dispatchEvent)
         EventDispatcher.initialize(this);
+       
         // Garder en mémoire le delegate de la fonction de connexion physique
         objConnexionPhysiqueDelegate = connexionPhysiqueDelegate;
+       
         // Garder en mémoire le delegate de la fonction de déconnexion physique
         objDeconnexionPhysiqueDelegate = deconnexionPhysiqueDelegate;
+       
         // Au début le joueur n'est pas connecté
         intEtatClient = Etat.NON_CONNECTE.no;
+       
         // Créer un nouveau tableau d'objets
         lstCommandesAEnvoyer = new ExtendedArray();
+       
         // Créer une nouvelle liste d'objets
         lstDelegateEvenements = new Object();
+       
         // Créer l'élément tableau dans la liste qui va contenir les noms
         // clés dans un tableau
         lstDelegateEvenements.tableau = new ExtendedArray();
+       
         // Créer un nouveau tableau d'objets
         lstEvenementsRecus = new ExtendedArray();
+       
         // Créer un nouveau tableau d'objets
         lstEvenementsAVerifier = new ExtendedArray();
+       
         // Initialiser le compteur à 0
         intCompteurCommande = 0;
+       
         // Initialiser le compteur à -1
         intDerniereCommandeServeur = -1;
+       
         // Au départ, aucune commande n'est en traitement
         objCommandeEnTraitement = null;
+       
         // Le temps pour recevoir un accusé réception sera de TEMPS_TIMER/1000 secondes
         objTimerEnvoiCommandes = new Timer(TEMPS_TIMER);
+       
         // Garder en mémoire le delegate pour l'événement de temps écoulé
         objTimerDelegate = Delegate.create(this, objTimerEnvoiCommandes_tempsEcoule);
+       
         // Initialiser le compteur d'erreurs à 0
         intCompteurErreurs = 0;
+       
         // Créer un nouveauDispatching XMLSocket qui va permettre de
         // communiquer avec le serveur en java
         objSocketClient = new DispatchingTunneling(url_serveur, port);
+       
         // Ajouter l'écouteur de l'événement connect
         objSocketClient.addEventListener("connect", Delegate.create(this, objSocketClient_onConnect));
+       
         // Ajouter l'écouteur de l'événement xml
         objSocketClient.addEventListener("xml", Delegate.create(this, objSocketClient_onXML));
+       
         // Ajouter l'écouteur de l'événement close
         //objSocketClient.addEventListener("close", Delegate.create(this, objSocketClient_onClose));
         // Essayer de se connecter au serveur de jeu
 		objSocketClient.connect(/*url_serveur, port*/);
     }
+    
     /**
      * Cet événement est appelé lorsque la connexion a réussi ou échoué.
      *
@@ -248,6 +287,8 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
         this.removeEventListener("DeconnexionPhysique", objDeconnexionPhysiqueDelegate);
     }
 */
+    
+    
     /**
      * Cet événement est appelé lorsqu'un message XML est reçu par le client.
      * Un document XML est passé en paramètres. Si une commande reçue n'est
@@ -284,6 +325,7 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
                 {
                     intDerniereCommandeServeur = objNoeudCommande.attributes.no;
                 }
+                
                 // Si la commande reçue est un événement, alors on va vérifier
                 // si on accepte l'événement ou non et si on doit le garder en
                 // attente ou le traiter immédiatement
@@ -309,11 +351,14 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
                          objNoeudCommande.attributes.nom != "ParametrePasBon" &&
                          objNoeudCommande.attributes.nom != "CommandeNonReconnue")
                 {
+                
                     // Arrêter le timer puisque la commande s'est bien rendue
                     // au serveur
                     objTimerEnvoiCommandes.arreter();
+                
                     // Réinitialiser le compteur d'erreurs à 0
                     intCompteurErreurs = 0;
+                
                     // Aiguiller la réponse du serveur vers la bonne fonction
                     switch (objCommandeEnTraitement.nom)
                     {
@@ -385,6 +430,7 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
             }
         }
     }
+    
     /**
      * Cette fonction permet d'obtenir le prochain numéro de commande à
      * envoyer au serveur. Ce numéro est de 0 au maximum. Si le numéro devient
@@ -397,8 +443,10 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
         // Déclaration d'une variable qui va contenir le numéro de la commande
         // à retourner
         var intNumeroCommande = intCompteurCommande;
+    
         // Incrémenter le compteur de commandes
         intCompteurCommande++;
+    
         // Si le compteur de commandes est maintenant plus grand que la plus
         // grande valeur possible, alors on réinitialise le compteur à 0
         if (intCompteurCommande > MAX_COMPTEUR)
@@ -463,6 +511,7 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
             // Envoyer l'événement aux écouteurs de cet événement		
             envoyerEvenement(noeudCommande);
         }
+    
         // Sinon, s'il y a une commande en traitement, on vérifie les
         // cas pouvant causer des problèmes de synchronisation (un
         // événement arrive avant le retour de la requête) et on
@@ -475,6 +524,7 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
             lstEvenementsRecus.push(noeudCommande);
         }
     }
+    
     /**
      * Cette fonction permet de traiter la prochaine commande en la chargeant
      * en mémoire. Si la prochaine commande n'est pas une commande valide
@@ -485,14 +535,17 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
         // Déclaration d'une variable qui va garder le code qui va permettre
         // de déterminer si on accepte la commande ou non
         var bolCommandeAcceptee:Boolean = false;
+    
         // Déclaration d'une liste des commandes acceptables
         var lstCommandesAcceptables:ExtendedArray = ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient));
+    
         // On boucle et passe à la prochaine commande tant qu'elle n'est
         // pas acceptable
         while (lstCommandesAEnvoyer.length >= 1 && bolCommandeAcceptee == false)
         {
             // Obtenir l'objet au début de la liste des commandes à envoyer
             var objCommande:Object = lstCommandesAEnvoyer.shift();
+    
             // Si la commande courante est dans la liste des commandes
             // acceptables, alors on peut la charger en mémoire et commencer à
             // écouter pour ses événements
@@ -516,6 +569,7 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
                         // Ajouter le Delegate de l'événement courant dans
                         // la liste en mémoire
                         lstDelegateEvenements[objCommande.listeDelegate[i].nom] = objCommande.listeDelegate[i].delegate;
+    
                         // Si le tableau ne contient pas le nom du delegate,
                         // alors on doit l'ajouter, sinon on ne fait rien
                         if (lstDelegateEvenements.tableau.contains(objCommande.listeDelegate[i].nom) == false)
@@ -556,17 +610,21 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
     {
         // Envoyer l'événement de retour de la commande
         dispatchEvent(objetEvenement);
+    
         // Enlever l'écouteur pour l'événement de retour de la commande
         this.removeEventListener(objCommandeEnTraitement.listeDelegate[0].nom,
                                  objCommandeEnTraitement.listeDelegate[0].delegate);
+       
         // Déclaration d'une variable qui va contenir un noeud XML d'événement
         var objNoeudEvenement:XMLNode;
+       
         // Boucler tant qu'il y a des événements dans la liste d'événements
         while (lstEvenementsRecus.length > 0)
         {
             // Retirer le premier élément de la liste et le mettre dans une
             // variable
             objNoeudEvenement = XMLNode(lstEvenementsRecus.shift());
+       
             // Si la commande a fonctionné avec succès ou qu'elle n'a pas
             // fonctionnée, mais que cet événement n'est pas un événement qui
             // a été ajouté par la commande courante, alors on peut envoyer
@@ -578,6 +636,7 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
                 // accepte les événements après le retour de la commande ou
                 // avant
                 var bolAccepteApres:Boolean = ExtendedArray.fromArray(Etat.obtenirEvenementsAcceptablesApres(intEtatClient, objCommandeEnTraitement.nom)).contains(objNoeudEvenement.attributes.nom);
+       
                 // Si on doit accepter les événements après l'arrivée du retour
                 // de la commande du serveur
                 if (bolAccepteApres == true)
@@ -654,6 +713,7 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
             }
         }
     }
+    
     /**
      * Cette fonction permet de transformer le noeud XML de l'événement en un
      * objet événement et d'envoyer cet événement aux écouteurs.
@@ -899,7 +959,8 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
 		    	{
 			    	if(noeudEvenement.attributes.nom == "PartieTerminee")
 			    	{
-				    	//trace("if = partieTerminee,  avant le switch : "+strNomType);
+		
+    		    	//trace("if = partieTerminee,  avant le switch : "+strNomType);
 				    	
 						trace(noeudEvenement.firstChild);
 	
@@ -1147,6 +1208,7 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
                 // Il faut maintenant mettre à jour l'état courant et commencer
                 // à accepter les événements propres à la partie
                 intEtatClient = Etat.PARTIE_DEMARREE.no;
+    
                 //TODO: Il va falloir améliorer ça car il se pourrait que
                 // l'usager fasse une commande et que la commande se traite
                 // il faut donc très bien synchroniser les événements
@@ -1195,6 +1257,7 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
             }
         }
     }
+    
     /**
      * Cette méthode permet de se connecter au serveur de jeu.
      *
@@ -1212,15 +1275,19 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
         {
             // Déclaration d'un tableau dont le contenu est un Delegate
             var lstDelegateCommande:ExtendedArray = new ExtendedArray();
+    
             // Ajouter le Delegate de retour dans le tableau des delegate pour
             // cette fonction
             lstDelegateCommande.push({nom:"Connexion", delegate:connexionDelegate});
+    
             // Déclaration d'une variable qui va contenir le numéro de la commande
             // générée
             var intNumeroCommande:Number = obtenirNumeroCommande();
+    
             // Créer l'objet XML qui va contenir la commande à envoyer au serveur
             var objObjetXML:XML = new XML();
-			// Créer tous les noeuds de la commande
+		
+    	// Créer tous les noeuds de la commande
             var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
             var objNoeudParametreNomUtilisateur:XMLNode = objObjetXML.createElement("parametre");
             var objNoeudParametreNomUtilisateurText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(nomUtilisateur));
@@ -1230,6 +1297,7 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
             var objNoeudParametreLangueText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(_level0.loader.contentHolder.langue));
             var objNoeudParametreGameType:XMLNode = objObjetXML.createElement("parametre");
             var objNoeudParametreGameTypeText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(_level0.loader.contentHolder.gameType));
+    
             // Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "Connexion";
@@ -1246,17 +1314,21 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
             objNoeudCommande.appendChild(objNoeudParametreLangue);
             objNoeudCommande.appendChild(objNoeudParametreGameType);
             objObjetXML.appendChild(objNoeudCommande);
+    
             // Déclaration d'un nouvel objet qui va contenir les informations sur
             // la commande à traiter courante
             var objObjetCommande:Object = new Object();
+    
             // Définir les propriétés de l'objet de la commande à ajouter dans le
             // tableau des commandes à envoyer
             objObjetCommande.no = intNumeroCommande;
             objObjetCommande.nom = "Connexion";
             objObjetCommande.objetXML = objObjetXML;
             objObjetCommande.listeDelegate = lstDelegateCommande;
+    
             // Ajouter l'objet de commande à envoyer courant à la fin du tableau
             var intNbElements:Number = lstCommandesAEnvoyer.push(objObjetCommande);
+    
             // Si le nombre d'éléments dans la liste est de 1 (celui qu'on vient
             // juste d'ajouter) et qu'il n'y aucune commande en traitement, alors
             // on peut envoyer la commande pour la faire traiter (normalement, il
@@ -1274,6 +1346,8 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
             // TODO: Dire qu'on n'est pas connecté
         }
     }
+    
+    
     /**
      * Cette méthode permet de déconnecter le joueur du serveur de jeu.
      *
@@ -1287,11 +1361,14 @@ trace(this.intEtatClient);
         // de la fonction
         if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("Deconnexion", "nom") == true)
         {
+    
             // Déclaration d'un tableau dont le contenu est un Delegate
             var lstDelegateCommande:ExtendedArray = new ExtendedArray();
+    
             // Ajouter le Delegate de retour dans le tableau des delegate pour
             // cette fonction
             lstDelegateCommande.push({nom:"Deconnexion", delegate:deconnexionDelegate});
+    
             // Déclaration d'une variable qui va contenir le numéro de la commande
             // générée
             var intNumeroCommande:Number = obtenirNumeroCommande();
@@ -1331,6 +1408,7 @@ trace(this.intEtatClient);
             // TODO: Dire qu'on n'est pas connecté
         }
     }
+    
     /**
      * Cette méthode permet d'obtenir la liste des joueurs connectés au
      * serveur de jeu.
@@ -1360,10 +1438,13 @@ trace(this.intEtatClient);
             // Déclaration d'une variable qui va contenir le numéro de la commande
             // générée
             var intNumeroCommande:Number = obtenirNumeroCommande();
+    
             // Créer l'objet XML qui va contenir la commande à envoyer au serveur
             var objObjetXML:XML = new XML();
+    
             // Créer tous les noeuds de la commande
             var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
+    
             // Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "ObtenirListeJoueurs";
@@ -1379,6 +1460,7 @@ trace(this.intEtatClient);
             objObjetCommande.listeDelegate = lstDelegateCommande;
             // Ajouter l'objet de commande à envoyer courant à la fin du tableau
             var intNbElements:Number = lstCommandesAEnvoyer.push(objObjetCommande);
+    
             // Si le nombre d'éléments dans la liste est de 1 (celui qu'on vient
             // juste d'ajouter) et qu'il n'y aucune commande en traitement, alors
             // on peut envoyer la commande pour la faire traiter (normalement, il
@@ -1396,6 +1478,7 @@ trace(this.intEtatClient);
             // TODO: Dire qu'on ne peut pas faire la commande tout de suite
         }
     }
+    
     /**
      * Cette méthode permet d'obtenir la liste des salles .
      *
@@ -1410,14 +1493,18 @@ trace(this.intEtatClient);
         {
             // Déclaration d'un tableau dont le contenu est un Delegate
             var lstDelegateCommande:ExtendedArray = new ExtendedArray();
+    
             // Ajouter le Delegate de retour dans le tableau des delegate pour
             // cette fonction
             lstDelegateCommande.push({nom:"ObtenirListeSalles", delegate:obtenirListeSallesDelegate});
+    
             // Déclaration d'une variable qui va contenir le numéro de la commande
             // générée
             var intNumeroCommande:Number = obtenirNumeroCommande();
+    
             // Créer l'objet XML qui va contenir la commande à envoyer au serveur
             var objObjetXML:XML = new XML();
+    
             // Créer tous les noeuds de la commande
             var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
             // Construire l'arbre du document XML
@@ -1452,6 +1539,8 @@ trace(this.intEtatClient);
             // TODO: Dire qu'on n'est pas connecté
         }
     }
+    
+    
     /**
      * Cette méthode permet au joueur d'entrer dans une salle.
      *
@@ -1469,19 +1558,24 @@ trace(this.intEtatClient);
         {
             // Déclaration d'un tableau dont le contenu est un Delegate
             var lstDelegateCommande:ExtendedArray = new ExtendedArray();
+            
             // Ajouter le Delegate de retour dans le tableau des delegate pour
             // cette fonction
             lstDelegateCommande.push({nom:"EntrerSalle", delegate:entrerSalleDelegate});
+            
             // Déclaration d'une variable qui va contenir le numéro de la commande
             // générée
             var intNumeroCommande:Number = obtenirNumeroCommande();
+            
             // Créer l'objet XML qui va contenir la commande à envoyer au serveur
             var objObjetXML:XML = new XML();
+            
             // Créer tous les noeuds de la commande
             var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
             var objNoeudParametreNomSalle:XMLNode = objObjetXML.createElement("parametre");
             var objNoeudParametreNomSalleText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(nomSalle));
             var objNoeudParametreMotDePasse:XMLNode = objObjetXML.createElement("parametre");
+            
             // Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "EntrerSalle";
@@ -1498,15 +1592,18 @@ trace(this.intEtatClient);
             objNoeudCommande.appendChild(objNoeudParametreNomSalle);
             objNoeudCommande.appendChild(objNoeudParametreMotDePasse);
             objObjetXML.appendChild(objNoeudCommande);
+            
             // Déclaration d'un nouvel objet qui va contenir les informations sur
             // la commande à traiter courante
             var objObjetCommande:Object = new Object();
+            
             // Définir les propriétés de l'objet de la commande à ajouter dans le
             // tableau des commandes à envoyer
             objObjetCommande.no = intNumeroCommande;
             objObjetCommande.nom = "EntrerSalle";
             objObjetCommande.objetXML = objObjetXML;
             objObjetCommande.listeDelegate = lstDelegateCommande;
+            
             // Ajouter l'objet de commande à envoyer courant à la fin du tableau
             var intNbElements:Number = lstCommandesAEnvoyer.push(objObjetCommande);
             // Si le nombre d'éléments dans la liste est de 1 (celui qu'on vient
@@ -1653,6 +1750,7 @@ trace(this.intEtatClient);
             // TODO: Dire qu'on ne peut pas faire la commande tout de suite
         }
     }
+    
     /**
      * Cette méthode permet d'obtenir la liste des tables de la salle courante.
      *
@@ -1734,6 +1832,7 @@ trace(this.intEtatClient);
             // TODO: Dire qu'on n'est pas connecté
         }
     }
+    
     /**
      * Cette méthode permet au joueur de créer une table.
      *
@@ -1803,6 +1902,7 @@ trace(this.intEtatClient);
             // TODO: Dire qu'on n'est pas connecté
         }
     }
+    
     /**
      * Cette méthode permet au joueur d'entrer dans une table.
      *
@@ -1871,6 +1971,7 @@ trace(this.intEtatClient);
             // TODO: Dire qu'on n'est pas connecté
         }
     }
+    
     /**
      * Cette méthode permet au joueur de quitter la table dans laquelle il se
      * trouve.
@@ -2233,7 +2334,8 @@ trace(this.intEtatClient);
         }
     }
 	
-	 /**
+	 
+   /**
      * Cette méthode permet au joueur d'utiliser un objet.
      *
      * @param Function utilserObjetDelegate : Un pointeur sur la
@@ -2516,6 +2618,7 @@ trace(this.intEtatClient);
      * 8. Traiter la prochaine commande
      *
      **********************************************/
+
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
@@ -2528,6 +2631,7 @@ trace(this.intEtatClient);
      */
     private function retourConnexion(noeudCommande:XMLNode)
     {
+
 trace("Retour Connexion");
         // Construire l'objet événement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
@@ -2563,9 +2667,6 @@ trace("Retour Connexion");
 	
 	
 	
-
-	
-	
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
@@ -2595,6 +2696,7 @@ trace("Retour Deconnexion");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+   
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
@@ -2627,6 +2729,7 @@ trace("Retour ObtenirListeJoueurs");
                 objEvenement.listeNomUtilisateurs.push({nom:lstChildNodes[i].attributes.nom});
             }
         }
+   
         // Si le retour de la fonction est une réponse positive et non une
         // erreur, alors on peut passer à l'autre état
         if (noeudCommande.attributes.type == "Reponse")
@@ -2637,9 +2740,11 @@ trace("Retour ObtenirListeJoueurs");
         // Appeler la fonction qui va envoyer tous les événements et
         // retirer leurs écouteurs
         envoyerEtMettreAJourEvenements(noeudCommande, objEvenement);
+   
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+   
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
@@ -2686,6 +2791,7 @@ trace("Retour ObtenirListeSalles");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+   
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
@@ -2712,9 +2818,11 @@ trace("Retour EntrerSalle");
         // Appeler la fonction qui va envoyer tous les événements et
         // retirer leurs écouteurs
         envoyerEtMettreAJourEvenements(noeudCommande, objEvenement);
+   
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+   
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
@@ -2744,6 +2852,7 @@ trace("Retour QuitterSalle");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+   
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
@@ -2789,6 +2898,7 @@ trace("Retour ObtenirListeJoueursSalle");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+   
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
@@ -2897,7 +3007,7 @@ trace("Retour ObtenirListeTables");
     
 	
 	
-	    /**
+	  /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
      * écouteur à la fonction
@@ -3055,6 +3165,8 @@ trace("Retour QuitterTable");
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+   
+   
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
      * paramètres et de lancer un événement à ceux qui s'étaient ajouté comme
@@ -3109,11 +3221,8 @@ trace("Retour DemarrerPartie");
         envoyerEtMettreAJourEvenements(noeudCommande, objEvenement);
         // Traiter la prochaine commande
         traiterProchaineCommande();
-		
-		
-		
-		
-		}
+	}
+
 
     /**
      * Cette méthode permet de décortiquer le noeud de commande passé en
