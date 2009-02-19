@@ -634,6 +634,7 @@ public class GestionnaireBD
 						motDePasse = rs.getString( "password" );
 						createur = rs.getString("user.name");
 						gameType = rs.getString("game_type.name");
+						System.out.println(gameType);
 
 						chargerRegllesSalle(objReglesSalle, room, langId);
 						Salle objSalle = new Salle(this, nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType);
