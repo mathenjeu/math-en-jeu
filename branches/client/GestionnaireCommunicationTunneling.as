@@ -426,7 +426,7 @@ class GestionnaireCommunicationTunneling extends GestionnaireCommunication
                     }
                 }
 				else
-					trace("find me in gesComm sucker! : "+objNoeudCommande.attributes.nom);
+					trace("find me in gesCommTunn sucker! : "+objNoeudCommande.attributes.nom);
             }
         }
     }
