@@ -563,8 +563,8 @@ public class GestionnaireBD
      */
 	public void fillsRooms(String language)
 	{
-		Regles objReglesSalle = new Regles();
-		ArrayList<Integer> rooms = new ArrayList();
+		
+		ArrayList<Integer> rooms = new ArrayList<Integer>();
 		int langId = 0;
 		if (language.equalsIgnoreCase("fr")) 
             langId = 1;
@@ -619,7 +619,8 @@ public class GestionnaireBD
 			{
 				synchronized( requete )
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room_info.name, room.password, game_type.name, user.name, room.room_id, room_info.language_id " +
+					ResultSet rs = requete.executeQuery( "SELECT room_info.name, room.password," +
+							"room_info.description, game_type.name, user.name, room.room_id, room_info.language_id " +
 							" FROM room_info,room, game_type, user, language " +
 							" WHERE room.game_type_id = game_type.game_type_id " +
 							"  AND room.room_id = room_info.room_id " +
@@ -630,15 +631,17 @@ public class GestionnaireBD
 					if(rs.next())
 					{
 						nom = rs.getString( "room_info.name" );
-						System.out.println(nom);
 						motDePasse = rs.getString( "password" );
 						createur = rs.getString("user.name");
 						gameType = rs.getString("game_type.name");
+						String roomDescription = rs.getString( "room_info.description" );
+						System.out.println(roomDescription);
 						System.out.println(gameType);
-
+						
+						Regles objReglesSalle = new Regles();
 						chargerRegllesSalle(objReglesSalle, room, langId);
 						Salle objSalle = new Salle(this, nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType);
-						chargerMaxObjets(objSalle, room);
+						objSalle.setRoomDescription(roomDescription);
 						objControleurJeu.ajouterNouvelleSalle(objSalle);
 					}   
 
@@ -666,40 +669,7 @@ public class GestionnaireBD
 	}// fin méthode chargerSalle
 	
 
-   /**
-    * 
-    * @param roomId 
- * @param objSalle 
- * @param roomId
-    */
-	public void chargerMaxObjets(Salle objSalle, int roomId) {
-		
-		try
-		{
-			synchronized( requete )
-			{
-				ResultSet rs = requete.executeQuery( "SELECT rule.max_object_coin FROM rule, room" +
-					" WHERE room.room_id = " + 1 +
-					" AND rule.rule_id = room.rule_id ;" );
-				if(rs.next())
-				{
-					
-					int maxPiecesObjects = rs.getInt( "max_object_coin" );
-					Salle.setMaxPossessionPieceEtObjet(maxPiecesObjects);					
-                }
-			}
-		}
-		catch (SQLException e)
-		{
-			// Une erreur est survenue lors de l'exécution de la requète
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error( e.getMessage() );
-		    e.printStackTrace();			
-		}
-		
-	}
-
+ 
    /**
     * 
     * @param objReglesSalle
@@ -713,12 +683,14 @@ public class GestionnaireBD
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery( "SELECT rule.* FROM rule, room" +
+				ResultSet rs = requete.executeQuery( "SELECT rule.*, room.tournament FROM rule, room" +
 						" WHERE room.room_id = " + roomId +
 				        " AND rule.rule_id = room.rule_id ;" );
 				while(rs.next())
 				{
-					boolean chat = Boolean.parseBoolean(rs.getString( "chat" ));
+					boolean shownumber = rs.getBoolean("show_nb_question");
+					boolean tournament =  rs.getBoolean("tournament");
+					boolean chat = rs.getBoolean( "chat" );
 					Float ratioTrous  = Float.parseFloat( rs.getString( "hole_ratio" ));
 					Float ratioMagasins  = Float.parseFloat( rs.getString( "shop_ratio" ));
 					Float ratioCasesSpeciales  = Float.parseFloat( rs.getString( "special_square_ratio" ));
@@ -729,8 +701,16 @@ public class GestionnaireBD
 					int tempsMax = rs.getInt( "maximal_time" );
 					int deplacementMax = rs.getInt( "max_movement" );
 					int maxShopObjects = rs.getInt( "max_object_shop" );
+					int maxNbPlayers = rs.getInt( "maxNbPlayers" );
+					int maxNbObjectsAndMoney = rs.getInt( "max_object_coin" );
 					
-					objReglesSalle.definirPermetChat( chat );
+					System.out.println(tournament);
+					
+					objReglesSalle.setMaxNbObjectsAndMoney(maxNbObjectsAndMoney);
+					objReglesSalle.setMaxNbPlayers(maxNbPlayers);
+					objReglesSalle.setShowNumber(shownumber);
+					objReglesSalle.setTournamentState(tournament);
+					objReglesSalle.definirPermetChat(chat);
 					objReglesSalle.definirRatioTrous( ratioTrous );
 					objReglesSalle.definirRatioMagasins( ratioMagasins );
 					objReglesSalle.definirRatioCasesSpeciales( ratioCasesSpeciales );
@@ -741,9 +721,7 @@ public class GestionnaireBD
 					objReglesSalle.definirTempsMaximal( tempsMax );
 					objReglesSalle.definirDeplacementMaximal( deplacementMax );
 					objReglesSalle.setIntMaxSaledObjects(maxShopObjects);
-					
-					//System.out.println("temp min: " + objReglesSalle.obtenirDeplacementMaximal());
-									
+											
                 }
 			}
 		}
@@ -964,7 +942,7 @@ public class GestionnaireBD
 	public Boolean roomLangControl(Salle salle, String language) {
 		
 		String answer = "";
-		String nom = salle.obtenirNomSalle();
+		String nom = salle.getRoomName();
 		try
  		{
  			synchronized( requete )
@@ -1042,8 +1020,8 @@ public class GestionnaireBD
                 " AND rule.rule_id = room.rule_id;" );
 				while(rs.next())
 				{
-					permit = Boolean.parseBoolean(rs.getString( "money_permit" ));
-													
+					permit = rs.getBoolean("money_permit");
+					System.out.println(permit);								
                 }
 			}
 		}

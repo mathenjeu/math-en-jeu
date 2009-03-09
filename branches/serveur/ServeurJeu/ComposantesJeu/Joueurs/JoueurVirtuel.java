@@ -72,7 +72,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     // partie du joueur virtuel
 	private int intPointage;
         
-        private int intArgent;
+    private int intArgent;
 
 	// Déclaration de la position du joueur virtuel dans le plateau de jeu
 	private Point objPositionJoueur;
@@ -229,7 +229,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         intNbMagasinVisites = 0;
 
         // Définir le nombre d'objets max par une valeur de base
-        intNbObjetsMax = ParametreIA.MAX_NOMBRE_OBJETS;
+        intNbObjetsMax = objTable.obtenirRegles().getMaxNbObjectsAndMoney();
         
         // Créer une liste de magasin déjà visité vide
         lstMagasinsVisites = new Vector();

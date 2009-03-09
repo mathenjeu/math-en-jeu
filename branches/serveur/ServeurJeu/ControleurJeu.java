@@ -11,7 +11,6 @@ import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Communications.GestionnaireCommunication;
 import ServeurJeu.Communications.ProtocoleJoueur;
 import ServeurJeu.ComposantesJeu.Salle;
-import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.Evenements.EvenementJoueurDeconnecte;
 import ServeurJeu.Evenements.EvenementJoueurConnecte;
@@ -91,7 +90,6 @@ public class ControleurJeu
 	// Déclaration de l'objet Espion qui va inscrire des informationsà proppos
 	// du serveur en parallète
 	//private Espion objEspion;
-	
 	
 	// Déclaration d'un objet random pour générer des nombres aléatoires
 	private Random objRandom;
@@ -444,23 +442,36 @@ public class ControleurJeu
             copieListeSalles.clear();
             Set keySet = lstSalles.keySet();
             Iterator it = keySet.iterator();
-            while (it.hasNext())
-            {
-                String key = (String)it.next();
+            boolean repeat = true;
+           
+            while (it.hasNext()&& repeat)
+            { 
+            	String key = (String)it.next();
                 Salle salle = (Salle)lstSalles.get(key);
-                
-                // On vérifie si cette salle est du bon gameType
-                // et si elle permet de jouer dans la langue donnée
-                //Boolean estDuBonGameType = gameType.equals(salle.getGameType());
-                Boolean permetCetteLangue = objGestionnaireBD.roomLangControl(salle, language);
                                 
-                // Si les paramètres en entrée sont des strings vides,
-                // alors on ignore le paramètre correspondant
-                //if(gameType.equals("")) estDuBonGameType = true;
-                if(language.equals("")) permetCetteLangue = true;
-                
-                // On ajoute la salle à la liste si elle correspond à ce qu'on veut
-                if(permetCetteLangue) copieListeSalles.put(key, salle);
+                if(salle.getRegles().getTournamentState()){
+
+                	copieListeSalles.clear();
+                	key = "TournamentActive";
+                	copieListeSalles.put(key,salle);
+                	System.out.println(key);
+                	repeat =  false;
+                	            	
+                }else{
+                	// On vérifie si cette salle est du bon gameType
+                	// et si elle permet de jouer dans la langue donnée
+                	//Boolean estDuBonGameType = gameType.equals(salle.getGameType());
+                	Boolean permetCetteLangue = objGestionnaireBD.roomLangControl(salle, language);
+
+                	// Si les paramètres en entrée sont des strings vides,
+                	// alors on ignore le paramètre correspondant
+                	//if(gameType.equals("")) estDuBonGameType = true;
+                	if(language.equals("")) permetCetteLangue = true;
+
+                	// On ajoute la salle à la liste si elle correspond à ce qu'on veut
+                	if(permetCetteLangue) copieListeSalles.put(key, salle);
+                	
+                }
             }
             
             return copieListeSalles;
@@ -497,7 +508,7 @@ public class ControleurJeu
 	{
 	    // Ajouter la nouvelle salle dans la liste des salles du 
 	    // contrôleur de jeu
-	    lstSalles.put(nouvelleSalle.obtenirNomSalle(), nouvelleSalle);	        
+	    lstSalles.put(nouvelleSalle.getRoomName(), nouvelleSalle);	        
 	}
 	
 	/**
