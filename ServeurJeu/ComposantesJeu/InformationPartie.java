@@ -84,6 +84,7 @@ public class InformationPartie
     //of the game is writen to the DB
     private boolean moneyPermit;
     
+    private static int maxNbObj; 
      
 	 
 	/**
@@ -92,7 +93,9 @@ public class InformationPartie
 	 */
 	public InformationPartie( GestionnaireEvenements gestionnaireEv, GestionnaireBD gestionnaireBD, JoueurHumain joueur, Table tableCourante)
 	{
-            // Au début, on ne subit pas de banane!
+            maxNbObj = tableCourante.obtenirRegles().getMaxNbObjectsAndMoney();    
+		
+		    // Au début, on ne subit pas de banane!
             vaSubirUneBanane = "";
             
             // Faire la référence vers le gestionnaire de base de données
@@ -108,7 +111,7 @@ public class InformationPartie
 	        intPointage = 0;
 	        
 	        // is permited or not to charge money from DB
-	        setMoneyPermit(objGestionnaireBD.getMoneyRule(joueur.obtenirSalleCourante().obtenirNomSalle()));
+	        setMoneyPermit(objGestionnaireBD.getMoneyRule(joueur.obtenirSalleCourante().getRoomName()));
 	        
 	        // charge money from DB if is permited
 	        if (isMoneyPermit()){
@@ -724,44 +727,44 @@ public class InformationPartie
 					// la liste des objets utilisables du joueur
 					if (objCaseCouleurDestination.obtenirObjetCase() instanceof ObjetUtilisable)
 					{
-						
-                                                if(Salle.getMaxPossessionPieceEtObjet() > intNouvelArgent + objListeObjetsUtilisablesRamasses.size())   /////!!!!!!!!!!!!!!!!!!! 
-                                                {
-                                                    // Faire la référence vers l'objet utilisable
-                                                    ObjetUtilisable objObjetUtilisable = (ObjetUtilisable) objCaseCouleurDestination.obtenirObjetCase();
 
-                                                    // Garder la référence vers l'objet utilisable pour l'ajouter à l'objet de retour
-                                                    objObjetRamasse = objObjetUtilisable;
+						if(maxNbObj > intNouvelArgent + objListeObjetsUtilisablesRamasses.size())   
+						{
+							// Faire la référence vers l'objet utilisable
+							ObjetUtilisable objObjetUtilisable = (ObjetUtilisable) objCaseCouleurDestination.obtenirObjetCase();
 
-                                                    // Ajouter l'objet ramassé dans la liste des objets du joueur courant
-                                                    objListeObjetsUtilisablesRamasses.put(new Integer(objObjetUtilisable.obtenirId()), objObjetUtilisable);
+							// Garder la référence vers l'objet utilisable pour l'ajouter à l'objet de retour
+							objObjetRamasse = objObjetUtilisable;
 
-                                                    // Enlever l'objet de la case du plateau de jeu
-                                                    objCaseCouleurDestination.definirObjetCase(null);
+							// Ajouter l'objet ramassé dans la liste des objets du joueur courant
+							objListeObjetsUtilisablesRamasses.put(new Integer(objObjetUtilisable.obtenirId()), objObjetUtilisable);
 
-                                                    // On va dire aux clients qu'il y a eu collision avec cet objet
-                                                    collision = objObjetUtilisable.obtenirTypeObjet();
-                                                }
+							// Enlever l'objet de la case du plateau de jeu
+							objCaseCouleurDestination.definirObjetCase(null);
+
+							// On va dire aux clients qu'il y a eu collision avec cet objet
+							collision = objObjetUtilisable.obtenirTypeObjet();
+						}
 					}
 					else if (objCaseCouleurDestination.obtenirObjetCase() instanceof Piece)
 					{
-                                                if(Salle.getMaxPossessionPieceEtObjet() > intNouvelArgent + objListeObjetsUtilisablesRamasses.size())   ///// !!!!!!!!!!!!!!!!!!
-                                                {
-                                                    // Faire la référence vers la piêce
-                                                    Piece objPiece = (Piece) objCaseCouleurDestination.obtenirObjetCase();
+						if(maxNbObj > intNouvelArgent + objListeObjetsUtilisablesRamasses.size()) 
+						{
+							// Faire la référence vers la piêce
+							Piece objPiece = (Piece) objCaseCouleurDestination.obtenirObjetCase();
 
-                                                    // Mettre à jour l'argent du joueur
-                                                    intNouvelArgent += objPiece.obtenirMonnaie();
+							// Mettre à jour l'argent du joueur
+							intNouvelArgent += objPiece.obtenirMonnaie();
 
-                                                    // Enlever la piêce de la case du plateau de jeu
-                                                    objCaseCouleurDestination.definirObjetCase(null);
+							// Enlever la piêce de la case du plateau de jeu
+							objCaseCouleurDestination.definirObjetCase(null);
 
-                                                    collision = "piece";
+							collision = "piece";
 
-                                                    // TODO: Il faut peut-être lancer un algo qui va placer 
-                                                    // 		 les piêces sur le plateau de jeu s'il n'y en n'a
-                                                    //		 plus
-                                                }
+							// TODO: Il faut peut-être lancer un algo qui va placer 
+							// 		 les piêces sur le plateau de jeu s'il n'y en n'a
+							//		 plus
+						}
 					}
 					else if (objCaseCouleurDestination.obtenirObjetCase() instanceof Magasin)
 					{

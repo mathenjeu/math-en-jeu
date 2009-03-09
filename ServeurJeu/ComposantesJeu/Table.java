@@ -32,7 +32,6 @@ import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
 import ServeurJeu.Evenements.EvenementMessageChat;
 import ServeurJeu.Evenements.EvenementUtiliserObjet;
-import java.util.Random;
 
 /**
  * @author Jean-François Brind'Amour
@@ -63,7 +62,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	
 	// Déclaration d'une constante qui définit le nombre maximal de joueurs 
 	// dans une table
-	private int _MAX_NB_JOUEURS;
+	private final int MAX_NB_PLAYERS;
 	
 	private int intNbJoueurDemande; 
 	
@@ -138,10 +137,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				 ControleurJeu controleurJeu) 
 	{
 		super();
-                
-                
-		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
-		_MAX_NB_JOUEURS = config.obtenirNombreEntier( "table.max-nb-joueurs" );
+   	
+		MAX_NB_PLAYERS = reglesTable.getMaxNbPlayers();
 		
 		positionWinTheGame = new Point(-1, -1); 		
         //this.butDuJeu = butDuJeu;
@@ -160,7 +157,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		intTempsTotal = tempsPartie;
               //  if(!this.butDuJeu.equals("original")) winTheGame = new WinTheGame(this);
                
-		
 		// Créer une nouvelle liste de joueurs
 		lstJoueurs = new TreeMap();
 		lstJoueursEnAttente = new TreeMap();
@@ -168,7 +164,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Au départ, aucune partie ne se joue sur la table
 		bolEstCommencee = false;
 		bolEstArretee = true;
-		intNbJoueurDemande = _MAX_NB_JOUEURS;
+		intNbJoueurDemande = MAX_NB_PLAYERS;
 		
 		// Définir les rçgles de jeu pour la salle courante
 		objRegles = reglesTable;
@@ -585,7 +581,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Générer le plateau de jeu selon les règles de la table et 
 		// garder le plateau en mémoire dans la table
 		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objGestionnaireBD, 
-				objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, _MAX_NB_JOUEURS, lstPointsFinish, getObjSalle().getGameType());
+				objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, MAX_NB_PLAYERS, lstPointsFinish, getObjSalle().getGameType());
 
         // Définir le prochain id pour les objets
         objProchainIdObjet++;
@@ -629,13 +625,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			
 			// Déterminer combien de joueurs on veut
 			intNombreJoueursVirtuels = 4 - lstJoueursEnAttente.size();
-			if (intNombreJoueursVirtuels < 0 || intNombreJoueursVirtuels >=4)
+			if (intNombreJoueursVirtuels < 0 || intNombreJoueursVirtuels >=6)
 			{
 				intNombreJoueursVirtuels = 0;
 			}
 		}
 		
-		
+		intNombreJoueursVirtuels = 3;
 		// Aller chercher les positions de départ pour les joueurs humains et virtuels
         if(getObjSalle().getGameType().equals("Tournament"))
         {
@@ -1060,7 +1056,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Boucler tant qu'on n'a pas atteint le nombre maximal de 
 		// joueurs moins le joueur courant car on ne le met pas dans la liste
-		while (listePersonnageJoueurs.size() < _MAX_NB_JOUEURS - 1)
+		while (listePersonnageJoueurs.size() < MAX_NB_PLAYERS - 1)
 		{
 			// On ajoute un joueur inconnu ayant le personnage 0
 			listePersonnageJoueurs.put("Inconnu" + Integer.toString(i), new Integer(0));

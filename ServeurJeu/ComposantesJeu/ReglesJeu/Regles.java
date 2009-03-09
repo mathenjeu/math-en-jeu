@@ -59,10 +59,20 @@ public class Regles
 	// peut se déplacer (minimum de 1)
 	private int intDeplacementMaximal;
 	
-	/**
-	 * Max of objects that shop can sale
-	 */
+	// Max of objects that shop can sale
 	private int intMaxSaledObjects;
+	
+	//Room is active in tournament and you enter directly in a board of this room
+	private boolean tournamentState;
+	
+	// show or not the question number in client
+	private boolean showNumber;
+	
+	//max number of players that game can hold
+	private int maxNbPlayers;
+	
+	 // This is the maximum number of coins and items a player can hold at one time
+	private int maxNbObjectsAndMoney;
 	
 	/**
 	 * Constructeur de la classe Regles qui permet d'initialiser
@@ -92,6 +102,8 @@ public class Regles
 	    intTempsMaximal = 0;
 	    intDeplacementMaximal = 1;
 	    intMaxSaledObjects = 0;
+	    tournamentState = false;
+	    showNumber = true;
 	}
 
 	/**
@@ -348,5 +360,37 @@ public class Regles
 
 	public int getIntMaxSaledObjects() {
 		return intMaxSaledObjects;
+	}
+
+	public void setTournamentState(boolean tournamentActive) {
+		this.tournamentState = tournamentActive;
+	}
+
+	public boolean getTournamentState() {
+		return tournamentState;
+	}
+
+	public void setShowNumber(boolean showNumber) {
+		this.showNumber = showNumber;
+	}
+
+	public boolean getShowNumber() {
+		return showNumber;
+	}
+
+	public void setMaxNbPlayers(int maxNbPlayers) {
+		this.maxNbPlayers = maxNbPlayers;
+	}
+
+	public int getMaxNbPlayers() {
+		return maxNbPlayers;
+	}
+
+	public void setMaxNbObjectsAndMoney(int maxNbObjectsAndMoney) {
+		this.maxNbObjectsAndMoney = maxNbObjectsAndMoney;
+	}
+
+	public int getMaxNbObjectsAndMoney() {
+		return maxNbObjectsAndMoney;
 	}
 }

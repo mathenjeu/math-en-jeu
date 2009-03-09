@@ -126,10 +126,7 @@ public class ParametreIA {
     public final static int GAUCHE = 2;
     public final static int HAUT = 3;
     
-    // Constante contenant le nombre d'objets maximum de base qu'un joueur
-    // virtuel se permet de trainer
-    public final static int MAX_NOMBRE_OBJETS = 10;
-    
+      
     // Constante contenant le nombre de id personnage
     public final static int NOMBRE_PERSONNAGE_ID = 4;
      

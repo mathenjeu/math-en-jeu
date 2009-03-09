@@ -46,7 +46,10 @@ public class Salle
 	private String strCreatorUserName;
         
     // Contient le type de jeu (ex. mathEnJeu)
-    private String gameType;
+	private String gameType;
+	
+	//Room short description
+	private String roomDescription;
 	
 	// Cet objet est une liste de numéros utilisés pour les tables (sert à 
 	// générer de nouvelles tables)
@@ -61,11 +64,9 @@ public class Salle
 	// Cet objet permet de déterminer les règles de jeu pour cette salle
 	private Regles objRegles;
         
-    // This is the maximum number of coins and items a player can hold at one time
-    private static int maxPossessionPieceEtObjet;   // will be changed to instance var
-        
-    
-	
+    //private static int maxPossessionPieceEtObjet;   // will be changed to instance var
+      
+   
 	/**
 	 * Constructeur de la classe Salle qui permet d'initialiser les membres 
 	 * privés de la salle. Ce constructeur a en plus un mot de passe permettant
@@ -691,12 +692,12 @@ public class Salle
 	 * 
 	 * @return String : Le nom de la salle
 	 */
-	public String obtenirNomSalle()
+	public String getRoomName()
 	{
 		return strNomSalle;
 	}
 	
-	public Regles obtenirRegles()
+	public Regles getRegles()
 	{
 	   return objRegles;
 	}
@@ -719,13 +720,13 @@ public class Salle
             return gameType;
         }
 
-		public static void setMaxPossessionPieceEtObjet(
-				int maxPossessionPieceEtObjet) {
-			Salle.maxPossessionPieceEtObjet = maxPossessionPieceEtObjet;
+	
+		public void setRoomDescription(String roomDescription) {
+			this.roomDescription = roomDescription;
 		}
 
-		public static int getMaxPossessionPieceEtObjet() {
-			return maxPossessionPieceEtObjet;
+		public String getRoomDescription() {
+			return roomDescription;
 		}
 
 }// end class 
