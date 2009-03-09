@@ -114,7 +114,7 @@ public final class GenerateurPartie
 		int intNbColumns;
 		int intNbLines;
 		
-		// calculate number of lines and of columns
+		// calculate number of lines and of columns if gametype = tournament
 		if (gameType.equals("Tournament"))
 		{
 		   intNbColumns = (max_nb_players + 1) * factor - 1;
@@ -162,8 +162,8 @@ public final class GenerateurPartie
 					lstPointsCasesCouleur, intCompteurCases, intNbCasesSpeciales,
 					objttPlateauJeu);
 			
-						
-		}else{ //if gametype = mathenjeu
+		//if gametype = mathenjeu			
+		}else{ 
 			
 		   intCompteurCases = 1;	
 		   intCompteurCases = boardCreation(objRandom, lstPointsCasesPresentes,
@@ -585,7 +585,7 @@ public final class GenerateurPartie
 	}
 
 	/**
-	 * Method
+	 * Method for the "Tournament" game board
 	 * @param reglesPartie
 	 * @param max_nb_players
 	 * @param objRandom
