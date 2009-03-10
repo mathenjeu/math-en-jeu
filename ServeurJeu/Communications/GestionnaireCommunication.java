@@ -58,9 +58,7 @@ public class GestionnaireCommunication
 	 * le port d'écoute du serveur et la référence vers le contrôleur de jeu ainsi
 	 * que vers le gestionnaire d'événements.
 	 */
-	public GestionnaireCommunication(ControleurJeu controleur, GestionnaireEvenements gestionnaireEv, 
-	        						 GestionnaireBD gestionnaireBD,
-									 GestionnaireTemps gestionnaireTemps, TacheSynchroniser tacheSynchroniser ) 
+	public GestionnaireCommunication(ControleurJeu controleur) 
 	{
 		super();
 		
@@ -72,8 +70,8 @@ public class GestionnaireCommunication
 		objControleurJeu = controleur;
 		
 		// Garder la référence vers le GestionnaireEvenements et vers le GestionnaireBD
-		objGestionnaireEvenements = gestionnaireEv;
-		objGestionnaireBD = gestionnaireBD;
+		objGestionnaireEvenements = controleur.obtenirGestionnaireEvenements();
+		objGestionnaireBD = controleur.obtenirGestionnaireBD();
 		
 		// Créer une liste des ProtocoleJoueur
 		lstProtocoleJoueur = new Vector();
@@ -81,8 +79,8 @@ public class GestionnaireCommunication
 		// Créer le vérificateur de connexions
 		objVerificateurConnexions = new VerificateurConnexions(this);
 		
-		objGestionnaireTemps = gestionnaireTemps;
-		objTacheSynchroniser = tacheSynchroniser;
+		objGestionnaireTemps = controleur.obtenirGestionnaireTemps();
+		objTacheSynchroniser = controleur.obtenirTacheSynchroniser();
 		
 		
 		// Créer un thread pour le vérificateur de connexions
@@ -125,9 +123,8 @@ public class GestionnaireCommunication
 				
 				// Accepter une connexion et créer un objet ProtocoleJoueur
 				// qui va exécuter le protocole pour le joueur
-				ProtocoleJoueur objJoueur = new ProtocoleJoueur(objControleurJeu, this, objVerificateurConnexions,
-																objSocketServeur.accept(),
-																objGestionnaireTemps, objTacheSynchroniser);
+				ProtocoleJoueur objJoueur = new ProtocoleJoueur(objControleurJeu, objVerificateurConnexions,
+																objSocketServeur.accept());
 				
 				// Créer un thread pour le joueur demandant la connexion
 				Thread threadJoueur = new Thread(objJoueur);
