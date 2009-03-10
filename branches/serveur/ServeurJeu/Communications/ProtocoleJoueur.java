@@ -124,23 +124,21 @@ public class ProtocoleJoueur implements Runnable
 	 * @param Socket socketJoueur : Le canal de communication associé au joueur
 	 */
 
-	public ProtocoleJoueur(ControleurJeu controleur, GestionnaireCommunication communication, 
-						   VerificateurConnexions verificateur, Socket socketJoueur,
-						   GestionnaireTemps gestionnaireTemps, TacheSynchroniser tacheSynchroniser ) 
+	public ProtocoleJoueur(ControleurJeu controleur, VerificateurConnexions verificateur, Socket socketJoueur ) 
 	{
 		super();
 
 		// Initialiser les valeurs du ProtocoleJoueur courant
 		objControleurJeu = controleur;
-		objGestionnaireCommunication = communication;
+		objGestionnaireCommunication = controleur.obtenirGestionnaireCommunication();
 		objVerificateurConnexions = verificateur;
 		objSocketJoueur = socketJoueur;
 		objJoueurHumain = null;
 		bolStopThread = false;
 		intCompteurCommande = 0;
 		intNumeroCommandeReponse = -1;
-		objGestionnaireTemps = gestionnaireTemps;
-		objTacheSynchroniser = tacheSynchroniser;
+		objGestionnaireTemps = controleur.obtenirGestionnaireTemps();
+		objTacheSynchroniser = controleur.obtenirTacheSynchroniser();
         bolEnTrainDeJouer = false;
 		objLogger.info( GestionnaireMessages.message("protocole.connexion").replace("$$CLIENT$$", socketJoueur.getInetAddress().toString()));
 

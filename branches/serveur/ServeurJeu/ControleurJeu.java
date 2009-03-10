@@ -140,7 +140,7 @@ public class ControleurJeu
 		objTacheSynchroniser = new TacheSynchroniser();
 
 		// Créer un nouveau gestionnaire de communication
-		objGestionnaireCommunication = new GestionnaireCommunication(this, objGestionnaireEvenements, objGestionnaireBD, objGestionnaireTemps, objTacheSynchroniser);
+		objGestionnaireCommunication = new GestionnaireCommunication(this);
 	}
 	
 	public void demarrer()
