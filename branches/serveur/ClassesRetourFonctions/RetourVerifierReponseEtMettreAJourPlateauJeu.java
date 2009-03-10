@@ -10,7 +10,7 @@ import java.awt.Point;
 public class RetourVerifierReponseEtMettreAJourPlateauJeu
 {
 	// Déclaration d'une variable qui va contenir si oui ou non le déplacement
-	// a été accpeté à cause que la réponse était bonne
+	// a été accepté à cause que la réponse était bonne
 	private boolean bolDeplacementAccepte;
 	
 	// Déclaration d'une variable qui va contenir l'explication du résultat
