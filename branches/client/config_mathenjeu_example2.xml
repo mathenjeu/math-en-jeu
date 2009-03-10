@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<config
+
+	language="en"
+	gameType="mathEnJeu"
+
+	url_server="localhost"
+	port="6100"
+
+	url_server_secondaire="132.203.18.66"
+	port_secondaire="80"
+
+	url_server_tunneling="mejdev.mat.ulaval.ca"
+	port_tunneling="80"
+
+	username="demo-156"
+	password="3437a1682af95c81"
+		
+	gamepath="mathemaQuoi_beta.swf"
+>
+
+</config>
