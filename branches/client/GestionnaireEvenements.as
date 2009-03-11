@@ -28,7 +28,9 @@ import FiltreTable;
 
 class GestionnaireEvenements
 {
-    private var nomUtilisateur:String;    // notre nom d'utilisateur
+    private var roomDescription:String;  // short room description taked from DB
+	
+	private var nomUtilisateur:String;    // notre nom d'utilisateur
 	private var numeroDuPersonnage:Number // sert à associer la bonne image pour le jeu d'île au trésor
     private var listeDesPersonnages:Array;   // liste associant les idPersonnage avec les nomUtilisateurs dans la table où on est
     private var motDePasse:String;  // notre mot de passe pour pouvoir jouer
@@ -38,7 +40,9 @@ class GestionnaireEvenements
     private var idPersonnage:Number;   //  le idPersonnage que nous avons choisi (le dessin)
     private var motDePasseSalle:String;   // le mot de passe de la salle dans laquelle on est
     private var listeDesJoueursDansSalle:Array;  // liste des joueurs dans la salle qu'on est. Un joueur contient un nom (nom)
-    private var listeDesSalles:Array;    //  liste de toutes les salles
+    private var listeDesDescriptionsSalles:Array; //liste des descriptions des salles 
+	private var activ:Boolean;
+	private var listeDesSalles:Array;    //  liste de toutes les salles
 	private var listeChansons:Array;    //  liste de toutes les chansons
     private var listeDesJoueursConnectes:Array;   // la première liste qu'on reçoit, tous les joueurs dans toutes les salles. Un joueur contient un nom (nom)
     //  liste de toutes les tables dans la salle où on est
@@ -112,6 +116,7 @@ class GestionnaireEvenements
         this.nomSalle = new String();
         this.motDePasseSalle = new String();
         this.listeDesSalles = new Array();
+		this.listeDesDescriptionsSalles = new Array();
         this.listeDesTables = new Array();
 		this.listeChansons = new Array();
         this.listeDesJoueursConnectes = new Array();
@@ -527,8 +532,13 @@ class GestionnaireEvenements
 					trace("salle " + i + " : " + this.listeDesSalles[i].nom);
 					*/
 					this.listeDesSalles.push(objetEvenement.listeNomSalles[i]);
-					_level0.loader.contentHolder.listeSalle.addItem(this.listeDesSalles[i].nom);
-					trace("salle " + i + " : " + this.listeDesSalles[i].nom);
+					_level0.loader.contentHolder.listeSalle.addItem(this.listeDesSalles[i].nom );
+					trace("salle " + i + " : " + this.listeDesSalles[i].nom );
+					
+					this.listeDesDescriptionsSalles.push(objetEvenement.listeDescrSalles[i]);
+					_level0.loader.contentHolder.listeDescr.push(this.listeDesDescriptionsSalles[i].descriptions );
+					trace("salle " + i + " : " + this.listeDesDescriptionsSalles[i].descriptions );
+					
 				}
 				for (var i:Number = 0; i < objetEvenement.listeNomSalles.length; i++)
                 {
@@ -538,6 +548,10 @@ class GestionnaireEvenements
 						trace("salle enlevée --> " + i + " : " + this.listeDesSalles[i].nom);
 					}
 				}
+				activ = objetEvenement.isActiveRoom;
+				
+				_level0.loader.contentHolder.isActiv = activ;
+				trace("salle active : " + _level0.loader.contentHolder.isActiv);
 				_level0.loader.contentHolder.bt_continuer1._visible = true;
 				_level0.loader.contentHolder.txtChargementSalles._visible = false;
             break;
