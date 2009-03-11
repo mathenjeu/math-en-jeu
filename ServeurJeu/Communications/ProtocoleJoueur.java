@@ -1489,7 +1489,7 @@ public class ProtocoleJoueur implements Runnable
                      	// Appeler la méthode permettant de créer la nouvelle
 						// table et d'entrer le joueur dans cette table
 						int intNoTable = objJoueurHumain.obtenirSalleCourante().creerTable(objJoueurHumain, 
-									intTempsPartie, true, objGestionnaireTemps, objTacheSynchroniser);
+									intTempsPartie, true);
 					
 						// Créer le noeud paramètre du numéro de la table
 						Element objNoeudParametreNoTable = objDocumentXMLSortie.createElement("parametre"); 

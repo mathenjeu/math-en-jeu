@@ -290,7 +290,7 @@ public class Salle
 	 * 				joueurs de la salle et leur envoyer un événement. La
 	 * 				fonction entrerTable est synchronisée automatiquement.
 	 */
-	public int creerTable(JoueurHumain joueur, int tempsPartie, boolean doitGenererNoCommandeRetour, GestionnaireTemps gestionnaireTemps, TacheSynchroniser tacheSynchroniser )
+	public int creerTable(JoueurHumain joueur, int tempsPartie, boolean doitGenererNoCommandeRetour)
 	{
 		// Déclaration d'une variable qui va contenir le numéro de la table
 		int intNoTable;
@@ -301,7 +301,7 @@ public class Salle
 	    {
 	    	
 	    	// Créer une nouvelle table en passant les paramètres appropriés
-	    	Table objTable = new Table( objGestionnaireBD, this, genererNoTable(), joueur.obtenirNomUtilisateur(), tempsPartie, objRegles, gestionnaireTemps, tacheSynchroniser, objControleurJeu);
+	    	Table objTable = new Table( this, genererNoTable(), joueur.obtenirNomUtilisateur(), tempsPartie, objRegles, objControleurJeu);
 	    		    	
 	    	objTable.creation();
 	    		    	
