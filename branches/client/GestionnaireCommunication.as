@@ -2617,6 +2617,9 @@ class GestionnaireCommunication
         // Construire l'objet evenement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
+		
+		// Si le résultat est la liste des salles, alors on peut ajouter la
+        // liste des salles dans l'objet à retourner
         // Si le resultat est la liste des salles, alors on peut ajouter la
         // liste des salles dans l'objet a retourner
         if (objEvenement.resultat == "ListeSalles")
@@ -2631,7 +2634,21 @@ class GestionnaireCommunication
             {
                 // Ajouter l'objet salle dans le tableau
                 objEvenement.listeNomSalles.push({nom:lstChildNodes[i].attributes.nom,
-                                                  possedeMotDePasse:Boolean(lstChildNodes[i].attributes.protegee == "true")});
+                    possedeMotDePasse:Boolean(lstChildNodes[i].attributes.protegee == "true"),descriptions:lstChildNodes[i].attributes.descriptions});
+								  
+            }
+			
+			// Créer un tableau ListeDescrSalles qui va contenir les
+            // descriptions des objets salle
+            objEvenement.listeDescrSalles = new Array();
+			objEvenement.isActiveRoom = new Boolean();
+            // Passer toutes les salles et les ajouter dans le tableau
+            for (var i:Number = 0; i < lstChildNodes.length; i++)
+            {
+                // Ajouter l'objet salle dans le tableau
+                objEvenement.listeDescrSalles.push({descriptions:lstChildNodes[i].attributes.descriptions});
+				objEvenement.isActiveRoom = (Boolean)(lstChildNodes[i].attributes.activ);
+				trace("Retour xxx " + lstChildNodes[i].attributes.activ );
             }
         }
         // Si le retour de la fonction est une reponse positive et non une
