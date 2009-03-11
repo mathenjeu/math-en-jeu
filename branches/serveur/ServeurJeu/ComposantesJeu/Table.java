@@ -131,10 +131,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @param int tempsPartie : Le temps de la partie en minute
 	 * @param Regles reglesTable : Les règles pour une partie sur cette table
 	 */
-	public Table(GestionnaireBD gestionnaireBD, Salle salleParente, int noTable,
-			String nomUtilisateurCreateur, int tempsPartie, Regles reglesTable,
-			GestionnaireTemps gestionnaireTemps, TacheSynchroniser tacheSynchroniser,
-				 ControleurJeu controleurJeu) 
+	public Table(Salle salleParente, int noTable, String nomUtilisateurCreateur,
+			int tempsPartie, Regles reglesTable, ControleurJeu controleurJeu) 
 	{
 		super();
    	
@@ -146,7 +144,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Faire la référence vers le gestionnaire d'événements et le 
 		// gestionnaire de base de données
 		objGestionnaireEvenements = new GestionnaireEvenements();
-		objGestionnaireBD = gestionnaireBD;
+		objGestionnaireBD = controleurJeu.obtenirGestionnaireBD();
 		
 		// Garder en mémoire la référence vers la salle parente, le numéro de 
 		// la table, le nom d'utilisateur du créateur de la table et le temps
@@ -172,8 +170,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// initialaise gameboard - set null
 		objttPlateauJeu = null;
 		
-		objGestionnaireTemps = gestionnaireTemps;
-		objTacheSynchroniser = tacheSynchroniser;
+		objGestionnaireTemps = controleurJeu.obtenirGestionnaireTemps();
+		objTacheSynchroniser = controleurJeu.obtenirTacheSynchroniser();
 
         // Au départ, on considçre qu'il n'y a que des joueurs humains.
         // Lorsque l'on démarrera une partie dans laPartieCommence(), on créera
@@ -625,7 +623,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			
 			// Déterminer combien de joueurs on veut
 			intNombreJoueursVirtuels = 4 - lstJoueursEnAttente.size();
-			if (intNombreJoueursVirtuels < 0 || intNombreJoueursVirtuels >=6)
+			if (intNombreJoueursVirtuels < 0 || intNombreJoueursVirtuels >= 6)
 			{
 				intNombreJoueursVirtuels = 0;
 			}
@@ -702,7 +700,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		        
 		        // Créé le joueur virtuel selon le niveau de difficulté désiré
                 JoueurVirtuel objJoueurVirtuel = new JoueurVirtuel(tNomsJoueursVirtuels[i - nbJoueur], 
-                    intDifficulteJoueurVirtuel, this, objGestionnaireEvenements, objControleurJeu, intIdPersonnage);
+                    intDifficulteJoueurVirtuel, this, objControleurJeu, intIdPersonnage);
                 
                 // Définir sa position
                 objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i]);

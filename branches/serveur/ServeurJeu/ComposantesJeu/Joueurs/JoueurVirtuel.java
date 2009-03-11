@@ -158,7 +158,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 
 	 */
 	public JoueurVirtuel(String nom, int niveauDifficulte, Table tableCourante, 
-	    GestionnaireEvenements gestionnaireEv, ControleurJeu controleur, int idPersonnage)
+	     ControleurJeu controleur, int idPersonnage)
 	{
 	    objControleurJeu = controleur;
 	    
@@ -171,7 +171,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		objPositionFinaleVisee = null;
 		
 		// Faire la référence vers le gestionnaire d'évenements
-		objGestionnaireEv = gestionnaireEv;
+		objGestionnaireEv = controleur.obtenirGestionnaireEvenements();
 			
 		// Cette variable sert à arrêter la thread lorsqu'à true
 		bolStopThread = false;		
