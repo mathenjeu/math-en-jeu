@@ -55,6 +55,12 @@ class Case
 		
 		temp = (this.l+1)*nombreDeColonnes - c;
 		
+		if ((this.l == nombreDeLignes - 1) && (this.c == nombreDeColonnes - 2 || this.c == nombreDeColonnes - 3 || this.c == nombreDeColonnes - 4))
+		{
+			num = 41000;
+			this.type = 41000;
+		} 
+		
 		nb = Math.abs(num%100);  // The cell's color is determined by num (its type)'s last 2 digits	
 		
 		if(nb == 91)
