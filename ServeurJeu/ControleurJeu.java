@@ -141,6 +141,9 @@ public class ControleurJeu
 
 		// Créer un nouveau gestionnaire de communication
 		objGestionnaireCommunication = new GestionnaireCommunication(this);
+		String language = "en";
+		// Fills the rooms from DB
+		objGestionnaireBD.fillsRooms(language);   
 	}
 	
 	public void demarrer()
@@ -434,8 +437,7 @@ public class ControleurJeu
 	 */
 	public TreeMap obtenirListeSalles(String language, String gameType)
 	{
-		// Fills the rooms from DB
-		objGestionnaireBD.fillsRooms(language);   
+		
 		
             // On crée une liste de salles vide, et on parcourt toutes les salles connues
             TreeMap copieListeSalles = (TreeMap)lstSalles.clone();
