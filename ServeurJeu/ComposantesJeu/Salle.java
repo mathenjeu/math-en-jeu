@@ -15,8 +15,6 @@ import ServeurJeu.Evenements.EvenementNouvelleTable;
 import ServeurJeu.Evenements.EvenementTableDetruite;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
-import ServeurJeu.Temps.GestionnaireTemps;
-import ServeurJeu.Temps.TacheSynchroniser;
 import ServeurJeu.ControleurJeu;
 
 //TODO: Le mot de passe d'une salle ne doit pas être modifiée pendant le jeu,

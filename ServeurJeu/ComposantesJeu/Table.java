@@ -629,7 +629,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			}
 		}
 		
-		intNombreJoueursVirtuels = 3;
+		//intNombreJoueursVirtuels = 3;
 		// Aller chercher les positions de départ pour les joueurs humains et virtuels
         if(getObjSalle().getGameType().equals("Tournament"))
         {
@@ -652,7 +652,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		    
 		    // Aller trouver les noms des joueurs virtuels
 		    tNomsJoueursVirtuels = obtenirNomsJoueursVirtuels(intNombreJoueursVirtuels);
-		    
 		}
 		
 		// Cette variable permettra d'affecter aux joueurs virtuels des id
@@ -700,7 +699,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		        
 		        // Créé le joueur virtuel selon le niveau de difficulté désiré
                 JoueurVirtuel objJoueurVirtuel = new JoueurVirtuel(tNomsJoueursVirtuels[i - nbJoueur], 
-                    intDifficulteJoueurVirtuel, this, objControleurJeu, intIdPersonnage);
+                    intDifficulteJoueurVirtuel, this, objGestionnaireEvenements, objControleurJeu, intIdPersonnage);
                 
                 // Définir sa position
                 objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i]);

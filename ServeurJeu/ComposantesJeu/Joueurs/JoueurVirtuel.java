@@ -158,8 +158,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 
 	 */
 	public JoueurVirtuel(String nom, int niveauDifficulte, Table tableCourante, 
-	     ControleurJeu controleur, int idPersonnage)
-	{
+		    GestionnaireEvenements gestionnaireEv, ControleurJeu controleur, int idPersonnage)
+		{
 	    objControleurJeu = controleur;
 	    
 	    objParametreIA = objControleurJeu.obtenirParametreIA();
