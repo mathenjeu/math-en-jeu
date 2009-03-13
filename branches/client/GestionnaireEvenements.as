@@ -4,19 +4,19 @@ Copyright (C) 2007 Projet SMAC
 
 Ce programme est un logiciel libre ; vous pouvez le
 redistribuer et/ou le modifier au titre des clauses de la
-Licence Publique Générale Affero (AGPL), telle que publiée par
-Affero Inc. ; soit la version 1 de la Licence, ou (à
-votre discrétion) une version ultérieure quelconque.
+Licence Publique Generale Affero (AGPL), telle que publiee par
+Affero Inc. ; soit la version 1 de la Licence, ou (a
+votre discretion) une version ulterieure quelconque.
 
-Ce programme est distribué dans l'espoir qu'il sera utile,
-mais SANS AUCUNE GARANTIE ; sans même une garantie implicite de
+Ce programme est distribue dans l'espoir qu'il sera utile,
+mais SANS AUCUNE GARANTIE ; sans meme une garantie implicite de
 COMMERCIABILITE ou DE CONFORMITE A UNE UTILISATION
 PARTICULIERE. Voir la Licence Publique
-Générale Affero pour plus de détails.
+Generale Affero pour plus de details.
 
-Vous devriez avoir reçu un exemplaire de la Licence Publique
-Générale Affero avec ce programme; si ce n'est pas le cas,
-écrivez à Affero Inc., 510 Third Street - Suite 225,
+Vous devriez avoir recu un exemplaire de la Licence Publique
+Generale Affero avec ce programme; si ce n'est pas le cas,
+ecrivez a Affero Inc., 510 Third Street - Suite 225,
 San Francisco, CA 94107, USA.
 *********************************************************************/
 
@@ -31,11 +31,11 @@ class GestionnaireEvenements
     private var roomDescription:String;  // short room description taked from DB
 	
 	private var nomUtilisateur:String;    // notre nom d'utilisateur
-	private var numeroDuPersonnage:Number // sert à associer la bonne image pour le jeu d'île au trésor
-    private var listeDesPersonnages:Array;   // liste associant les idPersonnage avec les nomUtilisateurs dans la table où on est
+	private var numeroDuPersonnage:Number // sert a associer la bonne image pour le jeu d'ile au tresor
+    private var listeDesPersonnages:Array;   // liste associant les idPersonnage avec les nomUtilisateurs dans la table ou on est
     private var motDePasse:String;  // notre mot de passe pour pouvoir jouer
     private var nomSalle:String;  //  nom de la salle dans laquelle on est
-    private var numeroTable:Number;   //   numéro de la table dans laquelle on est
+    private var numeroTable:Number;   //   numero de la table dans laquelle on est
     private var tempsPartie:Number;   //  temps que va durer la partie, en minutes
     private var idPersonnage:Number;   //  le idPersonnage que nous avons choisi (le dessin)
     private var motDePasseSalle:String;   // le mot de passe de la salle dans laquelle on est
@@ -44,17 +44,17 @@ class GestionnaireEvenements
 	private var activ:Boolean;
 	private var listeDesSalles:Array;    //  liste de toutes les salles
 	private var listeChansons:Array;    //  liste de toutes les chansons
-    private var listeDesJoueursConnectes:Array;   // la première liste qu'on reçoit, tous les joueurs dans toutes les salles. Un joueur contient un nom (nom)
-    //  liste de toutes les tables dans la salle où on est
-    //contient un numéro (noTable), le temps (temps) et une liste de joueurs (listeJoueurs) un joueur de la liste contient un nom (nom)
+    private var listeDesJoueursConnectes:Array;   // la premiere liste qu'on recoit, tous les joueurs dans toutes les salles. Un joueur contient un nom (nom)
+    //  liste de toutes les tables dans la salle ou on est
+    //contient un numero (noTable), le temps (temps) et une liste de joueurs (listeJoueurs) un joueur de la liste contient un nom (nom)
     private var listeDesTables:Array;
     private var objGestionnaireCommunication:GestionnaireCommunication;  //  pour caller les fonctions du serveur 
-	private var tabPodiumOrdonneID:Array;			// id des personnages ordonnés par pointage une fois la partie terminée
-	private var pointageMinimalWinTheGame:Number = -1 // pointage minimal à avoir droit d'atteindre le WinTheGame
+	private var tabPodiumOrdonneID:Array;			// id des personnages ordonnes par pointage une fois la partie terminee
+	private var pointageMinimalWinTheGame:Number = -1 // pointage minimal a avoir droit d'atteindre le WinTheGame
 	
 	function affichageChamps()
 	{
-		trace("------ début affichage ------");
+		trace("------ debut affichage ------");
 		trace("nomUtilisateur : " + nomUtilisateur);
 		trace("numeroDuPersonnage : " + numeroDuPersonnage);	
 		trace("listeDesPersonnages : " + listeDesPersonnages);	
@@ -194,7 +194,7 @@ class GestionnaireEvenements
             {
                 if(listeDesSalles[i].possedeMotDePasse == true)
                 {
-                    this.motDePasseSalle = "";   // afficher une fenêtre de demande de mot de passe
+                    this.motDePasseSalle = "";   // afficher une fenetre de demande de mot de passe
                 }
                 else
                 {
@@ -377,7 +377,7 @@ class GestionnaireEvenements
         trace("fin de retourObtenirChoixLanguage");
         trace("*********************************************\n");
     }
-    //    étiquettes de langue
+    //    etiquettes de langue
 	
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function retourObtenirNomsInterface(objetEvenement:Object)
@@ -408,10 +408,10 @@ class GestionnaireEvenements
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function retourConnexion(objetEvenement:Object)
     {
-    	// c'est la fonction qui va être appellée lorsque le GestionnaireCommunication aura
-        // reçu la reponse du serveur
-        // objetEvenement est un objet qui est propre à chaque fonction comme retourConnexion
-        // (en termes plus informatiques, on appelle ça un eventHandler -> fonction qui gère
+    	// c'est la fonction qui va etre appellee lorsque le GestionnaireCommunication aura
+        // recu la reponse du serveur
+        // objetEvenement est un objet qui est propre a chaque fonction comme retourConnexion
+        // (en termes plus informatiques, on appelle ca un eventHandler -> fonction qui gere
         // les evenements). Selon la fonction que vous appelerez, il y aura differentes valeurs
         // dedans. Ici, il y a juste une valeur qui est succes qui est de type booleen
     	// objetEvenement.resultat = Ok, JoueurNonConnu, JoueurDejaConnecte
@@ -423,7 +423,7 @@ class GestionnaireEvenements
         switch(objetEvenement.resultat)
         {
 			case "OkEtPartieDejaCommencee":
-			//À faire plus tard
+			//A faire plus tard
 			break;
 
 			case "Musique":
@@ -459,7 +459,7 @@ class GestionnaireEvenements
 			
 				dejaConnecte.textGUI_erreur.text = _root.texteSource_xml.firstChild.attributes.GUIdejaConnecte;
 			
-                trace("Joueur deja connecté");
+                trace("Joueur deja connecte");
             break;
 	     
             default:
@@ -494,7 +494,7 @@ class GestionnaireEvenements
             break;
 			
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
              
 			default:
@@ -515,7 +515,7 @@ class GestionnaireEvenements
             case "ListeSalles":
                 for (var i:Number = 0; i < objetEvenement.listeNomSalles.length; i++)
                 {
-					// ce if est temporaire - ou devrait être amélioré éventuellement
+					// ce if est temporaire - ou devrait etre ameliore eventuellement
 					// en anglais, il n'y a pas de salle Accromath
 					/*trace("bbb " + objetEvenement.listeNomSalles[i].nom);
 					if(_level0.loader.contentHolder.langue == "en" && objetEvenement.listeNomSalles[i].nom == "Accromath")
@@ -545,7 +545,7 @@ class GestionnaireEvenements
 					if(_level0.loader.contentHolder.langue == "en" && objetEvenement.listeNomSalles[i].nom == "Accromath")
 					{
 						_level0.loader.contentHolder.listeSalle.removeItemAt(i);
-						trace("salle enlevée --> " + i + " : " + this.listeDesSalles[i].nom);
+						trace("salle enlevee --> " + i + " : " + this.listeDesSalles[i].nom);
 					}
 				}
 				activ = objetEvenement.isActiveRoom;
@@ -565,7 +565,7 @@ class GestionnaireEvenements
             break;
 			 
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
 			 
             default:
@@ -596,7 +596,7 @@ class GestionnaireEvenements
             break;
 			
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
 			
             case "MauvaisMotDePasseSalle":
@@ -647,7 +647,7 @@ class GestionnaireEvenements
             break;
 			
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
 			
             case "JoueurPasDansSalle":
@@ -690,7 +690,7 @@ class GestionnaireEvenements
             break;
 			
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
 			
             case "JoueurPasDansSalle":
@@ -744,7 +744,7 @@ class GestionnaireEvenements
             break;
 			 
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
 			 
             case "JoueurPasDansSalle":
@@ -801,7 +801,7 @@ class GestionnaireEvenements
             break;
 			 
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
 			 
             case "JoueurPasDansSalle":
@@ -820,7 +820,7 @@ class GestionnaireEvenements
     }
 	
 	
-    //  on ne s'ajoute pas à la liste des joueur dans cette table, c grave ??  c correct pour quand on veut sortir....
+    //  on ne s'ajoute pas a la liste des joueur dans cette table, c grave ??  c correct pour quand on veut sortir....
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function retourEntrerTable(objetEvenement:Object)
     {
@@ -871,7 +871,7 @@ class GestionnaireEvenements
             break;
 			
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
 			
             case "JoueurPasDansSalle":
@@ -914,7 +914,7 @@ class GestionnaireEvenements
 					}
 				}
 
-				// on s'enlève de la liste des joueurs 
+				// on s'enleve de la liste des joueurs 
             	for(var j=0;j<this.listeDesTables[indice].listeJoueurs.length;j++)
             	{
                 	if(this.listeDesTables[indice].listeJoueurs[j].nom == this.nomUtilisateur)
@@ -956,7 +956,7 @@ class GestionnaireEvenements
             break;
              
 			case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
              
 			case "JoueurPasDansSalle":
@@ -997,7 +997,7 @@ class GestionnaireEvenements
             break;
 			
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
 			
             case "JoueurPasDansSalle":
@@ -1024,7 +1024,7 @@ class GestionnaireEvenements
         switch(objetEvenement.resultat)
         {
             case "Ok":
-                trace("Message envoyé");
+                trace("Message envoye");
             break;
 			
             case "CommandeNonReconnue":
@@ -1036,7 +1036,7 @@ class GestionnaireEvenements
             break;
 			
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
 			
             case "JoueurPasDansSalle":
@@ -1075,7 +1075,7 @@ class GestionnaireEvenements
             break;
 			
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
 			
             case "JoueurPasDansSalle":
@@ -1114,7 +1114,7 @@ class GestionnaireEvenements
             break;
 			
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
 			
             case "JoueurPasDansSalle":
@@ -1126,7 +1126,7 @@ class GestionnaireEvenements
             break;
 			
             case "TableNonComplete":
-                trace("Table non complète");
+                trace("Table non complete");
             break;
 			
             default:
@@ -1137,8 +1137,8 @@ class GestionnaireEvenements
     }
 	
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Ça c'est la fonction qui va être appelée lorsque le GestionnaireCommunication aura
-    // reçu la réponse du serveur
+    // Ca c'est la fonction qui va etre appelee lorsque le GestionnaireCommunication aura
+    // recu la reponse du serveur
     public function retourDeconnexion(objetEvenement:Object)
     {
         //   objetEvenement.resultat = Ok, CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte
@@ -1159,7 +1159,7 @@ class GestionnaireEvenements
             break;
 			
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
 			
             default:
@@ -1197,6 +1197,10 @@ class GestionnaireEvenements
 		     		case "ReponseCourte":
 						trace("type = ReponseCourte");
 		     		break;
+		     		
+		     		case "SHORT_ANSWER":
+						trace("type = SHORT_ANSWER");
+		     		break;
 	
 		     		default:
 						trace("Pas bon type de question   "+objetEvenement.question.type);
@@ -1206,7 +1210,7 @@ class GestionnaireEvenements
             break;
 
 			case "Banane":
-                trace("todo si nécéssaire");
+                trace("todo si necessaire");
             break;	
 				
             case "CommandeNonReconnue":
@@ -1218,7 +1222,7 @@ class GestionnaireEvenements
             break;
 			 		 
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break; 
 			 
             default:
@@ -1254,7 +1258,7 @@ class GestionnaireEvenements
             break;
 			
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
 			
 			default:
@@ -1280,10 +1284,10 @@ class GestionnaireEvenements
 				switch(objetEvenement.objetUtilise.typeObjet)
 				{
 					// lorsqu'on utilise un livre
-					// le serveur envoie une mauvaise réponse
+					// le serveur envoie une mauvaise reponse
 					// on efface alors un choix
 					case "Livre":
-						trace("mauvaise réponse (livre) : " +objetEvenement.objetUtilise.mauvaiseReponse);
+						trace("mauvaise reponse (livre) : " +objetEvenement.objetUtilise.mauvaiseReponse);
 					
 						switch((String)(objetEvenement.objetUtilise.mauvaiseReponse))
 						{
@@ -1304,7 +1308,7 @@ class GestionnaireEvenements
 							break;
 							
 							default:
-								trace("erreur choix réponse ds retourUtiliser : Livre");
+								trace("erreur choix reponse ds retourUtiliser : Livre");
 						}
 					break;
 				
@@ -1324,7 +1328,7 @@ class GestionnaireEvenements
 					break;
 				
 					default:
-						trace("erreur choix d'objet ds typeObjet à utiliser");
+						trace("erreur choix d'objet ds typeObjet a utiliser");
 					break;
 				}
 			break;
@@ -1338,7 +1342,7 @@ class GestionnaireEvenements
            	break;
 			
            	case "JoueurNonConnecte":
-               	trace("Joueur non connecté");
+               	trace("Joueur non connecte");
            	break;
 			
 			default:
@@ -1358,12 +1362,12 @@ class GestionnaireEvenements
     	switch(objetEvenement.resultat)
         {
             case "Pointage":
-                trace("on a le pointage total: "+objetEvenement.pointage + " Il reste à l'utiliser...");
+                trace("on a le pointage total: "+objetEvenement.pointage + " Il reste a l'utiliser...");
 				// modifier le pointage
 				_level0.loader.contentHolder.pointageJoueur = objetEvenement.pointage;
 				_level0.loader.contentHolder.planche.obtenirPerso().modifierPointage(objetEvenement.pointage);
-				// il faut mettre à jour le pointage
-				// qu'arrive-t-il s'il y a des délais et que le perso c'est déjà déplacé?
+				// il faut mettre a jour le pointage
+				// qu'arrive-t-il s'il y a des delais et que le perso c'est deja deplace?
             break;
 			
             case "CommandeNonReconnue":
@@ -1375,7 +1379,7 @@ class GestionnaireEvenements
             break;
 			
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
 			
             default:
@@ -1394,15 +1398,15 @@ class GestionnaireEvenements
     	switch(objetEvenement.resultat)
         {
             case "Argent":
-                trace("on a l'argent total: "+objetEvenement.argent + " Il reste à l'utiliser...");
+                trace("on a l'argent total: "+objetEvenement.argent + " Il reste a l'utiliser...");
 				// modifier l'argent
 				_level0.loader.contentHolder.argentJoueur = objetEvenement.argent;
 				_level0.loader.contentHolder.planche.obtenirPerso().modifierArgent(objetEvenement.argent);
 				//_level0.loader.contentHolder.planche.obtenirPerso().ajouterImageBanque(_level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet(), "pieceFixe", _level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet(), 75);
-				//todo corriger la ligne précédente si problème
+				//todo corriger la ligne precedente si probleme
 
-				// il faut mettre à jour l'argent
-				// qu'arrive-t-il s'il y a des délais et que le perso s'est déjà déplacé?
+				// il faut mettre a jour l'argent
+				// qu'arrive-t-il s'il y a des delais et que le perso s'est deja deplace?
             break;
 			 
             case "CommandeNonReconnue":
@@ -1414,7 +1418,7 @@ class GestionnaireEvenements
             break;
 			 
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
 			 
             default:
@@ -1433,7 +1437,7 @@ class GestionnaireEvenements
 	
     	trace("*********************************************");
     	trace("debut de retourRepondreQuestion   "+objetEvenement.resultat);
-    	trace("deplacement accepté oui ou non  :  "+objetEvenement.deplacementAccepte);   
+    	trace("deplacement accepte oui ou non  :  "+objetEvenement.deplacementAccepte);   
     	trace("url explication  :  "+objetEvenement.explication);
     	trace("nouveau pointage  :  "+objetEvenement.pointage);
     	trace("nouvel argent  :  "+objetEvenement.argent);
@@ -1444,7 +1448,7 @@ class GestionnaireEvenements
             case "Deplacement":
 		     	if(objetEvenement.deplacementAccepte)
 		     	{
-					trace("deplacement accepté");
+					trace("deplacement accepte");
 			
 					_level0.loader.contentHolder.box_question.gotoAndPlay(9);
 			
@@ -1464,7 +1468,7 @@ class GestionnaireEvenements
 		     	{
 					if(_level0.loader.contentHolder.erreurConnexion)
 					{
-						// Dans le cas d'une erreur de connexion, nous envoyons une réponse
+						// Dans le cas d'une erreur de connexion, nous envoyons une reponse
 						// assurement mauvaise au serveur. Il ne faut pas afficher de retro dans ce cas
 						_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 						_root.objGestionnaireInterface.afficherBoutons(1);
@@ -1472,7 +1476,7 @@ class GestionnaireEvenements
 					}
 					else
 					{
-			     		trace("deplacement refusé");
+			     		trace("deplacement refuse");
 			     		_level0.loader.contentHolder.url_retro = objetEvenement.explication;
 
 						_level0.loader.contentHolder.box_question.monScroll._visible = false;
@@ -1495,7 +1499,7 @@ class GestionnaireEvenements
             break;
 			 
             case "JoueurNonConnecte":
-                trace("Joueur non connecté");
+                trace("Joueur non connecte");
             break;
 			 
             default:
@@ -1649,7 +1653,7 @@ class GestionnaireEvenements
     	trace("*********************************************\n");
     }
     
-	//  temps de la partie : est-ce que ça marche?
+	//  temps de la partie : est-ce que ca marche?
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function evenementNouvelleTable(objetEvenement:Object)
     {
@@ -1657,7 +1661,7 @@ class GestionnaireEvenements
     	trace("*********************************************");
     	trace("debut de evenementNouvelleTable   "+objetEvenement.noTable+"    "+objetEvenement.tempsPartie);
     	var str:String = new String();
-    	// on ajoute une liste pour pouvoir insérer les joueurs quand ils vont entrer
+    	// on ajoute une liste pour pouvoir inserer les joueurs quand ils vont entrer
         objetEvenement.listeJoueurs = new Array();
         objetEvenement.no = objetEvenement.noTable;
 		objetEvenement.temps = objetEvenement.tempsPartie;
@@ -1739,7 +1743,7 @@ class GestionnaireEvenements
             	}
         	}
         	// enlever la table de la liste si elle est pleine
-			// à modifier si on est moins de 4
+			// a modifier si on est moins de 4
         	if(this.listeDesTables[indice].listeJoueurs.length == 4)
         	{
             	for(i;i<this.listeDesTables.length;i++)
@@ -1776,12 +1780,12 @@ class GestionnaireEvenements
             	break;
         	}
     	}
-    	// si la table est la nôtre (on choisit nos perso frame 3)
+    	// si la table est la notre (on choisit nos perso frame 3)
     	if(objetEvenement.noTable == this.numeroTable)
     	{
         	for(i = 0; i < 3; i++)
         	{
-            	//  on enlève le nom du joueur dans la liste et à l'écran
+            	//  on enleve le nom du joueur dans la liste et a l'ecran
             	if(listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur)
             	{
                 	listeDesPersonnages[i].nom = "Inconnu"+i;
@@ -1792,7 +1796,7 @@ class GestionnaireEvenements
             	}
         	}
         	// oupsss, on dirait qu'il est impossible d'aller changer l'image du perso...
-        	// est-ce que c'est nécessaire ?
+        	// est-ce que c'est necessaire ?
     	}
     	// si ce n'est pas notre table
     	else
@@ -1800,7 +1804,7 @@ class GestionnaireEvenements
         	// si la table existe
         	if(indice != -1)
         	{
-            	// on enlève le joueur de la liste des joueurs de la table en question
+            	// on enleve le joueur de la liste des joueurs de la table en question
             	for(j=0;j<this.listeDesTables[indice].listeJoueurs.length;j++)
             	{
                 	if(this.listeDesTables[indice].listeJoueurs[j].nom == objetEvenement.nomUtilisateur)
@@ -1814,7 +1818,7 @@ class GestionnaireEvenements
             	{
                 	if(_level0.loader.contentHolder.listeTable.getItemAt(i).data == objetEvenement.noTable)
                 	{
-                    	//tableAffichee == true;  // la table était au préalable affichée
+                    	//tableAffichee == true;  // la table etait au prealable affichee
                     	// si la table contient encore des joueurs
                     	if(this.listeDesTables[indice].listeJoueurs.length != 0)
                     	{
@@ -1835,7 +1839,7 @@ class GestionnaireEvenements
                 	}
             	}
 	    
-       		    // si la table n'était pas affichée, on l'affiche
+       		    // si la table n'etait pas affichee, on l'affiche
             	if(tableAffichee == false)
             	{
                 	str = "Table  "+this.listeDesTables[indice].no+"                    "+this.listeDesTables[indice].temps+" min.";
@@ -2002,7 +2006,7 @@ class GestionnaireEvenements
     	var taille:Number = objetEvenement.statistiqueJoueur.length;
 		var deconnecte = _level0.loader.contentHolder.deconnecte;
        
-		// trouver une façon de faire fonctionner ces lignes :
+		// trouver une facon de faire fonctionner ces lignes :
 		_root.vrai_txt.removeTextField();
 		_root.faux_txt.removeTextField();
 		_root.reponse_txt.removeTextField();
@@ -2016,7 +2020,7 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder["GUI_utiliserObjet"].removeMovieClip();
 		_level0.loader.contentHolder["box_question"].removeMovieClip();
 		_level0.loader.contentHolder["fond_MiniGame"]._y += 400;
-		//s'assurer que la musique s'arrête en fin de partie
+		//s'assurer que la musique s'arrete en fin de partie
 		_level0.loader.contentHolder.musique.stop();
 		_level0.loader.contentHolder.musiqueDefault.stop();
 	
@@ -2051,7 +2055,7 @@ class GestionnaireEvenements
 	    	indice = 0;
     	}
     
-    	// à modifier quand il y aura moins de 4 joueurs
+    	// a modifier quand il y aura moins de 4 joueurs
     	if(tabOrdonne[0].nom != undefined)
     	{
 			_level0.loader.contentHolder.nom1 = tabOrdonne[0].nom;	
