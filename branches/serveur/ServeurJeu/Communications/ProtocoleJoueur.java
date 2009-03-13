@@ -595,37 +595,21 @@ public class ProtocoleJoueur implements Runnable
                             {
 
                                 // Le joueur a été déconnecté et tente de se reconnecter.
-
                                 // Il faut lui envoyer une réponse spéciale lui
-
                                 // permettant de choisir s'il veut se reconnecter
-
-                                
-
+       
                                 bolEnTrainDeJouer = false;
-
-                                
-
+                           
                                 objNoeudCommande.setAttribute("type","Reponse");
-
                                 objNoeudCommande.setAttribute("nom","OkEtPartieDejaCommencee");
-
-  
-
+ 
                                 // On va envoyer dans le noeud la liste de chansons que le joueur pourrait aimer
-
                                 Vector liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
-
                                 for(int i=0; i<liste.size(); i++)
-
                                 {
-
                                     Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("musique");
-
                                     Text objNoeudTexteMusique = objDocumentXMLSortie.createTextNode((String)liste.get(i));
-
                                     objNoeudParametreMusique.appendChild(objNoeudTexteMusique);
-
                                     objNoeudCommande.appendChild(objNoeudParametreMusique);   
                                 }
                             }
@@ -662,295 +646,159 @@ public class ProtocoleJoueur implements Runnable
 					}
 
 				}
-
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.NePasRejoindrePartie))
-
 				{
-
 					// Un joueur déconnecté décide qu'il ne veut pas rejoindre sa partie abandonnée
 					if (objJoueurHumain != null)
-
 					{
-
 						if (objControleurJeu.estJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur()) == true)
-
 						{
-
 							// Ici on enlève le joueur déconnecté de la liste des joueurs déconnectés
 							// on ne l'enlève pas de la liste des joueurs déconnectés de la table car on ne
 							// vérifie qu'avec la liste des joueurs déconnectés du controleur de jeu
-
 							objControleurJeu.enleverJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
-
 						    objNoeudCommande.setAttribute("type", "Reponse");
-
 						    objNoeudCommande.setAttribute("nom", "Ok");
-
 						}
-
 					}
-
 				}
-
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.RejoindrePartie))
-
 				{
-
 				    // Un joueur déconnecté tente de rejoindre une partie déjà commencée
-
                     if (objJoueurHumain != null)
-
                     {
-
                         if (objControleurJeu.estJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur()) == true)
-
                         {
-
                             // Ici, on renvoie l'état du jeu au joueur pour
                             // qu'il puisse reprendre sa partie
                             JoueurHumain objAncientJoueurHumain = objControleurJeu.obtenirJoueurHumainJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
                             
                             // Envoyer la liste des joueurs
                             envoyerListeJoueurs(objAncientJoueurHumain);
-
-                            
-
+                       
                             // Envoyer le plateau de jeu, la liste des joueurs, 
-
                             // leurs ids personnage et leurs positions au joueur
-
                             // qui se reconnecte
-
                             envoyerPlateauJeu(objAncientJoueurHumain);
-
-                            
-
+                          
                             // envoyer le pointage au joueur
-
                             envoyerPointage(objAncientJoueurHumain);
-
-                            
-
+                   
                             // envoyer l'argent au joueur
-
                             envoyerArgent(objAncientJoueurHumain);
 
-                            
-
+                           
                             // Envoyer la liste des items du joueur qui
-
                             // se reconnecte
-
                             envoyerItemsJoueurDeconnecte(objAncientJoueurHumain);
-
                     
-
                             // Synchroniser temps
-
                             envoyerSynchroniserTemps(objAncientJoueurHumain);
 
-
-
                             // Faire en sorte que le joueur est correctement
-
                             // considéré en train de jouer
-
                             objJoueurHumain = objAncientJoueurHumain;
 
                             bolEnTrainDeJouer = true;
-
-                            
-
+                           
                             // Enlever le joueur de la liste des joueurs déconnectés
-
                             objControleurJeu.enleverJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
-
-                            
-
+                           
                         }
-
 				    }    
-
 				}
-
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.Deconnexion))
-
 				{
-
 					// Si le joueur humain a été défini dans le protocole, alors
-
 					// c'est qu'il a réussi à se connecter au serveur de jeu, il
-
 					// faut donc aviser le contrôleur de jeu pour qu'il enlève
-
 					// le joueur du serveur de jeu
-
 					if (objJoueurHumain != null)
-
 					{
-
 						// Informer le contrôleur de jeu que la connexion avec le 
-
 						// client (joueur) a été fermée (il faut obtenir un numéro
-
 					    // de commandes de cette fonction)
-
 						objControleurJeu.deconnecterJoueur(objJoueurHumain, true, false);
-
 						
-
 						// Il n'y a pas eu d'erreurs
-
 						objNoeudCommande.setAttribute("type", "Reponse");
-
 						objNoeudCommande.setAttribute("nom", "Ok");
-
 					}
-
 					else
-
 					{
-
 						// Le joueur n'est pas connecté
-
 						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
-
 					}
-
 				}
-
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.ObtenirListeJoueurs))
-
 				{
-
 					// Si le joueur est connecté au serveur de jeu, alors on va
-
 					// retourner au client la liste des joueurs connectés
-
 					if (objJoueurHumain != null)
-
 					{
-
 						// Il n'y a pas eu d'erreurs et il va falloir retourner 
-
 						// une liste de joueurs
-
 						objNoeudCommande.setAttribute("type", "Reponse");
-
 						objNoeudCommande.setAttribute("nom", "ListeJoueurs");
-
 						
-
 						// Créer le noeud de pour le paramètre contenant la liste
-
 						// des joueurs à retourner
-
 						Element objNoeudParametreListeJoueurs = objDocumentXMLSortie.createElement("parametre");
-
 												
-
 						// On ajoute un attribut type qui va contenir le type
-
 						// du paramètre
-
 						objNoeudParametreListeJoueurs.setAttribute("type", "ListeNomUtilisateurs");
-
 						
-
 						// Obtenir la liste des joueurs connectés au serveur de jeu
-
 						TreeMap lstListeJoueurs = objControleurJeu.obtenirListeJoueurs();
-
 						
-
 						// Empècher d'autres thread de toucher à la liste des
-
 						// joueurs connectés au serveur de jeu
-
 						synchronized (lstListeJoueurs)
-
 						{
-
 							// Créer un ensemble contenant tous les tuples de la liste 
-
 							// lstListeJoueurs (chaque élément est un Map.Entry)
-
 							Set lstEnsembleJoueurs = lstListeJoueurs.entrySet();
-
-							
-
+					
 							// Obtenir un itérateur pour l'ensemble contenant les joueurs
-
 							Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
-
 							
-
 							// Générer un nouveau numéro de commande qui sera 
-
 						    // retourné au client
-
 						    genererNumeroReponse();
-
 							
-
 							// Passer tous les joueurs connectés et créer un noeud
-
 							// pour chaque joueur et l'ajouter au noeud de paramètre
-
 							while (objIterateurListe.hasNext() == true)
-
 							{
-
 								// Créer une référence vers le joueur humain courant dans la liste
-
 								JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
-
 								
-
 								// Créer le noeud du joueur courant
-
 								Element objNoeudJoueur = objDocumentXMLSortie.createElement("joueur");
-
 								
-
 								// On ajoute un attribut nom qui va contenir le nom
-
 								// du joueur
 
 								objNoeudJoueur.setAttribute("nom", objJoueur.obtenirNomUtilisateur());
-
-								
-
-								// Ajouter le noeud du joueur au noeud du paramètre
-
-								objNoeudParametreListeJoueurs.appendChild(objNoeudJoueur);
-
-							}
-
-						}
-
 						
-
-						// Ajouter le noeud paramètre au noeud de commande dans
-
-						// le document de sortie
-
-						objNoeudCommande.appendChild(objNoeudParametreListeJoueurs);
-
+								// Ajouter le noeud du joueur au noeud du paramètre
+								objNoeudParametreListeJoueurs.appendChild(objNoeudJoueur);
+							}
+						}
+            					// Ajouter le noeud paramètre au noeud de commande dans
+        						// le document de sortie
+        						objNoeudCommande.appendChild(objNoeudParametreListeJoueurs);
 					}
-
 					else
 					{
 						// Sinon, il y a une erreur car le joueur doit ètre connecté
 						// pour pouvoir avoir accès à la liste des joueurs
 						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
 					}
-
 				}
-
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.ObtenirListeSalles))
 				{
-
 					// Si le joueur est connecté au serveur de jeu, alors on va
 					// retourner au client la liste des salles actives
 					if (objJoueurHumain != null)
@@ -1119,117 +967,61 @@ public class ProtocoleJoueur implements Runnable
 					}
 				}
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.QuitterSalle))
-
 				{
-
 					// Si le joueur n'est pas connecté, alors il y a une erreur
-
 					if (objJoueurHumain == null)
-
 					{
-
 						// Le joueur n'est pas connecté
-
 						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
-
 					}
-
 					// Si le joueur n'est pas dans aucune salle, alors il y a 
-
 					// une erreur
-
 					else if (objJoueurHumain.obtenirSalleCourante() == null)
-
 					{
-
 						// Le joueur n'est pas dans aucune salle
-
 						objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");						
-
 					}
-
 					else
-
 					{
-
 						// Appeler la méthode pour quitter la salle
-
 						objJoueurHumain.obtenirSalleCourante().quitterSalle(objJoueurHumain, true, true);
-
 						
-
 						// Il n'y a pas eu d'erreurs
-
 						objNoeudCommande.setAttribute("type", "Reponse");
-
 						objNoeudCommande.setAttribute("nom", "Ok");
-
 					}
-
 				}
-
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.ObtenirListeJoueursSalle))
-
 				{
-
 					// Si le joueur n'est pas connecté au serveur de jeu, alors il
-
 					// y a une erreur
-
 					if (objJoueurHumain == null)
-
 					{
-
 						// Le joueur ne peut pas accéder à la liste des joueurs 
-
 						// s'il n'est pas connecté au serveur de jeu
-
 						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
-
 					}
-
 					// Si le joueur n'est connecté à aucune salle, alors il ne 
-
 					// peut pas obtenir la liste des joueurs dans cette salle
-
 					else if (objJoueurHumain.obtenirSalleCourante() == null)
-
 					{
-
 						// Le joueur ne peut pas accéder à la liste des joueurs 
-
 						// s'il n'est pas dans une salle
-
 						objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");						
-
 					}
-
 					else
-
 					{
-
 						// Il n'y a pas eu d'erreurs et il va falloir retourner 
-
-						// une liste de joueurs
-
+    					// une liste de joueurs
 						objNoeudCommande.setAttribute("type", "Reponse");
-
 						objNoeudCommande.setAttribute("nom", "ListeJoueursSalle");
-
-						
-
+			
 						// Créer le noeud de pour le paramètre contenant la liste
-
 						// des joueurs à retourner
-
 						Element objNoeudParametreListeJoueurs = objDocumentXMLSortie.createElement("parametre");
-
 												
-
 						// On ajoute un attribut type qui va contenir le type
-
 						// du paramètre
-
 						objNoeudParametreListeJoueurs.setAttribute("type", "ListeNomUtilisateurs");
 				
 					    // Obtenir la liste des joueurs se trouvant dans la 
@@ -1243,8 +1035,7 @@ public class ProtocoleJoueur implements Runnable
 							// Créer un ensemble contenant tous les tuples de la liste 
 							// lstListeJoueurs (chaque élément est un Map.Entry)
 							Set lstEnsembleJoueurs = lstListeJoueurs.entrySet();
-
-						
+				
 							// Obtenir un itérateur pour l'ensemble contenant les joueurs
 							Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
 							
@@ -1288,10 +1079,11 @@ public class ProtocoleJoueur implements Runnable
 				    // s'occuper d'arranger tout èa et de ne rien faire si des 
 				    // événements arrivent après le no de retour et que èa ne 
 				    // change rien à la liste, car c'est normal
+					
 					// Obtenir la valeur du paramètre Filtre et le garder en 
 					// mémoire dans une variable
 					String strFiltre = obtenirValeurParametre(objNoeudCommandeEntree, "Filtre").getNodeValue();
-					
+					strFiltre = "Toutes";
 					// Si le joueur n'est pas connecté au serveur de jeu, alors il
 					// y a une erreur
 					if (objJoueurHumain == null)
@@ -1345,7 +1137,6 @@ public class ProtocoleJoueur implements Runnable
 
 							// Obtenir un itérateur pour l'ensemble contenant les tables
 							Iterator objIterateurListeTables = lstEnsembleTables.iterator();
-
 					
 							// Générer un nouveau numéro de commande qui sera 
 						    // retourné au client
@@ -1358,30 +1149,32 @@ public class ProtocoleJoueur implements Runnable
 								// Créer une référence vers la table courante dans la liste
 								Table objTable = (Table)(((Map.Entry)(objIterateurListeTables.next())).getValue());
 
+								System.out.println(objTable.obtenirNoTable());
+								/*
 								// Obtenir la liste des joueurs se trouvant dans la 
 								// table courante
-								TreeMap lstListeJoueurs = objTable.obtenirListeJoueurs();
+								TreeMap lstListeJoueurs = objJoueurHumain.obtenirSalleCourante().obtenirListeJoueurs();//objTable.obtenirListeJoueurs();
 
 								// Empècher d'autres thread de toucher à la liste des
 								// joueurs de la table courante
 								synchronized (lstListeJoueurs)
 								{
 									//TODO: Peut-ètre va-t-il falloir ajouter 
-
 									// des validations supplémentaires ici lorsqu'une 
-
 									// partie débutera ou se terminera
-
 									// Si la table est une de celles qui doivent ètre 
-
 									// retournées selon le filtre, alors on continue 
-
+                                  */
+								
+								
+                                     /*
 									if (strFiltre.equals(Filtre.Toutes) ||
 									   (strFiltre.equals(Filtre.IncompletesNonCommencees) && objTable.estComplete() == false && objTable.estCommencee() == false) || 
 									   (strFiltre.equals(Filtre.IncompletesCommencees) && objTable.estComplete() == false && objTable.estCommencee() == true) ||
             						   (strFiltre.equals(Filtre.CompletesNonCommencees) && objTable.estComplete() == true && objTable.estCommencee() == false) ||
 									   (strFiltre.equals(Filtre.CompletesCommencees) && objTable.estComplete() == true && objTable.estCommencee() == true))
 									{
+									*/
 										// Créer le noeud de la table courante
 										Element objNoeudTable = objDocumentXMLSortie.createElement("table");
 								
@@ -1393,26 +1186,18 @@ public class ProtocoleJoueur implements Runnable
 										// temps des parties qui se déroulent sur cette table
 										objNoeudTable.setAttribute("temps", Integer.toString(objTable.obtenirTempsTotal()));
 	
+										/*
 										// Créer un ensemble contenant tous les tuples de la liste 
 										// lstListeJoueurs (chaque élément est un Map.Entry)
 										Set lstEnsembleJoueurs = lstListeJoueurs.entrySet();
-
-										
-
+									
 										// Obtenir un itérateur pour l'ensemble contenant les joueurs
-
 										Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
-
 										
-
 										// Passer tous les joueurs et créer un noeud pour 
-
 										// chaque joueur et l'ajouter au noeud de la table 
-
 										// courante
-
 										while (objIterateurListeJoueurs.hasNext() == true)
-
 										{
 
 											// Créer une référence vers le joueur courant 
@@ -1428,18 +1213,19 @@ public class ProtocoleJoueur implements Runnable
 											
 											// Ajouter le noeud du joueur au noeud de la table
 											objNoeudTable.appendChild(objNoeudJoueur);
-										}									    
+										}  */									    
 									
 										// Ajouter le noeud de la table au noeud du paramètre
 										objNoeudParametreListeTables.appendChild(objNoeudTable);
-									}
-								}
+									//}
+								//}
 							}						    
 						}
 						
 						// Ajouter le noeud paramètre au noeud de commande dans
 						// le document de sortie
 						objNoeudCommande.appendChild(objNoeudParametreListeTables);
+						
 					}
 				}
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.CreerTable))
@@ -1521,76 +1307,44 @@ public class ProtocoleJoueur implements Runnable
 					{
 
 						// Le joueur ne peut pas entrer dans une table 
-
 						// s'il n'est pas connecté au serveur de jeu
-
 						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
-
 					}
-
 					// Si le joueur n'est connecté à aucune salle, alors il ne 
-
 					// peut pas entrer dans une table
 
 					else if (objJoueurHumain.obtenirSalleCourante() == null)
-
 					{
-
 						// Le joueur ne peut pas entrer dans une table 
-
 						// s'il n'est pas dans une salle
-
 						objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");
-
 					}
-
 					//TODO: Il va falloir synchroniser cette validation lorsqu'on va 
-
 					// avoir codé la commande SortirJoueurTable -> èa va ressembler au
-
 					// processus d'authentification
-
 					// Si le joueur est dans une table, alors il ne 
-
 					// peut pas entrer dans une autre table sans sortir de celle 
-
 					// dans laquelle il se trouve présentement
 
 					else if (objJoueurHumain.obtenirPartieCourante() != null)
-
 					{
-
 						// Le joueur ne peut pas entrer dans une table 
-
 						// s'il est déjà dans une table
-
 						objNoeudCommande.setAttribute("nom", "JoueurDansTable");
-
 					}
-
 					else
-
 					{
-
 						// Obtenir le numéro de la table dans laquelle le joueur 
-
 						// veut entrer et le garder en mémoire dans une variable
-
 						int intNoTable = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "NoTable").getNodeValue());
-
-						
-
+					
 						// Déclaration d'une nouvelle liste de personnages
 						TreeMap lstPersonnageJoueurs = new TreeMap();
-
-						
-
+					
 						// Appeler la méthode permettant d'entrer dans la
 						// table et garder son résultat dans une variable
-
 						String strResultatEntreeTable = objJoueurHumain.obtenirSalleCourante().entrerTable(objJoueurHumain, 
-																										   intNoTable, true, 
-   																									       lstPersonnageJoueurs);
+																						intNoTable, true, lstPersonnageJoueurs);
 
 						// Si le résultat de l'entrée dans la table est true alors le
 						// joueur est maintenant dans la table
