@@ -2509,7 +2509,7 @@ class GestionnaireCommunication
 			{
 				var str_temp:String = noeudCommande.childNodes[iii].firstChild.nodeValue;
 				objEvenement.listeChansons.push(str_temp);
-				trace("Liste chansons : " + objEvenement.listeChansons[iii]);
+				//trace("Liste chansons : " + objEvenement.listeChansons[iii]);
 			}
 	
         }
@@ -2585,6 +2585,7 @@ class GestionnaireCommunication
             {
                 // Ajouter l'objet joueur dans le tableau
                 objEvenement.listeNomUtilisateurs.push({nom:lstChildNodes[i].attributes.nom});
+                trace("jouer "+lstChildNodes[i].attributes.nom);
             }
         }
         // Si le retour de la fonction est une reponse positive et non une
@@ -2618,8 +2619,8 @@ class GestionnaireCommunication
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
 		
-		// Si le résultat est la liste des salles, alors on peut ajouter la
-        // liste des salles dans l'objet à retourner
+		// Si le resultat est la liste des salles, alors on peut ajouter la
+        // liste des salles dans l'objet a retourner
         // Si le resultat est la liste des salles, alors on peut ajouter la
         // liste des salles dans l'objet a retourner
         if (objEvenement.resultat == "ListeSalles")
@@ -2638,7 +2639,7 @@ class GestionnaireCommunication
 								  
             }
 			
-			// Créer un tableau ListeDescrSalles qui va contenir les
+			// Creer un tableau ListeDescrSalles qui va contenir les
             // descriptions des objets salle
             objEvenement.listeDescrSalles = new Array();
 			objEvenement.isActiveRoom = new Boolean();
