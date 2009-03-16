@@ -11,7 +11,6 @@ import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
-
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -20,7 +19,6 @@ import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
 import ServeurJeu.Configuration.GestionnaireMessages;
@@ -33,8 +31,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	// Cette variable va contenir le nom du joueur virtuel
 	private String strNom;
         
-        // Le joueur virtuel est-il destiné à subir une banane?
-        public String vaSubirUneBanane;
+    // Le joueur virtuel est-il destiné à subir une banane?
+    public String vaSubirUneBanane;
 	
     // Déclaration d'une référence vers le gestionnaire d'evenements
 	private GestionnaireEvenements objGestionnaireEv;
@@ -171,7 +169,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		objPositionFinaleVisee = null;
 		
 		// Faire la référence vers le gestionnaire d'évenements
-		objGestionnaireEv = controleur.obtenirGestionnaireEvenements();
+		objGestionnaireEv = gestionnaireEv;
 			
 		// Cette variable sert à arrêter la thread lorsqu'à true
 		bolStopThread = false;		

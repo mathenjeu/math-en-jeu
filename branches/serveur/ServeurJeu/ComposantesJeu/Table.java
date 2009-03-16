@@ -132,11 +132,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @param Regles reglesTable : Les règles pour une partie sur cette table
 	 */
 	public Table(Salle salleParente, int noTable, String nomUtilisateurCreateur,
-			int tempsPartie, Regles reglesTable, ControleurJeu controleurJeu) 
+			int tempsPartie, ControleurJeu controleurJeu) 
 	{
 		super();
    	
-		MAX_NB_PLAYERS = reglesTable.getMaxNbPlayers();
+		MAX_NB_PLAYERS = salleParente.getRegles().getMaxNbPlayers();
 		
 		positionWinTheGame = new Point(-1, -1); 		
         //this.butDuJeu = butDuJeu;
@@ -165,7 +165,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		intNbJoueurDemande = MAX_NB_PLAYERS;
 		
 		// Définir les rçgles de jeu pour la salle courante
-		objRegles = reglesTable;
+		objRegles = salleParente.getRegles();
 		
 		// initialaise gameboard - set null
 		objttPlateauJeu = null;
@@ -579,7 +579,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Générer le plateau de jeu selon les règles de la table et 
 		// garder le plateau en mémoire dans la table
 		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objGestionnaireBD, 
-				objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, MAX_NB_PLAYERS, lstPointsFinish, getObjSalle().getGameType());
+				objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, lstPointsFinish, getObjSalle().getGameType());
 
         // Définir le prochain id pour les objets
         objProchainIdObjet++;

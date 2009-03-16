@@ -640,7 +640,7 @@ public class GestionnaireBD
 						
 						Regles objReglesSalle = new Regles();
 						chargerRegllesSalle(objReglesSalle, room, langId);
-						Salle objSalle = new Salle(this, nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType);
+						Salle objSalle = new Salle(nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType);
 						objSalle.setRoomDescription(roomDescription);
 						objControleurJeu.ajouterNouvelleSalle(objSalle);
 					}   
@@ -703,6 +703,7 @@ public class GestionnaireBD
 					int maxShopObjects = rs.getInt( "max_object_shop" );
 					int maxNbPlayers = rs.getInt( "maxNbPlayers" );
 					int maxNbObjectsAndMoney = rs.getInt( "max_object_coin" );
+					int nbTracks = rs.getInt( "nbTracks" );
 					
 					System.out.println(tournament);
 					
@@ -721,6 +722,7 @@ public class GestionnaireBD
 					objReglesSalle.definirTempsMaximal( tempsMax );
 					objReglesSalle.definirDeplacementMaximal( deplacementMax );
 					objReglesSalle.setIntMaxSaledObjects(maxShopObjects);
+					objReglesSalle.setNbTracks(nbTracks);
 											
                 }
 			}

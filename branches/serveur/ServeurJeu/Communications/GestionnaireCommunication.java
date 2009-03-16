@@ -58,7 +58,7 @@ public class GestionnaireCommunication
 	 * le port d'écoute du serveur et la référence vers le contrôleur de jeu ainsi
 	 * que vers le gestionnaire d'événements.
 	 */
-	public GestionnaireCommunication(ControleurJeu controleur) 
+	public GestionnaireCommunication(ControleurJeu controleur, GestionnaireEvenements gestionnaireEv) 
 	{
 		super();
 		
@@ -70,7 +70,7 @@ public class GestionnaireCommunication
 		objControleurJeu = controleur;
 		
 		// Garder la référence vers le GestionnaireEvenements et vers le GestionnaireBD
-		objGestionnaireEvenements = controleur.obtenirGestionnaireEvenements();
+		objGestionnaireEvenements = gestionnaireEv;
 		objGestionnaireBD = controleur.obtenirGestionnaireBD();
 		
 		// Créer une liste des ProtocoleJoueur
