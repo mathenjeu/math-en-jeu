@@ -140,7 +140,9 @@ public class ControleurJeu
 		objTacheSynchroniser = new TacheSynchroniser();
 
 		// Créer un nouveau gestionnaire de communication
-		objGestionnaireCommunication = new GestionnaireCommunication(this);
+		objGestionnaireCommunication = new GestionnaireCommunication(this, objGestionnaireEvenements);
+		
+		////////////////////////////////////////////////////////////////
 		String language = "en";
 		// Fills the rooms from DB
 		objGestionnaireBD.fillsRooms(language);   
@@ -438,8 +440,7 @@ public class ControleurJeu
 	public TreeMap obtenirListeSalles(String language, String gameType)
 	{
 		
-		
-            // On crée une liste de salles vide, et on parcourt toutes les salles connues
+	        // On crée une liste de salles vide, et on parcourt toutes les salles connues
             TreeMap copieListeSalles = (TreeMap)lstSalles.clone();
             copieListeSalles.clear();
             Set keySet = lstSalles.keySet();
@@ -456,8 +457,7 @@ public class ControleurJeu
                 	copieListeSalles.clear();
                 	key = "TournamentActive";
                 	copieListeSalles.put(key,salle);
-                	System.out.println(key);
-                	repeat =  false;
+                  	repeat =  false;
                 	            	
                 }else{
                 	// On vérifie si cette salle est du bon gameType

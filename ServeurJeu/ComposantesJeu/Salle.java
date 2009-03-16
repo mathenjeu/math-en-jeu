@@ -77,8 +77,7 @@ public class Salle
 	 * @param String motDePasse : Le mot de passe
 	 * @param Regles reglesSalle : Les règles de jeu pour la salle courante
 	 */
-	public Salle(GestionnaireBD gestionnaireBD, 
-				 String nomSalle, String nomUtilisateurCreateur, String motDePasse, 
+	public Salle(String nomSalle, String nomUtilisateurCreateur, String motDePasse, 
 				 Regles reglesSalle, ControleurJeu controleurJeu, String gameType)
 	{
 		super();
@@ -86,7 +85,7 @@ public class Salle
 		// Faire la référence vers le gestionnaire d'événements et le 
 		// gestionnaire de base de données
 		objGestionnaireEvenements = new GestionnaireEvenements();
-		objGestionnaireBD = gestionnaireBD;
+		objGestionnaireBD = controleurJeu.obtenirGestionnaireBD();
 		
 		// Garder en mémoire le nom de la salle, le nom d'utilisateur du 
 		// créateur de la salle et le mot de passe
@@ -299,7 +298,7 @@ public class Salle
 	    {
 	    	
 	    	// Créer une nouvelle table en passant les paramètres appropriés
-	    	Table objTable = new Table( this, genererNoTable(), joueur.obtenirNomUtilisateur(), tempsPartie, objRegles, objControleurJeu);
+	    	Table objTable = new Table( this, genererNoTable(), joueur.obtenirNomUtilisateur(), tempsPartie, objControleurJeu);
 	    		    	
 	    	objTable.creation();
 	    		    	
