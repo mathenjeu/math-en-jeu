@@ -2648,9 +2648,11 @@ class GestionnaireCommunication
             {
                 // Ajouter l'objet salle dans le tableau
                 objEvenement.listeDescrSalles.push({descriptions:lstChildNodes[i].attributes.descriptions});
-				objEvenement.isActiveRoom = (Boolean)(lstChildNodes[i].attributes.activ);
-				trace("Retour xxx " + lstChildNodes[i].attributes.activ );
-            }
+				if(lstChildNodes[i].attributes.activ == "true")
+				   objEvenement.isActiveRoom = true;
+				else if(lstChildNodes[i].attributes.activ == "false")
+				   objEvenement.isActiveRoom = false;
+			}
         }
         // Si le retour de la fonction est une reponse positive et non une
         // erreur, alors on peut passer a l'autre etat
