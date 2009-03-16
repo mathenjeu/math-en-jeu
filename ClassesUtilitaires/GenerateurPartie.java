@@ -51,8 +51,8 @@ public final class GenerateurPartie
      */
     public static Case[][] genererPlateauJeu(GestionnaireBD objGestionnaireBD, 
     		Regles reglesPartie, int temps, ArrayList<Point> lstPointsCaseLibre,
-    		Integer objDernierIdObjets, int max_nb_players, 
-    		ArrayList<Point> lstPointsFinish, String gameType) throws NullPointerException
+    		Integer objDernierIdObjets, ArrayList<Point> lstPointsFinish, 
+    		String gameType) throws NullPointerException
     {
 		// Création d'un objet permettant de générer des nombres aléatoires
 		Random objRandom = new Random();
@@ -117,7 +117,7 @@ public final class GenerateurPartie
 		// calculate number of lines and of columns if gametype = tournament
 		if (gameType.equals("Tournament"))
 		{
-		   intNbColumns = (max_nb_players + 1) * factor - 1;
+		   intNbColumns = (reglesPartie.getNbTracks() + 1) * factor - 1;
 
     	   intNbLines = (int) Math.ceil((temps * temps * 3/2 ) / intNbColumns);
 		
@@ -148,16 +148,16 @@ public final class GenerateurPartie
 		if (gameType.equals("Tournament"))
 		{
 		   // we build table of game with the houls for the borders
-		   intCompteurCases = boardCreation(objRandom,max_nb_players, lstPointsCasesPresentes, 
+		   intCompteurCases = boardCreation(objRandom, reglesPartie.getNbTracks(), lstPointsCasesPresentes, 
 				   intCompteurCases, objCaseParcourue, intNbColumns, intNbLines, 
 				   intNbTrous ,objttPlateauJeu);
 		   // fill list with points for finish
-			for(int i = 0; i < max_nb_players; i++)
+			for(int i = 0; i < reglesPartie.getNbTracks(); i++)
 			{
 				objPoint = (Point) lstPointsCasesPresentes.remove(lstPointsCasesPresentes.size()-1);
 				lstPointsFinish.add(objPoint);
 			}
-			lstPointsCasesPresentes = caseDefinition(reglesPartie, max_nb_players,
+			lstPointsCasesPresentes = caseDefinition(reglesPartie, reglesPartie.getNbTracks(),
 					objRandom, lstPointsCasesPresentes, lstPointsCasesSpeciales,
 					lstPointsCasesCouleur, intCompteurCases, intNbCasesSpeciales,
 					objttPlateauJeu);
@@ -712,7 +712,7 @@ public final class GenerateurPartie
 
     /**
      * Method used to create the game board for the game type "Tournament"
-     * @param max_nb_joueurs
+     * @param nbTracks
      * @param lstPointsCasesPresentes
      * @param intCompteurCases
      * @param objCaseParcourue
@@ -722,7 +722,7 @@ public final class GenerateurPartie
      * @param objttPlateauJeu
      * @return
      */
-	private static int boardCreation(Random objRandom,int max_nb_joueurs,
+	private static int boardCreation(Random objRandom,int nbTracks,
 			ArrayList<Point> lstPointsCasesPresentes, int intCompteurCases,
 			CaseCouleur objCaseParcourue, int intNbColonnes, int intNbLignes,
 			int intNbTrous, Case[][] objttPlateauJeu) {
@@ -731,7 +731,7 @@ public final class GenerateurPartie
 		for(int x = 0; x < intNbLignes; x++){
 			for(int y = 0; y < intNbColonnes; y++){
 			
-				if(ifNotBorder(x, y, intNbLignes, intNbColonnes, max_nb_joueurs)){
+				if(ifNotBorder(x, y, intNbLignes, intNbColonnes, nbTracks)){
 					// Créer le point de la case courante
 					objPoint = new Point(x, y);
 					
@@ -922,24 +922,24 @@ public final class GenerateurPartie
      * @param y
      * @param intNbLignes
      * @param intNbColonnes
-     * @param max_nb_joueurs 
+     * @param nbTracks 
      * @return boolean if the point will be or not used
      */
-    private static boolean ifNotBorder(int x, int y, int intNbLignes, int intNbColonnes, int max_nb_joueurs) {
+    private static boolean ifNotBorder(int x, int y, int intNbLignes, int intNbColonnes, int nbTracks) {
 		
     	boolean notborder = true;
-		if ( (max_nb_joueurs % 2 == 0) && (y + 1) % (max_nb_joueurs + 1) == 0 ){
+		if ( (nbTracks % 2 == 0) && (y + 1) % (nbTracks + 1) == 0 ){
 			
-			if(y % 2 == 0 && x <= intNbLignes - max_nb_joueurs - 1 )
+			if(y % 2 == 0 && x <= intNbLignes - nbTracks - 1 )
 		      notborder = false;
-			else if (y % 2 == 1 && x > max_nb_joueurs - 1 )
+			else if (y % 2 == 1 && x > nbTracks - 1 )
 				 notborder = false;
 		
-		}else if (max_nb_joueurs % 2 == 1 && (y + 1) % (max_nb_joueurs + 1) == 0 ){
+		}else if (nbTracks % 2 == 1 && (y + 1) % (nbTracks + 1) == 0 ){
 		
-			if((y + 1) / (max_nb_joueurs + 1) %  2 == 1 && x <= intNbLignes - max_nb_joueurs - 1 )
+			if((y + 1) / (nbTracks + 1) %  2 == 1 && x <= intNbLignes - nbTracks - 1 )
 			      notborder = false;
-			else if ((y + 1) / (max_nb_joueurs + 1) % 2 == 0 && x > max_nb_joueurs - 1 )
+			else if ((y + 1) / (nbTracks + 1) % 2 == 0 && x > nbTracks - 1 )
 					 notborder = false;
 		
 		}
