@@ -552,7 +552,7 @@ class GestionnaireEvenements
 				
 				_level0.loader.contentHolder.isActiv = objetEvenement.isActiveRoom;
 				trace("salle active : " + _level0.loader.contentHolder.isActiv);
-				_level0.loader.contentHolder.bt_continuer1._visible = true;
+				_level0.loader.contentHolder.bt_continuer1._visible = false;
 				_level0.loader.contentHolder.txtChargementSalles._visible = false;
             break;
 			 
@@ -732,7 +732,7 @@ class GestionnaireEvenements
 				{
 					_level0.loader.contentHolder.chargementTables = "";
 				}
-				_level0.loader.contentHolder.bt_continuer2._visible = true;
+				_level0.loader.contentHolder.bt_continuer2._visible = false;
             break;
 			 
             case "CommandeNonReconnue":
@@ -923,7 +923,7 @@ class GestionnaireEvenements
                     	break;
                 	}
             	}
-					 
+				
 			 	delete this.listeDesTables;
 			 	this.listeDesTables = new Array();
 			 	delete this.listeDesJoueursConnectes;
@@ -1897,6 +1897,10 @@ class GestionnaireEvenements
         }
 
 		// put the face of my avatar in the panel (next to my name)
+		_level0.loader.contentHolder.myObj=new Object();
+		_level0.loader.contentHolder.myObj.myID=this.listeDesPersonnages[3].id;
+		_level0.loader.contentHolder.myObj.myNom=this.listeDesPersonnages[3].nom;
+		
 		var maTete:MovieClip = _level0.loader.contentHolder.maTete.attachMovie("tete"+this.listeDesPersonnages[3].id, "maTete", -10099);
 		maTete._x = -7;
 		maTete._y = -6;
@@ -1909,6 +1913,7 @@ class GestionnaireEvenements
 		// and put the face of our opponents' avatar in the panel (next to their name)
 		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.nomJoueur1 = this.listeDesPersonnages[0].nom;
 		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.pointageJoueur1 = 0;
+		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.idStart=this.listeDesPersonnages[0].id;
 		var tete0:MovieClip = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.tete1.attachMovie("tete"+this.listeDesPersonnages[0].id, "Tete0", -10100);
 		tete0._x = -7;
 		tete0._y = -6;
@@ -1917,6 +1922,7 @@ class GestionnaireEvenements
 	
 		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur2.nomJoueur2 = this.listeDesPersonnages[1].nom;
 		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur2.pointageJoueur2 = 0;
+		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur2.idStart=this.listeDesPersonnages[1].id;
 		var tete1:MovieClip = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur2.tete2.attachMovie("tete"+this.listeDesPersonnages[1].id, "Tete1", -10101);
 		tete1._x = -7;
 		tete1._y = -6;
@@ -1925,6 +1931,8 @@ class GestionnaireEvenements
 	
 		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur3.nomJoueur3 = this.listeDesPersonnages[2].nom;
 		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur3.pointageJoueur3 = 0;
+		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur3.idStart=this.listeDesPersonnages[2].id;
+		
 		var tete2:MovieClip = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur3.tete3.attachMovie("tete"+this.listeDesPersonnages[2].id, "Tete2", -10102);
 		tete2._x = -7;
 		tete2._y = -6;
@@ -1996,8 +2004,10 @@ class GestionnaireEvenements
     	trace("2 joueur  "+objetEvenement.statistiqueJoueur[1].nomUtilisateur+"   "+objetEvenement.statistiqueJoueur[1].pointage);
     	trace("3 joueur  "+objetEvenement.statistiqueJoueur[2].nomUtilisateur+"   "+objetEvenement.statistiqueJoueur[2].pointage);
     	trace("4 joueur  "+objetEvenement.statistiqueJoueur[3].nomUtilisateur+"   "+objetEvenement.statistiqueJoueur[3].pointage);
+    	trace("*********************************************");
+    	
     
-    	var k:Number = 1;
+    	var k:Number = 0;
     	var nomMax:Number = -1;
     	var indice:Number = 0;  // indice du plus grand
     	var nomK:String;
@@ -2013,6 +2023,46 @@ class GestionnaireEvenements
 		_root.penalite_txt.removeTextField();
 		_root.secondes_txt.removeTextField();
 		
+		
+		//  retourner les jouers deconnecte'
+		var jUndefined:Number; //qui est deconnecte'
+		var i,j:Number;
+		var itExist:Boolean;
+		var jouersStarted:Array =new Array();
+		
+		trace("-------------------------");
+		jouersStarted[0] = new Object();
+		jouersStarted[0].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.nomJoueur1;
+		jouersStarted[0].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.pointageJoueur1;
+		jouersStarted[0].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.idStart;
+		
+		jouersStarted[1] = new Object();
+		jouersStarted[1].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur2.nomJoueur2;
+		jouersStarted[1].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur2.pointageJoueur2;
+		jouersStarted[1].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur2.idStart;
+
+		
+		jouersStarted[2] = new Object();
+		jouersStarted[2].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur3.nomJoueur3;
+		jouersStarted[2].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur3.pointageJoueur3;
+		jouersStarted[2].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur3.idStart;
+
+		
+		jouersStarted[3] = new Object();
+		jouersStarted[3].nomUtilisateur=_level0.loader.contentHolder.myObj.myNom;
+		jouersStarted[3].idS=_level0.loader.contentHolder.myObj.myID;
+		jouersStarted[3].pointage=objetEvenement.statistiqueJoueur[0].pointage;
+		for (i=0;i<=3;i++) {
+			if(jouersStarted[3].nomUtilisateur==objetEvenement.statistiqueJoueur[i].nom) 
+				jouersStarted[3].pointage=objetEvenement.statistiqueJoueur[i].pointage;
+		}
+
+		trace("1 joueur  "+jouersStarted[0].nomUtilisateur+"   "+jouersStarted[0].pointage+"   "+jouersStarted[0].idS);
+    	trace("2 joueur  "+jouersStarted[1].nomUtilisateur+"   "+jouersStarted[1].pointage+"   "+jouersStarted[1].idS);
+    	trace("3 joueur  "+jouersStarted[2].nomUtilisateur+"   "+jouersStarted[2].pointage+"   "+jouersStarted[2].idS);
+    	trace("4 joueur  "+jouersStarted[3].nomUtilisateur+"   "+jouersStarted[3].pointage+"   "+jouersStarted[3].idS);	
+    	
+			
 		_level0.loader.contentHolder.miniGameLayer["magasin"].removeMovieClip();
     	_level0.loader.contentHolder["boutonFermer"].removeMovieClip();
 		_level0.loader.contentHolder["banane"].removeMovieClip();
@@ -2027,39 +2077,46 @@ class GestionnaireEvenements
     	_level0.loader.contentHolder.gotoAndStop(5);
     
     	Mouse.show();
-    
-    	while(k < taille+1)
+ 
+    	while(k <= 3)
     	{
-	    	for(var i:Number=0; i<taille;i++)
+	    	for(i=0; i<=3;i++)
 	    	{
-				if(String(objetEvenement.statistiqueJoueur[i].pointage) == "Gagnant" || String(objetEvenement.statistiqueJoueur[i].pointage) == "Winner")
+				if(String(jouersStarted[i].pointage) == "Gagnant" || String(jouersStarted[i].pointage) == "Winner")
 		    	{
 			    	nomMax = 9999;
 			    	indice = i;
 		    	}
 		 
-		 		if(Number(objetEvenement.statistiqueJoueur[i].pointage) > nomMax)
+		 		if(Number(jouersStarted[i].pointage) > nomMax)
 		    	{
-			    	nomMax = objetEvenement.statistiqueJoueur[i].pointage;
+			    	nomMax = jouersStarted[i].pointage;
 			    	indice = i;
 		    	}
 	    	}
 	    
-	    	tabOrdonne[k-1] = new Object();
-	    	tabOrdonne[k-1].nom = objetEvenement.statistiqueJoueur[indice].nomUtilisateur;
-	    	tabOrdonne[k-1].pointage = objetEvenement.statistiqueJoueur[indice].pointage;
+	    	tabOrdonne[k] = new Object();
+	    	tabOrdonne[k].nom = jouersStarted[indice].nomUtilisateur;
+	    	tabOrdonne[k].pointage = jouersStarted[indice].pointage;
+	    	tabOrdonne[k].id = jouersStarted[indice].idS;
 	   
 	   		k++;
 	    	nomMax = -1;
-	    	objetEvenement.statistiqueJoueur[indice].pointage = -1;
+	    	jouersStarted[indice].pointage = -1;
 	    	indice = 0;
     	}
-    
+    	
+    	/*
+    	trace("1 joueur  "+tabOrdonne[0].nom+"   "+tabOrdonne[0].pointage+"   "+tabOrdonne[0].id);
+    	trace("2 joueur  "+tabOrdonne[1].nom+"   "+tabOrdonne[1].pointage+"   "+tabOrdonne[1].id);
+    	trace("3 joueur  "+tabOrdonne[2].nom+"   "+tabOrdonne[2].pointage+"   "+tabOrdonne[2].id);
+    	trace("4 joueur  "+tabOrdonne[3].nom+"   "+tabOrdonne[3].pointage+"   "+tabOrdonne[3].id);	*/
+    	/*
     	// a modifier quand il y aura moins de 4 joueurs
     	if(tabOrdonne[0].nom != undefined)
-    	{
+    	{*/
 			_level0.loader.contentHolder.nom1 = tabOrdonne[0].nom;	
-			_level0.loader.contentHolder.pointage1 = tabOrdonne[0].pointage;
+			_level0.loader.contentHolder.pointage1 = tabOrdonne[0].pointage;/*
     	}
     	else
     	{
@@ -2068,9 +2125,9 @@ class GestionnaireEvenements
     	}
     
     	if(tabOrdonne[1].nom != undefined)
-    	{
+    	{*/
 			_level0.loader.contentHolder.nom2 = tabOrdonne[1].nom;	
-			_level0.loader.contentHolder.pointage2 = tabOrdonne[1].pointage;
+			_level0.loader.contentHolder.pointage2 = tabOrdonne[1].pointage;/*
     	}
     	else
     	{
@@ -2079,9 +2136,9 @@ class GestionnaireEvenements
     	}
     
     	if(tabOrdonne[2].nom != undefined)
-    	{
+    	{*/
 			_level0.loader.contentHolder.nom3 = tabOrdonne[2].nom;	
-			_level0.loader.contentHolder.pointage3 = tabOrdonne[2].pointage;
+			_level0.loader.contentHolder.pointage3 = tabOrdonne[2].pointage;/*
     	}
     	else
     	{
@@ -2090,29 +2147,30 @@ class GestionnaireEvenements
     	}
     
     	if(tabOrdonne[3].nom != undefined)
-    	{
+    	{*/
 			_level0.loader.contentHolder.nom4 = tabOrdonne[3].nom;	
-			_level0.loader.contentHolder.pointage4 = tabOrdonne[3].pointage;
+			_level0.loader.contentHolder.pointage4 = tabOrdonne[3].pointage;/*
     	}
     	else
     	{
 	    	_level0.loader.contentHolder.nom4 = _level0.loader.contentHolder.deconnecte;
 			_level0.loader.contentHolder.pointage4 = 0;
     	}
-	
+		*/
+		
 		// mettre les id en ordre : tabOrdonne.id contient les id des personnages en ordre de pointage
 		// il suffit de mettre les MC correspondants sur le podium
 		var w:Number = 0;
 		var z:Number = 0;
 		for(w=0;w<=3;w++)
-		{
+		{/*
 			for(z=0;z<=3;z++)
 			{	
 				if (tabOrdonne[w].nom == listeDesPersonnages[z].nom)
 				{
 					tabOrdonne[w].id = listeDesPersonnages[z].id;
 				}
-			}
+			}*/
 			this.tabPodiumOrdonneID[w] =  tabOrdonne[w].id;
 		}
         	    
