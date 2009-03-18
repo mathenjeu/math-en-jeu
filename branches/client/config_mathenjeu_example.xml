@@ -18,5 +18,12 @@
 		
 	gamepath="mathemaQuoi_beta.swf"
 >
+  <minigames>
+    <unMinigame>ballons.swf</unMinigame>
+    <unMinigame>ileTresor.swf</unMinigame>
+    <unMinigame>anagram.swf</unMinigame>
+    <unMinigame>association.swf</unMinigame>
+    <unMinigame>lingo.swf</unMinigame>
+  </minigames>
 
 </config>
