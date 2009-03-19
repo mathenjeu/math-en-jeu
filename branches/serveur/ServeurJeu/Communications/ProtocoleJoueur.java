@@ -163,7 +163,6 @@ public class ProtocoleJoueur implements Runnable
 
 	}
 
-	
 
 	/**
 	 * Cette méthode est appelée automatiquement par le thread du joueur et elle
@@ -171,9 +170,7 @@ public class ProtocoleJoueur implements Runnable
 	 * 
 	 * @synchronism Cette méthode n'a pas besoin d'ètre synchronisée
 	 */
-
 	public void run()
-
 	{
         // Cette variable nous permettra de savoir, lors de l'interception
         // d'une erreur, si c'était une erreu de communication, auquel cas
@@ -271,178 +268,92 @@ public class ProtocoleJoueur implements Runnable
 						// Vider la chaîne contenant les commandes à traiter
 						strMessageRecu.setLength(0);
 
-						
-
 						// Mettre le marqueur à l'endroit courant pour 
-
 						// pouvoir ensuite recommancer une nouvelle chaîne 
-
 						// de commande à partir d'ici
-
 						intMarqueur = i + 1;
-
 					}
-
 				}
-
 				
-
 				// Si le marqueur est toujours plus petit que le nombre de
-
 				// caractères lus, alors c'est qu'on n'a pas encore reèu
-
 				// le marqueur de fin de message EOM (byte 0)
-
 				if (intMarqueur < intBytesLus)
-
 				{
-
 					// On garde la partie du message non terminé dans la 
-
 					// chaîne qui va contenir le message à traiter lorsqu'on
-
 					// recevra le EOM
-
 					strMessageRecu.append(new String(byttBuffer, intMarqueur, intBytesLus - intMarqueur));
-
 				}
-
 			}
-
 		}
-
 		catch (IOException ioe)
-
 		{
-
 			objLogger.error( GestionnaireMessages.message("protocole.erreur_reception") );
-
 			objLogger.error( ioe.getMessage() );
-
 			bolErreurSocket = true;
-
-		}
-
+    	}
 		catch (TransformerConfigurationException tce)
-
 		{
-
 			objLogger.error(GestionnaireMessages.message("protocole.erreurXML_transformer"));
-
 			objLogger.error( tce.getMessage() );
-
 		}
-
 		catch (TransformerException te)
-
 		{
-
 			objLogger.error(GestionnaireMessages.message("protocole.erreurXML_conversion"));
-
 			objLogger.error( te.getMessage() );
-
 		}
-
 		catch (Exception e)
-
 		{
-
 		  objLogger.error(GestionnaireMessages.message("protocole.erreur_thread"));
-
 		  objLogger.error(e.getMessage());
-
 		  e.printStackTrace();
-
 		}
-
 		finally
-
 		{
-
 			try
-
 			{
-
 				// On tente de fermer le canal de réception
-
 				objCanalReception.close();
-
 			}
-
 			catch (IOException ioe) 
-
 			{
-
 				objLogger.error( ioe.getMessage() );
-
 			}
-
-						
 
 			try
-
 			{
-
 				// On tente de fermer le socket liant le client au serveur
-
 				objSocketJoueur.close();						
-
 			}
-
 			catch (IOException ioe) 
-
 			{
-
 				objLogger.error( ioe.getMessage() );
-
 			}
-
 			
-
 			// Si le joueur humain a été défini dans le protocole, alors
-
 			// c'est qu'il a réussi à se connecter au serveur de jeu, il
-
 			// faut donc aviser le contrôleur de jeu pour qu'il enlève
-
 			// le joueur du serveur de jeu
-
 			if (objJoueurHumain != null)
-
 			{
-
 				// Informer le contrôleur de jeu que la connexion avec le 
-
 				// client (joueur) a été fermée (on ne doit pas obtenir de
-
 			    // numéro de commande de cette fonction, car on ne retournera
-
 			    // rien du tout)
-
 				objControleurJeu.deconnecterJoueur(objJoueurHumain, false, true);					
-
 			}
-
 			
-
 			// Enlever le protocole du joueur courant de la liste des 
-
 			// protocoles de joueurs
-
 			objGestionnaireCommunication.supprimerProtocoleJoueur(this);
-
 		}
-
-
 
 		objLogger.info( GestionnaireMessages.message("protocole.fin_thread").replace("$$CLIENT$$",objSocketJoueur.getInetAddress().toString()));
-
 	}
-
 	
-
 	/**
-	 * Cette méthode permet de traiter le message de commande passé en 
+     * Cette méthode permet de traiter le message de commande passé en 
 	 * paramètres et de retourner le message à renvoyer au client.
 	 * 
 	 * @param String message : le message de commande à traiter (en format XML)
@@ -476,43 +387,30 @@ public class ProtocoleJoueur implements Runnable
 		// Créer un nouveau Document qui va contenir le code XML à retourner 
 		// au client
 		Document objDocumentXMLSortie = UtilitaireXML.obtenirDocumentXML();
-
 		
-
 		// Déclarer une référence vers le premier noeud de la commande
-
 		// du client. Ce noeud est le noeud commande
-
 		Element objNoeudCommandeEntree = objDocumentXMLEntree.getDocumentElement();
 
-
-
 		// Créer le noeud de commande à retourner
-
 		Element objNoeudCommande = objDocumentXMLSortie.createElement("commande");
-
-		
-
+	
 		// Initialement, on définit les attributs type et nom comme étant Erreur
 		// et Commande respectivement pour dire qu'il y a une erreur avec la
 		// commande (la commande n'est pas connue) -> Ces attributs seront 
 		// modifiés par la suite s'il y a d'autres erreurs. Par contre, on ne
 		// définit pas tout de suite le numéro de commande à envoyer au client
 		objNoeudCommande.setAttribute("type", "Erreur");
-
 		objNoeudCommande.setAttribute("nom", "CommandeNonReconnue");
 
 		// Si la commande est un ping et qu'il a bel et bien un numéro, alors
 		// on peut appeler la méthode du vérificateur de connexions pour lui
 		// dire qu'on a reèu un ping, il ne faut rien retourner au client
 		if (objDocumentXMLEntree.getChildNodes().getLength() == 1 &&
-
 		    objDocumentXMLEntree.getChildNodes().item(0).getNodeName().equals("ping") &&
-
 		    objDocumentXMLEntree.getChildNodes().item(0).hasAttributes() == true &&
-
 		    objDocumentXMLEntree.getChildNodes().item(0).getAttributes().getNamedItem("numero") != null)
-		{
+    	{
 		    // TODO Modifier cette partie pour que la confirmation du ping soit le mème 
 		    // principe pour tous les autres événements sauf que le ping ne renvoit pas 
 		    // de commande au client
@@ -1165,10 +1063,8 @@ public class ProtocoleJoueur implements Runnable
 									// Si la table est une de celles qui doivent ètre 
 									// retournées selon le filtre, alors on continue 
                                   */
-								
-								
-                                   
-									if (strFiltre.equals(Filtre.Toutes) ||
+					
+    								if (strFiltre.equals(Filtre.Toutes) ||
 									   (strFiltre.equals(Filtre.IncompletesNonCommencees) && objTable.estComplete() == false && objTable.estCommencee() == false) || 
 									   (strFiltre.equals(Filtre.IncompletesCommencees) && objTable.estComplete() == false && objTable.estCommencee() == true) ||
             						   (strFiltre.equals(Filtre.CompletesNonCommencees) && objTable.estComplete() == true && objTable.estCommencee() == false) ||
@@ -1879,17 +1775,11 @@ public class ProtocoleJoueur implements Runnable
 								creerListeObjetsMagasin(objMagasin, objDocumentXMLSortie, objNoeudCommande);
 
                                 /*
-
                                                                 Element objNoeudParametreTypeMagasin = objDocumentXMLSortie.createElement("parametre");
-
                                                                 objNoeudParametreTypeMagasin.setAttribute("type", "TypeMagasin");
-
                                                                 Text objNoeudTexteTypeMagasin = objDocumentXMLSortie.createTextNode(Integer.toString(objMagasin.type));
-
                                                                 objNoeudParametreTypeMagasin.appendChild(objNoeudTexteTypeMagasin);
-
                                                                 objNoeudCommande.appendChild(objNoeudParametreTypeMagasin);
-
                                  */
 							}
 		

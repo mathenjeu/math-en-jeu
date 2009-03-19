@@ -139,20 +139,34 @@ public class Question
 	 	if (strReponse.toUpperCase().equals("A") ||
 	 	    strReponse.toUpperCase().equals("B") ||
 	 	    strReponse.toUpperCase().equals("C") ||
-	 	    strReponse.toUpperCase().equals("D") )
+	 	    strReponse.toUpperCase().equals("D") ||
+	 	    strReponse.toUpperCase().equals("E") ||
+	 	    strReponse.toUpperCase().equals("H") )
 	 	{
 	 		// Choisir aléatoirement une mauvaise réponse
-	 	    int arrShuffle[] = {0,1,2,3};
+	 		int nbChoix = 0;
+	 		if(objTypeQuestion.equals("MULTIPLE_CHOICE"))
+	 			nbChoix = 4;
+	 		else if(objTypeQuestion.equals("MULTIPLE_CHOICE_3"))
+	 			nbChoix = 3;
+	 		else if(objTypeQuestion.equals("MULTIPLE_CHOICE_5"))
+	 			nbChoix = 5;
+	 		
+	 		
+	 	    int arrShuffle[] = new int[nbChoix];
+	 	    for(int i = 0; i < nbChoix; i++)
+	 	    	arrShuffle[i] = i;
+	 	    
 	 	    for (int x = 1; x < 10; x++)
 	 	    {
-	 	    	int a = UtilitaireNombres.genererNbAleatoire(4);
-	 	    	int b = UtilitaireNombres.genererNbAleatoire(4);
+	 	    	int a = UtilitaireNombres.genererNbAleatoire(nbChoix);
+	 	    	int b = UtilitaireNombres.genererNbAleatoire(nbChoix);
 	 	    	
 	 	    	int temp = arrShuffle[a];
 	 	    	arrShuffle[a] = arrShuffle[b];
 	 	    	arrShuffle[b] = temp;
 	 	    }
-	 	    for (int x = 1; x < 4; x++)
+	 	    for (int x = 1; x < nbChoix; x++)
 	 	    {
 	 	    	Character c = new Character((char)(arrShuffle[x] + 65));
 	 	    	String strMauvaiseReponse = c.toString();
