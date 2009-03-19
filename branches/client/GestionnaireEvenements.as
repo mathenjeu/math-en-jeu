@@ -552,7 +552,7 @@ class GestionnaireEvenements
 				
 				_level0.loader.contentHolder.isActiv = objetEvenement.isActiveRoom;
 				trace("salle active : " + _level0.loader.contentHolder.isActiv);
-				_level0.loader.contentHolder.bt_continuer1._visible = false;
+				_level0.loader.contentHolder.bt_continuer1._visible = true;
 				_level0.loader.contentHolder.txtChargementSalles._visible = false;
             break;
 			 
@@ -732,7 +732,7 @@ class GestionnaireEvenements
 				{
 					_level0.loader.contentHolder.chargementTables = "";
 				}
-				_level0.loader.contentHolder.bt_continuer2._visible = false;
+				_level0.loader.contentHolder.bt_continuer2._visible = true;
             break;
 			 
             case "CommandeNonReconnue":
