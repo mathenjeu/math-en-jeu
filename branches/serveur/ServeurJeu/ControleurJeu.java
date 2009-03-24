@@ -142,10 +142,8 @@ public class ControleurJeu
 		// Créer un nouveau gestionnaire de communication
 		objGestionnaireCommunication = new GestionnaireCommunication(this, objGestionnaireEvenements);
 		
-		////////////////////////////////////////////////////////////////
-		String language = "en";
 		// Fills the rooms from DB
-		objGestionnaireBD.fillsRooms(language);   
+		objGestionnaireBD.fillsRooms();   
 	}
 	
 	public void demarrer()
@@ -463,7 +461,7 @@ public class ControleurJeu
                 	// On vérifie si cette salle est du bon gameType
                 	// et si elle permet de jouer dans la langue donnée
                 	//Boolean estDuBonGameType = gameType.equals(salle.getGameType());
-                	Boolean permetCetteLangue = objGestionnaireBD.roomLangControl(salle, language);
+                	Boolean permetCetteLangue = true; //objGestionnaireBD.roomLangControl(salle, language);
 
                 	// Si les paramètres en entrée sont des strings vides,
                 	// alors on ignore le paramètre correspondant

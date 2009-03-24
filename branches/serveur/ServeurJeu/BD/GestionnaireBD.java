@@ -561,32 +561,26 @@ public class GestionnaireBD
      * et les regles de la salle 
      * @param noeudLangue
      */
-	public void fillsRooms(String language)
+	public void fillsRooms()
 	{
 		
 		ArrayList<Integer> rooms = new ArrayList<Integer>();
 		int langId = 0;
-		if (language.equalsIgnoreCase("fr")) 
+	/*	if (language.equalsIgnoreCase("fr")) 
             langId = 1;
         else if (language.equalsIgnoreCase("en"))
-        	langId = 2;
+        	langId = 2; */
 		String nom = "";
 		String motDePasse = "";
 		String createur = "";
 		String gameType = "";
 		
-		//find all rooms with requested language and fill in ArrayList
+		//find all rooms  and fill in ArrayList
 		try
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery( "SELECT room_info.name, room.password, game_type.name, user.name, room.room_id, room_info.language_id " +
-					" FROM room_info,room, game_type, user, language " +
-					" WHERE room.game_type_id = game_type.game_type_id " +
-					"  AND room.room_id = room_info.room_id " +
-					"  AND user.user_id = room.user_id " +
-					"  AND room_info.language_id = language.language_id " +
-					"  AND language.short_name = '" + language + "';" );
+				ResultSet rs = requete.executeQuery( "SELECT room.room_id FROM room ;" );
 				while(rs.next())
 				{
 					int roomId = rs.getInt("room.room_id");
@@ -619,28 +613,29 @@ public class GestionnaireBD
 			{
 				synchronized( requete )
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room_info.name, room.password," +
-							"room_info.description, game_type.name, user.name, room.room_id, room_info.language_id " +
-							" FROM room_info,room, game_type, user, language " +
+					ResultSet rs = requete.executeQuery( "SELECT room.password, user.name, game_type.name " +
+							" FROM room_info, room, user, game_type " +
 							" WHERE room.game_type_id = game_type.game_type_id " +
-							"  AND room.room_id = room_info.room_id " +
-							"  AND user.user_id = room.user_id " +
-							"  AND room_info.language_id = language.language_id " +
-							"  AND room.room_id = " + room +
-							"  AND language.short_name = '" + language + "';" );
+							" AND room.room_id = room_info.room_id " +
+							" AND user.user_id = room.user_id " +
+							" AND room.room_id = " + room +  ";" );
 					if(rs.next())
 					{
-						nom = rs.getString( "room_info.name" );
+						
 						motDePasse = rs.getString( "password" );
 						createur = rs.getString("user.name");
 						gameType = rs.getString("game_type.name");
-						String roomDescription = rs.getString( "room_info.description" );
+						
+						String roomDescription = fillRoomDescription(room);//rs.getString( "room_info.description" );
+						nom = fillRoomName(room);//nom = rs.getString( "room_info.name" );						
+						
+						System.out.println(nom);
 						System.out.println(roomDescription);
-						System.out.println(gameType);
 						
 						Regles objReglesSalle = new Regles();
-						chargerRegllesSalle(objReglesSalle, room, langId);
+						chargerRegllesSalle(objReglesSalle, room);
 						Salle objSalle = new Salle(nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType);
+						System.out.println(objSalle.toString());
 						objSalle.setRoomDescription(roomDescription);
 						objControleurJeu.ajouterNouvelleSalle(objSalle);
 					}   
@@ -669,15 +664,98 @@ public class GestionnaireBD
 	}// fin méthode chargerSalle
 	
 
- 
+ /**
+  * Methode to fill the room name in both languages
+  * @param room
+  * @return
+  */
+   private String fillRoomName(int room) {
+	   String name = "";
+	   try
+		{
+			synchronized( requete )
+			{
+				ResultSet rs = requete.executeQuery( "SELECT concat(r.name, ' / ',p.name) as room_bilingue " +
+                " FROM (Select room_id, name from room_info where language_id=1) as r, " +
+                "(select room_id, name from room_info where language_id=2) as p " +
+                " where r.room_id=p.room_id AND r.room_id = " + room +
+                " UNION " +
+                " SELECT  name from room_info " +
+                " where room_id not in (Select room_id from room_info where language_id=2) " +
+                " AND room_id = " + room + 
+                " UNION " +
+                " SELECT  name from room_info " +
+                " where room_id not in (Select room_id from room_info where language_id=1) " +
+                " AND room_id = " + room + ";");
+				
+				if(rs.next())
+				{
+					name = rs.getString("room_bilingue");
+                }
+			}
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exécution de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();			
+		}
+		System.out.println(name);
+		return name;
+	}// end methode
+
    /**
+    * Methode to fill the room description in both languages
+    * @param room
+    * @return
+    */
+     private String fillRoomDescription(int room) {
+  	   String name = "";
+  	   try
+  		{
+  			synchronized( requete )
+  			{
+  				ResultSet rs = requete.executeQuery( "SELECT concat(r.description, ' / ',p.description) as room_bilingue " +
+                  " FROM (Select room_id, description from room_info where language_id=1) as r, " +
+                  "(select room_id, description from room_info where language_id=2) as p " +
+                  " where r.room_id = p.room_id AND r.room_id = " + room +
+                  " UNION " +
+                  " SELECT  description from room_info " +
+                  " where room_id not in (Select room_id from room_info where language_id=2) " +
+                  " AND room_id = " + room + 
+                  " UNION " +
+                  " SELECT  description from room_info " +
+                  " where room_id not in (Select room_id from room_info where language_id=1) " +
+                  " AND room_id = " + room + ";");
+  				
+  				if(rs.next())
+  				{
+  					name = rs.getString("room_bilingue");
+                  }
+  			}
+  		}
+  		catch (SQLException e)
+  		{
+  			// Une erreur est survenue lors de l'exécution de la requète
+  			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+  			objLogger.error(GestionnaireMessages.message("bd.trace"));
+  			objLogger.error( e.getMessage() );
+  		    e.printStackTrace();			
+  		}
+  		System.out.println(name);
+  		return name;
+  	}// end methode
+
+/**
     * 
     * @param objReglesSalle
     * @param roomId
     * @param langId 
     */
 	@SuppressWarnings("unchecked")
-	private void chargerRegllesSalle(Regles objReglesSalle, int roomId, int langId) {
+	private void chargerRegllesSalle(Regles objReglesSalle, int roomId) {
 				
         try
 		{
@@ -742,10 +820,10 @@ public class GestionnaireBD
 		TreeSet casesSpeciale = objReglesSalle.obtenirListeCasesSpecialesPossibles();
 		TreeSet objetsUtilisables = objReglesSalle.obtenirListeObjetsUtilisablesPossibles();
 		
-		this.chargerReglesMagasins(magasins, roomId, langId);
+		this.chargerReglesMagasins(magasins, roomId);
 		this.chargerReglesCasesCouleur(casesCouleur, roomId);
 		this.chargerReglesCasesSpeciale(casesSpeciale, roomId);
-		this.chargerReglesObjetsUtilisables(objetsUtilisables, roomId, langId);
+		this.chargerReglesObjetsUtilisables(objetsUtilisables, roomId);
 		
 	}// fin méthode chargerReglesSalle
 	
@@ -756,7 +834,7 @@ public class GestionnaireBD
 	 * @param roomId
 	 * @param langId 
 	 */
-	private void chargerReglesObjetsUtilisables(TreeSet objetsUtilisables, int roomId, int langId ) {
+	private void chargerReglesObjetsUtilisables(TreeSet objetsUtilisables, int roomId) {
 		try
   		{
   			synchronized( requete )
@@ -765,7 +843,7 @@ public class GestionnaireBD
   					" FROM room_object, object_info " +
   					" WHERE room_object.room_id = " + roomId +
   					" AND room_object.object_id = object_info.object_id " +
-  					" AND object_info.language_id = " + langId +
+  					" AND object_info.language_id = " + 2 +
   					";");
   				while(rst.next())
   				{
@@ -867,10 +945,9 @@ public class GestionnaireBD
      * Méthode utilisée pour charger la liste des magasins dans les Regles du partie
      * @param magasins 
      * @param roomId
-     * @param langId 
      */
      @SuppressWarnings("unchecked")
-	private void chargerReglesMagasins(TreeSet magasins, int roomId, int langId) {
+	private void chargerReglesMagasins(TreeSet magasins, int roomId) {
     	 	
          try
  		{
@@ -878,7 +955,7 @@ public class GestionnaireBD
  			{
  				ResultSet rst = requete.executeQuery( "SELECT room_shop.priority, shop_info.name " +
  					" FROM room_shop, shop_info " +
- 					" WHERE shop_info.language_id = " + langId + 
+ 					" WHERE shop_info.language_id = " + 2 + 
  					" AND room_shop.shop_id = shop_info.shop_id " +
  					" AND  room_shop.room_id = " + roomId +
  					";");
