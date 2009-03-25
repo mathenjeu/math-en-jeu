@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <config
 
-	language="en"
+	language="fr"
 	gameType="mathEnJeu"
 
 	url_server="localhost"
@@ -13,8 +13,8 @@
 	url_server_tunneling="mejdev.mat.ulaval.ca"
 	port_tunneling="80"
 
-	username="demo-155"
-	password="3437a2cf2af95fe8"
+	username="demo-157"
+	password="3437af952af95aae"
 		
 	gamepath="mathemaQuoi_beta.swf"
 >
