@@ -458,10 +458,10 @@ public class ControleurJeu
                   	repeat =  false;
                 	            	
                 }else{
-                	// On vérifie si cette salle est du bon gameType
-                	// et si elle permet de jouer dans la langue donnée
+                	
+                	// here we test if the room has the language of player
                 	//Boolean estDuBonGameType = gameType.equals(salle.getGameType());
-                	Boolean permetCetteLangue = true; //objGestionnaireBD.roomLangControl(salle, language);
+                	Boolean permetCetteLangue = objGestionnaireBD.roomLangControl(salle, language);
 
                 	// Si les paramètres en entrée sont des strings vides,
                 	// alors on ignore le paramètre correspondant
@@ -508,7 +508,7 @@ public class ControleurJeu
 	{
 	    // Ajouter la nouvelle salle dans la liste des salles du 
 	    // contrôleur de jeu
-	    lstSalles.put(nouvelleSalle.getRoomName(), nouvelleSalle);	        
+	    lstSalles.put(nouvelleSalle.getRoomName(""), nouvelleSalle);	        
 	}
 	
 	/**

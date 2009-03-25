@@ -3,6 +3,7 @@ package ServeurJeu.ComposantesJeu;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import Enumerations.RetourFonctions.ResultatEntreeTable;
@@ -686,13 +687,32 @@ public class Salle
 
 	/**
 	 * Cette fonction permet de retourner le nom de la salle courante.
-	 * 
+	 * If the room has two languages on return name in the needed lang
+	 * if not on return the name in existing lang, or if the lang isn't 
+	 * known on return the existing string 
 	 * @return String : Le nom de la salle
 	 */
-	public String getRoomName()
+	public String getRoomName(String lang)
 	{
+		if(lang.equals(""))
+			return strNomSalle;
+		
+		boolean exist = false; 
+		for(int i = 0; i < strNomSalle.length(); i++)
+		{
+			if(strNomSalle.charAt(i) == '/')
+				exist = true;
+		}
+	
+		if(exist)
+		{
+		   StringTokenizer nomSalle = new StringTokenizer(strNomSalle, "/");
+		   String nomFr = nomSalle.nextToken().trim();
+		   String nomEng = nomSalle.nextToken().trim();
+		   return lang.equalsIgnoreCase("fr")? nomFr : nomEng;
+		}
 		return strNomSalle;
-	}
+	}//end methode
 	
 	public Regles getRegles()
 	{
@@ -722,7 +742,25 @@ public class Salle
 			this.roomDescription = roomDescription;
 		}
 
-		public String getRoomDescription() {
+		// return room description
+		public String getRoomDescription(String lang) {
+			if(lang.equals(""))
+				return roomDescription;
+			
+			boolean exist = false; 
+			for(int i = 0; i < roomDescription.length(); i++)
+			{
+				if(roomDescription.charAt(i) == '/')
+					exist = true;
+			}
+		
+			if(exist)
+			{
+			   StringTokenizer descRoom = new StringTokenizer(roomDescription, "/");
+			   String descFr = descRoom.nextToken().trim();
+			   String descEng = descRoom.nextToken().trim();
+			   return lang.equalsIgnoreCase("fr")? descFr : descEng;
+			}
 			return roomDescription;
 		}
 
