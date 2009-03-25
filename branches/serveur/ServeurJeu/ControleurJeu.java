@@ -492,7 +492,7 @@ public class ControleurJeu
 	public boolean salleExiste(String nomSalle)
 	{
 		// Retourner si la salle existe déjà ou non
-		return lstSalles.containsKey(nomSalle);	        
+		return lstSalles.containsKey(objGestionnaireBD.getFullRoomName(nomSalle));	        
 	}
 	
 	/**
@@ -535,7 +535,7 @@ public class ControleurJeu
 	        				   String motDePasse, boolean doitGenererNoCommandeRetour)
 	{
 		// On retourne le résultat de l'entrée du joueur dans la salle
-		return ((Salle) lstSalles.get(nomSalle)).entrerSalle(joueur, motDePasse, doitGenererNoCommandeRetour);
+		return ((Salle) lstSalles.get(objGestionnaireBD.getFullRoomName(nomSalle))).entrerSalle(joueur, motDePasse, doitGenererNoCommandeRetour);
 	}
 	
 	/**
