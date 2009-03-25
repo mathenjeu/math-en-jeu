@@ -332,7 +332,7 @@ class QuestionController extends Zend_Controller_Action {
                         $name = trim($request->getPost('sourceName'));
                         if ($name != "") {
                                 $sourceTable = new Source();
-                                $source = $sourceTable->fetchRow("name=$name");
+                                $source = $sourceTable->fetchRow("name='$name'");
                                 if ($source == null) {
                                         $sourceTable->insert(array('name'=>$name));
                                         $this->unsetFilteredInfo();
@@ -353,7 +353,7 @@ class QuestionController extends Zend_Controller_Action {
                         $name = trim($request->getPost('titleName'));
                         if ($name != "") {
                                 $titleTable = new Title();
-                                $title = $titleTable->fetchRow("name=$name");
+                                $title = $titleTable->fetchRow("name='$name'");
                                 if ($title == null) {
                                         $titleTable->insert(array('name'=>$name));
                                         $this->unsetFilteredInfo();
