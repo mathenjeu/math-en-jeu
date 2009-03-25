@@ -382,7 +382,7 @@ public class Espion implements Runnable{
 								
 				// Ajouter le nom de la salle
 				Salle objSalle = (Salle)(((Map.Entry)(objIterateurListeSalles.next())).getValue());
-				strSalles.append(objSalle.getRoomName());
+				strSalles.append(objSalle.getRoomName(""));
 			}	
 	    }
 	    
@@ -412,7 +412,7 @@ public class Espion implements Runnable{
 
                 // Ajouter le nom de la salle et le nombre de tables
          	    strTables.append("Tables pour la salle ");
-         	    strTables.append(objSalle.getRoomName());
+         	    strTables.append(objSalle.getRoomName(""));
          	    strTables.append(" : ");
          	    strTables.append(lstTables.size());
          	    
