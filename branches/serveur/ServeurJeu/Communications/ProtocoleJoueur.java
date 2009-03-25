@@ -751,7 +751,7 @@ public class ProtocoleJoueur implements Runnable
 
 							// On ajoute un attribut nom qui va contenir le nom
 							// de la salle
-							objNoeudSalle.setAttribute("nom", objSalle.getRoomName());
+							objNoeudSalle.setAttribute("nom", objSalle.getRoomName(this.langue));
 
 							// On ajoute un attribut protegee qui va contenir
 							// une valeur booléenne permettant de savoir si la
@@ -759,7 +759,7 @@ public class ProtocoleJoueur implements Runnable
 							objNoeudSalle.setAttribute("protegee", Boolean.toString(objSalle.protegeeParMotDePasse()));
 							
 							//Add room description to the node
-							objNoeudSalle.setAttribute("descriptions", objSalle.getRoomDescription());
+							objNoeudSalle.setAttribute("descriptions", objSalle.getRoomDescription(this.langue));
 							
 							
 							if(tournamentActive.equals("TournamentActive"))

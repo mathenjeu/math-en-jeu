@@ -1021,7 +1021,7 @@ public class GestionnaireBD
 	public Boolean roomLangControl(Salle salle, String language) {
 		
 		String answer = "";
-		String nom = salle.getRoomName();
+		String nom = salle.getRoomName(language);
 		try
  		{
  			synchronized( requete )

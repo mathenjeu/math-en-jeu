@@ -111,7 +111,7 @@ public class InformationPartie
 	        intPointage = 0;
 	        
 	        // is permited or not to charge money from DB
-	        setMoneyPermit(objGestionnaireBD.getMoneyRule(joueur.obtenirSalleCourante().getRoomName()));
+	        setMoneyPermit(objGestionnaireBD.getMoneyRule(joueur.obtenirSalleCourante().getRoomName(joueur.obtenirProtocoleJoueur().langue)));
 	        
 	        // charge money from DB if is permited
 	        if (isMoneyPermit()){
