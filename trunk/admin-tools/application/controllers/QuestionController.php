@@ -453,7 +453,6 @@ class QuestionController extends Zend_Controller_Action {
                         if ($request->getPost('translateQuestion') != null) {
                                 $errorMessage = $this->validateQuestionInfo($question, $answers, $levels);
                                 if (empty($errorMessage)) {
-                                        
                                         $this->insertQuestionInfoInDatabase($question, $answers, $levels);
                                         $this->unsetFilteredInfo();
                                         $this->_redirect('question/view/question_id/'.$question['question_id'].'/language_id/'.$question['language_id']);
@@ -733,7 +732,7 @@ class QuestionController extends Zend_Controller_Action {
                                            array('question_id='.$question['question_id'],'language_id='.$question['language_id']));
 
                 $answerTable = new Answer();
-                //if the answer type as changed all answers in the db for this question are invalid so delete them
+                //if the answer type has changed all answers in the db for this question are invalid so delete them
                 if ($originalQuestion['answer_type_id'] != $question['answer_type_id'])
                         $answerTable->delete('question_id='.$question['question_id']); //this cascades into all tables thanks to InnoDB
 
@@ -794,7 +793,7 @@ class QuestionController extends Zend_Controller_Action {
                     }
                     else
                             $answerInfoTable->update(array('answer_latex' => $answers[0]['answer_latex']),
-                                                     array('answer_id='.$answer[0]['answer_id'],'language_id='.$question['language_id']));
+                                                     array('answer_id='.$answers[0]['answer_id'],'language_id='.$question['language_id']));
                     break;
                 }
 
@@ -870,7 +869,7 @@ class QuestionController extends Zend_Controller_Action {
                     break;
                   case 3: //Short answer
                     if ($answers[0]['answer_id'] != null)
-                            $answer_id = $answer['answer_id'];
+                            $answer_id = $answers[0]['answer_id'];
                     else
                             $answer_id = $answerTable->insert(array('question_id' => $question_id,
                                                                     'is_right' => 1));
@@ -1034,10 +1033,14 @@ class QuestionController extends Zend_Controller_Action {
                                                'answer_flash_file'=>"");
                     break;
                   case 3: //Short answer
-                    $answerRow = $answerTable->fetchRow("question_id=$question_id");
-                    if ($answerRow != null) {
-                            $answerInfoRow = $answerRow->findAnswerInfo($answerTable->select()->where("language_id=$language_id"))->current();
-                            $answers[] = array('answer_id'=>$answerRow['answer_id'],
+                    $query = $answerInfoTable->select()
+                      ->setIntegrityCheck(false)
+                      ->from($answerInfoTable)
+                      ->join('answer', "answer.answer_id=answer_info.answer_id && answer.question_id=$question_id")
+                      ->where("language_id=$language_id");
+                    $answerInfoRow = $answerInfoTable->fetchRow($query);
+                    if ($answerInfoRow != null) {
+                            $answers[] = array('answer_id'=>$answerInfoRow['answer_id'],
                                                'label'=>"",
                                                'is_right'=>1,
                                                'answer_latex'=>$answerInfoRow['answer_latex'],

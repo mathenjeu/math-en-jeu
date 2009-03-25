@@ -2,10 +2,10 @@
 <tr>
   <td>Answer</td>
   <td class="answer">
-    <input type="text" name="answers[0][answer_latex]" value="<?php echo $this->answers['answer_latex'];?>" size="40">
+    <input type="text" name="answers[0][answer_latex]" value="<?php echo $this->answers[0]['answer_latex'];?>" size="40">
   </td>
-<?php if (isset($this->answers['answer_id'])) : ?>
-    <input type="hidden" name="answers[0][answer_id]" value="<?php echo $this->answers['answer_id'];?>">
+<?php if (isset($this->answers[0]['answer_id'])) : ?>
+    <input type="hidden" name="answers[0][answer_id]" value="<?php echo $this->answers[0]['answer_id'];?>">
 <?php endif; ?>
 </tr>
 </table>
