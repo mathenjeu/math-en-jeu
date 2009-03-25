@@ -110,7 +110,9 @@ class GestionnaireCommunication
 	
 	
     /**
-     * Constructeur de la classe GestionnaireCommunication qui prend le
+     *                  CONSTRUCTEUR
+     * 
+     de la classe GestionnaireCommunication qui prend le
      * gestionnaire de commandes en parametre.
      */
     function GestionnaireCommunication(connexionPhysiqueDelegate:Function, deconnexionPhysiqueDelegate:Function, url_serveur:String, port:Number)
@@ -157,6 +159,7 @@ class GestionnaireCommunication
         // Ajouter l'ecouteur de l'evenement close
         objSocketClient.addEventListener("close", Delegate.create(this, objSocketClient_onClose));
         // Essayer de se connecter au serveur de jeu
+        
 		objSocketClient.connect(url_serveur, port);
     }
 	
@@ -172,7 +175,7 @@ class GestionnaireCommunication
         // sinon on le remet a NON_CONNECTE (normalement il devrait deja etre
         // a cette valeur)
 		//trace("ds gestCom resultat de la connection :  "+objetEvenement.succes);
-        if (objetEvenement.succes == true)
+        if (objetEvenement.succes==true)
         {
             intEtatClient = Etat.DECONNECTE.no;
             // Ajouter l'ecouteur de l'evenement du timer
@@ -196,6 +199,7 @@ class GestionnaireCommunication
      */
     private function objSocketClient_onClose(objetEvenement:Object)
     {
+	    
         // Arreter le timer s'il est actif
         if (objTimerEnvoiCommandes.estActif() == true)
         {
