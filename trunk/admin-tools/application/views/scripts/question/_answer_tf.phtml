@@ -1,0 +1,12 @@
+<table>
+<tr>
+   <td>Answer</td>
+   <td class="answer">
+         <input type="radio" name="answers[0][is_right]" value="1"<?php if ($this->answers['is_right'] == 1) echo " checked";?>>True
+         <input type="radio" name="answers[0][is_right]" value="0"<?php if ($this->answers['is_right'] == 0) echo " checked";?>>False
+   </td>
+<?php if (isset($this->answers['answer_id'])) : ?>
+    <input type="hidden" name="answers[0][answer_id]" value="<?php echo $this->answers['answer_id'];?>">
+<?php endif; ?>
+</tr>
+</table>

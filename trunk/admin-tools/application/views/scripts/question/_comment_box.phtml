@@ -1,6 +1,10 @@
-<div>
-			<fieldset>  
-				<legend>Comment (optional)</legend>
-				<textarea name="comment" rows="8" cols="80"></textarea>
-			</fieldset>
-		</div>
+  		<fieldset>  <legend>Comment (optional)</legend>
+<?php if (count($this->question['comment']) == 0) :?>
+<textarea name="comment" rows="8" cols="60"></textarea>
+<?php endif; ?>
+
+<?php foreach($this->question['comment'] as $comment) : ?>
+<textarea name="comment[<?php echo $comment['comment_id'];?>]" rows="8" cols="60"><?php echo $this->escape($comment['comment']);?></textarea>
+<?php endforeach; ?>
+  		</fieldset>
+

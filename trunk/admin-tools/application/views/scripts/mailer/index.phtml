@@ -1,9 +1,4 @@
-<?php echo $this->render('header.phtml'); ?>
-  
-  <div id="content">
-  <h1><?php echo $this->escape($this->title); ?></h1>
-  
-  <p><a href="<?php echo $this->baseUrl; ?>/mailer/add">Add new mail</a></p>
+  <p><a href="<?php echo $this->baseUrl(); ?>/mailer/add">Add new mail</a></p>
   
     <?php echo $this->message; ?>
     <table class="question">
@@ -23,15 +18,12 @@
       <td><?php echo utf8_encode($mail->subject); ?></td>
       <td><?php echo Zend_Filter::get(substr($mail->body,0, 200), 'HtmlEntities'); ?></td>
       <td>
-        <a href="<?php echo $this->baseUrl ?>/mailer/send/id/<?php echo $mail->mail_template_id; ?>">Send</a><br/>
-        <a href="<?php echo $this->baseUrl ?>/mailer/edit/id/<?php echo $mail->mail_template_id; ?>">Edit</a><br/>
-        <a href="<?php echo $this->baseUrl ?>/mailer/delete/id/<?php echo $mail->mail_template_id; ?>">Delete</a><br/>
+        <a href="<?php echo $this->baseUrl(); ?>/mailer/send/id/<?php echo $mail->mail_template_id; ?>">Send</a><br/>
+        <a href="<?php echo $this->baseUrl(); ?>/mailer/edit/id/<?php echo $mail->mail_template_id; ?>">Edit</a><br/>
+        <a href="<?php echo $this->baseUrl(); ?>/mailer/delete/id/<?php echo $mail->mail_template_id; ?>">Delete</a><br/>
       </td>
     </tr>
   <?php endforeach; ?>
   
   </table>
   
-</div>
-<?php echo $this->render('mailer/_menu.phtml'); ?>
-<?php echo $this->render('footer.phtml'); ?>

@@ -1,8 +1,4 @@
-<?php echo $this->render('header.phtml'); ?>
-<div id="content">
-  <h1><?php echo $this->escape($this->title); ?></h1>
-  
-  <p><a href="<?php echo $this->baseUrl; ?>/image/upload">Add new image</a></p>
+  <p><a href="<?php echo $this->baseUrl(); ?>/image/upload">Add new image</a></p>
   <table>
     <tr>
       <th>Logical Name</th>
@@ -21,15 +17,12 @@
       <td><?php echo $this->escape($image->description); ?></td>
       <td><img alt="Image" src="<?php echo $this->image_url . str_replace(".eps",".jpeg",$image->physical_name); ?>" />
       <td>
-        <a href="<?php echo $this->baseUrl; ?>/image/edit/id/<?php
+        <a href="<?php echo $this->baseUrl(); ?>/image/edit/id/<?php
         echo $image->image_id;?>">Edit</a>
-        <a href="<?php echo $this->baseUrl; ?>/image/delete/id/<?php
+        <a href="<?php echo $this->baseUrl(); ?>/image/delete/id/<?php
         echo $image->image_id;?>">Delete</a>
       </td>
     </tr>
   <?php endforeach; ?>
   
   </table>
-</div>
-<?php echo $this->render('image/_menu.phtml'); ?>
-<?php echo $this->render('footer.phtml'); ?>

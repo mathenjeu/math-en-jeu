@@ -3,12 +3,6 @@ class Language extends Zend_Db_Table_Abstract
 {
   protected $_name = 'language';
   
-  protected $_dependentTables = 
-    array('User', 
-          'QuestionInfo', 
-          'Comment', 
-          'Subject', 
-          'CategoryInfo',
-          'MailTemplate');
+  protected $_dependentTables = array('Level','CategoryInfo','SubjectInfo','AnswerTypeInfo','QuestionInfo','Comment','AnswerInfo','User','MailTemplate');
 
 }

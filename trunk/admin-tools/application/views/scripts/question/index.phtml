@@ -1,9 +1,8 @@
-<?php echo $this->render('header.phtml'); ?>
-<div id="content">
-  <h1><?php echo $this->escape($this->title); ?></h1>
-  
-  <p><a href="<?php echo $this->baseUrl; ?>/question/add">Add a new question</a></p>
-  <?php echo $this->render('question/_list.phtml'); ?>
-</div>
-<?php echo $this->render('question/_menu.phtml'); ?>
-<?php echo $this->render('footer.phtml'); ?>
+<p><a href="<?php echo $this->baseUrl(); ?>/question/add">Add a new question</a></p>
+<table>
+  <tr>
+           <td valign="top"><?php echo $this->render('question/_list.phtml'); ?></td>
+           <td valign="top"><?php echo $this->render('question/_filter.phtml'); ?></td>
+  </tr>
+</table>
+

@@ -1,0 +1,84 @@
+  
+  <div id="question">
+  	<fieldset>
+  	<legend>Question details</legend>
+  	<table class="view_question_detail">
+  	<tr>
+  		<td><strong>ID</strong></td>
+  		<td><?php echo $this->question['question_id']; ?></td>
+  	</tr>
+  	<tr>
+  		<td><strong>Question</strong></td>
+                <td><?php echo $this->question['question_latex']; ?></td>
+  		<td>
+  			<?php 
+  			  if($this->question['question_flash_file'] != null) {
+  			?>
+  			  <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" width="500" height="200">
+          <param name="movie" value="<?php echo $this->flashUrl . $this->question['question_flash_file'];?>">
+          <param name="quality" value="high">
+          <param name="loop" value="true">
+          <param name="menu" value="false">
+          <param name="bgcolor" value="#ffffff" />
+          <embed src="<?php echo $this->flashUrl . $this->question['question_flash_file'];?>" bgcolor="ffffff" quality="high" width="500" height="200" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" />
+          </object>
+        <?php 
+  			  }
+  			?>
+  		</td>
+  	</tr>
+  	<tr>
+  		<td><strong>Feedback</strong></td>
+  		<td><?php echo $this->question['feedback_latex']; ?></td>
+  		<td>
+  			<?php 
+  			  if($this->question['feedback_flash_file'] != null) {
+  			?>
+  			  <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" width="500" height="200">
+          <param name="movie" value="<?php echo $this->flashUrl . $this->question['feedback_flash_file'];?>">
+          <param name="quality" value="high">
+          <param name="loop" value="true">
+          <param name="menu" value="false">
+          <param name="bgcolor" value="#ffffff" />
+          <embed src="<?php echo $this->flashUrl . $this->question['feedback_flash_file'];?>" bgcolor="ffffff" quality="high" width="500" height="200" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" />
+          </object>
+        <?php 
+  			  }
+  			?>
+  		</td>
+  	</tr>
+  	</table>
+  	</fieldset>
+	</div>
+
+
+
+  <div id="question">
+                <fieldset>
+                <legend>Answer details</legend>
+                <table>
+<?php foreach($this->answers as $answer) : ?>
+                  <tr>
+                    <td class="answer<?php if (count($this->answers) > 1) echo $answer['is_right'];?>"><?php echo $answer['answer_latex']; ?></td>
+  		    <td>
+<?php 
+if($answer['answer_flash_file'] != null) {
+?>
+                      <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" width="500" height="200">
+                      <param name="movie" value="<?php echo $this->flashUrl . $answer['answer_flash_file'];?>">
+                      <param name="quality" value="high">
+                      <param name="loop" value="true">
+                      <param name="menu" value="false">
+                      <param name="bgcolor" value="#ffffff" />
+                      <embed src="<?php echo $this->flashUrl . $answer['answer_flash_file'];?>" bgcolor="ffffff" quality="high" width="500" height="200" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" />
+                      </object>
+<?php 
+}
+?>
+                    </td>
+                  </tr>
+<?php endforeach; ?>
+  	        </table>
+  	</fieldset>
+</div>
+

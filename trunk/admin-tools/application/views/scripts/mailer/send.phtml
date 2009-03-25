@@ -1,7 +1,5 @@
-<?php echo $this->render('header.phtml'); ?>
-<a href="<?php echo $this->baseUrl ?>/mailer">Return</a>
-  <div id="content">
-    <h2><?php echo $this->escape($this->title); ?></h2>
+<a href="<?php echo $this->baseUrl(); ?>/mailer">Return</a>
+
     <?php if ($this->message != null) : ?>
     		<table>
     		<caption style="align:left">Email send result</caption>
@@ -30,7 +28,7 @@
     <table>
     <tr>
       <td>
-        <form action="<?php echo $this->baseUrl ?>/mailer/send" method="post">
+        <form action="<?php echo $this->baseUrl(); ?>/mailer/send" method="post">
           <table>
           <thead>
             <tr>
@@ -59,6 +57,3 @@
       </td>
     </tr>
     </table>
-  </div>
-<?php echo $this->render('mailer/_menu.phtml'); ?>
-<?php echo $this->render('footer.phtml'); ?>

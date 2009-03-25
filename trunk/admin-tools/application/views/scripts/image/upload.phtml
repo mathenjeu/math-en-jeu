@@ -1,27 +1,23 @@
-<?php echo $this->render('header.phtml'); ?>
-<a href="<?php echo $this->baseUrl ?>/image">Return</a>
-<div id="content">
-	<div id="message">
-    <span class="message"><?php echo $this->escape($this->message);?></span>
-  </div>
+<a href="<?php echo $this->baseUrl(); ?>/image">Return</a>
   
-  <form action="<?php echo $this->baseUrl ?>/image/upload" enctype='multipart/form-data' method="post">
-    <table>
-    <tr>
-      <td><label for="file">File</label></td>
-      <td><input type="file" name="file" /></td>
-    </tr>
-    <tr>
-      <td><label for="description">Description</label></td>
-      <td><input type="text" name="description" value=""/></td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <input type="submit" name="upload" value="Upload" />
-      </td>
-    </tr>
-    </table>
-  </form>
+<div id="message">
+  <span class="message"><?php echo $this->escape($this->message);?></span>
 </div>
-<?php echo $this->render('image/_menu.phtml'); ?>
-<?php echo $this->render('footer.phtml'); ?>
+
+<form action="<?php echo $this->baseUrl(); ?>/image/upload" enctype='multipart/form-data' method="post">
+  <table>
+  <tr>
+    <td><label for="file">File</label></td>
+    <td><input type="file" name="file" /></td>
+  </tr>
+  <tr>
+    <td><label for="description">Description</label></td>
+    <td><input type="text" name="description" value=""/></td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <input type="submit" name="upload" value="Upload" />
+    </td>
+  </tr>
+  </table>
+</form>

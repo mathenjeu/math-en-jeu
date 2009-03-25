@@ -22,6 +22,17 @@ thead.question_info {
 
 -->
 
+td.answer {
+    min-width:500px;
+}
+
+td.answer0 {
+	background-color: #ffffff;
+}
+td.answer1 {
+	background-color : #ffff00;
+}
+
 li.question_group {
 	list-style-type: none;
 }

@@ -1,9 +1,7 @@
-<?php echo $this->render('header.phtml'); ?>
-<a href="<?php echo $this->baseUrl ?>/mailer">Return</a>
+<a href="<?php echo $this->baseUrl(); ?>/mailer">Return</a>
 
-<div id="content">
   <?php if ($this->step == 1) :?>
-		<form method="post" action="<?php echo $this->baseUrl ?>/mailer/<?php echo $this->action ?>/id/<?php echo $this->id; ?>">
+		<form method="post" action="<?php echo $this->baseUrl(); ?>/mailer/<?php echo $this->action ?>/id/<?php echo $this->id; ?>">
 		<input type="hidden" name="step" value="1" />
 		<div>
 			<tr>
@@ -20,7 +18,7 @@
    <?php endif; ?>
    
    <?php if ($this->step == 2) :?>
-		<form method="post" action="<?php echo $this->baseUrl ?>/mailer/<?php echo $this->action ?>/id/<?php echo $this->id; ?>">
+		<form method="post" action="<?php echo $this->baseUrl(); ?>/mailer/<?php echo $this->action ?>/id/<?php echo $this->id; ?>">
 		<input type="hidden" name="step" value="2" />
 		<div>
 			<?php if ($this->choice=="Yes") echo $this->escape($this->message); ?>
@@ -30,6 +28,3 @@
 		</div>
       </form>
    <?php endif; ?>
-</div> 
-<?php echo $this->render('mailer/_menu.phtml'); ?>
-<?php echo $this->render('footer.phtml'); ?>

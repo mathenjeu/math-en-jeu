@@ -10,7 +10,6 @@ class MailerController extends Zend_Controller_Action {
   }
 
   function init() {
-    $this->view->baseUrl = $this->_request->getBaseUrl();
     $this->view->user = Zend_Auth::getInstance()->getIdentity();
     Zend_Loader::loadClass('Zend_Mail');
     Zend_Loader::loadClass('Zend_Mail_Transport_Smtp');

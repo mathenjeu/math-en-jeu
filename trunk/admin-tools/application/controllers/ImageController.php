@@ -10,7 +10,6 @@ class ImageController extends Zend_Controller_Action {
 	}
 
 	function init() {
-		$this->view->baseUrl = $this->_request->getBaseUrl();
 		Zend_Loader::loadClass('Image');
 		Zend_Loader::loadClass('Zend_Filter');
 		//Zend_Loader::loadClass('Zend_Registry');
@@ -24,7 +23,6 @@ class ImageController extends Zend_Controller_Action {
 
 	function indexAction() {
 		$this->view->title = "Image index";
-
 		$image = new Image();
 		$this->view->images = $image->fetchAll();
 	}

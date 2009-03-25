@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <!-- meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" / -->
+    <title><?php echo $this->escape($this->title); ?></title>
+    <link rel="stylesheet" type="text/css" media="screen"
+      href="<?php echo $this->baseUrl();?>/public/styles/style.css" />
+  </head>
+  
+  <body>
+         
+    <div id="menu">
+      <?php try {
+                    echo $this->render($this->controllerName() . "/_menu.phtml");
+            }catch (Exception $e) {}
+      ?>
+    </div>
+
+
+    <div id="content">
+      <h1><?php echo $this->escape($this->title); ?></h1>
+      <?php echo $this->layout()->content; ?>
+      <br>
+    </div>
+
+
+    <div id="footer">
+      <?php if($this->user) : ?>
+        <span id="logged-in">Logged in as <?php echo $this->escape($this->user->username);?>.
+          <a href="<?php echo $this->baseUrl() ?>/auth/logout">Logout</a>
+        </span>
+      <?php endif; ?>
+    </div>
+
+
+  </body>
+</html>
