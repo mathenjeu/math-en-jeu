@@ -41,7 +41,7 @@ class GestionnaireEvenements
     private var motDePasseSalle:String;   // le mot de passe de la salle dans laquelle on est
     private var listeDesJoueursDansSalle:Array;  // liste des joueurs dans la salle qu'on est. Un joueur contient un nom (nom)
     private var listeDesDescriptionsSalles:Array; //liste des descriptions des salles 
-	private var activ:Boolean;
+	private var activ:Boolean;                     // if game has type Tournament and the room is active
 	private var listeDesSalles:Array;    //  liste de toutes les salles
 	private var listeChansons:Array;    //  liste de toutes les chansons
     private var listeDesJoueursConnectes:Array;   // la premiere liste qu'on recoit, tous les joueurs dans toutes les salles. Un joueur contient un nom (nom)
@@ -1308,6 +1308,9 @@ class GestionnaireEvenements
 								_level0.loader.contentHolder.box_question.btn_d._visible = false;
 							break;
 							
+							case "E":
+								_level0.loader.contentHolder.box_question.btn_d._visible = false;
+							break;
 							default:
 								trace("erreur choix reponse ds retourUtiliser : Livre");
 						}
