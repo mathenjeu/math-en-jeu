@@ -424,13 +424,14 @@ class GestionnaireEvenements
         {
 			case "OkEtPartieDejaCommencee":
 			//A faire plus tard
+			trace("<<<<<<<<<<<<<<<< deja connecte >>>>>>>>>>>>>>>>>>>");
 			break;
 
 			case "Musique":
 				this.objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), Delegate.create(this, this.evenementJoueurConnecte), Delegate.create(this, this.evenementJoueurDeconnecte));
 
-				trace("objEvenement");
-				trace(objetEvenement.listeChansons);
+				//trace("objEvenement");
+				//trace(objetEvenement.listeChansons);
 				
 				for(var k:Number = 0;  k< objetEvenement.listeChansons.length; k++)
 				{
@@ -1999,12 +2000,12 @@ class GestionnaireEvenements
         // parametre: 
     	trace("*********************************************");
     	trace("debut de evenementPartieTerminee   "+objetEvenement.statistiqueJoueur);
-    
+    /*
 		trace("1 joueur  "+objetEvenement.statistiqueJoueur[0].nomUtilisateur+"   "+objetEvenement.statistiqueJoueur[0].pointage);
     	trace("2 joueur  "+objetEvenement.statistiqueJoueur[1].nomUtilisateur+"   "+objetEvenement.statistiqueJoueur[1].pointage);
     	trace("3 joueur  "+objetEvenement.statistiqueJoueur[2].nomUtilisateur+"   "+objetEvenement.statistiqueJoueur[2].pointage);
     	trace("4 joueur  "+objetEvenement.statistiqueJoueur[3].nomUtilisateur+"   "+objetEvenement.statistiqueJoueur[3].pointage);
-    	trace("*********************************************");
+    	trace("*********************************************");*/
     	
     
     	var k:Number = 0;
@@ -2030,7 +2031,7 @@ class GestionnaireEvenements
 		var itExist:Boolean;
 		var jouersStarted:Array =new Array();
 		
-		trace("-------------------------");
+		//trace("-------------------------");
 		jouersStarted[0] = new Object();
 		jouersStarted[0].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.nomJoueur1;
 		jouersStarted[0].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.pointageJoueur1;
@@ -2057,10 +2058,10 @@ class GestionnaireEvenements
 				jouersStarted[3].pointage=objetEvenement.statistiqueJoueur[i].pointage;
 		}
 
-		trace("1 joueur  "+jouersStarted[0].nomUtilisateur+"   "+jouersStarted[0].pointage+"   "+jouersStarted[0].idS);
+		/*trace("1 joueur  "+jouersStarted[0].nomUtilisateur+"   "+jouersStarted[0].pointage+"   "+jouersStarted[0].idS);
     	trace("2 joueur  "+jouersStarted[1].nomUtilisateur+"   "+jouersStarted[1].pointage+"   "+jouersStarted[1].idS);
     	trace("3 joueur  "+jouersStarted[2].nomUtilisateur+"   "+jouersStarted[2].pointage+"   "+jouersStarted[2].idS);
-    	trace("4 joueur  "+jouersStarted[3].nomUtilisateur+"   "+jouersStarted[3].pointage+"   "+jouersStarted[3].idS);	
+    	trace("4 joueur  "+jouersStarted[3].nomUtilisateur+"   "+jouersStarted[3].pointage+"   "+jouersStarted[3].idS);	*/
     	
 			
 		_level0.loader.contentHolder.miniGameLayer["magasin"].removeMovieClip();
