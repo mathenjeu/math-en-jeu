@@ -843,7 +843,7 @@ public class GestionnaireBD
   					" FROM room_object, object_info " +
   					" WHERE room_object.room_id = " + roomId +
   					" AND room_object.object_id = object_info.object_id " +
-  					" AND object_info.language_id = " + 2 +
+  					" AND object_info.language_id = " + 1 +
   					";");
   				while(rst.next())
   				{
@@ -955,7 +955,7 @@ public class GestionnaireBD
  			{
  				ResultSet rst = requete.executeQuery( "SELECT room_shop.priority, shop_info.name " +
  					" FROM room_shop, shop_info " +
- 					" WHERE shop_info.language_id = " + 2 + 
+ 					" WHERE shop_info.language_id = " + 1 + 
  					" AND room_shop.shop_id = shop_info.shop_id " +
  					" AND  room_shop.room_id = " + roomId +
  					";");
@@ -1114,6 +1114,50 @@ public class GestionnaireBD
 		}
 	
 		return permit;
+	}
+
+
+	/**
+	 * Return full name (in both languages) by name
+	 * @param nomSalle
+	 * @return
+	 */
+	public String getFullRoomName(String nomSalle) {
+		String completeName = "";
+		
+		try
+ 		{
+ 			synchronized( requete )
+ 			{
+ 				ResultSet rs = requete.executeQuery ("SELECT concat(r.name, ' / ',p.name) as room_bilingue " +
+                " FROM (Select room_id, name from room_info where language_id = 1) as r, " +
+                "(select room_id, name from room_info where language_id = 2) as p " +
+                " where r.room_id = p.room_id AND r.room_id = (SELECT room_id FROM room_info r where name = '" + nomSalle + "')" + 
+                " UNION " +
+                " SELECT  name from room_info " +
+                " where room_id not in (Select room_id from room_info where language_id = 2) " +
+                " AND room_id = (SELECT room_id FROM room_info r where name = '" + nomSalle + "')" + 
+                " UNION " +
+                " SELECT  name from room_info " +
+                " where room_id not in (Select room_id from room_info where language_id = 1) " +
+                " AND room_id = (SELECT room_id FROM room_info r where name = '" + nomSalle + "');");
+				
+ 				if(rs.next())
+ 				{
+ 					completeName = rs.getString("room_bilingue");
+                }
+ 			}
+ 		}
+ 		catch (SQLException e)
+ 		{
+ 			// Une erreur est survenue lors de l'exécution de la requète
+ 			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+ 			objLogger.error(GestionnaireMessages.message("bd.trace"));
+ 			objLogger.error( e.getMessage() );
+ 		    e.printStackTrace();			
+ 		}
+		//System.out.println(completeName);
+		return completeName;
 	}
 	
 	
