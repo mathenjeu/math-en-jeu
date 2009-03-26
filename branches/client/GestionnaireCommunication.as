@@ -371,7 +371,8 @@ class GestionnaireCommunication
 							retourUtiliserObjet(objNoeudCommande);
 							break;
 						case "Erreur":
-							retourErreur(objNoeudCommande);
+							trace("reponse du serveur: "+objCommandeEnTraitement.nom);
+							//retourErreur(objNoeudCommande);
 						break;
 						default:
 							trace("reponse du serveur: "+objCommandeEnTraitement.nom);
