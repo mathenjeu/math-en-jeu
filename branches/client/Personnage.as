@@ -179,7 +179,7 @@ class Personnage
 				case "Livre":
 					{
 						if(_level0.loader.contentHolder.objGestionnaireEvenements.obtenirGestionnaireCommunication().obtenirEtatClient() != Etat.ATTENTE_REPONSE_QUESTION.no) return false;
-						if(_level0.loader.contentHolder.type_question != "ChoixReponse") return false;
+						if((_level0.loader.contentHolder.type_question != "MULTIPLE_CHOICE") && (_level0.loader.contentHolder.type_question != "MULTIPLE_CHOICE_3") && (_level0.loader.contentHolder.type_question != "MULTIPLE_CHOICE_5" )) return false;
 						return true;
 					}
 				case "Boule":
