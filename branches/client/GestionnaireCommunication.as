@@ -527,6 +527,7 @@ class GestionnaireCommunication
                 // On changer la commande en cours de traitement, envoyer la
                 // commande au serveur et demarrer le timer
                 objCommandeEnTraitement = objCommande;
+                trace("Commande to server: "+ExtendedString.correctAmperstand(objCommande.objetXML.toString()));
                 objSocketClient.send(ExtendedString.correctAmperstand(objCommande.objetXML.toString()));
                 objTimerEnvoiCommandes.demarrer();
             }
@@ -1199,9 +1200,10 @@ class GestionnaireCommunication
             var objNoeudParametreMotDePasse:XMLNode = objObjetXML.createElement("parametre");
             var objNoeudParametreMotDePasseText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(motDePasse));
             var objNoeudParametreLangue:XMLNode = objObjetXML.createElement("parametre");
-            var objNoeudParametreLangueText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(_level0.loader.contentHolder.langue));
+            //>>>>>>>>>> THis is connextion: _level0.loader
+            var objNoeudParametreLangueText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(_parent.contentHolder.langue));
             var objNoeudParametreGameType:XMLNode = objObjetXML.createElement("parametre");
-            var objNoeudParametreGameTypeText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(_level0.loader.contentHolder.gameType));
+            var objNoeudParametreGameTypeText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(_parent.contentHolder.gameType));
             // Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "Connexion";
