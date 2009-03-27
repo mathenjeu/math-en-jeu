@@ -702,7 +702,7 @@ public class GestionnaireBD
 			objLogger.error( e.getMessage() );
 		    e.printStackTrace();			
 		}
-		System.out.println(name);
+		//System.out.println(name);
 		return name;
 	}// end methode
 
@@ -744,7 +744,7 @@ public class GestionnaireBD
   			objLogger.error( e.getMessage() );
   		    e.printStackTrace();			
   		}
-  		System.out.println(name);
+  		//System.out.println(name);
   		return name;
   	}// end methode
 
@@ -783,7 +783,7 @@ public class GestionnaireBD
 					int maxNbObjectsAndMoney = rs.getInt( "max_object_coin" );
 					int nbTracks = rs.getInt( "nbTracks" );
 					
-					System.out.println(tournament);
+					//System.out.println(tournament);
 					
 					objReglesSalle.setMaxNbObjectsAndMoney(maxNbObjectsAndMoney);
 					objReglesSalle.setMaxNbPlayers(maxNbPlayers);
