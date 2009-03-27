@@ -63,7 +63,8 @@ class Case
 		
 		nb = Math.abs(num%100);  // The cell's color is determined by num (its type)'s last 2 digits	
 		
-		if(nb == 91)
+		
+		if((nb >= 91)&&(nb <= 95))
 		{
 			this.clipCase = _level0.loader.contentHolder.referenceLayer.attachMovie("case91", "case"+temp, temp);
 			this.miniGame = true;
