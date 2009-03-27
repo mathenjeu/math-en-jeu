@@ -574,26 +574,26 @@ class QuestionController extends Zend_Controller_Action {
                                 $row_number = $this->lookupFilteredQuestionIndex($question_id, $language_id);
                                 $n = max(0, $row_number-1);
                                 $row = $session->filteredQuestions[$n];
-                                $question_id = $row->question_id;
-                                $language_id = $row->language_id;
+                                $question_id = $row['question_id'];
+                                $language_id = $row['language_id'];
                         }                        
                         else if ($request->getPost('next') != null) {
                                 $row_number = $this->lookupFilteredQuestionIndex($question_id, $language_id);
                                 $n = min(count($session->filteredQuestions)-1, $row_number+1);
                                 $row = $session->filteredQuestions[$n];
-                                $question_id = $row->question_id;
-                                $language_id = $row->language_id;
+                                $question_id = $row['question_id'];
+                                $language_id = $row['language_id'];
                         }
                         else if ($request->getPost('first') != null) {
                                 $row = $session->filteredQuestions[0];
-                                $question_id = $row->question_id;
-                                $language_id = $row->language_id;
+                                $question_id = $row['question_id'];
+                                $language_id = $row['language_id'];
                         }
                         else if ($request->getPost('last') != null) {
                                 $n = count($session->filteredQuestions)-1;
                                 $row = $session->filteredQuestions[$n];
-                                $question_id = $row->question_id;
-                                $language_id = $row->language_id;
+                                $question_id = $row['question_id'];
+                                $language_id = $row['language_id'];
                         }
 
                 }
