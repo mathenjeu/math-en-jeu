@@ -234,7 +234,7 @@ class QuestionController extends Zend_Controller_Action {
                                  ->where($questionFilter)
                                  ->order($sortby);
                 $session = new Zend_Session_Namespace('Question');
-                $session->filteredQuestions = $questionTable->fetchAll($questionQuery);
+                $session->filteredQuestions = $questionTable->fetchAll($questionQuery)->toArray();
         }
 
 
@@ -261,9 +261,6 @@ class QuestionController extends Zend_Controller_Action {
                 //The sortby array stores the sort key and direction.
                 if (!isset($session->sortby))
                         $session->sortby = Array('key'=>'question_id','dir'=>'asc');
-
-
-
 
                 
                 $request = $this->getRequest();
@@ -300,7 +297,7 @@ class QuestionController extends Zend_Controller_Action {
 
                 $questionsPerPage=10;
                 if ($request->isPost()) {
-                        $numberOfPages=ceil($session->filteredQuestions->count()/$questionsPerPage);
+                        $numberOfPages=ceil(count($session->filteredQuestions)/$questionsPerPage);
                         if ($request->getPost('prev') != null)
                                 $session->currentPageNumber = max(1,$session->currentPageNumber-1);
                         else if ($request->getPost('next') != null)
@@ -385,11 +382,11 @@ class QuestionController extends Zend_Controller_Action {
                                 $errorMessage = $this->validateQuestionInfo($question, $answers, $levels);
                                 if (empty($errorMessage)) {
                                         $question_id = $this->insertQuestionInfoInDatabase($question, $answers, $levels);
+                                        $this->generateFlashFiles($question_id, $question['language_id'], $conversionOptions);
                                         $this->unsetFilteredInfo();
                                         $this->_redirect('question/view/question_id/'.$question_id.'/language_id/'.$question['language_id']);
                                 }
-                                else
-                                        $this->view->message = $errorMessage;
+                                $this->view->warning = $errorMessage;
                         }
                 }
 
@@ -415,11 +412,11 @@ class QuestionController extends Zend_Controller_Action {
                                 $errorMessage = $this->validateQuestionInfo($question, $answers, $levels);
                                 if (empty($errorMessage)) {
                                         $this->updateQuestionInfoInDatabase($question, $answers, $levels);
+                                        $this->generateFlashFiles($question['question_id'], $question['language_id'], $conversionOptions);
                                         $this->unsetFilteredInfo();
                                         $this->_redirect('question/view/question_id/'.$question['question_id'].'/language_id/'.$question['language_id']);
                                 }
-                                else
-                                        $this->view->message = $errorMessage;
+                                $this->view->warning = $errorMessage;
                         }
                 }
                 //This is the normal entry point.  An edit request was made via the url, most
@@ -454,11 +451,12 @@ class QuestionController extends Zend_Controller_Action {
                                 $errorMessage = $this->validateQuestionInfo($question, $answers, $levels);
                                 if (empty($errorMessage)) {
                                         $this->insertQuestionInfoInDatabase($question, $answers, $levels);
+                                        $this->generateFlashFiles($question['question_id'], $question['language_id'], $conversionOptions);
                                         $this->unsetFilteredInfo();
                                         $this->_redirect('question/view/question_id/'.$question['question_id'].'/language_id/'.$question['language_id']);
                                 }
                                 else
-                                        $this->view->message = $errorMessage;
+                                        $this->view->warning = $errorMessage;
                         }
                 } else {
                         $question_id = Zend_Filter::get($request->getParam('question_id'), 'Digits');
@@ -508,49 +506,50 @@ class QuestionController extends Zend_Controller_Action {
 
                 if (!isset($questionInfoRow))
                         $this->_redirect('question/');
-
+                
                 //There are two cases to be checked.
                 //1) If we are deleting the last translation of a question.  We remove the entire question from the DB
-                //2) If a translation exist, we only delete the requested translation from the DB.  We also have to manually delelete the corresponding answer_info, if any.
+                //2) If a translation exist, we only delete the requested translation from the DB.
                 if ($request->getPost('deleteQuestion') != null) {
+                        //delete the flash files
+                        $registry = Zend_Registry::getInstance();
+                        $config = $registry->get('config');
+                        $filesToDelete = array();
+                        if ($questionInfoRow->question_flash_file != null)
+                                $filesToDelete[] = $config->file->flash->dir . DIRECTORY_SEPARATOR . $questionInfoRow->question_flash_file;
+                        if ($questionInfoRow->feedback_flash_file != null)
+                                $filesToDelete[] = $config->file->flash->dir . DIRECTORY_SEPARATOR . $questionInfoRow->feedback_flash_file;
+                        $answerInfoTable = new AnswerInfo();
+                        $answerInfoRowSet = $answerInfoTable->fetchAll('question_id=' . $questionInfoRow->question_id . ' && language_id=' . $questionInfoRow->language_id);
+                        foreach($answerInfoRowSet as $answerInfoRow)
+                                if ($answerInfoRow->answer_flash_file != null)
+                                        $filesToDelete[] = $config->file->flash->dir . DIRECTORY_SEPARATOR . $answerInfoRow->answer_flash_file;
+                        $message = $this->deleteFiles($filesToDelete);
+
+                        //delete the DB data
                         $siblingsRowSet = $questionInfoTable->fetchAll('question_id=' . $question_id);
-                        if (count($siblingsRowSet) == 1) {
+                        if (count($siblingsRowSet) == 1) { //1 means there's only one child i.e. this question is not translated
                                 $questionTable = new Question();
                                 $questionTable->fetchRow('question_id='.$question_id)->delete(); //this cascades in all tables thanks to InnoDB
                         }
-                        else {
-                                $questionTable = new Question();
-                                $questionRow = $questionTable->fetchRow('question_id='.$question_id);
-                                $answerTable = new Answer();
-                                foreach ($questionRow->findAnswer() as $answerRow) {
-                                        $answerInfoRow = $answerRow->findAnswerInfo($answerTable->select()->where("language_id=$language_id"))->current();
-                                        if ($answerInfoRow != null)
-                                                $answerInfoRow->delete();
-                                }
+                        else
+                                //Because 'answer_info(question_id,language_id)' is a foreign key reference to 'question_info(question_id,language_id)'
+                                //this cascades in 'answer_info' thanks to InnoDB
                                 $questionInfoRow->delete();
-                        }
+
+                        //Unset the filtered data to force a recompute
                         $this->unsetFilteredInfo();
-                        $this->_redirect('question/');
+                        if (!empty($message))
+                                $this->view->warning = $message;
+                        else
+                                $this->_redirect('question/');
                 }
                 else if ($request->getPost('keepQuestion') != null)
                         $this->_redirect('question/');
-
-
+                
+                //We only get here when delete page is initially requested
                 $this->view->question = $this->findQuestionInfo($question_id, $language_id);
                 $this->view->answers = $this->findQuestionAnswers($question_id, $language_id);
-
-                //delete the flash files
-                //$registry = Zend_Registry::getInstance();
-                //$config = $registry->get('config');
-                //if (!@unlink($config->file->flash->dir . DIRECTORY_SEPARATOR . $row->question_flash_file)
-                //  || !@unlink($config->file->flash->dir . DIRECTORY_SEPARATOR . $row->feedback_flash_file))
-                //{
-                //	$this->view->message = "Unable to physicaly remove the flash files : <strong>" .
-                //                             $config->file->flash->dir . DIRECTORY_SEPARATOR . $row->question_flash_file . "</strong> and " .
-                //                             $config->file->flash->dir . DIRECTORY_SEPARATOR . $row->feedback_flash_file . "</strong>";
-                //} else {
-                //      
-                //	$question->delete($where);
 	}
 
 	function viewAction() {
@@ -561,28 +560,38 @@ class QuestionController extends Zend_Controller_Action {
                 if ($request->isPost()) {
                         $question_id = $request->getPost('question_id');
                         $language_id = $request->getPost('language_id');
-                        if ($request->getPost('prev') != null) {
+                        if ($request->getPost('edit') != null)
+                                $this->_redirect('question/edit/question_id/'.$question_id.'/language_id/'.$language_id);
+                        else if ($request->getPost('translate') != null)
+                                $this->_redirect('question/translate/question_id/'.$question_id.'/language_id/'.$language_id);
+                        else if ($request->getPost('delete') != null)
+                                $this->_redirect('question/delete/question_id/'.$question_id.'/language_id/'.$language_id);
+                        else if ($request->getPost('disable') != null)
+                                $this->_redirect('question/disable/question_id/'.$question_id.'/language_id/'.$language_id);
+                        else if ($request->getPost('upload') != null)
+                                $this->_redirect('question/upload/question_id/'.$question_id.'/language_id/'.$language_id);
+                        else if ($request->getPost('prev') != null) {
                                 $row_number = $this->lookupFilteredQuestionIndex($question_id, $language_id);
                                 $n = max(0, $row_number-1);
-                                $row = $session->filteredQuestions->getRow($n);
+                                $row = $session->filteredQuestions[$n];
                                 $question_id = $row->question_id;
                                 $language_id = $row->language_id;
                         }                        
                         else if ($request->getPost('next') != null) {
                                 $row_number = $this->lookupFilteredQuestionIndex($question_id, $language_id);
-                                $n = min($session->filteredQuestions->count()-1, $row_number+1);
-                                $row = $session->filteredQuestions->getRow($n);
+                                $n = min(count($session->filteredQuestions)-1, $row_number+1);
+                                $row = $session->filteredQuestions[$n];
                                 $question_id = $row->question_id;
                                 $language_id = $row->language_id;
                         }
                         else if ($request->getPost('first') != null) {
-                                $row = $session->filteredQuestions->getRow(0);
+                                $row = $session->filteredQuestions[0];
                                 $question_id = $row->question_id;
                                 $language_id = $row->language_id;
                         }
                         else if ($request->getPost('last') != null) {
-                                $n = $session->filteredQuestions->count()-1;
-                                $row = $session->filteredQuestions->getRow($n);
+                                $n = count($session->filteredQuestions)-1;
+                                $row = $session->filteredQuestions[$n];
                                 $question_id = $row->question_id;
                                 $language_id = $row->language_id;
                         }
@@ -616,7 +625,46 @@ class QuestionController extends Zend_Controller_Action {
                 $this->_redirect('question/');
         }
 
+        function uploadAction() {
+		$this->view->title = "Upload a swf file";
 
+                $request = $this->getRequest();
+                $question_id = Zend_Filter::get($request->getParam('question_id'), 'Digits');
+                $language_id = Zend_Filter::get($request->getParam('language_id'), 'Digits');
+                if ($question_id == NULL || $language_id == NULL) 
+                        $this->_redirect('question/');
+
+                $questionInfoTable = new QuestionInfo();
+		$qinfoRow = $questionInfoTable->fetchRow('question_id=' . $question_id . ' && language_id=' . $language_id);
+                if ($qinfoRow == null)
+                        $this->_redirect('question/');
+
+                $message = "";
+                if ($request->isPost()) {
+ 			if (is_uploaded_file($_FILES["file"]["tmp_name"])) {
+                                $registry = Zend_Registry::getInstance();
+                                $config = $registry->get('config');
+                                $path_info = pathinfo($_FILES["file"]["name"]);
+                                $filename = $config->file->flash->dir . DIRECTORY_SEPARATOR . $path_info['basename'];
+                                if (move_uploaded_file($_FILES["file"]["tmp_name"], $filename)) {
+                                        switch ($request->getPost("column")) {
+                                          case "question":
+                                            $qinfoRow->question_flash_file=$path_info['basename'];
+                                            break;
+                                          case "feedback":
+                                            $qinfoRow->feedback_flash_file=$path_info['basename'];
+                                            break;
+                                        }
+                                        $qinfoRow->save();
+                                        $this->_redirect('question/view/question_id/'.$question_id.'/language_id/'.$language_id);
+                                }
+                        }
+                        $message .= "SWF file $filename could not be uploaded";
+                }
+                $this->view->message = $message;
+                $this->view->question = $this->findQuestionInfo($question_id, $language_id);
+                $this->view->answers = $this->findQuestionAnswers($question_id, $language_id);
+        }
         
         //Read information gathered from views/scripts/question/_form.phtml
         private function getQuestionInfoFromDisplayForm(&$request, &$question, &$answers, &$levels, &$conversionOptions) {
@@ -634,7 +682,6 @@ class QuestionController extends Zend_Controller_Action {
                 $question['question_latex'] = trim($request->getPost('question_latex'));
                 $question['feedback_latex'] = trim($request->getPost('feedback_latex'));
                 $question['comment'] = $request->getPost('comment');
-
                 //Read in the answers information
                 //For True/False questions
                 //   $answers[0]['is_right'] is one of 0 or 1 meaning false and true respectively.
@@ -658,10 +705,13 @@ class QuestionController extends Zend_Controller_Action {
                 //level_id to a difficulty value taken in {0,1,2,...,6}.
                 $levels = $request->getPost('levels');
 
-                if ($request->getPost('usejpeg') != null)
-                        $conversionOptions = 'usejpeg';
+                //Read the conversion options.
                 if ($request->getPost('noswf') != null)
                         $conversionOptions = 'noswf';
+                else if ($request->getPost('usejpeg') != null)
+                        $conversionOptions = 'usejpeg';
+                else
+                        $conversionOptions = 'pdf';
                 
                 //A request was made to increase the number of answers for a multiple choice question
                 //The request is granted only if the number of answer is less than 8
@@ -733,23 +783,36 @@ class QuestionController extends Zend_Controller_Action {
 
                 $answerTable = new Answer();
                 //if the answer type has changed all answers in the db for this question are invalid so delete them
-                if ($originalQuestion['answer_type_id'] != $question['answer_type_id'])
+                $filesToDelete = array();
+                if ($originalQuestion['answer_type_id'] != $question['answer_type_id']) {
+                        $answerInfoTable = new AnswerInfo();
+                        foreach ($answerInfoTable->fetchAll('question_id='.$question['question_id']) as $answerInfoRow)
+                                if ($answerInfoRow->answer_flash_file != null)
+                                        $filesToDelete[] = $answerInfoRow->answer_flash_file;
                         $answerTable->delete('question_id='.$question['question_id']); //this cascades into all tables thanks to InnoDB
-
-                $originalAnswers = $answerTable->fetchAll('question_id='.$question['question_id'])->toArray();
-                //if some of the answers were removed, delete them from the answer table.
+                }
+                $originalAnswerRowSet = $answerTable->fetchAll('question_id='.$question['question_id']);
+                //if some of the answers were removed (from the webpage itself this is only possible by clicking on an answer's "delete" 
+                //button in question/_form.phtml), delete them from the answer table.
                 //WARNING: ugly quadratic search.  Fortunately most questions have 1-5 answers.  Max is 8.
-                foreach ($originalAnswers as $o_answer) {
+                foreach ($originalAnswerRowSet as $originalAnswerRow) {
                         $found = false;
                         foreach($answers as $n_answer) {
-                                if ($o_answer['answer_id'] == $n_answer['answer_id']) {
+                                if ($originalAnswerRow->answer_id == $n_answer['answer_id']) {
                                         $found = true;
                                         break;
                                 }
                         }
-                        if (!$found)
-                                $answerTable->delete('answer_id='.$o_answer['answer_id']); //this cascades into all tables thanks to InnoDB
+                        if (!$found) {
+                                $answerInfoTable = new AnswerInfo();
+                                foreach ($answerInfoTable->fetchAll('question_id='.$question['question_id']) as $answerInfoRow)
+                                        if ($answerInfoRow->answer_flash_file != null)
+                                                $filesToDelete[] = $answerInfoRow->answer_flash_file;
+                                $originalAnswerRow->delete(); //this cascades into all tables thanks to InnoDB
+                        }
                 }
+
+                $this->deleteFiles($filesToDelete);
 
                 //At this point all the answers in $answers are either new or already exist in the DB **AND**
                 //there are no answers in the DB for this question that are not in $answers.
@@ -758,11 +821,12 @@ class QuestionController extends Zend_Controller_Action {
                   case 1: //Multiple choices
                     foreach ($answers as $answer) {
                             //answer id isn't known means this is a new answer
-                            if (!isset($answer['answer_id'])) { 
+                            if ($answer['answer_id'] == null) { 
                                     $answer_id = $answerTable->insert(array('question_id'=>$question['question_id'],
                                                                             'is_right'=>$answer['is_right'],
                                                                             'label'=>$answer['label']));
                                     $answerInfoTable->insert(array('answer_id' => $answer_id,
+                                                                   'question_id' => $question['question_id'],
                                                                    'language_id' => $question['language_id'],
                                                                    'answer_latex' => $answer['answer_latex']));
                             }
@@ -776,7 +840,7 @@ class QuestionController extends Zend_Controller_Action {
                     }
                     break;
                   case 2: //True or false
-                    if (!isset($answers[0]['answer_id']))
+                    if ($answers[0]['answer_id'] == null)
                             $answerTable->insert(array('question_id' => $question['question_id'],
                                                        'is_right' => $answers[0]['is_right']));
                     else
@@ -784,10 +848,11 @@ class QuestionController extends Zend_Controller_Action {
                                                  array('answer_id='.$answers[0]['answer_id']));
                     break;
                   case 3: //Short answer
-                    if (!isset($answers[0]['answer_id'])) {
+                    if ($answers[0]['answer_id'] == null) {
                             $answer_id = $answerTable->insert(array('question_id' => $question['question_id'],
                                                                     'is_right' => 1));
                             $answerInfoTable->insert(array('answer_id' => $answer_id,
+                                                           'question_id' => $question['question_id'],
                                                            'language_id' => $question['language_id'],
                                                            'answer_latex' => $answers[0]['answer_latex']));
                     }
@@ -823,6 +888,7 @@ class QuestionController extends Zend_Controller_Action {
                                                                     'answer_type_id' => $question['answer_type_id'],
                                                                     'source_id' =>  $question['source_id'],
                                                                     'title_id' => $question['title_id']));
+
                 //Add the data to the 'question_info' table
                 $questionInfoTable = new QuestionInfo();
                 $questionInfoTable->insert(array('question_id' => $question_id,
@@ -858,6 +924,7 @@ class QuestionController extends Zend_Controller_Action {
                                                                             'is_right'=>$answer['is_right'],
                                                                             'label'=>$answer['label']));
                             $answerInfoTable->insert(array('answer_id' => $answer_id,
+                                                           'question_id'=> $question_id,
                                                            'language_id' => $question['language_id'],
                                                            'answer_latex' => $answer['answer_latex']));
                     }
@@ -874,6 +941,7 @@ class QuestionController extends Zend_Controller_Action {
                             $answer_id = $answerTable->insert(array('question_id' => $question_id,
                                                                     'is_right' => 1));
                     $answerInfoTable->insert(array('answer_id' => $answer_id,
+                                                   'question_id' => $question_id,
                                                    'language_id' => $question['language_id'],
                                                    'answer_latex' => $answers[0]['answer_latex']));
                     break;
@@ -890,74 +958,93 @@ class QuestionController extends Zend_Controller_Action {
                                                                           'value'=>$value));
                         }
                 }
-
                 return $question_id;
-
-
-                //Generate the flash file
-/*                 if ($conversionOptions == 'none') */
-/*                         return; */
-
-/*                 $registry = Zend_Registry::getInstance(); */
-/*                 $config = $registry->get('config'); */
-/*                 $languageTable = new Language(); */
-/*                 $language = $languageTable->fetchRow('language_id='.$question['language_id']); */
-
-
-
-/*                 $extraHeaderTex = ""; */
-/*                 $extraTex = ""; */
-                
-/*                 $extraHeaderTex = '\renewcommand{\labelenumi}{\alph{enumi})}'; */
-/*                 $extraTex = '\begin{enumerate}'; */
-/*                 foreach ($answers as $answer) */
-/*                         $extraTex .= '\item ' . $answer['answer_latex']; */
-/*                 $extraTex .= '\end{enumerate}'; */
-                
-/*                 //try to generate the swf's for this question and feedback */
-/*                 $filename = $config->file->tempdir . "Q-" . $question_id . "-" . $language->short_name . ".tex"; */
-
-/*                 $questionFile = new QuestionFile($filename); */
-/*                 $questionFile->addText($config->latex->header); */
-/*                 $questionFile->addText($extraHeaderTex); */
-/*                 $questionFile->addText($question['question_latex']); */
-/*                 $questionFile->addText($extraTex); */
-/*                 $questionFile->addText($config->latex->footer); */
-/*                 $questionFile->close(); */
-/*                 $this->view->message = "long: " . $questionFile->getFullPath() . ",short= " . substr($questionFile->getFullPath(),0,-4); */
-/*                 $filename = $config->file->tempdir . "F-" . $question_id . "-" . $language->short_name . ".tex"; */
-/*                 $feedbackFile = new QuestionFile($filename); */
-/*                 $feedbackFile->addText($config->latex->header); */
-/*                 $feedbackFile->addText($question['feedback_latex']); */
-/*                 $feedbackFile->addText($config->latex->footer); */
-/*                 $feedbackFile->close(); */
-                               
-/*                 //check for eps to include in this swf */
-/*                 $this->copyImage($question['question_latex']); */
-/*                 $this->copyImage($question['feedback_latex']); */
-               
-/*                 $convertmethod = "pdf"; */
-/*                 if ($conversionOptions == 'usejpeg') */
-/*                         $convertmethod = "jpeg"; */
-                
-/*                 //run the script that build the swf for the question */
-/*                 exec($config->file->scriptdir . "tex2swf.sh " . $questionFile->getFullPath() . " " . $config->file->flash->dir . " " . $convertmethod); */
-/*                 if (file_exists($config->file->flash->dir . "Q-" . $question_id . "-" . $language->short_name . ".swf")) */
-/*                         $data['question_flash_file'] = "Q-" . $question_id . "-" . $language->short_name . ".swf"; */
-/*                 else */
-/*                         $data['question_flash_file'] = "echec.swf"; */
-                
-/*                 //run the script that build the swf for the feedback */
-/*                 exec($config->file->scriptdir . "tex2swf.sh " . $feedbackFile->getFullPath() . " " . $config->file->flash->dir . " " . $convertmethod); */
-/*                 if (file_exists($config->file->flash->dir . "F-" . $question_id . "-" . $language->short_name . ".swf")) */
-/*                         $data['feedback_flash_file'] = "F-" . $question_id . "-" . $language->short_name . ".swf"; */
-/*                 else */
-/*                         $data['feedback_flash_file'] = "echec.swf"; */
-                
-/*                 //$this->view->message = $data['question_flash_file']; */
-
         }
+
+        private function deleteFiles($filenames) {
+                $message="";
+                foreach ($filenames as $filename)
+                        if (!@unlink($filename))
+                                $message .= "Unable to physicaly remove the files : <strong>" . $filename . "</strong><br/>";
+                return $message;
+        }
+
+        private function generateFlashFiles($question_id, $language_id, $conversionOptions) {
         
+                if ($conversionOptions == 'noswf')
+                        return;
+
+                $questionInfoTable = new QuestionInfo();
+		$qinfo = $questionInfoTable->fetchRow('question_id=' . $question_id . ' && language_id=' . $language_id);
+                if ($qinfo == null)
+                        return;
+                $languageTable = new Language();
+                $language = $languageTable->fetchRow('language_id='.$language_id);
+
+                $registry = Zend_Registry::getInstance();
+                $config = $registry->get('config');
+
+                $this->deleteFiles(array($config->file->flash->dir.$qinfo->feedback_flash_file, $config->file->flash->dir.$qinfo->question_flash_file));
+                
+                //////////////////////////////////////////////////////////
+                /// Generate the feedback swf
+                $filename = $config->file->tempdir . "Q-" . $question_id . "-F-" . $language->short_name . ".tex";
+                $questionFile = new QuestionFile($filename);
+                $questionFile->addText($config->latex->header);
+                $questionFile->addText($qinfo->feedback_latex);
+                $questionFile->addText($config->latex->footer);
+                $questionFile->close();
+                $this->copyImage($qinfo->feedback_latex);
+                //run the script that build the swf for the question
+                exec($config->file->scriptdir . "tex2swf.sh " . $questionFile->getFullPath() . " " . $config->file->flash->dir . " " . $conversionOptions);
+                if (file_exists($config->file->flash->dir . "Q-" . $question_id . "-F-" . $language->short_name . ".swf"))
+                        $qinfo->feedback_flash_file = "Q-" . $question_id . "-F-" . $language->short_name . ".swf";
+                else
+                        $qinfo->feedback_flash_file = "echec.swf";
+                //////////////////////////////////////////////////////////
+                /// Generate the question swf
+                $filename = $config->file->tempdir . "Q-" . $question_id . "-" . $language->short_name . ".tex";
+                $questionFile = new QuestionFile($filename);
+                $questionFile->addText($config->latex->header);
+                $questionFile->addText($qinfo->question_latex);
+                $questionFile->addText($config->latex->footer);
+                $questionFile->close();
+                $this->copyImage($qinfo->question_latex);
+                //run the script that build the swf for the question
+                exec($config->file->scriptdir . "tex2swf.sh " . $questionFile->getFullPath() . " " . $config->file->flash->dir . " " . $conversionOptions);
+                if (file_exists($config->file->flash->dir . "Q-" . $question_id . "-" . $language->short_name . ".swf"))
+                        $qinfo->question_flash_file = "Q-" . $question_id . "-" . $language->short_name . ".swf";
+                else
+                        $qinfo->question_flash_file = "echec.swf";
+                
+                $qinfo->save();
+                ////////////////////////////////////////////////////////////
+                //////////////////////////////////////////////////////////
+                /// Generate the answers swf
+                $answerTable = new Answer();
+                $answerRowSet = $answerTable->fetchAll("question_id=$question_id");
+                $i=1;
+                foreach($answerRowSet as $answer) {
+                        $answerInfo = $answer->findAnswerInfo($answerTable->select()->where("language_id=$language_id"))->current();
+                        if ($answerInfo == null)
+                                continue;
+                        $filename = $config->file->tempdir . "Q-" .$question_id . "-A-" . $i . "-" . $language->short_name . ".tex";
+                        $questionFile = new QuestionFile($filename);
+                        $questionFile->addText($config->latex->header);
+                        $questionFile->addText($answerInfo->answer_latex);
+                        $questionFile->addText($config->latex->footer);
+                        $questionFile->close();
+                        $this->copyImage($answerInfo->answer_latex);
+                        exec($config->file->scriptdir . "tex2swf.sh " . $questionFile->getFullPath() . " " . $config->file->flash->dir . " " . $conversionOptions);
+                        if (file_exists($config->file->flash->dir . "Q-".$question_id."-A-" . $i . "-" . $language->short_name . ".swf"))
+                                $answerInfo->answer_flash_file = "Q-".$question_id."-A-" . $i . "-" . $language->short_name . ".swf";
+                        else
+                                $answerInfo->answer_flash_file = "echec.swf";
+                        $answerInfo->save();
+                        ++$i;
+                }
+        }
+                
 	/**
 	 * Copy the eps found in the text to the temp directory
 	 *
@@ -968,11 +1055,10 @@ class QuestionController extends Zend_Controller_Action {
 		$config = $registry->get('config');
 
 		$n = preg_match_all('/\includegraphics.*\{(.*\.eps)\}/i', $text  , $matches);
-		for ($i=0;$i < $n; $i++) {
+		for ($i=0; $i<$n; $i++) {
 			copy($config->file->image->dir . DIRECTORY_SEPARATOR . $matches[1][$i],
-			$config->file->tempdir . DIRECTORY_SEPARATOR . $matches[1][$i]);
+                             $config->file->tempdir . DIRECTORY_SEPARATOR . $matches[1][$i]);
 		}
-
 	}
 
         //Returns an array filled with the question information for this $question_id and $language_id
@@ -990,6 +1076,7 @@ class QuestionController extends Zend_Controller_Action {
                                 $question['question_flash_file'] = $questionInfoRow['question_flash_file'];
                                 $question['feedback_latex'] = $questionInfoRow['feedback_latex'];
                                 $question['feedback_flash_file'] = $questionInfoRow['feedback_flash_file'];
+                                $question['is_valid'] = $questionInfoRow['is_valid'];
                                 $commentRowSet = $questionInfoRow->findComment();
                                 $question['comment'] = array();
                                 foreach ($commentRowSet as $comment)
@@ -1080,11 +1167,9 @@ class QuestionController extends Zend_Controller_Action {
         //This should be implemented with a lookup table to speed it up a bit...
         private function lookupFilteredQuestionIndex($question_id, $language_id) {
                 $session = new Zend_Session_Namespace('Question');
-                $i=0;
-                foreach($session->filteredQuestions as $question) {
-                        if ($question->question_id == $question_id && $question->language_id == $language_id)
-                                return $i;
-                        ++$i;
+                foreach($session->filteredQuestions as $index=>$question) {
+                        if ($question['question_id'] == $question_id && $question['language_id'] == $language_id)
+                                return $index;
                 }
                 return 0;
         }

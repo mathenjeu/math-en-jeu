@@ -4,9 +4,8 @@ http://www.metamorphozis.com
 Released for free under a Creative Commons Attribution 2.5 License
 */
 
-@CHARSET "ISO-8859-1";
+@CHARSET "UTF8";
 
-<!--
 table.question {
 	border: solid #000 3px;
 }
@@ -17,10 +16,17 @@ thead.question {
 
 thead.question_info {
 	background-color : #ddddff;
-
 }
 
--->
+#warning {
+        border-color:red;
+        border-style:solid;
+	font-family: monospace;
+	font-size: 15px;
+	color: #737373;
+}
+
+
 
 td.answer {
     min-width:500px;

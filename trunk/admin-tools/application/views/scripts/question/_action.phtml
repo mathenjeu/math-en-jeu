@@ -1,0 +1,13 @@
+<?php
+          $validString = ($this->question['is_valid'] == 0 ? "Enable" : "Disable");
+?>
+<table>
+  <tr>
+      <td><a href="<?php echo $this->baseUrl(); ?>/question/view/question_id/<?php echo $this->escape($this->question['question_id']); ?>/language_id/<?php echo $this->escape($this->question['language_id']); ?>">View</a><br/></td>
+      <td><a href="<?php echo $this->baseUrl(); ?>/question/edit/question_id/<?php echo $this->escape($this->question['question_id']); ?>/language_id/<?php echo $this->escape($this->question['language_id']); ?>">Edit</a><br/></td>
+      <td><a href="<?php echo $this->baseUrl(); ?>/question/translate/question_id/<?php echo $this->escape($this->question['question_id']); ?>/language_id/<?php echo $this->escape($this->question['language_id']); ?>">Translate</a><br/></td>
+      <td><a href="<?php echo $this->baseUrl(); ?>/question/disable/question_id/<?php echo $this->escape($this->question['question_id']); ?>/language_id/<?php echo $this->escape($this->question['language_id']); ?>"><?php echo $validString;?></a><br/></td>
+      <td><a href="<?php echo $this->baseUrl(); ?>/question/delete/question_id/<?php echo $this->escape($this->question['question_id']); ?>/language_id/<?php echo $this->escape($this->question['language_id']); ?>">Delete</a><br/></td>
+      <td><a href="<?php echo $this->baseUrl(); ?>/question/upload/question_id/<?php echo $this->escape($this->question['question_id']); ?>/language_id/<?php echo $this->escape($this->question['language_id']); ?>">Upload SWF</a><br/></td>                     
+  </tr>
+</table>  

@@ -4,9 +4,7 @@
    <td class="answer">
          <input type="radio" name="answers[0][is_right]" value="1"<?php if ($this->answers[0]['is_right'] == 1) echo " checked";?>>True
          <input type="radio" name="answers[0][is_right]" value="0"<?php if ($this->answers[0]['is_right'] == 0) echo " checked";?>>False
+         <input type="hidden" name="answers[0][answer_id]" value="<?php echo isset($answers[0]['answer_id'])?$answer[0]['answer_id']:"";?>">
    </td>
-<?php if (isset($this->answers[0]['answer_id'])) : ?>
-    <input type="hidden" name="answers[0][answer_id]" value="<?php echo $this->answers[0]['answer_id'];?>">
-<?php endif; ?>
 </tr>
 </table>
