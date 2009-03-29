@@ -808,7 +808,7 @@ class Personnage
 			//Si le perso est le mien et qu'il est au repos, mais que le board n'est pas centre
 			if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 			{
-				if(_level0.loader.contentHolder.planche.recentrerBoard(this.l, this.c))
+				if(_level0.loader.contentHolder.planche.recentrerBoard(this.l, this.c, true))
 				{
 					if(!this.minigameLoade) _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 					boardCentre = true;

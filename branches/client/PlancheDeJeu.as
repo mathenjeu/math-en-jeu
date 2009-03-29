@@ -229,42 +229,79 @@ class PlancheDeJeu
         }
     }
 	
-    function translater(direction:String)
+    function translater(direction:String):Boolean
     {
-        var i:Number;
-        var j:Number;
-        var dx:Number;
-        var dy:Number;
         var la:Number;
         var ha:Number;
+		var limiteAtteinte:Boolean = false;
+		
+		var coinGauche = new Point(0,0);
+		var coinDroit = new Point(0,0);
+		var coinHaut = new Point(0,0);
+		var coinBas = new Point(0,0);
+		
+		coinGauche.definirX(_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[0][0].obtenirClipCase()._x);
+		coinGauche.definirY(_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[0][0].obtenirClipCase()._y);
+		coinHaut.definirX(coinGauche.obtenirX() + this.largeurDeCase/2 * (this.tableauDesCases[0].length-1));
+		coinHaut.definirY(coinGauche.obtenirY() - this.hauteurDeCase/2 * (this.tableauDesCases[0].length-1));
+		coinDroit.definirX(coinHaut.obtenirX() + this.largeurDeCase/2 * (this.tableauDesCases.length-1));
+		coinDroit.definirY(coinHaut.obtenirY() + this.hauteurDeCase/2 * (this.tableauDesCases.length-1));
+		coinBas.definirX(coinGauche.obtenirX() + this.largeurDeCase/2 * (this.tableauDesCases.length-1));
+		coinBas.definirY(coinGauche.obtenirY() + this.hauteurDeCase/2 * (this.tableauDesCases.length-1));
+	
         switch(direction)
         {
             case "Est":
                 la = -largeurDeCase/2;
+				if (coinDroit.obtenirX()+la < 275) //Le coin droit du tableau est au centre de l'écran
+				{
+					la = 275 - coinDroit.obtenirX();
+					limiteAtteinte = true;
+				}
                 ha = 0;
             break;
             case "Ouest":
-                la = largeurDeCase/2;
+                la = largeurDeCase/2; 
+				if (coinGauche.obtenirX()+la > 275) //Le coin gauche du tableau est au centre de l'écran
+				{
+					la = 275 - coinGauche.obtenirX();
+					limiteAtteinte = true;
+				}
                 ha = 0;
             break;
             case "Nord":
                 la = 0;
                 ha = hauteurDeCase/2;
+				if (coinHaut.obtenirY()+ha > 250) //Le coin haut du tableau est au centre de l'écran
+				{
+					ha = 250 - coinHaut.obtenirY();
+					limiteAtteinte = true;
+				}
             break;
             case "Sud":
                 la = 0;
                 ha = -hauteurDeCase/2;
+				if (coinBas.obtenirY()+ha < 250) //Le coin bas du tableau est au centre de l'écran
+				{
+					ha = 250 - coinBas.obtenirY();
+					limiteAtteinte = true;
+				}
             break;
         }
 	
 		// on déplace le clip sur lequel est attaché tous les autres clips
-		_level0.loader.contentHolder.referenceLayer._x +=la;		
-		_level0.loader.contentHolder.referenceLayer._y +=ha;
+		_level0.loader.contentHolder.referenceLayer._x += la;		
+		_level0.loader.contentHolder.referenceLayer._y += ha;
+		
+		return !(limiteAtteinte);
     }
 
        
     function zoomer(sens:String):Boolean
     {
+		var distX:Number;
+		var distY:Number;
+		
 		switch(sens)
 		{
 			case "in":
@@ -277,8 +314,16 @@ class PlancheDeJeu
 					_level0.loader.contentHolder.referenceLayer._yscale +=10;
 				
 					// on déplace le clip sur lequel est attaché tous les autres clips
-					_level0.loader.contentHolder.referenceLayer._x -=27;
-					_level0.loader.contentHolder.referenceLayer._y -=20;
+					distX = 275 - _level0.loader.contentHolder.referenceLayer._x;
+					distX *= (10+this.zoom)/(9+this.zoom); 
+					_level0.loader.contentHolder.referenceLayer._x = 275 - distX;
+					distY = 250 - _level0.loader.contentHolder.referenceLayer._y;
+					distY *= (10+this.zoom)/(9+this.zoom); 
+					_level0.loader.contentHolder.referenceLayer._y = 250 - distY;
+					
+					// on modifie largeurDeCase et hauteurDeCase
+					this.largeurDeCase *= (10+this.zoom)/(9+this.zoom);
+					this.hauteurDeCase *= (10+this.zoom)/(9+this.zoom);
 				}
 			break;
 				
@@ -292,14 +337,23 @@ class PlancheDeJeu
 					_level0.loader.contentHolder.referenceLayer._yscale -=10;
 					
 					// on déplace le clip sur lequel est attaché tous les autres clips
-					_level0.loader.contentHolder.referenceLayer._x +=27;
-					_level0.loader.contentHolder.referenceLayer._y +=20;
+					distX = 275 - _level0.loader.contentHolder.referenceLayer._x;
+					distX *= (10+this.zoom)/(11+this.zoom); 
+					_level0.loader.contentHolder.referenceLayer._x = 275 - distX;
+					distY = 250 - _level0.loader.contentHolder.referenceLayer._y;
+					distY *= (10+this.zoom)/(11+this.zoom); 
+					_level0.loader.contentHolder.referenceLayer._y = 250 - distY;
+					
+					// on modifie largeurDeCase et hauteurDeCase
+					this.largeurDeCase *= (10+this.zoom)/(11+this.zoom);
+					this.hauteurDeCase *= (10+this.zoom)/(11+this.zoom);
 				}
 			break;
 		
 			default:
 			break;
 		}
+		
 		if(this.zoom == -8 || this.zoom == 8) return false;
 		return true;
     }
@@ -423,7 +477,7 @@ class PlancheDeJeu
         {
             perso = p;
 	    	nomDeMonPersonnage = nom;
-	    	this.centrerPersonnage(ll,cc);
+	    	this.recentrerBoard(ll,cc,false);
 	  		//  p.zoomer(10);
         }
 		//else
@@ -455,51 +509,51 @@ class PlancheDeJeu
     
     
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function recentrerBoard(l:Number, c:Number):Boolean
+	function recentrerBoard(l:Number, c:Number, modeGraduel:Boolean):Boolean
 	{
 		var dx:Number;
 		var dy:Number;
-		var i:Number;
-		var j:Number;
 		var pourcent:Number;
 		
-		dx = 275-this.tableauDesCases[l][c].obtenirClipCase()._x;
-		dy = 200-this.tableauDesCases[l][c].obtenirClipCase()._y;
+		dx = 275-(_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
+		dy = 250-(_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._y);
+		dx = Math.round(dx);
+		dy = Math.round(dy);
 		
 		if ((dx == 0) && (dy == 0))
 		{
+			trace("recentrerBoard: true");
 			return true;
 		}
-    
-		if(Math.abs(dx) > Math.abs(dy))
+		//trace("dx = " + dx);
+		//trace("dy = " + dy);
+	
+		if (modeGraduel)
 		{
-			if(Math.abs(dx) > 20)
+			if(Math.abs(dx) > Math.abs(dy))
 			{
-				pourcent = 20/Math.abs(dx);
-				dx *= pourcent;
-				dy *= pourcent;
+				if(Math.abs(dx) > 20)
+				{
+					pourcent = 20/Math.abs(dx);
+					dx *= pourcent;
+					dy *= pourcent;
+				}
+			}
+			else
+			{
+				if(Math.abs(dy) > 20)
+				{
+					pourcent = 20/Math.abs(dy);
+					dx *= pourcent;
+					dy *= pourcent;
+				}
 			}
 		}
-		else
-		{
-			if(Math.abs(dy) > 20)
-			{
-				pourcent = 20/Math.abs(dy);
-				dx *= pourcent;
-				dy *= pourcent;
-			}
-		}
-		
-		for(i=0;i<this.tableauDesCases.length;i++)
-        {
-            for(j=0;j<this.tableauDesCases[0].length;j++)
-            {
-                if(this.tableauDesCases[i][j] != null)
-                {
-                    this.tableauDesCases[i][j].translater(dx, dy);
-                }
-            }
-        }
+
+		// on déplace le clip sur lequel est attaché tous les autres clips
+		_level0.loader.contentHolder.referenceLayer._x +=dx;		
+		_level0.loader.contentHolder.referenceLayer._y +=dy;
+		trace("recentrerBoard: false");
 		return false;
 	}
 	
