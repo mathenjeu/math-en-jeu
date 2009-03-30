@@ -4,19 +4,19 @@ Copyright (C) 2007 Projet SMAC
 
 Ce programme est un logiciel libre ; vous pouvez le
 redistribuer et/ou le modifier au titre des clauses de la
-Licence Publique Générale Affero (AGPL), telle que publiée par
-Affero Inc. ; soit la version 1 de la Licence, ou (à
-votre discrétion) une version ultérieure quelconque.
+Licence Publique Generale Affero (AGPL), telle que publiee par
+Affero Inc. ; soit la version 1 de la Licence, ou (a
+votre discretion) une version ulterieure quelconque.
 
-Ce programme est distribué dans l'espoir qu'il sera utile,
-mais SANS AUCUNE GARANTIE ; sans même une garantie implicite de
+Ce programme est distribue dans l'espoir qu'il sera utile,
+mais SANS AUCUNE GARANTIE ; sans meme une garantie implicite de
 COMMERCIABILITE ou DE CONFORMITE A UNE UTILISATION
 PARTICULIERE. Voir la Licence Publique
-Générale Affero pour plus de détails.
+Generale Affero pour plus de details.
 
-Vous devriez avoir reçu un exemplaire de la Licence Publique
-Générale Affero avec ce programme; si ce n'est pas le cas,
-écrivez à Affero Inc., 510 Third Street - Suite 225,
+Vous devriez avoir recu un exemplaire de la Licence Publique
+Generale Affero avec ce programme; si ce n'est pas le cas,
+ecrivez a Affero Inc., 510 Third Street - Suite 225,
 San Francisco, CA 94107, USA.
 *********************************************************************/
 
@@ -26,16 +26,16 @@ import mx.events.EventDispatcher;
 
 class DispatchingXMLSocket extends XMLSocket
 {
-    // Déclaration d'une fonction qui va prendre en paramètre une fonction
-    // et qui va la garder en mémoire et l'appeler lorsque nécessaire
+    // Declaration d'une fonction qui va prendre en parametre une fonction
+    // et qui va la garder en memoire et l'appeler lorsque necessaire
     public var addEventListener:Function;
 
-    // Déclaration d'une fonction qui va permettre d'enlever une fonction
-    // qui écoute l'événement du DispatchingXMLSocket
+    // Declaration d'une fonction qui va permettre d'enlever une fonction
+    // qui ecoute l'evenement du DispatchingXMLSocket
     public var removeEventListener:Function;
 
-    // Déclaration d'une fonction qui va permettre d'envoyer un événement
-    // aux fonctions qui ont été ajoutées par addEventListener
+    // Declaration d'une fonction qui va permettre d'envoyer un evenement
+    // aux fonctions qui ont ete ajoutees par addEventListener
     private var dispatchEvent:Function;
 
     /**
@@ -43,12 +43,12 @@ class DispatchingXMLSocket extends XMLSocket
      */
     function DispatchingXMLSocket()
     {
-        // Initialiser le dispatcher d'événements (ajoute les fonctions
+        // Initialiser le dispatcher d'evenements (ajoute les fonctions
         // addEventListener, removeEventListener et dispatchEvent)
         EventDispatcher.initialize(this);
 
-        // Définir les fonctions devant être appelées lorsque les différents
-        // événements de connexion, déconnexion, ... vont survenir
+        // Definir les fonctions devant etre appelees lorsque les differents
+        // evenements de connexion, deconnexion, ... vont survenir
         this.onConnect = dispatchOnConnect;
         this.onData = dispatchOnData;
         this.onClose = dispatchOnClose;
@@ -56,50 +56,51 @@ class DispatchingXMLSocket extends XMLSocket
     }
 
     /**
-     * Cette fonction va être appelée lorsque la connexion aura été effectuée
-     * (soit elle a échoué, soit elle a réussie).
+     * Cette fonction va etre appelee lorsque la connexion aura ete effectuee
+     * (soit elle a echoue, soit elle a reussie).
      *
-     * @param Boolean succes : Permet de savoir si la connexion a réussie
-     *                         ou si elle a échoué
+     * @param Boolean succes : Permet de savoir si la connexion a reussie
+     *                         ou si elle a echoue
      */
     private function dispatchOnConnect(succes:Boolean)
     {
-        // Envoyer l'événement indiquant l'état de la connexion
+        // Envoyer l'evenement indiquant l'etat de la connexion
         dispatchEvent({target:this, type:"connect", succes:succes});
     }
 
     /**
-     * Cette fonction va être appelée lorsque des données vont être reçues.
+     * Cette fonction va etre appelee lorsque des donnees vont etre recues.
      *
-     * @param String donnees : Le message reçu sous forme de String
+     * @param String donnees : Le message recu sous forme de String
      */
     private function dispatchOnData(donnees:String)
     {
-        // Envoyer l'événement indiquant l'arrivée de données en String
+        // Envoyer l'evenement indiquant l'arrivee de donnees en String
         dispatchEvent({target:this, type:"data", donnees:donnees});
 
-        // Appeler la méthode onData du XMLSocket parent (sinon la fonction
-        // dispatchOnXML ne sera pas appelée)
+        // Appeler la methode onData du XMLSocket parent (sinon la fonction
+        // dispatchOnXML ne sera pas appelee)
         super.onData(donnees);
     }
 
     /**
-     * Cette fonction va être appelée lorsque des données XML vont être reçues.
+     * Cette fonction va etre appelee lorsque des donnees XML vont etre recues.
      *
-     * @param XML donneesXML : Le message reçu sous forme d'objet XML
+     * @param XML donneesXML : Le message recu sous forme d'objet XML
      */
     private function dispatchOnXML(donneesXML:XML)
     {
-        // Envoyer l'événement indiquant l'arrivée de données en XML
+        // Envoyer l'evenement indiquant l'arrivee de donnees en XML
         dispatchEvent({target:this, type:"xml", donnees:donneesXML});
+        //super.onXML(donneesXML);
     }
 
     /**
-     * Cette fonction va être appelée lorsque la connexion va être perdue.
+     * Cette fonction va etre appelee lorsque la connexion va etre perdue.
      */
     private function dispatchOnClose()
     {
-        // Envoyer l'événement indiquant la fin de la connexion avec le serveur
+        // Envoyer l'evenement indiquant la fin de la connexion avec le serveur
         dispatchEvent({target:this, type:"close"});
     }
 }
