@@ -87,6 +87,12 @@ public final class GenerateurPartie
 		// contiennent des objets utilisables
 		ArrayList<Point> lstPointsObjetsUtilisables = new ArrayList<Point>();
 		
+		// Déclaration d'une liste de points contenant les points de start
+		ArrayList<Point> lstPointsStart = new ArrayList<Point>();
+		
+		// Déclaration d'une liste de points contenant les points de finish
+		ArrayList<Point> lstPointsEnd = new ArrayList<Point>();
+		
 				
 		// Déclaration d'un compteur de cases
 		int intCompteurCases = 0;
@@ -96,7 +102,8 @@ public final class GenerateurPartie
         
 		// Déclaration d'une case dont le type est -1 (ça n'existe pas) qui
 		// va nous servir pour identifier les cases qui ont été passées
-		CaseCouleur objCaseParcourue = new CaseCouleur(1);
+		CaseCouleur objCaseParcourue = new CaseCouleur(-1);
+		//System.out.println(objCaseParcourue.obtenirTypeCase());
 		
 		// Modifier le temps pour qu'il soit au moins le minimum de minutes
 		temps = Math.max(temps, reglesPartie.obtenirTempsMinimal());
@@ -145,10 +152,11 @@ public final class GenerateurPartie
 		// mis par défaut dans chaque élément)
 		Case[][] objttPlateauJeu = new Case[intNbLines][intNbColumns];	
 		
+		// if game type = tournament (plateau semilineaire)
 		if (gameType.equals("Tournament"))
 		{
 		   // we build table of game with the houls for the borders
-		   intCompteurCases = boardCreation(objRandom, reglesPartie.getNbTracks(), lstPointsCasesPresentes, 
+		   intCompteurCases = boardCreation(objRandom, reglesPartie.getNbTracks(), reglesPartie, lstPointsCasesPresentes, 
 				   intCompteurCases, objCaseParcourue, intNbColumns, intNbLines, 
 				   intNbTrous ,objttPlateauJeu);
 		   // fill list with points for finish
@@ -162,7 +170,7 @@ public final class GenerateurPartie
 					lstPointsCasesCouleur, intCompteurCases, intNbCasesSpeciales,
 					objttPlateauJeu);
 			
-		//if gametype = mathenjeu			
+		//else if gametype = mathenjeu			
 		}else{ 
 			
 		   intCompteurCases = 1;	
@@ -455,11 +463,34 @@ public final class GenerateurPartie
 		// Indiquer quel a été le dernier id des objets
 		objDernierIdObjets = intCompteurIdObjet;
 		
+		// if game type = tournament (plateau semilineaire)
+		// add the start points
+		if (gameType.equals("Tournament"))
+		{
+            Iterator objIterateurListePriorite = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
+							
+			for (int i = 0; i < reglesPartie.getNbTracks(); i++)
+			{
+				ReglesCaseCouleur objReglesCaseCouleur = (ReglesCaseCouleur) objIterateurListePriorite.next();
+				objPoint = new Point(0,i);
+				objttPlateauJeu[objPoint.x][objPoint.y] = new CaseCouleur(objReglesCaseCouleur.obtenirTypeCase());
+				lstPointsCaseLibre.add(objPoint);
+			}
+			Iterator objIterateurListePrioriteii = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
+			for (int i = 0; i < reglesPartie.getNbTracks(); i++)
+			{
+				ReglesCaseCouleur objReglesCaseCouleur = (ReglesCaseCouleur) objIterateurListePrioriteii.next();
+				objPoint = new Point(intNbLines - 1,intNbColumns - i - 1);
+				objttPlateauJeu[objPoint.x][objPoint.y] = new CaseCouleur(objReglesCaseCouleur.obtenirTypeCase());
+				lstPointsCaseLibre.add(objPoint);
+			}
+		}
+		
 		return objttPlateauJeu;
     }
 
     /**
-     * Method
+     * Method for "mathenjeu" game board
      * @param reglesPartie
      * @param objRandom
      * @param lstPointsCasesPresentes
@@ -603,7 +634,9 @@ public final class GenerateurPartie
 			ArrayList<Point> lstPointsCasesSpeciales,
 			ArrayList<Point> lstPointsCasesCouleur, int intCompteurCases,
 			int intNbCasesSpeciales, Case[][] objttPlateauJeu) {
+		
 		Point objPoint;
+		
 		// Si on doit afficher des cases spéciales dans le plateau de jeu, 
 		// alors on fait le code suivant
 		if (reglesPartie.obtenirListeCasesSpecialesPossibles().size() > 0)
@@ -669,7 +702,13 @@ public final class GenerateurPartie
 			// le pourcentage de cases spéciales devant se trouver sur le plateau 
 			// de jeu. Si on atteint la fin de la liste de cases de couleur, on 
 			// recommence depuis le début
-			while (intCompteurCasesCouleur < intCompteurCases - intNbCasesSpeciales - max_nb_players)
+			System.out.println(intCompteurCasesCouleur);
+			System.out.println(intCompteurCases);
+			System.out.println(intNbCasesSpeciales);
+			System.out.println(reglesPartie.getNbTracks());
+			System.out.println(lstPointsCasesPresentes.size());
+			
+			while (intCompteurCasesCouleur < intCompteurCases - intNbCasesSpeciales - reglesPartie.getNbTracks()*3)
 			{
 				
 				// Faire la référence vers la règle de la case de couleur 
@@ -722,7 +761,7 @@ public final class GenerateurPartie
      * @param objttPlateauJeu
      * @return
      */
-	private static int boardCreation(Random objRandom,int nbTracks,
+	private static int boardCreation(Random objRandom, int nbTracks, Regles reglesPartie,
 			ArrayList<Point> lstPointsCasesPresentes, int intCompteurCases,
 			CaseCouleur objCaseParcourue, int intNbColonnes, int intNbLignes,
 			int intNbTrous, Case[][] objttPlateauJeu) {
@@ -760,7 +799,18 @@ public final class GenerateurPartie
 			   lstPointsCasesPresentes.add(objPoint);
 		    }
 		}
-				
+		
+		for (int i = 0; i < reglesPartie.getNbTracks(); i++)
+		{
+			objPoint = new Point(0,i);
+			lstPointsCasesPresentes.remove(objPoint);
+		}
+		for (int i = 0; i < reglesPartie.getNbTracks(); i++)
+		{
+			objPoint = new Point(intNbLignes - 1 ,intNbColonnes - i - 1);
+			lstPointsCasesPresentes.remove(objPoint);
+		}
+		
 		return intCompteurCases;
 	}// end method
 
