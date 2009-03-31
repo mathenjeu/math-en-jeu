@@ -573,27 +573,27 @@ class QuestionController extends Zend_Controller_Action {
                         else if ($request->getPost('prev') != null) {
                                 $row_number = $this->lookupFilteredQuestionIndex($question_id, $language_id);
                                 $n = max(0, $row_number-1);
-                                $row = $session->filteredQuestions[$n];
-                                $question_id = $row['question_id'];
-                                $language_id = $row['language_id'];
+                                $question = $session->filteredQuestions[$n];
+                                $question_id = $question['question_id'];
+                                $language_id = $question['language_id'];
                         }                        
                         else if ($request->getPost('next') != null) {
                                 $row_number = $this->lookupFilteredQuestionIndex($question_id, $language_id);
                                 $n = min(count($session->filteredQuestions)-1, $row_number+1);
-                                $row = $session->filteredQuestions[$n];
-                                $question_id = $row['question_id'];
-                                $language_id = $row['language_id'];
+                                $question = $session->filteredQuestions[$n];
+                                $question_id = $question['question_id'];
+                                $language_id = $question['language_id'];
                         }
                         else if ($request->getPost('first') != null) {
-                                $row = $session->filteredQuestions[0];
-                                $question_id = $row['question_id'];
-                                $language_id = $row['language_id'];
+                                $question = $session->filteredQuestions[0];
+                                $question_id = $question['question_id'];
+                                $language_id = $question['language_id'];
                         }
                         else if ($request->getPost('last') != null) {
                                 $n = count($session->filteredQuestions)-1;
-                                $row = $session->filteredQuestions[$n];
-                                $question_id = $row['question_id'];
-                                $language_id = $row['language_id'];
+                                $question = $session->filteredQuestions[$n];
+                                $question_id = $question['question_id'];
+                                $language_id = $question['language_id'];
                         }
 
                 }
@@ -671,7 +671,7 @@ class QuestionController extends Zend_Controller_Action {
 
                 //The information should only be gathered if a button has been pressed.
                 if (!$request->isPost()) return;
-
+                $question = array();
                 //Read in the question information
                 $question['question_id'] = $request->getPost('question_id'); //this could be null
                 $question['language_id'] = $request->getPost('language_id');
@@ -692,10 +692,10 @@ class QuestionController extends Zend_Controller_Action {
                 //   and an additional parameter called 'rightAnswer' is also defined.
                 //In all cases 'answer_id' may or may not be defined.
                 $answers = $request->getPost('answers');
-                if ($request->getPost('rightAnswer') != null) {
+                if ($question['answer_type_id'] == 1) {
                         $right_answer = $request->getPost('rightAnswer');
                         foreach(array_keys($answers) as $index)
-                                if ($index == $right_answer)
+                                if ($right_answer != null && $index == $right_answer)
                                         $answers[$index]['is_right'] = 1;
                                 else
                                         $answers[$index]['is_right'] = 0;
@@ -1069,14 +1069,14 @@ class QuestionController extends Zend_Controller_Action {
                         $question = $questionRow->toArray();
                         $questionInfoRow = $questionRow->findQuestionInfo($questionTable->select()->where("language_id=$language_id"))->current();
                         if ($questionInfoRow != null) {
-                                $question['question_id'] = $questionInfoRow['question_id'];
-                                $question['language_id'] = $questionInfoRow['language_id'];
-                                $question['answer_type_id'] = $questionRow['answer_type_id'];
-                                $question['question_latex'] = $questionInfoRow['question_latex'];
-                                $question['question_flash_file'] = $questionInfoRow['question_flash_file'];
-                                $question['feedback_latex'] = $questionInfoRow['feedback_latex'];
-                                $question['feedback_flash_file'] = $questionInfoRow['feedback_flash_file'];
-                                $question['is_valid'] = $questionInfoRow['is_valid'];
+                                $question['question_id'] = $questionInfoRow->question_id;
+                                $question['language_id'] = $questionInfoRow->language_id;
+                                $question['answer_type_id'] = $questionRow->answer_type_id;
+                                $question['question_latex'] = $questionInfoRow->question_latex;
+                                $question['question_flash_file'] = $questionInfoRow->question_flash_file;
+                                $question['feedback_latex'] = $questionInfoRow->feedback_latex;
+                                $question['feedback_flash_file'] = $questionInfoRow->feedback_flash_file;
+                                $question['is_valid'] = $questionInfoRow->is_valid;
                                 $commentRowSet = $questionInfoRow->findComment();
                                 $question['comment'] = array();
                                 foreach ($commentRowSet as $comment)
@@ -1098,25 +1098,25 @@ class QuestionController extends Zend_Controller_Action {
                 $answers=array();
                 $answerTable = new Answer();
                 $answerInfoTable = new AnswerInfo();
-                switch($questionRow['answer_type_id']) {
+                switch($questionRow->answer_type_id) {
                   case 1: //Multiple choices
                     $answerRowSet = $answerTable->fetchAll("question_id=$question_id");
                     foreach($answerRowSet as $answerRow) {
                             $answerInfoRow = $answerRow->findAnswerInfo($answerTable->select()->where("language_id=$language_id"))->current();
-                            $answers[] = array('answer_id'=>$answerRow['answer_id'],
-                                               'label'=>$answerRow['label'],
-                                               'is_right'=>$answerRow['is_right'],
-                                               'answer_latex'=>$answerInfoRow['answer_latex'],
-                                               'answer_flash_file'=>$answerInfoRow['answer_flash_file']);
+                            $answers[] = array('answer_id'=>$answerRow->answer_id,
+                                               'label'=>$answerRow->label,
+                                               'is_right'=>$answerRow->is_right,
+                                               'answer_latex'=>$answerInfoRow->answer_latex,
+                                               'answer_flash_file'=>$answerInfoRow->answer_flash_file);
                     }
                     break;
                   case 2: //True/false
                     $answerRow = $answerTable->fetchRow("question_id=$question_id");
                     if ($answerRow != null)
-                            $answers[] = array('answer_id'=>$answerRow['answer_id'],
+                            $answers[] = array('answer_id'=>$answerRow->answer_id,
                                                'label'=>"",
-                                               'is_right'=>$answerRow['is_right'],
-                                               'answer_latex'=>$this->generateTFAnswer($language_id, $answerRow['is_right']),
+                                               'is_right'=>$answerRow->is_right,
+                                               'answer_latex'=>$this->generateTFAnswer($language_id, $answerRow->is_right),
                                                'answer_flash_file'=>"");
                     break;
                   case 3: //Short answer
@@ -1127,11 +1127,11 @@ class QuestionController extends Zend_Controller_Action {
                       ->where("language_id=$language_id");
                     $answerInfoRow = $answerInfoTable->fetchRow($query);
                     if ($answerInfoRow != null) {
-                            $answers[] = array('answer_id'=>$answerInfoRow['answer_id'],
+                            $answers[] = array('answer_id'=>$answerInfoRow->answer_id,
                                                'label'=>"",
                                                'is_right'=>1,
-                                               'answer_latex'=>$answerInfoRow['answer_latex'],
-                                               'answer_flash_file'=>$answerInfoRow['answer_flash_file']);
+                                               'answer_latex'=>$answerInfoRow->answer_latex,
+                                               'answer_flash_file'=>$answerInfoRow->answer_flash_file);
                     }
                     break;
                 }
@@ -1146,8 +1146,8 @@ class QuestionController extends Zend_Controller_Action {
                 $levels = array();
                 if ($questionRow != null) {
                         $questionLevelRowSet = $questionRow->findQuestionLevel();
-                        foreach ($questionLevelRowSet as $ql)
-                                $levels[$ql['level_id']] = $ql['value'];
+                        foreach ($questionLevelRowSet as $qlRow)
+                                $levels[$qlRow->level_id] = $qlRow->value;
                 }
                 return $levels;
         }
