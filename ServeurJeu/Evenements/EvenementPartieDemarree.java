@@ -132,6 +132,7 @@ public class EvenementPartieDemarree extends Evenement
                                     objNoeudParametrePositionWinTheGame.setAttribute("type", "positionWinTheGame");
                                     objNoeudParametrePositionWinTheGame.setAttribute("x", Integer.toString(table.obtenirPositionWinTheGame().x));
                                     objNoeudParametrePositionWinTheGame.setAttribute("y", Integer.toString(table.obtenirPositionWinTheGame().y));
+                                    objNoeudParametrePositionWinTheGame.setAttribute("tracks", Integer.toString(table.getObjSalle().getRegles().getNbTracks()));
                                     objNoeudParametrePositionWinTheGame.setAttribute("pointageRequis", Integer.toString(table.pointageRequisPourAllerSurLeWinTheGame()));
                                     objNoeudCommande.appendChild(objNoeudParametrePositionWinTheGame);
                                 }
