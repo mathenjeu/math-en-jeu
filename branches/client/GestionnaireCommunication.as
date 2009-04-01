@@ -673,6 +673,7 @@ class GestionnaireCommunication
 		// garder en memoire la position du win the game
 		var xWinGame:Number;
 		var yWinGame:Number;
+		var nbTracks:Number;
 		/*
 		for(var j:Number = 0; j<lstChildNodes.length; j++)
 		{
@@ -882,6 +883,7 @@ class GestionnaireCommunication
 				
 		    	else if(noeudEvenement.attributes.nom == "PartieTerminee")
 			    {
+					setInterval(30000);
 				   	//trace("if = partieTerminee,  avant le switch : "+strNomType);
 					trace(noeudEvenement.firstChild);
 	
@@ -944,10 +946,12 @@ class GestionnaireCommunication
                     case "positionWinTheGame":
 						xWinGame = lstChildNodes[i].attributes.x;
 						yWinGame = lstChildNodes[i].attributes.y;
+						nbTracks = lstChildNodes[i].attributes.tracks;
 						_level0.loader.contentHolder.objGestionnaireEvenements.setPointageMinimalWinTheGame(lstChildNodes[i].attributes.pointageRequis);
 						
 						trace("xWinGame : " + xWinGame);
 						trace("yWinGame : " + yWinGame);
+						trace("nbTracks : " + nbTracks);
 						trace("PointageRequis : " + lstChildNodes[i].attributes.pointageRequis);
 					break;
 					
@@ -1011,12 +1015,20 @@ class GestionnaireCommunication
                         {
                             // Declaration d'une variable qui va contenir la
                             // valeur a mettre dans la case
-                            var intValeurCase:Number = Number(lstChildNodesCase[j].attributes.type);
+                            
+							//Begin with the points for finish
+							var intValeurCase:Number = Number(lstChildNodesCase[j].attributes.type);
+							var isWin:Boolean = false
+							for(var i:Number = 0; i < nbTracks; i++)
+							{
+								if((xWinGame == lstChildNodesCase[j].attributes.x )&& (yWinGame - i == lstChildNodesCase[j].attributes.y))
+								isWin = true;
+							}
 							
 							//si la case contient le winTheGame, alors on ajoute 40 000 a la valeur de sa case.
-							if(xWinGame == lstChildNodesCase[j].attributes.x && yWinGame == lstChildNodesCase[j].attributes.y)
+							if(isWin)							
 							{
-								intValeurCase += 41000;
+								intValeurCase += 41001;
 							}
 							
                             // Si la case courante est une case speciale, alors
