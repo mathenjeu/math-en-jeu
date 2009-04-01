@@ -468,18 +468,18 @@ public final class GenerateurPartie
 		if (gameType.equals("Tournament"))
 		{
             Iterator objIterateurListePriorite = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
-							
+			ReglesCaseCouleur objReglesCaseCouleur = (ReglesCaseCouleur) objIterateurListePriorite.next();				
 			for (int i = 0; i < reglesPartie.getNbTracks(); i++)
 			{
-				ReglesCaseCouleur objReglesCaseCouleur = (ReglesCaseCouleur) objIterateurListePriorite.next();
+
 				objPoint = new Point(0,i);
 				objttPlateauJeu[objPoint.x][objPoint.y] = new CaseCouleur(objReglesCaseCouleur.obtenirTypeCase());
 				lstPointsCaseLibre.add(objPoint);
 			}
-			Iterator objIterateurListePrioriteii = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
+			
 			for (int i = 0; i < reglesPartie.getNbTracks(); i++)
 			{
-				ReglesCaseCouleur objReglesCaseCouleur = (ReglesCaseCouleur) objIterateurListePrioriteii.next();
+				
 				objPoint = new Point(intNbLines - 1,intNbColumns - i - 1);
 				objttPlateauJeu[objPoint.x][objPoint.y] = new CaseCouleur(objReglesCaseCouleur.obtenirTypeCase());
 				lstPointsCaseLibre.add(objPoint);
