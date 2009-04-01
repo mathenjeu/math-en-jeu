@@ -13,6 +13,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
+
+import java.util.Timer;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.Map;
@@ -1721,11 +1723,27 @@ public class ProtocoleJoueur implements Runnable
 						// noeuds spécifiques au succès de la réponse
 						if (objRetour.deplacementEstAccepte() == true)
     					{
-                            // On vérifie d'abord si le joueur a atteint le WinTheGame;
+							// On vérifie d'abord si le joueur a atteint le WinTheGame;
+							boolean isWinTheGame = false;
+							int tracks = objJoueurHumain.obtenirSalleCourante().getRegles().getNbTracks();
+							Point  objPoint = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirPositionWinTheGame();
+							Point objPointFinish = new Point();
+							
+							for(int i = 0; i < tracks; i++ )
+							{
+								objPointFinish.setLocation(objPoint.x, objPoint.y - i);
+								if(objRetour.obtenirNouvellePosition().equals(objPointFinish))
+										isWinTheGame = true;
+								System.out.println(isWinTheGame + " " + i);
+								System.out.println(objPointFinish.toString());
+							}
+							
+							
+                           
                             // Si c'est le cas, on arrète la partie
-                            if(this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().getObjSalle().getGameType().equals("Tournament") && objRetour.obtenirNouvellePosition().equals(this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirPositionWinTheGame()))
+                            if(objJoueurHumain.obtenirSalleCourante().getGameType().equals("Tournament") && isWinTheGame)
                             {
-                                this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().arreterPartie(this.obtenirJoueurHumain().obtenirNomUtilisateur());
+                            	objJoueurHumain.obtenirPartieCourante().obtenirTable().arreterPartie(objJoueurHumain.obtenirNomUtilisateur());
                             }
                             else
                             {
