@@ -192,7 +192,7 @@ public class Espion implements Runnable{
 		
 		
 		// Déclaration d'un objet qui contiendra une référence vers la liste des salles
-		TreeMap lstSalles = objControleurJeu.obtenirListeSalles("", "");
+		TreeMap lstSalles = objControleurJeu.obtenirListeSalles("");
 		
 	    // Déclaration d'un objet qui contiendra une référence vers la liste des tables
 	    // pour une certaine salle
