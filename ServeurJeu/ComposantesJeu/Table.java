@@ -622,8 +622,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			}
 			
 			// Déterminer combien de joueurs on veut
-			intNombreJoueursVirtuels = 4 - lstJoueursEnAttente.size();
-			if (intNombreJoueursVirtuels < 0 || intNombreJoueursVirtuels >= 6)
+			intNombreJoueursVirtuels = MAX_NB_PLAYERS - lstJoueursEnAttente.size();
+			if (intNombreJoueursVirtuels < 0 || intNombreJoueursVirtuels >= MAX_NB_PLAYERS)
 			{
 				intNombreJoueursVirtuels = 0;
 			}
