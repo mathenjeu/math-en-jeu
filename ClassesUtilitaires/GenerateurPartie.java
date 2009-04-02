@@ -702,12 +702,7 @@ public final class GenerateurPartie
 			// le pourcentage de cases spéciales devant se trouver sur le plateau 
 			// de jeu. Si on atteint la fin de la liste de cases de couleur, on 
 			// recommence depuis le début
-			System.out.println(intCompteurCasesCouleur);
-			System.out.println(intCompteurCases);
-			System.out.println(intNbCasesSpeciales);
-			System.out.println(reglesPartie.getNbTracks());
-			System.out.println(lstPointsCasesPresentes.size());
-			
+						
 			while (intCompteurCasesCouleur < intCompteurCases - intNbCasesSpeciales - reglesPartie.getNbTracks()*3)
 			{
 				
