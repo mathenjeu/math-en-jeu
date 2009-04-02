@@ -435,7 +435,7 @@ public class ControleurJeu
 	 * 				l'ajout et/ou au retrait d'une salle, car ça ne peut pas
 	 * 				se produire.
 	 */
-	public TreeMap obtenirListeSalles(String language, String gameType)
+	public TreeMap obtenirListeSalles(String language)
 	{
 		
 	        // On crée une liste de salles vide, et on parcourt toutes les salles connues

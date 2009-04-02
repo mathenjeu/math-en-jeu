@@ -730,38 +730,38 @@ public class Salle
 	{
 		return !(strPassword == null || strPassword.equals(""));
 	}
-        
-               
-        public String getGameType()
-        {
-            return gameType;
-        }
 
-	
-		public void setRoomDescription(String roomDescription) {
-			this.roomDescription = roomDescription;
-		}
 
-		// return room description
-		public String getRoomDescription(String lang) {
-			if(lang.equals(""))
-				return roomDescription;
-			
-			boolean exist = false; 
-			for(int i = 0; i < roomDescription.length(); i++)
-			{
-				if(roomDescription.charAt(i) == '/')
-					exist = true;
-			}
-		
-			if(exist)
-			{
-			   StringTokenizer descRoom = new StringTokenizer(roomDescription, "/");
-			   String descFr = descRoom.nextToken().trim();
-			   String descEng = descRoom.nextToken().trim();
-			   return lang.equalsIgnoreCase("fr")? descFr : descEng;
-			}
+	public String getGameType()
+	{
+		return gameType;
+	}
+
+
+	public void setRoomDescription(String roomDescription) {
+		this.roomDescription = roomDescription;
+	}
+
+	// return room description
+	public String getRoomDescription(String lang) {
+		if(lang.equals(""))
 			return roomDescription;
+
+		boolean exist = false; 
+		for(int i = 0; i < roomDescription.length(); i++)
+		{
+			if(roomDescription.charAt(i) == '/')
+				exist = true;
 		}
+
+		if(exist)
+		{
+			StringTokenizer descRoom = new StringTokenizer(roomDescription, "/");
+			String descFr = descRoom.nextToken().trim();
+			String descEng = descRoom.nextToken().trim();
+			return lang.equalsIgnoreCase("fr")? descFr : descEng;
+		}
+		return roomDescription;
+	}
 
 }// end class 

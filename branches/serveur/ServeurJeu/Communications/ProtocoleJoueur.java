@@ -13,8 +13,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
-
-import java.util.Timer;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.Map;
@@ -105,7 +103,7 @@ public class ProtocoleJoueur implements Runnable
     public String langue;
 
     // Type de jeu (ex. mathEnJeu)
-    public String gameType;
+    //public String gameType;
 
 	// Déclaration d'une variable qui va permettre de savoir si le joueur
 	// en en train de joueur une partie ou non. Cet état sera utile car on
@@ -719,7 +717,7 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudParametreListeSalles.setAttribute("type", "ListeNomSalles");
 
 						// Obtenir la liste des salles du serveur de jeu
-						TreeMap lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue, this.gameType);
+						TreeMap lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue);
 
 						// Générer un nouveau numéro de commande qui sera 
 						// retourné au client
@@ -762,6 +760,9 @@ public class ProtocoleJoueur implements Runnable
 							
 							//Add room description to the node
 							objNoeudSalle.setAttribute("descriptions", objSalle.getRoomDescription(this.langue));
+							
+							//Add max numbers of players of that room
+							objNoeudSalle.setAttribute("maxnbplayers", Integer.toString(objSalle.getRegles().getMaxNbPlayers()));
 							
 							
 							if(tournamentActive.equals("TournamentActive"))
@@ -1049,7 +1050,6 @@ public class ProtocoleJoueur implements Runnable
 								// Créer une référence vers la table courante dans la liste
 								Table objTable = (Table)(((Map.Entry)(objIterateurListeTables.next())).getValue());
 
-								System.out.println(objTable.obtenirNoTable());
 								/*
 								// Obtenir la liste des joueurs se trouvant dans la 
 								// table courante
@@ -1734,13 +1734,11 @@ public class ProtocoleJoueur implements Runnable
 								objPointFinish.setLocation(objPoint.x, objPoint.y - i);
 								if(objRetour.obtenirNouvellePosition().equals(objPointFinish))
 										isWinTheGame = true;
-								System.out.println(isWinTheGame + " " + i);
-								System.out.println(objPointFinish.toString());
+								//System.out.println(isWinTheGame + " " + i);
+								//System.out.println(objPointFinish.toString());
 							}
 							
-							
-                           
-                            // Si c'est le cas, on arrète la partie
+			                // est si c'est le cas, on arrète la partie
                             if(objJoueurHumain.obtenirSalleCourante().getGameType().equals("Tournament") && isWinTheGame)
                             {
                             	objJoueurHumain.obtenirPartieCourante().obtenirTable().arreterPartie(objJoueurHumain.obtenirNomUtilisateur());
