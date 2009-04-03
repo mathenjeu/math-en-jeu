@@ -527,7 +527,7 @@ class GestionnaireCommunication
                 // On changer la commande en cours de traitement, envoyer la
                 // commande au serveur et demarrer le timer
                 objCommandeEnTraitement = objCommande;
-                trace("Commande to server: "+ExtendedString.correctAmperstand(objCommande.objetXML.toString()));
+                //trace("Commande to server: "+ExtendedString.correctAmperstand(objCommande.objetXML.toString()));
                 objSocketClient.send(ExtendedString.correctAmperstand(objCommande.objetXML.toString()));
                 objTimerEnvoiCommandes.demarrer();
             }
@@ -2657,7 +2657,13 @@ class GestionnaireCommunication
             {
                 // Ajouter l'objet salle dans le tableau
                 objEvenement.listeNomSalles.push({nom:lstChildNodes[i].attributes.nom,
-                    possedeMotDePasse:Boolean(lstChildNodes[i].attributes.protegee == "true"),descriptions:lstChildNodes[i].attributes.descriptions});
+                    possedeMotDePasse:Boolean(lstChildNodes[i].attributes.protegee == "true"),
+                    descriptions:lstChildNodes[i].attributes.descriptions, 
+                    maxnbplayers:lstChildNodes[i].attributes.maxnbplayers});
+                /*trace(lstChildNodes[i].attributes.nom+"  "+
+                    (lstChildNodes[i].attributes.protegee == "true")+"  "+
+                    lstChildNodes[i].attributes.descriptions+"  "+
+                    lstChildNodes[i].attributes.maxnbplayers);*/
 								  
             }
 			
