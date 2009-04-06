@@ -43,6 +43,7 @@ class GestionnaireEvenements
     private var listeDesDescriptionsSalles:Array; //liste des descriptions des salles 
 	private var activ:Boolean;                     // if game has type Tournament and the room is active
 	private var listeDesSalles:Array;    //  liste de toutes les salles
+	private var listeNumeroJoueursSalles:Array;		//liste de numero de joueurs dans chaque salle
 	private var listeChansons:Array;    //  liste de toutes les chansons
     private var listeDesJoueursConnectes:Array;   // la premiere liste qu'on recoit, tous les joueurs dans toutes les salles. Un joueur contient un nom (nom)
     //  liste de toutes les tables dans la salle ou on est
@@ -117,6 +118,7 @@ class GestionnaireEvenements
         this.motDePasseSalle = new String();
         this.listeDesSalles = new Array();
 		this.listeDesDescriptionsSalles = new Array();
+		this.listeNumeroJoueursSalles = new Array();
         this.listeDesTables = new Array();
 		this.listeChansons = new Array();
         this.listeDesJoueursConnectes = new Array();
@@ -269,8 +271,8 @@ class GestionnaireEvenements
         trace("debut de demarrerPartie     "+no);
 	
         this.idPersonnage = no;
-        this.listeDesPersonnages[3].id = no;
-        this.listeDesPersonnages[3].nom = this.nomUtilisateur;
+        this.listeDesPersonnages[3].id = no; //nbmaxJoueurs-1].id = no;
+        this.listeDesPersonnages[3].nom = this.nomUtilisateur;//nbmaxJoueurs-1].nom = this.nomUtilisateur;//
         this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementPartieTerminee), no);  
 	
 		trace("fin de demarrerPartie");
@@ -534,11 +536,15 @@ class GestionnaireEvenements
 					*/
 					this.listeDesSalles.push(objetEvenement.listeNomSalles[i]);
 					_level0.loader.contentHolder.listeSalle.addItem(this.listeDesSalles[i].nom );
-					trace("salle " + i + " : " + this.listeDesSalles[i].nom );
+					trace("salle " + i + " : " + this.listeDesSalles[i].nom);
 					
 					this.listeDesDescriptionsSalles.push(objetEvenement.listeDescrSalles[i]);
 					_level0.loader.contentHolder.listeDescr.push(this.listeDesDescriptionsSalles[i].descriptions );
 					trace("salle " + i + " : " + this.listeDesDescriptionsSalles[i].descriptions );
+					
+					this.listeNumeroJoueursSalles.push(objetEvenement.listeNumberoJSalles[i]);
+					_level0.loader.contentHolder.listeNumeroJSalles.push(this.listeNumeroJoueursSalles[i].maxnbplayers );
+					trace("salle " + i + " : " + objetEvenement.listeNumberoJSalles[i].maxnbplayers);//this.listeNumeroJoueursSalles[i].maxnbplayers );
 					
 				}
 				for (var i:Number = 0; i < objetEvenement.listeNomSalles.length; i++)
@@ -1720,9 +1726,10 @@ class GestionnaireEvenements
     	}
     	if(objetEvenement.noTable == this.numeroTable)
     	{
-            for(i = 0; i < 3; i++)
+            for(i = 0; i < 3; i++)//nbmaxJoueurs
             {
                 if(listeDesPersonnages[i].nom == "Inconnu" || listeDesPersonnages[i].nom == "Inconnu1" || listeDesPersonnages[i].nom == "Inconnu2" || listeDesPersonnages[i].nom == "Inconnu3")
+                //isInconnu=(isInconnu||)listeDesPersonnages[i].nom == "Inconnu"????;
                 {
                     listeDesPersonnages[i].nom = objetEvenement.nomUtilisateur;
                     _level0.loader.contentHolder.nomJ1 = listeDesPersonnages[0].nom;
@@ -1748,7 +1755,7 @@ class GestionnaireEvenements
         	}
         	// enlever la table de la liste si elle est pleine
 			// a modifier si on est moins de 4
-        	if(this.listeDesTables[indice].listeJoueurs.length == 4)
+        	if(this.listeDesTables[indice].listeJoueurs.length == 4)//nbmaxJoueurs
         	{
             	for(i;i<this.listeDesTables.length;i++)
             	{
@@ -1787,7 +1794,7 @@ class GestionnaireEvenements
     	// si la table est la notre (on choisit nos perso frame 3)
     	if(objetEvenement.noTable == this.numeroTable)
     	{
-        	for(i = 0; i < 3; i++)
+        	for(i = 0; i < 3; i++)//nbmaxJoueurs
         	{
             	//  on enleve le nom du joueur dans la liste et a l'ecran
             	if(listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur)
@@ -1902,7 +1909,7 @@ class GestionnaireEvenements
 
 		// put the face of my avatar in the panel (next to my name)
 		_level0.loader.contentHolder.myObj=new Object();
-		_level0.loader.contentHolder.myObj.myID=this.listeDesPersonnages[3].id;
+		_level0.loader.contentHolder.myObj.myID=this.listeDesPersonnages[3].id;//nbmaxJoueurs
 		_level0.loader.contentHolder.myObj.myNom=this.listeDesPersonnages[3].nom;
 		
 		var maTete:MovieClip = _level0.loader.contentHolder.maTete.attachMovie("tete"+this.listeDesPersonnages[3].id, "maTete", -10099);
@@ -1915,6 +1922,8 @@ class GestionnaireEvenements
 		// et on met la face de leur avatar a cote de leur nom
 		// Initialise our opponents' name and score
 		// and put the face of our opponents' avatar in the panel (next to their name)
+		
+		//using in win's table
 		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.nomJoueur1 = this.listeDesPersonnages[0].nom;
 		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.pointageJoueur1 = 0;
 		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.idStart=this.listeDesPersonnages[0].id;
@@ -1943,7 +1952,7 @@ class GestionnaireEvenements
 		tete2._xscale = 55;
 		tete2._yscale = 55;
 
-        for(i = 0; i < 4; i++)
+        for(i = 0; i < 4; i++)//nbmaxJoueurs
         {
             if(this.listeDesPersonnages[3].nom == objetEvenement.positionJoueurs[i].nom)
             {
@@ -2034,7 +2043,7 @@ class GestionnaireEvenements
 		var itExist:Boolean;
 		var jouersStarted:Array =new Array();
 		
-		//trace("-------------------------");
+		//trace("-------------------------");nbmaxJoueurs
 		jouersStarted[0] = new Object();
 		jouersStarted[0].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.nomJoueur1;
 		jouersStarted[0].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.pointageJoueur1;
@@ -2082,9 +2091,9 @@ class GestionnaireEvenements
     
     	Mouse.show();
  
-    	while(k <= 3)
+    	while(k <= 3)//nbmaxJoueurs
     	{
-	    	for(i=0; i<=3;i++)
+	    	for(i=0; i<=3;i++)//nbmaxJoueurs
 	    	{
 				if(String(jouersStarted[i].pointage) == "Gagnant" || String(jouersStarted[i].pointage) == "Winner")
 		    	{
@@ -2119,7 +2128,7 @@ class GestionnaireEvenements
     	// a modifier quand il y aura moins de 4 joueurs
     	if(tabOrdonne[0].nom != undefined)
     	{*/
-			_level0.loader.contentHolder.nom1 = tabOrdonne[0].nom;	
+			_level0.loader.contentHolder.nom1 = tabOrdonne[0].nom;	//nbmaxJoueurs
 			_level0.loader.contentHolder.pointage1 = tabOrdonne[0].pointage;/*
     	}
     	else
@@ -2166,7 +2175,7 @@ class GestionnaireEvenements
 		// il suffit de mettre les MC correspondants sur le podium
 		var w:Number = 0;
 		var z:Number = 0;
-		for(w=0;w<=3;w++)
+		for(w=0;w<=3;w++)//nbmaxJoueurs
 		{/*
 			for(z=0;z<=3;z++)
 			{	
@@ -2199,7 +2208,7 @@ class GestionnaireEvenements
 		trace("juste avant la teleportation   nom du perso et param  ");
 		_level0.loader.contentHolder.planche.teleporterPersonnage(objetEvenement.nomUtilisateur, pt_initial.obtenirX(), pt_initial.obtenirY(), pt_final.obtenirX(), pt_final.obtenirY(), objetEvenement.collision);
 	
-		if(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.nomJoueur1 == objetEvenement.nomUtilisateur)
+		if(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.nomJoueur1 == objetEvenement.nomUtilisateur)//nbmaxJoueurs
 		{
 			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.pointageJoueur1 = objetEvenement.pointage;
 			//_level0.loader.contentHolder.argentAdversaire1 = objetEvenement.argent;

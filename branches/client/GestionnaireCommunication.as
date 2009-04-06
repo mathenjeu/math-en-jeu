@@ -2660,10 +2660,6 @@ class GestionnaireCommunication
                     possedeMotDePasse:Boolean(lstChildNodes[i].attributes.protegee == "true"),
                     descriptions:lstChildNodes[i].attributes.descriptions, 
                     maxnbplayers:lstChildNodes[i].attributes.maxnbplayers});
-                /*trace(lstChildNodes[i].attributes.nom+"  "+
-                    (lstChildNodes[i].attributes.protegee == "true")+"  "+
-                    lstChildNodes[i].attributes.descriptions+"  "+
-                    lstChildNodes[i].attributes.maxnbplayers);*/
 								  
             }
 			
@@ -2681,6 +2677,17 @@ class GestionnaireCommunication
 				else if(lstChildNodes[i].attributes.activ == "false")
 				   objEvenement.isActiveRoom = false;
 			}
+			//Creer un tableau listeNumberoJSalles qui va contenir les noumero des joueurs dans salles
+			objEvenement.listeNumberoJSalles = new Array();
+			//
+			for (var i:Number = 0; i < lstChildNodes.length; i++)
+            {
+                // Ajouter le numero de joueurs dans salle dans le tableau
+                objEvenement.listeNumberoJSalles.push({maxnbplayers:lstChildNodes[i].attributes.maxnbplayers});
+				
+			}
+
+
         }
         // Si le retour de la fonction est une reponse positive et non une
         // erreur, alors on peut passer a l'autre etat
