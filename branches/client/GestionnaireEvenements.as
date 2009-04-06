@@ -52,6 +52,7 @@ class GestionnaireEvenements
     private var objGestionnaireCommunication:GestionnaireCommunication;  //  pour caller les fonctions du serveur 
 	private var tabPodiumOrdonneID:Array;			// id des personnages ordonnes par pointage une fois la partie terminee
 	private var pointageMinimalWinTheGame:Number = -1 // pointage minimal a avoir droit d'atteindre le WinTheGame
+	private var numeroJoueursDansSalle:Number=0;
 	
 	function affichageChamps()
 	{
@@ -134,7 +135,12 @@ class GestionnaireEvenements
     	trace("*********************************************\n");
     }
 	
-	
+	function obtenirNumeroJoueurs():Number ///
+	{
+		return this.numeroJoueursDansSalle;
+	}
+    
+    
 	function obtenirTabPodiumOrdonneID():Array
 	{
 		return this.tabPodiumOrdonneID;
@@ -194,6 +200,8 @@ class GestionnaireEvenements
         {
             if(listeDesSalles[i].nom == nSalle)
             {
+	            numeroJoueursDansSalle=listeNumeroJoueursSalles[i].maxnbplayers;
+	            //trace("joueurs dans salle : "+numeroJoueursDansSalle+" <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
                 if(listeDesSalles[i].possedeMotDePasse == true)
                 {
                     this.motDePasseSalle = "";   // afficher une fenetre de demande de mot de passe
@@ -271,8 +279,8 @@ class GestionnaireEvenements
         trace("debut de demarrerPartie     "+no);
 	
         this.idPersonnage = no;
-        this.listeDesPersonnages[3].id = no; //nbmaxJoueurs-1].id = no;
-        this.listeDesPersonnages[3].nom = this.nomUtilisateur;//nbmaxJoueurs-1].nom = this.nomUtilisateur;//
+        this.listeDesPersonnages[numeroJoueursDansSalle-1].id = no;//3].id = no; //
+        this.listeDesPersonnages[numeroJoueursDansSalle-1].nom = this.nomUtilisateur;//3].nom = this.nomUtilisateur;//
         this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementPartieTerminee), no);  
 	
 		trace("fin de demarrerPartie");
