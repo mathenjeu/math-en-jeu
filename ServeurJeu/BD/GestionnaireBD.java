@@ -120,7 +120,7 @@ public class GestionnaireBD
 	}
 	
 	/**
-	 * Cette fonction permet de chercher dans la BD si le joueur dont le nom
+	 * Cette fonction permet de chercher dans la BD si le joueur dont le nom    ***
 	 * d'utilisateur et le mot de passe sont passés en paramètres existe.
 	 * 
 	 * @param String nomUtilisateur : Le nom d'utilisateur du joueur
@@ -176,7 +176,7 @@ public class GestionnaireBD
 	}
 	
 	/**
-	 * Cette fonction permet de chercher dans la BD le joueur et de remplir
+	 * Cette fonction permet de chercher dans la BD le joueur et de remplir  ***
 	 * les champs restants du joueur.
 	 * 
 	 * @param JoueurHumain joueur : Le joueur duquel il faut trouver les
@@ -184,37 +184,69 @@ public class GestionnaireBD
 	 */
 	public void remplirInformationsJoueur(JoueurHumain joueur)
 	{
+		int cle = 0;
+		
 		try
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery("SELECT user.user_id,last_name,name,user_subject_level.*  FROM user,user_subject_level " +
+				ResultSet rs = requete.executeQuery("SELECT user.user_id,last_name,name  FROM user " +
 						" WHERE username = '" + joueur.obtenirNomUtilisateur() + 
-						"' AND user.user_id = user_subject_level.user_id;"); //
+						"';"); //
 				if (rs.next())
 				{
-					
+				
 					String prenom = rs.getString("last_name");
 					String nom = rs.getString("name");
-					int cle = Integer.parseInt(rs.getString("user_id"));
+					cle = Integer.parseInt(rs.getString("user_id"));
 					
 					joueur.definirPrenom(prenom);
 					joueur.definirNomFamille(nom);
 					joueur.definirCleJoueur(cle);
-					
-					// on prend dans BD les niveaux scolaires du joueur en utilisant enum Categories
-					Categories[] catValues = Categories.values();
-					
-					int[] cleNiveau = new int[catValues.length];
-					for(int i = 0; i < catValues.length; i++)
-					{
-						cleNiveau[i] = Integer.parseInt(rs.getString(catValues[i].name()));
-					}
-					
-					joueur.definirCleNiveau(cleNiveau);
-				   
 				}
-				
+			}
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exécution de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_remplir_info_joueur"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();			
+		}
+		
+		// on prend dans BD les niveaux scolaires du joueur en utilisant enum Categories
+		Categories[] catValues = Categories.values();
+		int[] cleNiveau = new int[catValues.length];
+		
+	
+		
+		for(int i = 0; i < catValues.length; i++)
+		{
+			String strRequeteSQL = "SELECT user_subject_level.level  FROM user,user_subject_level " +
+						" WHERE  user_subject_level.user_id = " + cle + 
+						" AND user_subject_level.category_id = " + catValues[i].getCode() + ";"; 
+			
+			cleNiveau[i] = fillLevels(strRequeteSQL);
+			System.out.println(cleNiveau[i]);
+		}  
+		
+		joueur.definirCleNiveau(cleNiveau);
+	}//end methode
+	
+	// This function follows one of the two previous functions. It queries the database and
+    // does the actual filling of the player categories levels
+	private int fillLevels(  String strRequeteSQL )
+	{	int level = 0;
+		try
+		{
+			synchronized( requete )
+			{
+				ResultSet rs = requete.executeQuery( strRequeteSQL );
+				while(rs.next())
+				{
+                   level = Integer.parseInt(rs.getString("level"));
+    			}
 			}
 		}
 		catch (SQLException e)
@@ -225,8 +257,19 @@ public class GestionnaireBD
 			objLogger.error( e.getMessage() );
 		    e.printStackTrace();			
 		}
-		
-	}// fin méthode
+		catch( RuntimeException e)
+		{
+			//Une erreur est survenue lors de la recherche de la prochaine question
+			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();
+		}
+		return level;
+	}// end methode
+        
+  
+	
 
  
 	/** 
@@ -259,19 +302,20 @@ public class GestionnaireBD
      // pour chaque catégorie on prend le niveau scolaire du joueur
         for(int i = 0; i < catValues.length; i++)
 		{
-       	   String strRequeteSQL = "SELECT DISTINCT question_info.*,answer_type.tag,question_level.value,question_level.level_id " +
-           "FROM question_info,answer_type_info,question_level,question,answer_type " +
+       	   String strRequeteSQL = "SELECT DISTINCT answer.label, question.category_id, question_info.question_id, question_info.question_flash_file,question_info.feedback_flash_file, answer_type.tag, question_level.value  " +
+           "FROM question_info, answer_type_info, question_level, question, answer_type, answer " +
            "WHERE  question_info.language_id = " + cleLang +
-           " AND question_info.category_id = " + catScolaires[i] +
-           " AND question_info.question_id = question_level.question_id " +
+           " AND question.category_id = " + catScolaires[i] +
+           " AND question.question_id = question_level.question_id " +
            " AND question_info.question_id = question.question_id " +
-           " AND question_info.category_id = question.category_id " + 
-           " AND answer_type_info.answer_type_id = question.answer_type_id " +
+           " AND answer_type.answer_type_id = question.answer_type_id " +
            " and question_info.is_valid = 1 " +
            " and question_info.question_flash_file is not NULL " +
            " and question_info.feedback_flash_file is not NULL "   +
-           " and question_level.level_id =  " + niveau[i] + 
-           " and question_level.value != 0 ";   
+           " and question_level.level_id = " + niveau[i] + 
+           " and question_level.value != 0 " +
+           " and question.question_id = answer.question_id " +
+           " and answer.is_right = 1 ";   
         
       
 				   
@@ -294,9 +338,11 @@ public class GestionnaireBD
 					int categorie =  Integer.parseInt(rs.getString("category_id"));
 					String typeQuestion = rs.getString( "tag" );
 					String question = rs.getString( "question_flash_file" );
-					String reponse = rs.getString("good_answer");
+					String reponse = rs.getString("label");
 					String explication = rs.getString("feedback_flash_file");
 					int difficulte = Integer.parseInt(rs.getString("value")); 
+					
+					System.out.println(reponse +  difficulte);
 					
                     String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
                    // System.out.println(URL+explication);
@@ -323,7 +369,7 @@ public class GestionnaireBD
 	}// fin méthode
         
   
-  /** This function queries the DB to find the player's musical preferences
+  /** This function queries the DB to find the player's musical preferences  ***
    * and returns a Vector containing URLs of MP3s the player might like
    */
   public Vector obtenirListeURLsMusique(int cleJoueur)
@@ -365,7 +411,7 @@ public class GestionnaireBD
             return liste;
 	}
 	
-  // This method updates a player's information in the DB
+  // This method updates a player's information in the DB  ***
 	public void mettreAJourJoueur( JoueurHumain joueur, int tempsTotal )
 	{
 		try
@@ -402,7 +448,7 @@ public class GestionnaireBD
 	
 	/**
 	 * Cette méthode permet de fermer la connexion de base de données qui 
-	 * est ouverte.
+	 * est ouverte. 
 	 */
 	public void arreterGestionnaireBD()
 	{
@@ -420,7 +466,7 @@ public class GestionnaireBD
 		}
 	}
 	
-	/* Cette fonction permet d'ajouter les information sur une partie dans 
+	/* Cette fonction permet d'ajouter les information sur une partie dans ***
 	 * la base de données dans la table partie. 
 	 *
 	 * Retour: la clé de partie qui servira pour la table partieJoueur
@@ -465,7 +511,7 @@ public class GestionnaireBD
 	}
 
 	/**
-	 * Cette fonction permet d'ajouter les informations sur une partie pour
+	 * Cette fonction permet d'ajouter les informations sur une partie pour  ***
 	 * un joueur dans la table partieJoueur;
 	 *
 	 */
@@ -499,7 +545,7 @@ public class GestionnaireBD
 	}// end methode
 	
 	/**
-	 * Methode used to update in DB the player's money 
+	 * Methode used to update in DB the player's money ****
 	 * @param cleJoueur
 	 * @param newMoney
 	 */
@@ -524,7 +570,7 @@ public class GestionnaireBD
 	}//end methode
 	
 	/**
-	 * Methode used to charge to player's money from DB for current game
+	 * Methode used to charge to player's money from DB for current game ***
 	 * option can be disabled with
 	 * @param userId 
 	 */
@@ -553,11 +599,11 @@ public class GestionnaireBD
 		    e.printStackTrace();			
 		}
 		return money;
-	}
+	}// end methode
 
 
     /**
-     * Méthode utilisé pour charger les salles avec les propriétes 
+     * Méthode utilisé pour charger les salles avec les propriétes  ***
      * et les regles de la salle 
      * @param noeudLangue
      */
@@ -615,10 +661,10 @@ public class GestionnaireBD
 				{
 					ResultSet rs = requete.executeQuery( "SELECT room.password, user.name, game_type.name " +
 							" FROM room_info, room, user, game_type " +
-							" WHERE room.game_type_id = game_type.game_type_id " +
+							" WHERE room.room_id = " + room +  
 							" AND room.room_id = room_info.room_id " +
-							" AND user.user_id = room.user_id " +
-							" AND room.room_id = " + room +  ";" );
+							" AND room.game_type_id = game_type.game_type_id " +
+							" AND user.user_id = room.user_id ;" );
 					if(rs.next())
 					{
 						
@@ -629,13 +675,13 @@ public class GestionnaireBD
 						String roomDescription = fillRoomDescription(room);//rs.getString( "room_info.description" );
 						nom = fillRoomName(room);//nom = rs.getString( "room_info.name" );						
 						
-						System.out.println(nom);
-						System.out.println(roomDescription);
+					//	System.out.println(nom);
+					//	System.out.println(roomDescription);
 						
 						Regles objReglesSalle = new Regles();
 						chargerRegllesSalle(objReglesSalle, room);
 						Salle objSalle = new Salle(nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType);
-						System.out.println(objSalle.toString());
+					//  System.out.println(objSalle.toString());
 						objSalle.setRoomDescription(roomDescription);
 						objControleurJeu.ajouterNouvelleSalle(objSalle);
 					}   
@@ -665,7 +711,7 @@ public class GestionnaireBD
 	
 
  /**
-  * Methode to fill the room name in both languages
+  * Methode to fill the room name in both languages  ***
   * @param room
   * @return
   */
@@ -676,16 +722,16 @@ public class GestionnaireBD
 			synchronized( requete )
 			{
 				ResultSet rs = requete.executeQuery( "SELECT concat(r.name, ' / ',p.name) as room_bilingue " +
-                " FROM (Select room_id, name from room_info where language_id=1) as r, " +
-                "(select room_id, name from room_info where language_id=2) as p " +
-                " where r.room_id=p.room_id AND r.room_id = " + room +
+                " FROM (Select room_id, name from room_info where language_id = 1) as r, " +
+                "(select room_id, name from room_info where language_id = 2) as p " +
+                " where r.room_id = p.room_id AND r.room_id = " + room +
                 " UNION " +
                 " SELECT  name from room_info " +
-                " where room_id not in (Select room_id from room_info where language_id=2) " +
+                " where room_id not in (Select room_id from room_info where language_id = 2) " +
                 " AND room_id = " + room + 
                 " UNION " +
                 " SELECT  name from room_info " +
-                " where room_id not in (Select room_id from room_info where language_id=1) " +
+                " where room_id not in (Select room_id from room_info where language_id = 1) " +
                 " AND room_id = " + room + ";");
 				
 				if(rs.next())
@@ -718,16 +764,16 @@ public class GestionnaireBD
   			synchronized( requete )
   			{
   				ResultSet rs = requete.executeQuery( "SELECT concat(r.description, ' / ',p.description) as room_bilingue " +
-                  " FROM (Select room_id, description from room_info where language_id=1) as r, " +
-                  "(select room_id, description from room_info where language_id=2) as p " +
+                  " FROM (Select room_id, description from room_info where language_id = 1) as r, " +
+                  "(select room_id, description from room_info where language_id = 2) as p " +
                   " where r.room_id = p.room_id AND r.room_id = " + room +
                   " UNION " +
                   " SELECT  description from room_info " +
-                  " where room_id not in (Select room_id from room_info where language_id=2) " +
+                  " where room_id not in (Select room_id from room_info where language_id = 2) " +
                   " AND room_id = " + room + 
                   " UNION " +
                   " SELECT  description from room_info " +
-                  " where room_id not in (Select room_id from room_info where language_id=1) " +
+                  " where room_id not in (Select room_id from room_info where language_id = 1) " +
                   " AND room_id = " + room + ";");
   				
   				if(rs.next())
@@ -748,8 +794,8 @@ public class GestionnaireBD
   		return name;
   	}// end methode
 
-/**
-    * 
+   /**                                  
+    *                                          ***
     * @param objReglesSalle
     * @param roomId
     * @param langId 
@@ -766,7 +812,7 @@ public class GestionnaireBD
 				        " AND rule.rule_id = room.rule_id ;" );
 				while(rs.next())
 				{
-					boolean shownumber = rs.getBoolean("show_nb_question");
+					boolean shownumber = rs.getBoolean("show_nb_questions");
 					boolean tournament =  rs.getBoolean("tournament");
 					boolean chat = rs.getBoolean( "chat" );
 					Float ratioTrous  = Float.parseFloat( rs.getString( "hole_ratio" ));
@@ -829,7 +875,7 @@ public class GestionnaireBD
 	
 	
 	/**
-	 * Méthode utilisée pour charger la liste des objets utilisables
+	 * Méthode utilisée pour charger la liste des objets utilisables  ***
 	 * @param objetsUtilisables 
 	 * @param roomId
 	 * @param langId 
@@ -868,7 +914,7 @@ public class GestionnaireBD
 
 
 	/**
-	 * Méthode utilisée pour charger la liste des cases spéciales 
+	 * Méthode utilisée pour charger la liste des cases spéciales    ***
 	 * @param casesSpeciale 
 	 * @param roomId
 	 */
@@ -904,7 +950,7 @@ public class GestionnaireBD
 
 
 	/**
-     * Méthode utilisée pour charger la liste des cases couleur 
+     * Méthode utilisée pour charger la liste des cases couleur  ***
      * dans les Regles du partie
      * @param casesCouleur 
 	 * @param roomId
@@ -942,7 +988,7 @@ public class GestionnaireBD
 
 
     /**
-     * Méthode utilisée pour charger la liste des magasins dans les Regles du partie
+     * Méthode utilisée pour charger la liste des magasins dans les Regles du partie ***
      * @param magasins 
      * @param roomId
      */
@@ -981,7 +1027,7 @@ public class GestionnaireBD
 
  
     /**
-     * Methode that 
+     * Methode used to charge  
      * @param user's language 
      * @return URL of Questions-Answers on server
      */
@@ -1012,7 +1058,7 @@ public class GestionnaireBD
 
 
 	/**
-	 * Used to control if room has a language
+	 * Used to control if room has a language  ***
 	 * @param salle
 	 * @param language
 	 * @param Boulean
@@ -1048,6 +1094,12 @@ public class GestionnaireBD
 	}//end methode
 
 
+	/**
+	 * Methode used to fill store with objects to sell   ***
+	 * @param nomMagasin
+	 * @param listObjects
+	 */
+	 
 	public void fillShopObjects(String nomMagasin, ArrayList<String> listObjects) {
 		
 		
@@ -1082,7 +1134,7 @@ public class GestionnaireBD
 
 
 	/**
-	 * Methode to determine from DB if is permited to charge money from user's 
+	 * Methode to determine from DB if is permited to charge money from user's  ***
 	 * account in DB
 	 * @param roomName
 	 * @return permit
@@ -1118,7 +1170,7 @@ public class GestionnaireBD
 
 
 	/**
-	 * Return full name (in both languages) by name
+	 * Return full name (in both languages) by name  ***
 	 * @param nomSalle
 	 * @return
 	 */
