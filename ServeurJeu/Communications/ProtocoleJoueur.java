@@ -109,7 +109,12 @@ public class ProtocoleJoueur implements Runnable
 	// en en train de joueur une partie ou non. Cet état sera utile car on
 	// ne déconnectera pas un joeur en train de joueur via le vérification de connexion
 	private boolean bolEnTrainDeJouer;
+	
+	//String with statistics of players answers
+	private StringBuffer questionsAnswers;
 
+
+	
 
 	/**
      * Constructeur de la classe ProtocoleJoueur qui permet de garder une 
@@ -142,6 +147,8 @@ public class ProtocoleJoueur implements Runnable
         bolEnTrainDeJouer = false;
 		objLogger.info( GestionnaireMessages.message("protocole.connexion").replace("$$CLIENT$$", socketJoueur.getInetAddress().toString()));
 
+		questionsAnswers = new StringBuffer();
+		
 		try
 
 		{
@@ -1634,6 +1641,10 @@ public class ProtocoleJoueur implements Runnable
 							objNoeudQuestion.setAttribute("type", objQuestionAPoser.obtenirTypeQuestion().toString());
 							objNoeudQuestion.setAttribute("url", objQuestionAPoser.obtenirURLQuestion());
 
+							
+							//collect players questions for DB
+							collectPlayerAnswers(objQuestionAPoser);
+							
 							// Ajouter le noeud question au noeud paramètre
 							objNoeudParametreQuestion.appendChild(objNoeudQuestion);
 						}
@@ -1646,6 +1657,9 @@ public class ProtocoleJoueur implements Runnable
 				{
 					// Obtenir la réponse du joueur
 					String strReponse = obtenirValeurParametre(objNoeudCommandeEntree, "Reponse").getNodeValue();
+										
+					//collect players answers for DB
+					collectPlayerAnswers(strReponse);
 					
 					// Si le joueur n'est pas connecté au serveur de jeu, alors il
 					// y a une erreur
@@ -2034,8 +2048,6 @@ public class ProtocoleJoueur implements Runnable
 			return null;
 		}
 	}// fin méthode
-
-
 
 	/**
 	 * Cette méthode permet d'envoyer le message passé en paramètre au 
@@ -3702,7 +3714,31 @@ public class ProtocoleJoueur implements Runnable
 	    	}
     	}
     	objNoeudCommande.appendChild(objNoeudObjetsMagasin);
-    }
+    }//end method
+    
+    /*
+     * Methode that collect players answers in a string
+     */
+    private void collectPlayerAnswers(String strReponse) 
+    {
+		questionsAnswers.append(":" + strReponse + ":" + objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().reponseEstValide(strReponse));
+		
+	}// end methode
+
+        
+    /*
+     *Methode that collect players questions in the same string before inserting it in  DB 
+     */
+    private void collectPlayerAnswers(Question question)
+    {
+    	questionsAnswers.append(":" + question.obtenirCodeQuestion());
+    }//end methode
+    
+    // getter 
+    public String getQuestionsAnswers() {
+		return questionsAnswers.toString();
+	}
+
     
 }// end class
 

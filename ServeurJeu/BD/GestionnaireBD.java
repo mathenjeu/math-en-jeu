@@ -515,7 +515,7 @@ public class GestionnaireBD
 	 * un joueur dans la table partieJoueur;
 	 *
 	 */
-	public void ajouterInfosJoueurPartieTerminee(int clePartie, int cleJoueur, int pointage, boolean gagner)
+	public void ajouterInfosJoueurPartieTerminee(int clePartie, JoueurHumain joueur, boolean gagner)
 	{
 		int intGagner = 0;
 		if (gagner == true)
@@ -523,9 +523,13 @@ public class GestionnaireBD
 			intGagner = 1;
 		}
 		
+		int cleJoueur = joueur.obtenirCleJoueur();
+		int pointage = joueur.obtenirPartieCourante().obtenirPointage();
+		String statistics =joueur.obtenirProtocoleJoueur().getQuestionsAnswers();
+		
 		// Création du SQL pour l'ajout
-		String strSQL = "INSERT INTO game_user(game_id, user_id, score, has_won) VALUES " +
-		    "(" + clePartie + "," + cleJoueur + "," + pointage + "," + intGagner + ");"; 
+		String strSQL = "INSERT INTO game_user(game_id, user_id, score, has_won, questions_answers) VALUES " +
+		    "(" + clePartie + "," + cleJoueur + "," + pointage + "," + intGagner + ",'" + statistics + "');"; 
 		
 		try
 		{
@@ -743,7 +747,7 @@ public class GestionnaireBD
 		catch (SQLException e)
 		{
 			// Une erreur est survenue lors de l'exécution de la requète
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_room_name"));
 			objLogger.error(GestionnaireMessages.message("bd.trace"));
 			objLogger.error( e.getMessage() );
 		    e.printStackTrace();			
@@ -785,7 +789,7 @@ public class GestionnaireBD
   		catch (SQLException e)
   		{
   			// Une erreur est survenue lors de l'exécution de la requète
-  			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+  			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_room_description"));
   			objLogger.error(GestionnaireMessages.message("bd.trace"));
   			objLogger.error( e.getMessage() );
   		    e.printStackTrace();			
@@ -854,7 +858,7 @@ public class GestionnaireBD
 		catch (SQLException e)
 		{
 			// Une erreur est survenue lors de l'exécution de la requète
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_rules_charging"));
 			objLogger.error(GestionnaireMessages.message("bd.trace"));
 			objLogger.error( e.getMessage() );
 		    e.printStackTrace();			
@@ -904,7 +908,7 @@ public class GestionnaireBD
   		catch (SQLException e)
   		{
   			// Une erreur est survenue lors de l'exécution de la requète
-  			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+  			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_objects_rules_"));
   			objLogger.error(GestionnaireMessages.message("bd.trace"));
   			objLogger.error( e.getMessage() );
   		    e.printStackTrace();			
