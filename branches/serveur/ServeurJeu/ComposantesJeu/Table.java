@@ -633,7 +633,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Aller chercher les positions de départ pour les joueurs humains et virtuels
         if(getObjSalle().getGameType().equals("Tournament"))
         {
-		   objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels);
+		   objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels, objRegles.getNbTracks());
         }else{
            objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels, lstPointsCaseLibre);	
         }
@@ -870,8 +870,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                                                 }
 						
 						// Ajouter l'information pour cette partie et ce joueur
-						objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur.obtenirCleJoueur(), 
-						    joueur.obtenirPartieCourante().obtenirPointage(), boolGagnant);
+						objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur , boolGagnant);
 						
 						
 					}

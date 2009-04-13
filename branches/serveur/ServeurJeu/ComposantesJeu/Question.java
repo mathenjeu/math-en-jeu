@@ -69,6 +69,16 @@ public class Question
 	}
 	
 	/**
+	 * Cette fonction retourne la reponse  de la question.
+	 * 
+	 * @return string : La reponse de la question
+	 */
+	public String getStringAnswer()
+	{
+		return strReponse;
+	}
+	
+	/**
 	 * Cette fonction retourne le code de la question.
 	 * 
 	 * @return int : Le code de la question
