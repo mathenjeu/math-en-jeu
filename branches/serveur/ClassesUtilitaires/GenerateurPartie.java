@@ -1000,17 +1000,27 @@ public final class GenerateurPartie
      * @param Vector listePointsCaseLibre : La liste des points des cases libres
      * @return Point[] : Un tableau de points pour chaque joueur 
      */
-    public static Point[] genererPositionJoueurs(int nbJoueurs)
+    public static Point[] genererPositionJoueurs(int nbJoueurs, int nbTracks)
     {
 		// Créer un tableau contenant les nbJoueurs points
 		Point[] objtPositionJoueurs = new Point[nbJoueurs];
 		
+		int i = 0;
 				
 		// Pour tous les joueurs de la partie, on va générer des positions de joueurs
-		for (int i = 0; i < nbJoueurs; i++)
+		for (int row = 0; row < Math.ceil(nbJoueurs/nbTracks) + 1; row++)
 		{
-		
-			objtPositionJoueurs[i] = new Point(0,i);
+			for (int col = 0; col < nbTracks; col++)
+			{
+				if(i < nbJoueurs)
+				{
+					objtPositionJoueurs[i] = new Point(0,col);
+					i++;
+					System.out.println("i" + i);
+				}
+				System.out.println("col" + col);
+			}
+			System.out.println("row" + row);
 		}
 		
 		return objtPositionJoueurs;
