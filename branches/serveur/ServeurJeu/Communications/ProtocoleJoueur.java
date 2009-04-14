@@ -51,6 +51,7 @@ import java.util.Calendar;
 
 /**
  * @author Jean-François Brind'Amour
+ * 
  */
 
 public class ProtocoleJoueur implements Runnable
@@ -112,7 +113,6 @@ public class ProtocoleJoueur implements Runnable
 	
 	//String with statistics of players answers
 	private StringBuffer questionsAnswers;
-
 
 	
 
