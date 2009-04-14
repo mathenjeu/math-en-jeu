@@ -31,7 +31,8 @@ class GestionnaireEvenements
     private var roomDescription:String;  // short room description taked from DB
 	
 	private var nomUtilisateur:String;    // notre nom d'utilisateur
-	private var numeroDuPersonnage:Number // sert a associer la bonne image pour le jeu d'ile au tresor
+	private var numeroDuPersonnage:Number; // sert a associer la bonne image pour le jeu d'ile au tresor
+	private var numberDesJoueurs:Number;
     private var listeDesPersonnages:Array;   // liste associant les idPersonnage avec les nomUtilisateurs dans la table ou on est
     private var motDePasse:String;  // notre mot de passe pour pouvoir jouer
     private var nomSalle:String;  //  nom de la salle dans laquelle on est
@@ -110,10 +111,11 @@ class GestionnaireEvenements
         trace("debut du constructeur de gesEve      "+nom+"      "+passe);
         this.nomUtilisateur = nom;
         this.listeDesPersonnages = new Array();
-        for(var i:Number = 0; i < 4; i++)
+        this.listeDesPersonnages.push(new Object());
+        /*for(var i:Number = 0; i < 4; i++)
         {
             this.listeDesPersonnages.push(new Object());
-        }
+        }*/
         this.motDePasse = passe;
         this.nomSalle = new String();
         this.motDePasseSalle = new String();
@@ -196,12 +198,13 @@ class GestionnaireEvenements
         trace("*********************************************");
         trace("debut de entrerSalle      "+nSalle);
         this.nomSalle = nSalle;
+        
         for(var i:Number = 0; i < listeDesSalles.length; i++)
         {
             if(listeDesSalles[i].nom == nSalle)
             {
-	            numeroJoueursDansSalle=listeNumeroJoueursSalles[i].maxnbplayers;
 	            //trace("joueurs dans salle : "+numeroJoueursDansSalle+" <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+	            numeroJoueursDansSalle=listeNumeroJoueursSalles[i].maxnbplayers;
                 if(listeDesSalles[i].possedeMotDePasse == true)
                 {
                     this.motDePasseSalle = "";   // afficher une fenetre de demande de mot de passe
@@ -279,8 +282,8 @@ class GestionnaireEvenements
         trace("debut de demarrerPartie     "+no);
 	
         this.idPersonnage = no;
-        this.listeDesPersonnages[numeroJoueursDansSalle-1].id = no;//3].id = no; //
-        this.listeDesPersonnages[numeroJoueursDansSalle-1].nom = this.nomUtilisateur;//3].nom = this.nomUtilisateur;//
+        this.listeDesPersonnages[listeDesPersonnages.length-1].id = no;//3].id = no; //
+        this.listeDesPersonnages[listeDesPersonnages.length-1].nom = this.nomUtilisateur;
         this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementPartieTerminee), no);  
 	
 		trace("fin de demarrerPartie");
@@ -487,8 +490,12 @@ class GestionnaireEvenements
         trace("*********************************************");
         trace("debut de retourObtenirListeJoueurs   "+objetEvenement.resultat);
         switch(objetEvenement.resultat)
-        {
+        {  
+	        
             case "ListeJoueurs":
+            	this.numberDesJoueurs=objetEvenement.listeNomUtilisateurs.length;
+        		this.numeroJoueursDansSalle=objetEvenement.listeNomUtilisateurs.length;
+        		
                 for(var i:Number=0;i<objetEvenement.listeNomUtilisateurs.length;i++)
                 {
                     this.listeDesJoueursConnectes.push(objetEvenement.listeNomUtilisateurs[i]);
@@ -552,7 +559,7 @@ class GestionnaireEvenements
 					
 					this.listeNumeroJoueursSalles.push(objetEvenement.listeNumberoJSalles[i]);
 					_level0.loader.contentHolder.listeNumeroJSalles.push(this.listeNumeroJoueursSalles[i].maxnbplayers );
-					trace("salle " + i + " : " + objetEvenement.listeNumberoJSalles[i].maxnbplayers);//this.listeNumeroJoueursSalles[i].maxnbplayers );
+					trace("salle " + i + " : " + objetEvenement.listeNumberoJSalles[i].maxnbplayers);
 					
 				}
 				for (var i:Number = 0; i < objetEvenement.listeNomSalles.length; i++)
@@ -785,18 +792,27 @@ class GestionnaireEvenements
         trace("*********************************************");
         trace("debut de retourCreerTable   "+objetEvenement.resultat +"    "+objetEvenement.noTable);
         var movClip:MovieClip;
+        trace("Creer table >>>>>>>>>>>>>>> numeroJoueursDansSalle: "+numeroJoueursDansSalle);
         switch(objetEvenement.resultat)
         {
             case "NoTable":
                 this.numeroTable = objetEvenement.noTable;
                 _level0.loader.contentHolder.gotoAndPlay(3);
-				_level0.loader.contentHolder.nomJ1 = _root.joueurInconnu;
-                _level0.loader.contentHolder.nomJ2 = _root.joueurInconnu;
-                _level0.loader.contentHolder.nomJ3 = _root.joueurInconnu;
-                _level0.loader.contentHolder.nomJ4 = this.nomUtilisateur;
-
-				for(var i:Number = 0; i < 3; i++)
+                _level0.loader.contentHolder.noms=new Array();
+                for(var i:Number=0; i<numeroJoueursDansSalle-1; i++)
                 {
+	                _level0.loader.contentHolder.noms[i] = _root.joueurInconnu;
+                }
+                _level0.loader.contentHolder.noms[numeroJoueursDansSalle-1] = this.nomUtilisateur;
+                
+				_level0.loader.contentHolder.nomJ1 = _root.joueurInconnu;// 4 joueurs
+                _level0.loader.contentHolder.nomJ2 = _root.joueurInconnu;// 4 joueurs
+                _level0.loader.contentHolder.nomJ3 = _root.joueurInconnu;// 4 joueurs
+                _level0.loader.contentHolder.nomJ4 = this.nomUtilisateur;// 4 joueurs
+
+				for(var i:Number = 0; i < numeroJoueursDansSalle-1; i++)
+                {
+	                this.listeDesPersonnages.push(new Object());
                     this.listeDesPersonnages[i].nom = "Inconnu";
                     this.listeDesPersonnages[i].id = 0;
                     movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage0","b"+i,i);
@@ -856,12 +872,18 @@ class GestionnaireEvenements
                 }
 				
                 _level0.loader.contentHolder.gotoAndPlay(3);
-				_level0.loader.contentHolder.nomJ1 = objetEvenement.listePersonnageJoueurs[0].nom;
-                _level0.loader.contentHolder.nomJ2 = objetEvenement.listePersonnageJoueurs[1].nom;
-                _level0.loader.contentHolder.nomJ3 = objetEvenement.listePersonnageJoueurs[2].nom;
-                _level0.loader.contentHolder.nomJ4 = nomUtilisateur;
+                for(var i:Number=0; i<numeroJoueursDansSalle-1; i++)
+                {
+	                _level0.loader.contentHolder.noms[i] = objetEvenement.listePersonnageJoueurs[i].nom;;
+                }
+                _level0.loader.contentHolder.noms[numeroJoueursDansSalle-1] = nomUtilisateur;
+                
+				_level0.loader.contentHolder.nomJ1 = objetEvenement.listePersonnageJoueurs[0].nom;// 4 joueurs
+                _level0.loader.contentHolder.nomJ2 = objetEvenement.listePersonnageJoueurs[1].nom;// 4 joueurs
+                _level0.loader.contentHolder.nomJ3 = objetEvenement.listePersonnageJoueurs[2].nom;// 4 joueurs
+                _level0.loader.contentHolder.nomJ4 = nomUtilisateur;								// 4 joueurs
              
-				for(var i:Number = 0; i < 3; i++)
+				for(var i:Number = 0; i < numeroJoueursDansSalle-1; i++)
                 {
 					this.listeDesPersonnages[i].nom = objetEvenement.listePersonnageJoueurs[i].nom;
                     this.listeDesPersonnages[i].id = objetEvenement.listePersonnageJoueurs[i].idPersonnage;
@@ -1734,17 +1756,27 @@ class GestionnaireEvenements
     	}
     	if(objetEvenement.noTable == this.numeroTable)
     	{
-            for(i = 0; i < 3; i++)//nbmaxJoueurs
+	    	var alreadyWas:Boolean=false;
+	    	
+            for(i = 0; i < numeroJoueursDansSalle; i++)//nbmaxJoueurs
             {
-                if(listeDesPersonnages[i].nom == "Inconnu" || listeDesPersonnages[i].nom == "Inconnu1" || listeDesPersonnages[i].nom == "Inconnu2" || listeDesPersonnages[i].nom == "Inconnu3")
-                //isInconnu=(isInconnu||)listeDesPersonnages[i].nom == "Inconnu"????;
-                {
+	            var itIsInconnu:Boolean=(listeDesPersonnages[i].nom.substr(0,7)=="Inconnu");
+	            //for(var j:Number=0;j<numeroJoueursDansSalle;j++){
+	            	
+	           		//trace(listeDesPersonnages[i].nom); 
+            	//}
+            	
+                //if(listeDesPersonnages[i].nom == "Inconnu" || listeDesPersonnages[i].nom == "Inconnu1" || listeDesPersonnages[i].nom == "Inconnu2" || listeDesPersonnages[i].nom == "Inconnu3")
+				if(itIsInconnu&&(!alreadyWas))
+                 {
                     listeDesPersonnages[i].nom = objetEvenement.nomUtilisateur;
                     _level0.loader.contentHolder.nomJ1 = listeDesPersonnages[0].nom;
                     _level0.loader.contentHolder.nomJ2 = listeDesPersonnages[1].nom;
                     _level0.loader.contentHolder.nomJ3 = listeDesPersonnages[2].nom;
-                    break;
-                }
+                    alreadyWas=true;//break;
+                } else
+                	_level0.loader.contentHolder.noms[i] = listeDesPersonnages[i].nom;
+	                
             }
     	}
     	if(indice != -1)
@@ -1763,7 +1795,7 @@ class GestionnaireEvenements
         	}
         	// enlever la table de la liste si elle est pleine
 			// a modifier si on est moins de 4
-        	if(this.listeDesTables[indice].listeJoueurs.length == 4)//nbmaxJoueurs
+        	if(this.listeDesTables[indice].listeJoueurs.length == numeroJoueursDansSalle)
         	{
             	for(i;i<this.listeDesTables.length;i++)
             	{
@@ -1802,17 +1834,24 @@ class GestionnaireEvenements
     	// si la table est la notre (on choisit nos perso frame 3)
     	if(objetEvenement.noTable == this.numeroTable)
     	{
-        	for(i = 0; i < 3; i++)//nbmaxJoueurs
+	    	var alreadyWas:Boolean=false;
+	    	
+        	for(i = 0; i < numeroJoueursDansSalle; i++)
         	{
+	        	var itIsMe:Boolean=(listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur);
             	//  on enleve le nom du joueur dans la liste et a l'ecran
-            	if(listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur)
+            	if(itIsMe&&(!alreadyWas))
             	{
                 	listeDesPersonnages[i].nom = "Inconnu"+i;
+                	_level0.loader.contentHolder.noms[i] = "Inconnu";
                 	_level0.loader.contentHolder.nomJ1 = listeDesPersonnages[0].nom;
                 	_level0.loader.contentHolder.nomJ2 = listeDesPersonnages[1].nom;
                 	_level0.loader.contentHolder.nomJ3 = listeDesPersonnages[2].nom;
+                	alreadyWas=true;
                 	break;
             	}
+            	
+            		
         	}
         	// oupsss, on dirait qu'il est impossible d'aller changer l'image du perso...
         	// est-ce que c'est necessaire ?
@@ -1917,8 +1956,8 @@ class GestionnaireEvenements
 
 		// put the face of my avatar in the panel (next to my name)
 		_level0.loader.contentHolder.myObj=new Object();
-		_level0.loader.contentHolder.myObj.myID=this.listeDesPersonnages[3].id;//nbmaxJoueurs
-		_level0.loader.contentHolder.myObj.myNom=this.listeDesPersonnages[3].nom;
+		_level0.loader.contentHolder.myObj.myID=this.listeDesPersonnages[numeroJoueursDansSalle-1].id;//nbmaxJoueurs // 3
+		_level0.loader.contentHolder.myObj.myNom=this.listeDesPersonnages[numeroJoueursDansSalle-1].nom;
 		
 		var maTete:MovieClip = _level0.loader.contentHolder.maTete.attachMovie("tete"+this.listeDesPersonnages[3].id, "maTete", -10099);
 		maTete._x = -7;
@@ -1960,9 +1999,9 @@ class GestionnaireEvenements
 		tete2._xscale = 55;
 		tete2._yscale = 55;
 
-        for(i = 0; i < 4; i++)//nbmaxJoueurs
+        for(i = 0; i < numeroJoueursDansSalle; i++)//4 //nbmaxJoueurs
         {
-            if(this.listeDesPersonnages[3].nom == objetEvenement.positionJoueurs[i].nom)
+            if(this.listeDesPersonnages[numeroJoueursDansSalle-1].nom == objetEvenement.positionJoueurs[i].nom)
             {
                 _level0.loader.contentHolder.planche = new PlancheDeJeu(objetEvenement.plateauJeu, i, _level0.loader.contentHolder.gestionnaireInterface);
             }
@@ -1971,7 +2010,7 @@ class GestionnaireEvenements
         //trace("longueur de la liste des noms et mon nom    :"+this.listeDesPersonnages.length+"   "+this.listeDesPersonnages[3].nom);
         for(i = 0; i < objetEvenement.positionJoueurs.length; i++)
         {
-            for(j = 0; j < 4; j++)
+            for(j = 0; j < numeroJoueursDansSalle; j++)
             {
                 if(this.listeDesPersonnages[j].nom == objetEvenement.positionJoueurs[i].nom)
                 {
@@ -1993,7 +2032,7 @@ class GestionnaireEvenements
      	trace("*********************************************");
      	trace("debut de evenementJoueurDemarrePartie   "+objetEvenement.nomUtilisateur+"     "+objetEvenement.idPersonnage);
         var movClip:MovieClip;
-        for (var i:Number = 0; i < 3; i++)
+        for (var i:Number = 0; i < numeroJoueursDansSalle-1; i++)
         {
         	if(listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur)
         	{
@@ -2073,9 +2112,9 @@ class GestionnaireEvenements
 		jouersStarted[3].nomUtilisateur=_level0.loader.contentHolder.myObj.myNom;
 		jouersStarted[3].idS=_level0.loader.contentHolder.myObj.myID;
 		jouersStarted[3].pointage=objetEvenement.statistiqueJoueur[0].pointage;
-		for (i=0;i<=3;i++) {
-			if(jouersStarted[3].nomUtilisateur==objetEvenement.statistiqueJoueur[i].nom) 
-				jouersStarted[3].pointage=objetEvenement.statistiqueJoueur[i].pointage;
+		for (i=0;i<numeroJoueursDansSalle;i++) {
+			if(jouersStarted[numeroJoueursDansSalle-1].nomUtilisateur==objetEvenement.statistiqueJoueur[i].nom) 
+				jouersStarted[numeroJoueursDansSalle-1].pointage=objetEvenement.statistiqueJoueur[i].pointage;
 		}
 
 		/*trace("1 joueur  "+jouersStarted[0].nomUtilisateur+"   "+jouersStarted[0].pointage+"   "+jouersStarted[0].idS);
@@ -2099,9 +2138,9 @@ class GestionnaireEvenements
     
     	Mouse.show();
  
-    	while(k <= 3)//nbmaxJoueurs
+    	while(k < numeroJoueursDansSalle)//nbmaxJoueurs// <=3
     	{
-	    	for(i=0; i<=3;i++)//nbmaxJoueurs
+	    	for(i=0; i< numeroJoueursDansSalle;i++)//nbmaxJoueurs // <=3
 	    	{
 				if(String(jouersStarted[i].pointage) == "Gagnant" || String(jouersStarted[i].pointage) == "Winner")
 		    	{
@@ -2183,7 +2222,7 @@ class GestionnaireEvenements
 		// il suffit de mettre les MC correspondants sur le podium
 		var w:Number = 0;
 		var z:Number = 0;
-		for(w=0;w<=3;w++)//nbmaxJoueurs
+		for(w=0;w<numeroJoueursDansSalle;w++)//nbmaxJoueurs // w<=3
 		{/*
 			for(z=0;z<=3;z++)
 			{	
