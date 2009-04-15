@@ -165,6 +165,11 @@ class GestionnaireEvenements
 	}
 	
 	////////////////////////////////////////////////////////////
+	function obtenirNumeroJoueursDansSalle():Number
+	{
+		return this.numeroJoueursDansSalle;
+	}
+	////////////////////////////////////////////////////////////
 	function definirNumeroDuPersonnage(n:Number)
 	{
 		this.numeroDuPersonnage = n;
@@ -444,7 +449,7 @@ class GestionnaireEvenements
 				this.objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), Delegate.create(this, this.evenementJoueurConnecte), Delegate.create(this, this.evenementJoueurDeconnecte));
 
 				//trace("objEvenement");
-				//trace(objetEvenement.listeChansons);
+				trace("Q musique "+objetEvenement.listeChansons.length);
 				
 				for(var k:Number = 0;  k< objetEvenement.listeChansons.length; k++)
 				{
