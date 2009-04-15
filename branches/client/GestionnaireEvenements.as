@@ -815,16 +815,21 @@ class GestionnaireEvenements
                 _level0.loader.contentHolder.nomJ3 = _root.joueurInconnu;// 4 joueurs
                 _level0.loader.contentHolder.nomJ4 = this.nomUtilisateur;// 4 joueurs
 
+                var j:Number=0;
 				for(var i:Number = 0; i < numeroJoueursDansSalle-1; i++)
                 {
+	                if(i>3) j=1;
+					if(i>7) j=2;
+					if(i>11) j=3;
 	                this.listeDesPersonnages.push(new Object());
                     this.listeDesPersonnages[i].nom = "Inconnu";
                     this.listeDesPersonnages[i].id = 0;
                     movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage0","b"+i,i);
-                    movClip._x = 450;
-                    movClip._y = 150 + i*60;
+                    movClip._x = 510-j*60;
+                    movClip._y = 150 + i*60-j*240;
 					movClip._xscale -= 70;
 					movClip._yscale -= 70;
+					
 				}
             break;
 			 
@@ -888,18 +893,23 @@ class GestionnaireEvenements
                 _level0.loader.contentHolder.nomJ3 = objetEvenement.listePersonnageJoueurs[2].nom;// 4 joueurs
                 _level0.loader.contentHolder.nomJ4 = nomUtilisateur;								// 4 joueurs
              
+                var j:Number=0;
 				for(var i:Number = 0; i < numeroJoueursDansSalle-1; i++)
                 {
+	                if(i>3) j=1;
+					if(i>7) j=2;
+					if(i>11) j=3;  
 					this.listeDesPersonnages[i].nom = objetEvenement.listePersonnageJoueurs[i].nom;
                     this.listeDesPersonnages[i].id = objetEvenement.listePersonnageJoueurs[i].idPersonnage;
 		    
 		     		_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(objetEvenement.listePersonnageJoueurs[i].idPersonnage));
 		    
                     movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage"+objetEvenement.listePersonnageJoueurs[i].idPersonnage,"b"+i,i);
-                    movClip._x = 450;
-					movClip._y = 140 + i*60;
+                    movClip._x = 510-j*60;
+                    movClip._y = 150 + i*60-j*240;
 					movClip._xscale -= 70;
-					movClip._yscale -= 70;                
+					movClip._yscale -= 70;
+					             
                 }
 				
             break;
@@ -2037,22 +2047,29 @@ class GestionnaireEvenements
      	trace("*********************************************");
      	trace("debut de evenementJoueurDemarrePartie   "+objetEvenement.nomUtilisateur+"     "+objetEvenement.idPersonnage);
         var movClip:MovieClip;
+        var j:Number=0;
         for (var i:Number = 0; i < numeroJoueursDansSalle-1; i++)
         {
+	        
+			if(i>3) j=1;
+			if(i>7) j=2;
+			if(i>11) j=3;
         	if(listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur)
         	{
             	this.listeDesPersonnages[i].id = objetEvenement.idPersonnage;
             	_level0.loader.contentHolder.refLayer["b"+i].removeMovieClip();
             	movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage"+objetEvenement.idPersonnage,"b"+i,i);
-            	movClip._x = 450;
-            	movClip._y = 148 + i*60;
-	    		movClip._xscale -= 77;
-	    		movClip._yscale -= 77;
+            	movClip._x = 510-j*60;
+                movClip._y = 150 + i*60-j*240;
+				movClip._xscale -= 70;
+				movClip._yscale -= 70;
+				
 		
 	    		_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(objetEvenement.idPersonnage));
 	    
             	break;
         	}
+        	
         }
     	trace("fin de evenementJoueurDemarrePartie");
     	trace("*********************************************\n");
