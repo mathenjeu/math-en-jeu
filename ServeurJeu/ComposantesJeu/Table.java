@@ -622,11 +622,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			}
 			
 			// Déterminer combien de joueurs on veut
-			intNombreJoueursVirtuels = MAX_NB_PLAYERS - lstJoueursEnAttente.size();
+			intNombreJoueursVirtuels = objRegles.getNbVirtualPlayers();
+			
+		/*	intNombreJoueursVirtuels = 	MAX_NB_PLAYERS - lstJoueursEnAttente.size() - 9;
 			if (intNombreJoueursVirtuels < 0 || intNombreJoueursVirtuels >= MAX_NB_PLAYERS)
 			{
 				intNombreJoueursVirtuels = 0;
-			}
+			} */
 		}
 		
 		//intNombreJoueursVirtuels = 3;
