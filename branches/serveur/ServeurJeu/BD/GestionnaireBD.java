@@ -228,7 +228,7 @@ public class GestionnaireBD
 						" AND user_subject_level.category_id = " + catValues[i].getCode() + ";"; 
 			
 			cleNiveau[i] = fillLevels(strRequeteSQL);
-			System.out.println(cleNiveau[i]);
+			//System.out.println(cleNiveau[i]);
 		}  
 		
 		joueur.definirCleNiveau(cleNiveau);
@@ -342,7 +342,7 @@ public class GestionnaireBD
 					String explication = rs.getString("feedback_flash_file");
 					int difficulte = Integer.parseInt(rs.getString("value")); 
 					
-					System.out.println(reponse +  difficulte);
+					//System.out.println(reponse +  difficulte);
 					
                     String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
                    // System.out.println(URL+explication);
@@ -615,8 +615,8 @@ public class GestionnaireBD
 	{
 		
 		ArrayList<Integer> rooms = new ArrayList<Integer>();
-		int langId = 0;
-	/*	if (language.equalsIgnoreCase("fr")) 
+	/*	int langId = 0;
+		if (language.equalsIgnoreCase("fr")) 
             langId = 1;
         else if (language.equalsIgnoreCase("en"))
         	langId = 2; */
@@ -832,6 +832,7 @@ public class GestionnaireBD
 					int maxNbPlayers = rs.getInt( "maxNbPlayers" );
 					int maxNbObjectsAndMoney = rs.getInt( "max_object_coin" );
 					int nbTracks = rs.getInt( "nbTracks" );
+					int nbVirtualPlayers = rs.getInt("nbVirtualPlayers");
 					
 					//System.out.println(tournament);
 					
@@ -851,6 +852,7 @@ public class GestionnaireBD
 					objReglesSalle.definirDeplacementMaximal( deplacementMax );
 					objReglesSalle.setIntMaxSaledObjects(maxShopObjects);
 					objReglesSalle.setNbTracks(nbTracks);
+					objReglesSalle.setNbVirtualPlayers(nbVirtualPlayers);
 											
                 }
 			}

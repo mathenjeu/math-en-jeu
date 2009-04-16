@@ -77,6 +77,9 @@ public class Regles
 	//This is the number of tracks of the board of the game of type "Tournament"
 	private int nbTracks;
 	
+	//This is the number of virtual players for the game. Defined in DB in room options
+	private int nbVirtualPlayers;
+	
 	/**
 	 * Constructeur de la classe Regles qui permet d'initialiser
 	 * les règles.
@@ -108,6 +111,7 @@ public class Regles
 	    tournamentState = false;
 	    showNumber = true;
 	    setNbTracks(4);
+	    setNbVirtualPlayers(0);
 	}
 
 	/**
@@ -404,5 +408,19 @@ public class Regles
 
 	public int getNbTracks() {
 		return nbTracks;
+	}
+
+	/**
+	 * @return the nbVirtualPlayers
+	 */
+	public int getNbVirtualPlayers() {
+		return nbVirtualPlayers;
+	}
+
+	/**
+	 * @param nbVirtualPlayers the nbVirtualPlayers to set
+	 */
+	public void setNbVirtualPlayers(int nbVirtualPlayers) {
+		this.nbVirtualPlayers = nbVirtualPlayers;
 	}
 }
