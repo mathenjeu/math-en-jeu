@@ -797,7 +797,7 @@ class GestionnaireEvenements
         trace("*********************************************");
         trace("debut de retourCreerTable   "+objetEvenement.resultat +"    "+objetEvenement.noTable);
         var movClip:MovieClip;
-        trace("Creer table >>>>>>>>>>>>>>> numeroJoueursDansSalle: "+numeroJoueursDansSalle);
+        //trace("Creer table >>>>>>>>>>>>>>> numeroJoueursDansSalle: "+numeroJoueursDansSalle);
         switch(objetEvenement.resultat)
         {
             case "NoTable":
@@ -900,12 +900,12 @@ class GestionnaireEvenements
 	                if(i>3) {j=1;}
 					if(i>7) {j=2;}
 					if(i>11) {j=3;}
-					var tmpNom:String  = objetEvenement.listePersonnageJoueurs[i].nom;
+					//var tmpNom:String  = objetEvenement.listePersonnageJoueurs[i].nom;
 					this.listeDesPersonnages.push(new Object());
-					this.listeDesPersonnages[i].nom = tmpNom;//objetEvenement.listePersonnageJoueurs[i].nom;
+					this.listeDesPersonnages[i].nom = objetEvenement.listePersonnageJoueurs[i].nom;
                     this.listeDesPersonnages[i].id = objetEvenement.listePersonnageJoueurs[i].idPersonnage;
 		    
-                    trace(i+" "+this.listeDesPersonnages[i].nom+" "+tmpNom+", de serveur:"+objetEvenement.listePersonnageJoueurs[i].nom);
+                    //trace(i+" "+this.listeDesPersonnages[i].nom+" "+tmpNom+", de serveur:"+objetEvenement.listePersonnageJoueurs[i].nom);
                     
 		     		_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(objetEvenement.listePersonnageJoueurs[i].idPersonnage));
 		    
@@ -2023,18 +2023,18 @@ class GestionnaireEvenements
         {
             if(this.listeDesPersonnages[numeroJoueursDansSalle-1].nom == objetEvenement.positionJoueurs[i].nom)
             {
-	            trace(this.listeDesPersonnages[numeroJoueursDansSalle-1].nom+" N"+i+" starts game");
+	            //trace(this.listeDesPersonnages[numeroJoueursDansSalle-1].nom+" N"+i+" starts game");
 	            
                 _level0.loader.contentHolder.planche = new PlancheDeJeu(objetEvenement.plateauJeu, i, _level0.loader.contentHolder.gestionnaireInterface);
             }
         }
         _level0.loader.contentHolder.planche.afficher();
-        trace("longueur de la liste des noms envoyes par serveur    :"+objetEvenement.positionJoueurs.length);
+        //trace("longueur de la liste des noms envoyes par serveur    :"+objetEvenement.positionJoueurs.length);
         for(i = 0; i < objetEvenement.positionJoueurs.length; i++)
         {
             for(j = 0; j < numeroJoueursDansSalle; j++)
             {
-	            trace(this.listeDesPersonnages[j].nom+" : "+objetEvenement.positionJoueurs[i].nom);
+	            //trace(this.listeDesPersonnages[j].nom+" : "+objetEvenement.positionJoueurs[i].nom);
                 if(this.listeDesPersonnages[j].nom == objetEvenement.positionJoueurs[i].nom)
                 {
                     _level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, i, this.listeDesPersonnages[j].id);
