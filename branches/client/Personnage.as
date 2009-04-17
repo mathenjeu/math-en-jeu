@@ -542,8 +542,8 @@ class Personnage
 		this.l = ll;
 		this.c = cc;
 		this.numero = niveau;
-		this.position = new Point(xx, yy);                       
-		this.prochainePosition = new Point(xx, yy);
+		this.position = new Point(xx,yy);                       
+		this.prochainePosition = new Point(xx + 1,yy + 1);
 		this.image = _level0.loader.contentHolder.referenceLayer.attachMovie(nomClip, "Personnage"+niveau, niveau);
 		this.image._visible = false;
 		this.pointage = 0;
