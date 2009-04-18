@@ -2220,51 +2220,51 @@ class GestionnaireEvenements
 
 		
 		jouersStarted[3] = new Object();
-		jouersStarted[3].nomUtilisateur=_level0.loader.contentHolder.myObj.myNom;
-		jouersStarted[3].idS=_level0.loader.contentHolder.myObj.myID;
-		jouersStarted[3].pointage=objetEvenement.statistiqueJoueur[0].pointage;
+		jouersStarted[3].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur4.nomJoueur4;
+		jouersStarted[3].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur4.pointageJoueur4;
+		jouersStarted[3].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur4.idStart;
 		
 		
 		jouersStarted[4] = new Object();
-		jouersStarted[4].nomUtilisateur=_level0.loader.contentHolder.myObj.myNom;
-		jouersStarted[4].idS=_level0.loader.contentHolder.myObj.myID;
-		jouersStarted[4].pointage=objetEvenement.statistiqueJoueur[0].pointage;
+		jouersStarted[4].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur5.nomJoueur5;
+		jouersStarted[4].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur5.pointageJoueur5;
+		jouersStarted[4].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur5.idStart;
 		
 		
 		jouersStarted[5] = new Object();
-		jouersStarted[5].nomUtilisateur=_level0.loader.contentHolder.myObj.myNom;
-		jouersStarted[5].idS=_level0.loader.contentHolder.myObj.myID;
-		jouersStarted[5].pointage=objetEvenement.statistiqueJoueur[0].pointage;
+		jouersStarted[5].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur6.nomJoueur6;
+		jouersStarted[5].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur6.pointageJoueur6;
+		jouersStarted[5].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur6.idStart;
 		
 		
 		jouersStarted[6] = new Object();
-		jouersStarted[6].nomUtilisateur=_level0.loader.contentHolder.myObj.myNom;
-		jouersStarted[6].idS=_level0.loader.contentHolder.myObj.myID;
-		jouersStarted[6].pointage=objetEvenement.statistiqueJoueur[0].pointage;
+		jouersStarted[6].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur7.nomJoueur7;
+		jouersStarted[6].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur7.pointageJoueur7;
+		jouersStarted[6].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur7.idStart;
 		
 		
 		jouersStarted[7] = new Object();
-		jouersStarted[7].nomUtilisateur=_level0.loader.contentHolder.myObj.myNom;
-		jouersStarted[7].idS=_level0.loader.contentHolder.myObj.myID;
-		jouersStarted[7].pointage=objetEvenement.statistiqueJoueur[0].pointage;
+		jouersStarted[7].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur8.nomJoueur8;
+		jouersStarted[7].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur8.pointageJoueur8;
+		jouersStarted[7].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur8.idStart;
 		
 		
 		jouersStarted[8] = new Object();
-		jouersStarted[8].nomUtilisateur=_level0.loader.contentHolder.myObj.myNom;
-		jouersStarted[8].idS=_level0.loader.contentHolder.myObj.myID;
-		jouersStarted[8].pointage=objetEvenement.statistiqueJoueur[0].pointage;
+		jouersStarted[8].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur9.nomJoueur9;
+		jouersStarted[8].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur9.pointageJoueur9;
+		jouersStarted[8].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur9.idStart;
 		
 		
 		jouersStarted[9] = new Object();
-		jouersStarted[9].nomUtilisateur=_level0.loader.contentHolder.myObj.myNom;
-		jouersStarted[9].idS=_level0.loader.contentHolder.myObj.myID;
-		jouersStarted[9].pointage=objetEvenement.statistiqueJoueur[0].pointage;
+		jouersStarted[9].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur10.nomJoueur10;
+		jouersStarted[9].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur10.pointageJoueur10;
+		jouersStarted[9].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur10.idStart;
 		
 		
 		jouersStarted[10] = new Object();
-		jouersStarted[10].nomUtilisateur=_level0.loader.contentHolder.myObj.myNom;
-		jouersStarted[10].idS=_level0.loader.contentHolder.myObj.myID;
-		jouersStarted[10].pointage=objetEvenement.statistiqueJoueur[0].pointage;
+		jouersStarted[10].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur11.nomJoueur11;
+		jouersStarted[10].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur11.pointageJoueur11;
+		jouersStarted[10].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur11.idStart;
 		
 		
 		jouersStarted[11] = new Object();
@@ -2378,6 +2378,29 @@ class GestionnaireEvenements
 			_level0.loader.contentHolder.pointage4 = 0;
     	}
 		*/
+		_level0.loader.contentHolder.nom5 = tabOrdonne[4].nom;	
+		_level0.loader.contentHolder.pointage5 = tabOrdonne[4].pointage;
+		
+		_level0.loader.contentHolder.nom6 = tabOrdonne[5].nom;	
+		_level0.loader.contentHolder.pointage6 = tabOrdonne[5].pointage;
+		
+		_level0.loader.contentHolder.nom7 = tabOrdonne[6].nom;	
+			_level0.loader.contentHolder.pointage7 = tabOrdonne[6].pointage;
+		
+		_level0.loader.contentHolder.nom8 = tabOrdonne[7].nom;	
+			_level0.loader.contentHolder.pointage8 = tabOrdonne[7].pointage;
+			
+		_level0.loader.contentHolder.nom9 = tabOrdonne[8].nom;	
+			_level0.loader.contentHolder.pointage9 = tabOrdonne[8].pointage;
+		
+		_level0.loader.contentHolder.nom10 = tabOrdonne[9].nom;	
+			_level0.loader.contentHolder.pointage10 = tabOrdonne[9].pointage;
+		
+		_level0.loader.contentHolder.nom11 = tabOrdonne[10].nom;	
+			_level0.loader.contentHolder.pointage11 = tabOrdonne[10].pointage;
+			
+		_level0.loader.contentHolder.nom12 = tabOrdonne[11].nom;	
+			_level0.loader.contentHolder.pointage12 = tabOrdonne[11].pointage;
 		
 		// mettre les id en ordre : tabOrdonne.id contient les id des personnages en ordre de pointage
 		// il suffit de mettre les MC correspondants sur le podium
