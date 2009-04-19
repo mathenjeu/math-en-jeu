@@ -412,11 +412,12 @@ class QuestionController extends Zend_Controller_Action {
                                 $errorMessage = $this->validateQuestionInfo($question, $answers, $levels);
                                 if (empty($errorMessage)) {
                                         $this->updateQuestionInfoInDatabase($question, $answers, $levels);
-                                        $this->generateFlashFiles($question['question_id'], $question['language_id'], $conversionOptions);
+                                        $this->view->warning=$this->generateFlashFiles($question['question_id'], $question['language_id'], $conversionOptions);
                                         $this->unsetFilteredInfo();
                                         $this->_redirect('question/view/question_id/'.$question['question_id'].'/language_id/'.$question['language_id']);
                                 }
-                                $this->view->warning = $errorMessage;
+                                else
+                                        $this->view->warning = $errorMessage;
                         }
                 }
                 //This is the normal entry point.  An edit request was made via the url, most
@@ -974,6 +975,9 @@ class QuestionController extends Zend_Controller_Action {
                 if ($conversionOptions == 'noswf')
                         return;
 
+                $questionTable = new Question();
+                $questionRow = $questionTable->fetchRow("question_id=$question_id");
+
                 $questionInfoTable = new QuestionInfo();
 		$qinfo = $questionInfoTable->fetchRow('question_id=' . $question_id . ' && language_id=' . $language_id);
                 if ($qinfo == null)
@@ -990,9 +994,9 @@ class QuestionController extends Zend_Controller_Action {
                 /// Generate the feedback swf
                 $filename = $config->file->tempdir . "Q-" . $question_id . "-F-" . $language->short_name . ".tex";
                 $questionFile = new QuestionFile($filename);
-                $questionFile->addText($config->latex->header);
-                $questionFile->addText($qinfo->feedback_latex);
-                $questionFile->addText($config->latex->footer);
+                $questionFile->addText($config->latex->header . "\n");
+                $questionFile->addText($qinfo->feedback_latex . "\n");
+                $questionFile->addText($config->latex->footer . "\n");
                 $questionFile->close();
                 $this->copyImage($qinfo->feedback_latex);
                 //run the script that build the swf for the question
@@ -1002,12 +1006,34 @@ class QuestionController extends Zend_Controller_Action {
                 else
                         $qinfo->feedback_flash_file = "echec.swf";
                 //////////////////////////////////////////////////////////
-                /// Generate the question swf
+                /// Generate the question swf (with answers)
                 $filename = $config->file->tempdir . "Q-" . $question_id . "-" . $language->short_name . ".tex";
                 $questionFile = new QuestionFile($filename);
-                $questionFile->addText($config->latex->header);
-                $questionFile->addText($qinfo->question_latex);
-                $questionFile->addText($config->latex->footer);
+                $questionFile->addText($config->latex->header . "\n");
+                $questionFile->addText($qinfo->question_latex . "\n");
+                switch($questionRow->answer_type_id) {
+                        case 1: //Multiple choices
+                                $answerTable = new Answer();
+                                $answerRowSet = $answerTable->fetchAll("question_id=$question_id");
+                                $questionFile->addText("\begin{enumerate}[A)]");
+                                foreach($answerRowSet as $answerRow) {
+                                        $answerInfo = $answerRow->findAnswerInfo($answerTable->select()->where("language_id=$language_id"))->current();
+                                        if ($answerInfo == null)
+                                                continue;
+                                        $questionFile->addText("\item " . $answerInfo->answer_latex . "\n");
+                                }
+                                $questionFile->addText("\end{enumerate}");
+                                break;
+                        case 2: //True of false
+                                $questionFile->addText("\begin{enumerate}[A)]");
+                                $questionFile->addText("\item " . (($language_id==1)?"Vrai":"True"));
+                                $questionFile->addText("\item " . (($language_id==1)?"Faux":"False"));
+                                $questionFile->addText("\end{enumerate}");
+                                break;
+                        case 3: //Short answer
+                                break;
+                }
+                $questionFile->addText($config->latex->footer . "\n");
                 $questionFile->close();
                 $this->copyImage($qinfo->question_latex);
                 //run the script that build the swf for the question
@@ -1018,31 +1044,7 @@ class QuestionController extends Zend_Controller_Action {
                         $qinfo->question_flash_file = "echec.swf";
                 
                 $qinfo->save();
-                ////////////////////////////////////////////////////////////
-                //////////////////////////////////////////////////////////
                 /// Generate the answers swf
-                $answerTable = new Answer();
-                $answerRowSet = $answerTable->fetchAll("question_id=$question_id");
-                $i=1;
-                foreach($answerRowSet as $answer) {
-                        $answerInfo = $answer->findAnswerInfo($answerTable->select()->where("language_id=$language_id"))->current();
-                        if ($answerInfo == null)
-                                continue;
-                        $filename = $config->file->tempdir . "Q-" .$question_id . "-A-" . $i . "-" . $language->short_name . ".tex";
-                        $questionFile = new QuestionFile($filename);
-                        $questionFile->addText($config->latex->header);
-                        $questionFile->addText($answerInfo->answer_latex);
-                        $questionFile->addText($config->latex->footer);
-                        $questionFile->close();
-                        $this->copyImage($answerInfo->answer_latex);
-                        exec($config->file->scriptdir . "tex2swf.sh " . $questionFile->getFullPath() . " " . $config->file->flash->dir . " " . $conversionOptions);
-                        if (file_exists($config->file->flash->dir . "Q-".$question_id."-A-" . $i . "-" . $language->short_name . ".swf"))
-                                $answerInfo->answer_flash_file = "Q-".$question_id."-A-" . $i . "-" . $language->short_name . ".swf";
-                        else
-                                $answerInfo->answer_flash_file = "echec.swf";
-                        $answerInfo->save();
-                        ++$i;
-                }
         }
                 
 	/**
@@ -1065,6 +1067,7 @@ class QuestionController extends Zend_Controller_Action {
         private function findQuestionInfo($question_id, $language_id) {
                 $questionTable = new Question();
                 $questionRow = $questionTable->fetchRow("question_id=$question_id");
+                $question = array();
                 if ($questionRow != null) {
                         $question = $questionRow->toArray();
                         $questionInfoRow = $questionRow->findQuestionInfo($questionTable->select()->where("language_id=$language_id"))->current();
