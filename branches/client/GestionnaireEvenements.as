@@ -33,7 +33,7 @@ class GestionnaireEvenements
 	private var nomUtilisateur:String;    // notre nom d'utilisateur
 	private var numeroDuPersonnage:Number; // sert a associer la bonne image pour le jeu d'ile au tresor
 	private var numberDesJoueurs:Number;
-    private var listeDesPersonnages:Array;   // liste associant les idPersonnage avec les nomUtilisateurs dans la table ou on est
+    public var listeDesPersonnages:Array;   // liste associant les idPersonnage avec les nomUtilisateurs dans la table ou on est
     private var motDePasse:String;  // notre mot de passe pour pouvoir jouer
     private var nomSalle:String;  //  nom de la salle dans laquelle on est
     private var numeroTable:Number;   //   numero de la table dans laquelle on est
@@ -803,17 +803,20 @@ class GestionnaireEvenements
             case "NoTable":
                 this.numeroTable = objetEvenement.noTable;
                 _level0.loader.contentHolder.gotoAndPlay(3);
+                /*
                 _level0.loader.contentHolder.noms=new Array();
                 for(var i:Number=0; i<numeroJoueursDansSalle-1; i++)
                 {
 	                _level0.loader.contentHolder.noms[i] = _root.joueurInconnu;
                 }
                 _level0.loader.contentHolder.noms[numeroJoueursDansSalle-1] = this.nomUtilisateur;
-                
-				_level0.loader.contentHolder.nomJ1 = _root.joueurInconnu;// 4 joueurs
+                */
+				/*_level0.loader.contentHolder.nomJ1 = _root.joueurInconnu;// 4 joueurs
                 _level0.loader.contentHolder.nomJ2 = _root.joueurInconnu;// 4 joueurs
                 _level0.loader.contentHolder.nomJ3 = _root.joueurInconnu;// 4 joueurs
+                */
                 _level0.loader.contentHolder.nomJ4 = this.nomUtilisateur;// 4 joueurs
+                
 
                 var j:Number=0;
 				for(var i:Number = 0; i < numeroJoueursDansSalle-1; i++)
@@ -824,6 +827,8 @@ class GestionnaireEvenements
 	                this.listeDesPersonnages.push(new Object());
                     this.listeDesPersonnages[i].nom = "Inconnu";
                     this.listeDesPersonnages[i].id = 0;
+                    var m:Number=i+2;
+                    
                     movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage0","b"+i,i);
                     movClip._x = 510-j*60;
                     movClip._y = 150 + i*60-j*240;
@@ -882,18 +887,19 @@ class GestionnaireEvenements
                 }
 				
                 _level0.loader.contentHolder.gotoAndPlay(3);
-                for(var i:Number=0; i<numeroJoueursDansSalle-1; i++)
+                /*for(var i:Number=0; i<numeroJoueursDansSalle-1; i++)
                 {
 	                _level0.loader.contentHolder.noms[i] = objetEvenement.listePersonnageJoueurs[i].nom;;
                 }
-                _level0.loader.contentHolder.noms[numeroJoueursDansSalle-1] = nomUtilisateur;
+                _level0.loader.contentHolder.noms[numeroJoueursDansSalle-1] = nomUtilisateur;*/
                 
-				_level0.loader.contentHolder.nomJ1 = objetEvenement.listePersonnageJoueurs[0].nom;// 4 joueurs
+				/*_level0.loader.contentHolder.nomJ1 = objetEvenement.listePersonnageJoueurs[0].nom;// 4 joueurs
                 _level0.loader.contentHolder.nomJ2 = objetEvenement.listePersonnageJoueurs[1].nom;// 4 joueurs
                 _level0.loader.contentHolder.nomJ3 = objetEvenement.listePersonnageJoueurs[2].nom;// 4 joueurs
+                */
                 _level0.loader.contentHolder.nomJ4 = nomUtilisateur;								// 4 joueurs
              
-                trace("---------------- Remplir listeDesPersonnages num:"+objetEvenement.listePersonnageJoueurs.length);
+                //trace("---------------- Remplir listeDesPersonnages num:"+objetEvenement.listePersonnageJoueurs.length);
                 var j:Number=0;
 				for(var i:Number = 0; i < numeroJoueursDansSalle-1; i++)
                 {
@@ -1790,12 +1796,12 @@ class GestionnaireEvenements
 				if(itIsInconnu&&(!alreadyWas))
                  {
                     listeDesPersonnages[i].nom = objetEvenement.nomUtilisateur;
-                    _level0.loader.contentHolder.nomJ1 = listeDesPersonnages[0].nom;
+                    /*_level0.loader.contentHolder.nomJ1 = listeDesPersonnages[0].nom;
                     _level0.loader.contentHolder.nomJ2 = listeDesPersonnages[1].nom;
-                    _level0.loader.contentHolder.nomJ3 = listeDesPersonnages[2].nom;
+                    _level0.loader.contentHolder.nomJ3 = listeDesPersonnages[2].nom;*/
                     alreadyWas=true;//break;
                 } else
-                	_level0.loader.contentHolder.noms[i] = listeDesPersonnages[i].nom;
+                	_level0.loader.contentHolder["dtCadre"+i+1].text=_level0.loader.contentHolder.noms[i] = listeDesPersonnages[i].nom;
 	                
             }
     	}
@@ -1864,9 +1870,10 @@ class GestionnaireEvenements
             	{
                 	listeDesPersonnages[i].nom = "Inconnu"+i;
                 	_level0.loader.contentHolder.noms[i] = "Inconnu";
+                	/*
                 	_level0.loader.contentHolder.nomJ1 = listeDesPersonnages[0].nom;
                 	_level0.loader.contentHolder.nomJ2 = listeDesPersonnages[1].nom;
-                	_level0.loader.contentHolder.nomJ3 = listeDesPersonnages[2].nom;
+                	_level0.loader.contentHolder.nomJ3 = listeDesPersonnages[2].nom;*/
                 	alreadyWas=true;
                 	break;
             	}
