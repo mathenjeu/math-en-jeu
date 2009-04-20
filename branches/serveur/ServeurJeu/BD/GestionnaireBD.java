@@ -342,7 +342,7 @@ public class GestionnaireBD
 					String explication = rs.getString("feedback_flash_file");
 					int difficulte = Integer.parseInt(rs.getString("value")); 
 					
-					//System.out.println(reponse +  difficulte);
+					System.out.println(reponse +  difficulte);
 					
                     String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
                    // System.out.println(URL+explication);

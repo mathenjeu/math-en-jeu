@@ -431,6 +431,17 @@ public class ProtocoleJoueur implements Runnable
 					Integer.parseInt(objDocumentXMLEntree.getChildNodes().item(0).getAttributes().getNamedItem("numero").getNodeValue()));
 		}// fin if
 
+		// if flash security control
+		else if (objDocumentXMLEntree.getChildNodes().getLength() == 1 &&
+				objDocumentXMLEntree.getChildNodes().item(0).getNodeName().equals("policy-file-request"))
+		{
+			objDocumentXMLSortie.removeChild(objNoeudCommande);
+			//objDocumentXMLSortie.removeChild(objNoeudCommande);
+			objNoeudCommande = objDocumentXMLSortie.createElement("cross-domain-policy");
+			Element objNoeudCommandeIntern = objDocumentXMLSortie.createElement("allow-access-from domain='*' to-ports='*'");
+			objNoeudCommande.appendChild(objNoeudCommandeIntern);
+			
+		}
 		// S'il n'y a pas de noeud commande dans le document XML, alors il y a 
 		// une erreur, sinon on peut traiter le contenu du message
 		else if (objDocumentXMLEntree.getChildNodes().getLength() == 1 &&
