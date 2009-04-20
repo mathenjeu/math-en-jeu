@@ -610,6 +610,8 @@ class PlancheDeJeu
 	
     function afficherCasesPossibles(p:Personnage)
     {
+	 if(!(p.obtenirNom() == "watcher"))
+	 {
 		trace("Début afficherCasesPossibles");
 		
         var i:Number;
@@ -677,6 +679,7 @@ class PlancheDeJeu
             {
                 break;
             }
+			
         }
 	
 	
@@ -833,7 +836,8 @@ class PlancheDeJeu
                 break;
             }
         }
-		trace("Fin afficher cases possibles");    
+		trace("Fin afficher cases possibles"); 
+	 }// end if for watcher
     }
     
 	

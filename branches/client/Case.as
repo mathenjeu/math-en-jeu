@@ -373,7 +373,11 @@ class Case
 	// Add a character on the cell
 	function ajouterPersonnage(p:Personnage)
 	{
-		this.listeDesPersonnages.push(p);
+		if(!(p.obtenirNom() == "watcher"))
+		{
+		   this.listeDesPersonnages.push(p);
+		   trace("000000000000000+++ " + p.obtenirNom());
+		}
 	}
 
 
@@ -475,7 +479,7 @@ class Case
 			this.piece.afficher(pt);
 		}
 
-		if(this.casePossible != null)
+		if(this.casePossible != null )
 		{
 			this.casePossible._x = pt.obtenirX();
 			this.casePossible._y = pt.obtenirY();
@@ -486,7 +490,11 @@ class Case
 			var pt2:Point = new Point(l,c);
 			this.listeDesPersonnages[i].definirPosition(pt, l, c);
 			this.listeDesPersonnages[i].definirProchainePosition(pt2,"rien");  
-			this.listeDesPersonnages[i].afficher();
+			if(!(this.listeDesPersonnages[i].obtenirNom() == "watcher"))
+			 this.listeDesPersonnages[i].afficher();
+				   
+			if(this.listeDesPersonnages[i].obtenirNom() == "watcher")
+			   this.listeDesPersonnages[i].cachePersonnage();
 		}
 	}
 	
