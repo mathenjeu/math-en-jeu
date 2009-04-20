@@ -435,7 +435,7 @@ public class ProtocoleJoueur implements Runnable
 		else if (objDocumentXMLEntree.getChildNodes().getLength() == 1 &&
 				objDocumentXMLEntree.getChildNodes().item(0).getNodeName().equals("policy-file-request"))
 		{
-			objDocumentXMLSortie.removeChild(objNoeudCommande);
+			
 			//objDocumentXMLSortie.removeChild(objNoeudCommande);
 			objNoeudCommande = objDocumentXMLSortie.createElement("cross-domain-policy");
 			Element objNoeudCommandeIntern = objDocumentXMLSortie.createElement("allow-access-from domain='*' to-ports='*'");
