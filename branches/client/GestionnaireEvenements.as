@@ -2275,9 +2275,9 @@ class GestionnaireEvenements
 		
 		
 		jouersStarted[11] = new Object();
-		jouersStarted[11].nomUtilisateur=_level0.loader.contentHolder.myObj.myNom;
-		jouersStarted[11].idS=_level0.loader.contentHolder.myObj.myID;
-		jouersStarted[11].pointage=objetEvenement.statistiqueJoueur[0].pointage;
+		jouersStarted[numeroJoueursDansSalle-1].nomUtilisateur=_level0.loader.contentHolder.myObj.myNom;
+		jouersStarted[numeroJoueursDansSalle-1].idS=_level0.loader.contentHolder.myObj.myID;
+		jouersStarted[numeroJoueursDansSalle-1].pointage=objetEvenement.statistiqueJoueur[0].pointage;
 		
 		
 		for (i=0;i<numeroJoueursDansSalle;i++) {
