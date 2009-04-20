@@ -438,7 +438,9 @@ public class ProtocoleJoueur implements Runnable
 			
 			//objDocumentXMLSortie.removeChild(objNoeudCommande);
 			objNoeudCommande = objDocumentXMLSortie.createElement("cross-domain-policy");
-			Element objNoeudCommandeIntern = objDocumentXMLSortie.createElement("allow-access-from domain=* to-ports=*");
+			Element objNoeudCommandeIntern = objDocumentXMLSortie.createElement("allow-access-from");
+			objNoeudCommandeIntern.setAttribute("domain","*");
+            objNoeudCommandeIntern.setAttribute("to-ports","*");
 			objNoeudCommande.appendChild(objNoeudCommandeIntern);
 			
 		}
