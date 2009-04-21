@@ -1243,8 +1243,8 @@ class GestionnaireEvenements
       	switch(objetEvenement.resultat)
         {
             case "Question":
-		     	//_level0.loader.contentHolder.url_question = objetEvenement.question.url;
-		     	_level0.loader.contentHolder.url_question = "Q-6095-en.swf";
+		     	_level0.loader.contentHolder.url_question = objetEvenement.question.url;
+		     	//_level0.loader.contentHolder.url_question = "Q-6095-en.swf";
 		     	//_level0.loader.contentHolder.url_question = "Q-6138-en.swf";
 
 				_level0.loader.contentHolder.type_question = objetEvenement.question.type;
