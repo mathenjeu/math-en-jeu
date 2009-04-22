@@ -1804,7 +1804,7 @@ class GestionnaireEvenements
                     _level0.loader.contentHolder.nomJ3 = listeDesPersonnages[2].nom;*/
                     alreadyWas=true;//break;
                 } else
-                	_level0.loader.contentHolder["dtCadre"+i+1].text=_level0.loader.contentHolder.noms[i] = listeDesPersonnages[i].nom;
+                	_level0.loader.contentHolder["dtCadre"+i+1]["joueur"+i]=_level0.loader.contentHolder.noms[i] = listeDesPersonnages[i].nom;
 	                
             }
     	}

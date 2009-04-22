@@ -192,9 +192,9 @@
 		menuAide = "Help menu"
 		
 			aideQuitter = "Close"
-			nomCasesSpeciales  = "    Instant Victory                       Store"
-			nomCasesSpeciales2 = "        Coin                          '?' Cell"
-			nomObjets 		   = " Banana                 Book              Crystal ball"
+			nomCasesSpeciales  = "                                          Store"
+			nomCasesSpeciales2 = "                                      '?' Cell"
+			nomObjets 		   = "                        Book              Crystal ball"
 			salleListe = "Before playing"
 			salleTitre = "1. Setting the game"
 			salleTexte = "•Choosing a room
