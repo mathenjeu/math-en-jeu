@@ -103,7 +103,7 @@
       chargementTables = "Table list is loading..." 
       aucuneTable = "There's no open table in this room"
 			btnCreerTable = "New table"
-			choixTable = "or create a new one."
+			choixTable = "or wait to be opened one"
 			choixTemps = "Choose the duration of the game you wish to play."
 			sallesOuvertes = "Open rooms"
 			tablesOuvertes = "Open tables"
