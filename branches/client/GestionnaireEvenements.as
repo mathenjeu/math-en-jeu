@@ -2232,7 +2232,7 @@ class GestionnaireEvenements
     	trace("3 joueur  "+objetEvenement.statistiqueJoueur[2].nomUtilisateur+"   "+objetEvenement.statistiqueJoueur[2].pointage);
     	trace("4 joueur  "+objetEvenement.statistiqueJoueur[3].nomUtilisateur+"   "+objetEvenement.statistiqueJoueur[3].pointage);
     	trace("*********************************************");*/
-    	
+
     	var k:Number = 0;
     	var nomMax:Number = -1;
     	var indice:Number = 0;  // indice du plus grand
@@ -2350,6 +2350,18 @@ class GestionnaireEvenements
 			trace("              "+i+": "+jouersStarted[i].nomUtilisateur+" points:"+jouersStarted[i].pointage+" id:"+jouersStarted[i].idS);
 		}
 		*/
+		for (i=0;i<numeroJoueursDansSalle-1;i++) {
+			jouersStarted[i] = new Object();
+			jouersStarted[i].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)];
+			jouersStarted[i].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)];
+			jouersStarted[i].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].idStart;
+		}
+
+			jouersStarted[numeroJoueursDansSalle-1] = new Object();
+			jouersStarted[numeroJoueursDansSalle-1].nomUtilisateur=this.listeDesPersonnages[i].nom;
+			jouersStarted[numeroJoueursDansSalle-1].pointage=_level0.loader.contentHolder.pointageJoueur;
+			jouersStarted[numeroJoueursDansSalle-1].idS=this.listeDesPersonnages[i].id;
+		/*
 		for (i=0;i<numeroJoueursDansSalle;i++) {
 			jouersStarted[i] = new Object();
 			for(j=0;j<numeroJoueursDansSalle;j++)
@@ -2358,10 +2370,10 @@ class GestionnaireEvenements
 					jouersStarted[i].idS=this.listeDesPersonnages[i].id;
 					jouersStarted[i].nomUtilisateur=this.listeDesPersonnages[i].nom;
 				}
-			//trace("              "+i+": "+jouersStarted[i].nomUtilisateur+" points:"+jouersStarted[i].pointage+" id:"+jouersStarted[i].idS);
+			trace("              "+i+": "+jouersStarted[i].nomUtilisateur+" points:"+jouersStarted[i].pointage+" id:"+jouersStarted[i].idS);
 		}
 		
-    	
+    	*/
 			
 		_level0.loader.contentHolder.miniGameLayer["magasin"].removeMovieClip();
     	_level0.loader.contentHolder["boutonFermer"].removeMovieClip();
