@@ -103,7 +103,7 @@
       chargementTables = "Chargement de la liste des tables en cours" 
       aucuneTable = "Il n'y a aucune table ouverte dans cette salle" 
 			btnCreerTable = "Nouvelle table"
-			choixTable = "ou créez-en une nouvelle."
+			choixTable = "ou attendez qu'une soit crée .."
 			choixTemps = "Choisissez la durée de la partie que vous désirez jouer."
 			sallesOuvertes = "Salles ouvertes"
 			tablesOuvertes = "Tables ouvertes"
