@@ -1,22 +1,24 @@
-﻿/*******************************************************************
+﻿
+// comment ilya
+/*******************************************************************
 Math en jeu
 Copyright (C) 2007 Projet SMAC
 
 Ce programme est un logiciel libre ; vous pouvez le
 redistribuer et/ou le modifier au titre des clauses de la
-Licence Publique Générale Affero (AGPL), telle que publiée par
-Affero Inc. ; soit la version 1 de la Licence, ou (à
-votre discrétion) une version ultérieure quelconque.
+Licence Publique Generale Affero (AGPL), telle que publiee par
+Affero Inc. ; soit la version 1 de la Licence, ou (a
+votre discretion) une version ulterieure quelconque.
 
-Ce programme est distribué dans l'espoir qu'il sera utile,
-mais SANS AUCUNE GARANTIE ; sans même une garantie implicite de
+Ce programme est distribue dans l'espoir qu'il sera utile,
+mais SANS AUCUNE GARANTIE ; sans meme une garantie implicite de
 COMMERCIABILITE ou DE CONFORMITE A UNE UTILISATION
 PARTICULIERE. Voir la Licence Publique
-Générale Affero pour plus de détails.
+Generale Affero pour plus de details.
 
-Vous devriez avoir reçu un exemplaire de la Licence Publique
-Générale Affero avec ce programme; si ce n'est pas le cas,
-écrivez à Affero Inc., 510 Third Street - Suite 225,
+Vous devriez avoir recu un exemplaire de la Licence Publique
+Generale Affero avec ce programme; si ce n'est pas le cas,
+ecrivez a Affero Inc., 510 Third Street - Suite 225,
 San Francisco, CA 94107, USA.
 *********************************************************************/
 
@@ -38,10 +40,10 @@ class Personnage
 	private var argent:Number;
 	private var listeDesObjets:Array;
 	private var listeDesIDObjets:Array;	 // sert pour envoyer les commandes d'utilisation des objets au serveur ( on envoye les ID)
-	private var faireCollision:String;   // sert à savoir s'il y a eu collision après un déplacement et avec quoi
+	private var faireCollision:String;   // sert a savoir s'il y a eu collision apres un deplacement et avec quoi
 	private var nom:String;
 	private var boardCentre:Boolean;
-	private var listeSurMagasin:Array;	 // sert à récupérer la liste d'objets du magasin lorsque qu'on va sur une case magasin
+	private var listeSurMagasin:Array;	 // sert a recuperer la liste d'objets du magasin lorsque qu'on va sur une case magasin
 	private var nouveauID:Number;
 	private var vieuxID:Number;
 	private var minigameLoade:Boolean;
@@ -113,7 +115,7 @@ class Personnage
 	}
 	
 	////////////////////////////////////////////////////////////
-	// retourne l'ID d'un objet au rang entré en paramètre
+	// retourne l'ID d'un objet au rang entre en parametre
 	function obtenirRangIDObjet(i:Number)
 	{
 		return listeDesIDObjets[i];
@@ -145,8 +147,8 @@ class Personnage
 	}
 	
 	////////////////////////////////////////////////////////////
-	// - sert à ajouter une image à la banque d'objets du personnage
-	// - 10 tags sont placés sur la frame de mathemaquoi afin de 
+	// - sert a ajouter une image a la banque d'objets du personnage
+	// - 10 tags sont places sur la frame de mathemaquoi afin de 
 	// modifier la disposition des objets plus facilement
 	// 
 	function ajouterImageBanque(i:Number, nomObj:String, profondeur:Number, scale:Number)
@@ -157,7 +159,7 @@ class Personnage
 		trace(profondeur);
 		trace(scale);
 	
-		// dans mathemaquoi, les indices des tags sont de 1 à 10 : ils ne commencent pas à 0.
+		// dans mathemaquoi, les indices des tags sont de 1 a 10 : ils ne commencent pas a 0.
 		_level0.loader.contentHolder.menuObjets.createEmptyMovieClip("objCase" + i, profondeur);
 		//_level0.loader.contentHolder.menuObjets["objCase" +i].attachMovie(nomObj, nomObj, profondeur, {_x:_level0.loader.contentHolder["tag" + i]._x, _y:_level0.loader.contentHolder["tag" +i]._y, _xscale:scale, _yscale:scale});
 		_level0.loader.contentHolder.menuObjets["objCase"+i].attachMovie(nomObj, nomObj, profondeur, {_x:_level0.loader.contentHolder.menuObjets["tag"+i]._x, _y:_level0.loader.contentHolder.menuObjets["tag"+i]._y, _xscale:scale, _yscale:scale});
@@ -221,7 +223,7 @@ class Personnage
 	}
 	
 	////////////////////////////////////////////////////////////
-	// on enlève l'image d'objet au rang indiqué à l'appel de la fonction
+	// on enleve l'image d'objet au rang indique a l'appel de la fonction
 	//
 	function enleverImageBanque(i:Number)
 	{
@@ -230,9 +232,9 @@ class Personnage
 	}
 	
 	////////////////////////////////////////////////////////////
-	// -sert à enlever un objet à un personnage :
-	// on enlève les données relatives à cet objet dans les listes
-	// du personnage. on enlève ensuite l'image de l'objet
+	// -sert a enlever un objet a un personnage :
+	// on enleve les donnees relatives a cet objet dans les listes
+	// du personnage. on enleve ensuite l'image de l'objet
 	//
 	function enleverObjet(n:String)
 	{
@@ -255,9 +257,9 @@ class Personnage
 				enleverImageBanque(i+1);
 		
 				// pour que la disposition des objets reste correcte,
-				// on décale les objets.
-				// ex : on a 3 objets et on enlève celui du milieu
-				// alors l'objet3 va à la position 2 et on décale les image
+				// on decale les objets.
+				// ex : on a 3 objets et on enleve celui du milieu
+				// alors l'objet3 va a la position 2 et on decale les image
 				//for (var j:Number = i+1; j <= this.obtenirNombreObjet()+1; j++)
 				for (var j:Number = i+1; j <= this.obtenirNombreObjet(); j++)
 				{
@@ -268,14 +270,14 @@ class Personnage
 					enleverImageBanque(k);
 				}
 				
-				// une fois qu'on a trouvé l'objet, on quitte la fonction
+				// une fois qu'on a trouve l'objet, on quitte la fonction
 				n = "---";
 				break;
 			}
 		}
 		//enleverImageBanque(k+1);
 		
-		trace("liste d'objets après avoir enlever 1 obj :");
+		trace("liste d'objets apres avoir enlever 1 obj :");
 		for(i=0;i<listeDesObjets.length;i++)
 		{
 			trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
@@ -399,7 +401,7 @@ class Personnage
 	}
 	
 	////////////////////////////////////////////////////////////
-	// retourne la liste des objets que le magasin où on se trouve contient
+	// retourne la liste des objets que le magasin ou on se trouve contient
 	//
 	function obtenirMagasin():Array
 	{
@@ -415,7 +417,7 @@ class Personnage
 	}
 	
 	////////////////////////////////////////////////////////////
-	// défini le ID d'un object. appelé après l'achat
+	// defini le ID d'un object. appele apres l'achat
 	//
 	function definirCodeIDobjet(nouveauID:Number, vieuxID:Number)
 	{
@@ -432,10 +434,10 @@ class Personnage
 	}
 	
 	////////////////////////////////////////////////////////////
-	// cette fonction change l'échelle d'une image lorsqu'on utilise
+	// cette fonction change l'echelle d'une image lorsqu'on utilise
 	// une potion ( bleue ou rouge : grandit ou rapetisse )
-	// la potion fait effet pour 30 secondes. après, on rappelle la
-	// la fonction qui retourne à la normale.
+	// la potion fait effet pour 30 secondes. apres, on rappelle la
+	// la fonction qui retourne a la normale.
 	// on utilise des tween pour une transition plus amusante !
 	//
 	function shrinkBonhommeSpecial(mClip1:MovieClip, x:Number, y:Number)
@@ -444,9 +446,9 @@ class Personnage
 		var twMove2:Tween;
 		var intervalId:Number;
 		var cpt:Number = 0;
-		var fctPerso:Object = this;	// on garde en mémoire qu'on est dans la classe personnage pour être capable d'utiliser ses fonctions
+		var fctPerso:Object = this;	// on garde en memoire qu'on est dans la classe personnage pour etre capable d'utiliser ses fonctions
 
-		intervalId = setInterval(attendre, 1000, cpt);	// sert pour attendre la jusqu'à la fin de l'effet de la potion
+		intervalId = setInterval(attendre, 1000, cpt);	// sert pour attendre la jusqu'a la fin de l'effet de la potion
 		
 		twMove1 = new Tween(mClip1, "_xscale", Bounce.easeIn, 100, x, 2, true);
 		twMove2 = new Tween(mClip1, "_yscale", Bounce.easeIn, 100, y, 2, true);
@@ -467,8 +469,8 @@ class Personnage
 	}
 
 	////////////////////////////////////////////////////////////
-	// Cette fonction ramène la taille du mClip à sa taille normale
-	// prend les valeurs x et y pour l'échelle
+	// Cette fonction ramene la taille du mClip a sa taille normale
+	// prend les valeurs x et y pour l'echelle
 	// - le tween permet une transition plus amusante !
 	//
 	function shrinkBonhommeNormal(mClip1:MovieClip, x:Number, y:Number)
@@ -481,10 +483,10 @@ class Personnage
 	}
 
 	////////////////////////////////////////////////////////////
-	// cette fonction transforme des données stockées dans un array
+	// cette fonction transforme des donnees stockees dans un array
 	// dans un XMLNode.
-	// ça permet de garder en mémoire les objets contenus dans un magasin,
-	// leur ID et leur coût
+	// ca permet de garder en memoire les objets contenus dans un magasin,
+	// leur ID et leur cout
 	//
 	function genererListeMagasinXML(lstObjMagasin:Array):Object
 	{
@@ -587,8 +589,8 @@ class Personnage
 				switch(this.faireCollision)
 				{
 					case "piece":
-						// l'argent est ajouté au personnage dans les fichiers gestEve et gestComm
-						// en gros, ici, on enlève l'image du board
+						// l'argent est ajoute au personnage dans les fichiers gestEve et gestComm
+						// en gros, ici, on enleve l'image du board
 				
 						/////////////////////////////////////////
 						//fuck : si c'est pas moi qui tombe dessus la piece
@@ -617,7 +619,7 @@ class Personnage
 							_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 							_root.objGestionnaireInterface.effacerBoutons(1);			
 							
-							// on charge le magasin : on ajuste sa position à l'écran
+							// on charge le magasin : on ajuste sa position a l'ecran
 							// on indique qu'il ne s'agit pas d'un mini-game.
 						
 							var minigame:MovieClip;   
@@ -631,7 +633,7 @@ class Personnage
 							minigame._visible = false;
 						
 						
-							//variables qui servent pour un fade-in/fade-out à l'entrée du magasin
+							//variables qui servent pour un fade-in/fade-out a l'entree du magasin
 							var oListener:Object = new Object();  
 							var twMove:Tween;
 							var twMove2:Tween;
@@ -660,9 +662,9 @@ class Personnage
 						}
 					break;
 				
-					// Pour tous les objets, on se comporte de la même manière :
-					// on enlève l'objet (même si on en a 10 : parce que le serveur nous dit qu'on l'enlève)
-					// si nécéssaire, on l'ajoute à nos objets
+					// Pour tous les objets, on se comporte de la meme maniere :
+					// on enleve l'objet (meme si on en a 10 : parce que le serveur nous dit qu'on l'enleve)
+					// si necessaire, on l'ajoute a nos objets
 					
 					case "Livre":
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
@@ -756,7 +758,7 @@ class Personnage
 					
 						_level0.loader.contentHolder.minigameToLoad = _level0.loader.contentHolder.url_Minigames[Math.floor(Math.random() * _level0.loader.contentHolder.url_Minigames.length)];
 
-						//variables qui servent pour un fade-in/fade-out à l'entrée du magasin
+						//variables qui servent pour un fade-in/fade-out a l'entree du magasin
 						var oListener:Object = new Object();  
 						var twMove:Tween;
 						var twMove2:Tween;
@@ -816,7 +818,7 @@ class Personnage
 				}
 			}
 			
-			return; // pour ne pas faire le reste des vérifications inutilement si dx == dy == 0
+			return; // pour ne pas faire le reste des verifications inutilement si dx == dy == 0
 		}
 		
 		//pour le reste, ((dx == 0)&&(dy == 0) != 1)
