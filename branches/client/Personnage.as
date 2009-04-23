@@ -36,6 +36,7 @@ class Personnage
 	private var prochainePosition:Point;
 	private var l:Number;
 	private var c:Number;
+	// nom jouers LIlian
 	private var pointage:Number;
 	private var argent:Number;
 	private var listeDesObjets:Array;
