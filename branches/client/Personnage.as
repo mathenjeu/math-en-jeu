@@ -1,5 +1,4 @@
 ﻿
-// comment ilya
 /*******************************************************************
 Math en jeu
 Copyright (C) 2007 Projet SMAC
@@ -32,17 +31,16 @@ class Personnage
 {
 	private var image:MovieClip;
 	private var position:Point;
-	private var numero:Number;
+	private var numero:Number;           // ????
 	private var prochainePosition:Point;
 	private var l:Number;
 	private var c:Number;
-	// nom jouers LIlian
 	private var pointage:Number;
 	private var argent:Number;
 	private var listeDesObjets:Array;
 	private var listeDesIDObjets:Array;	 // sert pour envoyer les commandes d'utilisation des objets au serveur ( on envoye les ID)
 	private var faireCollision:String;   // sert a savoir s'il y a eu collision apres un deplacement et avec quoi
-	private var nom:String;
+	private var nom:String;               // name of user that is master of pers
 	private var boardCentre:Boolean;
 	private var listeSurMagasin:Array;	 // sert a recuperer la liste d'objets du magasin lorsque qu'on va sur une case magasin
 	private var nouveauID:Number;
@@ -547,8 +545,21 @@ class Personnage
 		this.numero = niveau;
 		this.position = new Point(xx,yy);                       
 		this.prochainePosition = new Point(xx + 1,yy + 1);
-		if(!(nom == "watcher"))
+		
+		// Bloc of code to treat the username
+        var firstDel = nom.indexOf("-");                 // find first delimiter
+        var secondDel = nom.indexOf(".",firstDel + 1);   // find second delimiter
+        var master;
+
+        //Now extract the 'master' from username
+        if (firstDel != -1 && secondDel != -1)
+           master = _parent._parent.nomUtilisateur.substring(firstDel + 1, secondDel);
+        else
+           master = nom;
+		
+		if(!(master == "master"))
 		this.image = _level0.loader.contentHolder.referenceLayer.attachMovie(nomClip, "Personnage"+niveau, niveau);
+		
 		this.image._visible = false;
 		this.pointage = 0;
 		this.argent = 0;
@@ -558,7 +569,11 @@ class Personnage
 		this.nom = nom;
 		this.listeSurMagasin = mag;
 		this.minigameLoade = false;
-	}
+	    
+		
+		
+		
+		}
 	
 	
 	////////////////////////////////////////////////////////////

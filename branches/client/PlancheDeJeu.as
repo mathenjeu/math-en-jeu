@@ -610,7 +610,20 @@ class PlancheDeJeu
 	
     function afficherCasesPossibles(p:Personnage)
     {
-	 if(!(p.obtenirNom() == "watcher"))
+		// Bloc of code to treat the username
+        var firstDel = p.obtenirNom().indexOf("-");                 // find first delimiter
+        var secondDel = p.obtenirNom().indexOf(".",firstDel + 1);   // find second delimiter
+        var master;
+
+        //Now extract the 'master' from username
+        if (firstDel != -1 && secondDel != -1)
+           master = p.obtenirNom().substring(firstDel + 1, secondDel);
+        else
+           master = "";
+		
+		
+		
+	 if(!(master == "master"))
 	 {
 		trace("Début afficherCasesPossibles");
 		
