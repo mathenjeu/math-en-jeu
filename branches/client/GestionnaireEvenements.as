@@ -499,7 +499,7 @@ class GestionnaireEvenements
 	        
             case "ListeJoueurs":
             	this.numberDesJoueurs=objetEvenement.listeNomUtilisateurs.length;
-        		this.numeroJoueursDansSalle=objetEvenement.listeNomUtilisateurs.length;
+        		//this.numeroJoueursDansSalle=objetEvenement.listeNomUtilisateurs.length;
         		
                 for(var i:Number=0;i<objetEvenement.listeNomUtilisateurs.length;i++)
                 {
@@ -2010,11 +2010,11 @@ class GestionnaireEvenements
 		// Initialise our opponents' name and score
 		// and put the face of our opponents' avatar in the panel (next to their name)
 		
-		/*for(i=0;i<numeroJoueursDansSalle-1;i++)
+		for(i=0;i<numeroJoueursDansSalle-1;i++)
 		{
-			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].dt.text = this.listeDesPersonnages[i].nom;
+			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)] = this.listeDesPersonnages[i].nom;
 			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)] = 0;
-			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["idStart"]=this.listeDesPersonnages[i].id;
+			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].idStart=this.listeDesPersonnages[i].id;
 			
 			trace("nom:"+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
 			this["tete"+i]=new MovieClip();
@@ -2024,10 +2024,9 @@ class GestionnaireEvenements
 			this["tete"+i]._xscale = 55;
 			this["tete"+i]._yscale = 55;
 			
-			trace(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.nomJoueur1+" - "+_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.idStart);
 
 		}
-		*/
+		
 		// put the face of my avatar in the panel (next to my name)
 		_level0.loader.contentHolder.myObj=new Object();
 		_level0.loader.contentHolder.myObj.myID=this.listeDesPersonnages[numeroJoueursDansSalle-1].id;//nbmaxJoueurs // 3
@@ -2039,7 +2038,7 @@ class GestionnaireEvenements
 		maTete._xscale = 55;
 		maTete._yscale = 55;
 		
-		
+		/*
 		//using in win's table
 		
 		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.nomJoueur1 = this.listeDesPersonnages[0].nom;
@@ -2150,7 +2149,7 @@ class GestionnaireEvenements
 		tete10._xscale = 55;
 		tete10._yscale = 55;
 
-		
+		*/
         for(i = 0; i < objetEvenement.positionJoueurs.length; i++)//4 //nbmaxJoueurs// numeroJoueursDansSalle
         {
             if(this.listeDesPersonnages[numeroJoueursDansSalle-1].nom == objetEvenement.positionJoueurs[i].nom)
