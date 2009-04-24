@@ -1726,10 +1726,10 @@ class GestionnaireEvenements
         	}
         	
     	}
-    	for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
+    	/*for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
                 {
 					trace(i+": "+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
-				}
+				}*/
     	trace("fin de evenementJoueurQuitteSalle");
     	trace("*********************************************\n");
     }
@@ -2226,10 +2226,10 @@ class GestionnaireEvenements
         	}
         	
         }
-        for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
+        /*for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
                 {
 					trace(i+": "+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
-				}
+				}*/
     	trace("fin de evenementJoueurDemarrePartie");
     	trace("*********************************************\n");
     }
