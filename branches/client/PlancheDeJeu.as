@@ -610,6 +610,7 @@ class PlancheDeJeu
 	
     function afficherCasesPossibles(p:Personnage)
     {
+		
 		// Bloc of code to treat the username
         var firstDel = p.obtenirNom().indexOf("-");                 // find first delimiter
         var secondDel = p.obtenirNom().indexOf(".",firstDel + 1);   // find second delimiter
@@ -624,7 +625,7 @@ class PlancheDeJeu
 		
 		
 	 if(!(master == "master"))
-	 {
+	 { 
 		trace("Début afficherCasesPossibles");
 		
         var i:Number;

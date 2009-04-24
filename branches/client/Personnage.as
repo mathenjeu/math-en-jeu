@@ -553,11 +553,11 @@ class Personnage
 
         //Now extract the 'master' from username
         if (firstDel != -1 && secondDel != -1)
-           master = _parent._parent.nomUtilisateur.substring(firstDel + 1, secondDel);
+           master = nom.substring(firstDel + 1, secondDel);
         else
            master = nom;
 		
-		if(!(master == "master"))
+		if(!(master == "master")) 
 		this.image = _level0.loader.contentHolder.referenceLayer.attachMovie(nomClip, "Personnage"+niveau, niveau);
 		
 		this.image._visible = false;

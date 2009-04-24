@@ -373,20 +373,20 @@ class Case
 	// Add a character on the cell
 	function ajouterPersonnage(p:Personnage)
 	{
+		
 		// Bloc of code to treat the username
-       var firstDel = p.obtenirNom().indexOf("-");                 // find first delimiter
-       var secondDel = p.obtenirNom().indexOf(".",firstDel + 1);   // find second delimiter
-       var master;
+        var firstDel = p.obtenirNom().indexOf("-");                 // find first delimiter
+        var secondDel = p.obtenirNom().indexOf(".",firstDel + 1);   // find second delimiter
+        var master;
 
-       //Now extract the 'master' from username
-       if (firstDel != -1 && secondDel != -1)
-          master = p.obtenirNom().substring(firstDel + 1, secondDel);
-       else
-          master = "";
-		if(master == "master")
-		{
+        //Now extract the 'master' from username
+        if (firstDel != -1 && secondDel != -1)
+           master = p.obtenirNom().substring(firstDel + 1, secondDel);
+        else
+           master = "";
+		if(master != "master")
+		{ 
 		   this.listeDesPersonnages.push(p);
-		   //trace("000000000000000+++ " + p.obtenirNom());
 		}
 	}
 
@@ -513,7 +513,7 @@ class Case
                 master = "";
 			
 			
-			if(!(master == "master"))
+			if(!(master == "master")) 
 			 this.listeDesPersonnages[i].afficher();
 				   
 			if( master == "master")
