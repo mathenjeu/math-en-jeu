@@ -838,6 +838,10 @@ class GestionnaireEvenements
 					movClip._yscale -= 70;
 					
 				}
+				/*for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
+                {
+	                	trace(i+". "+this.listeDesPersonnages[i].nom+" : "+this.listeDesPersonnages[i].id);
+                }*/
             break;
 			 
             case "CommandeNonReconnue":
@@ -2009,14 +2013,14 @@ class GestionnaireEvenements
 		// et on met la face de leur avatar a cote de leur nom
 		// Initialise our opponents' name and score
 		// and put the face of our opponents' avatar in the panel (next to their name)
-		
+ 
 		for(i=0;i<numeroJoueursDansSalle-1;i++)
 		{
 			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)] = this.listeDesPersonnages[i].nom;
 			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)] = 0;
 			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].idStart=this.listeDesPersonnages[i].id;
 			
-			trace("nom:"+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
+			trace(i+" nom:"+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
 			this["tete"+i]=new MovieClip();
 			this["tete"+i] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["tete"+(i+1)].attachMovie("tete"+this.listeDesPersonnages[i].id, "Tete"+i, -10100+i);
 			this["tete"+i]._x = -7;
@@ -2026,7 +2030,12 @@ class GestionnaireEvenements
 			
 
 		}
-		
+		for(i=0;i<12;i++)
+		{
+			if((undefined==this.listeDesPersonnages[i].nom)||("Inconnu"==this.listeDesPersonnages[i].nom)||(this.nomUtilisateur==this.listeDesPersonnages[i].nom))
+			 _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)]=undefined;//.removeMovieClip();
+			 trace(i+" "+_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)]+" == "+this.listeDesPersonnages[i].nom);//.removeMovieClip());
+		}
 		// put the face of my avatar in the panel (next to my name)
 		_level0.loader.contentHolder.myObj=new Object();
 		_level0.loader.contentHolder.myObj.myID=this.listeDesPersonnages[numeroJoueursDansSalle-1].id;//nbmaxJoueurs // 3
