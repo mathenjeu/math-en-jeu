@@ -466,6 +466,8 @@ public class InformationPartie
                 if(stepDifficulte * 4 < distanceFuture && distanceFuture <= stepDifficulte * 5) intDifficulte = 2;
                 if(intDifficulte == 0) intDifficulte = 1;
                 intDifficulte = Math.max(intDifficulte, grandeurDeplacement);
+               
+                System.out.println("Difficulte de la question : " + intDifficulte);   // test
 		
 		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
 		// une question
