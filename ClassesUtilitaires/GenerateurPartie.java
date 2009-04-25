@@ -112,7 +112,7 @@ public final class GenerateurPartie
 		temps = Math.min(temps, reglesPartie.obtenirTempsMaximal());
 		
 		//to have a more equilibrate dimension of game table
-		temps = (int) Math.ceil(temps * 5 / 10) + 10;
+		temps = (int) Math.ceil(temps * 5 / 10) + 7;
 		
 		int factor = objRandom.nextInt((int) Math.ceil(temps /4)) + (int) Math.ceil(temps /5);
 		if(factor % 2 == 0)
@@ -146,6 +146,7 @@ public final class GenerateurPartie
 		int intNbPieces = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioPieces());
 		int intNbObjetsUtilisables = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioObjetsUtilisables());
 
+		System.out.println("trous : " + intNbTrous);
 				
 		// Maintenant qu'on a le nombre de lignes et de colonnes, on va créer
 		// le tableau à 2 dimensions représentant le plateau de jeu (null est 
@@ -782,18 +783,27 @@ public final class GenerateurPartie
 		}
 		
 		// random holes
-		int intCompteur = 1;
-		while (intCompteur < intNbTrous/3 - (intNbLignes*intNbColonnes - intCompteurCases) )
+		int intCompteur = 0;
+		while (intCompteur < intNbTrous)
 		{
 			
-		    objPoint = (Point) lstPointsCasesPresentes.remove(objRandom.nextInt(lstPointsCasesPresentes.size()));
-		    if(!(objPoint.x == 0 || objPoint.x == intNbLignes - 1 || objPoint.y % 3 == 0)){
-		       objttPlateauJeu[objPoint.x][objPoint.y] = null;
-		       intCompteurCases--;
-		    }else {
-			   lstPointsCasesPresentes.add(objPoint);
+		      objPoint = (Point) lstPointsCasesPresentes.remove(objRandom.nextInt(lstPointsCasesPresentes.size()));
+		      objttPlateauJeu[objPoint.x][objPoint.y] = null;
+		      System.out.println("before : " + objPoint.x + " : " + objPoint.y );
+		      intCompteurCases--;
+		    
+		    if(  objPoint.x % 3 == 0 || objPoint.y % 3 == 0 || objPoint.y == intNbColonnes -1 || objPoint.y == 0 ){     // objPoint.x == 0|| objPoint.x == intNbLignes - 1 ||
+		    	objCaseParcourue = new CaseCouleur(1);
+		    	objttPlateauJeu[objPoint.x][objPoint.y] = objCaseParcourue;
+		     	System.out.println("after : " + objCaseParcourue.obtenirTypeCase() );
+		     	System.out.println("after : " + objttPlateauJeu[objPoint.x][objPoint.y].obtenirTypeCase() );
+		     	System.out.println("after : " + objPoint.x + " : " + objPoint.y );
+		    	lstPointsCasesPresentes.add(objPoint);
+		        intCompteurCases++;
+		        intCompteur--;
 		    }
-		}
+		    intCompteur++;
+		} // end while	
 		
 		for (int i = 0; i < reglesPartie.getNbTracks(); i++)
 		{
@@ -805,6 +815,8 @@ public final class GenerateurPartie
 			objPoint = new Point(intNbLignes - 1 ,intNbColonnes - i - 1);
 			lstPointsCasesPresentes.remove(objPoint);
 		}
+		
+		
 		
 		return intCompteurCases;
 	}// end method
