@@ -2652,6 +2652,7 @@ class GestionnaireCommunication
             // Creer un tableau ListeNomSalles qui va contenir les
             // objets salle
             objEvenement.listeNomSalles = new Array();
+            trace(">>>>>>>>>>>>>>>>> Reponse serveur"+noeudCommande);
             // Passer toutes les salles et les ajouter dans le tableau
             for (var i:Number = 0; i < lstChildNodes.length; i++)
             {
@@ -2659,7 +2660,8 @@ class GestionnaireCommunication
                 objEvenement.listeNomSalles.push({nom:lstChildNodes[i].attributes.nom,
                     possedeMotDePasse:Boolean(lstChildNodes[i].attributes.protegee == "true"),
                     descriptions:lstChildNodes[i].attributes.descriptions, 
-                    maxnbplayers:lstChildNodes[i].attributes.maxnbplayers});
+                    maxnbplayers:lstChildNodes[i].attributes.maxnbplayers,
+                    typeDeJeu:lstChildNodes[i].attributes.typeDeJeu});
 								  
             }
 			

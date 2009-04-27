@@ -54,6 +54,7 @@ class GestionnaireEvenements
 	private var tabPodiumOrdonneID:Array;			// id des personnages ordonnes par pointage une fois la partie terminee
 	private var pointageMinimalWinTheGame:Number = -1 // pointage minimal a avoir droit d'atteindre le WinTheGame
 	private var numeroJoueursDansSalle:Number=0;
+	public  var typeDeJeu:String="MathEnJeu";
 	
 	function affichageChamps()
 	{
@@ -210,6 +211,9 @@ class GestionnaireEvenements
             {
 	            //trace("joueurs dans salle : "+numeroJoueursDansSalle+" <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 	            numeroJoueursDansSalle=listeNumeroJoueursSalles[i].maxnbplayers;
+	            typeDeJeu=listeNumeroJoueursSalles[i].typeDeJeu;
+	            typeDeJeu=listeDesDescriptionsSalles[i].descriptions;
+	            trace("@@@@@@@@@@@@@ typeDeJeu="+typeDeJeu);
                 if(listeDesSalles[i].possedeMotDePasse == true)
                 {
                     this.motDePasseSalle = "";   // afficher une fenetre de demande de mot de passe
