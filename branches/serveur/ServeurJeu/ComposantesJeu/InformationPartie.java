@@ -78,7 +78,7 @@ public class InformationPartie
     private String vaSubirUneBanane;
         
     // Déclaration d'un int qui va garder le mode du jeu : Normal - 0 et Avancée - 1
-    private int modeJeu;
+    //private int modeJeu;
     
     // If is true intArgent is taken from DB and at the end 
     //of the game is writen to the DB
@@ -123,9 +123,7 @@ public class InformationPartie
 	        
             intIdPersonnage = 0;
 	        
-	        // mode de jeu par default ????????
-	        modeJeu = 0;
-	    
+	        
 	        // Faire la référence vers la table courante
 	        objTable = tableCourante;
 	    
@@ -992,23 +990,8 @@ public class InformationPartie
             return Math.abs(objPositionJoueur.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(objPositionJoueur.y - objTable.obtenirPositionWinTheGame().y);
         }
 
-        /**
-         * Setter pour mode de jeu
-         * @param modeJeu
-         */
-		public void setModeJeu(int modeJeu) {
-			this.modeJeu = modeJeu;
-		}
-
-		/**
-		 * Getter pour mode de jeu
-		 * @return
-		 */
-		public int getModeJeu() {
-			return modeJeu;
-		}
-
-		public void setMoneyPermit(boolean moneyPermit) {
+     
+        public void setMoneyPermit(boolean moneyPermit) {
 			this.moneyPermit = moneyPermit;
 		}
 
