@@ -787,7 +787,7 @@ public class ProtocoleJoueur implements Runnable
 							objNoeudSalle.setAttribute("maxnbplayers", Integer.toString(objSalle.getRegles().getMaxNbPlayers()));
 							
 							//Add max numbers of players of that room
-							objNoeudSalle.setAttribute("type", objSalle.getGameType());
+							objNoeudSalle.setAttribute("typeDeJeu", objSalle.getGameType());
 							
 							
 							if(tournamentActive.equals("TournamentActive"))
