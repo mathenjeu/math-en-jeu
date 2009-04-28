@@ -211,8 +211,8 @@ class GestionnaireEvenements
             {
 	            //trace("joueurs dans salle : "+numeroJoueursDansSalle+" <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 	            numeroJoueursDansSalle=listeNumeroJoueursSalles[i].maxnbplayers;
-	            typeDeJeu=listeNumeroJoueursSalles[i].typeDeJeu;
-	            typeDeJeu=listeDesDescriptionsSalles[i].descriptions;
+	            typeDeJeu=listeDesSalles[i].typeDeJeu;
+	            //typeDeJeu=listeDesDescriptionsSalles[i].descriptions;
 	            trace("@@@@@@@@@@@@@ typeDeJeu="+typeDeJeu);
                 if(listeDesSalles[i].possedeMotDePasse == true)
                 {
@@ -570,6 +570,7 @@ class GestionnaireEvenements
 					_level0.loader.contentHolder.listeNumeroJSalles.push(this.listeNumeroJoueursSalles[i].maxnbplayers );
 					trace("salle " + i + " : " + objetEvenement.listeNumberoJSalles[i].maxnbplayers);
 					
+
 				}
 				for (var i:Number = 0; i < objetEvenement.listeNomSalles.length; i++)
                 {

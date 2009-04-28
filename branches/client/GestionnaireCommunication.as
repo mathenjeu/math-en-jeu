@@ -2652,7 +2652,7 @@ class GestionnaireCommunication
             // Creer un tableau ListeNomSalles qui va contenir les
             // objets salle
             objEvenement.listeNomSalles = new Array();
-            trace(">>>>>>>>>>>>>>>>> Reponse serveur"+noeudCommande);
+            //trace(">>>>>>>>>>>>>>>>> Reponse serveur"+noeudCommande);
             // Passer toutes les salles et les ajouter dans le tableau
             for (var i:Number = 0; i < lstChildNodes.length; i++)
             {
