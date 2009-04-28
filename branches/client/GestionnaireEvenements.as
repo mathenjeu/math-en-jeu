@@ -2369,8 +2369,20 @@ class GestionnaireEvenements
 			trace("              "+i+": "+jouersStarted[i].nomUtilisateur+" points:"+jouersStarted[i].pointage+" id:"+jouersStarted[i].idS);
 		}
 		*/
-		var numeroJoueursConnecte:Number=0;
 		
+		//actualiser les champs de pointage
+		for (i=0;i<numeroJoueursDansSalle-1;i++) {
+			for(k=0;k<objetEvenement.statistiqueJoueur.length;k++){
+				
+				var nomTemp:String=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)];
+				
+				if(nomTemp==objetEvenement.statistiqueJoueur[k].nomUtilisateur)
+					_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)]=objetEvenement.statistiqueJoueur[k].pointage;
+			
+			}	
+		}
+		var numeroJoueursConnecte:Number=0;
+		// jouersStarted est liste de nom de joueurs et leurs pointage et IDs 
 		for (i=0;i<numeroJoueursDansSalle-1;i++) {
 			jouersStarted[i] = new Object();
 			jouersStarted[i].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)];
@@ -2379,11 +2391,14 @@ class GestionnaireEvenements
 			//trace(i+" "+jouersStarted[i].nomUtilisateur+" "+jouersStarted[i].pointage+"pts  id:"+jouersStarted[i].idS);
 			if(jouersStarted[i].nomUtilisateur!=undefined) numeroJoueursConnecte++;
 		}
-
-			jouersStarted[numeroJoueursDansSalle-1] = new Object();
-			jouersStarted[numeroJoueursDansSalle-1].nomUtilisateur=this.listeDesPersonnages[i].nom;
-			jouersStarted[numeroJoueursDansSalle-1].pointage=_level0.loader.contentHolder.pointageJoueur;
-			jouersStarted[numeroJoueursDansSalle-1].idS=this.listeDesPersonnages[i].id;
+		for(k=0;k<objetEvenement.statistiqueJoueur.length;k++)
+			if(_level0.loader.contentHolder.myObj.myNom==objetEvenement.statistiqueJoueur[k].nomUtilisateur){
+				jouersStarted[numeroJoueursDansSalle-1] = new Object();
+				jouersStarted[numeroJoueursDansSalle-1].nomUtilisateur=_level0.loader.contentHolder.myObj.myNom;
+				jouersStarted[numeroJoueursDansSalle-1].pointage=objetEvenement.statistiqueJoueur[k].pointage;
+				jouersStarted[numeroJoueursDansSalle-1].idS=_level0.loader.contentHolder.myObj.myID;
+			}
+		
 			//trace((numeroJoueursDansSalle-1)+" "+jouersStarted[numeroJoueursDansSalle-1].nomUtilisateur+" "+jouersStarted[numeroJoueursDansSalle-1].pointage+"pts  id:"+jouersStarted[numeroJoueursDansSalle-1].idS);
 
 		//trace("-------------- numeroJoueursConnecte="+numeroJoueursConnecte);
@@ -2400,6 +2415,8 @@ class GestionnaireEvenements
 		}
 		
     	*/
+    	
+    	//ranger les joueurs en dependant des pointages
     	for(k=0;k < numeroJoueursConnecte+1;k++)//nbmaxJoueurs// <=3
     	{
 	    	for(i=0; i< numeroJoueursDansSalle;i++)//nbmaxJoueurs // <=3

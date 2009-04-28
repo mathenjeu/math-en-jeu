@@ -686,6 +686,11 @@ class GestionnaireCommunication
         // Definir le type d'evenement et le target
         objEvenement.type = noeudEvenement.attributes.nom;
         objEvenement.target = this;
+        
+        //Definir nom de joueur qui a gagne
+        var nomGagner:String=noeudEvenement.childNodes[0].attributes.nom;
+        //trace("nomGagner = "+nomGagner);
+        
         // Passer tous les noeuds enfants (parametres) et creer chaque parametre
         // dans l'objet d'evenement
         for (var i:Number = 0; i < lstChildNodes.length; i++)
@@ -696,7 +701,7 @@ class GestionnaireCommunication
             // Si l'evenement n'est pas PartieDemarree, alors on peut simplement
             // aller chercher les valeurs des parametres, sinon il faut traiter
             // cet evenement differemment
-		
+			//trace(i+" strNomType = "+strNomType);
             if (noeudEvenement.attributes.nom != "PartieDemarree")
             {
 				if(noeudEvenement.attributes.nom == "JoueurDeplacePersonnage")
@@ -901,14 +906,15 @@ class GestionnaireCommunication
 				    
 				    		for(var j:Number =0; j < lstChildNodesStatistique.length; j++)
 				    		{
+					    		
 					    		objEvenement.statistiqueJoueur.push({nomUtilisateur:lstChildNodesStatistique[j].attributes.utilisateur, pointage:lstChildNodesStatistique[j].attributes.pointage});	
 				    		}
 							
-							if(noeudEvenement.firstChild.attributes.nom != "")
+							if(nomGagner!="") //noeudEvenement.firstChild.attributes.nom != "")
 							{
 								for(var j:Number =0; j < objEvenement.statistiqueJoueur.length; j++)
 								{
-									if(objEvenement.statistiqueJoueur[j].nomUtilisateur == noeudEvenement.firstChild.attributes.nom)
+									if(objEvenement.statistiqueJoueur[j].nomUtilisateur == nomGagner)//noeudEvenement.firstChild.attributes.nom)
 									{
 										if(_level0.loader.contentHolder.langue == "Francais")
 										{
