@@ -232,6 +232,8 @@ public class GestionnaireBD
 		}  
 		
 		joueur.definirCleNiveau(cleNiveau);
+		fillConnectedUser(cle);
+		
 	}//end methode
 	
 	// This function follows one of the two previous functions. It queries the database and
@@ -267,11 +269,63 @@ public class GestionnaireBD
 		}
 		return level;
 	}// end methode
-        
-  
 	
+	/**
+	 * this fonction fill the fields in DB (user.last_access_time,lasr_access_time)
+	 * with incorrect information to indicate that user is connected
+	 *
+	 */
+	public void fillConnectedUser(int userId)
+	{
 
- 
+ 				
+		//  SQL for update
+		String strSQL = "UPDATE user SET last_access_date = '1111-01-01', last_access_time = '55:55:55' where user_id = " + userId + ";"; 
+		
+		try
+		{
+			
+			synchronized(requete)
+			{
+				requete.executeUpdate(strSQL);
+			}
+        }
+        catch (Exception e)
+        {
+               System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_update_user_connected") + e.getMessage());
+        }
+        
+        
+	}// end methode 
+	
+	/**
+	 * this fonction fill the fields in DB (user.last_access_time,lasr_access_time)
+	 * with the current date at the end of game 
+	 */
+	public void fillEndDate(int userId)
+	{
+
+     		
+		//  SQL for update
+		String strSQL = "UPDATE user SET last_access_date = CURDATE(), last_access_time = CURTIME() where user_id = " + userId + ";"; 
+		
+		try
+		{
+			
+			synchronized(requete)
+			{
+				requete.executeUpdate(strSQL);
+			}
+        }
+        catch (Exception e)
+        {
+               System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_update_user_game_endtime") + e.getMessage());
+        }
+        
+        
+	}// end methode 
+        
+   
 	/** 
 	 * La fonction rempli la boiteQuestions avec des questions que correspond
 	 * a niveaux scolaires du joueur
@@ -471,7 +525,7 @@ public class GestionnaireBD
 	 *
 	 * Retour: la clé de partie qui servira pour la table partieJoueur
 	 */
-	public int ajouterInfosPartiePartieTerminee(Date dateDebut, int dureePartie)
+	public int ajouterInfosPartieTerminee(Date dateDebut, int dureePartie)
 	{
 
         SimpleDateFormat objFormatDate = new SimpleDateFormat("yyyy-MM-dd");
@@ -545,6 +599,7 @@ public class GestionnaireBD
                System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
             }
         
+        fillEndDate(cleJoueur);
         
 	}// end methode
 	
