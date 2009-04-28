@@ -431,7 +431,7 @@ public class ProtocoleJoueur implements Runnable
 					Integer.parseInt(objDocumentXMLEntree.getChildNodes().item(0).getAttributes().getNamedItem("numero").getNodeValue()));
 		}// fin if
 
-/*		// if flash security control
+		// if flash security control
 		else if (objDocumentXMLEntree.getChildNodes().getLength() == 1 &&
 				objDocumentXMLEntree.getChildNodes().item(0).getNodeName().equals("policy-file-request"))
 		{
@@ -444,7 +444,7 @@ public class ProtocoleJoueur implements Runnable
 			objNoeudCommande.appendChild(objNoeudCommandeIntern);
 			
 		} //end else if  
-*/
+
 		
 		// S'il n'y a pas de noeud commande dans le document XML, alors il y a 
 		// une erreur, sinon on peut traiter le contenu du message
