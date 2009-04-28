@@ -213,7 +213,7 @@ class GestionnaireEvenements
 	            numeroJoueursDansSalle=listeNumeroJoueursSalles[i].maxnbplayers;
 	            typeDeJeu=listeDesSalles[i].typeDeJeu;
 	            //typeDeJeu=listeDesDescriptionsSalles[i].descriptions;
-	            trace("@@@@@@@@@@@@@ typeDeJeu="+typeDeJeu);
+	            //trace("@@@@@@@@@@@@@ typeDeJeu="+typeDeJeu);
                 if(listeDesSalles[i].possedeMotDePasse == true)
                 {
                     this.motDePasseSalle = "";   // afficher une fenetre de demande de mot de passe
