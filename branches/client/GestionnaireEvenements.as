@@ -2369,18 +2369,24 @@ class GestionnaireEvenements
 			trace("              "+i+": "+jouersStarted[i].nomUtilisateur+" points:"+jouersStarted[i].pointage+" id:"+jouersStarted[i].idS);
 		}
 		*/
+		var numeroJoueursConnecte:Number=0;
+		
 		for (i=0;i<numeroJoueursDansSalle-1;i++) {
 			jouersStarted[i] = new Object();
 			jouersStarted[i].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)];
 			jouersStarted[i].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)];
 			jouersStarted[i].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].idStart;
-			trace(i+" "+jouersStarted[i].nomUtilisateur+" "+jouersStarted[i].pointage+"pts  id:"+jouersStarted[i].idS);
+			//trace(i+" "+jouersStarted[i].nomUtilisateur+" "+jouersStarted[i].pointage+"pts  id:"+jouersStarted[i].idS);
+			if(jouersStarted[i].nomUtilisateur!=undefined) numeroJoueursConnecte++;
 		}
 
 			jouersStarted[numeroJoueursDansSalle-1] = new Object();
 			jouersStarted[numeroJoueursDansSalle-1].nomUtilisateur=this.listeDesPersonnages[i].nom;
 			jouersStarted[numeroJoueursDansSalle-1].pointage=_level0.loader.contentHolder.pointageJoueur;
 			jouersStarted[numeroJoueursDansSalle-1].idS=this.listeDesPersonnages[i].id;
+			//trace((numeroJoueursDansSalle-1)+" "+jouersStarted[numeroJoueursDansSalle-1].nomUtilisateur+" "+jouersStarted[numeroJoueursDansSalle-1].pointage+"pts  id:"+jouersStarted[numeroJoueursDansSalle-1].idS);
+
+		//trace("-------------- numeroJoueursConnecte="+numeroJoueursConnecte);
 		/*
 		for (i=0;i<numeroJoueursDansSalle;i++) {
 			jouersStarted[i] = new Object();
@@ -2394,7 +2400,7 @@ class GestionnaireEvenements
 		}
 		
     	*/
-    	for(k=0;k < numeroJoueursDansSalle;k++)//nbmaxJoueurs// <=3
+    	for(k=0;k < numeroJoueursConnecte+1;k++)//nbmaxJoueurs// <=3
     	{
 	    	for(i=0; i< numeroJoueursDansSalle;i++)//nbmaxJoueurs // <=3
 	    	{
@@ -2521,10 +2527,13 @@ class GestionnaireEvenements
 		var z:Number = 0;
 		//
 		for(i=0;i<numeroJoueursDansSalle;i++){
+			
 	    	_level0.loader.contentHolder["nom"+(i+1)] = tabOrdonne[i].nom;	//nbmaxJoueurs
 			_level0.loader.contentHolder["pointage"+(i+1)] = tabOrdonne[i].pointage;
 			
-			this.tabPodiumOrdonneID[i] =  tabOrdonne[i].id;
+			this.tabPodiumOrdonneID[i] =  Number(tabOrdonne[i].id);
+			
+			trace(i+" "+tabOrdonne[i].nom+" = "+tabOrdonne[i].pointage+" pts, id:"+tabOrdonne[i].id);
 
     	}
     	

@@ -459,7 +459,8 @@ class GestionnaireCommunication
             (objCommandeEnTraitement != null &&
              ExtendedArray.fromArray(Etat.obtenirEvenementsAcceptablesCommande(intEtatClient, objCommandeEnTraitement.nom)).contains(noeudCommande.attributes.nom) == true))
         {
-            // Envoyer l'evenement aux ecouteurs de cet evenement		
+            // Envoyer l'evenement aux ecouteurs de cet evenement	
+            //trace("Envoyer l,evenement aux ecouteurs de cet evenement");	
             envoyerEvenement(noeudCommande);
         }
         // Sinon, s'il y a une commande en traitement, on verifie les
@@ -471,6 +472,7 @@ class GestionnaireCommunication
                   ExtendedArray.fromArray(Etat.obtenirEvenementsAcceptablesApres(intEtatClient, objCommandeEnTraitement.nom)).contains(noeudCommande.attributes.nom) == true))
         {
             // Ajouter l'evenement a la fin de la liste	
+            //trace("Ajouter l,evenement a la fin de la liste");
             lstEvenementsRecus.push(noeudCommande);
         }
     }
@@ -679,6 +681,7 @@ class GestionnaireCommunication
 		{
 			trace(lstChildNodes[j]);
 		}*/
+		trace("noeudEvenement "+noeudEvenement);
 		
         // Definir le type d'evenement et le target
         objEvenement.type = noeudEvenement.attributes.nom;
@@ -938,7 +941,7 @@ class GestionnaireCommunication
 			
             else	//donc (noeudEvenement.attributes.nom == "PartieDemarree")
             {
-				//trace("ds else ds for envoyer evenement : "+strNomType);
+				trace("ds else ds for envoyer evenement : "+strNomType);
                 // Traiter les differents cas et creer leurs objets dans objEvenement
                 switch (strNomType)
                 {
