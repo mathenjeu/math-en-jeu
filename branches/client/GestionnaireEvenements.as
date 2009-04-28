@@ -2529,13 +2529,13 @@ class GestionnaireEvenements
 		for(i=0;i<numeroJoueursDansSalle;i++){
 			
 			// Bloc of code to treat the username
-    			var firstDel = _parent._parent.nomUtilisateur.indexOf("-");                 // find first delimiter
-    			var secondDel = _parent._parent.nomUtilisateur.indexOf(".",firstDel + 1);   // find second delimiter
+    			var firstDel = tabOrdonne[i].nom.indexOf("-");                 // find first delimiter
+    			var secondDel = tabOrdonne[i].nom.indexOf(".",firstDel + 1);   // find second delimiter
     			var master;
 
     		//Now extract the 'master' from username
     			if (firstDel != -1 && secondDel != -1)
-       				master = _parent._parent.nomUtilisateur.substring(firstDel + 1, secondDel);
+       				master = tabOrdonne[i].nom.substring(firstDel + 1, secondDel);
     			else
        				master = "";
 		
