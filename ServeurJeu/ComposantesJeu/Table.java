@@ -801,7 +801,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			if(lstJoueurs.size() > 0)
 			{				
 				// Ajouter la partie dans la BD
-				int clePartie = objGestionnaireBD.ajouterInfosPartiePartieTerminee(objDateDebutPartie, intTempsTotal);
+				int clePartie = objGestionnaireBD.ajouterInfosPartieTerminee(objDateDebutPartie, intTempsTotal);
 	
 		        // Sert à déterminer si le joueur a gagné
 		        boolean boolGagnant;
