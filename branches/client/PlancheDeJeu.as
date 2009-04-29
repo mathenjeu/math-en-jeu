@@ -48,6 +48,8 @@ class PlancheDeJeu
     private var largeurDeCase:Number = -1;
     private var perso:Personnage;
     private var monPersonnage:Number = -1;  //  numéro dans le tableau des perso du personnage en cours
+	                                        // changed in id of personnage in purpose to distinguish paint from personnage
+											// and to have possibility to have 2 perso with the same paint
     private var nomDeMonPersonnage:String; // nom de notre perso
     private var zoom:Number = 0;
     private var gestionnaireInterface:GestionnaireInterface;
@@ -89,7 +91,7 @@ class PlancheDeJeu
     ////////////////////////////////////////////////////////////
     //  CONSTUCTEUR
     ////////////////////////////////////////////////////////////
-    function PlancheDeJeu(tab:Array, num:Number, p:GestionnaireInterface)
+    function PlancheDeJeu(tab:Array, idPersonage:Number, p:GestionnaireInterface)
     {
         var i:Number;
 		this.mat = new Array(tab.length)
@@ -99,7 +101,7 @@ class PlancheDeJeu
             this.tableauDesCases.push(new Array());
         }
         definirMat(tab, null);
-        monPersonnage = num;
+        monPersonnage = idPersonage;
         perso = null;
         gestionnaireInterface= p;
     }
@@ -463,17 +465,17 @@ class PlancheDeJeu
     }
 
     
-    function ajouterPersonnage(nom:String, ll:Number,cc:Number,num:Number, idClip:Number)
+    function ajouterPersonnage(nom:String, ll:Number,cc:Number, idPersonage:Number, idClip:Number)
     {
         var p:Personnage;
-        p = new Personnage(nom, 5*tableauDesCases.length*tableauDesCases[0].length+2*num,"Personnage"+idClip,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y);
+        p = new Personnage(nom, 5*tableauDesCases.length * tableauDesCases[0].length + 2 * idPersonage, idPersonage, "Personnage" + idClip ,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y);
         p.afficher();
      	//   p.zoomer(zoom*10);
         tableauDesCases[ll][cc].ajouterPersonnage(p);
 	
 		this.tableauDesPersonnages.push(p);
 	
-        if(num == monPersonnage)
+        if(idPersonage == monPersonnage)
         {
             perso = p;
 	    	nomDeMonPersonnage = nom;
