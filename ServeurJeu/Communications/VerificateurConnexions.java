@@ -113,6 +113,7 @@ public class VerificateurConnexions implements Runnable
     					{
     						// Arrêter le ProtocoleJoueur
     						protocole.arreterProtocoleJoueur();
+    						
     					}	
     				}
 				}
