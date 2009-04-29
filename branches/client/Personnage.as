@@ -31,7 +31,7 @@ class Personnage
 {
 	private var image:MovieClip;
 	private var position:Point;
-	private var numero:Number;           // ????
+	private var numero:Number;           // this is the level number    
 	private var prochainePosition:Point;
 	private var l:Number;
 	private var c:Number;
@@ -43,6 +43,7 @@ class Personnage
 	private var nom:String;               // name of user that is master of pers
 	private var boardCentre:Boolean;
 	private var listeSurMagasin:Array;	 // sert a recuperer la liste d'objets du magasin lorsque qu'on va sur une case magasin
+	private var personnageID:Number;        // id of perso - is diff for each connected player   
 	private var nouveauID:Number;
 	private var vieuxID:Number;
 	private var minigameLoade:Boolean;
@@ -84,9 +85,14 @@ class Personnage
 	}
 	
 	////////////////////////////////////////////////////////////
-	function setNouveauID(n:Number)
+	function setPersonnageID(n:Number)
 	{
-		nouveauID = n;
+		personnageID = n;
+	}
+	////////////////////////////////////////////////////////////
+	function getPersonnageID():Number
+	{
+		return personnageID;
 	}
 	
 	////////////////////////////////////////////////////////////
@@ -96,16 +102,24 @@ class Personnage
 	}
 	
 	////////////////////////////////////////////////////////////
-	function getNouveauID():Number
-	{
-		return nouveauID;
-	}
-	
-	////////////////////////////////////////////////////////////
 	function getVieuxID():Number
 	{
 		return vieuxID;
 	}
+	
+	////////////////////////////////////////////////////////////
+	function setNouveauID(n:Number)
+	{
+		nouveauID = n;
+	} 
+	
+	////////////////////////////////////////////////////////////
+	function getNouveauID():Number
+	{
+		return nouveauID;
+	} 
+	
+	
 	
 	////////////////////////////////////////////////////////////
 	function obtenirRangObjet(i:Number)
@@ -538,7 +552,7 @@ class Personnage
 	//////////////////////////////////////////////////////////////////////////////////////
 	//	CONSTRUCTEUR
 	//////////////////////////////////////////////////////////////////////////////////////
-	function Personnage(nom:String, niveau:Number, nomClip:String, ll:Number, cc:Number, xx:Number, yy:Number, mag:Array)
+	function Personnage(nom:String, niveau:Number, idPersonnage:Number, nomClip:String, ll:Number, cc:Number, xx:Number, yy:Number, mag:Array)
 	{
 		this.l = ll;
 		this.c = cc;
@@ -558,7 +572,7 @@ class Personnage
            master = nom;
 		
 		if(!(master == "master")) 
-		this.image = _level0.loader.contentHolder.referenceLayer.attachMovie(nomClip, "Personnage"+niveau, niveau);
+		this.image = _level0.loader.contentHolder.referenceLayer.attachMovie(nomClip, "Personnage" + idPersonnage, niveau);
 		
 		this.image._visible = false;
 		this.pointage = 0;
@@ -569,11 +583,9 @@ class Personnage
 		this.nom = nom;
 		this.listeSurMagasin = mag;
 		this.minigameLoade = false;
+		this.personnageID = idPersonnage;
 	    
-		
-		
-		
-		}
+	}
 	
 	
 	////////////////////////////////////////////////////////////
