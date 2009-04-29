@@ -378,6 +378,8 @@ public class ControleurJeu
 			joueur.obtenirSalleCourante().quitterSalle(joueur, false, !ajouterJoueurDeconnecte);
 		}
 		
+		// fill in DB the date and time of of last connection with server
+		this.objGestionnaireBD.fillEndDate(joueur.obtenirCleJoueur());
 		
 		// Empêcher d'autres thread de venir utiliser la liste des joueurs
 		// connectés au serveur de jeu pendant qu'on déconnecte le joueur
