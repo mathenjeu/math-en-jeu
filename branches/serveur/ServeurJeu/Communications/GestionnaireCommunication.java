@@ -176,6 +176,7 @@ public class GestionnaireCommunication
 		// Enlever le protocole joueur de la liste des ProtocoleJoueur
 		try
 		{
+			
 			lstProtocoleJoueur.remove(protocole);
 			miseAJourInfo();
 		}
