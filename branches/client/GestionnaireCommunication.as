@@ -681,7 +681,7 @@ class GestionnaireCommunication
 		{
 			trace(lstChildNodes[j]);
 		}*/
-		trace("noeudEvenement "+noeudEvenement);
+		//trace("noeudEvenement "+noeudEvenement);
 		
         // Definir le type d'evenement et le target
         objEvenement.type = noeudEvenement.attributes.nom;
