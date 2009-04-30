@@ -289,11 +289,15 @@ class GestionnaireEvenements
     {
         trace("*********************************************");
         trace("debut de demarrerPartie     "+no);
-	
-        this.idPersonnage = no;
+		
+        var idDessin:Number=((no-10000)-(no-10000)%100)/100;
+        
+        this.idPersonnage = no;//(no-10000)-idDessin*100;
+        trace("########### idDessin="+idDessin+" this.idPersonnage="+this.idPersonnage);
+        if(no<0) no=-no;
         this.listeDesPersonnages[numeroJoueursDansSalle-1].id = no;//3].id = no; // listeDesPersonnages.length
         this.listeDesPersonnages[numeroJoueursDansSalle-1].nom = this.nomUtilisateur;
-        this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementPartieTerminee), no);  
+        this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementPartieTerminee), no);//this.idPersonnage);//  
 	
 		trace("fin de demarrerPartie");
         trace("*********************************************\n");
@@ -911,6 +915,7 @@ class GestionnaireEvenements
                 _level0.loader.contentHolder.nomJ4 = nomUtilisateur;								// 4 joueurs
                 //this.listeDesPersonnages[0/*numeroJoueursDansSalle-1*/].nom = this.nomUtilisateur;
                 //this.listeDesPersonnages[0/*numeroJoueursDansSalle-1*/].id = idPersonnage;
+                
              
                 //trace("---------------- Remplir listeDesPersonnages num:"+objetEvenement.listePersonnageJoueurs.length);
                 var j:Number=0;
@@ -926,11 +931,16 @@ class GestionnaireEvenements
 		    
                     //trace(i+" "+this.listeDesPersonnages[i].nom+" "+tmpNom+", de serveur:"+objetEvenement.listePersonnageJoueurs[i].nom);
                     
-		     		_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(objetEvenement.listePersonnageJoueurs[i].idPersonnage));
+                    var nextID:Number=0;
+                    for(var k=0;k<objetEvenement.listePersonnageJoueurs.length;k++)
+                    	if(objetEvenement.listePersonnageJoueurs[k].nom.substr(0,7)!="Inconnu") nextID++;
+                    
+		     		_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(nextID));//[i].idPersonnage));//
 		    
-                    movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage"+objetEvenement.listePersonnageJoueurs[i].idPersonnage,"b"+i,i);
+                    movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage"+nextID/*[i].idPersonnage*/,"b"+i,i);
+                    _level0.loader.contentHolder["joueur"+(i+1)]=objetEvenement.listePersonnageJoueurs[i].nom;
                     //_level0.loader.contentHolder["dtCadre"+i+1]["joueur"+i]=this.listeDesPersonnages[i].nom;
-                    //trace("conect "+_level0.loader.contentHolder["dtCadre"+i+1]["joueur"+i]+" "+i);
+                    trace("nextID="+nextID+" connect "+i+" "+_level0.loader.contentHolder["joueur"+(i+1)]);
                     movClip._x = 510-j*60;
                     movClip._y = 150 + i*60-j*240;
 					movClip._xscale -= 70;
@@ -1058,7 +1068,7 @@ class GestionnaireEvenements
     {
         //   objetEvenement.resultat = Ok, CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte, JoueurPasDansSalle, JoueurPasDansTable, JoueursPasDansMemeTable
         trace("*********************************************");
-        trace("debut de retourDemarrerMaintenant   "+objetEvenement.resultat);
+        trace("debut de retourDemarrerMaintenant   "+objetEvenement.resultat+" "+objetEvenement);
 
 		switch(objetEvenement.resultat)
         {
@@ -2027,11 +2037,13 @@ class GestionnaireEvenements
 			if((undefined!=this.listeDesPersonnages[i].nom)&&("Inconnu"!=this.listeDesPersonnages[i].nom)){
 				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["nomJoueur"+(j+1)] = this.listeDesPersonnages[i].nom;
 				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["pointageJoueur"+(j+1)] = 0;
-				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)].idStart=this.listeDesPersonnages[i].id;
+				var idDessin:Number=((this.listeDesPersonnages[i].id-10000)-(this.listeDesPersonnages[i].id-10000)%100)/100;
+				var idPers:Number=this.listeDesPersonnages[i].id-10000-idDessin*100;
+				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)].idStart=idPers;//this.listeDesPersonnages[i].id;
 			
-				trace(i+" nom:"+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
+				trace(i+" nom:"+this.listeDesPersonnages[i].nom+" id:"+idPers);//this.listeDesPersonnages[i].id);
 				this["tete"+j]=new MovieClip();
-				this["tete"+j] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["tete"+(j+1)].attachMovie("tete"+this.listeDesPersonnages[i].id, "Tete"+j, -10100+j);
+				this["tete"+j] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["tete"+(j+1)].attachMovie("tete"+idPers/*this.listeDesPersonnages[i].id*/, "Tete"+j, -10100+j);
 				this["tete"+j]._x = -7;
 				this["tete"+j]._y = -6;
 				this["tete"+j]._xscale = 55;
@@ -2051,10 +2063,12 @@ class GestionnaireEvenements
 		}
 		// put the face of my avatar in the panel (next to my name)
 		_level0.loader.contentHolder.myObj=new Object();
-		_level0.loader.contentHolder.myObj.myID=this.listeDesPersonnages[numeroJoueursDansSalle-1].id;//nbmaxJoueurs // 3
+		var idDessin:Number=((this.listeDesPersonnages[numeroJoueursDansSalle-1].id-10000)-(this.listeDesPersonnages[numeroJoueursDansSalle-1].id-10000)%100)/100;
+		var idPers:Number=this.listeDesPersonnages[numeroJoueursDansSalle-1].id-10000-idDessin*100;
+		_level0.loader.contentHolder.myObj.myID=idPers;//this.listeDesPersonnages[numeroJoueursDansSalle-1].id;//nbmaxJoueurs // 3
 		_level0.loader.contentHolder.myObj.myNom=this.listeDesPersonnages[numeroJoueursDansSalle-1].nom;
 		
-		var maTete:MovieClip = _level0.loader.contentHolder.maTete.attachMovie("tete"+this.listeDesPersonnages[numeroJoueursDansSalle-1].id, "maTete", -10099);
+		var maTete:MovieClip = _level0.loader.contentHolder.maTete.attachMovie("tete"+idPers/*this.listeDesPersonnages[numeroJoueursDansSalle-1].id*/, "maTete", -10099);
 		maTete._x = -7;
 		maTete._y = -6;
 		maTete._xscale = 55;
@@ -2177,8 +2191,10 @@ class GestionnaireEvenements
             if(this.listeDesPersonnages[numeroJoueursDansSalle-1].nom == objetEvenement.positionJoueurs[i].nom)
             {
 	            //trace(this.listeDesPersonnages[numeroJoueursDansSalle-1].nom+" N"+i+" starts game");
-	            
-                _level0.loader.contentHolder.planche = new PlancheDeJeu(objetEvenement.plateauJeu, i, _level0.loader.contentHolder.gestionnaireInterface);
+	            var idDessin:Number=((this.listeDesPersonnages[numeroJoueursDansSalle-1].id-10000)-(this.listeDesPersonnages[numeroJoueursDansSalle-1].id-10000)%100)/100;
+				var idPers:Number=this.listeDesPersonnages[numeroJoueursDansSalle-1].id-10000-idDessin*100;
+				
+                _level0.loader.contentHolder.planche = new PlancheDeJeu(objetEvenement.plateauJeu, idDessin, _level0.loader.contentHolder.gestionnaireInterface);
             }
         }
         _level0.loader.contentHolder.planche.afficher();
@@ -2190,8 +2206,13 @@ class GestionnaireEvenements
 	            //trace(this.listeDesPersonnages[j].nom+" : "+objetEvenement.positionJoueurs[i].nom);
                 if(this.listeDesPersonnages[j].nom == objetEvenement.positionJoueurs[i].nom)
                 {
-                    _level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, i, this.listeDesPersonnages[j].id);
-		    		trace("Construction du personnage : " + this.listeDesPersonnages[j].nom + " " + objetEvenement.positionJoueurs[i].x + " " + objetEvenement.positionJoueurs[i].y + " " + i + " " + this.listeDesPersonnages[j].id);
+	                var idDessin:Number=((this.listeDesPersonnages[j].id-10000)-(this.listeDesPersonnages[j].id-10000)%100)/100;
+					var idPers:Number=this.listeDesPersonnages[j].id-10000-idDessin*100;
+					if(idDessin<0) idDessin=12;
+					//if(idPers<0) idPers=-idPers;
+					
+                    _level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin);//this.listeDesPersonnages[j].id);
+		    		trace("Construction du personnage : " + this.listeDesPersonnages[j].nom + " " + objetEvenement.positionJoueurs[i].x + " " + objetEvenement.positionJoueurs[i].y + " idDessin:" + idDessin + " idPers:" + idPers);//this.listeDesPersonnages[j].id);
 				}
             }
         }
@@ -2220,7 +2241,9 @@ class GestionnaireEvenements
         	{
             	this.listeDesPersonnages[i].id = objetEvenement.idPersonnage;
             	_level0.loader.contentHolder.refLayer["b"+i].removeMovieClip();
-            	movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage"+objetEvenement.idPersonnage,"b"+i,i);
+            	var idDessin:Number=((this.listeDesPersonnages[i].id-10000)-(this.listeDesPersonnages[i].id-10000)%100)/100;
+				var idPers:Number=this.listeDesPersonnages[i].id-10000-idDessin*100;
+            	movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage"+idPers/*objetEvenement.idPersonnage*/,"b"+i,i);
             	movClip._x = 510-j*60;
                 movClip._y = 150 + i*60-j*240;
 				movClip._xscale -= 70;

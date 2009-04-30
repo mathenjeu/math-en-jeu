@@ -1024,28 +1024,26 @@ class GestionnaireCommunication
                         {
                             // Declaration d'une variable qui va contenir la
                             // valeur a mettre dans la case
-                            
+                            var intValeurCase:Number = Number(lstChildNodesCase[j].attributes.type);
+							
 							//Begin with the points for finish
-							var intValeurCase:Number = Number(lstChildNodesCase[j].attributes.type);
 							if( _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")
 							{
-
-								var isWin:Boolean = false;
-							
-								for(var i:Number = 0; i < nbTracks; i++)
-								{
-									if((xWinGame == lstChildNodesCase[j].attributes.x )&& (yWinGame - i == lstChildNodesCase[j].attributes.y))
-									isWin = true;
-								}
-							
-								//si la case contient le winTheGame, alors on ajoute 40 000 a la valeur de sa case.
-								if(isWin)							
-								{
-									intValeurCase += 41001;
-								}
+							   
+							   var isWin:Boolean = false
+							   for(var i:Number = 0; i < nbTracks; i++)
+							   {
+								   if((xWinGame == lstChildNodesCase[j].attributes.x )&& (yWinGame - i == lstChildNodesCase[j].attributes.y))
+								   isWin = true;
+							   }
+							   //si la case contient le winTheGame, alors on ajoute 40 000 a la valeur de sa case.
+							   if(isWin)							
+							   {
+								  intValeurCase += 41001;
+							   }
 							} // end if for const of WinTheGame if type of game is Tournament
 							
-                            // Si la case courante est une case speciale, alors
+							// Si la case courante est une case speciale, alors
                             // on met ajoute 90 a la valeur de la case
                             if (lstChildNodesCase[j].nodeName == "caseSpeciale")
                             {
@@ -1940,7 +1938,7 @@ class GestionnaireCommunication
 	
 	/**
      * Cette methode permet au joueur de demarrer la partie avant qu'il n'y ait
-     * 4 joueurs a la table.
+     * nbmax joueurs a la table.
      *
      * @param Function demarrerMaintenantDelegate : Un pointeur sur la
      * fonction permettant de savoir si la commande a ete acceptee
