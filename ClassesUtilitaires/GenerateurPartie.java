@@ -105,6 +105,7 @@ public final class GenerateurPartie
 		CaseCouleur objCaseParcourue = new CaseCouleur(-1);
 		//System.out.println(objCaseParcourue.obtenirTypeCase());
 		
+		
 		// Modifier le temps pour qu'il soit au moins le minimum de minutes
 		temps = Math.max(temps, reglesPartie.obtenirTempsMinimal());
 		
@@ -117,17 +118,19 @@ public final class GenerateurPartie
 		int factor = objRandom.nextInt((int) Math.ceil(temps /4)) + (int) Math.ceil(temps /5);
 		if(factor % 2 == 0)
 		   factor = factor + 1;
-
+        
 		int intNbColumns;
 		int intNbLines;
 		
 		// calculate number of lines and of columns if gametype = tournament
 		if (gameType.equals("Tournament"))
 		{
-		   intNbColumns = (reglesPartie.getNbTracks() + 1) * factor - 1;
+		   intNbColumns = (reglesPartie.getNbTracks() + 1) * (reglesPartie.obtenirTempsMinimal() * 2 + 1) - 1; // factor - 1;
 
-    	   intNbLines = (int) Math.ceil((temps * temps * 3/2 ) / intNbColumns);
+    	   intNbLines = reglesPartie.obtenirTempsMaximal();     	   //(int) Math.ceil((temps * temps * 3/2 ) / intNbColumns);
 		
+    	   if (intNbLines < 10)
+    		   intNbLines = 12;
 		}else { //if gametype = mathenjeu
 		
 		   // Le nombre de lignes sera de ceiling(temps / 2) à temps
