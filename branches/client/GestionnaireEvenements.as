@@ -935,12 +935,16 @@ class GestionnaireEvenements
                     for(var k=0;k<objetEvenement.listePersonnageJoueurs.length;k++)
                     	if(objetEvenement.listePersonnageJoueurs[k].nom.substr(0,7)!="Inconnu") nextID++;
                     
+                    var idDessin:Number=((this.listeDesPersonnages[i].id-10000)-(this.listeDesPersonnages[i].id-10000)%100)/100;
+					var idPers:Number=this.listeDesPersonnages[i].id-10000-idDessin*100;
+					if(this.listeDesPersonnages[i].id==0) idDessin=0;
+					
 		     		_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(nextID));//[i].idPersonnage));//
 		    
-                    movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage"+nextID/*[i].idPersonnage*/,"b"+i,i);
+                    movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage"+idDessin/*[i].idPersonnage*/,"b"+i,i);
                     _level0.loader.contentHolder["joueur"+(i+1)]=objetEvenement.listePersonnageJoueurs[i].nom;
                     //_level0.loader.contentHolder["dtCadre"+i+1]["joueur"+i]=this.listeDesPersonnages[i].nom;
-                    trace("nextID="+nextID+" connect "+i+" "+_level0.loader.contentHolder["joueur"+(i+1)]);
+                    trace("idPers="+idPers+" idDessin="+idDessin+" a connecte "+i+" "+_level0.loader.contentHolder["joueur"+(i+1)]);
                     movClip._x = 510-j*60;
                     movClip._y = 150 + i*60-j*240;
 					movClip._xscale -= 70;
@@ -1820,7 +1824,7 @@ class GestionnaireEvenements
     	{
 	    	var alreadyWas:Boolean=false;
 	    	
-            for(i = 0; i < numeroJoueursDansSalle; i++)//nbmaxJoueurs
+            for(i = numeroJoueursDansSalle-1; i >=0 ; i--)//nbmaxJoueurs
             {
 	            var itIsInconnu:Boolean=(listeDesPersonnages[i].nom.substr(0,7)=="Inconnu");
 	            
@@ -1835,11 +1839,14 @@ class GestionnaireEvenements
                     alreadyWas=true;//break;
                 } else
                 {
+	                
                 	//_level0.loader.contentHolder["dtCadre"+i+1]["joueur"+i]=_level0.loader.contentHolder.noms[i] = listeDesPersonnages[i].nom;
                 	//trace("_level0.loader.contentHolder[\"dtCadre\"+i+1][\"joueur\"+i] "+_level0.loader.contentHolder["dtCadre"+i+1]["joueur"+i]);
             	}
+            	if((!itIsInconnu)&&(listeDesPersonnages[i].nom!=this.nomUtilisateur)) _level0.loader.contentHolder["joueur"+(i+1)]=listeDesPersonnages[i].nom;
 	                
             }
+            
     	}
     	if(indice != -1)
     	{
@@ -1871,7 +1878,7 @@ class GestionnaireEvenements
     	}
     	for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
                 {
-					trace(i+": "+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
+					trace(i+"this.listeDesPersonnages[i].nom: "+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
 				}
     	trace("fin de evenementJoueurEntreTable");
     	trace("*********************************************\n");
@@ -2039,11 +2046,11 @@ class GestionnaireEvenements
 				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["pointageJoueur"+(j+1)] = 0;
 				var idDessin:Number=((this.listeDesPersonnages[i].id-10000)-(this.listeDesPersonnages[i].id-10000)%100)/100;
 				var idPers:Number=this.listeDesPersonnages[i].id-10000-idDessin*100;
-				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)].idStart=idPers;//this.listeDesPersonnages[i].id;
+				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)].idStart=idDessin;//this.listeDesPersonnages[i].id;
 			
 				trace(i+" nom:"+this.listeDesPersonnages[i].nom+" id:"+idPers);//this.listeDesPersonnages[i].id);
 				this["tete"+j]=new MovieClip();
-				this["tete"+j] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["tete"+(j+1)].attachMovie("tete"+idPers/*this.listeDesPersonnages[i].id*/, "Tete"+j, -10100+j);
+				this["tete"+j] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["tete"+(j+1)].attachMovie("tete"+idDessin/*this.listeDesPersonnages[i].id*/, "Tete"+j, -10100+j);
 				this["tete"+j]._x = -7;
 				this["tete"+j]._y = -6;
 				this["tete"+j]._xscale = 55;
@@ -2059,16 +2066,16 @@ class GestionnaireEvenements
 				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)]=undefined;//.removeMovieClip();
 				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)] = -1;
 		 	}
-			 trace(i+" "+_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)]+" == "+this.listeDesPersonnages[i].nom);//.removeMovieClip());
+			 //trace(i+" "+_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)]+" == "+this.listeDesPersonnages[i].nom);//.removeMovieClip());
 		}
 		// put the face of my avatar in the panel (next to my name)
 		_level0.loader.contentHolder.myObj=new Object();
 		var idDessin:Number=((this.listeDesPersonnages[numeroJoueursDansSalle-1].id-10000)-(this.listeDesPersonnages[numeroJoueursDansSalle-1].id-10000)%100)/100;
 		var idPers:Number=this.listeDesPersonnages[numeroJoueursDansSalle-1].id-10000-idDessin*100;
-		_level0.loader.contentHolder.myObj.myID=idPers;//this.listeDesPersonnages[numeroJoueursDansSalle-1].id;//nbmaxJoueurs // 3
+		_level0.loader.contentHolder.myObj.myID=idDessin;//this.listeDesPersonnages[numeroJoueursDansSalle-1].id;//nbmaxJoueurs // 3
 		_level0.loader.contentHolder.myObj.myNom=this.listeDesPersonnages[numeroJoueursDansSalle-1].nom;
 		
-		var maTete:MovieClip = _level0.loader.contentHolder.maTete.attachMovie("tete"+idPers/*this.listeDesPersonnages[numeroJoueursDansSalle-1].id*/, "maTete", -10099);
+		var maTete:MovieClip = _level0.loader.contentHolder.maTete.attachMovie("tete"+idDessin/*this.listeDesPersonnages[numeroJoueursDansSalle-1].id*/, "maTete", -10099);
 		maTete._x = -7;
 		maTete._y = -6;
 		maTete._xscale = 55;
@@ -2194,7 +2201,7 @@ class GestionnaireEvenements
 	            var idDessin:Number=((this.listeDesPersonnages[numeroJoueursDansSalle-1].id-10000)-(this.listeDesPersonnages[numeroJoueursDansSalle-1].id-10000)%100)/100;
 				var idPers:Number=this.listeDesPersonnages[numeroJoueursDansSalle-1].id-10000-idDessin*100;
 				
-                _level0.loader.contentHolder.planche = new PlancheDeJeu(objetEvenement.plateauJeu, idDessin, _level0.loader.contentHolder.gestionnaireInterface);
+                _level0.loader.contentHolder.planche = new PlancheDeJeu(objetEvenement.plateauJeu, this.listeDesPersonnages[numeroJoueursDansSalle-1].id, _level0.loader.contentHolder.gestionnaireInterface);
             }
         }
         _level0.loader.contentHolder.planche.afficher();
@@ -2243,7 +2250,7 @@ class GestionnaireEvenements
             	_level0.loader.contentHolder.refLayer["b"+i].removeMovieClip();
             	var idDessin:Number=((this.listeDesPersonnages[i].id-10000)-(this.listeDesPersonnages[i].id-10000)%100)/100;
 				var idPers:Number=this.listeDesPersonnages[i].id-10000-idDessin*100;
-            	movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage"+idPers/*objetEvenement.idPersonnage*/,"b"+i,i);
+            	movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage"+idDessin/*objetEvenement.idPersonnage*/,"b"+idPers,100*i);
             	movClip._x = 510-j*60;
                 movClip._y = 150 + i*60-j*240;
 				movClip._xscale -= 70;
