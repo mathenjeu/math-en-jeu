@@ -879,11 +879,13 @@ class Personnage
 		{
 			// assure que le clip a la bonne orientation
 			image._xscale = -Math.abs(image._xscale);
+			image.dtNom._xscale=-Math.abs(image.dtNom._xscale);
 		}
 		else
 		{
 			// flip le clip pour aller vers la gauche
 			image._xscale = Math.abs(image._xscale);
+			image.dtNom._xscale=Math.abs(image.dtNom._xscale);
 		}
 		
 		
