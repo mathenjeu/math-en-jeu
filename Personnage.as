@@ -556,10 +556,12 @@ class Personnage
            master = nom.substring(firstDel + 1, secondDel);
         else
            master = nom;
-		
+		//trace("Personnage "+nom+" nomClip="+nomClip+"  niveau="+niveau);
 		if(!(master == "master")) 
 		this.image = _level0.loader.contentHolder.referenceLayer.attachMovie(nomClip, "Personnage"+niveau, niveau);
 		
+		this.image.dText.nom=nom;
+		this.image.nom=nom;
 		this.image._visible = false;
 		this.pointage = 0;
 		this.argent = 0;
