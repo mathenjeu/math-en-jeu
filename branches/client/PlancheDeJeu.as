@@ -4,19 +4,19 @@ Copyright (C) 2007 Projet SMAC
 
 Ce programme est un logiciel libre ; vous pouvez le
 redistribuer et/ou le modifier au titre des clauses de la
-Licence Publique Générale Affero (AGPL), telle que publiée par
-Affero Inc. ; soit la version 1 de la Licence, ou (à
-votre discrétion) une version ultérieure quelconque.
+Licence Publique Generale Affero (AGPL), telle que publiee par
+Affero Inc. ; soit la version 1 de la Licence, ou (a
+votre discretion) une version ulterieure quelconque.
 
-Ce programme est distribué dans l'espoir qu'il sera utile,
-mais SANS AUCUNE GARANTIE ; sans même une garantie implicite de
+Ce programme est distribue dans l'espoir qu'il sera utile,
+mais SANS AUCUNE GARANTIE ; sans meme une garantie implicite de
 COMMERCIABILITE ou DE CONFORMITE A UNE UTILISATION
 PARTICULIERE. Voir la Licence Publique
-Générale Affero pour plus de détails.
+Generale Affero pour plus de details.
 
-Vous devriez avoir reçu un exemplaire de la Licence Publique
-Générale Affero avec ce programme; si ce n'est pas le cas,
-écrivez à Affero Inc., 510 Third Street - Suite 225,
+Vous devriez avoir recu un exemplaire de la Licence Publique
+Generale Affero avec ce programme; si ce n'est pas le cas,
+ecrivez a Affero Inc., 510 Third Street - Suite 225,
 San Francisco, CA 94107, USA.
 *********************************************************************/
 
@@ -47,7 +47,7 @@ class PlancheDeJeu
     private var hauteurDeCase:Number = -1;
     private var largeurDeCase:Number = -1;
     private var perso:Personnage;
-    private var monPersonnage:Number = -1;  //  numéro dans le tableau des perso du personnage en cours
+    private var monPersonnage:Number = -1;  //  numero dans le tableau des perso du personnage en cours
     private var nomDeMonPersonnage:String; // nom de notre perso
     private var zoom:Number = 0;
     private var gestionnaireInterface:GestionnaireInterface;
@@ -99,7 +99,9 @@ class PlancheDeJeu
             this.tableauDesCases.push(new Array());
         }
         definirMat(tab, null);
-        monPersonnage = num;
+        var idDessin:Number=((num-10000)-(num-10000)%100)/100;
+		var idPers:Number=num-10000-idDessin*100;
+        monPersonnage = idPers;num;
         perso = null;
         gestionnaireInterface= p;
     }
@@ -111,7 +113,7 @@ class PlancheDeJeu
     }
 
    
-    // à revoir, pour tout de suite ca sert quand on enleve une piece
+    // a revoir, pour tout de suite ca sert quand on enleve une piece
     function modifierNumeroCase(l:Number, c:Number, num:Number)
     {
 	    // si on vient d'enlever un objet il faut mettre comme nouvelle valeur juste la couleur de la case (deux derniers chiffres)
@@ -152,7 +154,7 @@ class PlancheDeJeu
     }
    
    	// cette fonction affiche la planche de jeu initiale,
-    // idéalement il faudrait que les 4 coins soient toujours présents et pas plus de 9998 cases
+    // idealement il faudrait que les 4 coins soient toujours presents et pas plus de 9998 cases
     function afficher()
     {
         var i:Number;
@@ -163,7 +165,7 @@ class PlancheDeJeu
         var x:Number;
         var y:Number;
         var temp:Number;
-        // ici on veut juste déterminer la hauteur et la largeur des cases  //////////////////////////
+        // ici on veut juste determiner la hauteur et la largeur des cases  //////////////////////////
         clipTest= _level0.loader.contentHolder.referenceLayer.attachMovie("case0", "case", 0);
         clipTest._x = -100;
         clipTest._y = -100;
@@ -181,7 +183,7 @@ class PlancheDeJeu
                 pt.definirY(y);
                 if(this.mat[i][j] != 0)
                 {
-            		//trace("dans afficher la planche de jeu, i   j   numéro de la case :  "+i+"   "+j+"   "+this.mat[i][j]);
+            		//trace("dans afficher la planche de jeu, i   j   numero de la case :  "+i+"   "+j+"   "+this.mat[i][j]);
                     nouvelleCase = new Case(this.mat[i][j], i, j, mat.length, this.mat[0].length);
                     this.tableauDesCases[i][j] = nouvelleCase;
                     nouvelleCase.afficher(pt);
@@ -253,7 +255,7 @@ class PlancheDeJeu
         {
             case "Est":
                 la = -largeurDeCase/2;
-				if (coinDroit.obtenirX()+la < 275) //Le coin droit du tableau est au centre de l'écran
+				if (coinDroit.obtenirX()+la < 275) //Le coin droit du tableau est au centre de l'ecran
 				{
 					la = 275 - coinDroit.obtenirX();
 					limiteAtteinte = true;
@@ -262,7 +264,7 @@ class PlancheDeJeu
             break;
             case "Ouest":
                 la = largeurDeCase/2; 
-				if (coinGauche.obtenirX()+la > 275) //Le coin gauche du tableau est au centre de l'écran
+				if (coinGauche.obtenirX()+la > 275) //Le coin gauche du tableau est au centre de l'ecran
 				{
 					la = 275 - coinGauche.obtenirX();
 					limiteAtteinte = true;
@@ -272,7 +274,7 @@ class PlancheDeJeu
             case "Nord":
                 la = 0;
                 ha = hauteurDeCase/2;
-				if (coinHaut.obtenirY()+ha > 250) //Le coin haut du tableau est au centre de l'écran
+				if (coinHaut.obtenirY()+ha > 250) //Le coin haut du tableau est au centre de l'ecran
 				{
 					ha = 250 - coinHaut.obtenirY();
 					limiteAtteinte = true;
@@ -281,7 +283,7 @@ class PlancheDeJeu
             case "Sud":
                 la = 0;
                 ha = -hauteurDeCase/2;
-				if (coinBas.obtenirY()+ha < 250) //Le coin bas du tableau est au centre de l'écran
+				if (coinBas.obtenirY()+ha < 250) //Le coin bas du tableau est au centre de l'ecran
 				{
 					ha = 250 - coinBas.obtenirY();
 					limiteAtteinte = true;
@@ -289,7 +291,7 @@ class PlancheDeJeu
             break;
         }
 	
-		// on déplace le clip sur lequel est attaché tous les autres clips
+		// on deplace le clip sur lequel est attache tous les autres clips
 		_level0.loader.contentHolder.referenceLayer._x += la;		
 		_level0.loader.contentHolder.referenceLayer._y += ha;
 		
@@ -309,11 +311,11 @@ class PlancheDeJeu
 				{
 					this.zoom++;
 					
-					// on zoom le clip sur lequel est attaché tous les autres clips
+					// on zoom le clip sur lequel est attache tous les autres clips
 					_level0.loader.contentHolder.referenceLayer._xscale +=10;
 					_level0.loader.contentHolder.referenceLayer._yscale +=10;
 				
-					// on déplace le clip sur lequel est attaché tous les autres clips
+					// on deplace le clip sur lequel est attache tous les autres clips
 					distX = 275 - _level0.loader.contentHolder.referenceLayer._x;
 					distX *= (10+this.zoom)/(9+this.zoom); 
 					_level0.loader.contentHolder.referenceLayer._x = 275 - distX;
@@ -332,11 +334,11 @@ class PlancheDeJeu
 				{
 					this.zoom--; 
 					
-					// on zoom le clip sur lequel est attaché tous les autres clips
+					// on zoom le clip sur lequel est attache tous les autres clips
 					_level0.loader.contentHolder.referenceLayer._xscale -=10;
 					_level0.loader.contentHolder.referenceLayer._yscale -=10;
 					
-					// on déplace le clip sur lequel est attaché tous les autres clips
+					// on deplace le clip sur lequel est attache tous les autres clips
 					distX = 275 - _level0.loader.contentHolder.referenceLayer._x;
 					distX *= (10+this.zoom)/(11+this.zoom); 
 					_level0.loader.contentHolder.referenceLayer._x = 275 - distX;
@@ -371,8 +373,8 @@ class PlancheDeJeu
     }
    
     
-	// cette fonction prend en entrée un pt du board original et retourne la ligne et la colonne dans le board tourné
-	// à appliquer à tous les pt donnés par le serveur
+	// cette fonction prend en entree un pt du board original et retourne la ligne et la colonne dans le board tourne
+	// a appliquer a tous les pt donnes par le serveur
     function calculerPositionTourne(ll:Number, cc:Number):Point
     {
         var pt:Point;
@@ -414,8 +416,8 @@ class PlancheDeJeu
     }
 
     
-    // cette fonction prend en entrée un pt du board tourné et retourne la ligne et la colonne dans le board original
-    // à appliquer à tous les points donnés au serveur
+    // cette fonction prend en entree un pt du board tourne et retourne la ligne et la colonne dans le board original
+    // a appliquer a tous les points donnes au serveur
     function calculerPositionOriginale(ll:Number, cc:Number):Point
     {
         var pt:Point;
@@ -466,6 +468,7 @@ class PlancheDeJeu
     function ajouterPersonnage(nom:String, ll:Number,cc:Number,num:Number, idClip:Number)
     {
         var p:Personnage;
+        trace("ajouterPersonnage:"+nom+" niveau:"+(5*tableauDesCases.length*tableauDesCases[0].length+2*num)+" idPers:"+num+" idDessin:"+idClip);
         p = new Personnage(nom, 5*tableauDesCases.length*tableauDesCases[0].length+2*num,"Personnage"+idClip,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y);
         p.afficher();
      	//   p.zoomer(zoom*10);
@@ -486,7 +489,7 @@ class PlancheDeJeu
     
     
     
-	// c'est quoi la différence entre ça et recentrerBoard ??
+	// c'est quoi la difference entre ca et recentrerBoard ??
     function centrerPersonnage(l:Number, c:Number)
     {
         var diffX:Number;
@@ -550,7 +553,7 @@ class PlancheDeJeu
 			}
 		}
 
-		// on déplace le clip sur lequel est attaché tous les autres clips
+		// on deplace le clip sur lequel est attache tous les autres clips
 		_level0.loader.contentHolder.referenceLayer._x +=dx;		
 		_level0.loader.contentHolder.referenceLayer._y +=dy;
 		trace("recentrerBoard: false");
@@ -626,7 +629,7 @@ class PlancheDeJeu
 		
 	 if(!(master == "master"))
 	 { 
-		trace("Début afficherCasesPossibles");
+		trace("Debut afficherCasesPossibles");
 		
         var i:Number;
         var nb:Number = 0;
@@ -699,7 +702,7 @@ class PlancheDeJeu
 	
         for(i=1;i<=Math.min(p.obtenirL(),6);i++)
         {
-			//trace("ds deuxième for avant if  i  mat  :  "+i+"   "+mat[p.obtenirL()-i][p.obtenirC()]);
+			//trace("ds deuxieme for avant if  i  mat  :  "+i+"   "+mat[p.obtenirL()-i][p.obtenirC()]);
 			temp = p.obtenirL()-i;
            
 			if(mat[temp][p.obtenirC()] > 0)
@@ -856,9 +859,9 @@ class PlancheDeJeu
     
 	
 	/*
-	Les 2 fonctions suivantes servent à afficher le nombre de points que
-	vaut chaque déplacement quand la souris est déplacée sur les cases.
-	Elles sont appelées dans afficherCasesPossibles().
+	Les 2 fonctions suivantes servent a afficher le nombre de points que
+	vaut chaque deplacement quand la souris est deplacee sur les cases.
+	Elles sont appelees dans afficherCasesPossibles().
 	*/
 	function afficherValeurDeplacementColonne (p, brille:MovieClip, dx:Number, dy:Number)
 	{
@@ -967,11 +970,11 @@ class PlancheDeJeu
 		
         for(i=1;i<=Math.min(p.obtenirL(),6);i++)
         {
-			//trace("ds deuxième for");
+			//trace("ds deuxieme for");
 		
             if(mat[p.obtenirL()-i][p.obtenirC()] > 0)
             {
-				// trace("ds if deuxième for");
+				// trace("ds if deuxieme for");
                 tableauDesCases[p.obtenirL()-i][p.obtenirC()].effacerCasePossible();
 				switchBackColor(tableauDesCases[p.obtenirL()-i][p.obtenirC()]);
             }
@@ -1033,7 +1036,7 @@ class PlancheDeJeu
     }
   
   
-    // num est le numéro du personnage   str est le type de collision
+    // num est le numero du personnage   str est le type de collision
     function teleporterPersonnage(nom:String, ancienL:Number, ancienC:Number, nouveauL:Number, nouveauC:Number, str:String)
     {
 	    trace(" dans teleporterPersonnage, parametres :  "+nom+"   "+ancienL+"   "+ancienC+"   "+nouveauL+"   "+nouveauC+"   "+str);
@@ -1049,8 +1052,8 @@ class PlancheDeJeu
 	    {
 		    if(listeTemporaire[i].obtenirNom() == nom)
 		    {
-			    trace("juste avant de définir la prochaine poisition");
-			    //listeTemporaire[i].definirPosition(p, nouveauL, nouveauC);  // on le met si on veut téléportation, mais probleme avec les collisions...
+			    trace("juste avant de definir la prochaine poisition");
+			    //listeTemporaire[i].definirPosition(p, nouveauL, nouveauC);  // on le met si on veut teleportation, mais probleme avec les collisions...
 			    this.tableauDesCases[ancienL][ancienC].obtenirListeDesPersonnages()[i].definirProchainePosition(p,str);
 			    break;
 		    }
