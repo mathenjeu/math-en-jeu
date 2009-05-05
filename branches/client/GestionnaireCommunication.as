@@ -916,14 +916,14 @@ class GestionnaireCommunication
 								{
 									if(objEvenement.statistiqueJoueur[j].nomUtilisateur == nomGagner)//noeudEvenement.firstChild.attributes.nom)
 									{
-										if(_level0.loader.contentHolder.langue == "Francais")
+										/*if(_level0.loader.contentHolder.langue == "Francais")
 										{
 											objEvenement.statistiqueJoueur[j].pointage = "Gagnant";
 										}
 										else //en anglais
 										{
 											objEvenement.statistiqueJoueur[j].pointage = "Winner";
-										}
+										}*/
 									}
 								}
 							}
