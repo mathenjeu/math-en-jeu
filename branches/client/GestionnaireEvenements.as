@@ -2008,7 +2008,6 @@ class GestionnaireEvenements
     	trace("*********************************************");
     	trace("debut de evenementSynchroniserTemps   "+objetEvenement.tempsRestant);
     	_level0.loader.contentHolder.horlogeNum = objetEvenement.tempsRestant;
-    	trace("fin de evenementSynchroniserTemps    "+_level0.loader.contentHolder.tempsTable*60);
     	trace("*********************************************\n");
     }
 	
