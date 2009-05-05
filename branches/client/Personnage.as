@@ -592,7 +592,7 @@ class Personnage
 		dx = this.prochainePosition.obtenirX() - this.position.obtenirX();  
 		dy = this.prochainePosition.obtenirY() - this.position.obtenirY();
 		
-		if(boardCentre /*dx == 0 && dy == 0 && image._currentFrame == 1*/)
+		if( boardCentre) //dx == 0 && dy == 0 && image._currentFrame == 1) 
 		{
 			return;
 		}
@@ -827,14 +827,26 @@ class Personnage
 			}
 			if(reafficher1 && reafficher2) this.minigameLoade = false;
 			//Si le perso est le mien et qu'il est au repos, mais que le board n'est pas centre
+			
 			if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 			{
-				if(_level0.loader.contentHolder.planche.recentrerBoard(this.l, this.c, true))
+				if(_level0.loader.contentHolder.planche.recentrerBoard(this.l, this.c, false))
 				{
 					if(!this.minigameLoade) _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 					boardCentre = true;
+					trace(_level0.loader.contentHolder.horlogeNum + "temps restant");
+					
+					if( (_level0.loader.contentHolder.objGestionnaireEvenements.obtenirTempsPartie()*60 - _level0.loader.contentHolder.horlogeNum < 2))//&&(_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu=="Tournament")
+					{
+					   _level0.loader.contentHolder.planche.translater("Est");
+					   _level0.loader.contentHolder.planche.translater("Est");
+					   _level0.loader.contentHolder.planche.translater("Est");
+					   //_level0.loader.contentHolder.planche.translater("Est");
+					   //_level0.loader.contentHolder.planche.translater("Est");
+					   //boardCentre = false;
+					}
 				}
-			}
+			} 
 			
 			return; // pour ne pas faire le reste des verifications inutilement si dx == dy == 0
 		}
