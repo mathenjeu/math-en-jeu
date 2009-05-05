@@ -104,20 +104,10 @@ public final class GenerateurPartie
 		// va nous servir pour identifier les cases qui ont été passées
 		CaseCouleur objCaseParcourue = new CaseCouleur(-1);
 		//System.out.println(objCaseParcourue.obtenirTypeCase());
-		
-		
-		// Modifier le temps pour qu'il soit au moins le minimum de minutes
-		temps = Math.max(temps, reglesPartie.obtenirTempsMinimal());
-		
-		// Modifier le temps pour qu'il soit au plus le maximum de minutes
-		temps = Math.min(temps, reglesPartie.obtenirTempsMaximal());
-		
-		//to have a more equilibrate dimension of game table
-		temps = (int) Math.ceil(temps * 5 / 10) + 6;
-		
-		int factor = objRandom.nextInt((int) Math.ceil(temps /4)) + (int) Math.ceil(temps /5);
-		if(factor % 2 == 0)
-		   factor = factor + 1;
+			
+		//int factor = objRandom.nextInt((int) Math.ceil(temps /4)) + (int) Math.ceil(temps /5);
+		//if(factor % 2 == 0)
+		//   factor = factor + 1;
         
 		int intNbColumns;
 		int intNbLines;
@@ -127,13 +117,22 @@ public final class GenerateurPartie
 		{
 		   intNbColumns = (reglesPartie.getNbTracks() + 1) * (reglesPartie.obtenirTempsMinimal() * 2 + 1) - 1; // factor - 1;
 
-    	   intNbLines = reglesPartie.obtenirTempsMaximal();     	   //(int) Math.ceil((temps * temps * 3/2 ) / intNbColumns);
+    	   intNbLines = temps + reglesPartie.obtenirTempsMaximal();     	   //(int) Math.ceil((temps * temps * 3/2 ) / intNbColumns);
 		
-    	   if (intNbLines < 10)
-    		   intNbLines = 12;
+    	   if (intNbLines < 8)
+    		   intNbLines = 8;
 		}else { //if gametype = mathenjeu
 		
-		   // Le nombre de lignes sera de ceiling(temps / 2) à temps
+			// Modifier le temps pour qu'il soit au moins le minimum de minutes
+			temps = Math.max(temps, reglesPartie.obtenirTempsMinimal());
+			
+			// Modifier le temps pour qu'il soit au plus le maximum de minutes
+			temps = Math.min(temps, reglesPartie.obtenirTempsMaximal());
+			
+			//to have a more equilibrate dimension of game table
+			temps = (int) Math.ceil(temps * 5 / 10) + 10;
+			
+			// Le nombre de lignes sera de ceiling(temps / 2) à temps
 		   intNbLines = objRandom.nextInt(temps - ((int) Math.ceil(temps /2)) + 1) + ((int) Math.ceil(temps /2 ));
 
 		   // Le nombre de colonnes sera de temps à 2 * temps 
