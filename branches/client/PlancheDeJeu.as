@@ -101,7 +101,7 @@ class PlancheDeJeu
         definirMat(tab, null);
         var idDessin:Number=((num-10000)-(num-10000)%100)/100;
 		var idPers:Number=num-10000-idDessin*100;
-        monPersonnage = idPers;num;
+        monPersonnage = idPers;//num;
         perso = null;
         gestionnaireInterface= p;
     }
@@ -480,11 +480,11 @@ class PlancheDeJeu
         {
             perso = p;
 	    	nomDeMonPersonnage = nom;
-	    	this.recentrerBoard(ll,cc,false);
+	    	//this.recentrerBoard(ll,cc,false);
 	  		//  p.zoomer(10);
         }
 		//else
-		p.zoomer(-5);  // POURQUOI?
+		//p.zoomer(-7);  // POURQUOI?
     }
     
     
@@ -525,7 +525,7 @@ class PlancheDeJeu
 		
 		if ((dx == 0) && (dy == 0))
 		{
-			trace("recentrerBoard: true");
+			trace("recentrerBoard: true+");
 			return true;
 		}
 		//trace("dx = " + dx);
@@ -556,7 +556,7 @@ class PlancheDeJeu
 		// on deplace le clip sur lequel est attache tous les autres clips
 		_level0.loader.contentHolder.referenceLayer._x +=dx;		
 		_level0.loader.contentHolder.referenceLayer._y +=dy;
-		trace("recentrerBoard: false");
+		trace("recentrerBoard: false +");
 		return false;
 	}
 	
