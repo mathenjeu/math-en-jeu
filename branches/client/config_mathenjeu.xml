@@ -4,6 +4,7 @@
 	language="fr"
 	gameType="mathEnJeu"
 
+	url_server1="mathamaze.ca"
 	url_server="mejdev.mat.ulaval.ca"
 	port="80"
 
@@ -14,6 +15,7 @@
 	port_tunneling="80"
 
 	username1="game-master.1"
+	password1="watcher"
 	password1="050030c918c5aef3"
 	
 	username="demo-155"
