@@ -158,11 +158,13 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 	{
 		return intNouveauPointage;
 	}
+	
+	
 
-        public int obtenirNouvelArgent()
-        {
-            return intNouvelArgent;
-        }
+    public int obtenirNouvelArgent()
+    {
+        return intNouvelArgent;
+    }
 	
 	public String obtenirCollision()
 	{
