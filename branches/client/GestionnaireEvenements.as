@@ -1835,6 +1835,7 @@ class GestionnaireEvenements
 				if(itIsInconnu&&(!alreadyWas))
                  {
                     listeDesPersonnages[i].nom = objetEvenement.nomUtilisateur;
+                    _level0.loader.contentHolder["joueur"+(i+2)]=listeDesPersonnages[i].nom;
                     /*_level0.loader.contentHolder.nomJ1 = listeDesPersonnages[0].nom;
                     _level0.loader.contentHolder.nomJ2 = listeDesPersonnages[1].nom;
                     _level0.loader.contentHolder.nomJ3 = listeDesPersonnages[2].nom;*/
@@ -1845,7 +1846,7 @@ class GestionnaireEvenements
                 	//_level0.loader.contentHolder["dtCadre"+i+1]["joueur"+i]=_level0.loader.contentHolder.noms[i] = listeDesPersonnages[i].nom;
                 	//trace("_level0.loader.contentHolder[\"dtCadre\"+i+1][\"joueur\"+i] "+_level0.loader.contentHolder["dtCadre"+i+1]["joueur"+i]);
             	}
-            	if((!itIsInconnu)&&(listeDesPersonnages[i].nom!=this.nomUtilisateur)) _level0.loader.contentHolder["joueur"+(i+1)]=listeDesPersonnages[i].nom;
+            	//if((!itIsInconnu)&&(listeDesPersonnages[i].nom!=this.nomUtilisateur)) _level0.loader.contentHolder["joueur"+(i+1)]=listeDesPersonnages[i].nom;
 	                
             }
             
