@@ -128,7 +128,7 @@ public class ParametreIA {
     
       
     // Constante contenant le nombre de id personnage
-    public final static int NOMBRE_PERSONNAGE_ID = 4;
+    public final static int NOMBRE_PERSONNAGE_ID = 12;
      
     // Facteur d'éloignement minimal
     public final static double FACTEUR_AJUSTEMENT_MIN = 0.01;
