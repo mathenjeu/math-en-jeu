@@ -631,7 +631,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			} */
 		}
 		
-		//intNombreJoueursVirtuels = 3;
+		
 		// Aller chercher les positions de départ pour les joueurs humains et virtuels
         if(getObjSalle().getGameType().equals("Tournament"))
         {
@@ -686,12 +686,15 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     		}
     		else
     		{
+    			int IDdess = objControleurJeu.genererNbAleatoire(11) + 1;
+ 
     		    // On se rendra ici seulement si intNombreJoueursVirtuels > 0
     		    // C'est ici qu'on crée les joueurs virtuels, ils vont commencer
     		    // à jouer plus loin
     		  
                 // Ajouter un joueur virtuel dans la table
-
+    			intIdPersonnage = 10000 + 100*IDdess + 50 + i;
+ 
 		        // Utiliser le prochaine id de personnage libre
 		        while (!idPersonnageEstLibre(intIdPersonnage))
 		        {
