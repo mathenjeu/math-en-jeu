@@ -830,13 +830,13 @@ class Personnage
 			
 			if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 			{
-				if(_level0.loader.contentHolder.planche.recentrerBoard(this.l, this.c, false))
+				if(_level0.loader.contentHolder.planche.recentrerBoard(this.l, this.c, true))
 				{
 					if(!this.minigameLoade) _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 					boardCentre = true;
 					trace(_level0.loader.contentHolder.horlogeNum + "temps restant");
 					
-					if( (_level0.loader.contentHolder.objGestionnaireEvenements.obtenirTempsPartie()*60 - _level0.loader.contentHolder.horlogeNum < 2))//&&(_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu=="Tournament")
+					if((_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu=="Tournament") )//&&_level0.loader.contentHolder.objGestionnaireEvenements.obtenirTempsPartie()*60 - _level0.loader.contentHolder.horlogeNum < 2
 					{
 					   _level0.loader.contentHolder.planche.translater("Est");
 					   _level0.loader.contentHolder.planche.translater("Est");
