@@ -1755,93 +1755,72 @@ public class ProtocoleJoueur implements Runnable
 						// noeuds spécifiques au succès de la réponse
 						if (objRetour.deplacementEstAccepte() == true)
     					{
-							// On vérifie d'abord si le joueur a atteint le WinTheGame;
-							boolean isWinTheGame = false;
-							int tracks = objJoueurHumain.obtenirSalleCourante().getRegles().getNbTracks();
-							Point  objPoint = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirPositionWinTheGame();
-							Point objPointFinish = new Point();
 							
-							for(int i = 0; i < tracks; i++ )
-							{
-								objPointFinish.setLocation(objPoint.x, objPoint.y - i);
-								if(objRetour.obtenirNouvellePosition().equals(objPointFinish))
-										isWinTheGame = true;
-								//System.out.println(isWinTheGame + " " + i);
-								//System.out.println(objPointFinish.toString());
-							}
-							
-			                // est si c'est le cas, on arrète la partie
-                            if(objJoueurHumain.obtenirSalleCourante().getGameType().equals("Tournament") && isWinTheGame)
-                            {
-                            	objJoueurHumain.obtenirPartieCourante().obtenirTable().arreterPartie(objJoueurHumain.obtenirNomUtilisateur());
-                            }
-                            else
-                            {
-                            	 Element objNoeudParametreObjetRamasse = objDocumentXMLSortie.createElement("parametre");
-                            	 Element objNoeudParametreObjetSubi = objDocumentXMLSortie.createElement("parametre");
-                            	 Element objNoeudParametreNouvellePosition = objDocumentXMLSortie.createElement("parametre");
-                            	 Element objNoeudParametreCollision = objDocumentXMLSortie.createElement("parametre");
+                            	Element objNoeudParametreObjetRamasse = objDocumentXMLSortie.createElement("parametre");
+                            	Element objNoeudParametreObjetSubi = objDocumentXMLSortie.createElement("parametre");
+                            	Element objNoeudParametreNouvellePosition = objDocumentXMLSortie.createElement("parametre");
+                            	Element objNoeudParametreCollision = objDocumentXMLSortie.createElement("parametre");
 
-                            	 objNoeudParametreObjetRamasse.setAttribute("type", "ObjetRamasse");
-                            	 objNoeudParametreObjetSubi.setAttribute("type", "ObjetSubi");
-                            	 objNoeudParametreNouvellePosition.setAttribute("type", "NouvellePosition");
-                            	 objNoeudParametreCollision.setAttribute("type", "Collision");
+                            	objNoeudParametreObjetRamasse.setAttribute("type", "ObjetRamasse");
+                            	objNoeudParametreObjetSubi.setAttribute("type", "ObjetSubi");
+                            	objNoeudParametreNouvellePosition.setAttribute("type", "NouvellePosition");
+                            	objNoeudParametreCollision.setAttribute("type", "Collision");
 
-							// S'il y a un objet qui a été ramassé, alors on peut
-							// créer son noeud enfant, sinon on n'en crée pas
-							if (objRetour.obtenirObjetRamasse() != null)
-							{
-								Element objNoeudObjetRamasse = objDocumentXMLSortie.createElement("objetRamasse");
-								objNoeudObjetRamasse.setAttribute("id", Integer.toString(objRetour.obtenirObjetRamasse().obtenirId()));
-								objNoeudObjetRamasse.setAttribute("type", objRetour.obtenirObjetRamasse().getClass().getSimpleName());
-								objNoeudParametreObjetRamasse.appendChild(objNoeudObjetRamasse);
-								objNoeudCommande.appendChild(objNoeudParametreObjetRamasse);
-                                objJoueurHumain.obtenirPartieCourante().ajouterObjetUtilisableListe(objRetour.obtenirObjetRamasse());
-							}
+                            	// S'il y a un objet qui a été ramassé, alors on peut
+                            	// créer son noeud enfant, sinon on n'en crée pas
+                            	if (objRetour.obtenirObjetRamasse() != null)
+                            	{
+                            		Element objNoeudObjetRamasse = objDocumentXMLSortie.createElement("objetRamasse");
+                            		objNoeudObjetRamasse.setAttribute("id", Integer.toString(objRetour.obtenirObjetRamasse().obtenirId()));
+                            		objNoeudObjetRamasse.setAttribute("type", objRetour.obtenirObjetRamasse().getClass().getSimpleName());
+                            		objNoeudParametreObjetRamasse.appendChild(objNoeudObjetRamasse);
+                            		objNoeudCommande.appendChild(objNoeudParametreObjetRamasse);
+                            		objJoueurHumain.obtenirPartieCourante().ajouterObjetUtilisableListe(objRetour.obtenirObjetRamasse());
+                            	}
 
-							// Si le joueur a subi un objet, alors on peut créer 
-							// son noeud enfant, sinon on n'en crée pas
-							if (objRetour.obtenirObjetSubi() != null)
-							{
-								Element objNoeudObjetSubi = objDocumentXMLSortie.createElement("objetSubi");
-								objNoeudObjetSubi.setAttribute("id", Integer.toString(objRetour.obtenirObjetSubi().obtenirId()));
-								objNoeudObjetSubi.setAttribute("type", objRetour.obtenirObjetSubi().getClass().getSimpleName());
-								objNoeudParametreObjetSubi.appendChild(objNoeudObjetSubi);
-								objNoeudCommande.appendChild(objNoeudParametreObjetSubi);
-							}
+                            	// Si le joueur a subi un objet, alors on peut créer 
+                            	// son noeud enfant, sinon on n'en crée pas
+                            	if (objRetour.obtenirObjetSubi() != null)
+                            	{
+                            		Element objNoeudObjetSubi = objDocumentXMLSortie.createElement("objetSubi");
+                            		objNoeudObjetSubi.setAttribute("id", Integer.toString(objRetour.obtenirObjetSubi().obtenirId()));
+                            		objNoeudObjetSubi.setAttribute("type", objRetour.obtenirObjetSubi().getClass().getSimpleName());
+                            		objNoeudParametreObjetSubi.appendChild(objNoeudObjetSubi);
+                            		objNoeudCommande.appendChild(objNoeudParametreObjetSubi);
+                            	}
 
-							// Si le joueur est arrivé sur un magasin, alors on lui
-							// renvoie la liste des objets que le magasin vend
-							if (objRetour.obtenirCollision().equals("magasin"))
-							{
-								// Aller chercher une référence vers le magasin
-								// que le joueur visite
-								Magasin objMagasin = objRetour.obtenirMagasin();
+                            	// Si le joueur est arrivé sur un magasin, alors on lui
+                            	// renvoie la liste des objets que le magasin vend
+                            	if (objRetour.obtenirCollision().equals("magasin"))
+                            	{
+                            		// Aller chercher une référence vers le magasin
+                            		// que le joueur visite
+                            		Magasin objMagasin = objRetour.obtenirMagasin();
 
-								// Créer la liste des objets directement dans le 
-								// document XML de sortie
-								creerListeObjetsMagasin(objMagasin, objDocumentXMLSortie, objNoeudCommande);
+                            		// Créer la liste des objets directement dans le 
+                            		// document XML de sortie
+                            		creerListeObjetsMagasin(objMagasin, objDocumentXMLSortie, objNoeudCommande);
 
-                                /*
+                            		/*
                                                                 Element objNoeudParametreTypeMagasin = objDocumentXMLSortie.createElement("parametre");
                                                                 objNoeudParametreTypeMagasin.setAttribute("type", "TypeMagasin");
                                                                 Text objNoeudTexteTypeMagasin = objDocumentXMLSortie.createTextNode(Integer.toString(objMagasin.type));
                                                                 objNoeudParametreTypeMagasin.appendChild(objNoeudTexteTypeMagasin);
                                                                 objNoeudCommande.appendChild(objNoeudParametreTypeMagasin);
-                                 */
-							}
-		
-							Element objNoeudNouvellePosition = objDocumentXMLSortie.createElement("position");
-    						objNoeudNouvellePosition.setAttribute("x", Integer.toString(objRetour.obtenirNouvellePosition().x));
-							objNoeudNouvellePosition.setAttribute("y", Integer.toString(objRetour.obtenirNouvellePosition().y));
-							objNoeudParametreNouvellePosition.appendChild(objNoeudNouvellePosition);
-							objNoeudCommande.appendChild(objNoeudParametreNouvellePosition);
-							Text objNoeudTexteCollision = objDocumentXMLSortie.createTextNode(objRetour.obtenirCollision());
-							objNoeudParametreCollision.appendChild( objNoeudTexteCollision );
-							objNoeudCommande.appendChild( objNoeudParametreCollision );
-                           }
+                            		 */
+                            	}
 
-						}
+                            	Element objNoeudNouvellePosition = objDocumentXMLSortie.createElement("position");
+                            	objNoeudNouvellePosition.setAttribute("x", Integer.toString(objRetour.obtenirNouvellePosition().x));
+                            	objNoeudNouvellePosition.setAttribute("y", Integer.toString(objRetour.obtenirNouvellePosition().y));
+                            	objNoeudParametreNouvellePosition.appendChild(objNoeudNouvellePosition);
+                            	objNoeudCommande.appendChild(objNoeudParametreNouvellePosition);
+                            	Text objNoeudTexteCollision = objDocumentXMLSortie.createTextNode(objRetour.obtenirCollision());
+                            	objNoeudParametreCollision.appendChild( objNoeudTexteCollision );
+                            	objNoeudCommande.appendChild( objNoeudParametreCollision );
+                            }
+
+						
 						else
 						{
 							// Créer le noeud explications
