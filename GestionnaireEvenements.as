@@ -1835,7 +1835,7 @@ class GestionnaireEvenements
 				if(itIsInconnu&&(!alreadyWas))
                  {
                     listeDesPersonnages[i].nom = objetEvenement.nomUtilisateur;
-                    _level0.loader.contentHolder["joueur"+(i+2)]=listeDesPersonnages[i].nom;
+                    _level0.loader.contentHolder["joueur"+(i+1)]=listeDesPersonnages[i].nom;
                     /*_level0.loader.contentHolder.nomJ1 = listeDesPersonnages[0].nom;
                     _level0.loader.contentHolder.nomJ2 = listeDesPersonnages[1].nom;
                     _level0.loader.contentHolder.nomJ3 = listeDesPersonnages[2].nom;*/
