@@ -84,7 +84,10 @@ public class InformationPartie
     //of the game is writen to the DB
     private boolean moneyPermit;
     
-    private static int maxNbObj; 
+    private static int maxNbObj;
+    
+    // to not get twice bonus
+    private boolean isPlayerNotArrivedOnce; 
      
 	 
 	/**
@@ -141,6 +144,10 @@ public class InformationPartie
 	    
 	        // Créer la liste des objets utilisables qui ont été ramassés
 	        lstObjetsUtilisablesRamasses = new TreeMap();
+	        
+	        isPlayerNotArrivedOnce = true;
+	        
+	        
 
 	        String language = joueur.obtenirProtocoleJoueur().langue;
             objBoiteQuestions = new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language) , joueur);
@@ -611,7 +618,8 @@ public class InformationPartie
 		GestionnaireEvenements gestionnaireEv;
 		Question objQuestion; 
 		String nomJoueur; 
-		boolean bolReponseEstBonne; 
+		boolean bolReponseEstBonne;
+		boolean boolWasOnFinish = false;
 		
 		// Obtenir les divers informations à utiliser dépendamment de si
 		// la fonction s'applique à un joueur humain ou un joueur virtuel
@@ -629,6 +637,7 @@ public class InformationPartie
 		    gestionnaireEv = objPartieCourante.obtenirGestionnaireEvenements();
 		    objQuestion = objPartieCourante.obtenirQuestionCourante();
 		    nomJoueur = ((JoueurHumain)objJoueur).obtenirNomUtilisateur();
+		    boolWasOnFinish = objPartieCourante.isPlayerNotArrivedOnce;
                     
                     // If we're in debug mode, accept any answer
                     if(ControleurJeu.modeDebug)
@@ -791,6 +800,37 @@ public class InformationPartie
 					// Enlever l'objet subi de la case
 					objCaseCouleurDestination.definirObjetArme(null);
 				}
+				
+				//***********************************
+				//for gametype tourmnament - bonus for finish line
+				 if(table.getObjSalle().getGameType().equals("Tournament"))
+				 {
+					 // On vérifie d'abord si le joueur a atteint le WinTheGame;
+					 boolean isWinTheGame = false;
+
+					 int tracks = ((JoueurHumain)objJoueur).obtenirSalleCourante().getRegles().getNbTracks();
+					 Point  objPoint = ((JoueurHumain)objJoueur).obtenirPartieCourante().obtenirTable().obtenirPositionWinTheGame();
+					 Point objPointFinish = new Point();
+
+					 for(int i = 0; i < tracks; i++ )
+					 {
+						 objPointFinish.setLocation(objPoint.x, objPoint.y - i);
+						 if(objPositionDesiree.equals(objPointFinish))
+							 isWinTheGame = true;
+						 System.out.println(isWinTheGame + " " + i);
+						 System.out.println(objCaseDestination.toString());
+					 }
+
+					 System.out.println(boolWasOnFinish);
+					 // est si c'est le cas, on arrète la partie
+					 if(isWinTheGame && boolWasOnFinish )
+					 {
+						 intNouveauPointage += ((JoueurHumain)objJoueur).obtenirPartieCourante().obtenirTable().obtenirTempsRestant()/2;
+						 System.out.println("bonus : " + ((JoueurHumain)objJoueur).obtenirPartieCourante().obtenirTable().obtenirTempsRestant());
+						 ((JoueurHumain)objJoueur).obtenirPartieCourante().isPlayerNotArrivedOnce = false;
+					 }
+				 }
+				//************************************  end bonus
 			}
 			
 			// Créer l'objet de retour
