@@ -4,9 +4,16 @@
 	language="fr"
 	gameType="mathEnJeu"
 
-	url_server1="mathamaze.ca"
-	url_server="mejdev.mat.ulaval.ca"
-	port="80"
+	url_server1="mejdev.mat.ulaval.ca"
+	port1="80"
+	
+	url_server="mathamaze.ca"
+	port="8080"
+
+
+
+
+
 
 	url_server_secondaire="132.203.18.66"
 	port_secondaire="80"
@@ -14,13 +21,13 @@
 	url_server_tunneling="mejdev.mat.ulaval.ca"
 	port_tunneling="80"
 
-	username="game-master.1"
-	password="08d36f404a5f4426"
+	username1="game-master.1"
+	password1="08d36f404a5f4426"
 	password11="watcher"
 	password11="050030c918c5aef3"
 	
-	username1="demo-155"
-	password1="3437a2cf2af95fe8"
+	username="demo-155"
+	password="3437a2cf2af95fe8"
 	
 	username1="demo-156"
 	password1="3437a1682af95c81"
