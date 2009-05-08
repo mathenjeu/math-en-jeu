@@ -837,7 +837,7 @@ class GestionnaireEvenements
 					if(i>11) j=3;
 	                this.listeDesPersonnages.push(new Object());
                     this.listeDesPersonnages[i].nom = "Inconnu";
-                    this.listeDesPersonnages[i].id = 0;
+                    this.listeDesPersonnages[i].id = -1;
                     var m:Number=i+2;
                     
                     movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage0","b"+i,i);
@@ -2440,6 +2440,9 @@ class GestionnaireEvenements
 			jouersStarted[i].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)];
 			jouersStarted[i].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)];
 			jouersStarted[i].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].idStart;
+			
+			if((jouersStarted[i].pointage==undefined)||(jouersStarted[i].nomUtilisateur.substr(0,7)=="Inconnu")||(jouersStarted[i].nomUtilisateur.substr(0,7)=="master")) jouersStarted[i].pointage=Number(-1);
+			
 			trace(i+" jouersStarted[i]="+jouersStarted[i].nomUtilisateur+" "+jouersStarted[i].pointage+"pts  id:"+jouersStarted[i].idS);
 			if(jouersStarted[i].nomUtilisateur!=undefined) numeroJoueursConnecte++;
 			if(master == "master")   jouersStarted[i].pointage=-1;
