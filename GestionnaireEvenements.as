@@ -837,7 +837,7 @@ class GestionnaireEvenements
 					if(i>11) j=3;
 	                this.listeDesPersonnages.push(new Object());
                     this.listeDesPersonnages[i].nom = "Inconnu";
-                    this.listeDesPersonnages[i].id = -1;
+                    this.listeDesPersonnages[i].id = 0;
                     var m:Number=i+2;
                     
                     movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage0","b"+i,i);
@@ -2045,6 +2045,8 @@ class GestionnaireEvenements
 		{
        				
 			if((undefined!=this.listeDesPersonnages[i].nom)&&("Inconnu"!=this.listeDesPersonnages[i].nom)){
+				
+				
 				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["nomJoueur"+(j+1)] = this.listeDesPersonnages[i].nom;
 				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["pointageJoueur"+(j+1)] = 0;
 				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]._visible=true;
@@ -2425,13 +2427,14 @@ class GestionnaireEvenements
 		// jouersStarted est liste de nom de joueurs et leurs pointage et IDs 
 		for (i=0;i<11/*numeroJoueursDansSalle-1*/;i++) {
 			// Bloc of code to treat the username
-    			var firstDel = tabOrdonne[i].nom.indexOf("-");                 // find first delimiter
-    			var secondDel = tabOrdonne[i].nom.indexOf(".",firstDel + 1);   // find second delimiter
+			var tmpNom:String=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)];
+    			var firstDel = tmpNom.indexOf("-");                 // find first delimiter
+    			var secondDel = tmpNom.indexOf(".",firstDel + 1);   // find second delimiter
     			var master;
 
     		//Now extract the 'master' from username
     			if (firstDel != -1 && secondDel != -1)
-       				master = tabOrdonne[i].nom.substring(firstDel + 1, secondDel);
+       				master = tmpNom.substring(firstDel + 1, secondDel);
     			else
        				master = "";
 		
@@ -2441,11 +2444,11 @@ class GestionnaireEvenements
 			jouersStarted[i].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)];
 			jouersStarted[i].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].idStart;
 			
-			if((jouersStarted[i].pointage==undefined)||(jouersStarted[i].nomUtilisateur.substr(0,7)=="Inconnu")||(jouersStarted[i].nomUtilisateur.substr(0,7)=="master")) jouersStarted[i].pointage=Number(-1);
+			if((jouersStarted[i].pointage==undefined)||(jouersStarted[i].nomUtilisateur.substr(0,7)=="Inconnu")||(master == "master")) jouersStarted[i].pointage=Number(-1);
 			
 			trace(i+" jouersStarted[i]="+jouersStarted[i].nomUtilisateur+" "+jouersStarted[i].pointage+"pts  id:"+jouersStarted[i].idS);
 			if(jouersStarted[i].nomUtilisateur!=undefined) numeroJoueursConnecte++;
-			if(master == "master")   jouersStarted[i].pointage=-1;
+			
 		}
 		for(k=0;k<objetEvenement.statistiqueJoueur.length;k++)
 			if(_level0.loader.contentHolder.myObj.myNom==objetEvenement.statistiqueJoueur[k].nomUtilisateur){
