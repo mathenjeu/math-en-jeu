@@ -817,12 +817,10 @@ public class InformationPartie
 						 objPointFinish.setLocation(objPoint.x, objPoint.y - i);
 						 if(objPositionDesiree.equals(objPointFinish))
 							 isWinTheGame = true;
-						 System.out.println(isWinTheGame + " " + i);
-						 System.out.println(objCaseDestination.toString());
 					 }
 
-					 System.out.println(boolWasOnFinish);
-					 // est si c'est le cas, on arrète la partie
+					// System.out.println(boolWasOnFinish);
+					 
 					 if(isWinTheGame && boolWasOnFinish )
 					 {
 						 intNouveauPointage += ((JoueurHumain)objJoueur).obtenirPartieCourante().obtenirTable().obtenirTempsRestant()/2;
