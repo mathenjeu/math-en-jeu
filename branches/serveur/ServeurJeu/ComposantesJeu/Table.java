@@ -310,6 +310,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		    {
 		    	// Enlever le joueur de la liste des joueurs de cette table
 				lstJoueurs.remove(joueur.obtenirNomUtilisateur());
+				lstJoueursEnAttente.remove(joueur.obtenirNomUtilisateur());
 				
 				// Le joueur est maintenant dans aucune table
 				if (detruirePartieCourante == true)
@@ -1200,7 +1201,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		{
 			// Créer une référence vers le joueur humain courant dans la liste
 			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
-			
+			System.out.println(objJoueur.obtenirNomUtilisateur());
 			// Si le nom d'utilisateur du joueur courant n'est pas celui
 			// qui vient de démarrer la partie, alors on peut envoyer un 
 			// événement à cet utilisateur
@@ -1639,13 +1640,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			// Préparation pour parcourir la liste des joueurs
 			Set lstEnsembleJoueurs = lstJoueursEnAttente.entrySet();
 			Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
-			
+
 			// Parcourir la liste des joueurs et vérifier le id
 			while(objIterateurListeJoueurs.hasNext() == true)
 			{
 				// Aller chercher l'objet JoueurHumain
 				JoueurHumain objJoueurHumain = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
-				
+
 				// Vérifier le id
 				if (objJoueurHumain.obtenirPartieCourante().obtenirIdPersonnage() == intID)
 				{
@@ -1653,14 +1654,14 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					return false;
 				}	   	     	
 			}
-			
+
 
 		}
 		
 		// Si on se rend ici, on a parcouru tous les joueurs et on n'a pas
 		// trouvé ce id de personnage, donc le id est libre
 		return true;		
-	}
+	}// end method
      
 	/**
 	 * 
