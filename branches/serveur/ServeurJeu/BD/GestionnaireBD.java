@@ -370,16 +370,16 @@ public class GestionnaireBD
            " and question_level.value != 0 " +
            " and question.question_id = answer.question_id " +
            " and answer.is_right = 1 ";   
-        
       
-				   
-		    remplirBoiteQuestions( boiteQuestions, strRequeteSQL );
+       	   remplirBoiteQuestionsMC( boiteQuestions, strRequeteSQL );
+       	   
+       	   
 		}//fin for
 	}// fin méthode
 	
     // This function follows one of the two previous functions. It queries the database and
     // does the actual filling of the question box.
-	private void remplirBoiteQuestions( BoiteQuestions boiteQuestions, String strRequeteSQL )
+	private void remplirBoiteQuestionsMC( BoiteQuestions boiteQuestions, String strRequeteSQL )
 	{	
 		try
 		{
@@ -1213,7 +1213,7 @@ public class GestionnaireBD
 				while(rs.next())
 				{
 					permit = rs.getBoolean("money_permit");
-					System.out.println(permit);								
+					//System.out.println(permit);								
                 }
 			}
 		}
