@@ -356,6 +356,7 @@ public class GestionnaireBD
      // pour chaque catégorie on prend le niveau scolaire du joueur
         for(int i = 0; i < catValues.length; i++)
 		{
+        	/*
        	   String strRequeteSQL = "SELECT DISTINCT answer.label, question.category_id, question_info.question_id, question_info.question_flash_file,question_info.feedback_flash_file, answer_type.tag, question_level.value  " +
            "FROM question_info, answer_type_info, question_level, question, answer_type, answer " +
            "WHERE  question_info.language_id = " + cleLang +
@@ -370,16 +371,118 @@ public class GestionnaireBD
            " and question_level.value != 0 " +
            " and question.question_id = answer.question_id " +
            " and answer.is_right = 1 ";   
-      
-       	   remplirBoiteQuestionsMC( boiteQuestions, strRequeteSQL );
+            */
+        	String strRequeteSQL = "SELECT answer.is_right,question.question_id, question_info.question_flash_file,question_info.feedback_flash_file, question_level.value, answer_type.tag " +
+        	" FROM question_info, question_level, question, answer_type, answer " +
+        	" WHERE  question_info.language_id = " + cleLang +
+        	" AND question.question_id = question_level.question_id " +
+        	" AND question_info.question_id = question.question_id " +
+        	" AND question.category_id = " + catScolaires[i] +
+        	" and question_info.is_valid = 1 " +
+        	" and question_info.question_flash_file is not NULL " +
+        	" and question_info.feedback_flash_file is not NULL " +
+        	" and question_level.level_id = " + niveau[i] + 
+        	" and question_level.value > 0 " +
+        	" and question.answer_type_id = answer_type.answer_type_id " +
+        	" and question.question_id = answer.question_id " +
+        	" and (answer_type.tag='MULTIPLE_CHOICE' OR answer_type.tag='MULTIPLE_CHOICE_5' OR answer_type.tag='MULTIPLE_CHOICE_5')";
+        	
+        	remplirBoiteQuestionsMC( boiteQuestions, strRequeteSQL, catScolaires[i] );
+        	
+        	String strRequeteSQL_SA = "SELECT DISTINCT a.answer_latex, qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
+        	"FROM question_info qi, question_level ql, answer_info a " +
+        	"where qi.question_id IN (select q.question_id from question q, answer_type at " +
+        	"where q.answer_type_id = at.answer_type_id and q.category_id = " + catScolaires[i] + " and at.tag='SHORT_ANSWER')" +
+        	" AND qi.question_id = a.question_id and qi.question_id = ql.question_id " +
+        	" AND qi.language_id = " + cleLang +
+        	" and ql.level_id = " + niveau[i] + 
+        	" and ql.value > 0 " +
+        	" and qi.is_valid = 1 " +
+        	" and qi.question_flash_file is not NULL" +
+        	" and qi.feedback_flash_file is not NULL";
+        	remplirBoiteQuestionsSA( boiteQuestions, strRequeteSQL_SA, catScolaires[i] );
+        	
+        	String strRequeteSQL_TF = "SELECT DISTINCT a.is_right,qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
+        	" FROM question_info qi, question_level ql, answer a " +
+        	"where qi.question_id IN (select q.question_id from question q, answer_type a " +
+        	"where q.answer_type_id=a.answer_type_id and q.category_id = " + catScolaires[i] + " and a.tag='TRUE_OR_FALSE') " +
+        	" AND qi.question_id=a.question_id and qi.question_id=ql.question_id " +
+        	" AND qi.language_id = " + cleLang +
+        	" and ql.level_id = " + niveau[i] + 
+        	" and ql.value > 0 " +
+        	" and qi.is_valid = 1 " +
+        	" and qi.question_flash_file is not NULL" +
+        	" and qi.feedback_flash_file is not NULL";
+        	remplirBoiteQuestionsTF( boiteQuestions, strRequeteSQL_TF, catScolaires[i] );
+        	
        	   
        	   
 		}//fin for
 	}// fin méthode
 	
     // This function follows one of the two previous functions. It queries the database and
-    // does the actual filling of the question box.
-	private void remplirBoiteQuestionsMC( BoiteQuestions boiteQuestions, String strRequeteSQL )
+    // does the actual filling of the question box with questions of type MULTIPLE_CHOICE.
+	private void remplirBoiteQuestionsMC( BoiteQuestions boiteQuestions, String strRequeteSQL, int categorie )
+	{	
+		try
+		{
+			synchronized( requete )
+			{
+				ResultSet rs = requete.executeQuery( strRequeteSQL );
+				//int countQuestionId = 0;
+				int codeQuestionTemp = 0;
+				int countReponse = 0;
+				while(rs.next())
+				{
+					
+					int codeQuestion = rs.getInt("question_id");
+					if (codeQuestionTemp != codeQuestion )
+					{
+						//countQuestionId = 0;
+						countReponse = 0;
+					}
+					int condition = rs.getInt("is_right");
+					//countQuestionId++;
+					countReponse++;
+					if(condition == 1)
+					{
+						String typeQuestion = rs.getString( "tag" );
+						String question = rs.getString( "question_flash_file" );
+						String explication = rs.getString("feedback_flash_file");
+						int difficulte = rs.getInt("value");
+						String reponse = "" + countReponse;
+
+						System.out.println("MC : question " + codeQuestion + " " + reponse + " " + difficulte);
+						String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
+						// System.out.println(URL+explication);
+						boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, categorie));
+					}
+					codeQuestionTemp = codeQuestion;
+				}
+			}
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exécution de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();			
+		}
+		catch( RuntimeException e)
+		{
+			//Une erreur est survenue lors de la recherche de la prochaine question
+			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question_MC"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();
+		}
+	}// fin méthode
+        
+	
+	 // This function follows one of the two previous functions. It queries the database and
+    // does the actual filling of the question box with questions of type SHORT_ANSWER.
+	private void remplirBoiteQuestionsSA( BoiteQuestions boiteQuestions, String strRequeteSQL, int categorie )
 	{	
 		try
 		{
@@ -388,15 +491,15 @@ public class GestionnaireBD
 				ResultSet rs = requete.executeQuery( strRequeteSQL );
 				while(rs.next())
 				{
-					int codeQuestion = Integer.parseInt(rs.getString("question_id"));
-					int categorie =  Integer.parseInt(rs.getString("category_id"));
-					String typeQuestion = rs.getString( "tag" );
+					int codeQuestion = rs.getInt("question_id");
+					//int categorie =  Integer.parseInt(rs.getString("category_id"));
+					String typeQuestion = "SHORT_ANSWER";//rs.getString( "tag" );
 					String question = rs.getString( "question_flash_file" );
-					String reponse = rs.getString("label");
+					String reponse = rs.getString("answer_latex");
 					String explication = rs.getString("feedback_flash_file");
-					int difficulte = Integer.parseInt(rs.getString("value")); 
+					int difficulte = rs.getInt("value"); 
 					
-					//System.out.println(reponse +  difficulte);
+					System.out.println("SA : question " + codeQuestion + " " + reponse + " " + difficulte);
 					
                     String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
                    // System.out.println(URL+explication);
@@ -415,13 +518,57 @@ public class GestionnaireBD
 		catch( RuntimeException e)
 		{
 			//Une erreur est survenue lors de la recherche de la prochaine question
-			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question"));
+			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question_SA"));
 			objLogger.error(GestionnaireMessages.message("bd.trace"));
 			objLogger.error( e.getMessage() );
 		    e.printStackTrace();
 		}
 	}// fin méthode
-        
+	
+	// This function follows one of the two previous functions. It queries the database and
+    // does the actual filling of the question box with questions of type TRUE_OR_FALSE.
+	private void remplirBoiteQuestionsTF( BoiteQuestions boiteQuestions, String strRequeteSQL, int categorie )
+	{	
+		try
+		{
+			synchronized( requete )
+			{
+				ResultSet rs = requete.executeQuery( strRequeteSQL );
+				while(rs.next())
+				{
+					int codeQuestion = rs.getInt("question_id");
+					//int categorie =  Integer.parseInt(rs.getString("category_id"));
+					String typeQuestion = "TRUE_OR_FALSE";   //rs.getString( "tag" );
+					String question = rs.getString( "question_flash_file" );
+					String reponse = rs.getString("is_right");
+					String explication = rs.getString("feedback_flash_file");
+					int difficulte = rs.getInt("value"); 
+					
+					System.out.println("TF : question " + codeQuestion + " " + reponse + " " + difficulte);
+					
+                    String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
+                   // System.out.println(URL+explication);
+					boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, categorie));
+				}
+			}
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exécution de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();			
+		}
+		catch( RuntimeException e)
+		{
+			//Une erreur est survenue lors de la recherche de la prochaine question
+			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question_TF"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();
+		}
+	}// fin méthode
   
   /** This function queries the DB to find the player's musical preferences  ***
    * and returns a Vector containing URLs of MP3s the player might like
@@ -552,7 +699,7 @@ public class GestionnaireBD
 	            
 	            // On retourne la clé de partie
 	            rs.next();
-	           	return Integer.parseInt(rs.getString("GENERATED_KEY"));
+	           	return rs.getInt("GENERATED_KEY");
 			}
         }
         catch (Exception e)
@@ -643,7 +790,7 @@ public class GestionnaireBD
 				if (rs.next())
 				{
 					
-					money = Integer.parseInt(rs.getString("money"));
+					money = rs.getInt("money");
 										  
 				}
 				
