@@ -1731,6 +1731,7 @@ public class ProtocoleJoueur implements Runnable
 						// contenant toutes les informations à retourner
 						RetourVerifierReponseEtMettreAJourPlateauJeu objRetour = objJoueurHumain.obtenirPartieCourante().verifierReponseEtMettreAJourPlateauJeu(strReponse, true);
 
+						//objJoueurHumain.obtenirPartieCourante()
 						// Il n'y a pas eu d'erreurs
 						objNoeudCommande.setAttribute("type", "Reponse");
 						objNoeudCommande.setAttribute("nom", "Deplacement");
