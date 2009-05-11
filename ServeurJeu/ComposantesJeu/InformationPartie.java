@@ -71,7 +71,7 @@ public class InformationPartie
         
     // Déclaration de la boîte de question personnelle au joueur possédant
     // cet objet
-    BoiteQuestions objBoiteQuestions;
+    private BoiteQuestions objBoiteQuestions;
         
     // Déclaration d'un boolean qui dit si le joueur est 'targeté' pour subir une banane
     // (si le string n'est pas "", et alors le string dit qui l'a utilisée)
@@ -150,8 +150,8 @@ public class InformationPartie
 	        
 
 	        String language = joueur.obtenirProtocoleJoueur().langue;
-            objBoiteQuestions = new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language) , joueur);
-            objGestionnaireBD.remplirBoiteQuestions(objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());  
+            setObjBoiteQuestions(new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language) , joueur));
+            objGestionnaireBD.remplirBoiteQuestions(getObjBoiteQuestions(), objJoueurHumain.obtenirCleNiveau());  
             
 	}// fin constructeur
 
@@ -493,7 +493,7 @@ public class InformationPartie
 		}
 		else if (intDifficulte > 0)
 		{
-			objGestionnaireBD.remplirBoiteQuestions( objBoiteQuestions, objJoueurHumain.obtenirCleNiveau());
+			objGestionnaireBD.remplirBoiteQuestions( getObjBoiteQuestions(), objJoueurHumain.obtenirCleNiveau());
 			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
 			
 			lstQuestionsRepondues.clear();
@@ -544,7 +544,7 @@ public class InformationPartie
 		
 		
 		// pour le premier on voir la catégorie et difficulté demandées
-		objQuestionTrouvee = objBoiteQuestions.pigerQuestion( intCategorieQuestion, intDifficulte);
+		objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulte);
 		
 		//on prend les catégories scolaires en utilisant enum Categories
 		Categories[] catValues = Categories.values();
@@ -559,7 +559,7 @@ public class InformationPartie
 	    while(i < catScolaires.length && objQuestionTrouvee == null)
 	    {
 	   	   intCategorieQuestion = catScolaires[i];
-	   	   objQuestionTrouvee = objBoiteQuestions.pigerQuestion( intCategorieQuestion, intDifficulte);
+	   	   objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulte);
 	   	   i++;
 	    }
 	    
@@ -572,7 +572,7 @@ public class InformationPartie
 		    while(i < catScolaires.length && objQuestionTrouvee == null)
 		    {
 		   	   intCategorieQuestion = catScolaires[i];
-		   	   objQuestionTrouvee = objBoiteQuestions.pigerQuestion( intCategorieQuestion, intDifficulteTemp);
+		   	   objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulteTemp);
 		   	   i++;
 		    }
 		}// fin while
@@ -586,7 +586,7 @@ public class InformationPartie
 		    while(i < catScolaires.length && objQuestionTrouvee == null)
 		    {
 		   	   intCategorieQuestion = catScolaires[i];
-		   	   objQuestionTrouvee = objBoiteQuestions.pigerQuestion( intCategorieQuestion, intDifficulteTemp);
+		   	   objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulteTemp);
 		   	   i++;
 		    }
 		}// fin while
@@ -874,7 +874,7 @@ public class InformationPartie
 				objRetour.definirExplications(objQuestion.obtenirURLExplication());
 			}
 		}
-		
+		 
 		return objRetour;
 		
 	}
@@ -906,6 +906,7 @@ public class InformationPartie
 		    objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();					    
 		}
 		
+		//getObjBoiteQuestions().popQuestion(objQuestionCourante);
 		objQuestionCourante = null;
 
 		return objRetour;
@@ -1035,5 +1036,13 @@ public class InformationPartie
 
 		public boolean isMoneyPermit() {
 			return moneyPermit;
+		}
+
+		public void setObjBoiteQuestions(BoiteQuestions objBoiteQuestions) {
+			this.objBoiteQuestions = objBoiteQuestions;
+		}
+
+		public BoiteQuestions getObjBoiteQuestions() {
+			return objBoiteQuestions;
 		}
 }
