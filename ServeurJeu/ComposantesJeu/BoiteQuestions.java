@@ -65,6 +65,17 @@ public class BoiteQuestions
 		questions.add( question );
 	}
 	
+	/**
+	 *  This method adds a question to the question box
+	 * 
+	 * @param Question question : la question à ajouter
+	 */
+	public void popQuestion( Question question )
+	{
+		
+			lstQuestions.remove(question);		
+	}
+	
     /**
      * Cette fonction permet de sélectionner une question dans la
      * boite de questions selon sa catégorie et son niveau de difficulté
