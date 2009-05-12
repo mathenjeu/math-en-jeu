@@ -72,8 +72,14 @@ public class BoiteQuestions
 	 */
 	public void popQuestion( Question question )
 	{
+		// ajout acouet - tient en compte la categorie de la question
+		int intCategorieQuestion = question.obtenirCategorie();
+		int difficulte = question.obtenirDifficulte();
 		
-			lstQuestions.remove(question);		
+		TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );
+		Vector<Question> questions = difficultes.get( difficulte );
+		System.out.println(question.obtenirCodeQuestion());
+		questions.remove(question);		
 	}
 	
     /**
