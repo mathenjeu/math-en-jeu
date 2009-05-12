@@ -95,6 +95,7 @@ public class BoiteQuestions
 		// ajout acouet - tient en compte la categorie
 		Question question = null;
 	    Vector<Question> questions = obtenirQuestions( intCategorieQuestion, intDifficulte );
+		
 
 		// Let's choose a question among the possible ones
 	    if( questions != null && questions.size() > 0 )
