@@ -906,7 +906,7 @@ public class InformationPartie
 		    objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();					    
 		}
 		
-		//getObjBoiteQuestions().popQuestion(objQuestionCourante);
+		getObjBoiteQuestions().popQuestion(objQuestionCourante);
 		objQuestionCourante = null;
 
 		return objRetour;
