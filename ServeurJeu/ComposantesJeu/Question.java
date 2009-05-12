@@ -147,12 +147,12 @@ public class Question
 	 public String obtenirMauvaiseReponse()
 	 {
 	 	// Vérifier si la réponse est un choix de réponse
-	 	if (strReponse.toUpperCase().equals("A") ||
-	 	    strReponse.toUpperCase().equals("B") ||
-	 	    strReponse.toUpperCase().equals("C") ||
-	 	    strReponse.toUpperCase().equals("D") ||
-	 	    strReponse.toUpperCase().equals("E") ||
-	 	    strReponse.toUpperCase().equals("H") )
+	 	if (strReponse.toUpperCase().equals("1") ||
+	 	    strReponse.toUpperCase().equals("2") ||
+	 	    strReponse.toUpperCase().equals("3") ||
+	 	    strReponse.toUpperCase().equals("4") ||
+	 	    strReponse.toUpperCase().equals("5") ||
+	 	    strReponse.toUpperCase().equals("6") )
 	 	{
 	 		// Choisir aléatoirement une mauvaise réponse
 	 		int nbChoix = 0;
