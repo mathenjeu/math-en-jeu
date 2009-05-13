@@ -41,9 +41,10 @@ class GestionnaireEvenements
     private var idPersonnage:Number;   //  le idPersonnage que nous avons choisi (le dessin)
     private var motDePasseSalle:String;   // le mot de passe de la salle dans laquelle on est
     private var listeDesJoueursDansSalle:Array;  // liste des joueurs dans la salle qu'on est. Un joueur contient un nom (nom)
-    private var listeDesDescriptionsSalles:Array; //liste des descriptions des salles 
+    public var listeDesDescriptionsSalles:Array; //liste des descriptions des salles 
+    public var listeDesTypesDeJeu:Array; //liste des TypesDeJeu de salles
 	private var activ:Boolean;                     // if game has type Tournament and the room is active
-	private var listeDesSalles:Array;    //  liste de toutes les salles
+	public var listeDesSalles:Array;    //  liste de toutes les salles
 	private var listeNumeroJoueursSalles:Array;		//liste de numero de joueurs dans chaque salle
 	private var listeChansons:Array;    //  liste de toutes les chansons
     private var listeDesJoueursConnectes:Array;   // la premiere liste qu'on recoit, tous les joueurs dans toutes les salles. Un joueur contient un nom (nom)
@@ -123,6 +124,7 @@ class GestionnaireEvenements
         this.listeDesSalles = new Array();
 		this.listeDesDescriptionsSalles = new Array();
 		this.listeNumeroJoueursSalles = new Array();
+		this.listeDesTypesDeJeu = new Array();
         this.listeDesTables = new Array();
 		this.listeChansons = new Array();
         this.listeDesJoueursConnectes = new Array();
@@ -559,9 +561,9 @@ class GestionnaireEvenements
 						
 						this.listeDesSalles.push(objetEvenement.listeNomSalles[i]);
 						_level0.loader.contentHolder.listeSalle.addItem(this.listeDesSalles[i].nom);
-					}
-					trace("salle " + i + " : " + this.listeDesSalles[i].nom);
-					*/
+					}*/
+					
+					/**/
 					this.listeDesSalles.push(objetEvenement.listeNomSalles[i]);
 					_level0.loader.contentHolder.listeSalle.addItem(this.listeDesSalles[i].nom );
 					trace("salle " + i + " : " + this.listeDesSalles[i].nom);
@@ -573,6 +575,10 @@ class GestionnaireEvenements
 					this.listeNumeroJoueursSalles.push(objetEvenement.listeNumberoJSalles[i]);
 					_level0.loader.contentHolder.listeNumeroJSalles.push(this.listeNumeroJoueursSalles[i].maxnbplayers );
 					trace("salle " + i + " : " + objetEvenement.listeNumberoJSalles[i].maxnbplayers);
+					
+					this.listeDesTypesDeJeu.push(objetEvenement.typeDeJeuAll[i]);
+					_level0.loader.contentHolder.listeDesTypesDeJeu.push(this.listeDesTypesDeJeu[i].typeDeJeu );
+					trace("salle " + i + " : " + objetEvenement.typeDeJeuAll[i].typeDeJeu + " ~ " +this.listeDesTypesDeJeu[i].typeDeJeu);
 					
 
 				}

@@ -2695,11 +2695,13 @@ class GestionnaireCommunication
 			}
 			//Creer un tableau listeNumberoJSalles qui va contenir les noumero des joueurs dans salles
 			objEvenement.listeNumberoJSalles = new Array();
+			objEvenement.typeDeJeuAll = new Array();
 			//
 			for (var i:Number = 0; i < lstChildNodes.length; i++)
             {
                 // Ajouter le numero de joueurs dans salle dans le tableau
                 objEvenement.listeNumberoJSalles.push({maxnbplayers:lstChildNodes[i].attributes.maxnbplayers});
+                objEvenement.typeDeJeuAll.push({typeDeJeu:lstChildNodes[i].attributes.typeDeJeu});
 				
 			}
 
