@@ -670,8 +670,8 @@ class PlancheDeJeu
 					brille._x = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._x;
 					brille._y = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._y;
 					brille._alpha = 0;
-					brille._width = largeurDeCase;
-					brille._height = hauteurDeCase/0.85;
+					brille._width = largeurDeCase/0.55;
+					brille._height = hauteurDeCase/0.55;//0.85
 					brille._ligne = new Object();
 					brille._colonne = new Object();
 					brille._ligne = temp;
@@ -723,8 +723,8 @@ class PlancheDeJeu
 					brille._x = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._x;
 					brille._y = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._y;
 					brille._alpha = 0;
-					brille._width = largeurDeCase;
-					brille._height = hauteurDeCase/0.85;
+					brille._width = largeurDeCase/0.55;
+					brille._height = hauteurDeCase/0.55;//0.85;
 					brille._ligne = new Object();
 					brille._colonne = new Object();
 					brille._ligne = temp;
@@ -774,8 +774,8 @@ class PlancheDeJeu
 					brille._x = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._x;
 					brille._y = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._y;
 					brille._alpha = 0;
-					brille._width = largeurDeCase;
-					brille._height = hauteurDeCase/0.85;
+					brille._width = largeurDeCase/0.55;
+					brille._height = hauteurDeCase/0.55;//0.85;
 					brille._ligne = new Object();
 					brille._colonne = new Object();
 					brille._ligne = p.obtenirL();
@@ -825,8 +825,8 @@ class PlancheDeJeu
 					brille._x = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._x;
 					brille._y = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._y;
 					brille._alpha = 0;
-					brille._width = largeurDeCase;
-					brille._height = hauteurDeCase/0.85;
+					brille._width = largeurDeCase/0.55;
+					brille._height = hauteurDeCase/0.55;//0.85;
 					brille._ligne = new Object();
 					brille._colonne = new Object();
 					brille._ligne = p.obtenirL();
