@@ -5,7 +5,7 @@ import java.util.Comparator;
 /**
  * @author Jean-François Brind'Amour
  */
-public class ReglesComparator implements Comparator
+public class ReglesComparator implements Comparator<Object>
 {
 	/**
 	 * Constructeur de la classe ReglesComparator.

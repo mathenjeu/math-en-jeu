@@ -52,13 +52,13 @@ public class Salle
 	
 	// Cet objet est une liste de numéros utilisés pour les tables (sert à 
 	// générer de nouvelles tables)
-	private TreeSet lstNoTables;
+	private TreeSet<Integer> lstNoTables;
 	
 	// Cet objet est une liste des joueurs qui sont présentement dans cette salle
-	private TreeMap lstJoueurs;
+	private TreeMap<String, JoueurHumain> lstJoueurs;
 	
 	// Cet objet est une liste des tables qui sont présentement dans cette salle
-	private TreeMap lstTables;
+	private TreeMap<Integer, Table> lstTables;
 	
 	// Cet objet permet de déterminer les règles de jeu pour cette salle
 	private Regles objRegles;
@@ -99,9 +99,9 @@ public class Salle
         this.gameType = gameType;
 		
 		// Créer une nouvelle liste de joueurs, de tables et de numéros
-		lstJoueurs = new TreeMap();
-		lstTables = new TreeMap();
-		lstNoTables = new TreeSet();
+		lstJoueurs = new TreeMap<String, JoueurHumain>();
+		lstTables = new TreeMap<Integer, Table>();
+		lstNoTables = new TreeSet<Integer>();
 		
 		// Définir les règles de jeu pour la salle courante
 		objRegles = reglesSalle;
@@ -332,7 +332,7 @@ public class Salle
 
 		    // Entrer dans la table on ne fait rien avec la liste des 
 		    // personnages
-		    objTable.entrerTable(joueur, false, new TreeMap());
+		    objTable.entrerTable(joueur, false, new TreeMap<String,Integer>());
 		    
 		    // Garder le numéro de table pour le retourner
 		    intNoTable = objTable.obtenirNoTable();
@@ -367,7 +367,7 @@ public class Salle
 	 * 				courante qui a des chances d'être détruite si le joueur 
 	 * 				qui veut quitter est le dernier de la table.
 	 */
-	public String entrerTable(JoueurHumain joueur, int noTable, boolean doitGenererNoCommandeRetour, TreeMap listePersonnageJoueurs)
+	public String entrerTable(JoueurHumain joueur, int noTable, boolean doitGenererNoCommandeRetour, TreeMap<String, Integer> listePersonnageJoueurs)
 	{
 	    // Déclaration d'une variable qui va contenir le résultat à retourner
 	    // à la fonction appelante, soit les valeurs de l'énumération 
@@ -469,7 +469,7 @@ public class Salle
 	 * 				l'être par l'appelant de cette fonction tout dépendant
 	 * 				du traitement qu'elle doit faire
 	 */
-	public TreeMap obtenirListeJoueurs()
+	public TreeMap<String, JoueurHumain> obtenirListeJoueurs()
 	{
 		return lstJoueurs;
 	}
@@ -484,7 +484,7 @@ public class Salle
 	 * 				l'être par l'appelant de cette fonction tout dépendant
 	 * 				du traitement qu'elle doit faire
 	 */
-	public TreeMap obtenirListeTables()
+	public TreeMap<Integer, Table> obtenirListeTables()
 	{
 		return lstTables;
 	}

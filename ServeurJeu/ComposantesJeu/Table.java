@@ -74,10 +74,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	private int intTempsTotal;
 	
 	// Cet objet est une liste des joueurs qui sont présentement sur cette table
-	private TreeMap lstJoueurs;
+	private TreeMap<String, JoueurHumain> lstJoueurs;
 	
 	// Cet objet est une liste des joueurs qui attendent de joueur une partie
-	private TreeMap lstJoueursEnAttente;
+	private TreeMap<String, JoueurHumain> lstJoueursEnAttente;
 	
 	// Déclaration d'une variable qui va permettre de savoir si la partie est 
 	// commencée ou non
@@ -102,7 +102,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     private Point positionWinTheGame;
         
     // Cet objet est une liste des joueurs virtuels qui jouent sur cette table
-    private Vector lstJoueursVirtuels;
+    private Vector<JoueurVirtuel> lstJoueursVirtuels;
     
     // Cette variable indique le nombre de joueurs virtuels sur la table
     private int intNombreJoueursVirtuels;
@@ -111,7 +111,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     // dans cette table, ce qui nous permettra, lorsqu'une partie se termine, de
     // faire la mise ˆ jour de la liste des joueurs déconnectés du gestionnaire
     // de communication
-    private Vector lstJoueursDeconnectes;
+    private Vector<String> lstJoueursDeconnectes;
       
     private Date objDateDebutPartie;
     
@@ -156,8 +156,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
               //  if(!this.butDuJeu.equals("original")) winTheGame = new WinTheGame(this);
                
 		// Créer une nouvelle liste de joueurs
-		lstJoueurs = new TreeMap();
-		lstJoueursEnAttente = new TreeMap();
+		lstJoueurs = new TreeMap<String, JoueurHumain>();
+		lstJoueursEnAttente = new TreeMap<String, JoueurHumain>();
 		
 		// Au départ, aucune partie ne se joue sur la table
 		bolEstCommencee = false;
@@ -181,7 +181,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         lstJoueursVirtuels = null;
         
         // Cette liste sera modifié si jamais un joueur est déconnecté
-        lstJoueursDeconnectes = new Vector();
+        lstJoueursDeconnectes = new Vector<String>();
         
         
         // Faire la référence vers le controleu jeu
@@ -237,7 +237,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  qu'une partie est en cours (car toutes les fonctions 
 	 * 				  permettant de changer ça sont synchronisées).
 	 */
-	public void entrerTable(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, TreeMap listePersonnageJoueurs)  throws NullPointerException
+	public void entrerTable(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, TreeMap<String, Integer> listePersonnageJoueurs)  throws NullPointerException
 	{
 	    // Empçcher d'autres thread de toucher ˆ la liste des joueurs de 
 	    // cette table pendant l'ajout du nouveau joueur dans cette table
@@ -556,7 +556,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Création d'une nouvelle liste dont la clé est le nom 
 		// d'utilisateur du joueur et le contenu est un point 
 		// représentant la position du joueur
-		TreeMap lstPositionsJoueurs = new TreeMap();
+		TreeMap<String, Point> lstPositionsJoueurs = new TreeMap();
         
                 // Contient les noms des joueurs virtuels
                 String tNomsJoueursVirtuels[] = null;
@@ -642,7 +642,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         }
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// lstJoueursEnAttente (chaque élément est un Map.Entry)
-		Set lstEnsembleJoueurs = lstJoueursEnAttente.entrySet();
+		Set<Map.Entry<String,JoueurHumain>> lstEnsembleJoueurs = lstJoueursEnAttente.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les personnages
 		Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
@@ -651,7 +651,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// qui contiendra ces joueurs
 		if (intNombreJoueursVirtuels > 0)
 		{
-		    lstJoueursVirtuels = new Vector();
+		    lstJoueursVirtuels = new Vector<JoueurVirtuel>();
 		    
 		    // Aller trouver les noms des joueurs virtuels
 		    tNomsJoueursVirtuels = obtenirNomsJoueursVirtuels(intNombreJoueursVirtuels);
@@ -901,7 +901,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		    }
 		    
 		    // Enlever les joueurs déconnectés de cette table
-		    lstJoueursDeconnectes = new Vector();
+		    lstJoueursDeconnectes = new Vector<String>();
 		    
 		    // Si jamais les joueurs humains sont tous déconnectés, alors
 		    // il faut détruire la table ici
@@ -934,7 +934,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  l'çtre par l'appelant de cette fonction tout dépendant
 	 * 				  du traitement qu'elle doit faire
 	 */
-	public TreeMap obtenirListeJoueurs()
+	public TreeMap<String, JoueurHumain> obtenirListeJoueurs()
 	{
 		return lstJoueurs;
 	}
@@ -950,7 +950,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  l'çtre par l'appelant de cette fonction tout dépendant
 	 * 				  du traitement qu'elle doit faire
 	 */
-	public TreeMap obtenirListeJoueursEnAttente()
+	public TreeMap<String, JoueurHumain> obtenirListeJoueursEnAttente()
 	{
 		return lstJoueursEnAttente;
 	}
@@ -1033,11 +1033,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 										   pour chaque joueur
 	 * @throws NullPointerException : Si la liste des personnages est à nulle
 	 */
-	private void remplirListePersonnageJoueurs(TreeMap listePersonnageJoueurs) throws NullPointerException
+	private void remplirListePersonnageJoueurs(TreeMap<String, Integer> listePersonnageJoueurs) throws NullPointerException
 	{
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
-		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
@@ -1090,7 +1090,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la salle (chaque élément est un Map.Entry)
-		Set lstEnsembleJoueurs = getObjSalle().obtenirListeJoueurs().entrySet();
+		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = getObjSalle().obtenirListeJoueurs().entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
@@ -1140,7 +1140,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la salle (chaque élément est un Map.Entry)
-		Set lstEnsembleJoueurs = getObjSalle().obtenirListeJoueurs().entrySet();
+		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = getObjSalle().obtenirListeJoueurs().entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
@@ -1191,7 +1191,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
-		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
@@ -1231,7 +1231,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * Synchronisme : Cette fonction n'est pas synchronisée ici, mais elle l'est
 	 * 				  par l'appelant (demarrerPartie).
 	 */
-	private void preparerEvenementPartieDemarree(TreeMap listePositionJoueurs)
+	private void preparerEvenementPartieDemarree(TreeMap<String, Point> listePositionJoueurs)
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs de la table qu'un joueur a démarré une partie
@@ -1239,7 +1239,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
-		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
@@ -1270,7 +1270,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Créer un ensemble contenant tous les tuples de la liste des joueurs
 		// de la table
-		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
@@ -1306,7 +1306,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Créer un ensemble contenant tous les tuples de la liste des joueurs
 		// de la table
-		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
@@ -1337,7 +1337,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	{
         // Mçme chose que la fonction précédente, mais envoie plut™t les informations quant à l'utilisation d'un objet dont tous devront çtre au courant
 		EvenementUtiliserObjet utiliserObjet = new EvenementUtiliserObjet(joueurQuiUtilise, joueurAffecte, objetUtilise, autresInformations);
-		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
 		while (objIterateurListe.hasNext() == true)
 		{
@@ -1352,7 +1352,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	{
         // Meme chose que la fonction précédente, mais envoie plut™t un message de la part d'un joueur à tous les joueurs de la table
 		EvenementMessageChat messageChat = new EvenementMessageChat(joueurQuiEnvoieLeMessage, messageAEnvoyer);
-		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
 		while (objIterateurListe.hasNext() == true)
 		{
@@ -1410,7 +1410,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
-		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
@@ -1448,7 +1448,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
-		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
@@ -1485,7 +1485,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
-		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
 		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
@@ -1566,7 +1566,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	   return intNombreJoueursVirtuels;
 	}
 	
-	public Vector obtenirListeJoueursVirtuels()
+	public Vector<JoueurVirtuel> obtenirListeJoueursVirtuels()
 	{
 	   return lstJoueursVirtuels;
 	}
@@ -1581,7 +1581,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		lstJoueursDeconnectes.add(joueurHumain.obtenirNomUtilisateur().toLowerCase());
 	}
 	
-	public Vector obtenirListeJoueursDeconnectes()
+	public Vector<String> obtenirListeJoueursDeconnectes()
 	{
 		return lstJoueursDeconnectes;
 	}
@@ -1602,7 +1602,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	private boolean idPersonnageEstLibre(int intID)
 	{
    	    // Préparation pour parcourir la liste des joueurs
-        Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+        Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
         Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
 
         // Parcourir la liste des joueurs et vérifier le id
@@ -1638,7 +1638,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		synchronized (lstJoueursEnAttente)
 		{
 			// Préparation pour parcourir la liste des joueurs
-			Set lstEnsembleJoueurs = lstJoueursEnAttente.entrySet();
+			Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueursEnAttente.entrySet();
 			Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
 
 			// Parcourir la liste des joueurs et vérifier le id
@@ -1670,7 +1670,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 */
 	public JoueurHumain obtenirJoueurHumainParSonNom(String username)
 	{
-            Set nomsJoueursHumains = lstJoueurs.entrySet();
+            Set<Map.Entry<String, JoueurHumain>> nomsJoueursHumains = lstJoueurs.entrySet();
             Iterator objIterateurListeJoueurs = nomsJoueursHumains.iterator();
             while(objIterateurListeJoueurs.hasNext() == true)
             {
