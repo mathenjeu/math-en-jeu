@@ -176,6 +176,56 @@ public class GestionnaireBD
 	}
 	
 	/**
+	 * This methode fill columns with the actual date for the player with the blocked account
+	 */
+	public void controlPlayerAccount()
+	{
+		/*
+		int cleJoueur = 0;
+		
+		try
+		{
+			synchronized( requete )
+			{
+				ResultSet rs = requete.executeQuery("SELECT user.user_id FROM user " +
+						" WHERE last_access_date LIKE '1111-01-01' OR last_access_time LIKE '55:55:55';"); 
+				while (rs.next())
+				{
+					cleJoueur = Integer.parseInt(rs.getString("user_id"));
+					fillEndDate(cleJoueur);
+				}
+			}
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exécution de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_control_info_joueur"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();			
+		}
+		
+		//****************** */
+	//  SQL for update
+		String strSQL = "UPDATE user SET last_access_date = CURDATE(), last_access_time = CURTIME() where last_access_date LIKE '1111-01-01' OR last_access_time LIKE '55:55:55';"; 
+		
+		try
+		{
+			
+			synchronized(requete)
+			{
+				requete.executeUpdate(strSQL);
+			}
+        }
+        catch (Exception e)
+        {
+               System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_update_user_control_account") + e.getMessage());
+        }
+        
+		
+	}//end methode
+	
+	/**
 	 * Cette fonction permet de chercher dans la BD le joueur et de remplir  ***
 	 * les champs restants du joueur.
 	 * 
@@ -239,7 +289,8 @@ public class GestionnaireBD
 	// This function follows one of the two previous functions. It queries the database and
     // does the actual filling of the player categories levels
 	private int fillLevels(  String strRequeteSQL )
-	{	int level = 0;
+	{	
+		int level = 0;
 		try
 		{
 			synchronized( requete )
@@ -573,9 +624,9 @@ public class GestionnaireBD
   /** This function queries the DB to find the player's musical preferences  ***
    * and returns a Vector containing URLs of MP3s the player might like
    */
-  public Vector obtenirListeURLsMusique(int cleJoueur)
+  public Vector<Object> obtenirListeURLsMusique(int cleJoueur)
 	{
-            Vector liste = new Vector();
+            Vector<Object> liste = new Vector<Object>();
             String URLMusique = GestionnaireConfiguration.obtenirInstance().obtenirString("musique.url");
             String strRequeteSQL = "SELECT music_file.filename FROM music_file,music_file_category,music_category,music_category_user WHERE ";
             strRequeteSQL       += "music_file.music_file_id = music_file_category.music_file_id AND ";
@@ -1088,7 +1139,7 @@ public class GestionnaireBD
 	 * @param roomId
 	 * @param langId 
 	 */
-	private void chargerReglesObjetsUtilisables(TreeSet objetsUtilisables, int roomId) {
+	private void chargerReglesObjetsUtilisables(TreeSet<ReglesObjetUtilisable> objetsUtilisables, int roomId) {
 		try
   		{
   			synchronized( requete )
@@ -1126,7 +1177,7 @@ public class GestionnaireBD
 	 * @param casesSpeciale 
 	 * @param roomId
 	 */
-	private void chargerReglesCasesSpeciale(TreeSet casesSpeciale, int roomId) {
+	private void chargerReglesCasesSpeciale(TreeSet<ReglesCaseSpeciale> casesSpeciale, int roomId) {
 		try
   		{
   			synchronized( requete )
@@ -1163,7 +1214,7 @@ public class GestionnaireBD
      * @param casesCouleur 
 	 * @param roomId
      */
-     private void chargerReglesCasesCouleur(TreeSet casesCouleur, int roomId) {
+     private void chargerReglesCasesCouleur(TreeSet<ReglesCaseCouleur> casesCouleur, int roomId) {
                    
         try
   		{
@@ -1200,8 +1251,7 @@ public class GestionnaireBD
      * @param magasins 
      * @param roomId
      */
-     @SuppressWarnings("unchecked")
-	private void chargerReglesMagasins(TreeSet magasins, int roomId) {
+    private void chargerReglesMagasins(TreeSet<ReglesMagasin> magasins, int roomId) {
     	 	
          try
  		{
