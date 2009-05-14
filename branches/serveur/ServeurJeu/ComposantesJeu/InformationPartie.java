@@ -1,7 +1,10 @@
 package ServeurJeu.ComposantesJeu;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -432,9 +435,11 @@ public class InformationPartie
 		
 		Categories[] catValues = Categories.values();
         int[] catScolaires = new int[catValues.length];
+        //System.out.println("catValues.length : " + catValues.length);
         for(int i = 0; i < catValues.length; i++)
 		{
 			catScolaires[i] = catValues[i].getCode();
+						
 		}
 		
 		int intCategorieQuestion = catScolaires[UtilitaireNombres.genererNbAleatoire(catValues.length - 1)]; 
@@ -442,28 +447,28 @@ public class InformationPartie
 		//***************************************************************************************
 		
 		int intDifficulte = 0;
-        int grandeurDeplacement = 0;
+        //int grandeurDeplacement = 0;
 		Question objQuestionTrouvee = null;
 		
                 // Si la position en x est différente de celle désirée, alors
                 // c'est qu'il y a eu un déplacement sur l'axe des x
                 if (objPositionJoueur.x != nouvellePosition.x)
                 {
-                        grandeurDeplacement = Math.abs(nouvellePosition.x - objPositionJoueur.x);
+                	intDifficulte = Math.abs(nouvellePosition.x - objPositionJoueur.x);
                 }
                 // Si la position en y est différente de celle désirée, alors
                 // c'est qu'il y a eu un déplacement sur l'axe des y
                 else if (objPositionJoueur.y != nouvellePosition.y)
                 {
-                        grandeurDeplacement = Math.abs(nouvellePosition.y - objPositionJoueur.y);
+                	intDifficulte = Math.abs(nouvellePosition.y - objPositionJoueur.y);
                 }
                 
-                int distanceFuture = Math.abs(nouvellePosition.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(nouvellePosition.y - objTable.obtenirPositionWinTheGame().y);
-                distanceFuture -= 1;
-                if(distanceFuture < 0) distanceFuture = 0;
-                int stepDifficulte = Math.max(Math.abs(this.objTable.obtenirPlateauJeuCourant()[0].length-objTable.obtenirPositionWinTheGame().y), Math.abs(objTable.obtenirPositionWinTheGame().y-this.objTable.obtenirPlateauJeuCourant()[0].length)) / 5;
-                intDifficulte = 0;
-                
+                //int distanceFuture = Math.abs(nouvellePosition.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(nouvellePosition.y - objTable.obtenirPositionWinTheGame().y);
+                //distanceFuture -= 1;
+                //if(distanceFuture < 0) distanceFuture = 0;
+                //int stepDifficulte = Math.max(Math.abs(this.objTable.obtenirPlateauJeuCourant()[0].length-objTable.obtenirPositionWinTheGame().y), Math.abs(objTable.obtenirPositionWinTheGame().y-this.objTable.obtenirPlateauJeuCourant()[0].length)) / 5;
+                //intDifficulte = 0;
+                /*
                 if(stepDifficulte * 0 <= distanceFuture && distanceFuture <= stepDifficulte * 1) intDifficulte = 6;
                 if(stepDifficulte * 1 < distanceFuture && distanceFuture <= stepDifficulte * 2) intDifficulte = 5;
                 if(stepDifficulte * 2 < distanceFuture && distanceFuture <= stepDifficulte * 3) intDifficulte = 4;
@@ -471,7 +476,8 @@ public class InformationPartie
                 if(stepDifficulte * 4 < distanceFuture && distanceFuture <= stepDifficulte * 5) intDifficulte = 2;
                 if(intDifficulte == 0) intDifficulte = 1;
                 intDifficulte = Math.max(intDifficulte, grandeurDeplacement);
-               
+                */
+                
                 System.out.println("Difficulte de la question : " + intDifficulte);   // test
 		
 		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
@@ -554,39 +560,63 @@ public class InformationPartie
 			catScolaires[i] = catValues[i].getCode();
 		}
         
+        LinkedList<Integer> catScolairesTemp = new LinkedList<Integer>();
+        for(int numbers : catScolaires)
+        	catScolairesTemp.add(numbers);
+        int intRandom = 0;
+        
+        //System.out.println(catScolairesTemp.size());
+
 		//sinon on cherche pour toutes les catégories de la même difficulté 
 		int i = 0;
-	    while(i < catScolaires.length && objQuestionTrouvee == null)
+	    while(i < catScolaires.length && objQuestionTrouvee == null )
 	    {
-	   	   intCategorieQuestion = catScolaires[i];
+	       intRandom = UtilitaireNombres.genererNbAleatoire( catScolairesTemp.size() );	
+	   	   intCategorieQuestion =  catScolairesTemp.get(intRandom).intValue();
 	   	   objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulte);
+	   	   catScolairesTemp.remove(intRandom); 
 	   	   i++;
+	   	  // System.out.println(catScolairesTemp.size() + " " + i);
+	   	  // System.out.println(intRandom);
+	   	  
 	    }
 	    
 	    //après pour les difficultés moins grands 
 		int intDifficulteTemp = intDifficulte;
+		LinkedList<Integer> catScolairesTemp2 = new LinkedList<Integer>();
+        
 		while(objQuestionTrouvee == null && intDifficulteTemp > 0 ) 
 		{
+			for(int numbers : catScolaires)
+	        	catScolairesTemp2.add(numbers);
 			intDifficulteTemp--;
 			i = 0;
-		    while(i < catScolaires.length && objQuestionTrouvee == null)
+		    while(i < catScolaires.length && objQuestionTrouvee == null )
 		    {
-		   	   intCategorieQuestion = catScolaires[i];
+		       intRandom = UtilitaireNombres.genererNbAleatoire( catScolairesTemp2.size() );	
+			   intCategorieQuestion =  catScolairesTemp2.get(intRandom).intValue();
 		   	   objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulteTemp);
+		   	   catScolairesTemp2.remove(intRandom);
 		   	   i++;
 		    }
 		}// fin while
 		
 		//après pour les difficultés plus grands
 		intDifficulteTemp = intDifficulte;
+		LinkedList<Integer> catScolairesTemp3 = new LinkedList<Integer>();
+        
 		while(objQuestionTrouvee == null && intDifficulteTemp < 7 ) 
 		{
+			for(int numbers : catScolaires)
+	        	catScolairesTemp3.add(numbers);
 			intDifficulteTemp++;
 			i = 0;
-		    while(i < catScolaires.length && objQuestionTrouvee == null)
+		    while(i < catScolaires.length && objQuestionTrouvee == null )
 		    {
-		   	   intCategorieQuestion = catScolaires[i];
+		       intRandom = UtilitaireNombres.genererNbAleatoire( catScolairesTemp3.size() );	
+			   intCategorieQuestion =  catScolairesTemp3.get(intRandom).intValue();
 		   	   objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulteTemp);
+		   	   catScolairesTemp3.remove(intRandom);
 		   	   i++;
 		    }
 		}// fin while
