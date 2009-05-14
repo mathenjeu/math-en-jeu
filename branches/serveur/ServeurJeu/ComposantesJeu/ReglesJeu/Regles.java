@@ -2,6 +2,11 @@ package ServeurJeu.ComposantesJeu.ReglesJeu;
 
 import java.util.TreeSet;
 
+import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
+import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
+import ServeurJeu.ComposantesJeu.Objets.Objet;
+import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
+
 /**
  * @author Jean-François Brind'Amour
  */
@@ -9,19 +14,19 @@ public class Regles
 {
 	// Déclaration d'une liste qui contient les cases de couleur possibles (le 
 	// contenu est un objet ReglesCaseCouleur)
-	private TreeSet lstCasesCouleurPossibles;
+	private TreeSet<CaseCouleur> lstCasesCouleurPossibles;
 	
 	// Déclaration d'une liste qui contient les magasins possibles (le 
 	// contenu est un objet ReglesMagasin)
-	private TreeSet lstMagasinsPossibles;
+	private TreeSet<Magasin> lstMagasinsPossibles;
 	
 	// Déclaration d'une liste qui contient les cases spéciales possibles (le 
 	// contenu est un objet ReglesCaseSpeciale)
-	private TreeSet lstCasesSpecialesPossibles;
+	private TreeSet<CaseSpeciale> lstCasesSpecialesPossibles;
 	
 	// Déclaration d'une liste qui contient les objets utilisables possibles 
 	// (le contenu est un objet ReglesObjetUtilisable)
-	private TreeSet lstObjetsUtilisablesPossibles;
+	private TreeSet<Objet> lstObjetsUtilisablesPossibles;
 	
 	// Cette variable permet de savoir si on permet le chat ou non
 	private boolean bolPermetChat;
@@ -91,10 +96,10 @@ public class Regles
 		
 	    // Créer les listes de couleurs possibles, cases spéciales possibles,
 		// d'objets utilisables possibles et de magasins possibles
-	    lstCasesCouleurPossibles = new TreeSet(objReglesComparator);
-	    lstMagasinsPossibles = new TreeSet(objReglesComparator);
-	    lstCasesSpecialesPossibles = new TreeSet(objReglesComparator);
-	    lstObjetsUtilisablesPossibles = new TreeSet(objReglesComparator);
+	    lstCasesCouleurPossibles = new TreeSet<CaseCouleur>(objReglesComparator);
+	    lstMagasinsPossibles = new TreeSet<Magasin>(objReglesComparator);
+	    lstCasesSpecialesPossibles = new TreeSet<CaseSpeciale>(objReglesComparator);
+	    lstObjetsUtilisablesPossibles = new TreeSet<Objet>(objReglesComparator);
 	    
 	    // Initialiser les variables par défaut
 	    bolPermetChat = true;
@@ -120,7 +125,7 @@ public class Regles
 	 * 
 	 * @return TreeSet : La liste des cases de couleur possibles
 	 */
-	public TreeSet obtenirListeCasesCouleurPossibles()
+	public TreeSet<CaseCouleur> obtenirListeCasesCouleurPossibles()
 	{
 	   return lstCasesCouleurPossibles;
 	}
@@ -130,7 +135,7 @@ public class Regles
 	 * 
 	 * @return TreeSet : La liste des magasins possibles
 	 */
-	public TreeSet obtenirListeMagasinsPossibles()
+	public TreeSet<Magasin> obtenirListeMagasinsPossibles()
 	{
 	   return lstMagasinsPossibles;
 	}
@@ -141,7 +146,7 @@ public class Regles
 	 * 
 	 * @return TreeSet : La liste des cases spéciales possibles
 	 */
-	public TreeSet obtenirListeCasesSpecialesPossibles()
+	public TreeSet<CaseSpeciale> obtenirListeCasesSpecialesPossibles()
 	{
 	   return lstCasesSpecialesPossibles;
 	}
@@ -152,7 +157,7 @@ public class Regles
 	 * 
 	 * @return TreeSet : La liste des objets utilisables possibles
 	 */
-	public TreeSet obtenirListeObjetsUtilisablesPossibles()
+	public TreeSet<Objet> obtenirListeObjetsUtilisablesPossibles()
 	{
 	   return lstObjetsUtilisablesPossibles;
 	}

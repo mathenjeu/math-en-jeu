@@ -1,8 +1,6 @@
 package ServeurJeu.ComposantesJeu;
 
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
@@ -62,7 +60,7 @@ public class InformationPartie
 	
 	// Déclaration d'une liste de questions qui ont été répondues 
 	// par le joueur
-	private TreeMap lstQuestionsRepondues;
+	private TreeMap<Integer, Question> lstQuestionsRepondues;
 	
 	// Déclaration d'une variable qui va garder la question qui est 
 	// présentement posée au joueur. S'il n'y en n'a pas, alors il y a 
@@ -70,7 +68,7 @@ public class InformationPartie
 	private Question objQuestionCourante;
 	
 	// Déclaration d'une liste d'objets utilisables ramassés par le joueur
-	private TreeMap lstObjetsUtilisablesRamasses;
+	private TreeMap<Integer, ObjetUtilisable> lstObjetsUtilisablesRamasses;
         
     // Déclaration de la boîte de question personnelle au joueur possédant
     // cet objet
@@ -143,10 +141,10 @@ public class InformationPartie
 	        objQuestionCourante = null;
 	    
 	        // Créer la liste des questions qui ont été répondues
-	        lstQuestionsRepondues = new TreeMap();
+	        lstQuestionsRepondues = new TreeMap<Integer, Question>();
 	    
 	        // Créer la liste des objets utilisables qui ont été ramassés
-	        lstObjetsUtilisablesRamasses = new TreeMap();
+	        lstObjetsUtilisablesRamasses = new TreeMap<Integer, ObjetUtilisable>();
 	        
 	        isPlayerNotArrivedOnce = true;
 	        
@@ -256,7 +254,7 @@ public class InformationPartie
 	 * 
 	 * @return TreeMap : La liste des questions qui ont été répondues
 	 */
-	public TreeMap obtenirListeQuestionsRepondues()
+	public TreeMap<Integer, Question> obtenirListeQuestionsRepondues()
 	{
 	   return lstQuestionsRepondues;
 	}
@@ -643,7 +641,7 @@ public class InformationPartie
         int intArgentCourant;
 		Table table;
 		int intDifficulteQuestion;
-		TreeMap objListeObjetsUtilisablesRamasses; 
+		TreeMap<Integer, ObjetUtilisable> objListeObjetsUtilisablesRamasses; 
 		Point positionJoueur; 
 		GestionnaireEvenements gestionnaireEv;
 		Question objQuestion; 
@@ -945,7 +943,7 @@ public class InformationPartie
 	/*
 	 * Retourne une référence vers la liste des objets ramassés
 	 */
-	public TreeMap obtenirListeObjets()
+	public TreeMap<Integer, ObjetUtilisable> obtenirListeObjets()
 	{
 		return lstObjetsUtilisablesRamasses;
 	}
