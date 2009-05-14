@@ -66,9 +66,9 @@ public class BoiteQuestions
 	}
 	
 	/**
-	 *  This method adds a question to the question box
+	 *  This method delete a used question from question box
 	 * 
-	 * @param Question question : la question à ajouter
+	 * @param Question question : question to delete 
 	 */
 	public void popQuestion( Question question )
 	{
