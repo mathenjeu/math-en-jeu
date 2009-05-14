@@ -1724,7 +1724,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
    /*     public String obtenirButDuJeu()
         {
             return butDuJeu;
-        }*/
+        }   */
         
         public boolean peutAllerSurLeWinTheGame(int pointage)
         {
