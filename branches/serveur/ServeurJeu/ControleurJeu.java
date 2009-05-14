@@ -5,6 +5,8 @@ import java.util.Set;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
+import java.util.Map.Entry;
+
 import org.apache.log4j.Logger;
 import Enumerations.RetourFonctions.ResultatAuthentification;
 import ServeurJeu.BD.GestionnaireBD;
@@ -76,16 +78,16 @@ public class ControleurJeu
 	// Cet objet est une liste des joueurs qui sont connectés au serveur de jeu 
 	// (cela inclus les joueurs dans les salles ainsi que les joueurs jouant
 	// présentement dans des tables de jeu)
-	private TreeMap lstJoueursConnectes;
+	private TreeMap<String, JoueurHumain> lstJoueursConnectes;
 	
     
     // Déclaration d'une variable pour contenir une liste des joueurs
     // qui ont étés déconnectés et qui étaient en train de joueur une partie
-    private TreeMap lstJoueursDeconnectes;
+    private TreeMap<String, JoueurHumain> lstJoueursDeconnectes;
 	
 	// Cet objet est une liste des salles créées qui se trouvent dans le serveur
 	// de jeu. Chaque élément de cette liste a comme clé le nom de la salle
-	private TreeMap lstSalles;
+	private TreeMap<String, Salle> lstSalles;
 	
 	// Déclaration de l'objet Espion qui va inscrire des informationsà proppos
 	// du serveur en parallète
@@ -121,13 +123,13 @@ public class ControleurJeu
         objRandom = new Random();
 		
 		// Créer une liste des joueurs
-		lstJoueursConnectes = new TreeMap();
+		lstJoueursConnectes = new TreeMap<String, JoueurHumain>();
 		
 		// Créer une liste des joueurs déconnectés
-		lstJoueursDeconnectes = new TreeMap();
+		lstJoueursDeconnectes = new TreeMap<String, JoueurHumain>();
 		
 		// Créer une liste des salles
-		lstSalles = new TreeMap();
+		lstSalles = new TreeMap<String, Salle>();
 		
 		// Créer un nouveau gestionnaire d'événements
 		objGestionnaireEvenements = new GestionnaireEvenements();
@@ -143,7 +145,10 @@ public class ControleurJeu
 		objGestionnaireCommunication = new GestionnaireCommunication(this, objGestionnaireEvenements);
 		
 		// Fills the rooms from DB
-		objGestionnaireBD.fillsRooms();   
+		objGestionnaireBD.fillsRooms();
+		
+		// Control user accounts to not be blocked
+		objGestionnaireBD.controlPlayerAccount();
 	}
 	
 	public void demarrer()
@@ -419,7 +424,7 @@ public class ControleurJeu
 	 * 				l'être par l'appelant de cette fonction tout dépendant
 	 * 				du traitement qu'elle doit faire
 	 */
-	public TreeMap obtenirListeJoueurs()
+	public TreeMap<String, JoueurHumain> obtenirListeJoueurs()
 	{
 		return lstJoueursConnectes;
 	}
@@ -437,14 +442,14 @@ public class ControleurJeu
 	 * 				l'ajout et/ou au retrait d'une salle, car ça ne peut pas
 	 * 				se produire.
 	 */
-	public TreeMap obtenirListeSalles(String language)
+	public TreeMap<String, Salle> obtenirListeSalles(String language)
 	{
 		
 	        // On crée une liste de salles vide, et on parcourt toutes les salles connues
-            TreeMap copieListeSalles = (TreeMap)lstSalles.clone();
+            TreeMap<String, Salle> copieListeSalles = (TreeMap<String, Salle>) lstSalles.clone();
             copieListeSalles.clear();
-            Set keySet = lstSalles.keySet();
-            Iterator it = keySet.iterator();
+            Set<String> keySet = lstSalles.keySet();
+            Iterator<String> it = keySet.iterator();
             boolean repeat = true;
            
             while (it.hasNext()&& repeat)
@@ -562,16 +567,16 @@ public class ControleurJeu
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// lstJoueursConnectes (chaque élément est un Map.Entry)
-		Set lstEnsembleJoueurs = lstJoueursConnectes.entrySet();
+		Set<Map.Entry<String,JoueurHumain>> lstEnsembleJoueurs = lstJoueursConnectes.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
-		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
 		
 		// Passer tous les joueurs connectés et leur envoyer un événement
 		while (objIterateurListe.hasNext() == true)
 		{
 			// Créer une référence vers le joueur humain courant dans la liste
-			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String, JoueurHumain>)(objIterateurListe.next())).getValue());
 			
 			// Si le nom d'utilisateur du joueur courant n'est pas celui
 			// qui vient de se connecter au serveur de jeu, alors on peut
@@ -611,16 +616,16 @@ public class ControleurJeu
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// lstJoueursConnectes (chaque élément est un Map.Entry)
-		Set lstEnsembleJoueurs = lstJoueursConnectes.entrySet();
+		Set<Map.Entry<String,JoueurHumain>> lstEnsembleJoueurs = lstJoueursConnectes.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
-		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
 		
 		// Passer tous les joueurs connectés et leur envoyer un événement
 		while (objIterateurListe.hasNext() == true)
 		{
 			// Créer une référence vers le joueur humain courant dans la liste
-			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String, JoueurHumain>)(objIterateurListe.next())).getValue());
 			
 			// Si le nom d'utilisateur du joueur courant n'est pas celui
 			// qui vient de se déconnecter du serveur de jeu, alors on peut
@@ -717,7 +722,7 @@ public class ControleurJeu
     	}
     }
     
-    public TreeMap obtenirListeJoueursDeconnectes()
+    public TreeMap<String, JoueurHumain> obtenirListeJoueursDeconnectes()
     {
     	return lstJoueursDeconnectes;
     }
