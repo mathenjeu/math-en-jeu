@@ -670,7 +670,7 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudParametreListeJoueurs.setAttribute("type", "ListeNomUtilisateurs");
 						
 						// Obtenir la liste des joueurs connectés au serveur de jeu
-						TreeMap lstListeJoueurs = objControleurJeu.obtenirListeJoueurs();
+						TreeMap<String, JoueurHumain> lstListeJoueurs = objControleurJeu.obtenirListeJoueurs();
 						
 						// Empècher d'autres thread de toucher à la liste des
 						// joueurs connectés au serveur de jeu
@@ -952,7 +952,7 @@ public class ProtocoleJoueur implements Runnable
 				
 					    // Obtenir la liste des joueurs se trouvant dans la 
 						// salle courante
-						TreeMap lstListeJoueurs = objJoueurHumain.obtenirSalleCourante().obtenirListeJoueurs();
+						TreeMap<String, JoueurHumain> lstListeJoueurs = objJoueurHumain.obtenirSalleCourante().obtenirListeJoueurs();
 						
 						// Empècher d'autres thread de toucher à la liste des
 						// joueurs se trouvant dans la salle courante

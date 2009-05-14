@@ -23,7 +23,7 @@ public class GestionnaireCommunication
 	private ControleurJeu objControleurJeu;
 	
 	// Déclaration d'une liste de ProtocoleJoueur des clients connectés au serveur
-	private Vector lstProtocoleJoueur;
+	private Vector<ProtocoleJoueur> lstProtocoleJoueur;
 	
 	// Déclaration d'un objet qui va permettre de vérifier l'état des connexions
 	// entre le serveur et les clients
@@ -74,7 +74,7 @@ public class GestionnaireCommunication
 		objGestionnaireBD = controleur.obtenirGestionnaireBD();
 		
 		// Créer une liste des ProtocoleJoueur
-		lstProtocoleJoueur = new Vector();
+		lstProtocoleJoueur = new Vector<ProtocoleJoueur>();
 		
 		// Créer le vérificateur de connexions
 		objVerificateurConnexions = new VerificateurConnexions(this);
@@ -193,7 +193,7 @@ public class GestionnaireCommunication
 	 * @return Vector : la liste des ProtocoleJoueur des clients 
 	 * 					présentement connectés au serveur de jeu
 	 */
-	public Vector obtenirListeProtocoleJoueur()
+	public Vector<ProtocoleJoueur> obtenirListeProtocoleJoueur()
 	{
 		return lstProtocoleJoueur;
 	}
