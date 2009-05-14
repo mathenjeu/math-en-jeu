@@ -467,7 +467,7 @@ public final class GenerateurPartie
 		objDernierIdObjets = intCompteurIdObjet;
 		
 		// if game type = tournament (plateau semilineaire)
-		// add the start points
+		// add the start and end points 
 		if (gameType.equals("Tournament"))
 		{
             Iterator objIterateurListePriorite = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
