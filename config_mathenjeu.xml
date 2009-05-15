@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config
 
-	language="fr"
+	language="en"
 	gameType="mathEnJeu"
 
 	url_server="mejdev.mat.ulaval.ca"
@@ -33,6 +33,9 @@
 	password1="3437a1682af95c81"
 		
 	gamepath="mathemaQuoi_beta.swf"
+	
+	masterTime="10"
+	masterFinalTime="15"
 >
 
 </config>
