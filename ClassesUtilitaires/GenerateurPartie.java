@@ -791,15 +791,13 @@ public final class GenerateurPartie
 			
 		      objPoint = (Point) lstPointsCasesPresentes.remove(objRandom.nextInt(lstPointsCasesPresentes.size()));
 		      objttPlateauJeu[objPoint.x][objPoint.y] = null;
-		      System.out.println("before : " + objPoint.x + " : " + objPoint.y );
+		      
 		      intCompteurCases--;
 		    
 		    if(  objPoint.x % 3 == 0 || objPoint.y % 3 == 0 || objPoint.y == intNbColonnes -1 || objPoint.y == 0 ){     // objPoint.x == 0|| objPoint.x == intNbLignes - 1 ||
 		    	objCaseParcourue = new CaseCouleur(1);
 		    	objttPlateauJeu[objPoint.x][objPoint.y] = objCaseParcourue;
-		     	//System.out.println("after : " + objCaseParcourue.obtenirTypeCase() );
-		     	//System.out.println("after : " + objttPlateauJeu[objPoint.x][objPoint.y].obtenirTypeCase() );
-		     	//System.out.println("after : " + objPoint.x + " : " + objPoint.y );
+		     	
 		    	lstPointsCasesPresentes.add(objPoint);
 		        intCompteurCases++;
 		        intCompteur--;
@@ -1030,11 +1028,11 @@ public final class GenerateurPartie
 				{
 					objtPositionJoueurs[i] = new Point(0,col);
 					i++;
-					System.out.println("i" + i);
+					//System.out.println("i" + i);
 				}
-				System.out.println("col" + col);
+				//System.out.println("col" + col);
 			}
-			System.out.println("row" + row);
+			//System.out.println("row" + row);
 		}
 		
 		return objtPositionJoueurs;

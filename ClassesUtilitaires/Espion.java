@@ -13,6 +13,8 @@ import java.util.TreeMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
+
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ServeurJeu.Configuration.GestionnaireMessages;
@@ -182,29 +184,29 @@ public class Espion implements Runnable{
 	    StringBuilder strTables = new StringBuilder();
 	    
 	    // Déclaration d'un objet qui contiendra une référence vers la liste des joueurs
-	    Vector lstProtocoleJoueur = objControleurJeu.obtenirGestionnaireCommunication().obtenirListeProtocoleJoueur();
+	    Vector<ProtocoleJoueur> lstProtocoleJoueur = objControleurJeu.obtenirGestionnaireCommunication().obtenirListeProtocoleJoueur();
 	    
 		// Déclaration d'une liste de ProtocoleJoueur qui va contenir une copie
-		Vector lstCopieProtocoleJoueur = null;
+		Vector<ProtocoleJoueur> lstCopieProtocoleJoueur = null;
 		
 		// Déclaration d'un objet qui contiendra une référence vers la liste des joueurs déconnectés
-		TreeMap lstJoueursDeconnectes = objControleurJeu.obtenirListeJoueursDeconnectes();
+		TreeMap<String,JoueurHumain> lstJoueursDeconnectes = objControleurJeu.obtenirListeJoueursDeconnectes();
 		
 		
 		// Déclaration d'un objet qui contiendra une référence vers la liste des salles
-		TreeMap lstSalles = objControleurJeu.obtenirListeSalles("");
+		TreeMap<String, Salle> lstSalles = objControleurJeu.obtenirListeSalles("");
 		
 	    // Déclaration d'un objet qui contiendra une référence vers la liste des tables
 	    // pour une certaine salle
-	    TreeMap lstTables;
+	    TreeMap<Integer, Table> lstTables;
 		
 		// Déclaration d'un objet qui contiendra une référence vers la liste des joueurs
 		// pour une table
-		TreeMap lstJoueurs;
+		TreeMap<String, JoueurHumain> lstJoueurs;
 
         // Déclaration d'un objet qui contiendra une référence vers la liste des 
         // jouers connectés au serveur
-        TreeMap lstJoueursConnectes = objControleurJeu.obtenirListeJoueurs();		
+        TreeMap<String, JoueurHumain> lstJoueursConnectes = objControleurJeu.obtenirListeJoueurs();		
 		
 		// Permet de calculer le nombre de connexion refusé
 		int intConnexionRefusee = 0;
@@ -215,7 +217,7 @@ public class Espion implements Runnable{
 		synchronized (lstProtocoleJoueur)
 		{
 			// Faire une copie de la liste des ProtocoleJoueur
-			lstCopieProtocoleJoueur = (Vector) lstProtocoleJoueur.clone();
+			lstCopieProtocoleJoueur = (Vector<ProtocoleJoueur>) lstProtocoleJoueur.clone();
 		}
 		
 
@@ -285,8 +287,8 @@ public class Espion implements Runnable{
 
         // Joueurs connectés au serveur
 	    // Préparation pour parcourir le TreeMap des joueurs connectés
-	    Set lstEnsembleJoueursConnectes = lstJoueursConnectes.entrySet();
-	    Iterator objIterateurListeJoueursConnectes = lstEnsembleJoueursConnectes.iterator();
+	    Set<Map.Entry<String,JoueurHumain>> lstEnsembleJoueursConnectes = lstJoueursConnectes.entrySet();
+	    Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueursConnectes = lstEnsembleJoueursConnectes.iterator();
 	    
 	    // Ajouter le nombre de joueurs connectés
 	    strJoueursConnectes.append(strFinLigne);
@@ -308,7 +310,7 @@ public class Espion implements Runnable{
 					strJoueursConnectes.append(", ");
 				}
 				
-				strJoueursConnectes.append(((JoueurHumain)((Map.Entry)objIterateurListeJoueursConnectes.next()).getValue()).obtenirNomUtilisateur());
+				strJoueursConnectes.append(((JoueurHumain)((Map.Entry<String,JoueurHumain>)objIterateurListeJoueursConnectes.next()).getValue()).obtenirNomUtilisateur());
 			    intCompteur++;
 			}
         }
@@ -325,8 +327,8 @@ public class Espion implements Runnable{
         
         // Joueurs déconnectés
         // Préparation pour parcourir le TreeMap des joueurs déconnectés
-        Set lstEnsembleJoueursDeconnectes = lstJoueursDeconnectes.entrySet();
-        Iterator objIterateurListeJoueursDeconnectes = lstEnsembleJoueursDeconnectes.iterator();
+        Set<Map.Entry<String,JoueurHumain>> lstEnsembleJoueursDeconnectes = lstJoueursDeconnectes.entrySet();
+        Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueursDeconnectes = lstEnsembleJoueursDeconnectes.iterator();
         
         // Afficher le nombre de joueurs déconnectés
         strJoueursDeconnectes.append("Joueurs déconnectés: ");
@@ -347,7 +349,7 @@ public class Espion implements Runnable{
 					strJoueursDeconnectes.append(", ");
 				}
 				
-				strJoueursDeconnectes.append(((JoueurHumain)((Map.Entry)objIterateurListeJoueursDeconnectes.next()).getValue()).obtenirNomUtilisateur());
+				strJoueursDeconnectes.append(((JoueurHumain)((Map.Entry<String,JoueurHumain>)objIterateurListeJoueursDeconnectes.next()).getValue()).obtenirNomUtilisateur());
 			    intCompteur++;
 			}
         }
@@ -355,8 +357,8 @@ public class Espion implements Runnable{
         
 	    // Salles
         // Préparation pour parcourir le TreeMap des salles
-        Set lstEnsembleSalles = lstSalles.entrySet();
-        Iterator objIterateurListeSalles = lstEnsembleSalles.iterator();	  
+        Set<Map.Entry<String,Salle>> lstEnsembleSalles = lstSalles.entrySet();
+        Iterator<Entry<String, Salle>> objIterateurListeSalles = lstEnsembleSalles.iterator();	  
           
 	    // Afficher le nombre de salles 
 	    strSalles.append("Salles : ");
@@ -381,7 +383,7 @@ public class Espion implements Runnable{
 				intCompteur++;
 								
 				// Ajouter le nom de la salle
-				Salle objSalle = (Salle)(((Map.Entry)(objIterateurListeSalles.next())).getValue());
+				Salle objSalle = (Salle)(((Map.Entry<String,Salle>)(objIterateurListeSalles.next())).getValue());
 				strSalles.append(objSalle.getRoomName(""));
 			}	
 	    }
@@ -401,14 +403,14 @@ public class Espion implements Runnable{
 			while (objIterateurListeSalles.hasNext() == true)
 			{
 				// Aller chercher l'objet Salle
-                Salle objSalle = (Salle)(((Map.Entry)(objIterateurListeSalles.next())).getValue());				
+                Salle objSalle = (Salle)(((Map.Entry<String,Salle>)(objIterateurListeSalles.next())).getValue());				
 				
 				// Aller chercher la liste des tables
-				lstTables = (TreeMap)(objSalle.obtenirListeTables());
+				lstTables = (TreeMap<Integer,Table>)(objSalle.obtenirListeTables());
 				
 				// Préparation pour parcourir le TreeMap des tables
-				Set lstEnsembleTables = lstTables.entrySet();
-				Iterator objIterateurListeTables = lstEnsembleTables.iterator();
+				Set<Map.Entry<Integer,Table>> lstEnsembleTables = lstTables.entrySet();
+				Iterator<Entry<Integer, Table>> objIterateurListeTables = lstEnsembleTables.iterator();
 
                 // Ajouter le nom de la salle et le nombre de tables
          	    strTables.append("Tables pour la salle ");
@@ -425,7 +427,7 @@ public class Espion implements Runnable{
 	         	    while(objIterateurListeTables.hasNext() == true)
 	         	    {
 	         	    	 // Aller chercher l'objet Table
-	         	    	 Table objTable = (Table)(((Map.Entry)(objIterateurListeTables.next())).getValue());	
+	         	    	 Table objTable = (Table)(((Map.Entry<Integer, Table>)(objIterateurListeTables.next())).getValue());	
 	         	   	     
 	         	   	     // Ajouter les informations sur cette table
 	         	   	     strTables.append("    Numéro de table : ");
@@ -485,8 +487,8 @@ public class Espion implements Runnable{
 	         	   	     lstJoueurs = objTable.obtenirListeJoueurs();
 	         	   	     
 	         	   	     // Préparation pour parcourir la liste des joueurs
-				         Set lstEnsembleJoueurs = lstJoueurs.entrySet();
-				         Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
+				         Set<Map.Entry<String,JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
+				         Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
 	         	   	     
 	         	   	     // Ajouter le nom de chaque joueur sur la table
 	         	   	     strTables.append("    Joueurs : ");
@@ -500,7 +502,7 @@ public class Espion implements Runnable{
 	         	   	     	intCompteur++;
 	         	   	     	
 	         	   	     	// Aller chercher l'objet JoueurHumain
-	         	   	     	JoueurHumain objJoueurHumain = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
+	         	   	     	JoueurHumain objJoueurHumain = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
 	         	   	     	
 	         	   	     	// Ajouter le nom d'utilisateur du joueur
 	         	   	     	strTables.append(objJoueurHumain.obtenirNomUtilisateur());
@@ -510,7 +512,7 @@ public class Espion implements Runnable{
                          // Obtenir la liste des joueurs virtuels
                          if (objTable.obtenirListeJoueursVirtuels() != null)
                          {
-                             Vector lstJoueursVirtuels = objTable.obtenirListeJoueursVirtuels();
+                             Vector<JoueurVirtuel> lstJoueursVirtuels = objTable.obtenirListeJoueursVirtuels();
                              if (intCompteur > 0)
                              {
                              	strTables.append(", ");
