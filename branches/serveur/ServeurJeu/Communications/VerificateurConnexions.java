@@ -65,7 +65,7 @@ public class VerificateurConnexions implements Runnable
 			synchronized (lstProtocoleJoueur)
 			{
 				// Faire une copie de la liste des ProtocoleJoueur
-				lstCopieProtocoleJoueur = (Vector) lstProtocoleJoueur.clone();
+				lstCopieProtocoleJoueur = (Vector<ProtocoleJoueur>) lstProtocoleJoueur.clone();
 			}
 
 			// Passer tous les objets ProtocoleJoueur et envoyer un message ping

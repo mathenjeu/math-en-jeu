@@ -47,6 +47,7 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import java.util.Calendar;
+import java.util.Map.Entry;
 
 
 /**
@@ -524,7 +525,7 @@ public class ProtocoleJoueur implements Runnable
                                 objNoeudCommande.setAttribute("nom","OkEtPartieDejaCommencee");
  
                                 // On va envoyer dans le noeud la liste de chansons que le joueur pourrait aimer
-                                Vector liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
+                                Vector<Object> liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
                                 for(int i=0; i<liste.size(); i++)
                                 {
                                     Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("musique");
@@ -542,7 +543,7 @@ public class ProtocoleJoueur implements Runnable
     							objNoeudCommande.setAttribute("nom", "Musique");
                                  
                                  // On va envoyer dans le noeud la liste de chansons que le joueur pourrait aimer
-                                 Vector liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
+                                 Vector<Object> liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
                                  for(int i=0; i<liste.size(); i++)
                                  {
                                        Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("musique");
@@ -678,10 +679,10 @@ public class ProtocoleJoueur implements Runnable
 						{
 							// Créer un ensemble contenant tous les tuples de la liste 
 							// lstListeJoueurs (chaque élément est un Map.Entry)
-							Set lstEnsembleJoueurs = lstListeJoueurs.entrySet();
+							Set<Map.Entry<String,JoueurHumain>> lstEnsembleJoueurs = lstListeJoueurs.entrySet();
 					
 							// Obtenir un itérateur pour l'ensemble contenant les joueurs
-							Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+							Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
 							
 							// Générer un nouveau numéro de commande qui sera 
 						    // retourné au client
@@ -692,7 +693,7 @@ public class ProtocoleJoueur implements Runnable
 							while (objIterateurListe.hasNext() == true)
 							{
 								// Créer une référence vers le joueur humain courant dans la liste
-								JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+								JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
 								
 								// Créer le noeud du joueur courant
 								Element objNoeudJoueur = objDocumentXMLSortie.createElement("joueur");
@@ -739,7 +740,7 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudParametreListeSalles.setAttribute("type", "ListeNomSalles");
 
 						// Obtenir la liste des salles du serveur de jeu
-						TreeMap lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue);
+						TreeMap<String, Salle> lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue);
 
 						// Générer un nouveau numéro de commande qui sera 
 						// retourné au client
@@ -747,14 +748,14 @@ public class ProtocoleJoueur implements Runnable
 
 						// Créer un ensemble contenant tous les tuples de la liste 
 						// lstListeSalles (chaque élément est un Map.Entry)
-						Set lstEnsembleSalles = lstListeSalles.entrySet();
+						Set<Map.Entry<String, Salle>> lstEnsembleSalles = lstListeSalles.entrySet();
 
 						// Obtenir un itérateur pour l'ensemble contenant les salles
-						Iterator objIterateurListe = lstEnsembleSalles.iterator();
+						Iterator<Entry<String, Salle>> objIterateurListe = lstEnsembleSalles.iterator();
 						
 						//we find if room is set tournamentActive
-						Set keySet =  lstListeSalles.keySet();
-			            Iterator it = keySet.iterator();
+						Set<String> keySet =  lstListeSalles.keySet();
+			            Iterator<String> it = keySet.iterator();
 			            String tournamentActive = "";
 			            while (it.hasNext() && !tournamentActive.equals("TournamentActive"))
 			            {
@@ -766,7 +767,7 @@ public class ProtocoleJoueur implements Runnable
 						while (objIterateurListe.hasNext() == true)
 						{
 							// Créer une référence vers la salle courante dans la liste
-							Salle objSalle = (Salle)(((Map.Entry)(objIterateurListe.next())).getValue());
+							Salle objSalle = (Salle)(((Map.Entry<String, Salle>)(objIterateurListe.next())).getValue());
 
 							// Créer le noeud de la salle courante
 							Element objNoeudSalle = objDocumentXMLSortie.createElement("salle");
@@ -960,10 +961,10 @@ public class ProtocoleJoueur implements Runnable
 						{
 							// Créer un ensemble contenant tous les tuples de la liste 
 							// lstListeJoueurs (chaque élément est un Map.Entry)
-							Set lstEnsembleJoueurs = lstListeJoueurs.entrySet();
+							Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstListeJoueurs.entrySet();
 				
 							// Obtenir un itérateur pour l'ensemble contenant les joueurs
-							Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+							Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
 							
 							// Générer un nouveau numéro de commande qui sera 
 						    // retourné au client
@@ -974,7 +975,7 @@ public class ProtocoleJoueur implements Runnable
 							while (objIterateurListe.hasNext() == true)
 							{
 								// Créer une référence vers le joueur humain courant dans la liste
-								JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+								JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
 							
 								// Créer le noeud du joueur courant
 								Element objNoeudJoueur = objDocumentXMLSortie.createElement("joueur");
@@ -1051,7 +1052,7 @@ public class ProtocoleJoueur implements Runnable
 						
 					    // Obtenir la liste des tables se trouvant dans la 
 						// salle courante
-						TreeMap lstListeTables = objJoueurHumain.obtenirSalleCourante().obtenirListeTables();
+						TreeMap<Integer, Table> lstListeTables = objJoueurHumain.obtenirSalleCourante().obtenirListeTables();
 
 						// Empècher d'autres thread de toucher à la liste des
 						// tables se trouvant dans la salle courante
@@ -1059,10 +1060,10 @@ public class ProtocoleJoueur implements Runnable
 						{
 							// Créer un ensemble contenant tous les tuples de la liste 
 							// lstListeTables (chaque élément est un Map.Entry)
-							Set lstEnsembleTables = lstListeTables.entrySet();
+							Set<Map.Entry<Integer, Table>> lstEnsembleTables = lstListeTables.entrySet();
 
 							// Obtenir un itérateur pour l'ensemble contenant les tables
-							Iterator objIterateurListeTables = lstEnsembleTables.iterator();
+							Iterator<Entry<Integer, Table>> objIterateurListeTables = lstEnsembleTables.iterator();
 					
 							// Générer un nouveau numéro de commande qui sera 
 						    // retourné au client
@@ -1073,7 +1074,7 @@ public class ProtocoleJoueur implements Runnable
 							while (objIterateurListeTables.hasNext() == true)
 							{
 								// Créer une référence vers la table courante dans la liste
-								Table objTable = (Table)(((Map.Entry)(objIterateurListeTables.next())).getValue());
+								Table objTable = (Table)(((Map.Entry<Integer, Table>)(objIterateurListeTables.next())).getValue());
 
 								/*
 								// Obtenir la liste des joueurs se trouvant dans la 
@@ -1262,7 +1263,7 @@ public class ProtocoleJoueur implements Runnable
 						int intNoTable = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "NoTable").getNodeValue());
 					
 						// Déclaration d'une nouvelle liste de personnages
-						TreeMap lstPersonnageJoueurs = new TreeMap();
+						TreeMap<String, Integer> lstPersonnageJoueurs = new TreeMap<String, Integer>();
 					
 						// Appeler la méthode permettant d'entrer dans la
 						// table et garder son résultat dans une variable
@@ -1289,10 +1290,10 @@ public class ProtocoleJoueur implements Runnable
 
 							// Créer un ensemble contenant tous les tuples de la liste 
 							// lstPersonnageJoueurs (chaque élément est un Map.Entry)
-							Set lstEnsemblePersonnageJoueurs = lstPersonnageJoueurs.entrySet();
+							Set<Map.Entry<String,Integer>> lstEnsemblePersonnageJoueurs = lstPersonnageJoueurs.entrySet();
 
 							// Obtenir un itérateur pour l'ensemble contenant les personnages
-							Iterator objIterateurListePersonnageJoueurs = lstEnsemblePersonnageJoueurs.iterator();
+							Iterator<Entry<String, Integer>> objIterateurListePersonnageJoueurs = lstEnsemblePersonnageJoueurs.iterator();
 
 							
 							// Passer tous les personnages et créer un noeud pour 
@@ -1300,7 +1301,7 @@ public class ProtocoleJoueur implements Runnable
 							while (objIterateurListePersonnageJoueurs.hasNext() == true)
 							{
 								// Garder une référence vers l'entrée courante
-								Map.Entry objEntreeListePersonnageJoueurs = (Map.Entry)objIterateurListePersonnageJoueurs.next();
+								Map.Entry<String,Integer> objEntreeListePersonnageJoueurs = (Map.Entry<String,Integer>)objIterateurListePersonnageJoueurs.next();
 								
 								// Créer le noeud pour le joueur courant
 								Element objNoeudPersonnage = objDocumentXMLSortie.createElement("personnage");
@@ -2941,19 +2942,19 @@ public class ProtocoleJoueur implements Runnable
         Case[][] objttPlateauJeu = objTable.obtenirPlateauJeuCourant();
 
         // Créer la liste des positions des joueurs à retourner
-        TreeMap lstPositionsJoueurs = new TreeMap();
+        TreeMap<String, Point> lstPositionsJoueurs = new TreeMap<String, Point>();
 
         // Parcourir les positions des joueurs de la table et les ajouter
         // à notre liste locale
-        Set lstEnsemblePositionJoueurs = objTable.obtenirListeJoueurs().entrySet();
+        Set<Map.Entry<String, JoueurHumain>> lstEnsemblePositionJoueurs = objTable.obtenirListeJoueurs().entrySet();
 
-        Iterator objIterateurListe = lstEnsemblePositionJoueurs.iterator();
+        Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsemblePositionJoueurs.iterator();
 
         // Passer tous les positions des joueurs et les ajouter à la liste locale
         while (objIterateurListe.hasNext() == true)
         {
             // Déclaration d'une référence vers l'objet clé valeur courant
-            Map.Entry mapEntry = (Map.Entry) objIterateurListe.next();
+            Map.Entry<String,JoueurHumain> mapEntry = (Map.Entry<String,JoueurHumain>) objIterateurListe.next();
             
             JoueurHumain joueur = (JoueurHumain) mapEntry.getValue();
 
@@ -3024,14 +3025,14 @@ public class ProtocoleJoueur implements Runnable
 		objNoeudParametreListeJoueurs.setAttribute("type", "ListeJoueurs");
 		
         // Obtenir la liste des joueurs que l'on doit envoyer
-        TreeMap lstJoueurs = ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs();
+        TreeMap<String, JoueurHumain> lstJoueurs = ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs();
 
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// lstJoueurs (chaque élément est un Map.Entry)
-		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
+		Set<Map.Entry<String,JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les tables
-		Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
+		Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
 		
 		// Générer un nouveau numéro de commande qui sera 
 	    // retourné au client
@@ -3042,7 +3043,7 @@ public class ProtocoleJoueur implements Runnable
 		while (objIterateurListeJoueurs.hasNext() == true)
 		{
 			// Créer une référence vers le joueur courant dans la liste
-			JoueurHumain joueurHumain = (JoueurHumain)(((Map.Entry)objIterateurListeJoueurs.next()).getValue());
+			JoueurHumain joueurHumain = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)objIterateurListeJoueurs.next()).getValue());
 			
 		    // Créer le noeud
 			Element objNoeudJoueur = objDocumentXML.createElement("joueur");
@@ -3070,7 +3071,7 @@ public class ProtocoleJoueur implements Runnable
 	
 		// ----------------------------
 		// Ajouter les joueurs virtuels
-		Vector lstJoueursVirtuels = ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();
+		Vector<JoueurVirtuel> lstJoueursVirtuels = ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();
 
 		if (lstJoueursVirtuels != null)
 		{
@@ -3265,14 +3266,14 @@ public class ProtocoleJoueur implements Runnable
 		objNoeudParametreListeItems.setAttribute("type", "ListeObjets");
 
 	    // Obtenir la liste des items du joueur déconnecté
-		TreeMap lstListeItems = ancientJoueur.obtenirPartieCourante().obtenirListeObjets();
+		TreeMap<Integer,ObjetUtilisable> lstListeItems = ancientJoueur.obtenirPartieCourante().obtenirListeObjets();
 		
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// lstListeItemss (chaque élément est un Map.Entry)
-		Set lstEnsembleItems = lstListeItems.entrySet();
+		Set<Map.Entry<Integer, ObjetUtilisable>> lstEnsembleItems = lstListeItems.entrySet();
 
 		// Obtenir un itérateur pour l'ensemble contenant les tables
-    	Iterator objIterateurListeItems = lstEnsembleItems.iterator();
+    	Iterator<Entry<Integer, ObjetUtilisable>> objIterateurListeItems = lstEnsembleItems.iterator();
 
 		// Générer un nouveau numéro de commande qui sera 
 	    // retourné au client
@@ -3283,7 +3284,7 @@ public class ProtocoleJoueur implements Runnable
 		while (objIterateurListeItems.hasNext() == true)
 		{
 			// Créer une référence vers l'item courant dans la liste
-			ObjetUtilisable objItem = (ObjetUtilisable)(((Map.Entry)(objIterateurListeItems.next())).getValue());
+			ObjetUtilisable objItem = (ObjetUtilisable)(((Map.Entry<Integer,ObjetUtilisable>)(objIterateurListeItems.next())).getValue());
 			
 		    // Créer le noeud de la table courante
 			Element objNoeudItem = objDocumentXML.createElement("objet");
@@ -3535,13 +3536,14 @@ public class ProtocoleJoueur implements Runnable
             	 // La boule permettra à un joueur de changer de question si celle
             	 // qu'il s'est fait envoyer ne lui tente pas
             	 // On trouve une nouvelle question à poser
+            	 int oldQuestion = objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirCodeQuestion();
             	 Question nouvelleQuestion = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoser(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueurDesiree(), true);
 
             	 // Si on est tombé sur la mème question, on recommence jusqu'à 10 fois
             	 int essais=0;
-            	 while(nouvelleQuestion.obtenirCodeQuestion()==objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirCodeQuestion() && essais<10)
+            	 while(nouvelleQuestion.obtenirCodeQuestion() == oldQuestion && essais < 10)
             	 {
-            		 nouvelleQuestion = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoser(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueurDesiree(), true);
+            		 nouvelleQuestion = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoser(objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirDifficulte(), true);
             		 essais++;
             	 }
 
@@ -3588,15 +3590,15 @@ public class ProtocoleJoueur implements Runnable
             	 boolean estHumain2 = false;
 
             	 // On obtient la liste des joueurs humains, puis la liste des joueurs virtuels
-            	 TreeMap listeJoueursHumains = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs();
-            	 Set nomsJoueursHumains = listeJoueursHumains.entrySet();
-            	 Iterator objIterateurListeJoueurs = nomsJoueursHumains.iterator();
-            	 Vector listeJoueursVirtuels = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();
+            	 TreeMap<String, JoueurHumain> listeJoueursHumains = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs();
+            	 Set<Map.Entry<String, JoueurHumain>> nomsJoueursHumains = listeJoueursHumains.entrySet();
+            	 Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = nomsJoueursHumains.iterator();
+            	 Vector<JoueurVirtuel> listeJoueursVirtuels = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();
 
             	 // On trouve les deux joueurs les plus susceptibles d'ètre affectés
             	 while(objIterateurListeJoueurs.hasNext() == true)
             	 {
-            		 JoueurHumain j = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
+            		 JoueurHumain j = (JoueurHumain)(((Map.Entry<String, JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
 
             		 if(j.obtenirPartieCourante().obtenirDistanceAuWinTheGame()<=max1)
             		 {
@@ -3678,7 +3680,7 @@ public class ProtocoleJoueur implements Runnable
 		synchronized(objMagasin)
 		{					
 	    	// Obtenir la liste des objets en vente au magasin
-	    	Vector lstObjetsEnVente = objMagasin.obtenirListeObjetsUtilisables();
+	    	Vector<ObjetUtilisable> lstObjetsEnVente = objMagasin.obtenirListeObjetsUtilisables();
 	    	
 	    	// Créer le message XML en parcourant la liste des objets en vente
 	    	for (int i = 0; i < lstObjetsEnVente.size(); i++)

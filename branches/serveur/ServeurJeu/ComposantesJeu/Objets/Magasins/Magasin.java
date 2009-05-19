@@ -13,7 +13,7 @@ public abstract class Magasin extends Objet
 {
 	// Déclaration d'une liste d'objets utilisables qui va servir à savoir 
 	// quels objets le magasin vend
-	protected Vector lstObjetsUtilisables;
+	protected Vector<ObjetUtilisable> lstObjetsUtilisables;
         
 	/**
 	 * Constructeur de la classe Magasin qui permet d'initialiser
@@ -22,7 +22,7 @@ public abstract class Magasin extends Objet
 	public Magasin()
 	{
 		// Créer une nouvelle liste d'objets utilisables
-		lstObjetsUtilisables = new Vector();
+		lstObjetsUtilisables = new Vector<ObjetUtilisable>();
 	}
 
 	/**
@@ -31,7 +31,7 @@ public abstract class Magasin extends Objet
 	 * 
 	 * @return Vector : La liste des ObjetsUtilisables que le magasin vend
 	 */
-	public Vector obtenirListeObjetsUtilisables()
+	public Vector<ObjetUtilisable> obtenirListeObjetsUtilisables()
 	{
 	   return lstObjetsUtilisables;
 	}

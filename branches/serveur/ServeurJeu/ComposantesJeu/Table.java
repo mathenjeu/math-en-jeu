@@ -8,6 +8,8 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.awt.Point;
 import java.util.Date;
+import java.util.Map.Entry;
+
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
@@ -166,6 +168,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Définir les rçgles de jeu pour la salle courante
 		objRegles = salleParente.getRegles();
+		
+		// take new table dimentions if changed in DB
+		objGestionnaireBD.getNewTableDimentions(objRegles, salleParente.getRoomName(""));
+		//objRegles.definirTempsMaximal(objGestionnaireBD.getNewTableDimentionTours(salleParente.getRoomName("")));
+		//objRegles.definirTempsMinimal(objGestionnaireBD.getNewTableDimentionLines(salleParente.getRoomName("")));
 		
 		// initialaise gameboard - set null
 		objttPlateauJeu = null;
@@ -556,7 +563,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Création d'une nouvelle liste dont la clé est le nom 
 		// d'utilisateur du joueur et le contenu est un point 
 		// représentant la position du joueur
-		TreeMap<String, Point> lstPositionsJoueurs = new TreeMap();
+		TreeMap<String, Point> lstPositionsJoueurs = new TreeMap<String, Point>();
         
                 // Contient les noms des joueurs virtuels
                 String tNomsJoueursVirtuels[] = null;
@@ -645,7 +652,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		Set<Map.Entry<String,JoueurHumain>> lstEnsembleJoueurs = lstJoueursEnAttente.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les personnages
-		Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
+		Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
 
 		// S'il y a des joueurs virtuels, alors on va créer une nouvelle liste
 		// qui contiendra ces joueurs
@@ -677,7 +684,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     		    // dans la liste (pas besoin de vérifier s'il y en a un 
     			// prochain, car on a généré la position des joueurs 
     			// selon cette liste
-    			JoueurHumain objJoueur = (JoueurHumain) (((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
+    			JoueurHumain objJoueur = (JoueurHumain) (((Map.Entry<String,JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
     			    			    			
     			// Définir la position du joueur courant
     			objJoueur.obtenirPartieCourante().definirPositionJoueur(objtPositionsJoueurs[i]);
@@ -829,7 +836,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				synchronized (lstJoueurs)
 			    {
 			    	// Parcours des joueurs pour trouver le meilleur pointage
-					Iterator iteratorJoueursHumains = lstJoueurs.values().iterator();
+					Iterator<JoueurHumain> iteratorJoueursHumains = lstJoueurs.values().iterator();
 					while (iteratorJoueursHumains.hasNext())
 					{
 						JoueurHumain objJoueurHumain = (JoueurHumain)iteratorJoueursHumains.next();
@@ -843,7 +850,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					
 					// Parcours des joueurs pour mise à jour de la BD et
 					// pour ajouter les infos de la partie complétée
-					Iterator it = lstJoueurs.values().iterator();
+					Iterator<JoueurHumain> it = lstJoueurs.values().iterator();
 					while(it.hasNext())
 					{
 						// Mettre a jour les données des joueurs
@@ -1040,13 +1047,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
-		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
 		
 		// Passer tous les joueurs de la table et leur envoyer un événement
 		while (objIterateurListe.hasNext() == true)
 		{
 			// Créer une référence vers le joueur humain courant dans la liste
-			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
 			
 			// Ajouter le joueur dans la liste des personnages (il se peut que 
 			// le joueur n'aie pas encore de personnages, alors le id est 0)
@@ -1093,13 +1100,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = getObjSalle().obtenirListeJoueurs().entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
-		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
 		
 		// Passer tous les joueurs de la salle et leur envoyer un événement
 		while (objIterateurListe.hasNext() == true)
 		{
 			// Créer une référence vers le joueur humain courant dans la liste
-			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
 			
 			// Si le nom d'utilisateur du joueur courant n'est pas celui
 			// qui vient d'entrer dans la table, alors on peut envoyer un 
@@ -1143,13 +1150,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = getObjSalle().obtenirListeJoueurs().entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
-		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
 		
 		// Passer tous les joueurs de la salle et leur envoyer un événement
 		while (objIterateurListe.hasNext() == true)
 		{
 			// Créer une référence vers le joueur humain courant dans la liste
-			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
 			
 			// Si le nom d'utilisateur du joueur courant n'est pas celui
 			// qui vient de quitter la table, alors on peut envoyer un 
@@ -1194,13 +1201,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
-		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
 		
 		// Passer tous les joueurs de la table et leur envoyer un événement
 		while (objIterateurListe.hasNext() == true)
 		{
 			// Créer une référence vers le joueur humain courant dans la liste
-			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
 			System.out.println(objJoueur.obtenirNomUtilisateur());
 			// Si le nom d'utilisateur du joueur courant n'est pas celui
 			// qui vient de démarrer la partie, alors on peut envoyer un 
@@ -1242,13 +1249,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
-		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
 		
 		// Passer tous les joueurs de la salle et leur envoyer un événement
 		while (objIterateurListe.hasNext() == true)
 		{
 			// Créer une référence vers le joueur humain courant dans la liste
-			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
 
 		    // Obtenir un numéro de commande pour le joueur courant, créer 
 		    // un InformationDestination et l'ajouter à l'événement de la 
@@ -1273,7 +1280,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
-		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
 		
 		// Passser tous les joueurs de la table et leur envoyer l'événement
 		// NOTE: On omet d'envoyer au joueur nomUtilisateur étant donné
@@ -1281,7 +1288,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		while (objIterateurListe.hasNext() == true)
 		{
 			// Créer une référence vers le joueur humain courant dans la liste
-			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
 			
 			// Si le nom d'utilisateur du joueur n'est pas nomUtilisateur, alors
 			// on peut envoyer un événement à cet utilisateur
@@ -1309,7 +1316,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
-		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
 		
 		// Passser tous les joueurs de la table et leur envoyer l'événement
 		// NOTE: On omet d'envoyer au joueur nomUtilisateur étant donné
@@ -1317,7 +1324,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		while (objIterateurListe.hasNext() == true)
 		{
 			// Créer une référence vers le joueur humain courant dans la liste
-			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
 			
 			// Si le nom d'utilisateur du joueur n'est pas nomUtilisateur, alors
 			// on peut envoyer un événement à cet utilisateur
@@ -1338,10 +1345,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         // Mçme chose que la fonction précédente, mais envoie plut™t les informations quant à l'utilisation d'un objet dont tous devront çtre au courant
 		EvenementUtiliserObjet utiliserObjet = new EvenementUtiliserObjet(joueurQuiUtilise, joueurAffecte, objetUtilise, autresInformations);
 		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
-		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
 		while (objIterateurListe.hasNext() == true)
 		{
-			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
                         utiliserObjet.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),objJoueur.obtenirProtocoleJoueur()));
 		}
 		objGestionnaireEvenements.ajouterEvenement(utiliserObjet);
@@ -1353,10 +1360,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         // Meme chose que la fonction précédente, mais envoie plut™t un message de la part d'un joueur à tous les joueurs de la table
 		EvenementMessageChat messageChat = new EvenementMessageChat(joueurQuiEnvoieLeMessage, messageAEnvoyer);
 		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
-		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
 		while (objIterateurListe.hasNext() == true)
 		{
-			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
                         messageChat.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),objJoueur.obtenirProtocoleJoueur()));
 		}
 		objGestionnaireEvenements.ajouterEvenement(messageChat);
@@ -1413,13 +1420,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
-		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
 		
 		// Passer tous les joueurs de la table et leur envoyer un événement
 		while (objIterateurListe.hasNext() == true)
 		{
 			// Créer une référence vers le joueur humain courant dans la liste
-			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
 			
 			// Si le nom d'utilisateur du joueur courant n'est pas celui
 			// qui vient de démarrer la partie, alors on peut envoyer un 
@@ -1451,13 +1458,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
-		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
 		
 		// Passer tous les joueurs de la salle et leur envoyer un événement
 		while (objIterateurListe.hasNext() == true)
 		{
 			// Créer une référence vers le joueur humain courant dans la liste
-			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
 
 		    // Obtenir un numéro de commande pour le joueur courant, créer 
 		    // un InformationDestination et l'ajouter à l'événement de la 
@@ -1488,13 +1495,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
 		
 		// Obtenir un itérateur pour l'ensemble contenant les joueurs
-		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
 		
 		// Passer tous les joueurs de la salle et leur envoyer un événement
 		while (objIterateurListe.hasNext() == true)
 		{
 			// Créer une référence vers le joueur humain courant dans la liste
-			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
 
 		    // Obtenir un numéro de commande pour le joueur courant, créer 
 		    // un InformationDestination et l'ajouter à l'événement de la 
@@ -1603,13 +1610,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	{
    	    // Préparation pour parcourir la liste des joueurs
         Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
-        Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
+        Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
 
         // Parcourir la liste des joueurs et vérifier le id
    	    while(objIterateurListeJoueurs.hasNext() == true)
    	    {
 	        // Aller chercher l'objet JoueurHumain
-	        JoueurHumain objJoueurHumain = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
+	        JoueurHumain objJoueurHumain = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
 	         
 	        // Vérifier le id
 	        if (objJoueurHumain.obtenirPartieCourante().obtenirIdPersonnage() == intID)
@@ -1639,13 +1646,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		{
 			// Préparation pour parcourir la liste des joueurs
 			Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueursEnAttente.entrySet();
-			Iterator objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
+			Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = lstEnsembleJoueurs.iterator();
 
 			// Parcourir la liste des joueurs et vérifier le id
 			while(objIterateurListeJoueurs.hasNext() == true)
 			{
 				// Aller chercher l'objet JoueurHumain
-				JoueurHumain objJoueurHumain = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
+				JoueurHumain objJoueurHumain = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
 
 				// Vérifier le id
 				if (objJoueurHumain.obtenirPartieCourante().obtenirIdPersonnage() == intID)
@@ -1671,10 +1678,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	public JoueurHumain obtenirJoueurHumainParSonNom(String username)
 	{
             Set<Map.Entry<String, JoueurHumain>> nomsJoueursHumains = lstJoueurs.entrySet();
-            Iterator objIterateurListeJoueurs = nomsJoueursHumains.iterator();
+            Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = nomsJoueursHumains.iterator();
             while(objIterateurListeJoueurs.hasNext() == true)
             {
-                JoueurHumain j = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
+                JoueurHumain j = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
                 if(username.equals(j.obtenirNomUtilisateur())) return j;
             }
             return (JoueurHumain)null;

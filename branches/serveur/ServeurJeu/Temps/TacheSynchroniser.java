@@ -17,7 +17,7 @@ import java.util.Iterator;
 public class TacheSynchroniser extends Tache
 {
 	//Liste des observateurs qui seront notifiés pour la synchronisation
-	private TreeMap lstObservateurs;
+	private TreeMap<Integer, ObservateurSynchroniser> lstObservateurs;
 	
 	/**
 	 * Constructeur de la classe TacheSynchroniser
@@ -25,7 +25,7 @@ public class TacheSynchroniser extends Tache
 	 */
 	public TacheSynchroniser()
 	{
-		lstObservateurs = new TreeMap();
+		lstObservateurs = new TreeMap<Integer, ObservateurSynchroniser>();
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class TacheSynchroniser extends Tache
 		//notifier les observateurs
 		synchronized( lstObservateurs )
 		{
-			Iterator it = lstObservateurs.values().iterator();
+			Iterator<ObservateurSynchroniser> it = lstObservateurs.values().iterator();
 			while( it.hasNext() )
 			{
 				ObservateurSynchroniser obs = (ObservateurSynchroniser)it.next();

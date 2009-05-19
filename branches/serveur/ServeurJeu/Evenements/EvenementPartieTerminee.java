@@ -27,11 +27,11 @@ import ServeurJeu.Configuration.GestionnaireMessages;
  */
 public class EvenementPartieTerminee  extends Evenement
 {
-	private TreeMap lstJoueurs;
-	private Vector lstJoueursVirtuels;
+	private TreeMap<String, JoueurHumain> lstJoueurs;
+	private Vector<JoueurVirtuel> lstJoueursVirtuels;
     private String joueurGagnant;
 	
-	public EvenementPartieTerminee( TreeMap joueurs, Vector joueursVirtuels, String joueurGagnant)
+	public EvenementPartieTerminee( TreeMap<String, JoueurHumain> joueurs, Vector<JoueurVirtuel> joueursVirtuels, String joueurGagnant)
 	{
 		super();
 		lstJoueurs = joueurs;
@@ -68,7 +68,7 @@ public class EvenementPartieTerminee  extends Evenement
                         objNoeudARejointLeWinTheGame.setAttribute("nom", joueurGagnant);
                         objNoeudCommande.appendChild(objNoeudARejointLeWinTheGame);
 			
-			Iterator it = lstJoueurs.values().iterator();
+			Iterator<JoueurHumain> it = lstJoueurs.values().iterator();
 			while( it.hasNext() )
 			{
 				JoueurHumain joueur = (JoueurHumain)it.next();
