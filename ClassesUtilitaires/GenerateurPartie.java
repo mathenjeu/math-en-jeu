@@ -794,7 +794,7 @@ public final class GenerateurPartie
 		      
 		      intCompteurCases--;
 		    
-		    if(  objPoint.x % 3 == 0 || objPoint.y % 3 == 0 || objPoint.y == intNbColonnes -1 || objPoint.y == 0 ){     // objPoint.x == 0|| objPoint.x == intNbLignes - 1 ||
+		    if(  objPoint.x % 3 == 0 || objPoint.y % 3 == 0 || objPoint.y == intNbColonnes -1 || objPoint.y == 0 || (objPoint.y < nbTracks && objPoint.x < 6)){     // objPoint.x == 0|| objPoint.x == intNbLignes - 1 ||
 		    	objCaseParcourue = new CaseCouleur(1);
 		    	objttPlateauJeu[objPoint.x][objPoint.y] = objCaseParcourue;
 		     	
