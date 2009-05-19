@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.Map.Entry;
+
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.ComposantesJeu.Cases.Case;
@@ -461,28 +463,13 @@ public class InformationPartie
                 	intDifficulte = Math.abs(nouvellePosition.y - objPositionJoueur.y);
                 }
                 
-                //int distanceFuture = Math.abs(nouvellePosition.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(nouvellePosition.y - objTable.obtenirPositionWinTheGame().y);
-                //distanceFuture -= 1;
-                //if(distanceFuture < 0) distanceFuture = 0;
-                //int stepDifficulte = Math.max(Math.abs(this.objTable.obtenirPlateauJeuCourant()[0].length-objTable.obtenirPositionWinTheGame().y), Math.abs(objTable.obtenirPositionWinTheGame().y-this.objTable.obtenirPlateauJeuCourant()[0].length)) / 5;
-                //intDifficulte = 0;
-                /*
-                if(stepDifficulte * 0 <= distanceFuture && distanceFuture <= stepDifficulte * 1) intDifficulte = 6;
-                if(stepDifficulte * 1 < distanceFuture && distanceFuture <= stepDifficulte * 2) intDifficulte = 5;
-                if(stepDifficulte * 2 < distanceFuture && distanceFuture <= stepDifficulte * 3) intDifficulte = 4;
-                if(stepDifficulte * 3 < distanceFuture && distanceFuture <= stepDifficulte * 4) intDifficulte = 3;
-                if(stepDifficulte * 4 < distanceFuture && distanceFuture <= stepDifficulte * 5) intDifficulte = 2;
-                if(intDifficulte == 0) intDifficulte = 1;
-                intDifficulte = Math.max(intDifficulte, grandeurDeplacement);
-                */
-                
                 System.out.println("Difficulte de la question : " + intDifficulte);   // test
 		
 		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
 		// une question
 		if (intDifficulte > 0)
 		{
-			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
+			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte, true);
 		}
 		
 		// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
@@ -498,7 +485,7 @@ public class InformationPartie
 		else if (intDifficulte > 0)
 		{
 			objGestionnaireBD.remplirBoiteQuestions( getObjBoiteQuestions(), objJoueurHumain.obtenirCleNiveau());
-			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
+			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte, true);
 			
 			lstQuestionsRepondues.clear();
 			
@@ -531,6 +518,90 @@ public class InformationPartie
 		return objQuestionTrouvee;
 	}
 	
+	
+	/**
+	 * Methode used if player use the Cristal ball
+     * int intDifficulte - level of the last question. The new question must be < difficult	
+	 * @param boolean doitGenererNoCommandeRetour : Permet de savoir si on doit 
+	 * 						générer un numéro de commande à retourner
+	 * @return Question : La question trouvée, s'il n'y a pas eu de déplacement,
+	 * 					  alors la question retournée est null
+	 */
+	public Question trouverQuestionAPoser(int intDifficulte, boolean doitGenererNoCommandeRetour)
+	{
+		// Déclarations de variables qui vont contenir la catégorie de question 
+		// à poser, la difficulté et la question à retourner
+		//***************************************************************************************
+		
+		Categories[] catValues = Categories.values();
+        int[] catScolaires = new int[catValues.length];
+        //System.out.println("catValues.length : " + catValues.length);
+        for(int i = 0; i < catValues.length; i++)
+		{
+			catScolaires[i] = catValues[i].getCode();
+						
+		}
+		
+		int intCategorieQuestion = catScolaires[UtilitaireNombres.genererNbAleatoire(catValues.length - 1)]; 
+				
+		Question objQuestionTrouvee = null;
+		if (intDifficulte > 1)
+			intDifficulte--;
+		
+		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
+		// une question
+		if (intDifficulte > 0)
+		{
+			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte, false);
+		}
+		
+		// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
+		// des questions posées et on la garde en mémoire pour pouvoir ensuite
+		// traiter la réponse du joueur, on va aussi garder la position que le
+		// joueur veut se déplacer
+		if (objQuestionTrouvee != null)
+		{
+			lstQuestionsRepondues.put(new Integer(objQuestionTrouvee.obtenirCodeQuestion()), objQuestionTrouvee);
+			objQuestionCourante = objQuestionTrouvee;
+			//objPositionJoueurDesiree = nouvellePosition;
+		}
+		else if (intDifficulte > 0)
+		{
+			objGestionnaireBD.remplirBoiteQuestions( getObjBoiteQuestions(), objJoueurHumain.obtenirCleNiveau());
+			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte, false);
+			
+			lstQuestionsRepondues.clear();
+			
+			// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
+			// des questions posées et on la garde en mémoire pour pouvoir ensuite
+			// traiter la réponse du joueur
+			if (objQuestionTrouvee != null)
+			{
+				lstQuestionsRepondues.put(new Integer(objQuestionTrouvee.obtenirCodeQuestion()), objQuestionTrouvee);
+				objQuestionCourante = objQuestionTrouvee;
+				//objPositionJoueurDesiree = nouvellePosition;
+			}
+			else
+			{
+				// en théorie on ne devrait plus entrer dans ce else 
+				System.out.println( "‚a va mal : aucune question" );
+			}
+		}
+		
+		// Si on doit générer le numéro de commande de retour, alors
+		// on le génêre, sinon on ne fait rien (ùa devrait toujours
+		// être vrai, donc on le génêre tout le temps)
+		if (doitGenererNoCommandeRetour == true)
+		{
+			// Générer un nouveau numéro de commande qui sera 
+		    // retourné au client
+		    objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();					    
+		}
+		
+		return objQuestionTrouvee;
+	}// end methode
+	
+	
 	/**
 	 * Cette fonction essaie de piger une question du niveau de dificulté proche 
 	 * de intDifficulte, si on y arrive pas, ça veut dire qu'il ne 
@@ -541,7 +612,7 @@ public class InformationPartie
 	 * @param intDifficulte
 	 * @return la question trouver ou null si aucune question n'a pu être pigée
 	 */
-	private Question trouverQuestion(int intCategorieQuestion, int intDifficulte)
+	private Question trouverQuestion(int intCategorieQuestion, int intDifficulte, boolean moreDifficultQuestions)
 	{
 		
 		Question objQuestionTrouvee = null;
@@ -562,10 +633,9 @@ public class InformationPartie
         for(int numbers : catScolaires)
         	catScolairesTemp.add(numbers);
         int intRandom = 0;
+        System.out.println("Avant diff : " + intDifficulte);
         
-        //System.out.println(catScolairesTemp.size());
-
-		//sinon on cherche pour toutes les catégories de la même difficulté 
+       	//sinon on cherche pour toutes les catégories de la même difficulté 
 		int i = 0;
 	    while(i < catScolaires.length && objQuestionTrouvee == null )
 	    {
@@ -574,9 +644,7 @@ public class InformationPartie
 	   	   objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulte);
 	   	   catScolairesTemp.remove(intRandom); 
 	   	   i++;
-	   	  // System.out.println(catScolairesTemp.size() + " " + i);
-	   	  // System.out.println(intRandom);
-	   	  
+	   	      	  
 	    }
 	    
 	    //après pour les difficultés moins grands 
@@ -603,7 +671,7 @@ public class InformationPartie
 		intDifficulteTemp = intDifficulte;
 		LinkedList<Integer> catScolairesTemp3 = new LinkedList<Integer>();
         
-		while(objQuestionTrouvee == null && intDifficulteTemp < 7 ) 
+		while(objQuestionTrouvee == null && intDifficulteTemp < 7 && moreDifficultQuestions) 
 		{
 			for(int numbers : catScolaires)
 	        	catScolairesTemp3.add(numbers);
@@ -959,11 +1027,11 @@ public class InformationPartie
 	 */
 	public ObjetUtilisable obtenirObjetUtilisable(int intObjetId)
 	{
-	     Set lstEnsembleObjets = lstObjetsUtilisablesRamasses.entrySet();
-	     Iterator objIterateurListeObjets = lstEnsembleObjets.iterator();
+	     Set<Map.Entry<Integer,ObjetUtilisable>> lstEnsembleObjets = lstObjetsUtilisablesRamasses.entrySet();
+	     Iterator<Entry<Integer, ObjetUtilisable>> objIterateurListeObjets = lstEnsembleObjets.iterator();
 	     while (objIterateurListeObjets.hasNext() == true)
 	     {
-	     	Objet objObjet = (Objet)(((Map.Entry)(objIterateurListeObjets.next())).getValue());
+	     	Objet objObjet = (Objet)(((Map.Entry<Integer,ObjetUtilisable>)(objIterateurListeObjets.next())).getValue());
 	     	if (objObjet instanceof ObjetUtilisable)
 	     	{
 	     		if (((ObjetUtilisable)objObjet).obtenirId() == intObjetId)
@@ -982,13 +1050,13 @@ public class InformationPartie
 	 public boolean joueurPossedeObjet(int id)
 	 {
 	     // Préparation pour parcourir la liste d'objets
-	     Set lstEnsembleObjets = lstObjetsUtilisablesRamasses.entrySet();
-	     Iterator objIterateurListeObjets = lstEnsembleObjets.iterator();
+	     Set<Map.Entry<Integer,ObjetUtilisable>> lstEnsembleObjets = lstObjetsUtilisablesRamasses.entrySet();
+	     Iterator<Entry<Integer, ObjetUtilisable>> objIterateurListeObjets = lstEnsembleObjets.iterator();
 	     
 	     // Parcours du TreeMap
 	     while (objIterateurListeObjets.hasNext() == true)
 	     {
-	     	Objet objObjet = (Objet)(((Map.Entry)(objIterateurListeObjets.next())).getValue());
+	     	Objet objObjet = (Objet)(((Map.Entry<Integer,ObjetUtilisable>)(objIterateurListeObjets.next())).getValue());
 	     	if (objObjet instanceof ObjetUtilisable)
 	     	{
 	     		if (((ObjetUtilisable)objObjet).obtenirId() == id)

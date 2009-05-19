@@ -18,6 +18,7 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.text.SimpleDateFormat; 
 import ServeurJeu.Configuration.GestionnaireMessages;
@@ -180,32 +181,7 @@ public class GestionnaireBD
 	 */
 	public void controlPlayerAccount()
 	{
-		/*
-		int cleJoueur = 0;
 		
-		try
-		{
-			synchronized( requete )
-			{
-				ResultSet rs = requete.executeQuery("SELECT user.user_id FROM user " +
-						" WHERE last_access_date LIKE '1111-01-01' OR last_access_time LIKE '55:55:55';"); 
-				while (rs.next())
-				{
-					cleJoueur = Integer.parseInt(rs.getString("user_id"));
-					fillEndDate(cleJoueur);
-				}
-			}
-		}
-		catch (SQLException e)
-		{
-			// Une erreur est survenue lors de l'exécution de la requète
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_control_info_joueur"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error( e.getMessage() );
-		    e.printStackTrace();			
-		}
-		
-		//****************** */
 	//  SQL for update
 		String strSQL = "UPDATE user SET last_access_date = CURDATE(), last_access_time = CURTIME() where last_access_date LIKE '1111-01-01' OR last_access_time LIKE '55:55:55';"; 
 		
@@ -684,7 +660,7 @@ public class GestionnaireBD
 					int tempsPartie = tempsTotal + rs.getInt("total_time_played");
 					
 					//mise-a-jour
-					int result = requete.executeUpdate( "UPDATE user SET number_of_completed_game =" + partiesCompletes + ",best_score =" + meilleurPointage + ",total_time_played =" + tempsPartie + " WHERE username = '" + joueur.obtenirNomUtilisateur() + "';");
+					 requete.executeUpdate( "UPDATE user SET number_of_completed_game =" + partiesCompletes + ",best_score =" + meilleurPointage + ",total_time_played =" + tempsPartie + " WHERE username = '" + joueur.obtenirNomUtilisateur() + "';");
 				}
 			}
 		}
@@ -1470,5 +1446,58 @@ public class GestionnaireBD
 		return completeName;
 	}
 	
+	/*
+	 * Methode used to get from DB table rule the new dimention of the game board
+	 * and set it in the Regles 
+	 */
+	public void getNewTableDimentions(Regles objReglesSalle, String roomName)
+	{
+		boolean exist = false;
+		String nomFr = "";
+		String nomEng = "";
+		for(int i = 0; i < roomName.length(); i++)
+		{
+			if(roomName.charAt(i) == '/')
+				exist = true;
+		}
 	
+		if(exist)
+		{
+		   StringTokenizer nomSalle = new StringTokenizer(roomName, "/");
+		   nomFr = nomSalle.nextToken().trim();
+		   nomEng = nomSalle.nextToken().trim();
+		}
+		
+		Integer tmp1 = 0;
+		Integer tmp2 = 0;
+		
+		try
+  		{
+  			synchronized( requete )
+  			{
+  				ResultSet rst = requete.executeQuery( "SELECT minimal_time, maximal_time FROM rule " + 
+  						" where rule_id IN (SELECT rule_id FROM room,room_info where room.room_id = room_info.room_id " +
+                        " AND (room_info.name = '" + nomFr + "' OR room_info.name = '" + nomEng + "' OR room_info.name = '" + roomName + "'));");
+  				if(rst.next())
+  				{
+  					tmp1 = rst.getInt( "minimal_time" );
+  			        tmp2 = rst.getInt( "maximal_time" );
+  			         					 														
+  				}
+  			}
+  		}
+  		catch (SQLException e)
+  		{
+  			// Une erreur est survenue lors de l'exécution de la requète
+  			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_update_table_dimentions"));
+  			objLogger.error(GestionnaireMessages.message("bd.trace"));
+  			objLogger.error( e.getMessage() );
+  		    e.printStackTrace();			
+  		}// fin catch
+		
+  		if(tmp1 > 0)
+  			objReglesSalle.definirTempsMinimal(tmp1);
+  		if(tmp2 > 0)
+  			objReglesSalle.definirTempsMaximal(tmp2);
+	}//end methode
 }// end class

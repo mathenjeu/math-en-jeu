@@ -20,7 +20,7 @@ public class Minuterie extends Tache
 {
 	private int intTemps;
 	private int intStep;
-	private TreeMap lstObservateurs;
+	private TreeMap<Integer, ObservateurMinuterie> lstObservateurs;
 	private boolean bolStopped;
 	
 	public Minuterie( int tempsDepart, int step )
@@ -28,7 +28,7 @@ public class Minuterie extends Tache
 		intTemps = tempsDepart;
 		intStep = step;
 		bolStopped = false;
-		lstObservateurs = new TreeMap();
+		lstObservateurs = new TreeMap<Integer, ObservateurMinuterie>();
 	}
 	
 	public void ajouterObservateur( ObservateurMinuterie obs )
@@ -50,7 +50,7 @@ public class Minuterie extends Tache
 	            // notifier les observateurs
 				synchronized( lstObservateurs )
 				{
-					Iterator it = lstObservateurs.values().iterator();
+					Iterator<ObservateurMinuterie> it = lstObservateurs.values().iterator();
 					while( it.hasNext() )
 					{
 						ObservateurMinuterie obs = (ObservateurMinuterie)it.next();

@@ -36,13 +36,7 @@ public class Question
 	 *  joueur pour cette categorie, si 0 est pas applicable pour joueur
      */
 	private int intDifficulte;
-	
-	/* Déclaration d'une variable qui va contenir le sujet de la question
-	 * entre 1 et 6
 	 
-	private int intSujet;*/
-		
-	  
 	
 	
   /**

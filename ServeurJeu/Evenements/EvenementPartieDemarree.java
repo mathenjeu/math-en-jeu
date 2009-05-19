@@ -4,13 +4,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 import java.awt.Point;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
@@ -31,7 +31,7 @@ public class EvenementPartieDemarree extends Evenement
     
 	// Déclaration d'une liste contenant les positions des joueurs et dont la 
 	// clé est le nom d'utilisateur du joueur
-	private TreeMap lstPositionJoueurs;
+	private TreeMap<String, Point> lstPositionJoueurs;
 	
 	private Document objDocumentXML;
 	private Element objNoeudCommande;
@@ -47,13 +47,13 @@ public class EvenementPartieDemarree extends Evenement
      * @param Case[][] plateauJeu : Un tableau à 2 dimensions représentant le 
      * 								plateau de jeu
      */
-    public EvenementPartieDemarree(int tempsPartie, TreeMap listePositionJoueurs, Table table)
+    public EvenementPartieDemarree(int tempsPartie, TreeMap<String, Point> lstPositionsJoueurs, Table table)
     {
         // Définir le temps de la partie, le plateau de jeu et la liste des
     	// positions des joueurs
     	intTempsPartie = tempsPartie;
         this.table = table;
-        lstPositionJoueurs = listePositionJoueurs;
+        lstPositionJoueurs = lstPositionsJoueurs;
         objDocumentXML = null;
         objNoeudCommande = null;
     }
@@ -148,17 +148,17 @@ public class EvenementPartieDemarree extends Evenement
 				
 				// Créer un ensemble contenant tous les tuples de la liste 
 				// des positions de joueurs (chaque élément est un Map.Entry)
-				Set lstEnsemblePositionJoueurs = lstPositionJoueurs.entrySet();
+				Set<Entry<String, Point>> lstEnsemblePositionJoueurs = lstPositionJoueurs.entrySet();
 				
 				// Obtenir un itérateur pour l'ensemble contenant les positions 
 				// des joueurs
-				Iterator objIterateurListe = lstEnsemblePositionJoueurs.iterator();
+				Iterator<Entry<String, Point>> objIterateurListe = lstEnsemblePositionJoueurs.iterator();
 				
 				// Passer tous les positions des joueurs et créer leur code XML
 				while (objIterateurListe.hasNext() == true)
 				{
 					// Déclaration d'une référence vers l'objet clé valeur courant
-					Map.Entry objPositionJoueur = (Map.Entry) objIterateurListe.next();
+					Entry<String, Point> objPositionJoueur = (Map.Entry<String, Point>) objIterateurListe.next();
 					
 					// Créer une référence vers la position du joueur courant
 					Point objPosition = (Point) objPositionJoueur.getValue();
@@ -167,7 +167,7 @@ public class EvenementPartieDemarree extends Evenement
 					Element objNoeudPositionJoueur = objDocumentXML.createElement("position");
 					
 					// Définir les attributs du noeud courant
-					objNoeudPositionJoueur.setAttribute("nom", (String) objPositionJoueur.getKey());
+					objNoeudPositionJoueur.setAttribute("nom",  objPositionJoueur.getKey().toString());
 					objNoeudPositionJoueur.setAttribute("x", Integer.toString(objPosition.x));
 					objNoeudPositionJoueur.setAttribute("y", Integer.toString(objPosition.y));
 					
