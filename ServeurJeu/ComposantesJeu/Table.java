@@ -667,13 +667,15 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Cette variable permettra d'affecter aux joueurs virtuels des id
 		// de personnage différents de ceux des joueurs humains
 		int intIdPersonnage = 1;
-
+        int position = 0;
+		
 		// Passer toutes les positions des joueurs et les définir
 		for (int i = 0; i < objtPositionsJoueurs.length; i++)
 		{
-		    // On doit affecter certains positions aux joueurs humains et d'autres aux joueurs
+			
+			// On doit affecter certains positions aux joueurs humains et d'autres aux joueurs
 		    // virtuels. La grandeur de objtPositionsJoueurs est nbJoueur + intNombreJoueursVirtuels
-		    if (i < nbJoueur)
+		    if (i < nbJoueur )
 		    {
     		    
     			// Comme les positions sont générées aléatoirement, on 
@@ -685,12 +687,24 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     			// prochain, car on a généré la position des joueurs 
     			// selon cette liste
     			JoueurHumain objJoueur = (JoueurHumain) (((Map.Entry<String,JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
-    			    			    			
-    			// Définir la position du joueur courant
-    			objJoueur.obtenirPartieCourante().definirPositionJoueur(objtPositionsJoueurs[i]);
     			
-    			// Ajouter la position du joueur dans la liste
-    			lstPositionsJoueurs.put(objJoueur.obtenirNomUtilisateur(), objtPositionsJoueurs[i]);
+    			if(controlUserName(objJoueur.obtenirNomUtilisateur()))
+    			{
+    				// Définir la position du joueur master
+        			objJoueur.obtenirPartieCourante().definirPositionJoueur(objtPositionsJoueurs[objtPositionsJoueurs.length - 1]);
+        			
+        			// Ajouter la position du master dans la liste
+        			lstPositionsJoueurs.put(objJoueur.obtenirNomUtilisateur(), objtPositionsJoueurs[objtPositionsJoueurs.length - 1]);
+        			
+        			position--;
+    			}else{
+
+    				// Définir la position du joueur courant
+    				objJoueur.obtenirPartieCourante().definirPositionJoueur(objtPositionsJoueurs[position]);
+
+    				// Ajouter la position du joueur dans la liste
+    				lstPositionsJoueurs.put(objJoueur.obtenirNomUtilisateur(), objtPositionsJoueurs[position]);
+    			}
     		}
     		else
     		{
@@ -715,19 +729,20 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                     intDifficulteJoueurVirtuel, this, objGestionnaireEvenements, objControleurJeu, intIdPersonnage);
                 
                 // Définir sa position
-                objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[i]);
+                objJoueurVirtuel.definirPositionJoueurVirtuel(objtPositionsJoueurs[position]);
                 
                 // Ajouter le joueur virtuel à la liste
                 lstJoueursVirtuels.add(objJoueurVirtuel);
                 
                 // Ajouter le joueur virtuel à la liste des positions, liste qui sera envoyée
                 // aux joueurs humains
-                lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[i]);
+                lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[position]);
                 
                 // Pour le prochain joueur virtuel
                 intIdPersonnage++;
                 
     		}
+		    position++;
 		}
 		
 		// On peut maintenant vider la liste des joueurs en attente
@@ -1887,5 +1902,21 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 		public Salle getObjSalle() {
 			return objSalle;
+		}
+		
+		private Boolean controlUserName(String userName)
+		{
+			// Bloc of code to treat the username
+	        int firstDel = userName.indexOf("-");                 // find first delimiter
+	        int secondDel = userName.indexOf(".",firstDel + 1);   // find second delimiter
+	        String master = "";
+
+	        //Now extract the 'master' from username
+	        if (firstDel != -1 && secondDel != -1)
+	           master = userName.substring(firstDel + 1, secondDel);
+	       
+			
+			return master.equalsIgnoreCase("master");
+			
 		}
 }// end class    
