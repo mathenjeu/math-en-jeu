@@ -1009,7 +1009,6 @@ public final class GenerateurPartie
      * est généré sur une case vide.
      * 
      * @param int nbJoueurs : Le nombre de joueurs dont générer la position
-     * @param Vector listePointsCaseLibre : La liste des points des cases libres
      * @return Point[] : Un tableau de points pour chaque joueur 
      */
     public static Point[] genererPositionJoueurs(int nbJoueurs, int nbTracks)
