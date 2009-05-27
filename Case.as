@@ -374,17 +374,7 @@ class Case
 	function ajouterPersonnage(p:Personnage)
 	{
 		
-		// Bloc of code to treat the username
-        var firstDel = p.obtenirNom().indexOf("-");                 // find first delimiter
-        var secondDel = p.obtenirNom().indexOf(".",firstDel + 1);   // find second delimiter
-        var master;
-
-        //Now extract the 'master' from username
-        if (firstDel != -1 && secondDel != -1)
-           master = p.obtenirNom().substring(firstDel + 1, secondDel);
-        else
-           master = "";
-		if(master != "master")
+		if(!_level0.loader.contentHolder.objGestionnaireEvenements.controlForMaster( p.obtenirNom()))
 		{ 
 		   this.listeDesPersonnages.push(p);
 		}
@@ -501,22 +491,10 @@ class Case
 			this.listeDesPersonnages[i].definirPosition(pt, l, c);
 			this.listeDesPersonnages[i].definirProchainePosition(pt2,"rien");  
 			
-			// Bloc of code to treat the username
-            var firstDel = this.listeDesPersonnages[i].obtenirNom().indexOf("-");                 // find first delimiter
-            var secondDel = this.listeDesPersonnages[i].obtenirNom().indexOf(".",firstDel + 1);   // find second delimiter
-            var master;
-
-            //Now extract the 'master' from username
-            if (firstDel != -1 && secondDel != -1)
-                master = this.listeDesPersonnages[i].obtenirNom().substring(firstDel + 1, secondDel);
-            else
-                master = "";
-			
-			
-			if(!(master == "master")) 
-			 this.listeDesPersonnages[i].afficher();
+			if(!(_level0.loader.contentHolder.objGestionnaireEvenements.controlForMaster( this.listeDesPersonnages[i].obtenirNom()))) 
+			   this.listeDesPersonnages[i].afficher();
 				   
-			if( master == "master")
+			if( _level0.loader.contentHolder.objGestionnaireEvenements.controlForMaster( this.listeDesPersonnages[i].obtenirNom()))
 			   this.listeDesPersonnages[i].cachePersonnage();
 		}
 	}
