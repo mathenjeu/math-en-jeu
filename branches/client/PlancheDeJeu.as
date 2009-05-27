@@ -496,9 +496,18 @@ class PlancheDeJeu
         var diffY:Number;
         var i:Number;
         var j:Number;
-        diffX = 275-this.tableauDesCases[l][c].obtenirClipCase()._x;
-        diffY = 200-this.tableauDesCases[l][c].obtenirClipCase()._y;
-        for(i=0;i<this.tableauDesCases.length;i++)
+		
+		// if different type of game we need different pozitions
+        if((_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu=="Tournament") )
+		{
+		    diffX = 180 - this.tableauDesCases[l][c].obtenirClipCase()._x;
+            diffY = 250 - this.tableauDesCases[l][c].obtenirClipCase()._y;
+		}else{
+        	diffX = 300 - this.tableauDesCases[l][c].obtenirClipCase()._x;
+            diffY = 220 - this.tableauDesCases[l][c].obtenirClipCase()._y;
+		}
+		
+		for(i=0;i<this.tableauDesCases.length;i++)
         {
             for(j=0;j<this.tableauDesCases[0].length;j++)
             {
@@ -518,8 +527,16 @@ class PlancheDeJeu
 		var dy:Number;
 		var pourcent:Number;
 		
-		dx = 275-(_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
-		dy = 250-(_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._y);
+		// if different type of game we need different pozitions
+		if((_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu=="Tournament") )
+		{
+		   dx = 180 - (_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
+		   dy = 250 - (_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._y);
+		}else{
+		   dx = 300 - (_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
+		   dy = 220 - (_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._y);
+		}
+		
 		dx = Math.round(dx);
 		dy = Math.round(dy);
 		
@@ -612,22 +629,8 @@ class PlancheDeJeu
 
 	
     function afficherCasesPossibles(p:Personnage)
-    {
-		
-		// Bloc of code to treat the username
-        var firstDel = p.obtenirNom().indexOf("-");                 // find first delimiter
-        var secondDel = p.obtenirNom().indexOf(".",firstDel + 1);   // find second delimiter
-        var master;
-
-        //Now extract the 'master' from username
-        if (firstDel != -1 && secondDel != -1)
-           master = p.obtenirNom().substring(firstDel + 1, secondDel);
-        else
-           master = "";
-		
-		
-		
-	 if(!(master == "master"))
+    {						
+	 if(!(_level0.loader.contentHolder.objGestionnaireEvenements.controlForMaster(p.obtenirNom())))
 	 { 
 		trace("Debut afficherCasesPossibles");
 		
