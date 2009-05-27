@@ -123,11 +123,14 @@
 
 			inconnu = "Inconnu"
 			demarrerMaintenant = "Démarrer maintenant"
-			attente = "En attente des autres joueurs ..."
+			attente = "En attente des autres joueurs ...
+      Si vous n'attendez pas d'autres joueurs,
+      Démarrer la partie!"
 
 			difficulte = "Difficulté"
 			
-			choixNiveau = "Choisissez le niveau de vos adversaires virtuels."
+			choixNiveau = "Ne pas attendre d'autres joueurs!
+                        Démarrer la partie!"
 			niveauFacile = "Facile"
 			niveauInt = "Intermédiaire"
 			niveauDiff = "Difficile"
