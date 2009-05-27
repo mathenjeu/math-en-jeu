@@ -121,11 +121,14 @@
 			nonDisponible = "Unavailable"
 			inconnu = "Unknown"
 			demarrerMaintenant = "Start now"
-			attente = "Waiting for other players ..."
+			attente = "Waiting for other players ...
+      If you don't wait for other players,
+      Start the game!"
 
 			difficulte = "Difficulty"
 
-			choixNiveau = "Choose the level of your virtual opponents :"
+			choixNiveau = "Don't wait for other players!
+                         Start the game!"
 			niveauFacile = "Easy"
 			niveauInt = "Intermediate"
 			niveauDiff = "Difficult"
