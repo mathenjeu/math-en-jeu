@@ -376,6 +376,22 @@ class GestionnaireEvenements
         trace("fin de repondreQuestion");
         trace("*********************************************\n");
     }
+
+	// here we control if username contain the  'master'
+	public function controlForMaster(nom:String):Boolean
+    {
+		// Bloc of code to treat the username
+        var firstDel = nom.indexOf("-");                 // find first delimiter
+        var secondDel = nom.indexOf(".",firstDel + 1);   // find second delimiter
+        var master;
+
+        //Now extract the 'master' from username
+        if (firstDel != -1 && secondDel != -1)
+           master = nom.substring(firstDel + 1, secondDel);
+        else
+           master = "";
+        return (master == "master");
+    }
 	
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  fonctions retour
@@ -1410,7 +1426,7 @@ class GestionnaireEvenements
 							break;
 							
 							case "E":
-								_level0.loader.contentHolder.box_question.btn_d._visible = false;
+								_level0.loader.contentHolder.box_question.btn_e._visible = false;
 							break;
 							default:
 								trace("erreur choix reponse ds retourUtiliser : Livre");
@@ -2097,115 +2113,7 @@ class GestionnaireEvenements
 		maTete._yscale = 55;
 		
 		/*
-		//using in win's table
 		
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.nomJoueur1 = this.listeDesPersonnages[0].nom;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.pointageJoueur1 = 0;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.idStart=this.listeDesPersonnages[0].id;
-		var tete0:MovieClip = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.tete1.attachMovie("tete"+this.listeDesPersonnages[0].id, "Tete0", -10100);
-		tete0._x = -7;
-		tete0._y = -6;
-		tete0._xscale = 55;
-		tete0._yscale = 55;
-	
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur2.nomJoueur2 = this.listeDesPersonnages[1].nom;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur2.pointageJoueur2 = 0;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur2.idStart=this.listeDesPersonnages[1].id;
-		var tete1:MovieClip = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur2.tete2.attachMovie("tete"+this.listeDesPersonnages[1].id, "Tete1", -10101);
-		tete1._x = -7;
-		tete1._y = -6;
-		tete1._xscale = 55;
-		tete1._yscale = 55;
-	
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur3.nomJoueur3 = this.listeDesPersonnages[2].nom;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur3.pointageJoueur3 = 0;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur3.idStart=this.listeDesPersonnages[2].id;
-		
-		var tete2:MovieClip = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur3.tete3.attachMovie("tete"+this.listeDesPersonnages[2].id, "Tete2", -10102);
-		tete2._x = -7;
-		tete2._y = -6;
-		tete2._xscale = 55;
-		tete2._yscale = 55;
-
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur4.nomJoueur4 = this.listeDesPersonnages[3].nom;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur4.pointageJoueur4 = 0;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur4.idStart=this.listeDesPersonnages[3].id;
-		
-		var tete3:MovieClip = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur4.tete4.attachMovie("tete"+this.listeDesPersonnages[3].id, "Tete3", -10103);
-		tete3._x = -7;
-		tete3._y = -6;
-		tete3._xscale = 55;
-		tete3._yscale = 55;
-
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur5.nomJoueur5 = this.listeDesPersonnages[4].nom;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur5.pointageJoueur5 = 0;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur5.idStart=this.listeDesPersonnages[4].id;
-		
-		var tete4:MovieClip = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur5.tete5.attachMovie("tete"+this.listeDesPersonnages[4].id, "Tete4", -10104);
-		tete4._x = -7;
-		tete4._y = -6;
-		tete4._xscale = 55;
-		tete4._yscale = 55;
-
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur6.nomJoueur6 = this.listeDesPersonnages[5].nom;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur6.pointageJoueur6 = 0;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur6.idStart=this.listeDesPersonnages[5].id;
-		
-		var tete5:MovieClip = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur6.tete6.attachMovie("tete"+this.listeDesPersonnages[5].id, "Tete5", -10105);
-		tete5._x = -7;
-		tete5._y = -6;
-		tete5._xscale = 55;
-		tete5._yscale = 55;
-
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur7.nomJoueur7 = this.listeDesPersonnages[6].nom;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur7.pointageJoueur7 = 0;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur7.idStart=this.listeDesPersonnages[6].id;
-		
-		var tete6:MovieClip = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur7.tete7.attachMovie("tete"+this.listeDesPersonnages[6].id, "Tete6", -10106);
-		tete6._x = -7;
-		tete6._y = -6;
-		tete6._xscale = 55;
-		tete6._yscale = 55;
-
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur8.nomJoueur8 = this.listeDesPersonnages[7].nom;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur8.pointageJoueur8 = 0;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur8.idStart=this.listeDesPersonnages[7].id;
-		
-		var tete7:MovieClip = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur8.tete8.attachMovie("tete"+this.listeDesPersonnages[7].id, "Tete7", -10107);
-		tete7._x = -7;
-		tete7._y = -6;
-		tete7._xscale = 55;
-		tete7._yscale = 55;
-
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur9.nomJoueur9 = this.listeDesPersonnages[8].nom;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur9.pointageJoueur9 = 0;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur9.idStart=this.listeDesPersonnages[8].id;
-		
-		var tete8:MovieClip = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur9.tete9.attachMovie("tete"+this.listeDesPersonnages[8].id, "Tete8", -10108);
-		tete8._x = -7;
-		tete8._y = -6;
-		tete8._xscale = 55;
-		tete8._yscale = 55;
-
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur10.nomJoueur10 = this.listeDesPersonnages[9].nom;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur10.pointageJoueur10 = 0;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur10.idStart=this.listeDesPersonnages[9].id;
-		
-		var tete9:MovieClip = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur10.tete10.attachMovie("tete"+this.listeDesPersonnages[9].id, "Tete9", -10109);
-		tete9._x = -7;
-		tete9._y = -6;
-		tete9._xscale = 55;
-		tete9._yscale = 55;
-
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur11.nomJoueur11 = this.listeDesPersonnages[10].nom;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur11.pointageJoueur11 = 0;
-		_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur11.idStart=this.listeDesPersonnages[10].id;
-		
-		var tete10:MovieClip = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur11.tete11.attachMovie("tete"+this.listeDesPersonnages[10].id, "Tete10", -10110);
-		tete10._x = -7;
-		tete10._y = -6;
-		tete10._xscale = 55;
-		tete10._yscale = 55;
 
 		*/
         for(i = 0; i < objetEvenement.positionJoueurs.length; i++)//4 //nbmaxJoueurs// numeroJoueursDansSalle
@@ -2324,100 +2232,8 @@ class GestionnaireEvenements
 		var jouersStarted:Array =new Array();
 		
 		//trace("-------------------------");nbmaxJoueurs
-		/*
-		for(i=0;i<numeroJoueursDansSalle;i++)
-		{
-			trace(i+1+" joueur  "+objetEvenement.statistiqueJoueur[i].nomUtilisateur+"   "+objetEvenement.statistiqueJoueur[i].pointage);
-			jouersStarted[i] = new Object();
-			jouersStarted[i].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)];
-			jouersStarted[i].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)];;
-			jouersStarted[i].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].idStart;
-		}
-		*/
-		/*
-		jouersStarted[0] = new Object();
-		jouersStarted[0].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.nomJoueur1;
-		jouersStarted[0].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.pointageJoueur1;
-		jouersStarted[0].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.idStart;
 		
-		jouersStarted[1] = new Object();
-		jouersStarted[1].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur2.nomJoueur2;
-		jouersStarted[1].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur2.pointageJoueur2;
-		jouersStarted[1].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur2.idStart;
-
-		
-		jouersStarted[2] = new Object();
-		jouersStarted[2].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur3.nomJoueur3;
-		jouersStarted[2].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur3.pointageJoueur3;
-		jouersStarted[2].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur3.idStart;
-
-		
-		jouersStarted[3] = new Object();
-		jouersStarted[3].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur4.nomJoueur4;
-		jouersStarted[3].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur4.pointageJoueur4;
-		jouersStarted[3].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur4.idStart;
-		
-		
-		jouersStarted[4] = new Object();
-		jouersStarted[4].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur5.nomJoueur5;
-		jouersStarted[4].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur5.pointageJoueur5;
-		jouersStarted[4].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur5.idStart;
-		
-		
-		jouersStarted[5] = new Object();
-		jouersStarted[5].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur6.nomJoueur6;
-		jouersStarted[5].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur6.pointageJoueur6;
-		jouersStarted[5].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur6.idStart;
-		
-		
-		jouersStarted[6] = new Object();
-		jouersStarted[6].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur7.nomJoueur7;
-		jouersStarted[6].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur7.pointageJoueur7;
-		jouersStarted[6].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur7.idStart;
-		
-		
-		jouersStarted[7] = new Object();
-		jouersStarted[7].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur8.nomJoueur8;
-		jouersStarted[7].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur8.pointageJoueur8;
-		jouersStarted[7].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur8.idStart;
-		
-		
-		jouersStarted[8] = new Object();
-		jouersStarted[8].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur9.nomJoueur9;
-		jouersStarted[8].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur9.pointageJoueur9;
-		jouersStarted[8].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur9.idStart;
-		
-		
-		jouersStarted[9] = new Object();
-		jouersStarted[9].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur10.nomJoueur10;
-		jouersStarted[9].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur10.pointageJoueur10;
-		jouersStarted[9].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur10.idStart;
-		
-		
-		jouersStarted[10] = new Object();
-		jouersStarted[10].nomUtilisateur=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur11.nomJoueur11;
-		jouersStarted[10].pointage=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur11.pointageJoueur11;
-		jouersStarted[10].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur11.idStart;
-		
-		jouersStarted[11] = new Object();
-		jouersStarted[11].nomUtilisateur="";//_level0.loader.contentHolder.myObj.myNom;
-		jouersStarted[11].idS=0;//_level0.loader.contentHolder.myObj.myID;
-		jouersStarted[11].pointage=0;//objetEvenement.statistiqueJoueur[0].pointage;
-		
-		
-		
-		
-		trace("jouersStarted[i]");
-		for (i=0;i<numeroJoueursDansSalle;i++) {
-			trace(i+": "+jouersStarted[i].nomUtilisateur+" points:"+jouersStarted[i].pointage+" id:"+jouersStarted[i].idS);
-			for(j=0;j<numeroJoueursDansSalle;j++){
-			if(jouersStarted[i].nomUtilisateur==objetEvenement.statistiqueJoueur[j].nom) 
-				jouersStarted[i].pointage=objetEvenement.statistiqueJoueur[j].pointage;
-			}
-			trace("              "+i+": "+jouersStarted[i].nomUtilisateur+" points:"+jouersStarted[i].pointage+" id:"+jouersStarted[i].idS);
-		}
-		*/
-		
+			
 		//actualiser les champs de pointage
 		for (i=0;i<11/*numeroJoueursDansSalle-1*/;i++) {
 			
@@ -2464,22 +2280,15 @@ class GestionnaireEvenements
 				
 				// Bloc of code to treat the username
 			var tmpNom:String=_level0.loader.contentHolder.myObj.myNom;
-    			var firstDel = tmpNom.indexOf("-");                 // find first delimiter
-    			var secondDel = tmpNom.indexOf(".",firstDel + 1);   // find second delimiter
-    			var master;
-
-    		//Now extract the 'master' from username
-    			if (firstDel != -1 && secondDel != -1)
-       				master = tmpNom.substring(firstDel + 1, secondDel);
-    			else
-       				master = "";
-       				
+    			       				
 				jouersStarted[numeroJoueursDansSalle-1] = new Object();
 				jouersStarted[numeroJoueursDansSalle-1].nomUtilisateur=_level0.loader.contentHolder.myObj.myNom;
 				jouersStarted[numeroJoueursDansSalle-1].pointage=objetEvenement.statistiqueJoueur[k].pointage;
 				jouersStarted[numeroJoueursDansSalle-1].idS=_level0.loader.contentHolder.myObj.myID;
 				jouersStarted[numeroJoueursDansSalle-1].idPers=_level0.loader.contentHolder.myObj.myIDPers;
-				if(master=="master") jouersStarted[numeroJoueursDansSalle-1].pointage=Number(-1);
+				
+				if(controlForMaster(tmpNom)) 
+				   jouersStarted[numeroJoueursDansSalle-1].pointage=Number(-1);
 			}
 		
 		for(i=0;i<objetEvenement.statistiqueJoueur.length;i++)
@@ -2562,102 +2371,16 @@ class GestionnaireEvenements
     	Mouse.show();
  
   	
-    	/*
-    	trace("1 joueur  "+tabOrdonne[0].nom+"   "+tabOrdonne[0].pointage+"   "+tabOrdonne[0].id);
-    	trace("2 joueur  "+tabOrdonne[1].nom+"   "+tabOrdonne[1].pointage+"   "+tabOrdonne[1].id);
-    	trace("3 joueur  "+tabOrdonne[2].nom+"   "+tabOrdonne[2].pointage+"   "+tabOrdonne[2].id);
-    	trace("4 joueur  "+tabOrdonne[3].nom+"   "+tabOrdonne[3].pointage+"   "+tabOrdonne[3].id);	*/
-    	/*
-    	// a modifier quand il y aura moins de 4 joueurs
-    	if(tabOrdonne[0].nom != undefined)
-    	{*/
-    	
-    	/*
-			_level0.loader.contentHolder.nom1 = tabOrdonne[0].nom;	//nbmaxJoueurs
-			_level0.loader.contentHolder.pointage1 = tabOrdonne[0].pointage;/*
-    	}
-    	else
-    	{
-	    	_level0.loader.contentHolder.nom1 = _level0.loader.contentHolder.deconnecte;
-			_level0.loader.contentHolder.pointage1 = 0;
-    	}
-    
-    	if(tabOrdonne[1].nom != undefined)
-    	{
-			_level0.loader.contentHolder.nom2 = tabOrdonne[1].nom;	
-			_level0.loader.contentHolder.pointage2 = tabOrdonne[1].pointage;
-    	}
-    	else
-    	{
-			_level0.loader.contentHolder.nom2 = _level0.loader.contentHolder.deconnecte;
-	    	_level0.loader.contentHolder.pointage2 = 0;
-    	}
-    
-    	if(tabOrdonne[2].nom != undefined)
-    	{
-			_level0.loader.contentHolder.nom3 = tabOrdonne[2].nom;	
-			_level0.loader.contentHolder.pointage3 = tabOrdonne[2].pointage;
-    	}
-    	else
-    	{
-	    	_level0.loader.contentHolder.nom3 = _level0.loader.contentHolder.deconnecte;
-			_level0.loader.contentHolder.pointage3 = 0;
-    	}
-    
-    	if(tabOrdonne[3].nom != undefined)
-    	{
-			_level0.loader.contentHolder.nom4 = tabOrdonne[3].nom;	
-			_level0.loader.contentHolder.pointage4 = tabOrdonne[3].pointage;
-    	}
-    	else
-    	{
-	    	_level0.loader.contentHolder.nom4 = _level0.loader.contentHolder.deconnecte;
-			_level0.loader.contentHolder.pointage4 = 0;
-    	}
-		
-		_level0.loader.contentHolder.nom5 = tabOrdonne[4].nom;	
-		_level0.loader.contentHolder.pointage5 = tabOrdonne[4].pointage;
-		
-		_level0.loader.contentHolder.nom6 = tabOrdonne[5].nom;	
-		_level0.loader.contentHolder.pointage6 = tabOrdonne[5].pointage;
-		
-		_level0.loader.contentHolder.nom7 = tabOrdonne[6].nom;	
-			_level0.loader.contentHolder.pointage7 = tabOrdonne[6].pointage;
-		
-		_level0.loader.contentHolder.nom8 = tabOrdonne[7].nom;	
-			_level0.loader.contentHolder.pointage8 = tabOrdonne[7].pointage;
-			
-		_level0.loader.contentHolder.nom9 = tabOrdonne[8].nom;	
-			_level0.loader.contentHolder.pointage9 = tabOrdonne[8].pointage;
-		
-		_level0.loader.contentHolder.nom10 = tabOrdonne[9].nom;	
-			_level0.loader.contentHolder.pointage10 = tabOrdonne[9].pointage;
-		
-		_level0.loader.contentHolder.nom11 = tabOrdonne[10].nom;	
-			_level0.loader.contentHolder.pointage11 = tabOrdonne[10].pointage;
-			
-		_level0.loader.contentHolder.nom12 = tabOrdonne[11].nom;	
-			_level0.loader.contentHolder.pointage12 = tabOrdonne[11].pointage;*/
-		
 		// mettre les id en ordre : tabOrdonne.id contient les id des personnages en ordre de pointage
 		// il suffit de mettre les MC correspondants sur le podium
 		var w:Number = 0;
 		var z:Number = 0;
 		//
 		for(i=0;i<numeroJoueursDansSalle;i++){
+					
+			if(!controlForMaster(tabOrdonne[i].nom))    	
+			   _level0.loader.contentHolder["nom"+(i+1)] = tabOrdonne[i].nom;	
 			
-			// Bloc of code to treat the username
-    			var firstDel = tabOrdonne[i].nom.indexOf("-");                 // find first delimiter
-    			var secondDel = tabOrdonne[i].nom.indexOf(".",firstDel + 1);   // find second delimiter
-    			var master;
-
-    		//Now extract the 'master' from username
-    			if (firstDel != -1 && secondDel != -1)
-       				master = tabOrdonne[i].nom.substring(firstDel + 1, secondDel);
-    			else
-       				master = "";
-		
-			if(master != "master")    	_level0.loader.contentHolder["nom"+(i+1)] = tabOrdonne[i].nom;	//nbmaxJoueurs
 			_level0.loader.contentHolder["pointage"+(i+1)] = tabOrdonne[i].pointage;
 			
 			this.tabPodiumOrdonneID[i] =  Number(tabOrdonne[i].id);
@@ -2700,73 +2423,7 @@ class GestionnaireEvenements
 				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)] = objetEvenement.pointage;
 			//_level0.loader.contentHolder.argentAdversaire1 = objetEvenement.argent;
 		
-		/*
-		if(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.nomJoueur1 == objetEvenement.nomUtilisateur)//nbmaxJoueurs
-		{
-			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur1.pointageJoueur1 = objetEvenement.pointage;
-			//_level0.loader.contentHolder.argentAdversaire1 = objetEvenement.argent;
-		}
-	
-		if(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur2.nomJoueur2 == objetEvenement.nomUtilisateur)
-		{
-			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur2.pointageJoueur2 = objetEvenement.pointage;
-			//_level0.loader.contentHolder.argentAdversaire2 = objetEvenement.argent;
-		}
-	
-		if(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur3.nomJoueur3 == objetEvenement.nomUtilisateur)
-		{
-			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur3.pointageJoueur3 = objetEvenement.pointage;
-			//_level0.loader.contentHolder.argentAdversaire3 = objetEvenement.argent;
-		}
-	
-		if(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur4.nomJoueur4 == objetEvenement.nomUtilisateur)
-		{
-			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur4.pointageJoueur4 = objetEvenement.pointage;
-			//_level0.loader.contentHolder.argentAdversaire4 = objetEvenement.argent;
-		}
 		
-		if(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur5.nomJoueur5 == objetEvenement.nomUtilisateur)
-		{
-			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur5.pointageJoueur5 = objetEvenement.pointage;
-			//_level0.loader.contentHolder.argentAdversaire5 = objetEvenement.argent;
-		}
-		
-		if(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur6.nomJoueur6 == objetEvenement.nomUtilisateur)
-		{
-			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur6.pointageJoueur6 = objetEvenement.pointage;
-			//_level0.loader.contentHolder.argentAdversaire6 = objetEvenement.argent;
-		}
-		
-		if(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur7.nomJoueur7 == objetEvenement.nomUtilisateur)
-		{
-			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur7.pointageJoueur7 = objetEvenement.pointage;
-			//_level0.loader.contentHolder.argentAdversaire7 = objetEvenement.argent;
-		}
-		
-		if(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur8.nomJoueur8 == objetEvenement.nomUtilisateur)
-		{
-			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur8.pointageJoueur8 = objetEvenement.pointage;
-			//_level0.loader.contentHolder.argentAdversaire8 = objetEvenement.argent;
-		}
-		
-		if(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur9.nomJoueur9 == objetEvenement.nomUtilisateur)
-		{
-			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur9.pointageJoueur9 = objetEvenement.pointage;
-			//_level0.loader.contentHolder.argentAdversaire9 = objetEvenement.argent;
-		}
-		
-		if(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur10.nomJoueur10 == objetEvenement.nomUtilisateur)
-		{
-			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur10.pointageJoueur10 = objetEvenement.pointage;
-			//_level0.loader.contentHolder.argentAdversaire10 = objetEvenement.argent;
-		}
-		
-		if(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur11.nomJoueur11 == objetEvenement.nomUtilisateur)
-		{
-			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs.mc_joueur11.pointageJoueur11 = objetEvenement.pointage;
-			//_level0.loader.contentHolder.argentAdversaire11 = objetEvenement.argent;
-		}
-		*/
      	trace("fin de evenementJoueurDeplacePersonnage");
      	trace("*********************************************\n");
     }   
