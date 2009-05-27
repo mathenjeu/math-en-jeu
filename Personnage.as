@@ -546,22 +546,13 @@ class Personnage
 		this.position = new Point(xx,yy);                       
 		this.prochainePosition = new Point(xx + 1,yy + 1);
 		
-		// Bloc of code to treat the username
-        var firstDel = nom.indexOf("-");                 // find first delimiter
-        var secondDel = nom.indexOf(".",firstDel + 1);   // find second delimiter
-        var master;
-
-        //Now extract the 'master' from username
-        if (firstDel != -1 && secondDel != -1)
-           master = nom.substring(firstDel + 1, secondDel);
-        else
-           master = nom;
-		//trace("Personnage "+nom+" nomClip="+nomClip+"  niveau="+niveau);
-		if(!(master == "master")) 
-		this.image = _level0.loader.contentHolder.referenceLayer.attachMovie(nomClip, "Personnage"+niveau, niveau);
 		
-		this.image.dText.nom=nom;
-		this.image.nom=nom;
+		//trace("Personnage "+nom+" nomClip="+nomClip+"  niveau="+niveau);
+		if(!(_level0.loader.contentHolder.objGestionnaireEvenements.controlForMaster(nom))) 
+		   this.image = _level0.loader.contentHolder.referenceLayer.attachMovie(nomClip, "Personnage"+niveau, niveau);
+		
+		this.image.dText.nom = nom;
+		this.image.nom = nom;
 		this.image._visible = false;
 		this.pointage = 0;
 		this.argent = 0;
@@ -836,15 +827,6 @@ class Personnage
 					boardCentre = true;
 					trace(_level0.loader.contentHolder.horlogeNum + "temps restant");
 					
-					if((_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu=="Tournament") )//&&_level0.loader.contentHolder.objGestionnaireEvenements.obtenirTempsPartie()*60 - _level0.loader.contentHolder.horlogeNum < 2
-					{
-					   _level0.loader.contentHolder.planche.translater("Est");
-					   _level0.loader.contentHolder.planche.translater("Est");
-					   _level0.loader.contentHolder.planche.translater("Est");
-					   //_level0.loader.contentHolder.planche.translater("Est");
-					   //_level0.loader.contentHolder.planche.translater("Est");
-					   //boardCentre = false;
-					}
 				}
 			} 
 			
@@ -878,6 +860,7 @@ class Personnage
 			{
 				this.image.gotoAndPlay(70);
 			}
+			
 		}
 		else
 		{
@@ -890,14 +873,16 @@ class Personnage
 		if (dx >= 0)
 		{
 			// assure que le clip a la bonne orientation
-			image._xscale = -Math.abs(image._xscale);
-			image.dtNom._xscale=-Math.abs(image.dtNom._xscale);
+			image._xscale = - Math.abs(image._xscale);
+			image.dtNom._xscale = - Math.abs(image._xscale);
+			image.dtNom._x = 42;
 		}
 		else
 		{
 			// flip le clip pour aller vers la gauche
-			image._xscale = Math.abs(image._xscale);
-			image.dtNom._xscale=Math.abs(image.dtNom._xscale);
+			image._xscale =  Math.abs(image._xscale);
+			image.dtNom._xscale =   Math.abs(image._xscale);
+			image.dtNom._x = - 42;
 		}
 		
 		
