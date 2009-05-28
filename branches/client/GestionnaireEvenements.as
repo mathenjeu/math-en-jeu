@@ -381,16 +381,17 @@ class GestionnaireEvenements
 	public function controlForMaster(nom:String):Boolean
     {
 		// Bloc of code to treat the username
-        var firstDel = nom.indexOf("-");                 // find first delimiter
+        var firstDel = nom.indexOf(".");                 // find first delimiter
         var secondDel = nom.indexOf(".",firstDel + 1);   // find second delimiter
         var master;
 
         //Now extract the 'master' from username
         if (firstDel != -1 && secondDel != -1)
-           master = nom.substring(firstDel + 1, secondDel);
+           master = nom.substring(0, firstDel);
         else
            master = "";
-        return (master == "master");
+		   trace(" controlForMaster : " + master);
+        return (master == "game-master" || master == "maitre-du-jeu");
     }
 	
     ///////////////////////////////////////////////////////////////////////////////////////////////////
