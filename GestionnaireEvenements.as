@@ -1795,7 +1795,8 @@ class GestionnaireEvenements
         this.listeDesTables.push(objetEvenement);
         str = "Table  "+this.listeDesTables[this.listeDesTables.length-1].no+"      "+this.listeDesTables[this.listeDesTables.length-1].temps+" min.";
         _level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[this.listeDesTables.length-1].no});
-        for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
+        _level0.loader.contentHolder.chargementTables = "";
+		for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
                 {
 					trace(i+": "+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
 				}
