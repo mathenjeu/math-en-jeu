@@ -23,14 +23,13 @@ San Francisco, CA 94107, USA.
 import mx.transitions.Tween;
 import mx.transitions.easing.*;
 import mx.utils.Delegate;
-
 import FiltreTable;
 
 class GestionnaireEvenements
 {
     private var roomDescription:String;  // short room description taked from DB
 	
-	private var nomUtilisateur:String;    // notre nom d'utilisateur
+	private var nomUtilisateur:String;    // user name
 	private var numeroDuPersonnage:Number; // sert a associer la bonne image pour le jeu d'ile au tresor
 	private var numberDesJoueurs:Number;
     public var  listeDesPersonnages:Array;   // liste associant les idPersonnage avec les nomUtilisateurs dans la table ou on est
@@ -54,7 +53,7 @@ class GestionnaireEvenements
     private var objGestionnaireCommunication:GestionnaireCommunication;  //  pour caller les fonctions du serveur 
 	private var tabPodiumOrdonneID:Array;			// id des personnages ordonnes par pointage une fois la partie terminee
 	private var pointageMinimalWinTheGame:Number = -1 // pointage minimal a avoir droit d'atteindre le WinTheGame
-	private var numeroJoueursDansSalle:Number=0;
+	private var numeroJoueursDansSalle:Number = 0;
 	public  var typeDeJeu:String = "MathEnJeu";
 	
 	function affichageChamps()
@@ -114,10 +113,7 @@ class GestionnaireEvenements
         this.nomUtilisateur = nom;
         this.listeDesPersonnages = new Array();
         this.listeDesPersonnages.push(new Object());
-        /*for(var i:Number = 0; i < 4; i++)
-        {
-            this.listeDesPersonnages.push(new Object());
-        }*/
+       
         this.motDePasse = passe;
         this.nomSalle = new String();
         this.motDePasseSalle = new String();
@@ -388,7 +384,7 @@ class GestionnaireEvenements
            master = nom.substring(0, firstDel);
         else
            master = "";
-		   trace(" controlForMaster : " + master);
+		   //trace(" controlForMaster : " + master);
         return (master == "game-master" || master == "maitre-du-jeu");
     }
 	
@@ -756,6 +752,10 @@ class GestionnaireEvenements
         switch(objetEvenement.resultat)
         {
             case "ListeTables":
+			     
+				 _level0.loader.contentHolder.listeTable.removeAll();
+				 delete this.listeDesTables;
+				 this.listeDesTables = new Array();
                 for (var i:Number = 0; i < objetEvenement.listeTables.length; i++)
                 {
                     this.listeDesTables.push(objetEvenement.listeTables[i]);
@@ -773,6 +773,7 @@ class GestionnaireEvenements
 				else
 				{
 					_level0.loader.contentHolder.chargementTables = "";
+					_level0.loader.contentHolder.chargementTables._visible = false;
 				}
 				_level0.loader.contentHolder.bt_continuer2._visible = true;
             break;
@@ -887,6 +888,16 @@ class GestionnaireEvenements
     	trace("*********************************************\n");
     }
 	
+	/////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+    function obtenirListeTables()
+    {
+        trace("*********************************************");
+        trace("debut de sortirTable");
+        this.objGestionnaireCommunication.obtenirListeTablesApres(Delegate.create(this, this.retourObtenirListeTables), FiltreTable.INCOMPLETES_NON_COMMENCEES);
+        trace("fin de sortirTable");
+        trace("*********************************************\n");
+    } 
 	
     //  on ne s'ajoute pas a la liste des joueur dans cette table, c grave ??  c correct pour quand on veut sortir....
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -983,14 +994,29 @@ class GestionnaireEvenements
 			
             case "TableNonExistante":
                 trace("table non existante");
+				obtenirListeTables();
+				//this.objGestionnaireCommunication.obtenirListeTables(Delegate.create(this, this.retourObtenirListeTables), Delegate.create(this, this.evenementJoueurEntreTable), Delegate.create(this, this.evenementJoueurQuitteTable), Delegate.create(this, this.evenementNouvelleTable), Delegate.create(this, this.evenementTableDetruite), FiltreTable.INCOMPLETES_NON_COMMENCEES);
             break;
 			
             case "TableComplete":
-                trace("Table complete");
-            break;
+                trace("Table complete!!!!!");
+				
+				//_level0.loader.contentHolder.chargementTables = "Table complete";
+				/*
+				var nom:String = this.nomSalle;
+				//trace(nom);
+				this.sortirSalle();
+				
+				this.nomSalle = nom;
+				this.entrerSalle(nom); */
+				
+				obtenirListeTables();
+				
+			break;
 			
             default:
                 trace("Erreur Inconnue");
+				obtenirListeTables();
         }
     	trace("fin de retourEntrerTable");
     	trace("*********************************************\n");
