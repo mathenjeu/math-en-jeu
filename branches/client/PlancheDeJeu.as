@@ -629,8 +629,15 @@ class PlancheDeJeu
 
 	
     function afficherCasesPossibles(p:Personnage)
-    {						
-	 if(!(_level0.loader.contentHolder.objGestionnaireEvenements.controlForMaster(p.obtenirNom())))
+    {		
+	 var isInWinTheGame:Boolean = true;
+	 //var x = p.obtenirPosition().obtenirX();
+	 if(tableauDesCases[p.obtenirL()][p.obtenirC()].obtenirType() > 41000)
+        isInWinTheGame = false;
+	trace("ICI!!! : " + isInWinTheGame);
+	trace("ICI!!! : " + tableauDesCases[p.obtenirL()][p.obtenirC()].obtenirType());
+	
+	 if(!(_level0.loader.contentHolder.objGestionnaireEvenements.controlForMaster(p.obtenirNom())) && isInWinTheGame)
 	 { 
 		trace("Debut afficherCasesPossibles");
 		
@@ -703,7 +710,7 @@ class PlancheDeJeu
         }
 	
 	
-        for(i=1;i<=Math.min(p.obtenirL(),6);i++)
+        for(i=1; i<=Math.min(p.obtenirL(),6); i++)
         {
 			//trace("ds deuxieme for avant if  i  mat  :  "+i+"   "+mat[p.obtenirL()-i][p.obtenirC()]);
 			temp = p.obtenirL()-i;
