@@ -3536,16 +3536,17 @@ public class ProtocoleJoueur implements Runnable
             	 // La boule permettra à un joueur de changer de question si celle
             	 // qu'il s'est fait envoyer ne lui tente pas
             	 // On trouve une nouvelle question à poser
-            	 int oldQuestion = objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirCodeQuestion();
-            	 Question nouvelleQuestion = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoser(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueurDesiree(), true);
-
+            	
+         		 // last true - to find a question of less difficulty than used now 
+            	 Question nouvelleQuestion = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoserCristall(objJoueurHumain, true);
+                 /*
             	 // Si on est tombé sur la mème question, on recommence jusqu'à 10 fois
             	 int essais=0;
             	 while(nouvelleQuestion.obtenirCodeQuestion() == oldQuestion && essais < 10)
             	 {
             		 nouvelleQuestion = objJoueurHumain.obtenirPartieCourante().trouverQuestionAPoser(objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirDifficulte(), true);
             		 essais++;
-            	 }
+            	 } */
 
             	 // On prépare l'envoi des informations sur la nouvelle question
             	 Element objNoeudParametreNouvelleQuestion = objDocumentXMLSortie.createElement("parametre");
