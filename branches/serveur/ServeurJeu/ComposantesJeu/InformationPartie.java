@@ -429,6 +429,8 @@ public class InformationPartie
 	 */
 	public Question trouverQuestionAPoser(Point nouvellePosition, boolean doitGenererNoCommandeRetour)
 	{
+		//Point nouvellePosition = objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueurDesiree();
+		
 		// Déclarations de variables qui vont contenir la catégorie de question 
 		// à poser, la difficulté et la question à retourner
 		//***************************************************************************************
@@ -527,11 +529,15 @@ public class InformationPartie
 	 * @return Question : La question trouvée, s'il n'y a pas eu de déplacement,
 	 * 					  alors la question retournée est null
 	 */
-	public Question trouverQuestionAPoser(int intDifficulte, boolean doitGenererNoCommandeRetour)
+	public Question trouverQuestionAPoserCristall(JoueurHumain objJoueurHunmain, boolean doitGenererNoCommandeRetour)
 	{
 		// Déclarations de variables qui vont contenir la catégorie de question 
 		// à poser, la difficulté et la question à retourner
 		//***************************************************************************************
+	   int oldQuestion = objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirCodeQuestion();
+	   int intDifficulte = objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirDifficulte();
+		
+		
 		
 		Categories[] catValues = Categories.values();
         int[] catScolaires = new int[catValues.length];
@@ -548,13 +554,9 @@ public class InformationPartie
 		if (intDifficulte > 1)
 			intDifficulte--;
 		
-		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
-		// une question
-		if (intDifficulte > 0)
-		{
-			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte, false);
-		}
+		objQuestionTrouvee = trouverQuestionCristall(intCategorieQuestion, intDifficulte, oldQuestion, false);
 		
+				
 		// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
 		// des questions posées et on la garde en mémoire pour pouvoir ensuite
 		// traiter la réponse du joueur, on va aussi garder la position que le
@@ -565,10 +567,11 @@ public class InformationPartie
 			objQuestionCourante = objQuestionTrouvee;
 			//objPositionJoueurDesiree = nouvellePosition;
 		}
-		else if (intDifficulte > 0)
+		else 
 		{
 			objGestionnaireBD.remplirBoiteQuestions( getObjBoiteQuestions(), objJoueurHumain.obtenirCleNiveau());
-			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte, false);
+			
+			objQuestionTrouvee = trouverQuestionCristall(intCategorieQuestion, intDifficulte, oldQuestion, false);
 			
 			lstQuestionsRepondues.clear();
 			
@@ -601,6 +604,78 @@ public class InformationPartie
 		return objQuestionTrouvee;
 	}// end methode
 	
+	/**
+	 * Created for the case of Cristall
+	 * Cette fonction essaie de piger une question du niveau de dificulté proche 
+	 * de intDifficulte, si on y arrive pas, ça veut dire qu'il ne 
+	 * reste plus de questions de niveau de difficulté proche 
+	 * de intDifficulte
+	 * 
+	 * @param intCategorieQuestion
+	 * @param intDifficulte
+	 * @return la question trouver ou null si aucune question n'a pu être pigée
+	 */
+	private Question trouverQuestionCristall(int intCategorieQuestion, int intDifficulte, int codeOld, boolean moreDifficultQuestions)
+	{
+		
+		Question objQuestionTrouvee = null;
+		
+		// to not get the same question
+		do{
+			// pour le premier on voir la catégorie et difficulté demandées
+			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulte);
+
+			//on prend les catégories scolaires en utilisant enum Categories
+			Categories[] catValues = Categories.values();
+			int[] catScolaires = new int[catValues.length];
+			for(int i = 0; i < catValues.length; i++)
+			{
+				catScolaires[i] = catValues[i].getCode();
+			}
+
+			LinkedList<Integer> catScolairesTemp = new LinkedList<Integer>();
+			for(int numbers : catScolaires)
+				catScolairesTemp.add(numbers);
+			int intRandom = 0;
+			System.out.println("Avant diff : " + intDifficulte);
+
+			//sinon on cherche pour toutes les catégories de la même difficulté 
+			int i = 0;
+			while(i < catScolaires.length && objQuestionTrouvee == null )
+			{
+				intRandom = UtilitaireNombres.genererNbAleatoire( catScolairesTemp.size() );	
+				intCategorieQuestion =  catScolairesTemp.get(intRandom).intValue();
+				objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulte);
+				catScolairesTemp.remove(intRandom); 
+				i++;
+
+			}
+
+			//après pour les difficultés moins grands 
+			int intDifficulteTemp = intDifficulte;
+			LinkedList<Integer> catScolairesTemp2 = new LinkedList<Integer>();
+
+			while(objQuestionTrouvee == null && intDifficulteTemp > 0 ) 
+			{
+				for(int numbers : catScolaires)
+					catScolairesTemp2.add(numbers);
+				intDifficulteTemp--;
+				i = 0;
+				while(i < catScolaires.length && objQuestionTrouvee == null )
+				{
+					intRandom = UtilitaireNombres.genererNbAleatoire( catScolairesTemp2.size() );	
+					intCategorieQuestion =  catScolairesTemp2.get(intRandom).intValue();
+					objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulteTemp);
+					catScolairesTemp2.remove(intRandom);
+					i++;
+				}
+			}// fin while
+
+		}while( objQuestionTrouvee.obtenirCodeQuestion() == codeOld );		
+		
+		return objQuestionTrouvee;
+		
+	}// fin méthode
 	
 	/**
 	 * Cette fonction essaie de piger une question du niveau de dificulté proche 
