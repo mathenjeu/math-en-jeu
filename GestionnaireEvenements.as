@@ -622,7 +622,7 @@ class GestionnaireEvenements
         switch(objetEvenement.resultat)
         {
             case "Ok":
-                this.objGestionnaireCommunication.obtenirListeJoueursSalle(Delegate.create(this, this.retourObtenirListeJoueursSalle), Delegate.create(this, this.evenementJoueurEntreSalle), Delegate.create(this, this.evenementJoueurQuitteSalle))
+                this.objGestionnaireCommunication.obtenirListeJoueursSalle(Delegate.create(this, this.retourObtenirListeJoueursSalle), Delegate.create(this, this.evenementJoueurEntreSalle), Delegate.create(this, this.evenementJoueurQuitteSalle));
             break;
 			
             case "CommandeNonReconnue":
@@ -1057,9 +1057,10 @@ class GestionnaireEvenements
 			 	this.listeDesTables = new Array();
 			 	delete this.listeDesJoueursConnectes;
 			 	this.listeDesJoueursConnectes = new Array();
-			 	objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), Delegate.create(this, this.evenementJoueurConnecte), Delegate.create(this, this.evenementJoueurDeconnecte));
-						
-			 	this.numeroTable = 0;
+             // 	objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), Delegate.create(this, this.evenementJoueurConnecte), Delegate.create(this, this.evenementJoueurDeconnecte));
+                this.objGestionnaireCommunication.obtenirListeJoueursSalle(Delegate.create(this, this.retourObtenirListeJoueursSalle), Delegate.create(this, this.evenementJoueurEntreSalle), Delegate.create(this, this.evenementJoueurQuitteSalle))						
+			 	/*
+				this.numeroTable = 0;
 			 	this.idPersonnage = 0;
 			 	delete this.listeDesPersonnages;
 			 	this.listeDesPersonnages = new Array();
@@ -1067,13 +1068,14 @@ class GestionnaireEvenements
 			 
 			 	for (var i:Number = 0; i < this.listeDesTables.length; i++)
 			 	{
-					str = "Table  "+this.listeDesTables[i].no+"     "+this.listeDesTables[i].temps+" min.";
+					str = "Table  "+this.listeDesTables[i].no+"  "+this.listeDesTables[i].temps+" min.";
 					for (var j:Number = 0; j < this.listeDesTables[i].listeJoueurs.length; j++)
 					{
 						str = str+"\n   - "+this.listeDesTables[i].listeJoueurs[j].nom
 					}
 					_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
 			 	}
+				*/
             break;
 
 			case "CommandeNonReconnue":
