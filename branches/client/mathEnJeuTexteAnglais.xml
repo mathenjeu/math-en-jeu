@@ -23,6 +23,7 @@
       chargementSalles = "Room list is loading..." 
 			boutonRetour = "Back"
 			boutonContinuer = "Continue"
+			boutonQuitterX = "Quit the game"
 	
 			explication = "The advanced mode allows for the more experienced player to select his level among the various mathematical categories of the game. If desired, he can personnalize his gaming experience by choosing only the subjects he is interested in."
 			
