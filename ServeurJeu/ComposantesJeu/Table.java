@@ -133,8 +133,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @param int tempsPartie : Le temps de la partie en minute
 	 * @param Regles reglesTable : Les règles pour une partie sur cette table
 	 */
-	public Table(Salle salleParente, int noTable, String nomUtilisateurCreateur,
-			int tempsPartie, ControleurJeu controleurJeu) 
+	public Table(Salle salleParente, int noTable, JoueurHumain joueur ,	int tempsPartie, ControleurJeu controleurJeu) 
 	{
 		super();
    	
@@ -153,14 +152,16 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// total d'une partie
 		setObjSalle(salleParente);
 		intNoTable = noTable;
-		strNomUtilisateurCreateur = nomUtilisateurCreateur;
+		
 		intTempsTotal = tempsPartie;
               //  if(!this.butDuJeu.equals("original")) winTheGame = new WinTheGame(this);
                
 		// Créer une nouvelle liste de joueurs
 		lstJoueurs = new TreeMap<String, JoueurHumain>();
 		lstJoueursEnAttente = new TreeMap<String, JoueurHumain>();
-		
+		String nomUtilisateurCreateur = joueur.obtenirNomUtilisateur();
+		//lstJoueursEnAttente.put(joueur.obtenirNomUtilisateur(), joueur);
+		strNomUtilisateurCreateur = nomUtilisateurCreateur;
 		// Au départ, aucune partie ne se joue sur la table
 		bolEstCommencee = false;
 		bolEstArretee = true;
