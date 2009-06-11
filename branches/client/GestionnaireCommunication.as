@@ -2091,9 +2091,9 @@ class GestionnaireCommunication
     public function demarrerPartie(demarrerPartieDelegate:Function,
                                    evenementPartieDemarreeDelegate:Function,
                                    evenementJoueurDeplacePersonnageDelegate:Function,
-				evenementSynchroniserTempsDelegate:Function,
-				evenementPartieTermineeDelegate:Function,
-				idPersonnage:Number) 
+				                   evenementSynchroniserTempsDelegate:Function,
+				                   evenementPartieTermineeDelegate:Function,
+				                   idPersonnage:Number) 
     {
         // Si on est dans une table, alors on peut continuer le code de la
         // fonction
