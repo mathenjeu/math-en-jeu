@@ -1076,10 +1076,11 @@ public class ProtocoleJoueur implements Runnable
 								// Créer une référence vers la table courante dans la liste
 								Table objTable = (Table)(((Map.Entry<Integer, Table>)(objIterateurListeTables.next())).getValue());
 
-								/*
+								
 								// Obtenir la liste des joueurs se trouvant dans la 
 								// table courante
-								TreeMap lstListeJoueurs = objJoueurHumain.obtenirSalleCourante().obtenirListeJoueurs();//objTable.obtenirListeJoueurs();
+								//TreeMap lstListeJoueurs = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueursEnAttente();
+								  TreeMap lstListeJoueurs = objTable.obtenirListeJoueurs();
 
 								// Empècher d'autres thread de toucher à la liste des
 								// joueurs de la table courante
@@ -1090,7 +1091,7 @@ public class ProtocoleJoueur implements Runnable
 									// partie débutera ou se terminera
 									// Si la table est une de celles qui doivent ètre 
 									// retournées selon le filtre, alors on continue 
-                                  */
+                                
 					
     								if (strFiltre.equals(Filtre.Toutes) ||
 									   (strFiltre.equals(Filtre.IncompletesNonCommencees) && objTable.estComplete() == false && objTable.estCommencee() == false) || 
@@ -1110,7 +1111,7 @@ public class ProtocoleJoueur implements Runnable
 										// temps des parties qui se déroulent sur cette table
 										objNoeudTable.setAttribute("temps", Integer.toString(objTable.obtenirTempsTotal()));
 	
-										/*
+										
 										// Créer un ensemble contenant tous les tuples de la liste 
 										// lstListeJoueurs (chaque élément est un Map.Entry)
 										Set lstEnsembleJoueurs = lstListeJoueurs.entrySet();
@@ -1137,11 +1138,11 @@ public class ProtocoleJoueur implements Runnable
 											
 											// Ajouter le noeud du joueur au noeud de la table
 											objNoeudTable.appendChild(objNoeudJoueur);
-										}  */									    
+										}  								    
 									
 										// Ajouter le noeud de la table au noeud du paramètre
 										objNoeudParametreListeTables.appendChild(objNoeudTable);
-									//}
+									}
 								}
 							}						    
 						}
