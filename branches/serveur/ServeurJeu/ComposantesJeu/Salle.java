@@ -301,7 +301,7 @@ public class Salle
 	    {
 	    	
 	    	// Créer une nouvelle table en passant les paramètres appropriés
-	    	Table objTable = new Table( this, genererNoTable(), joueur.obtenirNomUtilisateur(), tempsPartie, objControleurJeu);
+	    	Table objTable = new Table( this, genererNoTable(), joueur, tempsPartie, objControleurJeu);
 	    		    	
 	    	objTable.creation();
 	    		    	
