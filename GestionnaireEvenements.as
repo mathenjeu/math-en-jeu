@@ -36,6 +36,7 @@ class GestionnaireEvenements
     private var motDePasse:String;  // notre mot de passe pour pouvoir jouer
     private var nomSalle:String;  //  nom de la salle dans laquelle on est
     private var numeroTable:Number;   //   numero de la table dans laquelle on est
+	private var nameTable:String;     // name of the created table
     private var tempsPartie:Number;   //  temps que va durer la partie, en minutes
     private var idPersonnage:Number;   //  le idPersonnage que nous avons choisi (le dessin)
     private var motDePasseSalle:String;   // le mot de passe de la salle dans laquelle on est
@@ -365,7 +366,7 @@ class GestionnaireEvenements
     function repondreQuestion(str:String)
     {
         trace("*********************************************");
-        trace("debut de repondreQuestion     "+str);
+        trace("debut de repondreQuestion     " + str);
         this.objGestionnaireCommunication.repondreQuestion(Delegate.create(this, this.retourRepondreQuestion), str);  
         trace("fin de repondreQuestion");
         trace("*********************************************\n");
@@ -712,7 +713,7 @@ class GestionnaireEvenements
         switch(objetEvenement.resultat)
         {
             case "ListeJoueursSalle":
-                for(var i:Number=0;i<objetEvenement.listeNomUtilisateurs.length;i++)
+                for(var i:Number=0; i < objetEvenement.listeNomUtilisateurs.length; i++)
                 {
                     this.listeDesJoueursDansSalle.push(objetEvenement.listeNomUtilisateurs[i]);
                 }
@@ -759,14 +760,18 @@ class GestionnaireEvenements
                 for (var i:Number = 0; i < objetEvenement.listeTables.length; i++)
                 {
                     this.listeDesTables.push(objetEvenement.listeTables[i]);
-                    str = "Table." + this.listeDesTables[i].no + "   " + this.listeDesTables[i].temps + " min.";
+					
+                    str = "Table. " + this.listeDesTables[i].no + "   " + this.listeDesTables[i].temps + " min.";
+					trace(objetEvenement.listeTables[i].listeJoueurs);
                     for (var j:Number = 0; j < this.listeDesTables[i].listeJoueurs.length; j++)
                     {
-                        str = str+"\n -  "+this.listeDesTables[i].listeJoueurs[j].nom
+                        str = str + "\n -  " + this.listeDesTables[i].listeJoueurs[j].nom;
+						trace(this.listeDesTables[i].listeJoueurs[j].nom);
                     }
-                    _level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
+                    
+					_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
                 }
-				if (objetEvenement.listeTables.length == 0)
+				if ( this.listeDesTables.length == 0)//objetEvenement.listeTables.length == 0)
 				{
 					_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
 				}
@@ -811,7 +816,7 @@ class GestionnaireEvenements
         //   objetEvenement.resultat = "NoTable", CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte, JoueurPasDansSalle,  JoueurDansTable
         // parametre : noTable
         trace("*********************************************");
-        trace("debut de retourCreerTable   "+objetEvenement.resultat +"    "+objetEvenement.noTable);
+        trace("debut de retourCreerTable   " + objetEvenement.resultat + "    " + objetEvenement.noTable);
         var movClip:MovieClip;
 
         switch(objetEvenement.resultat)
@@ -855,10 +860,7 @@ class GestionnaireEvenements
 					movClip._yscale -= 70;
 					*/
 				}
-				/*for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
-                {
-	                	trace(i+". "+this.listeDesPersonnages[i].nom+" : "+this.listeDesPersonnages[i].id);
-                }*/
+				
             break;
 			 
             case "CommandeNonReconnue":
@@ -925,18 +927,9 @@ class GestionnaireEvenements
 	                //_level0.loader.contentHolder.noms[i] = objetEvenement.listePersonnageJoueurs[i].nom;;
 	                trace("objetEvenement"+i+" "+objetEvenement.listePersonnageJoueurs[i].nom);
                 }
-                /*
-                _level0.loader.contentHolder.noms[numeroJoueursDansSalle-1] = nomUtilisateur;*/
                 
-				/*_level0.loader.contentHolder.nomJ1 = objetEvenement.listePersonnageJoueurs[0].nom;// 4 joueurs
-                _level0.loader.contentHolder.nomJ2 = objetEvenement.listePersonnageJoueurs[1].nom;// 4 joueurs
-                _level0.loader.contentHolder.nomJ3 = objetEvenement.listePersonnageJoueurs[2].nom;// 4 joueurs
-                */
-                _level0.loader.contentHolder.nomJ4 = nomUtilisateur;								// 4 joueurs
-                //this.listeDesPersonnages[0/*numeroJoueursDansSalle-1*/].nom = this.nomUtilisateur;
-                //this.listeDesPersonnages[0/*numeroJoueursDansSalle-1*/].id = idPersonnage;
+                _level0.loader.contentHolder.nomJ4 = nomUtilisateur;								
                 
-             
                 //trace("---------------- Remplir listeDesPersonnages num:"+objetEvenement.listePersonnageJoueurs.length);
                 var j:Number=0;
 				for(var i:Number = 0; i < numeroJoueursDansSalle-1; i++)
@@ -957,9 +950,9 @@ class GestionnaireEvenements
                     
                     var idDessin:Number=((this.listeDesPersonnages[i].id-10000)-(this.listeDesPersonnages[i].id-10000)%100)/100;
 					var idPers:Number=this.listeDesPersonnages[i].id-10000-idDessin*100;
-					if(this.listeDesPersonnages[i].id == 0) idDessin=0;
 					
-		     		_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(nextID));//[i].idPersonnage));//
+					if(this.listeDesPersonnages[i].id == 0) idDessin=0;
+					   _level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(nextID));//[i].idPersonnage));//
 		    
                     if(idDessin != 0)
 					{
@@ -995,21 +988,11 @@ class GestionnaireEvenements
             case "TableNonExistante":
                 trace("table non existante");
 				obtenirListeTables();
-				//this.objGestionnaireCommunication.obtenirListeTables(Delegate.create(this, this.retourObtenirListeTables), Delegate.create(this, this.evenementJoueurEntreTable), Delegate.create(this, this.evenementJoueurQuitteTable), Delegate.create(this, this.evenementNouvelleTable), Delegate.create(this, this.evenementTableDetruite), FiltreTable.INCOMPLETES_NON_COMMENCEES);
-            break;
+			break;
 			
             case "TableComplete":
                 trace("Table complete!!!!!");
-				
-				//_level0.loader.contentHolder.chargementTables = "Table complete";
-				/*
-				var nom:String = this.nomSalle;
-				//trace(nom);
-				this.sortirSalle();
-				
-				this.nomSalle = nom;
-				this.entrerSalle(nom); */
-				
+										
 				obtenirListeTables();
 				
 			break;
@@ -1034,7 +1017,7 @@ class GestionnaireEvenements
         switch(objetEvenement.resultat)
         {
             case "Ok":     
-				for(var i = 0;i<this.listeDesTables.length;i++)
+				for(var i = 0; i < this.listeDesTables.length; i++)
 				{
 					if(this.listeDesTables[i].no == this.numeroTable)
 					{
@@ -1044,21 +1027,28 @@ class GestionnaireEvenements
 				}
 
 				// on s'enleve de la liste des joueurs 
-            	for(var j=0;j<this.listeDesTables[indice].listeJoueurs.length;j++)
+            	for(var j=0; j < this.listeDesTables[indice].listeJoueurs.length; j++)
             	{
                 	if(this.listeDesTables[indice].listeJoueurs[j].nom == this.nomUtilisateur)
                 	{
                     	this.listeDesTables[indice].listeJoueurs.splice(j,1);
-                    	break;
-                	}
+                   	}
+					if(this.listeDesTables[indice].listeJoueurs.length == 0)
+            	      _level0.loader.contentHolder.listeTable.removeItemAt(indice);
             	}
 				
-			 	delete this.listeDesTables;
-			 	this.listeDesTables = new Array();
-			 	delete this.listeDesJoueursConnectes;
-			 	this.listeDesJoueursConnectes = new Array();
-             // 	objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), Delegate.create(this, this.evenementJoueurConnecte), Delegate.create(this, this.evenementJoueurDeconnecte));
-                this.objGestionnaireCommunication.obtenirListeJoueursSalle(Delegate.create(this, this.retourObtenirListeJoueursSalle), Delegate.create(this, this.evenementJoueurEntreSalle), Delegate.create(this, this.evenementJoueurQuitteSalle))						
+				if (this.listeDesTables.length == 0 )// || _level0.loader.contentHolder.listeTable.length == 0)
+		        {
+			      
+			       _level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
+		        }
+				
+			 	//delete this.listeDesTables;
+			 	//this.listeDesTables = new Array();
+			 	//delete this.listeDesJoueursConnectes;
+			 	//this.listeDesJoueursConnectes = new Array();
+                // 	objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), Delegate.create(this, this.evenementJoueurConnecte), Delegate.create(this, this.evenementJoueurDeconnecte));
+                this.objGestionnaireCommunication.obtenirListeJoueursSalle(Delegate.create(this, this.retourObtenirListeJoueursSalle), Delegate.create(this, this.evenementJoueurEntreSalle), Delegate.create(this, this.evenementJoueurQuitteSalle));						
 			 	/*
 				this.numeroTable = 0;
 			 	this.idPersonnage = 0;
@@ -1068,14 +1058,14 @@ class GestionnaireEvenements
 			 
 			 	for (var i:Number = 0; i < this.listeDesTables.length; i++)
 			 	{
-					str = "Table  "+this.listeDesTables[i].no+"  "+this.listeDesTables[i].temps+" min.";
+					str = "Table  " + this.listeDesTables[i].no + "  " + this.listeDesTables[i].temps + " min. \n";
 					for (var j:Number = 0; j < this.listeDesTables[i].listeJoueurs.length; j++)
 					{
-						str = str+"\n   - "+this.listeDesTables[i].listeJoueurs[j].nom
+						str = str + " - " + this.listeDesTables[i].listeJoueurs[j].nom + " - " ;
 					}
 					_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
-			 	}
-				*/
+			 	}*/
+				
             break;
 
 			case "CommandeNonReconnue":
@@ -1195,7 +1185,30 @@ class GestionnaireEvenements
         switch(objetEvenement.resultat)
         {
             case "Ok":
-            break;
+            for(var i = 0; i < this.listeDesTables.length; i++)
+    	    {
+        	   for(var j=0; j < this.listeDesTables[i].listeJoueurs.length; j++)
+               {
+                   if(this.listeDesTables[i].listeJoueurs[j].nom == objetEvenement.nomUtilisateur)
+                  {
+                    this.listeDesTables[i].listeJoueurs.splice(j,1);
+                    break;
+                  }
+               }
+			
+			   if(this.listeDesTables[i].listeJoueurs.length == 0)
+            	_level0.loader.contentHolder.listeTable.removeItemAt(i);
+       	     }
+    	
+		
+		if (this.listeDesTables.length == 0 )//|| _level0.loader.contentHolder.listeTable.length == 0)
+		{
+			
+			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
+		}
+		
+		
+			break;
 			
             case "CommandeNonReconnue":
                 trace("CommandeNonReconnue");
@@ -1773,8 +1786,9 @@ class GestionnaireEvenements
     {
         // parametre: nomUtilisateur
     	trace("*********************************************");
-    	trace("debut de evenementJoueurQuitteSalle   "+objetEvenement.nomUtilisateur);
-    	for(var i:Number = 0;i<this.listeDesJoueursDansSalle.length;i++)
+    	trace("debut de evenementJoueurQuitteSalle   " + objetEvenement.nomUtilisateur);
+    	
+		for(var i:Number = 0;i<this.listeDesJoueursDansSalle.length;i++)
     	{
         	if(this.listeDesJoueursDansSalle[i] == objetEvenement.nomUtilisateur)
         	{
@@ -1784,11 +1798,30 @@ class GestionnaireEvenements
         	}
         	
     	}
-    	/*for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
+		
+		for(i = 0; i < this.listeDesTables.length; i++)
+    	{
+        	for(var j=0; j < this.listeDesTables[i].listeJoueurs.length; j++)
+            {
+                if(this.listeDesTables[i].listeJoueurs[j].nom == objetEvenement.nomUtilisateur)
                 {
-					trace(i+": "+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
-				}*/
-    	trace("fin de evenementJoueurQuitteSalle");
+                    this.listeDesTables[i].listeJoueurs.splice(j,1);
+                    break;
+                }
+            }
+			
+			if(this.listeDesTables[i].listeJoueurs.length == 0)
+            	_level0.loader.contentHolder.listeTable.removeItemAt(i);
+       	}
+    	
+		
+		if (this.listeDesTables.length == 0)
+		{
+			//_level0.loader.contentHolder.listeTable.removeAll();
+			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
+		}
+		
+		trace("fin de evenementJoueurQuitteSalle");
     	trace("*********************************************\n");
     }
     
@@ -1798,16 +1831,26 @@ class GestionnaireEvenements
     {
         // parametre: noTable, tempsPartie
     	trace("*********************************************");
-    	trace("debut de evenementNouvelleTable   "+objetEvenement.noTable+"    "+objetEvenement.tempsPartie);
+    	trace("debut de evenementNouvelleTable   " + objetEvenement.noTable + "  " + objetEvenement.tempsPartie);
     	var str:String = new String();
     	// on ajoute une liste pour pouvoir inserer les joueurs quand ils vont entrer
         objetEvenement.listeJoueurs = new Array();
         objetEvenement.no = objetEvenement.noTable;
 		objetEvenement.temps = objetEvenement.tempsPartie;
-        this.listeDesTables.push(objetEvenement);
-        str = "Table." + this.listeDesTables[this.listeDesTables.length-1].no + " " + this.listeDesTables[this.listeDesTables.length-1].temps + " min.";
-        _level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[this.listeDesTables.length-1].no});
-        _level0.loader.contentHolder.chargementTables = "";
+        
+		this.listeDesTables.push(objetEvenement);
+        
+		str = "Table." + this.listeDesTables[this.listeDesTables.length-1].no + " " + this.listeDesTables[this.listeDesTables.length-1].temps + " min.";
+        
+		for (var j:Number = 0; j < this.listeDesTables[i].listeJoueurs.length; j++)
+        {
+            str = str + "\n -  " + this.listeDesTables[i].listeJoueurs[j].nom;
+			trace(" xxx " + this.listeDesTables[i].listeJoueurs[j].nom);
+        }
+		
+		_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[this.listeDesTables.length-1].no});
+        
+		_level0.loader.contentHolder.chargementTables = "";
 		
 		for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
                 {
@@ -1822,15 +1865,25 @@ class GestionnaireEvenements
     {
     	trace("*********************************************");
     	trace("debut de evenementTableDetruite   ");
-    	var i:Number;
-    	for(i = 0;i<this.listeDesTables.length;i++)
+    	
+		var i:Number;
+    	for(i = 0; i < this.listeDesTables.length; i++)
     	{
         	if(this.listeDesTables[i].no == objetEvenement.noTable)
         	{
             	this.listeDesTables.splice(i,1);
+				_level0.loader.contentHolder.listeTable.removeItemAt(i);
             	break;
         	}
     	}
+		
+				
+		if (this.listeDesTables.length == 0)
+		{
+			
+			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
+		}
+								
     	trace("fin de evenementTableDetruite");
     	trace("*********************************************\n");
     }
@@ -1849,19 +1902,20 @@ class GestionnaireEvenements
 	
 		//	musique();
 	
-    	for(i = 0;i<this.listeDesTables.length;i++)
+    	for(i = 0; i < this.listeDesTables.length; i++)
     	{
         	if(this.listeDesTables[i].no == objetEvenement.noTable)
         	{
             	this.listeDesTables[i].listeJoueurs.push(new Object());
-            	this.listeDesTables[i].listeJoueurs[this.listeDesTables[i].listeJoueurs.length-1].nom = objetEvenement.nomUtilisateur;
+            	this.listeDesTables[i].listeJoueurs[this.listeDesTables[i].listeJoueurs.length - 1].nom = objetEvenement.nomUtilisateur;
             	indice = i;
             	break;
         	}
     	}
-    	if(objetEvenement.noTable == this.numeroTable)
+    	
+		if(objetEvenement.noTable == this.numeroTable)
     	{
-	    	var alreadyWas:Boolean=false;
+	    	var alreadyWas:Boolean = false;
 	    	
             for(i = numeroJoueursDansSalle-1; i >=0 ; i--)//nbmaxJoueurs
             {
@@ -1885,30 +1939,31 @@ class GestionnaireEvenements
             	}
             	//if((!itIsInconnu)&&(listeDesPersonnages[i].nom!=this.nomUtilisateur)) _level0.loader.contentHolder["joueur"+(i+1)]=listeDesPersonnages[i].nom;
 	                
-            }
+            }// for
             
-    	}
+    	}// if
+		
     	if(indice != -1)
     	{
-        	for(i=0;i<this.listeDesTables.length;i++)
+        	for(i = 0; i < this.listeDesTables.length; i++)
         	{
             	if(_level0.loader.contentHolder.listeTable.getItemAt(i).data == objetEvenement.noTable)
             	{
-                	str = "Table." + this.listeDesTables[indice].no + "  " + this.listeDesTables[indice].temps + " min.";
+                	str = "Table. " + this.listeDesTables[indice].no + "  " + this.listeDesTables[indice].temps + " min.";
                 	for (j= 0; j < this.listeDesTables[indice].listeJoueurs.length; j++)
                 	{
-                    	str = str+"\n   - "+this.listeDesTables[indice].listeJoueurs[j].nom;
+                    	str = str + "\n   - " + this.listeDesTables[indice].listeJoueurs[j].nom;
                 	}
                 	_level0.loader.contentHolder.listeTable.replaceItemAt(i, {label : str, data : objetEvenement.noTable});
             	}
         	}
         	// enlever la table de la liste si elle est pleine
-			// a modifier si on est moins de 4
+			
         	if(this.listeDesTables[indice].listeJoueurs.length == numeroJoueursDansSalle)
         	{
-            	for(i;i<this.listeDesTables.length;i++)
+            	for(i = 0; i < this.listeDesTables.length; i++)
             	{
-                	if(_level0.loader.contentHolder.listeTable.getItemAt(i).data == this.listeDesTables[indice].noTable)
+                	if(_level0.loader.contentHolder.listeTable.getItemAt(i).data == objetEvenement.noTable)
                 	{
                     	_level0.loader.contentHolder.listeTable.removeItemAt(i);
 		    			break;
@@ -1916,7 +1971,13 @@ class GestionnaireEvenements
             	}
         	}
     	}
-    	for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
+		
+		if (this.listeDesTables.length == 0)
+		{
+			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
+		}
+    	
+		for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
                 {
 					trace(i+"this.listeDesPersonnages[i].nom: "+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
 				}
@@ -1977,7 +2038,7 @@ class GestionnaireEvenements
         	if(indice != -1)
         	{
             	// on enleve le joueur de la liste des joueurs de la table en question
-            	for(j=0;j<this.listeDesTables[indice].listeJoueurs.length;j++)
+            	for(j = 0; j < this.listeDesTables[indice].listeJoueurs.length; j++)
             	{
                 	if(this.listeDesTables[indice].listeJoueurs[j].nom == objetEvenement.nomUtilisateur)
                 	{
@@ -1985,8 +2046,9 @@ class GestionnaireEvenements
                     	break;
                 	}
             	}
-            	// on modifie la liste d'affichage des joueurs
-            	for(i;i<_level0.loader.contentHolder.listeTable.length;i++)
+            	
+				// on modifie la liste d'affichage des joueurs
+            	for(i = 0; i < _level0.loader.contentHolder.listeTable.length; i++)
             	{
                 	if(_level0.loader.contentHolder.listeTable.getItemAt(i).data == objetEvenement.noTable)
                 	{
@@ -1994,10 +2056,10 @@ class GestionnaireEvenements
                     	// si la table contient encore des joueurs
                     	if(this.listeDesTables[indice].listeJoueurs.length != 0)
                     	{
-                        	str = "Table  "+this.listeDesTables[indice].no+"                    "+this.listeDesTables[indice].temps+" min.";
+                        	str = "Table  " + this.listeDesTables[indice].no + "   " + this.listeDesTables[indice].temps + " min.";
                         	for (j= 0; j < this.listeDesTables[indice].listeJoueurs.length; j++)
                         	{
-                            	str = str+"\n   - "+this.listeDesTables[indice].listeJoueurs[j].nom;
+                            	str = str + "\n   - " + this.listeDesTables[indice].listeJoueurs[j].nom;
                         	}
                         	_level0.loader.contentHolder.listeTable.replaceItemAt(i, {label : str, data : objetEvenement.noTable});
                         	break;
@@ -2014,10 +2076,10 @@ class GestionnaireEvenements
        		    // si la table n'etait pas affichee, on l'affiche
             	if(tableAffichee == false)
             	{
-                	str = "Table  "+this.listeDesTables[indice].no+"                    "+this.listeDesTables[indice].temps+" min.";
+                	str = "Table  " + this.listeDesTables[indice].no + "  " + this.listeDesTables[indice].temps + " min.";
                 	for (j= 0; j < this.listeDesTables[indice].listeJoueurs.length; j++)
                 	{
-                    	str = str+"\n   - "+this.listeDesTables[indice].listeJoueurs[j].nom;
+                    	str = str + "\n  - " + this.listeDesTables[indice].listeJoueurs[j].nom;
                 	}
                 	_level0.loader.contentHolder.listeTable.replaceItemAt(i, {label : str, data : objetEvenement.noTable});
             	}	    
@@ -2027,7 +2089,15 @@ class GestionnaireEvenements
                 {
 					trace(i+": "+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
 				}
-    	trace("fin de evenementJoueurQuitteTable");
+    				
+		if(this.listeDesTables.length == 0)
+		{
+			
+			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
+		}
+		
+		
+		trace("fin de evenementJoueurQuitteTable");
     	trace("*********************************************\n");
     }
 	
@@ -2071,7 +2141,6 @@ class GestionnaireEvenements
             }
         }
 
-	
 		// ici on initie les noms et pointages des adversaire (dans le panneau qui descend)
 		// et on met la face de leur avatar a cote de leur nom
 		// Initialise our opponents' name and score
@@ -2410,6 +2479,31 @@ class GestionnaireEvenements
 			
 			this.tabPodiumOrdonneID[w] =  tabOrdonne[w].id;
 		}*/
+		
+		
+		//***********************************************************
+		for(i = 0; i < this.listeDesTables.length; i++)
+    	{
+        	for(var j=0; j < this.listeDesTables[i].listeJoueurs.length; j++)
+            {
+                if(this.listeDesTables[i].listeJoueurs[j].nom == objetEvenement.nomUtilisateur)
+                {
+                    this.listeDesTables[i].listeJoueurs.splice(j,1);
+                    break;
+                }
+            }
+			
+			if(this.listeDesTables[i].listeJoueurs.length == 0)
+            	_level0.loader.contentHolder.listeTable.removeItemAt(i);
+       	}
+    	
+		
+		if (this.listeDesTables.length == 0)
+		{
+			
+			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
+		}
+		
         	    
     	trace("fin de evenementPartieTerminee    ");
     	trace("*********************************************\n");
