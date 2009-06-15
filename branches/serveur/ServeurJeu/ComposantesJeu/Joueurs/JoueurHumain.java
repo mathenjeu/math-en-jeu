@@ -30,10 +30,17 @@ public class JoueurHumain extends Joueur
 	// Cette variable va contenir le nom de famille du joueur
 	private String strNomFamille;
 	
+	// Used to distinguish between simple user and administrator
+	// 1 - simple user 
+	// 2 - admin
+	private int role;
+	
 		
 	//Cette variable défini si un jouer peut creer une salle ??? utiliser encore??
 	//private boolean bolPeutCreerSalle;
 	
+	
+
 	/**
 	 * Déclaration d'un tableau qui contient les valeurs des niveaux des catégories
 	 * pour le profil du joueur - informaton garder dans BD -> user_subject_level
@@ -267,6 +274,20 @@ public class JoueurHumain extends Joueur
 	public void definirCleNiveau(int[] cleNiveau) 
 	{
 		this.cleNiveau = cleNiveau;
+	}
+	
+	/**
+	 * @return the role
+	 */
+	public int getRole() {
+		return role;
+	}
+
+	/**
+	 * @param role the role to set
+	 */
+	public void setRole(int role) {
+		this.role = role;
 	}
 
 	
