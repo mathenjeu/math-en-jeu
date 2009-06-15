@@ -28,8 +28,8 @@ import FiltreTable;
 class GestionnaireEvenements
 {
     private var roomDescription:String;  // short room description taked from DB
-	
-	private var nomUtilisateur:String;    // user name
+	private var nomUtilisateur:String;    // user name of our  user
+	private var userRole:Number;  // if 1 - simple user, if 2 - is admin(master)
 	private var numeroDuPersonnage:Number; // sert a associer la bonne image pour le jeu d'ile au tresor
 	private var numberDesJoueurs:Number;
     public var  listeDesPersonnages:Array;   // liste associant les idPersonnage avec les nomUtilisateurs dans la table ou on est
@@ -38,7 +38,7 @@ class GestionnaireEvenements
     private var numeroTable:Number;   //   numero de la table dans laquelle on est
 	private var nameTable:String;     // name of the created table
     private var tempsPartie:Number;   //  temps que va durer la partie, en minutes
-    private var idPersonnage:Number;   //  le idPersonnage que nous avons choisi (le dessin)
+    private var idPersonnage:Number;   //  
     private var motDePasseSalle:String;   // le mot de passe de la salle dans laquelle on est
     private var listeDesJoueursDansSalle:Array;  // liste des joueurs dans la salle qu'on est. Un joueur contient un nom (nom)
     public var  listeDesDescriptionsSalles:Array; //liste des descriptions des salles 
@@ -50,7 +50,7 @@ class GestionnaireEvenements
     private var listeDesJoueursConnectes:Array;   // la premiere liste qu'on recoit, tous les joueurs dans toutes les salles. Un joueur contient un nom (nom)
     //  liste de toutes les tables dans la salle ou on est
     //contient un numero (noTable), le temps (temps) et une liste de joueurs (listeJoueurs) un joueur de la liste contient un nom (nom)
-    private var listeDesTables:Array;
+    private var listeDesTables:Array;   // list of tables in our room with list of users in 
     private var objGestionnaireCommunication:GestionnaireCommunication;  //  pour caller les fonctions du serveur 
 	private var tabPodiumOrdonneID:Array;			// id des personnages ordonnes par pointage une fois la partie terminee
 	private var pointageMinimalWinTheGame:Number = -1 // pointage minimal a avoir droit d'atteindre le WinTheGame
@@ -113,7 +113,7 @@ class GestionnaireEvenements
         trace("debut du constructeur de gesEve      "+nom+"      "+passe);
         this.nomUtilisateur = nom;
         this.listeDesPersonnages = new Array();
-        this.listeDesPersonnages.push(new Object());
+        this.listeDesPersonnages.push(new Object());  // why ??????????? why without name ??????????
        
         this.motDePasse = passe;
         this.nomSalle = new String();
@@ -456,8 +456,8 @@ class GestionnaireEvenements
         // dedans. Ici, il y a juste une valeur qui est succes qui est de type booleen
     	// objetEvenement.resultat = Ok, JoueurNonConnu, JoueurDejaConnecte
     	trace("*********************************************");
-    	trace("debut de retourConnexion     "+objetEvenement.resultat);
-    
+    	trace("debut de retourConnexion     " + objetEvenement.resultat);
+        // param:  userRoleMaster == 1 if simple user or 2 if master
     	var dejaConnecte:MovieClip;
     
         switch(objetEvenement.resultat)
@@ -478,6 +478,7 @@ class GestionnaireEvenements
 					this.listeChansons.push(objetEvenement.listeChansons[k]);
 				}
 				
+				this.userRole = objetEvenement.userRoleMaster; 
 				//musique();
 				
 				trace("La connexion a marche");
@@ -761,19 +762,20 @@ class GestionnaireEvenements
                 {
                     this.listeDesTables.push(objetEvenement.listeTables[i]);
 					
-                    str = "Table. " + this.listeDesTables[i].no + "   " + this.listeDesTables[i].temps + " min.";
+                    str = "Table. " + objetEvenement.listeTables[i].no + "   " + objetEvenement.listeTables[i].temps + " min.";
 					trace(objetEvenement.listeTables[i].listeJoueurs);
-                    for (var j:Number = 0; j < this.listeDesTables[i].listeJoueurs.length; j++)
+                    for (var j:Number = 0; j < objetEvenement.listeTables[i].listeJoueurs.length; j++)
                     {
-                        str = str + "\n -  " + this.listeDesTables[i].listeJoueurs[j].nom;
+                        str = str + "\n -  " + objetEvenement.listeTables[i].listeJoueurs[j].nom;
 						trace(this.listeDesTables[i].listeJoueurs[j].nom);
                     }
                     
-					_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
+					_level0.loader.contentHolder.listeTable.addItem({label : str, data : objetEvenement.listeTables[i].no});
                 }
-				if ( this.listeDesTables.length == 0)//objetEvenement.listeTables.length == 0)
+				if ( objetEvenement.listeTables.length == 0)//objetEvenement.listeTables.length == 0)
 				{
 					_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
+					_level0.loader.contentHolder.txtChargementTables._visible = true;
 				}
 				else
 				{
@@ -1037,10 +1039,11 @@ class GestionnaireEvenements
             	      _level0.loader.contentHolder.listeTable.removeItemAt(indice);
             	}
 				
-				if (this.listeDesTables.length == 0 )// || _level0.loader.contentHolder.listeTable.length == 0)
+				if (this.listeDesTables.length == 0 )
 		        {
 			      
 			       _level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
+				   _level0.loader.contentHolder.txtChargementTables._visible = true;
 		        }
 				
 			 	//delete this.listeDesTables;
@@ -1201,10 +1204,11 @@ class GestionnaireEvenements
        	     }
     	
 		
-		if (this.listeDesTables.length == 0 )//|| _level0.loader.contentHolder.listeTable.length == 0)
+		if (this.listeDesTables.length == 0 )
 		{
 			
 			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
+			_level0.loader.contentHolder.txtChargementTables._visible = true;
 		}
 		
 		
@@ -1817,7 +1821,7 @@ class GestionnaireEvenements
 		
 		if (this.listeDesTables.length == 0)
 		{
-			//_level0.loader.contentHolder.listeTable.removeAll();
+			_level0.loader.contentHolder.txtChargementTables._visible = true;
 			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
 		}
 		
@@ -1880,7 +1884,7 @@ class GestionnaireEvenements
 				
 		if (this.listeDesTables.length == 0)
 		{
-			
+			_level0.loader.contentHolder.txtChargementTables._visible = true;
 			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
 		}
 								
@@ -1974,6 +1978,7 @@ class GestionnaireEvenements
 		
 		if (this.listeDesTables.length == 0)
 		{
+			_level0.loader.contentHolder.txtChargementTables._visible = true;
 			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
 		}
     	
@@ -2092,7 +2097,7 @@ class GestionnaireEvenements
     				
 		if(this.listeDesTables.length == 0)
 		{
-			
+			_level0.loader.contentHolder.txtChargementTables._visible = true;
 			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
 		}
 		
@@ -2353,7 +2358,7 @@ class GestionnaireEvenements
 			jouersStarted[i].idS=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].idStart;
 			jouersStarted[i].idPers=_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].idPers;
 			
-			if((jouersStarted[i].pointage==undefined)||(jouersStarted[i].nomUtilisateur.substr(0,7)=="Inconnu")||(master == "game-master")||(master == "maitre-du-jeu")) jouersStarted[i].pointage=Number(-1);
+			if((jouersStarted[i].pointage==undefined)||(jouersStarted[i].nomUtilisateur.substr(0,7)=="Inconnu")||(master == "game-master")||(master == "maitre-du-jeu")) jouersStarted[i].pointage = Number(-1);
 			
 			//trace(i+" jouersStarted[i]="+jouersStarted[i].nomUtilisateur+" "+jouersStarted[i].pointage+"pts  idD:"+jouersStarted[i].idS+" idP:"+jouersStarted[i].idPers);
 			if(jouersStarted[i].nomUtilisateur!=undefined) numeroJoueursConnecte++;
@@ -2500,7 +2505,7 @@ class GestionnaireEvenements
 		
 		if (this.listeDesTables.length == 0)
 		{
-			
+			_level0.loader.contentHolder.txtChargementTables._visible = true;			
 			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
 		}
 		
