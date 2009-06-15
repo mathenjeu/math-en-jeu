@@ -533,6 +533,30 @@ public class ProtocoleJoueur implements Runnable
                                     objNoeudParametreMusique.appendChild(objNoeudTexteMusique);
                                     objNoeudCommande.appendChild(objNoeudParametreMusique);   
                                 }
+                                //**************************************
+                                // Créer le noeud de pour le paramètre contenant le role de joueur
+        						Element objNoeudParametreRoleJoueur = objDocumentXMLSortie.createElement("parametre");
+        												
+        						// On ajoute un attribut type qui va contenir le type
+        						// du paramètre
+        						objNoeudParametreRoleJoueur.setAttribute("type", "userRole");
+        						
+        						// Créer le noeud du joueur courant
+								Element objNoeudJoueur = objDocumentXMLSortie.createElement("joueur");
+								
+								// On ajoute un attribut nom qui va contenir le nom
+								// du joueur
+								objNoeudJoueur.setAttribute("role", Integer.toString(objJoueurHumain.getRole()));
+								System.out.println("Protocole joueur: " + objJoueurHumain.getRole());
+						
+								// Ajouter le noeud du joueur au noeud du paramètre
+								objNoeudParametreRoleJoueur.appendChild(objNoeudJoueur);
+						
+            					// Ajouter le noeud paramètre au noeud de commande dans
+        						// le document de sortie
+        						objNoeudCommande.appendChild(objNoeudParametreRoleJoueur);
+        						
+                                //******************************************
                             }
                            else
                            {
@@ -551,6 +575,25 @@ public class ProtocoleJoueur implements Runnable
                                        objNoeudParametreMusique.appendChild(objNoeudTexteMusique);
                                        objNoeudCommande.appendChild(objNoeudParametreMusique);   
                                   }
+                                 
+                               //**************************************
+                                 // Créer le noeud de pour le paramètre contenant le role de joueur
+         						Element objNoeudParametreRoleJoueur = objDocumentXMLSortie.createElement("parametre");
+         												
+         						// On ajoute un attribut type qui va contenir le type  paramètre
+         						objNoeudParametreRoleJoueur.setAttribute("type", "userRole");
+         						
+         						 // Créer un noeud texte contenant le numéro de la table
+        						Text objNoeudTexteRole = objDocumentXMLSortie.createTextNode(Integer.toString(objJoueurHumain.getRole()));
+ 						
+ 								// Ajouter le noeud texte au noeud du paramètre
+ 								objNoeudParametreRoleJoueur.appendChild(objNoeudTexteRole);
+ 						
+             					// Ajouter le noeud paramètre au noeud de commande dans
+         						// le document de sortie
+         						objNoeudCommande.appendChild(objNoeudParametreRoleJoueur);
+         						
+                                //**************************
 							}//fin else
 						}
 						else if (strResultatAuthentification.equals(ResultatAuthentification.JoueurDejaConnecte))
