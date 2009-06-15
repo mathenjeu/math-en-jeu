@@ -2006,12 +2006,12 @@ class GestionnaireCommunication
      */
     public function demarrerMaintenant(demarrerMaintenantDelegate:Function, idPersonnage:Number, niveau:String)
     {
-		//trace("OUI OUI OUI! DEMARRER MAINTENANT!!!!  OUI OUI OUI!");
+		
         // Si on est dans une table, alors on peut continuer le code de la
         // fonction
         if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("DemarrerMaintenant", "nom") == true)
         {
-			//trace("OK, tout est sous controle mon chum!");
+			
 		
             // Declaration d'un tableau dont le contenu est un Delegate
             var lstDelegateCommande:ExtendedArray = new ExtendedArray();
@@ -2037,7 +2037,7 @@ class GestionnaireCommunication
 	    	objNoeudParametreIdPersonnage.attributes.type = "IdPersonnage";
             objNoeudParametreIdPersonnage.appendChild(objNoeudParametreIdPersonnageText);
 	    
-	    	objNoeudParametreNiveau.attributes.type = "NiveauJoueurVirtuel";  //JoueurVirtuel
+	    	objNoeudParametreNiveau.attributes.type = "NiveauJoueurVirtuel";  
 	    	objNoeudParametreNiveau.appendChild(objNoeudParametreNiveauText);
 	    
             objNoeudCommande.appendChild(objNoeudParametreIdPersonnage);
@@ -2605,11 +2605,16 @@ class GestionnaireCommunication
 				objEvenement.listeChansons.push(str_temp);
 				//trace("Liste chansons : " + objEvenement.listeChansons[iii]);
 			}
+			
+			//*****************************
+			// Ajouter l'attribut role dans l'objet d'evenement
+            objEvenement.userRoleMaster = Number(noeudCommande.firstChild.firstChild.nodeValue);
+			trace("objEvenement.userRoleMaster : " + objEvenement.userRoleMaster);
 	
         }
 		else
 		{
-			trace("erreur connexion  : "+noeudCommande.attributes.type);
+			trace("erreur connexion  : " + noeudCommande.attributes.type);
 		}
         // Appeler la fonction qui va envoyer tous les evenements et
         // retirer leurs ecouteurs
@@ -2929,6 +2934,7 @@ class GestionnaireCommunication
                     // Ajouter le joueur courant dans la liste des joueurs de
                     // la table
                     objTable.listeJoueurs.push({nom:lstJoueursChildNodes[j].attributes.nom});
+					//trace("GCom : " + nom:lstJoueursChildNodes[j].attributes.nom);
                 }
                 // Ajouter l'objet table dans le tableau
                 objEvenement.listeTables.push(objTable);
@@ -3155,7 +3161,7 @@ class GestionnaireCommunication
      */
     private function retourDemarrerPartie(noeudCommande:XMLNode)
     {
-		trace("Retour DemarrerPartie");
+		trace("Retour DemarrerPartie GCom");
         // Construire l'objet evenement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
