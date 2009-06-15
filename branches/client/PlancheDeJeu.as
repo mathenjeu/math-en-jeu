@@ -631,11 +631,9 @@ class PlancheDeJeu
     function afficherCasesPossibles(p:Personnage)
     {		
 	 var isInWinTheGame:Boolean = true;
-	 //var x = p.obtenirPosition().obtenirX();
+	 
 	 if(tableauDesCases[p.obtenirL()][p.obtenirC()].obtenirType() > 41000)
         isInWinTheGame = false;
-	trace("ICI!!! : " + isInWinTheGame);
-	trace("ICI!!! : " + tableauDesCases[p.obtenirL()][p.obtenirC()].obtenirType());
 	
 	 if(!(_level0.loader.contentHolder.objGestionnaireEvenements.controlForMaster(p.obtenirNom())) && isInWinTheGame)
 	 { 
