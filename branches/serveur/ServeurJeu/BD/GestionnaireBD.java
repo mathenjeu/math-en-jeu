@@ -211,12 +211,13 @@ public class GestionnaireBD
 	public void remplirInformationsJoueur(JoueurHumain joueur)
 	{
 		int cle = 0;
+		int role = 0;
 		
 		try
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery("SELECT user.user_id,last_name,name  FROM user " +
+				ResultSet rs = requete.executeQuery("SELECT user.user_id,last_name,name,role_id  FROM user " +
 						" WHERE username = '" + joueur.obtenirNomUtilisateur() + 
 						"';"); //
 				if (rs.next())
@@ -224,11 +225,13 @@ public class GestionnaireBD
 				
 					String prenom = rs.getString("last_name");
 					String nom = rs.getString("name");
-					cle = Integer.parseInt(rs.getString("user_id"));
-					
+					cle = rs.getInt("user_id");
+					role = rs.getInt("role_id"); 
+						
 					joueur.definirPrenom(prenom);
 					joueur.definirNomFamille(nom);
 					joueur.definirCleJoueur(cle);
+					joueur.setRole(role);
 				}
 			}
 		}
@@ -274,7 +277,7 @@ public class GestionnaireBD
 				ResultSet rs = requete.executeQuery( strRequeteSQL );
 				while(rs.next())
 				{
-                   level = Integer.parseInt(rs.getString("level"));
+                   level = rs.getInt("level");
     			}
 			}
 		}
@@ -383,22 +386,7 @@ public class GestionnaireBD
      // pour chaque catégorie on prend le niveau scolaire du joueur
         for(int i = 0; i < catValues.length; i++)
 		{
-        	/*
-       	   String strRequeteSQL = "SELECT DISTINCT answer.label, question.category_id, question_info.question_id, question_info.question_flash_file,question_info.feedback_flash_file, answer_type.tag, question_level.value  " +
-           "FROM question_info, answer_type_info, question_level, question, answer_type, answer " +
-           "WHERE  question_info.language_id = " + cleLang +
-           " AND question.category_id = " + catScolaires[i] +
-           " AND question.question_id = question_level.question_id " +
-           " AND question_info.question_id = question.question_id " +
-           " AND answer_type.answer_type_id = question.answer_type_id " +
-           " and question_info.is_valid = 1 " +
-           " and question_info.question_flash_file is not NULL " +
-           " and question_info.feedback_flash_file is not NULL "   +
-           " and question_level.level_id = " + niveau[i] + 
-           " and question_level.value != 0 " +
-           " and question.question_id = answer.question_id " +
-           " and answer.is_right = 1 ";   
-            */
+        	
         	String strRequeteSQL = "SELECT answer.is_right,question.question_id, question_info.question_flash_file,question_info.feedback_flash_file, question_level.value, answer_type.tag " +
         	" FROM question_info, question_level, question, answer_type, answer " +
         	" WHERE  question_info.language_id = " + cleLang +
@@ -479,7 +467,7 @@ public class GestionnaireBD
 						int difficulte = rs.getInt("value");
 						String reponse = "" + countReponse;
 
-						System.out.println("MC : question " + codeQuestion + " " + reponse + " " + difficulte);
+						//System.out.println("MC : question " + codeQuestion + " " + reponse + " " + difficulte);
 						String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
 						// System.out.println(URL+explication);
 						boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, categorie));
@@ -526,7 +514,7 @@ public class GestionnaireBD
 					String explication = rs.getString("feedback_flash_file");
 					int difficulte = rs.getInt("value"); 
 					
-					System.out.println("SA : question " + codeQuestion + " " + reponse + " " + difficulte);
+					//System.out.println("SA : question " + codeQuestion + " " + reponse + " " + difficulte);
 					
                     String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
                    // System.out.println(URL+explication);
@@ -571,7 +559,7 @@ public class GestionnaireBD
 					String explication = rs.getString("feedback_flash_file");
 					int difficulte = rs.getInt("value"); 
 					
-					System.out.println("TF : question " + codeQuestion + " " + reponse + " " + difficulte);
+					//System.out.println("TF : question " + codeQuestion + " " + reponse + " " + difficulte);
 					
                     String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
                    // System.out.println(URL+explication);
