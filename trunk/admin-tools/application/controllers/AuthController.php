@@ -31,7 +31,7 @@ class AuthController extends Zend_Controller_Action {
 				$authAdapter->setCredentialColumn('password');
 				// Set the input credential values to authenticate against
 				$authAdapter->setIdentity($username);
-				$authAdapter->setCredentialTreatment('password(?)');
+				$authAdapter->setCredentialTreatment('old_password(?)');
 				$authAdapter->setCredential($password);
 
 				// do the authentication

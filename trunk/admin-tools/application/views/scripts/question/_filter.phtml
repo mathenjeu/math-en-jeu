@@ -2,23 +2,12 @@
 <table class="question">
   <thead class="question">
   	<tr>
-             <th>Language</th>
-             <th>Source</th>
+             <th colspan="2">Source</th>
              <th>Title</th>
   	</tr>
   </thead>
   <tr>
-    <td>
-      <SELECT MULTIPLE name="languages[]" SIZE="10">
-        <?php foreach($this->allFilterOptions['languages'] as $language) : ?>
-          <option value="<?php echo $language['language_id']; ?>"
-                  <?php if (in_array($language['language_id'], $this->selectedFilterOptions['languages'])) echo " selected";?>>
-                  <?php echo $this->echoIfNotEmpty($language['name'],$language['language_id'],"Language#"); ?>
-          </option>
-        <?php endforeach; ?>
-      </SELECT>
-    </td>
-    <td>
+    <td colspan="2">
       <select multiple name="sources[]" SIZE="10">
       <?php foreach($this->allFilterOptions['sources'] as $source) : ?>
         <option value="<?php echo $source['source_id']; ?>"
@@ -42,17 +31,29 @@
   </tr>
   <thead>
     <tr>
-             <th colspan="2">Subject and Category</th>
+             <th>Subject and Category</th>
+             <th>Language</th>
              <th>Answer type</th>
     </tr>
   </thead>
   <tr>
-    <td colspan="2">
+    <td>
       <SELECT MULTIPLE name="categories[]" SIZE="10">
         <?php foreach($this->allFilterOptions['categories'] as $category) : ?>
           <option value="<?php echo $category['category_id']; ?>"
                   <?php if (in_array($category['category_id'], $this->selectedFilterOptions['categories'])) echo " selected";?>>
                   <?php echo $this->echoIfNotEmpty($category['subject_name'],$category['subject_id'],"Subject#") . " --> " . $this->echoIfNotEmpty($category['category_name'],$category['category_id'],"Category#"); ?>
+          </option>
+        <?php endforeach; ?>
+      </SELECT>
+    </td>
+             
+    <td>
+      <SELECT MULTIPLE name="languages[]" SIZE="10">
+        <?php foreach($this->allFilterOptions['languages'] as $language) : ?>
+          <option value="<?php echo $language['language_id']; ?>"
+                  <?php if (in_array($language['language_id'], $this->selectedFilterOptions['languages'])) echo " selected";?>>
+                  <?php echo $this->echoIfNotEmpty($language['name'],$language['language_id'],"Language#"); ?>
           </option>
         <?php endforeach; ?>
       </SELECT>
@@ -69,14 +70,19 @@
       </SELECT>
     </td>
   </tr>
+             
   <thead>
     <tr>
-             <th>Creator</th>
-             <th colspan="2">Latex text keywords (space separated)</th>
+             <th>Latex text keywords (space separated)</th>
+             <th colspan="2">Creator</th>
     </tr>
   </thead>
 
   <tr>             
+             <td valign="top">
+               <input type="text" size="50" name="keywords" value="<?php foreach($this->selectedFilterOptions['keywords'] as $keyword) echo $keyword." "; ?>">
+             </td>
+             
              <td rowspan="3">
                <select multiple name="creators[]" SIZE="10">
                  <option value="<?php echo $this->user->user_id ?>"
@@ -92,27 +98,35 @@
                  <?php endforeach; ?>
                </select>
              </td>
-
-             <td colspan="2" valign="top">
-               <input type="text" size="50" name="keywords" value="<?php foreach($this->selectedFilterOptions['keywords'] as $keyword) echo $keyword." "; ?>">
-             </td>
   </tr>
   <tr>
-             <th colspan="2">Options</th>
+             <th>Options</th>
   </tr>
   <tr>
-             <td colspan="2">
+             <td>
  <input type="checkbox" name="enabled"<?php if (in_array("1", $this->selectedFilterOptions['is_valid'])) echo " checked";?>>Enabled
  <input type="checkbox" name="disabled"<?php if (in_array("0", $this->selectedFilterOptions['is_valid'])) echo " checked";?>>Disabled
  <input type="checkbox" name="animated"<?php if (in_array("1", $this->selectedFilterOptions['is_animated'])) echo " checked";?>>Animated
  <input type="checkbox" name="unanimated"<?php if (in_array("0", $this->selectedFilterOptions['is_animated'])) echo " checked";?>>Not animated
              </td>
+
+
   </tr>
 
   <tr>
     <td colspan="3">
       <INPUT TYPE="SUBMIT" NAME="question_filter" VALUE="GO!">
+      <INPUT TYPE="SUBMIT" NAME="filter_reset" VALUE="CLEAR">
     </td>
   </tr>
+
+  <tr>
+    <td colspan="3">
+        Click to select a single item in a section.<br>
+        Control-click to select or unselect multiple individual items in a section.<br>
+        Shift-click to select a group of consecutive items within a section.
+    </td>
+  </tr>
+
 </table>
 </form>

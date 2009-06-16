@@ -1,7 +1,3 @@
-<?php $numberOfPages=ceil(count($this->questions)/$this->questionsPerPage); ?>
-<?php $firstIndex = $this->questionsPerPage*($this->currentPageNumber-1); ?>
-<?php $lastIndex = min($firstIndex+$this->questionsPerPage, count($this->questions)); ?>
-
 <table>
   <tr>
     <td><form method="post"><input type="submit" name="first" value="<<"></form></td>
@@ -11,12 +7,13 @@
     <td><form method="post"> 
           Jump to page 
           <SELECT name="page" onchange="this.form.submit();">
-            <?php for($i=1; $i<=$numberOfPages; ++$i) : ?>
+            <?php for($i=1; $i<=$this->numberOfPages; ++$i) : ?>
               <option value="<?php echo $i; ?>"<?php if ($i == $this->currentPageNumber) echo " selected"; ?>><?php echo $i; ?></option>
             <?php endfor; ?>
           </SELECT>
         </form>
     </td>
+    <td><?php echo $this->numberOfQuestions . " question(s) match your search"; ?> </td>
   </tr>
 </table>
 
@@ -35,7 +32,7 @@
   	</tr>
   </thead>
 
-<?php for($i = $firstIndex; $i < $lastIndex; ++$i) :?>
+<?php for($i = $this->indexOfFirstQuestion; $i < $this->indexOfLastQuestion; ++$i) :?>
 <?php
           $this->question = $this->questions[$i];
 ?>
@@ -62,12 +59,13 @@
     <td><form method="post"> 
           Jump to page 
           <SELECT name="page" onchange="this.form.submit();">
-            <?php for($i=1; $i<=$numberOfPages; ++$i) : ?>
+            <?php for($i=1; $i<=$this->numberOfPages; ++$i) : ?>
               <option value="<?php echo $i; ?>"<?php if ($i == $this->currentPageNumber) echo " selected"; ?>><?php echo $i; ?></option>
             <?php endfor; ?>
           </SELECT>
         </form>
     </td>
+    <td><?php echo $this->numberOfQuestions . " question(s) match your search"; ?> </td>
   </tr>
 </table>
   </br>

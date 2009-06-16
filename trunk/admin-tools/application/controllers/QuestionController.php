@@ -139,7 +139,7 @@ class QuestionController extends Zend_Controller_Action {
                                                'keywords'=>array(),
                                                'is_valid'=>array('0','1'),
                                                'is_animated'=>array('0','1'));
-                if ($request->isPost()) {
+                if ($request && $request->isPost()) {
                         $language_array = $request->getPost('languages');
                         $source_array = $request->getPost('sources');
                         $title_array = $request->getPost('titles');
@@ -216,9 +216,30 @@ class QuestionController extends Zend_Controller_Action {
                 $session->questionFilter = $where_clause;
         }
 
+        //Returns the number of rows satisfying the specified question filter.
+        private function countQuestions($questionFilter) {
+                $questionTable = new Question();
+                $questionQuery = $questionTable->select()
+                                 ->setIntegrityCheck(false)
+                                 ->from($questionTable,Array())
+                                 ->join('question_info','question.question_id=question_info.question_id',Array())
+                                 ->joinLeft('category','question.category_id=category.category_id',Array())
+                                 ->joinLeft('subject_info','category.subject_id=subject_info.subject_id && question_info.language_id=subject_info.language_id',Array())
+                                 ->joinLeft('category_info','question.category_id=category_info.category_id && question_info.language_id=category_info.language_id',Array())
+                                 ->joinLeft('source','question.source_id=source.source_id',Array())
+                                 ->joinLeft('title','question.title_id=title.title_id',Array())
+                                 ->joinLeft('answer_type_info','question.answer_type_id=answer_type_info.answer_type_id && question_info.language_id=answer_type_info.language_id',Array())
+                                 ->joinLeft('user','question_info.user_id=user.user_id',Array())
+                                 ->where($questionFilter)
+                                 ->columns('COUNT(1) as n');
+                return $questionTable->fetchRow($questionQuery)->n;
+        }
+
         //Sets the array: filteredQuestions by querying the database with the given filter.
         //The questions are sorted according to the $sortby value
-        private function setFilteredQuestions($questionFilter, $sortby) {
+        //Only $limit questions are retreived starting at index $offset (that's because it is
+        //unpractical to carry around to many questions in memory).
+        private function setFilteredQuestions($questionFilter, $sortby, $limit, $offset) {
                 $questionTable = new Question();
                 $questionQuery = $questionTable->select()
                                  ->setIntegrityCheck(false)
@@ -232,9 +253,11 @@ class QuestionController extends Zend_Controller_Action {
                                  ->joinLeft('answer_type_info','question.answer_type_id=answer_type_info.answer_type_id && question_info.language_id=answer_type_info.language_id',Array('answer_type_name'=>'name'))
                                  ->joinLeft('user','question_info.user_id=user.user_id',Array('username'))
                                  ->where($questionFilter)
-                                 ->order($sortby);
+                                 ->order($sortby)
+                                 ->limit($limit, $offset);
                 $session = new Zend_Session_Namespace('Question');
                 $session->filteredQuestions = $questionTable->fetchAll($questionQuery)->toArray();
+                $session->numberOfFilteredQuestions = $this->countQuestions($session->questionFilter);
         }
 
 
@@ -253,6 +276,14 @@ class QuestionController extends Zend_Controller_Action {
                 if (!isset($session->currentPageNumber))
                         $session->currentPageNumber = 1;
 
+                //Store the first page offset.  Because there are so many questions
+                //in the DB, we only retreive a few pages at the time.  This variable
+                //stores the index of the first page currently stored.  The actual
+                //number of page stored in memory at any time is controlled with the
+                //$limit variable below.
+                if (!isset($session->firstStoredPage))
+                        $session->firstStoredPage = 1;
+                
                 //We keep an array of allowable 'sort keys'.  If any other sort key
                 //is received by the get method, it will be ignored.
                 if (!isset($session->sortableKeys))
@@ -262,7 +293,16 @@ class QuestionController extends Zend_Controller_Action {
                 if (!isset($session->sortby))
                         $session->sortby = Array('key'=>'question_id','dir'=>'asc');
 
-                
+
+                //Set the number of questions to display on screen
+                $questionsPerPage=10;
+                //Set the number of pages of questions to retreive during each query.  We want a number that is large
+                //enough so that DB queries don't happen too often but small enough so that it is not a drag to carry
+                //into memory.  A rule of thumb is to never carry more then 200 questions, so for a page size of 10
+                //we should carry between 1 and 20 pages of questions.
+                $limit = 5*$questionsPerPage;
+
+
                 $request = $this->getRequest();
                 //When a sorting request is received, we check if it is valid
                 //and re-fetch the questions with the new sorting order;
@@ -282,22 +322,30 @@ class QuestionController extends Zend_Controller_Action {
                                         $currentSort['dir'] = 'asc';
                                 }
                                 $session->sortby = $currentSort;
-                                $this->setFilteredQuestions($session->questionFilter, $session->sortby['key'] . " " .  $session->sortby['dir']);
+                                $session->firstStoredPage = 1;
+                                $this->setFilteredQuestions($session->questionFilter, $session->sortby['key'] . " " . $session->sortby['dir'], $limit, 0);
                         }
                 }
 
+                //This happens when the "GO!" button is pressed in the question filter box. 
                 if ($request->isPost() && $request->getPost('question_filter') != null) {
+                        $session->firstStoredPage = 1;
                         $this->setSelectedFilterOptions($request);
-                        $this->setFilteredQuestions($session->questionFilter, $session->sortby['key'] . " " .  $session->sortby['dir']);
+                        $this->setFilteredQuestions($session->questionFilter, $session->sortby['key'] . " " .  $session->sortby['dir'], $limit, 0);
+                }
+                //This happens when the "RESET" button is pressed in the question filter box. 
+                if ($request->isPost() && $request->getPost('filter_reset') != null) {
+                        $this->setSelectedFilterOptions($no_filter); //the variable $no_filter does not exist anywhere but we must pass something...
                 }
                 
                 //If the questions list has to be updated, get the new list and save them into the session namespace
-                if (!isset($session->filteredQuestions))
-                        $this->setFilteredQuestions($session->questionFilter, $session->sortby['key'] . " " .  $session->sortby['dir']);
+                //This happens when add/delete/edit/translate/disable actions happen.
+                if (!isset($session->filteredQuestions)) {
+                        $this->setFilteredQuestions($session->questionFilter, $session->sortby['key'] . " " .  $session->sortby['dir'], $limit, ($session->firstStoredPage-1)*$questionsPerPage);
+                }
 
-                $questionsPerPage=10;
+                $numberOfPages=ceil($session->numberOfFilteredQuestions/$questionsPerPage);
                 if ($request->isPost()) {
-                        $numberOfPages=ceil(count($session->filteredQuestions)/$questionsPerPage);
                         if ($request->getPost('prev') != null)
                                 $session->currentPageNumber = max(1,$session->currentPageNumber-1);
                         else if ($request->getPost('next') != null)
@@ -311,9 +359,29 @@ class QuestionController extends Zend_Controller_Action {
                         else
                                 $session->currentPageNumber = 1;
                 }
-                $this->view->currentPageNumber = $session->currentPageNumber;
-                $this->view->questionsPerPage = $questionsPerPage;
 
+                //This is executed when we navigate 'past' the current set of stored questions.  When it happens
+                //we need to issue a query to get a new buffer of stored questions.
+                if ($session->currentPageNumber < $session->firstStoredPage || $session->currentPageNumber > $session->firstStoredPage+$limit/$questionsPerPage-1) {
+                        $session->firstStoredPage = $session->currentPageNumber;
+                        $this->setFilteredQuestions($session->questionFilter, $session->sortby['key'] . " " .  $session->sortby['dir'], $limit, ($session->firstStoredPage-1)*$questionsPerPage);
+                }
+
+                //We pass the number of pages because it is needed to display to combo box that allows 'jumping' to a specified page.
+                //We pass the current page so that the combo box knows what the current page is.
+                //We pass the number of questions so that we can display that number as information to the user.
+                $this->view->numberOfPages = $numberOfPages; 
+                $this->view->currentPageNumber = $session->currentPageNumber;
+                $this->view->numberOfQuestions = $session->numberOfFilteredQuestions;
+                
+                //We don't want to display all 'stored' questions so here we specify the RELATIVE index of the questions to be
+                //displayed with respect to the buffered question array.  ONLY the questions in [First,last) will be
+                //displayed.  Another solution would be to create a sub-array consisting of only the questions to be displayed,
+                //perhaps that solution would be more elegant but this will do.
+                $this->view->indexOfFirstQuestion = ($session->currentPageNumber-$session->firstStoredPage)*$questionsPerPage;
+                $this->view->indexOfLastQuestion = min($session->currentPageNumber*$questionsPerPage, $session->numberOfFilteredQuestions)-($session->firstStoredPage-1)*$questionsPerPage;
+
+                //Obviously we must pass the actual questions and current filter so that everything can be displayed properly.
                 $this->view->questions = $session->filteredQuestions;
                 $this->view->selectedFilterOptions = $session->selectedFilterOptions;
         }
