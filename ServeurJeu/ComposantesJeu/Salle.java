@@ -334,7 +334,7 @@ public class Salle
 
 		    // Entrer dans la table on ne fait rien avec la liste des 
 		    // personnages
-		    objTable.entrerTable(joueur, false, new TreeMap<String,Integer>());
+		    objTable.entrerTable(joueur, false, new TreeMap<String,Integer>(), new TreeMap<String, Integer>());
 		    
 		    // Garder le numéro de table pour le retourner
 		    intNoTable = objTable.obtenirNoTable();
@@ -369,7 +369,7 @@ public class Salle
 	 * 				courante qui a des chances d'être détruite si le joueur 
 	 * 				qui veut quitter est le dernier de la table.
 	 */
-	public String entrerTable(JoueurHumain joueur, int noTable, boolean doitGenererNoCommandeRetour, TreeMap<String, Integer> listePersonnageJoueurs)
+	public String entrerTable(JoueurHumain joueur, int noTable, boolean doitGenererNoCommandeRetour, TreeMap<String, Integer> listePersonnageJoueurs, TreeMap<String, Integer> listeRoleJoueurs)
 	{
 	    // Déclaration d'une variable qui va contenir le résultat à retourner
 	    // à la fonction appelante, soit les valeurs de l'énumération 
@@ -410,7 +410,7 @@ public class Salle
 			else
 			{
 				// Appeler la méthode permettant d'entrer dans la table
-				((Table) lstTables.get(new Integer(noTable))).entrerTable(joueur, doitGenererNoCommandeRetour, listePersonnageJoueurs);
+				((Table) lstTables.get(new Integer(noTable))).entrerTable(joueur, doitGenererNoCommandeRetour, listePersonnageJoueurs, listeRoleJoueurs);
 				
 				// Il n'y a eu aucun problème pour entrer dans la table
 				strResultatEntreeTable = ResultatEntreeTable.Succes;
