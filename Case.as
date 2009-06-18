@@ -374,7 +374,7 @@ class Case
 	function ajouterPersonnage(p:Personnage)
 	{
 		
-		if(!_level0.loader.contentHolder.objGestionnaireEvenements.controlForMaster( p.obtenirNom()))
+		if(p.getRole() == 1)
 		{ 
 		   this.listeDesPersonnages.push(p);
 		}
@@ -491,10 +491,10 @@ class Case
 			this.listeDesPersonnages[i].definirPosition(pt, l, c);
 			this.listeDesPersonnages[i].definirProchainePosition(pt2,"rien");  
 			
-			if(!(_level0.loader.contentHolder.objGestionnaireEvenements.controlForMaster( this.listeDesPersonnages[i].obtenirNom()))) 
+			if( this.listeDesPersonnages[i].getRole() == 1) 
 			   this.listeDesPersonnages[i].afficher();
 				   
-			if( _level0.loader.contentHolder.objGestionnaireEvenements.controlForMaster( this.listeDesPersonnages[i].obtenirNom()))
+			if( this.listeDesPersonnages[i].getRole == 2)
 			   this.listeDesPersonnages[i].cachePersonnage();
 		}
 	}
