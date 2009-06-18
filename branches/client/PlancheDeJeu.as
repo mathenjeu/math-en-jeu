@@ -99,11 +99,11 @@ class PlancheDeJeu
             this.tableauDesCases.push(new Array());
         }
         definirMat(tab, null);
-        var idDessin:Number=((num-10000)-(num-10000)%100)/100;
-		var idPers:Number=num-10000-idDessin*100;
+        var idDessin:Number =((num - 10000)-(num - 10000) % 100)/100;
+		var idPers:Number = num - 10000 - idDessin * 100;
         monPersonnage = idPers;//num;
         perso = null;
-        gestionnaireInterface= p;
+        gestionnaireInterface = p;
     }
 	
 	
@@ -166,7 +166,7 @@ class PlancheDeJeu
         var y:Number;
         var temp:Number;
         // ici on veut juste determiner la hauteur et la largeur des cases  //////////////////////////
-        clipTest= _level0.loader.contentHolder.referenceLayer.attachMovie("case0", "case", 0);
+        clipTest = _level0.loader.contentHolder.referenceLayer.attachMovie("case0", "case", 0);
         clipTest._x = -100;
         clipTest._y = -100;
         largeurDeCase = clipTest._width;
@@ -210,7 +210,7 @@ class PlancheDeJeu
     {
         var i:Number;
         var j:Number;
-        // on initie les tableaux /////////////////////////
+        // on initie les tableaux 
         for(i=0;i<tab.length;i++)
         {
             for(j=0;j<tab[0].length;j++)
@@ -465,11 +465,11 @@ class PlancheDeJeu
     }
 
     
-    function ajouterPersonnage(nom:String, ll:Number,cc:Number,num:Number, idClip:Number)
+    function ajouterPersonnage(nom:String, ll:Number,cc:Number,num:Number, idClip:Number, userRole:Number)
     {
         var p:Personnage;
         trace("ajouterPersonnage:"+nom+" niveau:"+(5*tableauDesCases.length*tableauDesCases[0].length+2*num)+" idPers:"+num+" idDessin:"+idClip);
-        p = new Personnage(nom, 5*tableauDesCases.length*tableauDesCases[0].length+2*num,"Personnage"+idClip,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y);
+        p = new Personnage(nom, userRole, 5*tableauDesCases.length*tableauDesCases[0].length+2*num,"Personnage"+idClip,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y );
         p.afficher();
      	//   p.zoomer(zoom*10);
         tableauDesCases[ll][cc].ajouterPersonnage(p);
@@ -497,8 +497,8 @@ class PlancheDeJeu
         var i:Number;
         var j:Number;
 		
-		// if different type of game we need different pozitions
-        if((_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu=="Tournament") )
+		// for different types of game we need different pozitions
+        if((_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") )
 		{
 		    diffX = 180 - this.tableauDesCases[l][c].obtenirClipCase()._x;
             diffY = 250 - this.tableauDesCases[l][c].obtenirClipCase()._y;
@@ -635,7 +635,7 @@ class PlancheDeJeu
 	 if(tableauDesCases[p.obtenirL()][p.obtenirC()].obtenirType() > 41000)
         isInWinTheGame = false;
 	
-	 if(!(_level0.loader.contentHolder.objGestionnaireEvenements.controlForMaster(p.obtenirNom())) && isInWinTheGame)
+	 if( !(p.getRole() == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") && isInWinTheGame)
 	 { 
 		trace("Debut afficherCasesPossibles");
 		
