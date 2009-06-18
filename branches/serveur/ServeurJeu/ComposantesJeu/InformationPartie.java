@@ -994,8 +994,8 @@ public class InformationPartie
 					 
 					 if(isWinTheGame && boolWasOnFinish )
 					 {
-						 intNouveauPointage += ((JoueurHumain)objJoueur).obtenirPartieCourante().obtenirTable().obtenirTempsRestant()/2;
-						 System.out.println("bonus : " + ((JoueurHumain)objJoueur).obtenirPartieCourante().obtenirTable().obtenirTempsRestant());
+						 intNouveauPointage += ((JoueurHumain)objJoueur).obtenirPartieCourante().obtenirTable().obtenirTempsRestant();
+						
 						 ((JoueurHumain)objJoueur).obtenirPartieCourante().isPlayerNotArrivedOnce = false;
 					 }
 				 }
