@@ -74,10 +74,13 @@ public class EvenementPartieTerminee  extends Evenement
 				JoueurHumain joueur = (JoueurHumain)it.next();
 				String nomUtilisateur = joueur.obtenirNomUtilisateur();
 				int pointage = joueur.obtenirPartieCourante().obtenirPointage();
+				int role = joueur.getRole();
 				
 				Element objNoeudJoueur = objDocumentXML.createElement("joueur");
 				objNoeudJoueur.setAttribute("utilisateur", nomUtilisateur);
 				objNoeudJoueur.setAttribute("pointage", new Integer( pointage).toString());
+				objNoeudJoueur.setAttribute("role", new Integer( role).toString());
+				
 				objNoeudParametre.appendChild( objNoeudJoueur );
 
 				// Ajouter le noeud paramètre au noeud de commande
@@ -91,10 +94,12 @@ public class EvenementPartieTerminee  extends Evenement
                                     JoueurVirtuel joueur = (JoueurVirtuel) lstJoueursVirtuels.get(i);
                                     String nomUtilisateur = joueur.obtenirNom();
                                     int pointage = joueur.obtenirPointage();
+                                    int role = 1;
 
                                     Element objNoeudJoueur = objDocumentXML.createElement("joueur");
                                     objNoeudJoueur.setAttribute("utilisateur", nomUtilisateur);
                                     objNoeudJoueur.setAttribute("pointage", new Integer( pointage).toString());
+                                    objNoeudJoueur.setAttribute("role", new Integer( role).toString());
 				    objNoeudParametre.appendChild(objNoeudJoueur);
 
 				    // Ajouter le noeud paramètre au noeud de commande
