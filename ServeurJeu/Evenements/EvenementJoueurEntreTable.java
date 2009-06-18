@@ -21,17 +21,21 @@ public class EvenementJoueurEntreTable extends Evenement
 	// joueur qui est entré dans la table
     private String strNomUtilisateur;
     
+    // variable for user role
+    private int userRole;
+    
     /**
      * Constructeur de la classe EvenementJoueurEntreTable qui permet 
      * d'initialiser le numéro de la table et le nom d'utilisateur du 
      * joueur qui vient d'entrer dans la table. 
      */
-    public EvenementJoueurEntreTable(int noTable, String nomUtilisateur)
+    public EvenementJoueurEntreTable(int noTable, String nomUtilisateur, int role)
     {
         // Définir le numéro de la table et le nom d'utilisateur du joueur 
     	// qui est entré
     	intNoTable = noTable;
         strNomUtilisateur = nomUtilisateur;
+        userRole = role;
     }
 	
 	/**
@@ -59,11 +63,13 @@ public class EvenementJoueurEntreTable extends Evenement
 			// Créer les noeuds de paramètre
 			Element objNoeudParametreNoTable = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreNomUtilisateur = objDocumentXML.createElement("parametre");
+			Element objNoeudParametreRoleUtilisateur = objDocumentXML.createElement("parametre");
 			
 			// Créer des noeuds texte contenant le numéro de la table et le 
 			// nom d'utilisateur des noeuds paramètre
 			Text objNoeudTexteNoTable = objDocumentXML.createTextNode(Integer.toString(intNoTable));
 			Text objNoeudTexteNomUtilisateur = objDocumentXML.createTextNode(strNomUtilisateur);
+			Text objNoeudTexteRoleUtilisateur = objDocumentXML.createTextNode(Integer.toString(userRole));
 			
 			// Définir les attributs du noeud de commande
 			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
@@ -74,14 +80,17 @@ public class EvenementJoueurEntreTable extends Evenement
 			// du paramètre
 			objNoeudParametreNoTable.setAttribute("type", "NoTable");
 			objNoeudParametreNomUtilisateur.setAttribute("type", "NomUtilisateur");
+			objNoeudParametreRoleUtilisateur.setAttribute("type", "userRole");
 			
 			// Ajouter les noeuds texte aux noeuds des paramètres
 			objNoeudParametreNoTable.appendChild(objNoeudTexteNoTable);
 			objNoeudParametreNomUtilisateur.appendChild(objNoeudTexteNomUtilisateur);
+			objNoeudParametreRoleUtilisateur.appendChild(objNoeudTexteRoleUtilisateur);
 			
 			// Ajouter les noeuds paramètres au noeud de commande
 			objNoeudCommande.appendChild(objNoeudParametreNoTable);
 			objNoeudCommande.appendChild(objNoeudParametreNomUtilisateur);
+			objNoeudCommande.appendChild(objNoeudParametreRoleUtilisateur);
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
 			objDocumentXML.appendChild(objNoeudCommande);
