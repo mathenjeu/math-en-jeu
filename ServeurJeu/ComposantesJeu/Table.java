@@ -159,9 +159,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Créer une nouvelle liste de joueurs
 		lstJoueurs = new TreeMap<String, JoueurHumain>();
 		lstJoueursEnAttente = new TreeMap<String, JoueurHumain>();
-		String nomUtilisateurCreateur = joueur.obtenirNomUtilisateur();
+		//String nomUtilisateurCreateur = joueur.obtenirNomUtilisateur();
 		//lstJoueursEnAttente.put(joueur.obtenirNomUtilisateur(), joueur);
-		strNomUtilisateurCreateur = nomUtilisateurCreateur;
+		strNomUtilisateurCreateur = joueur.obtenirNomUtilisateur();//nomUtilisateurCreateur;
 		// Au départ, aucune partie ne se joue sur la table
 		bolEstCommencee = false;
 		bolEstArretee = true;
@@ -245,14 +245,14 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  qu'une partie est en cours (car toutes les fonctions 
 	 * 				  permettant de changer ça sont synchronisées).
 	 */
-	public void entrerTable(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, TreeMap<String, Integer> listePersonnageJoueurs)  throws NullPointerException
+	public void entrerTable(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, TreeMap<String, Integer> listePersonnageJoueurs, TreeMap<String, Integer> listeRoleJoueurs)  throws NullPointerException
 	{
 	    // Empçcher d'autres thread de toucher ˆ la liste des joueurs de 
 	    // cette table pendant l'ajout du nouveau joueur dans cette table
 	    synchronized (lstJoueurs)
 	    {
 	    	// Remplir la liste des personnages choisis
-	    	remplirListePersonnageJoueurs(listePersonnageJoueurs);
+	    	remplirListePersonnageJoueurs(listePersonnageJoueurs, listeRoleJoueurs);
 	    	
 			// Ajouter ce nouveau joueur dans la liste des joueurs de cette table
 			lstJoueurs.put(joueur.obtenirNomUtilisateur(), joueur);
@@ -281,7 +281,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				// Cette fonction va passer les joueurs et créer un 
 				// InformationDestination pour chacun et ajouter l'événement 
 				// dans la file de gestion d'événements
-				preparerEvenementJoueurEntreTable(joueur.obtenirNomUtilisateur());		    	
+				preparerEvenementJoueurEntreTable(joueur.obtenirNomUtilisateur(), joueur.getRole());		    	
 		    }
 	    }
 	}
@@ -689,7 +689,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     			// selon cette liste
     			JoueurHumain objJoueur = (JoueurHumain) (((Map.Entry<String,JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
     			
-    			if(controlUserName(objJoueur.obtenirNomUtilisateur()))
+    			if(objJoueur.getRole() == 2)
     			{
     				// Définir la position du joueur master
         			objJoueur.obtenirPartieCourante().definirPositionJoueur(objtPositionsJoueurs[objtPositionsJoueurs.length - 1]);
@@ -766,7 +766,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					// dans la file de gestion d'événements
 					JoueurVirtuel objJoueurVirtuel = (JoueurVirtuel) lstJoueursVirtuels.get(i);
 					
-					preparerEvenementJoueurEntreTable(objJoueurVirtuel.obtenirNom());
+					preparerEvenementJoueurEntreTable(objJoueurVirtuel.obtenirNom(), 1);
 					preparerEvenementJoueurDemarrePartie(objJoueurVirtuel.obtenirNom(), objJoueurVirtuel.obtenirIdPersonnage());		    	
 			    }
 		    }
@@ -1056,7 +1056,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 										   pour chaque joueur
 	 * @throws NullPointerException : Si la liste des personnages est à nulle
 	 */
-	private void remplirListePersonnageJoueurs(TreeMap<String, Integer> listePersonnageJoueurs) throws NullPointerException
+	private void remplirListePersonnageJoueurs(TreeMap<String, Integer> listePersonnageJoueurs, TreeMap<String, Integer> listeRoleJoueurs) throws NullPointerException
 	{
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
@@ -1074,6 +1074,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			// Ajouter le joueur dans la liste des personnages (il se peut que 
 			// le joueur n'aie pas encore de personnages, alors le id est 0)
 			listePersonnageJoueurs.put(objJoueur.obtenirNomUtilisateur(), new Integer(objJoueur.obtenirPartieCourante().obtenirIdPersonnage()));
+			
+			listeRoleJoueurs.put(objJoueur.obtenirNomUtilisateur(), objJoueur.getRole());
 		}
 		
 		// Déclaration d'un compteur
@@ -1085,6 +1087,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		{
 			// On ajoute un joueur inconnu ayant le personnage 0
 			listePersonnageJoueurs.put("Inconnu" + Integer.toString(i), new Integer(0));
+			listeRoleJoueurs.put("Inconnu" + Integer.toString(i), new Integer(0));
 			
 			i++;
 		}
@@ -1105,11 +1108,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * Synchronisme : Cette fonction n'est pas synchronisée ici, mais elle l'est
 	 * 				  par l'appelant (entrerTable).
 	 */
-	private void preparerEvenementJoueurEntreTable(String nomUtilisateur)
+	private void preparerEvenementJoueurEntreTable(String nomUtilisateur, int role)
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs qu'un joueur est entré dans la table
-	    EvenementJoueurEntreTable joueurEntreTable = new EvenementJoueurEntreTable(intNoTable, nomUtilisateur);
+	    EvenementJoueurEntreTable joueurEntreTable = new EvenementJoueurEntreTable(intNoTable, nomUtilisateur, role);
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la salle (chaque élément est un Map.Entry)
@@ -1905,7 +1908,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			return objSalle;
 		}
 		
-		private Boolean controlUserName(String userName)
+/*		private Boolean controlForRole(int userName)
 		{
 			// Bloc of code to treat the username
 	        int firstDel = userName.indexOf("-");                 // find first delimiter
@@ -1919,5 +1922,5 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			
 			return master.equalsIgnoreCase("master");
 			
-		}
+		}*/
 }// end class    
