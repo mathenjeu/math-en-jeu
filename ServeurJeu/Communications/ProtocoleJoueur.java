@@ -1308,11 +1308,13 @@ public class ProtocoleJoueur implements Runnable
 					
 						// Déclaration d'une nouvelle liste de personnages
 						TreeMap<String, Integer> lstPersonnageJoueurs = new TreeMap<String, Integer>();
+						// Déclaration d'une nouvelle liste de role des joueurs
+						TreeMap<String, Integer> lstRoleJoueurs = new TreeMap<String, Integer>();
 					
 						// Appeler la méthode permettant d'entrer dans la
 						// table et garder son résultat dans une variable
 						String strResultatEntreeTable = objJoueurHumain.obtenirSalleCourante().entrerTable(objJoueurHumain, 
-																						intNoTable, true, lstPersonnageJoueurs);
+																						intNoTable, true, lstPersonnageJoueurs, lstRoleJoueurs);
 
 						// Si le résultat de l'entrée dans la table est true alors le
 						// joueur est maintenant dans la table
@@ -1335,9 +1337,11 @@ public class ProtocoleJoueur implements Runnable
 							// Créer un ensemble contenant tous les tuples de la liste 
 							// lstPersonnageJoueurs (chaque élément est un Map.Entry)
 							Set<Map.Entry<String,Integer>> lstEnsemblePersonnageJoueurs = lstPersonnageJoueurs.entrySet();
+							Set<Map.Entry<String,Integer>> lstEnsembleRoleJoueurs = lstRoleJoueurs.entrySet();
 
 							// Obtenir un itérateur pour l'ensemble contenant les personnages
 							Iterator<Entry<String, Integer>> objIterateurListePersonnageJoueurs = lstEnsemblePersonnageJoueurs.iterator();
+							Iterator<Entry<String, Integer>> objIterateurListeRoleJoueurs = lstEnsembleRoleJoueurs.iterator();
 
 							
 							// Passer tous les personnages et créer un noeud pour 
@@ -1346,6 +1350,7 @@ public class ProtocoleJoueur implements Runnable
 							{
 								// Garder une référence vers l'entrée courante
 								Map.Entry<String,Integer> objEntreeListePersonnageJoueurs = (Map.Entry<String,Integer>)objIterateurListePersonnageJoueurs.next();
+								Map.Entry<String,Integer> objEntreeListeRoleJoueurs = (Map.Entry<String,Integer>)objIterateurListeRoleJoueurs.next();
 								
 								// Créer le noeud pour le joueur courant
 								Element objNoeudPersonnage = objDocumentXMLSortie.createElement("personnage");
@@ -1353,6 +1358,7 @@ public class ProtocoleJoueur implements Runnable
 								// Définir le nom d'utilisateur du joueur ainsi que le id du personnage
 								objNoeudPersonnage.setAttribute("nom", (String) objEntreeListePersonnageJoueurs.getKey());
 								objNoeudPersonnage.setAttribute("idPersonnage", ((Integer) objEntreeListePersonnageJoueurs.getValue()).toString());
+								objNoeudPersonnage.setAttribute("role", ((Integer) objEntreeListeRoleJoueurs.getValue()).toString());
 								
 								// Ajouter le noeud du personnage au noeud de paramètre
 								objNoeudParametreListePersonnageJoueurs.appendChild(objNoeudPersonnage);
