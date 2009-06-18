@@ -381,7 +381,7 @@ class GestionnaireCommunication
                     }
                 }
 				else
-					trace("find me in gesComm sucker! : "+objNoeudCommande.attributes.nom);
+					trace("find me in gesComm ! : "+objNoeudCommande.attributes.nom);
             }
         }
     }
@@ -907,26 +907,26 @@ class GestionnaireCommunication
 				    		for(var j:Number =0; j < lstChildNodesStatistique.length; j++)
 				    		{
 					    		
-					    		objEvenement.statistiqueJoueur.push({nomUtilisateur:lstChildNodesStatistique[j].attributes.utilisateur, pointage:lstChildNodesStatistique[j].attributes.pointage});	
+					    		objEvenement.statistiqueJoueur.push({nomUtilisateur:lstChildNodesStatistique[j].attributes.utilisateur, userRole:lstChildNodesStatistique[j].attributes.role, pointage:lstChildNodesStatistique[j].attributes.pointage});	
 				    		}
 							
-							if(nomGagner!="") //noeudEvenement.firstChild.attributes.nom != "")
+					/*		if(nomGagner != "") //noeudEvenement.firstChild.attributes.nom != "")
 							{
 								for(var j:Number =0; j < objEvenement.statistiqueJoueur.length; j++)
 								{
 									if(objEvenement.statistiqueJoueur[j].nomUtilisateur == nomGagner)//noeudEvenement.firstChild.attributes.nom)
 									{
-										/*if(_level0.loader.contentHolder.langue == "Francais")
+										if(_level0.loader.contentHolder.langue == "Francais")
 										{
 											objEvenement.statistiqueJoueur[j].pointage = "Gagnant";
 										}
 										else //en anglais
 										{
 											objEvenement.statistiqueJoueur[j].pointage = "Winner";
-										}*/
+										}
 									}
 								}
-							}
+							}*/
 									
 					    break;
 							
@@ -3102,7 +3102,8 @@ class GestionnaireCommunication
             {
                 // Ajouter l'objet joueur dans le tableau
                 objEvenement.listePersonnageJoueurs.push({nom:lstChildNodes[i].attributes.nom,
-                                                          idPersonnage:lstChildNodes[i].attributes.idPersonnage});
+                                                          idPersonnage:lstChildNodes[i].attributes.idPersonnage,
+														  userRoles:lstChildNodes[i].attributes.role});
             }
         }
         // Si le retour de la fonction est une reponse positive et non une
