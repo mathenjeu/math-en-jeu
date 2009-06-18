@@ -29,6 +29,7 @@ import flash.filters.*;
 
 class Personnage
 {
+	private var role:Number; // role of user if 1 - simple user , if 2 - master(admin)
 	private var image:MovieClip;
 	private var position:Point;
 	private var numero:Number;           // ????
@@ -47,6 +48,16 @@ class Personnage
 	private var vieuxID:Number;
 	private var minigameLoade:Boolean;
 	private var SCALE_BOX_OBJET:Number = 75;
+	
+	function setRole(n:Number)
+	{
+		role = n;
+	}
+	
+	function getRole():Number
+	{
+		return role;
+	}
    
 	////////////////////////////////////////////////////////////
 	function obtenirNom():String
@@ -538,7 +549,7 @@ class Personnage
 	//////////////////////////////////////////////////////////////////////////////////////
 	//	CONSTRUCTEUR
 	//////////////////////////////////////////////////////////////////////////////////////
-	function Personnage(nom:String, niveau:Number, nomClip:String, ll:Number, cc:Number, xx:Number, yy:Number, mag:Array)
+	function Personnage(nom:String, role:Number, niveau:Number, nomClip:String, ll:Number, cc:Number, xx:Number, yy:Number, mag:Array)
 	{
 		this.l = ll;
 		this.c = cc;
@@ -548,7 +559,7 @@ class Personnage
 		
 		
 		//trace("Personnage "+nom+" nomClip="+nomClip+"  niveau="+niveau);
-		if(!(_level0.loader.contentHolder.objGestionnaireEvenements.controlForMaster(nom))) 
+		if(!(role == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") ) 
 		   this.image = _level0.loader.contentHolder.referenceLayer.attachMovie(nomClip, "Personnage"+niveau, niveau);
 		
 		this.image.dText.nom = nom;
@@ -562,10 +573,8 @@ class Personnage
 		this.nom = nom;
 		this.listeSurMagasin = mag;
 		this.minigameLoade = false;
-	    
-		
-		
-		
+		this.role = role;
+	    	
 		}
 	
 	
