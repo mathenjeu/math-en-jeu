@@ -1153,6 +1153,9 @@ public class ProtocoleJoueur implements Runnable
 										// On ajoute un attribut temps qui va contenir le 
 										// temps des parties qui se déroulent sur cette table
 										objNoeudTable.setAttribute("temps", Integer.toString(objTable.obtenirTempsTotal()));
+										
+										// Add table name
+										objNoeudTable.setAttribute("tablName", objTable.getTableName());
 	
 										
 										// Créer un ensemble contenant tous les tuples de la liste 
