@@ -24,6 +24,7 @@
 			boutonRetour = "Back"
 			boutonContinuer = "Continue"
 			boutonQuitterX = "Quit the game.."
+			tableNameLabel = "Table name"
 	
 			explication = "The advanced mode allows for the more experienced player to select his level among the various mathematical categories of the game. If desired, he can personnalize his gaming experience by choosing only the subjects he is interested in."
 			
@@ -116,7 +117,7 @@
 			noTable = "Table number :"	
 			numSalle = "Table no."
 			temps = "Time :"
-			minutes = "minutes"
+			timeLabel = "Select the time"
 
 			choixPerso = "Choose your character."
 			nonDisponible = "Unavailable"
