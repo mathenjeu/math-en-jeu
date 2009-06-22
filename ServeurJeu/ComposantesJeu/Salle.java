@@ -290,7 +290,7 @@ public class Salle
 	 * 				joueurs de la salle et leur envoyer un événement. La
 	 * 				fonction entrerTable est synchronisée automatiquement.
 	 */
-	public int creerTable(JoueurHumain joueur, int tempsPartie, boolean doitGenererNoCommandeRetour)
+	public int creerTable(JoueurHumain joueur, int tempsPartie, boolean doitGenererNoCommandeRetour, String name)
 	{
 		// Déclaration d'une variable qui va contenir le numéro de la table
 		int intNoTable;
@@ -301,7 +301,7 @@ public class Salle
 	    {
 	    	
 	    	// Créer une nouvelle table en passant les paramètres appropriés
-	    	Table objTable = new Table( this, genererNoTable(), joueur, tempsPartie, objControleurJeu);
+	    	Table objTable = new Table( this, genererNoTable(), joueur, tempsPartie, objControleurJeu, name);
 	    		    	
 	    	objTable.creation();
 	    		    	
@@ -329,7 +329,7 @@ public class Salle
 				// Cette fonction va passer les joueurs et créer un 
 				// InformationDestination pour chacun et ajouter l'événement 
 				// dans la file de gestion d'événements
-				preparerEvenementNouvelleTable(objTable.obtenirNoTable(), tempsPartie, joueur.obtenirNomUtilisateur());
+				preparerEvenementNouvelleTable(objTable.obtenirNoTable(), tempsPartie, joueur.obtenirNomUtilisateur(), objTable.getTableName());
 		    }
 
 		    // Entrer dans la table on ne fait rien avec la liste des 
@@ -354,7 +354,8 @@ public class Salle
 	 * 								l'appel de fonction
 	 * @param TreeMap listePersonnageJoueurs : La liste des joueurs dont la clé 
 	 * 								est le nom d'utilisateur du joueur et le contenu 
-	 * 								est le Id du personnage choisi 
+	 * 								est le Id du joueur 
+	 * 
 	 * @return String : Succes : Le joueur est maintenant dans la table
 	 * 		   			TableNonExistante : Le joueur a tenté d'entrer dans une
 	 * 										table non existante
@@ -609,11 +610,11 @@ public class Salle
 	 * @synchronism Cette fonction n'est pas synchronisée ici, mais elle l'est
 	 * 				par l'appelant (creerTable).
 	 */
-	private void preparerEvenementNouvelleTable(int noTable, int tempsPartie, String nomUtilisateur)
+	private void preparerEvenementNouvelleTable(int noTable, int tempsPartie, String nomUtilisateur, String tablName)
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs qu'une table a été créée
-	    EvenementNouvelleTable nouvelleTable = new EvenementNouvelleTable(noTable, tempsPartie);
+	    EvenementNouvelleTable nouvelleTable = new EvenementNouvelleTable(noTable, tempsPartie, tablName);
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// lstJoueurs (chaque élément est un Map.Entry)
