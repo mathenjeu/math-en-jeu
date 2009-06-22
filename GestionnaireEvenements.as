@@ -36,7 +36,7 @@ class GestionnaireEvenements
     private var motDePasse:String;  // notre mot de passe pour pouvoir jouer
     private var nomSalle:String;  //  nom de la salle dans laquelle on est
     private var numeroTable:Number;   //   numero de la table dans laquelle on est
-	private var nameTable:String;     // name of the created table
+	private var tablName:String;     // name of the created table
     private var tempsPartie:Number;   //  temps que va durer la partie, en minutes
     private var idPersonnage:Number;   //  
     private var motDePasseSalle:String;   // le mot de passe de la salle dans laquelle on est
@@ -232,7 +232,7 @@ class GestionnaireEvenements
     function entrerTable(nTable:Number)
     {
         trace("*********************************************");
-        trace("debut de entrerTable     :"+nTable);
+        trace("debut de entrerTable     :" + nTable);
         this.numeroTable = nTable;
         this.objGestionnaireCommunication.entrerTable(Delegate.create(this, this.retourEntrerTable), Delegate.create(this, this.evenementJoueurDemarrePartie), this.numeroTable);
         trace("fin de entrerTable");
@@ -272,11 +272,11 @@ class GestionnaireEvenements
     }
 	
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    function creerTable(temps:Number)
+    function creerTable(temps:Number, nameTable:String)
     {
         trace("*********************************************");
         trace("debut de creerTable     " + temps);
-        this.objGestionnaireCommunication.creerTable(Delegate.create(this, this.retourCreerTable), Delegate.create(this, this.evenementJoueurDemarrePartie), temps);
+        this.objGestionnaireCommunication.creerTable(Delegate.create(this, this.retourCreerTable), Delegate.create(this, this.evenementJoueurDemarrePartie), temps, nameTable);
         trace("fin de creerTable");
         trace("*********************************************\n");
     }
@@ -474,9 +474,10 @@ class GestionnaireEvenements
 				//trace("objEvenement");
 				trace("Q musique " + objetEvenement.listeChansons.length);
 				
-				for(var k:Number = 0;  k< objetEvenement.listeChansons.length; k++)
+				for(var k:Number = 0;  k < objetEvenement.listeChansons.length; k++)
 				{
 					this.listeChansons.push(objetEvenement.listeChansons[k]);
+					trace(objetEvenement.listeChansons[k]);
 				}
 				
 				this.userRole = objetEvenement.userRoleMaster; 
@@ -817,18 +818,19 @@ class GestionnaireEvenements
     public function retourCreerTable(objetEvenement:Object)
     {
         //   objetEvenement.resultat = "NoTable", CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte, JoueurPasDansSalle,  JoueurDansTable
-        // parametre : noTable
+        // parametre : noTable, name
         trace("*********************************************");
-        trace("debut de retourCreerTable   " + objetEvenement.resultat + "    " + objetEvenement.noTable);
+        trace("debut de retourCreerTable   " + objetEvenement.resultat + "    " + objetEvenement.noTable + "  " + objetEvenement.nameTable);
         var movClip:MovieClip;
 
         switch(objetEvenement.resultat)
         {
             case "NoTable":
                 this.numeroTable = objetEvenement.noTable;
+				this.tablName =  objetEvenement.nameTable;
                 _level0.loader.contentHolder.gotoAndPlay(3);
                
-                _level0.loader.contentHolder.nomJ4 = this.nomUtilisateur;// 4 joueurs 
+                _level0.loader.contentHolder.nomJ4 = this.nomUtilisateur;
               
                 var j:Number=0;
 				for(var i:Number = 0; i < numeroJoueursDansSalle-1; i++)
@@ -907,21 +909,23 @@ class GestionnaireEvenements
                     if(this.listeDesTables[i].no == numeroTable)
                     {
                         tempsPartie = this.listeDesTables[i].temps;
+						tablName = this.listeDesTables[i].tablName;
                         break;
                     }
                 }
 				
                 _level0.loader.contentHolder.gotoAndPlay(3);
-                for(var i:Number=0; i<numeroJoueursDansSalle-1; i++)
+				/*
+                for(var i:Number=0; i < numeroJoueursDansSalle-1; i++)
                 {
 	                //_level0.loader.contentHolder.noms[i] = objetEvenement.listePersonnageJoueurs[i].nom;;
 	                trace("objetEvenement"+i+" "+objetEvenement.listePersonnageJoueurs[i].nom);
                 }
-                
+                */
                 _level0.loader.contentHolder.nomJ4 = nomUtilisateur;								
                 
                 //trace("---------------- Remplir listeDesPersonnages num:"+objetEvenement.listePersonnageJoueurs.length);
-                var j:Number=0;
+                var j:Number = 0;
 				for(var i:Number = 0; i < numeroJoueursDansSalle-1; i++)
                 {
 	                if(i>3) {j=1;}
@@ -935,20 +939,20 @@ class GestionnaireEvenements
 		    
                     //trace(i+" "+this.listeDesPersonnages[i].nom+" "+tmpNom+", de serveur:"+objetEvenement.listePersonnageJoueurs[i].nom);
                     
-                    var nextID:Number=0;
-                    for(var k=0;k<objetEvenement.listePersonnageJoueurs.length;k++)
-                    	if(objetEvenement.listePersonnageJoueurs[k].nom.substr(0,7)!="Inconnu") nextID++;
+                    var nextID:Number = 0;
+                    for(var k=0; k < objetEvenement.listePersonnageJoueurs.length; k++)
+                    	if(objetEvenement.listePersonnageJoueurs[k].nom.substr(0,7) != "Inconnu") nextID++;
                     
-                    var idDessin:Number=((this.listeDesPersonnages[i].id-10000)-(this.listeDesPersonnages[i].id-10000)%100)/100;
-					var idPers:Number=this.listeDesPersonnages[i].id-10000-idDessin*100;
+                    var idDessin:Number = ((this.listeDesPersonnages[i].id-10000)-(this.listeDesPersonnages[i].id-10000)%100)/100;
+					var idPers:Number = this.listeDesPersonnages[i].id-10000-idDessin*100;
 					
-					if(this.listeDesPersonnages[i].id == 0) idDessin=0;
+					if(this.listeDesPersonnages[i].id == 0) idDessin = 0;
 					   _level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(nextID));//
 		    
                     if(idDessin != 0)
 					{
                        movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage" + idDessin,"b" + i,i);
-                       _level0.loader.contentHolder["joueur"+(i+1)]=objetEvenement.listePersonnageJoueurs[i].nom;
+                       _level0.loader.contentHolder["joueur"+(i+1)] = objetEvenement.listePersonnageJoueurs[i].nom;
                        //_level0.loader.contentHolder["dtCadre"+i+1]["joueur"+i]=this.listeDesPersonnages[i].nom;
                        trace("idPers="+idPers+" idDessin="+idDessin+" a connecte "+i+" "+_level0.loader.contentHolder["joueur"+(i+1)]);
                        movClip._x = 510-j*60;
@@ -1822,18 +1826,19 @@ class GestionnaireEvenements
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function evenementNouvelleTable(objetEvenement:Object)
     {
-        // parametre: noTable, tempsPartie
+        // parametre: noTable, tempsPartie , tablName
     	trace("*********************************************");
-    	trace("debut de evenementNouvelleTable   " + objetEvenement.noTable + "  " + objetEvenement.tempsPartie);
+    	trace("debut de evenementNouvelleTable   " + objetEvenement.noTable + "  " + objetEvenement.tempsPartie + " " + objetEvenement.nameTable);
     	var str:String = new String();
     	// on ajoute une liste pour pouvoir inserer les joueurs quand ils vont entrer
         objetEvenement.listeJoueurs = new Array();
         objetEvenement.no = objetEvenement.noTable;
 		objetEvenement.temps = objetEvenement.tempsPartie;
+		objetEvenement.tablName = objetEvenement.nameTable;
         
 		this.listeDesTables.push(objetEvenement);
         
-		str = "Table." + this.listeDesTables[this.listeDesTables.length-1].no + " " + this.listeDesTables[this.listeDesTables.length-1].temps + " min.";
+		str = "Table." + this.listeDesTables[this.listeDesTables.length-1].no + " " + this.listeDesTables[this.listeDesTables.length-1].temps + " min. " + " Name: " +  this.listeDesTables[this.listeDesTables.length-1].tablName;
         
 		for (var j:Number = 0; j < this.listeDesTables[i].listeJoueurs.length; j++)
         {
