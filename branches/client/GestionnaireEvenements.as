@@ -764,7 +764,7 @@ class GestionnaireEvenements
                 {
                     this.listeDesTables.push(objetEvenement.listeTables[i]);
 					
-                    str = "Table. " + objetEvenement.listeTables[i].no + "   " + objetEvenement.listeTables[i].temps + " min.";
+                    str = "Table. " + objetEvenement.listeTables[i].no + "   " + objetEvenement.listeTables[i].temps + " min. " +  " - " + objetEvenement.listeTables[i].tablName;
 					trace(objetEvenement.listeTables[i].listeJoueurs);
                     for (var j:Number = 0; j < objetEvenement.listeTables[i].listeJoueurs.length; j++)
                     {
@@ -1838,13 +1838,16 @@ class GestionnaireEvenements
         
 		this.listeDesTables.push(objetEvenement);
         
-		str = "Table." + this.listeDesTables[this.listeDesTables.length-1].no + " " + this.listeDesTables[this.listeDesTables.length-1].temps + " min. " + " Name: " +  this.listeDesTables[this.listeDesTables.length-1].tablName;
+		//trace("ICI : " + this.listeDesTables[this.listeDesTables.length-1].tablName);
+		str = "Table." + this.listeDesTables[this.listeDesTables.length-1].no + " " + this.listeDesTables[this.listeDesTables.length-1].temps + " min. " + " -  " +  this.listeDesTables[this.listeDesTables.length-1].tablName ;
         
-		for (var j:Number = 0; j < this.listeDesTables[i].listeJoueurs.length; j++)
+		//trace(str); 
+		for (var j:Number = 0; j < this.listeDesTables[this.listeDesTables.length-1].listeJoueurs.length; j++)
         {
-            str = str + "\n -  " + this.listeDesTables[i].listeJoueurs[j].nom;
-			trace(" xxx " + this.listeDesTables[i].listeJoueurs[j].nom);
+            str = str + "\n -  " + this.listeDesTables[this.listeDesTables.length-1].listeJoueurs[j].nom;
+			trace(" xxx " + this.listeDesTables[this.listeDesTables.length-1].listeJoueurs[j].nom);
         }
+		//trace(str); 
 		
 		_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[this.listeDesTables.length-1].no});
         
@@ -1944,11 +1947,11 @@ class GestionnaireEvenements
         	{
             	if(_level0.loader.contentHolder.listeTable.getItemAt(i).data == objetEvenement.noTable)
             	{
-                	str = "Table. " + this.listeDesTables[indice].no + "  " + this.listeDesTables[indice].temps + " min.";
-                	for (j= 0; j < this.listeDesTables[indice].listeJoueurs.length; j++)
-                	{
-                    	str = str + "\n   - " + this.listeDesTables[indice].listeJoueurs[j].nom;
-                	}
+                	str =  _level0.loader.contentHolder.listeTable.getItemAt(i).label; // "Table. " + this.listeDesTables[indice].no + "  " + this.listeDesTables[indice].temps + " min.";
+                	//for (j= 0; j < this.listeDesTables[indice].listeJoueurs.length; j++)
+                	//{
+                    	str = str + "\n   - " + this.listeDesTables[indice].listeJoueurs[this.listeDesTables[i].listeJoueurs.length - 1].nom;
+                	//}
                 	_level0.loader.contentHolder.listeTable.replaceItemAt(i, {label : str, data : objetEvenement.noTable});
             	}
         	}
