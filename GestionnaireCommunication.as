@@ -1809,7 +1809,7 @@ class GestionnaireCommunication
      */
     public function creerTable(creerTableDelegate:Function,
                                evenementJoueurDemarrePartieDelegate:Function,
-                               tempsPartie:Number)
+                               tempsPartie:Number, tablName:String)
     {
         // Si on a obtenu la liste des tables, alors on peut continuer le code
         // de la fonction
@@ -1831,12 +1831,20 @@ class GestionnaireCommunication
             var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
             var objNoeudParametreTempsPartie:XMLNode = objObjetXML.createElement("parametre");
             var objNoeudParametreTempsPartieText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(tempsPartie)));
-            // Construire l'arbre du document XML
+			
+			var objNoeudParametreNomPartie:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreNomPartieText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(tablName));
+			
+			// Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "CreerTable";
             objNoeudParametreTempsPartie.attributes.type = "TempsPartie";
             objNoeudParametreTempsPartie.appendChild(objNoeudParametreTempsPartieText);
+			objNoeudParametreNomPartie.attributes.type = "TableName";
+            objNoeudParametreNomPartie.appendChild(objNoeudParametreNomPartieText);
+			
             objNoeudCommande.appendChild(objNoeudParametreTempsPartie);
+			 objNoeudCommande.appendChild(objNoeudParametreNomPartie);
             objObjetXML.appendChild(objNoeudCommande);
             // Declaration d'un nouvel objet qui va contenir les informations sur
             // la commande a traiter courante
@@ -2603,7 +2611,7 @@ class GestionnaireCommunication
 			{
 				var str_temp:String = noeudCommande.childNodes[iii].firstChild.nodeValue;
 				objEvenement.listeChansons.push(str_temp);
-				//trace("Liste chansons : " + objEvenement.listeChansons[iii]);
+				trace("Liste chansons : " + objEvenement.listeChansons[iii]);
 			}
 			
 			//*****************************
@@ -2926,6 +2934,7 @@ class GestionnaireCommunication
                 // joueurs
                 objTable.no = lstTablesChildNodes[i].attributes.no;
                 objTable.temps = lstTablesChildNodes[i].attributes.temps;
+				objTable.tablName = lstTablesChildNodes[i].attributes.tablName;
                 objTable.listeJoueurs = new Array();
                 // Passer les joueurs de la table courante et les ajouter
                 // dans l'objet table courant
@@ -3054,7 +3063,36 @@ class GestionnaireCommunication
         if (objEvenement.resultat == "NoTable")
         {
             // Ajouter l'attribut noTable dans l'objet d'evenement
-            objEvenement.noTable = Number(noeudCommande.firstChild.firstChild.nodeValue);
+            //objEvenement.noTable = Number(noeudCommande.firstChild.firstChild.nodeValue);
+			
+			//**********************************************************
+			// Declaration d'une reference vers la liste des noeuds parametres
+            var lstNoeudsParametre:Array = noeudCommande.childNodes;
+			
+            // Passer tous les parametres et les ajouter dans l'objet evenement
+            for (var i:Number = 0; i < lstNoeudsParametre.length; i++)
+            {
+                // Faire la reference vers le noeud courant
+                var objNoeudParametre:XMLNode = lstNoeudsParametre[i];
+                // Determiner le type du parametre courant et creer l'element
+                // correspondant dans l'objet evenement
+		
+				//trace("avant le switch   "+objNoeudParametre.attributes.type);
+				trace("objNoeudParametre.attributes.type : " + objNoeudParametre.attributes.type);
+                switch (objNoeudParametre.attributes.type)
+                {
+                    case "NoTable":
+		    			objEvenement.noTable = Number(objNoeudParametre.firstChild.nodeValue);
+                        break;
+						
+                    case "NameTable":
+                        objEvenement.nameTable = objNoeudParametre.firstChild.nodeValue;
+						break;
+						                   
+                }
+            }
+			//*********************************************************
+			
         }
         // Si le retour de la fonction est une reponse positive et non une
         // erreur, alors on peut passer a l'autre etat
