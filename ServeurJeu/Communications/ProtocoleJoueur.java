@@ -593,7 +593,7 @@ public class ProtocoleJoueur implements Runnable
          						// le document de sortie
          						objNoeudCommande.appendChild(objNoeudParametreRoleJoueur);
          						
-                                //**************************
+                                //**************************   
 							}//fin else
 						}
 						else if (strResultatAuthentification.equals(ResultatAuthentification.JoueurDejaConnecte))
@@ -1240,10 +1240,16 @@ public class ProtocoleJoueur implements Runnable
 						// de la partie que le client veut créer
 						int intTempsPartie = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "TempsPartie").getNodeValue());
 
+						String name = "";
+						if(obtenirValeurParametre(objNoeudCommandeEntree, "TableName") != null) //.getNodeValue()
+							name = obtenirValeurParametre(objNoeudCommandeEntree, "TableName").getNodeValue();
+						
                      	// Appeler la méthode permettant de créer la nouvelle
 						// table et d'entrer le joueur dans cette table
 						int intNoTable = objJoueurHumain.obtenirSalleCourante().creerTable(objJoueurHumain, 
-									intTempsPartie, true);
+									intTempsPartie, true, name);
+						
+						name = objJoueurHumain.obtenirPartieCourante().obtenirTable().getTableName();
 					
 						// Créer le noeud paramètre du numéro de la table
 						Element objNoeudParametreNoTable = objDocumentXMLSortie.createElement("parametre"); 
@@ -1253,12 +1259,26 @@ public class ProtocoleJoueur implements Runnable
 					
 						// Définir l'attribut type pour le noeud paramètre
 						objNoeudParametreNoTable.setAttribute("type", "NoTable");
-					
+											
 						// Ajouter le noeud texte au noeud paramètre
 						objNoeudParametreNoTable.appendChild(objNoeudTexteNoTable);
 						
+						//***********************************************************
+						// Créer le noeud paramètre du nom de la table
+						Element objNoeudParametreNameTable = objDocumentXMLSortie.createElement("parametre"); 
+
+						// Créer un noeud texte contenant le nom de la table
+						Text objNoeudTexteNameTable = objDocumentXMLSortie.createTextNode(name);
+					
+						// Définir l'attribut type pour le noeud paramètre
+						objNoeudParametreNameTable.setAttribute("type", "NameTable");
+											
+						// Ajouter le noeud texte au noeud paramètre
+						objNoeudParametreNameTable.appendChild(objNoeudTexteNameTable);
+					
 						// Ajouter le noeud paramètre au noeud de commande
 						objNoeudCommande.appendChild(objNoeudParametreNoTable);
+						objNoeudCommande.appendChild(objNoeudParametreNameTable);
 					}
 				}
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.EntrerTable))
@@ -1316,6 +1336,7 @@ public class ProtocoleJoueur implements Runnable
 						String strResultatEntreeTable = objJoueurHumain.obtenirSalleCourante().entrerTable(objJoueurHumain, 
 																						intNoTable, true, lstPersonnageJoueurs, lstRoleJoueurs);
 
+						
 						// Si le résultat de l'entrée dans la table est true alors le
 						// joueur est maintenant dans la table
 						if (strResultatEntreeTable.equals(ResultatEntreeTable.Succes))
@@ -2364,7 +2385,7 @@ public class ProtocoleJoueur implements Runnable
 		{
 			// Si le nombre d'enfants du noeud de commande est de 1, alors
 			// le nombre de paramètres est correct et on peut continuer
-			if (noeudCommande.getChildNodes().getLength() == 1)
+			if (noeudCommande.getChildNodes().getLength() == 2)
 			{
 				// Déclarer une variable qui va permettre de savoir si le 
 				// noeud enfant est valide
