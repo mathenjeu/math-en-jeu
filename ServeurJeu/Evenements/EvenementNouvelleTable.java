@@ -20,15 +20,19 @@ public class EvenementNouvelleTable extends Evenement
     // Déclaration d'une variable qui va permettre de garder le temps de la partie
     private int intTempsPartie;
     
+    // Variable for the table name
+    private String tableName;
+    
     /**
      * Constructeur de la classe EvenementNouvelleTable qui permet 
      * d'initialiser le numéro de la table. 
      */
-    public EvenementNouvelleTable(int noTable, int tempsPartie)
+    public EvenementNouvelleTable(int noTable, int tempsPartie, String tableName)
     {
         // Définir le numéro de la table qui a été créée et le temps de la partie
     	intNoTable = noTable;
     	intTempsPartie = tempsPartie;
+    	this.tableName = tableName; 
     }
 	
 	/**
@@ -56,11 +60,13 @@ public class EvenementNouvelleTable extends Evenement
 			// Créer les noeuds de paramètre
 			Element objNoeudParametreNoTable = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreTempsPartie = objDocumentXML.createElement("parametre");
+			Element objNoeudParametreNomPartie = objDocumentXML.createElement("parametre");
 			
 			// Créer des noeuds contenant le numéro de la table du noeud 
 			// paramètre ainsi que le temps de la partie
 			Text objNoeudTexteNoTable = objDocumentXML.createTextNode(Integer.toString(intNoTable));
 			Text objNoeudTexteTempsPartie = objDocumentXML.createTextNode(Integer.toString(intTempsPartie));
+			Text objNoeudTexteNomPartie = objDocumentXML.createTextNode(tableName);
 			
 			// Définir les attributs du noeud de commande
 			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
@@ -71,14 +77,17 @@ public class EvenementNouvelleTable extends Evenement
 			// du paramètre
 			objNoeudParametreNoTable.setAttribute("type", "NoTable");
 			objNoeudParametreTempsPartie.setAttribute("type", "TempsPartie");
+			objNoeudParametreNomPartie.setAttribute("type", "NameTable");
 			
 			// Ajouter les noeuds texte aux noeuds de paramètre
 			objNoeudParametreNoTable.appendChild(objNoeudTexteNoTable);
 			objNoeudParametreTempsPartie.appendChild(objNoeudTexteTempsPartie);
+			objNoeudParametreNomPartie.appendChild(objNoeudTexteNomPartie);
 			
 			// Ajouter les noeuds paramètre au noeud de commande
 			objNoeudCommande.appendChild(objNoeudParametreNoTable);
 			objNoeudCommande.appendChild(objNoeudParametreTempsPartie);
+			objNoeudCommande.appendChild(objNoeudParametreNomPartie);
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
 			objDocumentXML.appendChild(objNoeudCommande);
