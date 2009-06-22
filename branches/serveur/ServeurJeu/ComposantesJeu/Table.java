@@ -121,6 +121,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     // On va initialisé cette variable lorsque le plateau de jeu sera créé
     private Integer objProchainIdObjet;
     
+    // Name of the table
+    private String tableName;
+    
+	
+
 	/**
 	 * Constructeur de la classe Table qui permet d'initialiser les membres 
 	 * privés de la table.
@@ -133,7 +138,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @param int tempsPartie : Le temps de la partie en minute
 	 * @param Regles reglesTable : Les règles pour une partie sur cette table
 	 */
-	public Table(Salle salleParente, int noTable, JoueurHumain joueur ,	int tempsPartie, ControleurJeu controleurJeu) 
+	public Table(Salle salleParente, int noTable, JoueurHumain joueur ,	int tempsPartie, ControleurJeu controleurJeu, String name) 
 	{
 		super();
    	
@@ -152,6 +157,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// total d'une partie
 		setObjSalle(salleParente);
 		intNoTable = noTable;
+		
+		setTableName(name);
 		
 		intTempsTotal = tempsPartie;
               //  if(!this.butDuJeu.equals("original")) winTheGame = new WinTheGame(this);
@@ -1906,6 +1913,26 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 		public Salle getObjSalle() {
 			return objSalle;
+		}
+		
+		/**
+		 * @return the tableName
+		 */
+		public String getTableName() {
+			return tableName;
+		}
+
+		/**
+		 * @param tableName the tableName to set
+		 */
+		public void setTableName(String tableName) {
+			if(tableName == "")
+			{
+			   this.tableName = "Table." + this.intNoTable;
+			}else
+			{
+				this.tableName = tableName;
+			}
 		}
 		
 /*		private Boolean controlForRole(int userName)
