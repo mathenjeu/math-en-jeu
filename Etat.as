@@ -72,7 +72,7 @@ class Etat
 	{nom:"QuitterSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie"), listeEvenementsAcceptablesApres:new Array()}, 
 	{nom:"QuitterTable", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite"), listeEvenementsAcceptablesAvant:new Array("JoueurDemarrePartie"), listeEvenementsAcceptablesApres:new Array()}, 
 	{nom:"DemarrerPartie", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie"), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array("PartieDemarree")},
-	 {nom:"ObtenirListeJoueursSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array("JoueurEntreSalle", "JoueurQuitteSalle")}), 
+	{nom:"ObtenirListeJoueursSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array("JoueurEntreSalle", "JoueurQuitteSalle")}), 
 	listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie")};
 
 //TODO: Temporairement, on accepte les événements de joueur déplace ici et la syncro du temps
