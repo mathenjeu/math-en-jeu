@@ -765,13 +765,14 @@ class GestionnaireEvenements
                     this.listeDesTables.push(objetEvenement.listeTables[i]);
 					
                     str = "Table. " + objetEvenement.listeTables[i].no + "   " + objetEvenement.listeTables[i].temps + " min. " +  " - " + objetEvenement.listeTables[i].tablName;
-					trace(objetEvenement.listeTables[i].listeJoueurs);
+					trace(objetEvenement.listeTables[i].listeJoueurs.length);
                     for (var j:Number = 0; j < objetEvenement.listeTables[i].listeJoueurs.length; j++)
                     {
-                        str = str + "\n -  " + objetEvenement.listeTables[i].listeJoueurs[j].nom;
+                        str = str + "\n -  " + this.listeDesTables[i].listeJoueurs[j].nom;
 						trace(this.listeDesTables[i].listeJoueurs[j].nom);
                     }
-                    
+                    trace(str);
+					str = str +  "\n  ";
 					_level0.loader.contentHolder.listeTable.addItem({label : str, data : objetEvenement.listeTables[i].no});
                 }
 				if ( objetEvenement.listeTables.length == 0)//objetEvenement.listeTables.length == 0)
@@ -1839,7 +1840,7 @@ class GestionnaireEvenements
 		this.listeDesTables.push(objetEvenement);
         
 		//trace("ICI : " + this.listeDesTables[this.listeDesTables.length-1].tablName);
-		str = "Table." + this.listeDesTables[this.listeDesTables.length-1].no + " " + this.listeDesTables[this.listeDesTables.length-1].temps + " min. " + " -  " +  this.listeDesTables[this.listeDesTables.length-1].tablName ;
+		str = "Table. " + this.listeDesTables[this.listeDesTables.length-1].no + "  " + this.listeDesTables[this.listeDesTables.length-1].temps + " min. " + " -  " +  this.listeDesTables[this.listeDesTables.length-1].tablName +  "\n   "; ;
         
 		//trace(str); 
 		for (var j:Number = 0; j < this.listeDesTables[this.listeDesTables.length-1].listeJoueurs.length; j++)
@@ -1847,8 +1848,8 @@ class GestionnaireEvenements
             str = str + "\n -  " + this.listeDesTables[this.listeDesTables.length-1].listeJoueurs[j].nom;
 			trace(" xxx " + this.listeDesTables[this.listeDesTables.length-1].listeJoueurs[j].nom);
         }
-		//trace(str); 
-		
+		//trace(str);
+				
 		_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[this.listeDesTables.length-1].no});
         
 		_level0.loader.contentHolder.chargementTables = "";
@@ -1950,8 +1951,9 @@ class GestionnaireEvenements
                 	str =  _level0.loader.contentHolder.listeTable.getItemAt(i).label; // "Table. " + this.listeDesTables[indice].no + "  " + this.listeDesTables[indice].temps + " min.";
                 	//for (j= 0; j < this.listeDesTables[indice].listeJoueurs.length; j++)
                 	//{
-                    	str = str + "\n   - " + this.listeDesTables[indice].listeJoueurs[this.listeDesTables[i].listeJoueurs.length - 1].nom;
+                    	str = str + " - " + this.listeDesTables[indice].listeJoueurs[this.listeDesTables[i].listeJoueurs.length - 1].nom + "\n   ";
                 	//}
+					trace(str);
                 	_level0.loader.contentHolder.listeTable.replaceItemAt(i, {label : str, data : objetEvenement.noTable});
             	}
         	}
@@ -2055,7 +2057,9 @@ class GestionnaireEvenements
                         	for (j= 0; j < this.listeDesTables[indice].listeJoueurs.length; j++)
                         	{
                             	str = str + "\n   - " + this.listeDesTables[indice].listeJoueurs[j].nom;
+								
                         	}
+							str = str +  "\n  ";
                         	_level0.loader.contentHolder.listeTable.replaceItemAt(i, {label : str, data : objetEvenement.noTable});
                         	break;
                     	}
@@ -2076,6 +2080,7 @@ class GestionnaireEvenements
                 	{
                     	str = str + "\n  - " + this.listeDesTables[indice].listeJoueurs[j].nom;
                 	}
+					str = str +  "\n  ";
                 	_level0.loader.contentHolder.listeTable.replaceItemAt(i, {label : str, data : objetEvenement.noTable});
             	}	    
         	}
