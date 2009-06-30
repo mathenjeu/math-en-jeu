@@ -137,6 +137,12 @@ class GestionnaireEvenements
     	trace("*********************************************\n");
     }
 	
+	function getTableName():String 
+	{
+		return this.tablName;
+	}
+    
+	
 	function obtenirNumeroJoueurs():Number 
 	{
 		return this.numeroJoueursDansSalle;
@@ -764,15 +770,15 @@ class GestionnaireEvenements
                 {
                     this.listeDesTables.push(objetEvenement.listeTables[i]);
 					
-                    str = "Table. " + objetEvenement.listeTables[i].no + "   " + objetEvenement.listeTables[i].temps + " min. " +  " - " + objetEvenement.listeTables[i].tablName;
-					trace(objetEvenement.listeTables[i].listeJoueurs.length);
+                    str = objetEvenement.listeTables[i].no + ".  *" +  objetEvenement.listeTables[i].tablName + "*  " + objetEvenement.listeTables[i].temps + " min. " ;
+					/*
                     for (var j:Number = 0; j < objetEvenement.listeTables[i].listeJoueurs.length; j++)
                     {
                         str = str + "\n -  " + this.listeDesTables[i].listeJoueurs[j].nom;
 						trace(this.listeDesTables[i].listeJoueurs[j].nom);
                     }
-                    trace(str);
-					str = str +  "\n  ";
+                    str = str +  "\n  ";
+					*/
 					_level0.loader.contentHolder.listeTable.addItem({label : str, data : objetEvenement.listeTables[i].no});
                 }
 				if ( objetEvenement.listeTables.length == 0)//objetEvenement.listeTables.length == 0)
@@ -1022,6 +1028,7 @@ class GestionnaireEvenements
 					}
 				}
 
+				 _level0.loader.contentHolder.listeTable.removeAll();
 				// on s'enleve de la liste des joueurs 
             	for(var j=0; j < this.listeDesTables[indice].listeJoueurs.length; j++)
             	{
@@ -1030,7 +1037,10 @@ class GestionnaireEvenements
                     	this.listeDesTables[indice].listeJoueurs.splice(j,1);
                    	}
 					if(this.listeDesTables[indice].listeJoueurs.length == 0)
-            	      _level0.loader.contentHolder.listeTable.removeItemAt(indice);
+					{
+            	      //_level0.loader.contentHolder.listeTable.removeItemAt(indice);
+					  this.listeDesTables.splice(indice,1);
+					}
             	}
 				
 				if (this.listeDesTables.length == 0 )
@@ -1052,16 +1062,13 @@ class GestionnaireEvenements
 			 	delete this.listeDesPersonnages;
 			 	this.listeDesPersonnages = new Array();
 			 	_level0.loader.contentHolder.listeTable.removeAll();
-			 
+			    */
 			 	for (var i:Number = 0; i < this.listeDesTables.length; i++)
 			 	{
-					str = "Table  " + this.listeDesTables[i].no + "  " + this.listeDesTables[i].temps + " min. \n";
-					for (var j:Number = 0; j < this.listeDesTables[i].listeJoueurs.length; j++)
-					{
-						str = str + " - " + this.listeDesTables[i].listeJoueurs[j].nom + " - " ;
-					}
+					str = this.listeDesTables[i].no + ".  *" +  this.listeDesTables[i].tablName + "*  " + this.listeDesTables[i].temps + " min. " ;
+					
 					_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
-			 	}*/
+			 	}
 				
             break;
 
@@ -1194,18 +1201,27 @@ class GestionnaireEvenements
                }
 			
 			   if(this.listeDesTables[i].listeJoueurs.length == 0)
-            	_level0.loader.contentHolder.listeTable.removeItemAt(i);
-       	     }
-    	
-		
-		if (this.listeDesTables.length == 0 )
-		{
-			
-			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
-			_level0.loader.contentHolder.txtChargementTables._visible = true;
-		}
-		
-		
+			   {
+            	  // _level0.loader.contentHolder.listeTable.removeItemAt(i);
+				   this.listeDesTables.splice(i,1);
+			   }
+			   
+			   
+       	     }//end for
+			 var str:String = new String();
+              _level0.loader.contentHolder.listeTable.removeAll();
+			 for (var i:Number = 0; i < this.listeDesTables.length; i++)
+			 {
+				str = this.listeDesTables[i].no + ".  *" +  this.listeDesTables[i].tablName + "*  " + this.listeDesTables[i].temps + " min. " ;
+				_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
+			 }
+					
+		     if (this.listeDesTables.length == 0 )
+		     {
+			   _level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
+			   _level0.loader.contentHolder.txtChargementTables._visible = true;
+		     }
+				
 			break;
 			
             case "CommandeNonReconnue":
@@ -1808,9 +1824,19 @@ class GestionnaireEvenements
                 }
             }
 			
-			if(this.listeDesTables[i].listeJoueurs.length == 0)
-            	_level0.loader.contentHolder.listeTable.removeItemAt(i);
-       	}
+			if(this.listeDesTables[i].listeJoueurs.length == 0){
+				this.listeDesTables.splice(i,1);
+            	//_level0.loader.contentHolder.listeTable.removeItemAt(i);
+			}
+		}
+		
+		var str:String = new String();
+		_level0.loader.contentHolder.listeTable.removeAll();
+		for (var i:Number = 0; i < this.listeDesTables.length; i++)
+	    {
+			str = this.listeDesTables[i].no + ".  *" +  this.listeDesTables[i].tablName + "*  " + this.listeDesTables[i].temps + " min. " ;
+			_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
+		}
     	
 		
 		if (this.listeDesTables.length == 0)
@@ -1839,18 +1865,22 @@ class GestionnaireEvenements
         
 		this.listeDesTables.push(objetEvenement);
         
-		//trace("ICI : " + this.listeDesTables[this.listeDesTables.length-1].tablName);
-		str = "Table. " + this.listeDesTables[this.listeDesTables.length-1].no + "  " + this.listeDesTables[this.listeDesTables.length-1].temps + " min. " + " -  " +  this.listeDesTables[this.listeDesTables.length-1].tablName +  "\n   "; ;
-        
-		//trace(str); 
+		str = this.listeDesTables[this.listeDesTables.length-1].no + ".  *" + this.listeDesTables[this.listeDesTables.length-1].tablName + "*  "+ this.listeDesTables[this.listeDesTables.length-1].temps + " min. \n    "; ;
+        /*
 		for (var j:Number = 0; j < this.listeDesTables[this.listeDesTables.length-1].listeJoueurs.length; j++)
         {
             str = str + "\n -  " + this.listeDesTables[this.listeDesTables.length-1].listeJoueurs[j].nom;
 			trace(" xxx " + this.listeDesTables[this.listeDesTables.length-1].listeJoueurs[j].nom);
         }
-		//trace(str);
+		*/
 				
-		_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[this.listeDesTables.length-1].no});
+		  _level0.loader.contentHolder.listeTable.removeAll();
+			 for (var i:Number = 0; i < this.listeDesTables.length; i++)
+			 {
+				str = this.listeDesTables[i].no + ".  *" +  this.listeDesTables[i].tablName + "*  " + this.listeDesTables[i].temps + " min. " ;
+				_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
+			 }
+		//_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[this.listeDesTables.length-1].no});
         
 		_level0.loader.contentHolder.chargementTables = "";
 		
@@ -1874,11 +1904,18 @@ class GestionnaireEvenements
         	if(this.listeDesTables[i].no == objetEvenement.noTable)
         	{
             	this.listeDesTables.splice(i,1);
-				_level0.loader.contentHolder.listeTable.removeItemAt(i);
+				//_level0.loader.contentHolder.listeTable.removeItemAt(i);
             	break;
         	}
     	}
 		
+		var str:String = new String();
+		_level0.loader.contentHolder.listeTable.removeAll();
+		for (var i:Number = 0; i < this.listeDesTables.length; i++)
+		{
+			str = this.listeDesTables[i].no + ".  *" +  this.listeDesTables[i].tablName + "*  " + this.listeDesTables[i].temps + " min. " ;
+			_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
+		}
 				
 		if (this.listeDesTables.length == 0)
 		{
@@ -1944,6 +1981,7 @@ class GestionnaireEvenements
 		
     	if(indice != -1)
     	{
+			/*
         	for(i = 0; i < this.listeDesTables.length; i++)
         	{
             	if(_level0.loader.contentHolder.listeTable.getItemAt(i).data == objetEvenement.noTable)
@@ -1956,7 +1994,7 @@ class GestionnaireEvenements
 					trace(str);
                 	_level0.loader.contentHolder.listeTable.replaceItemAt(i, {label : str, data : objetEvenement.noTable});
             	}
-        	}
+        	} */
         	// enlever la table de la liste si elle est pleine
 			
         	if(this.listeDesTables[indice].listeJoueurs.length == numeroJoueursDansSalle)
@@ -1971,6 +2009,12 @@ class GestionnaireEvenements
             	}
         	}
     	}
+		  _level0.loader.contentHolder.listeTable.removeAll();
+			 for (var i:Number = 0; i < this.listeDesTables.length; i++)
+			 {
+				str = this.listeDesTables[i].no + ".  *" +  this.listeDesTables[i].tablName + "*  " + this.listeDesTables[i].temps + " min. " ;
+				_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
+			 }
 		
 		if (this.listeDesTables.length == 0)
 		{
@@ -2044,11 +2088,12 @@ class GestionnaireEvenements
                 	}
             	}
             	
-				// on modifie la liste d'affichage des joueurs
+				/*// on modifie la liste d'affichage des joueurs
             	for(i = 0; i < _level0.loader.contentHolder.listeTable.length; i++)
             	{
                 	if(_level0.loader.contentHolder.listeTable.getItemAt(i).data == objetEvenement.noTable)
                 	{
+						
                     	//tableAffichee == true;  // la table etait au prealable affichee
                     	// si la table contient encore des joueurs
                     	if(this.listeDesTables[indice].listeJoueurs.length != 0)
@@ -2068,7 +2113,7 @@ class GestionnaireEvenements
                     	{
                         	_level0.loader.contentHolder.listeTable.removeItemAt(i);
                         	break;
-                    	}
+                    	} 
                 	}
             	}
 	    
@@ -2082,9 +2127,15 @@ class GestionnaireEvenements
                 	}
 					str = str +  "\n  ";
                 	_level0.loader.contentHolder.listeTable.replaceItemAt(i, {label : str, data : objetEvenement.noTable});
-            	}	    
+            	}	*/    
         	}
     	}
+		  _level0.loader.contentHolder.listeTable.removeAll();
+			 for (var i:Number = 0; i < this.listeDesTables.length; i++)
+			 {
+				str = this.listeDesTables[i].no + ".  *" +  this.listeDesTables[i].tablName + "*  " + this.listeDesTables[i].temps + " min. " ;
+				_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
+			 }
     	for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
                 {
 					trace(i+": "+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
