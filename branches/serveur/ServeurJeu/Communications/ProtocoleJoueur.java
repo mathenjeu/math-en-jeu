@@ -114,6 +114,9 @@ public class ProtocoleJoueur implements Runnable
 	
 	//String with statistics of players answers
 	private StringBuffer questionsAnswers;
+	
+	// time in seconds as reference to calculate time of reponse
+	private int lastQuestionTime;
 
 	
 
@@ -1744,6 +1747,10 @@ public class ProtocoleJoueur implements Runnable
 						
 						// Ajouter le noeud paramètre au noeud de commande
 						objNoeudCommande.appendChild(objNoeudParametreQuestion);
+						
+						//*******************************************************
+						lastQuestionTime = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsRestant();
+						System.out.println("Protocol for : " + lastQuestionTime);
 					}
 				}
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.RepondreQuestion))
@@ -1752,7 +1759,13 @@ public class ProtocoleJoueur implements Runnable
 					String strReponse = obtenirValeurParametre(objNoeudCommandeEntree, "Reponse").getNodeValue();
 										
 					//collect players answers for DB
-					collectPlayerAnswers(strReponse);
+					collectPlayerAnswers(strReponse );
+					
+					int timer = lastQuestionTime - objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsRestant();
+					//collect time of reponse for DB
+					collectPlayerAnswers(timer);
+					System.out.println("reponse :Protocol :" + timer);
+					
 					
 					// Si le joueur n'est pas connecté au serveur de jeu, alors il
 					// y a une erreur
@@ -3633,6 +3646,16 @@ public class ProtocoleJoueur implements Runnable
             	 objNoeudCommande.setAttribute("type", "Boule");
             	 objNoeudCommande.appendChild(objNoeudParametreNouvelleQuestion);
             	 bolDoitRetournerCommande = true;
+            	 
+            	 //******************************************************************
+            	 //int poz = questionsAnswers.lastIndexOf("*");
+            	 //int end = questionsAnswers.length();
+            	 //questionsAnswers.delete(poz,end-1);
+            	 collectPlayerAnswers();
+            	 collectPlayerAnswers(nouvelleQuestion);
+            	 
+            	 lastQuestionTime = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsRestant();
+				 System.out.println("Protocol for Cristall : " + lastQuestionTime);
              }
              else if(strTypeObjet.equals("PotionGros"))
              {
@@ -3794,9 +3817,27 @@ public class ProtocoleJoueur implements Runnable
     /*
      * Methode that collect players answers in a string
      */
+    private void collectPlayerAnswers(int reponseTime) 
+    {
+		questionsAnswers.append(":" + reponseTime + "*");
+		
+	}// end methode
+    
+    /*
+     * Methode that collect players answers in a string
+     */
     private void collectPlayerAnswers(String strReponse) 
     {
 		questionsAnswers.append(":" + strReponse + ":" + objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().reponseEstValide(strReponse));
+		
+	}// end methode
+    
+    /*
+     * Methode that collect players answers in a string
+     */
+    private void collectPlayerAnswers() 
+    {
+		questionsAnswers.append(": Cristall *");
 		
 	}// end methode
 
