@@ -708,7 +708,7 @@ public class InformationPartie
         for(int numbers : catScolaires)
         	catScolairesTemp.add(numbers);
         int intRandom = 0;
-        System.out.println("Avant diff : " + intDifficulte);
+        //System.out.println("Avant diff : " + intDifficulte);
         
        	//sinon on cherche pour toutes les catégories de la même difficulté 
 		int i = 0;
