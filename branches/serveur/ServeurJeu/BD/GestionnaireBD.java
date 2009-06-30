@@ -741,7 +741,14 @@ public class GestionnaireBD
 		
 		int cleJoueur = joueur.obtenirCleJoueur();
 		int pointage = joueur.obtenirPartieCourante().obtenirPointage();
-		String statistics =joueur.obtenirProtocoleJoueur().getQuestionsAnswers();
+		int[] levels = joueur.obtenirCleNiveau();
+		String statistics = "Levels ";
+		for(int i = 0; i < levels.length; i++)
+		{
+			statistics =  statistics + ":" + levels[i];
+		}
+		
+		statistics = statistics + "*" + joueur.obtenirProtocoleJoueur().getQuestionsAnswers();
 		
 		// Création du SQL pour l'ajout
 		String strSQL = "INSERT INTO game_user(game_id, user_id, score, has_won, questions_answers) VALUES " +
