@@ -25,6 +25,7 @@
 			boutonContinuer = "Continuer"
 			boutonQuitterX = "Quitter la partie.."
 			tableNameLabel = "Nom de la Table"
+			playersListe = " - Liste des joueurs - "
 			
 			explication = "Le mode avancé permet au joueur plus expérimenté de sélectionner uniquement les catégories de questions qu'il désire. Il peut ainsi personnaliser son expérience de jeu en choisissant son niveau pour chaque thème mathématique présent dans le jeu."
 			
@@ -114,8 +115,8 @@
 	
 		frame3 = ""
 
-			noTable = "Numéro de table"	
-			numSalle = "Table no."
+			noTable = "Numéro de la table :"	
+			numSalle = " "
 			temps = "Temps :"
 			timeLabel = "Temps"
 			
