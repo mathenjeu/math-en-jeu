@@ -78,7 +78,7 @@ public class BoiteQuestions
 		
 		TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );
 		Vector<Question> questions = difficultes.get( difficulte );
-		System.out.println(question.obtenirCodeQuestion());
+		//System.out.println(question.obtenirCodeQuestion());
 		questions.remove(question);		
 	}
 	
