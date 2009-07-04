@@ -34,13 +34,10 @@ public class JoueurHumain extends Joueur
 	// 1 - simple user 
 	// 2 - admin
 	private int role;
-	
 		
 	//Cette variable défini si un jouer peut creer une salle ??? utiliser encore??
 	//private boolean bolPeutCreerSalle;
 	
-	
-
 	/**
 	 * Déclaration d'un tableau qui contient les valeurs des niveaux des catégories
 	 * pour le profil du joueur - informaton garder dans BD -> user_subject_level
@@ -92,6 +89,7 @@ public class JoueurHumain extends Joueur
 		// Au début, le joueur n'est dans aucune salle ni table
 		objSalleCourante = null;
 		objPartieCourante = null;
+		
 	}
 
 	/**
@@ -289,6 +287,6 @@ public class JoueurHumain extends Joueur
 	public void setRole(int role) {
 		this.role = role;
 	}
-
+	
 	
 }
