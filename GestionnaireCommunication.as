@@ -3511,6 +3511,10 @@ class GestionnaireCommunication
 						trace("Argent ds gestComm   "+objEvenement.argent);
 						break;
 		   
+		            case "MoveVisibility":
+                        objEvenement.moveVisibility = Number(objNoeudParametre.firstChild.nodeValue);
+						trace("moveVisibility ds gestComm   " + objEvenement.moveVisibility);
+						break;
 		   
 		   			case "Collision":  
 						if (objNoeudParametre.hasChildNodes() == true)
