@@ -90,9 +90,18 @@ public class InformationPartie
     private static int maxNbObj;
     
     // to not get twice bonus
-    private boolean isPlayerNotArrivedOnce; 
+    private boolean isPlayerNotArrivedOnce;
+
+ // The number of cases on that user can to move. At the begining is set to 3.
+	// After for all 3 correct answers running add one unity. Not bigger than 6. 
+	private int moveVisibility;
+	
+	// Number of running correct answers. If is 3 moveVisibility is increasing by 1 
+	// and this is set to 0. if one incorrect answer is set too to 0. 
+	private int runningAnswers;
      
 	 
+    
 	/**
 	 * Constructeur de la classe InformationPartie qui permet d'initialiser
 	 * les propriétés de la partie et de faire la référence vers la table.
@@ -150,10 +159,11 @@ public class InformationPartie
 	        
 	        isPlayerNotArrivedOnce = true;
 	        
+	        moveVisibility = 3;
+			runningAnswers = 0;
 	        
-
-	        String language = joueur.obtenirProtocoleJoueur().langue;
-            setObjBoiteQuestions(new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language) , joueur));
+			String language = joueur.obtenirProtocoleJoueur().langue;
+            setObjBoiteQuestions(new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language), joueur));
             objGestionnaireBD.remplirBoiteQuestions(getObjBoiteQuestions(), objJoueurHumain.obtenirCleNiveau());  
             
 	}// fin constructeur
@@ -861,8 +871,9 @@ public class InformationPartie
 		Magasin objMagasinRencontre = null;
 		
 		// Si la réponse est bonne, alors on modifie le plateau de jeu
-		if (bolReponseEstBonne == true)
+		if (bolReponseEstBonne)
 		{
+						
 			// Faire la référence vers la case de destination
 			Case objCaseDestination = table.obtenirPlateauJeuCourant()[objPositionDesiree.x][objPositionDesiree.y];
 			
@@ -1020,22 +1031,41 @@ public class InformationPartie
 						    	
 		    }
 		    
-			// Modifier la position, le pointage et l'argent
+			// Modifier la position, le pointage et l'argent et moveVisibility
 			if (objJoueur instanceof JoueurHumain)
 			{
 				((JoueurHumain)objJoueur).obtenirPartieCourante().definirPositionJoueur(objPositionDesiree);
-			    ((JoueurHumain)objJoueur).obtenirPartieCourante().definirPointage(intNouveauPointage);
-                            ((JoueurHumain)objJoueur).obtenirPartieCourante().definirArgent(intNouvelArgent);
+				((JoueurHumain)objJoueur).obtenirPartieCourante().definirPointage(intNouveauPointage);
+				((JoueurHumain)objJoueur).obtenirPartieCourante().definirArgent(intNouvelArgent);
+
+
+				//on increase the number of correct answers and on set moveVisibility
+				int answers = ((JoueurHumain)objJoueur).obtenirPartieCourante().getRunningAnswers();
+				System.out.println("InfoPartie: " + ((JoueurHumain)objJoueur).obtenirPartieCourante().getRunningAnswers() + " " + answers);
+
+				if (answers == 2){
+					((JoueurHumain)objJoueur).obtenirPartieCourante().setRunningAnswers(0);
+					((JoueurHumain)objJoueur).obtenirPartieCourante().setMoveVisibility(((JoueurHumain)objJoueur).obtenirPartieCourante().getMoveVisibility() + 1);
+					
+					System.out.println("InfoPartie2: " + ((JoueurHumain)objJoueur).obtenirPartieCourante().getRunningAnswers());
+				}else{
+					((JoueurHumain)objJoueur).obtenirPartieCourante().setRunningAnswers(answers + 1);
+					System.out.println("InfoPartie3: " + ((JoueurHumain)objJoueur).obtenirPartieCourante().getRunningAnswers() + " " + answers);
+				}
 			}
 			else if (objJoueur instanceof JoueurVirtuel)
 			{
 				((JoueurVirtuel)objJoueur).definirPositionJoueurVirtuel(objPositionDesiree);
 				((JoueurVirtuel)objJoueur).definirPointage(intNouveauPointage);
-                                ((JoueurVirtuel)objJoueur).definirArgent(intNouvelArgent);
+                ((JoueurVirtuel)objJoueur).definirArgent(intNouvelArgent);
 			}
 		}
 		else
 		{
+			//
+			((JoueurHumain)objJoueur).obtenirPartieCourante().setRunningAnswers(0);
+			((JoueurHumain)objJoueur).obtenirPartieCourante().setMoveVisibility(((JoueurHumain)objJoueur).obtenirPartieCourante().getMoveVisibility() - 1);
+			
 			// Créer l'objet de retour
 			objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, intNouveauPointage, intNouvelArgent);
 			
@@ -1216,4 +1246,40 @@ public class InformationPartie
 		public BoiteQuestions getObjBoiteQuestions() {
 			return objBoiteQuestions;
 		}
+		
+		/**
+		 * @return the moveVisibility
+		 */
+		public int getMoveVisibility() {
+			return moveVisibility;
+		}
+
+		/**
+		 * @param moveVisibility the moveVisibility to set
+		 */
+		public void setMoveVisibility(int moveV) {
+			this.moveVisibility = moveV;
+			
+			if (this.moveVisibility > 6){
+				this.moveVisibility = 6;
+			}else if (this.moveVisibility < 1){
+				this.moveVisibility = 1;
+			}
+		}
+
+		/**
+		 * @return the runningAnswers
+		 */
+		public int getRunningAnswers() {
+			return runningAnswers;
+		}
+
+		/**
+		 * @param runningAnswers the runningAnswers to set
+		 */
+		public void setRunningAnswers(int runningAnswers) {
+			this.runningAnswers = runningAnswers;
+		}
+
+		
 }
