@@ -634,7 +634,7 @@ class PlancheDeJeu
 	 
 	 if(tableauDesCases[p.obtenirL()][p.obtenirC()].obtenirType() > 41000)
         isInWinTheGame = false;
-	
+	 var moveVisibility =  _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility;
 	 if( !(p.getRole() == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") && isInWinTheGame)
 	 { 
 		trace("Debut afficherCasesPossibles");
@@ -654,7 +654,7 @@ class PlancheDeJeu
 		switchColor(tableauDesCases[p.obtenirL()][p.obtenirC()]);
 		
 		//trace("ds afficherCasesPossibles");
-        for(i=1;i<=Math.min(mat.length-p.obtenirL()-1,6);i++)
+        for(i = 1; i <= Math.min(mat.length-p.obtenirL()-1,moveVisibility); i++)
         {
 			temp = Number(p.obtenirL());
 			temp += Number(i);
@@ -708,7 +708,7 @@ class PlancheDeJeu
         }
 	
 	
-        for(i=1; i<=Math.min(p.obtenirL(),6); i++)
+        for(i=1; i <= Math.min(p.obtenirL(),moveVisibility); i++)
         {
 			//trace("ds deuxieme for avant if  i  mat  :  "+i+"   "+mat[p.obtenirL()-i][p.obtenirC()]);
 			temp = p.obtenirL()-i;
@@ -760,7 +760,7 @@ class PlancheDeJeu
             }
         }
 	
-        for(i=1;i<=Math.min(mat[0].length-p.obtenirC()-1,6);i++)
+        for(i=1;i<=Math.min(mat[0].length-p.obtenirC()-1,moveVisibility);i++)
         {
 			temp = Number(p.obtenirC());
 			temp += Number(i);
@@ -812,7 +812,7 @@ class PlancheDeJeu
             }
         }
 		
-        for(i=1;i<=Math.min(p.obtenirC(),6);i++)
+        for(i=1;i<=Math.min(p.obtenirC(),moveVisibility);i++)
         {
 			//trace("ds dernier for avant if  i  mat  :  "+i+"   "+mat[p.obtenirL()][p.obtenirC()-i]);
 			temp = p.obtenirC()-i;
