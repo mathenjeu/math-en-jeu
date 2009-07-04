@@ -57,6 +57,9 @@ class GestionnaireEvenements
 	private var numeroJoueursDansSalle:Number = 0;
 	public  var typeDeJeu:String = "MathEnJeu";
 	
+	private var moveVisibility:Number;  // The number of cases that user can move. At the begining is 3. 
+	                                    // With the 3 running correct answers the level increase by 1  
+	
 	function affichageChamps()
 	{
 		trace("------ debut affichage ------");
@@ -127,6 +130,8 @@ class GestionnaireEvenements
         this.listeDesJoueursConnectes = new Array();
         this.listeDesJoueursDansSalle = new Array();
 		this.tabPodiumOrdonneID = new Array();
+		
+		this.moveVisibility = 3;
 		
 		var url_serveur:String = _level0.configxml_mainnode.attributes.url_server;
 		var port:Number = parseInt(_level0.configxml_mainnode.attributes.port, 10);
@@ -1449,23 +1454,23 @@ class GestionnaireEvenements
 					
 						switch((String)(objetEvenement.objetUtilise.mauvaiseReponse))
 						{
-							case "A":
+							case "1":
 								_level0.loader.contentHolder.box_question.btn_a._visible = false;
 							break;
 							
-							case "B":
+							case "2":
 								_level0.loader.contentHolder.box_question.btn_b._visible = false;
 							break;
 							
-							case "C":
+							case "3":
 								_level0.loader.contentHolder.box_question.btn_c._visible = false;
 							break;
 							
-							case "D":
+							case "4":
 								_level0.loader.contentHolder.box_question.btn_d._visible = false;
 							break;
 							
-							case "E":
+							case "5":
 								_level0.loader.contentHolder.box_question.btn_e._visible = false;
 							break;
 							default:
@@ -1623,7 +1628,8 @@ class GestionnaireEvenements
 					// modifier le pointage
 					_level0.loader.contentHolder.planche.obtenirPerso().modifierPointage(objetEvenement.pointage);
 					_level0.loader.contentHolder.planche.obtenirPerso().modifierArgent(objetEvenement.argent);
-					_level0.loader.contentHolder.sortieDunMinigame = false;   
+					_level0.loader.contentHolder.sortieDunMinigame = false; 
+					this.moveVisibility = objetEvenement.moveVisibility;
 		     	}
 		     	else
 		     	{
@@ -1644,6 +1650,7 @@ class GestionnaireEvenements
 						var ptX:Number = _level0.loader.contentHolder.box_question.monScroll._x;
 						var ptY:Number = _level0.loader.contentHolder.box_question.monScroll._y;
 						_level0.loader.contentHolder.box_question.attachMovie("GUI_retro","GUI_retro", 100, {_x:ptX, _y:ptY});
+						this.moveVisibility = objetEvenement.moveVisibility;
 
 						_root.objGestionnaireInterface.effacerBoutons(1);
 					}
