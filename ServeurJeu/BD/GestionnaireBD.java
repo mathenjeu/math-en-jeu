@@ -748,7 +748,7 @@ public class GestionnaireBD
 			statistics =  statistics + ":" + levels[i];
 		}
 		
-		statistics = statistics + "*" + joueur.obtenirProtocoleJoueur().getQuestionsAnswers();
+		statistics = statistics + "||" + joueur.obtenirProtocoleJoueur().getQuestionsAnswers();
 		
 		// Création du SQL pour l'ajout
 		String strSQL = "INSERT INTO game_user(game_id, user_id, score, has_won, questions_answers) VALUES " +
