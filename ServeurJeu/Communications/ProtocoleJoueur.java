@@ -154,7 +154,6 @@ public class ProtocoleJoueur implements Runnable
 		questionsAnswers = new StringBuffer();
 		
 		try
-
 		{
 			// etant donné que ce sont seulement de petits messages qui sont 
 			// envoyés entre le client et le serveur, alors il n'est pas 
@@ -1759,7 +1758,7 @@ public class ProtocoleJoueur implements Runnable
 					String strReponse = obtenirValeurParametre(objNoeudCommandeEntree, "Reponse").getNodeValue();
 										
 					//collect players answers for DB
-					collectPlayerAnswers(strReponse );
+					collectPlayerAnswers(strReponse, objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().reponseEstValide(strReponse));
 					
 					int timer = lastQuestionTime - objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsRestant();
 					//collect time of reponse for DB
@@ -1829,31 +1828,46 @@ public class ProtocoleJoueur implements Runnable
 						Element objNoeudParametreDeplacementAccepte = objDocumentXMLSortie.createElement("parametre");
 						Element objNoeudParametrePointage = objDocumentXMLSortie.createElement("parametre");
                         Element objNoeudParametreArgent = objDocumentXMLSortie.createElement("parametre");
+                        Element objNoeudParametreVisibility = objDocumentXMLSortie.createElement("parametre");
+                        
                         Text objNoeudTexteDeplacementAccepte = objDocumentXMLSortie.createTextNode(Boolean.toString(objRetour.deplacementEstAccepte()));
 						Text objNoeudTextePointage = objDocumentXMLSortie.createTextNode(Integer.toString(objRetour.obtenirNouveauPointage()));
                         Text objNoeudTexteArgent = objDocumentXMLSortie.createTextNode(Integer.toString(objRetour.obtenirNouvelArgent()));
+                        Text objNoeudTexteVisibility = objDocumentXMLSortie.createTextNode(Integer.toString(objJoueurHumain.obtenirPartieCourante().getMoveVisibility()));
+                        
+                        System.out.println(":ICI Visibility : " + objJoueurHumain.obtenirPartieCourante().getMoveVisibility());
+                        
 						objNoeudParametreDeplacementAccepte.setAttribute("type", "DeplacementAccepte");
 						objNoeudParametrePointage.setAttribute("type", "Pointage");
                         objNoeudParametreArgent.setAttribute("type", "Argent");
+                        objNoeudParametreVisibility.setAttribute("type", "MoveVisibility");
+                        
+                        
 						objNoeudParametreDeplacementAccepte.appendChild(objNoeudTexteDeplacementAccepte);
 						objNoeudParametrePointage.appendChild(objNoeudTextePointage);
                         objNoeudParametreArgent.appendChild(objNoeudTexteArgent);
+                        objNoeudParametreVisibility.appendChild(objNoeudTexteVisibility);
+                        
+                        
 						objNoeudCommande.appendChild(objNoeudParametreDeplacementAccepte);
 
 						// Si le déplacement est accepté, alors on crée les 
 						// noeuds spécifiques au succès de la réponse
 						if (objRetour.deplacementEstAccepte() == true)
     					{
-							
+							    // work with movevisibility
+							  					
                             	Element objNoeudParametreObjetRamasse = objDocumentXMLSortie.createElement("parametre");
                             	Element objNoeudParametreObjetSubi = objDocumentXMLSortie.createElement("parametre");
                             	Element objNoeudParametreNouvellePosition = objDocumentXMLSortie.createElement("parametre");
                             	Element objNoeudParametreCollision = objDocumentXMLSortie.createElement("parametre");
+                            	
 
                             	objNoeudParametreObjetRamasse.setAttribute("type", "ObjetRamasse");
                             	objNoeudParametreObjetSubi.setAttribute("type", "ObjetSubi");
                             	objNoeudParametreNouvellePosition.setAttribute("type", "NouvellePosition");
                             	objNoeudParametreCollision.setAttribute("type", "Collision");
+                            	
 
                             	// S'il y a un objet qui a été ramassé, alors on peut
                             	// créer son noeud enfant, sinon on n'en crée pas
@@ -1918,11 +1932,13 @@ public class ProtocoleJoueur implements Runnable
 							objNoeudParametreExplication.setAttribute("type", "Explication");
 							objNoeudParametreExplication.appendChild(objNoeudTexteExplication);
 							objNoeudCommande.appendChild(objNoeudParametreExplication);
+							objNoeudCommande.appendChild(objNoeudParametreVisibility);
 						}
 
 						// Ajouter les noeuds paramètres au noeud de commande
 						objNoeudCommande.appendChild(objNoeudParametrePointage);
                         objNoeudCommande.appendChild(objNoeudParametreArgent);
+                        objNoeudCommande.appendChild(objNoeudParametreVisibility);
 					}
 				}
 				else if(objNoeudCommandeEntree.getAttribute("nom").equals(Commande.Pointage))
@@ -3617,6 +3633,9 @@ public class ProtocoleJoueur implements Runnable
             	 objNoeudCommande.setAttribute("type", "Livre");
             	 objNoeudCommande.appendChild(objNoeudParametreMauvaiseReponse);
             	 bolDoitRetournerCommande = true;
+            	 
+            	 collectPlayerAnswers("Book");
+            	 
              }
              else if(strTypeObjet.equals("Boule"))
              {
@@ -3651,7 +3670,7 @@ public class ProtocoleJoueur implements Runnable
             	 //int poz = questionsAnswers.lastIndexOf("*");
             	 //int end = questionsAnswers.length();
             	 //questionsAnswers.delete(poz,end-1);
-            	 collectPlayerAnswers();
+            	 collectPlayerAnswers("Cristall");
             	 collectPlayerAnswers(nouvelleQuestion);
             	 
             	 lastQuestionTime = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsRestant();
@@ -3819,25 +3838,28 @@ public class ProtocoleJoueur implements Runnable
      */
     private void collectPlayerAnswers(int reponseTime) 
     {
-		questionsAnswers.append(":" + reponseTime + "*");
+		questionsAnswers.append(":" + reponseTime + "||");
 		
 	}// end methode
     
     /*
      * Methode that collect players answers in a string
      */
-    private void collectPlayerAnswers(String strReponse) 
+    private void collectPlayerAnswers(String strReponse, boolean valide) 
     {
-		questionsAnswers.append(":" + strReponse + ":" + objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().reponseEstValide(strReponse));
+		questionsAnswers.append(":" + strReponse + ":" + valide);
 		
 	}// end methode
     
     /*
      * Methode that collect players answers in a string
      */
-    private void collectPlayerAnswers() 
+    private void collectPlayerAnswers(String object) 
     {
-		questionsAnswers.append(": Cristall *");
+    	if (object.equalsIgnoreCase("Cristall"))
+		    questionsAnswers.append(": Cristall ||");
+    	else if (object.equalsIgnoreCase("Book"))
+    		questionsAnswers.append(": Book");
 		
 	}// end methode
 
