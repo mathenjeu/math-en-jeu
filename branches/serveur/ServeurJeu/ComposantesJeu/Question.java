@@ -148,6 +148,8 @@ public class Question
 	 	    strReponse.toUpperCase().equals("5") ||
 	 	    strReponse.toUpperCase().equals("6") )
 	 	{
+	 		System.out.println(strReponse.toUpperCase());
+	 		
 	 		// Choisir aléatoirement une mauvaise réponse
 	 		int nbChoix = 0;
 	 		if(objTypeQuestion.equals("MULTIPLE_CHOICE"))
@@ -160,7 +162,7 @@ public class Question
 	 		
 	 	    int arrShuffle[] = new int[nbChoix];
 	 	    for(int i = 0; i < nbChoix; i++)
-	 	    	arrShuffle[i] = i;
+	 	    	arrShuffle[i] = i + 1;
 	 	    
 	 	    for (int x = 1; x < 10; x++)
 	 	    {
@@ -173,10 +175,13 @@ public class Question
 	 	    }
 	 	    for (int x = 1; x < nbChoix; x++)
 	 	    {
-	 	    	Character c = new Character((char)(arrShuffle[x] + 65));
-	 	    	String strMauvaiseReponse = c.toString();
+	 	    	//Character c = new Character((char)(arrShuffle[x] + 48));  // 65 for the letters 48 for the numbers
+	 	    	//String strMauvaiseReponse = c.toString();
+	 	    	
+	 	    	String strMauvaiseReponse = ((Integer)(arrShuffle[x])).toString();
 	 	    	if (!strMauvaiseReponse.equals(strReponse.toUpperCase()))
 	 	    	{
+	 	    		System.out.println("ICI mauvaise rep : "  + strMauvaiseReponse);
 	 	    		return strMauvaiseReponse;
 	 	    	}
 	 	    }	 
