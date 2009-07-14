@@ -101,9 +101,9 @@ public class Salle
         this.gameType = gameType;
 		
 		// Créer une nouvelle liste de joueurs, de tables et de numéros
-		lstJoueurs = new TreeMap<String, JoueurHumain>();
-		lstTables = new TreeMap<Integer, Table>();
-		lstNoTables = new TreeSet<Integer>();
+		lstJoueurs = new TreeMap <String, JoueurHumain>();
+		lstTables = new TreeMap <Integer, Table>();
+		lstNoTables = new TreeSet <Integer>();
 		
 		// Définir les règles de jeu pour la salle courante
 		objRegles = reglesSalle;
