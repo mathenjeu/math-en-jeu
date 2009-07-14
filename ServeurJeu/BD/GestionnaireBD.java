@@ -466,7 +466,7 @@ public class GestionnaireBD
 			synchronized( requete )
 			{
 				ResultSet rs = requete.executeQuery( strRequeteSQL );
-				rs.setFetchSize(10);
+				rs.setFetchSize(5);
 				//int countQuestionId = 0;
 				int codeQuestionTemp = 0;
 				int countReponse = 0;
@@ -527,7 +527,7 @@ public class GestionnaireBD
 			synchronized( requete )
 			{
 				ResultSet rs = requete.executeQuery( strRequeteSQL );
-				rs.setFetchSize(10);
+				rs.setFetchSize(5);
 				while(rs.next())
 				{
 					int codeQuestion = rs.getInt("question_id");
@@ -573,7 +573,7 @@ public class GestionnaireBD
 			synchronized( requete )
 			{
 				ResultSet rs = requete.executeQuery( strRequeteSQL );
-				rs.setFetchSize(10);
+				rs.setFetchSize(5);
 				while(rs.next())
 				{
 					int codeQuestion = rs.getInt("question_id");
@@ -1564,8 +1564,10 @@ public class GestionnaireBD
 		//add information of the room to other tables of DB
 		putNewRoomInfo(room_id, cleLang, name, roomDesc);
 		putNewRoomColorSquare(room_id);
+		putNewRoomObjects(room_id);
+		putNewRoomShops(room_id); 
 		
-		System.out.println(room_id);
+		//System.out.println(room_id);
 		
 		return room_id;
 	}// end methode
@@ -1661,6 +1663,96 @@ public class GestionnaireBD
 				synchronized(prepStatement)
 				{
 					for(int i = 0; i < 5; i++)
+					{
+
+						// Ajouter l'information pour cette salle
+						prepStatement.setInt(1, room_id);
+						prepStatement.setInt(2, i + 1);
+						prepStatement.setInt(3, i + 1);
+						prepStatement.addBatch();//executeUpdate();
+
+					}
+					prepStatement.executeBatch();
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_specialSquare") + e.getMessage());
+			}
+		
+		
+	}// end methode
+	
+	/**
+	 * Method satellite to putNewRoom() used to put new room in DB from room created in profModule
+	 * put infos in room_object table
+	 * @throws SQLException 
+	 */
+	public void putNewRoomObjects(int room_id) 
+	{
+		
+		PreparedStatement prepStatement = null;
+		try {
+			prepStatement = connexion.prepareStatement("INSERT INTO room_object (room_id, object_id, priority) VALUES ( ? , ?, ?);");
+		} catch (SQLException eper) {
+			// TODO Auto-generated catch block
+			// Une erreur est survenue lors de la création de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_create_preparedStatement_NewRoomObjects"));
+			eper.printStackTrace();
+		}
+				
+		
+			try
+			{
+				synchronized(prepStatement)
+				{
+					
+					// Ajouter l'information pour cette salle
+					prepStatement.setInt(1, room_id);
+					prepStatement.setInt(2, 1);
+					prepStatement.setInt(3, 1);
+					prepStatement.addBatch();
+					
+					prepStatement.setInt(1, room_id);
+					prepStatement.setInt(2, 3);
+					prepStatement.setInt(3, 2);
+					prepStatement.addBatch();
+				
+					prepStatement.executeBatch();
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_objects") + e.getMessage());
+			}
+		
+		
+	}// end methode
+	
+	/**
+	 * Method satellite to putNewRoom() used to put new room in DB from room created in profModule
+	 * put infos in room_shop table
+	 * @throws SQLException 
+	 */
+	public void putNewRoomShops(int room_id) 
+	{
+		
+		PreparedStatement prepStatement = null;
+		try {
+			prepStatement = connexion.prepareStatement("INSERT INTO room_shop (room_id, shop_id, priority) VALUES ( ? , ?, ?);");
+		} catch (SQLException eper) {
+			// TODO Auto-generated catch block
+			// Une erreur est survenue lors de la création de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_create_preparedStatement_shops"));
+			eper.printStackTrace();
+		}
+				
+		
+			try
+			{
+				synchronized(prepStatement)
+				{
+					for(int i = 0; i < 3; i++)
 					{
 
 						// Ajouter l'information pour cette salle
