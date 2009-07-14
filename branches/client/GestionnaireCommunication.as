@@ -325,6 +325,10 @@ class GestionnaireCommunication
                         case "ObtenirListeSalles":
                             retourObtenirListeSalles(objNoeudCommande);
                             break;
+						//************************************************
+						case "CreateRoom":
+                            retourCreateRoom(objNoeudCommande);
+                            break;
                         case "EntrerSalle":
                             retourEntrerSalle(objNoeudCommande);
                             break;
@@ -1227,24 +1231,24 @@ class GestionnaireCommunication
             var objNoeudParametreMotDePasseText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(motDePasse));
             var objNoeudParametreLangue:XMLNode = objObjetXML.createElement("parametre");
             //>>>>>>>>>> THis is connextion: _level0.loader
-            var objNoeudParametreLangueText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(_parent.contentHolder.langue));
-            var objNoeudParametreGameType:XMLNode = objObjetXML.createElement("parametre");
-            var objNoeudParametreGameTypeText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(_parent.contentHolder.gameType));
+            var objNoeudParametreLangueText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(_level0.langue));
+            //var objNoeudParametreGameType:XMLNode = objObjetXML.createElement("parametre");
+            //var objNoeudParametreGameTypeText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(_level0.gameType));
             // Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "Connexion";
             objNoeudParametreNomUtilisateur.attributes.type = "NomUtilisateur";
             objNoeudParametreMotDePasse.attributes.type = "MotDePasse";
             objNoeudParametreLangue.attributes.type = "Langue";
-            objNoeudParametreGameType.attributes.type = "GameType";
+            //objNoeudParametreGameType.attributes.type = "GameType";
             objNoeudParametreNomUtilisateur.appendChild(objNoeudParametreNomUtilisateurText);
             objNoeudParametreMotDePasse.appendChild(objNoeudParametreMotDePasseText);
             objNoeudParametreLangue.appendChild(objNoeudParametreLangueText);
-            objNoeudParametreGameType.appendChild(objNoeudParametreGameTypeText);
+            //objNoeudParametreGameType.appendChild(objNoeudParametreGameTypeText);
             objNoeudCommande.appendChild(objNoeudParametreNomUtilisateur);
             objNoeudCommande.appendChild(objNoeudParametreMotDePasse);
             objNoeudCommande.appendChild(objNoeudParametreLangue);
-            objNoeudCommande.appendChild(objNoeudParametreGameType);
+            //objNoeudCommande.appendChild(objNoeudParametreGameType);
             objObjetXML.appendChild(objNoeudCommande);
             // Declaration d'un nouvel objet qui va contenir les informations sur
             // la commande a traiter courante
@@ -1455,6 +1459,103 @@ class GestionnaireCommunication
             // TODO: Dire qu'on n'est pas connecte
         }
     }
+	//*********************************************************************
+	 /**
+     * Cette methode permet au joueur de creer une salle.
+     *
+     * @param Function createRoomDelegate : Un pointeur sur la
+     *          fonction permettant au joueur de creer une salle
+     * 
+     * @params String - les params de la salle
+     */
+    public function createRoom(createRoomDelegate:Function,
+                               nameRoom:String, description:String, pass:String, fromDate:String, toDate:String)
+    {
+        // Si on a obtenu la liste des tables, alors on peut continuer le code
+        // de la fonction
+        if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("CreateRoom", "nom") == true)
+        {
+            // Declaration d'un tableau dont le contenu est un Delegate
+            var lstDelegateCommande:ExtendedArray = new ExtendedArray();
+            // Ajouter le Delegate de retour dans le tableau des delegate pour
+            // cette fonction
+            lstDelegateCommande.push({nom:"CreateRoom", delegate:createRoomDelegate});
+            // Ajouter les autres Delegate d'evenements
+            ////lstDelegateCommande.push({nom:"JoueurDemarrePartie", delegate:evenementJoueurDemarrePartieDelegate});
+            // Declaration d'une variable qui va contenir le numero de la commande
+            // generee
+            var intNumeroCommande:Number = obtenirNumeroCommande();
+            // Creer l'objet XML qui va contenir la commande a envoyer au serveur
+            var objObjetXML:XML = new XML();
+            // Creer tous les noeuds de la commande
+            var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
+            
+			var objNoeudParametreNameRoom:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreNameRoomText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(nameRoom));
+			
+			var objNoeudParametreDescription:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreDescriptionText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(description)));
+			
+			var objNoeudParametrePass:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametrePassText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(pass));
+			
+			var objNoeudParametreBeginDate:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreBeginDateText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(fromDate));
+			
+			var objNoeudParametreEndDate:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreEndDateText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(toDate));
+			
+			// Construire l'arbre du document XML
+            objNoeudCommande.attributes.no = String(intNumeroCommande);
+            objNoeudCommande.attributes.nom = "CreateRoom";
+            objNoeudParametreNameRoom.attributes.type = "NameRoom";
+            objNoeudParametreNameRoom.appendChild(objNoeudParametreNameRoomText);
+			objNoeudParametreDescription.attributes.type = "Description";
+            objNoeudParametreDescription.appendChild(objNoeudParametreDescriptionText);
+			objNoeudParametrePass.attributes.type = "Password";
+            objNoeudParametrePass.appendChild(objNoeudParametrePassText);
+			objNoeudParametreBeginDate.attributes.type = "BeginDate";
+            objNoeudParametreBeginDate.appendChild(objNoeudParametreBeginDateText);
+			objNoeudParametreEndDate.attributes.type = "EndDate";
+            objNoeudParametreEndDate.appendChild(objNoeudParametreEndDateText);
+						
+            objNoeudCommande.appendChild(objNoeudParametreNameRoom);
+			objNoeudCommande.appendChild(objNoeudParametreDescription);
+            objNoeudCommande.appendChild(objNoeudParametrePass);
+			objNoeudCommande.appendChild(objNoeudParametreBeginDate);
+            objNoeudCommande.appendChild(objNoeudParametreEndDate);
+					
+			objObjetXML.appendChild(objNoeudCommande);
+            // Declaration d'un nouvel objet qui va contenir les informations sur
+            // la commande a traiter courante
+            var objObjetCommande:Object = new Object();
+            // Definir les proprietes de l'objet de la commande a ajouter dans le
+            // tableau des commandes a envoyer
+            objObjetCommande.no = intNumeroCommande;
+            objObjetCommande.nom = "CreateRoom";
+            objObjetCommande.objetXML = objObjetXML;
+            objObjetCommande.listeDelegate = lstDelegateCommande;
+			//trace(objObjetXML);
+            // Ajouter l'objet de commande a envoyer courant a la fin du tableau
+            var intNbElements:Number = lstCommandesAEnvoyer.push(objObjetCommande);
+            // Si le nombre d'elements dans la liste est de 1 (celui qu'on vient
+            // juste d'ajouter) et qu'il n'y aucune commande en traitement, alors
+            // on peut envoyer la commande pour la faire traiter (normalement, il
+            // ne devrait y avoir aucune commande en traitement), sinon alors elle
+            // va se faire traiter tres prochainement
+            if (intNbElements == 1 && objCommandeEnTraitement == null)
+            {
+                // Appeler la fonction qui va permettre de traiter la prochaine
+                // commande et de charger tout ce qu'il faut en memoire
+                traiterProchaineCommande();
+            }
+        }
+        else
+        {
+            // TODO: Dire qu'on n'est pas connecte
+        }
+    }
+	//*********************************************************************
 	
     /**
      * Cette methode permet au joueur d'entrer dans une salle.
@@ -2791,6 +2892,77 @@ class GestionnaireCommunication
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+	
+	//*******************************************************************
+	 /**
+     * Cette methode permet de decortiquer le noeud de commande passe en
+     * parametres et de lancer un evenement a ceux qui s'etaient ajoute comme
+     * ecouteur a la fonction creerTable. On va egalement envoyer les
+     * evenements qui attendent d'etre traites dans le tableau d'evenements
+     * et les retirer du tableau.
+     *
+     * @param XMLNode noeudCommande : Le noeud de commande que le serveur
+     *                                nous renvoye et qui contient sa reponse
+     */
+    private function retourCreateRoom(noeudCommande:XMLNode)
+    {
+		trace("Retour CreateRoom");
+        // Construire l'objet evenement pour le retour de la fonction
+        var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
+                                   resultat:noeudCommande.attributes.nom};
+        // Si le resultat est le numero de la table, alors on peut
+        // ajouter le numero de la table dans l'objet a retourner
+        if (objEvenement.resultat == "NoTable")
+        {
+            // Ajouter l'attribut noTable dans l'objet d'evenement
+            //objEvenement.noTable = Number(noeudCommande.firstChild.firstChild.nodeValue);
+			
+			//**********************************************************
+			// Declaration d'une reference vers la liste des noeuds parametres
+            var lstNoeudsParametre:Array = noeudCommande.childNodes;
+			
+            // Passer tous les parametres et les ajouter dans l'objet evenement
+            for (var i:Number = 0; i < lstNoeudsParametre.length; i++)
+            {
+                // Faire la reference vers le noeud courant
+                var objNoeudParametre:XMLNode = lstNoeudsParametre[i];
+                // Determiner le type du parametre courant et creer l'element
+                // correspondant dans l'objet evenement
+		
+				//trace("avant le switch   "+objNoeudParametre.attributes.type);
+				trace("objNoeudParametre.attributes.type : " + objNoeudParametre.attributes.type);
+                switch (objNoeudParametre.attributes.type)
+                {
+                    case "NoTable":
+		    			objEvenement.noTable = Number(objNoeudParametre.firstChild.nodeValue);
+                        break;
+						
+                    case "NameTable":
+                        objEvenement.nameTable = objNoeudParametre.firstChild.nodeValue;
+						break;
+						                   
+                }
+            }
+			//*********************************************************
+			
+        }
+        // Si le retour de la fonction est une reponse positive et non une
+        // erreur, alors on peut passer a l'autre etat
+        if (noeudCommande.attributes.type == "Reponse")
+        {
+            // On est maintenant a l'autre etat
+            intEtatClient = Etat.DANS_TABLE.no;
+        }
+        // Appeler la fonction qui va envoyer tous les evenements et
+        // retirer leurs ecouteurs
+        envoyerEtMettreAJourEvenements(noeudCommande, objEvenement);
+        // Traiter la prochaine commande
+        traiterProchaineCommande();
+    }
+
+	
+	//*******************************************************************
+	
 	
     /**
      * Cette methode permet de decortiquer le noeud de commande passe en
