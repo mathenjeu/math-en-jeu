@@ -113,7 +113,7 @@ class GestionnaireEvenements
     function GestionnaireEvenements(nom:String, passe:String)
     {
         trace("*********************************************");
-        trace("debut du constructeur de gesEve      "+nom+"      "+passe);
+        trace("debut du constructeur de gesEve      " + nom + "      " + passe);
         this.nomUtilisateur = nom;
         this.listeDesPersonnages = new Array();
         this.listeDesPersonnages.push(new Object());  // why ??????????? why without name ??????????
@@ -207,6 +207,16 @@ class GestionnaireEvenements
 		this.objGestionnaireCommunication = new GestionnaireCommunication(Delegate.create(this, this.evenementConnexionPhysiqueTunneling), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
 	}
 	
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+    function createRoom(nameRoom:String, description:String, pass:String, fromDate:String, toDate:String)
+    {
+        trace("*********************************************");
+        trace("debut de createRoom     :" + nameRoom);
+        this.objGestionnaireCommunication.createRoom(Delegate.create(this, this.retourCreateRoom), nameRoom, description, pass, fromDate, toDate);
+        trace("fin de createRoom");
+        trace("*********************************************\n");
+    }
+
 	
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     function entrerSalle(nSalle:String)
@@ -627,6 +637,42 @@ class GestionnaireEvenements
         trace("fin de retourObtenirListeSalles");
         trace("*********************************************\n");
     }
+	
+	//*****************************************************************************************
+	 ////////////////////////////////////////////////////////////////////////////////////////////////////
+    public function retourCreateRoom(objetEvenement:Object)
+    {
+        //   objetEvenement.resultat = , CommandeNonReconnue, ParametrePasBon ou JoueurNonConnecte
+        trace("*********************************************");
+        trace("debut de retourCreateRoom   " + objetEvenement.resultat);
+        switch(objetEvenement.resultat)
+        {
+            case "OK":
+               
+					trace("room XXX ");
+					
+
+            break;
+			 
+            case "CommandeNonReconnue":
+                trace("CommandeNonReconnue");
+            break;
+			 
+            case "ParametrePasBon":
+                trace("ParamettrePasBon");
+            break;
+			 
+            case "JoueurNonConnecte":
+                trace("Joueur non connecte");
+            break;
+			 
+            default:
+                trace("Erreur Inconnue");
+        }
+        trace("fin de retourCreateRoom");
+        trace("*********************************************\n");
+    }
+	//*****************************************************************************************
 	
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function retourEntrerSalle(objetEvenement:Object)
