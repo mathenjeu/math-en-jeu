@@ -639,6 +639,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			
 			// Déterminer combien de joueurs on veut
 			intNombreJoueursVirtuels = objRegles.getNbVirtualPlayers();
+			if(intNombreJoueursVirtuels + nbJoueur > objRegles.getMaxNbPlayers()) 
+			   intNombreJoueursVirtuels = objRegles.getMaxNbPlayers() - nbJoueur;
 			
 		/*	intNombreJoueursVirtuels = 	MAX_NB_PLAYERS - lstJoueursEnAttente.size() - 9;
 			if (intNombreJoueursVirtuels < 0 || intNombreJoueursVirtuels >= MAX_NB_PLAYERS)
