@@ -28,6 +28,8 @@ public final class Commande
         public static final String AcheterObjet = "AcheterObjet";
         public static final String Argent = "Argent";
         public static final String ChatMessage = "ChatMessage";
+        public static final String CreateRoom = "CreateRoom";
+        public static final String CloseRoom = "CloseRoom";
     
 	/**
 	 * Constructeur par défaut est privé pour empêcher de pourvoir créer des 
@@ -57,6 +59,7 @@ public final class Commande
 		        valeur.equals(DeplacerPersonnage) || valeur.equals(RepondreQuestion) ||
 		        valeur.equals(DemarrerMaintenant) || valeur.equals(Pointage) ||
 		        valeur.equals(RejoindrePartie) || valeur.equals(UtiliserObjet) ||
-		        valeur.equals(AcheterObjet) || valeur.equals(Argent) || valeur.equals(ChatMessage));
+		        valeur.equals(AcheterObjet) || valeur.equals(Argent) || 
+		        valeur.equals(ChatMessage)||valeur.equals(CreateRoom)||valeur.equals(CloseRoom));
 	}
 }
