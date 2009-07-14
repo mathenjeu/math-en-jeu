@@ -261,41 +261,33 @@ public class GestionnaireBD
 		}
 		
 		try{
-			synchronized(prepStatement)
+			for(int i = 0; i < catValues.length; i++)
 			{
-				for(int i = 0; i < catValues.length; i++)
+				synchronized(prepStatement)
 				{
-
 					prepStatement.setInt(1, cle);
 					prepStatement.setInt(2, catValues[i].getCode());
-					prepStatement.addBatch();
+					ResultSet rs = prepStatement.executeQuery();
+					if(rs.next())
+					{
+						cleNiveau[i] = rs.getInt("level");
+	    			}
+					
 				}
-				cleNiveau = prepStatement.executeBatch();
+
 			}
 		}
 		catch (Exception e)
 		{
 			System.out.println(GestionnaireMessages.message("bd.erreur_adding_info_subject_user") + e.getMessage());
 		}
-		
-		
-		/*
-		for(int i = 0; i < catValues.length; i++)
-		{
-			strRequeteSQL = "SELECT user_subject_level.level  FROM user,user_subject_level " +
-						" WHERE  user_subject_level.user_id = " + cle + 
-						" AND user_subject_level.category_id = " + catValues[i].getCode() + ";"; 
 			
-			cleNiveau[i] = fillLevels(strRequeteSQL);
-			//System.out.println(cleNiveau[i]);
-		} */ 
-		
 		joueur.definirCleNiveau(cleNiveau);
 		fillConnectedUser(cle);
 		
 	}//end methode
 	
-	// This function follows one of the two previous functions. It queries the database and
+/*	// This function follows one of the two previous functions. It queries the database and
     // does the actual filling of the player categories levels
 	private int fillLevels(  String strRequeteSQL )
 	{	
@@ -328,7 +320,7 @@ public class GestionnaireBD
 		    e.printStackTrace();
 		}
 		return level;
-	}// end methode
+	}// end methode  */
 	
 	/**
 	 * this fonction fill the fields in DB (user.last_access_time,lasr_access_time)
@@ -474,6 +466,7 @@ public class GestionnaireBD
 			synchronized( requete )
 			{
 				ResultSet rs = requete.executeQuery( strRequeteSQL );
+				rs.setFetchSize(10);
 				//int countQuestionId = 0;
 				int codeQuestionTemp = 0;
 				int countReponse = 0;
@@ -534,6 +527,7 @@ public class GestionnaireBD
 			synchronized( requete )
 			{
 				ResultSet rs = requete.executeQuery( strRequeteSQL );
+				rs.setFetchSize(10);
 				while(rs.next())
 				{
 					int codeQuestion = rs.getInt("question_id");
@@ -579,6 +573,7 @@ public class GestionnaireBD
 			synchronized( requete )
 			{
 				ResultSet rs = requete.executeQuery( strRequeteSQL );
+				rs.setFetchSize(10);
 				while(rs.next())
 				{
 					int codeQuestion = rs.getInt("question_id");
@@ -1033,7 +1028,7 @@ public class GestionnaireBD
   				if(rs.next())
   				{
   					name = rs.getString("room_bilingue");
-                  }
+                }
   			}
   		}
   		catch (SQLException e)
