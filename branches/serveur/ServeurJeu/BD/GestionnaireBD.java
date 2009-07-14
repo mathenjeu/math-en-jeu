@@ -1,6 +1,7 @@
 package ServeurJeu.BD;
 
 import java.sql.*;
+
 import org.apache.log4j.Logger;
 import Enumerations.Categories;
 import Enumerations.Visibilite;
@@ -247,18 +248,47 @@ public class GestionnaireBD
 		// on prend dans BD les niveaux scolaires du joueur en utilisant enum Categories
 		Categories[] catValues = Categories.values();
 		int[] cleNiveau = new int[catValues.length];
+				
+		PreparedStatement prepStatement = null;
+		try {
+			prepStatement = connexion.prepareStatement("SELECT user_subject_level.level  FROM user,user_subject_level " +
+					" WHERE  user_subject_level.user_id = ? AND user_subject_level.category_id = ? ;");
+		} catch (SQLException eper) {
+			// TODO Auto-generated catch block
+			// Une erreur est survenue lors de la création de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_create_preparedStatement_User"));
+			eper.printStackTrace();
+		}
 		
-	
+		try{
+			synchronized(prepStatement)
+			{
+				for(int i = 0; i < catValues.length; i++)
+				{
+
+					prepStatement.setInt(1, cle);
+					prepStatement.setInt(2, catValues[i].getCode());
+					prepStatement.addBatch();
+				}
+				cleNiveau = prepStatement.executeBatch();
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(GestionnaireMessages.message("bd.erreur_adding_info_subject_user") + e.getMessage());
+		}
 		
+		
+		/*
 		for(int i = 0; i < catValues.length; i++)
 		{
-			String strRequeteSQL = "SELECT user_subject_level.level  FROM user,user_subject_level " +
+			strRequeteSQL = "SELECT user_subject_level.level  FROM user,user_subject_level " +
 						" WHERE  user_subject_level.user_id = " + cle + 
 						" AND user_subject_level.category_id = " + catValues[i].getCode() + ";"; 
 			
 			cleNiveau[i] = fillLevels(strRequeteSQL);
 			//System.out.println(cleNiveau[i]);
-		}  
+		} */ 
 		
 		joueur.definirCleNiveau(cleNiveau);
 		fillConnectedUser(cle);
@@ -900,16 +930,12 @@ public class GestionnaireBD
 						createur = rs.getString("user.name");
 						gameType = rs.getString("game_type.name");
 						
-						String roomDescription = fillRoomDescription(room);//rs.getString( "room_info.description" );
-						nom = fillRoomName(room);//nom = rs.getString( "room_info.name" );						
-						
-					//	System.out.println(nom);
-					//	System.out.println(roomDescription);
-						
+						String roomDescription = fillRoomDescription(room);
+						nom = fillRoomName(room);
+														
 						Regles objReglesSalle = new Regles();
 						chargerRegllesSalle(objReglesSalle, room);
 						Salle objSalle = new Salle(nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType);
-					//  System.out.println(objSalle.toString());
 						objSalle.setRoomDescription(roomDescription);
 						objControleurJeu.ajouterNouvelleSalle(objSalle);
 					}   
@@ -1029,7 +1055,7 @@ public class GestionnaireBD
     * @param langId 
     */
 	@SuppressWarnings("unchecked")
-	private void chargerRegllesSalle(Regles objReglesSalle, int roomId) {
+	public void chargerRegllesSalle(Regles objReglesSalle, int roomId) {
 				
         try
 		{
@@ -1153,9 +1179,9 @@ public class GestionnaireBD
   		{
   			synchronized( requete )
   			{
-  				ResultSet rst = requete.executeQuery( "SELECT color_square_rule.priority, color_square_rule.type " +
-  					" FROM color_square_rule " +
-  					" WHERE color_square_rule.room_id = " + roomId +
+  				ResultSet rst = requete.executeQuery( "SELECT special_square_rule.priority, special_square_rule.type " +
+  					" FROM special_square_rule " +
+  					" WHERE special_square_rule.room_id = " + roomId +
   					 ";");
   				while(rst.next())
   				{
@@ -1495,4 +1521,171 @@ public class GestionnaireBD
   		if(tmp2 > 0)
   			objReglesSalle.definirTempsMaximal(tmp2);
 	}//end methode
+	
+	
+	//******************************************************************
+	//  Bloc used to put new room in DB from room created in profModule
+	//******************************************************************
+	
+	/**
+	 * Method used to put new room in DB from room created in profModule
+	 * put it in room table
+	 */
+	public int putNewRoom(String pass, int user_id, String name, String roomDesc, String langue )
+	{
+		int room_id = 0;
+		
+		 // Pour tenir compte de la langue
+        int cleLang = 1;   
+        
+        if (langue.equalsIgnoreCase("fr")) 
+            cleLang = 1;
+        else if (langue.equalsIgnoreCase("en"))
+        	cleLang = 2;
+		// Création du SQL pour l'ajout
+		String strSQL = "INSERT INTO room (password, game_type_id, user_id, official, rule_id) VALUES ('" +
+		                 pass + "',1," + user_id + ",1,1);";
+
+		try
+		{
+			synchronized(requete)
+			{
+				// Ajouter l'information pour cette partie
+				requete.executeUpdate(strSQL, Statement.RETURN_GENERATED_KEYS);
+
+				// Aller chercher la clé de la salle qu'on vient d'ajouter
+				ResultSet  rs = requete.getGeneratedKeys();
+
+				// On retourne la clé de partie
+				rs.next();
+				room_id = rs.getInt("GENERATED_KEY");
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_infos") + e.getMessage());
+		}
+
+		//add information of the room to other tables of DB
+		putNewRoomInfo(room_id, cleLang, name, roomDesc);
+		putNewRoomColorSquare(room_id);
+		
+		System.out.println(room_id);
+		
+		return room_id;
+	}// end methode
+	
+	/**
+	 * Method satellite to putNewRoom() used to put new room in DB from room created in profModule
+	 * put infos in room_info table
+	 */
+	public void putNewRoomInfo(int room_id, int lang_id, String name, String roomDesc)
+	{
+		
+		// Création du SQL pour l'ajout
+		String strSQL = "INSERT INTO room_info (room_id, language_id, name, description) VALUES (" +
+		                 room_id + "," + lang_id + ",'" + name + "','" + roomDesc + "');";
+
+		try
+		{
+			synchronized(requete)
+			{
+				// Ajouter l'information pour cette salle
+				requete.executeUpdate(strSQL);
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_infosTable") + e.getMessage());
+		}
+
+		
+	}// end methode
+	
+	/**
+	 * Method satellite to putNewRoom() used to put new room in DB from room created in profModule
+	 * put infos in color_square_rule table
+	 * @throws SQLException 
+	 */
+	public void putNewRoomColorSquare(int room_id) 
+	{
+		PreparedStatement prepStatement = null;
+		try {
+			prepStatement = connexion.prepareStatement("INSERT INTO color_square_rule (room_id, type, priority) VALUES ( ? , ?, ?);");
+		} catch (SQLException eper) {
+			// TODO Auto-generated catch block
+			// Une erreur est survenue lors de la création de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_create_preparedStatement_NewRoom"));
+			eper.printStackTrace();
+		}
+		
+			try
+			{
+				for(int i = 0; i < 5; i++)
+				{
+					synchronized(prepStatement)
+					{
+						// Ajouter l'information pour cette salle
+						prepStatement.setInt(1, room_id);
+						prepStatement.setInt(2, i + 1);
+						prepStatement.setInt(3, i + 1);
+						prepStatement.addBatch();//executeUpdate();
+					}
+				}
+				prepStatement.executeBatch();
+			}
+			catch (Exception e)
+			{
+				System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_colorSquare") + e.getMessage());
+			}
+		
+		
+	}// end methode
+	
+	/**
+	 * Method satellite to putNewRoom() used to put new room in DB from room created in profModule
+	 * put infos in special_square_rule table
+	 * @throws SQLException 
+	 */
+	public void putNewRoomSpecialSquare(int room_id) 
+	{
+		
+		PreparedStatement prepStatement = null;
+		try {
+			prepStatement = connexion.prepareStatement("INSERT INTO special_square_rule (room_id, type, priority) VALUES ( ? , ?, ?);");
+		} catch (SQLException eper) {
+			// TODO Auto-generated catch block
+			// Une erreur est survenue lors de la création de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_create_preparedStatement_NewRoom"));
+			eper.printStackTrace();
+		}
+				
+		
+			try
+			{
+				synchronized(prepStatement)
+				{
+					for(int i = 0; i < 5; i++)
+					{
+
+						// Ajouter l'information pour cette salle
+						prepStatement.setInt(1, room_id);
+						prepStatement.setInt(2, i + 1);
+						prepStatement.setInt(3, i + 1);
+						prepStatement.addBatch();//executeUpdate();
+
+					}
+					prepStatement.executeBatch();
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_specialSquare") + e.getMessage());
+			}
+		
+		
+	}// end methode
+	//******************************************************************
+	
+	
 }// end class
