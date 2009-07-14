@@ -8,6 +8,19 @@
 		boutonEntrer = "Enter"
 		barLabel = "Loading ..."
 
+  moduleProf = ""
+	  teacherFrame1 = "Teachers Angle" 
+	  boutonNewRoom = "New Room"
+	  teacherExploreFrame1 = "Explore"
+	  roomNameLabel = "Name"
+	  roomDescLabel = "Description"
+	  roomPassLabel = "Password"
+	  roomBDateLabel = "Begin date"
+	  roomBTimeLabel = "Begin time"
+	  roomEDateLabel = "End date"
+	  roomETimeLabel = "End time"
+	  createRoomText = "Create"
+	  
 	
 	mathemaQuoi_beta = ""
 	
@@ -26,6 +39,8 @@
 			boutonQuitterX = "Quit the game.."
 			tableNameLabel = "Table name"
 			playersListe = " - Liste of players - "
+			
+			
 	
 			explication = "The advanced mode allows for the more experienced player to select his level among the various mathematical categories of the game. If desired, he can personnalize his gaming experience by choosing only the subjects he is interested in."
 			
