@@ -444,7 +444,7 @@ public class ControleurJeu
 	 */
 	public TreeMap<String, Salle> obtenirListeSalles(String language)
 	{
-		
+		synchronized(lstSalles){
 	        // On crée une liste de salles vide, et on parcourt toutes les salles connues
             TreeMap<String, Salle> copieListeSalles = (TreeMap<String, Salle>) lstSalles.clone();
             copieListeSalles.clear();
@@ -467,12 +467,10 @@ public class ControleurJeu
                 }else{
                 	
                 	// here we test if the room has the language of player
-                	//Boolean estDuBonGameType = gameType.equals(salle.getGameType());
                 	Boolean permetCetteLangue = objGestionnaireBD.roomLangControl(salle, language);
 
                 	// Si les paramètres en entrée sont des strings vides,
                 	// alors on ignore le paramètre correspondant
-                	//if(gameType.equals("")) estDuBonGameType = true;
                 	if(language.equals("")) permetCetteLangue = true;
 
                 	// On ajoute la salle à la liste si elle correspond à ce qu'on veut
@@ -482,6 +480,7 @@ public class ControleurJeu
             }
             
             return copieListeSalles;
+		}
 	}
 
 	/**
@@ -491,15 +490,14 @@ public class ControleurJeu
 	 * @param String nomSalle : Le nom de la salle
 	 * @return false : La salle n'existe pas 
 	 * 		   true  : La salle existe déjà
-	 * @synchronism Cette fonction n'a pas besoin d'être synchronisée car
-	 * 				on ne peut pas ajouter ou enlever des salles par le
-	 * 				serveur de jeu (sauf quand celui-ci démarre, mais aucun
-	 * 				joueur n'est connecté à ce moment-là)
+	 * 
 	 */
 	public boolean salleExiste(String nomSalle)
 	{
 		// Retourner si la salle existe déjà ou non
-		return lstSalles.containsKey(objGestionnaireBD.getFullRoomName(nomSalle));	        
+		synchronized(lstSalles){
+		   return lstSalles.containsKey(objGestionnaireBD.getFullRoomName(nomSalle));
+		}
 	}
 	
 	/**
@@ -510,12 +508,28 @@ public class ControleurJeu
 	 * @synchronism Cette fonction n'a pas besoin d'être synchronisée car
 	 * 				elle est exécutée seulement lors du démarrage du serveur
 	 * 				et il n'y a aucun joueur de connecté à ce moment là.
+	 *    !!! add synchronism because need to add rooms dinamicaly during 
+	 *    the time of life of controler        
 	 */
 	public void ajouterNouvelleSalle(Salle nouvelleSalle)
 	{
 	    // Ajouter la nouvelle salle dans la liste des salles du 
 	    // contrôleur de jeu
-	    lstSalles.put(nouvelleSalle.getRoomName(""), nouvelleSalle);	        
+		synchronized(lstSalles){
+		   lstSalles.put(nouvelleSalle.getRoomName(""), nouvelleSalle);
+		}
+	}
+	
+	/**
+	 * This methode is used to close the room for future games
+	 * @param 
+	 * TODO need to verify the params
+	 */
+	public void closeRoom (Salle room){
+		synchronized(lstSalles){
+			
+			   lstSalles.remove(room.getRoomName(""));
+			}
 	}
 	
 	/**
@@ -533,16 +547,15 @@ public class ControleurJeu
 	 * @return false : Le mot de passe pour entrer dans la salle n'est pas
 	 * 				   le bon
 	 * 		   true  : Le joueur a réussi à entrer dans la salle
-	 * @synchronism Cette fonction n'a pas besoin d'être synchronisée, car 
-	 * 				elle ne modifie pas la liste des salles et aucune autre
-	 * 				fonction ne le fait. Cependant, la méthode entrerSalle
-	 * 				de la salle devra être synchronisée.
+	 * 
 	 */
 	public boolean entrerSalle(JoueurHumain joueur, String nomSalle, 
 	        				   String motDePasse, boolean doitGenererNoCommandeRetour)
 	{
-		// On retourne le résultat de l'entrée du joueur dans la salle
-		return ((Salle) lstSalles.get(objGestionnaireBD.getFullRoomName(nomSalle))).entrerSalle(joueur, motDePasse, doitGenererNoCommandeRetour);
+		synchronized(lstSalles){
+    		// On retourne le résultat de l'entrée du joueur dans la salle
+	    	return ((Salle) lstSalles.get(objGestionnaireBD.getFullRoomName(nomSalle))).entrerSalle(joueur, motDePasse, doitGenererNoCommandeRetour);
+		}
 	}
 	
 	/**
