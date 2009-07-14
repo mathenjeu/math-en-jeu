@@ -8,6 +8,21 @@
 		boutonEntrer = "Entrer"
 		barLabel = "Chargement en cours..."
 
+  moduleProf = ""
+    teacherFrame1 = "Coin des Professeurs"
+    boutonNewRoom = "Nouvelle Salle"
+    teacherExploreFrame1 = "Explorer"
+    roomNameLabel = "Nom"
+    roomDescLabel = "Description"
+	  roomPassLabel = "Mot de Passe"
+	  roomBDateLabel = "Date début"
+	  roomBTimeLabel = "Temps début"
+	  roomEDateLabel = "Date fin"
+	  roomETimeLabel = "Temps fin"
+	  createRoomText = "Creé"
+    
+    
+    
 	
 	mathemaQuoi_beta = ""
 	
