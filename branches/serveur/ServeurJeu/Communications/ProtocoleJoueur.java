@@ -791,70 +791,71 @@ public class ProtocoleJoueur implements Runnable
 						// Générer un nouveau numéro de commande qui sera 
 						// retourné au client
 						genererNumeroReponse();
+						synchronized(lstListeSalles)
+                        {
+                        	// Créer un ensemble contenant tous les tuples de la liste 
+                        	// lstListeSalles (chaque élément est un Map.Entry)
+                        	Set<Map.Entry<String, Salle>> lstEnsembleSalles = lstListeSalles.entrySet();
 
-						// Créer un ensemble contenant tous les tuples de la liste 
-						// lstListeSalles (chaque élément est un Map.Entry)
-						Set<Map.Entry<String, Salle>> lstEnsembleSalles = lstListeSalles.entrySet();
+                        	// Obtenir un itérateur pour l'ensemble contenant les salles
+                        	Iterator<Entry<String, Salle>> objIterateurListe = lstEnsembleSalles.iterator();
 
-						// Obtenir un itérateur pour l'ensemble contenant les salles
-						Iterator<Entry<String, Salle>> objIterateurListe = lstEnsembleSalles.iterator();
+                        	//we find if room is set tournamentActive
+                        	Set<String> keySet =  lstListeSalles.keySet();
+                        	Iterator<String> it = keySet.iterator();
+                        	/*String tournamentActive = "";
+                        	while (it.hasNext() && !tournamentActive.equals("TournamentActive"))
+                        	{
+                        		tournamentActive  = (String)it.next();
+                        	}*/
 
-						//we find if room is set tournamentActive
-						Set<String> keySet =  lstListeSalles.keySet();
-						Iterator<String> it = keySet.iterator();
-						String tournamentActive = "";
-						while (it.hasNext() && !tournamentActive.equals("TournamentActive"))
-						{
-							tournamentActive  = (String)it.next();
-						}
+                        	// Passer toutes les salles et créer un noeud pour 
+                        	// chaque salle et l'ajouter au noeud de paramètre
+                        	while (objIterateurListe.hasNext() == true)
+                        	{
+                        		// Créer une référence vers la salle courante dans la liste
+                        		Salle objSalle = (Salle)(((Map.Entry<String, Salle>)(objIterateurListe.next())).getValue());
 
-						// Passer toutes les salles et créer un noeud pour 
-						// chaque salle et l'ajouter au noeud de paramètre
-						while (objIterateurListe.hasNext() == true)
-						{
-							// Créer une référence vers la salle courante dans la liste
-							Salle objSalle = (Salle)(((Map.Entry<String, Salle>)(objIterateurListe.next())).getValue());
+                        		// Créer le noeud de la salle courante
+                        		Element objNoeudSalle = objDocumentXMLSortie.createElement("salle");
 
-							// Créer le noeud de la salle courante
-							Element objNoeudSalle = objDocumentXMLSortie.createElement("salle");
+                        		// On ajoute un attribut nom qui va contenir le nom
+                        		// de la salle
+                        		objNoeudSalle.setAttribute("nom", objSalle.getRoomName(this.langue));
 
-							// On ajoute un attribut nom qui va contenir le nom
-							// de la salle
-							objNoeudSalle.setAttribute("nom", objSalle.getRoomName(this.langue));
-							
-							System.out.println(objSalle.getRoomName(""));
+                        		//System.out.println(objSalle.getRoomName(""));
 
-							// On ajoute un attribut protegee qui va contenir
-							// une valeur booléenne permettant de savoir si la
-							// salle est protégée par un mot de passe ou non
-							objNoeudSalle.setAttribute("protegee", Boolean.toString(objSalle.protegeeParMotDePasse()));
+                        		// On ajoute un attribut protegee qui va contenir
+                        		// une valeur booléenne permettant de savoir si la
+                        		// salle est protégée par un mot de passe ou non
+                        		objNoeudSalle.setAttribute("protegee", Boolean.toString(objSalle.protegeeParMotDePasse()));
 
-							//Add room description to the node
-							objNoeudSalle.setAttribute("descriptions", objSalle.getRoomDescription(this.langue));
-							
-							System.out.println(objSalle.getRoomDescription(""));
+                        		//Add room description to the node
+                        		objNoeudSalle.setAttribute("descriptions", objSalle.getRoomDescription(this.langue));
 
-							//Add max numbers of players of that room
-							objNoeudSalle.setAttribute("maxnbplayers", Integer.toString(objSalle.getRegles().getMaxNbPlayers()));
+                        		//System.out.println(objSalle.getRoomDescription(""));
 
-							//Add max numbers of players of that room
-							objNoeudSalle.setAttribute("typeDeJeu", objSalle.getGameType());
+                        		//Add max numbers of players of that room
+                        		objNoeudSalle.setAttribute("maxnbplayers", Integer.toString(objSalle.getRegles().getMaxNbPlayers()));
 
+                        		//Add max numbers of players of that room
+                        		objNoeudSalle.setAttribute("typeDeJeu", objSalle.getGameType());
 
-							if(tournamentActive.equals("TournamentActive"))
-							{
-								objNoeudSalle.setAttribute("activ", "true");
-							}
-							else
-							{
-								objNoeudSalle.setAttribute("activ", "false");
-							}
+                                /*
+                        		if(tournamentActive.equals("TournamentActive"))
+                        		{
+                        			objNoeudSalle.setAttribute("activ", "true");
+                        		}
+                        		else
+                        		{
+                        			objNoeudSalle.setAttribute("activ", "false");
+                        		}
+                                */
 
-
-							// Ajouter le noeud de la salle au noeud du paramètre
-							objNoeudParametreListeSalles.appendChild(objNoeudSalle);
-						}
-
+                        		// Ajouter le noeud de la salle au noeud du paramètre
+                        		objNoeudParametreListeSalles.appendChild(objNoeudSalle);
+                        	}
+                        }
 						// Ajouter le noeud paramètre au noeud de commande dans
 						// le document de sortie
 						objNoeudCommande.appendChild(objNoeudParametreListeSalles);
@@ -925,7 +926,7 @@ public class ProtocoleJoueur implements Runnable
 						objControleurJeu.ajouterNouvelleSalle(objSalle);
 						
 						// Il n'y a pas eu d'erreurs et il va falloir retourner 
-						// une liste de salles
+						// une liste des salles ?
 						objNoeudCommande.setAttribute("type", "Reponse");
 						objNoeudCommande.setAttribute("nom", "OK");
 
