@@ -20,6 +20,11 @@
 	  roomEDateLabel = "Date fin"
 	  roomETimeLabel = "Temps fin"
 	  createRoomText = "Creé"
+	  roomListLabel  = "LISTE DES SALLES"
+	  roomReportLabel = "RAPPORT"
+	  roomReportText = "Rapport"
+	  editRoomText = "Éditer Salle"
+	  saveReportText = "Sauver rapport"
     
     
     
