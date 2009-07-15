@@ -50,6 +50,7 @@ class Etat
     // Constante objet indiquant que le joueur a obtenu la liste des salles
     public static var LISTE_SALLES_OBTENUE:Object = {no:4, listeCommandesPossibles:new Array({nom:"Deconnexion", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurConnecte", "JoueurDeconnecte"), listeEvenementsAcceptablesApres:new Array()},
     {nom:"CreateRoom", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurConnecte", "JoueurDeconnecte"), listeEvenementsAcceptablesApres:new Array()},
+	{nom:"ObtenirListeSalles", listeEvenementsAcceptables:new Array("JoueurConnecte", "JoueurDeconnecte"), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()},
     {nom:"EntrerSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurConnecte", "JoueurDeconnecte"), listeEvenementsAcceptablesApres:new Array()}),
 	listeEvenementsAcceptables:new Array("JoueurConnecte", "JoueurDeconnecte")};
 
