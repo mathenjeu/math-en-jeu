@@ -68,7 +68,7 @@ public class Regles
 	private int intMaxSaledObjects;
 	
 	//Room is active in tournament and you enter directly in a board of this room
-	private boolean tournamentState;
+	//private boolean tournamentState;
 	
 	// show or not the question number in client
 	private boolean showNumber;
@@ -113,7 +113,7 @@ public class Regles
 	    intTempsMaximal = 0;
 	    intDeplacementMaximal = 1;
 	    intMaxSaledObjects = 0;
-	    tournamentState = false;
+	    //tournamentState = false;
 	    showNumber = true;
 	    setNbTracks(4);
 	    setNbVirtualPlayers(0);
@@ -374,7 +374,7 @@ public class Regles
 	public int getIntMaxSaledObjects() {
 		return intMaxSaledObjects;
 	}
-
+/*
 	public void setTournamentState(boolean tournamentActive) {
 		this.tournamentState = tournamentActive;
 	}
@@ -382,7 +382,7 @@ public class Regles
 	public boolean getTournamentState() {
 		return tournamentState;
 	}
-
+*/
 	public void setShowNumber(boolean showNumber) {
 		this.showNumber = showNumber;
 	}
