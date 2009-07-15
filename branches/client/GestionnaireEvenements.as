@@ -29,7 +29,7 @@ class GestionnaireEvenements
 {
     private var roomDescription:String;  // short room description taked from DB
 	private var nomUtilisateur:String;    // user name of our  user
-	private var userRole:Number;  // if 1 - simple user, if 2 - is admin(master)
+	private var userRole:Number;  // if 1 - simple user, if 2 - is admin(master), if 3 - is  prof
 	private var numeroDuPersonnage:Number; // sert a associer la bonne image pour le jeu d'ile au tresor
 	private var numberDesJoueurs:Number;
     public var  listeDesPersonnages:Array;   // liste associant les idPersonnage avec les nomUtilisateurs dans la table ou on est
@@ -43,7 +43,7 @@ class GestionnaireEvenements
     private var listeDesJoueursDansSalle:Array;  // liste des joueurs dans la salle qu'on est. Un joueur contient un nom (nom)
     public var  listeDesDescriptionsSalles:Array; //liste des descriptions des salles 
     public var  listeDesTypesDeJeu:Array; //liste des TypesDeJeu de salles
-	private var activ:Boolean;                     // if game has type Tournament and the room is active
+	//private var activ:Boolean;                     // if game has type Tournament and the room is active
 	public var  listeDesSalles:Array;    //  liste de toutes les salles
 	private var listeNumeroJoueursSalles:Array;		//liste de numero de joueurs dans chaque salle
 	private var listeChansons:Array;    //  liste de toutes les chansons
@@ -582,13 +582,15 @@ class GestionnaireEvenements
         switch(objetEvenement.resultat)
         {
             case "ListeSalles":
+			    this.listeDesSalles.removeAll();
                 for (var i:Number = 0; i < objetEvenement.listeNomSalles.length; i++)
                 {
 					
 					this.listeDesSalles.push(objetEvenement.listeNomSalles[i]);
 					_level0.loader.contentHolder.listeSalle.addItem(this.listeDesSalles[i].nom );
 					trace("salle " + i + " : " + this.listeDesSalles[i].nom);
-					
+					_level0.listeRooms.addItem(this.listeDesSalles[i].nom );
+										
 					this.listeDesDescriptionsSalles.push(objetEvenement.listeDescrSalles[i]);
 					_level0.loader.contentHolder.listeDescr.push(this.listeDesDescriptionsSalles[i].descriptions );
 					trace("salle " + i + " : " + this.listeDesDescriptionsSalles[i].descriptions );
@@ -611,10 +613,10 @@ class GestionnaireEvenements
 						trace("salle enlevee --> " + i + " : " + this.listeDesSalles[i].nom);
 					}
 				}
-				activ = objetEvenement.isActiveRoom;
+				//activ = objetEvenement.isActiveRoom;
 				
-				_level0.loader.contentHolder.isActiv = objetEvenement.isActiveRoom;
-				trace("salle active : " + _level0.loader.contentHolder.isActiv);
+				//_level0.loader.contentHolder.isActiv = objetEvenement.isActiveRoom;
+				//trace("salle active : " + _level0.loader.contentHolder.isActiv);
 				_level0.loader.contentHolder.bt_continuer1._visible = true;
 				_level0.loader.contentHolder.txtChargementSalles._visible = false;
             break;
@@ -649,8 +651,8 @@ class GestionnaireEvenements
         {
             case "OK":
                
-					trace("room XXX ");
-					
+			trace("room created  ");
+			this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles));
 
             break;
 			 
