@@ -1056,13 +1056,13 @@ public class GestionnaireBD
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery( "SELECT rule.*, room.tournament FROM rule, room" +
+				ResultSet rs = requete.executeQuery( "SELECT rule.*  FROM rule, room" +
 						" WHERE room.room_id = " + roomId +
 				        " AND rule.rule_id = room.rule_id ;" );
 				while(rs.next())
 				{
 					boolean shownumber = rs.getBoolean("show_nb_questions");
-					boolean tournament =  rs.getBoolean("tournament");
+					//boolean tournament =  rs.getBoolean("tournament");
 					boolean chat = rs.getBoolean( "chat" );
 					Float ratioTrous  = Float.parseFloat( rs.getString( "hole_ratio" ));
 					Float ratioMagasins  = Float.parseFloat( rs.getString( "shop_ratio" ));
@@ -1084,7 +1084,7 @@ public class GestionnaireBD
 					objReglesSalle.setMaxNbObjectsAndMoney(maxNbObjectsAndMoney);
 					objReglesSalle.setMaxNbPlayers(maxNbPlayers);
 					objReglesSalle.setShowNumber(shownumber);
-					objReglesSalle.setTournamentState(tournament);
+					//objReglesSalle.setTournamentState(tournament);
 					objReglesSalle.definirPermetChat(chat);
 					objReglesSalle.definirRatioTrous( ratioTrous );
 					objReglesSalle.definirRatioMagasins( ratioMagasins );
