@@ -20,6 +20,11 @@
 	  roomEDateLabel = "End date"
 	  roomETimeLabel = "End time"
 	  createRoomText = "Create"
+	  roomListLabel  = "ROOMS LIST"
+	  roomReportLabel = "REPORT"
+	  roomReportText = "Report"
+	  editRoomText = "Edit Room"
+	  saveReportText = "Save report"
 	  
 	
 	mathemaQuoi_beta = ""
