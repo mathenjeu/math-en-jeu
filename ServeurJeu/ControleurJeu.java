@@ -450,13 +450,13 @@ public class ControleurJeu
             copieListeSalles.clear();
             Set<String> keySet = lstSalles.keySet();
             Iterator<String> it = keySet.iterator();
-            boolean repeat = true;
+            //boolean repeat = true;
            
-            while (it.hasNext()&& repeat)
+            while (it.hasNext())//&& repeat)
             { 
             	String key = (String)it.next();
                 Salle salle = (Salle)lstSalles.get(key);
-                                
+                 /*               
                 if(salle.getRegles().getTournamentState()){
 
                 	copieListeSalles.clear();
@@ -464,7 +464,7 @@ public class ControleurJeu
                 	copieListeSalles.put(key,salle);
                   	repeat =  false;
                 	            	
-                }else{
+                }else{*/
                 	
                 	// here we test if the room has the language of player
                 	Boolean permetCetteLangue = objGestionnaireBD.roomLangControl(salle, language);
@@ -476,7 +476,7 @@ public class ControleurJeu
                 	// On ajoute la salle à la liste si elle correspond à ce qu'on veut
                 	if(permetCetteLangue) copieListeSalles.put(key, salle);
                 	
-                }
+                //}
             }
             
             return copieListeSalles;
