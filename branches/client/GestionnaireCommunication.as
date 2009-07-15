@@ -2854,16 +2854,16 @@ class GestionnaireCommunication
 			// Creer un tableau ListeDescrSalles qui va contenir les
             // descriptions des objets salle
             objEvenement.listeDescrSalles = new Array();
-			objEvenement.isActiveRoom = new Boolean();
+			//objEvenement.isActiveRoom = new Boolean();
             // Passer toutes les salles et les ajouter dans le tableau
             for (var i:Number = 0; i < lstChildNodes.length; i++)
             {
                 // Ajouter l'objet salle dans le tableau
                 objEvenement.listeDescrSalles.push({descriptions:lstChildNodes[i].attributes.descriptions});
-				if(lstChildNodes[i].attributes.activ == "true")
+				/*if(lstChildNodes[i].attributes.activ == "true")
 				   objEvenement.isActiveRoom = true;
 				else if(lstChildNodes[i].attributes.activ == "false")
-				   objEvenement.isActiveRoom = false;
+				   objEvenement.isActiveRoom = false; */
 			}
 			//Creer un tableau listeNumberoJSalles qui va contenir les noumero des joueurs dans salles
 			objEvenement.listeNumberoJSalles = new Array();
@@ -2912,9 +2912,9 @@ class GestionnaireCommunication
                                    resultat:noeudCommande.attributes.nom};
         // Si le resultat est le numero de la table, alors on peut
         // ajouter le numero de la table dans l'objet a retourner
-        if (objEvenement.resultat == "NoTable")
+        if (objEvenement.resultat == "OK")
         {
-            // Ajouter l'attribut noTable dans l'objet d'evenement
+            /*// Ajouter l'attribut noTable dans l'objet d'evenement
             //objEvenement.noTable = Number(noeudCommande.firstChild.firstChild.nodeValue);
 			
 			//**********************************************************
@@ -2943,7 +2943,7 @@ class GestionnaireCommunication
 						                   
                 }
             }
-			//*********************************************************
+			//**********************************************************/
 			
         }
         // Si le retour de la fonction est une reponse positive et non une
@@ -2951,7 +2951,7 @@ class GestionnaireCommunication
         if (noeudCommande.attributes.type == "Reponse")
         {
             // On est maintenant a l'autre etat
-            intEtatClient = Etat.DANS_TABLE.no;
+            intEtatClient = Etat.LISTE_SALLES_OBTENUE.no;
         }
         // Appeler la fonction qui va envoyer tous les evenements et
         // retirer leurs ecouteurs
