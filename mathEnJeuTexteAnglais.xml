@@ -10,7 +10,7 @@
 
   moduleProf = ""
 	  teacherFrame1 = "Teachers Angle" 
-	  boutonNewRoom = "New Room"
+	  boutonNewRoom = "New"
 	  teacherExploreFrame1 = "Explore"
 	  roomNameLabel = "Name"
 	  roomDescLabel = "Description"
@@ -23,8 +23,8 @@
 	  roomListLabel  = "ROOMS LIST"
 	  roomReportLabel = "REPORT"
 	  roomReportText = "Report"
-	  editRoomText = "Edit Room"
-	  saveReportText = "Save report"
+	  editRoomText = "Edit"
+	  saveReportText = "Save"
 	  
 	
 	mathemaQuoi_beta = ""
