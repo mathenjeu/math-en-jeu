@@ -589,7 +589,7 @@ class GestionnaireEvenements
 					this.listeDesSalles.push(objetEvenement.listeNomSalles[i]);
 					_level0.loader.contentHolder.listeSalle.addItem(this.listeDesSalles[i].nom );
 					trace("salle " + i + " : " + this.listeDesSalles[i].nom);
-					_level0.listeRooms.addItem(this.listeDesSalles[i].nom );
+					//_level0.listeRooms.addItem(this.listeDesSalles[i].nom );
 										
 					this.listeDesDescriptionsSalles.push(objetEvenement.listeDescrSalles[i]);
 					_level0.loader.contentHolder.listeDescr.push(this.listeDesDescriptionsSalles[i].descriptions );
@@ -619,6 +619,9 @@ class GestionnaireEvenements
 				//trace("salle active : " + _level0.loader.contentHolder.isActiv);
 				_level0.loader.contentHolder.bt_continuer1._visible = true;
 				_level0.loader.contentHolder.txtChargementSalles._visible = false;
+				_level0.new_btn._visible = true;
+				_level0.expl_btn._visible = true;
+				
             break;
 			 
             case "CommandeNonReconnue":
