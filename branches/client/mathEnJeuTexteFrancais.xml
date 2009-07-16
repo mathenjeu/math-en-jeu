@@ -10,7 +10,7 @@
 
   moduleProf = ""
     teacherFrame1 = "Coin des Professeurs"
-    boutonNewRoom = "Nouvelle Salle"
+    boutonNewRoom = "Créer"
     teacherExploreFrame1 = "Explorer"
     roomNameLabel = "Nom"
     roomDescLabel = "Description"
@@ -19,12 +19,12 @@
 	  roomBTimeLabel = "Temps début"
 	  roomEDateLabel = "Date fin"
 	  roomETimeLabel = "Temps fin"
-	  createRoomText = "Creé"
+	  createRoomText = "Créer"
 	  roomListLabel  = "LISTE DES SALLES"
 	  roomReportLabel = "RAPPORT"
 	  roomReportText = "Rapport"
-	  editRoomText = "Éditer Salle"
-	  saveReportText = "Sauver rapport"
+	  editRoomText = "Éditer"
+	  saveReportText = "Sauver"
     
     
     
