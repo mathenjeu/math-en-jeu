@@ -41,7 +41,7 @@ class GestionnaireEvenements
     private var idPersonnage:Number;   //  
     private var motDePasseSalle:String;   // le mot de passe de la salle dans laquelle on est
     private var listeDesJoueursDansSalle:Array;  // liste des joueurs dans la salle qu'on est. Un joueur contient un nom (nom)
-    public var  listeDesDescriptionsSalles:Array; //liste des descriptions des salles 
+    //public var  listeDesDescriptionsSalles:Array; //liste des descriptions des salles   // inutile a mon avis O.L.
     public var  listeDesTypesDeJeu:Array; //liste des TypesDeJeu de salles
 	//private var activ:Boolean;                     // if game has type Tournament and the room is active
 	public var  listeDesSalles:Array;    //  liste de toutes les salles
@@ -122,7 +122,7 @@ class GestionnaireEvenements
         this.nomSalle = new String();
         this.motDePasseSalle = new String();
         this.listeDesSalles = new Array();
-		this.listeDesDescriptionsSalles = new Array();
+		//this.listeDesDescriptionsSalles = new Array();
 		this.listeNumeroJoueursSalles = new Array();
 		this.listeDesTypesDeJeu = new Array();
         this.listeDesTables = new Array();
@@ -229,7 +229,7 @@ class GestionnaireEvenements
         {
             if(listeDesSalles[i].nom == nSalle)
             {
-	            numeroJoueursDansSalle = listeNumeroJoueursSalles[i].maxnbplayers;
+	            numeroJoueursDansSalle = listeDesSalles[i].maxnbplayers;
 	            typeDeJeu = listeDesSalles[i].typeDeJeu;
 	            
                 if(listeDesSalles[i].possedeMotDePasse == true)
@@ -591,13 +591,13 @@ class GestionnaireEvenements
 					trace("salle " + i + " : " + this.listeDesSalles[i].nom);
 					//_level0.listeRooms.addItem(this.listeDesSalles[i].nom );
 										
-					this.listeDesDescriptionsSalles.push(objetEvenement.listeDescrSalles[i]);
-					_level0.loader.contentHolder.listeDescr.push(this.listeDesDescriptionsSalles[i].descriptions );
-					trace("salle " + i + " : " + this.listeDesDescriptionsSalles[i].descriptions );
+					//this.listeDesDescriptionsSalles.push(objetEvenement.listeDescrSalles[i]);
+					//_level0.loader.contentHolder.listeDescr.push(this.listeDesDescriptionsSalles[i].descriptions );
+					//trace("salle " + i + " : " + this.listeDesSalles[i].descriptions );
 					
 					this.listeNumeroJoueursSalles.push(objetEvenement.listeNumberoJSalles[i]);
 					_level0.loader.contentHolder.listeNumeroJSalles.push(this.listeNumeroJoueursSalles[i].maxnbplayers );
-					trace("salle " + i + " : " + objetEvenement.listeNumberoJSalles[i].maxnbplayers);
+					trace("salle " + i + " : " + this.listeDesSalles[i].maxnbplayers + " " + objetEvenement.listeNomSalles[i].maxnbplayers);
 					
 					this.listeDesTypesDeJeu.push(objetEvenement.typeDeJeuAll[i]);
 					_level0.loader.contentHolder.listeDesTypesDeJeu.push(this.listeDesTypesDeJeu[i].typeDeJeu );
@@ -2014,7 +2014,7 @@ class GestionnaireEvenements
     	{
 	    	var alreadyWas:Boolean = false;
 	    	
-            for(i = numeroJoueursDansSalle-1; i >=0 ; i--)//nbmaxJoueurs
+            for(i = numeroJoueursDansSalle-1; i >=0 ; i--)         //
             {
 	            var itIsInconnu:Boolean = (listeDesPersonnages[i].nom.substr(0,7)=="Inconnu");
 	            
@@ -2359,15 +2359,15 @@ class GestionnaireEvenements
         	if(listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur)
         	{
             	this.listeDesPersonnages[i].id = objetEvenement.idPersonnage;
-            	_level0.loader.contentHolder.refLayer["b"+i].removeMovieClip();
+            	_level0.loader.contentHolder.refLayer["b" + i].removeMovieClip();
             	var idDessin:Number=((this.listeDesPersonnages[i].id-10000)-(this.listeDesPersonnages[i].id-10000)%100)/100;
-				var idPers:Number=this.listeDesPersonnages[i].id-10000-idDessin*100;
-            	movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage"+idDessin,"b"+idPers,100*i);
+				var idPers:Number = this.listeDesPersonnages[i].id - 10000 - idDessin*100;
+            	movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage" + idDessin,"b" + i, 100*i );
             	movClip._x = 510-j*60;
                 movClip._y = 150 + i*60-j*240;
 				movClip._xscale -= 70;
 				movClip._yscale -= 70;
-				
+				trace("idPers : " + idPers + "\n" + "idDessin");
 		
 	    		_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(objetEvenement.idPersonnage));
 	    
@@ -2375,10 +2375,10 @@ class GestionnaireEvenements
         	}
         	
         }
-        /*for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
+        for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
                 {
-					trace(i+": "+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
-				}*/
+					trace(i+": " + this.listeDesPersonnages[i].nom + " id:" + this.listeDesPersonnages[i].id);
+				}
     	trace("fin de evenementJoueurDemarrePartie");
     	trace("*********************************************\n");
     }
