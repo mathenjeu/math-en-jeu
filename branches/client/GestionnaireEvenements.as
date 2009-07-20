@@ -619,9 +619,9 @@ class GestionnaireEvenements
 				//trace("salle active : " + _level0.loader.contentHolder.isActiv);
 				_level0.loader.contentHolder.bt_continuer1._visible = true;
 				_level0.loader.contentHolder.txtChargementSalles._visible = false;
-				_level0.new_btn._visible = true;
-				_level0.expl_btn._visible = true;
-				
+				//_level0.new_btn._visible = true;
+				//_level0.expl_btn._visible = true;
+				_level0.gotoAndStop(3);
             break;
 			 
             case "CommandeNonReconnue":
@@ -656,6 +656,7 @@ class GestionnaireEvenements
                
 			trace("room created  ");
 			this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles));
+			
 
             break;
 			 
