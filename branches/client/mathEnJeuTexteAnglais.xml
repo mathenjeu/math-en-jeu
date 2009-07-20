@@ -9,7 +9,8 @@
 		barLabel = "Loading ..."
 
   moduleProf = ""
-	  teacherFrame1 = "Teachers Angle" 
+	  teacherFrame1 = "Teachers Angle
+    Charging the liste of rooms..." 
 	  boutonNewRoom = "New"
 	  teacherExploreFrame1 = "Explore"
 	  roomNameLabel = "Name"
