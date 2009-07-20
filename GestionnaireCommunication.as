@@ -2856,15 +2856,16 @@ class GestionnaireCommunication
             objEvenement.listeDescrSalles = new Array();
 			//objEvenement.isActiveRoom = new Boolean();
             // Passer toutes les salles et les ajouter dans le tableau
-            for (var i:Number = 0; i < lstChildNodes.length; i++)
+           /*
+		    for (var i:Number = 0; i < lstChildNodes.length; i++)
             {
                 // Ajouter l'objet salle dans le tableau
                 objEvenement.listeDescrSalles.push({descriptions:lstChildNodes[i].attributes.descriptions});
 				/*if(lstChildNodes[i].attributes.activ == "true")
 				   objEvenement.isActiveRoom = true;
 				else if(lstChildNodes[i].attributes.activ == "false")
-				   objEvenement.isActiveRoom = false; */
-			}
+				   objEvenement.isActiveRoom = false; 
+			} */
 			//Creer un tableau listeNumberoJSalles qui va contenir les noumero des joueurs dans salles
 			objEvenement.listeNumberoJSalles = new Array();
 			objEvenement.typeDeJeuAll = new Array();
