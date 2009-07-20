@@ -9,7 +9,8 @@
 		barLabel = "Chargement en cours..."
 
   moduleProf = ""
-    teacherFrame1 = "Coin des Professeurs"
+    teacherFrame1 = "Coin des Professeurs
+    Chargement de la liste des salles..."
     boutonNewRoom = "Créer"
     teacherExploreFrame1 = "Explorer"
     roomNameLabel = "Nom"
