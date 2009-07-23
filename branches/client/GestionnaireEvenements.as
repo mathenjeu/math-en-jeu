@@ -217,6 +217,16 @@ class GestionnaireEvenements
         trace("*********************************************\n");
     }
 
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+    function getReport(nameRoom:String)
+    {
+        trace("*********************************************");
+        trace("begin of getReport     :" + nameRoom);
+        this.objGestionnaireCommunication.getReport(Delegate.create(this, this.retourGetReport), nameRoom);
+        trace("end getReport");
+        trace("*********************************************\n");
+    }
+	
 	
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     function entrerSalle(nSalle:String)
@@ -619,8 +629,8 @@ class GestionnaireEvenements
 				//trace("salle active : " + _level0.loader.contentHolder.isActiv);
 				_level0.loader.contentHolder.bt_continuer1._visible = true;
 				_level0.loader.contentHolder.txtChargementSalles._visible = false;
-				//_level0.new_btn._visible = true;
-				//_level0.expl_btn._visible = true;
+				
+				//for the profModule;
 				_level0.gotoAndStop(3);
             break;
 			 
@@ -658,6 +668,38 @@ class GestionnaireEvenements
 			this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles));
 			
 
+            break;
+			 
+            case "CommandeNonReconnue":
+                trace("CommandeNonReconnue");
+            break;
+			 
+            case "ParametrePasBon":
+                trace("ParamettrePasBon");
+            break;
+			 
+            case "JoueurNonConnecte":
+                trace("Joueur non connecte");
+            break;
+			 
+            default:
+                trace("Erreur Inconnue");
+        }
+        trace("fin de retourCreateRoom");
+        trace("*********************************************\n");
+    }
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+    public function retourGetReport(objetEvenement:Object)
+    {
+        //   objetEvenement.resultat = , CommandeNonReconnue, ParametrePasBon ou JoueurNonConnecte
+        trace("*********************************************");
+        trace("debut de retourCreateRoom   " + objetEvenement.resultat);
+        switch(objetEvenement.resultat)
+        {
+            case "OK":
+            trace("report created  ");
+			_level0.roomReportText_txt.text = objetEvenement.report;
             break;
 			 
             case "CommandeNonReconnue":
