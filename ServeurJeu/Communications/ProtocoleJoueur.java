@@ -838,9 +838,13 @@ public class ProtocoleJoueur implements Runnable
                         		//Add max numbers of players of that room
                         		objNoeudSalle.setAttribute("maxnbplayers", Integer.toString(objSalle.getRegles().getMaxNbPlayers()));
 
-                        		//Add max numbers of players of that room
+                        		//Add type of game for that room
                         		objNoeudSalle.setAttribute("typeDeJeu", objSalle.getGameType());
+                        		
+                        		//Add type of game for that room
+                        		objNoeudSalle.setAttribute("userCreator", objSalle.getStrCreatorUserName());
 
+                        		System.out.println(objSalle.getStrCreatorUserName());
                                 /*
                         		if(tournamentActive.equals("TournamentActive"))
                         		{
@@ -930,6 +934,44 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudCommande.setAttribute("type", "Reponse");
 						objNoeudCommande.setAttribute("nom", "OK");
 
+
+						// Générer un nouveau numéro de commande qui sera 
+						// retourné au client
+						genererNumeroReponse();
+
+					} else {
+						// Sinon, il y a une erreur car le joueur doit ètre connecté
+						// pour pouvoir cree des salles
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+
+				}
+				//****************************************************************************
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.getReport))
+				{
+					// Si le joueur est connecté au serveur de jeu, alors on va
+					// cree la salle
+					if (objJoueurHumain != null)
+					{
+						String createur = objJoueurHumain.obtenirNomUtilisateur();
+																						
+						// Déclaration d'une variable qui va contenir le noeud
+						// du nom de la salle a creer le rapport
+						Node objRoomName = obtenirValeurParametre(objNoeudCommandeEntree, "NameRoom");
+                        String name = "";
+						name = objRoomName.getNodeValue();
+						System.out.println(name);
+						
+                       					
+						//add report from DB 
+						String report = objControleurJeu.obtenirGestionnaireBD().getReport(objJoueurHumain.obtenirCleJoueur(), name, this.langue);
+                        
+												
+						// Il n'y a pas eu d'erreurs et il va falloir retourner 
+						// une liste des salles ?
+						objNoeudCommande.setAttribute("type", "Reponse");
+						objNoeudCommande.setAttribute("nom", "OK");
+						objNoeudCommande.setAttribute("report", report);
 
 						// Générer un nouveau numéro de commande qui sera 
 						// retourné au client
@@ -2387,6 +2429,14 @@ public class ProtocoleJoueur implements Runnable
 		else if (noeudCommande.getAttribute("nom").equals(Commande.CreateRoom))
 		{
 			if (noeudCommande.getChildNodes().getLength() == 5)
+			{
+				bolCommandeValide = true;
+			}
+		}
+		
+		else if (noeudCommande.getAttribute("nom").equals(Commande.getReport))
+		{
+			if (noeudCommande.getChildNodes().getLength() == 1)
 			{
 				bolCommandeValide = true;
 			}
