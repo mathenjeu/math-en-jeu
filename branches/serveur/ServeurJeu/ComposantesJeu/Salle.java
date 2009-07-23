@@ -94,7 +94,7 @@ public class Salle
 		// créateur de la salle et le mot de passe
 		strNomSalle = nomSalle;
 		 
-		strCreatorUserName = nomUtilisateurCreateur;
+		setStrCreatorUserName(nomUtilisateurCreateur);
 		strPassword = motDePasse;
                 
         // Type de jeu de la salle
@@ -765,6 +765,14 @@ public class Salle
 			return lang.equalsIgnoreCase("fr")? descFr : descEng;
 		}
 		return roomDescription;
+	}
+
+	public void setStrCreatorUserName(String strCreatorUserName) {
+		this.strCreatorUserName = strCreatorUserName;
+	}
+
+	public String getStrCreatorUserName() {
+		return strCreatorUserName;
 	}
 
 }// end class 
