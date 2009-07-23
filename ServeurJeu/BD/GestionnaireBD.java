@@ -767,7 +767,8 @@ public class GestionnaireBD
 		int cleJoueur = joueur.obtenirCleJoueur();
 		int pointage = joueur.obtenirPartieCourante().obtenirPointage();
 		int[] levels = joueur.obtenirCleNiveau();
-		String statistics = "Levels ";
+		int room_id = 0;
+		String statistics = "";
 		for(int i = 0; i < levels.length; i++)
 		{
 			statistics =  statistics + ":" + levels[i];
@@ -775,15 +776,23 @@ public class GestionnaireBD
 		
 		statistics = statistics + "||" + joueur.obtenirProtocoleJoueur().getQuestionsAnswers();
 		
-		// Création du SQL pour l'ajout
-		String strSQL = "INSERT INTO game_user(game_id, user_id, score, has_won, questions_answers) VALUES " +
-		    "(" + clePartie + "," + cleJoueur + "," + pointage + "," + intGagner + ",'" + statistics + "');"; 
+		
 		
 		try
 		{
 			
 			synchronized(requete)
 			{
+				String langue = joueur.obtenirProtocoleJoueur().langue;
+				String name =  joueur.obtenirSalleCourante().getRoomName(langue);
+				//System.out.println(name);
+				ResultSet rs = requete.executeQuery("SELECT room_id FROM room_info WHERE name = '" + name + "';");
+				if (rs.next())
+					room_id = rs.getInt("room_id");
+				
+				// Création du SQL pour l'ajout
+				String strSQL = "INSERT INTO game_user(game_id, user_id, score, has_won, questions_answers, room_id) VALUES " +
+				    "(" + clePartie + "," + cleJoueur + "," + pointage + "," + intGagner + ",'" + statistics + "'," + room_id + ");"; 
 				// Ajouter l'information pour ce joueur
 	            requete.executeUpdate(strSQL);
 			}
@@ -912,7 +921,7 @@ public class GestionnaireBD
 			{
 				synchronized( requete )
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room.password, user.name, game_type.name " +
+					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, game_type.name " +
 							" FROM room_info, room, user, game_type " +
 							" WHERE room.room_id = " + room +  
 							" AND room.room_id = room_info.room_id " +
@@ -922,7 +931,7 @@ public class GestionnaireBD
 					{
 						
 						motDePasse = rs.getString( "password" );
-						createur = rs.getString("user.name");
+						createur = rs.getString("user.username");
 						gameType = rs.getString("game_type.name");
 						
 						String roomDescription = fillRoomDescription(room);
@@ -1772,7 +1781,101 @@ public class GestionnaireBD
 		
 		
 	}// end methode
-	//******************************************************************
 	
+	//******************************************************************
+	/**
+	 * Methode used to create the report for a room
+	 */
+	public String getReport(int creator_id, String name, String langue)
+	{
+		StringBuffer report = new StringBuffer();
+		int user_id = 0;
+		int score = 0;
+		String questions_answers = "";
+		Boolean won;
+		String first_name = "";
+		String last_name = "";
+		String username = "";
+		
+		if (langue.equals("fr"))
+			report.append("La Salle " + name + "\n\n");
+		else if (langue.equals("en"))
+			report.append("The Room " + name + "\n\n");
+		try
+		{
+			
+			synchronized(requete)
+			{
+				
+				ResultSet rs = requete.executeQuery("SELECT game_user.user_id,name,last_name,username,score,questions_answers,has_won FROM game_user, user where room_id IN (Select room_id From room_info where name = '" + name + "') AND game_user.user_id = user.user_id;");
+				while (rs.next()){
+					user_id = rs.getInt("user_id");
+					score = rs.getInt("score");
+					questions_answers = rs.getString("questions_answers");
+					won = rs.getBoolean("has_won");
+					first_name = rs.getString("name");
+					last_name = rs.getString("last_name");
+					username = rs.getString("username");
+					//report.append(user_id + score + questions_answers);
+					makeReport(report, user_id, score, questions_answers, won, langue, first_name, last_name, username);
+				}
+				
+			}
+        }
+        catch (Exception e)
+            {
+               System.out.println(GestionnaireMessages.message("bd.erreur_create_report") + e.getMessage());
+            }
+		
+        return report.toString();
+		
+	}// end methode
+	/**
+	 * Methode satellite to getReport
+	 * @param report
+	 * @param user_id
+	 * @param score
+	 * @param answers
+	 * @param won
+	 * @param langue
+	 */
+	private void makeReport(StringBuffer report, int user_id, int score, String answers, Boolean won, String langue, String first_name, String last_name, String username)
+	{
+		/*	
+		try
+		{
+			synchronized(requete)
+			{
+				
+				ResultSet rs = requete.executeQuery("SELECT name,last_name,username FROM user where user_id = " + user_id + ";");
+				if(rs.next()){
+					name = rs.getString("name");
+					last_name = rs.getString("last_name");
+					username = rs.getString("username");
+				}
+				
+			}
+        }
+        catch (Exception e)
+        {
+              System.out.println(GestionnaireMessages.message("bd.erreur_make_report") + e.getMessage());
+        }
+		*/
+        if(langue.equals("fr"))
+        {
+        	report.append("Joueur : " + username + "  Prenom : " + first_name + "  Nom de famille : " + last_name + "\n");
+        	report.append("Le pointage pour cette partie : " + score + "\n");
+        	report.append("À gagné : " + (won?"vrai":"faux") + "\n");
+        	report.append("Les réponses : " + answers + "\n\n");
+        }
+        else if(langue.equals("en"))
+        {
+        	report.append("User : " + username + "  Name : " + first_name + "  Last name: " + last_name + "\n");
+        	report.append("Points : " + score + "\n");
+        	report.append("He won : " + won + "\n");
+        	report.append("Answers : " + answers + "\n\n");
+        }
+		
+	}
 	
 }// end class
