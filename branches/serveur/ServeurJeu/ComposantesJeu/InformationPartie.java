@@ -455,7 +455,7 @@ public class InformationPartie
 		}
 		
 		int intCategorieQuestion = catScolaires[UtilitaireNombres.genererNbAleatoire(catValues.length - 1)]; 
-		
+		System.out.println("categorie : " + intCategorieQuestion);
 		//***************************************************************************************
 		
 		int intDifficulte = 0;
