@@ -26,6 +26,8 @@
 	  roomReportText = "Rapport"
 	  editRoomText = "Éditer"
 	  saveReportText = "Sauver"
+	  printReportText = "Imprimer"
+	  reportTextChange = "Selecter une salle pour voir le rapport..."
     
     
     
