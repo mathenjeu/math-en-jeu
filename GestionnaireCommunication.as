@@ -3055,7 +3055,7 @@ class GestionnaireCommunication
      */
     private function retourGetReport(noeudCommande:XMLNode)
     {
-		trace("Retour CreateRoom");
+		trace("Retour getReport");
         // Construire l'objet evenement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom, report:noeudCommande.attributes.report};
