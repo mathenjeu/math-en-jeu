@@ -694,12 +694,13 @@ class GestionnaireEvenements
     {
         //   objetEvenement.resultat = , CommandeNonReconnue, ParametrePasBon ou JoueurNonConnecte
         trace("*********************************************");
-        trace("debut de retourCreateRoom   " + objetEvenement.resultat);
+        trace("debut de retourGetReport   " + objetEvenement.resultat);
         switch(objetEvenement.resultat)
         {
             case "OK":
             trace("report created  ");
 			_level0.roomReportText_txt.text = objetEvenement.report;
+			_level0.roomReportText_txt.setTextFormat(_level0.reportFormat);
             break;
 			 
             case "CommandeNonReconnue":
@@ -717,7 +718,7 @@ class GestionnaireEvenements
             default:
                 trace("Erreur Inconnue");
         }
-        trace("fin de retourCreateRoom");
+        trace("fin de retourGetReport");
         trace("*********************************************\n");
     }
 	//*****************************************************************************************
