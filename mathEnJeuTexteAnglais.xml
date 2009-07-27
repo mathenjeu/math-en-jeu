@@ -26,6 +26,8 @@
 	  roomReportText = "Report"
 	  editRoomText = "Edit"
 	  saveReportText = "Save"
+	  printReportText = "Print"
+	  reportTextChange = "Select a room to take report..."
 	  
 	
 	mathemaQuoi_beta = ""
