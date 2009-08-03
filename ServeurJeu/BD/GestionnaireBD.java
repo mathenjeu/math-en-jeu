@@ -81,7 +81,7 @@ public class GestionnaireBD
 	* Cette fonction permet d'initialiser une connexion avec le serveur MySQL
 	* et de créer un objet requète
 	*/
-	private void connexionDB()
+	public void connexionDB()
 	{
 		  GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		
@@ -183,7 +183,7 @@ public class GestionnaireBD
 	public void controlPlayerAccount()
 	{
 		
-	//  SQL for update
+	    //  SQL for update
 		String strSQL = "UPDATE user SET last_access_date = CURDATE(), last_access_time = CURTIME() where last_access_date LIKE '1111-01-01' OR last_access_time LIKE '55:55:55';"; 
 		
 		try
@@ -250,11 +250,13 @@ public class GestionnaireBD
 		int[] cleNiveau = new int[catValues.length];
 				
 		PreparedStatement prepStatement = null;
-		try {
+		try
+		{
 			prepStatement = connexion.prepareStatement("SELECT user_subject_level.level  FROM user,user_subject_level " +
 					" WHERE  user_subject_level.user_id = ? AND user_subject_level.category_id = ? ;");
-		} catch (SQLException eper) {
-			// TODO Auto-generated catch block
+		
+		} catch (SQLException eper) 
+		{
 			// Une erreur est survenue lors de la création de la requète
 			objLogger.error(GestionnaireMessages.message("bd.erreur_create_preparedStatement_User"));
 			eper.printStackTrace();
@@ -873,22 +875,13 @@ public class GestionnaireBD
 	{
 		
 		ArrayList<Integer> rooms = new ArrayList<Integer>();
-	/*	int langId = 0;
-		if (language.equalsIgnoreCase("fr")) 
-            langId = 1;
-        else if (language.equalsIgnoreCase("en"))
-        	langId = 2; */
-		String nom = "";
-		String motDePasse = "";
-		String createur = "";
-		String gameType = "";
-		
+			
 		//find all rooms  and fill in ArrayList
 		try
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery( "SELECT room.room_id FROM room ;" );
+				ResultSet rs = requete.executeQuery( "SELECT room.room_id FROM room where (beginDate < NOW() AND endDate > NOW()) OR beginDate is NULL OR endDate is NULL;" );
 				while(rs.next())
 				{
 					int roomId = rs.getInt("room.room_id");
@@ -914,14 +907,31 @@ public class GestionnaireBD
 			objLogger.error( e.getMessage() );
 		    e.printStackTrace();
 		}
-			
+		
+		// create the rooms by this list of rooms ID  and put them in the ControleurJeu
+		fillRoomList(rooms);
+		
+	}//end methode fillsRooms
+	
+	/**
+	 * Methode satellite for fillsRooms()
+	 * @param rooms
+	 */
+	public void fillRoomList(ArrayList<Integer> rooms)
+	{
+		String nom = "";
+		String motDePasse = "";
+		String createur = "";
+		String gameType = "";
+	    Date beginDate = null;
+	    Date endDate = null;
 		//now fill all the rooms with properties and add this rooms to the game
 		for (int room : rooms){
 			try
 			{
 				synchronized( requete )
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, game_type.name " +
+					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, game_type.name, beginDate, endDate " +
 							" FROM room_info, room, user, game_type " +
 							" WHERE room.room_id = " + room +  
 							" AND room.room_id = room_info.room_id " +
@@ -933,13 +943,16 @@ public class GestionnaireBD
 						motDePasse = rs.getString( "password" );
 						createur = rs.getString("user.username");
 						gameType = rs.getString("game_type.name");
+						beginDate = rs.getDate("beginDate");
+						endDate = rs.getDate("endDate");
 						
+												
 						String roomDescription = fillRoomDescription(room);
 						nom = fillRoomName(room);
 														
 						Regles objReglesSalle = new Regles();
 						chargerRegllesSalle(objReglesSalle, room);
-						Salle objSalle = new Salle(nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType);
+						Salle objSalle = new Salle(nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType, room, beginDate, endDate);
 						objSalle.setRoomDescription(roomDescription);
 						objControleurJeu.ajouterNouvelleSalle(objSalle);
 					}   
@@ -965,7 +978,7 @@ public class GestionnaireBD
 
 		}//end for
 				
-	}// fin méthode chargerSalle
+	}// fin méthode fillRoomList
 	
 
  /**
@@ -1324,19 +1337,27 @@ public class GestionnaireBD
 	 * @return
 	 */
 	public Boolean roomLangControl(Salle salle, String language) {
+		Boolean existe = false;
 		
-		String answer = "";
-		String nom = salle.getRoomName(language);
+		// Pour tenir compte de la langue
+        int cleLang = 1;   
+        
+        if (language.equalsIgnoreCase("fr")) 
+            cleLang = 1;
+        else if (language.equalsIgnoreCase("en"))
+        	cleLang = 2;
+		int key = salle.getRoomID();//getRoomName(language);
 		try
  		{
  			synchronized( requete )
  			{
- 				ResultSet rs = requete.executeQuery( "SELECT language.short_name FROM language, room_info " +
- 					" WHERE  room_info.name = '" + nom + 
- 					"' AND room_info.language_id = language.language_id ;");
+ 				ResultSet rs = requete.executeQuery( "SELECT name FROM room_info " +
+ 					" WHERE  room_info.room_id = '" + key + 
+ 					"' AND room_info.language_id = '" + cleLang + "' ;");
  				if(rs.next())
  				{
- 					answer = rs.getString("language.short_name");
+ 					String name = rs.getString("name");
+ 					existe = true;
                 }
  			}
  		}
@@ -1349,7 +1370,7 @@ public class GestionnaireBD
  		    e.printStackTrace();			
  		}
 		
-		return language.equalsIgnoreCase(answer);
+		return existe;
 	}//end methode
 
 
@@ -1535,9 +1556,17 @@ public class GestionnaireBD
 	 * Method used to put new room in DB from room created in profModule
 	 * put it in room table
 	 */
-	public int putNewRoom(String pass, int user_id, String name, String roomDesc, String langue )
+	public int putNewRoom(String pass, int user_id, String name, String roomDesc, String langue, String begin, String end )
 	{
 		int room_id = 0;
+		
+	/*	// get the date and time for begin and end of room
+		StringTokenizer dateTimeBegin = new StringTokenizer(begin, "///");
+		   String dateBegin = dateTimeBegin.nextToken().trim();
+		   String timeBegin = dateTimeBegin.nextToken().trim();
+		StringTokenizer dateTimeEnd = new StringTokenizer(end, "///");
+		   String dateEnd = dateTimeEnd.nextToken().trim();
+		   String timeEnd = dateTimeEnd.nextToken().trim(); */
 		
 		 // Pour tenir compte de la langue
         int cleLang = 1;   
@@ -1547,8 +1576,8 @@ public class GestionnaireBD
         else if (langue.equalsIgnoreCase("en"))
         	cleLang = 2;
 		// Création du SQL pour l'ajout
-		String strSQL = "INSERT INTO room (password, game_type_id, user_id, official, rule_id) VALUES ('" +
-		                 pass + "',1," + user_id + ",1,1);";
+		String strSQL = "INSERT INTO room (password, game_type_id, user_id, official, rule_id, beginDate, endDate) VALUES (PASSWORD('" +
+		                 pass + "'),1," + user_id + ",1,1,'" + begin + "','" + end + "');";
 
 		try
 		{
@@ -1786,7 +1815,7 @@ public class GestionnaireBD
 	/**
 	 * Methode used to create the report for a room
 	 */
-	public String getReport(int creator_id, String name, String langue)
+	public String getReport(int creator_id, int room_id, String langue)
 	{
 		StringBuffer report = new StringBuffer();
 		int user_id = 0;
@@ -1798,16 +1827,16 @@ public class GestionnaireBD
 		String username = "";
 		
 		if (langue.equals("fr"))
-			report.append("La Salle " + name + "\n\n");
+			report.append("La Salle Nr." + room_id + " " + objControleurJeu.obtenirListeSalles(langue).get(room_id).getRoomName(langue) + "\n\n");
 		else if (langue.equals("en"))
-			report.append("The Room " + name + "\n\n");
+			report.append("The Room Nr." + room_id + " " + objControleurJeu.obtenirListeSalles(langue).get(room_id).getRoomName(langue) + "\n\n");
 		try
 		{
 			
 			synchronized(requete)
 			{
 				
-				ResultSet rs = requete.executeQuery("SELECT game_user.user_id,name,last_name,username,score,questions_answers,has_won FROM game_user, user where room_id IN (Select room_id From room_info where name = '" + name + "') AND game_user.user_id = user.user_id;");
+				ResultSet rs = requete.executeQuery("SELECT game_user.user_id,name,last_name,username,score,questions_answers,has_won FROM game_user, user where room_id = '" + room_id + "' AND game_user.user_id = user.user_id;");
 				while (rs.next()){
 					user_id = rs.getInt("user_id");
 					score = rs.getInt("score");
@@ -1841,36 +1870,17 @@ public class GestionnaireBD
 	 */
 	private void makeReport(StringBuffer report, int user_id, int score, String answers, Boolean won, String langue, String first_name, String last_name, String username)
 	{
-		/*	
-		try
-		{
-			synchronized(requete)
-			{
-				
-				ResultSet rs = requete.executeQuery("SELECT name,last_name,username FROM user where user_id = " + user_id + ";");
-				if(rs.next()){
-					name = rs.getString("name");
-					last_name = rs.getString("last_name");
-					username = rs.getString("username");
-				}
-				
-			}
-        }
-        catch (Exception e)
-        {
-              System.out.println(GestionnaireMessages.message("bd.erreur_make_report") + e.getMessage());
-        }
-		*/
+		
         if(langue.equals("fr"))
         {
-        	report.append("Joueur : " + username + "  Prenom : " + first_name + "  Nom de famille : " + last_name + "\n");
+        	report.append("Joueur : " + username + "\n  Prenom : " + first_name + "  Nom de famille : " + last_name + "\n");
         	report.append("Le pointage pour cette partie : " + score + "\n");
         	report.append("À gagné : " + (won?"vrai":"faux") + "\n");
         	report.append("Les réponses : " + answers + "\n\n");
         }
         else if(langue.equals("en"))
         {
-        	report.append("User : " + username + "  Name : " + first_name + "  Last name: " + last_name + "\n");
+        	report.append("User : " + username + "\n  Name : " + first_name + "  Last name: " + last_name + "\n");
         	report.append("Points : " + score + "\n");
         	report.append("He won : " + won + "\n");
         	report.append("Answers : " + answers + "\n\n");
