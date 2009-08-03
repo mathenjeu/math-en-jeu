@@ -1,5 +1,6 @@
 package ServeurJeu.ComposantesJeu;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -64,8 +65,17 @@ public class Salle
 	
 	// Cet objet permet de déterminer les règles de jeu pour cette salle
 	private Regles objRegles;
-        
-    //private static int maxPossessionPieceEtObjet;   // will be changed to instance var
+	
+	// Date when room will be activated
+	private Date beginDate;
+	
+	// Date untill room will be activ
+	private Date endDate;
+	
+	// ID in DB.  
+	private int roomID;
+	
+	//private static int maxPossessionPieceEtObjet;   // will be changed to instance var
       
    
 	/**
@@ -81,7 +91,7 @@ public class Salle
 	 * @param Regles reglesSalle : Les règles de jeu pour la salle courante
 	 */
 	public Salle(String nomSalle, String nomUtilisateurCreateur, String motDePasse, 
-				 Regles reglesSalle, ControleurJeu controleurJeu, String gameType)
+				 Regles reglesSalle, ControleurJeu controleurJeu, String gameType, int roomID, Date beginDate, Date endDate)
 	{
 		super();
 		
@@ -99,6 +109,9 @@ public class Salle
                 
         // Type de jeu de la salle
         this.gameType = gameType;
+        this.setRoomID(roomID);
+        this.setBeginDate(beginDate);
+        this.setEndDate(endDate);
 		
 		// Créer une nouvelle liste de joueurs, de tables et de numéros
 		lstJoueurs = new TreeMap <String, JoueurHumain>();
@@ -118,6 +131,39 @@ public class Salle
 		threadEvenements.start();
 		
 	}
+
+	/**
+	 * @return the beginDate
+	 */
+	public Date getBeginDate() {
+		return beginDate;
+	}
+
+	
+	/**
+	 * @return the endDate
+	 */
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	
+	/**
+	 * @param beginDate the beginDate to set
+	 */
+	public void setBeginDate(Date beginDate) {
+		this.beginDate = beginDate;
+	}
+
+	
+	/**
+	 * @param endDate the endDate to set
+	 */
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	
 
 	/**
 	 * Cette fonction permet de générer un nouveau numéro de table.
@@ -773,6 +819,14 @@ public class Salle
 
 	public String getStrCreatorUserName() {
 		return strCreatorUserName;
+	}
+
+	public void setRoomID(int roomID) {
+		this.roomID = roomID;
+	}
+
+	public int getRoomID() {
+		return roomID;
 	}
 
 }// end class 
