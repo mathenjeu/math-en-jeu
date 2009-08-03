@@ -194,7 +194,7 @@ public class Espion implements Runnable{
 		
 		
 		// Déclaration d'un objet qui contiendra une référence vers la liste des salles
-		TreeMap<String, Salle> lstSalles = objControleurJeu.obtenirListeSalles("");
+		TreeMap<Integer, Salle> lstSalles = objControleurJeu.obtenirListeSalles("");
 		
 	    // Déclaration d'un objet qui contiendra une référence vers la liste des tables
 	    // pour une certaine salle
@@ -357,8 +357,8 @@ public class Espion implements Runnable{
         
 	    // Salles
         // Préparation pour parcourir le TreeMap des salles
-        Set<Map.Entry<String,Salle>> lstEnsembleSalles = lstSalles.entrySet();
-        Iterator<Entry<String, Salle>> objIterateurListeSalles = lstEnsembleSalles.iterator();	  
+        Set<Map.Entry<Integer,Salle>> lstEnsembleSalles = lstSalles.entrySet();
+        Iterator<Entry<Integer, Salle>> objIterateurListeSalles = lstEnsembleSalles.iterator();	  
           
 	    // Afficher le nombre de salles 
 	    strSalles.append("Salles : ");
@@ -383,7 +383,7 @@ public class Espion implements Runnable{
 				intCompteur++;
 								
 				// Ajouter le nom de la salle
-				Salle objSalle = (Salle)(((Map.Entry<String,Salle>)(objIterateurListeSalles.next())).getValue());
+				Salle objSalle = (Salle)(((Map.Entry<Integer,Salle>)(objIterateurListeSalles.next())).getValue());
 				strSalles.append(objSalle.getRoomName(""));
 			}	
 	    }
@@ -403,7 +403,7 @@ public class Espion implements Runnable{
 			while (objIterateurListeSalles.hasNext() == true)
 			{
 				// Aller chercher l'objet Salle
-                Salle objSalle = (Salle)(((Map.Entry<String,Salle>)(objIterateurListeSalles.next())).getValue());				
+                Salle objSalle = (Salle)(((Map.Entry<Integer,Salle>)(objIterateurListeSalles.next())).getValue());				
 				
 				// Aller chercher la liste des tables
 				lstTables = (TreeMap<Integer,Table>)(objSalle.obtenirListeTables());
