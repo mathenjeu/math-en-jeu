@@ -35,6 +35,8 @@ class GestionnaireEvenements
     public var  listeDesPersonnages:Array;   // liste associant les idPersonnage avec les nomUtilisateurs dans la table ou on est
     private var motDePasse:String;  // notre mot de passe pour pouvoir jouer
     private var nomSalle:String;  //  nom de la salle dans laquelle on est
+	private var idRoom:Number;    // ID of room in what we are in server's list of rooms
+	private var clientType:Number;  // if 1 is game, if 2 is prof's module
     private var numeroTable:Number;   //   numero de la table dans laquelle on est
 	private var tablName:String;     // name of the created table
     private var tempsPartie:Number;   //  temps que va durer la partie, en minutes
@@ -110,14 +112,15 @@ class GestionnaireEvenements
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  CONSTRUCTEUR
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    function GestionnaireEvenements(nom:String, passe:String)
+    function GestionnaireEvenements(nom:String, passe:String, client:Number)
     {
         trace("*********************************************");
         trace("debut du constructeur de gesEve      " + nom + "      " + passe);
         this.nomUtilisateur = nom;
         this.listeDesPersonnages = new Array();
         this.listeDesPersonnages.push(new Object());  // why ??????????? why without name ??????????
-       
+        this.clientType = client;
+	   
         this.motDePasse = passe;
         this.nomSalle = new String();
         this.motDePasseSalle = new String();
@@ -218,30 +221,31 @@ class GestionnaireEvenements
     }
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////
-    function getReport(nameRoom:String)
+    function getReport(idRoom:Number)
     {
         trace("*********************************************");
-        trace("begin of getReport     :" + nameRoom);
-        this.objGestionnaireCommunication.getReport(Delegate.create(this, this.retourGetReport), nameRoom);
+        trace("begin of getReport     :" + idRoom);
+        this.objGestionnaireCommunication.getReport(Delegate.create(this, this.retourGetReport), idRoom);
         trace("end getReport");
         trace("*********************************************\n");
     }
 	
 	
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    function entrerSalle(nSalle:String)
+    function entrerSalle(roomId:Number)
     {
         trace("*********************************************");
-        trace("debut de entrerSalle      " + nSalle);
-        this.nomSalle = nSalle;
+        trace("debut de entrerSalle      " + roomId);
+        
         
         for(var i:Number = 0; i < listeDesSalles.length; i++)
         {
-            if(listeDesSalles[i].nom == nSalle)
+            if(listeDesSalles[i].idRoom == roomId)
             {
 	            numeroJoueursDansSalle = listeDesSalles[i].maxnbplayers;
 	            typeDeJeu = listeDesSalles[i].typeDeJeu;
-	            
+	            this.idRoom = listeDesSalles[i].idRoom;
+				this.nomSalle = listeDesSalles[i].nom;
                 if(listeDesSalles[i].possedeMotDePasse == true)
                 {
                     this.motDePasseSalle = "";   // afficher une fenetre de demande de mot de passe
@@ -253,7 +257,7 @@ class GestionnaireEvenements
                 break;
             }
         }
-        this.objGestionnaireCommunication.entrerSalle(Delegate.create(this, this.retourEntrerSalle), this.nomSalle, this.motDePasseSalle);
+        this.objGestionnaireCommunication.entrerSalle(Delegate.create(this, this.retourEntrerSalle), this.idRoom, this.motDePasseSalle);
         trace("fin de entrerSalle");
         trace("*********************************************\n");
     }
@@ -561,7 +565,7 @@ class GestionnaireEvenements
                 {
                     this.listeDesJoueursConnectes.push(objetEvenement.listeNomUtilisateurs[i]);
                 }
-                this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles));
+                this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), this.clientType);
             break;
 			
             case "CommandeNonReconnue":
@@ -597,7 +601,7 @@ class GestionnaireEvenements
                 {
 					
 					this.listeDesSalles.push(objetEvenement.listeNomSalles[i]);
-					_level0.loader.contentHolder.listeSalle.addItem(this.listeDesSalles[i].nom );
+					_level0.loader.contentHolder.listeSalle.addItem({label: this.listeDesSalles[i].nom, data:  this.listeDesSalles[i].idRoom});
 					trace("salle " + i + " : " + this.listeDesSalles[i].nom);
 					//_level0.listeRooms.addItem(this.listeDesSalles[i].nom );
 										
@@ -692,7 +696,7 @@ class GestionnaireEvenements
 	////////////////////////////////////////////////////////////////////////////////////////////////////
     public function retourGetReport(objetEvenement:Object)
     {
-        //   objetEvenement.resultat = , CommandeNonReconnue, ParametrePasBon ou JoueurNonConnecte
+        //   objetEvenement.resultat = OK, CommandeNonReconnue, ParametrePasBon ou JoueurNonConnecte
         trace("*********************************************");
         trace("debut de retourGetReport   " + objetEvenement.resultat);
         switch(objetEvenement.resultat)
