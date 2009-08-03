@@ -1,12 +1,13 @@
 package ServeurJeu;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.TreeMap;
 import java.util.Set;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Map.Entry;
-
 import org.apache.log4j.Logger;
 import Enumerations.RetourFonctions.ResultatAuthentification;
 import ServeurJeu.BD.GestionnaireBD;
@@ -24,7 +25,7 @@ import ServeurJeu.Temps.TacheSynchroniser;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
 import ServeurJeu.Configuration.GestionnaireMessages;
-
+import ServeurJeu.BD.SpyRooms;
 
 
 //TODO: Si un jour on doit modifier le nom d'utilisateur d'un joueur pendant 
@@ -86,12 +87,14 @@ public class ControleurJeu
     private TreeMap<String, JoueurHumain> lstJoueursDeconnectes;
 	
 	// Cet objet est une liste des salles créées qui se trouvent dans le serveur
-	// de jeu. Chaque élément de cette liste a comme clé le nom de la salle
-	private TreeMap<String, Salle> lstSalles;
+	// de jeu. Chaque élément de cette liste a comme clé le id de la salle 
+	private TreeMap<Integer, Salle> lstSalles;
 	
 	// Déclaration de l'objet Espion qui va inscrire des informationsà proppos
 	// du serveur en parallète
 	//private Espion objEspion;
+	
+	private SpyRooms objSpyDB;
 	
 	// Déclaration d'un objet random pour générer des nombres aléatoires
 	private Random objRandom;
@@ -129,7 +132,7 @@ public class ControleurJeu
 		lstJoueursDeconnectes = new TreeMap<String, JoueurHumain>();
 		
 		// Créer une liste des salles
-		lstSalles = new TreeMap<String, Salle>();
+		lstSalles = new TreeMap<Integer, Salle>();
 		
 		// Créer un nouveau gestionnaire d'événements
 		objGestionnaireEvenements = new GestionnaireEvenements();
@@ -176,6 +179,15 @@ public class ControleurJeu
 		Thread threadEspion = new Thread(objEspion);
 		threadEspion.start();
         *********************************/
+		//Start spyDb to update periodically the rooms list
+		// Add new rooms or out the olds 
+		
+		int delay = 60000;
+		objSpyDB = new SpyRooms(this, delay); 
+		//Start spy thread's
+		Thread threadSpy = new Thread(objSpyDB);
+		threadSpy.start();
+		
 		
         // Créer une instance de la classe regroupant tous les paramètres
         // des joueurs virtuels
@@ -442,41 +454,38 @@ public class ControleurJeu
 	 * 				l'ajout et/ou au retrait d'une salle, car ça ne peut pas
 	 * 				se produire.
 	 */
-	public TreeMap<String, Salle> obtenirListeSalles(String language)
+	public TreeMap<Integer, Salle> obtenirListeSalles(String language)
 	{
 		synchronized(lstSalles){
 	        // On crée une liste de salles vide, et on parcourt toutes les salles connues
-            TreeMap<String, Salle> copieListeSalles = (TreeMap<String, Salle>) lstSalles.clone();
+            TreeMap<Integer, Salle> copieListeSalles = (TreeMap<Integer, Salle>) lstSalles.clone();
             copieListeSalles.clear();
-            Set<String> keySet = lstSalles.keySet();
-            Iterator<String> it = keySet.iterator();
+            Set<Integer> keySet = lstSalles.keySet();
+            Iterator<Integer> it = keySet.iterator();
             //boolean repeat = true;
            
             while (it.hasNext())//&& repeat)
             { 
-            	String key = (String)it.next();
-                Salle salle = (Salle)lstSalles.get(key);
-                 /*               
-                if(salle.getRegles().getTournamentState()){
+            	int key = (int)it.next();
+            	Salle salle = (Salle)lstSalles.get(key);
+            	System.out.println(salle.getRoomName(language));
 
-                	copieListeSalles.clear();
-                	key = "TournamentActive";
-                	copieListeSalles.put(key,salle);
-                  	repeat =  false;
-                	            	
-                }else{*/
-                	
-                	// here we test if the room has the language of player
-                	Boolean permetCetteLangue = objGestionnaireBD.roomLangControl(salle, language);
 
-                	// Si les paramètres en entrée sont des strings vides,
-                	// alors on ignore le paramètre correspondant
-                	if(language.equals("")) permetCetteLangue = true;
+            	// here we test if the room has the language of player
+            	Boolean permetCetteLangue = objGestionnaireBD.roomLangControl(salle, language);
 
-                	// On ajoute la salle à la liste si elle correspond à ce qu'on veut
-                	if(permetCetteLangue) copieListeSalles.put(key, salle);
-                	
-                //}
+            	// Si les paramètres en entrée sont des strings vides,
+            	// alors on ignore le paramètre correspondant
+            	if(language.equals("")) permetCetteLangue = true;
+
+            	// On ajoute la salle à la liste si elle correspond à ce qu'on veut
+            	if(permetCetteLangue) 
+            	{
+            		copieListeSalles.put(key, salle);
+            		System.out.println("permet " + salle.getRoomName(language));
+            	}
+
+
             }
             
             return copieListeSalles;
@@ -492,11 +501,11 @@ public class ControleurJeu
 	 * 		   true  : La salle existe déjà
 	 * 
 	 */
-	public boolean salleExiste(String nomSalle)
+	public boolean salleExiste(int idRoom)
 	{
 		// Retourner si la salle existe déjà ou non
 		synchronized(lstSalles){
-		   return lstSalles.containsKey(objGestionnaireBD.getFullRoomName(nomSalle));
+		   return lstSalles.containsKey(idRoom);//objGestionnaireBD.getFullRoomName(nomSalle));
 		}
 	}
 	
@@ -516,7 +525,7 @@ public class ControleurJeu
 	    // Ajouter la nouvelle salle dans la liste des salles du 
 	    // contrôleur de jeu
 		synchronized(lstSalles){
-		   lstSalles.put(nouvelleSalle.getRoomName(""), nouvelleSalle);
+		   lstSalles.put(nouvelleSalle.getRoomID(), nouvelleSalle);
 		}
 	}
 	
@@ -528,8 +537,37 @@ public class ControleurJeu
 	public void closeRoom (Salle room){
 		synchronized(lstSalles){
 			
-			   lstSalles.remove(room.getRoomName(""));
+			   lstSalles.remove(room.getRoomID());
 			}
+	}// end methode
+	
+	/**
+	 * This methode is used to remove the rooms from the list of Controleur if 
+	 * the date of expiration is arrived. In the same time on return for SpyRooms
+	 * the list of ID of rooms rested in the list
+	 */
+	public ArrayList<Integer> removeOldRooms()
+	{
+		ArrayList<Integer> rooms = new ArrayList<Integer>();
+		synchronized(lstSalles){
+			
+			Set<Integer> keySet = lstSalles.keySet();
+            Iterator<Integer> it = keySet.iterator();
+                      
+            while (it.hasNext())
+            { 
+            	int key = (int)it.next();
+                Salle salle = (Salle)lstSalles.get(key);
+                if (salle.getEndDate()!= null)
+                {
+                	if (salle.getEndDate().before(new Date(System.currentTimeMillis())))
+                		lstSalles.remove(salle.getRoomID());
+                	else 
+                		rooms.add(key);
+                }
+			}
+         }
+		return rooms;
 	}
 	
 	/**
@@ -549,12 +587,12 @@ public class ControleurJeu
 	 * 		   true  : Le joueur a réussi à entrer dans la salle
 	 * 
 	 */
-	public boolean entrerSalle(JoueurHumain joueur, String nomSalle, 
+	public boolean entrerSalle(JoueurHumain joueur, int idRoom, 
 	        				   String motDePasse, boolean doitGenererNoCommandeRetour)
 	{
 		synchronized(lstSalles){
     		// On retourne le résultat de l'entrée du joueur dans la salle
-	    	return ((Salle) lstSalles.get(objGestionnaireBD.getFullRoomName(nomSalle))).entrerSalle(joueur, motDePasse, doitGenererNoCommandeRetour);
+	    	return ((Salle) lstSalles.get(idRoom)).entrerSalle(joueur, motDePasse, doitGenererNoCommandeRetour);
 		}
 	}
 	
