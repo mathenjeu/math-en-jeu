@@ -45,7 +45,6 @@ import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
-import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import java.util.Calendar;
 import java.util.Map.Entry;
@@ -118,6 +117,9 @@ public class ProtocoleJoueur implements Runnable
 	
 	// time in seconds as reference to calculate time of reponse
 	private int lastQuestionTime;
+	
+	// describe the type of client 1 - game and 2 is prof's module
+	private int client;
 
 	
 
@@ -150,6 +152,7 @@ public class ProtocoleJoueur implements Runnable
 		objGestionnaireTemps = controleur.obtenirGestionnaireTemps();
 		objTacheSynchroniser = controleur.obtenirTacheSynchroniser();
         bolEnTrainDeJouer = false;
+        client = 1;
 		objLogger.info( GestionnaireMessages.message("protocole.connexion").replace("$$CLIENT$$", socketJoueur.getInetAddress().toString()));
 
 		questionsAnswers = new StringBuffer();
@@ -776,6 +779,10 @@ public class ProtocoleJoueur implements Runnable
 						// une liste de salles
 						objNoeudCommande.setAttribute("type", "Reponse");
 						objNoeudCommande.setAttribute("nom", "ListeSalles");
+						
+						client = Integer.parseInt((obtenirValeurParametre(objNoeudCommandeEntree, "ClientType")).getNodeValue());
+						
+						
 
 						// Créer le noeud pour le paramètre contenant la liste
 						// des salles à retourner
@@ -786,7 +793,7 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudParametreListeSalles.setAttribute("type", "ListeNomSalles");
 
 						// Obtenir la liste des salles du serveur de jeu
-						TreeMap<String, Salle> lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue);
+						TreeMap<Integer, Salle> lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue);
 
 						// Générer un nouveau numéro de commande qui sera 
 						// retourné au client
@@ -795,69 +802,59 @@ public class ProtocoleJoueur implements Runnable
                         {
                         	// Créer un ensemble contenant tous les tuples de la liste 
                         	// lstListeSalles (chaque élément est un Map.Entry)
-                        	Set<Map.Entry<String, Salle>> lstEnsembleSalles = lstListeSalles.entrySet();
+                        	Set<Map.Entry<Integer, Salle>> lstEnsembleSalles = lstListeSalles.entrySet();
 
                         	// Obtenir un itérateur pour l'ensemble contenant les salles
-                        	Iterator<Entry<String, Salle>> objIterateurListe = lstEnsembleSalles.iterator();
+                        	Iterator<Entry<Integer, Salle>> objIterateurListe = lstEnsembleSalles.iterator();
 
                         	//we find if room is set tournamentActive
-                        	Set<String> keySet =  lstListeSalles.keySet();
-                        	Iterator<String> it = keySet.iterator();
-                        	/*String tournamentActive = "";
-                        	while (it.hasNext() && !tournamentActive.equals("TournamentActive"))
-                        	{
-                        		tournamentActive  = (String)it.next();
-                        	}*/
+                        	Set<Integer> keySet =  lstListeSalles.keySet();
+                        	Iterator<Integer> it = keySet.iterator();
+                        	
 
                         	// Passer toutes les salles et créer un noeud pour 
                         	// chaque salle et l'ajouter au noeud de paramètre
                         	while (objIterateurListe.hasNext() == true)
                         	{
                         		// Créer une référence vers la salle courante dans la liste
-                        		Salle objSalle = (Salle)(((Map.Entry<String, Salle>)(objIterateurListe.next())).getValue());
+                        		Salle objSalle = (Salle)(((Map.Entry<Integer, Salle>)(objIterateurListe.next())).getValue());
 
-                        		// Créer le noeud de la salle courante
-                        		Element objNoeudSalle = objDocumentXMLSortie.createElement("salle");
+                        		 if ((objSalle.getStrCreatorUserName().equals(objJoueurHumain.obtenirNomUtilisateur()) && client == 2)||(client == 1)) {
+                        			
+                        			 
+                        			// Créer le noeud de la salle courante
+                        			Element objNoeudSalle = objDocumentXMLSortie.createElement("salle");
 
-                        		// On ajoute un attribut nom qui va contenir le nom
-                        		// de la salle
-                        		objNoeudSalle.setAttribute("nom", objSalle.getRoomName(this.langue));
+                        			// On ajoute un attribut nom qui va contenir le nom
+                        			// de la salle
+                        			objNoeudSalle.setAttribute("nom", objSalle.getRoomName(this.langue));
 
-                        		//System.out.println(objSalle.getRoomName(""));
+                        			// add too the room id
+                        			objNoeudSalle.setAttribute("id", Integer.toString(objSalle.getRoomID()));
 
-                        		// On ajoute un attribut protegee qui va contenir
-                        		// une valeur booléenne permettant de savoir si la
-                        		// salle est protégée par un mot de passe ou non
-                        		objNoeudSalle.setAttribute("protegee", Boolean.toString(objSalle.protegeeParMotDePasse()));
+                        			//System.out.println(objSalle.getRoomName(""));
 
-                        		//Add room description to the node
-                        		objNoeudSalle.setAttribute("descriptions", objSalle.getRoomDescription(this.langue));
+                        			// On ajoute un attribut protegee qui va contenir
+                        			// une valeur booléenne permettant de savoir si la
+                        			// salle est protégée par un mot de passe ou non
+                        			objNoeudSalle.setAttribute("protegee", Boolean.toString(objSalle.protegeeParMotDePasse()));
 
-                        		//System.out.println(objSalle.getRoomDescription(""));
+                        			//Add room description to the node
+                        			objNoeudSalle.setAttribute("descriptions", objSalle.getRoomDescription(this.langue));
 
-                        		//Add max numbers of players of that room
-                        		objNoeudSalle.setAttribute("maxnbplayers", Integer.toString(objSalle.getRegles().getMaxNbPlayers()));
+                        			//Add max numbers of players of that room
+                        			objNoeudSalle.setAttribute("maxnbplayers", Integer.toString(objSalle.getRegles().getMaxNbPlayers()));
 
-                        		//Add type of game for that room
-                        		objNoeudSalle.setAttribute("typeDeJeu", objSalle.getGameType());
-                        		
-                        		//Add type of game for that room
-                        		objNoeudSalle.setAttribute("userCreator", objSalle.getStrCreatorUserName());
+                        			//Add type of game for that room
+                        			objNoeudSalle.setAttribute("typeDeJeu", objSalle.getGameType());
 
-                        		System.out.println(objSalle.getStrCreatorUserName());
-                                /*
-                        		if(tournamentActive.equals("TournamentActive"))
-                        		{
-                        			objNoeudSalle.setAttribute("activ", "true");
+                        			//Add type of game for that room
+                        			objNoeudSalle.setAttribute("userCreator", objSalle.getStrCreatorUserName());
+
+
+                        			// Ajouter le noeud de la salle au noeud du paramètre
+                        			objNoeudParametreListeSalles.appendChild(objNoeudSalle);
                         		}
-                        		else
-                        		{
-                        			objNoeudSalle.setAttribute("activ", "false");
-                        		}
-                                */
-
-                        		// Ajouter le noeud de la salle au noeud du paramètre
-                        		objNoeudParametreListeSalles.appendChild(objNoeudSalle);
                         	}
                         }
 						// Ajouter le noeud paramètre au noeud de commande dans
@@ -910,24 +907,26 @@ public class ProtocoleJoueur implements Runnable
 						{
 							roomDescription = objDescription.getNodeValue();
 						}
-						System.out.println(roomDescription);
+						//System.out.println(roomDescription);
 						
 						Node objBeginDate = obtenirValeurParametre(objNoeudCommandeEntree, "BeginDate");
 						String beginDate = "";
 						beginDate = objBeginDate.getNodeValue();
+						System.out.println(beginDate);
 						
 						Node objEndDate = obtenirValeurParametre(objNoeudCommandeEntree, "EndDate");
 						String endDate = "";
 						endDate = objEndDate.getNodeValue();
 						
 						//add room to the DB too
-						int room_id = objControleurJeu.obtenirGestionnaireBD().putNewRoom(motDePasse, objJoueurHumain.obtenirCleJoueur(), name, roomDescription, this.langue);
-                        
+						int room_id = objControleurJeu.obtenirGestionnaireBD().putNewRoom(motDePasse, objJoueurHumain.obtenirCleJoueur(), name, roomDescription, this.langue, beginDate, endDate);
+                        /*
 						Regles objReglesSalle = new Regles();
 						objControleurJeu.obtenirGestionnaireBD().chargerRegllesSalle(objReglesSalle, room_id);
-						Salle objSalle = new Salle(name, createur, motDePasse, objReglesSalle, objControleurJeu, gameType);
+						Salle objSalle = new Salle(name, createur, motDePasse, objReglesSalle, objControleurJeu, gameType, room_id);
 						objSalle.setRoomDescription(roomDescription);
 						objControleurJeu.ajouterNouvelleSalle(objSalle);
+						*/
 						
 						// Il n'y a pas eu d'erreurs et il va falloir retourner 
 						// une liste des salles ?
@@ -957,14 +956,13 @@ public class ProtocoleJoueur implements Runnable
 																						
 						// Déclaration d'une variable qui va contenir le noeud
 						// du nom de la salle a creer le rapport
-						Node objRoomName = obtenirValeurParametre(objNoeudCommandeEntree, "NameRoom");
-                        String name = "";
-						name = objRoomName.getNodeValue();
-						System.out.println(name);
+						Node objRoomID = obtenirValeurParametre(objNoeudCommandeEntree, "IDRoom");
+                        int room_id = Integer.parseInt(objRoomID.getNodeValue());
+						System.out.println(room_id);
 						
                        					
 						//add report from DB 
-						String report = objControleurJeu.obtenirGestionnaireBD().getReport(objJoueurHumain.obtenirCleJoueur(), name, this.langue);
+						String report = objControleurJeu.obtenirGestionnaireBD().getReport(objJoueurHumain.obtenirCleJoueur(), room_id, this.langue);
                         
 												
 						// Il n'y a pas eu d'erreurs et il va falloir retourner 
@@ -997,7 +995,7 @@ public class ProtocoleJoueur implements Runnable
 					{
 						// Déclaration d'une variable qui va contenir le noeud
 						// du nom de la salle dans laquelle le client veut entrer
-						Node objNomSalle = obtenirValeurParametre(objNoeudCommandeEntree, "NomSalle");
+						Node objRoomID = obtenirValeurParametre(objNoeudCommandeEntree, "RoomID");
 
 						// Déclaration d'une variable qui va contenir le noeud
 						// du mot de passe permettant d'accéder à la salle (s'il 
@@ -1007,7 +1005,6 @@ public class ProtocoleJoueur implements Runnable
 						// Déclaration d'une variable qui va contenir le mot de
 						// passe pour accéder à la salle (peut ètre vide)
 						String strMotDePasse = "";
-
 						// Si le noeud du mot de passe n'est pas null alors il y
 						// a un mot de passe pour la salle
 						if (objMotDePasse != null)
@@ -1023,7 +1020,7 @@ public class ProtocoleJoueur implements Runnable
 						// deux threads à la fois
 						// Si la salle n'existe pas dans le serveur de jeu, alors il
 						// y a une erreur
-						if (objControleurJeu.salleExiste(objNomSalle.getNodeValue()) == false)
+						if (objControleurJeu.salleExiste(Integer.parseInt(objRoomID.getNodeValue())) == false)
 						{
 							// La salle n'existe pas
 							objNoeudCommande.setAttribute("nom", "SalleNonExistante");
@@ -1044,7 +1041,7 @@ public class ProtocoleJoueur implements Runnable
 							// savoir si le le joueur a réussi à entrer dans
 							// la salle (donc que le mot de passe était le bon)
 							boolean bolResultatEntreeSalle = objControleurJeu.entrerSalle(objJoueurHumain, 
-									objNomSalle.getNodeValue(), strMotDePasse, true);
+									Integer.parseInt(objRoomID.getNodeValue()), strMotDePasse, true);
 
 							// Si le joueur a réussi à entrer
 							if (bolResultatEntreeSalle == true)
@@ -2420,7 +2417,7 @@ public class ProtocoleJoueur implements Runnable
 		{
 			// Si le nombre d'enfants du noeud de commande est de 0, alors
 			// il n'y a vraiment aucun paramètres
-			if (noeudCommande.getChildNodes().getLength() == 0)
+			if (noeudCommande.getChildNodes().getLength() == 1)
 			{
 				bolCommandeValide = true;
 			}
