@@ -1412,7 +1412,7 @@ class GestionnaireCommunication
      * @param Function obtenirListeSallesDelegate : Un pointeur sur la
      *          fonction permettant de retourner la liste des salles
      */
-    public function obtenirListeSalles(obtenirListeSallesDelegate:Function)
+    public function obtenirListeSalles(obtenirListeSallesDelegate:Function, client:Number)
     {
         // Si on a obtenu la liste des joueurs, alors on peut continuer le code
         // de la fonction
@@ -1433,6 +1433,19 @@ class GestionnaireCommunication
             // Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "ObtenirListeSalles";
+            //*************************
+			var objNoeudParametreClientType:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreClientTypeText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(client)));
+            
+            // Construire l'arbre du document XML
+            
+            objNoeudParametreClientType.attributes.type = "ClientType";
+           
+            objNoeudParametreClientType.appendChild(objNoeudParametreClientTypeText);
+            
+            objNoeudCommande.appendChild(objNoeudParametreClientType);
+            
+			//***************************
             objObjetXML.appendChild(objNoeudCommande);
             // Declaration d'un nouvel objet qui va contenir les informations sur
             // la commande a traiter courante
@@ -1570,7 +1583,7 @@ class GestionnaireCommunication
      * 
      * @params String - les params de la salle
      */
-    public function getReport(getReportDelegate:Function, nameRoom:String)
+    public function getReport(getReportDelegate:Function, idRoom:Number)
     {
         // Si on a obtenu la liste des tables, alors on peut continuer le code
         // de la fonction
@@ -1592,13 +1605,13 @@ class GestionnaireCommunication
             var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
             
 			var objNoeudParametreNameRoom:XMLNode = objObjetXML.createElement("parametre");
-            var objNoeudParametreNameRoomText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(nameRoom));
+            var objNoeudParametreNameRoomText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(idRoom)));
 			
 						
 			// Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "getReport";
-            objNoeudParametreNameRoom.attributes.type = "NameRoom";
+            objNoeudParametreNameRoom.attributes.type = "IDRoom";
             objNoeudParametreNameRoom.appendChild(objNoeudParametreNameRoomText);
 			
             objNoeudCommande.appendChild(objNoeudParametreNameRoom);
@@ -1645,7 +1658,7 @@ class GestionnaireCommunication
      * @param String motDePasse : Le mot de passe pour entrer dans la salle
      *                            (ce mot de passe peut etre vide)
      */
-    public function entrerSalle(entrerSalleDelegate:Function, nomSalle:String, motDePasse:String)
+    public function entrerSalle(entrerSalleDelegate:Function, idRoom:Number, motDePasse:String)
     {
         // Si on a obtenu la liste des salles, alors on peut continuer le code
         // de la fonction
@@ -1663,15 +1676,15 @@ class GestionnaireCommunication
             var objObjetXML:XML = new XML();
             // Creer tous les noeuds de la commande
             var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
-            var objNoeudParametreNomSalle:XMLNode = objObjetXML.createElement("parametre");
-            var objNoeudParametreNomSalleText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(nomSalle));
+            var objNoeudParametreIdRoom:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreIdRoomText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(idRoom)));
             var objNoeudParametreMotDePasse:XMLNode = objObjetXML.createElement("parametre");
             // Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "EntrerSalle";
-            objNoeudParametreNomSalle.attributes.type = "NomSalle";
+            objNoeudParametreIdRoom.attributes.type = "RoomID";
             objNoeudParametreMotDePasse.attributes.type = "MotDePasse";
-            objNoeudParametreNomSalle.appendChild(objNoeudParametreNomSalleText);
+            objNoeudParametreIdRoom.appendChild(objNoeudParametreIdRoomText);
             // Si le mot de passe est vide ou a null, alors on n'a pas besoin
             // de le creer, sinon il faut l'ajouter
             if (motDePasse != null && motDePasse != "")
@@ -1679,7 +1692,7 @@ class GestionnaireCommunication
                 var objNoeudParametreMotDePasseText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(motDePasse));
                 objNoeudParametreMotDePasse.appendChild(objNoeudParametreMotDePasseText);
             }
-            objNoeudCommande.appendChild(objNoeudParametreNomSalle);
+            objNoeudCommande.appendChild(objNoeudParametreIdRoom);
             objNoeudCommande.appendChild(objNoeudParametreMotDePasse);
             objObjetXML.appendChild(objNoeudCommande);
             // Declaration d'un nouvel objet qui va contenir les informations sur
@@ -2926,6 +2939,7 @@ class GestionnaireCommunication
                     possedeMotDePasse:Boolean(lstChildNodes[i].attributes.protegee == "true"),
                     descriptions:lstChildNodes[i].attributes.descriptions, 
                     maxnbplayers:lstChildNodes[i].attributes.maxnbplayers,
+					idRoom:lstChildNodes[i].attributes.id,
                     typeDeJeu:lstChildNodes[i].attributes.typeDeJeu,
 					userCreator:lstChildNodes[i].attributes.userCreator});
 								  
