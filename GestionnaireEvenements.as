@@ -669,7 +669,7 @@ class GestionnaireEvenements
             case "OK":
                
 			trace("room created  ");
-			this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles));
+			this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), this.clientType);
 			
 
             break;
