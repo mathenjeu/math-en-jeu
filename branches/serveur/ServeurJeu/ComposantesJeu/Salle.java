@@ -106,6 +106,7 @@ public class Salle
 		 
 		setStrCreatorUserName(nomUtilisateurCreateur);
 		strPassword = motDePasse;
+		System.out.println(strPassword);
                 
         // Type de jeu de la salle
         this.gameType = gameType;
