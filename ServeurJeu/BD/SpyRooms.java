@@ -2,6 +2,7 @@ package ServeurJeu.BD;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -73,26 +74,54 @@ public class SpyRooms implements Runnable {
 	 */
 	private void detectNewRooms(ArrayList<Integer> rooms)
 	{
+		    System.out.println("start : " + System.currentTimeMillis());
 		    //to not select the existed rooms   
 			String list = "";
 			for (int room : rooms)
 			{
 				list += room + ",";
+				//System.out.println(list);
 			}
-			int ind = list.lastIndexOf(",");
-			list.substring(0, ind + 1);
+		    int ind = list.lastIndexOf(",");
+		    list = list.substring(0, list.lastIndexOf(","));  
+            //Object[] roomS =  rooms.toArray();
 			rooms.clear();
+            /*
+			PreparedStatement prepStatement = null;
+			try {
+				   prepStatement = connexion.prepareStatement("SELECT room.room_id FROM room where ((beginDate < NOW() AND endDate > NOW()) OR beginDate is NULL OR endDate is NULL) AND room_id NOT IN (?);" );
+			
+					
+						
+						// Ajouter l'information pour cette salle
+						prepStatement.setObject(1, roomS);
+								
+						ResultSet rs = prepStatement.executeQuery();
+						while(rs.next())
+						{
+							int roomId = rs.getInt("room.room_id");
+							//System.out.println(roomId + "NEW");				
+							rooms.add(roomId);
+						}   
+					
+				}
+				catch (Exception e)
+				{
+					System.out.println(GestionnaireMessages.message("bd.erreur_spy_rooms") + e.getMessage());
+				}
+			
+            */
 			
 			//find all new rooms  and fill in ArrayList
 			try
 			{
 				synchronized( requete )
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room.room_id FROM room where ((beginDate < NOW() AND endDate > NOW()) OR beginDate is NULL OR endDate is NULL) AND room_id NOT IN ('" + list + "');" );
+					ResultSet rs = requete.executeQuery( "SELECT room.room_id FROM room where ((beginDate < NOW() AND endDate > NOW()) OR beginDate is NULL OR endDate is NULL) AND room_id NOT IN (" + list + ");" );
 					while(rs.next())
 					{
 						int roomId = rs.getInt("room.room_id");
-										
+						//System.out.println(roomId + "NEW");				
 						rooms.add(roomId);
 					}   
 								
@@ -113,11 +142,12 @@ public class SpyRooms implements Runnable {
 				objLogger.error(GestionnaireMessages.message("bd.trace"));
 				objLogger.error( e.getMessage() );
 			    e.printStackTrace();
-			}
+			}  
 			
 			//put in Controleur finded rooms
+			System.out.println(rooms + "NEW");	
 			objControleurJeu.obtenirGestionnaireBD().fillRoomList(rooms);
-			
+			System.out.println("end : " + System.currentTimeMillis());
 	}// end methode detectNewRooms
 
 	/**
