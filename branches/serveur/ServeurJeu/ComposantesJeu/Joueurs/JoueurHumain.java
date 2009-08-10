@@ -33,6 +33,7 @@ public class JoueurHumain extends Joueur
 	// Used to distinguish between simple user and administrator
 	// 1 - simple user 
 	// 2 - admin
+	// 3 - prof
 	private int role;
 		
 	//Cette variable défini si un jouer peut creer une salle ??? utiliser encore??
