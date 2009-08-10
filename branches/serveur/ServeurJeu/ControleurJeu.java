@@ -468,9 +468,7 @@ public class ControleurJeu
             { 
             	int key = (int)it.next();
             	Salle salle = (Salle)lstSalles.get(key);
-            	System.out.println(salle.getRoomName(language));
-
-
+            	
             	// here we test if the room has the language of player
             	Boolean permetCetteLangue = objGestionnaireBD.roomLangControl(salle, language);
 
@@ -482,8 +480,7 @@ public class ControleurJeu
             	if(permetCetteLangue) 
             	{
             		copieListeSalles.put(key, salle);
-            		System.out.println("permet " + salle.getRoomName(language));
-            	}
+               	}
 
 
             }
@@ -526,6 +523,7 @@ public class ControleurJeu
 	    // contrôleur de jeu
 		synchronized(lstSalles){
 		   lstSalles.put(nouvelleSalle.getRoomID(), nouvelleSalle);
+		  // System.out.println(nouvelleSalle.getRoomID() + " NEW " + nouvelleSalle.toString());	
 		}
 	}
 	
@@ -549,6 +547,7 @@ public class ControleurJeu
 	public ArrayList<Integer> removeOldRooms()
 	{
 		ArrayList<Integer> rooms = new ArrayList<Integer>();
+		ArrayList<Integer> roomsToRemove = new ArrayList<Integer>();
 		synchronized(lstSalles){
 			
 			Set<Integer> keySet = lstSalles.keySet();
@@ -558,15 +557,34 @@ public class ControleurJeu
             { 
             	int key = (int)it.next();
                 Salle salle = (Salle)lstSalles.get(key);
+                
                 if (salle.getEndDate()!= null)
                 {
-                	if (salle.getEndDate().before(new Date(System.currentTimeMillis())))
-                		lstSalles.remove(salle.getRoomID());
-                	else 
+                	if (salle.getEndDate().before(new Date(System.currentTimeMillis()))){
+                		roomsToRemove.add(key);
+                	    //System.out.println(key + "remove" + salle.getEndDate());
+                	}
+                	else{ 
                 		rooms.add(key);
+                	    //System.out.println(key + "SSS");
+                	}
+                }else if (salle.getEndDate()== null){
+                	rooms.add(key);
+            	    //System.out.println(key + "SSSx");
                 }
+                
+                	
 			}
-         }
+        }
+		synchronized(lstSalles){
+		   for(int room : roomsToRemove){
+		 		   lstSalles.remove(room); 
+ 		   }
+		}
+		
+		for(int room : rooms){
+	 		 // System.out.println( lstSalles.get(room).getRoomID() + "xxx"); 
+	    }
 		return rooms;
 	}
 	
