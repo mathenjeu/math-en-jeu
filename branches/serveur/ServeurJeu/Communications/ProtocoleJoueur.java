@@ -553,7 +553,7 @@ public class ProtocoleJoueur implements Runnable
 								// On ajoute un attribut nom qui va contenir le nom
 								// du joueur
 								objNoeudJoueur.setAttribute("role", Integer.toString(objJoueurHumain.getRole()));
-								System.out.println("Protocole joueur: " + objJoueurHumain.getRole());
+								//System.out.println("Protocole joueur: " + objJoueurHumain.getRole());
 
 								// Ajouter le noeud du joueur au noeud du paramètre
 								objNoeudParametreRoleJoueur.appendChild(objNoeudJoueur);
@@ -792,9 +792,17 @@ public class ProtocoleJoueur implements Runnable
 						// du paramètre
 						objNoeudParametreListeSalles.setAttribute("type", "ListeNomSalles");
 
-						// Obtenir la liste des salles du serveur de jeu
-						TreeMap<Integer, Salle> lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue);
-
+						TreeMap<Integer, Salle> lstListeSalles = new TreeMap<Integer, Salle>();
+						if(client == 1)
+						{
+							// take list of rooms from Controleur
+							lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue);
+						}else if (client == 2)
+						{
+							// else take it from DB - the rooms maden by this user prof
+							objControleurJeu.obtenirGestionnaireBD().listRoomsProf(this.langue, objJoueurHumain.obtenirCleJoueur(), lstListeSalles);
+							
+						}
 						// Générer un nouveau numéro de commande qui sera 
 						// retourné au client
 						genererNumeroReponse();
@@ -819,42 +827,42 @@ public class ProtocoleJoueur implements Runnable
                         		// Créer une référence vers la salle courante dans la liste
                         		Salle objSalle = (Salle)(((Map.Entry<Integer, Salle>)(objIterateurListe.next())).getValue());
 
-                        		 if ((objSalle.getStrCreatorUserName().equals(objJoueurHumain.obtenirNomUtilisateur()) && client == 2)||(client == 1)) {
-                        			
-                        			 
-                        			// Créer le noeud de la salle courante
-                        			Element objNoeudSalle = objDocumentXMLSortie.createElement("salle");
+                        		 //if (objSalle.getStrCreatorUserName().equals(objJoueurHumain.obtenirNomUtilisateur()))
+                        		 
 
-                        			// On ajoute un attribut nom qui va contenir le nom
-                        			// de la salle
-                        			objNoeudSalle.setAttribute("nom", objSalle.getRoomName(this.langue));
+                        			 // Créer le noeud de la salle courante
+                        			 Element objNoeudSalle = objDocumentXMLSortie.createElement("salle");
 
-                        			// add too the room id
-                        			objNoeudSalle.setAttribute("id", Integer.toString(objSalle.getRoomID()));
+                        			 // On ajoute un attribut nom qui va contenir le nom
+                        			 // de la salle
+                        			 objNoeudSalle.setAttribute("nom", objSalle.getRoomName(this.langue));
 
-                        			//System.out.println(objSalle.getRoomName(""));
+                        			 // add too the room id
+                        			 objNoeudSalle.setAttribute("id", Integer.toString(objSalle.getRoomID()));
 
-                        			// On ajoute un attribut protegee qui va contenir
-                        			// une valeur booléenne permettant de savoir si la
-                        			// salle est protégée par un mot de passe ou non
-                        			objNoeudSalle.setAttribute("protegee", Boolean.toString(objSalle.protegeeParMotDePasse()));
+                        			 //System.out.println(objSalle.getRoomName(""));
 
-                        			//Add room description to the node
-                        			objNoeudSalle.setAttribute("descriptions", objSalle.getRoomDescription(this.langue));
+                        			 // On ajoute un attribut protegee qui va contenir
+                        			 // une valeur booléenne permettant de savoir si la
+                        			 // salle est protégée par un mot de passe ou non
+                        			 objNoeudSalle.setAttribute("protegee", Boolean.toString(objSalle.protegeeParMotDePasse()));
 
-                        			//Add max numbers of players of that room
-                        			objNoeudSalle.setAttribute("maxnbplayers", Integer.toString(objSalle.getRegles().getMaxNbPlayers()));
+                        			 //Add room description to the node
+                        			 objNoeudSalle.setAttribute("descriptions", objSalle.getRoomDescription(this.langue));
 
-                        			//Add type of game for that room
-                        			objNoeudSalle.setAttribute("typeDeJeu", objSalle.getGameType());
+                        			 //Add max numbers of players of that room
+                        			 objNoeudSalle.setAttribute("maxnbplayers", Integer.toString(objSalle.getRegles().getMaxNbPlayers()));
 
-                        			//Add type of game for that room
-                        			objNoeudSalle.setAttribute("userCreator", objSalle.getStrCreatorUserName());
+                        			 //Add type of game for that room
+                        			 objNoeudSalle.setAttribute("typeDeJeu", objSalle.getGameType());
+
+                        			 //Add type of game for that room
+                        			 objNoeudSalle.setAttribute("userCreator", objSalle.getStrCreatorUserName());
 
 
-                        			// Ajouter le noeud de la salle au noeud du paramètre
-                        			objNoeudParametreListeSalles.appendChild(objNoeudSalle);
-                        		}
+                        			 // Ajouter le noeud de la salle au noeud du paramètre
+                        			 objNoeudParametreListeSalles.appendChild(objNoeudSalle);
+                        		 
                         	}
                         }
 						// Ajouter le noeud paramètre au noeud de commande dans
@@ -882,8 +890,7 @@ public class ProtocoleJoueur implements Runnable
 						Node objRoomName = obtenirValeurParametre(objNoeudCommandeEntree, "NameRoom");
                         String name = "";
 						name = objRoomName.getNodeValue();
-						System.out.println(name);
-						
+												
                         // Déclaration d'une variable qui va contenir le noeud
 						// du mot de passe permettant d'accéder à la salle (s'il 
 						// n'y en a pas, alors le mot de passe sera vide)
@@ -907,12 +914,12 @@ public class ProtocoleJoueur implements Runnable
 						{
 							roomDescription = objDescription.getNodeValue();
 						}
-						//System.out.println(roomDescription);
+						
 						
 						Node objBeginDate = obtenirValeurParametre(objNoeudCommandeEntree, "BeginDate");
 						String beginDate = "";
 						beginDate = objBeginDate.getNodeValue();
-						System.out.println(beginDate);
+						
 						
 						Node objEndDate = obtenirValeurParametre(objNoeudCommandeEntree, "EndDate");
 						String endDate = "";
@@ -958,13 +965,10 @@ public class ProtocoleJoueur implements Runnable
 						// du nom de la salle a creer le rapport
 						Node objRoomID = obtenirValeurParametre(objNoeudCommandeEntree, "IDRoom");
                         int room_id = Integer.parseInt(objRoomID.getNodeValue());
-						System.out.println(room_id);
-						
-                       					
+						                       					
 						//add report from DB 
 						String report = objControleurJeu.obtenirGestionnaireBD().getReport(objJoueurHumain.obtenirCleJoueur(), room_id, this.langue);
                         
-												
 						// Il n'y a pas eu d'erreurs et il va falloir retourner 
 						// une liste des salles ?
 						objNoeudCommande.setAttribute("type", "Reponse");
@@ -1821,11 +1825,11 @@ public class ProtocoleJoueur implements Runnable
 					// Si quelqu'un a utilisé une banane et c'est ce joueur qui la subit
 					else if(!objJoueurHumain.obtenirPartieCourante().obtenirVaSubirUneBanane().equals(""))
 					{
-						System.out.println("Ancienne position: " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().x) + " " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().y));
+						//System.out.println("Ancienne position: " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().x) + " " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().y));
 
 						Banane.utiliserBanane(objJoueurHumain.obtenirPartieCourante().obtenirVaSubirUneBanane(), objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur(), objJoueurHumain.obtenirNomUtilisateur(), objJoueurHumain.obtenirPartieCourante().obtenirTable(), true);
 
-						System.out.println("Nouvelle position: " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().x) + " " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().y));
+						//System.out.println("Nouvelle position: " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().x) + " " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().y));
 
 						objJoueurHumain.obtenirPartieCourante().definirVaSubirUneBanane("");
 
@@ -1876,7 +1880,7 @@ public class ProtocoleJoueur implements Runnable
 
 						//*******************************************************
 						lastQuestionTime = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsRestant();
-						System.out.println("Protocol for : " + lastQuestionTime);
+						//System.out.println("Protocol for : " + lastQuestionTime);
 					}
 				}
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.RepondreQuestion))
@@ -3827,7 +3831,7 @@ public class ProtocoleJoueur implements Runnable
             	 collectPlayerAnswers(nouvelleQuestion);
             	 
             	 lastQuestionTime = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsRestant();
-				 System.out.println("Protocol for Cristall : " + lastQuestionTime);
+				 //System.out.println("Protocol for Cristall : " + lastQuestionTime);
              }
              else if(strTypeObjet.equals("PotionGros"))
              {
