@@ -28,8 +28,12 @@
 	  saveReportText = "Sauver"
 	  printReportText = "Imprimer"
 	  reportTextChange = "Selecter une salle pour voir le rapport..."
-    
-    
+	  
+  mathemaQuoi_betaNEW = ""  
+    errorPWD = "Mauvais mot de passe!"
+	  pwdAlert = "Erreur!"
+	  textGUI_PWD = "La salle demande un mot de passe..."
+  
     
 	
 	mathemaQuoi_beta = ""
