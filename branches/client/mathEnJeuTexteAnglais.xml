@@ -29,6 +29,10 @@
 	  printReportText = "Print"
 	  reportTextChange = "Select a room to take report..."
 	  
+	mathemaQuoi_betaNEW = ""
+	  errorPWD = "False room's password!"
+    pwdAlert = "Error!"
+    textGUI_PWD = "To enter you need a password..."  
 	
 	mathemaQuoi_beta = ""
 	
