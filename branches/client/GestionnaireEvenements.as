@@ -24,6 +24,7 @@ import mx.transitions.Tween;
 import mx.transitions.easing.*;
 import mx.utils.Delegate;
 import FiltreTable;
+ import mx.controls.Alert;
 
 class GestionnaireEvenements
 {
@@ -41,7 +42,7 @@ class GestionnaireEvenements
 	private var tablName:String;     // name of the created table
     private var tempsPartie:Number;   //  temps que va durer la partie, en minutes
     private var idPersonnage:Number;   //  
-    private var motDePasseSalle:String;   // le mot de passe de la salle dans laquelle on est
+    //private var motDePasseSalle:String;   // le mot de passe de la salle dans laquelle on est  //O.L.  pourquoi le garder??? envoyer au serveur et fini...
     private var listeDesJoueursDansSalle:Array;  // liste des joueurs dans la salle qu'on est. Un joueur contient un nom (nom)
     //public var  listeDesDescriptionsSalles:Array; //liste des descriptions des salles   // inutile a mon avis O.L.
     public var  listeDesTypesDeJeu:Array; //liste des TypesDeJeu de salles
@@ -73,7 +74,7 @@ class GestionnaireEvenements
 		trace("numeroTable : " + numeroTable);	
 		trace("tempsPartie : " + tempsPartie);	
 		trace("idPersonnage : " + idPersonnage);	
-		trace("motDePasseSalle : " + motDePasseSalle);	
+		//trace("motDePasseSalle : " + motDePasseSalle);	
 		trace("listeDesJoueursDansSalle : " + listeDesJoueursDansSalle);	
 		trace("listeDesSalles : " + listeDesSalles);	
 		trace("listeChansons : " + listeChansons);	
@@ -123,7 +124,7 @@ class GestionnaireEvenements
 	   
         this.motDePasse = passe;
         this.nomSalle = new String();
-        this.motDePasseSalle = new String();
+        //this.motDePasseSalle = new String();
         this.listeDesSalles = new Array();
 		//this.listeDesDescriptionsSalles = new Array();
 		this.listeNumeroJoueursSalles = new Array();
@@ -236,7 +237,9 @@ class GestionnaireEvenements
     {
         trace("*********************************************");
         trace("debut de entrerSalle      " + roomId);
-        
+        var guiPWD:MovieClip;  
+		
+		var motDePasseSalle:String = "";
         
         for(var i:Number = 0; i < listeDesSalles.length; i++)
         {
@@ -248,16 +251,19 @@ class GestionnaireEvenements
 				this.nomSalle = listeDesSalles[i].nom;
                 if(listeDesSalles[i].possedeMotDePasse == true)
                 {
-                    this.motDePasseSalle = "";   // afficher une fenetre de demande de mot de passe
+					
+	                guiPWD = _level0.loader.contentHolder.attachMovie("GUI_pwd", "guiPWD", 19995);//_level0.loader.contentHolder.getNextHighestDepth());
+                    guiPWD.textGUI_PWD.text = _root.texteSource_xml.firstChild.attributes.textGUI_PWD;
+					motDePasseSalle = guiPWD.textPWD.text;
                 }
-                else
-                {
-                    this.motDePasseSalle = "";
-                }
+                
                 break;
             }
         }
-        this.objGestionnaireCommunication.entrerSalle(Delegate.create(this, this.retourEntrerSalle), this.idRoom, this.motDePasseSalle);
+		guiPWD.btn_ok.onPress = function(){
+		  this.objGestionnaireCommunication.entrerSalle(Delegate.create(this, this.retourEntrerSalle), this.idRoom, motDePasseSalle);
+			};
+        
         trace("fin de entrerSalle");
         trace("*********************************************\n");
     }
@@ -737,7 +743,8 @@ class GestionnaireEvenements
         {
             case "Ok":
                 this.objGestionnaireCommunication.obtenirListeJoueursSalle(Delegate.create(this, this.retourObtenirListeJoueursSalle), Delegate.create(this, this.evenementJoueurEntreSalle), Delegate.create(this, this.evenementJoueurQuitteSalle));
-            break;
+                _level0.loader.contentHolder.gotoAndPlay(2);
+			break;
 			
             case "CommandeNonReconnue":
                 trace("CommandeNonReconnue");
@@ -753,6 +760,12 @@ class GestionnaireEvenements
 			
             case "MauvaisMotDePasseSalle":
                 trace("Mauvais mot de passe");
+				
+				//_level0.loader.contentHolder.alertTest();
+				var erreur:String = _root.texteSource_xml.firstChild.attributes.errorPWD;
+	            var pwdAlert:String = _root.texteSource_xml.firstChild.attributes.pwdAlert;
+	            Alert.show(erreur, pwdAlert); 
+				
             break;
 			
             case "SalleNonExistante":
@@ -784,7 +797,7 @@ class GestionnaireEvenements
                 delete this.listeDesJoueursConnectes;
                 this.listeDesJoueursDansSalle = new Array();
                 this.nomSalle = "";
-                this.motDePasseSalle = "";
+                //this.motDePasseSalle = "";
                 this.listeDesSalles = new Array();
                 this.listeDesJoueursConnectes = new Array();
                 objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), Delegate.create(this, this.evenementJoueurConnecte), Delegate.create(this, this.evenementJoueurDeconnecte));
