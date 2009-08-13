@@ -240,6 +240,7 @@ class GestionnaireEvenements
         var guiPWD:MovieClip;  
 		
 		var motDePasseSalle:String = "";
+		var finded:Boolean = false;
         
         for(var i:Number = 0; i < listeDesSalles.length; i++)
         {
@@ -252,23 +253,38 @@ class GestionnaireEvenements
                 if(listeDesSalles[i].possedeMotDePasse == true)
                 {
 					
-	                guiPWD = _level0.loader.contentHolder.attachMovie("GUI_pwd", "guiPWD", 19995);//_level0.loader.contentHolder.getNextHighestDepth());
-                    guiPWD.textGUI_PWD.text = _root.texteSource_xml.firstChild.attributes.textGUI_PWD;
-					motDePasseSalle = guiPWD.textPWD.text;
-                }
+	               guiPWD = _level0.loader.contentHolder.attachMovie("GUI_pwd", "guiPWD", _level0.loader.contentHolder.getNextHighestDepth());
+                   guiPWD.textGUI_PWD.text = _root.texteSource_xml.firstChild.attributes.textGUI_PWD;
+					
+                   
+			     }else{
+					   this.objGestionnaireCommunication.entrerSalle(Delegate.create(this, this.retourEntrerSalle), this.idRoom, motDePasseSalle);
+				 }
                 
                 break;
             }
         }
-		guiPWD.btn_ok.onPress = function(){
-		  this.objGestionnaireCommunication.entrerSalle(Delegate.create(this, this.retourEntrerSalle), this.idRoom, motDePasseSalle);
-			};
+		
         
         trace("fin de entrerSalle");
         trace("*********************************************\n");
     }
 	
-
+	 ///////////////////////////////////////////////////////////////////////////////////////////////////
+    function entrerSallePWD(pwd:String)
+    {
+        trace("*********************************************");
+        trace("debut de entrerSallePWD      " + pwd);
+        
+		
+		   this.objGestionnaireCommunication.entrerSalle(Delegate.create(this, this.retourEntrerSalle), this.idRoom, pwd);
+				
+		
+        
+        trace("fin de entrerSallePWD");
+        trace("*********************************************\n");
+    }
+	
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     function entrerTable(nTable:Number)
     {
@@ -738,10 +754,11 @@ class GestionnaireEvenements
     {
         //objetEvenement.resultat = Ok, CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte, MauvaisMotDePasseSalle, SalleNonExistante, JoueurDansSalle
         trace("*********************************************");
-        trace("debut de retourEntrerSalle   "+objetEvenement.resultat);
+        trace("debut de retourEntrerSalle   " + objetEvenement.resultat);
         switch(objetEvenement.resultat)
         {
             case "Ok":
+			    _level0.loader.contentHolder["guiPWD"].removeMovieClip();
                 this.objGestionnaireCommunication.obtenirListeJoueursSalle(Delegate.create(this, this.retourObtenirListeJoueursSalle), Delegate.create(this, this.evenementJoueurEntreSalle), Delegate.create(this, this.evenementJoueurQuitteSalle));
                 _level0.loader.contentHolder.gotoAndPlay(2);
 			break;
@@ -760,8 +777,8 @@ class GestionnaireEvenements
 			
             case "MauvaisMotDePasseSalle":
                 trace("Mauvais mot de passe");
-				
-				//_level0.loader.contentHolder.alertTest();
+									
+				_level0.loader.contentHolder["guiPWD"].removeMovieClip();
 				var erreur:String = _root.texteSource_xml.firstChild.attributes.errorPWD;
 	            var pwdAlert:String = _root.texteSource_xml.firstChild.attributes.pwdAlert;
 	            Alert.show(erreur, pwdAlert); 
