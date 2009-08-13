@@ -219,7 +219,8 @@ public class Salle
 		// Si le mot de passe est le bon, alors on ajoute le joueur dans la liste
 		// des joueurs de cette salle et on envoit un événement aux autres
 		// joueurs de cette salle pour leur dire qu'il y a un nouveau joueur
-		if (strPassword.equals(motDePasse))
+		
+		if (strPassword.equals(objGestionnaireBD.controlPWD(motDePasse)))
 		{
 		    // Empêcher d'autres thread de toucher à la liste des joueurs de 
 		    // cette salle pendant l'ajout du nouveau joueur dans cette salle
