@@ -1000,7 +1000,7 @@ public class GestionnaireBD
 					if(rs.next())
 					{
 						
-						motDePasse = rs.getString( "password" );
+						motDePasse = rs.getString("password");
 						createur = rs.getString("user.username");
 						gameType = rs.getString("game_type.name");
 						beginDate = rs.getTimestamp("beginDate");
@@ -1630,8 +1630,8 @@ public class GestionnaireBD
         else if (langue.equalsIgnoreCase("en"))
         	cleLang = 2;
 		// Création du SQL pour l'ajout
-		String strSQL = "INSERT INTO room (password, game_type_id, user_id, official, rule_id, beginDate, endDate) VALUES (PASSWORD('" +
-		                 pass + "'),1," + user_id + ",1,1,'" + begin + "','" + end + "');";
+		String strSQL = "INSERT INTO room (password, game_type_id, user_id, rule_id, beginDate, endDate) VALUES (PASSWORD('" +
+		                 pass + "'),1," + user_id + ",1,'" + begin + "','" + end + "');";
 
 		try
 		{
@@ -1998,7 +1998,7 @@ public class GestionnaireBD
 						Salle objSalle = new Salle(nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType, room, beginDate, endDate);
 						objSalle.setRoomDescription(roomDescription);
 						
-						System.out.println(objSalle.getEndDate().toString());
+						//System.out.println(objSalle.getEndDate().toString());
 						//objControleurJeu.ajouterNouvelleSalle(objSalle);
 						lstSalles.put(room, objSalle);
 					}   
@@ -2026,5 +2026,40 @@ public class GestionnaireBD
 		
 				
 	}// fin méthode fillRoomList
+	
+	public String controlPWD(String clientPWD)
+	{
+		String encodedPWD = "";
+		try
+		{
+			synchronized( requete )
+			{
+				ResultSet rs = requete.executeQuery( "SELECT PASSWORD('" + clientPWD + "') AS password;");
+				
+				if(rs.next())
+				{
+					encodedPWD = rs.getString("password");
+				}
+			}
+		}catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exécution de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete _PWD"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+			e.printStackTrace();			
+		}
+		catch( RuntimeException e)
+		{
+			//Une erreur est survenue lors de la recherche de la prochaine salle
+			objLogger.error(GestionnaireMessages.message("bd.erreur_PWD"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+			e.printStackTrace();
+		}
+
+	   System.out.println(encodedPWD);	
+	   return encodedPWD;
+	}
 	
 }// end class
