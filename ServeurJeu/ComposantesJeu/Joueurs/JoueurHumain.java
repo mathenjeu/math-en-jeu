@@ -13,7 +13,7 @@ public class JoueurHumain extends Joueur
 	private ProtocoleJoueur objProtocoleJoueur;
 	
 	// Cette variable va contenir le nom d'utilisateur du joueur
-	private String strNomUtilisateur;
+	private final String strNomUtilisateur;
 	
 	// Cetta variable contient la clé de la table joueur
 	private int intCleJoueur;
@@ -185,16 +185,7 @@ public class JoueurHumain extends Joueur
 		strNomFamille = nomFamille;
 	}
 	
-	/**
-	 * Cette méthode permet de définir si un joueur peut creer une salle.
-	 * 
-	 * @param boolean peutCreerSalle : peut ou peux pas creer salle
-	  
-	public void definirPeutCreerSalles( boolean peutCreerSalle)
-	{
-		bolPeutCreerSalle = peutCreerSalle;
-	}*/
-	
+		
 	/**
 	 * Cette fonction permet de retourner la référence vers la salle dans 
 	 * laquelle se trouve le joueur présentement.
