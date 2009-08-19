@@ -21,11 +21,11 @@ public class BoiteQuestions
 	
 	// Déclaration d'une référence vers un joueur humain correspondant à cet
 	// objet d'information de partie
-	private JoueurHumain objJoueurHumain;
+	private final JoueurHumain objJoueurHumain;
 	
 	// Since there is a question box for each player, and all players might not want to play
 	// in the same language, we set a language field for question boxes
-	private Lang language;
+	private final Lang language;
 	
 	public BoiteQuestions(String language, String url, JoueurHumain joueur)
 	{

@@ -164,7 +164,7 @@ public class InformationPartie
 	        
 			String language = joueur.obtenirProtocoleJoueur().langue;
             setObjBoiteQuestions(new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language), joueur));
-            objGestionnaireBD.remplirBoiteQuestions(getObjBoiteQuestions(), objJoueurHumain.obtenirCleNiveau());  
+            objGestionnaireBD.remplirBoiteQuestions(getObjBoiteQuestions(), objJoueurHumain);  
             
 	}// fin constructeur
 
@@ -455,7 +455,7 @@ public class InformationPartie
 		}
 		
 		int intCategorieQuestion = catScolaires[UtilitaireNombres.genererNbAleatoire(catValues.length - 1)]; 
-		System.out.println("categorie : " + intCategorieQuestion);
+		//System.out.println("categorie : " + intCategorieQuestion);
 		//***************************************************************************************
 		
 		int intDifficulte = 0;
@@ -496,7 +496,7 @@ public class InformationPartie
 		}
 		else if (intDifficulte > 0)
 		{
-			objGestionnaireBD.remplirBoiteQuestions( getObjBoiteQuestions(), objJoueurHumain.obtenirCleNiveau());
+			objGestionnaireBD.remplirBoiteQuestions( getObjBoiteQuestions(), objJoueurHumain);
 			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte, true);
 			
 			lstQuestionsRepondues.clear();
@@ -579,7 +579,7 @@ public class InformationPartie
 		}
 		else 
 		{
-			objGestionnaireBD.remplirBoiteQuestions( getObjBoiteQuestions(), objJoueurHumain.obtenirCleNiveau());
+			objGestionnaireBD.remplirBoiteQuestions( getObjBoiteQuestions(), objJoueurHumain);
 			
 			objQuestionTrouvee = trouverQuestionCristall(intCategorieQuestion, intDifficulte, oldQuestion, false);
 			

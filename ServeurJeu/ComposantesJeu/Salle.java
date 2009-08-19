@@ -1,7 +1,10 @@
 package ServeurJeu.ComposantesJeu;
 
+import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -9,6 +12,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 
+import Enumerations.Categories;
 import Enumerations.RetourFonctions.ResultatEntreeTable;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
@@ -39,16 +43,16 @@ public class Salle
 	private GestionnaireBD objGestionnaireBD;
 	
 	// Cette variable va contenir le nom de la salle
-	private String strNomSalle;
+	private final String strNomSalle;
 
 	// Cette variable va contenir le mot de passe permettant d'accéder à la salle
-	private String strPassword;
+	private final String strPassword;
 	
 	// Cette variable va contenir le nom d'utilisateur du créateur de cette salle
-	private String strCreatorUserName;
+	private final String strCreatorUserName;
         
     // Contient le type de jeu (ex. mathEnJeu)
-	private String gameType;
+	private final String gameType;
 	
 	//Room short description
 	private String roomDescription;
@@ -73,15 +77,24 @@ public class Salle
 	private Date endDate;
 	
 	// ID in DB.  
-	private int roomID;
+	private final int roomID;
 	
-	//private static int maxPossessionPieceEtObjet;   // will be changed to instance var
-      
-   
+	//default time for the room 
+	private final int masterTime;
+	
+	//use all general categories or only room's specyfied categories
+	private final boolean roomCategories;
+	
+	//specifyed room's categories
+	private ArrayList<Integer> categories;
+	
+	   
+	
 	/**
 	 * Constructeur de la classe Salle qui permet d'initialiser les membres 
 	 * privés de la salle. Ce constructeur a en plus un mot de passe permettant
 	 * d'accéder à la salle.
+	 * @param roomCategories 
 	 * 
 	 * @param GestionnaireBD gestionnaireBD : Le gestionnaire de base de données
 	 * @param String nomSalle : Le nom de la salle
@@ -91,7 +104,9 @@ public class Salle
 	 * @param Regles reglesSalle : Les règles de jeu pour la salle courante
 	 */
 	public Salle(String nomSalle, String nomUtilisateurCreateur, String motDePasse, 
-				 Regles reglesSalle, ControleurJeu controleurJeu, String gameType, int roomID, Date beginDate, Date endDate)
+				 Regles reglesSalle, ControleurJeu controleurJeu, String gameType, 
+				 int roomID, Date beginDate, Date endDate, int masterTime, 
+				 boolean roomCategories)
 	{
 		super();
 		
@@ -104,15 +119,19 @@ public class Salle
 		// créateur de la salle et le mot de passe
 		strNomSalle = nomSalle;
 		 
-		setStrCreatorUserName(nomUtilisateurCreateur);
+		strCreatorUserName = nomUtilisateurCreateur;
 		strPassword = motDePasse;
-		System.out.println(strPassword);
+		//System.out.println(strPassword);
                 
         // Type de jeu de la salle
         this.gameType = gameType;
-        this.setRoomID(roomID);
+        this.roomID = roomID;
         this.setBeginDate(beginDate);
         this.setEndDate(endDate);
+        this.masterTime = masterTime;
+        this.roomCategories = roomCategories;
+        
+        categories = new ArrayList();
 		
 		// Créer une nouvelle liste de joueurs, de tables et de numéros
 		lstJoueurs = new TreeMap <String, JoueurHumain>();
@@ -249,6 +268,9 @@ public class Salle
 				preparerEvenementJoueurEntreSalle(joueur.obtenirNomUtilisateur());
 		    }
 		
+		    System.out.println(motDePasse);
+		    objGestionnaireBD.fillUserLevels(joueur, this);
+		    System.out.println(motDePasse);
 			// On retourne vrai
 			return true;
 		}
@@ -789,6 +811,7 @@ public class Salle
 	}
 
 
+	
 	public void setRoomDescription(String roomDescription) {
 		this.roomDescription = roomDescription;
 	}
@@ -815,20 +838,66 @@ public class Salle
 		return roomDescription;
 	}
 
+	/*
 	public void setStrCreatorUserName(String strCreatorUserName) {
 		this.strCreatorUserName = strCreatorUserName;
-	}
+	}*/
 
 	public String getStrCreatorUserName() {
 		return strCreatorUserName;
 	}
 
+	/*
 	public void setRoomID(int roomID) {
 		this.roomID = roomID;
-	}
+	}*/
 
 	public int getRoomID() {
 		return roomID;
 	}
 
+	/*
+	public void setMasterTime(int masterTime) {
+		this.masterTime = masterTime;
+	}*/
+
+	public int getMasterTime() {
+		return masterTime;
+	}
+
+	public boolean isRoomCategories() {
+		return roomCategories;
+	}
+
+	public ArrayList<Integer> getCategories() {
+		return categories;
+	}
+
+	/**
+	 * @param categories the categories to set
+	 */
+	public void setCategories() {
+		Categories[] catValues = Categories.values();
+        for(int i = 0; i < catValues.length; i++)
+		{
+			categories.add(catValues[i].getCode());
+		}
+			
+	}// end methode
+	
+	public void setCategories(String categoriesString)
+	{
+
+		if(categoriesString != null){
+			StringTokenizer cat = new StringTokenizer(categoriesString, ":");
+			while(cat.hasMoreTokens())
+			{
+				categories.add(Integer.parseInt(cat.nextToken()));
+			}
+		}
+		ListIterator<Integer> it = categories.listIterator();	
+		while(it.hasNext())
+			System.out.println(it.next());
+	}// end mathode
+	
 }// end class 

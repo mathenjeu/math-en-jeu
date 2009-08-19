@@ -60,7 +60,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	private Salle objSalle;
 	
 	// Cette variable va contenir le numéro de la table
-	private int intNoTable;
+	private final int intNoTable;
 	
 	// Déclaration d'une constante qui définit le nombre maximal de joueurs 
 	// dans une table
@@ -73,7 +73,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	
 	// Déclaration d'une variable qui va garder le temps total défini pour 
 	// cette table
-	private int intTempsTotal;
+	private final int intTempsTotal;
 	
 	// Cet objet est une liste des joueurs qui sont présentement sur cette table
 	private TreeMap<String, JoueurHumain> lstJoueurs;
@@ -254,6 +254,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 */
 	public void entrerTable(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, TreeMap<String, Integer> listePersonnageJoueurs, TreeMap<String, Integer> listeRoleJoueurs)  throws NullPointerException
 	{
+		System.out.println("start table: " + System.currentTimeMillis());
 	    // Empçcher d'autres thread de toucher ˆ la liste des joueurs de 
 	    // cette table pendant l'ajout du nouveau joueur dans cette table
 	    synchronized (lstJoueurs)
@@ -291,7 +292,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				preparerEvenementJoueurEntreTable(joueur.obtenirNomUtilisateur(), joueur.getRole());		    	
 		    }
 	    }
-	}
+	    System.out.println("end table : " + System.currentTimeMillis());
+	}// end methode
 
 	/**
 	 * Cette méthode permet au joueur passé en paramçtres de quitter la table. 
