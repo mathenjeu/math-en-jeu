@@ -28,6 +28,7 @@
 	  saveReportText = "Sauver"
 	  printReportText = "Imprimer"
 	  reportTextChange = "Selecter une salle pour voir le rapport..."
+	  roomTimeLabel = "Temps partie"
 	  
   mathemaQuoi_betaNEW = ""  
     errorPWD = "Mauvais mot de passe!"
