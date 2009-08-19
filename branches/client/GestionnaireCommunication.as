@@ -1486,7 +1486,8 @@ class GestionnaireCommunication
      * @params String - les params de la salle
      */
     public function createRoom(createRoomDelegate:Function,
-                               nameRoom:String, description:String, pass:String, fromDate:String, toDate:String)
+                               nameRoom:String, description:String, pass:String, fromDate:String,
+							   toDate:String, defaultTime:String, roomCategories:String)
     {
         // Si on a obtenu la liste des tables, alors on peut continuer le code
         // de la fonction
@@ -1522,6 +1523,12 @@ class GestionnaireCommunication
 			var objNoeudParametreEndDate:XMLNode = objObjetXML.createElement("parametre");
             var objNoeudParametreEndDateText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(toDate));
 			
+			var objNoeudParametreDefaultTime:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreDefaultTimeText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(defaultTime)));
+			
+			var objNoeudParametreRoomCategories:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreRoomCategoriesText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(roomCategories));
+			
 			// Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "CreateRoom";
@@ -1535,12 +1542,20 @@ class GestionnaireCommunication
             objNoeudParametreBeginDate.appendChild(objNoeudParametreBeginDateText);
 			objNoeudParametreEndDate.attributes.type = "EndDate";
             objNoeudParametreEndDate.appendChild(objNoeudParametreEndDateText);
+			objNoeudParametreDefaultTime.attributes.type = "DefaultTime";
+            objNoeudParametreDefaultTime.appendChild(objNoeudParametreDefaultTimeText);
+			objNoeudParametreRoomCategories.attributes.type = "RoomCategories";
+            objNoeudParametreRoomCategories.appendChild(objNoeudParametreRoomCategoriesText);
+			
+			//trace ("GC : defT : " + defaultTime + " " + ExtendedString.encodeToUTF8(defaultTime));
 						
             objNoeudCommande.appendChild(objNoeudParametreNameRoom);
 			objNoeudCommande.appendChild(objNoeudParametreDescription);
             objNoeudCommande.appendChild(objNoeudParametrePass);
 			objNoeudCommande.appendChild(objNoeudParametreBeginDate);
             objNoeudCommande.appendChild(objNoeudParametreEndDate);
+			objNoeudCommande.appendChild(objNoeudParametreDefaultTime);
+			objNoeudCommande.appendChild(objNoeudParametreRoomCategories);
 					
 			objObjetXML.appendChild(objNoeudCommande);
             // Declaration d'un nouvel objet qui va contenir les informations sur
@@ -2941,7 +2956,8 @@ class GestionnaireCommunication
                     maxnbplayers:lstChildNodes[i].attributes.maxnbplayers,
 					idRoom:lstChildNodes[i].attributes.id,
                     typeDeJeu:lstChildNodes[i].attributes.typeDeJeu,
-					userCreator:lstChildNodes[i].attributes.userCreator});
+					userCreator:lstChildNodes[i].attributes.userCreator,
+					masterTime:lstChildNodes[i].attributes.masterTime});
 								  
             }
 			
