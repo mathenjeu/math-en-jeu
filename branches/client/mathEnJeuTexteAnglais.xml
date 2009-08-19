@@ -28,6 +28,7 @@
 	  saveReportText = "Save"
 	  printReportText = "Print"
 	  reportTextChange = "Select a room to take report..."
+	  roomTimeLabel = "Game duration"
 	  
 	mathemaQuoi_betaNEW = ""
 	  errorPWD = "False room's password!"
