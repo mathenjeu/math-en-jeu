@@ -37,6 +37,7 @@ class GestionnaireEvenements
     private var motDePasse:String;  // notre mot de passe pour pouvoir jouer
     private var nomSalle:String;  //  nom de la salle dans laquelle on est
 	private var idRoom:Number;    // ID of room in what we are in server's list of rooms
+	private var masterTime:Number; // masterTime of room, if masterTime != 0 is taked masterTime for the time of game 
 	private var clientType:Number;  // if 1 is game, if 2 is prof's module
     private var numeroTable:Number;   //   numero de la table dans laquelle on est
 	private var tablName:String;     // name of the created table
@@ -212,11 +213,11 @@ class GestionnaireEvenements
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////
-    function createRoom(nameRoom:String, description:String, pass:String, fromDate:String, toDate:String)
+    function createRoom(nameRoom:String, description:String, pass:String, fromDate:String, toDate:String, defaultTime:String, roomCategories:String)
     {
         trace("*********************************************");
-        trace("debut de createRoom     :" + nameRoom);
-        this.objGestionnaireCommunication.createRoom(Delegate.create(this, this.retourCreateRoom), nameRoom, description, pass, fromDate, toDate);
+        trace("debut de createRoom     :" + nameRoom + " " + toDate + " " + defaultTime);
+        this.objGestionnaireCommunication.createRoom(Delegate.create(this, this.retourCreateRoom), nameRoom, description, pass, fromDate, toDate, defaultTime, roomCategories);
         trace("fin de createRoom");
         trace("*********************************************\n");
     }
@@ -759,6 +760,15 @@ class GestionnaireEvenements
         {
             case "Ok":
 			    _level0.loader.contentHolder["guiPWD"].removeMovieClip();
+				
+				for (var i:Number = 0; i < this.listeDesSalles.length; i++)
+                {
+                    if(this.listeDesSalles[i].idRoom == this.idRoom)
+                    {
+                        this.masterTime = this.listeDesSalles[i].masterTime;
+						break;
+                    }
+                }
                 this.objGestionnaireCommunication.obtenirListeJoueursSalle(Delegate.create(this, this.retourObtenirListeJoueursSalle), Delegate.create(this, this.evenementJoueurEntreSalle), Delegate.create(this, this.evenementJoueurQuitteSalle));
                 _level0.loader.contentHolder.gotoAndPlay(2);
 			break;
