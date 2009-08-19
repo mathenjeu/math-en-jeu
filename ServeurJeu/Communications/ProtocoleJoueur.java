@@ -858,6 +858,9 @@ public class ProtocoleJoueur implements Runnable
 
                         			 //Add type of game for that room
                         			 objNoeudSalle.setAttribute("userCreator", objSalle.getStrCreatorUserName());
+                        			 
+                        			//Add type of game for that room
+                        			 objNoeudSalle.setAttribute("masterTime", Integer.toString(objSalle.getMasterTime()));
 
 
                         			 // Ajouter le noeud de la salle au noeud du paramètre
@@ -925,16 +928,17 @@ public class ProtocoleJoueur implements Runnable
 						String endDate = "";
 						endDate = objEndDate.getNodeValue();
 						
-						//add room to the DB too
-						int room_id = objControleurJeu.obtenirGestionnaireBD().putNewRoom(motDePasse, objJoueurHumain.obtenirCleJoueur(), name, roomDescription, this.langue, beginDate, endDate);
-                        /*
-						Regles objReglesSalle = new Regles();
-						objControleurJeu.obtenirGestionnaireBD().chargerRegllesSalle(objReglesSalle, room_id);
-						Salle objSalle = new Salle(name, createur, motDePasse, objReglesSalle, objControleurJeu, gameType, room_id);
-						objSalle.setRoomDescription(roomDescription);
-						objControleurJeu.ajouterNouvelleSalle(objSalle);
-						*/
+						Node objMasterTime = obtenirValeurParametre(objNoeudCommandeEntree, "DefaultTime");
+						int masterTime = 0;
+						masterTime = Integer.parseInt(objMasterTime.getNodeValue());
 						
+						Node objRoomCategories = obtenirValeurParametre(objNoeudCommandeEntree, "RoomCategories");
+						String roomCategories = "";
+						roomCategories = objRoomCategories.getNodeValue();
+						
+						//add room to the DB too
+						int room_id = objControleurJeu.obtenirGestionnaireBD().putNewRoom(motDePasse, objJoueurHumain.obtenirCleJoueur(), name, roomDescription, this.langue, beginDate, endDate, masterTime, roomCategories);
+                        
 						// Il n'y a pas eu d'erreurs et il va falloir retourner 
 						// une liste des salles ?
 						objNoeudCommande.setAttribute("type", "Reponse");
@@ -1047,12 +1051,14 @@ public class ProtocoleJoueur implements Runnable
 							boolean bolResultatEntreeSalle = objControleurJeu.entrerSalle(objJoueurHumain, 
 									Integer.parseInt(objRoomID.getNodeValue()), strMotDePasse, true);
 
+							
 							// Si le joueur a réussi à entrer
-							if (bolResultatEntreeSalle == true)
+							if (bolResultatEntreeSalle)
 							{
 								// Il n'y a pas eu d'erreurs
 								objNoeudCommande.setAttribute("type", "Reponse");
 								objNoeudCommande.setAttribute("nom", "Ok");
+								
 							}
 							else
 							{
@@ -2429,7 +2435,7 @@ public class ProtocoleJoueur implements Runnable
 		
 		else if (noeudCommande.getAttribute("nom").equals(Commande.CreateRoom))
 		{
-			if (noeudCommande.getChildNodes().getLength() == 5)
+			if (noeudCommande.getChildNodes().getLength() == 7)
 			{
 				bolCommandeValide = true;
 			}
