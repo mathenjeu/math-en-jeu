@@ -74,7 +74,7 @@ public class SpyRooms implements Runnable {
 	 */
 	private void detectNewRooms(ArrayList<Integer> rooms)
 	{
-		    System.out.println("start : " + System.currentTimeMillis());
+		    //System.out.println("start : " + System.currentTimeMillis());
 		    //to not select the existed rooms   
 			String list = "";
 			for (int room : rooms)
@@ -145,9 +145,9 @@ public class SpyRooms implements Runnable {
 			}  
 			
 			//put in Controleur finded rooms
-			System.out.println(rooms + "NEW");	
+			//System.out.println(rooms + "NEW");	
 			objControleurJeu.obtenirGestionnaireBD().fillRoomList(rooms);
-			System.out.println("end : " + System.currentTimeMillis());
+			//System.out.println("end : " + System.currentTimeMillis());
 	}// end methode detectNewRooms
 
 	/**
