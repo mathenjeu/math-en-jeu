@@ -24,7 +24,7 @@ import mx.transitions.Tween;
 import mx.transitions.easing.*;
 import mx.utils.Delegate;
 import FiltreTable;
- import mx.controls.Alert;
+import mx.controls.Alert;
 
 class GestionnaireEvenements
 {
@@ -791,7 +791,12 @@ class GestionnaireEvenements
 				_level0.loader.contentHolder["guiPWD"].removeMovieClip();
 				var erreur:String = _root.texteSource_xml.firstChild.attributes.errorPWD;
 	            var pwdAlert:String = _root.texteSource_xml.firstChild.attributes.pwdAlert;
-	            Alert.show(erreur, pwdAlert); 
+	            //var myAlert:Alert = new Alert();//createClassObject(Alert,"myAlert", getNextHighestDepth()); 
+				//Alert.setStyle("themeColor", "haloBlue");
+				_global.styles.Alert.setStyle("themeColor", "haloBlue");
+				_global.styles.Alert.setStyle("color", 0x000099);
+
+				Alert.show(erreur, pwdAlert); 
 				
             break;
 			
