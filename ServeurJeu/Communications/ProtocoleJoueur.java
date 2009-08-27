@@ -363,7 +363,8 @@ public class ProtocoleJoueur implements Runnable
 			objGestionnaireCommunication.supprimerProtocoleJoueur(this);
 		}
 
-		objLogger.info( GestionnaireMessages.message("protocole.fin_thread").replace("$$CLIENT$$",objSocketJoueur.getInetAddress().toString()));
+                String inetAddress = objSocketJoueur.getInetAddress() == null ? "[?.?.?.?]" : objSocketJoueur.getInetAddress().toString();
+		objLogger.info( GestionnaireMessages.message("protocole.fin_thread").replace("$$CLIENT$$",inetAddress));
 	}
 	
 	/**
@@ -2316,7 +2317,7 @@ public class ProtocoleJoueur implements Runnable
 				objLogger.info( GestionnaireMessages.message("protocole.message_envoye") + chainetemp );
 			}
 			// ƒcrire le message sur le canal d'envoi au client
-			objCanalEnvoi.write(UtilitaireEncodeurDecodeur.encodeToUTF8(message).getBytes());
+			objCanalEnvoi.write(message.getBytes("UTF8"));
 			
 			// ƒcrire le byte 0 sur le canal d'envoi pour signifier la fin du message
     		objCanalEnvoi.write((byte) 0);

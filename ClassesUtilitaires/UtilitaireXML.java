@@ -172,7 +172,9 @@ public final class UtilitaireXML
 		else
 		{
 			// On retourne le message sans l'entête XML
-			return (message.substring(message.indexOf("?>") + 2));
+                        int finEntete = message.indexOf("?>")+2;
+                        int debutXML = Math.max(finEntete, message.indexOf("<", finEntete));
+                        return message.substring(debutXML);
 		}
 	}
 }
