@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <config
 
 	language="en"
 	gameType="mathEnJeu"
 
-	url_server="mejdev.mat.ulaval.ca"
-	port="80"
+	url_server="192.168.0.1"
+	port="6100"
 	
 	url_server1="mathamaze.ca"
 	port1="8080"
@@ -21,7 +21,7 @@
 	url_server_tunneling1="mejdev.mat.ulaval.ca"
 	port_tunneling="80"
 
-	username="game-master.1"
+	username="game-master.1.1"
 	password="08d36f404a5f4426"
 	password111="watcher"
 	password111="050030c918c5aef3"
