@@ -2394,8 +2394,9 @@ class GestionnaireEvenements
 		var maTete:MovieClip = _level0.loader.contentHolder.maTete.attachMovie("tete"+idDessin/*this.listeDesPersonnages[numeroJoueursDansSalle-1].id*/, "maTete", -10099);
 		maTete._x = -7;
 		maTete._y = -6;
-		maTete._xscale = 55;
-		maTete._yscale = 55;
+		// V3 head size
+		maTete._xscale = 150;
+		maTete._yscale = 150;
 		
 		
         for(i = 0; i < objetEvenement.positionJoueurs.length; i++)//4 //nbmaxJoueurs// numeroJoueursDansSalle
