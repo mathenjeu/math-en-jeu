@@ -2,7 +2,13 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
 	
-	chargement_beta_local = ""	
+	main_menu = ""
+	  bienvenue = "Bienvenue au 'Math en jeu' "
+    btnPlay = "Jouer" 
+    btnQuit = "Quitter"
+    btnProfile = "Profil"
+     
+  chargement_beta_local = ""	
 
 		version = "Version 2.0"
 		boutonEntrer = "Entrer"
