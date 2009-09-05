@@ -48,7 +48,7 @@ class GestionnaireCommunication
     // Declaration d'un objet DispatchingXMLSocket qui va servir a communiquer
     // avec le serveur de jeu
     private var objSocketClient:DispatchingXMLSocket;
-    // Declaration d'une contante gardant le delai que le timer doit attendre
+    // Declaration d'une constante gardant le delai que le timer doit attendre
     // pour determiner si une commande envoyee s'est perdue en chemin
     private var TEMPS_TIMER:Number = 8000;
     // Declaration d'un delegate qui va pointer vers la fonction qui gere
