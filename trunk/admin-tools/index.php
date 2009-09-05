@@ -7,10 +7,10 @@ set_include_path('.' . PATH_SEPARATOR . './library'
   . PATH_SEPARATOR . './application/models/'
   . PATH_SEPARATOR . './application/views/scripts/question/'
   . PATH_SEPARATOR . get_include_path());
-  
-include "Zend/Loader.php";
 
-Zend_Loader::registerAutoLoad();
+include 'Zend/Loader/Autoloader.php';
+$autoloader = Zend_Loader_Autoloader::getInstance();
+$autoloader->setFallbackAutoloader(true);
 
 // load configuration
 $config = new Zend_Config_Ini('./application/config.ini', 'general');
