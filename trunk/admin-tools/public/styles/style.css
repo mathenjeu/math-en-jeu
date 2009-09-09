@@ -26,7 +26,16 @@ thead.question_info {
 	color: #737373;
 }
 
+td.swf {
+    min-width:800px;
+    height:600px;
+}
 
+.swf {
+    vertical-align:top;
+    width:100%;
+    height:100%;
+}
 
 td.answer {
     min-width:500px;
