@@ -1083,20 +1083,20 @@ class QuestionController extends Zend_Controller_Action {
                         case 1: //Multiple choices
                                 $answerTable = new Answer();
                                 $answerRowSet = $answerTable->fetchAll("question_id=$question_id");
-                                $questionFile->addText("\begin{enumerate}[A)]");
+                                $questionFile->addText("\begin{mej-enumerate}");
                                 foreach($answerRowSet as $answerRow) {
                                         $answerInfo = $answerRow->findAnswerInfo($answerTable->select()->where("language_id=$language_id"))->current();
                                         if ($answerInfo == null)
                                                 continue;
                                         $questionFile->addText("\item " . $answerInfo->answer_latex . "\n");
                                 }
-                                $questionFile->addText("\end{enumerate}");
+                                $questionFile->addText("\end{mej-enumerate}");
                                 break;
                         case 2: //True of false
-                                $questionFile->addText("\begin{enumerate}[A)]");
+                                $questionFile->addText("\begin{mej-enumerate}");
                                 $questionFile->addText("\item " . (($language_id==1)?"Vrai":"True"));
                                 $questionFile->addText("\item " . (($language_id==1)?"Faux":"False"));
-                                $questionFile->addText("\end{enumerate}");
+                                $questionFile->addText("\end{mej-enumerate}");
                                 break;
                         case 3: //Short answer
                                 break;
