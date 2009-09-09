@@ -7,6 +7,23 @@
     btnQuit = "Quit"
     btnProfile = "Profile"
     
+  page_instructions = ""
+    beginPage = "Begin one game"
+    rulesPage = "Rules"
+    objectsPage = "Objects"
+    backBtnTxt = "Back"
+    bookLabel = "BOOK"
+    coinLabel = "COIN"
+    shopLabel = "SHOP"
+    bananaLabel = "BANANA"
+    crystallLabel = "CRISTALL BALL"
+    
+    bananaTxt = "  The banana allows you to play a wicked trick on another player! When you use this object, your opponent that has more points sign slides on the banana and becomes a little dumber for the 90 secondes!"
+    bookTxt = "  The book eliminates an answer choice for you on a multiple choice question. The number of choices then decreases for one."
+    crystalTxt = "  If you feel unable to answer a question, you may use the crystal ball. The computer will then give you a new question."
+    
+    shopTxt = "  It is here that you can spend your coins!"
+    coinTxt = "  The coins you pick up on your way allow you to buy objects."
 	
 	chargement_beta_local = ""	
 
@@ -311,33 +328,23 @@
 			nomCasesSpeciales2 = "                                      '?' Cell"
 			nomObjets 		   = "                        Book              Crystal ball"
 			salleListe = "Before playing"
-			salleTitre = "1. Setting the game"
-			salleTexte = "•Choosing a room
-Choose a room to play in. For example, you can choose the Newton room. Click on the room’s name and then click on Continue.
-			
-•Choosing a table
-If there is a table open and you want to play with these people, click on this table. Then click on Continue. Otherwise, click on “Create a new table” and choose how many minutes you want to play.
-			
-•Choosing a character
-By clicking on the left or on the right-pointing arrow, choose you character. Click on Continue.
-			
-•Choosing the difficulty level
-The level you choose will not affect the difficulty of your questions. It modifies the capacity of the virtual opponents to answer the quesions. Click on the level you want and then click on Continue."
+			salleTitre = "Setting the game"
+			salleTexte = "•  In the main menu choose Play button.
+•  Choose a room to play in. For example, you can choose the Newton room. Click on the room’s name and then click on Continue.
+•  If there is a table open and you want to play with these people, click on this table. Then click on Continue. Otherwise, click on “Create a new table” and choose how many minutes you want to play.
+•  By clicking on the left or on the right-pointing arrow, choose you character. Click on Continue.
+•  The level you choose will not affect the difficulty of your questions. It modifies the capacity of the virtual opponents to answer the quesions. Click on the level you want and then click on Continue."
 		
 			elementsJeuListe = "Game"
 			elementsJeuTitre = "2. Elements of the game"
 			elementsJeuTexte = "Basic rules:
-•On the game board, you character appears bigger than the other player’s.
-
-•You character can move in four directions. To the front, to the back, to the left, and to the right the same line. The accessible cells appear in yellow.
-
-•Your character can move between one and six cells at once. The bigger the displacement, the harder the question, relative to the academic level on your registration.
-
-•The number of points a question is worth depends on the length of the displacement. A one cell displacement is worth three point, a two cells displacement is worth five points, and so on.
-
-•The cells with a question mark bring you to a game if the question is answered correctly. The points won in that game will be added to your score.
-
-•The winner is the player with the most points, or the one that reaches the ''Instant Victory'' sign first (see in the 'Special Cells' section)."
+			
+•  On the game board, you character appears bigger than the other player’s.
+•  You character can move in four directions. To the front, to the back, to the left, and to the right the same line. The accessible cells appear in yellow.
+•  Your character can move between one and six cells at once. The bigger the displacement, the harder the question, relative to the academic level on your registration.
+•  The number of points a question is worth depends on the length of the displacement. A one cell displacement is worth three point, a two cells displacement is worth five points, and so on.
+•  The cells with a question mark bring you to a game if the question is answered correctly. The points won in that game will be added to your score.
+•  The winner is the player with the most points, or the one that reaches the ''Instant Victory'' sign first (see in the 'Special Cells' section)."
 			
 			objetsListe = "Objects"
 			objetsTitre = "3. The objects"
