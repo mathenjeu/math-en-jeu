@@ -7,7 +7,24 @@
     btnPlay = "Jouer" 
     btnQuit = "Quitter"
     btnProfile = "Profil"
-     
+    
+  page_instructions = ""
+    beginPage = "Débuter une partie"
+    rulesPage = "Règlements"
+    objectsPage = "Les objets"
+    backBtnTxt = "Retour" 
+    bookLabel = "LIVRE"
+    coinLabel = "MONNAIE"
+    shopLabel = "MAGASIN"
+    bananaLabel = "BANANE"
+    crystallLabel = "BOULE DE CRISTAL"
+    
+    bananaTxt = "  La banane te permet de jouer un tour à un des joueurs ! Quand tu l'utilises, ton adversaire qui a le plus des points glisse alors sur la banane et il prend des résultats mauvaises les autres 90 secondes!"
+    crystalTxt = "  Si tu te sens incapable de répondre à une question, utilise la boule de cristal. Tu recevras alors une question différente."
+    bookTxt = "  Le livre élimine un mauvais choix de réponse lors d'une question à choix multiples. Le nombre de choix possible passe alors de quatre à trois."
+    shopTxt = "Tu peux y échanger tes pièces contre des objets."
+    coinTxt = "Les pièces que tu trouves sur la planche de jeu te permettent d'acheter des objets."
+        
   chargement_beta_local = ""	
 
 		version = "Version 2.0"
@@ -311,31 +328,23 @@
 			nomCasesSpeciales2 = "        Pièce                          Case '?' "			
 			nomObjets 		   = " Banane                 Livre            Boule de cristal"
 			salleListe = "Avant de jouer"
-			salleTitre = "1. Préparer la partie"
-			salleTexte = "•Choisir une salle
-Choisis une salle où jouer. Par exemple, tu peux choisir la salle Newton. Clique sur le nom de la salle et clique ensuite sur Continuer.
-			
-•Choisir une table
-S'il y a une table ouverte et que tu veux jouer avec ces personnes, clique sur cette table. Clique ensuite sur Continuer. Sinon, clique sur Créer une nouvelle table et entre un nombre de minutes pour jouer.
-			
-•Choisir un personnage
-En cliquant sur les flèches qui pointent vers la gauche et la droite, sélectionne ton personnage. Clique sur OK.
-			
-•Choisir le niveau de difficulté
-Le niveau choisi n'affecte pas la difficulté des questions. Il modifie la capacité des joueurs virtuels à bien répondre aux questions. Clique sur le niveau de ton choix et clique ensuite sur Continuer."
+			salleTitre = "Préparer la partie"
+			salleTexte = "•  Sur le menu principal, clique sur le bouton Jouer.
+•  Choisis une salle où jouer. Par exemple, tu peux choisir la salle Newton. Clique sur le nom de la salle et clique ensuite sur Continuer.
+•  S'il y a une table ouverte et que tu veux jouer avec ces personnes, clique sur cette table. Clique ensuite sur Continuer. Sinon, clique sur Créer une nouvelle table et entre un nombre de minutes pour jouer.
+•  En cliquant sur les flèches qui pointent vers la gauche et la droite, sélectionne ton personnage. Clique sur OK.
+•  Le niveau choisi n'affecte pas la difficulté des questions. Il modifie la capacité des joueurs virtuels à bien répondre aux questions. Clique sur le niveau de ton choix et clique ensuite sur Continuer."
 		
 			elementsJeuListe = "Jeu"
 			elementsJeuTitre = "2. Éléments du jeu"
 			elementsJeuTexte = "Règles de base:
-•Ton personnage peut se déplacer dans 4 directions. Les cases accessibles sont d'une couleur différentes des autres et apparaissent en jaune.
-
-•Ton personnage peut se déplacer de 1 à 6 cases à la fois. Plus le déplacement est grand, plus la question est difficile, mais toujours adaptée au niveau académique choisi lors de l'enregistrement du profile.
-
-•Le nombre de points attribués à une bonne réponse dépend de la longueur d'un déplacement. Un déplacement d'une case vaut 3 points, un déplacement de deux cases vaut 5 points et ainsi de suite.
-
-•Si tu te rends sur une case contenant un point d'interrogation, tu cours la chance de remporter encore plus de points.
-
-•Le gagnant est le joueur qui a le plus de points ou celui qui atteint la case ''Victoire Instantanée'' en premier (voir la section ''Cases spéciales'')."
+			
+•  Sur la planche de jeu, votre personnage apparaîtra plus gros que celui des autres joueurs.
+•  Ton personnage peut se déplacer dans 4 directions. Les cases accessibles sont d'une couleur différentes des autres et apparaissent en jaune.
+•  Ton personnage peut se déplacer de 1 à 6 cases à la fois. Plus le déplacement est grand, plus la question est difficile, mais toujours adaptée au niveau académique choisi lors de l'enregistrement du profile.
+•  Le nombre de points attribués à une bonne réponse dépend de la longueur d'un déplacement. Un déplacement d'une case vaut 3 points, un déplacement de deux cases vaut 5 points et ainsi de suite.
+•  Si tu te rends sur une case contenant un point d'interrogation, tu cours la chance de remporter encore plus de points.
+•  Le gagnant est le joueur qui a le plus de points ou celui qui atteint la case ''Victoire Instantanée'' en premier (voir la section ''Cases spéciales'')."
 			
 			objetsListe = "Objets"
 			objetsTitre = "3. Les objets"
