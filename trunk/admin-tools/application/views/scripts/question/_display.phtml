@@ -12,13 +12,13 @@
         <!-- <td class="swf"><?php echo $this->question['question_latex']; ?></td> -->
         <td class="swf">
                 <?php if($this->question['question_flash_file'] != null) { ?>
-                    <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0">
+                    <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0">
                         <param name="movie" value="<?php echo $this->flashUrl . $this->question['question_flash_file'];?>">
                         <param name="quality" value="high">
                         <param name="loop" value="true">
                         <param name="menu" value="false">
-                        <param name="bgcolor" value="#ffffff" />
-                        <embed class="swf" src="<?php echo $this->flashUrl . $this->question['question_flash_file'];?>" bgcolor="ede9e3" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" />
+                        <param name="bgcolor" value="#ffffff">
+                        <embed class="swf" src="<?php echo $this->flashUrl . $this->question['question_flash_file'];?>" bgcolor="ede9e3" quality="high" width="100%" height="100%" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"></embed>
                     </object>
                 <?php 
                 } ?>
@@ -30,14 +30,13 @@
         <!--<td class="swf"><?php echo $this->question['feedback_latex']; ?></td> -->
         <td class="swf">
                 <?php if($this->question['feedback_flash_file'] != null) { ?>
-    		<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0">
+    		    <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0">
                         <param name="movie" value="<?php echo $this->flashUrl . $this->question['feedback_flash_file'];?>">
                         <param name="quality" value="high">
                         <param name="loop" value="true">
                         <param name="menu" value="false">
                         <param name="bgcolor" value="#ffffff">
-                        <param name="scale" value="noScale">
-                        <embed class="swf" src="<?php echo $this->flashUrl . $this->question['feedback_flash_file'];?>" bgcolor="ede9e3" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" />
+                        <embed class="swf" src="<?php echo $this->flashUrl . $this->question['feedback_flash_file'];?>" bgcolor="ede9e3" quality="high" width="100%" height="100%" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"></embed>
                     </object>
                 <?php 
                 } ?>
@@ -58,13 +57,13 @@
                   echo $answer['label'];
                   if($answer['answer_flash_file'] != null) {
                 ?>
-                <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" width="500" height="50">
+                <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0">
                   <param name="movie" value="<?php echo $this->flashUrl . $answer['answer_flash_file'];?>">
                   <param name="quality" value="high">
                   <param name="loop" value="true">
                   <param name="menu" value="false">
                   <param name="bgcolor" value="#ffffff" />
-                  <embed src="<?php echo $this->flashUrl . $answer['answer_flash_file'];?>" bgcolor="ffffff" quality="high" width="500" height="50" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" />
+                  <embed src="<?php echo $this->flashUrl . $answer['answer_flash_file'];?>" bgcolor="ffffff" quality="high" width="100%" height="100%" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"></embed>
                 </object>
             <?php 
             } ?>
