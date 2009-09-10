@@ -2,7 +2,7 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
 	main_menu = ""
-	  bienvenue = "Welcome to the 'MathAmaze' "
+	  bienvenue = "Welcome to MathAmaze "
     btnPlay = "Play"
     btnQuit = "Quit"
     btnProfile = "Profile"
