@@ -3,7 +3,7 @@
 <Texte 
 	
 	main_menu = ""
-	  bienvenue = "Bienvenue au 'Math en jeu' "
+	  bienvenue = "Bienvenue dans Math en jeu "
     btnPlay = "Jouer" 
     btnQuit = "Quitter"
     btnProfile = "Profil"
