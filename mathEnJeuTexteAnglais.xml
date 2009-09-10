@@ -270,7 +270,7 @@
 			sonsLabel = "Sounds"
 			musiqueLabel = "Music"
 
-			texteMauvaiseReponse = "Wrong !!!"
+			texteMauvaiseReponse = "Incorrect !!!"
 			punitionTexte = "Time left to your penalty :"
 			penalite = "Penalty :"
 			secondes = "seconds"
