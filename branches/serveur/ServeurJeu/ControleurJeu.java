@@ -582,9 +582,6 @@ public class ControleurJeu
  		   }
 		}
 		
-		for(int room : rooms){
-	 		 // System.out.println( lstSalles.get(room).getRoomID() + "xxx"); 
-	    }
 		return rooms;
 	}
 	
