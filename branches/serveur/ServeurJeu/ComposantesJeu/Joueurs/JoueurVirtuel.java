@@ -35,7 +35,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	private String strNom;
         
     // Le joueur virtuel est-il destiné à subir une banane?
-    public String vaSubirUneBanane;
+    public String isUnderBananaEffect;
 	
     // Déclaration d'une référence vers le gestionnaire d'evenements
 	private GestionnaireEvenements objGestionnaireEv;
@@ -166,7 +166,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    objParametreIA = objControleurJeu.obtenirParametreIA();
 	    
 		strNom = nom;
-        vaSubirUneBanane = "";
+		isUnderBananaEffect = "";
 		
 		// Cette variable sera utilisée dans la thread
 		objPositionFinaleVisee = null;
@@ -395,11 +395,19 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 					    intPourcentageReussite = objParametreIA.tPourcentageReponseObjetLivre[intNiveauDifficulte][intGrandeurDeplacement-1];
 					}
 					
+					//if Banana is used on this Virtual Player 
+					if(!isUnderBananaEffect.equals(""))
+						intPourcentageReussite = intPourcentageReussite  - 10;
+					
 	    			// Déterminer si le joueur virtuel répondra à la question
 	                bolQuestionReussie = (genererNbAleatoire(100)+1 <= intPourcentageReussite);
 	    			        
 	    			// Déterminer le temps de réponse à la question
 	    			intTempsReflexionQuestion = obtenirTempsReflexionReponse();
+	    			
+	    			//if Banana is used on this Virtual Player 
+					if(!isUnderBananaEffect.equals(""))
+						intTempsReflexionQuestion = intTempsReflexionQuestion + 4;
 	                
 	    			// Pause pour moment de réflexion de réponse
 	    			pause(intTempsReflexionQuestion);	
@@ -411,15 +419,17 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    				//System.out.println("Question reussie"); // trace
 	    				
 	    				// Déplacement du joueur virtuel
-                                        if(!vaSubirUneBanane.equals(""))
+	    				
+                                      /*  if(!isUnderBananaEffect.equals(""))
                                         {
-                                            Banane.utiliserBanane(vaSubirUneBanane, this.obtenirPositionJoueur(), this.obtenirNom(), this.obtenirTable(), false);
-                                            vaSubirUneBanane = "";
+                                            Banane.utiliserBanane(isUnderBananaEffect, this.obtenirPositionJoueur(), this.obtenirNom(), this.obtenirTable(), false);
+                                            isUnderBananaEffect = "";
                                         }
                                         else
                                         {
                                             deplacerJoueurVirtuelEtMajPlateau(objPositionIntermediaire);
-                                        }
+                                        } */
+	    				deplacerJoueurVirtuelEtMajPlateau(objPositionIntermediaire);
 	    				
 	    				// Obtenir le temps que le déplacement dure
 	    				intTempsDeplacement = obtenirTempsDeplacement(obtenirPointage(objPositionJoueur, objPositionIntermediaire));
@@ -1040,16 +1050,16 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 
         // Cette variable contiendra le nombre de coups estimé pour se rendre
         // à la case en cours d'analyse
-        double dblDistance;
+        //double dblDistance;
         
         // Point en cours d'analyse
         Point ptTemp = new Point(0,0);
         
         // Autre point en cours d'analyse
-        Point ptTemp2 = new Point(0,0);
+        //Point ptTemp2 = new Point(0,0);
         
         // Chemin entre le joueur et une case importante analysée
-        Vector<Point> lstChemin;
+        //Vector<Point> lstChemin;
 
         // Déplacement moyen, contient le nombre de cases que l'on peut
         // s'attendre à franchir par coup (prend en compte niveau de
