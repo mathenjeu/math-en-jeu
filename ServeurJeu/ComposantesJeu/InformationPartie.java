@@ -78,11 +78,8 @@ public class InformationPartie
         
     // Déclaration d'un boolean qui dit si le joueur est 'targeté' pour subir une banane
     // (si le string n'est pas "", et alors le string dit qui l'a utilisée)
-    private String vaSubirUneBanane;
+    private String isUnderBananaEffect;
         
-    // Déclaration d'un int qui va garder le mode du jeu : Normal - 0 et Avancée - 1
-    //private int modeJeu;
-    
     // If is true intArgent is taken from DB and at the end 
     //of the game is writen to the DB
     private boolean moneyPermit;
@@ -92,12 +89,12 @@ public class InformationPartie
     // to not get twice bonus
     private boolean isPlayerNotArrivedOnce;
 
- // The number of cases on that user can to move. At the begining is set to 3.
+    // The number of cases on that user can to move. At the begining is set to 3.
 	// After for all 3 correct answers running add one unity. Not bigger than 6. 
 	private int moveVisibility;
 	
 	// Number of running correct answers. If is 3 moveVisibility is increasing by 1 
-	// and this is set to 0. if one incorrect answer is set too to 0. 
+	// and this is set to 0. if one incorrect answer this is set too to 0. 
 	private int runningAnswers;
      
 	 
@@ -111,7 +108,7 @@ public class InformationPartie
             maxNbObj = tableCourante.obtenirRegles().getMaxNbObjectsAndMoney();    
 		
 		    // Au début, on ne subit pas de banane!
-            vaSubirUneBanane = "";
+            isUnderBananaEffect = "";
             
             // Faire la référence vers le gestionnaire de base de données
             objGestionnaireBD = gestionnaireBD;
@@ -476,6 +473,10 @@ public class InformationPartie
                 }
                 
                 System.out.println("Difficulte de la question : " + intDifficulte);   // test
+                
+                // if is under Banana effects
+                if(!isUnderBananaEffect.equals(""))
+        			intDifficulte++;
 		
 		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
 		// une question
@@ -563,6 +564,9 @@ public class InformationPartie
 		Question objQuestionTrouvee = null;
 		if (intDifficulte > 1)
 			intDifficulte--;
+		//if is Banana used to this player
+		if(!isUnderBananaEffect.equals(""))
+			intDifficulte++;
 		
 		objQuestionTrouvee = trouverQuestionCristall(intCategorieQuestion, intDifficulte, oldQuestion, false);
 		
@@ -840,6 +844,12 @@ public class InformationPartie
             intArgentCourant   = objJoueurVirtuel.obtenirArgent();
 		    table = objJoueurVirtuel.obtenirTable();
 		    intDifficulteQuestion = objJoueurVirtuel.obtenirPointage(objJoueurVirtuel.obtenirPositionJoueur(), objPositionDesiree);
+		    
+		    //if Banana is used on this Virtual Player
+		    if(!objJoueurVirtuel.isUnderBananaEffect.equals("") && intDifficulteQuestion > 3)
+		    	intDifficulteQuestion = intDifficulteQuestion - 3;
+		    	
+		    	
 		    objListeObjetsUtilisablesRamasses = objJoueurVirtuel.obtenirListeObjetsRamasses();
 		    positionJoueur = objJoueurVirtuel.obtenirPositionJoueur();
 		    gestionnaireEv = objJoueurVirtuel.obtenirGestionnaireEvenements();
@@ -873,7 +883,8 @@ public class InformationPartie
 		// Si la réponse est bonne, alors on modifie le plateau de jeu
 		if (bolReponseEstBonne)
 		{
-						
+			
+			
 			// Faire la référence vers la case de destination
 			Case objCaseDestination = table.obtenirPlateauJeuCourant()[objPositionDesiree.x][objPositionDesiree.y];
 			
@@ -1041,16 +1052,15 @@ public class InformationPartie
 
 				//on increase the number of correct answers and on set moveVisibility
 				int answers = ((JoueurHumain)objJoueur).obtenirPartieCourante().getRunningAnswers();
-				System.out.println("InfoPartie: " + ((JoueurHumain)objJoueur).obtenirPartieCourante().getRunningAnswers() + " " + answers);
-
+				
 				if (answers == 2){
 					((JoueurHumain)objJoueur).obtenirPartieCourante().setRunningAnswers(0);
 					((JoueurHumain)objJoueur).obtenirPartieCourante().setMoveVisibility(((JoueurHumain)objJoueur).obtenirPartieCourante().getMoveVisibility() + 1);
 					
-					System.out.println("InfoPartie2: " + ((JoueurHumain)objJoueur).obtenirPartieCourante().getRunningAnswers());
+					
 				}else{
 					((JoueurHumain)objJoueur).obtenirPartieCourante().setRunningAnswers(answers + 1);
-					System.out.println("InfoPartie3: " + ((JoueurHumain)objJoueur).obtenirPartieCourante().getRunningAnswers() + " " + answers);
+					
 				}
 			}
 			else if (objJoueur instanceof JoueurVirtuel)
@@ -1215,14 +1225,14 @@ public class InformationPartie
             return objGestionnaireBD;
         }
         
-        public String obtenirVaSubirUneBanane()
+        public String getIsUnderBananaEffect()
         {
-            return vaSubirUneBanane;
+            return isUnderBananaEffect;
         }
         
-        public void definirVaSubirUneBanane(String b)
+        public void setIsUnderBananaEffect(String b)
         {
-            vaSubirUneBanane = b;
+            isUnderBananaEffect = b;
         }
         
         public int obtenirDistanceAuWinTheGame()
