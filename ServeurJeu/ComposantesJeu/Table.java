@@ -124,6 +124,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     // Name of the table
     private String tableName;
     
+    // Array of players pictures 
+    private ArrayList<Integer> pictures; 
+    
+    
 	
 
 	/**
@@ -197,6 +201,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         
         // Cette liste sera modifié si jamais un joueur est déconnecté
         lstJoueursDeconnectes = new Vector<String>();
+        pictures = new ArrayList<Integer>();
         
         
         // Faire la référence vers le controleu jeu
@@ -254,7 +259,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 */
 	public void entrerTable(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, TreeMap<String, Integer> listePersonnageJoueurs, TreeMap<String, Integer> listeRoleJoueurs)  throws NullPointerException
 	{
-		System.out.println("start table: " + System.currentTimeMillis());
+		//System.out.println("start table: " + System.currentTimeMillis());
 	    // Empçcher d'autres thread de toucher ˆ la liste des joueurs de 
 	    // cette table pendant l'ajout du nouveau joueur dans cette table
 	    synchronized (lstJoueurs)
@@ -292,7 +297,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				preparerEvenementJoueurEntreTable(joueur.obtenirNomUtilisateur(), joueur.getRole());		    	
 		    }
 	    }
-	    System.out.println("end table : " + System.currentTimeMillis());
+	    //System.out.println("end table : " + System.currentTimeMillis());
 	}// end methode
 
 	/**
@@ -421,6 +426,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				
 				// Garder en mémoire le Id du personnage choisi par le joueur
 				joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
+				
+		System.out.println(idPersonnage);
+				pictures.add((idPersonnage - 10000)/100);
 				
 	    		// Si on doit générer le numéro de commande de retour, alors
 				// on le génçre, sinon on ne fait rien (ça se peut que ce soit
@@ -644,11 +652,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			if(intNombreJoueursVirtuels + nbJoueur > objRegles.getMaxNbPlayers()) 
 			   intNombreJoueursVirtuels = objRegles.getMaxNbPlayers() - nbJoueur;
 			
-		/*	intNombreJoueursVirtuels = 	MAX_NB_PLAYERS - lstJoueursEnAttente.size() - 9;
-			if (intNombreJoueursVirtuels < 0 || intNombreJoueursVirtuels >= MAX_NB_PLAYERS)
-			{
-				intNombreJoueursVirtuels = 0;
-			} */
+		
 		}
 		
 		
@@ -720,9 +724,14 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     		}
     		else
     		{
-    			int IDdess = objControleurJeu.genererNbAleatoire(11) + 1;
- 
-    		    // On se rendra ici seulement si intNombreJoueursVirtuels > 0
+    			int IDdess;
+    			
+    			// to have differents pictures for the virtual players
+    			do{
+    			    IDdess = objControleurJeu.genererNbAleatoire(11) + 1;
+    			}while(pictures.contains(IDdess));
+    		    
+    			// On se rendra ici seulement si intNombreJoueursVirtuels > 0
     		    // C'est ici qu'on crée les joueurs virtuels, ils vont commencer
     		    // à jouer plus loin
     		  
@@ -736,6 +745,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		        	intIdPersonnage++;
 		        }
 		        
+		        // to have virtual players of all difficulty levels
+		        intDifficulteJoueurVirtuel = objControleurJeu.genererNbAleatoire(4);
+		        System.out.println("Virtuel : " + intDifficulteJoueurVirtuel);
+		        
 		        // Créé le joueur virtuel selon le niveau de difficulté désiré
                 JoueurVirtuel objJoueurVirtuel = new JoueurVirtuel(tNomsJoueursVirtuels[i - nbJoueur], 
                     intDifficulteJoueurVirtuel, this, objGestionnaireEvenements, objControleurJeu, intIdPersonnage);
@@ -745,6 +758,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 
                 // Ajouter le joueur virtuel à la liste
                 lstJoueursVirtuels.add(objJoueurVirtuel);
+                
+                pictures.add(IDdess);
                 
                 // Ajouter le joueur virtuel à la liste des positions, liste qui sera envoyée
                 // aux joueurs humains
@@ -819,7 +834,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
          definirNouvellePositionWinTheGame();
                 //winTheGame.demarrer();
           
-	}
+	}// end method
 	
 	public void arreterPartie(String joueurGagnant)
 	{
@@ -1059,7 +1074,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	
 	/**
 	 * Cette méthode permet de remplir la liste des personnages des joueurs 
-	 * oç les clés seront le nom d'utilisateur du joueur et le contenu le 
+	 * ou les clés seront le id d'utilisateur du joueur et le contenu le 
 	 * numéro du personnage. On suppose que le joueur courant n'est pas 
 	 * encore dans la liste.
 	 *  
@@ -1238,7 +1253,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		{
 			// Créer une référence vers le joueur humain courant dans la liste
 			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
-			System.out.println(objJoueur.obtenirNomUtilisateur());
+			
 			// Si le nom d'utilisateur du joueur courant n'est pas celui
 			// qui vient de démarrer la partie, alors on peut envoyer un 
 			// événement à cet utilisateur
@@ -1299,6 +1314,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		objGestionnaireEvenements.ajouterEvenement(partieDemarree);
 	}
 	
+	/**
+	 * 
+	 * @param nomUtilisateur
+	 * @param nouveauPointage
+	 */
 	public void preparerEvenementMAJPointage(String nomUtilisateur, int nouveauPointage)
 	{
 		// Créer un nouveal événement qui va permettre d'envoyer l'événment
@@ -1369,7 +1389,14 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
 		objGestionnaireEvenements.ajouterEvenement(majArgent);
 	}
-        
+       
+	/**
+	 * 
+	 * @param joueurQuiUtilise
+	 * @param joueurAffecte
+	 * @param objetUtilise
+	 * @param autresInformations
+	 */
 	public void preparerEvenementUtiliserObjet(String joueurQuiUtilise, String joueurAffecte, String objetUtilise, String autresInformations)
 	{
         // Mçme chose que la fonction précédente, mais envoie plut™t les informations quant à l'utilisation d'un objet dont tous devront çtre au courant
@@ -1379,7 +1406,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		while (objIterateurListe.hasNext() == true)
 		{
 			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
-                        utiliserObjet.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),objJoueur.obtenirProtocoleJoueur()));
+            utiliserObjet.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),objJoueur.obtenirProtocoleJoueur()));
 		}
 		objGestionnaireEvenements.ajouterEvenement(utiliserObjet);
 	}
@@ -1427,7 +1454,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	}  */
 
 	/**
-	 * Methode that is used to prepare event of move of player
+	 * Method that is used to prepare event of move of player
 	 * @param nomUtilisateur
 	 * @param collision
 	 * @param oldPosition
@@ -1440,7 +1467,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    Point oldPosition, Point positionJoueur, int nouveauPointage, int nouvelArgent, String objetUtilise)
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
-	    // aux joueurs qu'un joueur démarré une partie
+	    // aux joueurs qu'un joueur se deplace 
 		
 		EvenementJoueurDeplacePersonnage joueurDeplacePersonnage = new EvenementJoueurDeplacePersonnage( nomUtilisateur, 
 		    oldPosition, positionJoueur, collision, nouveauPointage, nouvelArgent);
@@ -1461,7 +1488,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			// Si le nom d'utilisateur du joueur courant n'est pas celui
 			// qui vient de démarrer la partie, alors on peut envoyer un 
 			// événement à cet utilisateur
-			if (objJoueur.obtenirNomUtilisateur().equals(nomUtilisateur) == false || objetUtilise.equals("Banane"))
+			if (objJoueur.obtenirNomUtilisateur().equals(nomUtilisateur) == false )
 			{
 			    // Obtenir un numéro de commande pour le joueur courant, créer 
 			    // un InformationDestination et l'ajouter à l'événement
@@ -1758,11 +1785,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             return positionWinTheGame;
         }
         
-   /*     public String obtenirButDuJeu()
-        {
-            return butDuJeu;
-        }   */
-        
+       
         public boolean peutAllerSurLeWinTheGame(int pointage)
         {
             return pointage >= pointageRequisPourAllerSurLeWinTheGame();
