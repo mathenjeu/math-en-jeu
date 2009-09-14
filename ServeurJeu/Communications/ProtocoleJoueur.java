@@ -1829,6 +1829,7 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudCommande.setAttribute("nom", "DeplacementNonAutorise");
 					}
 
+					/*// banana has new 
 					// Si quelqu'un a utilisé une banane et c'est ce joueur qui la subit
 					else if(!objJoueurHumain.obtenirPartieCourante().obtenirVaSubirUneBanane().equals(""))
 					{
@@ -1844,7 +1845,7 @@ public class ProtocoleJoueur implements Runnable
 
 						objNoeudCommande.setAttribute("nom", "Banane");
 
-					}
+					} */
 					else
 					{
 						// Trouver la question à poser selon la difficulté et 
@@ -3855,16 +3856,15 @@ public class ProtocoleJoueur implements Runnable
              else if(strTypeObjet.equals("Banane"))
              {
 
-            	 //La Banane éloigne du WinTheGame le joueur le plus près du WinTheGame
-            	 //(sauf si c'est soi mème, alors èa éloigne le 2ème)
+            	 //La Banane prend effet sur le joueur avec le plus des points
+            	 //(sauf si c'est soi mème, alors c'est le 2ème)
             	 // La partie ici ne fait que sélectionner le joueur qui sera affecté
-            	 // Le reste se fait dans Banane.java (on attend que le joueur affecté clique
-            	 // pour se déplacer avant de lui faire subir la banane pour ètre sér que tout va bien
+            	 // Le reste se fait dans Banane.java 
             	 objNoeudCommande.setAttribute("type", "OK");
 
-            	 // Entiers et Strings pour garder en mémoire la distance la plus courte au WTG et les joueurs associés
-            	 int max1 = 666;
-            	 int max2 = 666;
+            	 // Entiers et Strings pour garder en mémoire les points et les joueurs associés
+            	 int max1 = 0;
+            	 int max2 = 0;
             	 String max1User = "";
             	 String max2User = "";
             	 boolean estHumain1 = false;
@@ -3881,18 +3881,18 @@ public class ProtocoleJoueur implements Runnable
             	 {
             		 JoueurHumain j = (JoueurHumain)(((Map.Entry<String, JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
 
-            		 if(j.obtenirPartieCourante().obtenirDistanceAuWinTheGame()<=max1)
+            		 if(j.obtenirPartieCourante().obtenirPointage() >= max1)
             		 {
             			 max2 = max1;
             			 max2User = max1User;
             			 estHumain2 = estHumain1;
-            			 max1 = j.obtenirPartieCourante().obtenirDistanceAuWinTheGame();
+            			 max1 = j.obtenirPartieCourante().obtenirPointage();
             			 max1User = j.obtenirNomUtilisateur();
             			 estHumain1 = true;
             		 }
-            		 else if(j.obtenirPartieCourante().obtenirDistanceAuWinTheGame()<=max2)
+            		 else if(j.obtenirPartieCourante().obtenirPointage() >= max2)
             		 {
-            			 max2 = j.obtenirPartieCourante().obtenirDistanceAuWinTheGame();
+            			 max2 = j.obtenirPartieCourante().obtenirPointage();
             			 max2User = j.obtenirNomUtilisateur();
             			 estHumain2 = true;
             		 }
@@ -3900,25 +3900,25 @@ public class ProtocoleJoueur implements Runnable
             	 if(listeJoueursVirtuels != null) for(int i=0; i<listeJoueursVirtuels.size(); i++)
             	 {
             		 JoueurVirtuel j = (JoueurVirtuel)listeJoueursVirtuels.get(i);
-            		 if(j.obtenirDistanceAuWinTheGame()<=max1)
+            		 if(j.obtenirPointage() >= max1)
             		 {
             			 max2 = max1;
             			 max2User = max1User;
             			 estHumain2 = estHumain1;
-            			 max1 = j.obtenirDistanceAuWinTheGame();
+            			 max1 = j.obtenirPointage();
             			 max1User = j.obtenirNom();
             			 estHumain1 = false;
             		 }
-            		 else if(j.obtenirPointage()<=max2)
+            		 else if(j.obtenirPointage() >= max2)
             		 {
-            			 max2 = j.obtenirDistanceAuWinTheGame();
+            			 max2 = j.obtenirPointage();
             			 max2User = j.obtenirNom();
             			 estHumain2 = false;
             		 }
             	 }
 
             	 boolean estHumain; //Le joueur choisi est'il humain?
-       			 Point positionJoueurChoisi;
+       			 //Point positionJoueurChoisi;
             	 String nomJoueurChoisi;
 
             	 if(max1User.equals(objJoueurHumain.obtenirNomUtilisateur()))
@@ -3926,23 +3926,25 @@ public class ProtocoleJoueur implements Runnable
             		 // Celui qui utilise la banane est le 1er, alors on fait glisser le 2ème
             		 estHumain = estHumain2;
             		 nomJoueurChoisi = max2User;
-            		 if(estHumain) positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(max2User).obtenirPartieCourante().obtenirPositionJoueur());
-            		 else positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(max2User).obtenirPositionJoueur());
+            		 //if(estHumain) positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(max2User).obtenirPartieCourante().obtenirPositionJoueur());
+            		 //else positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(max2User).obtenirPositionJoueur());
             	 }
             	 else
             	 {
             		 // Celui qui utilise la banane n'est pas le 1er, alors on fait glisser le 1er
             		 estHumain = estHumain1;
             		 nomJoueurChoisi = max1User;
-            		 if(estHumain) positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(max1User).obtenirPartieCourante().obtenirPositionJoueur());
-            		 else positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(max1User).obtenirPositionJoueur());
+            		// if(estHumain) positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(max1User).obtenirPartieCourante().obtenirPositionJoueur());
+            		 //else positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(max1User).obtenirPositionJoueur());
             	 }
 
-            	 if(estHumain) obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(nomJoueurChoisi).obtenirPartieCourante().definirVaSubirUneBanane(objJoueurHumain.obtenirNomUtilisateur());
-            	 else obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(nomJoueurChoisi).vaSubirUneBanane = objJoueurHumain.obtenirNomUtilisateur();
+            	 objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliserObjet(objJoueurHumain.obtenirNomUtilisateur(), nomJoueurChoisi, "Banane", "");
+            	
+            	 Banane.utiliserBanane(objJoueurHumain, nomJoueurChoisi, estHumain);
+            	 
              }
 		}
-    }
+    }// end method
     
     /* Cette procédure permet de créer la liste des objets en vente
      * dans un magasin. On appelle cette méthode lorsqu'un joueur répond
