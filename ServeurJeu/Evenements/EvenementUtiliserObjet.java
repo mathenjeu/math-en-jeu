@@ -5,7 +5,6 @@ import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-
 import ServeurJeu.Monitoring.Moniteur;
 import ClassesUtilitaires.UtilitaireXML;
 import ServeurJeu.Configuration.GestionnaireMessages;
@@ -21,10 +20,10 @@ public class EvenementUtiliserObjet extends Evenement
         // Chaînes de caractères qui vont garder en mémoire le nom des joueurs
         // qui ont utilisé et qui snot affectés par l'objet utilisé
 	private String joueurQuiUtilise;
-        private String joueurAffecte;
+    private String joueurAffecte;
         
-        // Nom de l'objet utilisé
-        private String objetUtilise;
+    // Nom de l'objet utilisé
+    private String objetUtilise;
 	
 	// Autres informations à envoyer
 	private String autresInformations;
@@ -41,19 +40,7 @@ public class EvenementUtiliserObjet extends Evenement
 	{
 		Moniteur.obtenirInstance().debut("EvenementUtiliserObjet.genererCodeXML");
 		
-		/*
-		 * <commande no="57" nom="UtiliserObjet" type="Evenement">
-		 *     <parametre type="joueurQuiUtilise">AdversaireXYZ</parametre>
-		 *     <parametre type="joueurAffecte">AdversaireABC</parametre>
-                 *     <parametre type="objetUtilise">Banane</parametre>    // ou PotionPetit, PotionGros...
-                 *     <parametre type="autresInformations">
-                            |||| ICI on print directement le contenu de autresInformations |||||
-                 *     </parametre>
-		 * </commande>
-		 *
-		 */
-
-	    String strCodeXML = "";
+		String strCodeXML = "";
 	    
 		try
 		{
@@ -102,6 +89,7 @@ public class EvenementUtiliserObjet extends Evenement
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
 		Moniteur.obtenirInstance().fin();
+		System.out.println("Banana : " + strCodeXML);
 		return strCodeXML;
 	}
 }
