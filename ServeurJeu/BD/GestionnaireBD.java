@@ -261,7 +261,7 @@ public class GestionnaireBD
 	 */
 	public void fillUserLevels(JoueurHumain player, Salle salle)
 	{
-		System.out.println("start level: " + System.currentTimeMillis());
+		//System.out.println("start level: " + System.currentTimeMillis());
 		int cle = player.obtenirCleJoueur();
 		
 		// on prend dans BD les niveaux scolaires du joueur en utilisant les Categories de la salle
@@ -283,7 +283,7 @@ public class GestionnaireBD
 					if(rs.next())
 					{
 						cleNiveau[i] = rs.getInt("level");
-						System.out.println("level : " + cleNiveau[i] + " " + i);
+						//System.out.println("level : " + cleNiveau[i] + " " + i);
 	    			}
 					
 				}
@@ -296,7 +296,7 @@ public class GestionnaireBD
 		}
 		
 		player.definirCleNiveau(cleNiveau);
-		System.out.println("end level : " + System.currentTimeMillis());		
+		//System.out.println("end level : " + System.currentTimeMillis());		
 	}//end methode
 	
 
@@ -365,7 +365,7 @@ public class GestionnaireBD
      */
 	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, JoueurHumain player)
 	{
-		System.out.println("start boite: " + System.currentTimeMillis());
+		//System.out.println("start boite: " + System.currentTimeMillis());
         // Pour tenir compte de la langue
         int cleLang = 1;   
         Lang lang = boiteQuestions.obtenirLangue();
@@ -384,7 +384,7 @@ public class GestionnaireBD
         for(int i = 0; i < cat.size(); i++)
 		{
         	int categorie = it.next();
-        	System.out.println("x : "+categorie);
+        	//System.out.println("x : "+categorie);
         	
         	String strRequeteSQL = "SELECT answer.is_right,question.question_id, question_info.question_flash_file,question_info.feedback_flash_file, question_level.value, answer_type.tag " +
         	" FROM question_info, question_level, question, answer_type, answer " +
@@ -432,7 +432,7 @@ public class GestionnaireBD
        	   
        	   
 		}//fin for
-        System.out.println("end boite: " + System.currentTimeMillis());
+        //System.out.println("end boite: " + System.currentTimeMillis());
 	}// fin méthode
 	
     // This function follows one of the two previous functions. It queries the database and
