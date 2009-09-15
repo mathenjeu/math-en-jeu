@@ -206,14 +206,16 @@ class Personnage
 		
 		var listeObjets:Array = this.obtenirObjets();
 		var listeIDObjets:Array = this.obtenirListeDesIDObjets();
+		
+		// function used to make action of the object on that on click
 		_level0.loader.contentHolder.menuObjets["objCase"+i].onRelease = function()
 		{
 			if(peutUtiliserObjet(nomObj))
 			{
 				var j:Number;
-				for(j=0; j<listeObjets.length && nomObj != listeObjets[j].nom; j++);
+				for(j = 0; j < listeObjets.length && nomObj != listeObjets[j].nom; j++);
 				
-				if(j<listeObjets.length)
+				if(j < listeObjets.length)
 				{
 					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(listeIDObjets[j]);
 					_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet(listeObjets[j].nom);
@@ -251,12 +253,12 @@ class Personnage
 		var i:Number;
 		
 		trace("liste d'objets avant avoir enlever 1 obj :");
-		for(i=0;i<listeDesObjets.length;i++)
+		for(i=0; i < listeDesObjets.length; i++)
 		{
 			trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
 		}
 		
-		for(i=0;i<listeDesObjets.length;i++)
+		for(i=0; i < listeDesObjets.length; i++)
 		{
 			if(listeDesObjets[i].obtenirNom() == n)
 			{
