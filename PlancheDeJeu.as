@@ -117,7 +117,6 @@ class PlancheDeJeu
     function modifierNumeroCase(l:Number, c:Number, num:Number)
     {
 	    // si on vient d'enlever un objet il faut mettre comme nouvelle valeur juste la couleur de la case (deux derniers chiffres)
-	    // si on vient d'enlever une piece il faut mettre comme nouvelle valeur juste la couleur de la case (deux derniers chiffres)
 	    if(num == -30000 || num == -10000)
 	    {
 			this.mat[l][c] = this.mat[l][c]%100;    
@@ -173,9 +172,9 @@ class PlancheDeJeu
         hauteurDeCase = clipTest._height*0.85;
         clipTest.removeMovieClip();
         ////////////////////////////////////////////////////////////////////////////////////////
-        for(i=0;i<this.mat.length;i++)
+        for(i=0; i < this.mat.length; i++)
         {
-            x = i*largeurDeCase/2+largeurDeCase/2;
+            x = i*largeurDeCase/2 + largeurDeCase/2;
             y = 200 + i*hauteurDeCase/2;
             for(j=0;j<this.mat[0].length;j++)
             {
@@ -468,7 +467,7 @@ class PlancheDeJeu
     function ajouterPersonnage(nom:String, ll:Number,cc:Number,num:Number, idClip:Number, userRole:Number)
     {
         var p:Personnage;
-        trace("ajouterPersonnage:"+nom+" niveau:"+(5*tableauDesCases.length*tableauDesCases[0].length+2*num)+" idPers:"+num+" idDessin:"+idClip);
+        trace("ajouterPersonnage:" + nom + " niveau:" + (5*tableauDesCases.length*tableauDesCases[0].length+2*num) + " idPers:" + num + " idDessin:" + idClip);
         p = new Personnage(nom, userRole, 5*tableauDesCases.length*tableauDesCases[0].length+2*num,"Personnage"+idClip,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y );
         p.afficher();
      	//   p.zoomer(zoom*10);
@@ -542,7 +541,6 @@ class PlancheDeJeu
 		
 		if ((dx == 0) && (dy == 0))
 		{
-			trace("recentrerBoard: true+");
 			return true;
 		}
 		//trace("dx = " + dx);
@@ -573,7 +571,7 @@ class PlancheDeJeu
 		// on deplace le clip sur lequel est attache tous les autres clips
 		_level0.loader.contentHolder.referenceLayer._x +=dx;		
 		_level0.loader.contentHolder.referenceLayer._y +=dy;
-		trace("recentrerBoard: false +");
+		
 		return false;
 	}
 	
@@ -635,9 +633,10 @@ class PlancheDeJeu
 	 if(tableauDesCases[p.obtenirL()][p.obtenirC()].obtenirType() > 41000)
         isInWinTheGame = false;
 	 var moveVisibility =  _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility;
+	 //trace("Move : " + moveVisibility);
 	 if( !(p.getRole() == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") && isInWinTheGame)
 	 { 
-		trace("Debut afficherCasesPossibles");
+		//trace("Debut afficherCasesPossibles");
 		
         var i:Number;
         var nb:Number = 0;
@@ -899,9 +898,6 @@ class PlancheDeJeu
 				break;
 			}
 
-			//trace(mc.valDeplace.valeur);
-			//trace("ligne"+dx);
-			//trace("collo"+dy);
 		}
 
 		brille.onRollOut = function()
