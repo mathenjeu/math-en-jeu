@@ -36,7 +36,7 @@ class GestionnaireEvenements
     public var  listeDesPersonnages:Array;   // liste associant les idPersonnage avec les nomUtilisateurs dans la table ou on est
     private var motDePasse:String;  // notre mot de passe pour pouvoir jouer
     private var nomSalle:String;  //  nom de la salle dans laquelle on est
-	private var idRoom:Number;    // ID of room in what we are in server's list of rooms
+	private var idRoom:Number;    // ID of our room in the server's list of rooms
 	private var masterTime:Number; // masterTime of room, if masterTime != 0 is taked masterTime for the time of game 
 	private var clientType:Number;  // if 1 is game, if 2 is prof's module
     private var numeroTable:Number;   //   numero de la table dans laquelle on est
@@ -47,12 +47,12 @@ class GestionnaireEvenements
     private var listeDesJoueursDansSalle:Array;  // liste des joueurs dans la salle qu'on est. Un joueur contient un nom (nom)
     //public var  listeDesDescriptionsSalles:Array; //liste des descriptions des salles   // inutile a mon avis O.L.
     public var  listeDesTypesDeJeu:Array; //liste des TypesDeJeu de salles
-	//private var activ:Boolean;                     // if game has type Tournament and the room is active
 	public var  listeDesSalles:Array;    //  liste de toutes les salles
 	private var listeNumeroJoueursSalles:Array;		//liste de numero de joueurs dans chaque salle
 	private var listeChansons:Array;    //  liste de toutes les chansons
     private var listeDesJoueursConnectes:Array;   // la premiere liste qu'on recoit, tous les joueurs dans toutes les salles. Un joueur contient un nom (nom)
-    //  liste de toutes les tables dans la salle ou on est
+    
+	//liste de toutes les tables dans la salle ou on est
     //contient un numero (noTable), le temps (temps) et une liste de joueurs (listeJoueurs) un joueur de la liste contient un nom (nom)
     private var listeDesTables:Array;   // list of tables in our room with list of users in 
     private var objGestionnaireCommunication:GestionnaireCommunication;  //  pour caller les fonctions du serveur 
@@ -345,7 +345,7 @@ class GestionnaireEvenements
         trace("*********************************************");
         trace("debut de demarrerPartie     " + no);
 		
-        var idDessin:Number=((no-10000)-(no-10000)%100)/100;
+        var idDessin:Number = ((no-10000)-(no-10000)%100)/100;
         
         this.idPersonnage = no;
         trace("########### idDessin= " + idDessin + " this.idPersonnage= " + this.idPersonnage);
@@ -353,7 +353,7 @@ class GestionnaireEvenements
         this.listeDesPersonnages[numeroJoueursDansSalle-1].id = no;
         this.listeDesPersonnages[numeroJoueursDansSalle-1].nom = this.nomUtilisateur;
 		 this.listeDesPersonnages[numeroJoueursDansSalle-1].role = this.userRole;
-        this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementPartieTerminee), no);//this.idPersonnage);//  
+        this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), Delegate.create(this, this.evenementPartieTerminee), no);//this.idPersonnage);//  
 	
 		trace("fin de demarrerPartie");
         trace("*********************************************\n");
@@ -431,22 +431,7 @@ class GestionnaireEvenements
         trace("*********************************************\n");
     }
 
-	// here we control if username contain the  'master'
-	public function controlForMaster(nom:String):Boolean
-    {
-		// Bloc of code to treat the username
-        var firstDel = nom.indexOf(".");                 // find first delimiter
-        var secondDel = nom.indexOf(".",firstDel + 1);   // find second delimiter
-        var master;
-
-        //Now extract the 'master' from username
-        if (firstDel != -1 && secondDel != -1)
-           master = nom.substring(0, firstDel);
-        else
-           master = "";
-		   //trace(" controlForMaster : " + master);
-        return (master == "game-master" || master == "maitre-du-jeu");
-    }
+	
 	
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  fonctions retour
@@ -642,6 +627,7 @@ class GestionnaireEvenements
 					
 
 				}
+				/*
 				for (var i:Number = 0; i < objetEvenement.listeNomSalles.length; i++)
                 {
 					if(_level0.loader.contentHolder.langue == "en" && objetEvenement.listeNomSalles[i].nom == "Accromath")
@@ -649,11 +635,9 @@ class GestionnaireEvenements
 						_level0.loader.contentHolder.listeSalle.removeItemAt(i);
 						trace("salle enlevee --> " + i + " : " + this.listeDesSalles[i].nom);
 					}
-				}
+				}*/
 				//activ = objetEvenement.isActiveRoom;
 				
-				//_level0.loader.contentHolder.isActiv = objetEvenement.isActiveRoom;
-				//trace("salle active : " + _level0.loader.contentHolder.isActiv);
 				_level0.loader.contentHolder.bt_continuer1._visible = true;
 				_level0.loader.contentHolder.txtChargementSalles._visible = false;
 				
@@ -1947,7 +1931,7 @@ class GestionnaireEvenements
     }
 	
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function evenementJoueurQuitteSalle(objetEvenement:Object)
+    public function evenementJoueurQuitteSalle(objetEvenement:Object)  
     {
         // parametre: nomUtilisateur
     	trace("*********************************************");
@@ -2627,6 +2611,33 @@ class GestionnaireEvenements
      	trace("*********************************************\n");
     }   
     
+	 ////////////////////////////////////////////////////////////////////////////////////////////////////
+    public function evenementUtiliserObjet(objetEvenement:Object)
+    {
+        // parametre: joueurQuiUtilise, joueurAffecte, objetUtilise, autresInformations
+    	trace("*********************************************");
+    	trace("debut de evenementUtiliserObjet  " + objetEvenement.joueurQuiUtilise + "   " + objetEvenement.joueurAffecte + "   " + objetEvenement.objetUtilise );
+        // here we treat the Banana
+		if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte == this.nomUtilisateur )
+		{
+    	   this.moveVisibility = this.moveVisibility - 2;
+		   _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+		   _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+		   //trace(_level0.loader.contentHolder.planche.obtenirPerso().minigameLoade);
+		   if(_level0.loader.contentHolder.planche.obtenirPerso().minigameLoade)
+		   {
+		      
+              //trace(_level0.loader.contentHolder.planche.obtenirPerso().minigameLoade);
+			  //trace(_level0.loader.contentHolder.miniGameLayer["Minigame"].loader.contentHolder);
+			 
+			  _level0.loader.contentHolder.miniGameLayer["Minigame"].loader.contentHolder.quitter(true);
+		   }
+		}
+     	trace("fin de evenementJoueurDeplacePersonnage");
+     	trace("*********************************************\n");
+    }   
+    
+	
  /*   ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function EvenementDeplacementWinTheGame(objetEvenement:Object)
     {
@@ -2673,4 +2684,21 @@ class GestionnaireEvenements
 	{
 		return objGestionnaireCommunication;
 	}
+	
+	// here we control if username contain the  'master'
+	public function controlForMaster(nom:String):Boolean
+    {
+		// Bloc of code to treat the username
+        var firstDel = nom.indexOf(".");                 // find first delimiter
+        var secondDel = nom.indexOf(".",firstDel + 1);   // find second delimiter
+        var master;
+
+        //Now extract the 'master' from username
+        if (firstDel != -1 && secondDel != -1)
+           master = nom.substring(0, firstDel);
+        else
+           master = "";
+		   //trace(" controlForMaster : " + master);
+        return (master == "game-master" || master == "maitre-du-jeu");
+    }// end method
 }
