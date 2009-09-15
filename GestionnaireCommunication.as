@@ -695,7 +695,7 @@ class GestionnaireCommunication
         objEvenement.target = this;
         
         //Definir nom de joueur qui a gagne
-        var nomGagner:String=noeudEvenement.childNodes[0].attributes.nom;
+        var nomGagner:String = noeudEvenement.childNodes[0].attributes.nom;
         //trace("nomGagner = "+nomGagner);
         
         // Passer tous les noeuds enfants (parametres) et creer chaque parametre
@@ -708,7 +708,7 @@ class GestionnaireCommunication
             // Si l'evenement n'est pas PartieDemarree, alors on peut simplement
             // aller chercher les valeurs des parametres, sinon il faut traiter
             // cet evenement differemment
-			//trace(i+" strNomType = "+strNomType);
+			trace(i+" strNomType = "+strNomType);
             if (noeudEvenement.attributes.nom != "PartieDemarree")
             {
 				if(noeudEvenement.attributes.nom == "JoueurDeplacePersonnage")
@@ -822,7 +822,7 @@ class GestionnaireCommunication
 					switch(strNomType)
 			    	{
 				    	case "joueurQuiUtilise":
-							trace(strNomType);
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
 				    		objEvenement["joueurQuiUtilise"] = lstChildNodes[i].firstChild.nodeValue;
 				    		//trace("case NomUtilisateur  "+objEvenement.nomUtilisateur+ "   "+lstChildNodes[i].firstChild.nodeValue);
 				    	break;
@@ -2308,6 +2308,7 @@ class GestionnaireCommunication
                                    evenementPartieDemarreeDelegate:Function,
                                    evenementJoueurDeplacePersonnageDelegate:Function,
 				                   evenementSynchroniserTempsDelegate:Function,
+								   evenementUtiliserObjetDelegate:Function,
 				                   evenementPartieTermineeDelegate:Function,
 				                   idPersonnage:Number) 
     {
@@ -2325,6 +2326,7 @@ class GestionnaireCommunication
             //TODO: A enlever ou a penser s'il faut le laisser la
             lstDelegateCommande.push({nom:"JoueurDeplacePersonnage", delegate:evenementJoueurDeplacePersonnageDelegate});
 	    	lstDelegateCommande.push({nom:"SynchroniserTemps", delegate:evenementSynchroniserTempsDelegate});
+			lstDelegateCommande.push({nom:"UtiliserObjet", delegate:evenementUtiliserObjetDelegate});
 	    
 	    	lstDelegateCommande.push({nom:"PartieTerminee", delegate:evenementPartieTermineeDelegate});
             
