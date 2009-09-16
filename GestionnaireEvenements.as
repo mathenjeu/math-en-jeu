@@ -2379,8 +2379,8 @@ class GestionnaireEvenements
 		maTete._x = -7;
 		maTete._y = -6;
 		// V3 head size
-		maTete._xscale = 150;
-		maTete._yscale = 150;
+		maTete._xscale = 50;
+		maTete._yscale = 50;
 		
 		
         for(i = 0; i < objetEvenement.positionJoueurs.length; i++)//4 //nbmaxJoueurs// numeroJoueursDansSalle
@@ -2617,23 +2617,34 @@ class GestionnaireEvenements
         // parametre: joueurQuiUtilise, joueurAffecte, objetUtilise, autresInformations
     	trace("*********************************************");
     	trace("debut de evenementUtiliserObjet  " + objetEvenement.joueurQuiUtilise + "   " + objetEvenement.joueurAffecte + "   " + objetEvenement.objetUtilise );
-        // here we treat the Banana
+        
+		// here we treat the Banana
 		if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte == this.nomUtilisateur )
 		{
     	   this.moveVisibility = this.moveVisibility - 2;
-		   _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-		   _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-		   //trace(_level0.loader.contentHolder.planche.obtenirPerso().minigameLoade);
+		   if(this.moveVisibility < 1)
+		      this.moveVisibility = 1;
+		   //if the player is in the minigame 
 		   if(_level0.loader.contentHolder.planche.obtenirPerso().minigameLoade)
 		   {
 		      
-              //trace(_level0.loader.contentHolder.planche.obtenirPerso().minigameLoade);
-			  //trace(_level0.loader.contentHolder.miniGameLayer["Minigame"].loader.contentHolder);
-			 
-			  _level0.loader.contentHolder.miniGameLayer["Minigame"].loader.contentHolder.quitter(true);
+               _level0.loader.contentHolder.miniGameLayer["Minigame"].loader.contentHolder.quitter(true);
+			   _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+		       _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			
+			// if the player read at the monment a question
+		   }else if(_level0.loader.contentHolder.box_question.monScroll._visible)
+		   {
+    		   
+			   this.repondreQuestion(" ");
+			   _level0.loader.contentHolder.box_question.gotoAndPlay(9);
+			   _root.objGestionnaireInterface.afficherBoutons(1);
+			   _level0.loader.contentHolder.sortieDunMinigame = false; 
 		   }
+		   		   
+		   
 		}
-     	trace("fin de evenementJoueurDeplacePersonnage");
+     	trace("fin de evenementUtiliserObjet");
      	trace("*********************************************\n");
     }   
     
