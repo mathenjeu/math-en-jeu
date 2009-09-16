@@ -840,10 +840,10 @@ class GestionnaireCommunication
 							switch(objEvenement["objetUtilise"])
 							{
 								case "Banane":
-									definirIntEtatClient(10);
+									//definirIntEtatClient(10);
 									
-									objEvenement["NouvellePositionX"] = noeudEvenement.firstChild.nextSibling.nextSibling.nextSibling.firstChild.firstChild.firstChild;
-									objEvenement["NouvellePositionY"] = noeudEvenement.firstChild.nextSibling.nextSibling.nextSibling.firstChild.firstChild.nextSibling.firstChild;
+									//objEvenement["NouvellePositionX"] = noeudEvenement.firstChild.nextSibling.nextSibling.nextSibling.firstChild.firstChild.firstChild;
+									//objEvenement["NouvellePositionY"] = noeudEvenement.firstChild.nextSibling.nextSibling.nextSibling.firstChild.firstChild.nextSibling.firstChild;
 									
 									var twMove:Tween;
 									var guiBanane:MovieClip;
@@ -853,6 +853,7 @@ class GestionnaireCommunication
 									_level0.loader.contentHolder["banane"].nomCible = objEvenement["joueurAffecte"];
 									
 									twMove = new Tween(guiBanane, "_alpha", Strong.easeOut, 40, 100, 1, true);
+									
 								break;
 								
 								case "PotionPetit":
