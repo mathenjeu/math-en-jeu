@@ -149,6 +149,7 @@
 			boutonContinuer = "Continue"
 			boutonQuitterX = "Quit the game.."
 			tableNameLabel = "Table name"
+			tableOptionalLabel = "*Optional"
 			playersListe = " - Liste of players - "
 			
 			
