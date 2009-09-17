@@ -18,6 +18,7 @@
     shopLabel = "MAGASIN"
     bananaLabel = "BANANE"
     crystallLabel = "BOULE DE CRISTAL"
+    stepsTxt = "Voici les étapes à suivre pour débuter une partie :"
     
     bananaTxt = "  La banane te permet de jouer un tour à un des joueurs ! Quand tu l'utilises, ton adversaire qui a le plus des points glisse alors sur la banane et il prend des résultats mauvaises les autres 90 secondes!"
     crystalTxt = "  Si tu te sens incapable de répondre à une question, utilise la boule de cristal. Tu recevras alors une question différente."
