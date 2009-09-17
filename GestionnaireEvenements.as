@@ -62,7 +62,8 @@ class GestionnaireEvenements
 	public  var typeDeJeu:String = "MathEnJeu";
 	
 	private var moveVisibility:Number;  // The number of cases that user can move. At the begining is 3. 
-	                                    // With the 3 running correct answers the level increase by 1  
+	                                    // With the 3 running correct answers the level increase by 1 
+	private var langue;
 	
 	function affichageChamps()
 	{
@@ -114,7 +115,7 @@ class GestionnaireEvenements
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  CONSTRUCTEUR
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    function GestionnaireEvenements(nom:String, passe:String, client:Number)
+    function GestionnaireEvenements(nom:String, passe:String, langue:String, client:Number)
     {
         trace("*********************************************");
         trace("debut du constructeur de gesEve      " + nom + "      " + passe);
@@ -124,6 +125,7 @@ class GestionnaireEvenements
         this.clientType = client;
 	   
         this.motDePasse = passe;
+		this.langue = langue;
         this.nomSalle = new String();
         //this.motDePasseSalle = new String();
         this.listeDesSalles = new Array();
@@ -1819,7 +1821,7 @@ class GestionnaireEvenements
         trace("debut de evenementConnexionPhysique GEv");
         if(objetEvenement.resultat == true)
         {
-            this.objGestionnaireCommunication.connexion(Delegate.create(this, this.retourConnexion), this.nomUtilisateur, this.motDePasse);
+            this.objGestionnaireCommunication.connexion(Delegate.create(this, this.retourConnexion), this.nomUtilisateur, this.motDePasse, this.langue);
 		}
         else
         {
