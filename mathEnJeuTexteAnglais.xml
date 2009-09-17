@@ -17,6 +17,7 @@
     shopLabel = "SHOP"
     bananaLabel = "BANANA"
     crystallLabel = "CRISTALL BALL"
+    stepsTxt = "Here the steps to do to begin the game :"
     
     bananaTxt = "  The banana allows you to play a wicked trick on another player! When you use this object, your opponent that has more points sign slides on the banana and becomes a little dumber for the 90 secondes!"
     bookTxt = "  The book eliminates an answer choice for you on a multiple choice question. The number of choices then decreases for one."
