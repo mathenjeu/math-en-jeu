@@ -1212,7 +1212,7 @@ class GestionnaireCommunication
      *                            se connecter au serveur de jeu
      */
     public function connexion(connexionDelegate:Function, nomUtilisateur:String,
-                              motDePasse:String)
+                              motDePasse:String, langue:String)
     {
         // Si on est connecte alors on peut continuer le code de la connexion
         if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("Connexion", "nom") == true)
@@ -1235,7 +1235,7 @@ class GestionnaireCommunication
             var objNoeudParametreMotDePasseText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(motDePasse));
             var objNoeudParametreLangue:XMLNode = objObjetXML.createElement("parametre");
             //>>>>>>>>>> THis is connextion: _level0.loader
-            var objNoeudParametreLangueText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(_level0.langue));
+            var objNoeudParametreLangueText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(langue));
             //var objNoeudParametreGameType:XMLNode = objObjetXML.createElement("parametre");
             //var objNoeudParametreGameTypeText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(_level0.gameType));
             // Construire l'arbre du document XML
