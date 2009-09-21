@@ -1902,7 +1902,7 @@ public class ProtocoleJoueur implements Runnable
 					int timer = lastQuestionTime - objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsRestant();
 					//collect time of reponse for DB
 					collectPlayerAnswers(timer);
-					System.out.println("reponse :Protocol :" + timer);
+					//System.out.println("reponse :Protocol :" + timer);
 
 
 					// Si le joueur n'est pas connecté au serveur de jeu, alors il
@@ -2080,6 +2080,60 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudCommande.appendChild(objNoeudParametreVisibility);
 					}
 				}
+				//////////////////////////////////////////////////////////////////////////////////
+				else if(objNoeudCommandeEntree.getAttribute("nom").equals(Commande.CancelQuestion))
+				{
+					
+					// Si le joueur n'est pas connecté au serveur de jeu, alors il
+					// y a une erreur
+					if (objJoueurHumain == null)
+					{
+						// Le joueur ne peut pas répondre à une question 
+						// s'il n'est pas connecté au serveur de jeu
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+
+					// Si le joueur n'est connecté à aucune salle, alors il ne 
+					// peut pas répondre à aucune question
+					else if (objJoueurHumain.obtenirSalleCourante() == null)
+					{
+
+						// Le joueur ne peut pas répondre à aucune question 
+						// s'il n'est pas dans une salle
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansSalle");
+					}
+
+					//TODO: Il va falloir synchroniser cette validation lorsqu'on va 
+					// avoir codé la commande SortirJoueurTable -> èa va ressembler au
+					// processus d'authentification
+					// Si le joueur n'est pas dans aucune table, alors il y a 
+					// une erreur
+					else if (objJoueurHumain.obtenirPartieCourante() == null)
+					{
+						// Le joueur ne peut pas répondre à aucune question 
+						// s'il n'est dans aucune table
+						objNoeudCommande.setAttribute("nom", "JoueurPasDansTable");
+					}
+
+					// Si la partie n'est pas commencée, alors il y a une erreur
+					else if (objJoueurHumain.obtenirPartieCourante().obtenirTable().estCommencee() == false)
+					{
+						// Le joueur ne peut pas répondre à aucune question 
+						// si la partie n'est pas commencée
+						objNoeudCommande.setAttribute("nom", "PartiePasDemarree");
+					}
+					else
+					{
+						
+						objJoueurHumain.obtenirPartieCourante().cancelPosedQuestion(true);
+
+						//	Il n'y a pas eu d'erreurs
+						objNoeudCommande.setAttribute("type", "Reponse");
+						objNoeudCommande.setAttribute("nom", "OK");
+				
+					}
+				}
+				/////////////////////////////////////////////////////////////////////////////////
 				else if(objNoeudCommandeEntree.getAttribute("nom").equals(Commande.Pointage))
 				{
 					// Obtenir pointage
@@ -2434,7 +2488,7 @@ public class ProtocoleJoueur implements Runnable
 				bolCommandeValide = true;
 			}
 		}
-		
+		// TODO 
 		else if (noeudCommande.getAttribute("nom").equals(Commande.CreateRoom))
 		{
 			if (noeudCommande.getChildNodes().getLength() == 7)
@@ -2442,7 +2496,7 @@ public class ProtocoleJoueur implements Runnable
 				bolCommandeValide = true;
 			}
 		}
-		
+		// TODO
 		else if (noeudCommande.getAttribute("nom").equals(Commande.getReport))
 		{
 			if (noeudCommande.getChildNodes().getLength() == 1)
@@ -2820,6 +2874,19 @@ public class ProtocoleJoueur implements Runnable
 				bolCommandeValide = bolNoeudValide;
 			}
 		}
+		
+		// Si le nom de la commande est CancelQuestion, alors il ne doit pas y avoir 
+		// de paramètres
+		else if (noeudCommande.getAttribute("nom").equals(Commande.CancelQuestion))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 0, alors
+			// il n'y a vraiment aucun paramètres
+			if (noeudCommande.getChildNodes().getLength() == 0)
+			{
+				bolCommandeValide = true;
+			}
+		}
+
 
 		//Si le nom de la commande est Pointage, alors il doit y avoir 1 paramètre
 		else if (noeudCommande.getAttribute("nom").equals(Commande.Pointage))
