@@ -1088,7 +1088,31 @@ public class InformationPartie
 		 
 		return objRetour;
 		
+	}// end method
+	
+	/**
+	 * This method is used to cancel the question. 
+	 * The first use is for Banana - to cancel question if banana is applied
+	 * then used read the question. 
+	 *  
+	 */
+	public void cancelPosedQuestion(boolean doitGenererNoCommandeRetour)
+	{
+		// Si on doit générer le numéro de commande de retour, alors
+		// on le génêre, sinon on ne fait rien (ùa devrait toujours
+		// être vrai, donc on le génêre tout le temps)
+		if (doitGenererNoCommandeRetour == true)
+		{
+			// Générer un nouveau numéro de commande qui sera 
+		    // retourné au client
+		    objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();					    
+		}
+		
+		getObjBoiteQuestions().popQuestion(objQuestionCourante);
+		objQuestionCourante = null;
 	}
+	
+	
 	
 	/**
 	 * Cette fonction met à jour le plateau de jeu si le joueur a bien répondu
