@@ -427,7 +427,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				// Garder en mémoire le Id du personnage choisi par le joueur
 				joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
 				
-		System.out.println(idPersonnage);
+		//System.out.println(idPersonnage);
 				pictures.add((idPersonnage - 10000)/100);
 				
 	    		// Si on doit générer le numéro de commande de retour, alors
