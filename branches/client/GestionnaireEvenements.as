@@ -432,6 +432,17 @@ class GestionnaireEvenements
         trace("fin de repondreQuestion");
         trace("*********************************************\n");
     }
+	
+	 ///////////////////////////////////////////////////////////////////////////////////////////////////
+    function cancelQuestion()
+    {
+        trace("*********************************************");
+        trace("CancelQuestion");
+        this.objGestionnaireCommunication.cancelQuestion(Delegate.create(this, this.returnCancelQuestion));
+        trace("end CancelQuestion");
+        trace("*********************************************\n");
+    }
+	
 
 	
 	
@@ -1806,6 +1817,46 @@ class GestionnaireEvenements
      	trace("fin de retourRepondreQuestion");
     	trace("*********************************************\n");
     }
+	
+	 ////////////////////////////////////////////////////////////////////////////////////////////////////
+	public function returnCancelQuestion(objetEvenement:Object)
+    {
+        //   objetEvenement.resultat = Ok, CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte, JoueurPasDansSalle, JoueurPasDansTable
+        trace("*********************************************");
+        trace("debut de returnCancelQuestion   " + objetEvenement.resultat + " " + objetEvenement);
+
+		switch(objetEvenement.resultat)
+        {
+            case "OK":
+                trace("Commande CancelQuestion acceptee par le serveur");
+            break;
+			
+            case "CommandeNonReconnue":
+                trace("CommandeNonReconnue");
+            break;
+			
+            case "ParametrePasBon":
+                trace("ParamettrePasBon");
+            break;
+			
+            case "JoueurNonConnecte":
+                trace("Joueur non connecte");
+            break;
+			
+            case "JoueurPasDansSalle":
+                trace("Joueur pas dans salle");
+            break;
+			
+            case "JoueurPasDansTable":
+                trace("Joueur pas dans table");
+            break;
+			
+            default:
+                trace("Erreur Inconnue");
+        }
+        trace("fin de returnCancelQuestion");
+        trace("*********************************************\n");
+    }
 
 	
 	
@@ -2638,10 +2689,13 @@ class GestionnaireEvenements
 		   }else if(_level0.loader.contentHolder.box_question.monScroll._visible)
 		   {
     		   
-			   this.repondreQuestion(" ");
+			   this.cancelQuestion();
 			   _level0.loader.contentHolder.box_question.gotoAndPlay(9);
 			   _root.objGestionnaireInterface.afficherBoutons(1);
-			   _level0.loader.contentHolder.sortieDunMinigame = false; 
+			   _level0.loader.contentHolder.sortieDunMinigame = false;
+			   
+			   _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+		       _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 		   }
 		   		   
 		   

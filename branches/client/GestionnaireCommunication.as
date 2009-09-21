@@ -377,6 +377,10 @@ class GestionnaireCommunication
 						case "UtiliserObjet":
 							retourUtiliserObjet(objNoeudCommande);
 							break;
+						case "CancelQuestion":
+							returnCancelQuestion(objNoeudCommande);
+							break;
+							
 						case "Erreur":
 							trace("reponse du serveur: "+objCommandeEnTraitement.nom);
 							//retourErreur(objNoeudCommande);
@@ -2651,6 +2655,64 @@ class GestionnaireCommunication
             // TODO: Dire qu'on n'est pas connecte
         }
     }
+	//****************************************************************************************
+	/**
+     * Cette methode permet de detruire une question pose.
+     *
+     * @param Function cancelQuestionDelegate : Un pointeur sur la fonction de retour
+     */
+    public function cancelQuestion(cancelQuestionDelegate:Function)
+    {
+        // Si une question est pose alors utiliser la fonction
+        if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("CancelQuestion", "nom") == true)
+        {
+            // Declaration d'un tableau dont le contenu est un Delegate
+            var lstDelegateCommande:ExtendedArray = new ExtendedArray();
+            // Ajouter le Delegate de retour dans le tableau des delegate pour
+            // cette fonction
+            lstDelegateCommande.push({nom:"CancelQuestion", delegate:cancelQuestionDelegate});
+            // Declaration d'une variable qui va contenir le numero de la commande
+            // generee
+            var intNumeroCommande:Number = obtenirNumeroCommande();
+            // Creer l'objet XML qui va contenir la commande a envoyer au serveur
+            var objObjetXML:XML = new XML();
+            // Creer tous les noeuds de la commande
+            var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
+            // Construire l'arbre du document XML
+            objNoeudCommande.attributes.no = String(intNumeroCommande);
+            objNoeudCommande.attributes.nom = "CancelQuestion";
+            objObjetXML.appendChild(objNoeudCommande);
+            // Declaration d'un nouvel objet qui va contenir les informations sur
+            // la commande a traiter courante
+            var objObjetCommande:Object = new Object();
+            // Definir les proprietes de l'objet de la commande a ajouter dans le
+            // tableau des commandes a envoyer
+            objObjetCommande.no = intNumeroCommande;
+            objObjetCommande.nom = "CancelQuestion";
+            objObjetCommande.objetXML = objObjetXML;
+            objObjetCommande.listeDelegate = lstDelegateCommande;
+            // Ajouter l'objet de commande a envoyer courant a la fin du tableau
+            var intNbElements:Number = lstCommandesAEnvoyer.push(objObjetCommande);
+            // Si le nombre d'elements dans la liste est de 1 (celui qu'on vient
+            // juste d'ajouter) et qu'il n'y aucune commande en traitement, alors
+            // on peut envoyer la commande pour la faire traiter (normalement, il
+            // ne devrait y avoir aucune commande en traitement), sinon alors elle
+            // va se faire traiter tres prochainement
+            if (intNbElements == 1 && objCommandeEnTraitement == null)
+            {
+                // Appeler la fonction qui va permettre de traiter la prochaine
+                // commande et de charger tout ce qu'il faut en memoire
+                traiterProchaineCommande();
+            }
+        }
+        else
+        {
+            // TODO: Dire qu'on n'est pas connecte
+        }
+    }
+	
+	
+	//****************************************************************************************
     
     public function definirPointageApresMinigame(definirPointageApresMinigameDelegate:Function, 
      						  points:Number)
@@ -3930,6 +3992,38 @@ class GestionnaireCommunication
         // Traiter la prochaine commande
         traiterProchaineCommande();
     }
+	
+	//*********************************************************
+	 /**
+     * Cette methode permet de decortiquer le noeud de commande passe en
+     * parametres et de lancer un evenement a ceux qui s'etaient ajoute comme
+     * ecouteur a la fonction cancelQuestion. On va egalement envoyer les
+     * evenements qui attendent d'etre traites dans le tableau d'evenements et
+     * les retirer du tableau.
+     *
+     * @param XMLNode noeudCommande : Le noeud de commande que le serveur
+     *                                nous renvoye et qui contient sa reponse
+     */
+    private function returnCancelQuestion(noeudCommande:XMLNode)
+    {
+		trace("Retour CancelQuestion");
+        // Construire l'objet evenement pour le retour de la fonction
+        var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
+                                   resultat:noeudCommande.attributes.nom};
+        // Si le retour de la fonction est une reponse positive et non une
+        // erreur, alors on peut passer a l'autre etat
+        if (noeudCommande.attributes.type == "Reponse")
+        {
+            // On est maintenant a l'autre etat
+            intEtatClient = Etat.PARTIE_DEMARREE.no;
+        }
+        // Appeler la fonction qui va envoyer tous les evenements et
+        // retirer leurs ecouteurs
+        envoyerEtMettreAJourEvenements(noeudCommande, objEvenement);
+        // Traiter la prochaine commande
+        traiterProchaineCommande();
+    }
+	//*********************************************************
 	
 	function definirIntEtatClient(intEtat:Number)
 	{
