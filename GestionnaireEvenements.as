@@ -443,9 +443,6 @@ class GestionnaireEvenements
         trace("*********************************************\n");
     }
 	
-
-	
-	
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  fonctions retour
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2363,6 +2360,7 @@ class GestionnaireEvenements
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 	public function evenementPartieDemarree(objetEvenement:Object)
     {
+		
         // parametre: plateauJeu, positionJoueurs (nom, x, y), tempsPartie
         trace("*********************************************");
         trace("debut de evenementPartieDemarree   "+objetEvenement.tempsPartie+"   "+getTimer());
@@ -2513,6 +2511,33 @@ class GestionnaireEvenements
     	trace("fin de evenementJoueurDemarrePartie");
     	trace("*********************************************\n");
     }
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////	
+	function remplirMenuPointage()
+    {
+		trace("*********************************************");
+    	trace("debut de remplirMenuPointage   ");
+		trace(this.listeDesPersonnages[1].nom);
+		trace(this.listeDesPersonnages[1].pointage);
+		trace("statistique Joueur" + this.statistiqueJoueur[1].pointage);
+		
+		/*
+		
+		//tabLILIAN est un tableau ordonné
+		
+		// NOTE HUGO : Voici comment placer des variables dans des champs de texte dynamique
+		// demonstrate the result
+		for(i = 0; i < jouersStarted.length; i++){
+					
+			_level0.loader.contentHolder["nom"+(i+1)] = tabLILIAN[i].nom;	
+			_level0.loader.contentHolder["pointage"+(i+1)] = tabLILIAN[i].pointage;
+		
+    	} */
+
+
+    }
+	
+	
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function evenementPartieTerminee(objetEvenement:Object)
@@ -2553,7 +2578,8 @@ class GestionnaireEvenements
 			jouersStarted[i].role = objetEvenement.statistiqueJoueur[i].userRole;
 						
 		}// end for
-		   	
+		 
+		// NOTE HUGO : Is this an insert-sort? 
     	//ranger les joueurs en dependant des pointages
     	for(k = 0; k < jouersStarted.length; k++)
     	{
@@ -2622,6 +2648,8 @@ class GestionnaireEvenements
 		      tabOrdonne.removeItemAt(i);
 		}
 		
+		
+		// NOTE HUGO : Voici comment placer des variables dans des champs de texte dynamique
 		// demonstrate the result
 		for(i = 0; i < jouersStarted.length; i++){
 					
