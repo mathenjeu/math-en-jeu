@@ -346,6 +346,7 @@ class GestionnaireEvenements
         this.listeDesPersonnages[numeroJoueursDansSalle-1].id = no;
         this.listeDesPersonnages[numeroJoueursDansSalle-1].nom = this.nomUtilisateur;
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].role = this.userRole;
+		this.listeDesPersonnages[numeroJoueursDansSalle-1].pointage = 0;
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].idessin = calculatePicture(no);
         this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), Delegate.create(this, this.evenementPartieTerminee), no);//this.idPersonnage);//  
 	
@@ -2537,9 +2538,6 @@ class GestionnaireEvenements
 		//trace(this.listeDesPersonnages[1].pointage);
 		
 		
-		var indice:Number = 0;  // indice du plus grand
-		var nomMax:Number = -1;
-		
 		// we make an array to sort the players regarding theirs points 
 		var jouersStarted:Array = new Array();
 				
@@ -2553,8 +2551,10 @@ class GestionnaireEvenements
 					//trace("Dans menuointage : " + jouersStarted[i].pointage + " " + jouersStarted[i].idessin + " " + this.listeDesPersonnages[i].idessin );
 		}// end for
 		
-		jouersStarted.sortOn("pointage");
-		//jouersStarted.reverse();
+		//jouersStarted.sortOn("pointage");
+		//sort the elements using a compare function
+		jouersStarted.sort(compareByPointsAscending);
+		
 		
 		for (var i:Number = 0; i < this.listeDesPersonnages.length; i++) {
 					
@@ -2628,7 +2628,9 @@ class GestionnaireEvenements
 						
 		}// end for
 						
-		this.tabPodiumOrdonneID.sortOn("pointage");
+		//this.tabPodiumOrdonneID.sortOn("pointage");
+		//sort the elements using a compare function
+		this.tabPodiumOrdonneID.sort(compareByPointsAscending);
 		this.tabPodiumOrdonneID.reverse();
 		
 		// to find the picture
@@ -2682,7 +2684,13 @@ class GestionnaireEvenements
     	        	    
     	trace("fin de evenementPartieTerminee    ");
     	trace("*********************************************\n");
-    }  
+    }// end methode
+	
+	// methode used as compare function to sort our players by their points
+	private function compareByPointsAscending(element1, element2)
+	{
+		return element1.pointage - element2.pointage;
+	}
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function evenementJoueurDeplacePersonnage(objetEvenement:Object)
@@ -2751,6 +2759,7 @@ class GestionnaireEvenements
 			   
 		   }else if(_level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible)  // _level0.loader.contentHolder.box_question.GUI_retro.tempsPenalite
 		   {
+			   _level0.loader.contentHolder.box_question._visible = false;
 			   trace("Ici pause !!!!          *****************************************************");   
 		   }
 		   		   
@@ -2835,5 +2844,7 @@ class GestionnaireEvenements
 	{
 		return (perso - 10000 - idDessin * 100);
 	}
+	
+	
 	
 }
