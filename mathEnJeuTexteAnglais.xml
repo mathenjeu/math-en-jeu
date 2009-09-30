@@ -138,6 +138,7 @@
 	  descAlert = "Short description, please!"
 	  dateBeginAlert = "Begin date not selected!"
 	  dateEndAlert = "End date not selected!"
+	  passAlert = "Password will give only to yours pupils the access to the room. Accordingly the report will contain only theirs games."
 	
   mathemaQuoi_beta = ""
 	

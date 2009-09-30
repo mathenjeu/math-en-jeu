@@ -138,6 +138,7 @@
 	  descAlert = "Donnez une description, SVP!"
 	  dateBeginAlert = "Date de début ne sélectée pas!"
 	  dateEndAlert = "Date de fin ne sélectée pas!"
+	  passAlert = "Le mot de passe va permettre seulement à vos élèves d’accéder à la salle."
   
     
 	
