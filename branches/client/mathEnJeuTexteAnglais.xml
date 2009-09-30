@@ -133,8 +133,13 @@
 	  errorPWD = "False room's password! Give the correct or try another room!"
     pwdAlert = "Error!"
     textGUI_PWD = "To enter you need a password..."  
+	  errorSelect = "Select a room first!"
+	  nomAlert = "Give a name to the room!"
+	  descAlert = "Short description, please!"
+	  dateBeginAlert = "Begin date not selected!"
+	  dateEndAlert = "End date not selected!"
 	
-	mathemaQuoi_beta = ""
+  mathemaQuoi_beta = ""
 	
 		frame1 = ""
 			
