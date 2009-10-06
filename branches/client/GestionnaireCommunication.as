@@ -3952,9 +3952,9 @@ class GestionnaireCommunication
 									objEvenement["objet"+j].cout = objNoeudObjMagasin.attributes.cout;
 									objEvenement["objet"+j].id = objNoeudObjMagasin.attributes.id;
 									objEvenement["objet"+j].type = objNoeudObjMagasin.attributes.type;
-									//trace("objet"+j+".cout :" + objEvenement["objet"+j].cout);
-									//trace("objet"+j+".id :" + objEvenement["objet"+j].id);
-									//trace("objet"+j+".type :" + objEvenement["objet"+j].type);
+									trace("objet"+j+".cout :" + objEvenement["objet"+j].cout);
+									trace("objet"+j+".id :" + objEvenement["objet"+j].id);
+									trace("objet"+j+".type :" + objEvenement["objet"+j].type);
 								}
 								trace("************************");
 								
