@@ -85,8 +85,6 @@ public class JoueurHumain extends Joueur
 		strPrenom = "";
 		strNomFamille = "";
 		
-		//bolPeutCreerSalle = false;
-		
 		// Au début, le joueur n'est dans aucune salle ni table
 		objSalleCourante = null;
 		objPartieCourante = null;
@@ -145,16 +143,7 @@ public class JoueurHumain extends Joueur
 		return strPrenom;
 	}
 	
-	/**
-	 * Cette fonction permet de retourner si un joueur peut creer une salle.
-	 * 
-	 * @return boolean : peut ou peut pas creer une salle
-	 
-	public boolean obtenirPeutCreerSalle()
-	{
-		return bolPeutCreerSalle;
-	}*/
-	
+		
 	/**
 	 * Cette méthode permet de définir le prénom du joueur.
 	 * 
