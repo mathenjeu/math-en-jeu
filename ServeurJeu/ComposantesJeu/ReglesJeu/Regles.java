@@ -77,7 +77,7 @@ public class Regles
 	private int maxNbPlayers;
 	
 	// This is the maximum number of coins and items a player can hold at one time
-	private int maxNbObjectsAndMoney;
+	//private int maxNbObjectsAndMoney;
 	
 	//This is the number of tracks of the board of the game of type "Tournament"
 	private int nbTracks;
@@ -399,13 +399,13 @@ public class Regles
 		return maxNbPlayers;
 	}
 
-	public void setMaxNbObjectsAndMoney(int maxNbObjectsAndMoney) {
+	/*public void setMaxNbObjectsAndMoney(int maxNbObjectsAndMoney) {
 		this.maxNbObjectsAndMoney = maxNbObjectsAndMoney;
 	}
 
 	public int getMaxNbObjectsAndMoney() {
 		return maxNbObjectsAndMoney;
-	}
+	}*/
 
 	public void setNbTracks(int nbTracks) {
 		this.nbTracks = nbTracks;
