@@ -11,7 +11,7 @@ import java.util.Timer;
 public class Banane extends ObjetUtilisable 
 {
 	// Cette constante spécifie le prix de l'objet courant
-	public static final int PRIX = 3;
+	public static final int PRIX = 1;
 
 	// Cette constante affirme que l'objet courant n'est pas limité 
 	// lorsqu'on l'achète (c'est-à-dire qu'un magasin n'épuise jamais 
