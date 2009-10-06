@@ -84,7 +84,7 @@ public class InformationPartie
     //of the game is writen to the DB
     private boolean moneyPermit;
     
-    private static int maxNbObj;
+    //private static int maxNbObj;
     
     // to not get twice bonus
     private boolean isPlayerNotArrivedOnce;
@@ -105,7 +105,7 @@ public class InformationPartie
 	 */
 	public InformationPartie( GestionnaireEvenements gestionnaireEv, GestionnaireBD gestionnaireBD, JoueurHumain joueur, Table tableCourante)
 	{
-            maxNbObj = tableCourante.obtenirRegles().getMaxNbObjectsAndMoney();    
+            //maxNbObj = tableCourante.obtenirRegles().getMaxNbObjectsAndMoney();    
 		
 		    // Au début, on ne subit pas de banane!
             isUnderBananaEffect = "";
@@ -930,8 +930,7 @@ public class InformationPartie
 					if (objCaseCouleurDestination.obtenirObjetCase() instanceof ObjetUtilisable)
 					{
 
-						if(maxNbObj > intNouvelArgent + objListeObjetsUtilisablesRamasses.size())   
-						{
+						
 							// Faire la référence vers l'objet utilisable
 							ObjetUtilisable objObjetUtilisable = (ObjetUtilisable) objCaseCouleurDestination.obtenirObjetCase();
 
@@ -946,12 +945,11 @@ public class InformationPartie
 
 							// On va dire aux clients qu'il y a eu collision avec cet objet
 							collision = objObjetUtilisable.obtenirTypeObjet();
-						}
+						
 					}
 					else if (objCaseCouleurDestination.obtenirObjetCase() instanceof Piece)
 					{
-						if(maxNbObj > intNouvelArgent + objListeObjetsUtilisablesRamasses.size()) 
-						{
+						
 							// Faire la référence vers la piêce
 							Piece objPiece = (Piece) objCaseCouleurDestination.obtenirObjetCase();
 
@@ -966,7 +964,7 @@ public class InformationPartie
 							// TODO: Il faut peut-être lancer un algo qui va placer 
 							// 		 les piêces sur le plateau de jeu s'il n'y en n'a
 							//		 plus
-						}
+						
 					}
 					else if (objCaseCouleurDestination.obtenirObjetCase() instanceof Magasin)
 					{
