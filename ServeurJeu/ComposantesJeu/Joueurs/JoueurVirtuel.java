@@ -230,7 +230,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         intNbMagasinVisites = 0;
 
         // Définir le nombre d'objets max par une valeur de base
-        intNbObjetsMax = objTable.obtenirRegles().getMaxNbObjectsAndMoney();
+        //intNbObjetsMax = objTable.obtenirRegles().getMaxNbObjectsAndMoney();
         
         // Créer une liste de magasin déjà visité vide
         lstMagasinsVisites = new Vector<Magasin>();
