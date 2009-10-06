@@ -1084,12 +1084,12 @@ public class GestionnaireBD
 					int deplacementMax = rs.getInt( "max_movement" );
 					int maxShopObjects = rs.getInt( "max_object_shop" );
 					int maxNbPlayers = rs.getInt( "maxNbPlayers" );
-					int maxNbObjectsAndMoney = rs.getInt( "max_object_coin" );
+					//int maxNbObjectsAndMoney = rs.getInt( "max_object_coin" );
 					int nbTracks = rs.getInt( "nbTracks" );
 					int nbVirtualPlayers = rs.getInt("nbVirtualPlayers");
 					
 								
-					objReglesSalle.setMaxNbObjectsAndMoney(maxNbObjectsAndMoney);
+					//objReglesSalle.setMaxNbObjectsAndMoney(maxNbObjectsAndMoney);
 					objReglesSalle.setMaxNbPlayers(maxNbPlayers);
 					objReglesSalle.setShowNumber(shownumber);
 					objReglesSalle.definirPermetChat(chat);
