@@ -3734,8 +3734,8 @@ class GestionnaireCommunication
 			
 			//trace(noeudMagasin.attributes.id);
 			//trace(objEvenement.argent.id);
-			_level0.loader.contentHolder.planche.obtenirPerso().setNouveauID(Number(noeudMagasin.attributes.id));
-			_level0.loader.contentHolder.planche.obtenirPerso().setVieuxID(objEvenement.argent.id);
+			//_level0.loader.contentHolder.planche.obtenirPerso().(Number(noeudMagasin.attributes.id));
+			//_level0.loader.contentHolder.planche.obtenirPerso().setVieuxID(objEvenement.argent.id);
 
         }
 
@@ -3885,13 +3885,13 @@ class GestionnaireCommunication
                         {
                             objEvenement.objetRamasse = new Object();
                             objEvenement.objetRamasse.id = Number(objNoeudParametre.firstChild.attributes.id);
-							
-							var o:ObjetSurCase = new ObjetSurCase();
-							o.definirNom(objNoeudParametre.firstChild.attributes.type);
-							_level0.loader.contentHolder.planche.obtenirPerso().ajouterObjet(o, objEvenement.objetRamasse.id);
-							
-                            objEvenement.objetRamasse.type = objNoeudParametre.firstChild.attributes.type;
+							objEvenement.objetRamasse.type = objNoeudParametre.firstChild.attributes.type;
 							objEvenement.collision = "objet";
+							//var o:ObjetSurCase = new ObjetSurCase();
+							//o.definirNom(objNoeudParametre.firstChild.attributes.type);
+							_level0.loader.contentHolder.planche.obtenirPerso().ajouterObjet(objEvenement.objetRamasse.id, objEvenement.objetRamasse.type);
+							
+                            
                         }
                         break;
 						

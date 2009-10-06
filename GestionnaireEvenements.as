@@ -25,6 +25,7 @@ import mx.transitions.easing.*;
 import mx.utils.Delegate;
 import FiltreTable;
 import mx.controls.Alert;
+import flash.utils.*;
 
 class GestionnaireEvenements
 {
@@ -61,6 +62,8 @@ class GestionnaireEvenements
 	private var moveVisibility:Number;  // The number of cases that user can move. At the begining is 3. 
 	                                    // With the 3 running correct answers the level increase by 1 
 	private var langue;
+	
+	//var timerInterval:Number;
 	
 	
 	function affichageChamps()
@@ -1460,7 +1463,7 @@ class GestionnaireEvenements
 		var question:MovieClip;
 	
       	trace("*********************************************");
-      	trace("debut de retourDeplacerpersonnage   "+objetEvenement.resultat);
+      	trace("debut de retourDeplacerpersonnage   " + objetEvenement.resultat);
       	switch(objetEvenement.resultat)
         {
             case "Question":
@@ -1470,12 +1473,20 @@ class GestionnaireEvenements
 
 				switch(objetEvenement.question.type)
 			 	{
-		     		case "ChoixReponse":
-						trace("type = ChoixReponse");
+		     		case "MULTIPLE_CHOICE_5":
+						trace("type = ChoixReponse : MULTIPLE_CHOICE_5");
+		     		break;
+					
+					case "MULTIPLE_CHOICE_3":
+						trace("type = ChoixReponse : MULTIPLE_CHOICE_3");
 		     		break;
 	
-		     		case "VraiFaux":
-						trace("type = VraiFaux");
+	                case "MULTIPLE_CHOICE":
+						trace("type = ChoixReponse : MULTIPLE_CHOICE");
+		     		break;
+					
+		     		case "TRUE_OR_FALSE":
+						trace("type = VraiFaux : TRUE_OR_FALSE");
 		     		break;
 	
 		     		case "ReponseCourte":
@@ -1525,13 +1536,10 @@ class GestionnaireEvenements
     	switch(objetEvenement.resultat)
         {
 			case "Ok":
-				//_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet("pieceFixe");
-				if(_level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet() <= 10)
-				{
-					trace("nom de l'objet : " + objetEvenement.argent.type);
-					_level0.loader.contentHolder.planche.obtenirPerso().ajouterImageBanque(_level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet(), objetEvenement.argent.type,  _level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet(), 75);
-				}
-			break;
+				
+					trace("nom de l'objet : " + objetEvenement.argent.type + " " + objetEvenement.argent.id);
+					_level0.loader.contentHolder.planche.obtenirPerso().ajouterObjet(objetEvenement.argent.id, objetEvenement.argent.type); /// id???
+					break;
 			
 			case "CommandeNonReconnue":
                 trace("CommandeNonReconnue");
@@ -1649,9 +1657,9 @@ class GestionnaireEvenements
     	switch(objetEvenement.resultat)
         {
             case "Pointage":
-                trace("on a le pointage total: "+objetEvenement.pointage + " Il reste a l'utiliser...");
+                trace("on a le pointage total: " + objetEvenement.pointage + " Il reste a l'utiliser...");
 				// modifier le pointage
-				_level0.loader.contentHolder.pointageJoueur = objetEvenement.pointage;
+				//_level0.loader.contentHolder.pointageJoueur = objetEvenement.pointage;
 				_level0.loader.contentHolder.planche.obtenirPerso().modifierPointage(objetEvenement.pointage);
 				// il faut mettre a jour le pointage
 				// qu'arrive-t-il s'il y a des delais et que le perso c'est deja deplace?
@@ -1690,18 +1698,16 @@ class GestionnaireEvenements
     {
 	    //   objetEvenement.resultat = Ok, CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte
     	trace("*********************************************");
-    	trace("debut de retourDefinirArgentApresMinigame   "+objetEvenement.resultat);
+    	trace("debut de retourDefinirArgentApresMinigame   " + objetEvenement.resultat);
     	switch(objetEvenement.resultat)
         {
             case "Argent":
                 trace("on a l'argent total: "+objetEvenement.argent + " Il reste a l'utiliser...");
 				// modifier l'argent
-				_level0.loader.contentHolder.argentJoueur = objetEvenement.argent;
+				
 				_level0.loader.contentHolder.planche.obtenirPerso().modifierArgent(objetEvenement.argent);
-				//_level0.loader.contentHolder.planche.obtenirPerso().ajouterImageBanque(_level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet(), "pieceFixe", _level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet(), 75);
-				//todo corriger la ligne precedente si probleme
-
-				// not use for the moment
+				
+				// not in use for the moment
 				/*
 				for(var i:Number = 0; i < this.listeDesJoueursDansSalle.length; i++)
     	        {
@@ -1796,13 +1802,17 @@ class GestionnaireEvenements
 					}
 					else
 					{
-			     		trace("deplacement refuse");
-			     		_level0.loader.contentHolder.url_retro = objetEvenement.explication;
+			     		trace("deplacement refuse  ");
+						_level0.loader.contentHolder.url_retro = objetEvenement.explication;
 
 						_level0.loader.contentHolder.box_question.monScroll._visible = false;
 						var ptX:Number = _level0.loader.contentHolder.box_question.monScroll._x;
 						var ptY:Number = _level0.loader.contentHolder.box_question.monScroll._y;
 						_level0.loader.contentHolder.box_question.attachMovie("GUI_retro","GUI_retro", 100, {_x:ptX, _y:ptY});
+						
+						//define the time of penality
+						_level0.loader.contentHolder.box_question.GUI_retro.timeX = 15;
+						// define new visibility
 						this.moveVisibility = objetEvenement.moveVisibility;
 
 						_root.objGestionnaireInterface.effacerBoutons(1);
@@ -2195,9 +2205,9 @@ class GestionnaireEvenements
                 	_level0.loader.contentHolder.listeTable.replaceItemAt(i, {label : str, data : objetEvenement.noTable});
             	}
         	} */
-        	// enlever la table de la liste si elle est pleine
-			
-        	if(this.listeDesTables[indice].listeJoueurs.length == numeroJoueursDansSalle)
+        	
+			// enlever la table de la liste si elle est pleine
+			if(this.listeDesTables[indice].listeJoueurs.length == numeroJoueursDansSalle)
         	{
             	for(i = 0; i < this.listeDesTables.length; i++)
             	{
@@ -2418,8 +2428,8 @@ class GestionnaireEvenements
 				this["tete"+j] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["tete"+(j+1)].attachMovie("tete" + idDessin, "Tete"+j, -10100+j);
 				this["tete"+j]._x = -7;
 				this["tete"+j]._y = -6;
-				this["tete"+j]._xscale = 55;
-				this["tete"+j]._yscale = 55;
+				this["tete"+j]._xscale = 100;
+				this["tete"+j]._yscale = 100;
 				j++;
 			}
 			
@@ -2446,8 +2456,8 @@ class GestionnaireEvenements
 		maTete._x = -7;
 		maTete._y = -6;
 		// V3 head size
-		maTete._xscale = 50;
-		maTete._yscale = 50;
+		maTete._xscale = 200;
+		maTete._yscale = 200;
 		
 		
         for(i = 0; i < objetEvenement.positionJoueurs.length; i++)
@@ -2482,6 +2492,11 @@ class GestionnaireEvenements
         }
         //_level0.loader.contentHolder.planche.afficher();
         _level0.loader.contentHolder.horlogeNum = 60*objetEvenement.tempsPartie;
+		
+		_level0.loader.contentHolder.objectMenu.Boule.countTxt = "0";
+		_level0.loader.contentHolder.objectMenu.Banane.countTxt = "0";
+		_level0.loader.contentHolder.objectMenu.Livre.countTxt = 0;
+		_level0.loader.contentHolder.objectMenu.piece.countTxt = 0;
 
         trace("fin de evenementPartieDemarree    "+getTimer());
         trace("*********************************************\n");
@@ -2697,7 +2712,7 @@ class GestionnaireEvenements
     {
         // parametre: nomUtilisateur, anciennePosition et nouvellePosition, pointage
     	trace("*********************************************");
-    	trace("debut de evenementJoueurDeplacePersonnage (sans compter les rotations)  "+objetEvenement.nomUtilisateur+"   "+objetEvenement.anciennePosition.x+"   "+objetEvenement.anciennePosition.y+"   "+objetEvenement.nouvellePosition.x+"   "+objetEvenement.nouvellePosition.y+"   "+objetEvenement.collision+"   "+objetEvenement.pointage+"   "+objetEvenement.argent);
+    	trace("debut de evenementJoueurDeplacePersonnage (sans compter les rotations)  " + objetEvenement.nomUtilisateur + "   " + objetEvenement.anciennePosition.x+"   "+objetEvenement.anciennePosition.y+"   "+objetEvenement.nouvellePosition.x+"   "+objetEvenement.nouvellePosition.y+"   "+objetEvenement.collision+"   "+objetEvenement.pointage+"   "+objetEvenement.argent);
    
     	var pt_initial:Point = new Point();
     	var pt_final:Point = new Point();
@@ -2710,7 +2725,7 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder.planche.teleporterPersonnage(objetEvenement.nomUtilisateur, pt_initial.obtenirX(), pt_initial.obtenirY(), pt_final.obtenirX(), pt_final.obtenirY(), objetEvenement.collision);
 	
 	    // update players array
-		for(var i:Number=0;i<numeroJoueursDansSalle;i++){
+		for(var i:Number=0; i < numeroJoueursDansSalle; i++){
 					
 			if(this.listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur){
 			   this.listeDesPersonnages[i].pointage = objetEvenement.pointage;
@@ -2756,19 +2771,57 @@ class GestionnaireEvenements
 			   
 			   _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 		       _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			   
-		   }else if(_level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible)  // _level0.loader.contentHolder.box_question.GUI_retro.tempsPenalite
+			
+			// if the player read a feedback of a question 
+		   }else if(_level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible) 
 		   {
-			   _level0.loader.contentHolder.box_question._visible = false;
-			   trace("Ici pause !!!!          *****************************************************");   
-		   }
+			   // catch the rested time to be used after banana show
+			   	var tempsRested:Number = _level0.loader.contentHolder.box_question.GUI_retro.tempsPenalite;
+				//var url:String = _level0.loader.contentHolder.url_retro;
+				trace(tempsRested + " : ici le temps que restent");
+                //_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			    //_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+				//_root.objGestionnaireInterface.afficherBoutons(1);
+				_level0.loader.contentHolder.box_question.monScroll._visible = false;
+				_level0.loader.contentHolder.box_question._visible = false;
+				_level0.loader.contentHolder.box_question.GUI_retro.removeMovieClip();
+				
+			    // here show banana in action
+			    // setTimeout( Function, delay in miliseconds, arguments)
+               _global.timerInterval = setInterval(this,"funcToRecallFeedback", 5000, tempsRested);
+			  	   
+				//_root.objGestionnaireInterface.effacerBoutons(1);
+			  
+		   }else{
+		      
+                _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			    _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso()); 
+		   
+		   }//end else if
 		   		   
 		   
-		}
+		}// end if
      	trace("fin de evenementUtiliserObjet");
      	trace("*********************************************\n");
-    }   
+    } // end methode  
     
+	function funcToRecallFeedback(tempsRested:Number):Void
+    {
+		  
+		  trace("callback: " + getTimer() + " ms.");
+
+          //and now continue to show the feedback 
+		  _level0.loader.contentHolder.box_question._visible = true;
+		  _level0.loader.contentHolder.box_question.monScroll._visible = true;
+		  var ptX:Number = _level0.loader.contentHolder.box_question.monScroll._x;
+		  var ptY:Number = _level0.loader.contentHolder.box_question.monScroll._y;
+		  _level0.loader.contentHolder.box_question.attachMovie("GUI_retro","GUI_retro", 100, {_x:ptX, _y:ptY});
+	      _level0.loader.contentHolder.box_question.GUI_retro.timeX = tempsRested;
+			   
+			   clearInterval(_global.timerInterval);
+     
+    } // end methode
+	
 	
  /*   ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function EvenementDeplacementWinTheGame(objetEvenement:Object)
