@@ -19,8 +19,9 @@ Vous devriez avoir recu un exemplaire de la Licence Publique
 Generale Affero avec ce programme; si ce n'est pas le cas,
 ecrivez a Affero Inc., 510 Third Street - Suite 225,
 San Francisco, CA 94107, USA.
-*********************************************************************/
 
+Changed 2009 Oloieri Lilian
+*********************************************************************/
 
 import mx.transitions.Tween;
 import mx.transitions.easing.*;
@@ -38,17 +39,13 @@ class Personnage
 	private var c:Number;
 	private var pointage:Number;
 	private var argent:Number;
-	private var listeDesObjets:Array;
-	private var listeDesIDObjets:Array;	 // sert pour envoyer les commandes d'utilisation des objets au serveur ( on envoye les ID)
+	private var listeDesObjets:Object;
 	private var faireCollision:String;   // sert a savoir s'il y a eu collision apres un deplacement et avec quoi
 	private var nom:String;               // name of user that is master of pers
 	private var boardCentre:Boolean;
 	private var listeSurMagasin:Array;	 // sert a recuperer la liste d'objets du magasin lorsque qu'on va sur une case magasin
-	private var nouveauID:Number;
-	private var vieuxID:Number;
 	private var minigameLoade:Boolean;
-	private var SCALE_BOX_OBJET:Number = 75;
-	
+		
 	function setRole(n:Number)
 	{
 		role = n;
@@ -66,116 +63,60 @@ class Personnage
 	}
 	       
 	////////////////////////////////////////////////////////////
-	function acheterObjet(o:ObjetSurCase, id:Number)
+	function acheterObjet(id:Number, objectName:String)
 	{
-		listeDesObjets.push(o);
-		listeDesIDObjets.push(id);
+		listeDesObjets[objectName].push(id);
+		ajouterImageBanque(objectName);
 	}
 	
-	////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////    
 	function afficherObjets()
 	{
 		var i:Number;
 		trace("debut afficherObjets\n**********")
-		for(i=0;i<listeDesObjets.length;i++)
+		for(var nom:String in listeDesObjets)
 		{
-			trace(listeDesObjets[i].obtenirNom() + " - id : " + listeDesIDObjets[i]);
+			for(i = 0; i < listeDesObjets[nom].length; i++) 
+			trace(listeDesObjets[nom][i] + " - id : ");
 		}
 		trace("**********\nfin afficherObjets")
 	}
 	
-	////////////////////////////////////////////////////////////
-	function afficherIDObjets()
-	{
-		var i:Number;
-		for(i=0;i<listeDesIDObjets.length;i++)
-		{
-			trace(listeDesIDObjets[i]);
-		}
-	}
-	
-	////////////////////////////////////////////////////////////
-	function setNouveauID(n:Number)
-	{
-		nouveauID = n;
-	}
-	
-	////////////////////////////////////////////////////////////
-	function setVieuxID(n:Number)
-	{
-		vieuxID = n;
-	}
-	
-	////////////////////////////////////////////////////////////
-	function getNouveauID():Number
-	{
-		return nouveauID;
-	}
-	
-	////////////////////////////////////////////////////////////
-	function getVieuxID():Number
-	{
-		return vieuxID;
-	}
-	
-	////////////////////////////////////////////////////////////
-	function obtenirRangObjet(i:Number)
-	{
-		return listeDesObjets[i].obtenirNom();
-	}
-	
-	////////////////////////////////////////////////////////////
-	// retourne l'ID d'un objet au rang entre en parametre
-	function obtenirRangIDObjet(i:Number)
-	{
-		return listeDesIDObjets[i];
-	}
-	
-	////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////   
 	function obtenirNombreObjet()
 	{
-		return listeDesObjets.length;
+		var total:Number = 0;
+		for(var nom:String in listeDesObjets)
+		{
+			total += listeDesObjets[nom].length; 			
+		}
+		
+		trace("total : " + total);
+		return total;
 	}
 	
 	////////////////////////////////////////////////////////////
-	function ajouterObjet(o:ObjetSurCase, id:Number)
+	function ajouterObjet(id:Number, objectName:String)
 	{
-		listeDesObjets.push(o);
-		listeDesIDObjets.push(id);
+		listeDesObjets[objectName].push(id);
+		//ajouterImageBanque(objectName);
 	}
 	
 	////////////////////////////////////////////////////////////
-	function obtenirObjets():Array
+	function obtenirObjets():Object
 	{
 		return this.listeDesObjets;
 	}
 	
 	////////////////////////////////////////////////////////////
-	function obtenirListeDesIDObjets():Array
-	{
-		return this.listeDesIDObjets;
-	}
+	// - sert a ajouter une objet a la banque d'objets du personnage
 	
-	////////////////////////////////////////////////////////////
-	// - sert a ajouter une image a la banque d'objets du personnage
-	// - 10 tags sont places sur la frame de mathemaquoi afin de 
-	// modifier la disposition des objets plus facilement
-	// 
-	function ajouterImageBanque(i:Number, nomObj:String, profondeur:Number, scale:Number)
+	function ajouterImageBanque(nomObj:String)
 	{		
 		trace("--- ds ajouterImageBanque ! ---");
-		trace(i);
-		trace(nomObj);
-		trace(profondeur);
-		trace(scale);
-	
-		// dans mathemaquoi, les indices des tags sont de 1 a 10 : ils ne commencent pas a 0.
-		_level0.loader.contentHolder.menuObjets.createEmptyMovieClip("objCase" + i, profondeur);
-		//_level0.loader.contentHolder.menuObjets["objCase" +i].attachMovie(nomObj, nomObj, profondeur, {_x:_level0.loader.contentHolder["tag" + i]._x, _y:_level0.loader.contentHolder["tag" +i]._y, _xscale:scale, _yscale:scale});
-		_level0.loader.contentHolder.menuObjets["objCase"+i].attachMovie(nomObj, nomObj, profondeur, {_x:_level0.loader.contentHolder.menuObjets["tag"+i]._x, _y:_level0.loader.contentHolder.menuObjets["tag"+i]._y, _xscale:scale, _yscale:scale});
-		_level0.loader.contentHolder.menuObjets["objCase"+i]._visible = false;
-		//_level0.loader.contentHolder.menuObjets["x" + i]._visible = false;
-		
+			
+		_level0.loader.contentHolder.objectMenu[nomObj].countTxt = Number(_level0.loader.contentHolder.objectMenu[nomObj].countTxt) + 1;
+				
 		function peutUtiliserObjet(nomObjet:String):Boolean
 		{
 			switch(nomObjet)
@@ -204,44 +145,34 @@ class Personnage
 			return false;
 		}
 		
-		var listeObjets:Array = this.obtenirObjets();
-		var listeIDObjets:Array = this.obtenirListeDesIDObjets();
-		
-		// function used to make action of the object on that on click
-		_level0.loader.contentHolder.menuObjets["objCase"+i].onRelease = function()
-		{
-			if(peutUtiliserObjet(nomObj))
-			{
-				var j:Number;
-				for(j = 0; j < listeObjets.length && nomObj != listeObjets[j].nom; j++);
+		var listeObjets:Object = this.obtenirObjets();
 				
-				if(j < listeObjets.length)
-				{
-					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(listeIDObjets[j]);
-					_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet(listeObjets[j].nom);
-				}
+		// function used to make action of the object on that on click
+		_level0.loader.contentHolder.objectMenu[nomObj + "_mc"].onRelease = function()
+		{
+			if(peutUtiliserObjet(nomObj)&& listeObjets[nomObj].length >= 1)
+			{
+				
+					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(listeObjets[nomObj][listeObjets[nomObj].length - 1]);
+					_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet(nomObj);
+				
 			}
 		};
-		_level0.loader.contentHolder.menuObjets["objCase"+i].onRollOver = function()
+		
+		_level0.loader.contentHolder.objectMenu[nomObj].onRollOver = function()
 		{
-			if(peutUtiliserObjet(nomObj)) _level0.loader.contentHolder.menuObjets["objCase"+i]._alpha = 60;
+			if(peutUtiliserObjet(nomObj) && listeObjets[nomObj].length >= 1) _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 60;
 		};
-		_level0.loader.contentHolder.menuObjets["objCase"+i].onRollOut = function()
+		
+		_level0.loader.contentHolder.objectMenu[nomObj].onRollOut = function()
 		{
-			if(peutUtiliserObjet(nomObj)) _level0.loader.contentHolder.menuObjets["objCase"+i]._alpha = 100;
+			if(peutUtiliserObjet(nomObj) && listeObjets[nomObj].length >= 1) _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
 		};
 		
 		trace("--- FIN ajouterImageBanque ! ---");
 	}
 	
-	////////////////////////////////////////////////////////////
-	// on enleve l'image d'objet au rang indique a l'appel de la fonction
-	//
-	function enleverImageBanque(i:Number)
-	{
-		_level0.loader.contentHolder.menuObjets["objCase" + i].removeMovieClip();
-		//_level0.loader.contentHolder.menuObjets["x" + this.obtenirNombreObjet()+1]._visible = true;
-	}
+	
 	
 	////////////////////////////////////////////////////////////
 	// -sert a enlever un objet a un personnage :
@@ -253,47 +184,14 @@ class Personnage
 		var i:Number;
 		
 		trace("liste d'objets avant avoir enlever 1 obj :");
-		for(i=0; i < listeDesObjets.length; i++)
-		{
-			trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
-		}
+		afficherObjets();
 		
-		for(i=0; i < listeDesObjets.length; i++)
-		{
-			if(listeDesObjets[i].obtenirNom() == n)
-			{
-				trace("dans le if " + n + " = " + listeDesObjets[i].obtenirNom() + " et i : " + i);
-				listeDesObjets.splice(i,1);
-				listeDesIDObjets.splice(i,1);
-				
-				enleverImageBanque(i+1);
+		listeDesObjets[n].pop();
+		_level0.loader.contentHolder.objectMenu[n].countTxt = Number(_level0.loader.contentHolder.objectMenu[n].countTxt) - 1;
 		
-				// pour que la disposition des objets reste correcte,
-				// on decale les objets.
-				// ex : on a 3 objets et on enleve celui du milieu
-				// alors l'objet3 va a la position 2 et on decale les image
-				//for (var j:Number = i+1; j <= this.obtenirNombreObjet()+1; j++)
-				for (var j:Number = i+1; j <= this.obtenirNombreObjet(); j++)
-				{
-					var k:Number = j+1;
-					//trace(this.obtenirRangObjet(j-1));
-					//ajouterImageBanque(j, this.obtenirRangObjet(j-1), this.obtenirRangIDObjet(j-1)+j, SCALE_BOX_OBJET);
-					ajouterImageBanque(j, this.obtenirRangObjet(j-1), j, SCALE_BOX_OBJET);
-					enleverImageBanque(k);
-				}
-				
-				// une fois qu'on a trouve l'objet, on quitte la fonction
-				n = "---";
-				break;
-			}
-		}
-		//enleverImageBanque(k+1);
 		
 		trace("liste d'objets apres avoir enlever 1 obj :");
-		for(i=0;i<listeDesObjets.length;i++)
-		{
-			trace("i : " + i + " => " + listeDesObjets[i].obtenirNom());
-		}
+		afficherObjets();
 	}
 	
 	////////////////////////////////////////////////////////////
@@ -361,7 +259,6 @@ class Personnage
 	function modifierPointage(x:Number)
 	{
 		pointage = x;
-		_level0.loader.contentHolder.pointageJoueur = x;
 	}
 	
 	////////////////////////////////////////////////////////////
@@ -374,7 +271,7 @@ class Personnage
 	function modifierArgent(x:Number)
 	{
 		argent = x;
-		_level0.loader.contentHolder.argentJoueur = x;
+		_level0.loader.contentHolder.objectMenu["piece"].countTxt = x;
 	}
 	
 	////////////////////////////////////////////////////////////
@@ -428,23 +325,7 @@ class Personnage
 		listeSurMagasin = mag;
 	}
 	
-	////////////////////////////////////////////////////////////
-	// defini le ID d'un object. appele apres l'achat
-	//
-	function definirCodeIDobjet(nouveauID:Number, vieuxID:Number)
-	{
-		trace(listeDesIDObjets);
 		
-		for(var i:Number = 0; i < listeDesIDObjets.length; i++)
-		{
-			if(listeDesIDObjets[i] == vieuxID)
-			{
-				listeDesIDObjets[i] = nouveauID;
-			}
-		}
-		trace(listeDesIDObjets);
-	}
-	
 	////////////////////////////////////////////////////////////
 	// cette fonction change l'echelle d'une image lorsqu'on utilise
 	// une potion ( bleue ou rouge : grandit ou rapetisse )
@@ -569,15 +450,21 @@ class Personnage
 		this.image._visible = false;
 		this.pointage = 0;
 		this.argent = 0;
-		this.listeDesObjets = new Array();
-		this.listeDesIDObjets = new Array();
+		this.listeDesObjets = new Object();
+		
+		// each array will contain the ID's of objects in possession
+		//this.listeDesObjets["piece"] = new Array();
+		this.listeDesObjets["Banane"] = new Array();
+		this.listeDesObjets["Livre"] = new Array();
+		this.listeDesObjets["Boule"] = new Array();
+		
 		this.faireCollision = null;
 		this.nom = nom;
 		this.listeSurMagasin = mag;
 		this.minigameLoade = false;
 		this.role = role;
 	    	
-		}
+	}// end constr
 	
 	
 	////////////////////////////////////////////////////////////
@@ -644,10 +531,10 @@ class Personnage
 						
 							var minigame:MovieClip;   
 							minigame = _level0.loader.contentHolder.miniGameLayer.attachMovie("GUI_magasin", "magasin", 9997);
-							minigame._x = -6;
-							minigame._y = -20;
-							minigame._xscale = 115;
-							minigame._yscale = 115;
+							minigame._x = 0;
+							minigame._y = 0;
+							minigame._xscale = 100;
+							minigame._yscale = 100;
 							//minigame._width = 550;
 							//minigame._height= 400;
 							minigame._visible = false;
@@ -691,9 +578,9 @@ class Personnage
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
 					
-						if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 						{
-							ajouterImageBanque(this.obtenirNombreObjet(), "Livre", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
+							ajouterImageBanque("Livre");
 						}
 					break;
 				
@@ -702,9 +589,9 @@ class Personnage
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
 
-						if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 						{
-							ajouterImageBanque(this.obtenirNombreObjet(), "Telephone", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
+							ajouterImageBanque("Telephone");
 						}
 					break;
 				
@@ -713,9 +600,9 @@ class Personnage
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
 
-						if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 						{
-							ajouterImageBanque(this.obtenirNombreObjet(), "Papillon", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
+							ajouterImageBanque("Papillon");
 						}
 					break;
 				
@@ -724,9 +611,9 @@ class Personnage
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
 
-						if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 						{
-							ajouterImageBanque(this.obtenirNombreObjet(), "Boule", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
+							ajouterImageBanque("Boule");
 						}
 					break;
 				
@@ -735,9 +622,9 @@ class Personnage
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
 
-						if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 						{
-							ajouterImageBanque(this.obtenirNombreObjet(), "PotionGros", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
+							ajouterImageBanque("PotionGros");
 						}
 					break;
 				
@@ -746,9 +633,9 @@ class Personnage
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
 
-						if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 						{
-							ajouterImageBanque(this.obtenirNombreObjet(), "PotionPetit", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
+							ajouterImageBanque("PotionPetit");
 						}
 					break;
 				
@@ -757,9 +644,9 @@ class Personnage
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
 
-						if(this.obtenirNombreObjet() < 11 && this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 						{
-							ajouterImageBanque(this.obtenirNombreObjet(), "Banane", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
+							ajouterImageBanque("Banane");
 						}
 					break;
 				
