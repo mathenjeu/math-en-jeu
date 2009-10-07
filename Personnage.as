@@ -99,7 +99,7 @@ class Personnage
 	function ajouterObjet(id:Number, objectName:String)
 	{
 		listeDesObjets[objectName].push(id);
-		//ajouterImageBanque(objectName);
+		ajouterImageBanque(objectName);
 	}
 	
 	////////////////////////////////////////////////////////////
@@ -150,7 +150,7 @@ class Personnage
 		// function used to make action of the object on that on click
 		_level0.loader.contentHolder.objectMenu[nomObj + "_mc"].onRelease = function()
 		{
-			if(peutUtiliserObjet(nomObj)&& listeObjets[nomObj].length >= 1)
+			if(peutUtiliserObjet(nomObj)&& (listeObjets[nomObj].length >= 1))
 			{
 				
 					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(listeObjets[nomObj][listeObjets[nomObj].length - 1]);
@@ -161,12 +161,12 @@ class Personnage
 		
 		_level0.loader.contentHolder.objectMenu[nomObj].onRollOver = function()
 		{
-			if(peutUtiliserObjet(nomObj) && listeObjets[nomObj].length >= 1) _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 60;
+			if(peutUtiliserObjet(nomObj) && (listeObjets[nomObj].length >= 1)) _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 60;
 		};
 		
 		_level0.loader.contentHolder.objectMenu[nomObj].onRollOut = function()
 		{
-			if(peutUtiliserObjet(nomObj) && listeObjets[nomObj].length >= 1) _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
+			if(peutUtiliserObjet(nomObj) && (listeObjets[nomObj].length >= 1)) _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
 		};
 		
 		trace("--- FIN ajouterImageBanque ! ---");
@@ -577,77 +577,77 @@ class Personnage
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-					
+				        /*	
 						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 						{
 							ajouterImageBanque("Livre");
-						}
+						}*/
 					break;
 				
 					case "Telephone":
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-
+                        /* 
 						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 						{
 							ajouterImageBanque("Telephone");
-						}
+						}*/
 					break;
 				
 					case "Papillon":
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-
+                        /*
 						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 						{
 							ajouterImageBanque("Papillon");
-						}
+						}*/
 					break;
 				
 					case "Boule":
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-
+                        /*
 						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 						{
 							ajouterImageBanque("Boule");
-						}
+						}*/
 					break;
 				
 					case "PotionGros":
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-
+                        /*
 						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 						{
 							ajouterImageBanque("PotionGros");
-						}
+						}*/
 					break;
 				
 					case "PotionPetit":
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-
+                        /*
 						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 						{
 							ajouterImageBanque("PotionPetit");
-						}
+						}*/
 					break;
 				
 					case "Banane":
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-
+                        /*   
 						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 						{
 							ajouterImageBanque("Banane");
-						}
+						} */
 					break;
 				
 					default :
@@ -681,24 +681,24 @@ class Personnage
 						switch(_level0.loader.contentHolder.minigameToLoad)
 						{
 							case "ileTresor.swf":
-								minigame._x = 8;
-								minigame._y = -30;
-								minigame._width = 800;
-								minigame._height= 550;
+								minigame._x = 40;
+								minigame._y = -40;
+								minigame._width = 670;
+								minigame._height= 500;
 							break;
 							
 							case "balleAuMur2.swf":
 								minigame._x = 0;
 								minigame._y = 40;
-								minigame._width = 570;
-								minigame._height= 410;
+								minigame._width = 550;
+								minigame._height= 400;
 							break;
 							
 							default:
-								minigame._x = 0;
-								minigame._y = 0;
-								minigame._width = 550;
-								minigame._height= 400;
+								minigame._x = 15;
+								minigame._y = - 40;
+								minigame._width = 485;
+								minigame._height= 385;
 							break;
 						}
 						
