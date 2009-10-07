@@ -252,7 +252,7 @@ class GestionnaireEvenements
                 if(listeDesSalles[i].possedeMotDePasse == true)
                 {
 					
-	               guiPWD = _level0.loader.contentHolder.attachMovie("GUI_pwd", "guiPWD", _level0.loader.contentHolder.getNextHighestDepth());
+	               guiPWD = _level0.loader.contentHolder.attachMovie("GUI_pwd", "guiPWD", 2003);//_level0.loader.contentHolder.getNextHighestDepth());
                    guiPWD.textGUI_PWD.text = _root.texteSource_xml.firstChild.attributes.textGUI_PWD;
 					
                    
