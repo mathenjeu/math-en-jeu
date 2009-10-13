@@ -155,18 +155,29 @@ class Personnage
 				
 					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(listeObjets[nomObj][listeObjets[nomObj].length - 1]);
 					_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet(nomObj);
+					_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._xscale = _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._yscale = 100;
+					_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
 				
 			}
 		};
 		
-		_level0.loader.contentHolder.objectMenu[nomObj].onRollOver = function()
+		_level0.loader.contentHolder.objectMenu[nomObj + "_mc"].onRollOver = function()
 		{
-			if(peutUtiliserObjet(nomObj) && (listeObjets[nomObj].length >= 1)) _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 60;
+			if(peutUtiliserObjet(nomObj) && (listeObjets[nomObj].length >= 1))
+			{
+				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 60;
+				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._xscale = _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._yscale = 125;
+				
+			}
 		};
 		
-		_level0.loader.contentHolder.objectMenu[nomObj].onRollOut = function()
+		_level0.loader.contentHolder.objectMenu[nomObj + "_mc"].onRollOut = function()
 		{
-			if(peutUtiliserObjet(nomObj) && (listeObjets[nomObj].length >= 1)) _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
+			if(peutUtiliserObjet(nomObj) && (listeObjets[nomObj].length >= 1))
+			{
+				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
+				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._xscale = _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._yscale = 100;
+			}
 		};
 		
 		trace("--- FIN ajouterImageBanque ! ---");
