@@ -62,6 +62,7 @@ class GestionnaireEvenements
 	private var moveVisibility:Number;  // The number of cases that user can move. At the begining is 3. 
 	                                    // With the 3 running correct answers the level increase by 1 
 	private var langue;
+	private var endGame:Boolean;
 	
 	//var timerInterval:Number;
 	
@@ -136,6 +137,7 @@ class GestionnaireEvenements
         this.listeDesJoueursDansSalle = new Array();
 		this.tabPodiumOrdonneID = new Array();
 		this.moveVisibility = 3;
+		this.endGame = false;
 		var url_serveur:String = _level0.configxml_mainnode.attributes.url_server;
 		var port:Number = parseInt(_level0.configxml_mainnode.attributes.port, 10);
 		
@@ -2411,7 +2413,7 @@ class GestionnaireEvenements
 		for(i=0; i < numeroJoueursDansSalle; i++)
 		{
        				
-			if((undefined != this.listeDesPersonnages[i].nom) && ("Inconnu" != this.listeDesPersonnages[i].nom) && !(this.listeDesPersonnages[i].role == 2 && this.typeDeJeu == "Tournament")){
+			if((undefined != this.listeDesPersonnages[i].nom) && ("Inconnu" != this.listeDesPersonnages[i].nom) && !(this.listeDesPersonnages[i].role == 2 || this.typeDeJeu == "Tournament")){
 				
 				
 				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["nomJoueur"+(j+1)] = this.listeDesPersonnages[i].nom;
@@ -2426,23 +2428,23 @@ class GestionnaireEvenements
 				this.listeDesPersonnages[i].numPointage = j;   //TODO ????
 				this["tete"+j]=new MovieClip();
 				this["tete"+j] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["tete"+(j+1)].attachMovie("tete" + idDessin, "Tete"+j, -10100+j);
-				this["tete"+j]._x = -7;
+				this["tete"+j]._x = -6;
 				this["tete"+j]._y = -6;
-				this["tete"+j]._xscale = 100;
-				this["tete"+j]._yscale = 100;
+				this["tete"+j]._xscale = 60;
+				this["tete"+j]._yscale = 60;
 				j++;
 			}
 			
 
 		}
-		
+		/*  eliminate!!!
 		for(i = j; i < 12; i++)
 		{
 			
 				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)] = undefined;
 				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)] = -1;
 		 	
-		}
+		}*/
 		
 		// put the face of my avatar in the panel (next to my name)
 		_level0.loader.contentHolder.myObj = new Object();
@@ -2498,6 +2500,8 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder.objectMenu.Livre.countTxt = 0;
 		_level0.loader.contentHolder.objectMenu.piece.countTxt = 0;
 
+        remplirMenuPointage();
+		
         trace("fin de evenementPartieDemarree    "+getTimer());
         trace("*********************************************\n");
     }  
@@ -2569,6 +2573,7 @@ class GestionnaireEvenements
 		//jouersStarted.sortOn("pointage");
 		//sort the elements using a compare function
 		jouersStarted.sort(compareByPointsAscending);
+		jouersStarted.reverse();
 		
 		
 		for (var i:Number = 0; i < this.listeDesPersonnages.length; i++) {
@@ -2597,10 +2602,10 @@ class GestionnaireEvenements
 			
 			//this["tete"+j]=new MovieClip();
 			this["tete" + (i + 1)] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+ (i + 1)]["tete"+ (i + 1)].attachMovie("tete" + jouersStarted[i].idessin, "Tete" + i, -10100 + i);
-			this["tete" + (i + 1)]._x = -7;
+			this["tete" + (i + 1)]._x = -6;
 			this["tete" + (i + 1)]._y = -6;
-			this["tete" + (i + 1)]._xscale = 55;
-			this["tete" + (i + 1)]._yscale = 55;
+			this["tete" + (i + 1)]._xscale = 60;
+			this["tete" + (i + 1)]._yscale = 60;
 	
     	} 
     }// end methode
@@ -2690,13 +2695,18 @@ class GestionnaireEvenements
 		
 		// NOTE HUGO : Voici comment placer des variables dans des champs de texte dynamique
 		// demonstrate the result
-		for(i = 0; i < this.tabPodiumOrdonneID.length; i++){
+		for(i = 1; i <= this.tabPodiumOrdonneID.length; i++){
 					
-			_level0.loader.contentHolder["nom"+(i+1)] = this.tabPodiumOrdonneID[i].nomUtilisateur;	
-			_level0.loader.contentHolder["pointage"+(i+1)] = this.tabPodiumOrdonneID[i].pointage;
-									
+			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["nomJoueur" + i] = this.tabPodiumOrdonneID[i - 1].nomUtilisateur;	
+			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["pointageJoueur" + i] = this.tabPodiumOrdonneID[i - 1].pointage;
+			//_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["tete" + i].attachMovie("tete" + this.tabPodiumOrdonneID[i].idessin,  "Tete" + i, -10100 + i);
+            this["tete" + i] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["tete" + i].attachMovie("tete" + this.tabPodiumOrdonneID[i - 1].idessin,  "Tete" + i, -10100 + i - 1);
+			this["tete" + i]._x = -6;
+			this["tete" + i]._y = -6;
+			this["tete" + i]._xscale = 60;
+			this["tete" + i]._yscale = 60;		
     	}
-    	        	    
+    	this.endGame = true;        	    
     	trace("fin de evenementPartieTerminee    ");
     	trace("*********************************************\n");
     }// end methode
@@ -2722,19 +2732,20 @@ class GestionnaireEvenements
     	pt_final = _level0.loader.contentHolder.planche.calculerPositionTourne(objetEvenement.nouvellePosition.x, objetEvenement.nouvellePosition.y);
    
 		trace("juste avant la teleportation nom du perso et param  ");
-		_level0.loader.contentHolder.planche.teleporterPersonnage(objetEvenement.nomUtilisateur, pt_initial.obtenirX(), pt_initial.obtenirY(), pt_final.obtenirX(), pt_final.obtenirY(), objetEvenement.collision);
+		if(!endGame){
+			_level0.loader.contentHolder.planche.teleporterPersonnage(objetEvenement.nomUtilisateur, pt_initial.obtenirX(), pt_initial.obtenirY(), pt_final.obtenirX(), pt_final.obtenirY(), objetEvenement.collision);
 	
-	    // update players array
-		for(var i:Number=0; i < numeroJoueursDansSalle; i++){
+	        // update players array
+		   for(var i:Number=0; i < numeroJoueursDansSalle; i++){
 					
-			if(this.listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur){
-			   this.listeDesPersonnages[i].pointage = objetEvenement.pointage;
-			}
+			   if(this.listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur){
+			      this.listeDesPersonnages[i].pointage = objetEvenement.pointage;
+			   }
+		   }
+		
+		   // show the results
+		   remplirMenuPointage();
 		}
-		
-		// show the results
-		remplirMenuPointage();
-		
      	trace("fin de evenementJoueurDeplacePersonnage");
      	trace("*********************************************\n");
     }   
