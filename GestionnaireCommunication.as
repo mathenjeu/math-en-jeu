@@ -2529,7 +2529,7 @@ class GestionnaireCommunication
      * @param Number nomObj : le nom de l'objet a acheter
      */
 	public function utiliserObjet(acheterObjetDelegate:Function,
-                                       idObj:Number)
+                                       idObj:Number, bananaName:String)
     {
         trace("ds gestCom utiliserObjet");
         // Si la partie est commencee, alors on peut continuer le code de la
