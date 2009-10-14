@@ -392,11 +392,13 @@ class GestionnaireEvenements
     }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////    
-	function utiliserObjet(id:Number)
+	function utiliserObjet(id:Number, bananaName:String)
     {
         trace("*********************************************");
         trace("debut de utiliserObjet : " + id);
-        this.objGestionnaireCommunication.utiliserObjet(Delegate.create(this, this.retourUtiliserObjet), id);  
+		
+			this.objGestionnaireCommunication.utiliserObjet(Delegate.create(this, this.retourUtiliserObjet), id, bananaName);  
+	   
         trace("fin de utiliserObjet");
         trace("*********************************************\n");
     }
@@ -1620,8 +1622,9 @@ class GestionnaireEvenements
 						_level0.loader.contentHolder.box_question.gotoAndPlay(7);
 					break;
 				
-					case "OK":
-						trace("banane ou potion");
+					case "Banane":
+						trace("banane");
+						_level0.loader.contentHolder.toss.removeMovieClip();
 					break;
 				
 					default:
@@ -2672,6 +2675,7 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder["bananeUser"].removeMovieClip();
 		_level0.loader.contentHolder["GUI_utiliserObjet"].removeMovieClip();
 		_level0.loader.contentHolder["box_question"].removeMovieClip();
+		_level0.loader.contentHolder.toss.removeMovieClip();
 		_level0.loader.contentHolder["fond_MiniGame"]._y += 400;
 		
 		//s'assurer que la musique s'arrete en fin de partie

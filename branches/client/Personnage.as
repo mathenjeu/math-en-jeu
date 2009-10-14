@@ -152,13 +152,23 @@ class Personnage
 		{
 			if(peutUtiliserObjet(nomObj)&& (listeObjets[nomObj].length >= 1))
 			{
+				if(nomObj == "Banane"){
+                      var objID:Object = new Object();
+					  objID.id = listeObjets[nomObj][listeObjets[nomObj].length - 1];
+					 
+			          var bananaClip:MovieClip;
+                      bananaClip = _level0.loader.contentHolder.attachMovie("bananaToss", "toss", 2001, objID);
+                      bananaClip._x = 22;
+                      bananaClip._y = 55;
+					  
+		        }else{
+					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(listeObjets[nomObj][listeObjets[nomObj].length - 1], "");
+				}
 				
-					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(listeObjets[nomObj][listeObjets[nomObj].length - 1]);
-					_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet(nomObj);
-					_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._xscale = _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._yscale = 100;
-					_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
-				
-			}
+				_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet(nomObj);
+				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._xscale = _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._yscale = 100;
+				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
+			}//end 1st if
 		};
 		
 		_level0.loader.contentHolder.objectMenu[nomObj + "_mc"].onRollOver = function()
