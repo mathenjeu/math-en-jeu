@@ -51,7 +51,7 @@
 	  editRoomText = "Éditer"
 	  saveReportText = "Sauver"
 	  printReportText = "Imprimer"
-	  reportTextChange = "Selecter une salle pour voir le rapport..."
+	  reportTextChange = "Sélectionnez une salle pour voir le rapport..."
 	  roomTimeLabel = "Temps partie"
 	  All = "Toutes"
 	  
@@ -133,12 +133,12 @@
     errorPWD = "Mauvais mot de passe! Donnez une mot correct ou faitez une autre choix! "
 	  pwdAlert = "Erreur!"
 	  textGUI_PWD = "La salle demande un mot de passe..."
-	  errorSelect = "Selectez une salle avant!"
+	  errorSelect = "Sélectionnez une salle"
 	  nomAlert = "Donnez une nom SVP!"
 	  descAlert = "Donnez une description, SVP!"
-	  dateBeginAlert = "Date de début ne sélectée pas!"
-	  dateEndAlert = "Date de fin ne sélectée pas!"
-	  passAlert = "Le mot de passe va permettre seulement à vos élèves d’accéder à la salle."
+	  dateBeginAlert = "Date de début invalide"
+	  dateEndAlert = "Date de fin invalide"
+	  passAlert = "Le mot de passe permet de contrôler l’accéder à la salle."
   
     
 	
