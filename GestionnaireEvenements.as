@@ -395,7 +395,7 @@ class GestionnaireEvenements
 	function utiliserObjet(id:Number, bananaName:String)
     {
         trace("*********************************************");
-        trace("debut de utiliserObjet : " + id);
+        trace("debut de utiliserObjet : " + id + " name : " + bananaName );
 		
 			this.objGestionnaireCommunication.utiliserObjet(Delegate.create(this, this.retourUtiliserObjet), id, bananaName);  
 	   
@@ -2575,8 +2575,8 @@ class GestionnaireEvenements
 		
 		//jouersStarted.sortOn("pointage");
 		//sort the elements using a compare function
-		jouersStarted.sort(compareByPointsAscending);
-		jouersStarted.reverse();
+		jouersStarted.sort(compareByPointsDescending);
+		//jouersStarted.reverse();
 		
 		
 		for (var i:Number = 0; i < this.listeDesPersonnages.length; i++) {
@@ -2653,8 +2653,8 @@ class GestionnaireEvenements
 						
 		//this.tabPodiumOrdonneID.sortOn("pointage");
 		//sort the elements using a compare function
-		this.tabPodiumOrdonneID.sort(compareByPointsAscending);
-		this.tabPodiumOrdonneID.reverse();
+		this.tabPodiumOrdonneID.sort(compareByPointsDescending);
+		//this.tabPodiumOrdonneID.reverse();
 		
 		// to find the picture
 		for (i = 0; i < 12; i++) {
@@ -2716,9 +2716,15 @@ class GestionnaireEvenements
     }// end methode
 	
 	// methode used as compare function to sort our players by their points
-	private function compareByPointsAscending(element1, element2)
+	public function compareByPointsAscending(element1, element2)
 	{
 		return element1.pointage - element2.pointage;
+	}
+	
+	// methode used as compare function to sort our players by their points
+	public function compareByPointsDescending(element1, element2)
+	{
+		return element2.pointage - element1.pointage;
 	}
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////

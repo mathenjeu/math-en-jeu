@@ -162,7 +162,7 @@ class Personnage
                       bananaClip._y = 55;
 					  
 		        }else{
-					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(listeObjets[nomObj][listeObjets[nomObj].length - 1], "");
+					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(listeObjets[nomObj][listeObjets[nomObj].length - 1], "NA");
 				}
 				
 				_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet(nomObj);

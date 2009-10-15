@@ -2482,7 +2482,7 @@ class GestionnaireCommunication
             var objObjetXML:XML = new XML();
             // Creer tous les noeuds de la commande
             var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
-            var objNoeudParametreId:XMLNode = objObjetXML.createElement("parametre");
+			var objNoeudParametreId:XMLNode = objObjetXML.createElement("parametre");
 			var objNoeudParametreIdTexte:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(idObj)));
 			objNoeudParametreId.attributes.type = "id";
 			
@@ -2531,7 +2531,7 @@ class GestionnaireCommunication
 	public function utiliserObjet(acheterObjetDelegate:Function,
                                        idObj:Number, bananaName:String)
     {
-        trace("ds gestCom utiliserObjet");
+        trace("ds gestCom utiliserObjet: " + bananaName);
         // Si la partie est commencee, alors on peut continuer le code de la
         // fonction
 		trace("intEtatClient : " + intEtatClient);
@@ -2551,13 +2551,24 @@ class GestionnaireCommunication
             // Creer tous les noeuds de la commande
             var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
             var objNoeudParametreId:XMLNode = objObjetXML.createElement("parametre");
+			var objNoeudParametreTossName:XMLNode = objObjetXML.createElement("parametre");
+			
 			var objNoeudParametreIdTexte:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(idObj)));
+			var objNoeudParametreTossNameTexte:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(bananaName));
+			
 			objNoeudParametreId.attributes.type = "id";
-            // Construire l'arbre du document XML
+			objNoeudParametreTossName.attributes.type = "player";
+            
+			// Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "UtiliserObjet";
+			
 			objNoeudParametreId.appendChild(objNoeudParametreIdTexte);
+			objNoeudParametreTossName.appendChild(objNoeudParametreTossNameTexte);
+			
 			objNoeudCommande.appendChild(objNoeudParametreId);
+			objNoeudCommande.appendChild(objNoeudParametreTossName);
+			
 	  		objObjetXML.appendChild(objNoeudCommande);
             // Declaration d'un nouvel objet qui va contenir les informations sur
             // la commande a traiter courante
