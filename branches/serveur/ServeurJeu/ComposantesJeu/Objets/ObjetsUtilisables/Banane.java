@@ -68,15 +68,20 @@ public class Banane extends ObjetUtilisable
 		{
 			// player under Banana
 			JoueurVirtuel vsecond = player.obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(nomJoueurChoisi); 
-			vsecond.isUnderBananaEffect = player.obtenirNomUtilisateur();
-			
+			if(vsecond != null){
+			   vsecond.isUnderBananaEffect = player.obtenirNomUtilisateur();
 			// Create TimerTask and Timer.
-			BananaTask bTask = new BananaTask(vsecond);
-			Timer bTimer = new Timer();
-			//bkTimer.cancel();
-			
-			// used timer to take out effects of banana after the needed time
-			bTimer.schedule(bTask, Seconds * 1000);
+				BananaTask bTask = new BananaTask(vsecond);
+				Timer bTimer = new Timer();
+				//bkTimer.cancel();
+				
+				// used timer to take out effects of banana after the needed time
+				bTimer.schedule(bTask, Seconds * 1000);
+				
+			}else{
+				System.out.println("Message Banane : joueur null");
+			}
+						
 		}
 
 		/*
