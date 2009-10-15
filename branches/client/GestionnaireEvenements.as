@@ -2303,46 +2303,7 @@ class GestionnaireEvenements
                 	}
             	}
             	
-				/*// on modifie la liste d'affichage des joueurs
-            	for(i = 0; i < _level0.loader.contentHolder.listeTable.length; i++)
-            	{
-                	if(_level0.loader.contentHolder.listeTable.getItemAt(i).data == objetEvenement.noTable)
-                	{
-						
-                    	//tableAffichee == true;  // la table etait au prealable affichee
-                    	// si la table contient encore des joueurs
-                    	if(this.listeDesTables[indice].listeJoueurs.length != 0)
-                    	{
-                        	str = "Table  " + this.listeDesTables[indice].no + "   " + this.listeDesTables[indice].temps + " min.";
-                        	for (j= 0; j < this.listeDesTables[indice].listeJoueurs.length; j++)
-                        	{
-                            	str = str + "\n   - " + this.listeDesTables[indice].listeJoueurs[j].nom;
-								
-                        	}
-							str = str +  "\n  ";
-                        	_level0.loader.contentHolder.listeTable.replaceItemAt(i, {label : str, data : objetEvenement.noTable});
-                        	break;
-                    	}
-                    	// si la table est vide on ne l'affiche plus
-                    	else
-                    	{
-                        	_level0.loader.contentHolder.listeTable.removeItemAt(i);
-                        	break;
-                    	} 
-                	}
-            	}
-	    
-       		    // si la table n'etait pas affichee, on l'affiche
-            	if(tableAffichee == false)
-            	{
-                	str = "Table  " + this.listeDesTables[indice].no + "  " + this.listeDesTables[indice].temps + " min.";
-                	for (j= 0; j < this.listeDesTables[indice].listeJoueurs.length; j++)
-                	{
-                    	str = str + "\n  - " + this.listeDesTables[indice].listeJoueurs[j].nom;
-                	}
-					str = str +  "\n  ";
-                	_level0.loader.contentHolder.listeTable.replaceItemAt(i, {label : str, data : objetEvenement.noTable});
-            	}	*/    
+				
         	}
     	}
 		  _level0.loader.contentHolder.listeTable.removeAll();
@@ -2411,52 +2372,48 @@ class GestionnaireEvenements
 		// et on met la face de leur avatar a cote de leur nom
 		// Initialise our opponents' name and score
 		// and put the face of our opponents' avatar in the panel (next to their name)
- 		
+ 				
 		j=0;
 		for(i=0; i < numeroJoueursDansSalle; i++)
 		{
        				
-			if((undefined != this.listeDesPersonnages[i].nom) && ("Inconnu" != this.listeDesPersonnages[i].nom) && !(this.listeDesPersonnages[i].role == 2 || this.typeDeJeu == "Tournament")){
+			if((undefined != this.listeDesPersonnages[i].nom) && ("Inconnu" != this.listeDesPersonnages[i].nom) && !(this.listeDesPersonnages[i].role == 2 && this.typeDeJeu == "Tournament")){
 				
 				
-				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["nomJoueur"+(j+1)] = this.listeDesPersonnages[i].nom;
-				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["pointageJoueur"+(j+1)] = 0;
-				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]._visible=true;
-				var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
-				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
-				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)].idStart = idDessin;  //TODO ????
-				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)].idPers = idPers;     //TODO ????  
+				//_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["nomJoueur"+(j+1)] = this.listeDesPersonnages[i].nom;
+				//_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["pointageJoueur"+(j+1)] = 0;
+				//_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]._visible=true;
+				//var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
+				//var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
+				//_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)].idStart = idDessin;  //TODO ????
+				//_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)].idPers = idPers;     //TODO ????  
 			
 				//trace(i + " nom: " + this.listeDesPersonnages[i].nom + " id:" + idPers);//this.listeDesPersonnages[i].id);
-				this.listeDesPersonnages[i].numPointage = j;   //TODO ????
-				this["tete"+j]=new MovieClip();
+				//this.listeDesPersonnages[i].numPointage = j;   //TODO ????
+				this["tete"+j] = new MovieClip();
+				/*
 				this["tete"+j] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["tete"+(j+1)].attachMovie("tete" + idDessin, "Tete"+j, -10100+j);
 				this["tete"+j]._x = -6;
 				this["tete"+j]._y = -6;
 				this["tete"+j]._xscale = 60;
-				this["tete"+j]._yscale = 60;
+				this["tete"+j]._yscale = 60; */
 				j++;
 			}
 			
 
 		}
-		/*  eliminate!!!
-		for(i = j; i < 12; i++)
-		{
-			
-				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)] = undefined;
-				_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)] = -1;
-		 	
-		}*/
+		
 		
 		// put the face of my avatar in the panel (next to my name)
+		/*
 		_level0.loader.contentHolder.myObj = new Object();
-		var idDessin:Number = calculatePicture(this.listeDesPersonnages[numeroJoueursDansSalle-1].id);
+		
 		var idPers:Number = calculateIDPers(this.listeDesPersonnages[numeroJoueursDansSalle-1].id, idDessin);
 		_level0.loader.contentHolder.myObj.myID = idDessin;
 		_level0.loader.contentHolder.myObj.myIDPers = idPers;
 		_level0.loader.contentHolder.myObj.myNom = this.listeDesPersonnages[numeroJoueursDansSalle-1].nom;
-		
+		*/
+		var idDessin:Number = calculatePicture(this.listeDesPersonnages[numeroJoueursDansSalle-1].id);
 		var maTete:MovieClip = _level0.loader.contentHolder.maTete.attachMovie("tete" + idDessin, "maTete", -10099);
 		maTete._x = -7;
 		maTete._y = -6;
@@ -2495,7 +2452,22 @@ class GestionnaireEvenements
 				}
             }
         }
+		
+		
         //_level0.loader.contentHolder.planche.afficher();
+		for(var k = 0; k < this.listeDesPersonnages.length; k++){
+		 for(i=0; i < this.listeDesPersonnages.length; i++)
+		 {
+			if(( this.listeDesPersonnages[i].nom == "Inconnu") || ( this.listeDesPersonnages[i].nom.substr(0,7) == "Inconnu"))
+			{ 
+			     this.listeDesPersonnages.removeItemAt(i);
+			    
+			}
+			  
+		  
+		  }  // i
+		} // k
+		
         _level0.loader.contentHolder.horlogeNum = 60*objetEvenement.tempsPartie;
 		
 		_level0.loader.contentHolder.objectMenu.Boule.countTxt = "0";
@@ -2550,7 +2522,32 @@ class GestionnaireEvenements
     	trace("fin de evenementJoueurDemarrePartie");
     	trace("*********************************************\n");
     }
-	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	function calculateMenu():Number
+	{
+		// we make an array to sort the players regarding theirs points 
+		var jouersStarted:Array = new Array();
+				
+		for (var i:Number = 0; i < this.listeDesPersonnages.length; i++) {
+					jouersStarted[i] = new Object();
+			        jouersStarted[i].nomUtilisateur = this.listeDesPersonnages[i].nom;
+			        jouersStarted[i].pointage = this.listeDesPersonnages[i].pointage;
+			        jouersStarted[i].role = this.listeDesPersonnages[i].role;
+					jouersStarted[i].idessin = this.listeDesPersonnages[i].idessin;//this.listeDesPersonnages[i].idessin;
+					
+					//trace("Dans menuointage : " + jouersStarted[i].pointage + " " + jouersStarted[i].idessin + " " + this.listeDesPersonnages[i].idessin );
+		}// end for
+		
+		// to cut the holes ...
+		
+		   for(i = 0; i < jouersStarted.length; i++){
+		      if((jouersStarted[i].role == 2 && this.typeDeJeu == "Tournament") || (jouersStarted[i].nomUtilisateur.substr(0,7) == "Inconnu") || (jouersStarted[i].nomUtilisateur == "Inconnu"))   
+		         jouersStarted.removeItemAt(i);
+		   }
+		
+		
+		return jouersStarted.length;
+    }
 	////////////////////////////////////////////////////////////////////////////////////////////////////	
 	function remplirMenuPointage()
     {
@@ -2579,18 +2576,17 @@ class GestionnaireEvenements
 		//jouersStarted.reverse();
 		
 		
-		for (var i:Number = 0; i < this.listeDesPersonnages.length; i++) {
-					
-		}// end for
 		
 		// mettre les id en ordre : tabOrdonne.id contient les id des personnages en ordre de pointage
 		// il suffit de mettre les MC correspondants sur le podium
 		
-		// to cut the holes ...
-		for(i = 0; i < jouersStarted.length; i++){
-		   if((jouersStarted[i].role == 2 && this.typeDeJeu == "Tournament"))   
-		      jouersStarted.removeItemAt(i);
-		}
+		// to control the holes ...
+		
+		   for(i = 0; i < jouersStarted.length; i++){
+		      if((jouersStarted[i].role == 2 && this.typeDeJeu == "Tournament") || (jouersStarted[i].nomUtilisateur.substr(0,7) == "Inconnu"))   
+		         jouersStarted.removeItemAt(i);
+		   }
+		
 		
 		
 		
@@ -2691,10 +2687,12 @@ class GestionnaireEvenements
 		// il suffit de mettre les MC correspondants sur le podium
 		
 		// to cut the holes ...
-		for(i = 0; i < this.tabPodiumOrdonneID.length; i++){
-		   if((this.tabPodiumOrdonneID[i].role == 2 && this.typeDeJeu == "Tournament"))   
-		      this.tabPodiumOrdonneID.removeItemAt(i);
-		}
+		
+		   for(i = 0; i < this.tabPodiumOrdonneID.length; i++){
+		      if((this.tabPodiumOrdonneID[i].role == 2 && this.typeDeJeu == "Tournament") || (this.tabPodiumOrdonneID[i].nomUtilisateur.substr(0,7) == "Inconnu") || (this.tabPodiumOrdonneID[i].nomUtilisateur == "Inconnu") )   
+		         this.tabPodiumOrdonneID.removeItemAt(i);
+		   }  
+		
 		
 		
 		// NOTE HUGO : Voici comment placer des variables dans des champs de texte dynamique
