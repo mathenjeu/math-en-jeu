@@ -2994,7 +2994,7 @@ public class ProtocoleJoueur implements Runnable
 		// Si le nom de la commande est UtiliserObjet, il doit y voir un paramètre
 		else if (noeudCommande.getAttribute("nom").equals(Commande.UtiliserObjet))
 		{
-			if (noeudCommande.getChildNodes().getLength() == 1)
+			if (noeudCommande.getChildNodes().getLength() == 2)
 			{
 				// Déclarer une variable qui va permettre de savoir si le 
 				// noeud enfant est valide
@@ -3787,7 +3787,16 @@ public class ProtocoleJoueur implements Runnable
     {
         // Obtenir l'id de l'objet a utilisé
 		int intIdObjet = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "id").getNodeValue());
+		
 
+		// Si le joueur n'est pas connecté au serveur de jeu, alors il
+		// y a une erreur
+		if (obtenirValeurParametre(objNoeudCommandeEntree, "player").getNodeValue() == null)
+		{
+			// Le joueur ne peut pas utiliser un objet
+			// s'il n'est pas connecté au serveur de jeu
+			objNoeudCommande.setAttribute("nom", "InvalidePlayer");
+		}
 		// Si le joueur n'est pas connecté au serveur de jeu, alors il
 		// y a une erreur
 		if (objJoueurHumain == null)
@@ -3832,7 +3841,8 @@ public class ProtocoleJoueur implements Runnable
 		}
 		else
 		{
-		    // Obtenir l'objet
+			String playerName = obtenirValeurParametre(objNoeudCommandeEntree, "player").getNodeValue();
+			// Obtenir l'objet
 		    ObjetUtilisable objObjetUtilise = objJoueurHumain.obtenirPartieCourante().obtenirObjetUtilisable(intIdObjet);
    
 		    // Obtenir le type de l'objet a utilisé
@@ -3929,7 +3939,25 @@ public class ProtocoleJoueur implements Runnable
             	 // Le reste se fait dans Banane.java 
             	 objNoeudCommande.setAttribute("type", "OK");
 
-            	 // Entiers et Strings pour garder en mémoire les points et les joueurs associés
+                 boolean estHumain =  false; //Le joueur choisi est'il humain?
+       			
+                 // On obtient la liste des joueurs humains, puis la liste des joueurs virtuels
+            	 TreeMap<String, JoueurHumain> listeJoueursHumains = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs();
+            	 Set<Map.Entry<String, JoueurHumain>> nomsJoueursHumains = listeJoueursHumains.entrySet();
+            	 Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = nomsJoueursHumains.iterator();
+            	 Vector<JoueurVirtuel> listeJoueursVirtuels = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();             	 
+            	 
+            	 while(objIterateurListeJoueurs.hasNext() == true)
+            	 {
+            		 if(((Map.Entry<String, JoueurHumain>)(objIterateurListeJoueurs.next())).getValue().equals(playerName))
+            		 {
+            			 estHumain = true;
+            		 }
+
+            	 }
+            	 
+            	 /*
+               	 // Entiers et Strings pour garder en mémoire les points et les joueurs associés
             	 int max1 = 0;
             	 int max2 = 0;
             	 String max1User = "";
@@ -3937,12 +3965,9 @@ public class ProtocoleJoueur implements Runnable
             	 boolean estHumain1 = false;
             	 boolean estHumain2 = false;
 
-            	 // On obtient la liste des joueurs humains, puis la liste des joueurs virtuels
-            	 TreeMap<String, JoueurHumain> listeJoueursHumains = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs();
-            	 Set<Map.Entry<String, JoueurHumain>> nomsJoueursHumains = listeJoueursHumains.entrySet();
-            	 Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = nomsJoueursHumains.iterator();
-            	 Vector<JoueurVirtuel> listeJoueursVirtuels = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();
-
+            	
+                 
+            	 
             	 // On trouve les deux joueurs les plus susceptibles d'ètre affectés
             	 while(objIterateurListeJoueurs.hasNext() == true)
             	 {
@@ -3984,10 +4009,9 @@ public class ProtocoleJoueur implements Runnable
             		 }
             	 }
 
-            	 boolean estHumain; //Le joueur choisi est'il humain?
-       			 //Point positionJoueurChoisi;
-            	 String nomJoueurChoisi;
+            	
 
+            	
             	 if(max1User.equals(objJoueurHumain.obtenirNomUtilisateur()))
             	 {
             		 // Celui qui utilise la banane est le 1er, alors on fait glisser le 2ème
@@ -4003,11 +4027,11 @@ public class ProtocoleJoueur implements Runnable
             		 nomJoueurChoisi = max1User;
             		// if(estHumain) positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(max1User).obtenirPartieCourante().obtenirPositionJoueur());
             		 //else positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(max1User).obtenirPositionJoueur());
-            	 }
+            	 }*/
 
-            	 objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliserObjet(objJoueurHumain.obtenirNomUtilisateur(), nomJoueurChoisi, "Banane", "");
+            	 objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliserObjet(objJoueurHumain.obtenirNomUtilisateur(), playerName, "Banane", "");
             	
-            	 Banane.utiliserBanane(objJoueurHumain, nomJoueurChoisi, estHumain);
+            	 Banane.utiliserBanane(objJoueurHumain, playerName, estHumain);
             	 
              }
 		}
