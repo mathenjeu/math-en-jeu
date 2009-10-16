@@ -3934,7 +3934,7 @@ public class ProtocoleJoueur implements Runnable
             	 
             	 while(objIterateurListeJoueurs.hasNext() == true)
             	 {
-            		 if(((Map.Entry<String, JoueurHumain>)(objIterateurListeJoueurs.next())).getValue().equals(playerName))
+            		 if(((Map.Entry<String, JoueurHumain>)(objIterateurListeJoueurs.next())).getValue().obtenirNomUtilisateur().equals(playerName))
             		 {
             			 estHumain = true;
             		 }
