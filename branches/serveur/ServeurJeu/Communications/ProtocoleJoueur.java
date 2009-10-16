@@ -970,6 +970,7 @@ public class ProtocoleJoueur implements Runnable
 						// du nom de la salle a creer le rapport
 						Node objRoomID = obtenirValeurParametre(objNoeudCommandeEntree, "IDRoom");
                         int room_id = Integer.parseInt(objRoomID.getNodeValue());
+                        //String roomName = objControleurJeu.getRoomName(room_id, this.langue);
 						                       					
 						//add report from DB 
 						String report = objControleurJeu.obtenirGestionnaireBD().getReport(objJoueurHumain.obtenirCleJoueur(), room_id, this.langue);
@@ -986,7 +987,7 @@ public class ProtocoleJoueur implements Runnable
 
 					} else {
 						// Sinon, il y a une erreur car le joueur doit ètre connecté
-						// pour pouvoir cree des salles
+						// pour pouvoir voir le rapport
 						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
 					}
 
@@ -1829,23 +1830,7 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudCommande.setAttribute("nom", "DeplacementNonAutorise");
 					}
 
-					/*// banana has new 
-					// Si quelqu'un a utilisé une banane et c'est ce joueur qui la subit
-					else if(!objJoueurHumain.obtenirPartieCourante().obtenirVaSubirUneBanane().equals(""))
-					{
-						//System.out.println("Ancienne position: " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().x) + " " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().y));
-
-						Banane.utiliserBanane(objJoueurHumain.obtenirPartieCourante().obtenirVaSubirUneBanane(), objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur(), objJoueurHumain.obtenirNomUtilisateur(), objJoueurHumain.obtenirPartieCourante().obtenirTable(), true);
-
-						//System.out.println("Nouvelle position: " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().x) + " " + Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur().y));
-
-						objJoueurHumain.obtenirPartieCourante().definirVaSubirUneBanane("");
-
-						objNoeudCommande.setAttribute("type", "Reponse");
-
-						objNoeudCommande.setAttribute("nom", "Banane");
-
-					} */
+					
 					else
 					{
 						// Trouver la question à poser selon la difficulté et 
@@ -4095,7 +4080,7 @@ public class ProtocoleJoueur implements Runnable
      */
     private void collectPlayerAnswers(int reponseTime) 
     {
-		questionsAnswers.append(":" + reponseTime + "||");
+		questionsAnswers.append("t:" + reponseTime + "||");
 		
 	}// end methode
     
@@ -4104,7 +4089,7 @@ public class ProtocoleJoueur implements Runnable
      */
     private void collectPlayerAnswers(String strReponse, boolean valide) 
     {
-		questionsAnswers.append(":" + strReponse + ":" + valide);
+		questionsAnswers.append("r:" + strReponse + "c:" + valide);
 		
 	}// end methode
     
@@ -4126,7 +4111,7 @@ public class ProtocoleJoueur implements Runnable
      */
     private void collectPlayerAnswers(Question question)
     {
-    	questionsAnswers.append(":" + question.obtenirCodeQuestion());
+    	questionsAnswers.append("q:" + question.obtenirCodeQuestion());
     }//end methode
     
     // getter 
