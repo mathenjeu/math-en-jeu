@@ -1441,7 +1441,7 @@ public class GestionnaireBD
 	 */
 	public String getFullRoomName(String nomSalle) {
 		
-		String completeName = "";
+		String completName = "";
 		
 		try
  		{
@@ -1462,7 +1462,7 @@ public class GestionnaireBD
 				
  				if(rs.next())
  				{
- 					completeName = rs.getString("room_bilingue");
+ 					completName = rs.getString("room_bilingue");
                 }
  			}
  		}
@@ -1475,7 +1475,7 @@ public class GestionnaireBD
  		    e.printStackTrace();			
  		}
 		//System.out.println(completeName);
-		return completeName;
+		return completName;
 	}
 	
 	/*
@@ -1770,6 +1770,7 @@ public class GestionnaireBD
 	//******************************************************************
 	/**
 	 * Methode used to create the report for a room
+	 * @param roomName 
 	 */
 	public String getReport(int creator_id, int room_id, String langue)
 	{
@@ -1781,11 +1782,14 @@ public class GestionnaireBD
 		String first_name = "";
 		String last_name = "";
 		String username = "";
-		
-		if (langue.equals("fr"))
-			report.append("La Salle Nr." + room_id + " " + "\n\n");//objControleurJeu.obtenirListeSalles(langue).get(room_id).getRoomName(langue) + "\n\n");
-		else if (langue.equals("en"))
-			report.append("The Room Nr." + room_id + " " + "\n\n");//objControleurJeu.obtenirListeSalles(langue).get(room_id).getRoomName(langue) + "\n\n");
+		String roomName; 
+		if (langue.equals("fr")){
+			roomName =  this.getRoomName(room_id, 1);
+			report.append("Salle Nr." + room_id + " " + roomName + "\n\n");
+		}else if (langue.equals("en")){
+			roomName =  this.getRoomName(room_id, 2);
+			report.append("The Room Nr." + room_id + " " + roomName + "\n\n");
+		}
 		try
 		{
 
@@ -1826,23 +1830,54 @@ public class GestionnaireBD
 	 */
 	private void makeReport(StringBuffer report, int user_id, int score, String answers, Boolean won, String langue, String first_name, String last_name, String username)
 	{
+		StringTokenizer allAnswers = new StringTokenizer(answers, "||");
+		String levels = allAnswers.nextToken().trim();
+		String answersDescription = allAnswers.nextToken().trim();
 		
         if(langue.equals("fr"))
         {
-        	report.append("Joueur : " + username + "\n  Prenom : " + first_name + "  Nom de famille : " + last_name + "\n");
-        	report.append("Le pointage pour cette partie : " + score + "\n");
-        	report.append("À gagné : " + (won?"vrai":"faux") + "\n");
-        	report.append("Les réponses : " + answers + "\n\n");
+        	report.append("Joueur : " + first_name + " " + last_name + " (Alias: "  +  username +")\n");
+        	report.append("Le pointage pour cette partie : " + score + "  (gagnant: " + (won?"oui":"non") + ")\n");
+        	report.append("Niveaux: " + levels + "\n");
+        	report.append("Détails: (légende: q:numero de la question, r: réponse, c:correct, t:temps)\n " + answersDescription + "\n\n");
         }
         else if(langue.equals("en"))
         {
-        	report.append("User : " + username + "\n  Name : " + first_name + "  Last name: " + last_name + "\n");
-        	report.append("Points : " + score + "\n");
-        	report.append("He won : " + won + "\n");
-        	report.append("Answers : " + answers + "\n\n");
+        	report.append("User : " + first_name + " " + last_name + " (Alias: " + username + ")\n");
+        	report.append("Points : " + score + ". He won : " + won + "\n");
+        	report.append("Levels : " + levels + "\n");
+        	report.append("Details : (legend: q:number of question, r:answer, c:correct, t:time)\n" + answersDescription + "\n\n");
         }
 		
-	}
+	}// end methode
+	
+	/**
+	 * Methode satellite to the makeReport()
+	 */
+	private String getRoomName(int roomId, int langue)
+	{
+		String roomName = "";
+		try
+		{
+
+			synchronized(requete)
+			{
+
+				ResultSet rs = requete.executeQuery("SELECT name FROM room_info WHERE room_id = '" + roomId + "' AND language_id = '" + langue + "';");
+				while (rs.next()){
+					roomName = rs.getString("name");
+				}
+
+			}	
+		}
+        catch (Exception e)
+            {
+               System.out.println(GestionnaireMessages.message("bd.erreur_create_report_get_name") + e.getMessage());
+            }
+		return roomName;
+		
+	}// end methode
+	
 
 
 	/**
@@ -1867,7 +1902,7 @@ public class GestionnaireBD
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery( "SELECT room.room_id FROM room, room_info where user_id = " + userID + " and room.room_id = room_info.room_id and language_id = " + cleLang + ";" );
+				ResultSet rs = requete.executeQuery( "SELECT room.room_id FROM room, room_info where user_id = '" + userID + "' and room.room_id = room_info.room_id and language_id = " + cleLang + ";" );
 				while(rs.next())
 				{
 					int roomId = rs.getInt("room.room_id");
