@@ -313,7 +313,8 @@
 			GUIerreurRetroaction = "Math en jeu is unable to load the retroaction. Please check your internet connection or communicate with the SMAC technical team. We are sincerely sorry that you are experimenting this problem."
 
 
-			GUIbanane = "A banana has been used. This character will be moved away from the «Win The Game» cell."	
+			GUIbanane = "just threw a banana at you.
+For the next 90 seconds, the questions you'll be asked will be more difficult. Also, your allowed movements have been diminished by 2 steps."	
 			
 			GUIbananeUser = "You used a banana."
 
