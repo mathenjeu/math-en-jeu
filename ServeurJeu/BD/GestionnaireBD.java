@@ -1721,6 +1721,11 @@ public class GestionnaireBD
 					prepStatement.setInt(2, 3);
 					prepStatement.setInt(3, 2);
 					prepStatement.addBatch();
+					
+					prepStatement.setInt(1, room_id);
+					prepStatement.setInt(2, 7);
+					prepStatement.setInt(3, 3);
+					prepStatement.addBatch();
 				
 					prepStatement.executeBatch();
 				
