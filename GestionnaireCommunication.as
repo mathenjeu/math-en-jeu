@@ -848,16 +848,17 @@ class GestionnaireCommunication
 									
 									//objEvenement["NouvellePositionX"] = noeudEvenement.firstChild.nextSibling.nextSibling.nextSibling.firstChild.firstChild.firstChild;
 									//objEvenement["NouvellePositionY"] = noeudEvenement.firstChild.nextSibling.nextSibling.nextSibling.firstChild.firstChild.nextSibling.firstChild;
+									if(_level0.loader.contentHolder.objGestionnaireEvenements.nomUtilisateur == objEvenement["joueurAffecte"]){
+									   var twMove:Tween;
+									   var guiBanane:MovieClip;
+									   guiBanane = _level0.loader.contentHolder.attachMovie("GUI_banane", "banane", 9998);
+									   guiBanane._y = 200;
+									   guiBanane._x = 275;
+									   _level0.loader.contentHolder["banane"].nomCible = objEvenement["joueurAffecte"];
+									   _level0.loader.contentHolder["banane"].nomJoueurUtilisateur = objEvenement["joueurQuiUtilise"];
 									
-									var twMove:Tween;
-									var guiBanane:MovieClip;
-									guiBanane = _level0.loader.contentHolder.attachMovie("GUI_banane", "banane", 9998);
-									guiBanane._y = 200;
-									guiBanane._x = 275;
-									_level0.loader.contentHolder["banane"].nomCible = objEvenement["joueurAffecte"];
-									
-									twMove = new Tween(guiBanane, "_alpha", Strong.easeOut, 40, 100, 1, true);
-									
+									   twMove = new Tween(guiBanane, "_alpha", Strong.easeOut, 40, 100, 1, true);
+									}// end if
 								break;
 								
 								case "PotionPetit":
