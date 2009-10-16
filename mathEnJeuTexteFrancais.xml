@@ -313,7 +313,8 @@
 			GUIerreurQuestion = "Math en jeu est incapable de télécharger la question. S'il-vous-plait veillez vérifier votre connexion internet. Si le problème persiste, communiquez avec l'équipe technique de SMAC. Nous sommes sincèrement désolé que vous éprouviez de telles difficultés."
 			GUIerreurRetroaction = "Math en jeu est incapable de télécharger la rétroaction. S'il-vous-plait veillez vérifier votre connexion internet. Si le problème persiste, communiquez avec l'équipe technique de SMAC. Nous sommes sincèrement désolé que vous éprouviez de telles difficultés."	
 			
-			GUIbanane = "Une banane a été utilisée. Ce personnage sera déplacé à une plus grande distance de la case «Gagne La Partie»."
+			GUIbanane = "vous a lancé une banane.
+Pour les prochaines 90 secondes, les questions qui vous seront posées seront plus difficiles. Aussi, vos déplacements possibles ont été réduits de 2 pas."
 			
 			GUIbananeUser = "Vous avez utilisé une banane."
 			
