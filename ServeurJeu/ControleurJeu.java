@@ -490,7 +490,7 @@ public class ControleurJeu
 	}
 
 	/**
-	 * Cette fonction permet de déterminer si la salle dont le nom est passé
+	 * Cette fonction permet de déterminer si la salle dont le id est passé
 	 * en paramètres existe déjà ou non.
 	 * 
 	 * @param String nomSalle : Le nom de la salle
@@ -503,6 +503,17 @@ public class ControleurJeu
 		// Retourner si la salle existe déjà ou non
 		synchronized(lstSalles){
 		   return lstSalles.containsKey(idRoom);//objGestionnaireBD.getFullRoomName(nomSalle));
+		}
+	}
+	
+	public String getRoomName(int idRoom, String lang)
+	{
+		// Retourner si la salle existe déjà ou non
+		synchronized(lstSalles){
+		   if(lstSalles.containsKey(idRoom))
+			return lstSalles.get(idRoom).getRoomName(lang);
+		   else
+			return "Not exist";
 		}
 	}
 	
