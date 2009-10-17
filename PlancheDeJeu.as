@@ -673,10 +673,17 @@ class PlancheDeJeu
 	
 					level = (tableauDesCases.length*tableauDesCases[0].length) +(temp*tableauDesCases[0].length)+Number(p.obtenirC()) + Number(1);
 					//trace("ds if,  level  "+level);
-					brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
+					if(tableauDesCases[temp][p.obtenirC()].obtenirType() > 40000)
+					{
+					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
+					   tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();
+					}else{
+					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
+					   brille._alpha = 0;
+					}
 					brille._x = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._x;
 					brille._y = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._y;
-					brille._alpha = 0;
+					//brille._alpha = 0;
 					brille._width = largeurDeCase/0.55;
 					brille._height = hauteurDeCase/0.55;//0.85
 					brille._ligne = new Object();
@@ -693,6 +700,7 @@ class PlancheDeJeu
 						coordonnees.definirY(this._colonne);
 						_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 						_level0.loader.contentHolder.objGestionnaireEvenements.deplacerPersonnage(coordonnees);
+						tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().removeShineWin();
 					};
 					tableauDesCases[temp][p.obtenirC()].definirCasePossible(brille);
 			
@@ -726,10 +734,18 @@ class PlancheDeJeu
 					// trace("tableau des cases[0]  vs  mat[]  : "+ tableauDesCases[0].length+"   "+mat[0].length);
 					level = (tableauDesCases.length*tableauDesCases[0].length)  +  ((temp)*tableauDesCases[0].length)  +  Number(p.obtenirC()) + Number(1);
 					// trace("ds if,  level:  "+level);
-					brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
+					if(tableauDesCases[temp][p.obtenirC()].obtenirType() > 40000 ){
+					   
+					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
+					   tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();
+					}else{
+					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
+					   brille._alpha = 0;
+					}
+					//brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					brille._x = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._x;
 					brille._y = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._y;
-					brille._alpha = 0;
+					
 					brille._width = largeurDeCase/0.55;
 					brille._height = hauteurDeCase/0.55;//0.85;
 					brille._ligne = new Object();
@@ -746,7 +762,8 @@ class PlancheDeJeu
 						coordonnees.definirY(this._colonne);
 				
 						_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-						_level0.loader.contentHolder.objGestionnaireEvenements.deplacerPersonnage(coordonnees);   
+						_level0.loader.contentHolder.objGestionnaireEvenements.deplacerPersonnage(coordonnees); 
+						tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().removeShineWin();
 					};
 					this.tableauDesCases[temp][p.obtenirC()].definirCasePossible(brille);
 			
@@ -777,10 +794,17 @@ class PlancheDeJeu
 			
 					level = (tableauDesCases.length*tableauDesCases[0].length) + Number(p.obtenirL()*tableauDesCases[0].length) + temp + Number(1);
 					//trace("ds if : level :   "+level);
-					brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
+					if(tableauDesCases[p.obtenirL()][temp].obtenirType() > 40000){
+					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
+					   tableauDesCases[p.obtenirL()][temp].obtenirWinTheGame().shineWin();
+					}else{
+					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
+					   brille._alpha = 0;
+					}
+					//brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					brille._x = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._x;
 					brille._y = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._y;
-					brille._alpha = 0;
+					
 					brille._width = largeurDeCase/0.55;
 					brille._height = hauteurDeCase/0.55;//0.85;
 					brille._ligne = new Object();
@@ -798,7 +822,7 @@ class PlancheDeJeu
 				
 						_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 						_level0.loader.contentHolder.objGestionnaireEvenements.deplacerPersonnage(coordonnees);
-			   
+			            tableauDesCases[p.obtenirL()][temp].obtenirWinTheGame().removeShineWin(); 
 					};
 					this.tableauDesCases[p.obtenirL()][temp].definirCasePossible(brille);
 			
@@ -828,10 +852,17 @@ class PlancheDeJeu
 			
 					level = (tableauDesCases.length*tableauDesCases[0].length) + (Number(p.obtenirL())*tableauDesCases[0].length)+temp+Number(1);
 					//trace("ds if,  level: "+level);
-					brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
+					if(tableauDesCases[p.obtenirL()][temp].obtenirType() > 40000){
+					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
+					   tableauDesCases[p.obtenirL()][temp].obtenirWinTheGame().shineWin();
+					}else{
+					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
+					   brille._alpha = 0;
+					}
+					//brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					brille._x = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._x;
 					brille._y = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._y;
-					brille._alpha = 0;
+					
 					brille._width = largeurDeCase/0.55;
 					brille._height = hauteurDeCase/0.55;//0.85;
 					brille._ligne = new Object();
@@ -849,6 +880,7 @@ class PlancheDeJeu
 				
 						_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 						_level0.loader.contentHolder.objGestionnaireEvenements.deplacerPersonnage(coordonnees);
+						tableauDesCases[p.obtenirL()][temp].obtenirWinTheGame().removeShineWin(); 
 					};
 					this.tableauDesCases[p.obtenirL()][temp].definirCasePossible(brille);
 			

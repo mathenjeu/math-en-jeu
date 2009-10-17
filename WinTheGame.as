@@ -66,8 +66,18 @@ class WinTheGame
 	// constructeur
 	function WinTheGame(niveau:Number)
 	{
-		image = _level0.loader.contentHolder.referenceLayer.attachMovie("winTheGame", "winTheGame" + niveau, niveau);  
+		image = _level0.loader.contentHolder.referenceLayer.attachMovie("winPoint", "winPoint" + niveau, niveau);  
 		image._visible = false;
+	}
+	
+	function shineWin()
+	{
+		this.image._visible = false;
+	}
+	
+	function removeShineWin()
+	{
+		this.image._visible = true;
 	}
 
 	

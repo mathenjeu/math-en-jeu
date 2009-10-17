@@ -157,7 +157,7 @@ class Personnage
 					  objID.id = listeObjets[nomObj][listeObjets[nomObj].length - 1];
 					 
 			          var bananaClip:MovieClip;
-                      bananaClip = _level0.loader.contentHolder.attachMovie("bananaToss", "toss", 2001, objID);
+                      bananaClip = _level0.loader.contentHolder.attachMovie("bananaToss", "toss", 2021, objID);
                       bananaClip._x = 22;
                       bananaClip._y = 55;
 					  
@@ -466,7 +466,8 @@ class Personnage
 		if(!(role == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") ) 
 		   this.image = _level0.loader.contentHolder.referenceLayer.attachMovie(nomClip, "Personnage"+niveau, niveau);
 		
-		this.image.dText.nom = nom;
+		this.image.dtNomX.text = nom;
+		this.image.dText.nomX = nom;
 		this.image.nom = nom;
 		this.image._visible = false;
 		this.pointage = 0;
