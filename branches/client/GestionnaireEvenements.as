@@ -353,6 +353,7 @@ class GestionnaireEvenements
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].role = this.userRole;
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].pointage = 0;
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].idessin = calculatePicture(no);
+		this.listeDesPersonnages[numeroJoueursDansSalle-1].win = 0;
         this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), Delegate.create(this, this.evenementPartieTerminee), no);//this.idPersonnage);//  
 	
 		trace("fin de demarrerPartie");
@@ -2455,7 +2456,7 @@ class GestionnaireEvenements
 		
 		
         //_level0.loader.contentHolder.planche.afficher();
-		for(var k = 0; k < this.listeDesPersonnages.length; k++){
+		for(var k = 0; k <= this.listeDesPersonnages.length; k++){
 		 for(i=0; i < this.listeDesPersonnages.length; i++)
 		 {
 			if(( this.listeDesPersonnages[i].nom == "Inconnu") || ( this.listeDesPersonnages[i].nom.substr(0,7) == "Inconnu"))
@@ -2467,6 +2468,8 @@ class GestionnaireEvenements
 		  
 		  }  // i
 		} // k
+		
+		
 		
         _level0.loader.contentHolder.horlogeNum = 60*objetEvenement.tempsPartie;
 		
@@ -2544,6 +2547,10 @@ class GestionnaireEvenements
 		      if((jouersStarted[i].role == 2 && this.typeDeJeu == "Tournament") || (jouersStarted[i].nomUtilisateur.substr(0,7) == "Inconnu") || (jouersStarted[i].nomUtilisateur == "Inconnu"))   
 		         jouersStarted.removeItemAt(i);
 		   }
+		   for(i = 0; i < jouersStarted.length; i++){
+		      if((jouersStarted[i].role == 2 && this.typeDeJeu == "Tournament") || (jouersStarted[i].nomUtilisateur.substr(0,7) == "Inconnu") || (jouersStarted[i].nomUtilisateur == "Inconnu"))   
+		         jouersStarted.removeItemAt(i);
+		   }
 		
 		
 		return jouersStarted.length;
@@ -2566,6 +2573,7 @@ class GestionnaireEvenements
 			        jouersStarted[i].pointage = this.listeDesPersonnages[i].pointage;
 			        jouersStarted[i].role = this.listeDesPersonnages[i].role;
 					jouersStarted[i].idessin = this.listeDesPersonnages[i].idessin;//this.listeDesPersonnages[i].idessin;
+					jouersStarted[i].win = this.listeDesPersonnages[i].win;
 					
 					//trace("Dans menuointage : " + jouersStarted[i].pointage + " " + jouersStarted[i].idessin + " " + this.listeDesPersonnages[i].idessin );
 		}// end for
@@ -2583,7 +2591,7 @@ class GestionnaireEvenements
 		// to control the holes ...
 		
 		   for(i = 0; i < jouersStarted.length; i++){
-		      if((jouersStarted[i].role == 2 && this.typeDeJeu == "Tournament") || (jouersStarted[i].nomUtilisateur.substr(0,7) == "Inconnu"))   
+		      if((jouersStarted[i].role == 2 && this.typeDeJeu == "Tournament") || (jouersStarted[i].nomUtilisateur.substr(0,7) == "Inconnu") || (jouersStarted[i].nomUtilisateur == "Inconnu"))   
 		         jouersStarted.removeItemAt(i);
 		   }
 		
@@ -2597,6 +2605,8 @@ class GestionnaireEvenements
 			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)] = jouersStarted[i].nomUtilisateur;	
 			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)] = jouersStarted[i].pointage;
 
+			if(jouersStarted[i].win == 1)
+			   _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].attachMovie("check_flag", "flag" + i, 500 + i);
 			//trace("Pointage: " + i + " " + jouersStarted[i].pointage);
 			
 			//this["tete"+j]=new MovieClip();
@@ -2740,6 +2750,7 @@ class GestionnaireEvenements
     	pt_final = _level0.loader.contentHolder.planche.calculerPositionTourne(objetEvenement.nouvellePosition.x, objetEvenement.nouvellePosition.y);
    
 		trace("juste avant la teleportation nom du perso et param  ");
+		//to cancel after end game virtual players move's
 		if(!endGame){
 			_level0.loader.contentHolder.planche.teleporterPersonnage(objetEvenement.nomUtilisateur, pt_initial.obtenirX(), pt_initial.obtenirY(), pt_final.obtenirX(), pt_final.obtenirY(), objetEvenement.collision);
 	
@@ -2750,7 +2761,10 @@ class GestionnaireEvenements
 			      this.listeDesPersonnages[i].pointage = objetEvenement.pointage;
 			   }
 		   }
-		
+		if(objetEvenement.pointage > 13)
+		{
+			 this.listeDesPersonnages[i].win = 1;
+		}
 		   // show the results
 		   remplirMenuPointage();
 		}
