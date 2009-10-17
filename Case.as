@@ -54,13 +54,7 @@ class Case
 		this.numMagasin = -1;
 		
 		temp = (this.l+1)*nombreDeColonnes - c;
-		/*
-		if ((this.l == nombreDeLignes - 1) && (this.c == nombreDeColonnes - 2 || this.c == nombreDeColonnes - 3 || this.c == nombreDeColonnes - 4))
-		{
-			num = 41000;
-			this.type = 41000;
-		} 
-		*/
+		
 		nb = Math.abs(num%100);  // The cell's color is determined by num (its type)'s last 2 digits	
 		
 		
@@ -145,12 +139,10 @@ class Case
 			
 			case 4: //	WinTheGame
 				trace("num : " + num);
-				this.winTheGame = new WinTheGame(3*nombreDeCases+temp);
-				obtenirClipCase().attachMovie("winTheGame", "winTheGame1", 100);
-				if(_level0.loader.contentHolder.langue == "en")
-				{
-					obtenirClipCase().winTheGame1.texteTorche = "Victory";
-				}
+				this.winTheGame = new WinTheGame(3*nombreDeCases + temp);
+				//obtenirClipCase().attachMovie("winPoint", "winPoint1", 100);
+				//winPoint1._x =
+				
 			break;
 		}				
 	}
@@ -290,6 +282,7 @@ class Case
 	{
 		this.casePossible.removeMovieClip();
 		this.casePossible = null;
+		this.winTheGame.removeShineWin();
 	}
 
 
