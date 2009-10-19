@@ -994,6 +994,7 @@ class GestionnaireEvenements
                     this.listeDesPersonnages[i].id = 0;
 					this.listeDesPersonnages[i].role = 0;
 					this.listeDesPersonnages[i].pointage = 0;
+					this.listeDesPersonnages[i].win = 0;
 					
 					
                     /*
@@ -1084,6 +1085,7 @@ class GestionnaireEvenements
                     this.listeDesPersonnages[i].id = objetEvenement.listePersonnageJoueurs[i].idPersonnage;
 					this.listeDesPersonnages[i].role = objetEvenement.listePersonnageJoueurs[i].userRoles;
 					this.listeDesPersonnages[i].pointage = 0;
+					this.listeDesPersonnages[i].win = 0;
 					//this.listeDesPersonnages[i].argent = 0;
 		    
                                    
@@ -2450,6 +2452,7 @@ class GestionnaireEvenements
 					
                     _level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin, this.listeDesPersonnages[j].role);
 		    		trace("Construction du personnage : " + this.listeDesPersonnages[j].nom + " " + objetEvenement.positionJoueurs[i].x + " " + objetEvenement.positionJoueurs[i].y + " idDessin:" + idDessin + " idPers:" + idPers);
+					_level0.loader.contentHolder.referenceLayer["Personnage" + idPers].nom = this.listeDesPersonnages[j].nom;
 				}
             }
         }
@@ -2457,7 +2460,7 @@ class GestionnaireEvenements
 		
         //_level0.loader.contentHolder.planche.afficher();
 		for(var k = 0; k <= this.listeDesPersonnages.length; k++){
-		 for(i=0; i < this.listeDesPersonnages.length; i++)
+		 for( i = 0; i < this.listeDesPersonnages.length; i++)
 		 {
 			if(( this.listeDesPersonnages[i].nom == "Inconnu") || ( this.listeDesPersonnages[i].nom.substr(0,7) == "Inconnu"))
 			{ 
@@ -2469,6 +2472,11 @@ class GestionnaireEvenements
 		  }  // i
 		} // k
 		
+		for(i = 1; i <= this.listeDesPersonnages.length; i++){
+		   
+		   //_level0.loader.contentHolder[]
+		
+		}
 		
 		
         _level0.loader.contentHolder.horlogeNum = 60*objetEvenement.tempsPartie;
@@ -2575,7 +2583,7 @@ class GestionnaireEvenements
 					jouersStarted[i].idessin = this.listeDesPersonnages[i].idessin;//this.listeDesPersonnages[i].idessin;
 					jouersStarted[i].win = this.listeDesPersonnages[i].win;
 					
-					//trace("Dans menuointage : " + jouersStarted[i].pointage + " " + jouersStarted[i].idessin + " " + this.listeDesPersonnages[i].idessin );
+					trace("Dans menuointage : " + jouersStarted[i].win + " " + this.listeDesPersonnages[i].win );
 		}// end for
 		
 		//jouersStarted.sortOn("pointage");
@@ -2605,10 +2613,11 @@ class GestionnaireEvenements
 			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)] = jouersStarted[i].nomUtilisateur;	
 			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)] = jouersStarted[i].pointage;
 
-			if(jouersStarted[i].win == 1)
-			   _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].attachMovie("check_flag", "flag" + i, 500 + i);
-			//trace("Pointage: " + i + " " + jouersStarted[i].pointage);
-			
+			if(jouersStarted[i].win == 1){
+			   _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].attachMovie("check_flag", "flag" + i, 500 + i, {_x:-50, _y:0});
+			   
+			}
+			trace("Pointage: !!!!!!!!!! " + i + " " + jouersStarted[i].win);
 			//this["tete"+j]=new MovieClip();
 			this["tete" + (i + 1)] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+ (i + 1)]["tete"+ (i + 1)].attachMovie("tete" + jouersStarted[i].idessin, "Tete" + i, -10100 + i);
 			this["tete" + (i + 1)]._x = -6;
@@ -2759,12 +2768,14 @@ class GestionnaireEvenements
 					
 			   if(this.listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur){
 			      this.listeDesPersonnages[i].pointage = objetEvenement.pointage;
+				  
+				  if(objetEvenement.pointage > 13)
+		          {
+			         this.listeDesPersonnages[i].win = 1;
+		          }
 			   }
 		   }
-		if(objetEvenement.pointage > 13)
-		{
-			 this.listeDesPersonnages[i].win = 1;
-		}
+		
 		   // show the results
 		   remplirMenuPointage();
 		}
