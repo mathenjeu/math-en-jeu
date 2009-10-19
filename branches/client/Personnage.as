@@ -461,18 +461,22 @@ class Personnage
 		this.position = new Point(xx,yy);                       
 		this.prochainePosition = new Point(xx + 1,yy + 1);
 		
-		
+		//this.image = new MovieClip();
 		//trace("Personnage "+nom+" nomClip="+nomClip+"  niveau="+niveau);
 		if(!(role == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") ) 
 		   this.image = _level0.loader.contentHolder.referenceLayer.attachMovie(nomClip, "Personnage"+niveau, niveau);
 		
-		this.image.dtNomX.text = nom;
-		this.image.dText.nomX = nom;
+		
+		this.image.dtNom._visible = true;
+		//this.image.dText.nom = nom;
 		this.image.nom = nom;
 		this.image._visible = false;
 		this.pointage = 0;
 		this.argent = 0;
 		this.listeDesObjets = new Object();
+		
+		trace("CONS PERSO: " + nom + " " + this.image.nom);
+		targetPath(image);
 		
 		// each array will contain the ID's of objects in possession
 		//this.listeDesObjets["piece"] = new Array();
