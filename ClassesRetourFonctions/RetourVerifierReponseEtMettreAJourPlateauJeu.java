@@ -38,13 +38,16 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 	
 	private String strCollision;
 	
+	private int playerBonus;
+	
 	/**
 	 * Constructeur de la classe RetourVerifierReponseEtMettreAJourPlateauJeu.
+	 * @param bonus 
 	 * 
 	 * @param boolean deplacementAccepte : Permet de savoir si le déplacement a été accepté ou non
 	 * @param int nouveauPointage : Le nouveau pointage du joueur
 	 */
-	public RetourVerifierReponseEtMettreAJourPlateauJeu(boolean deplacementAccepte, int nouveauPointage, int nouvelArgent)
+	public RetourVerifierReponseEtMettreAJourPlateauJeu(boolean deplacementAccepte, int nouveauPointage, int nouvelArgent, int bonus)
 	{
 		// Initialiser les membres de la classe de retour
 		bolDeplacementAccepte = deplacementAccepte;
@@ -55,8 +58,23 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 		intNouveauPointage = nouveauPointage;
         intNouvelArgent = nouvelArgent;
 		strCollision = "vide";
+		playerBonus = bonus;
 	}
 	
+	/**
+	 * @return the playerBonus
+	 */
+	public int getPlayerBonus() {
+		return playerBonus;
+	}
+
+	/**
+	 * @param playerBonus the playerBonus to set
+	 */
+	public void setPlayerBonus(int playerBonus) {
+		this.playerBonus = playerBonus;
+	}
+
 	/**
 	 * Cette fonction retourne si oui ou non le déplacement est accepté.
 	 * 
