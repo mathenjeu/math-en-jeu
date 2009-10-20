@@ -96,7 +96,11 @@ public class InformationPartie
 	// Number of running correct answers. If is 3 moveVisibility is increasing by 1 
 	// and this is set to 0. if one incorrect answer this is set too to 0. 
 	private int runningAnswers;
-     
+    
+	// Number for bonus in Tournament type of game
+	// Bonus is given while arrived at finish line and is calculated
+	// as number of rested sec to game time
+	private int tournamentBonus;
 	 
     
 	/**
@@ -158,12 +162,27 @@ public class InformationPartie
 	        
 	        moveVisibility = 3;
 			runningAnswers = 0;
+			tournamentBonus = 0;
 	        
 			String language = joueur.obtenirProtocoleJoueur().langue;
             setObjBoiteQuestions(new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language), joueur));
             objGestionnaireBD.remplirBoiteQuestions(getObjBoiteQuestions(), objJoueurHumain);  
             
 	}// fin constructeur
+
+	/**
+	 * @return the tournamentBonus
+	 */
+	public int getTournamentBonus() {
+		return tournamentBonus;
+	}
+
+	/**
+	 * @param tournamentBonus the tournamentBonus to set
+	 */
+	public void setTournamentBonus(int tournamentBonus) {
+		this.tournamentBonus = tournamentBonus;
+	}
 
 	/**
 	 * Cette fonction permet de retourner la référence vers la table courante 
@@ -796,6 +815,7 @@ public class InformationPartie
 		
 		int intPointageCourant; 
         int intArgentCourant;
+        int bonus = 0;
 		Table table;
 		int intDifficulteQuestion;
 		TreeMap<Integer, ObjetUtilisable> objListeObjetsUtilisablesRamasses; 
@@ -815,6 +835,7 @@ public class InformationPartie
 			// Obtenir les informations du joueur humain
 			intPointageCourant = objPartieCourante.obtenirPointage();
             intArgentCourant = objPartieCourante.obtenirArgent();
+            bonus = objPartieCourante.getTournamentBonus();
 		    table = objPartieCourante.obtenirTable();
 		    intDifficulteQuestion = objPartieCourante.obtenirQuestionCourante().obtenirDifficulte();
 		    objListeObjetsUtilisablesRamasses = objPartieCourante.obtenirListeObjets();
@@ -1014,7 +1035,7 @@ public class InformationPartie
 					 
 					 if(isWinTheGame && boolWasOnFinish )
 					 {
-						 intNouveauPointage += ((JoueurHumain)objJoueur).obtenirPartieCourante().obtenirTable().obtenirTempsRestant();
+						 bonus = ((JoueurHumain)objJoueur).obtenirPartieCourante().obtenirTable().obtenirTempsRestant();
 						
 						 ((JoueurHumain)objJoueur).obtenirPartieCourante().isPlayerNotArrivedOnce = false;
 					 }
@@ -1023,7 +1044,7 @@ public class InformationPartie
 			}
 			
 			// Créer l'objet de retour
-			objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, intNouveauPointage, intNouvelArgent);
+			objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, intNouveauPointage, intNouvelArgent, bonus);
 			objRetour.definirObjetRamasse(objObjetRamasse);
 			objRetour.definirObjetSubi(objObjetSubi);
 			objRetour.definirNouvellePosition(objPositionDesiree);
@@ -1036,7 +1057,7 @@ public class InformationPartie
 				// Cette fonction va passer les joueurs et créer un 
 				// InformationDestination pour chacun et ajouter l'événement 
 				// dans la file de gestion d'événements
-				table.preparerEvenementJoueurDeplacePersonnage(nomJoueur, collision, positionJoueur, objPositionDesiree, intNouveauPointage, intNouvelArgent, "");
+				table.preparerEvenementJoueurDeplacePersonnage(nomJoueur, collision, positionJoueur, objPositionDesiree, intNouveauPointage, intNouvelArgent, bonus, "");
 						    	
 		    }
 		    
@@ -1046,6 +1067,7 @@ public class InformationPartie
 				((JoueurHumain)objJoueur).obtenirPartieCourante().definirPositionJoueur(objPositionDesiree);
 				((JoueurHumain)objJoueur).obtenirPartieCourante().definirPointage(intNouveauPointage);
 				((JoueurHumain)objJoueur).obtenirPartieCourante().definirArgent(intNouvelArgent);
+				((JoueurHumain)objJoueur).obtenirPartieCourante().setTournamentBonus(bonus);
 
 
 				//on increase the number of correct answers and on set moveVisibility
@@ -1075,7 +1097,7 @@ public class InformationPartie
 			((JoueurHumain)objJoueur).obtenirPartieCourante().setMoveVisibility(((JoueurHumain)objJoueur).obtenirPartieCourante().getMoveVisibility() - 1);
 			
 			// Créer l'objet de retour
-			objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, intNouveauPointage, intNouvelArgent);
+			objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, intNouveauPointage, intNouvelArgent, bonus);
 			
 			// La question sera nulle pour les joueurs virtuels
 			if (objQuestion != null)
