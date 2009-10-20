@@ -729,6 +729,11 @@ class GestionnaireCommunication
 				    		objEvenement["pointage"] = lstChildNodes[i].firstChild.nodeValue;
 				    		//trace("case Pointage  "+objEvenement.pointage+ "   "+lstChildNodes[i].firstChild.nodeValue);
 				    	break;
+						
+						case "Bonus":
+				    		objEvenement["bonus"] = lstChildNodes[i].firstChild.nodeValue;
+				    		//trace("case Pointage  "+objEvenement.pointage+ "   "+lstChildNodes[i].firstChild.nodeValue);
+				    	break;
 				    
 						case "NouvelArgent":
 				    		objEvenement["argent"] = lstChildNodes[i].firstChild.nodeValue;
@@ -3930,6 +3935,11 @@ class GestionnaireCommunication
                     case "Pointage":
                         objEvenement.pointage = Number(objNoeudParametre.firstChild.nodeValue);
 						trace("Pointage ds gestComm   "+objEvenement.pointage);
+						break;
+						
+					case "Bonus":
+                        objEvenement.bonus = Number(objNoeudParametre.firstChild.nodeValue);
+						trace("Bonus ds gestComm   " + objEvenement.bonus);
 						break;
 		   
 		    		case "Argent":
