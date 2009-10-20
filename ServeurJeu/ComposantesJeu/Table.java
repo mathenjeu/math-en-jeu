@@ -1461,16 +1461,17 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @param positionJoueur
 	 * @param nouveauPointage
 	 * @param nouvelArgent
+	 * @param bonus 
 	 * @param objetUtilise
 	 */
 	public void preparerEvenementJoueurDeplacePersonnage( String nomUtilisateur, String collision, 
-	    Point oldPosition, Point positionJoueur, int nouveauPointage, int nouvelArgent, String objetUtilise)
+	    Point oldPosition, Point positionJoueur, int nouveauPointage, int nouvelArgent, int bonus, String objetUtilise)
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs qu'un joueur se deplace 
 		
 		EvenementJoueurDeplacePersonnage joueurDeplacePersonnage = new EvenementJoueurDeplacePersonnage( nomUtilisateur, 
-		    oldPosition, positionJoueur, collision, nouveauPointage, nouvelArgent);
+		    oldPosition, positionJoueur, collision, nouveauPointage, nouvelArgent, bonus);
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
