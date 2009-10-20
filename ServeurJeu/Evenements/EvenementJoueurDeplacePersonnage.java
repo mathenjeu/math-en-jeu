@@ -30,9 +30,10 @@ public class EvenementJoueurDeplacePersonnage extends Evenement
     private String strCollision;
     private int intNouveauPointage;
     private int intNouvelArgent;
+    private int playerBonus;
     
 	public EvenementJoueurDeplacePersonnage(String nomUtilisateur, Point anciennePosition, 
-        Point positionJoueur, String collision, int nouveauPointage, int nouvelArgent)
+        Point positionJoueur, String collision, int nouveauPointage, int nouvelArgent, int bonus)
     {
         // Définir le nom d'utilisateur du joueur qui se deplace
         strNomUtilisateur = nomUtilisateur;
@@ -41,6 +42,7 @@ public class EvenementJoueurDeplacePersonnage extends Evenement
         strCollision = collision;
         intNouveauPointage = nouveauPointage;
         intNouvelArgent = nouvelArgent;
+        playerBonus = bonus;
     }
 	
 	/**
@@ -71,7 +73,8 @@ public class EvenementJoueurDeplacePersonnage extends Evenement
 			Element objNoeudParametreAnciennePosition = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreCollision = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreNouveauPointage = objDocumentXML.createElement("parametre");
-                        Element objNoeudParametreNouvelArgent = objDocumentXML.createElement("parametre");
+            Element objNoeudParametreNouvelArgent = objDocumentXML.createElement("parametre");
+            Element objNoeudParametreBonus = objDocumentXML.createElement("parametre");
 			
 			// Créer un noeud contenant le nom d'utilisateur du noeud paramètre
 			Text objNoeudTexte = objDocumentXML.createTextNode(strNomUtilisateur);
@@ -107,12 +110,16 @@ public class EvenementJoueurDeplacePersonnage extends Evenement
 			
 
 			Text objNoeudTextePointage = objDocumentXML.createTextNode(Integer.toString(intNouveauPointage));
-                        objNoeudParametreNouveauPointage.setAttribute("type", "NouveauPointage");
-                        objNoeudParametreNouveauPointage.appendChild(objNoeudTextePointage);
+            objNoeudParametreNouveauPointage.setAttribute("type", "NouveauPointage");
+            objNoeudParametreNouveauPointage.appendChild(objNoeudTextePointage);
 			
-                        Text objNoeudTexteArgent = objDocumentXML.createTextNode(Integer.toString(intNouvelArgent));
-                        objNoeudParametreNouvelArgent.setAttribute("type", "NouvelArgent");
-                        objNoeudParametreNouvelArgent.appendChild(objNoeudTexteArgent);
+            Text objNoeudTexteArgent = objDocumentXML.createTextNode(Integer.toString(intNouvelArgent));
+            objNoeudParametreNouvelArgent.setAttribute("type", "NouvelArgent");
+            objNoeudParametreNouvelArgent.appendChild(objNoeudTexteArgent);
+            
+            Text objNoeudTexteBonus = objDocumentXML.createTextNode(Integer.toString(playerBonus));
+            objNoeudParametreBonus.setAttribute("type", "Bonus");
+            objNoeudParametreBonus.appendChild(objNoeudTexteBonus);
 			
 			// Ajouter le noeud paramètre au noeud de commande
 			objNoeudCommande.appendChild(objNoeudParametreNomUtilisateur);
@@ -121,6 +128,7 @@ public class EvenementJoueurDeplacePersonnage extends Evenement
 			objNoeudCommande.appendChild(objNoeudParametreCollision);
                         objNoeudCommande.appendChild(objNoeudParametreNouveauPointage);
                         objNoeudCommande.appendChild(objNoeudParametreNouvelArgent);
+                        objNoeudCommande.appendChild(objNoeudParametreBonus);
 			
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
