@@ -1953,24 +1953,29 @@ public class ProtocoleJoueur implements Runnable
 						Element objNoeudParametrePointage = objDocumentXMLSortie.createElement("parametre");
 						Element objNoeudParametreArgent = objDocumentXMLSortie.createElement("parametre");
 						Element objNoeudParametreVisibility = objDocumentXMLSortie.createElement("parametre");
+						Element objNoeudParametreBonus = objDocumentXMLSortie.createElement("parametre");
+						
 
 						Text objNoeudTexteDeplacementAccepte = objDocumentXMLSortie.createTextNode(Boolean.toString(objRetour.deplacementEstAccepte()));
 						Text objNoeudTextePointage = objDocumentXMLSortie.createTextNode(Integer.toString(objRetour.obtenirNouveauPointage()));
 						Text objNoeudTexteArgent = objDocumentXMLSortie.createTextNode(Integer.toString(objRetour.obtenirNouvelArgent()));
 						Text objNoeudTexteVisibility = objDocumentXMLSortie.createTextNode(Integer.toString(objJoueurHumain.obtenirPartieCourante().getMoveVisibility()));
+						Text objNoeudTexteBonus = objDocumentXMLSortie.createTextNode(Integer.toString(objJoueurHumain.obtenirPartieCourante().getTournamentBonus()));
 
-						//System.out.println(":ICI Visibility : " + objJoueurHumain.obtenirPartieCourante().getMoveVisibility());
+						System.out.println(":ICI Bonus retour reponse : " + objJoueurHumain.obtenirPartieCourante().getTournamentBonus());
 
 						objNoeudParametreDeplacementAccepte.setAttribute("type", "DeplacementAccepte");
 						objNoeudParametrePointage.setAttribute("type", "Pointage");
 						objNoeudParametreArgent.setAttribute("type", "Argent");
 						objNoeudParametreVisibility.setAttribute("type", "MoveVisibility");
+						objNoeudParametreBonus.setAttribute("type", "Bonus");
 
 
 						objNoeudParametreDeplacementAccepte.appendChild(objNoeudTexteDeplacementAccepte);
 						objNoeudParametrePointage.appendChild(objNoeudTextePointage);
 						objNoeudParametreArgent.appendChild(objNoeudTexteArgent);
 						objNoeudParametreVisibility.appendChild(objNoeudTexteVisibility);
+						objNoeudParametreBonus.appendChild(objNoeudTexteBonus);
 
 
 						objNoeudCommande.appendChild(objNoeudParametreDeplacementAccepte);
@@ -2063,6 +2068,7 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudCommande.appendChild(objNoeudParametrePointage);
 						objNoeudCommande.appendChild(objNoeudParametreArgent);
 						objNoeudCommande.appendChild(objNoeudParametreVisibility);
+						objNoeudCommande.appendChild(objNoeudParametreBonus);
 					}
 				}
 				//////////////////////////////////////////////////////////////////////////////////
