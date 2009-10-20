@@ -354,6 +354,7 @@ class GestionnaireEvenements
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].pointage = 0;
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].idessin = calculatePicture(no);
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].win = 0;
+		//this.listeDesPersonnages[numeroJoueursDansSalle-1].lastPoints = 0;
         this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), Delegate.create(this, this.evenementPartieTerminee), no);//this.idPersonnage);//  
 	
 		trace("fin de demarrerPartie");
@@ -1762,6 +1763,7 @@ class GestionnaireEvenements
     	trace("nouveau pointage  :  "+objetEvenement.pointage);
     	trace("nouvel argent  :  "+objetEvenement.argent);
     	trace("collision  :"+objetEvenement.collision);
+		trace("bonus  : " + objetEvenement.bonus);
       
     	switch(objetEvenement.resultat)
         { 
@@ -1793,6 +1795,12 @@ class GestionnaireEvenements
             	          this.listeDesPersonnages[i].pointage = objetEvenement.pointage;
 						  this.listeDesPersonnages[i].argent = objetEvenement.argent;
 						  
+						  // if we have bonus in the tournament game  we must treat this
+						  if(objetEvenement.bonus > 0){
+						     	this.listeDesPersonnages[i].win = 1;
+								this.listeDesPersonnages[i].pointage += objetEvenement.bonus;
+								_level0.loader.contentHolder.bonusBox.bonus = objetEvenement.bonus;
+						  }
         	           }
         	   	    }
 					
@@ -2614,7 +2622,8 @@ class GestionnaireEvenements
 			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)] = jouersStarted[i].pointage;
 
 			if(jouersStarted[i].win == 1){
-			   _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].attachMovie("check_flag", "flag" + i, 500 + i, {_x:-50, _y:0});
+			   this["Flag" + (i + 1)] = new MovieClip();
+			   this["Flag" + (i + 1)] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].attachMovie("checkFlag_mc", "flag" + i, 220 + i, {_x:-20, _y:0});
 			   
 			}
 			trace("Pointage: !!!!!!!!!! " + i + " " + jouersStarted[i].win);
@@ -2747,7 +2756,7 @@ class GestionnaireEvenements
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function evenementJoueurDeplacePersonnage(objetEvenement:Object)
     {
-        // parametre: nomUtilisateur, anciennePosition et nouvellePosition, pointage
+        // parametre: nomUtilisateur, anciennePosition et nouvellePosition, pointage, bonus
     	trace("*********************************************");
     	trace("debut de evenementJoueurDeplacePersonnage (sans compter les rotations)  " + objetEvenement.nomUtilisateur + "   " + objetEvenement.anciennePosition.x+"   "+objetEvenement.anciennePosition.y+"   "+objetEvenement.nouvellePosition.x+"   "+objetEvenement.nouvellePosition.y+"   "+objetEvenement.collision+"   "+objetEvenement.pointage+"   "+objetEvenement.argent);
    
@@ -2769,7 +2778,7 @@ class GestionnaireEvenements
 			   if(this.listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur){
 			      this.listeDesPersonnages[i].pointage = objetEvenement.pointage;
 				  
-				  if(objetEvenement.pointage > 13)
+				  if(objetEvenement.bonus > 0)
 		          {
 			         this.listeDesPersonnages[i].win = 1;
 		          }
