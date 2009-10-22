@@ -54,6 +54,7 @@
 	  reportTextChange = "Sélectionnez une salle pour voir le rapport..."
 	  roomTimeLabel = "Temps partie"
 	  All = "Toutes"
+	  AllLevels = "Niveaux"
 	  
 	  Subject0 = " Général"
 	     categorie00 = "non-classée" 

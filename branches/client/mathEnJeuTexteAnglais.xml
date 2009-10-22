@@ -54,6 +54,7 @@
 	  reportTextChange = "Select a room to take report..."
 	  roomTimeLabel = "Game duration"
 	  All = "All"
+	  AllLevels = "Levels"
 	  
 	  Subject0 = " General"
 	     categorie00 = "unclassified" 
