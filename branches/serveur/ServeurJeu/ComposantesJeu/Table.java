@@ -728,7 +728,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     			
     			// to have differents pictures for the virtual players
     			do{
-    			    IDdess = objControleurJeu.genererNbAleatoire(11) + 1;
+    			    IDdess = objControleurJeu.genererNbAleatoire(9) + 1;
     			}while(pictures.contains(IDdess));
     		    
     			// On se rendra ici seulement si intNombreJoueursVirtuels > 0
