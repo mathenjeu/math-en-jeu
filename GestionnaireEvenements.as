@@ -1628,7 +1628,8 @@ class GestionnaireEvenements
 				
 					case "Banane":
 						trace("banane");
-						_level0.loader.contentHolder.toss.removeMovieClip();
+						//_level0.loader.contentHolder.toss.removeMovieClip();
+						//_level0.loader.contentHolder.planche.obtenirPerso().tossBanana();
 					break;
 				
 					default:
@@ -2455,6 +2456,7 @@ class GestionnaireEvenements
                 {
 	                var idDessin:Number = calculatePicture(this.listeDesPersonnages[j].id);
 					var idPers:Number = calculateIDPers(this.listeDesPersonnages[j].id, idDessin);
+					this.listeDesPersonnages[i].idPers = idPers;
 					if(idDessin < 0) idDessin = 12;   ///????
 					//if(idPers<0) idPers=-idPers;
 					
@@ -2798,7 +2800,7 @@ class GestionnaireEvenements
         // parametre: joueurQuiUtilise, joueurAffecte, objetUtilise, autresInformations
     	trace("*********************************************");
     	trace("debut de evenementUtiliserObjet  " + objetEvenement.joueurQuiUtilise + "   " + objetEvenement.joueurAffecte + "   " + objetEvenement.objetUtilise );
-        
+        var playerUnder:String = objetEvenement.joueurAffecte;
 		// here we treat the Banana
 		if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte == this.nomUtilisateur )
 		{
@@ -2812,6 +2814,7 @@ class GestionnaireEvenements
                _level0.loader.contentHolder.miniGameLayer["Minigame"].loader.contentHolder.quitter(true);
 			   _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 		       _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			   _level0.loader.contentHolder.planche.obtenirPerso().slippingBanana();
 			
 			// if the player read at the monment a question
 		   }else if(_level0.loader.contentHolder.box_question.monScroll._visible)
@@ -2824,6 +2827,7 @@ class GestionnaireEvenements
 			   
 			   _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 		       _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			   _level0.loader.contentHolder.planche.obtenirPerso().slippingBanana();
 			
 			// if the player read a feedback of a question 
 		   }else if(_level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible) 
@@ -2838,7 +2842,7 @@ class GestionnaireEvenements
 				_level0.loader.contentHolder.box_question.monScroll._visible = false;
 				_level0.loader.contentHolder.box_question._visible = false;
 				_level0.loader.contentHolder.box_question.GUI_retro.removeMovieClip();
-				
+				_level0.loader.contentHolder.planche.obtenirPerso().slippingBanana();
 			    // here show banana in action
 			    // setTimeout( Function, delay in miliseconds, arguments)
                _global.timerInterval = setInterval(this,"funcToRecallFeedback", 5000, tempsRested);
@@ -2848,11 +2852,24 @@ class GestionnaireEvenements
 		   }else{
 		      
                 _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			    _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso()); 
+			    _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+				_level0.loader.contentHolder.planche.obtenirPerso().slippingBanana();
 		   
 		   }//end else if
 		   		   
 		   
+		}else if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte != this.nomUtilisateur)
+		{
+			var num:Number;
+			for(var i:Number = 0; i < this.listeDesPersonnages.length; i++)
+			{
+				if(this.listeDesPersonnages[i].nom == objetEvenement.joueurAffecte )
+				  _level0.loader.contentHolder.referenceLayer["Personnage" + this.listeDesPersonnages[i].idPers].gotoAndPlay("slipping"); 
+			}
+			
+			//_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder);
+			//trace("fin de evenementUtiliserObjet ++++ banana UNDER " + _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirNom());
+		
 		}// end if
      	trace("fin de evenementUtiliserObjet");
      	trace("*********************************************\n");
