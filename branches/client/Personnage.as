@@ -158,7 +158,8 @@ class Personnage
 					 
 			          var bananaClip:MovieClip;
                       bananaClip = _level0.loader.contentHolder.attachMovie("bananaToss", "toss", 2021, objID);
-                      bananaClip._x = 22;
+					  
+					  bananaClip._x = 22;
                       bananaClip._y = 55;
 					  
 		        }else{
@@ -475,8 +476,8 @@ class Personnage
 		this.argent = 0;
 		this.listeDesObjets = new Object();
 		
-		trace("CONS PERSO: " + nom + " " + this.image.nom);
-		targetPath(image);
+		//trace("CONS PERSO: " + nom + " " + this.image.nom);
+		//targetPath(image);
 		
 		// each array will contain the ID's of objects in possession
 		//this.listeDesObjets["piece"] = new Array();
@@ -873,6 +874,19 @@ class Personnage
 	function rire()
 	{
 		image.gotoAndPlay("rire");
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////
+	function tossBanana()
+	{
+		this.image.gotoAndPlay("tossing");
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////
+	function slippingBanana()
+	{
+		trace("slipping ++++++++");
+		this.image.gotoAndPlay("slipping");
 	}
 	
 }

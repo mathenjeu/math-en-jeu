@@ -106,6 +106,15 @@ class PlancheDeJeu
         gestionnaireInterface = p;
     }
 	
+	function getPersonnageByName(playerName:String)
+	{
+		for(var i:Number = 0; i < tableauDesPersonnages.length; i++)
+		{
+		   if(tableauDesPersonnages[i].obtenirNom() == playerName)
+		      tableauDesPersonnages[i].slippingBanana();
+			  //return tableauDesPersonnages[i];
+		}
+	}
 	
     function obtenirNombreDeColonnes():Number
     {
