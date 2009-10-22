@@ -864,6 +864,11 @@ class GestionnaireCommunication
 									
 									   twMove = new Tween(guiBanane, "_alpha", Strong.easeOut, 40, 100, 1, true);
 									}// end if
+									if(String(objEvenement["joueurAffecte"]) == String(tabPersonnages[i].obtenirNom()))
+									{
+											tabPersonnages[i].slippingBanana();
+									}
+									//_level0.loader.contentHolder.planche.getPersonnageByName(objEvenement["joueurAffecte"]);
 								break;
 								
 								case "PotionPetit":
