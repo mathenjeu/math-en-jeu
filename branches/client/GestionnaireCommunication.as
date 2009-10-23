@@ -853,6 +853,7 @@ class GestionnaireCommunication
 									
 									//objEvenement["NouvellePositionX"] = noeudEvenement.firstChild.nextSibling.nextSibling.nextSibling.firstChild.firstChild.firstChild;
 									//objEvenement["NouvellePositionY"] = noeudEvenement.firstChild.nextSibling.nextSibling.nextSibling.firstChild.firstChild.nextSibling.firstChild;
+									/*
 									if(_level0.loader.contentHolder.objGestionnaireEvenements.nomUtilisateur == objEvenement["joueurAffecte"]){
 									   var twMove:Tween;
 									   var guiBanane:MovieClip;
@@ -863,11 +864,13 @@ class GestionnaireCommunication
 									   _level0.loader.contentHolder["banane"].nomJoueurUtilisateur = objEvenement["joueurQuiUtilise"];
 									
 									   twMove = new Tween(guiBanane, "_alpha", Strong.easeOut, 40, 100, 1, true);
-									}// end if
+									}// end if*/
+									
+									/*
 									if(String(objEvenement["joueurAffecte"]) == String(tabPersonnages[i].obtenirNom()))
 									{
 											tabPersonnages[i].slippingBanana();
-									}
+									}*/
 									//_level0.loader.contentHolder.planche.getPersonnageByName(objEvenement["joueurAffecte"]);
 								break;
 								
