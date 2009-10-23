@@ -110,9 +110,14 @@ class PlancheDeJeu
 	{
 		for(var i:Number = 0; i < tableauDesPersonnages.length; i++)
 		{
-		   if(tableauDesPersonnages[i].obtenirNom() == playerName)
-		      tableauDesPersonnages[i].slippingBanana();
-			  //return tableauDesPersonnages[i];
+			trace("DANS PLANCHE for: " + tableauDesPersonnages[i].obtenirNom());
+		   if(tableauDesPersonnages[i].obtenirNom() == playerName){
+			   
+		     // this.tableauDesPersonnages[i].slippingBanana();
+			 // this.tableauDesPersonnages[i].obtenirImage().gotoAndPlay(10);
+			  //trace("DANS PLANCHE: " + tableauDesPersonnages[i].obtenirNom());//
+			  return tableauDesPersonnages[i];
+		   }
 		}
 	}
 	
@@ -178,7 +183,7 @@ class PlancheDeJeu
         clipTest._x = -100;
         clipTest._y = -100;
         largeurDeCase = clipTest._width;
-        hauteurDeCase = clipTest._height*0.85;
+        hauteurDeCase = clipTest._height*0.875;
         clipTest.removeMovieClip();
         ////////////////////////////////////////////////////////////////////////////////////////
         for(i=0; i < this.mat.length; i++)
