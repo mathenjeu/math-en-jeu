@@ -2800,7 +2800,8 @@ class GestionnaireEvenements
         // parametre: joueurQuiUtilise, joueurAffecte, objetUtilise, autresInformations
     	trace("*********************************************");
     	trace("debut de evenementUtiliserObjet  " + objetEvenement.joueurQuiUtilise + "   " + objetEvenement.joueurAffecte + "   " + objetEvenement.objetUtilise );
-        var playerUnder:String = objetEvenement.joueurAffecte;
+        var playerThat:String = objetEvenement.joueurQuiUtilise;
+		var playerUnder:String = objetEvenement.joueurAffecte;
 		// here we treat the Banana
 		if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte == this.nomUtilisateur )
 		{
@@ -2857,23 +2858,36 @@ class GestionnaireEvenements
 		   
 		   }//end else if
 		   		   
+		   _global.timerInterval = setInterval(this,"funcToCallMessage", 6000, playerThat);
 		   
 		}else if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte != this.nomUtilisateur)
 		{
-			var num:Number;
-			for(var i:Number = 0; i < this.listeDesPersonnages.length; i++)
-			{
-				if(this.listeDesPersonnages[i].nom == objetEvenement.joueurAffecte )
-				  _level0.loader.contentHolder.referenceLayer["Personnage" + this.listeDesPersonnages[i].idPers].gotoAndPlay("slipping"); 
-			}
 			
-			//_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder);
-			//trace("fin de evenementUtiliserObjet ++++ banana UNDER " + _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirNom());
+			//_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).slippingBanana();
+			_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().gotoAndPlay(110);
 		
 		}// end if
+		
+		if(objetEvenement.objetUtilise == "Banane" && playerThat != this.nomUtilisateur)
+		{
+			_level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().gotoAndPlay(130);
+		}
      	trace("fin de evenementUtiliserObjet");
      	trace("*********************************************\n");
     } // end methode  
+	
+	function funcToCallMessage(playerThat:String)
+	{
+		var twMove:Tween;
+        var guiBanane:MovieClip
+		guiBanane = _level0.loader.contentHolder.attachMovie("GUI_banane", "banane", 9998);
+		guiBanane._y = 200;
+        guiBanane._x = 275;
+		_level0.loader.contentHolder["banane"].nomCible = " ";
+	    _level0.loader.contentHolder["banane"].nomJoueurUtilisateur = playerThat;
+	    twMove = new Tween(guiBanane, "_alpha", Strong.easeOut, 40, 100, 1, true);
+		 clearInterval(_global.timerInterval);
+	}
     
 	function funcToRecallFeedback(tempsRested:Number):Void
     {
