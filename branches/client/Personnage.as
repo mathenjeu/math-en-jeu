@@ -31,7 +31,7 @@ import flash.filters.*;
 class Personnage
 {
 	private var role:Number; // role of user if 1 - simple user , if 2 - master(admin)
-	private var image:MovieClip;
+	public  var image:MovieClip;
 	private var position:Point;
 	private var numero:Number;           // ????
 	private var prochainePosition:Point;
@@ -781,7 +781,7 @@ class Personnage
 
 		if (dy < 0)
 		{
-			if(this.image._currentFrame<70)
+			if(this.image._currentFrame < 70)
 			{
 				this.image.gotoAndPlay(70);
 			}
@@ -789,7 +789,7 @@ class Personnage
 		}
 		else
 		{
-			if(this.image._currentFrame>69)
+			if(this.image._currentFrame > 69)
 			{
 				this.image.gotoAndPlay(10);
 			}
@@ -819,7 +819,7 @@ class Personnage
 	
 		// Si le deplacement voulu n'est pas nul mais que le personnage est au repos
 		//trace("avant le if le frame  :   "+this.image._currentFrame);
-		if (((dx != 0) || (dy != 0)) && (this.image._currentFrame == 1))
+		if (((dx != 0) || (dy != 0)) && (this.image._currentFrame == 1 || this.image._currentFrame > 89))
 		{
 			// place le clip du personnage au debut de la sequence de deplacement
 			this.image.gotoAndPlay(10);
@@ -879,14 +879,17 @@ class Personnage
 	//////////////////////////////////////////////////////////////////////////////////////
 	function tossBanana()
 	{
-		this.image.gotoAndPlay("tossing");
+		this.image.gotoAndPlay(130);
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////
 	function slippingBanana()
 	{
-		trace("slipping ++++++++");
-		this.image.gotoAndPlay("slipping");
+		trace("slipping ++++++++ " + this.image._currentFrame + " *** " + this.nom);
+		
+		this.image.gotoAndPlay(110);
+		//this.image.benj.gotoAndPlay(1);
+		trace("slipping ++++++++ " + this.image._currentFrame + " *** " + this.nom);
 	}
 	
 }
