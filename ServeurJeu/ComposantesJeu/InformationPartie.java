@@ -95,7 +95,7 @@ public class InformationPartie
 	
 	// Number of running correct answers. If is 3 moveVisibility is increasing by 1 
 	// and this is set to 0. if one incorrect answer this is set too to 0. 
-	private int runningAnswers;
+	//private int runningAnswers;
     
 	// Number for bonus in Tournament type of game
 	// Bonus is given while arrived at finish line and is calculated
@@ -161,7 +161,7 @@ public class InformationPartie
 	        isPlayerNotArrivedOnce = true;
 	        
 	        moveVisibility = 3;
-			runningAnswers = 0;
+			//runningAnswers = 0;
 			tournamentBonus = 0;
 	        
 			String language = joueur.obtenirProtocoleJoueur().langue;
@@ -1071,17 +1071,17 @@ public class InformationPartie
 
 
 				//on increase the number of correct answers and on set moveVisibility
-				int answers = ((JoueurHumain)objJoueur).obtenirPartieCourante().getRunningAnswers();
+				//int answers = ((JoueurHumain)objJoueur).obtenirPartieCourante().getRunningAnswers();
 				
-				if (answers == 2){
-					((JoueurHumain)objJoueur).obtenirPartieCourante().setRunningAnswers(0);
+				//if (answers == 2){
+					//((JoueurHumain)objJoueur).obtenirPartieCourante().setRunningAnswers(0);
 					((JoueurHumain)objJoueur).obtenirPartieCourante().setMoveVisibility(((JoueurHumain)objJoueur).obtenirPartieCourante().getMoveVisibility() + 1);
 					
 					
-				}else{
-					((JoueurHumain)objJoueur).obtenirPartieCourante().setRunningAnswers(answers + 1);
+				//}else{
+					//((JoueurHumain)objJoueur).obtenirPartieCourante().setRunningAnswers(answers + 1);
 					
-				}
+				//}
 			}
 			else if (objJoueur instanceof JoueurVirtuel)
 			{
@@ -1092,8 +1092,7 @@ public class InformationPartie
 		}
 		else
 		{
-			//
-			((JoueurHumain)objJoueur).obtenirPartieCourante().setRunningAnswers(0);
+			//((JoueurHumain)objJoueur).obtenirPartieCourante().setRunningAnswers(0);
 			((JoueurHumain)objJoueur).obtenirPartieCourante().setMoveVisibility(((JoueurHumain)objJoueur).obtenirPartieCourante().getMoveVisibility() - 1);
 			
 			// Créer l'objet de retour
@@ -1321,19 +1320,19 @@ public class InformationPartie
 			}
 		}
 
-		/**
+		/*
+		 * *
 		 * @return the runningAnswers
-		 */
+		 
 		public int getRunningAnswers() {
 			return runningAnswers;
 		}
 
 		/**
 		 * @param runningAnswers the runningAnswers to set
-		 */
+		 
 		public void setRunningAnswers(int runningAnswers) {
 			this.runningAnswers = runningAnswers;
-		}
-
+		}*/
 		
 }
