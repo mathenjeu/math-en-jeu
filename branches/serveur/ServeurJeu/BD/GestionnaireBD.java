@@ -399,7 +399,7 @@ public class GestionnaireBD
         	" and question_level.value > 0 " +
         	" and question.answer_type_id = answer_type.answer_type_id " +
         	" and question.question_id = answer.question_id " +
-        	" and (answer_type.tag='MULTIPLE_CHOICE' OR answer_type.tag='MULTIPLE_CHOICE_5' OR answer_type.tag='MULTIPLE_CHOICE_5')";
+        	" and (answer_type.tag = 'MULTIPLE_CHOICE' OR answer_type.tag = 'MULTIPLE_CHOICE_5' OR answer_type.tag = 'MULTIPLE_CHOICE_3')";
         	
         	remplirBoiteQuestionsMC( boiteQuestions, strRequeteSQL, categorie );
         	
@@ -468,7 +468,7 @@ public class GestionnaireBD
 						int difficulte = rs.getInt("value");
 						String reponse = "" + countReponse;
 
-						//System.out.println("MC : question " + codeQuestion + " " + reponse + " " + difficulte);
+						System.out.println("MC : question " + typeQuestion + " " + codeQuestion + " " + difficulte);
 						String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
 						// System.out.println(URL+explication);
 						boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, categorie));
