@@ -2815,7 +2815,7 @@ class GestionnaireEvenements
                _level0.loader.contentHolder.miniGameLayer["Minigame"].loader.contentHolder.quitter(true);
 			   _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 		       _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			   _level0.loader.contentHolder.planche.obtenirPerso().slippingBanana();
+			   _global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);	
 			
 			// if the player read at the monment a question
 		   }else if(_level0.loader.contentHolder.box_question.monScroll._visible)
@@ -2828,7 +2828,7 @@ class GestionnaireEvenements
 			   
 			   _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 		       _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			   _level0.loader.contentHolder.planche.obtenirPerso().slippingBanana();
+			   _global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);	
 			
 			// if the player read a feedback of a question 
 		   }else if(_level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible) 
@@ -2843,7 +2843,7 @@ class GestionnaireEvenements
 				_level0.loader.contentHolder.box_question.monScroll._visible = false;
 				_level0.loader.contentHolder.box_question._visible = false;
 				_level0.loader.contentHolder.box_question.GUI_retro.removeMovieClip();
-				_level0.loader.contentHolder.planche.obtenirPerso().slippingBanana();
+				_global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);	
 			    // here show banana in action
 			    // setTimeout( Function, delay in miliseconds, arguments)
                _global.timerInterval = setInterval(this,"funcToRecallFeedback", 5000, tempsRested);
@@ -2854,7 +2854,7 @@ class GestionnaireEvenements
 		      
                 _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 			    _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-				_level0.loader.contentHolder.planche.obtenirPerso().slippingBanana();
+				_global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);	
 		   
 		   }//end else if
 		   		   
@@ -2863,18 +2863,30 @@ class GestionnaireEvenements
 		}else if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte != this.nomUtilisateur)
 		{
 			
-			//_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).slippingBanana();
-			_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().gotoAndPlay(110);
+			
+		    _global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);	
+			//_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().gotoAndPlay(110);
 		
 		}// end if
 		
 		if(objetEvenement.objetUtilise == "Banane" && playerThat != this.nomUtilisateur)
 		{
-			_level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().gotoAndPlay(130);
+			//_level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().gotoAndPlay("tossing");
+			_level0.loader.contentHolder.planche.tossBananaShell(playerThat, playerUnder);//getPersonnageByName(playerThat).tossBanana();
+			
 		}
      	trace("fin de evenementUtiliserObjet");
      	trace("*********************************************\n");
-    } // end methode  
+    } // end methode
+	
+	// cette fonction attend jusqu'au signal du compteur
+	// et appelle le fonction d'action de la Banane
+    function waitBanana(playerUnder:String):Void
+   {
+      _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).slippingBanana();
+	  clearInterval(_global.timerIntervalBanana);
+				
+   }
 	
 	function funcToCallMessage(playerThat:String)
 	{

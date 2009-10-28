@@ -106,16 +106,13 @@ class PlancheDeJeu
         gestionnaireInterface = p;
     }
 	
-	function getPersonnageByName(playerName:String)
+	function getPersonnageByName(playerName:String):Personnage
 	{
 		for(var i:Number = 0; i < tableauDesPersonnages.length; i++)
 		{
-			trace("DANS PLANCHE for: " + tableauDesPersonnages[i].obtenirNom());
+			
 		   if(tableauDesPersonnages[i].obtenirNom() == playerName){
-			   
-		     // this.tableauDesPersonnages[i].slippingBanana();
-			 // this.tableauDesPersonnages[i].obtenirImage().gotoAndPlay(10);
-			  //trace("DANS PLANCHE: " + tableauDesPersonnages[i].obtenirNom());//
+			 
 			  return tableauDesPersonnages[i];
 		   }
 		}
@@ -190,7 +187,7 @@ class PlancheDeJeu
         {
             x = i*largeurDeCase/2 + largeurDeCase/2;
             y = 200 + i*hauteurDeCase/2;
-            for(j=0;j<this.mat[0].length;j++)
+            for(j=0; j < this.mat[0].length; j++)
             {
                 pt.definirX(x);
                 pt.definirY(y);
@@ -541,7 +538,7 @@ class PlancheDeJeu
 		var pourcent:Number;
 		
 		// if different type of game we need different pozitions
-		if((_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu=="Tournament") )
+		if((_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") )
 		{
 		   dx = 180 - (_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
 		   dy = 250 - (_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._y);
@@ -1124,5 +1121,32 @@ class PlancheDeJeu
 	
 		return false;
     }
+	
+	// used for Banana action on the game
+	function tossBananaShell(nameBy:String, nameTo:String ):Void
+	{
+	   var speed:Number;
+	   // phase 1 - remove old shell_mc
+	   _level0.loader.contentHolder.referenceLayer.shell_mc.removeMovieClip();
+	   // phase 1 - player toss banana
+	   getPersonnageByName(nameBy).tossBanana();
+	   
+	   // phase 2 - banana shell fly to the player that support the action
+	   var coorByX:Number = getPersonnageByName(nameBy).obtenirX();// - getPersonnageByName(nameBy).obtenirImage()._width;
+	   var coorByY:Number = getPersonnageByName(nameBy).obtenirY() - getPersonnageByName(nameBy).obtenirImage()._height;
+	   	   
+	   var coorToX:Number = getPersonnageByName(nameTo).obtenirProchainePosition().obtenirX();
+	   var coorToY:Number = getPersonnageByName(nameTo).obtenirProchainePosition().obtenirY()- 15;
+	   
+	   //_level0.loader.contentHolder.referenceLayer.shell_mc._x = coorToX + 5;
+	   //_level0.loader.contentHolder.referenceLayer.shell_mc._y = coorToY + 5;
+	   var intervalId:Number;
+	   intervalId = setInterval(attendre, 3100, coorToX, coorToY);	// sert pour attendre la jusqu'a la fin de action de 
+	   
+	   function attendre(){
+	     _level0.loader.contentHolder.referenceLayer.attachMovie("bananaShell2", "shell_mc", _level0.loader.contentHolder.referenceLayer.getNextHighestDepth(), {_x:coorToX, _y:coorToY});
+		 clearInterval(intervalId);
+	   }
+	}
         
 }
