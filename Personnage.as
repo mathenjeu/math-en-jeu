@@ -515,7 +515,7 @@ class Personnage
 		
 		if ((dx == 0) && (dy == 0))
 		{
-			if(image._currentFrame != 1)
+			if(image._currentFrame != 1 && image._currentFrame < 90)
 			{
 				// place le personnage au repos et de face
 				this.image.gotoAndStop(1);
@@ -879,17 +879,15 @@ class Personnage
 	//////////////////////////////////////////////////////////////////////////////////////
 	function tossBanana()
 	{
-		this.image.gotoAndPlay(130);
+		this.image.gotoAndPlay("tossing");
+		
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////
 	function slippingBanana()
 	{
-		trace("slipping ++++++++ " + this.image._currentFrame + " *** " + this.nom);
-		
-		this.image.gotoAndPlay(110);
-		//this.image.benj.gotoAndPlay(1);
-		trace("slipping ++++++++ " + this.image._currentFrame + " *** " + this.nom);
+		this.image.gotoAndPlay("slipping");
 	}
+	
 	
 }
