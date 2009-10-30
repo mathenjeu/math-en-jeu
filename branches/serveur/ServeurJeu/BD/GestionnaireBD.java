@@ -752,8 +752,7 @@ public class GestionnaireBD
 			statistics =  statistics + ":" + levels[i];
 		}
 		
-		statistics = statistics + "||" + joueur.obtenirProtocoleJoueur().getQuestionsAnswers();
-		
+		statistics = statistics + "/-/" + joueur.obtenirProtocoleJoueur().getQuestionsAnswers();
 		
 		
 		try
@@ -895,7 +894,7 @@ public class GestionnaireBD
 	    Date beginDate = null;
 	    Date endDate = null;
 	    int masterTime = 0;
-	    boolean roomCategories = false; 
+	    boolean roomCategories = false;
 	    String categoriesString = "";
 	    
 		//now fill all the rooms with properties and add this rooms to the game
@@ -941,6 +940,10 @@ public class GestionnaireBD
 					 	}
 						
 						objControleurJeu.ajouterNouvelleSalle(objSalle);
+						 
+						
+						objControleurJeu.preparerEvenementNouvelleSalle(nom, objSalle.protegeeParMotDePasse(), createur, gameType, 
+								           roomDescription, objReglesSalle.getMaxNbPlayers(), masterTime, room);
 						
 					}   
 
@@ -1620,8 +1623,7 @@ public class GestionnaireBD
 		
 		// Création du SQL pour l'ajout
 		String strSQL = "INSERT INTO room_info (room_id, language_id, name, description) VALUES (" +
-		                 room_id + "," + lang_id + ",'" + name + "','" + roomDesc + "');";
-
+		                 room_id + "," + lang_id + ",\"" + name + "\",\"" + roomDesc + "\");";   
 		try
 		{
 			synchronized(requete)
@@ -1652,7 +1654,7 @@ public class GestionnaireBD
 
 					{
 						// Ajouter l'information pour cette salle
-						requete.executeUpdate("INSERT INTO color_square_rule (room_id, type, priority) VALUES ( " + room_id + " ," + i + 1 +" , " + i + 1 + ");");
+						requete.executeUpdate("INSERT INTO color_square_rule (room_id, type, priority) VALUES ( " + room_id + " ," + (i + 1) + " , " + (i + 1) + ");");
 					}
 				}		
 			}
@@ -1783,18 +1785,19 @@ public class GestionnaireBD
 		int user_id = 0;
 		int score = 0;
 		String questions_answers = "";
-		Boolean won;
+		Boolean won = null;
 		String first_name = "";
 		String last_name = "";
 		String username = "";
 		String roomName; 
 		if (langue.equals("fr")){
-			roomName =  this.getRoomName(room_id, 1);
-			report.append("Salle Nr." + room_id + " " + roomName + "\n\n");
+			roomName =  this.getRoomName(room_id, 1) +  "\n";
+			report.append("Salle Nr." + room_id + " - " + roomName);
 		}else if (langue.equals("en")){
-			roomName =  this.getRoomName(room_id, 2);
-			report.append("The Room Nr." + room_id + " " + roomName + "\n\n");
+			roomName =  this.getRoomName(room_id, 2) + "\n";
+			report.append("The Room Nr." + room_id + " - " + roomName);
 		}
+		
 		try
 		{
 
@@ -1812,18 +1815,21 @@ public class GestionnaireBD
 					username = rs.getString("username");
 					//report.append(user_id + score + questions_answers);
 					makeReport(report, user_id, score, questions_answers, won, langue, first_name, last_name, username);
-				}
+			    }
 
 			}	
 		}
         catch (Exception e)
-            {
-               System.out.println(GestionnaireMessages.message("bd.erreur_create_report") + e.getMessage());
-            }
-		
+        {
+               System.out.println( GestionnaireMessages.message("bd.erreur_create_report") + e.getMessage());
+        }
+        
+        
         return report.toString();
 		
 	}// end methode
+	
+	
 	/**
 	 * Methode satellite to getReport
 	 * @param report
@@ -1835,13 +1841,24 @@ public class GestionnaireBD
 	 */
 	private void makeReport(StringBuffer report, int user_id, int score, String answers, Boolean won, String langue, String first_name, String last_name, String username)
 	{
-		StringTokenizer allAnswers = new StringTokenizer(answers, "||");
-		String levels = allAnswers.nextToken().trim();
-		String answersDescription = allAnswers.nextToken().trim();
+		StringTokenizer allAnswers = new StringTokenizer(answers, "/-/");
 		
-        if(langue.equals("fr"))
+		String levels = "- ";
+		String answersDescription = "- ";
+		
+		if(allAnswers.hasMoreTokens())
+		{
+			levels = allAnswers.nextToken();
+		}
+		
+		if(allAnswers.hasMoreTokens())
+		{
+			answersDescription = allAnswers.nextToken();
+		}
+		if(langue.equals("fr"))
         {
-        	report.append("Joueur : " + first_name + " " + last_name + " (Alias: "  +  username +")\n");
+        	
+        	report.append("Joueur : " + first_name + " - " + last_name + " (Alias: "  + username + ")\n");
         	report.append("Le pointage pour cette partie : " + score + "  (gagnant: " + (won?"oui":"non") + ")\n");
         	report.append("Niveaux: " + levels + "\n");
         	report.append("Détails: (légende: q:numero de la question, r: réponse, c:correct, t:temps)\n " + answersDescription + "\n\n");
