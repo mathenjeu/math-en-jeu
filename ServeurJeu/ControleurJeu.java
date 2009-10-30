@@ -17,6 +17,8 @@ import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.Evenements.EvenementJoueurDeconnecte;
 import ServeurJeu.Evenements.EvenementJoueurConnecte;
+import ServeurJeu.Evenements.EvenementNouvelleSalle;
+import ServeurJeu.Evenements.EvenementNouvelleTable;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.Monitoring.TacheLogMoniteur;
@@ -669,6 +671,68 @@ public class ControleurJeu
 		
 		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
 		objGestionnaireEvenements.ajouterEvenement(joueurConnecte);
+	}
+	
+	/**
+	 * Cette méthode permet de préparer l'événement de la création d'une 
+	 * nouvelle salle dans le serveur apres l'ajout d'elle dans BD. 
+	 * Cette méthode va passer tous les joueurs connectés et pour ceux devant être avertis 
+	 * (tous sauf le joueur courant passé en paramètre), on va obtenir un numéro 
+	 * de commande, on va créer un InformationDestination et on va ajouter 
+	 * l'événement dans la file d'événements du gestionnaire d'événements. 
+	 * Lors de l'appel de cette fonction, la liste des joueurs est 
+	 * synchronisée.
+	 *
+	 * @param int roomID : Le numéro de la Salle créé
+	 * @param String roomName : Le nom de la Salle
+	 * @param String strCreatorUserName : Le nom d'utilisateur du joueur qui
+	 * 								  a créé la table
+	 * @param int maxnbplayers : Le numéro maximal des joueurs dans les tables
+	 *                           de cette Salle
+	 * @param String gameType : Contient le type de jeu (ex. mathEnJeu)
+	 * @param Boolea protegee : Si la Salle est protegee par mot de passe
+	 * @param String roomDescription : Court description de la Salle
+	 * @param int masterTime : Le temps par default d'une partie dans la Salle
+	 * 
+	 * @synchronism Cette fonction n'est pas synchronisée ici, mais elle l'est
+	 * 				par l'appelant ().
+	 */
+	public void preparerEvenementNouvelleSalle(String roomName, Boolean protegee, String strCreatorUserName, String gameType, 
+    		String roomDescription, int maxnbplayers, int masterTime, int roomID)
+	{
+	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
+	    // aux joueurs qu'une table a été créée
+	    EvenementNouvelleSalle nouvelleSalle = new EvenementNouvelleSalle(roomName, protegee, strCreatorUserName, gameType, 
+	    		roomDescription, maxnbplayers, masterTime, roomID);
+	    
+	    // Créer un ensemble contenant tous les tuples de la liste 
+		// lstJoueursConnectes (chaque élément est un Map.Entry)
+		Set<Map.Entry<String,JoueurHumain>> lstEnsembleJoueurs = lstJoueursConnectes.entrySet();
+		
+		// Obtenir un itérateur pour l'ensemble contenant les joueurs
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
+		
+		
+		// Passer tous les joueurs de la salle et leur envoyer un événement
+		while (objIterateurListe.hasNext() == true)
+		{
+			// Créer une référence vers le joueur humain courant dans la liste
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
+			
+			// Si le nom d'utilisateur du joueur courant n'est pas celui
+			// qui vient de créer la table, alors on peut envoyer un 
+			// événement à cet utilisateur
+			if (objJoueur.obtenirNomUtilisateur().equals(strCreatorUserName) == false)
+			{
+			    // Obtenir un numéro de commande pour le joueur courant, créer 
+			    // un InformationDestination et l'ajouter à l'événement
+				nouvelleSalle.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
+			            											objJoueur.obtenirProtocoleJoueur()));
+			}
+		}
+		
+		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
+		objGestionnaireEvenements.ajouterEvenement(nouvelleSalle);
 	}
 	
 	/**
