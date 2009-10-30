@@ -4086,7 +4086,7 @@ public class ProtocoleJoueur implements Runnable
      */
     private void collectPlayerAnswers(int reponseTime) 
     {
-		questionsAnswers.append("t:" + reponseTime + "||");
+		questionsAnswers.append(" t:" + reponseTime + "||");
 		
 	}// end methode
     
@@ -4095,7 +4095,7 @@ public class ProtocoleJoueur implements Runnable
      */
     private void collectPlayerAnswers(String strReponse, boolean valide) 
     {
-		questionsAnswers.append("r:" + strReponse + "c:" + valide);
+		questionsAnswers.append(" r:" + strReponse + " c:" + valide);
 		
 	}// end methode
     
@@ -4117,7 +4117,7 @@ public class ProtocoleJoueur implements Runnable
      */
     private void collectPlayerAnswers(Question question)
     {
-    	questionsAnswers.append("q:" + question.obtenirCodeQuestion());
+    	questionsAnswers.append(" q:" + question.obtenirCodeQuestion());
     }//end methode
     
     // getter 
