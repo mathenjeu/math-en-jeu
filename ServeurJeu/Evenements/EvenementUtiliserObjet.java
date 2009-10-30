@@ -89,7 +89,7 @@ public class EvenementUtiliserObjet extends Evenement
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
 		Moniteur.obtenirInstance().fin();
-		System.out.println("Banana : " + strCodeXML);
+		
 		return strCodeXML;
 	}
 }
