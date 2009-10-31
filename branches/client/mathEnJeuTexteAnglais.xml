@@ -259,9 +259,7 @@
 			nonDisponible = "Unavailable"
 			inconnu = "Unknown"
 			demarrerMaintenant = "Start now"
-			attente = "Waiting for other players ...
-      If you don't wait for other players,
-      Start the game!"
+			attente = "Waiting for other players ..."
 
 			difficulte = "Difficulty"
 

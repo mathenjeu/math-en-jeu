@@ -261,9 +261,7 @@
 
 			inconnu = "Inconnu"
 			demarrerMaintenant = "Démarrer maintenant"
-			attente = "En attente des autres joueurs ...
-      Si vous n'attendez pas d'autres joueurs,
-   Démarrez la partie!"
+			attente = "En attente des autres joueurs ..."
 
 			difficulte = "Difficulté"
 			
