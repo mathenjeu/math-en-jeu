@@ -266,10 +266,9 @@ public class Salle
 				// dans la file de gestion d'événements
 				preparerEvenementJoueurEntreSalle(joueur.obtenirNomUtilisateur());
 		    }
-		
-		    System.out.println(motDePasse);
+				    
 		    objGestionnaireBD.fillUserLevels(joueur, this);
-		    System.out.println(motDePasse);
+		   
 			// On retourne vrai
 			return true;
 		}
