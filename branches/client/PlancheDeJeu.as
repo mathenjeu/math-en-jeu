@@ -180,7 +180,7 @@ class PlancheDeJeu
         clipTest._x = -100;
         clipTest._y = -100;
         largeurDeCase = clipTest._width;
-        hauteurDeCase = clipTest._height*0.875;
+        hauteurDeCase = clipTest._height*0.88;
         clipTest.removeMovieClip();
         ////////////////////////////////////////////////////////////////////////////////////////
         for(i=0; i < this.mat.length; i++)
@@ -1141,11 +1141,30 @@ class PlancheDeJeu
 	   //_level0.loader.contentHolder.referenceLayer.shell_mc._x = coorToX + 5;
 	   //_level0.loader.contentHolder.referenceLayer.shell_mc._y = coorToY + 5;
 	   var intervalId:Number;
-	   intervalId = setInterval(attendre, 3100, coorToX, coorToY);	// sert pour attendre la jusqu'a la fin de action de 
+	   intervalId = setInterval(attendre, 3500, coorToX, coorToY);	// sert pour attendre la jusqu'a la fin de action de 
 	   
 	   function attendre(){
 	     _level0.loader.contentHolder.referenceLayer.attachMovie("bananaShell2", "shell_mc", _level0.loader.contentHolder.referenceLayer.getNextHighestDepth(), {_x:coorToX, _y:coorToY});
 		 clearInterval(intervalId);
+	   }
+	   
+	   var persoImage:MovieClip;
+	   var num:Number = getPersonnageByName(nameTo).obtenirNumero();
+	   persoImage = _level0.loader.contentHolder.referenceLayer["Personnage" + num];
+	   _level0.loader.contentHolder.referenceLayer["shell_mc"].swapDepths(persoImage);
+	   
+	   trace("executeCallback intervalId: " + persoImage.getDepth() + " count: " + _level0.loader.contentHolder.referenceLayer["shell_mc"].getDepth());
+	   
+	   var intervalId2:Number;
+	   var wait:Number = 0;
+	   intervalId2 = setInterval(bananaShell, 200);	// sert pour attendre la jusqu'a la fin de action de 
+	   function bananaShell(){
+	      	  
+		  if(wait > 35)
+		     _level0.loader.contentHolder.referenceLayer["shell_mc"]._alpha -= 5;
+		  if(wait > 55)
+		     clearInterval(intervalId2);
+		  wait++;   
 	   }
 	}
         
