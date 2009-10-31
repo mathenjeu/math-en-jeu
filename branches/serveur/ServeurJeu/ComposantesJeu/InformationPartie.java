@@ -1036,6 +1036,7 @@ public class InformationPartie
 					 if(isWinTheGame && boolWasOnFinish )
 					 {
 						 bonus = ((JoueurHumain)objJoueur).obtenirPartieCourante().obtenirTable().obtenirTempsRestant();
+						 intNouveauPointage += bonus; 
 						
 						 ((JoueurHumain)objJoueur).obtenirPartieCourante().isPlayerNotArrivedOnce = false;
 					 }
