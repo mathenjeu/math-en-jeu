@@ -961,8 +961,46 @@ class GestionnaireCommunication
 						break
 				    }	// fin du switch
 			    } // fin du if(noeudEvenement.attributes.nom == "PartieTerminee")
-			    
-				else	// donc (noeudEvenement.attributes.nom != "PartieDemarree" NI "JoueurDeplacePersonnage" NI "PartieTerminee")
+				else if(noeudEvenement.attributes.nom == "NouvelleSalle")
+				{
+					switch(strNomType)
+			    	{
+				    	case "NoSalle":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["NoSalle"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+						case "NomSalle":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["NomSalle"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+						case "ProtegeeSalle":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["ProtegeeSalle"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+						case "CreatorUserName":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["CreatorUserName"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+						case "GameType":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["GameType"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+						case "MasterTime":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["MasterTime"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+						case "MaxNbPlayers":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["MaxNbPlayers"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+						case "RoomDescriptions":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["RoomDescriptions"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+					} // end switch
+				
+				} // fin NouvelleSalle
+			    else	// donc (noeudEvenement.attributes.nom != "PartieDemarree" NI "JoueurDeplacePersonnage" NI "PartieTerminee")
 			    {
 				 	//trace("ds if ds for envoyer evenement  :  "+noeudEvenement.attributes.nom+"   "+lstChildNodes[i].firstChild.nodeValue+"   "+strNomType.substring(0, 1).toLowerCase() + strNomType.substring(1, strNomType.length));
 					// Le firstChild va pointer vers un noeud texte
@@ -1431,7 +1469,8 @@ class GestionnaireCommunication
      * @param Function obtenirListeSallesDelegate : Un pointeur sur la
      *          fonction permettant de retourner la liste des salles
      */
-    public function obtenirListeSalles(obtenirListeSallesDelegate:Function, client:Number)
+    public function obtenirListeSalles(obtenirListeSallesDelegate:Function, evenementNouvelleSalleDelegate:Function,
+									   client:Number)
     {
         // Si on a obtenu la liste des joueurs, alors on peut continuer le code
         // de la fonction
@@ -1442,6 +1481,8 @@ class GestionnaireCommunication
             // Ajouter le Delegate de retour dans le tableau des delegate pour
             // cette fonction
             lstDelegateCommande.push({nom:"ObtenirListeSalles", delegate:obtenirListeSallesDelegate});
+			
+			lstDelegateCommande.push({nom:"NouvelleSalle", delegate:evenementNouvelleSalleDelegate});
             // Declaration d'une variable qui va contenir le numero de la commande
             // generee
             var intNumeroCommande:Number = obtenirNumeroCommande();
@@ -3035,7 +3076,7 @@ class GestionnaireCommunication
             // Creer un tableau ListeNomSalles qui va contenir les
             // objets salle
             objEvenement.listeNomSalles = new Array();
-            //trace(">>>>>>>>>>>>>>>>> Reponse serveur"+noeudCommande);
+            
             // Passer toutes les salles et les ajouter dans le tableau
             for (var i:Number = 0; i < lstChildNodes.length; i++)
             {
@@ -3054,18 +3095,9 @@ class GestionnaireCommunication
 			// Creer un tableau ListeDescrSalles qui va contenir les
             // descriptions des objets salle
             objEvenement.listeDescrSalles = new Array();
-			//objEvenement.isActiveRoom = new Boolean();
+			
             // Passer toutes les salles et les ajouter dans le tableau
-           /*
-		    for (var i:Number = 0; i < lstChildNodes.length; i++)
-            {
-                // Ajouter l'objet salle dans le tableau
-                objEvenement.listeDescrSalles.push({descriptions:lstChildNodes[i].attributes.descriptions});
-				/*if(lstChildNodes[i].attributes.activ == "true")
-				   objEvenement.isActiveRoom = true;
-				else if(lstChildNodes[i].attributes.activ == "false")
-				   objEvenement.isActiveRoom = false; 
-			} */
+          
 			//Creer un tableau listeNumberoJSalles qui va contenir les noumero des joueurs dans salles
 			objEvenement.listeNumberoJSalles = new Array();
 			objEvenement.typeDeJeuAll = new Array();

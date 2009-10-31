@@ -33,7 +33,7 @@ class GestionnaireEvenements
 	private var nomUtilisateur:String;    // user name of our  user
 	private var userRole:Number;  // if 1 - simple user, if 2 - is admin(master), if 3 - is  prof
 	private var numeroDuPersonnage:Number; // sert a associer la bonne image pour le jeu d'ile au tresor
-	private var numberDesJoueurs:Number;
+	
     public var  listeDesPersonnages:Array;   // liste associant les idPersonnage avec les nomUtilisateurs dans la table ou on est
     private var motDePasse:String;  // notre mot de passe pour pouvoir jouer
     private var nomSalle:String;  //  nom de la salle dans laquelle on est
@@ -45,9 +45,13 @@ class GestionnaireEvenements
     private var tempsPartie:Number;   //  temps que va durer la partie, en minutes
     private var idPersonnage:Number;   //  
     private var listeDesJoueursDansSalle:Array;  // liste des joueurs dans la salle qu'on est. Un joueur contient un nom (nom) ???? 
-    public var  listeDesTypesDeJeu:Array; //liste des TypesDeJeu de salles
-	public var  listeDesSalles:Array;    //  liste de toutes les salles
+    
+	private var numberDesJoueurs:Number;   // ????????
+	public var  listeDesTypesDeJeu:Array; //liste des TypesDeJeu de salles
+	public var  listeDesSalles:Array;    //  liste de toutes les salles                !!!! Combiner ici tout dans un Objet
 	private var listeNumeroJoueursSalles:Array;		//liste de numero de joueurs dans chaque salle
+	private var numeroJoueursDansSalle:Number = 0; //??????
+	
 	private var listeChansons:Array;    //  liste de toutes les chansons
     private var listeDesJoueursConnectes:Array;   // la premiere liste qu'on recoit, tous les joueurs dans toutes les salles. Un joueur contient un nom (nom)
     
@@ -57,15 +61,12 @@ class GestionnaireEvenements
     private var objGestionnaireCommunication:GestionnaireCommunication;  //  pour caller les fonctions du serveur 
 	private var tabPodiumOrdonneID:Array;			// id des personnages ordonnes par pointage une fois la partie terminee
 	private var pointageMinimalWinTheGame:Number = -1 // pointage minimal a avoir droit d'atteindre le WinTheGame
-	private var numeroJoueursDansSalle:Number = 0;
+	
 	public  var typeDeJeu:String = "MathEnJeu";
 	private var moveVisibility:Number;  // The number of cases that user can move. At the begining is 3. 
 	                                    // With the 3 running correct answers the level increase by 1 
 	private var langue;
 	private var endGame:Boolean;
-	
-	//var timerInterval:Number;
-	
 	
 	function affichageChamps()
 	{
@@ -585,7 +586,7 @@ class GestionnaireEvenements
                 {
                     this.listeDesJoueursConnectes.push(objetEvenement.listeNomUtilisateurs[i]);
                 }
-                this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), this.clientType);
+                this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), Delegate.create(this, this.evenementNouvelleSalle), this.clientType);
             break;
 			
             case "CommandeNonReconnue":
@@ -624,11 +625,7 @@ class GestionnaireEvenements
 					_level0.loader.contentHolder.listeSalle.addItem({label: this.listeDesSalles[i].nom, data:  this.listeDesSalles[i].idRoom});
 					trace("salle " + i + " : " + this.listeDesSalles[i].nom);
 					//_level0.listeRooms.addItem(this.listeDesSalles[i].nom );
-										
-					//this.listeDesDescriptionsSalles.push(objetEvenement.listeDescrSalles[i]);
-					//_level0.loader.contentHolder.listeDescr.push(this.listeDesDescriptionsSalles[i].descriptions );
-					//trace("salle " + i + " : " + this.listeDesSalles[i].descriptions );
-					
+															
 					this.listeNumeroJoueursSalles.push(objetEvenement.listeNumberoJSalles[i]);
 					_level0.loader.contentHolder.listeNumeroJSalles.push(this.listeNumeroJoueursSalles[i].maxnbplayers );
 					trace("salle " + i + " : " + this.listeDesSalles[i].maxnbplayers + " " + objetEvenement.listeNomSalles[i].maxnbplayers);
@@ -639,17 +636,7 @@ class GestionnaireEvenements
 					
 
 				}
-				/*
-				for (var i:Number = 0; i < objetEvenement.listeNomSalles.length; i++)
-                {
-					if(_level0.loader.contentHolder.langue == "en" && objetEvenement.listeNomSalles[i].nom == "Accromath")
-					{
-						_level0.loader.contentHolder.listeSalle.removeItemAt(i);
-						trace("salle enlevee --> " + i + " : " + this.listeDesSalles[i].nom);
-					}
-				}*/
-				//activ = objetEvenement.isActiveRoom;
-				
+								
 				_level0.loader.contentHolder.bt_continuer1._visible = true;
 				_level0.loader.contentHolder.txtChargementSalles._visible = false;
 				
@@ -688,7 +675,7 @@ class GestionnaireEvenements
             case "OK":
                
 			trace("room created  ");
-			this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), this.clientType);
+			this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), Delegate.create(this, this.evenementNouvelleSalle), this.clientType);
 			
 
             break;
@@ -1799,7 +1786,7 @@ class GestionnaireEvenements
 						  // if we have bonus in the tournament game  we must treat this
 						  if(objetEvenement.bonus > 0){
 						     	this.listeDesPersonnages[i].win = 1;
-								this.listeDesPersonnages[i].pointage += objetEvenement.bonus;
+								//this.listeDesPersonnages[i].pointage += objetEvenement.bonus;
 								_level0.loader.contentHolder.bonusBox.bonus = objetEvenement.bonus;
 						  }
         	           }
@@ -2000,6 +1987,38 @@ class GestionnaireEvenements
     	trace("fin de evenementJoueurConnecte");
     	trace("*********************************************\n");
     }
+	
+	 ////////////////////////////////////////////////////////////////////////////////////////////////////
+    public function evenementNouvelleSalle(objetEvenement:Object)
+    {
+        // parametre: NoSalle, NomSalle, ProtegeeSalle, CreatorUserName, GameType, MasterTime, MaxNbPlayers, RoomDescriptions
+    	trace("*********************************************");
+    	trace("debut de evenementNouvelleSalle   " + objetEvenement.NoSalle + "  " + objetEvenement.RoomDescriptions + " " + objetEvenement.MaxNbPlayers);
+    	  
+		    this.listeDesSalles.push(new Object());
+			this.listeDesSalles[this.listeDesSalles.length - 1].nom = objetEvenement.NomSalle;
+			this.listeDesSalles[this.listeDesSalles.length - 1].idRoom = objetEvenement.NoSalle;
+			this.listeDesSalles[this.listeDesSalles.length - 1].possedeMotDePasse = Boolean(objetEvenement.ProtegeeSalle);
+			this.listeDesSalles[this.listeDesSalles.length - 1].descriptions = objetEvenement.RoomDescriptions;
+			this.listeDesSalles[this.listeDesSalles.length - 1].maxnbplayers = objetEvenement.MaxNbPlayers;
+			this.listeDesSalles[this.listeDesSalles.length - 1].typeDeJeu = objetEvenement.GameType;
+			this.listeDesSalles[this.listeDesSalles.length - 1].userCreator = objetEvenement.CreatorUserName;
+			this.listeDesSalles[this.listeDesSalles.length - 1].masterTime = objetEvenement.MasterTime;
+			trace(" GE : " + this.listeDesSalles[this.listeDesSalles.length - 1].nom + " * " +  this.listeDesSalles[this.listeDesSalles.length - 1].possedeMotDePasse);
+			
+			_level0.loader.contentHolder.listeSalle.addItem({label: objetEvenement.NomSalle, data:  objetEvenement.NoSalle});
+			_level0.loader.contentHolder.listeSalle.redraw();
+																
+			this.listeNumeroJoueursSalles.push(objetEvenement.MaxNbPlayers);
+			_level0.loader.contentHolder.listeNumeroJSalles.push(objetEvenement.MaxNbPlayers );
+					
+			this.listeDesTypesDeJeu.push(objetEvenement.GameType);
+			_level0.loader.contentHolder.listeDesTypesDeJeu.push(objetEvenement.GameType);
+						 
+    	trace("fin de evenementNouvelleSalle");
+    	trace("*********************************************\n");
+    }// end event
+	
 	
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     public function evenementJoueurDeconnecte(objetEvenement:Object)
@@ -2704,6 +2723,7 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder.toss.removeMovieClip();
 		_level0.loader.contentHolder["fond_MiniGame"]._y += 400;
 		
+		
 		//s'assurer que la musique s'arrete en fin de partie
 		_level0.loader.contentHolder.musique.stop();
 		_level0.loader.contentHolder.musiqueDefault.stop();
@@ -2812,10 +2832,18 @@ class GestionnaireEvenements
 		   if(_level0.loader.contentHolder.planche.obtenirPerso().minigameLoade)
 		   {
 		      
+			  if(_level0.loader.contentHolder.miniGameLayer["Minigame"])
+			  {
                _level0.loader.contentHolder.miniGameLayer["Minigame"].loader.contentHolder.quitter(true);
-			   _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-		       _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			   _global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);	
+			  }else  if(_level0.loader.contentHolder.miniGameLayer["magasin"])
+			  {
+               _level0.loader.contentHolder.miniGameLayer["magasin"].loader.contentHolder.quitter();
+			  }
+			  
+			  _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+		      _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			  _global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);
+			  //_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
 			
 			// if the player read at the monment a question
 		   }else if(_level0.loader.contentHolder.box_question.monScroll._visible)
@@ -2828,7 +2856,8 @@ class GestionnaireEvenements
 			   
 			   _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 		       _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			   _global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);	
+			   _global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);
+			   //_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
 			
 			// if the player read a feedback of a question 
 		   }else if(_level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible) 
@@ -2843,10 +2872,11 @@ class GestionnaireEvenements
 				_level0.loader.contentHolder.box_question.monScroll._visible = false;
 				_level0.loader.contentHolder.box_question._visible = false;
 				_level0.loader.contentHolder.box_question.GUI_retro.removeMovieClip();
-				_global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);	
+				_global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);
+				//_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
 			    // here show banana in action
 			    // setTimeout( Function, delay in miliseconds, arguments)
-               _global.timerInterval = setInterval(this,"funcToRecallFeedback", 5000, tempsRested);
+               _global.timerInterval = setInterval(this,"funcToRecallFeedback", 7000, tempsRested);
 			  	   
 				//_root.objGestionnaireInterface.effacerBoutons(1);
 			  
@@ -2854,17 +2884,19 @@ class GestionnaireEvenements
 		      
                 _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 			    _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-				_global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);	
+				_global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);
+				//_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
 		   
 		   }//end else if
 		   		   
-		   _global.timerInterval = setInterval(this,"funcToCallMessage", 6000, playerThat);
+		   _global.timerIntervalMessage = setInterval(this,"funcToCallMessage", 6000, playerThat);
 		   
 		}else if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte != this.nomUtilisateur)
 		{
 			
 			
-		    _global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);	
+		    _global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);
+			//_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
 			//_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().gotoAndPlay(110);
 		
 		}// end if
@@ -2882,11 +2914,20 @@ class GestionnaireEvenements
 	// cette fonction attend jusqu'au signal du compteur
 	// et appelle le fonction d'action de la Banane
     function waitBanana(playerUnder:String):Void
-   {
+    {
       _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).slippingBanana();
 	  clearInterval(_global.timerIntervalBanana);
 				
-   }
+    }
+	
+	// cette fonction attend jusqu'au signal du compteur
+	// et appelle le fonction de distruction de la peaux de la Banane
+    function bananaShell(playerUnder:String):Void
+    {
+      
+	  clearInterval(_global.timerIntervalBanana);
+				
+    }
 	
 	function funcToCallMessage(playerThat:String)
 	{
@@ -2898,7 +2939,7 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder["banane"].nomCible = " ";
 	    _level0.loader.contentHolder["banane"].nomJoueurUtilisateur = playerThat;
 	    twMove = new Tween(guiBanane, "_alpha", Strong.easeOut, 40, 100, 1, true);
-		 clearInterval(_global.timerInterval);
+		 clearInterval(_global.timerIntervalMessage);
 	}
     
 	function funcToRecallFeedback(tempsRested:Number):Void
