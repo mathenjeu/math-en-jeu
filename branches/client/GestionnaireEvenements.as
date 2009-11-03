@@ -1193,6 +1193,9 @@ class GestionnaireEvenements
 					
 					_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
 			 	}
+				this.listeDesPersonnages.removeAll();
+				this.listeDesPersonnages.push(new Object());
+				_level0.loader.contentHolder.tableauDesPersoChoisis.removeAll();
 				
             break;
 
@@ -1345,6 +1348,15 @@ class GestionnaireEvenements
 			   _level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
 			   _level0.loader.contentHolder.txtChargementTables._visible = true;
 		     }
+			 
+			 for(var j = 0; j < this.listeDesPersonnages.length; j++)
+             {
+                   if(this.listeDesPersonnages[j].nom == objetEvenement.nom)
+                  {
+                    this.listeDesPersonnages.removeItemAt(j);
+                    break;
+                  }
+             }
 				
 			break;
 			
@@ -2026,6 +2038,17 @@ class GestionnaireEvenements
         // parametre: nomUtilisateur
     	trace("*********************************************");
     	trace("debut de evenementJoueurDeconnecte   "+objetEvenement.nomUtilisateur);
+		
+		for(var i:Number = 0; i < this.listeDesPersonnages.length;i++)
+    	{
+        	if(this.listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur)
+        	{
+            	this.listeDesPersonnages.removeItemAt(i);
+           		trace("un joueur enlever de la liste :   " + objetEvenement.nomUtilisateur);
+            	break;
+        	}
+        	
+    	}
     	trace("fin de evenementJoueurDeconnecte");
     	trace("*********************************************\n");
     }
@@ -2288,7 +2311,8 @@ class GestionnaireEvenements
     	var j:Number;
     	var tableAffichee:Boolean = false;
     	var str:String = new String();
-    	for(i = 0;i<this.listeDesTables.length;i++)
+    	
+		for(i = 0;i<this.listeDesTables.length;i++)
     	{
         	if(this.listeDesTables[i].no == objetEvenement.noTable)
         	{
@@ -2307,8 +2331,8 @@ class GestionnaireEvenements
             	//  on enleve le nom du joueur dans la liste et a l'ecran
             	if(itIsMe && (!alreadyWas))
             	{
-                	listeDesPersonnages[i].nom = "Inconnu" + i;
-                	_level0.loader.contentHolder.noms[i] = "Inconnu";
+                	//listeDesPersonnages[i].nom = "Inconnu" + i;
+                	//_level0.loader.contentHolder.noms[i] = "Inconnu";
                 	alreadyWas=true;
                 	break;
             	}
@@ -2337,21 +2361,40 @@ class GestionnaireEvenements
 				
         	}
     	}
-		  _level0.loader.contentHolder.listeTable.removeAll();
-			 for (var i:Number = 0; i < this.listeDesTables.length; i++)
-			 {
-				str = this.listeDesTables[i].no + ".  *" +  this.listeDesTables[i].tablName + "*  " + this.listeDesTables[i].temps + " min. " ;
-				_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
-			 }
-    	for(var i:Number = 0; i < numeroJoueursDansSalle; i++)
-                {
-					trace(i + ": " + this.listeDesPersonnages[i].nom + " id:" + this.listeDesPersonnages[i].id);
-				}
+		_level0.loader.contentHolder.listeTable.removeAll();
+		for (var i:Number = 0; i < this.listeDesTables.length; i++)
+	    {
+			str = this.listeDesTables[i].no + ".  *" +  this.listeDesTables[i].tablName + "*  " + this.listeDesTables[i].temps + " min. " ;
+			_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
+		}
+		
+		for(var i:Number = 0; i < this.listeDesPersonnages.length; i++)
+    	{
+        	if(this.listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur)
+        	{
+				trace("un joueur enlever de la liste :   " + objetEvenement.nomUtilisateur + " " + this.listeDesPersonnages[i].nom);
+            	this.listeDesPersonnages.removeItemAt(i);
+           		break;
+        	}
+        	
+    	}
+		
+    	for(var i:Number = 0; i <this.listeDesPersonnages.length; i++)
+        {
+			trace(i + ": " + this.listeDesPersonnages[i].nom + " id:" + this.listeDesPersonnages[i].id);
+		}
     				
+		
 		if(this.listeDesTables.length == 0)
 		{
 			_level0.loader.contentHolder.txtChargementTables._visible = true;
 			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
+		}
+		
+		if(!endGame){
+		   _level0.loader.contentHolder.planche.getPersonnageByName(objetEvenement.nomUtilisateur).cachePersonnage();
+		   dessinerMenu();
+		   remplirMenuPointage();
 		}
 		
 		
@@ -3035,6 +3078,155 @@ class GestionnaireEvenements
 		return (perso - 10000 - idDessin * 100);
 	}
 	
+	function dessinerMenu()
+	{
+		// Create the base shape with blue color
+       var playersNumber:Number = calculateMenu();
+
+      _level0.loader.contentHolder.createEmptyMovieClip("menuPointages", 5);
+      _level0.loader.contentHolder.menuPointages._x = 450;
+      _level0.loader.contentHolder.menuPointages._y = 60;
+      drawRoundedRectangle(_level0.loader.contentHolder.menuPointages, 100, 31 + 8 + playersNumber*21, 10, 0x2A57F6, 100);
+
+      // add the intern black box there put the players lines
+      _level0.loader.contentHolder.menuPointages.createEmptyMovieClip("mc_autresJoueurs", 11);
+      _level0.loader.contentHolder.menuPointages.mc_autresJoueurs._x = 7;
+      _level0.loader.contentHolder.menuPointages.mc_autresJoueurs._y = 31;
+      drawRoundedRectangle(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs, 86, 2 + playersNumber*21, 3, 0x000000, 100);
+
+      //add the shines
+     if( playersNumber > 3)
+     {
+      _level0.loader.contentHolder.menuPointages.attachMovie("shine1", "shine11", 14, {_x:3, _y:40});
+      _level0.loader.contentHolder.menuPointages.attachMovie("shine1", "shine12", 15, {_x:96, _y:55});
+     }
+     _level0.loader.contentHolder.menuPointages.attachMovie("shine2", "shine22", 16, {_x:1, _y:(26 + playersNumber * 21) });
+
+     // add the title
+     if(langue == "fr")
+     {
+	    _level0.loader.contentHolder.menuPointages.attachMovie("pointages titre", "mc_pointages_title", 12, {_x:7, _y:3});
+	
+     }
+     else
+     {
+	    _level0.loader.contentHolder.menuPointages.attachMovie("score title", "mc_score_title", 12, {_x:7, _y:3});
+	
+     }
+	
+     // add the players mc
+     for (var i:Number = 1; i <= playersNumber; i++){
+
+        _level0.loader.contentHolder.menuPointages.mc_autresJoueurs.createEmptyMovieClip("mc_joueur" + i, i );
+        _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]._x = 0;
+        _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]._y = 2 + 21 * (i - 1);
+   
+        var playerNumberBox:String = "";
+        if( i == 1){
+           //playerNumberBox == "golden_box";
+	       _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i].attachMovie("gold_box","number_box" + i, i, {_x:0, _y:0});	
+        }else if( i == 2){
+           //playerNumberBox == "silver_box";
+	       _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i].attachMovie("silver_box","number_box" + i, i, {_x:0, _y:0});	
+        }else if( i == 3){
+           //playerNumberBox == "bronze_box";
+	       _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i].attachMovie("bronze_box","number_box" + i, i, {_x:0, _y:0});	
+        }else{ 
+           //playerNumberBox == "green_box";
+	       _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i].attachMovie("green_box","number_box" + i, i, {_x:0, _y:0});
+		}
+        
+		if(i < 10)
+	       _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["number_box" + i].listNumber = "  " + i;
+	    else
+	     _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["number_box" + i].listNumber = i;
+        // end else
+   
+        //background
+        _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i].attachMovie("fondBleu_mc","fondBleu" + i, 20 + i, {_x:12, _y:0});
+        // players face
+        _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i].attachMovie("faceHolder2","tete" + i, 40 + i, {_x:22, _y:7});
+        // players name
+        _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i].createTextField("dtNamePlayer" + i, 60 + i, 30, -4, 55, 14);
+      
+        // Make the field an label text field
+        _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["dtNamePlayer" + i].type = "dynamic";
+        _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["dtNamePlayer" + i].variable = "nomJoueur" + i;
+        with(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["dtNamePlayer" + i])
+        {
+	       multiline = false;
+	       background = false;
+	       text = "";
+	       textColor = 0xFFFFFF;
+	       border = false;
+	       _visible = true;
+	       //autoSize = true;
+        }
+   
+        var formatName:TextFormat = new TextFormat();
+        formatName.bold = true;
+        formatName.size = 8;
+        formatName.font = "Times New Roman";
+        formatName.align = "Right";
+        _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["dtNamePlayer" + i].setNewTextFormat(formatName);
+        //******************************************************************************************
+   
+        // players points
+        _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i].createTextField("dtPoints" + i, 200 + i, 50, 5, 35, 15);
+      
+        // Make the field an label text field
+        _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["dtPoints" + i].type = "dynamic";
+        _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["dtPoints" + i].variable = "pointageJoueur" + i;
+        with(_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["dtPoints" + i])
+        {
+	       multiline = false;
+	       background = false;
+	       text = "";
+	       textColor = 0xFF9933;
+	       border = false;
+	       _visible = true;
+	       //autoSize = true;
+        }
+   
+        var formatPoints:TextFormat = new TextFormat();
+        formatPoints.bold = true;
+        formatPoints.size = 8;
+        formatPoints.font = "Arial";
+        formatPoints.align = "Right";
+        _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["dtPoints" + i].setNewTextFormat(formatPoints);
+   
+       //menuPointages.mc_autresJoueurs["mc_joueur" + i].attachMovie("checkFlag_mc","flag" + i, 220 + i, {_x:-20, _y:0});
+    
+     
+   }// end for
+  
+} //end fonction 
+
+
+// modified code from source - www.adobe.com
+function drawRoundedRectangle(target_mc:MovieClip, boxWidth:Number, boxHeight:Number, cornerRadius:Number, fillColor:Number, fillAlpha:Number):Void {
+    with (target_mc) {
+		
+		lineStyle(2, 0x000000, 100);
+
+        beginFill(fillColor, fillAlpha);
+        moveTo(cornerRadius, 0);
+        lineTo(boxWidth - cornerRadius, 0);
+        curveTo(boxWidth, 0, boxWidth, cornerRadius);
+        lineTo(boxWidth, cornerRadius);
+        lineTo(boxWidth, boxHeight - cornerRadius);
+        curveTo(boxWidth, boxHeight, boxWidth - cornerRadius, boxHeight);
+        lineTo(boxWidth - cornerRadius, boxHeight);
+        lineTo(cornerRadius, boxHeight);
+        curveTo(0, boxHeight, 0, boxHeight - cornerRadius);
+        lineTo(0, boxHeight - cornerRadius);
+        lineTo(0, cornerRadius);
+        curveTo(0, 0, cornerRadius, 0);
+        lineTo(cornerRadius, 0);
+        endFill();
+    }
+}//end function
+
 	
 	
-}
+}// end class
