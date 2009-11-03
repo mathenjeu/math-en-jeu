@@ -889,5 +889,11 @@ class Personnage
 		this.image.gotoAndPlay("slipping");
 	}
 	
+	//////////////////////////////////////////////////////////////////////////////////////
+	function rest()
+	{
+		this.image.gotoAndPlay("rest");
+	}
+	
 	
 }
