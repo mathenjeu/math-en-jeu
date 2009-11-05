@@ -364,7 +364,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 			    // S'il ne reste aucun joueur dans la table et que la partie
 			    // est terminée, alors on doit détruire la table
-			    if (lstJoueurs.size() == 0 && bolEstArretee == true)
+			    if ((lstJoueurs.size() == 0 && bolEstArretee == true)||(joueur.obtenirNomUtilisateur() == strNomUtilisateurCreateur && !bolEstCommencee))
 			    {
 			    	//Arreter le gestionnaire de temps
 			    	//objGestionnaireTemps.arreterGestionnaireTemps();
