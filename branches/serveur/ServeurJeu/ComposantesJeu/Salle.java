@@ -87,6 +87,9 @@ public class Salle
 	//specifyed room's categories
 	private ArrayList<Integer> categories;
 	
+	// last room number
+	private int lastNumber;
+	
 	   
 	
 	/**
@@ -197,13 +200,15 @@ public class Salle
 	{
 		// Déclaration d'une variable qui va contenir le numéro de table
 		// généré
-		int intNoTable = 1;
-		
+		int intNoTable = getLastNumber() + 1;
+				
 		// Boucler tant qu'on n'a pas trouvé de numéro n'étant pas utilisé
 		while (lstNoTables.contains(new Integer(intNoTable)) == true)
 		{
 			intNoTable++;
 		}
+		
+		setLastNumber(intNoTable);
 		
 		return intNoTable;
 	}
@@ -897,5 +902,16 @@ public class Salle
 		while(it.hasNext())
 			System.out.println(it.next());
 	}// end mathode
+
+	private void setLastNumber(int lastNumber) {
+		this.lastNumber = lastNumber;
+		
+		if(this.lastNumber > 999)
+			this.lastNumber = 0;
+	}
+
+	private int getLastNumber() {
+		return lastNumber;
+	}
 	
 }// end class 
