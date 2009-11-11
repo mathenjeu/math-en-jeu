@@ -1125,34 +1125,57 @@ class PlancheDeJeu
 	// used for Banana action on the game
 	function tossBananaShell(nameBy:String, nameTo:String ):Void
 	{
-	   var speed:Number;
-	   // phase 1 - remove old shell_mc
+	    // phase 1 - remove old shell_mc
 	   _level0.loader.contentHolder.referenceLayer.shell_mc.removeMovieClip();
 	   // phase 1 - player toss banana
 	   getPersonnageByName(nameBy).tossBanana();
 	   
 	   // phase 2 - banana shell fly to the player that support the action
-	   var coorByX:Number = getPersonnageByName(nameBy).obtenirX();// - getPersonnageByName(nameBy).obtenirImage()._width;
-	   var coorByY:Number = getPersonnageByName(nameBy).obtenirY() - getPersonnageByName(nameBy).obtenirImage()._height;
-	   	   
-	   var coorToX:Number = getPersonnageByName(nameTo).obtenirProchainePosition().obtenirX();
-	   var coorToY:Number = getPersonnageByName(nameTo).obtenirProchainePosition().obtenirY()- 15;
-	   
-	   //_level0.loader.contentHolder.referenceLayer.shell_mc._x = coorToX + 5;
-	   //_level0.loader.contentHolder.referenceLayer.shell_mc._y = coorToY + 5;
 	   var intervalId:Number;
 	   var num:Number = getPersonnageByName(nameTo).obtenirNumero();
-	   intervalId = setInterval(attendre, 3500, coorToX, coorToY);	// sert pour attendre la jusqu'a la fin de action de 
+	   intervalId = setInterval(attendre, 2700, nameTo, nameBy);	// sert pour attendre la jusqu'a la fin de action de 
 	   
 	   function attendre(){
-	     _level0.loader.contentHolder.referenceLayer.attachMovie("bananaShell2", "shell_mc", _level0.loader.contentHolder.referenceLayer.getNextHighestDepth(), {_x:coorToX, _y:coorToY});
-		  _level0.loader.contentHolder.referenceLayer["shell_mc"].swapDepths(_level0.loader.contentHolder.referenceLayer["Personnage" + num]);
+	     
 		 clearInterval(intervalId);
-	   }
+	   var coorByX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameBy).obtenirX() - 10;// - getPersonnageByName(nameBy).obtenirImage()._width;
+	   var coorByY:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameBy).obtenirY() - _level0.loader.contentHolder.planche.getPersonnageByName(nameBy).obtenirImage()._height;
+	   	   
+	   var coorToX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).obtenirProchainePosition().obtenirX();
+	   var coorToY:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).obtenirProchainePosition().obtenirY()- 15;
+		 
+		 /*// move
+		 var speedX:Number = (coorToX - coorByX)/100;
+         var speedY:Number = (coorToY - coorByY)/100;
+		 var count:Number = 0;
+		
+		 var intervalM = setInterval(moveShell, 1, speedX, speedY, count);
+		 
+		 function moveShell(){
+			 
+			
+			_level0.loader.contentHolder.referenceLayer.shell_mc._x += speedX;
+			_level0.loader.contentHolder.referenceLayer.shell_mc._y += speedY;
+			count++;
+			if(count == 100)
+			  clearInterval(intervalM); 
+			  
+		 } */
+		  	
+		 
+		 _level0.loader.contentHolder.referenceLayer.attachMovie("bananaShell", "shell_mc", _level0.loader.contentHolder.referenceLayer.getNextHighestDepth(), {_x:coorByX, _y:coorByY});
+		 
+		 var twMoveX:Tween = new Tween(_level0.loader.contentHolder.referenceLayer.shell_mc, "_x", Strong.easeOut, coorByX, coorToX, 1, true);
+		 var twMoveY:Tween = new Tween(_level0.loader.contentHolder.referenceLayer.shell_mc, "_y", Strong.easeOut, coorByY, coorToY, 1, true);
+		 var twMoveRot:Tween = new Tween(_level0.loader.contentHolder.referenceLayer.shell_mc, "_rotation", Strong.easeOut, 0, 360, 1, true);
+		 
+		 _level0.loader.contentHolder.referenceLayer["shell_mc"].swapDepths(_level0.loader.contentHolder.referenceLayer["Personnage" + num]);
+		 
+	   }// end attendre
 	   
 	   // to resume the banana state
 	    var intervalId3:Number;
-		intervalId3 = setInterval(endOfBanana, 12000, nameTo);
+		intervalId3 = setInterval(endOfBanana, 15000, nameTo);
 		function endOfBanana(){
 		   _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).rest();
 		   clearInterval(intervalId3);
@@ -1175,7 +1198,7 @@ class PlancheDeJeu
 		  if(wait > 55)
 		     clearInterval(intervalId2);
 		  wait++;   
-	   }
+	   } // end bananaShell
 	   
 	   
 	}

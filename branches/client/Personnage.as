@@ -160,13 +160,14 @@ class Personnage
                       bananaClip = _level0.loader.contentHolder.attachMovie("bananaToss", "toss", 2021, objID);
 					  
 					  bananaClip._x = 22;
-                      bananaClip._y = 55;
+                      bananaClip._y = 70;
 					  
 		        }else{
 					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(listeObjets[nomObj][listeObjets[nomObj].length - 1], "NA");
+					_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet(nomObj);
 				}
 				
-				_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet(nomObj);
+				
 				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._xscale = _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._yscale = 100;
 				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
 			}//end 1st if
