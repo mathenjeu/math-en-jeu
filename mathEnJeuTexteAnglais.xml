@@ -1,7 +1,12 @@
 
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
-	main_menu = ""
+	Messagerie = ""
+	  welcomeMess = "Welcome to the game!!!"
+	  bananaMess = " tossed a Banana to "
+	  outMess = " left the game!"
+	  moveMess = "To move - click on yellow cells!"
+  main_menu = ""
 	  bienvenue = "Welcome to MathAmaze "
     btnPlay = "Play"
     btnQuit = "Quit"
