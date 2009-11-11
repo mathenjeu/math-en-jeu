@@ -67,6 +67,7 @@ class GestionnaireEvenements
 	                                    // With the 3 running correct answers the level increase by 1 
 	private var langue;
 	private var endGame:Boolean;
+	private var newsArray:Array;  // all the messages to show in newsbox  
 	
 	function affichageChamps()
 	{
@@ -124,8 +125,8 @@ class GestionnaireEvenements
         trace("debut du constructeur de gesEve      " + nom + "      " + passe);
         this.nomUtilisateur = nom;
         this.listeDesPersonnages = new Array();
-        this.listeDesPersonnages.push(new Object());  
-        this.clientType = client;
+        this.listeDesPersonnages.push(new Object());
+		this.clientType = client;
 	    this.motDePasse = passe;
 		this.langue = langue;
         this.nomSalle = new String();
@@ -142,6 +143,8 @@ class GestionnaireEvenements
 		var url_serveur:String = _level0.configxml_mainnode.attributes.url_server;
 		var port:Number = parseInt(_level0.configxml_mainnode.attributes.port, 10);
 		
+		this.newsArray = new Array();
+				
         this.objGestionnaireCommunication = new GestionnaireCommunication(Delegate.create(this, this.evenementConnexionPhysique), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
 	
     	trace("fin du constructeur de gesEve");
@@ -380,7 +383,9 @@ class GestionnaireEvenements
         trace("*********************************************");
         trace("debut de deplacerPersonnage     " + pt.obtenirX() + "     " + pt.obtenirY());
         this.objGestionnaireCommunication.deplacerPersonnage(Delegate.create(this, this.retourDeplacerPersonnage), _level0.loader.contentHolder.planche.calculerPositionOriginale(pt.obtenirX(), pt.obtenirY()));  
-        trace("fin de deplacerPersonnage");
+        // to correct the state 
+		_level0.loader.contentHolder.planche.obtenirPerso().minigameLoade = false;
+	    trace("fin de deplacerPersonnage");
         trace("*********************************************\n");
     }
    
@@ -1466,7 +1471,7 @@ class GestionnaireEvenements
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function retourDeplacerPersonnage(objetEvenement:Object)
     {
-        //   objetEvenement.resultat = Question, CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte
+        //   objetEvenement.resultat = Question, CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte, DeplacementNonAutorise
 		var question:MovieClip;
 	
       	trace("*********************************************");
@@ -1521,6 +1526,10 @@ class GestionnaireEvenements
 
             case "ParametrePasBon":
                 trace("ParamettrePasBon");
+            break;
+			
+			case "DeplacementNonAutorise":
+                trace("DeplacementNonAutorise");
             break;
 			 		 
             case "JoueurNonConnecte":
@@ -2164,8 +2173,9 @@ class GestionnaireEvenements
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function evenementTableDetruite(objetEvenement:Object)
     {
+		// param :  NoTable
     	trace("*********************************************");
-    	trace("debut de evenementTableDetruite   ");
+    	trace("debut de evenementTableDetruite   "  + objetEvenement.noTable);
     	
 		var i:Number;
     	for(i = 0; i < this.listeDesTables.length; i++)
@@ -2191,6 +2201,16 @@ class GestionnaireEvenements
 			_level0.loader.contentHolder.txtChargementTables._visible = true;
 			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
 		}
+		if(!endGame && objetEvenement.noTable == this.numeroTable){
+		   sortirSalle();
+		   //_level0.loader.contentHolder.gestionBoutons(true);
+		   _level0.loader.contentHolder["att"].removeMovieClip();
+		   _level0.loader.contentHolder.gotoAndPlay(1);
+		   this.listeDesPersonnages.removeAll();  
+		   this.listeDesPersonnages.push(new Object());  
+		  
+		}
+		
 								
     	trace("fin de evenementTableDetruite");
     	trace("*********************************************\n");
@@ -2391,10 +2411,17 @@ class GestionnaireEvenements
 			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
 		}
 		
-		if(!endGame){
+		if(!endGame && _level0.loader.contentHolder._currentframe > 3 && objetEvenement.noTable == this.numeroTable){
 		   _level0.loader.contentHolder.planche.getPersonnageByName(objetEvenement.nomUtilisateur).cachePersonnage();
 		   dessinerMenu();
 		   remplirMenuPointage();
+		   
+		   // newsbox
+		   _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
+		   var messageInfo:String = objetEvenement.nomUtilisateur + _root.texteSource_xml.firstChild.attributes.outMess; 
+		   this.newsArray[newsArray.length] = messageInfo;
+		   _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
+		   _level0.loader.contentHolder.orderId = 0;
 		}
 		
 		
@@ -2557,6 +2584,11 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder.objectMenu.Banane.countTxt = "0";
 		_level0.loader.contentHolder.objectMenu.Livre.countTxt = 0;
 		_level0.loader.contentHolder.objectMenu.piece.countTxt = 0;
+		
+		this.newsArray[0] = _root.texteSource_xml.firstChild.attributes.welcomeMess; 
+		this.newsArray[1] = _root.texteSource_xml.firstChild.attributes.moveMess;
+		_level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[1];
+		_level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[0];
 
         remplirMenuPointage();
 		
@@ -2684,6 +2716,12 @@ class GestionnaireEvenements
 					
 			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)] = jouersStarted[i].nomUtilisateur;	
 			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)] = jouersStarted[i].pointage;
+			
+			// to color our player points
+			if(jouersStarted[i].nomUtilisateur ==  this.nomUtilisateur)
+		       _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + (i + 1)]["dtPoints" + (i + 1)].textColor = 0x33FFFF;
+			else
+			   _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + (i + 1)]["dtPoints" + (i + 1)].textColor = 0xFF9933;
 
 			if(jouersStarted[i].win == 1){
 			   this["Flag" + (i + 1)] = new MovieClip();
@@ -2865,6 +2903,23 @@ class GestionnaireEvenements
     	trace("debut de evenementUtiliserObjet  " + objetEvenement.joueurQuiUtilise + "   " + objetEvenement.joueurAffecte + "   " + objetEvenement.objetUtilise );
         var playerThat:String = objetEvenement.joueurQuiUtilise;
 		var playerUnder:String = objetEvenement.joueurAffecte;
+		
+		// info for newsbox
+		if(objetEvenement.objetUtilise == "Banane"){
+		   _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
+		   //trace("INfo : " + this.newsArray[this.newsArray.length - 1] + " " + this.newsArray.length );
+		   var messageInfo:String = playerThat + _root.texteSource_xml.firstChild.attributes.bananaMess + playerUnder; 
+		   this.newsArray[newsArray.length] = messageInfo;
+		   _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
+		   
+		   _level0.loader.contentHolder.orderId = 0;
+		
+		}else if(objetEvenement.objetUtilise == "Livre")
+		{
+		   trace("INfo : " + objetEvenement.objetUtilise);
+		}
+		
+		
 		// here we treat the Banana
 		if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte == this.nomUtilisateur )
 		{
@@ -2882,10 +2937,11 @@ class GestionnaireEvenements
 			  {
                _level0.loader.contentHolder.miniGameLayer["magasin"].loader.contentHolder.quitter();
 			  }
-			  
+			 			  
 			  _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 		      _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			  _global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);
+			  _global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
+			  
 			  //_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
 			
 			// if the player read at the monment a question
@@ -2899,7 +2955,8 @@ class GestionnaireEvenements
 			   
 			   _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 		       _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			   _global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);
+			   _global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
+			  
 			   //_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
 			
 			// if the player read a feedback of a question 
@@ -2915,11 +2972,12 @@ class GestionnaireEvenements
 				_level0.loader.contentHolder.box_question.monScroll._visible = false;
 				_level0.loader.contentHolder.box_question._visible = false;
 				_level0.loader.contentHolder.box_question.GUI_retro.removeMovieClip();
-				_global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);
+				_global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
 				//_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
 			    // here show banana in action
 			    // setTimeout( Function, delay in miliseconds, arguments)
                _global.timerInterval = setInterval(this,"funcToRecallFeedback", 7000, tempsRested);
+			   
 			  	   
 				//_root.objGestionnaireInterface.effacerBoutons(1);
 			  
@@ -2927,7 +2985,9 @@ class GestionnaireEvenements
 		      
                 _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 			    _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-				_global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);
+				_global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
+				
+				
 				//_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
 		   
 		   }//end else if
@@ -2938,7 +2998,7 @@ class GestionnaireEvenements
 		{
 			
 			
-		    _global.timerIntervalBanana = setInterval(this, "waitBanana", 4000, playerUnder);
+		    _global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
 			//_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
 			//_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().gotoAndPlay(110);
 		
@@ -2950,6 +3010,7 @@ class GestionnaireEvenements
 			_level0.loader.contentHolder.planche.tossBananaShell(playerThat, playerUnder);//getPersonnageByName(playerThat).tossBanana();
 			
 		}
+		//***********  END treat the Banana **************************
      	trace("fin de evenementUtiliserObjet");
      	trace("*********************************************\n");
     } // end methode
@@ -2963,14 +3024,6 @@ class GestionnaireEvenements
 				
     }
 	
-	// cette fonction attend jusqu'au signal du compteur
-	// et appelle le fonction de distruction de la peaux de la Banane
-    function bananaShell(playerUnder:String):Void
-    {
-      
-	  clearInterval(_global.timerIntervalBanana);
-				
-    }
 	
 	function funcToCallMessage(playerThat:String)
 	{
@@ -3077,12 +3130,12 @@ class GestionnaireEvenements
 	{
 		return (perso - 10000 - idDessin * 100);
 	}
-	
-	function dessinerMenu()
+//// function used to draw the points menu	
+	public function dessinerMenu()
 	{
-		// Create the base shape with blue color
+		// used to know the size of menu
        var playersNumber:Number = calculateMenu();
-
+      // Create the base shape with blue color
       _level0.loader.contentHolder.createEmptyMovieClip("menuPointages", 5);
       _level0.loader.contentHolder.menuPointages._x = 450;
       _level0.loader.contentHolder.menuPointages._y = 60;
@@ -3194,7 +3247,7 @@ class GestionnaireEvenements
         formatPoints.font = "Arial";
         formatPoints.align = "Right";
         _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["dtPoints" + i].setNewTextFormat(formatPoints);
-   
+		   
        //menuPointages.mc_autresJoueurs["mc_joueur" + i].attachMovie("checkFlag_mc","flag" + i, 220 + i, {_x:-20, _y:0});
     
      

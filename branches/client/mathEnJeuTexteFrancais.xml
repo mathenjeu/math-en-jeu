@@ -2,6 +2,11 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
 	
+	Messagerie = ""
+	  welcomeMess = "Bienvenue au jeu!!!"
+	  bananaMess = " a lancé une Banane à "
+	  outMess = "  a quitte le jeu!"
+	  moveMess = "Pour ce deplacer - click sur les cases jaunes."
 	main_menu = ""
 	  bienvenue = "Bienvenue dans Math en jeu "
     btnPlay = "Jouer" 
