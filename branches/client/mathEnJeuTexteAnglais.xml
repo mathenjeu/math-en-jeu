@@ -145,6 +145,10 @@
 	  dateBeginAlert = "Begin date not selected!"
 	  dateEndAlert = "End date not selected!"
 	  passAlert = "Password will give only to yours pupils the access to the room. Accordingly the report will contain only theirs games."
+	  
+	  buttonNew = "New Game"
+	  buttonOld = "Restart"
+	  restartText = "Do you want to begin a new game or restart an old one?"
 	
   mathemaQuoi_beta = ""
 	

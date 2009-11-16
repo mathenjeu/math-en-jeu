@@ -216,6 +216,27 @@ class GestionnaireEvenements
 		this.objGestionnaireCommunication = new GestionnaireCommunication(Delegate.create(this, this.evenementConnexionPhysiqueTunneling), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
 	}
 	
+	 ///////////////////////////////////////////////////////////////////////////////////////////////////
+    function beginNewGame()
+    {
+        trace("*********************************************");
+        trace("begin New Game");
+        this.objGestionnaireCommunication.beginNewGame(Delegate.create(this, this.feedbackBeginNewGame));
+        trace("end New Game");
+        trace("*********************************************\n");
+    }
+	
+	 ///////////////////////////////////////////////////////////////////////////////////////////////////
+    function restartOldGame()
+    {
+	    trace("*********************************************");
+        trace("restart Old Game");
+        this.objGestionnaireCommunication.restartOldGame(Delegate.create(this, this.feedbackRestartOldGame), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementSynchroniserTemps));  // , Delegate.create(this, this.feedbackRestartListePlayers)
+        trace("end restart Old Game");
+        trace("*********************************************\n");
+    }
+	
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////////
     function createRoom(nameRoom:String, description:String, pass:String, fromDate:String, toDate:String, defaultTime:String, roomCategories:String)
     {
@@ -304,7 +325,7 @@ class GestionnaireEvenements
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     function sortirSalle()
     {
-        trace("*********************************************");
+		trace("*********************************************");
         trace("debut de sortirSalle");
         this.objGestionnaireCommunication.quitterSalle(Delegate.create(this, this.retourQuitterSalle));
         trace("fin de sortirSalle");
@@ -521,12 +542,29 @@ class GestionnaireEvenements
     	trace("debut de retourConnexion     " + objetEvenement.resultat);
         // param:  userRoleMaster == 1 if simple user or 2 if master
     	var dejaConnecte:MovieClip;
+		var isOldGame:MovieClip;
     
         switch(objetEvenement.resultat)
         {
 			case "OkEtPartieDejaCommencee":
 			//A faire plus tard
-			trace("<<<<<<<<<<<<<<<< deja connecte >>>>>>>>>>>>>>>>>>>");
+			trace("<<<<<<<<<<<<<<<< deja connecte ???? >>>>>>>>>>>>>>>>>>>");
+			trace("Q musique " + objetEvenement.listeChansons.length);
+				
+				for(var k:Number = 0;  k < objetEvenement.listeChansons.length; k++)
+				{
+					this.listeChansons.push(objetEvenement.listeChansons[k]);
+					trace(objetEvenement.listeChansons[k]);
+				}
+				
+				this.userRole = objetEvenement.userRoleMaster; 
+				//musique();
+				
+				isOldGame = _level0.loader.contentHolder.attachMovie("GUI_oldGame", "restartGame", 9999);
+				//isOldGame.textGUI_erreur.text = _root.texteSource_xml.firstChild.attributes.GUIdejaConnecte;
+				
+				
+				trace("La connexion a marche");
 			break;
 
 			case "Musique":
@@ -573,6 +611,143 @@ class GestionnaireEvenements
      	trace("fin de retourConnexion");
      	trace("*********************************************\n");
     }
+	//********** new code *************************************************
+	
+	 public function feedbackBeginNewGame(objetEvenement:Object)
+    {
+    	// c'est la fonction qui va etre appellee lorsque le GestionnaireCommunication aura
+        // recu la reponse du serveur
+        // objetEvenement est un objet qui est propre a chaque fonction comme retourConnexion
+        // (en termes plus informatiques, on appelle ca un eventHandler -> fonction qui gere
+        // les evenements). Selon la fonction que vous appelerez, il y aura differentes valeurs
+        // dedans. Ici, il y a juste une valeur qui est succes qui est de type booleen
+    	// objetEvenement.resultat = Ok
+    	trace("*********************************************");
+    	trace("debut de feedbackBeginNewGame    " + objetEvenement.resultat);
+      
+        switch(objetEvenement.resultat)
+        {
+			case "Ok":
+			//A faire plus tard
+			trace("<<<<<<<<<<<<<<<<  reconnexion with new game >>>>>>>>>>>>>>>>>>>");
+			this.objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), Delegate.create(this, this.evenementJoueurConnecte), Delegate.create(this, this.evenementJoueurDeconnecte));
+			_level0.loader.contentHolder["restartGame"].removeMovieClip();
+			
+			break;
+	     
+            default:
+            	trace("Erreur Inconnue");
+        }
+     	trace("fin de feedbackBeginNewGame");
+     	trace("*********************************************\n");
+    }
+	
+	public function feedbackRestartOldGame(objetEvenement:Object)
+    {
+    	// c'est la fonction qui va etre appellee lorsque le GestionnaireCommunication aura
+        // recu la reponse du serveur
+        // objetEvenement est un objet qui est propre a chaque fonction comme retourConnexion
+        // (en termes plus informatiques, on appelle ca un eventHandler -> fonction qui gere
+        // les evenements). Selon la fonction que vous appelerez, il y aura differentes valeurs
+        // dedans. Ici, il y a juste une valeur qui est succes qui est de type booleen
+    	// objetEvenement.resultat = Ok, ListeJoueurs, Pointage, Argent, ListeObjets
+    	trace("*********************************************");
+    	trace("debut de feedbackRestartOldGame    " + objetEvenement.resultat + " " + objetEvenement.playersListe);
+      
+        switch(objetEvenement.resultat)
+        {
+			case "ListeJoueurs":
+			   this.listeDesPersonnages.removeAll();
+			   _level0.loader.contentHolder["restartGame"].removeMovieClip();
+			 
+			   this.numberDesJoueurs = objetEvenement.playersListe.length;
+        	   for(var i:Number=0;i<objetEvenement.playersListe.length;i++)
+               {
+                   this.listeDesJoueursConnectes.push(objetEvenement.playersListe[i]);
+              
+			 
+			      this.listeDesPersonnages.push(new Object());
+			      this.listeDesPersonnages[i].nom = objetEvenement.playersListe[i].nom;
+                  this.listeDesPersonnages[i].id = objetEvenement.playersListe[i].idPersonnage;
+			      this.listeDesPersonnages[i].role = 0;//objetEvenement.playersListe[i].userRoles;
+			      this.listeDesPersonnages[i].pointage = 0;
+			      this.listeDesPersonnages[i].win = 0;
+					
+		          var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
+				  
+				  //_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(nextID));
+		    
+                    if(idDessin != 0)
+					{
+					   this.listeDesPersonnages[i].idessin = idDessin;
+                     
+					}
+			   }// end for
+			trace("La connexion a marche");
+			break;
+			
+			case "Pointage":
+						
+			//A faire plus tard
+			
+			trace("La connexion a marche");
+			break;
+			
+			case "Argent":
+						
+			//A faire plus tard
+			
+			trace("La connexion a marche");
+			break;
+			
+			case "ListeObjets":
+						
+			//A faire plus tard
+			
+			trace("La connexion a marche");
+			break;
+			
+			case "Ok":
+			//A faire plus tard
+			trace("<<<<<<<<<<<<<<<<  feedbackRestartOldGame >>>>>>>>>>>>>>>>>>>");
+			trace("La connexion a marche");
+			break;
+	     
+            default:
+            	trace("resultat Inconnue");
+        }
+     	trace("fin de feedbackRestartOldGame");
+     	trace("*********************************************\n");
+    }
+	
+	/*
+	public function feedbackRestartListePlayers(objetEvenement:Object)
+    {
+    	// c'est la fonction qui va etre appellee lorsque le GestionnaireCommunication aura
+        // recu la reponse du serveur
+        // objetEvenement est un objet qui est propre a chaque fonction comme retourConnexion
+        // (en termes plus informatiques, on appelle ca un eventHandler -> fonction qui gere
+        // les evenements). Selon la fonction que vous appelerez, il y aura differentes valeurs
+        // dedans. Ici, il y a juste une valeur qui est succes qui est de type booleen
+    	// objetEvenement.resultat = Ok
+    	trace("*********************************************");
+    	trace("debut de feedbackRestartListePlayers    " + objetEvenement.resultat);
+      
+        switch(objetEvenement.resultat)
+        {
+			case "Ok":
+			//A faire plus tard
+			trace("<<<<<<<<<<<<<<<<  feedbackRestartOldGame >>>>>>>>>>>>>>>>>>>");
+			trace("La connexion a marche");
+			break;
+	     
+            default:
+            	trace("Erreur Inconnue");
+        }
+     	trace("fin de feedbackRestartListePlayers");
+     	trace("*********************************************\n");
+    } */
+	
 	
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function retourObtenirListeJoueurs(objetEvenement:Object)
@@ -2480,40 +2655,14 @@ class GestionnaireEvenements
        				
 			if((undefined != this.listeDesPersonnages[i].nom) && ("Inconnu" != this.listeDesPersonnages[i].nom) && !(this.listeDesPersonnages[i].role == 2 && this.typeDeJeu == "Tournament")){
 				
-				
-				//_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["nomJoueur"+(j+1)] = this.listeDesPersonnages[i].nom;
-				//_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["pointageJoueur"+(j+1)] = 0;
-				//_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]._visible=true;
-				//var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
-				//var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
-				//_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)].idStart = idDessin;  //TODO ????
-				//_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)].idPers = idPers;     //TODO ????  
-			
-				//trace(i + " nom: " + this.listeDesPersonnages[i].nom + " id:" + idPers);//this.listeDesPersonnages[i].id);
-				//this.listeDesPersonnages[i].numPointage = j;   //TODO ????
-				this["tete"+j] = new MovieClip();
-				/*
-				this["tete"+j] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(j+1)]["tete"+(j+1)].attachMovie("tete" + idDessin, "Tete"+j, -10100+j);
-				this["tete"+j]._x = -6;
-				this["tete"+j]._y = -6;
-				this["tete"+j]._xscale = 60;
-				this["tete"+j]._yscale = 60; */
-				j++;
+			  this["tete"+j] = new MovieClip();
+			  j++;
 			}
-			
-
 		}
 		
 		
 		// put the face of my avatar in the panel (next to my name)
-		/*
-		_level0.loader.contentHolder.myObj = new Object();
 		
-		var idPers:Number = calculateIDPers(this.listeDesPersonnages[numeroJoueursDansSalle-1].id, idDessin);
-		_level0.loader.contentHolder.myObj.myID = idDessin;
-		_level0.loader.contentHolder.myObj.myIDPers = idPers;
-		_level0.loader.contentHolder.myObj.myNom = this.listeDesPersonnages[numeroJoueursDansSalle-1].nom;
-		*/
 		var idDessin:Number = calculatePicture(this.listeDesPersonnages[numeroJoueursDansSalle-1].id);
 		var maTete:MovieClip = _level0.loader.contentHolder.maTete.attachMovie("tete" + idDessin, "maTete", -10099);
 		maTete._x = -7;
@@ -2523,22 +2672,23 @@ class GestionnaireEvenements
 		maTete._yscale = 200;
 		
 		
-        for(i = 0; i < objetEvenement.positionJoueurs.length; i++)
+        for(i = 0; i < this.listeDesPersonnages.length; i++)
         {
-            if(this.listeDesPersonnages[numeroJoueursDansSalle-1].nom == objetEvenement.positionJoueurs[i].nom)
+            if(this.listeDesPersonnages[i].nom == this.nomUtilisateur)
             {
-	            var idDessin:Number = calculatePicture(this.listeDesPersonnages[numeroJoueursDansSalle-1].id);
-				var idPers:Number = calculateIDPers(this.listeDesPersonnages[numeroJoueursDansSalle-1].id, idDessin);
+	            var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
+				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
 				
-                _level0.loader.contentHolder.planche = new PlancheDeJeu(objetEvenement.plateauJeu, this.listeDesPersonnages[numeroJoueursDansSalle-1].id, _level0.loader.contentHolder.gestionnaireInterface);
+                _level0.loader.contentHolder.planche = new PlancheDeJeu(objetEvenement.plateauJeu, this.listeDesPersonnages[i].id, _level0.loader.contentHolder.gestionnaireInterface);
             }
         }
        
 	    _level0.loader.contentHolder.planche.afficher();
-        //trace("longueur de la liste des noms envoyes par serveur    :"+objetEvenement.positionJoueurs.length);
+        
+		trace("longueur de la liste des noms envoyes par serveur    :"+objetEvenement.positionJoueurs.length);
         for(i = 0; i < objetEvenement.positionJoueurs.length; i++)
         {
-            for(j = 0; j < numeroJoueursDansSalle; j++)
+            for(j = 0; j < this.listeDesPersonnages.length; j++)
             {
 	            //trace(this.listeDesPersonnages[j].nom+" : "+objetEvenement.positionJoueurs[i].nom);
                 if(this.listeDesPersonnages[j].nom == objetEvenement.positionJoueurs[i].nom)
@@ -2549,6 +2699,7 @@ class GestionnaireEvenements
 					if(idDessin < 0) idDessin = 12;   ///????
 					//if(idPers<0) idPers=-idPers;
 					
+					_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(this.listeDesPersonnages[j].id));
                     _level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin, this.listeDesPersonnages[j].role);
 		    		trace("Construction du personnage : " + this.listeDesPersonnages[j].nom + " " + objetEvenement.positionJoueurs[i].x + " " + objetEvenement.positionJoueurs[i].y + " idDessin:" + idDessin + " idPers:" + idPers);
 					_level0.loader.contentHolder.referenceLayer["Personnage" + idPers].nom = this.listeDesPersonnages[j].nom;
