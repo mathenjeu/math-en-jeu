@@ -102,7 +102,7 @@ public final class GenerateurPartie
         
 		// Déclaration d'une case dont le type est -1 (ça n'existe pas) qui
 		// va nous servir pour identifier les cases qui ont été passées
-		CaseCouleur objCaseParcourue = new CaseCouleur(-1);
+		CaseCouleur objCaseParcourue = new CaseCouleur(1);
 		//System.out.println(objCaseParcourue.obtenirTypeCase());
 			
 		//int factor = objRandom.nextInt((int) Math.ceil(temps /4)) + (int) Math.ceil(temps /5);
@@ -176,7 +176,6 @@ public final class GenerateurPartie
 		//else if gametype = mathenjeu			
 		}else{ 
 			
-		   intCompteurCases = 1;	
 		   intCompteurCases = boardCreation(objRandom, lstPointsCasesPresentes,
 				intCompteurCases, objCaseParcourue, intNbColumns, intNbLines,
 				intNbTrous, objttPlateauJeu); 
