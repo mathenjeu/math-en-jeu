@@ -548,17 +548,12 @@ public class ProtocoleJoueur implements Runnable
 								// du paramètre
 								objNoeudParametreRoleJoueur.setAttribute("type", "userRole");
 
-								// Créer le noeud du joueur courant
-								Element objNoeudJoueur = objDocumentXMLSortie.createElement("joueur");
+								// Créer un noeud texte contenant le role du joueur
+								Text objNoeudTexteRole = objDocumentXMLSortie.createTextNode(Integer.toString(objJoueurHumain.getRole()));
 
-								// On ajoute un attribut nom qui va contenir le nom
-								// du joueur
-								objNoeudJoueur.setAttribute("role", Integer.toString(objJoueurHumain.getRole()));
-								//System.out.println("Protocole joueur: " + objJoueurHumain.getRole());
-
-								// Ajouter le noeud du joueur au noeud du paramètre
-								objNoeudParametreRoleJoueur.appendChild(objNoeudJoueur);
-
+								// Ajouter le noeud texte au noeud du paramètre
+								objNoeudParametreRoleJoueur.appendChild(objNoeudTexteRole);
+								
 								// Ajouter le noeud paramètre au noeud de commande dans
 								// le document de sortie
 								objNoeudCommande.appendChild(objNoeudParametreRoleJoueur);
@@ -590,7 +585,7 @@ public class ProtocoleJoueur implements Runnable
 								// On ajoute un attribut type qui va contenir le type  paramètre
 								objNoeudParametreRoleJoueur.setAttribute("type", "userRole");
 
-								// Créer un noeud texte contenant le numéro de la table
+								// Créer un noeud texte contenant le role du joueur
 								Text objNoeudTexteRole = objDocumentXMLSortie.createTextNode(Integer.toString(objJoueurHumain.getRole()));
 
 								// Ajouter le noeud texte au noeud du paramètre
@@ -638,6 +633,7 @@ public class ProtocoleJoueur implements Runnable
 					// Un joueur déconnecté tente de rejoindre une partie déjà commencée
 					if (objJoueurHumain != null)
 					{
+						// on controle que le joueur est dans la liste des joueurs deconnectes
 						if (objControleurJeu.estJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur()) == true)
 						{
 							// Ici, on renvoie l'état du jeu au joueur pour
@@ -645,7 +641,7 @@ public class ProtocoleJoueur implements Runnable
 							JoueurHumain objAncientJoueurHumain = objControleurJeu.obtenirJoueurHumainJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
 
 							// Envoyer la liste des joueurs
-							envoyerListeJoueurs(objAncientJoueurHumain);
+							envoyerListeJoueurs(objAncientJoueurHumain, objNoeudCommandeEntree.getAttribute("no"));
 
 							// Envoyer le plateau de jeu, la liste des joueurs, 
 							// leurs ids personnage et leurs positions au joueur
@@ -653,15 +649,15 @@ public class ProtocoleJoueur implements Runnable
 							envoyerPlateauJeu(objAncientJoueurHumain);
 
 							// envoyer le pointage au joueur
-							envoyerPointage(objAncientJoueurHumain);
+							envoyerPointage(objAncientJoueurHumain, objNoeudCommandeEntree.getAttribute("no"));
 
 							// envoyer l'argent au joueur
-							envoyerArgent(objAncientJoueurHumain);
+							envoyerArgent(objAncientJoueurHumain, objNoeudCommandeEntree.getAttribute("no"));
 
 
 							// Envoyer la liste des items du joueur qui
 							// se reconnecte
-							envoyerItemsJoueurDeconnecte(objAncientJoueurHumain);
+							envoyerItemsJoueurDeconnecte(objAncientJoueurHumain, objNoeudCommandeEntree.getAttribute("no"));
 
 							// Synchroniser temps
 							envoyerSynchroniserTemps(objAncientJoueurHumain);
@@ -674,6 +670,8 @@ public class ProtocoleJoueur implements Runnable
 
 							// Enlever le joueur de la liste des joueurs déconnectés
 							objControleurJeu.enleverJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
+							objNoeudCommande.setAttribute("type", "Reponse");
+							objNoeudCommande.setAttribute("nom", "Ok");
 
 						}
 					}    
@@ -2445,6 +2443,30 @@ public class ProtocoleJoueur implements Runnable
 			}
 		}
 
+		// Si le nom de la commande est NePasRejoindrePartie, alors il ne doit pas y avoir 
+		// de paramètres
+		else if (noeudCommande.getAttribute("nom").equals(Commande.NePasRejoindrePartie))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 0, alors
+			// il n'y a vraiment aucun paramètres
+			if (noeudCommande.getChildNodes().getLength() == 0)
+			{
+				bolCommandeValide = true;
+			}
+		}
+		// Si le nom de la commande est RejoindrePartie, alors il ne doit pas y avoir 
+		// de paramètres
+		else if (noeudCommande.getAttribute("nom").equals(Commande.RejoindrePartie))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 0, alors
+			// il n'y a vraiment aucun paramètres
+			if (noeudCommande.getChildNodes().getLength() == 0)
+			{
+				bolCommandeValide = true;
+			}
+		}
+		
+		
 		// Si le nom de la commande est Deconnexion, alors il ne doit pas y avoir 
 		// de paramètres
 		else if (noeudCommande.getAttribute("nom").equals(Commande.Deconnexion))
@@ -3296,8 +3318,12 @@ public class ProtocoleJoueur implements Runnable
       
         // Créer l'événement contenant toutes les informations sur le plateau et
         // la partie
-        EvenementPartieDemarree objEvenementPartieDemarree = new EvenementPartieDemarree(objTable.obtenirTempsTotal(), lstPositionsJoueurs, this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable());
+        System.out.println("ICI1 " +  objTable.obtenirTempsTotal());
+        System.out.println("ICI2 " +  lstPositionsJoueurs);
+        //System.out.println("ICI3 " +  this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable());
+        EvenementPartieDemarree objEvenementPartieDemarree = new EvenementPartieDemarree(objTable.obtenirTempsTotal(), lstPositionsJoueurs, objTable);//this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable());
 
+        
         // Créer l'objet information destination pour envoyer l'information à ce joueur
         InformationDestination objInformationDestination = new InformationDestination(obtenirNumeroCommande(), this);
        
@@ -3316,7 +3342,7 @@ public class ProtocoleJoueur implements Runnable
      * virtuels et s'envoyer soi-mème (?) pour que le joueur qui se reconnecte
      * sache quel avatar il avait choisit
      */
-    private void envoyerListeJoueurs(JoueurHumain ancientJoueur)
+    private void envoyerListeJoueurs(JoueurHumain ancientJoueur, String no)
     {
 		/*
 		 * <commande nom="ListeJoueurs" no="0" type="MiseAJour">
@@ -3339,8 +3365,10 @@ public class ProtocoleJoueur implements Runnable
 		Element objNoeudParametre = objDocumentXML.createElement("parametre");
 
 		// Envoyer une liste des joueurs
+		objNoeudCommande.setAttribute("noClient", no);
 		objNoeudCommande.setAttribute("type", "MiseAJour");
 		objNoeudCommande.setAttribute("nom", "ListeJoueurs");
+		
       
 		// Créer le noeud pour le paramètre contenant la liste
 		// des joueurs à retourner
@@ -3454,8 +3482,9 @@ public class ProtocoleJoueur implements Runnable
 
     /**
      * Permet d'envoyer le pointage à un joueur qui se reconnecte
+     * @param no 
      */
-    private void envoyerPointage(JoueurHumain ancientJoueur)
+    private void envoyerPointage(JoueurHumain ancientJoueur, String no)
     {
 		/*
 		 * <commande nom="Pointage" no="0" type="MiseAJour">
@@ -3476,9 +3505,10 @@ public class ProtocoleJoueur implements Runnable
 		Element objNoeudParametre = objDocumentXML.createElement("parametre");
 
 		// Envoyer une liste des joueurs
+		objNoeudCommande.setAttribute("noClient", no);
 		objNoeudCommande.setAttribute("type", "MiseAJour");
 		objNoeudCommande.setAttribute("nom", "Pointage");
-		objNoeudParametre.setAttribute("type", "Pointage");	
+		//objNoeudParametre.setAttribute("type", "Pointage");  //??????????????	
 		objNoeudParametre.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirPointage()));
 
 		// Ajouter le noeud paramètre au noeud de commande dans
@@ -3505,7 +3535,7 @@ public class ProtocoleJoueur implements Runnable
     /*
      * Permet d'envoyer l'argent à un joueur qui se reconnecte
      */
-    private void envoyerArgent(JoueurHumain ancientJoueur)
+    private void envoyerArgent(JoueurHumain ancientJoueur, String no)
     {
 
 		/*
@@ -3528,9 +3558,10 @@ public class ProtocoleJoueur implements Runnable
 		Element objNoeudParametre = objDocumentXML.createElement("parametre");
 
 		// Envoyer une liste des joueurs
+		objNoeudCommande.setAttribute("noClient", no);
 		objNoeudCommande.setAttribute("type", "MiseAJour");
 		objNoeudCommande.setAttribute("nom", "Argent");
-		objNoeudParametre.setAttribute("type", "Argent");	
+		//objNoeudParametre.setAttribute("type", "Argent");	
 		objNoeudParametre.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirArgent()));
 
 		// Ajouter le noeud paramètre au noeud de commande dans
@@ -3557,7 +3588,7 @@ public class ProtocoleJoueur implements Runnable
     /*
      * Permet d'envoyer la liste des items d'un joueur qui rejoint une partie
      */                            
-    private void envoyerItemsJoueurDeconnecte(JoueurHumain ancientJoueur)
+    private void envoyerItemsJoueurDeconnecte(JoueurHumain ancientJoueur, String no)
     {
 		/*
 		 * <commande nom="ListeItems" no="0" type="MiseAJour">
@@ -3580,6 +3611,7 @@ public class ProtocoleJoueur implements Runnable
 		Element objNoeudParametre = objDocumentXML.createElement("parametre");
 
 		// Envoyer une liste des items
+		objNoeudCommande.setAttribute("noClient", no);
 		objNoeudCommande.setAttribute("type", "MiseAJour");
 		objNoeudCommande.setAttribute("nom", "ListeObjets");
 		
@@ -3947,79 +3979,6 @@ public class ProtocoleJoueur implements Runnable
 
             	 }
             	 
-            	 /*
-               	 // Entiers et Strings pour garder en mémoire les points et les joueurs associés
-            	 int max1 = 0;
-            	 int max2 = 0;
-            	 String max1User = "";
-            	 String max2User = "";
-            	 boolean estHumain1 = false;
-            	 boolean estHumain2 = false;
-
-            	
-                 
-            	 
-            	 // On trouve les deux joueurs les plus susceptibles d'ètre affectés
-            	 while(objIterateurListeJoueurs.hasNext() == true)
-            	 {
-            		 JoueurHumain j = (JoueurHumain)(((Map.Entry<String, JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
-
-            		 if(j.obtenirPartieCourante().obtenirPointage() >= max1)
-            		 {
-            			 max2 = max1;
-            			 max2User = max1User;
-            			 estHumain2 = estHumain1;
-            			 max1 = j.obtenirPartieCourante().obtenirPointage();
-            			 max1User = j.obtenirNomUtilisateur();
-            			 estHumain1 = true;
-            		 }
-            		 else if(j.obtenirPartieCourante().obtenirPointage() >= max2)
-            		 {
-            			 max2 = j.obtenirPartieCourante().obtenirPointage();
-            			 max2User = j.obtenirNomUtilisateur();
-            			 estHumain2 = true;
-            		 }
-            	 }
-            	 if(listeJoueursVirtuels != null) for(int i=0; i<listeJoueursVirtuels.size(); i++)
-            	 {
-            		 JoueurVirtuel j = (JoueurVirtuel)listeJoueursVirtuels.get(i);
-            		 if(j.obtenirPointage() >= max1)
-            		 {
-            			 max2 = max1;
-            			 max2User = max1User;
-            			 estHumain2 = estHumain1;
-            			 max1 = j.obtenirPointage();
-            			 max1User = j.obtenirNom();
-            			 estHumain1 = false;
-            		 }
-            		 else if(j.obtenirPointage() >= max2)
-            		 {
-            			 max2 = j.obtenirPointage();
-            			 max2User = j.obtenirNom();
-            			 estHumain2 = false;
-            		 }
-            	 }
-
-            	
-
-            	
-            	 if(max1User.equals(objJoueurHumain.obtenirNomUtilisateur()))
-            	 {
-            		 // Celui qui utilise la banane est le 1er, alors on fait glisser le 2ème
-            		 estHumain = estHumain2;
-            		 nomJoueurChoisi = max2User;
-            		 //if(estHumain) positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(max2User).obtenirPartieCourante().obtenirPositionJoueur());
-            		 //else positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(max2User).obtenirPositionJoueur());
-            	 }
-            	 else
-            	 {
-            		 // Celui qui utilise la banane n'est pas le 1er, alors on fait glisser le 1er
-            		 estHumain = estHumain1;
-            		 nomJoueurChoisi = max1User;
-            		// if(estHumain) positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(max1User).obtenirPartieCourante().obtenirPositionJoueur());
-            		 //else positionJoueurChoisi = new Point(obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(max1User).obtenirPositionJoueur());
-            	 }*/
-
             	 objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliserObjet(objJoueurHumain.obtenirNomUtilisateur(), playerName, "Banane", "");
             	
             	 Banane.utiliserBanane(objJoueurHumain, playerName, estHumain);
