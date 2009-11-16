@@ -60,7 +60,7 @@ public final class Commande
 		        valeur.equals(QuitterTable) || valeur.equals(DemarrerPartie) ||
 		        valeur.equals(DeplacerPersonnage) || valeur.equals(RepondreQuestion) ||valeur.equals(CancelQuestion) ||
 		        valeur.equals(DemarrerMaintenant) || valeur.equals(Pointage) ||
-		        valeur.equals(RejoindrePartie) || valeur.equals(UtiliserObjet) ||
+		        valeur.equals(RejoindrePartie) || valeur.equals(NePasRejoindrePartie) ||valeur.equals(UtiliserObjet) ||
 		        valeur.equals(AcheterObjet) || valeur.equals(Argent) || 
 		        valeur.equals(ChatMessage)||valeur.equals(CreateRoom)||valeur.equals(CloseRoom)||valeur.equals(getReport));
 	}
