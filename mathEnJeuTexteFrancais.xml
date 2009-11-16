@@ -145,6 +145,10 @@
 	  dateBeginAlert = "Date de début invalide"
 	  dateEndAlert = "Date de fin invalide"
 	  passAlert = "Le mot de passe permet de contrôler l’accéder à la salle."
+	  
+	  buttonNew = "Nouvelle"
+	  buttonOld = "Recommencer"
+	  restartText = " Voulez vous rejoindre la vieille partie ou créé une nouvelle? "
   
     
 	

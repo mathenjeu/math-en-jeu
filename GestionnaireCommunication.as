@@ -316,6 +316,16 @@ class GestionnaireCommunication
                         case "Connexion":
                             retourConnexion(objNoeudCommande);
                             break;
+					//*****************************************************
+					    
+						case "NePasRejoindrePartie":
+                            feedbackBeginNewGame(objNoeudCommande);
+                            break;
+							
+						case "RejoindrePartie":
+							feedbackRestartOldGame(objNoeudCommande);
+							break;
+					//************************************************
                         case "Deconnexion":
                             retourDeconnexion(objNoeudCommande);
                             break;
@@ -325,7 +335,7 @@ class GestionnaireCommunication
                         case "ObtenirListeSalles":
                             retourObtenirListeSalles(objNoeudCommande);
                             break;
-						//************************************************
+						
 						case "CreateRoom":
                             retourCreateRoom(objNoeudCommande);
                             break;
@@ -392,7 +402,7 @@ class GestionnaireCommunication
                     }
                 }
 				else
-					trace("find me in gesComm ! : "+objNoeudCommande.attributes.nom);
+					trace("find me in gesComm ! : "+objNoeudCommande.attributes.nom + " " + objNoeudCommande.attributes.noClient + " " + objCommandeEnTraitement.no);
             }
         }
     }
@@ -471,7 +481,7 @@ class GestionnaireCommunication
              ExtendedArray.fromArray(Etat.obtenirEvenementsAcceptablesCommande(intEtatClient, objCommandeEnTraitement.nom)).contains(noeudCommande.attributes.nom) == true))
         {
             // Envoyer l'evenement aux ecouteurs de cet evenement	
-            //trace("Envoyer l,evenement aux ecouteurs de cet evenement");	
+            trace("Envoyer l,evenement aux ecouteurs de cet evenement " + noeudCommande.attributes.nom);	
             envoyerEvenement(noeudCommande);
         }
         // Sinon, s'il y a une commande en traitement, on verifie les
@@ -483,7 +493,7 @@ class GestionnaireCommunication
                   ExtendedArray.fromArray(Etat.obtenirEvenementsAcceptablesApres(intEtatClient, objCommandeEnTraitement.nom)).contains(noeudCommande.attributes.nom) == true))
         {
             // Ajouter l'evenement a la fin de la liste	
-            //trace("Ajouter l,evenement a la fin de la liste");
+            trace("Ajouter l,evenement a la fin de la liste"  + noeudCommande.attributes.nom);
             lstEvenementsRecus.push(noeudCommande);
         }
     }
@@ -571,10 +581,13 @@ class GestionnaireCommunication
     {
         // Envoyer l'evenement de retour de la commande
         dispatchEvent(objetEvenement);
-        // Enlever l'ecouteur pour l'evenement de retour de la commande
-        this.removeEventListener(objCommandeEnTraitement.listeDelegate[0].nom,
+        if (noeudCommande.attributes.type != "MiseAJour")
+        {
+		   // Enlever l'ecouteur pour l'evenement de retour de la commande
+           this.removeEventListener(objCommandeEnTraitement.listeDelegate[0].nom,
                                  objCommandeEnTraitement.listeDelegate[0].delegate);
-        // Declaration d'une variable qui va contenir un noeud XML d'evenement
+		}
+		// Declaration d'une variable qui va contenir un noeud XML d'evenement
         var objNoeudEvenement:XMLNode;
         // Boucler tant qu'il y a des evenements dans la liste d'evenements
         while (lstEvenementsRecus.length > 0)
@@ -649,6 +662,27 @@ class GestionnaireCommunication
         // Si le retour de la fonction est une reponse positive et non une
         // erreur, alors on peut retirer les ecouteurs des evenements
         else if (noeudCommande.attributes.type == "Reponse")
+        {
+            // Passer la liste des delegate et enlever tous les handlers
+            for (var i:Number = lstDelegateEvenements.tableau.length - 1; i >= 0; i--)
+            {
+                // Si l'evenement courant n'est pas accepte dans l'etat courant
+                // (l'etat est deja modifie), alors on peut enlever l'ecouteur
+                if (ExtendedArray.fromArray(Etat.obtenirEvenementsAcceptablesEtat(intEtatClient)).contains(lstDelegateEvenements.tableau[i]) == false)
+                {
+                    // Enlever l'ecouteur pour l'evenement courant
+					this.removeEventListener(lstDelegateEvenements.tableau[i], lstDelegateEvenements[lstDelegateEvenements.tableau[i]]);
+		    
+                    // Supprimer l'objet delegate courant
+                    delete lstDelegateEvenements[lstDelegateEvenements.tableau[i]];
+                    lstDelegateEvenements.tableau.remove(lstDelegateEvenements.tableau[i]);
+                }
+            }
+        }
+		
+		// Si le retour de la fonction est une reponse positive et non une
+        // erreur, alors on peut retirer les ecouteurs des evenements
+        else if (noeudCommande.attributes.type == "MiseAJour")
         {
             // Passer la liste des delegate et enlever tous les handlers
             for (var i:Number = lstDelegateEvenements.tableau.length - 1; i >= 0; i--)
@@ -1396,6 +1430,132 @@ class GestionnaireCommunication
             // TODO: Dire qu'on n'est pas connecte
         }
     }
+	
+	//**************************** new code ******************************************
+	 /**
+     * Cette methode permet de se reconnecter au serveur de jeu avec creation d'une nouvelle partie.
+     *
+     * @param Function feedbackBeginNewGameDelegate : Un pointeur sur la fonction
+     *      permettant de retourner la reponse a Flash
+     */
+    public function beginNewGame(feedbackBeginNewGameDelegate:Function)
+    {
+        // Si on est connecte alors on peut continuer le code de la reconnexion avec creation d'une nouvelle partie
+        if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("NePasRejoindrePartie", "nom") == true)
+        {
+            // Declaration d'un tableau dont le contenu est un Delegate
+            var lstDelegateCommande:ExtendedArray = new ExtendedArray();
+            // Ajouter le Delegate de retour dans le tableau des delegate pour
+            // cette fonction
+            lstDelegateCommande.push({nom:"NePasRejoindrePartie", delegate:feedbackBeginNewGameDelegate});
+            // Declaration d'une variable qui va contenir le numero de la commande
+            // generee
+            var intNumeroCommande:Number = obtenirNumeroCommande();
+            // Creer l'objet XML qui va contenir la commande a envoyer au serveur
+            var objObjetXML:XML = new XML();
+			// Creer tous les noeuds de la commande
+            var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
+            
+            // Construire l'arbre du document XML
+            objNoeudCommande.attributes.no = String(intNumeroCommande);
+            objNoeudCommande.attributes.nom = "NePasRejoindrePartie";
+            
+            objObjetXML.appendChild(objNoeudCommande);
+            // Declaration d'un nouvel objet qui va contenir les informations sur
+            // la commande a traiter courante
+            var objObjetCommande:Object = new Object();
+            // Definir les proprietes de l'objet de la commande a ajouter dans le
+            // tableau des commandes a envoyer
+            objObjetCommande.no = intNumeroCommande;
+            objObjetCommande.nom = "NePasRejoindrePartie";
+            objObjetCommande.objetXML = objObjetXML;
+            objObjetCommande.listeDelegate = lstDelegateCommande;
+            // Ajouter l'objet de commande a envoyer courant a la fin du tableau
+            var intNbElements:Number = lstCommandesAEnvoyer.push(objObjetCommande);
+            // Si le nombre d'elements dans la liste est de 1 (celui qu'on vient
+            // juste d'ajouter) et qu'il n'y aucune commande en traitement, alors
+            // on peut envoyer la commande pour la faire traiter (normalement, il
+            // ne devrait y avoir aucune commande en traitement), sinon alors elle
+            // va se faire traiter tres prochainement
+            if (intNbElements == 1 && objCommandeEnTraitement == null)
+            {
+                // Appeler la fonction qui va permettre de traiter la prochaine
+                // commande et de charger tout ce qu'il faut en memoire
+                traiterProchaineCommande();
+            }
+        }
+        else
+        {
+            // TODO: Dire qu'on n'est pas connecte
+        }
+    }
+	
+	//**************************** new code ******************************************
+	 /**
+     * Cette methode permet de se reconnecter au serveur de jeu sans creation d'une nouvelle partie.
+     *
+     * @param FunctionfeedbackRestartOldGameDelegate : Un pointeur sur la fonction
+     *      permettant de retourner la reponse a Flash
+     */
+    public function restartOldGame(feedbackRestartOldGameDelegate:Function,
+								   evenementPartieDemarreeDelegate:Function,
+								   evenementSynchroniserTempsDelegate:Function)
+    {
+        // Si on est connecte alors on peut continuer le code de la reconnexion sans la creation d'une nouvelle partie
+        if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("RejoindrePartie", "nom") == true)
+        {
+            // Declaration d'un tableau dont le contenu est un Delegate
+            var lstDelegateCommande:ExtendedArray = new ExtendedArray();
+            // Ajouter le Delegate de retour dans le tableau des delegate pour
+            // cette fonction
+            lstDelegateCommande.push({nom:"RejoindrePartie", delegate:feedbackRestartOldGameDelegate});
+			// Ajouter les autres Delegate d'evenements
+            lstDelegateCommande.push({nom:"PartieDemarree", delegate:evenementPartieDemarreeDelegate});
+			lstDelegateCommande.push({nom:"SynchroniserTemps", delegate:evenementSynchroniserTempsDelegate});
+			
+            // Declaration d'une variable qui va contenir le numero de la commande
+            // generee
+            var intNumeroCommande:Number = obtenirNumeroCommande();
+            // Creer l'objet XML qui va contenir la commande a envoyer au serveur
+            var objObjetXML:XML = new XML();
+			// Creer tous les noeuds de la commande
+            var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
+            
+            // Construire l'arbre du document XML
+            objNoeudCommande.attributes.no = String(intNumeroCommande);
+            objNoeudCommande.attributes.nom = "RejoindrePartie";
+            
+            objObjetXML.appendChild(objNoeudCommande);
+            // Declaration d'un nouvel objet qui va contenir les informations sur
+            // la commande a traiter courante
+            var objObjetCommande:Object = new Object();
+            // Definir les proprietes de l'objet de la commande a ajouter dans le
+            // tableau des commandes a envoyer
+            objObjetCommande.no = intNumeroCommande;
+            objObjetCommande.nom = "RejoindrePartie";
+            objObjetCommande.objetXML = objObjetXML;
+            objObjetCommande.listeDelegate = lstDelegateCommande;
+            // Ajouter l'objet de commande a envoyer courant a la fin du tableau
+            var intNbElements:Number = lstCommandesAEnvoyer.push(objObjetCommande);
+            // Si le nombre d'elements dans la liste est de 1 (celui qu'on vient
+            // juste d'ajouter) et qu'il n'y aucune commande en traitement, alors
+            // on peut envoyer la commande pour la faire traiter (normalement, il
+            // ne devrait y avoir aucune commande en traitement), sinon alors elle
+            // va se faire traiter tres prochainement
+            if (intNbElements == 1 && objCommandeEnTraitement == null)
+            {
+                // Appeler la fonction qui va permettre de traiter la prochaine
+                // commande et de charger tout ce qu'il faut en memoire
+                traiterProchaineCommande();
+            }
+        }
+        else
+        {
+            // TODO: Dire qu'on n'est pas connecte
+        }
+    }// end methode
+	
+	//********************************************************************************
 	
     /**
      * Cette methode permet d'obtenir la liste des joueurs connectes au
@@ -3001,6 +3161,124 @@ class GestionnaireCommunication
         traiterProchaineCommande();
     }
 	
+	//****************** new code **************************************
+	
+	/**
+     * Cette methode permet de decortiquer le noeud de commande passe en
+     * parametres et de lancer un evenement a ceux qui s'etaient ajoute comme
+     * ecouteur a la fonction deconnexion. On va egalement envoyer les evenements
+     * qui attendent d'etre traites dans le tableau d'evenements et les retirer
+     * du tableau.
+     *
+     * @param XMLNode noeudCommande : Le noeud de commande que le serveur
+     *                                nous renvoye et qui contient sa reponse
+     */
+    private function feedbackBeginNewGame(noeudCommande:XMLNode)
+    {
+		trace("Retour feedbackBeginNewGame");
+        // Construire l'objet evenement pour le retour de la fonction
+        var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
+                                   resultat:noeudCommande.attributes.nom};
+        // Si le retour de la fonction est une reponse positive et non une
+        // erreur, alors on peut passer a l'autre etat
+        if (noeudCommande.attributes.type == "Reponse")
+        {
+            // On est maintenant connecte
+          
+        }
+        // Appeler la fonction qui va envoyer tous les evenements et
+        // retirer leurs ecouteurs
+        envoyerEtMettreAJourEvenements(noeudCommande, objEvenement);
+        // Traiter la prochaine commande
+        traiterProchaineCommande();
+    }
+	
+	/**
+     * Cette methode permet de decortiquer le noeud de commande passe en
+     * parametres et de lancer un evenement a ceux qui s'etaient ajoute comme
+     * ecouteur a la fonction de rejoindre une partie. On va egalement envoyer les evenements
+     * qui attendent d'etre traites dans le tableau d'evenements et les retirer
+     * du tableau.
+     *
+     * @param XMLNode noeudCommande : Le noeud de commande que le serveur
+     *                                nous renvoye et qui contient sa reponse
+     */
+    private function feedbackRestartOldGame(noeudCommande:XMLNode)
+    {
+		trace("Retour feedbackRestartOldGame");
+        // Construire l'objet evenement pour le retour de la fonction
+        var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
+                                   resultat:noeudCommande.attributes.nom};
+        // Si le retour de la fonction est une reponse positive et non une
+        // erreur, alors on peut passer a l'autre etat
+        if (noeudCommande.attributes.type == "MiseAJour" && noeudCommande.attributes.nom == "ListeJoueurs")
+        {
+            // On est maintenant connecte
+            intEtatClient = Etat.ATTENTE_DEBUT_PARTIE.no;
+        }
+		
+		if(noeudCommande.attributes.nom == "ListeJoueurs")
+		{
+		   // Declaration d'une reference vers la liste des noeuds joueurs
+            var lstChildNodes:Array = noeudCommande.firstChild.childNodes;
+            // Creer un tableau ListeNomUtilisateurs qui va contenir les
+            // objets joueurs
+            objEvenement.playersListe = new Array();
+            // Passer tous les joueurs et les ajouter dans le tableau
+            for (var i:Number = 0; i < lstChildNodes.length; i++)
+            {
+                // Ajouter l'objet joueur dans le tableau
+                objEvenement.playersListe.push({nom:lstChildNodes[i].attributes.nom,
+												idPersonnage:lstChildNodes[i].attributes.id});
+				trace("GCOM : NOW " + lstChildNodes[i].attributes.nom + " " + lstChildNodes[i].attributes.id )
+            }
+		}
+        // Appeler la fonction qui va envoyer tous les evenements et
+        // retirer leurs ecouteurs
+        envoyerEtMettreAJourEvenements(noeudCommande, objEvenement);
+        
+		if (noeudCommande.attributes.type != "MiseAJour")
+        {
+            // Traiter la prochaine commande
+            traiterProchaineCommande();
+        }
+		
+    }
+	
+	
+	/**
+     * Cette methode permet de decortiquer le noeud de commande passe en
+     * parametres et de lancer un evenement a ceux qui s'etaient ajoute comme
+     * ecouteur a la fonction de rejoindre une partie. On va egalement envoyer les evenements
+     * qui attendent d'etre traites dans le tableau d'evenements et les retirer
+     * du tableau.
+     *
+     * @param XMLNode noeudCommande : Le noeud de commande que le serveur
+     *                                nous renvoye et qui contient sa reponse
+     *//*
+    private function feedbackRestartListePlayers(noeudCommande:XMLNode)
+    {
+		trace("Retour feedbackRestartListePlayers");
+        // Construire l'objet evenement pour le retour de la fonction
+        var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
+                                   resultat:noeudCommande.attributes.nom};
+        // Si le retour de la fonction est une reponse positive et non une
+        // erreur, alors on peut passer a l'autre etat
+        if (noeudCommande.attributes.type == "MiseAJour")
+        {
+            // On est maintenant connecte
+            intEtatClient = Etat.ATTENTE_DEBUT_PARTIE.no;
+        }
+        // Appeler la fonction qui va envoyer tous les evenements et
+        // retirer leurs ecouteurs
+        envoyerEtMettreAJourEvenements(noeudCommande, objEvenement);
+        // Traiter la prochaine commande
+        //traiterProchaineCommande();
+    } */
+	
+	
+	//****************************************************************
+	
     /**
      * Cette methode permet de decortiquer le noeud de commande passe en
      * parametres et de lancer un evenement a ceux qui s'etaient ajoute comme
@@ -3147,36 +3425,7 @@ class GestionnaireCommunication
         // ajouter le numero de la table dans l'objet a retourner
         if (objEvenement.resultat == "OK")
         {
-            /*// Ajouter l'attribut noTable dans l'objet d'evenement
-            //objEvenement.noTable = Number(noeudCommande.firstChild.firstChild.nodeValue);
-			
-			//**********************************************************
-			// Declaration d'une reference vers la liste des noeuds parametres
-            var lstNoeudsParametre:Array = noeudCommande.childNodes;
-			
-            // Passer tous les parametres et les ajouter dans l'objet evenement
-            for (var i:Number = 0; i < lstNoeudsParametre.length; i++)
-            {
-                // Faire la reference vers le noeud courant
-                var objNoeudParametre:XMLNode = lstNoeudsParametre[i];
-                // Determiner le type du parametre courant et creer l'element
-                // correspondant dans l'objet evenement
-		
-				//trace("avant le switch   "+objNoeudParametre.attributes.type);
-				trace("objNoeudParametre.attributes.type : " + objNoeudParametre.attributes.type);
-                switch (objNoeudParametre.attributes.type)
-                {
-                    case "NoTable":
-		    			objEvenement.noTable = Number(objNoeudParametre.firstChild.nodeValue);
-                        break;
-						
-                    case "NameTable":
-                        objEvenement.nameTable = objNoeudParametre.firstChild.nodeValue;
-						break;
-						                   
-                }
-            }
-			//**********************************************************/
+           
 			
         }
         // Si le retour de la fonction est une reponse positive et non une
@@ -3215,36 +3464,7 @@ class GestionnaireCommunication
         // ajouter le numero de la table dans l'objet a retourner
         if (objEvenement.resultat == "OK")
         {
-            /*// Ajouter l'attribut noTable dans l'objet d'evenement
-            //objEvenement.noTable = Number(noeudCommande.firstChild.firstChild.nodeValue);
-			
-			//**********************************************************
-			// Declaration d'une reference vers la liste des noeuds parametres
-            var lstNoeudsParametre:Array = noeudCommande.childNodes;
-			
-            // Passer tous les parametres et les ajouter dans l'objet evenement
-            for (var i:Number = 0; i < lstNoeudsParametre.length; i++)
-            {
-                // Faire la reference vers le noeud courant
-                var objNoeudParametre:XMLNode = lstNoeudsParametre[i];
-                // Determiner le type du parametre courant et creer l'element
-                // correspondant dans l'objet evenement
-		
-				//trace("avant le switch   "+objNoeudParametre.attributes.type);
-				trace("objNoeudParametre.attributes.type : " + objNoeudParametre.attributes.type);
-                switch (objNoeudParametre.attributes.type)
-                {
-                    case "NoTable":
-		    			objEvenement.noTable = Number(objNoeudParametre.firstChild.nodeValue);
-                        break;
-						
-                    case "NameTable":
-                        objEvenement.nameTable = objNoeudParametre.firstChild.nodeValue;
-						break;
-						                   
-                }
-            }
-			//**********************************************************/
+           
 			
         }
         // Si le retour de la fonction est une reponse positive et non une
@@ -3788,11 +4008,7 @@ class GestionnaireCommunication
 
 			var noeudMagasin:XMLNode;
 			noeudMagasin = noeudCommande.firstChild.nextSibling;
-			
-			//trace(noeudMagasin.attributes.id);
-			//trace(objEvenement.argent.id);
-			//_level0.loader.contentHolder.planche.obtenirPerso().(Number(noeudMagasin.attributes.id));
-			//_level0.loader.contentHolder.planche.obtenirPerso().setVieuxID(objEvenement.argent.id);
+						
 
         }
 
