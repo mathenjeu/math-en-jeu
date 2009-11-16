@@ -499,7 +499,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         int valeurTemp;
         
         // On va faire 3 mélanges, ce sera suffisant
-        for (indiceNombreMelange = 1; indiceNombreMelange <= 3;indiceNombreMelange++)
+        for (indiceNombreMelange = 1; indiceNombreMelange <= 3; indiceNombreMelange++)
         {
             // Brasser aléatoirement le tableau aléatoire
             indiceA = genererNbAleatoire(4);
