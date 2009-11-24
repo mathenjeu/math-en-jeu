@@ -73,7 +73,7 @@ public class JoueurHumain extends Joueur
 		super();
 
 		// Faire la référence vers le protocole du joueur
-		objProtocoleJoueur = protocole;
+		setObjProtocoleJoueur(protocole);
 		
 		// Garder en mémoire le nom d'utilisateur, l'adresse IP et le port du
 		// joueur
@@ -102,6 +102,11 @@ public class JoueurHumain extends Joueur
 	{
 		return objProtocoleJoueur;
 	}
+	
+	public void setObjProtocoleJoueur(ProtocoleJoueur objProtocoleJoueur) {
+		this.objProtocoleJoueur = objProtocoleJoueur;
+	}
+
 	
 	/**
 	 * Cette fonction permet de retourner le nom d'utilisateur du joueur.
