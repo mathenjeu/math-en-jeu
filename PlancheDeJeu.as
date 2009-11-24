@@ -647,7 +647,7 @@ class PlancheDeJeu
 	 //trace("Move : " + moveVisibility);
 	 if( !(p.getRole() == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") && isInWinTheGame)
 	 { 
-		//trace("Debut afficherCasesPossibles");
+		trace("Debut afficherCasesPossibles");
 		
         var i:Number;
         var nb:Number = 0;
@@ -663,13 +663,13 @@ class PlancheDeJeu
 		
 		switchColor(tableauDesCases[p.obtenirL()][p.obtenirC()]);
 		
-		//trace("ds afficherCasesPossibles");
+		trace("ds afficherCasesPossibles");
         for(i = 1; i <= Math.min(mat.length-p.obtenirL()-1,moveVisibility); i++)
         {
 			temp = Number(p.obtenirL());
 			temp += Number(i);
 			// pourquoi il concatene ??????????????
-			// trace("ds premier for avant if  i  temp   mat  L   C  :  "+i+"   "+temp+"   "+this.mat[temp][p.obtenirC()]+"   "+p.obtenirL()+"   "+p.obtenirC());
+			 trace("ds premier for avant if  i  temp   mat  L   C  :  "+i+"   "+temp+"   "+this.mat[temp][p.obtenirC()]+"   "+p.obtenirL()+"   "+p.obtenirC());
 		
             if(this.mat[temp][p.obtenirC()] > 0)
             {

@@ -849,7 +849,9 @@ class Personnage
 		
 		this.l = pt.obtenirX();
 		this.c = pt.obtenirY();
-
+ 
+        
+ 
 		_level0.loader.contentHolder.planche.tableauDesCases[this.l][this.c].ajouterPersonnage(this);
 		
 		this.prochainePosition.definirX(_level0.loader.contentHolder.planche.tableauDesCases[this.l][this.c].obtenirClipCase()._x);

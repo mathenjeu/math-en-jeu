@@ -149,7 +149,13 @@
 	  buttonNew = "New Game"
 	  buttonOld = "Restart"
 	  restartText = "Do you want to begin a new game or restart an old one?"
-	
+	  buttonBug = "Report this question"
+	  userText = "Player :"
+	  buttonSend = "Send"
+	  buttonBack = "Cancel"
+	  
+	  bugReportMess = "Bug was well reported ..."
+	  
   mathemaQuoi_beta = ""
 	
 		frame1 = ""
