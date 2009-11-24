@@ -2072,5 +2072,26 @@ public class GestionnaireBD
 	   //System.out.println(encodedPWD);	
 	   return encodedPWD;
 	}
+
+
+	public void reportBugQuestion(int user_id, int question, int language_id,
+			String errorDescription) {
+	try {
+			synchronized(requete)
+			{
+				
+
+					// Ajouter l'information pour cette salle
+					requete.executeUpdate("INSERT INTO questions_with_error (user_id, question_id, language_id, description) VALUES ( " + user_id + " ," + question + " , " + language_id + " ,'" + errorDescription + "');");
+
+			}		
+		}
+		catch (Exception e)
+		{
+			System.out.println(GestionnaireMessages.message("bd.erreur_adding_questions_errors") + e.getMessage());
+		}
+	
+		
+	}// end methode
 	
 }// end class
