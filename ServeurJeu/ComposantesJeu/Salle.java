@@ -243,7 +243,7 @@ public class Salle
 		// des joueurs de cette salle et on envoit un événement aux autres
 		// joueurs de cette salle pour leur dire qu'il y a un nouveau joueur
 		
-		if (strPassword.equals(objGestionnaireBD.controlPWD(motDePasse)))
+		if (getStrPassword().equals(objGestionnaireBD.controlPWD(motDePasse)))
 		{
 		    // Empêcher d'autres thread de toucher à la liste des joueurs de 
 		    // cette salle pendant l'ajout du nouveau joueur dans cette salle
@@ -804,7 +804,7 @@ public class Salle
 	 */
 	public boolean protegeeParMotDePasse()
 	{
-		return !(strPassword == null || strPassword.equals(""));
+		return !(getStrPassword() == null || getStrPassword().equals(""));
 	}
 
 
@@ -912,6 +912,10 @@ public class Salle
 
 	private int getLastNumber() {
 		return lastNumber;
+	}
+
+	public String getStrPassword() {
+		return strPassword;
 	}
 	
 }// end class 
