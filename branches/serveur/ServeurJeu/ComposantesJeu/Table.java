@@ -376,6 +376,73 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		}
 	}
 	
+	
+	/**
+	 * Cette méthode permet au joueur passé en paramçtres de recommencer la partie. 
+	 * On suppose que le joueur est dans la table.
+	 * 
+	 * @param JoueurHumain joueur : Le joueur demandant de recommencer
+	 * @param boolean doitGenererNoCommandeRetour : Permet de savoir si on doit 
+	 * 								générer un numéro de commande pour le retour de
+	 * 								l'appel de fonction
+	 * 
+	 * Synchronisme : Cette fonction est synchronisée sur la liste des tables
+	 * 				  puis sur la liste des joueurs de cette table, car il se
+	 * 				  peut qu'on doive détruire la table si c'est le dernier
+	 * 				  joueur et qu'on va modifier la liste des joueurs de cette
+	 * 				  table, car le joueur quitte la table. Cela évite que des
+	 * 				  joueurs entrent ou quittent une table en mçme temps.
+	 * 				  On n'a pas ˆ s'inquiéter que le joueur soit modifié
+	 * 				  pendant le temps qu'on exécute cette fonction. Si on 
+	 * 				  inverserait les synchronisations, ça pourrait créer un 
+	 * 				  deadlock avec les personnes entrant dans la salle.
+	 */
+	public void restartGame(JoueurHumain joueur, boolean doitGenererNoCommandeRetour)
+	{
+	    // Empçcher d'autres thread de toucher ˆ la liste des tables de 
+	    // cette salle pendant que le joueur quitte cette table
+	    synchronized (getObjSalle().obtenirListeTables())
+	    {
+		    // Empçcher d'autres thread de toucher ˆ la liste des joueurs de 
+		    // cette table pendant que le joueur et ajouter a la table
+		    synchronized (lstJoueurs)
+		    {
+		    	// ajouter le joueur a la liste des joueurs de cette table
+				lstJoueurs.put(joueur.obtenirNomUtilisateur(), joueur);
+				
+				
+				
+				// Si on doit générer le numéro de commande de retour, alors
+				// on le génçre, sinon on ne fait rien (ça se peut que ce soit
+				// faux)
+				if (doitGenererNoCommandeRetour == true)
+				{
+					// Générer un nouveau numéro de commande qui sera 
+				    // retourné au client
+				    joueur.obtenirProtocoleJoueur().genererNumeroReponse();					    
+				}
+
+				// Empçcher d'autres thread de toucher ˆ la liste des joueurs de 
+			    // cette salle pendant qu'on parcourt tous les joueurs de la salle
+				// pour leur envoyer un événement
+			    synchronized (getObjSalle().obtenirListeJoueurs())
+			    {
+					// Préparer l'événement qu'un joueur a quitté la table. 
+					// Cette fonction va passer les joueurs et créer un 
+					// InformationDestination pour chacun et ajouter l'événement 
+					// dans la file de gestion d'événements
+					//preparerEvenementJoueurQuitteTable(joueur.obtenirNomUtilisateur());
+			    }
+
+			   
+		    }
+		    synchronized (lstJoueursDeconnectes)
+		    {
+		    	lstJoueursDeconnectes.remove(joueur);
+		    }
+		}
+	}
+	
 	/**
 	 * Cette méthode permet au joueur passé en paramçtres de démarrer la partie. 
 	 * On suppose que le joueur est dans la table.
@@ -1495,6 +1562,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			    // un InformationDestination et l'ajouter à l'événement
 				joueurDeplacePersonnage.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
 			            																	 objJoueur.obtenirProtocoleJoueur()));
+				System.out.println("Control : " + objJoueur.obtenirProtocoleJoueur() + " " + objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande());
 			}
 		}
 		
