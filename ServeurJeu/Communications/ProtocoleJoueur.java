@@ -56,7 +56,6 @@ import java.util.Map.Entry;
  */
 
 public class ProtocoleJoueur implements Runnable
-
 {
 
 	// Déclaration d'une référence vers le contrôleur de jeu
@@ -640,6 +639,7 @@ public class ProtocoleJoueur implements Runnable
 							// qu'il puisse reprendre sa partie
 							JoueurHumain objAncientJoueurHumain = objControleurJeu.obtenirJoueurHumainJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
 
+							
 							// Envoyer la liste des joueurs
 							envoyerListeJoueurs(objAncientJoueurHumain, objNoeudCommandeEntree.getAttribute("no"));
 
@@ -664,12 +664,22 @@ public class ProtocoleJoueur implements Runnable
 
 							// Faire en sorte que le joueur est correctement
 							// considéré en train de jouer
+							System.out.println("Before : " +  objJoueurHumain.obtenirProtocoleJoueur() + " " + objJoueurHumain.obtenirProtocoleJoueur().obtenirJoueurHumain());
+							System.out.println("Before : " +  objAncientJoueurHumain.obtenirProtocoleJoueur() + " " + objAncientJoueurHumain.obtenirProtocoleJoueur().obtenirJoueurHumain()); 
+							
 							objJoueurHumain = objAncientJoueurHumain;
-
+							objAncientJoueurHumain.setObjProtocoleJoueur(this);
+                              objAncientJoueurHumain.obtenirProtocoleJoueur().definirJoueur(objAncientJoueurHumain);
 							bolEnTrainDeJouer = true;
-
+                            objJoueurHumain.obtenirPartieCourante().obtenirTable().restartGame(objJoueurHumain, true);
 							// Enlever le joueur de la liste des joueurs déconnectés
 							objControleurJeu.enleverJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
+							objControleurJeu.entrerSalle(objJoueurHumain, objJoueurHumain.obtenirPartieCourante().obtenirTable().getObjSalle().getRoomID(), objJoueurHumain.obtenirPartieCourante().obtenirTable().getObjSalle().getStrPassword(), false);
+							
+							
+							System.out.println("NOW : " +  objJoueurHumain.obtenirProtocoleJoueur() + " " + objJoueurHumain.obtenirProtocoleJoueur().obtenirJoueurHumain() + " " + objJoueurHumain.obtenirSalleCourante().obtenirListeJoueurs() + " " + objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs());
+							System.out.println("NOW : " +  objAncientJoueurHumain.obtenirProtocoleJoueur() + " " + objAncientJoueurHumain.obtenirProtocoleJoueur().obtenirJoueurHumain() + " " + objAncientJoueurHumain.obtenirSalleCourante().obtenirListeJoueurs() + " " + objAncientJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs());
+							
 							objNoeudCommande.setAttribute("type", "Reponse");
 							objNoeudCommande.setAttribute("nom", "Ok");
 
@@ -937,6 +947,68 @@ public class ProtocoleJoueur implements Runnable
 						
 						//add room to the DB too
 						int room_id = objControleurJeu.obtenirGestionnaireBD().putNewRoom(motDePasse, objJoueurHumain.obtenirCleJoueur(), name, roomDescription, this.langue, beginDate, endDate, masterTime, roomCategories);
+                        
+						// Il n'y a pas eu d'erreurs et il va falloir retourner 
+						// une liste des salles ?
+						objNoeudCommande.setAttribute("type", "Reponse");
+						objNoeudCommande.setAttribute("nom", "OK");
+
+
+						// Générer un nouveau numéro de commande qui sera 
+						// retourné au client
+						genererNumeroReponse();
+
+					} else {
+						// Sinon, il y a une erreur car le joueur doit ètre connecté
+						// pour pouvoir cree des salles
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+
+				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.ReportBugQuestion))
+				{
+					// Si le joueur est connecté au serveur de jeu, alors on va reporter le bug
+					if (objJoueurHumain != null)
+					{
+																					
+						// Déclaration d'une variable qui va contenir le noeud
+						// du nom du joueur qui a fait le rapport
+						Node objPlayerName = obtenirValeurParametre(objNoeudCommandeEntree, "PlayerName");
+                        String name = "";
+						name = objPlayerName.getNodeValue();
+												
+                        // Déclaration d'une variable qui va contenir le noeud
+						// du mot de passe permettant d'accéder à la salle (s'il 
+						// n'y en a pas, alors le mot de passe sera vide)
+						Node objQuestion = obtenirValeurParametre(objNoeudCommandeEntree, "Question");
+
+						// Déclaration d'une variable qui va contenir le numero de la question en question :)
+						int question = 0;	
+
+						// Si le noeud du mot de passe n'est pas null alors il y
+						// a un mot de passe pour la salle
+						if (objQuestion != null)
+						{
+							// Garder le mot de passe en mémoire
+							question = Integer.parseInt(objQuestion. getNodeValue());
+						}
+                        
+						Node objDescription = obtenirValeurParametre(objNoeudCommandeEntree, "Description");
+						String errorDescription = "";
+						if(objDescription != null)
+						{
+							errorDescription = objDescription.getNodeValue();
+						}
+						
+						int langue_id;
+						if(this.langue == "fr")
+							langue_id = 1;
+						else
+							langue_id =2;
+							
+												
+						//add the info to the DB 
+						objControleurJeu.obtenirGestionnaireBD().reportBugQuestion(objJoueurHumain.obtenirCleJoueur(), question, langue_id, errorDescription);//
                         
 						// Il n'y a pas eu d'erreurs et il va falloir retourner 
 						// une liste des salles ?
@@ -2501,6 +2573,14 @@ public class ProtocoleJoueur implements Runnable
 				bolCommandeValide = true;
 			}
 		}
+		// we have 3 parameteres in the commande Node
+		else if (noeudCommande.getAttribute("nom").equals(Commande.ReportBugQuestion))
+		{
+			if (noeudCommande.getChildNodes().getLength() == 3)
+			{
+				bolCommandeValide = true;
+			}
+		}
 		// TODO 
 		else if (noeudCommande.getAttribute("nom").equals(Commande.CreateRoom))
 		{
@@ -3311,7 +3391,26 @@ public class ProtocoleJoueur implements Runnable
 
             lstPositionsJoueurs.put(joueur.obtenirNomUtilisateur(), objPositionJoueur);
         }
+        
+     // Ajouter les joueurs virtuels
+		Vector<JoueurVirtuel> lstJoueursVirtuels = ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();
+
+		if (lstJoueursVirtuels != null)
+		{
+		    for (int i=0; i < lstJoueursVirtuels.size(); i++)
+		    {
+			    
+				JoueurVirtuel objJoueurVirtuel = (JoueurVirtuel) lstJoueursVirtuels.get(i);
+				
+				// Créer une référence vers la position du joueur courant
+	            Point objPositionJoueur = objJoueurVirtuel.obtenirPositionJoueur();
+
+	            lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objPositionJoueur);
+				
+		    }
+		}
     
+        
         // Ajouter la position du joueur déconnecté à la liste
         lstPositionsJoueurs.put(ancientJoueur.obtenirNomUtilisateur(),
             ancientJoueur.obtenirPartieCourante().obtenirPositionJoueur());
@@ -3406,6 +3505,10 @@ public class ProtocoleJoueur implements Runnable
 			objNoeudJoueur.setAttribute("nom", joueurHumain.obtenirNomUtilisateur());
 
 			objNoeudJoueur.setAttribute("id", Integer.toString(joueurHumain.obtenirPartieCourante().obtenirIdPersonnage()));
+			
+			objNoeudJoueur.setAttribute("role", Integer.toString(joueurHumain.getRole()));
+			
+			objNoeudJoueur.setAttribute("pointage", Integer.toString(joueurHumain.obtenirPartieCourante().obtenirPointage()));
 
 			// Ajouter le noeud de l'item au noeud du paramètre
 			objNoeudParametreListeJoueurs.appendChild(objNoeudJoueur);
@@ -3419,6 +3522,8 @@ public class ProtocoleJoueur implements Runnable
 		// On ajoute les attributs nom et id identifiant le joueur
 		objNoeudJoueur.setAttribute("nom", ancientJoueur.obtenirNomUtilisateur());
 		objNoeudJoueur.setAttribute("id", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirIdPersonnage()));
+		objNoeudJoueur.setAttribute("role", Integer.toString(ancientJoueur.getRole()));
+		objNoeudJoueur.setAttribute("pointage", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirPointage()));
 					    
 		// Ajouter le noeud de l'item au noeud du paramètre
 		objNoeudParametreListeJoueurs.appendChild(objNoeudJoueur);
@@ -3438,6 +3543,8 @@ public class ProtocoleJoueur implements Runnable
 				// On ajoute les attributs nom et id identifiant le joueur
 				objNoeudJoueur.setAttribute("nom", objJoueurVirtuel.obtenirNom());
 				objNoeudJoueur.setAttribute("id", Integer.toString(objJoueurVirtuel.obtenirIdPersonnage()));
+				objNoeudJoueur.setAttribute("role", Integer.toString(1));
+				objNoeudJoueur.setAttribute("pointage", Integer.toString(objJoueurVirtuel.obtenirPointage()));
 							    
 				// Ajouter le noeud de l'item au noeud du paramètre
 				objNoeudParametreListeJoueurs.appendChild(objNoeudJoueur);	
@@ -3508,7 +3615,7 @@ public class ProtocoleJoueur implements Runnable
 		objNoeudCommande.setAttribute("noClient", no);
 		objNoeudCommande.setAttribute("type", "MiseAJour");
 		objNoeudCommande.setAttribute("nom", "Pointage");
-		//objNoeudParametre.setAttribute("type", "Pointage");  //??????????????	
+		objNoeudParametre.setAttribute("type", "Pointage");  
 		objNoeudParametre.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirPointage()));
 
 		// Ajouter le noeud paramètre au noeud de commande dans
@@ -3561,7 +3668,7 @@ public class ProtocoleJoueur implements Runnable
 		objNoeudCommande.setAttribute("noClient", no);
 		objNoeudCommande.setAttribute("type", "MiseAJour");
 		objNoeudCommande.setAttribute("nom", "Argent");
-		//objNoeudParametre.setAttribute("type", "Argent");	
+		objNoeudParametre.setAttribute("type", "Argent");	
 		objNoeudParametre.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirArgent()));
 
 		// Ajouter le noeud paramètre au noeud de commande dans
