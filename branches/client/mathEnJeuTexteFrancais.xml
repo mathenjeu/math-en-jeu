@@ -149,6 +149,12 @@
 	  buttonNew = "Nouvelle"
 	  buttonOld = "Recommencer"
 	  restartText = " Voulez vous rejoindre la vieille partie ou créé une nouvelle? "
+	  buttonBug = "Signaler cette question"
+	  userText = "Joueur : "
+	  buttonSend = "Envoyer"
+	  buttonBack = "Annuler"
+	  
+	  bugReportMess = "L'erreur a été envoyée avec succes!"
   
     
 	
