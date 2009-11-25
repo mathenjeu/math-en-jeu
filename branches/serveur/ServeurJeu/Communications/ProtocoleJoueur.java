@@ -971,28 +971,7 @@ public class ProtocoleJoueur implements Runnable
 					if (objJoueurHumain != null)
 					{
 																					
-						// Déclaration d'une variable qui va contenir le noeud
-						// du nom du joueur qui a fait le rapport
-						Node objPlayerName = obtenirValeurParametre(objNoeudCommandeEntree, "PlayerName");
-                        String name = "";
-						name = objPlayerName.getNodeValue();
-												
-                        // Déclaration d'une variable qui va contenir le noeud
-						// du mot de passe permettant d'accéder à la salle (s'il 
-						// n'y en a pas, alors le mot de passe sera vide)
-						Node objQuestion = obtenirValeurParametre(objNoeudCommandeEntree, "Question");
-
-						// Déclaration d'une variable qui va contenir le numero de la question en question :)
-						int question = 0;	
-
-						// Si le noeud du mot de passe n'est pas null alors il y
-						// a un mot de passe pour la salle
-						if (objQuestion != null)
-						{
-							// Garder le mot de passe en mémoire
-							question = Integer.parseInt(objQuestion. getNodeValue());
-						}
-                        
+						                        
 						Node objDescription = obtenirValeurParametre(objNoeudCommandeEntree, "Description");
 						String errorDescription = "";
 						if(objDescription != null)
@@ -1004,11 +983,13 @@ public class ProtocoleJoueur implements Runnable
 						if(this.langue == "fr")
 							langue_id = 1;
 						else
-							langue_id =2;
+							langue_id = 2;
 							
 												
 						//add the info to the DB 
-						objControleurJeu.obtenirGestionnaireBD().reportBugQuestion(objJoueurHumain.obtenirCleJoueur(), question, langue_id, errorDescription);//
+						objControleurJeu.obtenirGestionnaireBD().reportBugQuestion(objJoueurHumain.obtenirCleJoueur(), 
+								objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirCodeQuestion(),
+								langue_id, errorDescription);
                         
 						// Il n'y a pas eu d'erreurs et il va falloir retourner 
 						// une liste des salles ?
@@ -1043,7 +1024,8 @@ public class ProtocoleJoueur implements Runnable
                         //String roomName = objControleurJeu.getRoomName(room_id, this.langue);
 						                       					
 						//add report from DB 
-						String report = objControleurJeu.obtenirGestionnaireBD().getReport(objJoueurHumain.obtenirCleJoueur(), room_id, this.langue);
+						String report = objControleurJeu.obtenirGestionnaireBD().getReport(objJoueurHumain.obtenirCleJoueur(),
+								         room_id, this.langue);
                         
 						// Il n'y a pas eu d'erreurs et il va falloir retourner 
 						// une liste des salles ?
@@ -2576,7 +2558,7 @@ public class ProtocoleJoueur implements Runnable
 		// we have 3 parameteres in the commande Node
 		else if (noeudCommande.getAttribute("nom").equals(Commande.ReportBugQuestion))
 		{
-			if (noeudCommande.getChildNodes().getLength() == 3)
+			if (noeudCommande.getChildNodes().getLength() == 1)
 			{
 				bolCommandeValide = true;
 			}
