@@ -2082,7 +2082,7 @@ public class GestionnaireBD
 				
 
 					// Ajouter l'information pour cette salle
-					requete.executeUpdate("INSERT INTO questions_with_error (user_id, question_id, language_id, description) VALUES ( " + user_id + " ," + question + " , " + language_id + " ,'" + errorDescription + "');");
+					requete.executeUpdate("INSERT INTO questions_with_error (question_id, user_id, language_id, description) VALUES ( " + question + " ," + user_id + " , " + language_id + " ,'" + errorDescription + "');");
 
 			}		
 		}
