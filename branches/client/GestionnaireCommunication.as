@@ -1802,7 +1802,7 @@ class GestionnaireCommunication
 	 *         question : String - le numero de la question avec erreur
 	 *         description : String - la description de l'erreur
      */
-    public function reportBugQuestion(reportBugQuestionDelegate:Function, playerName:String, question:String, description:String)
+    public function reportBugQuestion(reportBugQuestionDelegate:Function, description:String)
     {
         // Si on a obtenu la liste des tables, alors on peut continuer le code
         // de la fonction
@@ -1821,31 +1821,19 @@ class GestionnaireCommunication
             var objObjetXML:XML = new XML();
             // Creer tous les noeuds de la commande
             var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
-            
-			var objNoeudParametrePlayerName:XMLNode = objObjetXML.createElement("parametre");
-            var objNoeudParametrePlayerNameText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(playerName));
-			
+            					
 			var objNoeudParametreDescription:XMLNode = objObjetXML.createElement("parametre");
             var objNoeudParametreDescriptionText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(description)));
-			
-			var objNoeudParametreQuestion:XMLNode = objObjetXML.createElement("parametre");
-            var objNoeudParametreQuestionText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(question));
-			
+						
 			// Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "ReportBugQuestion";
-            objNoeudParametrePlayerName.attributes.type = "PlayerName";
-            objNoeudParametrePlayerName.appendChild(objNoeudParametrePlayerNameText);
+            
 			objNoeudParametreDescription.attributes.type = "Description";
             objNoeudParametreDescription.appendChild(objNoeudParametreDescriptionText);
-			objNoeudParametreQuestion.attributes.type = "Question";
-            objNoeudParametreQuestion.appendChild(objNoeudParametreQuestionText);
-									
-            objNoeudCommande.appendChild(objNoeudParametrePlayerName);
-			objNoeudCommande.appendChild(objNoeudParametreDescription);
-            objNoeudCommande.appendChild(objNoeudParametreQuestion);
-			
-					
+												
+          	objNoeudCommande.appendChild(objNoeudParametreDescription);
+           					
 			objObjetXML.appendChild(objNoeudCommande);
             // Declaration d'un nouvel objet qui va contenir les informations sur
             // la commande a traiter courante

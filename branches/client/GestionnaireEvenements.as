@@ -258,11 +258,11 @@ class GestionnaireEvenements
     }
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////
-    function reportBugQuestion(playerName:String, question:String, description:String)
+    function reportBugQuestion(description:String)
     {
         trace("*********************************************");
-        trace("reportBugQuestion     :" + question);
-        this.objGestionnaireCommunication.reportBugQuestion(Delegate.create(this, this.retourReportBugQuestion), playerName, question, description);
+        trace("reportBugQuestion     : ");
+        this.objGestionnaireCommunication.reportBugQuestion(Delegate.create(this, this.retourReportBugQuestion), description);
         trace("end reportBugQuestion");
         trace("*********************************************\n");
     }
