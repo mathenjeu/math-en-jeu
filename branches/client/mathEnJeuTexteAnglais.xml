@@ -5,6 +5,7 @@
 	  welcomeMess = "Welcome to the game!!!"
 	  bananaMess = " tossed a Banana to "
 	  outMess = " left the game!"
+	  InMess = " is in again!"
 	  moveMess = "To move - click on yellow cells!"
   main_menu = ""
 	  bienvenue = "Welcome to MathAmaze "

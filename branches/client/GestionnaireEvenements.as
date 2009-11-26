@@ -390,7 +390,7 @@ class GestionnaireEvenements
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].idessin = calculatePicture(no);
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].win = 0;
 		//this.listeDesPersonnages[numeroJoueursDansSalle-1].lastPoints = 0;
-        this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), Delegate.create(this, this.evenementPartieTerminee), no);//this.idPersonnage);//  
+        this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), Delegate.create(this, this.evenementPartieTerminee),  no);//this.idPersonnage);//  
 	
 		trace("fin de demarrerPartie");
         trace("*********************************************\n");
@@ -413,7 +413,7 @@ class GestionnaireEvenements
     {
         trace("*********************************************");
         trace("debut de deplacerPersonnage     " + pt.obtenirX() + "     " + pt.obtenirY());
-        this.objGestionnaireCommunication.deplacerPersonnage(Delegate.create(this, this.retourDeplacerPersonnage), _level0.loader.contentHolder.planche.calculerPositionOriginale(pt.obtenirX(), pt.obtenirY()));  
+        this.objGestionnaireCommunication.deplacerPersonnage(Delegate.create(this, this.retourDeplacerPersonnage), Delegate.create(this, this.evenementJoueurRejoindrePartie), _level0.loader.contentHolder.planche.calculerPositionOriginale(pt.obtenirX(), pt.obtenirY()));  
         // to correct the state 
 		_level0.loader.contentHolder.planche.obtenirPerso().minigameLoade = false;
 	    trace("fin de deplacerPersonnage");
@@ -2698,7 +2698,7 @@ class GestionnaireEvenements
 		
         // parametre: plateauJeu, positionJoueurs (nom, x, y), tempsPartie
         trace("*********************************************");
-        trace("debut de evenementPartieDemarree   "+objetEvenement.tempsPartie+"   "+getTimer());
+        trace("debut de evenementPartieDemarree   " + objetEvenement.tempsPartie + "   " + getTimer());
         var i:Number;
         var j:Number;
         
@@ -2720,7 +2720,7 @@ class GestionnaireEvenements
 		// Initialise our opponents' name and score
 		// and put the face of our opponents' avatar in the panel (next to their name)
  				
-		j=0;
+		j = 0;
 		for(i=0; i < numeroJoueursDansSalle; i++)
 		{
        				
@@ -2755,7 +2755,7 @@ class GestionnaireEvenements
        
 	    _level0.loader.contentHolder.planche.afficher();
         
-		trace("longueur de la liste des noms envoyes par serveur    :"+objetEvenement.positionJoueurs.length);
+		trace("longueur de la liste des noms envoyes par serveur    :" + objetEvenement.positionJoueurs.length);
         for(i = 0; i < objetEvenement.positionJoueurs.length; i++)
         {
             for(j = 0; j < this.listeDesPersonnages.length; j++)
@@ -2809,7 +2809,42 @@ class GestionnaireEvenements
 		
         trace("fin de evenementPartieDemarree    "+getTimer());
         trace("*********************************************\n");
-    }  
+    } 
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	//   "JoueurRejoindrePartie"
+	public function evenementJoueurRejoindrePartie(objetEvenement:Object)
+    {
+        // parametre: nomUtilisateur, idPersonnage, Pointage
+     	trace("*********************************************");
+     	trace("debut de evenementJoueurRejoindrePartie   " + objetEvenement.nomUtilisateur + "    " + objetEvenement.idPersonnage + " " + objetEvenement.Pointage);
+		
+		this.listeDesPersonnages.push(new Object());
+		var i:Number = this.listeDesPersonnages.length - 1;
+		this.listeDesPersonnages[i].nom = objetEvenement.nomUtilisateur;
+        this.listeDesPersonnages[i].id = objetEvenement.idPersonnage;
+		this.listeDesPersonnages[i].role = 1;//objetEvenement.userRole;   !!!!!!!!!!!!!!!!!!!!!!
+		this.listeDesPersonnages[i].pointage = objetEvenement.Pointage;
+		this.listeDesPersonnages[i].win = 0;
+		this.listeDesPersonnages[i].idessin = calculatePicture(this.listeDesPersonnages[i].id);
+		
+		_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(this.listeDesPersonnages[i].id));
+		
+		_level0.loader.contentHolder.planche.getPersonnageByName(objetEvenement.nomUtilisateur).afficher();
+		dessinerMenu();
+		remplirMenuPointage();
+		   
+		 //complete the message box  - newsbox
+		 _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
+		 var messageInfo:String = objetEvenement.nomUtilisateur + _root.texteSource_xml.firstChild.attributes.InMess; 
+		 this.newsArray[newsArray.length] = messageInfo;
+		 _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
+		 _level0.loader.contentHolder.orderId = 0;
+		
+		trace("fin de evenement evenementJoueurRejoindrePartie ");
+        trace("*********************************************\n");
+				
+	}
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function evenementJoueurDemarrePartie(objetEvenement:Object)
@@ -3110,7 +3145,7 @@ class GestionnaireEvenements
      	trace("*********************************************\n");
     }   
     
-	 ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function evenementUtiliserObjet(objetEvenement:Object)
     {
         // parametre: joueurQuiUtilise, joueurAffecte, objetUtilise, autresInformations
@@ -3233,8 +3268,8 @@ class GestionnaireEvenements
 	// et appelle le fonction d'action de la Banane
     function waitBanana(playerUnder:String):Void
     {
-      _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).slippingBanana();
-	  clearInterval(_global.timerIntervalBanana);
+        _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).slippingBanana();
+	    clearInterval(_global.timerIntervalBanana);
 				
     }
 	
@@ -3344,7 +3379,8 @@ class GestionnaireEvenements
 	{
 		return (perso - 10000 - idDessin * 100);
 	}
-//// function used to draw the points menu	
+    
+	//// function used to draw the points menu	
 	public function dessinerMenu()
 	{
 		// used to know the size of menu

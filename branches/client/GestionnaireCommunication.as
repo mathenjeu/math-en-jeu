@@ -1014,7 +1014,29 @@ class GestionnaireCommunication
 					} // end switch
 				
 				} // fin NouvelleSalle
-			    else	// donc (noeudEvenement.attributes.nom != "PartieDemarree" NI "JoueurDeplacePersonnage" NI "PartieTerminee")
+				else if(noeudEvenement.attributes.nom == "JoueurRejoindrePartie")
+				{
+					switch(strNomType)
+			    	{
+				    	
+						case "NomUtilisateur":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["nomUtilisateur"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+						
+						case "IdPersonnage":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["idPersonnage"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+						
+						case "Pointage":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["Pointage"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+					} // end switch
+				
+				} // fin "JoueurRejoindrePartie"
+				else	// donc (noeudEvenement.attributes.nom != "PartieDemarree" NI "JoueurDeplacePersonnage" NI "PartieTerminee")
 			    {
 				 	//trace("ds if ds for envoyer evenement  :  "+noeudEvenement.attributes.nom+"   "+lstChildNodes[i].firstChild.nodeValue+"   "+strNomType.substring(0, 1).toLowerCase() + strNomType.substring(1, strNomType.length));
 					// Le firstChild va pointer vers un noeud texte
@@ -2586,6 +2608,7 @@ class GestionnaireCommunication
 				                   evenementSynchroniserTempsDelegate:Function,
 								   evenementUtiliserObjetDelegate:Function,
 				                   evenementPartieTermineeDelegate:Function,
+								  
 				                   idPersonnage:Number) 
     {
         // Si on est dans une table, alors on peut continuer le code de la
@@ -2662,6 +2685,7 @@ class GestionnaireCommunication
      * @param Point nouvellePosition : La nouvelle position du personnage
      */
     public function deplacerPersonnage(deplacerPersonnageDelegate:Function,
+									   evenementJoueurRejoindrePartieDelegate:Function,
                                        nouvellePosition:Point)
     {
         trace("ds gestCom deplacerPersonnage");
@@ -2676,6 +2700,9 @@ class GestionnaireCommunication
             // Ajouter le Delegate de retour dans le tableau des delegate pour
             // cette fonction
             lstDelegateCommande.push({nom:"DeplacerPersonnage", delegate:deplacerPersonnageDelegate});
+			
+			 // Ajouter les autres Delegate d'evenements
+			lstDelegateCommande.push({nom:"JoueurRejoindrePartie", delegate:evenementJoueurRejoindrePartieDelegate});
             // Declaration d'une variable qui va contenir le numero de la commande
             // generee
             var intNumeroCommande:Number = obtenirNumeroCommande();

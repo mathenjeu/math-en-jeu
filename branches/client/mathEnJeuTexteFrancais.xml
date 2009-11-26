@@ -6,6 +6,7 @@
 	  welcomeMess = "Bienvenue au jeu!!!"
 	  bananaMess = " a lancé une Banane à "
 	  outMess = "  a quitte le jeu!"
+	  InMess = " est du nouveau dans le Jeu!"
 	  moveMess = "Pour ce deplacer - click sur les cases jaunes."
 	main_menu = ""
 	  bienvenue = "Bienvenue dans Math en jeu "
