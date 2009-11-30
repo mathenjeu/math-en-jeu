@@ -2608,7 +2608,7 @@ class GestionnaireCommunication
 				                   evenementSynchroniserTempsDelegate:Function,
 								   evenementUtiliserObjetDelegate:Function,
 				                   evenementPartieTermineeDelegate:Function,
-								  
+                                   evenementJoueurRejoindrePartieDelegate:Function,
 				                   idPersonnage:Number) 
     {
         // Si on est dans une table, alors on peut continuer le code de la
@@ -2628,6 +2628,7 @@ class GestionnaireCommunication
 			lstDelegateCommande.push({nom:"UtiliserObjet", delegate:evenementUtiliserObjetDelegate});
 	    
 	    	lstDelegateCommande.push({nom:"PartieTerminee", delegate:evenementPartieTermineeDelegate});
+			lstDelegateCommande.push({nom:"JoueurRejoindrePartie", delegate:evenementJoueurRejoindrePartieDelegate});
             
             // Declaration d'une variable qui va contenir le numero de la commande
             // generee
@@ -2685,8 +2686,7 @@ class GestionnaireCommunication
      * @param Point nouvellePosition : La nouvelle position du personnage
      */
     public function deplacerPersonnage(deplacerPersonnageDelegate:Function,
-									   evenementJoueurRejoindrePartieDelegate:Function,
-                                       nouvellePosition:Point)
+									   nouvellePosition:Point)
     {
         trace("ds gestCom deplacerPersonnage");
         // Si la partie est commencee, alors on peut continuer le code de la
@@ -2702,7 +2702,7 @@ class GestionnaireCommunication
             lstDelegateCommande.push({nom:"DeplacerPersonnage", delegate:deplacerPersonnageDelegate});
 			
 			 // Ajouter les autres Delegate d'evenements
-			lstDelegateCommande.push({nom:"JoueurRejoindrePartie", delegate:evenementJoueurRejoindrePartieDelegate});
+			
             // Declaration d'une variable qui va contenir le numero de la commande
             // generee
             var intNumeroCommande:Number = obtenirNumeroCommande();

@@ -18,6 +18,8 @@ Vous devriez avoir recu un exemplaire de la Licence Publique
 Generale Affero avec ce programme; si ce n'est pas le cas,
 ecrivez a Affero Inc., 510 Third Street - Suite 225,
 San Francisco, CA 94107, USA.
+
+last change - Nov.2009 - Oloieri Lilian
 *********************************************************************/
 
 import flash.geom.Transform;
@@ -53,6 +55,7 @@ class PlancheDeJeu
     private var gestionnaireInterface:GestionnaireInterface;
     private var rotation:Number = 0;
     private var tableauDesPersonnages:Array = new Array(); // contient les personnages
+	private  var intervalCol:Number;
 	
     
     function obtenirPerso():Personnage
@@ -597,6 +600,8 @@ class PlancheDeJeu
 		var trans:Transform = new Transform(mClip);
 		var colorTrans:ColorTransform = new ColorTransform();
 		
+
+				
 		if(laCase.obtenirMiniGame())
 		{
 			colorTrans.rgb = 0xd8ae00;
@@ -609,8 +614,65 @@ class PlancheDeJeu
 		{
 			colorTrans.rgb = 0xd8ae00;
 			trans.colorTransform = colorTrans;
+			//colorTrans2.rgb = 0xFFEB5B;
+			 //var twMoveColor:Tween = new Tween(mClip, "transform.colorTransform", Strong.easeOut, colorTrans, colorTrans2, 5, true);
+			//colorTween
+            //var rb:Tween = new Tween (mClip, "transform", Strong.easeOut, trans.rb, Math.random () * 0xFF, 3, true);
+            //var gb:Tween = new Tween (mClip, "transform", Strong.easeOut, trans.gb, Math.random () * 0xFF, 3, true);
+            //var bb:Tween = new Tween (mClip, "transform", Strong.easeOut, trans.bb, Math.random () * 0xFF, 3, true);
+    
+	        //intervalCol = setInterval(executeColor, 3000, mClip, colorTrans, trans, 0x00, 0xFF, 0xEB, 0x5B, Strong.easeOut);
+			 			 
+			 colorTween(mClip, colorTrans, trans, 0.5, 0x00, 0xFF, 0xEB, 0x5B, Strong.easeOut, laCase, intervalCol);
+				   
 		}
-	}
+
+        
+	}///////// end methode
+	
+	
+	
+	/////////// recent add  --- changed from www.kirupa.com 
+	/*
+	*  Used to apply tween to color transformation - can be used in different situations
+	*  where you need graduate color transform 
+	*/
+	function colorTween(mc:MovieClip, ct:ColorTransform, t:Transform, seconds:Number, a:Number, r:Number, g:Number, b:Number, ease:Function, laCase:Case, intervalCol:Number):Void {
+      
+	 
+	   intervalCol = setInterval(executeColor, 500, mc, ct, t, seconds, a, r, g, b, ease);
+	   function executeColor(){
+		  ct.rgb =  0xd8ae00;
+		  t.colorTransform = ct;
+	      var alphaTween:Tween = new Tween(ct, "alphaOffset", ease, ct.alphaOffset, a, seconds, true);
+          var redTween:Tween = new Tween(ct, "redOffset", ease, ct.redOffset, r, seconds, true);
+          var greenTween:Tween = new Tween(ct, "greenOffset", ease, ct.greenOffset, g, seconds, true);
+          var blueTween:Tween = new Tween(ct, "blueOffset", ease, ct.blueOffset, b, seconds, true);
+     
+          greenTween.onMotionChanged = function() {
+           t.colorTransform = ct;
+          };
+		  
+		  if(laCase.obtenirCasePossible() == null){
+		    clearInterval(intervalCol);
+			
+		   //var alphaTween:Tween = new Tween(ct, "alphaOffset", ease, ct.alphaOffset,0x00, 0.5, true);
+           var redTween:Tween = new Tween(ct, "redOffset", ease, ct.redOffset, 0x8a, 0.5, true);
+           var greenTween:Tween = new Tween(ct, "greenOffset", ease, ct.greenOffset, 0xb2, 0.5, true);
+           var blueTween:Tween = new Tween(ct, "blueOffset", ease, ct.blueOffset, 0x1d, 0.5, true);
+     
+            greenTween.onMotionChanged = function() {
+               t.colorTransform = ct;
+		       ct.rgb = 0x8ab21d;
+			   t.colorTransform = ct;
+			};
+		  
+		  }
+		 
+	  }
+    }
+	//////////////////////
+	
 
 	function switchBackColor(laCase:Case)
 	{
@@ -633,6 +695,7 @@ class PlancheDeJeu
 		{
 			colorTrans.rgb = 0x8ab21d;
 			trans.colorTransform = colorTrans;
+			
 		}
 	}
 
