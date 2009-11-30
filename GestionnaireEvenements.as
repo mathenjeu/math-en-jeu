@@ -390,7 +390,7 @@ class GestionnaireEvenements
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].idessin = calculatePicture(no);
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].win = 0;
 		//this.listeDesPersonnages[numeroJoueursDansSalle-1].lastPoints = 0;
-        this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), Delegate.create(this, this.evenementPartieTerminee),  no);//this.idPersonnage);//  
+        this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), Delegate.create(this, this.evenementPartieTerminee), Delegate.create(this, this.evenementJoueurRejoindrePartie),  no);//this.idPersonnage);//  
 	
 		trace("fin de demarrerPartie");
         trace("*********************************************\n");
@@ -413,7 +413,7 @@ class GestionnaireEvenements
     {
         trace("*********************************************");
         trace("debut de deplacerPersonnage     " + pt.obtenirX() + "     " + pt.obtenirY());
-        this.objGestionnaireCommunication.deplacerPersonnage(Delegate.create(this, this.retourDeplacerPersonnage), Delegate.create(this, this.evenementJoueurRejoindrePartie), _level0.loader.contentHolder.planche.calculerPositionOriginale(pt.obtenirX(), pt.obtenirY()));  
+        this.objGestionnaireCommunication.deplacerPersonnage(Delegate.create(this, this.retourDeplacerPersonnage), _level0.loader.contentHolder.planche.calculerPositionOriginale(pt.obtenirX(), pt.obtenirY()));  
         // to correct the state 
 		_level0.loader.contentHolder.planche.obtenirPerso().minigameLoade = false;
 	    trace("fin de deplacerPersonnage");
@@ -2828,7 +2828,7 @@ class GestionnaireEvenements
 		this.listeDesPersonnages[i].win = 0;
 		this.listeDesPersonnages[i].idessin = calculatePicture(this.listeDesPersonnages[i].id);
 		
-		_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(this.listeDesPersonnages[i].id));
+		//_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(this.listeDesPersonnages[i].id));
 		
 		_level0.loader.contentHolder.planche.getPersonnageByName(objetEvenement.nomUtilisateur).afficher();
 		dessinerMenu();
