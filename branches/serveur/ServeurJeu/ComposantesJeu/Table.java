@@ -18,6 +18,7 @@ import ServeurJeu.Evenements.EvenementJoueurDeplacePersonnage;
 import ServeurJeu.Evenements.EvenementJoueurEntreTable;
 import ServeurJeu.Evenements.EvenementJoueurQuitteTable;
 import ServeurJeu.Evenements.EvenementJoueurDemarrePartie;
+import ServeurJeu.Evenements.EvenementJoueurRejoindrePartie;
 import ServeurJeu.Evenements.EvenementPartieDemarree;
 import ServeurJeu.Evenements.EvenementMAJPointage;
 import ServeurJeu.Evenements.EvenementMAJArgent;
@@ -421,19 +422,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				    // retourné au client
 				    joueur.obtenirProtocoleJoueur().genererNumeroReponse();					    
 				}
-
-				// Empçcher d'autres thread de toucher ˆ la liste des joueurs de 
-			    // cette salle pendant qu'on parcourt tous les joueurs de la salle
-				// pour leur envoyer un événement
-			    synchronized (getObjSalle().obtenirListeJoueurs())
-			    {
-					// Préparer l'événement qu'un joueur a quitté la table. 
-					// Cette fonction va passer les joueurs et créer un 
-					// InformationDestination pour chacun et ajouter l'événement 
-					// dans la file de gestion d'événements
-					//preparerEvenementJoueurQuitteTable(joueur.obtenirNomUtilisateur());
-			    }
-
+			
+				preparerEvenementJoueurRejoindrePartie(joueur.obtenirNomUtilisateur(), joueur.obtenirPartieCourante().obtenirIdPersonnage(), joueur.obtenirPartieCourante().obtenirPointage());
 			   
 		    }
 		    synchronized (lstJoueursDeconnectes)
@@ -1421,6 +1411,49 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
 		objGestionnaireEvenements.ajouterEvenement(majPointage);
 	}
+	
+	/**
+	 * Used to inform another players that one player is back to the game
+	 * We need to give them his user name and his points
+	 * @param nomUtilisateur
+	 * @param nouveauPointage
+	 */
+	public void preparerEvenementJoueurRejoindrePartie(String userName, int idPersonnage, int points)
+	{
+		// Créer un nouveal événement qui va permettre d'envoyer l'événment
+		// aux joueurs pour signifier une modification du pointage
+		EvenementJoueurRejoindrePartie maPartie = new EvenementJoueurRejoindrePartie(userName, idPersonnage, points);
+		
+		// Créer un ensemble contenant tous les tuples de la liste des joueurs
+		// de la table
+		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
+		
+		// Obtenir un itérateur pour l'ensemble contenant les joueurs
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
+		
+		// Passser tous les joueurs de la table et leur envoyer l'événement
+		// NOTE: On omet d'envoyer au joueur nomUtilisateur étant donné
+		//       qu'il connait déjà son pointage
+		while (objIterateurListe.hasNext() == true)
+		{
+			// Créer une référence vers le joueur humain courant dans la liste
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
+			
+			// Si le nom d'utilisateur du joueur n'est pas nomUtilisateur, alors
+			// on peut envoyer un événement à cet utilisateur
+			if (objJoueur.obtenirNomUtilisateur().equals(userName) == false)
+			{
+				// Obtenir un numéro de commande pour le joueur courant, créer
+				// un InformationDestination et l'ajouter à l'événement
+				maPartie.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
+			            																	 objJoueur.obtenirProtocoleJoueur()));      																	 
+			}
+		}
+		
+		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
+		objGestionnaireEvenements.ajouterEvenement(maPartie);
+	}
+
 
 	public void preparerEvenementMAJArgent(String nomUtilisateur, int nouvelArgent)
 	{
@@ -1562,7 +1595,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			    // un InformationDestination et l'ajouter à l'événement
 				joueurDeplacePersonnage.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
 			            																	 objJoueur.obtenirProtocoleJoueur()));
-				System.out.println("Control : " + objJoueur.obtenirProtocoleJoueur() + " " + objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande());
+				//System.out.println("Control : " + objJoueur.obtenirProtocoleJoueur() + " " + objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande());
 			}
 		}
 		
