@@ -664,8 +664,6 @@ public class ProtocoleJoueur implements Runnable
 
 							// Faire en sorte que le joueur est correctement
 							// considéré en train de jouer
-							System.out.println("Before : " +  objJoueurHumain.obtenirProtocoleJoueur() + " " + objJoueurHumain.obtenirProtocoleJoueur().obtenirJoueurHumain());
-							System.out.println("Before : " +  objAncientJoueurHumain.obtenirProtocoleJoueur() + " " + objAncientJoueurHumain.obtenirProtocoleJoueur().obtenirJoueurHumain()); 
 							
 							objJoueurHumain = objAncientJoueurHumain;
 							objAncientJoueurHumain.setObjProtocoleJoueur(this);
@@ -675,11 +673,7 @@ public class ProtocoleJoueur implements Runnable
 							// Enlever le joueur de la liste des joueurs déconnectés
 							objControleurJeu.enleverJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
 							objControleurJeu.entrerSalle(objJoueurHumain, objJoueurHumain.obtenirPartieCourante().obtenirTable().getObjSalle().getRoomID(), objJoueurHumain.obtenirPartieCourante().obtenirTable().getObjSalle().getStrPassword(), false);
-							
-							
-							System.out.println("NOW : " +  objJoueurHumain.obtenirProtocoleJoueur() + " " + objJoueurHumain.obtenirProtocoleJoueur().obtenirJoueurHumain() + " " + objJoueurHumain.obtenirSalleCourante().obtenirListeJoueurs() + " " + objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs());
-							System.out.println("NOW : " +  objAncientJoueurHumain.obtenirProtocoleJoueur() + " " + objAncientJoueurHumain.obtenirProtocoleJoueur().obtenirJoueurHumain() + " " + objAncientJoueurHumain.obtenirSalleCourante().obtenirListeJoueurs() + " " + objAncientJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs());
-							
+												
 							objNoeudCommande.setAttribute("type", "Reponse");
 							objNoeudCommande.setAttribute("nom", "Ok");
 
