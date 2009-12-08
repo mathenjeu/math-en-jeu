@@ -128,12 +128,20 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     // Array of players pictures 
     private ArrayList<Integer> pictures; 
     
+    // nb lines on the game board
+    private int nbLines;
+    
+    // nb columns on the game board
+    private int nbColumns;
+    
     
 	
 
 	/**
 	 * Constructeur de la classe Table qui permet d'initialiser les membres 
 	 * privés de la table.
+	 * @param intNbColumns 
+	 * @param intNbLines 
 	 *
 	 * @param Salle salleParente : La salle dans laquelle se trouve cette table
 	 * @param GestionnaireBD gestionnaireBD : Le gestionnaire de base de données
@@ -143,7 +151,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @param int tempsPartie : Le temps de la partie en minute
 	 * @param Regles reglesTable : Les règles pour une partie sur cette table
 	 */
-	public Table(Salle salleParente, int noTable, JoueurHumain joueur ,	int tempsPartie, ControleurJeu controleurJeu, String name) 
+	public Table(Salle salleParente, int noTable, JoueurHumain joueur ,	int tempsPartie, ControleurJeu controleurJeu, String name, int intNbLines, int intNbColumns) 
 	{
 		super();
    	
@@ -164,6 +172,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		intNoTable = noTable;
 		
 		setTableName(name);
+		setNbLines(intNbLines);
+		setNbColumns(intNbColumns);
 		
 		intTempsTotal = tempsPartie;
               //  if(!this.butDuJeu.equals("original")) winTheGame = new WinTheGame(this);
@@ -662,7 +672,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Générer le plateau de jeu selon les règles de la table et 
 		// garder le plateau en mémoire dans la table
 		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objGestionnaireBD, 
-				objRegles, intTempsTotal, lstPointsCaseLibre, objProchainIdObjet, lstPointsFinish, getObjSalle().getGameType());
+				lstPointsCaseLibre, objProchainIdObjet, lstPointsFinish, this);
 
         // Définir le prochain id pour les objets
         objProchainIdObjet++;
@@ -2062,6 +2072,34 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			{
 				this.tableName = tableName;
 			}
+		}
+		
+		  /**
+		 * @return the nbLines
+		 */
+		public int getNbLines() {
+			return nbLines;
+		}
+
+		/**
+		 * @param nbLines the nbLines to set
+		 */
+		public void setNbLines(int nbLines) {
+			this.nbLines = nbLines;
+		}
+
+		/**
+		 * @return the nbColumns
+		 */
+		public int getNbColumns() {
+			return nbColumns;
+		}
+
+		/**
+		 * @param nbColumns the nbColumns to set
+		 */
+		public void setNbColumns(int nbColumns) {
+			this.nbColumns = nbColumns;
 		}
 		
 /*		private Boolean controlForRole(int userName)
