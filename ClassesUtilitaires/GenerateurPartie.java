@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Random;
 import Enumerations.Visibilite;
 import ServeurJeu.BD.GestionnaireBD;
+import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
@@ -38,7 +39,8 @@ public final class GenerateurPartie
      * @param objGestionnaireBD 
      * @param max_nb_players 
      * @param lstPointsFinish 
-     * @param gameType 
+     * @param nbColumns 
+     * @param nbLines 
      *
      * @param Regles reglesPartie : L'ensemble des règles pour la partie
      * @param int temps : Le temps de la partie
@@ -50,16 +52,12 @@ public final class GenerateurPartie
      * 								  être remplie est nulle
      */
     public static Case[][] genererPlateauJeu(GestionnaireBD objGestionnaireBD, 
-    		Regles reglesPartie, int temps, ArrayList<Point> lstPointsCaseLibre,
-    		Integer objDernierIdObjets, ArrayList<Point> lstPointsFinish, 
-    		String gameType) throws NullPointerException
+    		ArrayList<Point> lstPointsCaseLibre, Integer objDernierIdObjets, ArrayList<Point> lstPointsFinish, 
+    		Table table) throws NullPointerException
     {
 		// Création d'un objet permettant de générer des nombres aléatoires
 		Random objRandom = new Random();
-               
-        // Obtention du nombre d'objets maximal en vente par magasin
-        int maxNbObjetsAVendre = reglesPartie.getIntMaxSaledObjects();
-		
+        		
 		// Déclaration de points
 		Point objPoint;
 		
@@ -111,9 +109,15 @@ public final class GenerateurPartie
         
 		int intNbColumns;
 		int intNbLines;
+		Regles reglesPartie = table.getObjSalle().getRegles();
+				
+		// Obtention du nombre d'objets maximal en vente par magasin
+        //int maxNbObjetsAVendre = reglesPartie.getIntMaxSaledObjects();
+        
+		int temps = table.obtenirTempsTotal();
 		
 		// calculate number of lines and of columns if gametype = tournament
-		if (gameType.equals("Tournament"))
+		if (table.getObjSalle().getGameType().equals("Tournament"))
 		{
 		   intNbColumns = (reglesPartie.getNbTracks() + 1) * (reglesPartie.obtenirTempsMinimal() * 2 + 1) - 1; // factor - 1;
 
@@ -136,19 +140,30 @@ public final class GenerateurPartie
 		   intNbLines = objRandom.nextInt(temps - ((int) Math.ceil(temps /2)) + 1) + ((int) Math.ceil(temps /2 ));
 
 		   // Le nombre de colonnes sera de temps à 2 * temps 
-		   intNbColumns = (int) Math.ceil((temps * temps ) / intNbLines); 
+		   intNbColumns = (int) Math.floor((temps * temps ) / intNbLines); 
 		}
+		
+		if(table.getNbLines() != 0)
+			intNbLines = table.getNbLines();
+		if(table.getNbColumns() != 0)
+			intNbColumns = table.getNbColumns();
 				
 		// Déclaration de variables qui vont garder le nombre de trous, 
 		// le nombre de cases spéciales, le nombres de magasins,
 		// le nombre de pièces, le nombre de
-		int intNbTrous = ((int) Math.ceil(intNbLines * intNbColumns * reglesPartie.obtenirRatioTrous()));
+		int intNbTrous = ((int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioTrous()));
 		int intNbCasesSpeciales = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioCasesSpeciales());
 		int intNbMagasins = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioMagasins());
 		int intNbPieces = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioPieces());
 		int intNbObjetsUtilisables = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioObjetsUtilisables());
 
-		System.out.println("trous : " + intNbTrous);
+		System.out.println("lignes : " + temps);
+		System.out.println("lignes : " + intNbLines);
+		System.out.println("colognes : " + intNbColumns);
+		
+		// to set the correct values on the table
+		table.setNbLines(intNbLines);
+		table.setNbColumns(intNbColumns);
 				
 		// Maintenant qu'on a le nombre de lignes et de colonnes, on va créer
 		// le tableau à 2 dimensions représentant le plateau de jeu (null est 
@@ -156,7 +171,7 @@ public final class GenerateurPartie
 		Case[][] objttPlateauJeu = new Case[intNbLines][intNbColumns];	
 		
 		// if game type = tournament (plateau semilineaire)
-		if (gameType.equals("Tournament"))
+		if (table.getObjSalle().getGameType().equals("Tournament"))
 		{
 		   // we build table of game with the houls for the borders
 		   intCompteurCases = boardCreation(objRandom, reglesPartie.getNbTracks(), reglesPartie, lstPointsCasesPresentes, 
@@ -467,7 +482,7 @@ public final class GenerateurPartie
 		
 		// if game type = tournament (plateau semilineaire)
 		// add the start and end points 
-		if (gameType.equals("Tournament"))
+		if (table.getObjSalle().getGameType().equals("Tournament"))
 		{
             Iterator objIterateurListePriorite = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
 			ReglesCaseCouleur objReglesCaseCouleur = (ReglesCaseCouleur) objIterateurListePriorite.next();				
