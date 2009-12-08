@@ -1056,6 +1056,7 @@ class GestionnaireCommunication
 						xWinGame = lstChildNodes[i].attributes.x;
 						yWinGame = lstChildNodes[i].attributes.y;
 						nbTracks = lstChildNodes[i].attributes.tracks;
+						//_level0.loader.contentHolder.objGestionnaireEvenements.setNbTracks(nbTracks);
 						_level0.loader.contentHolder.objGestionnaireEvenements.setPointageMinimalWinTheGame(lstChildNodes[i].attributes.pointageRequis);
 						
 						trace("xWinGame : " + xWinGame);
@@ -2315,7 +2316,7 @@ class GestionnaireCommunication
      */
     public function creerTable(creerTableDelegate:Function,
                                evenementJoueurDemarrePartieDelegate:Function,
-                               tempsPartie:Number, tablName:String)
+                               tempsPartie:Number, nbLines:Number, nbColumns:Number, tablName:String)
     {
         // Si on a obtenu la liste des tables, alors on peut continuer le code
         // de la fonction
@@ -2338,6 +2339,12 @@ class GestionnaireCommunication
             var objNoeudParametreTempsPartie:XMLNode = objObjetXML.createElement("parametre");
             var objNoeudParametreTempsPartieText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(tempsPartie)));
 			
+			var objNoeudParametreNbLines:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreNbLinesText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(nbLines)));
+			
+			var objNoeudParametreNbColumns:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreNbColumnsText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(nbColumns)));
+			
 			var objNoeudParametreNomPartie:XMLNode = objObjetXML.createElement("parametre");
             var objNoeudParametreNomPartieText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(tablName));
 			
@@ -2346,11 +2353,17 @@ class GestionnaireCommunication
             objNoeudCommande.attributes.nom = "CreerTable";
             objNoeudParametreTempsPartie.attributes.type = "TempsPartie";
             objNoeudParametreTempsPartie.appendChild(objNoeudParametreTempsPartieText);
+			objNoeudParametreNbLines.attributes.type = "NbLines";
+            objNoeudParametreNbLines.appendChild(objNoeudParametreNbLinesText);
+			objNoeudParametreNbColumns.attributes.type = "NbColumns";
+            objNoeudParametreNbColumns.appendChild(objNoeudParametreNbColumnsText);
 			objNoeudParametreNomPartie.attributes.type = "TableName";
             objNoeudParametreNomPartie.appendChild(objNoeudParametreNomPartieText);
 			
             objNoeudCommande.appendChild(objNoeudParametreTempsPartie);
-			 objNoeudCommande.appendChild(objNoeudParametreNomPartie);
+			objNoeudCommande.appendChild(objNoeudParametreNbLines);
+			objNoeudCommande.appendChild(objNoeudParametreNbColumns);
+			objNoeudCommande.appendChild(objNoeudParametreNomPartie);
             objObjetXML.appendChild(objNoeudCommande);
             // Declaration d'un nouvel objet qui va contenir les informations sur
             // la commande a traiter courante
@@ -3485,6 +3498,7 @@ class GestionnaireCommunication
                     maxnbplayers:lstChildNodes[i].attributes.maxnbplayers,
 					idRoom:lstChildNodes[i].attributes.id,
                     typeDeJeu:lstChildNodes[i].attributes.typeDeJeu,
+					nbTracks:lstChildNodes[i].attributes.nbTracks,
 					userCreator:lstChildNodes[i].attributes.userCreator,
 					masterTime:lstChildNodes[i].attributes.masterTime});
 								  

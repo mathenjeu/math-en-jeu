@@ -62,12 +62,13 @@ class GestionnaireEvenements
 	private var tabPodiumOrdonneID:Array;			// id des personnages ordonnes par pointage une fois la partie terminee
 	private var pointageMinimalWinTheGame:Number = -1 // pointage minimal a avoir droit d'atteindre le WinTheGame
 	
-	public  var typeDeJeu:String = "MathEnJeu";
+	public  var typeDeJeu:String = "mathEnJeu";
 	private var moveVisibility:Number;  // The number of cases that user can move. At the begining is 3. 
 	                                    // With the 3 running correct answers the level increase by 1 
 	private var langue;
 	private var endGame:Boolean;   // used to ignore the movement of virtual players after the end of the game
-	private var newsArray:Array;  // all the messages to show in newsbox  
+	private var newsArray:Array;  // all the messages to show in newsbox
+	private var nbTracks:Number; 
 	
 	function affichageChamps()
 	{
@@ -113,6 +114,16 @@ class GestionnaireEvenements
 	function setPointageMinimalWinTheGame(ptMin:Number)
     {
     	this.pointageMinimalWinTheGame = ptMin;
+    }
+	
+	function getNbTracks():Number
+	{
+		return this.nbTracks;
+	}
+	
+	function setNbTracks(nTracks:Number)
+    {
+    	this.nbTracks = nTracks;
     }
 	
     
@@ -365,11 +376,11 @@ class GestionnaireEvenements
     }
 	
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    function creerTable(temps:Number, nameTable:String)
+    function creerTable(temps:Number, nb_lines:Number, nb_columns:Number, nameTable:String)
     {
         trace("*********************************************");
         trace("debut de creerTable     " + temps);
-        this.objGestionnaireCommunication.creerTable(Delegate.create(this, this.retourCreerTable), Delegate.create(this, this.evenementJoueurDemarrePartie), temps, nameTable);
+        this.objGestionnaireCommunication.creerTable(Delegate.create(this, this.retourCreerTable), Delegate.create(this, this.evenementJoueurDemarrePartie), temps, nb_lines, nb_columns, nameTable);
         trace("fin de creerTable");
         trace("*********************************************\n");
     }
@@ -638,7 +649,7 @@ class GestionnaireEvenements
         switch(objetEvenement.resultat)
         {
 			case "Ok":
-			//A faire plus tard
+			
 			trace("<<<<<<<<<<<<<<<<  reconnexion with new game >>>>>>>>>>>>>>>>>>>");
 			this.objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), Delegate.create(this, this.evenementJoueurConnecte), Delegate.create(this, this.evenementJoueurDeconnecte));
 			_level0.loader.contentHolder["restartGame"].removeMovieClip();
@@ -672,7 +683,7 @@ class GestionnaireEvenements
 			   _level0.loader.contentHolder.gestionBoutons(false);
 			   		 
 			   this.numberDesJoueurs = objetEvenement.playersListe.length;
-			   this.typeDeJeu = "MathEnJeu";
+			   this.typeDeJeu = "mathEnJeu";
 			   this.endGame = false;
 			  
         	   for(i = 0; i <objetEvenement.playersListe.length; i++)
@@ -1010,6 +1021,7 @@ class GestionnaireEvenements
                     if(this.listeDesSalles[i].idRoom == this.idRoom)
                     {
                         this.masterTime = this.listeDesSalles[i].masterTime;
+						this.nbTracks = Number(this.listeDesSalles[i].nbTracks);
 						break;
                     }
                 }
@@ -3353,6 +3365,7 @@ class GestionnaireEvenements
 	}
 	
 	// here we control if username contain the  'master'
+	// this function is not used for the moment
 	public function controlForMaster(nom:String):Boolean
     {
 		// Bloc of code to treat the username
