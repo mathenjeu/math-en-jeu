@@ -858,6 +858,9 @@ public class ProtocoleJoueur implements Runnable
 
                         			 //Add type of game for that room
                         			 objNoeudSalle.setAttribute("typeDeJeu", objSalle.getGameType());
+                        			 
+                        			//Add type of game for that room
+                        			 objNoeudSalle.setAttribute("nbTracks", Integer.toString(objSalle.getRegles().getNbTracks()));
 
                         			 //Add type of game for that room
                         			 objNoeudSalle.setAttribute("userCreator", objSalle.getStrCreatorUserName());
@@ -1429,6 +1432,9 @@ public class ProtocoleJoueur implements Runnable
 						// Déclaration d'une variable qui va contenir le temps
 						// de la partie que le client veut créer
 						int intTempsPartie = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "TempsPartie").getNodeValue());
+						
+						int intNbLines = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "NbLines").getNodeValue());
+						int intNbColumns = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "NbColumns").getNodeValue());
 
 						String name = "";
 						if(obtenirValeurParametre(objNoeudCommandeEntree, "TableName") != null) //.getNodeValue()
@@ -1437,7 +1443,7 @@ public class ProtocoleJoueur implements Runnable
 						// Appeler la méthode permettant de créer la nouvelle
 						// table et d'entrer le joueur dans cette table
 						int intNoTable = objJoueurHumain.obtenirSalleCourante().creerTable(objJoueurHumain, 
-								intTempsPartie, true, name);
+								intTempsPartie, true, name, intNbLines, intNbColumns);
 
 						name = objJoueurHumain.obtenirPartieCourante().obtenirTable().getTableName();
 
@@ -2705,7 +2711,7 @@ public class ProtocoleJoueur implements Runnable
 		{
 			// Si le nombre d'enfants du noeud de commande est de 1, alors
 			// le nombre de paramètres est correct et on peut continuer
-			if (noeudCommande.getChildNodes().getLength() == 2)
+			if (noeudCommande.getChildNodes().getLength() == 4)
 			{
 				// Déclarer une variable qui va permettre de savoir si le 
 				// noeud enfant est valide
