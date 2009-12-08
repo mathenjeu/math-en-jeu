@@ -614,16 +614,8 @@ class PlancheDeJeu
 		{
 			colorTrans.rgb = 0xd8ae00;
 			trans.colorTransform = colorTrans;
-			//colorTrans2.rgb = 0xFFEB5B;
-			 //var twMoveColor:Tween = new Tween(mClip, "transform.colorTransform", Strong.easeOut, colorTrans, colorTrans2, 5, true);
-			//colorTween
-            //var rb:Tween = new Tween (mClip, "transform", Strong.easeOut, trans.rb, Math.random () * 0xFF, 3, true);
-            //var gb:Tween = new Tween (mClip, "transform", Strong.easeOut, trans.gb, Math.random () * 0xFF, 3, true);
-            //var bb:Tween = new Tween (mClip, "transform", Strong.easeOut, trans.bb, Math.random () * 0xFF, 3, true);
-    
-	        //intervalCol = setInterval(executeColor, 3000, mClip, colorTrans, trans, 0x00, 0xFF, 0xEB, 0x5B, Strong.easeOut);
-			 			 
-			 colorTween(mClip, colorTrans, trans, 0.5, 0x00, 0xFF, 0xEB, 0x5B, Strong.easeOut, laCase, intervalCol);
+						 			 
+			colorTween(mClip, colorTrans, trans, 1.2, 0x00, 0xFF, 0xEB, 0x5B, Strong.easeOut, laCase, intervalCol);
 				   
 		}
 
@@ -640,7 +632,7 @@ class PlancheDeJeu
 	function colorTween(mc:MovieClip, ct:ColorTransform, t:Transform, seconds:Number, a:Number, r:Number, g:Number, b:Number, ease:Function, laCase:Case, intervalCol:Number):Void {
       
 	 
-	   intervalCol = setInterval(executeColor, 500, mc, ct, t, seconds, a, r, g, b, ease);
+	   intervalCol = setInterval(executeColor, 1200, mc, ct, t, seconds, a, r, g, b, ease);
 	   function executeColor(){
 		  ct.rgb =  0xd8ae00;
 		  t.colorTransform = ct;
@@ -656,10 +648,10 @@ class PlancheDeJeu
 		  if(laCase.obtenirCasePossible() == null){
 		    clearInterval(intervalCol);
 			
-		   //var alphaTween:Tween = new Tween(ct, "alphaOffset", ease, ct.alphaOffset,0x00, 0.5, true);
-           var redTween:Tween = new Tween(ct, "redOffset", ease, ct.redOffset, 0x8a, 0.5, true);
-           var greenTween:Tween = new Tween(ct, "greenOffset", ease, ct.greenOffset, 0xb2, 0.5, true);
-           var blueTween:Tween = new Tween(ct, "blueOffset", ease, ct.blueOffset, 0x1d, 0.5, true);
+		   var alphaTween:Tween = new Tween(ct, "alphaOffset", ease, ct.alphaOffset,0x00, 1.2, true);
+           var redTween:Tween = new Tween(ct, "redOffset", ease, ct.redOffset, 0x8a, 1.2, true);
+           var greenTween:Tween = new Tween(ct, "greenOffset", ease, ct.greenOffset, 0xb2, 1.2, true);
+           var blueTween:Tween = new Tween(ct, "blueOffset", ease, ct.blueOffset, 0x1d, 1.2, true);
      
             greenTween.onMotionChanged = function() {
                t.colorTransform = ct;
@@ -1196,7 +1188,7 @@ class PlancheDeJeu
 	   // phase 2 - banana shell fly to the player that support the action
 	   var intervalId:Number;
 	   var num:Number = getPersonnageByName(nameTo).obtenirNumero();
-	   intervalId = setInterval(attendre, 2700, nameTo, nameBy);	// sert pour attendre la jusqu'a la fin de action de 
+	   intervalId = setInterval(attendre, 2900, nameTo, nameBy);	// sert pour attendre la jusqu'a la fin de action de 
 	   
 	   function attendre(){
 	     
@@ -1207,24 +1199,7 @@ class PlancheDeJeu
 	   var coorToX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).obtenirProchainePosition().obtenirX();
 	   var coorToY:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).obtenirProchainePosition().obtenirY()- 15;
 		 
-		 /*// move
-		 var speedX:Number = (coorToX - coorByX)/100;
-         var speedY:Number = (coorToY - coorByY)/100;
-		 var count:Number = 0;
-		
-		 var intervalM = setInterval(moveShell, 1, speedX, speedY, count);
-		 
-		 function moveShell(){
-			 
-			
-			_level0.loader.contentHolder.referenceLayer.shell_mc._x += speedX;
-			_level0.loader.contentHolder.referenceLayer.shell_mc._y += speedY;
-			count++;
-			if(count == 100)
-			  clearInterval(intervalM); 
-			  
-		 } */
-		  	
+				  	
 		 
 		 _level0.loader.contentHolder.referenceLayer.attachMovie("bananaShell", "shell_mc", _level0.loader.contentHolder.referenceLayer.getNextHighestDepth(), {_x:coorByX, _y:coorByY});
 		 
@@ -1244,13 +1219,7 @@ class PlancheDeJeu
 		   clearInterval(intervalId3);
 		}
 	   
-	   //var persoImage:MovieClip;
-	   
-	   //persoImage = _level0.loader.contentHolder.referenceLayer["Personnage" + num];
-	   //_level0.loader.contentHolder.referenceLayer["shell_mc"].swapDepths(persoImage);
-	   
-	   //trace("executeCallback intervalId: " + persoImage.getDepth() + " count: " + _level0.loader.contentHolder.referenceLayer["shell_mc"].getDepth());
-	   
+	   	   
 	   var intervalId2:Number;
 	   var wait:Number = 0;
 	   intervalId2 = setInterval(bananaShell, 200);	// sert pour attendre la jusqu'a la fin de action de 

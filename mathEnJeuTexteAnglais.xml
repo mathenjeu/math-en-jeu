@@ -173,6 +173,8 @@
 			boutonContinuer = "Continue"
 			boutonQuitterX = "Quit the game.."
 			tableNameLabel = "Table name"
+			tableLinesLabel = "Lines"
+			tableColumnsLabel = "Columns"
 			tableOptionalLabel = "*Optional"
 			playersListe = " - Liste of players - "
 			
@@ -318,7 +320,7 @@
 
 		autre = ""
 
-			GUIdejaConnecte = "This user is already connected. Close this window and start again with another user."
+			GUIdejaConnecte = "This user is already connected. Close this window and start again with another user!!!"
 			GUIhorsService = "The server does not answer. Check you connection and start again. If the problem persist, please click on the following link to perform a connection test and then send the result to the SMAC technical team. We are sincerely sorry that you are experimenting this problem."
 			GUIhorsService2 = "Connection Test"
 			GUIhorsServiceURL = "http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_16466&sliceId=1"
