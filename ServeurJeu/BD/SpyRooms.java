@@ -13,6 +13,10 @@ import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import org.apache.log4j.Logger;
 
+/**
+ * @author Lilian Oloieri
+ */
+
 public class SpyRooms implements Runnable {
 
 	// Declaration of object that points to ControleurJeu
