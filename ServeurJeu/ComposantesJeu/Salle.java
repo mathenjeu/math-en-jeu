@@ -347,6 +347,8 @@ public class Salle
 	 * Cette méthode permet de créer une nouvelle table et d'y faire entrer le
 	 * joueur qui en fait la demande. On suppose que le joueur n'est pas dans 
 	 * aucune autre table.
+	 * @param intNbColumns 
+	 * @param intNbLines 
 	 * 
 	 * @param JoueurHumain joueur : Le joueur demandant de créer la table
 	 * @param int tempsPartie : Le temps que doit durer la partie
@@ -363,7 +365,7 @@ public class Salle
 	 * 				joueurs de la salle et leur envoyer un événement. La
 	 * 				fonction entrerTable est synchronisée automatiquement.
 	 */
-	public int creerTable(JoueurHumain joueur, int tempsPartie, boolean doitGenererNoCommandeRetour, String name)
+	public int creerTable(JoueurHumain joueur, int tempsPartie, boolean doitGenererNoCommandeRetour, String name, int intNbLines, int intNbColumns)
 	{
 		// Déclaration d'une variable qui va contenir le numéro de la table
 		int intNoTable;
@@ -374,7 +376,7 @@ public class Salle
 	    {
 	    	
 	    	// Créer une nouvelle table en passant les paramètres appropriés
-	    	Table objTable = new Table( this, genererNoTable(), joueur, tempsPartie, objControleurJeu, name);
+	    	Table objTable = new Table( this, genererNoTable(), joueur, tempsPartie, objControleurJeu, name, intNbLines, intNbColumns);
 	    		    	
 	    	objTable.creation();
 	    		    	
