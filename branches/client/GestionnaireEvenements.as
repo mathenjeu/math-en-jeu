@@ -26,6 +26,8 @@ import mx.utils.Delegate;
 import FiltreTable;
 import mx.controls.Alert;
 import flash.utils.*;
+import flash.geom.Transform;
+import flash.geom.ColorTransform;
 
 class GestionnaireEvenements
 {
@@ -2970,20 +2972,35 @@ class GestionnaireEvenements
 		   }
 		
 		
-		
+		var fondClip:MovieClip = new MovieClip();
+		var colorTrans:ColorTransform = new ColorTransform();
 		
 		// NOTE HUGO : Voici comment placer des variables dans des champs de texte dynamique
 		// demonstrate the result
 		for(i = 0; i < jouersStarted.length; i++){
-					
+			
+			
+		    fondClip = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + (i + 1)]["fondBleu" + (i+1)].fondIntern;
+			var trans:Transform = new Transform(fondClip);
+		   
+			
 			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["nomJoueur"+(i+1)] = jouersStarted[i].nomUtilisateur;	
 			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)]["pointageJoueur"+(i+1)] = jouersStarted[i].pointage;
 			
 			// to color our player points
 			if(jouersStarted[i].nomUtilisateur ==  this.nomUtilisateur)
-		       _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + (i + 1)]["dtPoints" + (i + 1)].textColor = 0x33FFFF;
+			{
+				colorTrans.rgb = 0x2A57F6;
+			    trans.colorTransform = colorTrans;
+			}
 			else
-			   _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + (i + 1)]["dtPoints" + (i + 1)].textColor = 0xFF9933;
+			{
+			    colorTrans.rgb = 0x000033;
+			    trans.colorTransform = colorTrans;
+			}
+		       //_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + (i + 1)]["dtPoints" + (i + 1)].textColor = 0x33FFFF;
+			//else
+			  // _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + (i + 1)]["dtPoints" + (i + 1)].textColor = 0xFF9933;
 
 			if(jouersStarted[i].win == 1){
 			   this["Flag" + (i + 1)] = new MovieClip();

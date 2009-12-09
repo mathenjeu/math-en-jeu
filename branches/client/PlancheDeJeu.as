@@ -543,7 +543,7 @@ class PlancheDeJeu
 		// if different type of game we need different pozitions
 		if((_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") )
 		{
-		   dx = 180 - (_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
+		   dx = 225 - (_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
 		   dy = 250 - (_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._y);
 		}else{
 		   dx = 300 - (_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
@@ -646,20 +646,20 @@ class PlancheDeJeu
           };
 		  
 		  if(laCase.obtenirCasePossible() == null){
-		    clearInterval(intervalCol);
+		      clearInterval(intervalCol);
 			
-		   var alphaTween:Tween = new Tween(ct, "alphaOffset", ease, ct.alphaOffset,0x00, 1.2, true);
-           var redTween:Tween = new Tween(ct, "redOffset", ease, ct.redOffset, 0x8a, 1.2, true);
-           var greenTween:Tween = new Tween(ct, "greenOffset", ease, ct.greenOffset, 0xb2, 1.2, true);
-           var blueTween:Tween = new Tween(ct, "blueOffset", ease, ct.blueOffset, 0x1d, 1.2, true);
+		      var alphaTween:Tween = new Tween(ct, "alphaOffset", ease, ct.alphaOffset,0x00, 1.2, true);
+              var redTween:Tween = new Tween(ct, "redOffset", ease, ct.redOffset, 0x8a, 1.2, true);
+              var greenTween:Tween = new Tween(ct, "greenOffset", ease, ct.greenOffset, 0xb2, 1.2, true);
+              var blueTween:Tween = new Tween(ct, "blueOffset", ease, ct.blueOffset, 0x1d, 1.2, true);
      
-            greenTween.onMotionChanged = function() {
-               t.colorTransform = ct;
-		       ct.rgb = 0x8ab21d;
-			   t.colorTransform = ct;
-			};
+              greenTween.onMotionChanged = function() {
+                 t.colorTransform = ct;
+		         ct.rgb = 0x8ab21d;
+			     t.colorTransform = ct;
+			  };
 		  
-		  }
+		  }// end if
 		 
 	  }
     }
