@@ -3560,6 +3560,37 @@ function drawRoundedRectangle(target_mc:MovieClip, boxWidth:Number, boxHeight:Nu
     }
 }//end function
 
+function drawToolTip(messInfo:String)
+{
+	var stringLength:Number = messInfo.length;
+	var wid:Number = Math.floor(stringLength / 20 * 14);
+	_level0.loader.contentHolder.createEmptyMovieClip("toolTip", _level0.loader.contentHolder.getNextHigesthDepth());
+	_level0.loader.contentHolder.toolTip.swapDepths(_level0.loader.contentHolder.menuPointages);
+	drawRoundedRectangle(_level0.loader.contentHolder.toolTip, 130, wid + 10, 15, 0xFFEB5B, 100);
+	_level0.loader.contentHolder.toolTip.createTextField("toolTipMessage", 60, 5, 3, 120, wid);
+	
+	 // Make the field an label text field
+       _level0.loader.contentHolder.toolTip.toolTipMessage.type = "dynamic";
+       
+       with(_level0.loader.contentHolder.toolTip.toolTipMessage)
+       {
+	       multiline = true;
+	       background = false;
+	       text = messInfo;
+	       textColor = 0x330000;
+	       border = false;
+	       _visible = true;
+	       //autoSize = true;
+		   wordWrap = true;
+	       autoSize = "left";
+		   maxChars = 70;
+       }
+	  _level0.loader.contentHolder.toolTip.toolTipMessage.setStyle("fontSize", "7");
+	
+	_level0.loader.contentHolder.toolTip._visible = false;
+	//_level0.loader.contentHolder.
+
+}
 	
 	
 }// end class
