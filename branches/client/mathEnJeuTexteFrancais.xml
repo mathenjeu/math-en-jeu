@@ -3,11 +3,11 @@
 <Texte 
 	
 	Messagerie = ""
-	  welcomeMess = "Bienvenue au jeu!!!"
+	  welcomeMess = "Bienvenue à Math en jeu!!!"
 	  bananaMess = " a lancé une Banane à "
-	  outMess = "  a quitte le jeu!"
-	  InMess = " est du nouveau dans le Jeu!"
-	  moveMess = "Pour ce deplacer - click sur les cases jaunes."
+	  outMess = "  a quitté le jeu!"
+	  InMess = " est de retour dans le jeu!"
+	  moveMess = "Click sur une case jaune pour te déplacer."
 	main_menu = ""
 	  bienvenue = "Bienvenue dans Math en jeu "
     btnPlay = "Jouer" 
@@ -26,9 +26,9 @@
     crystallLabel = "BOULE DE CRISTAL"
     stepsTxt = "Voici les étapes à suivre pour débuter une partie :"
     
-    bananaTxt = "  La banane te permet de jouer un tour à un des joueurs ! Quand tu l'utilises, ton adversaire qui a le plus des points glisse alors sur la banane et il prend des résultats mauvaises les autres 90 secondes!"
-    crystalTxt = "  Si tu te sens incapable de répondre à une question, utilise la boule de cristal. Tu recevras alors une question différente."
-    bookTxt = "  Le livre élimine un mauvais choix de réponse lors d'une question à choix multiples. Le nombre de choix possible passe alors de quatre à trois."
+    bananaTxt = "  La banane te permet de jouer un tour à un de tes adversaires! Lorsque tu la lances à un adversaire, tu rends ce dernier momentanément moins habile. En effet, pendant les 90 secondes qui suive le lancé de la banane, ton adversaire aura des questions plus difficiles et 2 cases jaunes lui seront retirées!"
+    crystalTxt = "  Si tu te sens incapable de répondre à une question, utilise la boule de cristal. Tu recevras alors une question différente et plus facile!"
+    bookTxt = "  Le livre élimine un mauvais choix de réponse lors d'une question à choix multiples."
     shopTxt = "Tu peux y échanger tes pièces contre des objets."
     coinTxt = "Les pièces que tu trouves sur la planche de jeu te permettent d'acheter des objets."
         
@@ -46,19 +46,19 @@
     roomNameLabel = "Nom"
     roomDescLabel = "Description"
 	  roomPassLabel = "Mot de Passe"
-	  roomBDateLabel = "Date début"
-	  roomBTimeLabel = "Temps début"
-	  roomEDateLabel = "Date fin"
-	  roomETimeLabel = "Temps fin"
+	  roomBDateLabel = "Date d'ouverture"
+	  roomBTimeLabel = "Heure d'ouverture"
+	  roomEDateLabel = "Date de fermeture"
+	  roomETimeLabel = "Heure de fermeture"
 	  createRoomText = "Créer"
 	  roomListLabel  = "LISTE DES SALLES"
 	  roomReportLabel = "RAPPORT"
 	  roomReportText = "Rapport"
 	  editRoomText = "Éditer"
-	  saveReportText = "Sauver"
+	  saveReportText = "Sauvegarder"
 	  printReportText = "Imprimer"
 	  reportTextChange = "Sélectionnez une salle pour voir le rapport..."
-	  roomTimeLabel = "Temps partie"
+	  roomTimeLabel = "Temps des parties"
 	  All = "Toutes"
 	  AllLevels = "Niveaux"
 	  
@@ -137,26 +137,26 @@
 	  
 	  
   mathemaQuoi_betaNEW = ""  
-    errorPWD = "Mauvais mot de passe! Donnez une mot correct ou faitez une autre choix! "
+    errorPWD = "Mauvais mot de passe! Réessayez ou faites un autre choix! "
 	  pwdAlert = "Erreur!"
-	  textGUI_PWD = "La salle demande un mot de passe..."
+	  textGUI_PWD = "Cette salle requiert un mot de passe..."
 	  errorSelect = "Sélectionnez une salle"
-	  nomAlert = "Donnez une nom SVP!"
-	  descAlert = "Donnez une description, SVP!"
-	  dateBeginAlert = "Date de début invalide"
-	  dateEndAlert = "Date de fin invalide"
+	  nomAlert = "Donnez un nom SVP!"
+	  descAlert = "Donnez une description SVP!"
+	  dateBeginAlert = "Date d'ouverture invalide"
+	  dateEndAlert = "Date de fermeture invalide"
 	  passAlert = "Le mot de passe permet de contrôler l’accéder à la salle."
 	  
 	  buttonNew = "Nouvelle"
 	  buttonOld = "Recommencer"
-	  restartText = " Voulez vous rejoindre la vieille partie ou créé une nouvelle? "
-	  buttonBug = "Signaler cette question"
+	  restartText = "Vous êtes déjà assigné à une partie en cours. Voulez vous rejoindre la partie en cours ou désirez-vous en recommencer une nouvelle? "
+	  buttonBug = "Signaler une erreur dans cette question"
 	  userText = "Joueur : "
 	  buttonSend = "Envoyer"
 	  buttonBack = "Annuler"
 	  
-	  bugReportMess = "L'erreur a été envoyée avec succes!"
-	  pointsMessage = "Points données quand vous arrivez au fin ..."
+	  bugReportMess = "L'erreur a été envoyée avec succès! Merci!"
+	  pointsMessage = "Points bonus pour franchir la ligne d'arrivée"
   
     
 	
@@ -164,7 +164,7 @@
 	
 		frame1 = ""
 		
-			descriptionPrincipale = "C'est le coeur de Math en Jeu. Une immense banque de questions se penche sur tous les domaines des mathématiques."
+			descriptionPrincipale = "C'est le coeur de Math en Jeu. Une immense banque de questions se penchant sur tous les domaines des mathématiques."
 			
 			descriptionAccromath = "Questions plus avancées en lien avec les multiples sujets traités dans la revue Accromath."
 			
@@ -260,7 +260,7 @@
       chargementTables = "Chargement de la liste des tables en cours" 
       aucuneTable = "Il n'y a aucune table ouverte dans cette salle" 
 			btnCreerTable = "Nouvelle table"
-			choixTable = "ou attendez qu'une soit crée .."
+			choixTable = "ou attendez qu'une table soit crée .."
 			choixTemps = "Choisissez la durée de la partie que vous désirez jouer."
 			sallesOuvertes = "Salles ouvertes"
 			tablesOuvertes = "Tables ouvertes"
@@ -299,11 +299,11 @@
 			sonsLabel = "Sons"
 			musiqueLabel = "Musique"
 
-			texteMauvaiseReponse = "Mauvaise réponse !"
-			punitionTexte = "Temps restant à votre pénalité :"
-			penalite = "Pénalité :"
+			texteMauvaiseReponse = "Mauvaise réponse!"
+			punitionTexte = "Temps restant à votre pénalité:"
+			penalite = "Pénalité:"
 			secondes = "secondes"
-			reponse = "Réponse :"
+			reponse = "Réponse:"
 			vrai = "vrai"
 			faux = "faux"
 			pointage = "Pointages"
@@ -337,7 +337,7 @@ Pour les prochaines 90 secondes, les questions qui vous seront posées seront pl
 			GUIbananeUser = "Vous avez utilisé une banane."
 			
 
-			GUIutiliserLivre = "Voulez-vous vraiment utiliser le livre ?"
+			GUIutiliserLivre = "Voulez-vous vraiment utiliser le livre?"
 			
 			btnOui = "OUI"
 
