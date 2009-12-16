@@ -145,7 +145,7 @@
 	  descAlert = "Donnez une description SVP!"
 	  dateBeginAlert = "Date d'ouverture invalide"
 	  dateEndAlert = "Date de fermeture invalide"
-	  passAlert = "Le mot de passe permet de contrôler l’accéder à la salle."
+	  passAlert = "Protéger votre salle par un mot de passe permet de contrôler l’accéder à celle-ci et assure que seulement vos élèves peuvent y accéder. Cela permet aussi de n'avoir que leurs résultats dans vos rapports."
 	  
 	  buttonNew = "Nouvelle"
 	  buttonOld = "Recommencer"
@@ -155,7 +155,7 @@
 	  buttonSend = "Envoyer"
 	  buttonBack = "Annuler"
 	  
-	  bugReportMess = "L'erreur a été envoyée avec succès! Merci!"
+	  bugReportMess = "L'erreur a été envoyée avec succès. Merci!"
 	  pointsMessage = "Points bonus pour franchir la ligne d'arrivée"
   
     
