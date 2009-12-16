@@ -55,7 +55,7 @@ class PlancheDeJeu
     private var gestionnaireInterface:GestionnaireInterface;
     private var rotation:Number = 0;
     private var tableauDesPersonnages:Array = new Array(); // contient les personnages
-	private  var intervalCol:Number;
+	private var intervalCol:Number;
 	
     
     function obtenirPerso():Personnage
@@ -183,7 +183,7 @@ class PlancheDeJeu
         clipTest._x = -100;
         clipTest._y = -100;
         largeurDeCase = clipTest._width;
-        hauteurDeCase = clipTest._height*0.88;
+        hauteurDeCase = clipTest._height*0.85;
         clipTest.removeMovieClip();
         ////////////////////////////////////////////////////////////////////////////////////////
         for(i=0; i < this.mat.length; i++)
@@ -513,7 +513,7 @@ class PlancheDeJeu
 		// for different types of game we need different pozitions
         if((_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") )
 		{
-		    diffX = 180 - this.tableauDesCases[l][c].obtenirClipCase()._x;
+		    diffX = 225 - this.tableauDesCases[l][c].obtenirClipCase()._x;
             diffY = 250 - this.tableauDesCases[l][c].obtenirClipCase()._y;
 		}else{
         	diffX = 300 - this.tableauDesCases[l][c].obtenirClipCase()._x;

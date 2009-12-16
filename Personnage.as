@@ -178,7 +178,7 @@ class Personnage
 			if(peutUtiliserObjet(nomObj) && (listeObjets[nomObj].length >= 1))
 			{
 				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 60;
-				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._xscale = _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._yscale = 125;
+				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._xscale = _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._yscale = 120;
 				
 			}
 		};
