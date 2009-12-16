@@ -2,11 +2,11 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
 	Messagerie = ""
-	  welcomeMess = "Welcome to the game!!!"
-	  bananaMess = " tossed a Banana to "
+	  welcomeMess = "Welcome to Math Amaze!!!"
+	  bananaMess = " threw a Banana at "
 	  outMess = " left the game!"
 	  InMess = " is in again!"
-	  moveMess = "To move - click on yellow cells!"
+	  moveMess = "To move - click on a yellow sqare!"
   main_menu = ""
 	  bienvenue = "Welcome to MathAmaze "
     btnPlay = "Play"
@@ -14,7 +14,7 @@
     btnProfile = "Profile"
     
   page_instructions = ""
-    beginPage = "Begin one game"
+    beginPage = "Start a game"
     rulesPage = "Rules"
     objectsPage = "Objects"
     backBtnTxt = "Back"
@@ -22,12 +22,12 @@
     coinLabel = "COIN"
     shopLabel = "SHOP"
     bananaLabel = "BANANA"
-    crystallLabel = "CRISTALL BALL"
-    stepsTxt = "Here the steps to do to begin the game :"
+    crystallLabel = "CRYSTAL BALL"
+    stepsTxt = "Here are the steps to follow in order to start a game :"
     
-    bananaTxt = "  The banana allows you to play a wicked trick on another player! When you use this object, your opponent that has more points sign slides on the banana and becomes a little dumber for the 90 secondes!"
-    bookTxt = "  The book eliminates an answer choice for you on a multiple choice question. The number of choices then decreases for one."
-    crystalTxt = "  If you feel unable to answer a question, you may use the crystal ball. The computer will then give you a new question."
+    bananaTxt = "  The banana allows you to play a wicked trick on another player! When you throw it to an opponent, you make this opponent momentarily less good. Indeed, for the next 90 secondes after a banana toss, the questions asked to your opponent will be more difficult and (s)he will loose 2 yellow squares!"
+    bookTxt = "  The book eliminates an answer choice for you on a multiple choice question."
+    crystalTxt = "  If you feel unable to answer a question, you may use the crystal ball. The computer will then give you a new and easier question."
     
     shopTxt = "  It is here that you can spend your coins!"
     coinTxt = "  The coins you pick up on your way allow you to buy objects."
@@ -39,17 +39,17 @@
 		barLabel = "Loading ..."
 
   moduleProf = ""
-	  teacherFrame1 = "Teachers Angle
-    Charging the liste of rooms..." 
+	  teacherFrame1 = "Teachers Section
+    Charging the list of rooms..." 
 	  boutonNewRoom = "New"
 	  teacherExploreFrame1 = "Explore"
 	  roomNameLabel = "Name"
 	  roomDescLabel = "Description"
 	  roomPassLabel = "Password"
-	  roomBDateLabel = "Begin date"
-	  roomBTimeLabel = "Begin time"
-	  roomEDateLabel = "End date"
-	  roomETimeLabel = "End time"
+	  roomBDateLabel = "Opening date"
+	  roomBTimeLabel = "Opening time"
+	  roomEDateLabel = "Closing date"
+	  roomETimeLabel = "Closing time"
 	  createRoomText = "Create"
 	  roomListLabel  = "ROOMS LIST"
 	  roomReportLabel = "REPORT"
@@ -57,7 +57,7 @@
 	  editRoomText = "Edit"
 	  saveReportText = "Save"
 	  printReportText = "Print"
-	  reportTextChange = "Select a room to take report..."
+	  reportTextChange = "Select a room to see a report..."
 	  roomTimeLabel = "Game duration"
 	  All = "All"
 	  AllLevels = "Levels"
@@ -137,26 +137,26 @@
 	  
 	  
 	mathemaQuoi_betaNEW = ""
-	  errorPWD = "False room's password! Give the correct or try another room!"
+	  errorPWD = "Wrong password! Try again or choose another room!"
     pwdAlert = "Error!"
-    textGUI_PWD = "To enter you need a password..."  
+    textGUI_PWD = "You need a password to enter this room..."  
 	  errorSelect = "Select a room first!"
 	  nomAlert = "Give a name to the room!"
-	  descAlert = "Short description, please!"
-	  dateBeginAlert = "Begin date not selected!"
-	  dateEndAlert = "End date not selected!"
-	  passAlert = "Password will give only to yours pupils the access to the room. Accordingly the report will contain only theirs games."
+	  descAlert = "Short description please!"
+	  dateBeginAlert = "Opening date is invalid!"
+	  dateEndAlert = "Closing date is invalid!"
+	  passAlert = "Password protecting your room ensure that only your pupils can the access it. Accordingly the report will contain only their game results."
 	  
 	  buttonNew = "New Game"
 	  buttonOld = "Restart"
-	  restartText = "Do you want to begin a new game or restart an old one?"
-	  buttonBug = "Report this question"
+	  restartText = "You are already assigned to a running game. Do you want to rejoin it or start a new game?"
+	  buttonBug = "Report an error in this question"
 	  userText = "Player :"
 	  buttonSend = "Send"
 	  buttonBack = "Cancel"
 	  
-	  bugReportMess = "Bug was well reported ..."
-	  pointsMessage = "Points gived when you reach the finish... "
+	  bugReportMess = "The error was successfully reported. Thanks!"
+	  pointsMessage = "Bonus Points to reach the finish line"
 	  
   mathemaQuoi_beta = ""
 	
@@ -296,11 +296,11 @@
 			sonsLabel = "Sounds"
 			musiqueLabel = "Music"
 
-			texteMauvaiseReponse = "Incorrect !!!"
-			punitionTexte = "Time left to your penalty :"
+			texteMauvaiseReponse = "Incorrect!!!"
+			punitionTexte = "Time left to your penalty:"
 			penalite = "Penalty :"
 			secondes = "seconds"
-			reponse = "Answer :"
+			reponse = "Answer:"
 			vrai = "true"
 			faux = "false"
 			pointage = "Scores"
@@ -336,7 +336,7 @@ For the next 90 seconds, the questions you'll be asked will be more difficult. A
 			
 			GUIbananeUser = "You used a banana."
 
-			GUIutiliserLivre = "Do you really want to use the book ?"
+			GUIutiliserLivre = "Do you really want to use the book?"
 			
 			btnOui = "YES"
 
