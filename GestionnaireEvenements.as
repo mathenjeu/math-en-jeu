@@ -2101,7 +2101,7 @@ class GestionnaireEvenements
 			     		trace("deplacement refuse  ");
 						_level0.loader.contentHolder.url_retro = objetEvenement.explication;
 
-						_level0.loader.contentHolder.box_question.monScroll._visible = false;
+                        _level0.loader.contentHolder.box_question.monScroll._visible = false;
 						var ptX:Number = _level0.loader.contentHolder.box_question.monScroll._x;
 						var ptY:Number = _level0.loader.contentHolder.box_question.monScroll._y;
 						_level0.loader.contentHolder.box_question.attachMovie("GUI_retro","GUI_retro", 100, {_x:ptX, _y:ptY});
@@ -3563,11 +3563,11 @@ function drawRoundedRectangle(target_mc:MovieClip, boxWidth:Number, boxHeight:Nu
 function drawToolTip(messInfo:String)
 {
 	var stringLength:Number = messInfo.length;
-	var wid:Number = Math.floor(stringLength / 20 * 14);
+	var wid:Number = Math.floor(stringLength / 20 * 16);
 	_level0.loader.contentHolder.createEmptyMovieClip("toolTip", _level0.loader.contentHolder.getNextHigesthDepth());
 	_level0.loader.contentHolder.toolTip.swapDepths(_level0.loader.contentHolder.menuPointages);
-	drawRoundedRectangle(_level0.loader.contentHolder.toolTip, 130, wid + 10, 15, 0xFFEB5B, 100);
-	_level0.loader.contentHolder.toolTip.createTextField("toolTipMessage", 60, 5, 3, 120, wid);
+	drawRoundedRectangle(_level0.loader.contentHolder.toolTip, 120, wid + 10, 15, 0xFFEB5B, 100);
+	_level0.loader.contentHolder.toolTip.createTextField("toolTipMessage", 60, 5, 3, 110, wid);
 	
 	 // Make the field an label text field
        _level0.loader.contentHolder.toolTip.toolTipMessage.type = "dynamic";

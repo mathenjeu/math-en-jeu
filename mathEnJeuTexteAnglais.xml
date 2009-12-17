@@ -150,7 +150,7 @@
 	  buttonNew = "New Game"
 	  buttonOld = "Restart"
 	  restartText = "You are already assigned to a running game. Do you want to rejoin it or start a new game?"
-	  buttonBug = "Report an error in this question"
+	  buttonBug = "Report   an error in this question"
 	  userText = "Player :"
 	  buttonSend = "Send"
 	  buttonBack = "Cancel"
