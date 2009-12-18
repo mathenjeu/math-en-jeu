@@ -150,7 +150,7 @@
 	  buttonNew = "Nouvelle"
 	  buttonOld = "Recommencer"
 	  restartText = "Vous êtes déjà assigné à une partie en cours. Voulez vous rejoindre la partie en cours ou désirez-vous en recommencer une nouvelle? "
-	  buttonBug = "Signaler  une erreur dans cette question"
+	  buttonBug = " Signaler une erreur "
 	  userText = "Joueur : "
 	  buttonSend = "Envoyer"
 	  buttonBack = "Annuler"
