@@ -3202,19 +3202,35 @@ class GestionnaireCommunication
 			//musique
 			objEvenement.listeChansons = new Array();
 	
-			for(var iii:Number = 0; iii < noeudCommande.childNodes.length; iii++)	
-			{
-				var str_temp:String = noeudCommande.childNodes[iii].firstChild.nodeValue;
-				objEvenement.listeChansons.push(str_temp);
-				trace("Liste chansons : " + objEvenement.listeChansons[iii]);
-			}
+	        // Declaration d'une reference vers la liste des noeuds parametres
+            var lstNoeudsParametre:Array = noeudCommande.childNodes;
 			
-			//*****************************
-			// Ajouter l'attribut role dans l'objet d'evenement
-            objEvenement.userRoleMaster = Number(noeudCommande.firstChild.firstChild.nodeValue);
-			trace("objEvenement.userRoleMaster : " + objEvenement.userRoleMaster);
-	
-        }
+            // Passer tous les parametres et les ajouter dans l'objet evenement
+            for (var i:Number = 0; i < lstNoeudsParametre.length; i++)
+            {
+                // Faire la reference vers le noeud courant
+                var objNoeudParametre:XMLNode = lstNoeudsParametre[i];
+                // Determiner le type du parametre courant et creer l'element
+                // correspondant dans l'objet evenement
+		
+				//trace("avant le switch   "+objNoeudParametre.attributes.type);
+				trace("objNoeudParametre.attributes.type : " + objNoeudParametre.attributes.type);
+                switch (objNoeudParametre.attributes.type)
+                {
+                    case "musique":
+		    			objEvenement.listeChansons.push(objNoeudParametre.firstChild.nodeValue);
+						trace("Liste chansons : " + objEvenement.listeChansons[i]);
+                        break;
+						
+                    case "userRole":
+                        // Ajouter l'attribut role dans l'objet d'evenement
+						objEvenement.userRoleMaster = Number(objNoeudParametre.firstChild.nodeValue);
+			            trace("objEvenement.userRoleMaster : " + objEvenement.userRoleMaster);
+						break;
+						                   
+                }
+            }
+	    }
 		else
 		{
 			trace("erreur connexion  : " + noeudCommande.attributes.type);
