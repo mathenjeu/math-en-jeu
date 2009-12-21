@@ -534,8 +534,13 @@ public class ProtocoleJoueur implements Runnable
 								Vector<Object> liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
 								for(int i=0; i<liste.size(); i++)
 								{
-									Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("musique");
+									Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("parametre");
+									
+									// On ajoute un attribut type qui va contenir le type  paramètre
+									objNoeudParametreMusique.setAttribute("type", "musique");
+									
 									Text objNoeudTexteMusique = objDocumentXMLSortie.createTextNode((String)liste.get(i));
+									//System.out.println("Musique  " + (String)liste.get(i));
 									objNoeudParametreMusique.appendChild(objNoeudTexteMusique);
 									objNoeudCommande.appendChild(objNoeudParametreMusique);   
 								}
@@ -571,12 +576,17 @@ public class ProtocoleJoueur implements Runnable
 								Vector<Object> liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
 								for(int i=0; i<liste.size(); i++)
 								{
-									Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("musique");
+									Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("parametre");
+									
+									// On ajoute un attribut type qui va contenir le type  paramètre
+									objNoeudParametreMusique.setAttribute("type", "musique");
+									
 									Text objNoeudTexteMusique = objDocumentXMLSortie.createTextNode((String)liste.get(i));
+									//System.out.println("Musique  " + (String)liste.get(i));
 									objNoeudParametreMusique.appendChild(objNoeudTexteMusique);
 									objNoeudCommande.appendChild(objNoeudParametreMusique);   
 								}
-
+                                    
 								//**************************************
 								// Créer le noeud de pour le paramètre contenant le role de joueur
 								Element objNoeudParametreRoleJoueur = objDocumentXMLSortie.createElement("parametre");
