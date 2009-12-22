@@ -34,7 +34,7 @@
 	
 	chargement_beta_local = ""	
 
-		version = "Version 2.0"
+		version = "Version 2.5"
 		boutonEntrer = "Enter"
 		barLabel = "Loading ..."
 
