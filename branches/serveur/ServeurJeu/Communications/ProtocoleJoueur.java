@@ -1443,8 +1443,27 @@ public class ProtocoleJoueur implements Runnable
 						// de la partie que le client veut créer
 						int intTempsPartie = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "TempsPartie").getNodeValue());
 						
-						int intNbLines = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "NbLines").getNodeValue());
-						int intNbColumns = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "NbColumns").getNodeValue());
+						int intNbLines;
+						try {
+							
+							intNbLines = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "NbLines").getNodeValue());
+						
+						}catch(NumberFormatException e){
+						
+							intNbLines = 0;
+						
+						}
+						
+						int intNbColumns;
+						try {
+						
+							intNbColumns = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "NbColumns").getNodeValue());
+						
+						}catch(NumberFormatException e){
+						
+							intNbColumns = 0;
+						
+						}
 
 						String name = "";
 						if(obtenirValeurParametre(objNoeudCommandeEntree, "TableName") != null) //.getNodeValue()
