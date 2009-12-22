@@ -757,10 +757,10 @@ class GestionnaireEvenements
 			case "Ok":
 			
 			    // newsbox
-		        _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
+		        _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
 		        var messageInfo:String = objetEvenement.nomUtilisateur + _root.texteSource_xml.firstChild.attributes.restartMess; 
 		        this.newsArray[newsArray.length] = messageInfo;
-		        _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
+		        _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
 		        _level0.loader.contentHolder.orderId = 0;
 			   trace("<<<<<<<<<<<<<<<<  feedbackRestartOldGame  finish restart >>>>>>>>>>>>>>>>>>>");
 			
@@ -944,10 +944,10 @@ class GestionnaireEvenements
             case "OK":
             
 			   // newsbox
-		       _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
+		       _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
 		       var messageInfo:String = _root.texteSource_xml.firstChild.attributes.bugReportMess; 
 		       this.newsArray[newsArray.length] = messageInfo;
-		       _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
+		       _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
 		       _level0.loader.contentHolder.orderId = 0;
 			trace("bug reported  ");
 			
@@ -1258,17 +1258,8 @@ class GestionnaireEvenements
 					this.listeDesPersonnages[i].role = 0;
 					this.listeDesPersonnages[i].pointage = 0;
 					this.listeDesPersonnages[i].win = 0;
-					
-					
-                    /*
-					var m:Number=i+2;
-                    
-                    movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage0","b"+i,i);
-                    movClip._x = 510-j*60;
-                    movClip._y = 150 + i*60-j*240;
-					movClip._xscale -= 70;
-					movClip._yscale -= 70;
-					*/
+								
+                   
 				}
 				
             break;
@@ -2674,10 +2665,10 @@ class GestionnaireEvenements
 		   remplirMenuPointage();
 		   
 		   // newsbox
-		   _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
+		   _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
 		   var messageInfo:String = objetEvenement.nomUtilisateur + _root.texteSource_xml.firstChild.attributes.outMess; 
 		   this.newsArray[newsArray.length] = messageInfo;
-		   _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
+		   _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
 		   _level0.loader.contentHolder.orderId = 0;
 		}
 		
@@ -2816,8 +2807,8 @@ class GestionnaireEvenements
 		
 		this.newsArray[0] = _root.texteSource_xml.firstChild.attributes.welcomeMess; 
 		this.newsArray[1] = _root.texteSource_xml.firstChild.attributes.moveMess;
-		_level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[1];
-		_level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[0];
+		_level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[1];
+		_level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[0];
 
         remplirMenuPointage();
 		
@@ -2849,10 +2840,10 @@ class GestionnaireEvenements
 		remplirMenuPointage();
 		   
 		 //complete the message box  - newsbox
-		 _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
+		 _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
 		 var messageInfo:String = objetEvenement.nomUtilisateur + _root.texteSource_xml.firstChild.attributes.InMess; 
 		 this.newsArray[newsArray.length] = messageInfo;
-		 _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
+		 _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
 		 _level0.loader.contentHolder.orderId = 0;
 		
 		trace("fin de evenement evenementJoueurRejoindrePartie ");
@@ -3185,11 +3176,11 @@ class GestionnaireEvenements
 		
 		// info for newsbox
 		if(objetEvenement.objetUtilise == "Banane"){
-		   _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
+		   _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
 		   //trace("INfo : " + this.newsArray[this.newsArray.length - 1] + " " + this.newsArray.length );
 		   var messageInfo:String = playerThat + _root.texteSource_xml.firstChild.attributes.bananaMess + playerUnder; 
 		   this.newsArray[newsArray.length] = messageInfo;
-		   _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
+		   _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
 		   
 		   _level0.loader.contentHolder.orderId = 0;
 		

@@ -267,7 +267,7 @@ class PlancheDeJeu
         switch(direction)
         {
             case "Est":
-                la = -largeurDeCase/2;
+                la = largeurDeCase/2;
 				if (coinDroit.obtenirX()+la < 275) //Le coin droit du tableau est au centre de l'ecran
 				{
 					la = 275 - coinDroit.obtenirX();
@@ -276,7 +276,7 @@ class PlancheDeJeu
                 ha = 0;
             break;
             case "Ouest":
-                la = largeurDeCase/2; 
+                la = -largeurDeCase/2; 
 				if (coinGauche.obtenirX()+la > 275) //Le coin gauche du tableau est au centre de l'ecran
 				{
 					la = 275 - coinGauche.obtenirX();
@@ -286,7 +286,7 @@ class PlancheDeJeu
             break;
             case "Nord":
                 la = 0;
-                ha = hauteurDeCase/2;
+                ha = -hauteurDeCase/2;
 				if (coinHaut.obtenirY()+ha > 250) //Le coin haut du tableau est au centre de l'ecran
 				{
 					ha = 250 - coinHaut.obtenirY();
@@ -295,7 +295,7 @@ class PlancheDeJeu
             break;
             case "Sud":
                 la = 0;
-                ha = -hauteurDeCase/2;
+                ha = hauteurDeCase/2;
 				if (coinBas.obtenirY()+ha < 250) //Le coin bas du tableau est au centre de l'ecran
 				{
 					ha = 250 - coinBas.obtenirY();
