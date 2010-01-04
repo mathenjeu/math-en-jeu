@@ -3,7 +3,6 @@ package ServeurJeu.BD;
 import java.sql.*;
 
 import org.apache.log4j.Logger;
-import Enumerations.Categories;
 import Enumerations.Visibilite;
 import ServeurJeu.ComposantesJeu.BoiteQuestions;
 import ServeurJeu.ComposantesJeu.Lang;
@@ -838,8 +837,11 @@ public class GestionnaireBD
      * Méthode utilisé pour charger les salles avec les propriétes  ***
      * et les regles de la salle 
      * @param noeudLangue
+     * @throws ClassNotFoundException 
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
      */
-	public void fillsRooms()
+	public void fillsRooms()  
 	{
 		
 		ArrayList<Integer> rooms = new ArrayList<Integer>();
@@ -885,7 +887,7 @@ public class GestionnaireBD
 	 * Methode satellite for fillsRooms()
 	 * @param rooms
 	 */
-	public void fillRoomList(ArrayList<Integer> rooms)
+	public void fillRoomList(ArrayList<Integer> rooms) 
 	{
 		String nom = "";
 		String motDePasse = "";
@@ -1485,8 +1487,10 @@ public class GestionnaireBD
 	 * Methode used to get from DB table rule the new dimention of the game board
 	 * and set it in the Regles 
 	 */
-	public void getNewTableDimentions(Regles objReglesSalle, String roomName)
+	public void getNewTableDimentions(Salle objSalle)
 	{
+		String roomName = objSalle.getRoomName("");
+		Regles objReglesSalle = objSalle.getRegles();
 		boolean exist = false;
 		String nomFr = "";
 		String nomEng = "";
@@ -1958,7 +1962,7 @@ public class GestionnaireBD
 	 * Methode satellite for listRoomsProf()
 	 * @param rooms
 	 */
-	public void fillRoomList(ArrayList<Integer> rooms, TreeMap<Integer, Salle> lstSalles)
+	public void fillRoomList(ArrayList<Integer> rooms, TreeMap<Integer, Salle> lstSalles) 
 	{
 		String nom = "";
 		String motDePasse = "";

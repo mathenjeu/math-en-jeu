@@ -44,8 +44,8 @@ public class GestionnaireCommunication
 	// Déclaration d'un socket pour le serveur
 	private ServerSocket objSocketServeur;
 	
-	private GestionnaireTemps objGestionnaireTemps;
-	private TacheSynchroniser objTacheSynchroniser;
+	//private GestionnaireTemps objGestionnaireTemps;
+	//private TacheSynchroniser objTacheSynchroniser;
 	
 	private boolean boolStopThread; 
 	
@@ -79,8 +79,8 @@ public class GestionnaireCommunication
 		// Créer le vérificateur de connexions
 		objVerificateurConnexions = new VerificateurConnexions(this);
 		
-		objGestionnaireTemps = controleur.obtenirGestionnaireTemps();
-		objTacheSynchroniser = controleur.obtenirTacheSynchroniser();
+		//objGestionnaireTemps = controleur.obtenirGestionnaireTemps();
+		//objTacheSynchroniser = controleur.obtenirTacheSynchroniser();
 		
 		
 		// Créer un thread pour le vérificateur de connexions

@@ -18,7 +18,6 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.Evenements.EvenementJoueurDeconnecte;
 import ServeurJeu.Evenements.EvenementJoueurConnecte;
 import ServeurJeu.Evenements.EvenementNouvelleSalle;
-import ServeurJeu.Evenements.EvenementNouvelleTable;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.Monitoring.TacheLogMoniteur;

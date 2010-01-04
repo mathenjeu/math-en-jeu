@@ -13,7 +13,6 @@ import java.util.Map.Entry;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
-import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.Evenements.EvenementJoueurDeplacePersonnage;
 import ServeurJeu.Evenements.EvenementJoueurEntreTable;
 import ServeurJeu.Evenements.EvenementJoueurQuitteTable;
@@ -24,7 +23,6 @@ import ServeurJeu.Evenements.EvenementMAJPointage;
 import ServeurJeu.Evenements.EvenementMAJArgent;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
-import ClassesUtilitaires.GenerateurPartie;
 import Enumerations.RetourFonctions.ResultatDemarrerPartie;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
@@ -87,15 +85,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	private boolean bolEstCommencee;
 	   
 	// Déclaration d'une variable qui va permettre d'arrçter la partie en laissant
-	// l'état de la partie ˆ "commencée" tant que les joueurs sont ˆ l'écran des pointages
+	// l'état de la partie à "commencée" tant que les joueurs sont à l'écran des pointages
 	private boolean bolEstArretee;
 	
-	// Déclaration d'un tableau ˆ 2 dimensions qui va contenir les informations 
+	// Déclaration d'un tableau à 2 dimensions qui va contenir les informations 
 	// sur les cases du jeu
 	private Case[][] objttPlateauJeu;
 	
-	// This object determine the rules of the game for this board
-	private Regles objRegles;
 	
 	private GestionnaireTemps objGestionnaireTemps;
 	private TacheSynchroniser objTacheSynchroniser;
@@ -112,7 +108,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	
     // Cette liste contient le nom des joueurs qui ont été déconnectés
     // dans cette table, ce qui nous permettra, lorsqu'une partie se termine, de
-    // faire la mise ˆ jour de la liste des joueurs déconnectés du gestionnaire
+    // faire la mise à jour de la liste des joueurs déconnectés du gestionnaire
     // de communication
     private Vector<String> lstJoueursDeconnectes;
       
@@ -151,19 +147,18 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @param int tempsPartie : Le temps de la partie en minute
 	 * @param Regles reglesTable : Les règles pour une partie sur cette table
 	 */
-	public Table(Salle salleParente, int noTable, JoueurHumain joueur ,	int tempsPartie, ControleurJeu controleurJeu, String name, int intNbLines, int intNbColumns) 
+	public Table(Salle salleParente, int noTable, JoueurHumain joueur ,	int tempsPartie, String name, int intNbLines, int intNbColumns) 
 	{
 		super();
    	
 		MAX_NB_PLAYERS = salleParente.getRegles().getMaxNbPlayers();
 		
 		positionWinTheGame = new Point(-1, -1); 		
-        //this.butDuJeu = butDuJeu;
-        
+                
 		// Faire la référence vers le gestionnaire d'événements et le 
 		// gestionnaire de base de données
 		objGestionnaireEvenements = new GestionnaireEvenements();
-		objGestionnaireBD = controleurJeu.obtenirGestionnaireBD();
+		objGestionnaireBD = salleParente.getObjControleurJeu().obtenirGestionnaireBD();
 		
 		// Garder en mémoire la référence vers la salle parente, le numéro de 
 		// la table, le nom d'utilisateur du créateur de la table et le temps
@@ -176,8 +171,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		setNbColumns(intNbColumns);
 		
 		intTempsTotal = tempsPartie;
-              //  if(!this.butDuJeu.equals("original")) winTheGame = new WinTheGame(this);
-               
+                       
 		// Créer une nouvelle liste de joueurs
 		lstJoueurs = new TreeMap<String, JoueurHumain>();
 		lstJoueursEnAttente = new TreeMap<String, JoueurHumain>();
@@ -188,20 +182,15 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		bolEstCommencee = false;
 		bolEstArretee = true;
 		intNbJoueurDemande = MAX_NB_PLAYERS;
-		
-		// Définir les rçgles de jeu pour la salle courante
-		objRegles = salleParente.getRegles();
-		
+				
 		// take new table dimentions if changed in DB
-		objGestionnaireBD.getNewTableDimentions(objRegles, salleParente.getRoomName(""));
-		//objRegles.definirTempsMaximal(objGestionnaireBD.getNewTableDimentionTours(salleParente.getRoomName("")));
-		//objRegles.definirTempsMinimal(objGestionnaireBD.getNewTableDimentionLines(salleParente.getRoomName("")));
-		
+		objGestionnaireBD.getNewTableDimentions(salleParente);
+				
 		// initialaise gameboard - set null
 		objttPlateauJeu = null;
 		
-		objGestionnaireTemps = controleurJeu.obtenirGestionnaireTemps();
-		objTacheSynchroniser = controleurJeu.obtenirTacheSynchroniser();
+		objGestionnaireTemps = salleParente.getObjControleurJeu().obtenirGestionnaireTemps();
+		objTacheSynchroniser = salleParente.getObjControleurJeu().obtenirTacheSynchroniser();
 
         // Au départ, on considçre qu'il n'y a que des joueurs humains.
         // Lorsque l'on démarrera une partie dans laPartieCommence(), on créera
@@ -216,7 +205,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         
         
         // Faire la référence vers le controleu jeu
-        objControleurJeu = controleurJeu;
+        objControleurJeu = salleParente.getObjControleurJeu();
         
         // Créer un thread pour le GestionnaireEvenements
 		Thread threadEvenements = new Thread(objGestionnaireEvenements);
@@ -260,9 +249,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 
 	 * Synchronisme : Cette fonction est synchronisée pour éviter que deux 
 	 * 				  joueurs puissent entrer ou quitter la table en mçme temps.
-	 * 				  On n'a pas ˆ s'inquiéter que le joueur soit modifié
+	 * 				  On n'a pas à s'inquiéter que le joueur soit modifié
 	 * 				  pendant le temps qu'on exécute cette fonction. De plus
-	 * 				  on n'a pas ˆ revérifier que la table existe bien (car
+	 * 				  on n'a pas à revérifier que la table existe bien (car
 	 * 				  elle ne peut çtre supprimée en mçme temps qu'un joueur 
 	 * 				  entre dans la table), qu'elle n'est pas complçte ou 
 	 * 				  qu'une partie est en cours (car toutes les fonctions 
@@ -271,7 +260,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	public void entrerTable(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, TreeMap<String, Integer> listePersonnageJoueurs, TreeMap<String, Integer> listeRoleJoueurs)  throws NullPointerException
 	{
 		//System.out.println("start table: " + System.currentTimeMillis());
-	    // Empçcher d'autres thread de toucher ˆ la liste des joueurs de 
+	    // Empçcher d'autres thread de toucher à la liste des joueurs de 
 	    // cette table pendant l'ajout du nouveau joueur dans cette table
 	    synchronized (lstJoueurs)
 	    {
@@ -296,7 +285,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			    joueur.obtenirProtocoleJoueur().genererNumeroReponse();					    
 			}
 
-			// Empçcher d'autres thread de toucher ˆ la liste des joueurs de 
+			// Empçcher d'autres thread de toucher à la liste des joueurs de 
 		    // cette salle pendant qu'on parcourt tous les joueurs de la salle
 			// pour leur envoyer un événement
 		    synchronized (getObjSalle().obtenirListeJoueurs())
@@ -326,18 +315,18 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  joueur et qu'on va modifier la liste des joueurs de cette
 	 * 				  table, car le joueur quitte la table. Cela évite que des
 	 * 				  joueurs entrent ou quittent une table en mçme temps.
-	 * 				  On n'a pas ˆ s'inquiéter que le joueur soit modifié
+	 * 				  On n'a pas à s'inquiéter que le joueur soit modifié
 	 * 				  pendant le temps qu'on exécute cette fonction. Si on 
 	 * 				  inverserait les synchronisations, ça pourrait créer un 
 	 * 				  deadlock avec les personnes entrant dans la salle.
 	 */
 	public void quitterTable(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, boolean detruirePartieCourante)
 	{
-	    // Empçcher d'autres thread de toucher ˆ la liste des tables de 
+	    // Empçcher d'autres thread de toucher à la liste des tables de 
 	    // cette salle pendant que le joueur quitte cette table
 	    synchronized (getObjSalle().obtenirListeTables())
 	    {
-		    // Empçcher d'autres thread de toucher ˆ la liste des joueurs de 
+		    // Empçcher d'autres thread de toucher à la liste des joueurs de 
 		    // cette table pendant que le joueur quitte cette table
 		    synchronized (lstJoueurs)
 		    {
@@ -361,7 +350,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				    joueur.obtenirProtocoleJoueur().genererNumeroReponse();					    
 				}
 
-				// Empçcher d'autres thread de toucher ˆ la liste des joueurs de 
+				// Empçcher d'autres thread de toucher à la liste des joueurs de 
 			    // cette salle pendant qu'on parcourt tous les joueurs de la salle
 				// pour leur envoyer un événement
 			    synchronized (getObjSalle().obtenirListeJoueurs())
@@ -403,18 +392,18 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  joueur et qu'on va modifier la liste des joueurs de cette
 	 * 				  table, car le joueur quitte la table. Cela évite que des
 	 * 				  joueurs entrent ou quittent une table en mçme temps.
-	 * 				  On n'a pas ˆ s'inquiéter que le joueur soit modifié
+	 * 				  On n'a pas à s'inquiéter que le joueur soit modifié
 	 * 				  pendant le temps qu'on exécute cette fonction. Si on 
 	 * 				  inverserait les synchronisations, ça pourrait créer un 
 	 * 				  deadlock avec les personnes entrant dans la salle.
 	 */
 	public void restartGame(JoueurHumain joueur, boolean doitGenererNoCommandeRetour)
 	{
-	    // Empçcher d'autres thread de toucher ˆ la liste des tables de 
+	    // Empçcher d'autres thread de toucher à la liste des tables de 
 	    // cette salle pendant que le joueur quitte cette table
 	    synchronized (getObjSalle().obtenirListeTables())
 	    {
-		    // Empçcher d'autres thread de toucher ˆ la liste des joueurs de 
+		    // Empçcher d'autres thread de toucher à la liste des joueurs de 
 		    // cette table pendant que le joueur et ajouter a la table
 		    synchronized (lstJoueurs)
 		    {
@@ -453,13 +442,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 								générer un numéro de commande pour le retour de
 	 * 								l'appel de fonction
 	 * @return String : Succes : si le joueur est maintenant en attente
-	 * 					DejaEnAttente : si le joueur était déjˆ en attente
+	 * 					DejaEnAttente : si le joueur était déjà en attente
 	 * 					PartieEnCours : si une partie était en cours
 	 * 
 	 * Synchronisme : Cette fonction est synchronisée sur la liste des joueurs 
 	 * 				  en attente, car il se peut qu'on ajouter ou retirer des
 	 * 				  joueurs de la liste en attente en mçme temps. On n'a pas
-	 * 				  ˆ s'inquiéter que le mçme joueur soit mis dans la liste 
+	 * 				  à s'inquiéter que le mçme joueur soit mis dans la liste 
 	 * 				  des joueurs en attente par un autre thread.
 	 */
 	public String demarrerPartie(JoueurHumain joueur, int idPersonnage, boolean doitGenererNoCommandeRetour)
@@ -468,7 +457,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// attente ou non
 		String strResultatDemarrerPartie;
 		
-	    // Empçcher d'autres thread de toucher ˆ la liste des joueurs en attente 
+	    // Empçcher d'autres thread de toucher à la liste des joueurs en attente 
 	    // de cette table pendant que le joueur tente de démarrer la partie
 	    synchronized (lstJoueursEnAttente)
 	    {
@@ -477,7 +466,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    	{
 	    		strResultatDemarrerPartie = ResultatDemarrerPartie.PartieEnCours;
 	    	}
-	    	// Sinon si le joueur est déjˆ en attente, alors on va retourner 
+	    	// Sinon si le joueur est déjà en attente, alors on va retourner 
 	    	// DejaEnAttente
 	    	else if (lstJoueursEnAttente.containsKey(joueur.obtenirNomUtilisateur()) == true)
 	    	{
@@ -507,7 +496,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				    joueur.obtenirProtocoleJoueur().genererNumeroReponse();					    
 				}
 				
-				// Empçcher d'autres thread de toucher ˆ la liste des joueurs de 
+				// Empçcher d'autres thread de toucher à la liste des joueurs de 
 			    // cette table pendant qu'on parcourt tous les joueurs de la table
 				// pour leur envoyer un événement
 			    synchronized (lstJoueurs)
@@ -671,8 +660,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Générer le plateau de jeu selon les règles de la table et 
 		// garder le plateau en mémoire dans la table
-		objttPlateauJeu = GenerateurPartie.genererPlateauJeu(objGestionnaireBD, 
-				lstPointsCaseLibre, objProchainIdObjet, lstPointsFinish, this);
+		objttPlateauJeu = objSalle.getGameFactory().genererPlateauJeu(lstPointsCaseLibre, objProchainIdObjet, lstPointsFinish, this);
 
         // Définir le prochain id pour les objets
         objProchainIdObjet++;
@@ -715,21 +703,15 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			}
 			
 			// Déterminer combien de joueurs on veut
-			intNombreJoueursVirtuels = objRegles.getNbVirtualPlayers();
-			if(intNombreJoueursVirtuels + nbJoueur > objRegles.getMaxNbPlayers()) 
-			   intNombreJoueursVirtuels = objRegles.getMaxNbPlayers() - nbJoueur;
+			intNombreJoueursVirtuels = objSalle.getRegles().getNbVirtualPlayers();
+			if(intNombreJoueursVirtuels + nbJoueur > objSalle.getRegles().getMaxNbPlayers()) 
+			   intNombreJoueursVirtuels = objSalle.getRegles().getMaxNbPlayers() - nbJoueur;
 			
 		
 		}
 		
-		
-		// Aller chercher les positions de départ pour les joueurs humains et virtuels
-        if(getObjSalle().getGameType().equals("Tournament"))
-        {
-		   objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels, objRegles.getNbTracks());
-        }else{
-           objtPositionsJoueurs = GenerateurPartie.genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels, lstPointsCaseLibre);	
-        }
+		objtPositionsJoueurs = objSalle.getGameFactory().genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels, lstPointsCaseLibre);	
+        
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// lstJoueursEnAttente (chaque élément est un Map.Entry)
 		Set<Map.Entry<String,JoueurHumain>> lstEnsembleJoueurs = lstJoueursEnAttente.entrySet();
@@ -1005,6 +987,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		        for (int i = 0; i < lstJoueursVirtuels.size(); i++)
 		        {
                     ((JoueurVirtuel)lstJoueursVirtuels.get(i)).arreterThread();
+                    
 		        }
 		    }
 		    
@@ -1118,15 +1101,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		return bolEstCommencee;	        
 	}
 	
-	/**
-	 * Cette fonction retourne les rçgles pour la table courante.
-	 * 
-	 * @return Regles : Les règles pour la table courante
-	 */
-	public Regles obtenirRegles()
-	{
-		return objRegles;
-	}
+	
 	
 	/**
 	 * Cette fonction retourne le plateau de jeu courant.
