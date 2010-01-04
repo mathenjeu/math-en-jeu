@@ -128,7 +128,7 @@ public class ParametreIA {
     
       
     // Constante contenant le nombre de id personnage
-    public final static int NOMBRE_PERSONNAGE_ID = 12;
+    public final static int NOMBRE_PERSONNAGE_ID = 10;
      
     // Facteur d'éloignement minimal
     public final static double FACTEUR_AJUSTEMENT_MIN = 0.01;
@@ -309,7 +309,7 @@ public class ParametreIA {
 	    tTempsReflexionAleatoire[TYPE_REFLEXION_COUP][DIFFICULTE_TRES_DIFFICILE] = 3;
 	    
         // Temps de réflexion pour répondre à une question  
-	    tTempsReflexionBase[TYPE_REFLEXION_REPONSE][DIFFICULTE_FACILE] = 32;
+	    tTempsReflexionBase[TYPE_REFLEXION_REPONSE][DIFFICULTE_FACILE] = 32;  //???????????????
 	    tTempsReflexionBase[TYPE_REFLEXION_REPONSE][DIFFICULTE_MOYEN] = 28;
 	    tTempsReflexionBase[TYPE_REFLEXION_REPONSE][DIFFICULTE_DIFFICILE] = 24;
 	    tTempsReflexionBase[TYPE_REFLEXION_REPONSE][DIFFICULTE_TRES_DIFFICILE] = 20;

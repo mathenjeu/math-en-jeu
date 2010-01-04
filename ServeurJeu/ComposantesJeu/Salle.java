@@ -53,6 +53,8 @@ public class Salle
     // Contient le type de jeu (ex. mathEnJeu)
 	private final String gameType;
 	
+	private GenerateurPartie gameFactory;
+	
 	//Room short description
 	private String roomDescription;
 	
@@ -85,7 +87,7 @@ public class Salle
 	private final boolean roomCategories;
 	
 	//specifyed room's categories
-	private ArrayList<Integer> categories;
+	private final ArrayList<Integer> categories;
 	
 	// last room number
 	private int lastNumber;
@@ -133,7 +135,7 @@ public class Salle
         this.masterTime = masterTime;
         this.roomCategories = roomCategories;
         
-        categories = new ArrayList();
+        categories = new ArrayList<Integer>();
 		
 		// Créer une nouvelle liste de joueurs, de tables et de numéros
 		lstJoueurs = new TreeMap <String, JoueurHumain>();
@@ -144,13 +146,28 @@ public class Salle
 		objRegles = reglesSalle;
                 
         // Faire la référence vers le controleur de jeu
-		objControleurJeu = controleurJeu;
+		setObjControleurJeu(controleurJeu);
 		
 		// Créer un thread pour le GestionnaireEvenements
 		Thread threadEvenements = new Thread(objGestionnaireEvenements);
 		
 		// Démarrer le thread du gestionnaire d'événements
 		threadEvenements.start();
+		
+		this.gameFactory = null;
+		
+		try {
+			this.gameFactory = (GenerateurPartie) Class.forName("ServeurJeu.ComposantesJeu.GenerateurPartie" + gameType).newInstance();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -376,7 +393,7 @@ public class Salle
 	    {
 	    	
 	    	// Créer une nouvelle table en passant les paramètres appropriés
-	    	Table objTable = new Table( this, genererNoTable(), joueur, tempsPartie, objControleurJeu, name, intNbLines, intNbColumns);
+	    	Table objTable = new Table( this, genererNoTable(), joueur, tempsPartie, name, intNbLines, intNbColumns);
 	    		    	
 	    	objTable.creation();
 	    		    	
@@ -918,6 +935,18 @@ public class Salle
 
 	public String getStrPassword() {
 		return strPassword;
+	}
+
+	public void setObjControleurJeu(ControleurJeu objControleurJeu) {
+		this.objControleurJeu = objControleurJeu;
+	}
+
+	public ControleurJeu getObjControleurJeu() {
+		return objControleurJeu;
+	}
+
+	public GenerateurPartie getGameFactory() {
+		return gameFactory;
 	}
 	
 }// end class 

@@ -2364,7 +2364,7 @@ public class ProtocoleJoueur implements Runnable
 					{
 						objNoeudCommande.setAttribute("nom", "JoueurPasDansTable");
 					}
-					else if (!this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().obtenirRegles().obtenirPermetChat())
+					else if (!this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().getObjSalle().getRegles().obtenirPermetChat())
 					{
 						objNoeudCommande.setAttribute("nom", "ChatNonPermis");
 					}

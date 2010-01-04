@@ -342,8 +342,8 @@ public class InformationPartie
 		}
 
 		// Si la distance parcourue dépasse le nombre de cases maximal possible, alors il y a une erreur
-		if (bolEstPermis == true && ((nouvellePosition.x != objPositionJoueur.x && Math.abs(nouvellePosition.x - objPositionJoueur.x) > objTable.obtenirRegles().obtenirDeplacementMaximal()) || 
-									 (nouvellePosition.y != objPositionJoueur.y && Math.abs(nouvellePosition.y - objPositionJoueur.y) > objTable.obtenirRegles().obtenirDeplacementMaximal())))
+		if (bolEstPermis == true && ((nouvellePosition.x != objPositionJoueur.x && Math.abs(nouvellePosition.x - objPositionJoueur.x) > objTable.getObjSalle().getRegles().obtenirDeplacementMaximal()) || 
+									 (nouvellePosition.y != objPositionJoueur.y && Math.abs(nouvellePosition.y - objPositionJoueur.y) > objTable.getObjSalle().getRegles().obtenirDeplacementMaximal())))
 		{
 			bolEstPermis = false;
 		}
@@ -1017,29 +1017,50 @@ public class InformationPartie
 				//for gametype tourmnament - bonus for finish line
 				 if(table.getObjSalle().getGameType().equals("Tournament"))
 				 {
+					 int tracks = table.getObjSalle().getRegles().getNbTracks();
+					 Point  objPoint = table.obtenirPositionWinTheGame();
+					 Point objPointFinish = new Point();
+					 
 					 // On vérifie d'abord si le joueur a atteint le WinTheGame;
 					 boolean isWinTheGame = false;
+				 	 
+                     	 			 
+		 			 if(objJoueur instanceof JoueurHumain)
+		 			 {
 
-					 int tracks = ((JoueurHumain)objJoueur).obtenirSalleCourante().getRegles().getNbTracks();
-					 Point  objPoint = ((JoueurHumain)objJoueur).obtenirPartieCourante().obtenirTable().obtenirPositionWinTheGame();
-					 Point objPointFinish = new Point();
+		 				 for(int i = 0; i < tracks; i++ )
+						 {
+							 objPointFinish.setLocation(objPoint.x, objPoint.y - i);
+							 if(objPositionDesiree.equals(objPointFinish))
+								 isWinTheGame = true;
+						 }
+					 	 
+		 				 
+		 				 if(isWinTheGame && boolWasOnFinish )
+		 				 {
+		 					 ((JoueurHumain)objJoueur).obtenirPartieCourante().isPlayerNotArrivedOnce = false;
+		 					 bonus = table.obtenirTempsRestant();
+		 					 intNouveauPointage += bonus; 
+		 				 }
+		 			 }
+		 			 else if (objJoueur instanceof JoueurVirtuel)
+		 			 {
+		 				 boolWasOnFinish = ((JoueurVirtuel)objJoueur).isPlayerNotArrivedOnce();
+		 				 for(int i = 0; i < tracks; i++ )
+						 {
+							 objPointFinish.setLocation(objPoint.x, objPoint.y - i);
+							 if(objPositionDesiree.equals(objPointFinish))
+								 isWinTheGame = true;
+						 }
+					 	 
+		 				 if(isWinTheGame && boolWasOnFinish )
+		 				 {
+		 				    ((JoueurVirtuel)objJoueur).setPlayerNotArrivedOnce(false);
+		 				    bonus = table.obtenirTempsRestant();
+		 				    intNouveauPointage += bonus; 
+		 				 }
+		 			 }
 
-					 for(int i = 0; i < tracks; i++ )
-					 {
-						 objPointFinish.setLocation(objPoint.x, objPoint.y - i);
-						 if(objPositionDesiree.equals(objPointFinish))
-							 isWinTheGame = true;
-					 }
-
-					// System.out.println(boolWasOnFinish);
-					 
-					 if(isWinTheGame && boolWasOnFinish )
-					 {
-						 bonus = ((JoueurHumain)objJoueur).obtenirPartieCourante().obtenirTable().obtenirTempsRestant();
-						 intNouveauPointage += bonus; 
-						
-						 ((JoueurHumain)objJoueur).obtenirPartieCourante().isPlayerNotArrivedOnce = false;
-					 }
 				 }
 				//************************************  end bonus
 			}
