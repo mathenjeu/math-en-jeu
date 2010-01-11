@@ -106,39 +106,46 @@ public class EvenementPartieDemarree extends Evenement
 				objNoeudParametreTaillePlateauJeu.setAttribute("type", "Taille");
 				objNoeudParametrePositionJoueurs.setAttribute("type", "PositionJoueurs");
 				objNoeudParametrePlateauJeu.setAttribute("type", "PlateauJeu");
-                                
-						/*
-						 * *****************
-						 * TODO 
-						 * REPLACE THIS CODE TO 
-						 * USE THE WIN THE GAME AGAIN
-						 * *****************
-						 */
-				
-                                
-                                if(table.getObjSalle().getGameType().equals("Tournament")) //!table.obtenirButDuJeu().equals("original")&&
-                                {
-                                    // Créer le noeud contenant la position initiale du WinTheGame
-                                    
-                                        int z=0;
-                                        while((table.obtenirPositionWinTheGame().x == -1 || table.obtenirPositionWinTheGame().y == -1) && z<100)
-                                        {
-                                            table.definirNouvellePositionWinTheGame();
-                                            z++;
-                                        }
-                                    
+                                               
 
-                                    Element objNoeudParametrePositionWinTheGame = objDocumentXML.createElement("parametre");
-                                    objNoeudParametrePositionWinTheGame.setAttribute("type", "positionWinTheGame");
-                                    objNoeudParametrePositionWinTheGame.setAttribute("x", Integer.toString(table.obtenirPositionWinTheGame().x));
-                                    objNoeudParametrePositionWinTheGame.setAttribute("y", Integer.toString(table.obtenirPositionWinTheGame().y));
-                                    objNoeudParametrePositionWinTheGame.setAttribute("tracks", Integer.toString(table.getObjSalle().getRegles().getNbTracks()));
-                                    objNoeudParametrePositionWinTheGame.setAttribute("pointageRequis", Integer.toString(table.pointageRequisPourAllerSurLeWinTheGame()));
-                                    objNoeudCommande.appendChild(objNoeudParametrePositionWinTheGame);
-                                }
-                                 
+				// Créer le noeud contenant la position initiale du pointsFinish
 				
+				/*	Point objPoint = table.getPositionPointFinish();
+					int z=0;
+					while((objPoint.x == -1 || objPoint.y == -1) && z < 100)
+					{
+						table.definirNouvellePositionWinTheGame();
+						z++;
+					} */ 
 				
+
+
+				Element objNoeudParametrePositionPointsFinish = objDocumentXML.createElement("parametre");
+				objNoeudParametrePositionPointsFinish.setAttribute("type", "positionPointsFinish");
+				objNoeudParametrePositionPointsFinish.setAttribute("tracks", Integer.toString(table.getObjSalle().getRegles().getNbTracks()));
+
+				for(int i = 0; i < table.getLstPointsFinish().size(); i++)
+				{
+				   Point objPosition = table.getLstPointsFinish().get(i);
+				   
+				    // Créer un noeud de case
+					Element objNoeudParametrePositionPoint = objDocumentXML.createElement("positionPoint");
+					
+					// Définir les attributs du noeud courant
+					objNoeudParametrePositionPoint.setAttribute("x", Integer.toString(objPosition.x));
+				    objNoeudParametrePositionPoint.setAttribute("y", Integer.toString(objPosition.y));
+					
+					// Ajouter le noeud de position courant au noeud paramètre
+					objNoeudParametrePositionPointsFinish.appendChild(objNoeudParametrePositionPoint);
+				   
+				   
+				}
+				//objNoeudParametrePositionWinTheGame.setAttribute("pointageRequis", Integer.toString(table.pointageRequisPourAllerSurLeWinTheGame()));
+				objNoeudCommande.appendChild(objNoeudParametrePositionPointsFinish);
+
+
+
+
 				// Créer les informations concernant la taille
 				objNoeudParametreTaille.setAttribute("nbLignes", Integer.toString(table.obtenirPlateauJeuCourant().length));
 				objNoeudParametreTaille.setAttribute("nbColonnes", Integer.toString(table.obtenirPlateauJeuCourant()[0].length));

@@ -294,76 +294,29 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 				pause(intTempsReflexionCoup);
 				
 				
-				// CHANGES WIN THE GAME - OFF
-				// **********************************************************
-				
-                // Trouver une case intéressante à atteindre
-                int essais = 0;
-                if (reviserPositionFinaleVisee() == true)
-                {
-                    essais = 0;
-                    do
-                    {
-                        objPositionFinaleVisee = trouverPositionFinaleVisee();
-                        essais++;
-                    }while(essais < 50 && objPositionFinaleVisee.equals(this.obtenirTable().obtenirPositionWinTheGame()));
-                }
-
-                
-                // On trouve une position entre le joueur virtuel et son objectif
-                essais = 0;
-                if(this.obtenirTable().peutAllerSurLeWinTheGame(this.obtenirPointage())) objPositionIntermediaire = trouverPositionIntermediaire();
-                else
-                {
-                    do
-                    {
-                         objPositionIntermediaire = trouverPositionIntermediaire();
-                         essais++;
-                    }while(essais < 50 && objPositionIntermediaire.equals(this.obtenirTable().obtenirPositionWinTheGame()));
-                }
-                
-              
-                 
-                
-                 
                 // ORIGINAL CODE - TODO CHANGE BACK TO GET WIN THE GAME
                 // AS WELL AS THE CHANGES IN SALLE.JAVA
 				
                 // Trouver une case intéressante à atteindre
                 // Si on a assez de points pour atteindre le WinTheGame, allons-y!
-                if(this.obtenirTable().getObjSalle().getGameType().equals("Tournament"))
-                {
-                	objPositionFinaleVisee = this.obtenirTable().obtenirPositionWinTheGame();
-                }
-                else
-                {
-                	if (reviserPositionFinaleVisee() == true)
+                
+               objPositionFinaleVisee = this.obtenirTable().getPositionPointFinish();
+               
+               if (reviserPositionFinaleVisee() == true)
+               {
+               		int essais = 0;
+                	do
                 	{
-                		essais = 0;
-                		do
-                		{
-                			objPositionFinaleVisee = trouverPositionFinaleVisee();
+                		objPositionFinaleVisee = trouverPositionFinaleVisee();
                 			essais++;
-                		}while(essais < 50 && objPositionFinaleVisee.equals(this.obtenirTable().obtenirPositionWinTheGame()));
-                	}
+                	}while(essais < 50 &&  this.obtenirTable().checkPositionPointsFinish(objPositionFinaleVisee));
+                	
                 }
 
                 // On trouve une position entre le joueur virtuel et son objectif
 
-                essais = 0;
-                if(this.obtenirTable().peutAllerSurLeWinTheGame(this.obtenirPointage())) objPositionIntermediaire = trouverPositionIntermediaire();
-                else
-                {
-                	do
-                	{
-                		objPositionIntermediaire = trouverPositionIntermediaire();
-                		essais++;
-                	}while(essais < 50 && objPositionIntermediaire.equals(this.obtenirTable().obtenirPositionWinTheGame()));
-                }
-
-
-
-
+                objPositionIntermediaire = trouverPositionIntermediaire();
+                
 				// S'il y a erreur de recherche ou si le joueur virtuel est pris
 				// on ne le fait pas bouger
 				if (objPositionIntermediaire.x != objPositionJoueur.x || 
@@ -421,19 +374,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    			// réussi à répondre à la question
 	    			if (bolQuestionReussie == true)
 	    			{
-	    				//System.out.println("Question reussie"); // trace
 	    				
-	    				// Déplacement du joueur virtuel
-	    				
-                                      /*  if(!isUnderBananaEffect.equals(""))
-                                        {
-                                            Banane.utiliserBanane(isUnderBananaEffect, this.obtenirPositionJoueur(), this.obtenirNom(), this.obtenirTable(), false);
-                                            isUnderBananaEffect = "";
-                                        }
-                                        else
-                                        {
-                                            deplacerJoueurVirtuelEtMajPlateau(objPositionIntermediaire);
-                                        } */
 	    				deplacerJoueurVirtuelEtMajPlateau(objPositionIntermediaire);
 	    				
 	    				// Obtenir le temps que le déplacement dure
@@ -686,7 +627,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
             // Si on est déjà sur le WinTheGame et qu'on a le pointage requis, restons là!!
             // Peut-être que les joueurs virtuels essaient ensuite de se déplacer
             // mais le serveur refusera alors ils resteront vraiment là
-            if(this.obtenirTable().peutAllerSurLeWinTheGame(this.obtenirPointage()) && this.obtenirPositionJoueur().equals(this.obtenirTable().obtenirPositionWinTheGame())) return this.obtenirPositionJoueur();
+            if(this.obtenirPositionJoueur().equals(this.obtenirTable().getPositionPointFinish())) return this.obtenirPositionJoueur();
             
 	    // Variable contenant la position à retourner à la fonction appelante
 		Point objPositionTrouvee;
@@ -2603,7 +2544,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     // it is not absolutely correct because PositionWinTheGame is a array, but it is not so important 
     public int obtenirDistanceAuWinTheGame()
     {
-        return Math.abs(objPositionJoueur.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(objPositionJoueur.y - objTable.obtenirPositionWinTheGame().y);
+    	Point objPoint = objTable.getPositionPointFinish();
+        return Math.abs(objPositionJoueur.x - objPoint.x) + Math.abs(objPositionJoueur.y - objPoint.y);
     }
 
 

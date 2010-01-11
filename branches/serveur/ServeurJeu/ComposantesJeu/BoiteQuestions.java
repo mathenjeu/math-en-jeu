@@ -4,8 +4,13 @@
  */
 package ServeurJeu.ComposantesJeu;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
+import java.util.Map.Entry;
+
 import org.apache.log4j.Logger;
 import ClassesUtilitaires.UtilitaireNombres;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
@@ -21,7 +26,7 @@ public class BoiteQuestions
 	
 	// Déclaration d'une référence vers un joueur humain correspondant à cet
 	// objet d'information de partie
-	private final JoueurHumain objJoueurHumain;
+	//private final JoueurHumain objJoueurHumain;
 	
 	// Since there is a question box for each player, and all players might not want to play
 	// in the same language, we set a language field for question boxes
@@ -33,7 +38,7 @@ public class BoiteQuestions
         this.language = new Lang(language, url);
     	
         // Faire la référence vers le joueur humain courant
-        objJoueurHumain = joueur;
+       // objJoueurHumain = joueur;
 	}// fin constructeur
 	
 	
@@ -103,6 +108,59 @@ public class BoiteQuestions
 	    	   int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
 	    	   question = (Question)questions.elementAt( intRandom );
 			   questions.remove( intRandom );
+		}
+		else
+		{
+			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+		}
+		
+		return question;
+	}
+	
+	
+	/**
+     * Cette fonction permet de sélectionner une question dans la
+     * boite de questions selon son niveau de difficulté
+     *
+     * @param int intDifficulte : la difficulte de la question
+     * @param int intCategorieQuestion : la categorie de la question
+     * @return Question : La question pigée
+     */
+	public Question pigerQuestion( int intDifficulte )
+	{
+		
+		Question question = null;
+		Vector<Question> questionsDiff = new Vector<Question>();
+		Vector<Question> questions = new Vector<Question>();
+		Set<Map.Entry<Integer, TreeMap<Integer, Vector<Question>>>> catQuestions = lstQuestions.entrySet();
+		//TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );
+		
+		// Obtenir un itérateur pour l'ensemble contenant les personnages
+		Iterator<Entry<Integer, TreeMap<Integer, Vector<Question>>>> objIterateurListeQuestions = catQuestions.iterator();
+
+		while(objIterateurListeQuestions.hasNext())
+		{
+			TreeMap<Integer, Vector<Question>> difficultes = objIterateurListeQuestions.next().getValue();
+
+			if( difficultes != null )
+			{
+				questions = difficultes.get( intDifficulte );
+				if (questions != null)
+				   questionsDiff.addAll(questions); 
+			}
+			
+
+		}
+		
+		//System.out.println(questionsDiff.toString());
+				
+
+		// Let's choose a question among the possible ones
+	    if( questionsDiff != null && questionsDiff.size() > 0 )
+		{
+	    	   int intRandom = UtilitaireNombres.genererNbAleatoire( questionsDiff.size() );
+	    	   question = (Question)questionsDiff.elementAt( intRandom );
+			   //questions.remove( intRandom );
 		}
 		else
 		{

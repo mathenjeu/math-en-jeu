@@ -117,7 +117,9 @@ public class GenerateurPartieTournament extends GenerateurPartie {
 		// fill list with points for finish
 		for(int i = 0; i < reglesPartie.getNbTracks(); i++)
 		{
-			objPoint = (Point) lstPointsCasesPresentes.remove(lstPointsCasesPresentes.size()-1);
+			//objPoint = (Point) lstPointsCasesPresentes.remove(lstPointsCasesPresentes.size()-1);
+			objPoint = new Point(intNbLines - 1,intNbColumns - i - 1);
+			System.out.println("COnttrol : " + objPoint);
 			lstPointsFinish.add(objPoint);
 		}
 		caseDefinition(intNbCasesSpeciales, objttPlateauJeu);
