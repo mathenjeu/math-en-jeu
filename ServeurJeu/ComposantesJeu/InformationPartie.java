@@ -559,7 +559,7 @@ public class InformationPartie
 	 * @return Question : La question trouvée, s'il n'y a pas eu de déplacement,
 	 * 					  alors la question retournée est null
 	 */
-	public Question trouverQuestionAPoserCristall(JoueurHumain objJoueurHunmain, boolean doitGenererNoCommandeRetour)
+	public Question trouverQuestionAPoserCristall(JoueurHumain objJoueurHumain, boolean doitGenererNoCommandeRetour)
 	{
 		// Déclarations de variables qui vont contenir la catégorie de question 
 		// à poser, la difficulté et la question à retourner
@@ -656,8 +656,9 @@ public class InformationPartie
 		// to not get the same question
 		do{
 			// pour le premier on voir la catégorie et difficulté demandées
-			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulte);
+			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intDifficulte);
 
+			/*
 			//on prend les catégories scolaires en utilisant enum Categories
 			Categories[] catValues = Categories.values();
 			int[] catScolaires = new int[catValues.length];
@@ -703,6 +704,18 @@ public class InformationPartie
 					i++;
 				}
 			}// fin while
+			*/
+			
+			//après pour les difficultés moins grands 
+			int intDifficulteTemp = intDifficulte;
+			        
+			while(objQuestionTrouvee == null && intDifficulteTemp > 0 ) 
+			{
+				intDifficulteTemp--;
+				objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intDifficulteTemp);
+			   	
+			}// fin while
+
 
 		}while( objQuestionTrouvee.obtenirCodeQuestion() == codeOld );		
 		
@@ -727,8 +740,34 @@ public class InformationPartie
 		
 		
 		// pour le premier on voir la catégorie et difficulté demandées
-		objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulte);
+		//objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulte);
 		
+		objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion(intDifficulte);
+		
+		 
+	    //après pour les difficultés plus grands 
+		int intDifficulteTemp = intDifficulte;
+		while(objQuestionTrouvee == null &&  intDifficulteTemp < 7 ) 
+		{
+			intDifficulteTemp++;
+			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intDifficulteTemp);
+		   	
+		}// fin while        
+		
+		
+		//après pour les difficultés moins grands 
+		intDifficulteTemp = intDifficulte;
+		        
+		while(objQuestionTrouvee == null && intDifficulteTemp > 0 ) 
+		{
+			intDifficulteTemp--;
+			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intDifficulteTemp);
+		   	
+		}// fin while
+		
+		
+		/*
+		//******************************************************************************************************
 		//on prend les catégories scolaires en utilisant enum Categories
 		Categories[] catValues = Categories.values();
         int[] catScolaires = new int[catValues.length];
@@ -794,8 +833,8 @@ public class InformationPartie
 		   	   i++;
 		    }
 		}// fin while
-		
-		
+		//***************************************************************************************
+		*/
 		return objQuestionTrouvee;
 		
 	}// fin méthode
@@ -1018,7 +1057,7 @@ public class InformationPartie
 				 if(table.getObjSalle().getGameType().equals("Tournament"))
 				 {
 					 int tracks = table.getObjSalle().getRegles().getNbTracks();
-					 Point  objPoint = table.obtenirPositionWinTheGame();
+					 Point  objPoint = table.getPositionPointFinish();
 					 Point objPointFinish = new Point();
 					 
 					 // On vérifie d'abord si le joueur a atteint le WinTheGame;
@@ -1300,9 +1339,10 @@ public class InformationPartie
             isUnderBananaEffect = b;
         }
         
-        public int obtenirDistanceAuWinTheGame()
+        public int obtenirDistanceAuFinish()
         {
-            return Math.abs(objPositionJoueur.x - objTable.obtenirPositionWinTheGame().x) + Math.abs(objPositionJoueur.y - objTable.obtenirPositionWinTheGame().y);
+            Point objPoint = objTable.getPositionPointFinish();
+        	return Math.abs(objPositionJoueur.x - objPoint.x) + Math.abs(objPositionJoueur.y - objPoint.y);
         }
 
      

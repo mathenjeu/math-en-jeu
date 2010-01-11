@@ -122,6 +122,12 @@ public class GenerateurPartiemathEnJeu extends GenerateurPartie {
 		
 					
 		boardCreation(intNbTrous, objttPlateauJeu); 
+		
+		for(int i = 0; i < reglesPartie.getNbVirtualPlayers(); i++)
+		{
+			objPoint = (Point) lstPointsCasesPresentes.get(objRandom.nextInt(lstPointsCasesPresentes.size()));
+			lstPointsFinish.add(objPoint);
+		} 
 		caseDefinition(intNbCasesSpeciales, objttPlateauJeu, intNbTrous);
 			
 		// Si on doit afficher des magasins dans le plateau de jeu, 

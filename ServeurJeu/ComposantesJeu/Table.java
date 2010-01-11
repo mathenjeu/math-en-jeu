@@ -3,6 +3,7 @@ package ServeurJeu.ComposantesJeu;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -98,7 +99,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	private Minuterie objMinuterie;
         
     // Position where is placed WinTheGame
-    private Point positionWinTheGame;
+    //private Point positionWinTheGame;
         
     // Cet objet est une liste des joueurs virtuels qui jouent sur cette table
     private Vector<JoueurVirtuel> lstJoueursVirtuels;
@@ -153,7 +154,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
    	
 		MAX_NB_PLAYERS = salleParente.getRegles().getMaxNbPlayers();
 		
-		positionWinTheGame = new Point(-1, -1); 		
+		//positionWinTheGame = new Point(-1, -1); 		
                 
 		// Faire la référence vers le gestionnaire d'événements et le 
 		// gestionnaire de base de données
@@ -571,7 +572,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		return strResultatDemarrerPartie;
 	}
 		
-    /* Cette fonction permet d'obtenir un tableau contenant intNombreJoueurs
+    
+	/* Cette fonction permet d'obtenir un tableau contenant intNombreJoueurs
      * noms de joueurs virtuels différents
      */
 	private String[] obtenirNomsJoueursVirtuels(int intNombreJoueurs)
@@ -880,7 +882,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                  
         }
          // On trouve une position initiale au WinTheGame et on part son thread si nécessaire
-         definirNouvellePositionWinTheGame();
+         //definirNouvellePositionWinTheGame();
                 //winTheGame.demarrer();
           
 	}// end method
@@ -897,6 +899,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			objTacheSynchroniser.enleverObservateur(this);
 			objGestionnaireTemps.enleverTache(objMinuterie);
 			objMinuterie = null;
+			
+			
 
 			// S'il y a au moins un joueur qui a complété la partie,
 			// alors on ajoute les informations de cette partie dans la BD
@@ -954,25 +958,19 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 						   objGestionnaireBD.setNewPlayersMoney(joueur.obtenirCleJoueur(), joueur.obtenirPartieCourante().obtenirArgent());
 						} 
 						
-                                                // Si un joueur a atteint le WinTheGame, joueurGagnant contiendra le nom de ce joueur
-                                                if(joueurGagnant.equals(""))
-                                                {
-                                                    // Vérififer si ce joueur a gagné par les points
-                                                    if (joueur.obtenirPartieCourante().obtenirPointage() == meilleurPointage)
-                                                    {
-                                                            boolGagnant = true;
-                                                    }
-                                                    else
-                                                    {
-                                                            boolGagnant = false;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    if(joueurGagnant.equals(joueur.obtenirNomUtilisateur())) boolGagnant = true;
-                                                    else boolGagnant = false;
-                                                }
-						
+						// Si un joueur a atteint le WinTheGame, joueurGagnant contiendra le nom de ce joueur !!!!!!!!!!!!!!!!!
+
+						// Vérififer si ce joueur a gagné par les points
+						if (joueur.obtenirPartieCourante().obtenirPointage() == meilleurPointage)
+						{
+							boolGagnant = true;
+						}
+						else
+						{
+							boolGagnant = false;
+						}
+
+
 						// Ajouter l'information pour cette partie et ce joueur
 						objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur , boolGagnant);
 						
@@ -1865,7 +1863,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
        	   return (peutAllerSurLeWinTheGame(pointageDuJoueur) && (positionDuJoueur.equals(positionWinTheGame)));
        	}
             
-    } //end method */
+    } //end method 
         
         public Point obtenirPositionWinTheGame()
         {
@@ -1882,11 +1880,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         {
             return intTempsTotal*5;
         }   
-        
-        
-        /**
-         * 
-         */ 
+       
+      
         public void definirNouvellePositionWinTheGame()
         {
         	if (getObjSalle().getGameType().equals("Tournament"))
@@ -2017,9 +2012,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 }
                 // Tout est OK, on déplace le WinTheGame
                 positionWinTheGame.move(meilleurI, meilleurJ);
-            } */
+            } 
         }
-    }// end 
+    }// end  */
 
 		public void setObjSalle(Salle objSalle) {
 			this.objSalle = objSalle;
@@ -2074,9 +2069,43 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		 * @param nbColumns the nbColumns to set
 		 */
 		public void setNbColumns(int nbColumns) {
-			this.nbColumns = nbColumns;
+			this.nbColumns = nbColumns;			
 		}
 		
+		public Point getPositionPointFinish()
+        {
+			Random objRandom = new Random();
+			
+            return lstPointsFinish.get(objRandom.nextInt(lstPointsFinish.size() - 1));
+        }
+		
+		public boolean checkPositionPointsFinish(Point objPoint)
+        {
+			boolean isTrue = false;
+			for(int i = 0; i < lstPointsFinish.size(); i++)
+			{
+				isTrue = objPoint.equals(lstPointsFinish.get(i));
+			    if(isTrue)
+			    	return isTrue;
+			}
+			
+            return isTrue;
+        }
+		
+		/**
+		 * @return the lstPointsFinish
+		 */
+		public ArrayList<Point> getLstPointsFinish() {
+			return lstPointsFinish;
+		}
+
+		/**
+		 * @param lstPointsFinish the lstPointsFinish to set
+		 */
+		public void setLstPointsFinish(ArrayList<Point> lstPointsFinish) {
+			this.lstPointsFinish = lstPointsFinish;
+		}
+
 /*		private Boolean controlForRole(int userName)
 		{
 			// Bloc of code to treat the username
