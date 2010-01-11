@@ -511,7 +511,7 @@ class PlancheDeJeu
         var j:Number;
 		
 		// for different types of game we need different pozitions
-        if((_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") )
+        if(_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament" || _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Course" )
 		{
 		    diffX = 225 - this.tableauDesCases[l][c].obtenirClipCase()._x;
             diffY = 250 - this.tableauDesCases[l][c].obtenirClipCase()._y;
@@ -541,7 +541,7 @@ class PlancheDeJeu
 		var pourcent:Number;
 		
 		// if different type of game we need different pozitions
-		if((_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") )
+		if(_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament" || _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Course" )
 		{
 		   dx = 225 - (_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
 		   dy = 250 - (_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._y);
@@ -712,7 +712,8 @@ class PlancheDeJeu
 		var temp:Number;
 		var twMove:Tween;
 		var twMove2:Tween;
-		var pointageMin:Number = _level0.loader.contentHolder.objGestionnaireEvenements.obtenirPointageMinimalWinTheGame();
+		// il faudra enlever completement
+		var pointageMin:Number = -1;//_level0.loader.contentHolder.objGestionnaireEvenements.obtenirPointageMinimalWinTheGame();
 
 		trace(pointageMin);
 		
