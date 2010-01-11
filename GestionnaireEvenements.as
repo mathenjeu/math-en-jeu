@@ -70,7 +70,11 @@ class GestionnaireEvenements
 	private var langue;
 	private var endGame:Boolean;   // used to ignore the movement of virtual players after the end of the game
 	private var newsArray:Array;  // all the messages to show in newsbox
-	private var nbTracks:Number; 
+	private var nbTracks:Number;
+	private var finishPoints:Array;
+	
+	//used to color clothes
+	private var colorIt:Number;
 	
 	function affichageChamps()
 	{
@@ -128,6 +132,26 @@ class GestionnaireEvenements
     	this.nbTracks = nTracks;
     }
 	
+	function getListeFinishPoints():Array
+	{
+		return this.finishPoints;
+	}
+	
+	function setListeFinishPoints(a:Array)
+	{
+		this.finishPoints = a;
+	}
+	
+	function getColorIt():Number
+	{
+		return this.colorIt;
+	}
+	
+	function setColorIt(color:Number)
+    {
+    	this.colorIt = color;
+    }
+
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  CONSTRUCTEUR

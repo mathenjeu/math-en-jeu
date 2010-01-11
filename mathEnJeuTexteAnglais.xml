@@ -351,12 +351,14 @@ For the next 90 seconds, the questions you'll be asked will be more difficult. A
 		menuAide = "Help menu"
 		
 			aideQuitter = "Close"
-			nomCasesSpeciales  = "                                          Store"
+			nomCasesSpeciales  = "  Store    Coin    '?' Cell"
 			nomCasesSpeciales2 = "                                      '?' Cell"
-			nomObjets 		   = "                        Book              Crystal ball"
+			nomObjets 		   = " Banana                 Book            Crystal ball"
 			salleListe = "Before playing"
-			salleTitre = "Setting the game"
-			salleTexte = "•  In the main menu choose Play button.
+			salleTitre = "1. Setting the game"
+			salleTexte = "
+
+•  In the main menu choose Play button.
 •  Choose a room to play in. For example, you can choose the Newton room. Click on the room’s name and then click on Continue.
 •  If there is a table open and you want to play with these people, click on this table. Then click on Continue. Otherwise, click on “Create a new table” and choose how many minutes you want to play.
 •  By clicking on the left or on the right-pointing arrow, choose you character. Click on Continue.
@@ -371,17 +373,15 @@ For the next 90 seconds, the questions you'll be asked will be more difficult. A
 •  Your character can move between one and six cells at once. The bigger the displacement, the harder the question, relative to the academic level on your registration.
 •  The number of points a question is worth depends on the length of the displacement. A one cell displacement is worth three point, a two cells displacement is worth five points, and so on.
 •  The cells with a question mark bring you to a game if the question is answered correctly. The points won in that game will be added to your score.
-•  The winner is the player with the most points, or the one that reaches the ''Instant Victory'' sign first (see in the 'Special Cells' section)."
+•  The winner is the player with the most points."
 			
 			objetsListe = "Objects"
 			objetsTitre = "3. The objects"
 			objetsTexte = "
-						
-
-The objects you can buy are:
+The objects you can buy or find are:
 
 The banana
-•The banana allows you to play a wicked trick on another player! When you use this object, you opponent that is the closest to the ''Instant Victory'' sign slides on the banana, and gets thrown at the opposite end of the board!
+•The banana allows you to play a wicked trick on another player! 
 
 The book
 •The book eliminates an answer choice for you on a multiple choice question. The number of choices then decreases from four to three.
@@ -392,15 +392,7 @@ The crystal ball
 			casesSpecialesListe = "   Special cells"
 			casesSpecialesTitre = "4. The special cells"
 			casesSpecialesTexte = "
-			
-				
-				
-				
-
-There are 4 special cells in the game:
-    
-Instant Victory!
-•The player that first reaches this cell instantly wins the game! But, there is a twist to it! Before being allowed to click on this cell, you must have accumulated a minimum number of points. This amount of points depends on the length of the game. If no player has reached this cell when time is up, the winner is of course the player with the most points.  
+There are 3 special cells in the game:
    
 The coins
 •The coins you pick up on your way allow you to buy objects (they cost one coin each).
@@ -408,22 +400,21 @@ The coins
 The shops
 •It is here that you can spend your coins!
 
-?
+Cell ?
 •Something special happens when you step on this cell..."
 			
 			optionsListe = "Options"
 			optionsTitre = "5. The options"
-			optionsTexte = "During the game, you can access Math en Jeu's help menu by clicking on the button at the bottom right of the screen. 
-			
-Then, you can change different settings of the game:
+			optionsTexte = "
+You can change different settings of the game:
 
-Activate or deactivate sound effects during the game
+Activate or deactivate sound effects...
 
-Activate or deactivate music during the game
+Activate or deactivate music...
 
-Zoom in or zoom out from the board
+Zoom in or zoom out from the board...
 
-Move the screen in the direction of you choice to explore the board"
+Move the screen in the direction of you choice to explore the board."
 
 
 

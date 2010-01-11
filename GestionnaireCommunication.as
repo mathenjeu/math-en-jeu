@@ -724,6 +724,7 @@ class GestionnaireCommunication
 		var xWinGame:Number;
 		var yWinGame:Number;
 		var nbTracks:Number;
+		var listePoints:Array = new Array;
 		/*
 		for(var j:Number = 0; j<lstChildNodes.length; j++)
 		{
@@ -1051,18 +1052,32 @@ class GestionnaireCommunication
                 // Traiter les differents cas et creer leurs objets dans objEvenement
                 switch (strNomType)
                 {
-					// Si le cas est positionWinTheGame, alors on initialise la position du WinTheGame
-                    case "positionWinTheGame":
-						xWinGame = lstChildNodes[i].attributes.x;
-						yWinGame = lstChildNodes[i].attributes.y;
+					// Si le cas est positionPointsFinish, alors on initialise les  points
+                    case "positionPointsFinish":
+						//xWinGame = lstChildNodes[i].attributes.x;
+						//yWinGame = lstChildNodes[i].attributes.y;
 						nbTracks = lstChildNodes[i].attributes.tracks;
-						//_level0.loader.contentHolder.objGestionnaireEvenements.setNbTracks(nbTracks);
-						_level0.loader.contentHolder.objGestionnaireEvenements.setPointageMinimalWinTheGame(lstChildNodes[i].attributes.pointageRequis);
+						_level0.loader.contentHolder.objGestionnaireEvenements.setNbTracks(nbTracks);
+						//_level0.loader.contentHolder.objGestionnaireEvenements.setPointageMinimalWinTheGame(lstChildNodes[i].attributes.pointageRequis);
 						
-						trace("xWinGame : " + xWinGame);
-						trace("yWinGame : " + yWinGame);
+						// Declaration d'une reference vers la liste des noeuds
+                        // de position des cases pour finish peut importe le type du jeu
+                        var lstChildNodesPosition:Array = lstChildNodes[i].childNodes;
+                        // Passer tous les noeuds position et les ajouter dans
+                        // l'objet d'evenement
+                        for (var j:Number = 0; j < lstChildNodesPosition.length; j++)
+                        {
+                            // Mettre un objet Point contenant position x, y
+                            listePoints.push(new Point(lstChildNodesPosition[j].attributes.x, lstChildNodesPosition[j].attributes.y));
+							trace(" x: " + lstChildNodesPosition[j].attributes.x + " y: " + lstChildNodesPosition[j].attributes.y);
+                        }
+						
+						_level0.loader.contentHolder.objGestionnaireEvenements.setListeFinishPoints(listePoints);
+																											
+						//trace("xWinGame : " + xWinGame);
+						//trace("yWinGame : " + yWinGame);
 						trace("nbTracks : " + nbTracks);
-						trace("PointageRequis : " + lstChildNodes[i].attributes.pointageRequis);
+						//trace("PointageRequis : " + lstChildNodes[i].attributes.pointageRequis);
 					break;
 					
                     // Si le cas est TempsPartie, alors on initialise le temps de la partie
@@ -1077,6 +1092,9 @@ class GestionnaireCommunication
                         // le nombre de colonnes du plateau de jeu
                         var intNbLignes:Number = Number(lstChildNodes[i].firstChild.attributes.nbLignes);
                         var intNbColonnes:Number = Number(lstChildNodes[i].firstChild.attributes.nbColonnes);
+						
+						xWinGame = intNbLignes -1;
+						yWinGame = intNbColonnes - 1;
                         // Creer un nouveau tableau dans le plateau de jeu
                         objEvenement.plateauJeu = new Array();
                         // Passer toutes les lignes et creer un tableau dans
@@ -1128,7 +1146,7 @@ class GestionnaireCommunication
                             
 							//Begin with the points for finish
 							var intValeurCase:Number = Number(lstChildNodesCase[j].attributes.type);
-							if( _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")
+							if( _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament" || _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Course" )
 							{
 
 								var isWin:Boolean = false;
