@@ -26,6 +26,7 @@ Changed 2009 Oloieri Lilian
 import mx.transitions.Tween;
 import mx.transitions.easing.*;
 import flash.filters.*;
+import mx.controls.Loader;
 
 
 class Personnage
@@ -462,11 +463,30 @@ class Personnage
 		this.numero = niveau;
 		this.position = new Point(xx,yy);                       
 		this.prochainePosition = new Point(xx + 1,yy + 1);
+/*        var Personnage1:MovieClip;
+        var persoLoader:Loader = new Loader();
+        persoLoader.contentPath("perso1.swf");
+        persoLoader.load();
+        
+		var listenerObject:Object = new Object();
+        listenerObject.complete = function(eventObj:Object){
+           //Personnage1 = persoLoader.content;
+           if(nomClip == "Personnage1")
+		     image = _level0.loader.contentHolder.referenceLayer.attachMovie(persoLoader.content, "Personnage" + niveau, niveau);
+        };
+        persoLoader.addEventListener("complete", listenerObject);
+     
+  */    
+          
+           if(nomClip == "Personnage1")
+		    this.image =  _level0.loader.contentHolder.referenceLayer.createEmptyMovieClip("Personnage" + niveau, niveau);
+			  
+		   loadMovie("perso1.swf", this.image);
+		   //trace("Control for perso : " + nomClip);
+		    
 		
-		//this.image = new MovieClip();
-		//trace("Personnage "+nom+" nomClip="+nomClip+"  niveau="+niveau);
-		if(!(role == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") ) 
-		   this.image = _level0.loader.contentHolder.referenceLayer.attachMovie(nomClip, "Personnage"+niveau, niveau);
+		if(!(role == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")&& nomClip != "Personnage1") 
+		   this.image = _level0.loader.contentHolder.referenceLayer.attachMovie(nomClip, "Personnage" + niveau, niveau);
 		
 		
 		this.image.dtNom._visible = true;
@@ -677,6 +697,14 @@ class Personnage
 							ajouterImageBanque("Banane");
 						} */
 					break;
+					
+					case "Braniac":
+						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
+						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
+						this.faireCollision = null;
+                        
+					break;
+
 				
 					default :
 						//trace("pas de collision");	
@@ -896,6 +924,18 @@ class Personnage
 	function rest()
 	{
 		this.image.gotoAndPlay("rest");
+	}
+	
+	////////////////////////////****************/////////////////////////////////////////
+	
+	function setBraniac()
+	{
+	   //this.image.
+	}
+	
+	function getOutBraniac()
+	{
+		
 	}
 	
 	
