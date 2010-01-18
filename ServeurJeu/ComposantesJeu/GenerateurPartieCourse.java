@@ -15,6 +15,7 @@ import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin3;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin4;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Banane;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Boule;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Braniac;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Livre;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Papillon;
@@ -236,6 +237,11 @@ public class GenerateurPartieCourse extends GenerateurPartie {
                         Banane objAAjouter = new Banane(intCompteurIdObjet, true);
                         objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
                     }
+                    else if(nomDeLObjet.equals("Braniac"))
+                    {
+                        Braniac objAAjouter = new Braniac(intCompteurIdObjet, false);
+                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                    }
 				}// end for              
 				
 				// Incrémenter le nombre de cases passées
@@ -377,6 +383,13 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Banane(intCompteurIdObjet, bolEstVisible));					
 				}
+                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Braniac") ||
+                                		objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Braniac"))
+				{
+					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Braniac(intCompteurIdObjet, bolEstVisible));					
+				}
+
+				
 				
 				// Incrémenter le nombre de cases passées
 				intCompteurCases++;

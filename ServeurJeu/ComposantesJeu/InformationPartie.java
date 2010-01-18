@@ -2,12 +2,10 @@ package ServeurJeu.ComposantesJeu;
 
 import java.awt.Point;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.Map.Entry;
-
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.ComposantesJeu.Cases.Case;
@@ -79,6 +77,9 @@ public class InformationPartie
     // Déclaration d'un boolean qui dit si le joueur est 'targeté' pour subir une banane
     // (si le string n'est pas "", et alors le string dit qui l'a utilisée)
     private String isUnderBananaEffect;
+    
+    //is our player in Braniac state?
+    private boolean isInBraniacState;
         
     // If is true intArgent is taken from DB and at the end 
     //of the game is writen to the DB
@@ -494,8 +495,11 @@ public class InformationPartie
                 System.out.println("Difficulte de la question : " + intDifficulte);   // test
                 
                 // if is under Banana effects
-                if(!isUnderBananaEffect.equals(""))
+                if(!isUnderBananaEffect.equals("") && intDifficulte < 6)
         			intDifficulte++;
+                // if is under Braniac effects
+                if(!isInBraniacState && intDifficulte > 1 )
+        			intDifficulte--;
 		
 		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
 		// une question
@@ -584,8 +588,8 @@ public class InformationPartie
 		if (intDifficulte > 1)
 			intDifficulte--;
 		//if is Banana used to this player
-		if(!isUnderBananaEffect.equals(""))
-			intDifficulte++;
+		//if(!isUnderBananaEffect.equals(""))
+		//	intDifficulte++;
 		
 		objQuestionTrouvee = trouverQuestionCristall(intCategorieQuestion, intDifficulte, oldQuestion, false);
 		
@@ -883,7 +887,15 @@ public class InformationPartie
 		    objQuestion = objPartieCourante.obtenirQuestionCourante();
 		    nomJoueur = ((JoueurHumain)objJoueur).obtenirNomUtilisateur();
 		    boolWasOnFinish = objPartieCourante.isPlayerNotArrivedOnce;
+		    
+		    //if Banana is used on this Humain Player
+		    if(!objPartieCourante.getIsUnderBananaEffect().equals("") && intDifficulteQuestion > 1)
+		    	intDifficulteQuestion = intDifficulteQuestion - 1;
                     
+		    //if  Humain Player  is on Braniac
+		    if(!objPartieCourante.isInBraniacState && intDifficulteQuestion < 6)
+		    	intDifficulteQuestion = intDifficulteQuestion + 1;
+
                     // If we're in debug mode, accept any answer
                     if(ControleurJeu.modeDebug)
                     {
@@ -897,8 +909,7 @@ public class InformationPartie
 		else
 		{
 			JoueurVirtuel objJoueurVirtuel = (JoueurVirtuel)objJoueur;
-			
-			
+						
 			// Obtenir les informations du joueur virtuel
 			intPointageCourant = objJoueurVirtuel.obtenirPointage();
             intArgentCourant   = objJoueurVirtuel.obtenirArgent();
@@ -906,8 +917,12 @@ public class InformationPartie
 		    intDifficulteQuestion = objJoueurVirtuel.obtenirPointage(objJoueurVirtuel.obtenirPositionJoueur(), objPositionDesiree);
 		    
 		    //if Banana is used on this Virtual Player
-		    if(!objJoueurVirtuel.isUnderBananaEffect.equals("") && intDifficulteQuestion > 3)
-		    	intDifficulteQuestion = intDifficulteQuestion - 3;
+		    if(!objJoueurVirtuel.isUnderBananaEffect.equals("") && intDifficulteQuestion > 1)
+		    	intDifficulteQuestion = intDifficulteQuestion - 1;
+		    
+		    //if Virtual Player is on Braniac
+		    if(objJoueurVirtuel.isUnderBraniacEffect() && intDifficulteQuestion < 6)
+		    	intDifficulteQuestion = intDifficulteQuestion + 1;
 		    	
 		    	
 		    objListeObjetsUtilisablesRamasses = objJoueurVirtuel.obtenirListeObjetsRamasses();
@@ -990,7 +1005,29 @@ public class InformationPartie
 					if (objCaseCouleurDestination.obtenirObjetCase() instanceof ObjetUtilisable)
 					{
 
-						
+						if (objCaseCouleurDestination.obtenirObjetCase() instanceof Braniac)
+						{
+							
+							// put the player on the Braniac state
+							if (objJoueur instanceof JoueurHumain)
+							{
+								Braniac.utiliserBraniac((JoueurHumain)objJoueur);
+								table.preparerEvenementUtiliserObjet(((JoueurHumain) objJoueur).obtenirNomUtilisateur(), ((JoueurHumain) objJoueur).obtenirNomUtilisateur(), "Braniac", "");
+							}
+							else if (objJoueur instanceof JoueurVirtuel)
+							{
+								Braniac.utiliserBraniac((JoueurVirtuel)objJoueur);
+								table.preparerEvenementUtiliserObjet(((JoueurVirtuel) objJoueur).obtenirNom(), ((JoueurVirtuel) objJoueur).obtenirNom(), "Braniac", "");
+
+							}
+							
+							// Enlever l'objet de la case du plateau de jeu
+							objCaseCouleurDestination.definirObjetCase(null);
+
+							// On va dire aux clients qu'il y a eu collision avec cet objet
+							collision = "Braniac";
+							
+						}else{
 							// Faire la référence vers l'objet utilisable
 							ObjetUtilisable objObjetUtilisable = (ObjetUtilisable) objCaseCouleurDestination.obtenirObjetCase();
 
@@ -1005,6 +1042,7 @@ public class InformationPartie
 
 							// On va dire aux clients qu'il y a eu collision avec cet objet
 							collision = objObjetUtilisable.obtenirTypeObjet();
+						}
 						
 					}
 					else if (objCaseCouleurDestination.obtenirObjetCase() instanceof Piece)
@@ -1054,7 +1092,7 @@ public class InformationPartie
 				
 				//***********************************
 				//for gametype tourmnament - bonus for finish line
-				 if(table.getObjSalle().getGameType().equals("Tournament"))
+				 if(table.getObjSalle().getGameType().equals("Tournament")||table.getObjSalle().getGameType().equals("Course"))
 				 {
 					 int tracks = table.getObjSalle().getRegles().getNbTracks();
 					 Point  objPoint = table.getPositionPointFinish();
@@ -1380,6 +1418,20 @@ public class InformationPartie
 			}else if (this.moveVisibility < 1){
 				this.moveVisibility = 1;
 			}
+		}
+
+		/**
+		 * @return the isInBraniacState
+		 */
+		public boolean isInBraniacState() {
+			return isInBraniacState;
+		}
+
+		/**
+		 * @param isInBraniacState the isInBraniacState to set
+		 */
+		public void setInBraniacState(boolean isInBraniacState) {
+			this.isInBraniacState = isInBraniacState;
 		}
 
 		/*

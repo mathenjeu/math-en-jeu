@@ -16,6 +16,7 @@ import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin3;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin4;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Banane;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Boule;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Braniac;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Livre;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Papillon;
@@ -381,6 +382,11 @@ public class GenerateurPartiemathEnJeu extends GenerateurPartie {
                                 		objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Banana"))
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Banane(intCompteurIdObjet, bolEstVisible));					
+				}
+                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Braniac") ||
+                                		objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Braniac"))
+				{
+					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Braniac(intCompteurIdObjet, bolEstVisible));					
 				}
 				
 				// Incrémenter le nombre de cases passées

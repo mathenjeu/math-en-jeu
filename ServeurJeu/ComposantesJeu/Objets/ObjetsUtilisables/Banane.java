@@ -7,6 +7,7 @@ import java.util.Timer;
 
 /**
  * @author François Gingras
+ * changed Oloieri Lilian
  */
 public class Banane extends ObjetUtilisable 
 {
@@ -84,38 +85,6 @@ public class Banane extends ObjetUtilisable
 						
 		}
 
-		/*
-		Document objDocumentXMLTemp = UtilitaireXML.obtenirDocumentXML();
-		Element objNoeudCommandeTemp = objDocumentXMLTemp.createElement("Banane");
-
-		Element objNoeudParametreNouvellePositionX = objDocumentXMLTemp.createElement("parametre");
-		Element objNoeudParametreNouvellePositionY = objDocumentXMLTemp.createElement("parametre");
-		objNoeudParametreNouvellePositionX.setAttribute("type", "NouvellePositionX");
-		objNoeudParametreNouvellePositionY.setAttribute("type", "NouvellePositionY");
-		Text objNoeudTexteNouvellePositionX = objDocumentXMLTemp.createTextNode(Integer.toString(pointOptimal.x));
-		Text objNoeudTexteNouvellePositionY = objDocumentXMLTemp.createTextNode(Integer.toString(pointOptimal.y));
-		objNoeudParametreNouvellePositionX.appendChild(objNoeudTexteNouvellePositionX);
-		objNoeudParametreNouvellePositionY.appendChild(objNoeudTexteNouvellePositionY);
-		objNoeudCommandeTemp.appendChild(objNoeudParametreNouvellePositionX);
-		objNoeudCommandeTemp.appendChild(objNoeudParametreNouvellePositionY);
-
-		objDocumentXMLTemp.appendChild(objNoeudCommandeTemp);
-		String strCodeXML = "";
-		try
-		{
-			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXMLTemp);
-		}
-		catch (TransformerConfigurationException tce)
-		{
-			System.out.println(GestionnaireMessages.message("evenement.XML_transformation"));
-		}
-		catch (TransformerException te)
-		{
-			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
-		}
-
-         */
-		
-		
+				
 	}
 }// end class
