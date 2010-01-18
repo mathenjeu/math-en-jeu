@@ -13,4 +13,5 @@ public abstract class Objet
 	public static final int UID_OU_POTIONGROS = 4;
         public static final int UID_OU_POTIONPETIT = 5;
         public static final int UID_OU_BANANE = 6;
+        public static final int UID_OU_BRANIAC = 7;
 }

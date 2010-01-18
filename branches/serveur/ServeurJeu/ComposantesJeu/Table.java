@@ -2106,7 +2106,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			this.lstPointsFinish = lstPointsFinish;
 		}
 
-/*		private Boolean controlForRole(int userName)
+        /*
+        private Boolean controlForRole(int userName)
 		{
 			// Bloc of code to treat the username
 	        int firstDel = userName.indexOf("-");                 // find first delimiter
