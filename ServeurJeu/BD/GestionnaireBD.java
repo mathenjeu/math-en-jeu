@@ -1157,11 +1157,11 @@ public class GestionnaireBD
   				while(rst.next())
   				{
   					Integer tmp1 = rst.getInt( "priority" );
-  			        String tmp2 = rst.getString( "name" );
-  			        
-  			        objetsUtilisables.add(new ReglesObjetUtilisable(tmp1, tmp2, Visibilite.Aleatoire));
-  			      												
-                  }
+  					String tmp2 = rst.getString( "name" );
+
+  					objetsUtilisables.add(new ReglesObjetUtilisable(tmp1, tmp2, Visibilite.Aleatoire));
+
+  				}
   			}
   		}
   		catch (SQLException e)
