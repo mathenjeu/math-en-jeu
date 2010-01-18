@@ -18,7 +18,7 @@ import ServeurJeu.Configuration.GestionnaireMessages;
 public class EvenementUtiliserObjet extends Evenement
 {
         // Chaînes de caractères qui vont garder en mémoire le nom des joueurs
-        // qui ont utilisé et qui snot affectés par l'objet utilisé
+        // qui ont utilisé et qui sont affectés par l'objet utilisé
 	private String joueurQuiUtilise;
     private String joueurAffecte;
         
