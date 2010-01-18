@@ -148,6 +148,13 @@ class ObjetSurCase
 				valeur = 7;
 			break;
 			
+			case "Braniac":
+				image = _level0.loader.contentHolder.referenceLayer.attachMovie("Papillon", "Braniac", niveau);  
+				image._visible = false;
+				valeur = 2;
+			break;
+
+			
 			default:break;
 		}
 	}
