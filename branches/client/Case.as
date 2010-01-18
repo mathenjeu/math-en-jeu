@@ -130,6 +130,11 @@ class Case
 					case 7:
 						nomObj = "Banane";
 					break;
+					
+					case 8:
+						nomObj = "Braniac";
+					break;
+
 
 					default:break;
 				}
