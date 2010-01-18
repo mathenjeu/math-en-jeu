@@ -28,6 +28,7 @@ import ServeurJeu.Configuration.GestionnaireMessages;
  
 /**
  * @author Jean-François Fournier
+ * changed Oloieri Lilian
  */
 public class JoueurVirtuel extends Joueur implements Runnable {
 	
@@ -36,6 +37,9 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         
     // Le joueur virtuel est-il destiné à subir une banane?
     public String isUnderBananaEffect;
+    
+    // Le joueur virtuel est-il sous effets du Braniac?
+    private boolean isUnderBraniacEffect;
 	
     // Déclaration d'une référence vers le gestionnaire d'evenements
 	private GestionnaireEvenements objGestionnaireEv;
@@ -170,6 +174,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    
 		strNom = nom;
 		isUnderBananaEffect = "";
+		
+		isUnderBraniacEffect = false;
 		
 		// Cette variable sera utilisée dans la thread
 		objPositionFinaleVisee = null;
@@ -357,6 +363,10 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 					if(!isUnderBananaEffect.equals(""))
 						intPourcentageReussite = intPourcentageReussite  - 10;
 					
+					//if Braniac is used on this Virtual Player 
+					if(isUnderBraniacEffect)
+						intPourcentageReussite = intPourcentageReussite  + 10;
+					
 	    			// Déterminer si le joueur virtuel répondra à la question
 	                bolQuestionReussie = (genererNbAleatoire(100)+1 <= intPourcentageReussite);
 	    			        
@@ -366,6 +376,10 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    			//if Banana is used on this Virtual Player 
 					if(!isUnderBananaEffect.equals(""))
 						intTempsReflexionQuestion = intTempsReflexionQuestion + 4;
+					
+					//if Braniac is used on this Virtual Player 
+					if(isUnderBraniacEffect)
+						intTempsReflexionQuestion = intTempsReflexionQuestion - 4;
 	                
 	    			// Pause pour moment de réflexion de réponse
 	    			pause(intTempsReflexionQuestion);	
@@ -2556,6 +2570,16 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 
 	public boolean isPlayerNotArrivedOnce() {
 		return isPlayerNotArrivedOnce;
+	}
+
+
+	public void setUnderBraniacEffect(boolean isUnderBraniacEffect) {
+		this.isUnderBraniacEffect = isUnderBraniacEffect;
+	}
+
+
+	public boolean isUnderBraniacEffect() {
+		return isUnderBraniacEffect;
 	}
 }
 
