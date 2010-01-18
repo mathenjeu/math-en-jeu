@@ -3428,9 +3428,6 @@ public class ProtocoleJoueur implements Runnable
       
         // Créer l'événement contenant toutes les informations sur le plateau et
         // la partie
-        System.out.println("ICI1 " +  objTable.obtenirTempsTotal());
-        System.out.println("ICI2 " +  lstPositionsJoueurs);
-        //System.out.println("ICI3 " +  this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable());
         EvenementPartieDemarree objEvenementPartieDemarree = new EvenementPartieDemarree(objTable.obtenirTempsTotal(), lstPositionsJoueurs, objTable);//this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable());
 
         
@@ -4074,8 +4071,6 @@ public class ProtocoleJoueur implements Runnable
              else if(strTypeObjet.equals("Banane"))
              {
 
-            	 //La Banane prend effet sur le joueur avec le plus des points
-            	 //(sauf si c'est soi mème, alors c'est le 2ème)
             	 // La partie ici ne fait que sélectionner le joueur qui sera affecté
             	 // Le reste se fait dans Banane.java 
             	 objNoeudCommande.setAttribute("type", "OK");
@@ -4102,6 +4097,33 @@ public class ProtocoleJoueur implements Runnable
             	 Banane.utiliserBanane(objJoueurHumain, playerName, estHumain);
             	 
              }
+             else if(strTypeObjet.equals("Braniac"))
+             {
+
+            	 /*
+            	 objNoeudCommande.setAttribute("type", "OK");
+
+                 boolean estHumain =  false; //Le joueur choisi est'il humain?
+       			
+                 // On obtient la liste des joueurs humains, puis la liste des joueurs virtuels
+            	 TreeMap<String, JoueurHumain> listeJoueursHumains = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs();
+            	 Set<Map.Entry<String, JoueurHumain>> nomsJoueursHumains = listeJoueursHumains.entrySet();
+            	 Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = nomsJoueursHumains.iterator();
+            	 Vector<JoueurVirtuel> listeJoueursVirtuels = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();             	 
+            	 
+            	 while(objIterateurListeJoueurs.hasNext() == true)
+            	 {
+            		 if(((Map.Entry<String, JoueurHumain>)(objIterateurListeJoueurs.next())).getValue().obtenirNomUtilisateur().equals(playerName))
+            		 {
+            			 estHumain = true;
+            		 }
+
+            	 }
+            	 
+             */
+             }
+
+             
 		}
     }// end method
     
