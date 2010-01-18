@@ -1233,6 +1233,10 @@ class GestionnaireCommunication
                                     {
                                         intValeurCase += 700;
                                     }
+									else if (lstChildNodesCase[j].firstChild.attributes.nom == "Braniac")
+                                    {
+                                        intValeurCase += 800;
+                                    }
 									else
 									{
 					    				trace("ds envoyeEvenement, le fameux else... c'est pas un de nos objet connus");
