@@ -1385,9 +1385,9 @@ class GestionnaireEvenements
 					   this.listeDesPersonnages[i].idessin = idDessin;
 					   
 					   // change back if not used perso load
-					   if(idDessin == 1)
-					      movClip = _level0.loader.contentHolder.refLayer.loadMovie("perso1.swf","b" + i);
-					   else
+					   //if(idDessin == 1)
+					     // movClip = _level0.loader.contentHolder.refLayer.loadMovie("perso1.swf","b" + i);
+					   //else
                           movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage" + idDessin,"b" + i,i);
                        _level0.loader.contentHolder["joueur"+(i+1)] = objetEvenement.listePersonnageJoueurs[i].nom;
                        //_level0.loader.contentHolder["dtCadre"+i+1]["joueur"+i]=this.listeDesPersonnages[i].nom;
@@ -2902,9 +2902,9 @@ class GestionnaireEvenements
 				this.listeDesPersonnages[i].idessin = idDessin;
 				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
             	
-				if(idDessin == 1)
-					      movClip = _level0.loader.contentHolder.refLayer.loadMovie("perso1.swf","b" + i,i);
-					   else
+				//if(idDessin == 1)
+					//      movClip = _level0.loader.contentHolder.refLayer.loadMovie("perso1.swf","b" + i,i);
+					  // else
 				movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage" + idDessin,"b" + i, 100*i );
             	movClip._x = 510-j*60;
                 movClip._y = 150 + i*60-j*240;

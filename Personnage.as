@@ -476,16 +476,16 @@ class Personnage
         };
         persoLoader.addEventListener("complete", listenerObject);
      
-  */    
+    
           
            if(nomClip == "Personnage1")
 		    this.image =  _level0.loader.contentHolder.referenceLayer.createEmptyMovieClip("Personnage" + niveau, niveau);
 			  
 		   loadMovie("perso1.swf", this.image);
 		   //trace("Control for perso : " + nomClip);
-		    
+		*/      
 		
-		if(!(role == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")&& nomClip != "Personnage1") 
+		if(!(role == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament"))//&& nomClip != "Personnage1") 
 		   this.image = _level0.loader.contentHolder.referenceLayer.attachMovie(nomClip, "Personnage" + niveau, niveau);
 		
 		
