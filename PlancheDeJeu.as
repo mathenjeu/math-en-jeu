@@ -482,7 +482,7 @@ class PlancheDeJeu
     {
         var p:Personnage;
         trace("ajouterPersonnage:" + nom + " niveau:" + (5*tableauDesCases.length*tableauDesCases[0].length+2*num) + " idPers:" + num + " idDessin:" + idClip);
-        p = new Personnage(nom, userRole, 5*tableauDesCases.length*tableauDesCases[0].length+2*num,"Personnage"+idClip,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y );
+        p = new Personnage(nom, userRole, 5*tableauDesCases.length*tableauDesCases[0].length+2*num, "Personnage"+idClip ,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y );
         p.afficher();
      	//   p.zoomer(zoom*10);
         tableauDesCases[ll][cc].ajouterPersonnage(p);
@@ -1234,6 +1234,21 @@ class PlancheDeJeu
 	   } // end bananaShell
 	   
 	   
+	}// end function
+	
+	// used to put the Braniac animation on the player  for the 90 sec.
+	function getBraniacAnimaton(playerThat:String)
+	{
+	   getPersonnageByName(playerThat).setBraniac();
+	// to resume the animation of the braniac state
+	    var intervalId4:Number;
+		intervalId4 = setInterval(endOfBraniac, 90000, playerThat);
+		function endOfBraniac(){
+		   _level0.loader.contentHolder.planche.getPersonnageByName(playerThat).getOutBraniac();
+		   clearInterval(intervalId4);
+		}
+	
 	}
+
         
 }
