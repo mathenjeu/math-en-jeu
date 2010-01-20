@@ -35,7 +35,7 @@ public class EvenementPartieDemarree extends Evenement
 	
 	private Document objDocumentXML;
 	private Element objNoeudCommande;
-        private Table table;
+    private Table table;
     
     /**
      * Constructeur de la classe EvenementPartieDemarree qui permet 
