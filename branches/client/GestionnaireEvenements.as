@@ -3099,6 +3099,7 @@ class GestionnaireEvenements
 		
     	    	
   		_level0.loader.contentHolder.miniGameLayer["magasin"].removeMovieClip();
+		_level0.loader.contentHolder["aide"].removeMovieClip();
     	_level0.loader.contentHolder["boutonFermer"].removeMovieClip();
 		_level0.loader.contentHolder["banane"].removeMovieClip();
 		_level0.loader.contentHolder["bananeUser"].removeMovieClip();
@@ -3184,6 +3185,7 @@ class GestionnaireEvenements
 			   if(this.listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur){
 			      this.listeDesPersonnages[i].pointage = objetEvenement.pointage;
 				  
+				  // to put the flag
 				  if(objetEvenement.bonus > 0)
 		          {
 			         this.listeDesPersonnages[i].win = 1;

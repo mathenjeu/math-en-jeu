@@ -372,10 +372,10 @@ class Case
 	function ajouterPersonnage(p:Personnage)
 	{
 		
-		if(p.getRole() == 1)
-		{ 
+		//if(p.getRole() == 1)
+		//{ 
 		   this.listeDesPersonnages.push(p);
-		}
+		//}
 	}
 
 
@@ -489,10 +489,10 @@ class Case
 			this.listeDesPersonnages[i].definirPosition(pt, l, c);
 			this.listeDesPersonnages[i].definirProchainePosition(pt2,"rien");  
 			
-			if( this.listeDesPersonnages[i].getRole() == 1) 
+			//if( this.listeDesPersonnages[i].getRole() == 1) 
 			   this.listeDesPersonnages[i].afficher();
 				   
-			if( this.listeDesPersonnages[i].getRole == 2)
+			//if( this.listeDesPersonnages[i].getRole == 2 &&  _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")
 			   this.listeDesPersonnages[i].cachePersonnage();
 		}
 	}
