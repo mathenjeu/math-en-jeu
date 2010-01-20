@@ -88,7 +88,7 @@ public class InformationPartie
     //private static int maxNbObj;
     
     // to not get twice bonus
-    private boolean isPlayerNotArrivedOnce;
+    private boolean wasOnFinish;
 
     // The number of cases on that user can to move. At the begining is set to 3.
 	// After for all 3 correct answers running add one unity. Not bigger than 6. 
@@ -159,7 +159,7 @@ public class InformationPartie
 	        // Créer la liste des objets utilisables qui ont été ramassés
 	        lstObjetsUtilisablesRamasses = new TreeMap<Integer, ObjetUtilisable>();
 	        
-	        isPlayerNotArrivedOnce = true;
+	        wasOnFinish = false;
 	        
 	        moveVisibility = 3;
 			//runningAnswers = 0;
@@ -886,7 +886,7 @@ public class InformationPartie
 		    gestionnaireEv = objPartieCourante.obtenirGestionnaireEvenements();
 		    objQuestion = objPartieCourante.obtenirQuestionCourante();
 		    nomJoueur = ((JoueurHumain)objJoueur).obtenirNomUtilisateur();
-		    boolWasOnFinish = objPartieCourante.isPlayerNotArrivedOnce;
+		    boolWasOnFinish = objPartieCourante.wasOnFinish;
 		    
 		    //if Banana is used on this Humain Player
 		    if(!objPartieCourante.getIsUnderBananaEffect().equals("") && intDifficulteQuestion > 1)
@@ -1095,11 +1095,11 @@ public class InformationPartie
 				 if(table.getObjSalle().getGameType().equals("Tournament")||table.getObjSalle().getGameType().equals("Course"))
 				 {
 					 int tracks = table.getObjSalle().getRegles().getNbTracks();
-					 Point  objPoint = table.getPositionPointFinish();
+					 Point  objPoint = new Point(table.getNbLines() - 1, table.getNbColumns() - 1);
 					 Point objPointFinish = new Point();
 					 
 					 // On vérifie d'abord si le joueur a atteint le WinTheGame;
-					 boolean isWinTheGame = false;
+					 boolean isOnThePointsOfFinish = false;
 				 	 
                      	 			 
 		 			 if(objJoueur instanceof JoueurHumain)
@@ -1109,15 +1109,24 @@ public class InformationPartie
 						 {
 							 objPointFinish.setLocation(objPoint.x, objPoint.y - i);
 							 if(objPositionDesiree.equals(objPointFinish))
-								 isWinTheGame = true;
+								 isOnThePointsOfFinish = true;
 						 }
 					 	 
 		 				 
-		 				 if(isWinTheGame && boolWasOnFinish )
+		 				 if(isOnThePointsOfFinish && !boolWasOnFinish && table.getObjSalle().getGameType().equals("Tournament"))
 		 				 {
-		 					 ((JoueurHumain)objJoueur).obtenirPartieCourante().isPlayerNotArrivedOnce = false;
+		 					 ((JoueurHumain)objJoueur).obtenirPartieCourante().wasOnFinish = true;
 		 					 bonus = table.obtenirTempsRestant();
 		 					 intNouveauPointage += bonus; 
+		 				 }
+		 				 else if (isOnThePointsOfFinish && !boolWasOnFinish && table.getObjSalle().getGameType().equals("Course"))
+		 				 {
+		 					((JoueurHumain)objJoueur).obtenirPartieCourante().wasOnFinish = true;
+		 					bonus = table.obtenirTempsRestant();
+		 					intNouveauPointage += bonus; 
+		 					// if all the humains is on the finish line we stop the game
+		 					if(table.isAllTheHumainsOnTheFinish((JoueurHumain)objJoueur))
+		 						 table.arreterPartie(((JoueurHumain)objJoueur).obtenirNomUtilisateur());
 		 				 }
 		 			 }
 		 			 else if (objJoueur instanceof JoueurVirtuel)
@@ -1127,10 +1136,10 @@ public class InformationPartie
 						 {
 							 objPointFinish.setLocation(objPoint.x, objPoint.y - i);
 							 if(objPositionDesiree.equals(objPointFinish))
-								 isWinTheGame = true;
+								 isOnThePointsOfFinish = true;
 						 }
 					 	 
-		 				 if(isWinTheGame && boolWasOnFinish )
+		 				 if(isOnThePointsOfFinish && boolWasOnFinish )
 		 				 {
 		 				    ((JoueurVirtuel)objJoueur).setPlayerNotArrivedOnce(false);
 		 				    bonus = table.obtenirTempsRestant();

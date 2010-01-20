@@ -1009,6 +1009,53 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		    	getObjSalle().detruireTable(this);
 		    }
 		}
+	}// end method
+	
+	/**
+	 * If all the other players than that in param is on the points of Finish line 
+	 * @param joueurHumain
+	 * @return 
+	 */
+	public boolean isAllTheHumainsOnTheFinish(JoueurHumain joueurHumain)
+	{
+		boolean isAllPlayers = true;
+		int tracks = getObjSalle().getRegles().getNbTracks();
+				
+		synchronized (lstJoueurs)
+	    {
+	    	// Pass all players to find their position
+			Iterator<JoueurHumain> iteratorJoueursHumains = lstJoueurs.values().iterator();
+			while (iteratorJoueursHumains.hasNext())
+			{
+				JoueurHumain objJoueurHumain = (JoueurHumain)iteratorJoueursHumains.next();
+				if(!(objJoueurHumain.obtenirNomUtilisateur().equals(joueurHumain.obtenirNomUtilisateur())))
+				{
+					System.out.println(objJoueurHumain.obtenirNomUtilisateur() + " nom");
+
+					Point pozJoueur = objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur();
+					System.out.println(pozJoueur + " poz");
+					Point  objPoint = new Point(getNbLines() - 1, getNbColumns() - 1);
+					Point objPointFinish = new Point();
+					boolean isOn = false;
+					for(int i = 0; i < tracks; i++ )
+					{
+						objPointFinish.setLocation(objPoint.x, objPoint.y - i);
+						System.out.println(objPointFinish  + " finish");
+						if(pozJoueur.equals(objPointFinish))
+							isOn = true;
+						System.out.println(isOn  + " bool");
+
+					}
+					if(!isOn)
+						isAllPlayers = false;
+				}
+			}
+	    }
+		
+		
+		System.out.println(isAllPlayers + " isAll");
+		return isAllPlayers;
+		
 	}
 	
 	/**
