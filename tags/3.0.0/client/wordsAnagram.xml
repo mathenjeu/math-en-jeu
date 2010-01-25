@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mots>  
+<unmot>
+  <lemot>angle</lemot>
+  <description>the figure formed by two line segments extending from a given point.</description>
+  <hint>The figure formed by two line segments extending from a given point.</hint>
+ </unmot> 
+<unmot>
+  <lemot>edge</lemot>
+  <description>the intersection of two faces of a solid.</description>
+  <hint>A polyhedron has many of those.</hint>
+ </unmot> 
+<unmot>
+  <lemot>square</lemot>
+  <description>un quadrilateral whose angles are straight and whose sides are congruent.</description>
+  <hint>A type of polygon.</hint>
+ </unmot> 
+<unmot>
+  <lemot>circle</lemot>
+  <description>a two-dimensional figure whose points are located at an equal distance of the center.</description>
+  <hint>A type of two-dimensional figure.</hint>
+ </unmot> 
+<unmot>
+  <lemot>numeral</lemot>
+  <description>a symbol used for writing numbers. The base 10 number system has 10 numerals : 0, 1, 2, 3, 4, 5, 6,  7, 8, and 9</description>
+  <hint>A symbol widely used in mathematics.</hint>
+ </unmot> 
+<unmot>
+  <lemot>cone</lemot>
+  <description>a three-dimensional figure with a circular base, and bound by a curved surface culminating into a vertex.</description>
+  <hint>Type of three-dimensional figure with a circular base.</hint>
+ </unmot> 
+<unmot>
+  <lemot>cube</lemot>
+  <description>a rectangular prism that has six squares as faces.</description>
+  <hint>A type of polyhedron.</hint> 
+ </unmot> 
+<unmot>
+  <lemot>cylinder</lemot>
+  <description>a three-dimensional figure bound by two circular congruent planes, and a curve plane.</description>
+  <hint>A three-dimensional figure.</hint>
+ </unmot> 
+<unmot>
+  <lemot>divisor</lemot>
+  <description>The second term of  a division. In the operation 18 ÷ 9 = 2, 9 is the divisor.</description>
+  <hint>An element of a division.</hint>
+ </unmot> 
+<unmot>
+  <lemot>line</lemot>
+  <description>a straight one-dimensional figure having no thickness and extending infinitely in both directions.</description>
+  <hint>This one-dimensional figure can be represented by a linear function.</hint>
+ </unmot> 
+<unmot>
+  <lemot>sample</lemot>
+  <description>a set of people chosen for being representatives of a population.</description>
+  <hint>Concept widely used in statistics.</hint>
+ </unmot> 
+<unmot>  
+  <lemot>nonagon</lemot>
+  <description>a polygon with nine sides.</description>
+  <hint>A type of polygon.</hint>
+ </unmot> 
+<unmot>
+  <lemot>factor</lemot>
+  <description>The whole numbers multiplied in a multiplication are factors. In the equation 2 x 6 = 12, 2 and 6 are factors of 12.</description>
+  <hint>The whole numbers multiplied in a multiplication are ... of the product.</hint>
+ </unmot> 
+<unmot>
+  <lemot>plot</lemot>
+  <description>a diagram that exhibits a relationship between two sets of numbers.</description>
+  <hint>A way to represent a data set.</hint>
+ </unmot>   
+<unmot>
+  <lemot>line</lemot>
+  <description>a one-dimensional geometrical figure.</description>
+  <hint>A one-dimensional geometrical figure.</hint>
+ </unmot> 
+<unmot>
+  <lemot>lozenge</lemot>
+  <description> a parallelogram that has four congruent sides.</description>
+  <hint>A type of parallelogram.</hint>
+ </unmot> 
+<unmot>
+  <lemot>mass</lemot>
+  <description>The mass of an object corresponds to his property of being more or less heavy. The mass of an object is a function of its volume, and of the kind of matter it is made of. On the other hand, the weight of an object also depends on its position relative to a gravity field (Is the object on Earth, on the Moon, at the equator, or at the north pole?) The weight is a measure of the gravitational force acting on an object.</description>  
+ </unmot> 
+<unmot>
+  <lemot>number</lemot>
+  <description> a symbol representing a quantity, a size, a position. The symbols used may be numerical(6), letters (six) or else (1111 1).</description>
+  <hint>A symbol representing a quantity, a size, or a position.</hint>
+ </unmot> 
+<unmot>
+  <lemot>pair</lemot>
+  <description>a set that contains two elements.</description>
+  <hint>A set that contains two elements.</hint>
+ </unmot> 
+<unmot>
+  <lemot>point</lemot>
+  <description>a geometrical figure without dimension.</description>
+  <hint>A geometrical figure with dimension 0.</hint>
+ </unmot> 
+<unmot>
+  <lemot>polygon</lemot>
+  <description>a closed plane figure limited by line segments.</description>
+  <hint>A closed plane figure limited by line segments.</hint>
+ </unmot> 
+<unmot>
+  <lemot>prism</lemot>
+  <description>a polyhedron limited by two parallel congruent polygons linked by parallelograms.</description>
+  <hint>A type of polyhedron.</hint>
+ </unmot> 
+<unmot>
+  <lemot>product</lemot>
+  <description>the result of a multiplication.</description>
+  <hint>The result of a multiplication.</hint>
+ </unmot> 
+<unmot>
+  <lemot>pyramid</lemot>
+  <description>a polyhedron  that has  polygon as a base, and triangles that meet at a common point as sides.</description>
+  <hint>A type of polyhedron.</hint>
+ </unmot> 
+<unmot>
+  <lemot>radius</lemot>
+  <description>the line segment between the center of a circle and any point on the circumference.</description>
+  <hint>One of the parameters that defines a circle.</hint>
+ </unmot> 
+<unmot>
+  <lemot>graph</lemot>
+  <description>a collection of points and lines connecting some of them.</description>
+  <hint>A collection of points and lines connecting some of them.</hint>
+ </unmot>
+<unmot>
+  <lemot>similar</lemot>
+  <description>two figures are similar if one is an enlarging or a reduction of the other.</description>
+  <hint>Two figures are called ... if one is an enlarging or a reduction of the other.</hint>
+ </unmot> 
+<unmot>
+  <lemot>solid</lemot>
+  <description>a three-dimensional figure.</description>
+  <hint>A three-dimensional figure.</hint>
+ </unmot> 
+<unmot>
+  <lemot>sum</lemot>
+  <description>the result of an addition.</description>
+  <hint>The result of an addition.</hint>
+ </unmot> 
+<unmot>
+  <lemot>vertex</lemot>
+  <description>the junction point of the two line segments of an angle, of two sides of a polygon, or three (or more) edges of a solid .</description>
+  <hint>An Euclidean solid has many of those.</hint>
+ </unmot> 
+<unmot>
+  <lemot>survey</lemot>
+  <description>a gathering of a sample of data.</description>
+  <hint>Concept widely used in statistics.</hint>
+ </unmot>  
+<unmot>
+  <lemot>sphere</lemot>
+  <description>a three-dimensional figure for which each point is located at an equal distance of the center.</description>
+  <hint>A type of three-dimensional figure.</hint>
+ </unmot> 
+<unmot>
+  <lemot>total</lemot>
+  <description>the result of an addition.</description>
+  <hint>The result of an addition.</hint>
+ </unmot> 
+<unmot>
+  <lemot>volume</lemot>
+  <description>Mathematically, the volume of an object is defined as the space an object occupies and represents the measure of that space. For example, the volume of a given box is 90cm3. </description>
+  <hint>This quantity is sometimes measured with liters.</hint>
+ </unmot>
+</mots>

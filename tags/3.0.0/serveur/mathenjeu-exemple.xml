@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!-- Math en jeu configuration file -->
+<configuration>
+
+    <!-- Set the URL where the music files will be accessible by the client -->
+    <musique>
+        <url>http://localhost/musique/</url>
+    </musique>
+
+    <!-- Stuff needed by the ServeurJeu.ControleurJeu class -->
+    <controleurjeu>
+
+        <synchro>
+            <!--Delay (in seconds) between each synchronisation of client's and server's timers -->
+            <step>30</step>
+        </synchro>
+        <monitoring>
+            <step>3600</step>
+        </monitoring>
+        <info>
+                <!-- Output file that contains information about the server's activity -->
+                <fichier-sortie>InfosServeur.txt</fichier-sortie>
+
+                <!-- Output is printed every * miliseconds -->
+                <delai>3000</delai>
+        </info>
+
+        <messages>
+            <!-- XML containing the server's messages -->
+            <fichierxml>messages_fr.xml</fichierxml>
+        </messages>
+
+        <!-- Set the room's info and rules here -->
+        <salles-initiales>
+            <salle>
+                <nom>Salle Newton</nom>
+                <createur></createur>
+                <mot-de-passe></mot-de-passe>
+                <gameType>mathEnJeu</gameType>
+                
+                <!-- Which languages does this room support? -->
+                <langue>
+                    <en>
+                        <nom-table-questions-BD></nom-table-questions-BD>
+                        <url-questions-reponses></url-questions-reponses>
+                        <cle-question-min></cle-question-min>
+                        <cle-question-max></cle-question-max>
+                    </en>
+                    <fr>
+                        <nom-table-questions-BD></nom-table-questions-BD>
+                        <url-questions-reponses></url-questions-reponses>
+                        <cle-question-min></cle-question-min>
+                        <cle-question-max></cle-question-max>
+                    </fr>
+                </langue>
+            </salle>
+
+            <regles>
+                <case-couleur>
+                        <priorite>2</priorite>
+                        <type>1</type>
+                </case-couleur>
+                <case-couleur>
+                        <priorite>1</priorite>
+                        <type>2</type>
+                </case-couleur>
+                <case-couleur>
+                        <priorite>3</priorite>
+                        <type>3</type>
+                </case-couleur>
+                <case-couleur>
+                        <priorite>4</priorite>
+                        <type>4</type>
+                </case-couleur>
+                <case-couleur>
+                        <priorite>5</priorite>
+                        <type>5</type>
+                </case-couleur>
+
+                <case-speciale>
+                        <priorite>1</priorite>
+                        <type>1</type>
+                </case-speciale>
+
+                <!-- List of shops -->
+		<magasin nom="Magasin1" priorite="1">
+                    <objet-a-vendre>Livre</objet-a-vendre>
+                    <objet-a-vendre>Boule</objet-a-vendre>
+		</magasin>
+		<magasin nom="Magasin2" priorite="2">
+                    <objet-a-vendre>PotionGros</objet-a-vendre>
+                    <objet-a-vendre>PotionPetit</objet-a-vendre>
+		</magasin>
+		<magasin nom="Magasin3" priorite="3">
+                    <objet-a-vendre>Banane</objet-a-vendre>
+                    <objet-a-vendre>Livre</objet-a-vendre>
+                    <objet-a-vendre>Boule</objet-a-vendre>
+		</magasin>
+
+                <!-- List of objects to be placed randomly on the board -->
+                <objet-utilisable>
+                    <priorite>1</priorite>
+                    <nom>Livre</nom>
+                </objet-utilisable>
+                <objet-utilisable>
+                    <priorite>2</priorite>
+                    <nom>Papillon</nom>
+                </objet-utilisable>
+                <objet-utilisable>
+                    <priorite>3</priorite>
+                    <nom>Boule</nom>
+                </objet-utilisable>
+                <objet-utilisable>
+                    <priorite>4</priorite>
+                    <nom>Telephone</nom>
+                </objet-utilisable>
+                <objet-utilisable>
+                    <priorite>5</priorite>
+                    <nom>PotionGros</nom>
+                </objet-utilisable>
+                <objet-utilisable>
+                    <priorite>6</priorite>
+                    <nom>PotionPetit</nom>
+                </objet-utilisable>
+                <objet-utilisable>
+                    <priorite>7</priorite>
+                    <nom>Banane</nom>
+                </objet-utilisable>
+
+                <chat>true</chat>
+                <ratio-trous>0.30f</ratio-trous>
+                <ratio-magasins>0.00f</ratio-magasins>
+                <ratio-cases-speciales>0.05f</ratio-cases-speciales>
+                <ratio-pieces>0.10f</ratio-pieces>
+                <ratio-objets-utilisables>0.05f</ratio-objets-utilisables>
+                <max-objet-en-vente-par-magasin>4</max-objet-en-vente-par-magasin>
+                <valeur-piece-maximale>25</valeur-piece-maximale>
+                <temps-minimal>10</temps-minimal>
+                <temps-maximal>60</temps-maximal>
+                <deplacement-maximal>6</deplacement-maximal>
+                <max-possession-objets-et-pieces>10</max-possession-objets-et-pieces>
+                <intervalle-deplacement-winthegame>30</intervalle-deplacement-winthegame>
+            </regles>
+        </salles-initiales>
+        
+        <!-- Set this to 'true' for more console outputs (prints some communications between
+        the server and the client), and when playing, any answer is good -->
+        <debug>false</debug>
+    </controleurjeu>
+
+    <gestionnairecommunication>
+        <!-- TCP/IP port to be used by the server-->
+        <port>6100</port>
+        <address>hostname</address>
+    </gestionnairecommunication>
+
+    <!-- Information about the database -->
+    <gestionnairebd>
+            <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+            <hote>jdbc:mysql://localhost/smac</hote>
+            <utilisateur></utilisateur>
+            <mot-de-passe></mot-de-passe>
+            <code_erreur_inactivite>08S01</code_erreur_inactivite>
+    </gestionnairebd>
+
+    <!-- Tables rules -->
+    <table>
+            <max-nb-joueurs>4</max-nb-joueurs>
+    </table>
+
+    <!-- Stuff needed by ServeurJeu.Monitoring.Monitor -->
+    <monitor>
+            <fichier-sortie>serveur_monitoring.html</fichier-sortie>
+    </monitor>
+
+    <!-- Config the A.I. players here -->
+    <joueurs-virtuels>
+        <noms>Willy/Billy/Fred/Max/Véro/Bob/Greg/Dany/Dave/John/Joe/Mike/Tod/Doum/Dan</noms>
+        <difficulte_defaut>0</difficulte_defaut>
+    </joueurs-virtuels>
+</configuration>

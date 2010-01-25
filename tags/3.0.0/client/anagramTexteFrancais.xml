@@ -1,0 +1,17 @@
+
+<?xml version="1.0" encoding="UTF-8"?> 
+<Texte 
+	consignes = "Le but du jeu est simple. Il faut réécrire le mot dans le bon ordre avant que le temps ne se soit écoulé complètement. Si tu découvres le mot, tu accumules des points et tu as la possibilité de tenter ta chance à nouveau. Mais attention si tu rates: le total de tes points accumulés dans ce jeu sera diminué de moitié."
+	
+	boutonJouer = "Débuter"
+	instruction = "I  N  S  T  R  U  C  T  I  O  N  S"
+	texteInstruction = "Écrivez votre réponse dans le rectangle"
+	pointage = "Pointage"
+	temps = "Temps"
+  indice = "Indice : " 
+	boutonMotSuivant = "Mot suivant"
+	boutonValider = "Valider"
+	boutonTerminer = "Terminer"
+	
+>
+</Texte> 
