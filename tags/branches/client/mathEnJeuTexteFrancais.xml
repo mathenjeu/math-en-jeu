@@ -1,0 +1,417 @@
+
+<?xml version="1.0" encoding="UTF-8"?> 
+<Texte 
+	
+	Messagerie = ""
+	  welcomeMess = "Bienvenue à Math en jeu!!!"
+	  bananaMess = " a lancé une Banane à "
+	  outMess = "  a quitté le jeu!"
+	  InMess = " est de retour dans le jeu!"
+	  moveMess = "Click sur une case jaune pour te déplacer."
+	main_menu = ""
+	  bienvenue = "Bienvenue dans Math en jeu "
+    btnPlay = "Jouer" 
+    btnQuit = "Quitter"
+    btnProfile = "Profil"
+    
+  page_instructions = ""
+    beginPage = "Débuter une partie"
+    rulesPage = "Règlements"
+    objectsPage = "Les objets"
+    backBtnTxt = "Retour" 
+    bookLabel = "LIVRE"
+    coinLabel = "MONNAIE"
+    shopLabel = "MAGASIN"
+    bananaLabel = "BANANE"
+    crystallLabel = "BOULE DE CRISTAL"
+    stepsTxt = "Voici les étapes à suivre pour débuter une partie :"
+    
+    bananaTxt = "  La banane te permet de jouer un tour à un de tes adversaires! Lorsque tu la lances à un adversaire, tu rends ce dernier momentanément moins habile. En effet, pendant les 90 secondes qui suive le lancé de la banane, ton adversaire aura des questions plus difficiles et 2 cases jaunes lui seront retirées!"
+    crystalTxt = "  Si tu te sens incapable de répondre à une question, utilise la boule de cristal. Tu recevras alors une question différente et plus facile!"
+    bookTxt = "  Le livre élimine un mauvais choix de réponse lors d'une question à choix multiples."
+    shopTxt = "Tu peux y échanger tes pièces contre des objets."
+    coinTxt = "Les pièces que tu trouves sur la planche de jeu te permettent d'acheter des objets."
+        
+  chargement_beta_local = ""	
+
+		version = "Version 2.5"
+		boutonEntrer = "Entrer"
+		barLabel = "Chargement en cours..."
+
+  moduleProf = ""
+    teacherFrame1 = "Coin des Professeurs
+    Chargement de la liste des salles..."
+    boutonNewRoom = "Créer"
+    teacherExploreFrame1 = "Explorer"
+    roomNameLabel = "Nom"
+    roomDescLabel = "Description"
+	  roomPassLabel = "Mot de Passe"
+	  roomBDateLabel = "Date d'ouverture"
+	  roomBTimeLabel = "Heure d'ouverture"
+	  roomEDateLabel = "Date de fermeture"
+	  roomETimeLabel = "Heure de fermeture"
+	  createRoomText = "Créer"
+	  roomListLabel  = "LISTE DES SALLES"
+	  roomReportLabel = "RAPPORT"
+	  roomReportText = "Rapport"
+	  editRoomText = "Éditer"
+	  saveReportText = "Sauvegarder"
+	  printReportText = "Imprimer"
+	  reportTextChange = "Sélectionnez une salle pour voir le rapport..."
+	  roomTimeLabel = "Temps des parties"
+	  All = "Toutes"
+	  AllLevels = "Niveaux"
+	  
+	  Subject0 = " Général"
+	     categorie00 = "non-classée" 
+	  Subject1 = " Algèbre"
+	     categorie10 = "générale"
+	     categorie11 = "concepts"
+	     categorie12 = "manipulations algébriques"
+	     categorie13 = "systèmes d'équations"
+	     categorie14 = "modélisation de situation"
+	  Subject2 = " Arithmétique"
+	     categorie20 = "générale"
+	     categorie21 = "nombre naturels"
+	     categorie22 = "fractions, nombres décimaux et pourcentage"
+	     categorie23 = "nombres entiers"
+	     categorie24 = "nombres réels (rationnels et irrationnels)"
+	     categorie25 = "proportions"
+	     categorie26 = "puissances, radicaux et des logarithmes"
+	  Subject3 = " Énigmes de logique"
+	     categorie30	= "générale"  
+	  Subject4 = " Functions"
+	     categorie40 = "générale"
+	     categorie41 = "concepts"
+	     categorie42 = "fonction polynômiale de degré 0,1 ou 2"
+	     categorie43 = "fonction valeur absolue"
+	     categorie44 = "fonction rationnelle"
+	     categorie45 = "fonction définie par parties"
+	     categorie46 = "fonction parties entières"
+	     categorie47 = "fonction périodique (sinus, cosinus, tangente)"
+	     categorie48 = "fonction exponentielle et logarithmique"
+	  Subject5 = " Géométrie"
+	     categorie50 = "générale"
+	     categorie51 = "longueur, périmètre et circonférance"
+	     categorie52 = "aire"
+	     categorie53 = "angles"
+	     categorie54 = "triangles"
+	     categorie55 = "quadrilatères"
+	     categorie56 = "solides (aire latérale et volume)"
+	     categorie57 = "espaces (projections)"
+	     categorie58 = "loi de Héron" 
+	     categorie59 = "théorème de Pythagore"
+	     categorie510 = "frises et dallages"
+	     categorie511 = "transformations géométriques"
+	     categorie512 = "coniques"
+	     categorie513 = "distance et point de partage"
+	     categorie514 = "conversion (capacité, temps, etc.)"
+	  Subject6 = " Histoire des mathématiques"
+	     categorie60 = "générale"
+	     categorie61 = "algèbre"
+	     categorie62 = "arithmétique"
+	     categorie63 = "fonctions"
+	     categorie64 = "géométrie"
+	     categorie65 = "probabilité"
+	     categorie66 = "statistique"
+	  Subject7 = " Probabilité"
+	     categorie70 = "générale"
+	     categorie71 = "concepts"
+	     categorie72 = "dénombrement"
+	     categorie73 = "calcul de probabilité"
+	     categorie74 = "espérance mathématique et équité"
+	     categorie75 = "chance"
+	  Subject8 = " Statistique"
+	     categorie80 = "concepts"
+	     categorie81 = "diagrammes et tableaux"
+	     categorie82 = "mesure de tendance centrale"
+	     categorie83 = "mesure de dispersion"
+	     categorie84 = "mesure de position"
+	     categorie85 = "corrélation"
+	  Subject9 = " Accromath"
+	     categorie90 = "volume 1, été-automne 2006"
+	     categorie91 = "volume 2, hiver-printemps 2007"
+	     categorie92 = "volume 3, été-automne 2007"
+	     categorie93 = "volume 4, hiver-printemps 2008"
+	     categorie94 = "volume 5, été-automne 2008"
+	  
+	  
+  mathemaQuoi_betaNEW = ""  
+    errorPWD = "Mauvais mot de passe! Réessayez ou faites un autre choix! "
+	  pwdAlert = "Erreur!"
+	  textGUI_PWD = "Cette salle requiert un mot de passe..."
+	  errorSelect = "Sélectionnez une salle"
+	  nomAlert = "Donnez un nom SVP!"
+	  descAlert = "Donnez une description SVP!"
+	  dateBeginAlert = "Date d'ouverture invalide"
+	  dateEndAlert = "Date de fermeture invalide"
+	  passAlert = "Protéger votre salle par un mot de passe permet de contrôler l’accéder à celle-ci et assure que seulement vos élèves peuvent y accéder. Cela permet aussi de n'avoir que leurs résultats dans vos rapports."
+	  
+	  buttonNew = "Nouvelle"
+	  buttonOld = "Rejoindre"
+	  restartText = "Vous êtes déjà assigné à une partie en cours. Voulez vous rejoindre la partie en cours ou désirez-vous en recommencer une nouvelle? "
+	  buttonBug = " Signaler une erreur "
+	  userText = "Joueur : "
+	  buttonSend = "Envoyer"
+	  buttonBack = "Annuler"
+	  
+	  bugReportMess = "L'erreur a été envoyée avec succès. Merci!"
+	  pointsMessage = "Points bonus pour franchir la ligne d'arrivée"
+  
+    
+	
+	mathemaQuoi_beta = ""
+	
+		frame1 = ""
+		
+			descriptionPrincipale = "C'est le coeur de Math en Jeu. Une immense banque de questions se penchant sur tous les domaines des mathématiques."
+			
+			descriptionAccromath = "Questions plus avancées en lien avec les multiples sujets traités dans la revue Accromath."
+			
+			descriptionDefault = "La banque de questions a été créée par une personne ou un groupe indépendant de l'équipe de Math en Jeu."
+			
+			salle = "Choisissez une salle."
+      chargementSalles = "Chargement de la liste des salles en cours" 
+			boutonRetour = "Retour"
+			boutonContinuer = "Continuer"
+			boutonQuitterX = "Quitter la partie.."
+			tableNameLabel = "Nom de la Table"
+			tableLinesLabel = "Lignes"
+			tableColumnsLabel = "Colognes"
+			tableOptionalLabel = "*Optionnel"
+			playersListe = " - Liste des joueurs - "
+			
+			explication = "Le mode avancé permet au joueur plus expérimenté de sélectionner uniquement les catégories de questions qu'il désire. Il peut ainsi personnaliser son expérience de jeu en choisissant son niveau pour chaque thème mathématique présent dans le jeu."
+			
+			pasQuestion = "Pas de question"
+			primaire1 = "Primaire 1"
+			primaire2 = "Primaire 2"
+			primaire3 = "Primaire 3"
+			primaire4 = "Primaire 4"
+			primaire5 = "Primaire 5"
+			primaire6 = "Primaire 6"
+			secondaire1 = "Secondaire 1"
+			secondaire2 = "Secondaire 2"
+			secondaire3 = "Secondaire 3"
+			secondaire4_CST = "Secondaire 4-Culture"
+			secondaire4_TS = "Secondaire 4-Soc. et Technique"
+			secondaire4_SN = "Secondaire 4-Sc. Naturelles"
+			secondaire5_CST = "Secondaire 5-Culture"
+			secondaire5_TS = "Secondaire 5-Soc. et Technique"
+			secondaire5_SN = "Secondaire 5-Sc. Naturelles"
+			
+			algebre = "Algèbre"
+				conceptsAlgebre = "Concepts"
+				manipulation = "Manipulations algébriques"
+				systemesEquations = "Systèmes d'équations"
+				modelisation = "Modélisation de situations"
+			
+			arithmetique = "Arithmétique"
+				nombresNaturels = "Nombres naturels"
+				fractionsDecimauxPourcentage = "Fractions, décimaux et pourcentage"
+				nombresEntiers = "Nombres entiers"	
+				nombresReels = "Nombres réels"
+				proportions = "Proportions"
+				puissancesRadicauxLogarithmes = "Puissances, radicaux et logarithmes"
+				
+			fonctions = "Fonctions"
+				conceptsFonctions = "Concepts"
+				polynomiale012 = "Polynomiale de degre 0, 1 ou 2"
+				valeurAbsolue = "Valeur absolue"
+				rationnelle = "Rationnelle"
+				parParties = "Définie par parties"
+				partieEntiere = "Partie entière"
+				periodique = "Périodique"
+				exponentielleLogarithmique = "Exponentielle et logarithmique"
+				
+			
+			geometrie = "Géométrie"
+				geometriePlane = "Géométrie plane"
+				geometrie3D = "Géométrie 3D"
+				transformations = "Transformations"
+				distancePointDePartage = "Distance et point de partage"
+								
+			
+			probabilites = "Probabilités"
+				conceptsProbabilites = "Concepts"
+				denombrement = "Dénombrement"
+				calculProbabilite = "Calcul de probabilité"
+				esperanceEquite = "Espérance mathématique et équité"
+				chance = "Chance"
+							
+			statistiques = "Statistiques"
+				conceptsStatistiques = "Concepts"
+				diagrammesTableaux = "Diagrammes et tableaux"
+				mesureTendanceCentrale = "Mesure de tendance centrale"
+				mesureDispersion = "Mesure de dispersion"
+				mesurePosition = "Mesure de position"
+				correlation = "Corrélation"					
+				
+			logique = "Énigmes de logique"
+			
+			histoire = "Histoire des maths"
+			
+			accromath = "Accromath"
+	
+	
+		frame2 = ""
+
+			texteTables = "Choisissez une table ouverte dans la salle"
+      chargementTables = "Chargement de la liste des tables en cours" 
+      aucuneTable = "Il n'y a aucune table ouverte dans cette salle" 
+			btnCreerTable = "Nouvelle table"
+			choixTable = "ou attendez qu'une table soit crée .."
+			choixTemps = "Choisissez la durée de la partie que vous désirez jouer."
+			sallesOuvertes = "Salles ouvertes"
+			tablesOuvertes = "Tables ouvertes"
+
+			GUITemps = "Choisissez le temps de la partie que vous désirez jouer (en minutes) :"
+	
+		frame3 = ""
+
+			noTable = "Numéro de la table :"	
+			numSalle = " "
+			temps = "Temps :"
+			timeLabel = "Temps"
+			
+			choixPerso = "Choisissez votre personnage."
+
+			nonDisponible = "Non disponible"
+
+			inconnu = "Inconnu"
+			demarrerMaintenant = "Démarrer maintenant"
+			attente = "En attente des autres joueurs ..."
+
+			difficulte = "Difficulté"
+			
+			choixNiveau = "Ne pas attendre d'autres joueurs!
+                        Démarrer la partie!"
+			niveauFacile = "Facile"
+			niveauInt = "Intermédiaire"
+			niveauDiff = "Difficile"
+			niveauTrDiff = "Très difficile"
+
+			joueur = "Joueur"
+	
+	
+		frame4 = ""
+
+			sonsLabel = "Sons"
+			musiqueLabel = "Musique"
+
+			texteMauvaiseReponse = "Mauvaise réponse!"
+			punitionTexte = "Temps restant à votre pénalité:"
+			penalite = "Pénalité:"
+			secondes = "secondes"
+			reponse = "Réponse:"
+			vrai = "vrai"
+			faux = "faux"
+			pointage = "Pointages"
+			objet = "Objets"
+
+		
+		frame5 = ""
+
+			btn_rejouer = "Rejouer"
+			btn_retourSite = "Retour à Math en Jeu"
+			btn_quitter = "Quitter"
+			joueurs = "Joueurs"
+			pointage = "Pointages"
+			resultat = "Résultats"
+
+
+		autre = ""
+
+
+			GUIdejaConnecte = "Cet utilisateur est déjà connecté. Veuillez fermer la fenêtre et recommencer avec un autre nom d'utilisateur!!!"
+			GUIhorsService = "Le serveur ne répond pas. Veuillez vérifier votre connexion et recommencer. Si le problème persiste, veuillez s'il-vous-plaît cliquer sur le lien suivant afin d'exécuter un test de connexion. Faites ensuite parvenir les résultats de ce test à l'équipe technique de SMAC. Nous sommes sincèrement désolés que vous éprouviez de telles difficultés."
+			GUIhorsService2 = "Test de Connexion"
+			GUIhorsServiceURL = "http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_16466&sliceId=1"
+
+			GUIerreurQuestion = "Math en jeu est incapable de télécharger la question. S'il-vous-plait veillez vérifier votre connexion internet. Si le problème persiste, communiquez avec l'équipe technique de SMAC. Nous sommes sincèrement désolé que vous éprouviez de telles difficultés."
+			GUIerreurRetroaction = "Math en jeu est incapable de télécharger la rétroaction. S'il-vous-plait veillez vérifier votre connexion internet. Si le problème persiste, communiquez avec l'équipe technique de SMAC. Nous sommes sincèrement désolé que vous éprouviez de telles difficultés."	
+			
+			GUIbanane = "vous a lancé une banane.
+Pour les prochaines 90 secondes, les questions qui vous seront posées seront plus difficiles. Aussi, vos déplacements possibles ont été réduits de 2 pas."
+			
+			GUIbananeUser = "Vous avez utilisé une banane."
+			
+
+			GUIutiliserLivre = "Voulez-vous vraiment utiliser le livre?"
+			
+			btnOui = "OUI"
+
+			btnNon = "NON"
+
+			deconnecte = "déconnecté"
+
+	
+	
+	
+		menuAide = "Menu d'aide"
+		
+			aideQuitter = "Fermer"
+			nomCasesSpeciales  = " Magasin           Pièce            Case '?' "
+			nomCasesSpeciales2 = "        Pièce                          Case '?' "			
+			nomObjets 		   = " Banane                 Livre            Boule de cristal"
+			salleListe = "Avant de jouer"
+			salleTitre = "1. Préparer la partie"
+			salleTexte = "•  Sur le menu principal, clique sur le bouton Jouer.
+•  Choisis une salle où jouer. Par exemple, tu peux choisir la salle Newton. Clique sur le nom de la salle et clique ensuite sur Continuer.
+•  S'il y a une table ouverte et que tu veux jouer avec ces personnes, clique sur cette table. Clique ensuite sur Continuer. Sinon, clique sur Créer une nouvelle table et entre un nombre de minutes pour jouer.
+•  En cliquant sur les flèches qui pointent vers la gauche et la droite, sélectionne ton personnage. Clique sur OK.
+•  Le niveau choisi n'affecte pas la difficulté des questions. Il modifie la capacité des joueurs virtuels à bien répondre aux questions. Clique sur le niveau de ton choix et clique ensuite sur Continuer."
+		
+			elementsJeuListe = "Jeu"
+			elementsJeuTitre = "2. Éléments du jeu"
+			elementsJeuTexte = "Règles de base:			
+•  Sur la planche de jeu, votre personnage apparaîtra plus gros que celui des autres joueurs.
+•  Ton personnage peut se déplacer dans 4 directions. Les cases accessibles sont d'une couleur différentes des autres et apparaissent en jaune.
+•  Ton personnage peut se déplacer de 1 à 6 cases à la fois. Plus le déplacement est grand, plus la question est difficile, mais toujours adaptée au niveau académique choisi lors de l'enregistrement du profile.
+•  Le nombre de points attribués à une bonne réponse dépend de la longueur d'un déplacement. Un déplacement d'une case vaut 3 points, un déplacement de deux cases vaut 5 points et ainsi de suite.
+•  Si tu te rends sur une case contenant un point d'interrogation, tu cours la chance de remporter encore plus de points.
+•  Le gagnant est le joueur qui a le plus de points."
+			
+			objetsListe = "Objets"
+			objetsTitre = "3. Les objets"
+			objetsTexte = "Les objets que tu peux acheter ou trouver sont:
+
+La banane
+•La banane te permet de jouer un tour à un des joueurs ! 
+
+Le livre
+•Le livre élimine un mauvais choix de réponse lors d'une question à choix multiples. Le nombre de choix possible passe alors de quatre à trois.
+
+La boule de cristal
+•Si tu te sens incapable de répondre à une question, utilise la boule de cristal. Tu recevras alors une question différente."
+						
+			casesSpecialesListe = "Cases spéciales"
+			casesSpecialesTitre = "4. Les cases spéciales"
+			casesSpecialesTexte = "Il y a 3 cases spéciales dans le jeu:
+    
+Les pièces
+•Les pièces que tu trouves sur la planche de jeu te permettent d'acheter des objets.
+ 
+Les magasins
+•Tu peux y échanger tes pièces contre des objets.
+
+Case ?
+•Quelque chose de spécial survient lorsque tu tombes sur cette case..."
+
+			
+			optionsListe = "Options"
+			optionsTitre = "5. Les options"
+			optionsTexte = "Tu peux changer les configurations suivantes de ton écran de jeu:
+
+
+Activer ou de désactiver les effets sonores durant la partie...
+
+Activer ou de désactiver la musique durant la partie...
+
+Déplacer l'écran de jeu dans la direction de ton choix...
+
+S'approcher ou s'éloigner de la planche de jeu."
+			
+			
+>
+</Texte> 

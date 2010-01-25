@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="UTF-8"?> 
+<Texte 
+	
+	titre = "Jeu de mémoire"
+	instructions = "Pour gagner des points dans ce jeu, vous devez associer les symboles grecs à leurs noms français. Faites vite, vous n'avez que 60 secondes!"
+	jouer = "Jouer!"	
+
+ 	pointage = "Pointage : "
+	niveau = "Niveau : "
+	temps = "Temps : "
+
+	alpha = "alpha"
+	beta = "bêta"
+	gamma = "gamma"
+	delta = "delta"
+	epsilon = "epsilon"
+
+	zeta = "zêta"
+	eta = "êta"
+	theta = "thêta"
+	iota = "iota"
+	kappa = "kappa"
+
+	lambda = "lambda"
+	mu = "mu"
+	nu = "nu"
+	xi = "xi"
+	omicron = "omicron"
+
+	pi = "pi"
+	rho = "rhô"
+	sigma = "sigma"
+	tau = "tau"
+	upsilon = "upsilon"
+
+	phi = "phi"
+	khi = "khi"
+	psi = "psi"
+	omega = "oméga"
+
+	finVictoire = "Félicitations! Vous êtes passé à travers l'alphabet grec en moins de 60 secondes. Vous vous méritez 100 points!"
+	finTemps = "Le temps est écoulé! Vous avez accumulé "
+	quitter = "Quitter"
+
+>
+</Texte> 

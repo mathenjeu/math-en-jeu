@@ -1,0 +1,417 @@
+
+<?xml version="1.0" encoding="UTF-8"?> 
+<Texte 
+	Messagerie = ""
+	  welcomeMess = "Welcome to Math Amaze!!!"
+	  bananaMess = " threw a Banana at "
+	  outMess = " left the game!"
+	  InMess = " is in again!"
+	  moveMess = "To move - click on a yellow sqare!"
+  main_menu = ""
+	  bienvenue = "Welcome to MathAmaze "
+    btnPlay = "Play"
+    btnQuit = "Quit"
+    btnProfile = "Profile"
+    
+  page_instructions = ""
+    beginPage = "Start a game"
+    rulesPage = "Rules"
+    objectsPage = "Objects"
+    backBtnTxt = "Back"
+    bookLabel = "BOOK"
+    coinLabel = "COIN"
+    shopLabel = "SHOP"
+    bananaLabel = "BANANA"
+    crystallLabel = "CRYSTAL BALL"
+    stepsTxt = "Here are the steps to follow in order to start a game :"
+    
+    bananaTxt = "  The banana allows you to play a wicked trick on another player! When you throw it to an opponent, you make this opponent momentarily less good. Indeed, for the next 90 secondes after a banana toss, the questions asked to your opponent will be more difficult and (s)he will loose 2 yellow squares!"
+    bookTxt = "  The book eliminates an answer choice for you on a multiple choice question."
+    crystalTxt = "  If you feel unable to answer a question, you may use the crystal ball. The computer will then give you a new and easier question."
+    
+    shopTxt = "  It is here that you can spend your coins!"
+    coinTxt = "  The coins you pick up on your way allow you to buy objects."
+	
+	chargement_beta_local = ""	
+
+		version = "Version 2.5"
+		boutonEntrer = "Enter"
+		barLabel = "Loading ..."
+
+  moduleProf = ""
+	  teacherFrame1 = "Teachers Section
+    Charging the list of rooms..." 
+	  boutonNewRoom = "New"
+	  teacherExploreFrame1 = "Explore"
+	  roomNameLabel = "Name"
+	  roomDescLabel = "Description"
+	  roomPassLabel = "Password"
+	  roomBDateLabel = "Opening date"
+	  roomBTimeLabel = "Opening time"
+	  roomEDateLabel = "Closing date"
+	  roomETimeLabel = "Closing time"
+	  createRoomText = "Create"
+	  roomListLabel  = "ROOMS LIST"
+	  roomReportLabel = "REPORT"
+	  roomReportText = "Report"
+	  editRoomText = "Edit"
+	  saveReportText = "Save"
+	  printReportText = "Print"
+	  reportTextChange = "Select a room to see a report..."
+	  roomTimeLabel = "Game duration"
+	  All = "All"
+	  AllLevels = "Levels"
+	  
+	  Subject0 = " General"
+	     categorie00 = "unclassified" 
+	  Subject1 = " Algebra"
+	     categorie10 = "general"
+	     categorie11 = "concepts"
+	     categorie12 = "algebraic manipulations"
+	     categorie13 = "systems of equations"
+	     categorie14 = "problem modelling"
+	  Subject2 = " Arithmetic"
+	     categorie20 = "general"
+	     categorie21 = "natural numbers"
+	     categorie22 = "fractions, decimal numbers, and percentages"
+	     categorie23 = "integers"
+	     categorie24 = "real numbers (rationals and irrationals)"
+	     categorie25 = "proportions"
+	     categorie26 = "powers, roots, and logarithms"
+	  Subject3 = " Enigmas of logic"
+	     categorie30 = "general"
+	  Subject4 = " Functions"
+	     categorie40 = "general"
+	     categorie41 = "concepts"
+	     categorie42 = "polynomials of degree 0, 1, or 2" 
+	     categorie43 = "absolute value function"
+	     categorie44 = "rational functions"
+	     categorie45 = "functions defined by parts"
+	     categorie46 = "greatest integer function (floor function)"
+	     categorie47 = "periodic functions (sine,cosine, tangent)"
+	     categorie48 = "exponential and logarithmic functions"
+	  Subject5 = " Geometry"
+	     categorie50 = "general"
+	     categorie51 = "length, perimeter, and circumference"
+	     categorie52 = "area"
+	     categorie53 = "angles"
+	     categorie54 = "triangles"
+	     categorie55 = "quadrilaterals"
+	     categorie56 = "three-dimensional figures (surface area and volume)"
+	     categorie57 = "spaces (projections)"
+	     categorie58 = "Heron's formula"
+	     categorie59 = "pythagorean formula"
+	     categorie510 = "freizes and grids"
+	     categorie511 = "geometrical transformations"
+	     categorie512 = "conic sections"
+	     categorie513 = "distances and midpoints"
+	     categorie514 = "unit conversions (capacities, time, ect.)"
+	  Subject6 = " History of mathematics"
+	     categorie60 = "general"
+	     categorie61 = "algebra"
+	     categorie62 = "arithmetic"
+	     categorie63 = "functions"
+	     categorie64 = "geometry"
+	     categorie65 = "probability"
+	     categorie66 = "statistic"
+	  Subject7 = " Probability"
+	     categorie70 = "general"
+	     categorie71 = "concepts"
+	     categorie72 = "counting"
+	     categorie73 = "probability calculations"
+	     categorie74 = "expected values and equity"
+	     categorie75 = "chance"
+	  Subject8 = " Statistic"
+	     categorie80 = "concepts"
+	     categorie81 = "diagrams and tables"
+	     categorie82 = "measures of central tendency"
+	     categorie83 = "measures of variation (standard deviation, variance, ...)"
+	     categorie84 = "measures of position"
+	     categorie85 = "correlation"
+	  Subject9 = " Accromath"
+	     categorie90 = "volume 1, summer-fall 2006"
+	     categorie91 = "volume 2, winter-spring 2007"
+	     categorie92 = "volume 3, summer-fall 2007"
+	     categorie93 = "volume 4, winter-spring 2008"
+	     categorie94 = "volume 5, summer-fall 2008"
+	  
+	  
+	mathemaQuoi_betaNEW = ""
+	  errorPWD = "Wrong password! Try again or choose another room!"
+    pwdAlert = "Error!"
+    textGUI_PWD = "You need a password to enter this room..."  
+	  errorSelect = "Select a room first!"
+	  nomAlert = "Give a name to the room!"
+	  descAlert = "Short description please!"
+	  dateBeginAlert = "Opening date is invalid!"
+	  dateEndAlert = "Closing date is invalid!"
+	  passAlert = "Password protecting your room ensure that only your pupils can the access it. Accordingly the report will contain only their game results."
+	  
+	  buttonNew = "New Game"
+	  buttonOld = "Restart"
+	  restartText = "You are already assigned to a running game. Do you want to rejoin it or start a new game?"
+	  buttonBug = " Report an error "
+	  userText = "Player :"
+	  buttonSend = "Send"
+	  buttonBack = "Cancel"
+	  
+	  bugReportMess = "The error was successfully reported. Thanks!"
+	  pointsMessage = "Bonus Points to reach the finish line"
+	  
+  mathemaQuoi_beta = ""
+	
+		frame1 = ""
+			
+			descriptionPrincipale = "It's the heart of Math en Jeu. There is a huge questions library for each of the specific mathematic domains."
+			
+			descriptionAccromath = "More advanced questions related to the various subjets presented in the Accromath's magazine."
+			
+			descriptionDefault = "This questions libray has been created by a person or a group not affiliated with the Math en Jeu's team."
+			
+			salle = "Choose a room."
+      chargementSalles = "Room list is loading..." 
+			boutonRetour = "Back"
+			boutonContinuer = "Continue"
+			boutonQuitterX = "Quit the game.."
+			tableNameLabel = "Table name"
+			tableLinesLabel = "Lines"
+			tableColumnsLabel = "Columns"
+			tableOptionalLabel = "*Optional"
+			playersListe = " - Liste of players - "
+			
+			
+	
+			explication = "The advanced mode allows for the more experienced player to select his level among the various mathematical categories of the game. If desired, he can personnalize his gaming experience by choosing only the subjects he is interested in."
+			
+			pasQuestion = "No question"
+			primaire1 = "Primary 1"
+			primaire2 = "Primary 2"
+			primaire3 = "Primary 3"
+			primaire4 = "Primary 4"
+			primaire5 = "Primary 5"
+			primaire6 = "Primary 6"
+			secondaire1 = "High school 1"
+			secondaire2 = "High school 2"
+			secondaire3 = "High school 3"
+			secondaire4_CST = "High school 4 - Culture"
+			secondaire4_TS = "High school 4 - Society and Tech"
+			secondaire4_SN = "High school 4 - Natural Sc."
+			secondaire5_CST = "High school 5 - Culture"
+			secondaire5_TS = "High school 5 - Society and Tech"
+			secondaire5_SN = "High school 5 - Natural Sc."
+			
+			
+			algebre = "Algebra"
+				conceptsAlgebre = "Concepts"
+				manipulation = "Algebraic manipulations"
+				systemesEquations = "Systems of equations"
+				modelisation = "Problem modelling"
+			
+			arithmetique = "Arithmetics"
+				nombresNaturels = "Natural numbers"
+				fractionsDecimauxPourcentage = "Fractions, decimal numbers, and percentages"
+				nombresEntiers = "Integers"	
+				nombresReels = "Real numbers"
+				proportions = "Proportions"
+				puissancesRadicauxLogarithmes = "Powers, roots, and logarithms"
+				
+			fonctions = "Functions"
+				conceptsFonctions = "Concepts"
+				polynomiale012 = "Polynomials of degree 0, 1, and 2"
+				valeurAbsolue = "Absolute value functions"
+				rationnelle = "Rational functions"
+				parParties = "Functions defined by parts"
+				partieEntiere = "Greatest integer function"
+				periodique = "Periodic functions"
+				exponentielleLogarithmique = "Exponential and logarithmic"
+				
+			
+			geometrie = "Geometry"
+				geometriePlane = "Plane geometry"
+				geometrie3D = "3D geometry"
+				transformations = "Transformations"
+				distancePointDePartage = "Distances and midpoints"
+				
+			
+			probabilites = "Probabilities"
+				conceptsProbabilites = "Concepts"
+				denombrement = "Counting"
+				calculProbabilite = "Probability calculations"
+				esperanceEquite = "Expected values and equity"
+				chance = "Chance"
+							
+			statistiques = "Statistics"
+				conceptsStatistiques = "Concepts"
+				diagrammesTableaux = "Diagrams et tables"
+				mesureTendanceCentrale = "Measures of central tendency"
+				mesureDispersion = "Measures of variation"
+				mesurePosition = "Measures of position"
+				correlation = "Correlation"									
+							
+			logique = "Logic enigmas"
+			
+			histoire = "History of maths"
+			
+			accromath = "Accromath"
+	
+		frame2 = ""
+
+			texteTables = "Choose an open table in the room : "	
+      chargementTables = "Table list is loading..." 
+      aucuneTable = "There's no open table in this room"
+			btnCreerTable = "New table"
+			choixTable = "or wait to be opened one"
+			choixTemps = "Choose the duration of the game you wish to play."
+			sallesOuvertes = "Open rooms"
+			tablesOuvertes = "Open tables"
+
+			GUITemps = "How long would you like to play (in minutes) :"
+	
+		frame3 = ""
+
+			noTable = "Table number :"	
+			numSalle = " "
+			temps = "Time :"
+			timeLabel = "Select the time"
+
+			choixPerso = "Choose your character."
+			nonDisponible = "Unavailable"
+			inconnu = "Unknown"
+			demarrerMaintenant = "Start now"
+			attente = "Waiting for other players ..."
+
+			difficulte = "Difficulty"
+
+			choixNiveau = "Don't wait for other players!
+                         Start the game!"
+			niveauFacile = "Easy"
+			niveauInt = "Intermediate"
+			niveauDiff = "Difficult"
+			niveauTrDiff = "Very Difficult"
+
+			joueur = "Player"
+
+		frame4 = ""
+
+			sonsLabel = "Sounds"
+			musiqueLabel = "Music"
+
+			texteMauvaiseReponse = "Incorrect!!!"
+			punitionTexte = "Time left to your penalty:"
+			penalite = "Penalty :"
+			secondes = "seconds"
+			reponse = "Answer:"
+			vrai = "true"
+			faux = "false"
+			pointage = "Scores"
+			objet = "Objects"
+		
+
+	
+		frame5 = ""
+
+			btn_rejouer = "Play again"
+			btn_retourSite = "Return to Math en Jeu"
+			btn_quitter = "Quit"
+			joueurs = "Players"
+			pointage = "Score"
+			resultat = "Results"
+			
+
+
+		autre = ""
+
+			GUIdejaConnecte = "This user is already connected. Close this window and start again with another user!!!"
+			GUIhorsService = "The server does not answer. Check you connection and start again. If the problem persist, please click on the following link to perform a connection test and then send the result to the SMAC technical team. We are sincerely sorry that you are experimenting this problem."
+			GUIhorsService2 = "Connection Test"
+			GUIhorsServiceURL = "http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_16466&sliceId=1"
+			
+			
+			GUIerreurQuestion = "Math en jeu is unable to load the question. Please check your internet connection or communicate with the SMAC technical team. We are sincerely sorry that you are experimenting this problem."
+			GUIerreurRetroaction = "Math en jeu is unable to load the retroaction. Please check your internet connection or communicate with the SMAC technical team. We are sincerely sorry that you are experimenting this problem."
+
+
+			GUIbanane = "just threw a banana at you.
+For the next 90 seconds, the questions you'll be asked will be more difficult. Also, your allowed movements have been diminished by 2 steps."	
+			
+			GUIbananeUser = "You used a banana."
+
+			GUIutiliserLivre = "Do you really want to use the book?"
+			
+			btnOui = "YES"
+
+			btnNon = "NO"
+
+			deconnecte = "disconnected"
+
+
+
+
+
+		menuAide = "Help menu"
+		
+			aideQuitter = "Close"
+			nomCasesSpeciales  = "  Store              Coin             '?' Cell"
+			nomCasesSpeciales2 = "                                      '?' Cell"
+			nomObjets 		   = " Banana               Book            Crystal ball"
+			salleListe = "Before playing"
+			salleTitre = "1. Setting the game"
+			salleTexte = "•  In the main menu choose Play button.
+•  Choose a room to play in. For example, you can choose the Newton room. Click on the room’s name and then click on Continue.
+•  If there is a table open and you want to play with these people, click on this table. Then click on Continue. Otherwise, click on “Create a new table” and choose how many minutes you want to play.
+•  By clicking on the left or on the right-pointing arrow, choose you character. Click on Continue.
+•  The level you choose will not affect the difficulty of your questions. It modifies the capacity of the virtual opponents to answer the quesions. Click on the level you want and then click on Continue."
+		
+			elementsJeuListe = "Game"
+			elementsJeuTitre = "2. Elements of the game"
+			elementsJeuTexte = "Basic rules:
+			
+•  On the game board, you character appears bigger than the other player’s.
+•  You character can move in four directions. To the front, to the back, to the left, and to the right the same line. The accessible cells appear in yellow.
+•  Your character can move between one and six cells at once. The bigger the displacement, the harder the question, relative to the academic level on your registration.
+•  The number of points a question is worth depends on the length of the displacement. A one cell displacement is worth three point, a two cells displacement is worth five points, and so on.
+•  The cells with a question mark bring you to a game if the question is answered correctly. The points won in that game will be added to your score.
+•  The winner is the player with the most points."
+			
+			objetsListe = "Objects"
+			objetsTitre = "3. The objects"
+			objetsTexte = "The objects you can buy or find are:
+
+The banana
+•The banana allows you to play a wicked trick on another player! 
+
+The book
+•The book eliminates an answer choice for you on a multiple choice question. The number of choices then decreases from four to three.
+     
+The crystal ball
+•If you feel unable to answer a question, you may use the crystal ball. The computer will then give you a new question."
+						
+			casesSpecialesListe = "   Special cells"
+			casesSpecialesTitre = "4. The special cells"
+			casesSpecialesTexte = "There are 3 special cells in the game:
+   
+The coins
+•The coins you pick up on your way allow you to buy objects (they cost one coin each).
+ 
+The shops
+•It is here that you can spend your coins!
+
+Cell ?
+•Something special happens when you step on this cell..."
+			
+			optionsListe = "Options"
+			optionsTitre = "5. The options"
+			optionsTexte = "You can change different settings of the game:
+
+Activate or deactivate sound effects...
+
+Activate or deactivate music...
+
+Move the screen in the direction of you choice to explore the board...
+
+Zoom in or zoom out from the board..."
+
+
+
+>
+</Texte>  
