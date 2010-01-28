@@ -800,7 +800,7 @@ class QuestionController extends Zend_Controller_Action {
                 //The answer type has changed.  Reset the answer to the default for each answer type.
                 else if ($request->getPost('answerTypeChanged') != null) {
                         switch ($question['answer_type_id']) {
-                          case 1: $answers = array('0'=>array(), '1'=>array()); break;
+                          case 1: case 4: $answers = array('0'=>array(), '1'=>array()); break;
                           case 2: $answers = array('0'=>array('is_right'=>1)); break;
                           case 3: $answers = array('0'=>array('answer_latex'=>"")); break;
                         }
@@ -813,7 +813,7 @@ class QuestionController extends Zend_Controller_Action {
                 if ($question['feedback_latex']=="") return "Invalid question: No LaTeX specified for feedback.";
                 $answertype = $question['answer_type_id'];
                 switch ($answertype) {
-                  case 1: //Multiple choice
+                  case 1: case 4://Multiple choice
                     $rightAnswerCount=0;
                     $i=1;
                     foreach ($answers as $answer) {
@@ -887,7 +887,7 @@ class QuestionController extends Zend_Controller_Action {
                 //there are no answers in the DB for this question that are not in $answers.
                 $answerInfoTable = new AnswerInfo();
                 switch ($question['answer_type_id']) {
-                  case 1: //Multiple choices
+                  case 1: case 4://Multiple choices
                     foreach ($answers as $answer) {
                             //answer id isn't known means this is a new answer
                             if ($answer['answer_id'] == null) { 
@@ -981,7 +981,7 @@ class QuestionController extends Zend_Controller_Action {
                 $answerTable = new Answer();
                 $answerInfoTable = new AnswerInfo();
                 switch ($question['answer_type_id']) {
-                  case 1: //Multiple choices
+                  case 1: case 4://Multiple choices
                     foreach ($answers as $answer) {
                             //Add the answer to the 'answer' table if it doesn't already exists.
                             //The answer already exists when this function is called via 'translateAction'
@@ -1080,7 +1080,7 @@ class QuestionController extends Zend_Controller_Action {
                 $questionFile->addText($config->latex->header . "\n");
                 $questionFile->addText($qinfo->question_latex . "\n");
                 switch($questionRow->answer_type_id) {
-                        case 1: //Multiple choices
+                        case 1: case 4://Multiple choices
                                 $answerTable = new Answer();
                                 $answerRowSet = $answerTable->fetchAll("question_id=$question_id");
                                 $questionFile->addText("\begin{mej-enumerate}");
@@ -1170,7 +1170,7 @@ class QuestionController extends Zend_Controller_Action {
                 $answerTable = new Answer();
                 $answerInfoTable = new AnswerInfo();
                 switch($questionRow->answer_type_id) {
-                  case 1: //Multiple choices
+                  case 1: case 4://Multiple choices
                     $answerRowSet = $answerTable->fetchAll("question_id=$question_id");
                     foreach($answerRowSet as $answerRow) {
                             $answerInfoRow = $answerRow->findAnswerInfo($answerTable->select()->where("language_id=$language_id"))->current();
