@@ -704,12 +704,16 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				intDifficulteJoueurVirtuel = ParametreIA.DIFFICULTE_TRES_DIFFICILE;
 			}
 			
-			// Déterminer combien de joueurs on veut
-			intNombreJoueursVirtuels = objSalle.getRegles().getNbVirtualPlayers();
-			if(intNombreJoueursVirtuels + nbJoueur > objSalle.getRegles().getMaxNbPlayers()) 
-			   intNombreJoueursVirtuels = objSalle.getRegles().getMaxNbPlayers() - nbJoueur;
-			
-		
+			// Déterminer combien de joueurs virtuels on veut
+			int maxNombreJoueursVirtuels = objSalle.getRegles().getNbVirtualPlayers();
+			if(nbJoueur < objSalle.getRegles().getNbTracks()){ 
+			   intNombreJoueursVirtuels = maxNombreJoueursVirtuels;
+			   while(maxNombreJoueursVirtuels + nbJoueur > objSalle.getRegles().getNbTracks()){
+			      intNombreJoueursVirtuels--;
+			      maxNombreJoueursVirtuels--;
+			   }
+			}
+
 		}
 		
 		objtPositionsJoueurs = objSalle.getGameFactory().genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels, lstPointsCaseLibre);	
