@@ -900,11 +900,11 @@ public class Salle
 	 */
 	public void setCategories() {
 		Categories[] catValues = Categories.values();
-        for(int i = 0; i < catValues.length; i++)
+		for(int i = 0; i < catValues.length; i++)
 		{
 			categories.add(catValues[i].getCode());
 		}
-			
+
 	}// end methode
 	
 	public void setCategories(String categoriesString)
