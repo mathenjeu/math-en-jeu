@@ -24,7 +24,6 @@ last change - Nov.2009 - Oloieri Lilian
 
 import flash.geom.Transform;
 import flash.geom.ColorTransform;
-
 import mx.transitions.Tween;
 import mx.transitions.easing.*;
 import mx.utils.Delegate;
@@ -332,9 +331,9 @@ class PlancheDeJeu
 					distX = 275 - _level0.loader.contentHolder.referenceLayer._x;
 					distX *= (10+this.zoom)/(9+this.zoom); 
 					_level0.loader.contentHolder.referenceLayer._x = 275 - distX;
-					distY = 250 - _level0.loader.contentHolder.referenceLayer._y;
+					distY = 200 - _level0.loader.contentHolder.referenceLayer._y;
 					distY *= (10+this.zoom)/(9+this.zoom); 
-					_level0.loader.contentHolder.referenceLayer._y = 250 - distY;
+					_level0.loader.contentHolder.referenceLayer._y = 200 - distY;
 					
 					// on modifie largeurDeCase et hauteurDeCase
 					this.largeurDeCase *= (10+this.zoom)/(9+this.zoom);
@@ -355,9 +354,9 @@ class PlancheDeJeu
 					distX = 275 - _level0.loader.contentHolder.referenceLayer._x;
 					distX *= (10+this.zoom)/(11+this.zoom); 
 					_level0.loader.contentHolder.referenceLayer._x = 275 - distX;
-					distY = 250 - _level0.loader.contentHolder.referenceLayer._y;
+					distY = 200 - _level0.loader.contentHolder.referenceLayer._y;
 					distY *= (10+this.zoom)/(11+this.zoom); 
-					_level0.loader.contentHolder.referenceLayer._y = 250 - distY;
+					_level0.loader.contentHolder.referenceLayer._y = 200 - distY;
 					
 					// on modifie largeurDeCase et hauteurDeCase
 					this.largeurDeCase *= (10+this.zoom)/(11+this.zoom);
@@ -482,8 +481,9 @@ class PlancheDeJeu
     {
         var p:Personnage;
         trace("ajouterPersonnage:" + nom + " niveau:" + (5*tableauDesCases.length*tableauDesCases[0].length+2*num) + " idPers:" + num + " idDessin:" + idClip);
-        p = new Personnage(nom, userRole, 5*tableauDesCases.length*tableauDesCases[0].length+2*num, "Personnage"+idClip ,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y );
+        p = new Personnage(nom, userRole, 5*tableauDesCases.length*tableauDesCases[0].length+2*num, idClip ,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y );
         p.afficher();
+		// p.afficherAutreDir();
      	//   p.zoomer(zoom*10);
         tableauDesCases[ll][cc].ajouterPersonnage(p);
 	
@@ -615,7 +615,7 @@ class PlancheDeJeu
 			colorTrans.rgb = 0xd8ae00;
 			trans.colorTransform = colorTrans;
 						 			 
-			colorTween(mClip, colorTrans, trans, 1.2, 0x00, 0xFF, 0xEB, 0x5B, Strong.easeOut, laCase, intervalCol);
+			colorTween(mClip, colorTrans, trans, 1.4, 0x00, 0xFF, 0xEB, 0x5B, Strong.easeOut, laCase, intervalCol);
 				   
 		}
 
@@ -632,7 +632,7 @@ class PlancheDeJeu
 	function colorTween(mc:MovieClip, ct:ColorTransform, t:Transform, seconds:Number, a:Number, r:Number, g:Number, b:Number, ease:Function, laCase:Case, intervalCol:Number):Void {
       
 	 
-	   intervalCol = setInterval(executeColor, 1200, mc, ct, t, seconds, a, r, g, b, ease);
+	   intervalCol = setInterval(executeColor, 1400, mc, ct, t, seconds, a, r, g, b, ease);
 	   function executeColor(){
 		  ct.rgb =  0xd8ae00;
 		  t.colorTransform = ct;
@@ -648,10 +648,10 @@ class PlancheDeJeu
 		  if(laCase.obtenirCasePossible() == null){
 		      clearInterval(intervalCol);
 			
-		      var alphaTween:Tween = new Tween(ct, "alphaOffset", ease, ct.alphaOffset,0x00, 1.2, true);
-              var redTween:Tween = new Tween(ct, "redOffset", ease, ct.redOffset, 0x8a, 1.2, true);
-              var greenTween:Tween = new Tween(ct, "greenOffset", ease, ct.greenOffset, 0xb2, 1.2, true);
-              var blueTween:Tween = new Tween(ct, "blueOffset", ease, ct.blueOffset, 0x1d, 1.2, true);
+		      var alphaTween:Tween = new Tween(ct, "alphaOffset", ease, ct.alphaOffset,0x00, 1.4, true);
+              var redTween:Tween = new Tween(ct, "redOffset", ease, ct.redOffset, 0x8a, 1.4, true);
+              var greenTween:Tween = new Tween(ct, "greenOffset", ease, ct.greenOffset, 0xb2, 1.4, true);
+              var blueTween:Tween = new Tween(ct, "blueOffset", ease, ct.blueOffset, 0x1d, 1.4, true);
      
               greenTween.onMotionChanged = function() {
                  t.colorTransform = ct;
