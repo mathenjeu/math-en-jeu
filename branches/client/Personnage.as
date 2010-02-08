@@ -29,6 +29,7 @@ import flash.filters.*;
 import mx.controls.Loader;
 
 
+
 class Personnage
 {
 	private var role:Number; // role of user if 1 - simple user , if 2 - master(admin)
@@ -456,46 +457,60 @@ class Personnage
 	//////////////////////////////////////////////////////////////////////////////////////
 	//	CONSTRUCTEUR
 	//////////////////////////////////////////////////////////////////////////////////////
-	function Personnage(nom:String, role:Number, niveau:Number, nomClip:String, ll:Number, cc:Number, xx:Number, yy:Number, mag:Array)
+	function Personnage(nom:String, role:Number, niveau:Number, nomClip:Number, ll:Number, cc:Number, xx:Number, yy:Number, mag:Array)
 	{
 		this.l = ll;
 		this.c = cc;
 		this.numero = niveau;
-		this.position = new Point(xx,yy);                       
-		this.prochainePosition = new Point(xx + 1,yy + 1);
-/*        var Personnage1:MovieClip;
-        var persoLoader:Loader = new Loader();
-        persoLoader.contentPath("perso1.swf");
-        persoLoader.load();
-        
-		var listenerObject:Object = new Object();
-        listenerObject.complete = function(eventObj:Object){
-           //Personnage1 = persoLoader.content;
-           if(nomClip == "Personnage1")
-		     image = _level0.loader.contentHolder.referenceLayer.attachMovie(persoLoader.content, "Personnage" + niveau, niveau);
+		this.position = new Point(xx,yy);
+		this.prochainePosition = new Point( xx , yy );
+		
+		// to load the perso .. use ClipLoader to know the moment of complet load
+		var myLoader:MovieClipLoader = new MovieClipLoader();
+	    //myLoader.addListener(image);
+		
+		var mclListener:Object = new Object();
+        mclListener.onLoadComplete = function(target_mc:MovieClip) {
+            trace("content has been loaded into " + target_mc + " nom : " + nom );
+		    target_mc.nom = nom;
+			
+			// assure que le clip a la bonne orientation
+			target_mc._xscale = - Math.abs(target_mc._xscale);
+			//target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
+			target_mc.dtNom._x = 42;
+			
         };
-        persoLoader.addEventListener("complete", listenerObject);
-     
-    
-          
-           if(nomClip == "Personnage1")
-		    this.image =  _level0.loader.contentHolder.referenceLayer.createEmptyMovieClip("Personnage" + niveau, niveau);
-			  
-		   loadMovie("perso1.swf", this.image);
-		   //trace("Control for perso : " + nomClip);
-		*/      
+		myLoader.addListener(mclListener);
+
+
 		
-		if(!(role == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament"))//&& nomClip != "Personnage1") 
-		   this.image = _level0.loader.contentHolder.referenceLayer.attachMovie(nomClip, "Personnage" + niveau, niveau);
+		if(!(role == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")){
+  
+           image =  _level0.loader.contentHolder.referenceLayer.createEmptyMovieClip("Personnage" + niveau, niveau);
+		    myLoader.loadClip("perso" + nomClip + ".swf", image); 
+		  //_level0.loader.contentHolder.referenceLayer["Personnage" + niveau].loadMovie("perso" + nomClip + ".swf", "Personnage" + niveau);
+			// loadMovie("perso" + nomClip + ".swf",  _level0.loader.contentHolder.referenceLayer["Personnage" + niveau]);
+		   //this.image = _level0.loader.contentHolder.referenceLayer.attachMovie("Personnage" + nomClip, "Personnage" + niveau, niveau);
+		}
 		
 		
-		this.image.dtNom._visible = true;
-		//this.image.dText.nom = nom;
-		this.image.nom = nom;
-		this.image._visible = false;
+		/*
+		function onLoadComplete(mc:MovieClip) { 
+		   trace("content has been loaded into "+mc);
+		   _level0.loader.contentHolder.referenceLayer["Personnage" + niveau].dtNom.text = nom;
+		} */
+		
+		
+		//image.dtNom._visible = true;
+		//image.dtNom.text = nom;
+		//image.nom = nom;
+		//trace(image.nom + " : ici perso2" );
+		//trace(image + " : ici perso2" );
+		//this.image._visible = false;
 		this.pointage = 0;
 		this.argent = 0;
 		this.listeDesObjets = new Object();
+		
 		
 		//trace("CONS PERSO: " + nom + " " + this.image.nom);
 		//targetPath(image);
@@ -511,7 +526,7 @@ class Personnage
 		this.listeSurMagasin = mag;
 		this.minigameLoade = false;
 		this.role = role;
-	    	
+	    
 	}// end constr
 	
 	
@@ -539,7 +554,7 @@ class Personnage
 			if(image._currentFrame != 1 && image._currentFrame < 90)
 			{
 				// place le personnage au repos et de face
-				this.image.gotoAndStop(1);
+				image.gotoAndStop(1);
 		
 				switch(this.faireCollision)
 				{
@@ -808,19 +823,21 @@ class Personnage
 			}
 		}
 
+        trace("trace  dx : " + dx + " dy : " + dy);
 		if (dy < 0)
 		{
-			if(this.image._currentFrame < 70)
+			if(image._currentFrame < 70)
 			{
-				this.image.gotoAndPlay(70);
+				image.gotoAndPlay(70);
+				trace("perso " + image._currentFrame);
 			}
 			
 		}
 		else
 		{
-			if(this.image._currentFrame > 69)
+			if(image._currentFrame > 69)
 			{
-				this.image.gotoAndPlay(10);
+				image.gotoAndPlay(10);
 			}
 		}
 				
@@ -841,17 +858,17 @@ class Personnage
 		
 		
 		// deplace le clip
-		this.image._x += dx;  
-		this.image._y += dy;
+		image._x += dx;  
+		image._y += dy;
 		position.definirX(position.obtenirX()+dx);
 		position.definirY(position.obtenirY()+dy);
 	
 		// Si le deplacement voulu n'est pas nul mais que le personnage est au repos
-		//trace("avant le if le frame  :   "+this.image._currentFrame);
+		trace("avant le if le frame  :   "+this.image._currentFrame);
 		if (((dx != 0) || (dy != 0)) && (this.image._currentFrame == 1 || this.image._currentFrame > 89))
 		{
 			// place le clip du personnage au debut de la sequence de deplacement
-			this.image.gotoAndPlay(10);
+			image.gotoAndPlay(10);
 		}
 	}
 
@@ -861,6 +878,14 @@ class Personnage
 		image._visible = true;
 		image._x = position.obtenirX();  
 		image._y = position.obtenirY();
+	}
+	
+	function afficherAutreDir()
+	{
+	       // assure que le clip a la bonne orientation
+			image._xscale = - Math.abs(image._xscale);
+			image.dtNom._xscale = - Math.abs(image._xscale);
+			image.dtNom._x = 42;
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -930,9 +955,37 @@ class Personnage
 	
 	function setBraniac()
 	{
-	   //this.image.
+	   
+	    _level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("begin"); 
+		
+		var intervalIDBegin = setInterval(etape2Bran, 1000);	// to pass to phase 2 of Braniac
+		
+		function etape2Bran():Void
+		{
+			_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("inBegin"); 
+		 	clearInterval(intervalIDBegin);
+		}
+		
+		
+		
+		var intervalIdIn = setInterval(etape3Bran, 3000);	// to pass to phase 3 of Braniac
+		
+		function etape3Bran():Void
+		{
+			_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("in"); 
+		 	clearInterval(intervalIdIn);
+		}
+		
+		
+		var intervalIdEnd = setInterval(etape4Bran, 85000);	// to pass to phase 4 of Braniac
+		
+		function etape4Bran():Void
+		{
+			_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("end"); 
+		 	clearInterval(intervalIdEnd);
+		}
 	}
-	
+	// do we realy need it???
 	function getOutBraniac()
 	{
 		
