@@ -981,7 +981,8 @@ class Personnage
 		
 		function etape4Bran():Void
 		{
-			_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("end"); 
+			_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("end");
+			//_level0.loader.contentHolder.array_sons[7].start(0,1);
 		 	clearInterval(intervalIdEnd);
 		}
 	}
