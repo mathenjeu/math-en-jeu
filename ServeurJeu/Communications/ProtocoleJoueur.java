@@ -1809,6 +1809,10 @@ public class ProtocoleJoueur implements Runnable
 						// Obtenir le numéro Id du personnage choisi et le garder 
 						// en mémoire dans une variable
 						int intIdPersonnage = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "IdPersonnage").getNodeValue());
+						
+						// Obtenir le numéro du couleur des vetements du personnage choisi et le garder 
+						// en mémoire dans une variable
+						int clothesColor = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "ClothesColor").getNodeValue());
 
 						// Vérifier que ce id de personnage n'est pas déjà utilisé
 						if (!objJoueurHumain.obtenirPartieCourante().obtenirTable().idPersonnageEstLibreEnAttente(intIdPersonnage))
@@ -1821,7 +1825,7 @@ public class ProtocoleJoueur implements Runnable
 							// Appeler la méthode permettant de démarrer une partie
 							// et garder son résultat dans une variable
 							String strResultatDemarrerPartie = objJoueurHumain.obtenirPartieCourante().obtenirTable().demarrerPartie(objJoueurHumain, 
-									intIdPersonnage, true);
+									intIdPersonnage, clothesColor, true);
 
 							// Si le résultat du démarrage de partie est Succes alors le
 							// joueur est maintenant en attente
@@ -2824,7 +2828,7 @@ public class ProtocoleJoueur implements Runnable
 			// Si le nombre d'enfants du noeud de commande est de 1, alors
 			// le nombre de paramètres est correct et on peut continuer
 
-			if (noeudCommande.getChildNodes().getLength() == 1)
+			if (noeudCommande.getChildNodes().getLength() == 2)
 			{
 				// Déclarer une variable qui va permettre de savoir si le 
 				// noeud enfant est valide
@@ -2841,6 +2845,24 @@ public class ProtocoleJoueur implements Runnable
 					objNoeudCourant.getAttributes().getLength() != 1 ||
 					objNoeudCourant.getAttributes().getNamedItem("type") == null ||
 					objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("IdPersonnage") == false ||
+					objNoeudCourant.getChildNodes().getLength() != 1 ||
+					objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false ||
+					UtilitaireNombres.isPositiveNumber(objNoeudCourant.getChildNodes().item(0).getNodeValue()) == false)
+				{
+					bolNoeudValide = false;
+				}
+				
+				//validation du deuxième noeud (NiveauJoueurVirtuel)
+				objNoeudCourant = noeudCommande.getChildNodes().item(1);
+				
+				// Si le noeud enfant n'est pas un paramètre, ou qu'il n'a
+				// pas exactement 1 attribut, ou que le nom de cet attribut 
+				// n'est pas type, ou que le noeud n'a pas de valeurs, alors 
+				// il y a une erreur dans la structure
+				if (objNoeudCourant.getNodeName().equals("parametre") == false || 
+					objNoeudCourant.getAttributes().getLength() != 1 ||
+					objNoeudCourant.getAttributes().getNamedItem("type") == null ||
+					objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("ClothesColor") == false ||
 					objNoeudCourant.getChildNodes().getLength() != 1 ||
 					objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false ||
 					UtilitaireNombres.isPositiveNumber(objNoeudCourant.getChildNodes().item(0).getNodeValue()) == false)
