@@ -477,11 +477,11 @@ class PlancheDeJeu
     }
 
     
-    function ajouterPersonnage(nom:String, ll:Number,cc:Number,num:Number, idClip:Number, userRole:Number)
+    function ajouterPersonnage(nom:String, ll:Number,cc:Number,num:Number, idClip:Number, userRole:Number, cloColor:Number)
     {
         var p:Personnage;
         trace("ajouterPersonnage:" + nom + " niveau:" + (5*tableauDesCases.length*tableauDesCases[0].length+2*num) + " idPers:" + num + " idDessin:" + idClip);
-        p = new Personnage(nom, userRole, 5*tableauDesCases.length*tableauDesCases[0].length+2*num, idClip ,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y );
+        p = new Personnage(nom, userRole, 5*tableauDesCases.length*tableauDesCases[0].length+2*num, idClip ,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y ,cloColor);
         p.afficher();
 		// p.afficherAutreDir();
      	//   p.zoomer(zoom*10);

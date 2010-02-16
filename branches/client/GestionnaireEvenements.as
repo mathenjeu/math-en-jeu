@@ -75,7 +75,7 @@ class GestionnaireEvenements
 	
 	private var braniacState:String;
 	
-	//used to color clothes
+	//used to color clothes of our perso
 	private var colorIt:Number;
 	
 	function affichageChamps()
@@ -194,6 +194,7 @@ class GestionnaireEvenements
 		var port:Number = parseInt(_level0.configxml_mainnode.attributes.port, 10);
 		
 		this.newsArray = new Array();
+		this.colorIt = 0;
 				
         this.objGestionnaireCommunication = new GestionnaireCommunication(Delegate.create(this, this.evenementConnexionPhysique), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
 	
@@ -439,8 +440,9 @@ class GestionnaireEvenements
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].pointage = 0;
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].idessin = calculatePicture(no);
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].win = 0;
+		this.listeDesPersonnages[numeroJoueursDansSalle-1].clocolor = this.colorIt;
 		//this.listeDesPersonnages[numeroJoueursDansSalle-1].lastPoints = 0;
-        this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), Delegate.create(this, this.evenementPartieTerminee), Delegate.create(this, this.evenementJoueurRejoindrePartie),  no);//this.idPersonnage);//  
+        this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), Delegate.create(this, this.evenementPartieTerminee), Delegate.create(this, this.evenementJoueurRejoindrePartie),  no, colorIt);//this.idPersonnage);//  
 	
 		trace("fin de demarrerPartie");
         trace("*********************************************\n");
@@ -735,6 +737,7 @@ class GestionnaireEvenements
                   this.listeDesPersonnages[i].id = objetEvenement.playersListe[i].idPersonnage;
 			      this.listeDesPersonnages[i].role = objetEvenement.playersListe[i].userRole;
 			      this.listeDesPersonnages[i].pointage = objetEvenement.playersListe[i].pointage;
+				  this.listeDesPersonnages[i].clocolor = objetEvenement.playersListe[i].clocolor;
 			      this.listeDesPersonnages[i].win = 0;
 				  					
 		          var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
@@ -1295,6 +1298,7 @@ class GestionnaireEvenements
 					this.listeDesPersonnages[i].role = 0;
 					this.listeDesPersonnages[i].pointage = 0;
 					this.listeDesPersonnages[i].win = 0;
+					this.listeDesPersonnages[i].clocolor = 0;
 								
                    
 				}
@@ -1375,6 +1379,7 @@ class GestionnaireEvenements
 					this.listeDesPersonnages[i].nom = objetEvenement.listePersonnageJoueurs[i].nom;
                     this.listeDesPersonnages[i].id = objetEvenement.listePersonnageJoueurs[i].idPersonnage;
 					this.listeDesPersonnages[i].role = objetEvenement.listePersonnageJoueurs[i].userRoles;
+					this.listeDesPersonnages[i].clocolor = objetEvenement.listePersonnageJoueurs[i].clothesColor;
 					this.listeDesPersonnages[i].pointage = 0;
 					this.listeDesPersonnages[i].win = 0;
 					//this.listeDesPersonnages[i].argent = 0;
@@ -2786,6 +2791,7 @@ class GestionnaireEvenements
             {
 	            var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
 				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
+				this.listeDesPersonnages[i].clocolor = this.colorIt;
 				
 				// put the face of my avatar in the panel (next to my name)
 		
@@ -2816,9 +2822,13 @@ class GestionnaireEvenements
 					if(idDessin < 0) idDessin = 12;   ///????
 					//if(idPers<0) idPers=-idPers;
 					
+					// to update clothes color
+					this.listeDesPersonnages[j].clocolor = objetEvenement.positionJoueurs[i].clocolor;
+					
+					// after we create the perso's
 					_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(this.listeDesPersonnages[j].id));
-                    _level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin, this.listeDesPersonnages[j].role);
-		    		trace("Construction du personnage : " + this.listeDesPersonnages[j].nom + " " + objetEvenement.positionJoueurs[i].x + " " + objetEvenement.positionJoueurs[i].y + " idDessin:" + idDessin + " idPers:" + idPers);
+                    _level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin, this.listeDesPersonnages[j].role, objetEvenement.positionJoueurs[i].clocolor);
+		    		//trace("Construction du personnage : " + this.listeDesPersonnages[j].clocolor + " " + objetEvenement.positionJoueurs[i].x + " " + objetEvenement.positionJoueurs[i].y + " idDessin:" + idDessin + " idPers:" + idPers);
 					_level0.loader.contentHolder.referenceLayer["Personnage" + idPers].nom = this.listeDesPersonnages[j].nom;
 				}
             }
@@ -2870,6 +2880,7 @@ class GestionnaireEvenements
 		var i:Number = this.listeDesPersonnages.length - 1;
 		this.listeDesPersonnages[i].nom = objetEvenement.nomUtilisateur;
         this.listeDesPersonnages[i].id = objetEvenement.idPersonnage;
+		this.listeDesPersonnages[i].clocolor = objetEvenement.clocolor;
 		this.listeDesPersonnages[i].role = 1;//objetEvenement.userRole;   !!!!!!!!!!!!!!!!!!!!!!
 		this.listeDesPersonnages[i].pointage = objetEvenement.Pointage;
 		this.listeDesPersonnages[i].win = 0;
@@ -2926,7 +2937,7 @@ class GestionnaireEvenements
                 movClip._y = 150 + i*60 - j*240;
 				movClip._xscale -= 70;
 				movClip._yscale -= 70;
-				trace("idPers : " + idPers + "\n" + "idDessin");
+				//trace("idPers : " + idPers + "\n" + "idDessin");
 		
 	    		_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(objetEvenement.idPersonnage));
 	    
@@ -2991,7 +3002,7 @@ class GestionnaireEvenements
 					jouersStarted[i].idessin = this.listeDesPersonnages[i].idessin;//this.listeDesPersonnages[i].idessin;
 					jouersStarted[i].win = this.listeDesPersonnages[i].win;
 					
-					trace("Dans menuointage : " + jouersStarted[i].win + " " + this.listeDesPersonnages[i].win );
+					//trace("Dans menuointage : " + jouersStarted[i].win + " " + this.listeDesPersonnages[i].win );
 		}// end for
 		
 		//jouersStarted.sortOn("pointage");
@@ -3047,7 +3058,7 @@ class GestionnaireEvenements
 			   this["Flag" + (i + 1)] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].attachMovie("checkFlag_mc", "flag" + i, 220 + i, {_x:-20, _y:0});
 			   
 			}
-			trace("Pointage: !!!!!!!!!! " + i + " " + jouersStarted[i].win);
+			//trace("Pointage: !!!!!!!!!! " + i + " " + jouersStarted[i].win);
 			//this["tete"+j]=new MovieClip();
 			this["tete" + (i + 1)] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+ (i + 1)]["tete"+ (i + 1)].attachMovie("tete" + jouersStarted[i].idessin, "Tete" + i, -10100 + i);
 			this["tete" + (i + 1)]._x = -6;
@@ -3286,7 +3297,7 @@ class GestionnaireEvenements
 			   // catch the rested time to be used after banana show
 			   	var tempsRested:Number = _level0.loader.contentHolder.box_question.GUI_retro.tempsPenalite;
 				
-				trace(tempsRested + " : ici le temps que restent");
+				//trace(tempsRested + " : ici le temps que restent");
                
 				//_root.objGestionnaireInterface.afficherBoutons(1);
 				_level0.loader.contentHolder.box_question.monScroll._visible = false;

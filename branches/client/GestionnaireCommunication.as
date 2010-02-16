@@ -1127,7 +1127,9 @@ class GestionnaireCommunication
                         {
                             // Mettre un objet contenant le nom du joueur et sa
                             // position x, y
-                            objEvenement.positionJoueurs.push({nom:lstChildNodesPosition[j].attributes.nom, x:lstChildNodesPosition[j].attributes.x, y:lstChildNodesPosition[j].attributes.y});
+                            objEvenement.positionJoueurs.push({nom:lstChildNodesPosition[j].attributes.nom,
+									x:lstChildNodesPosition[j].attributes.x, y:lstChildNodesPosition[j].attributes.y, 
+									clocolor:lstChildNodesPosition[j].attributes.clocolor});
                         }
                     break;
 					
@@ -2644,7 +2646,7 @@ class GestionnaireCommunication
 								   evenementUtiliserObjetDelegate:Function,
 				                   evenementPartieTermineeDelegate:Function,
                                    evenementJoueurRejoindrePartieDelegate:Function,
-				                   idPersonnage:Number) 
+				                   idPersonnage:Number, clothesColor:Number) 
     {
         // Si on est dans une table, alors on peut continuer le code de la
         // fonction
@@ -2674,13 +2676,19 @@ class GestionnaireCommunication
             var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
             var objNoeudParametreIdPersonnage:XMLNode = objObjetXML.createElement("parametre");
             var objNoeudParametreIdPersonnageText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(idPersonnage)));
+			var objNoeudParametreClothesColor:XMLNode = objObjetXML.createElement("parametre");
+			var objNoeudParametreClothesColorText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(clothesColor)));
 		
             // Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "DemarrerPartie";
             objNoeudParametreIdPersonnage.attributes.type = "IdPersonnage";
             objNoeudParametreIdPersonnage.appendChild(objNoeudParametreIdPersonnageText);
+			objNoeudParametreClothesColor.attributes.type = "ClothesColor";
+            objNoeudParametreClothesColor.appendChild(objNoeudParametreClothesColorText);
+
             objNoeudCommande.appendChild(objNoeudParametreIdPersonnage);
+			objNoeudCommande.appendChild(objNoeudParametreClothesColor);
 														
             objObjetXML.appendChild(objNoeudCommande);
             // Declaration d'un nouvel objet qui va contenir les informations sur
