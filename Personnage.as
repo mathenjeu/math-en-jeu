@@ -47,7 +47,18 @@ class Personnage
 	private var boardCentre:Boolean;
 	private var listeSurMagasin:Array;	 // sert a recuperer la liste d'objets du magasin lorsque qu'on va sur une case magasin
 	private var minigameLoade:Boolean;
+	private var clothesColor:Number;
 		
+		
+	function setColor(n:Number)
+	{
+		clothesColor = n;
+	}
+	
+	function getColor():Number
+	{
+		return clothesColor;
+	}
 	function setRole(n:Number)
 	{
 		role = n;
@@ -457,13 +468,14 @@ class Personnage
 	//////////////////////////////////////////////////////////////////////////////////////
 	//	CONSTRUCTEUR
 	//////////////////////////////////////////////////////////////////////////////////////
-	function Personnage(nom:String, role:Number, niveau:Number, nomClip:Number, ll:Number, cc:Number, xx:Number, yy:Number, mag:Array)
+	function Personnage(nom:String, role:Number, niveau:Number, nomClip:Number, ll:Number, cc:Number, xx:Number, yy:Number, cloColor:Number, mag:Array)
 	{
 		this.l = ll;
 		this.c = cc;
 		this.numero = niveau;
 		this.position = new Point(xx,yy);
 		this.prochainePosition = new Point( xx , yy );
+		this.clothesColor = cloColor;
 		
 		// to load the perso .. use ClipLoader to know the moment of complet load
 		var myLoader:MovieClipLoader = new MovieClipLoader();
@@ -471,13 +483,16 @@ class Personnage
 		
 		var mclListener:Object = new Object();
         mclListener.onLoadComplete = function(target_mc:MovieClip) {
-            trace("content has been loaded into " + target_mc + " nom : " + nom );
+            
 		    target_mc.nom = nom;
 			
 			// assure que le clip a la bonne orientation
 			target_mc._xscale = - Math.abs(target_mc._xscale);
 			//target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
 			target_mc.dtNom._x = 42;
+			
+			target_mc.clothesCol = cloColor;
+			//trace(" new color 2!!! " + target_mc.clothesCol)
 			
         };
 		myLoader.addListener(mclListener);
@@ -488,17 +503,9 @@ class Personnage
   
            image =  _level0.loader.contentHolder.referenceLayer.createEmptyMovieClip("Personnage" + niveau, niveau);
 		    myLoader.loadClip("perso" + nomClip + ".swf", image); 
-		  //_level0.loader.contentHolder.referenceLayer["Personnage" + niveau].loadMovie("perso" + nomClip + ".swf", "Personnage" + niveau);
-			// loadMovie("perso" + nomClip + ".swf",  _level0.loader.contentHolder.referenceLayer["Personnage" + niveau]);
-		   //this.image = _level0.loader.contentHolder.referenceLayer.attachMovie("Personnage" + nomClip, "Personnage" + niveau, niveau);
+		
 		}
 		
-		
-		/*
-		function onLoadComplete(mc:MovieClip) { 
-		   trace("content has been loaded into "+mc);
-		   _level0.loader.contentHolder.referenceLayer["Personnage" + niveau].dtNom.text = nom;
-		} */
 		
 		
 		//image.dtNom._visible = true;
@@ -506,7 +513,7 @@ class Personnage
 		//image.nom = nom;
 		//trace(image.nom + " : ici perso2" );
 		//trace(image + " : ici perso2" );
-		//this.image._visible = false;
+		
 		this.pointage = 0;
 		this.argent = 0;
 		this.listeDesObjets = new Object();
