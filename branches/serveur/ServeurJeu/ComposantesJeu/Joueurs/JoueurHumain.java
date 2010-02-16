@@ -273,6 +273,7 @@ public class JoueurHumain extends Joueur
 	public void setRole(int role) {
 		this.role = role;
 	}
+
 	
 	
 }

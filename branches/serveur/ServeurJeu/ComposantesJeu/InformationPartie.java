@@ -102,6 +102,11 @@ public class InformationPartie
 	// Bonus is given while arrived at finish line and is calculated
 	// as number of rested sec to game time
 	private int tournamentBonus;
+	
+	// the color of the clothes in the player's picture
+	// user can change it in the frame 3 of the client
+	// if we use default color it will remain = 0
+	private int clothesColor;
 	 
     
 	/**
@@ -164,6 +169,9 @@ public class InformationPartie
 	        moveVisibility = 3;
 			//runningAnswers = 0;
 			tournamentBonus = 0;
+			
+			// set the color to default
+			clothesColor = 0;
 	        
 			String language = joueur.obtenirProtocoleJoueur().langue;
             setObjBoiteQuestions(new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language), joueur));
@@ -1441,6 +1449,14 @@ public class InformationPartie
 		 */
 		public void setInBraniacState(boolean isInBraniacState) {
 			this.isInBraniacState = isInBraniacState;
+		}
+
+		public void setClothesColor(int clothesColor) {
+			this.clothesColor = clothesColor;
+		}
+
+		public int getClothesColor() {
+			return clothesColor;
 		}
 
 		/*
