@@ -436,6 +436,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	/**
 	 * Cette méthode permet au joueur passé en paramçtres de démarrer la partie. 
 	 * On suppose que le joueur est dans la table.
+	 * @param clothesColor 
 	 * 
 	 * @param JoueurHumain joueur : Le joueur demandant de démarrer la partie
 	 * @param int idPersonnage : Le numéro Id du personnage choisi par le joueur
@@ -452,7 +453,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  à s'inquiéter que le mçme joueur soit mis dans la liste 
 	 * 				  des joueurs en attente par un autre thread.
 	 */
-	public String demarrerPartie(JoueurHumain joueur, int idPersonnage, boolean doitGenererNoCommandeRetour)
+	public String demarrerPartie(JoueurHumain joueur, int idPersonnage, int clothesColor, boolean doitGenererNoCommandeRetour)
 	{
 		// Cette variable va permettre de savoir si le joueur est maintenant
 		// attente ou non
@@ -484,7 +485,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				// Garder en mémoire le Id du personnage choisi par le joueur
 				joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
 				
-		//System.out.println(idPersonnage);
+				// Garder en mémoire le numero du couleur choisi par le joueur
+				joueur.obtenirPartieCourante().setClothesColor(clothesColor);
+				
+		        //System.out.println(idPersonnage);
 				pictures.add((idPersonnage - 10000)/100);
 				
 	    		// Si on doit générer le numéro de commande de retour, alors
@@ -1866,7 +1870,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	/**
 	 * 
 	 * @param username
-	 * @return
+	 * @return Humain player
 	 */
 	public JoueurHumain obtenirJoueurHumainParSonNom(String username)
 	{
@@ -1883,7 +1887,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	/**
 	 * 
 	 * @param username
-	 * @return
+	 * @return Virtual Player
 	 */
 	public JoueurVirtuel obtenirJoueurVirtuelParSonNom(String username)
 	{
@@ -1894,7 +1898,30 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             }
             return (JoueurVirtuel)null;
 	}
-        
+	
+	/**
+	 * method to get player color by his name
+	 * we don't check if we really have this player(for Virtuals)
+	 * @param username
+	 * @return Player clothes color 
+	 */
+    public int getPlayerColor(String username)
+    {
+    	int color = 0;
+    	
+    	Set<Map.Entry<String, JoueurHumain>> nomsJoueursHumains = lstJoueurs.entrySet();
+        Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = nomsJoueursHumains.iterator();
+        while(objIterateurListeJoueurs.hasNext() == true)
+        {
+            JoueurHumain j = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
+            if(username.equals(j.obtenirNomUtilisateur())) return j.obtenirPartieCourante().getClothesColor();
+        }
+		
+        //otherwise we have a virtual player and his color for the moment is = 0
+        return color;
+       	
+    }    
+	
   /*  // Cette méthode permettra de dire si un joueur a gagné la partie en
     // ayant accumulé assez de points et en ayant rejoint le WinTheGame
     public boolean aRejointLeWinTheGame(int pointageDuJoueur, Point positionDuJoueur)
