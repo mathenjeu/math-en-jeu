@@ -3471,6 +3471,7 @@ class GestionnaireEvenements
 	}
     
 	//// function used to draw the points menu	
+	////////////////////////////////////////////////////
 	public function dessinerMenu()
 	{
 		// used to know the size of menu
