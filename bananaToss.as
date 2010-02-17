@@ -1,9 +1,8 @@
 ﻿/* 
-  Code for the MovieClip BananaToss
- *
- *
- *
+  Code for the actions:Frame1 MovieClip BananaToss Mathenjeu
  */
+ 
+ 
 bt_annulerText = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.boutonRetour;
 bt_annulerTextRoll = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.boutonRetour;
 
@@ -17,7 +16,7 @@ for (var i:Number = 0; i < _level0.loader.contentHolder.objGestionnaireEvenement
 			        bananaPlayers[i].role = _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].role;
 					bananaPlayers[i].idessin = _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].idessin;
 					bananaPlayers[i].clocolor = _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].clocolor;
-					trace("ICI CLOCOLOR : " + bananaPlayers[i].clocolor + " " + _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].clocolor);
+					//trace("ICI CLOCOLOR : " + bananaPlayers[i].clocolor + " " + _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].clocolor);
 								
 }// end for
 
@@ -51,27 +50,28 @@ var myLoader4:MovieClipLoader = new MovieClipLoader();
 var mclListener4:Object = new Object();
 */
 
+
 for(var i:Number = 1; i <= bananaPlayers.length; i++)
 {
    id = bananaPlayers[i - 1].idessin;
    
    if(bananaPlayers[i - 1].nom != _level0.loader.contentHolder.objGestionnaireEvenements.nomUtilisateur){
-     
+     	    	 
 	  // to load the perso .. use ClipLoader to know the moment of complet load
 	  // we are in for so load it dynamically
         mclListenerString = "mclListener" + i;
 		this["mclListenerString"] = new Object();
 		this["mclListenerString"].onLoadComplete = function(target_mc:MovieClip) {
     
-			trace("ICI TOSS " + target_mc.clothesCol);
-						
-			target_mc.clothesCol = bananaPlayers[i - 1].clocolor;
-			trace("ICI TOSS " + target_mc.clothesCol + " "+ bananaPlayers[i - 1].clocolor);
+	        var nameX:String = "x" + target_mc;
+	        var i:Number = Number(nameX.slice(-1,nameX.length));
+			target_mc.clothesCol = _level0.loader.contentHolder.toss.bananaPlayers[i - 1].clocolor;
+			//trace("ICI TOSS " + target_mc.clothesCol + " " + nameX.slice(-1,nameX.length) + "  " + nameX);
 						
         };
 		myLoaderString = "myLoader" + i;
 		this["myLoaderString"] = new MovieClipLoader();
-		this["myLoaderString"].addListener("mclListenerString");
+		this["myLoaderString"].addListener(this["mclListenerString"]);
 		
 		this["myLoaderString"].loadClip("perso" + id + ".swf", this["perso" + i].createEmptyMovieClip("persoBanana"  + i, 100 + i)); 
 				  
