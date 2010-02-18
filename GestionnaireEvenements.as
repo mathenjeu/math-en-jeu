@@ -1404,7 +1404,7 @@ class GestionnaireEvenements
 					   
 					   // change back if not used perso load
 					    movClip = _level0.loader.contentHolder.refLayer.createEmptyMovieClip("Personnage" + idDessin,i);
-					    _level0.loader.contentHolder.refLayer["Personnage" + idDessin].loadMovie("perso" + idDessin + ".swf","b" + i);
+					    _level0.loader.contentHolder.refLayer["Personnage" + idDessin].loadMovie("persox" + idDessin + ".swf","b" + i);
 					  
                           //movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage" + idDessin,"b" + i,i);
                        _level0.loader.contentHolder["joueur"+(i+1)] = objetEvenement.listePersonnageJoueurs[i].nom;
@@ -2928,7 +2928,7 @@ class GestionnaireEvenements
             	
 				
 				movClip = _level0.loader.contentHolder.refLayer.createEmptyMovieClip("Personnage" + idDessin,i);
-			    _level0.loader.contentHolder.refLayer["Personnage" + idDessin].loadMovie("perso" + idDessin + ".swf","b" + i);
+			    _level0.loader.contentHolder.refLayer["Personnage" + idDessin].loadMovie("persox" + idDessin + ".swf","b" + i);
 
 				//movClip = _level0.loader.contentHolder.refLayer.loadMovie("perso1.swf","b" + i,i);
 					
