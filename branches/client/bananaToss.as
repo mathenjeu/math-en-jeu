@@ -63,7 +63,8 @@ for(var i:Number = 1; i <= bananaPlayers.length; i++)
 		this["mclListenerString"] = new Object();
 		this["mclListenerString"].onLoadComplete = function(target_mc:MovieClip) {
     
-	        var nameX:String = "x" + target_mc;
+	       // attention if use 10 or more players!!! must be changed! 10 == 0
+		    var nameX:String = "x" + target_mc;
 	        var i:Number = Number(nameX.slice(-1,nameX.length));
 			target_mc.clothesCol = _level0.loader.contentHolder.toss.bananaPlayers[i - 1].clocolor;
 			//trace("ICI TOSS " + target_mc.clothesCol + " " + nameX.slice(-1,nameX.length) + "  " + nameX);
@@ -73,7 +74,7 @@ for(var i:Number = 1; i <= bananaPlayers.length; i++)
 		this["myLoaderString"] = new MovieClipLoader();
 		this["myLoaderString"].addListener(this["mclListenerString"]);
 		
-		this["myLoaderString"].loadClip("perso" + id + ".swf", this["perso" + i].createEmptyMovieClip("persoBanana"  + i, 100 + i)); 
+		this["myLoaderString"].loadClip("persox" + id + ".swf", this["perso" + i].createEmptyMovieClip("persoBanana"  + i, 100 + i)); 
 				  
 	  //this["perso" + i].createEmptyMovieClip("persoBanana"  + i, 100 + i);
 	  //this["perso" + i]["persoBanana"  + i].loadMovie("perso" + id + ".swf");

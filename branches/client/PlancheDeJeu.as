@@ -615,7 +615,7 @@ class PlancheDeJeu
 			colorTrans.rgb = 0xd8ae00;
 			trans.colorTransform = colorTrans;
 						 			 
-			colorTween(mClip, colorTrans, trans, 1.4, 0x00, 0xFF, 0xEB, 0x5B, Strong.easeOut, laCase, intervalCol);
+			//colorTween(mClip, colorTrans, trans, 2.4, 0x00, 0xFF, 0xEB, 0x5B, Strong.easeOut, laCase, intervalCol);
 				   
 		}
 
@@ -632,7 +632,7 @@ class PlancheDeJeu
 	function colorTween(mc:MovieClip, ct:ColorTransform, t:Transform, seconds:Number, a:Number, r:Number, g:Number, b:Number, ease:Function, laCase:Case, intervalCol:Number):Void {
       
 	 
-	   intervalCol = setInterval(executeColor, 1400, mc, ct, t, seconds, a, r, g, b, ease);
+	   intervalCol = setInterval(executeColor, 2400, mc, ct, t, seconds, a, r, g, b, ease);
 	   function executeColor(){
 		  ct.rgb =  0xd8ae00;
 		  t.colorTransform = ct;
@@ -648,10 +648,10 @@ class PlancheDeJeu
 		  if(laCase.obtenirCasePossible() == null){
 		      clearInterval(intervalCol);
 			
-		      var alphaTween:Tween = new Tween(ct, "alphaOffset", ease, ct.alphaOffset,0x00, 1.4, true);
-              var redTween:Tween = new Tween(ct, "redOffset", ease, ct.redOffset, 0x8a, 1.4, true);
-              var greenTween:Tween = new Tween(ct, "greenOffset", ease, ct.greenOffset, 0xb2, 1.4, true);
-              var blueTween:Tween = new Tween(ct, "blueOffset", ease, ct.blueOffset, 0x1d, 1.4, true);
+		      var alphaTween:Tween = new Tween(ct, "alphaOffset", ease, ct.alphaOffset,0x00, 2.4, true);
+              var redTween:Tween = new Tween(ct, "redOffset", ease, ct.redOffset, 0x8a, 2.4, true);
+              var greenTween:Tween = new Tween(ct, "greenOffset", ease, ct.greenOffset, 0xb2, 2.4, true);
+              var blueTween:Tween = new Tween(ct, "blueOffset", ease, ct.blueOffset, 0x1d, 2.4, true);
      
               greenTween.onMotionChanged = function() {
                  t.colorTransform = ct;
@@ -715,8 +715,6 @@ class PlancheDeJeu
 		// il faudra enlever completement
 		var pointageMin:Number = -1;//_level0.loader.contentHolder.objGestionnaireEvenements.obtenirPointageMinimalWinTheGame();
 
-		trace(pointageMin);
-		
 		switchColor(tableauDesCases[p.obtenirL()][p.obtenirC()]);
 		
 		trace("ds afficherCasesPossibles");
@@ -725,7 +723,7 @@ class PlancheDeJeu
 			temp = Number(p.obtenirL());
 			temp += Number(i);
 			// pourquoi il concatene ??????????????
-			 trace("ds premier for avant if  i  temp   mat  L   C  :  "+i+"   "+temp+"   "+this.mat[temp][p.obtenirC()]+"   "+p.obtenirL()+"   "+p.obtenirC());
+			 //trace("ds premier for avant if  i  temp   mat  L   C  :  "+i+"   "+temp+"   "+this.mat[temp][p.obtenirC()]+"   "+p.obtenirL()+"   "+p.obtenirC());
 		
             if(this.mat[temp][p.obtenirC()] > 0)
             {
