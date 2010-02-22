@@ -519,9 +519,6 @@ class Personnage
 		this.listeDesObjets = new Object();
 		
 		
-		//trace("CONS PERSO: " + nom + " " + this.image.nom);
-		//targetPath(image);
-		
 		// each array will contain the ID's of objects in possession
 		//this.listeDesObjets["piece"] = new Array();
 		this.listeDesObjets["Banane"] = new Array();

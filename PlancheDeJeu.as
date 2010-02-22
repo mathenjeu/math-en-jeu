@@ -182,7 +182,7 @@ class PlancheDeJeu
         clipTest._x = -100;
         clipTest._y = -100;
         largeurDeCase = clipTest._width;
-        hauteurDeCase = clipTest._height*0.85;
+        hauteurDeCase = clipTest._height * 0.85;
         clipTest.removeMovieClip();
         ////////////////////////////////////////////////////////////////////////////////////////
         for(i=0; i < this.mat.length; i++)
@@ -288,7 +288,7 @@ class PlancheDeJeu
                 ha = -hauteurDeCase/2;
 				if (coinHaut.obtenirY()+ha > 250) //Le coin haut du tableau est au centre de l'ecran
 				{
-					ha = 250 - coinHaut.obtenirY();
+					ha = 200 - coinHaut.obtenirY();
 					limiteAtteinte = true;
 				}
             break;
@@ -297,7 +297,7 @@ class PlancheDeJeu
                 ha = hauteurDeCase/2;
 				if (coinBas.obtenirY()+ha < 250) //Le coin bas du tableau est au centre de l'ecran
 				{
-					ha = 250 - coinBas.obtenirY();
+					ha = 200 - coinBas.obtenirY();
 					limiteAtteinte = true;
 				}
             break;
@@ -480,7 +480,7 @@ class PlancheDeJeu
     function ajouterPersonnage(nom:String, ll:Number,cc:Number,num:Number, idClip:Number, userRole:Number, cloColor:Number)
     {
         var p:Personnage;
-        trace("ajouterPersonnage:" + nom + " niveau:" + (5*tableauDesCases.length*tableauDesCases[0].length+2*num) + " idPers:" + num + " idDessin:" + idClip);
+        //trace("ajouterPersonnage:" + nom + " niveau:" + (5*tableauDesCases.length*tableauDesCases[0].length+2*num) + " idPers:" + num + " idDessin:" + idClip);
         p = new Personnage(nom, userRole, 5*tableauDesCases.length*tableauDesCases[0].length+2*num, idClip ,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y ,cloColor);
         p.afficher();
 		// p.afficherAutreDir();
@@ -513,11 +513,11 @@ class PlancheDeJeu
 		// for different types of game we need different pozitions
         if(_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament" || _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Course" )
 		{
-		    diffX = 225 - this.tableauDesCases[l][c].obtenirClipCase()._x;
-            diffY = 250 - this.tableauDesCases[l][c].obtenirClipCase()._y;
+		    diffX = 275 - this.tableauDesCases[l][c].obtenirClipCase()._x;
+            diffY = 200 - this.tableauDesCases[l][c].obtenirClipCase()._y;
 		}else{
-        	diffX = 300 - this.tableauDesCases[l][c].obtenirClipCase()._x;
-            diffY = 220 - this.tableauDesCases[l][c].obtenirClipCase()._y;
+        	diffX = 275 - this.tableauDesCases[l][c].obtenirClipCase()._x;
+            diffY = 200 - this.tableauDesCases[l][c].obtenirClipCase()._y;
 		}
 		
 		for(i=0;i<this.tableauDesCases.length;i++)
@@ -543,11 +543,11 @@ class PlancheDeJeu
 		// if different type of game we need different pozitions
 		if(_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament" || _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Course" )
 		{
-		   dx = 225 - (_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
-		   dy = 250 - (_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._y);
+		   dx = 275 - (_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
+		   dy = 200 - (_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._y);
 		}else{
-		   dx = 300 - (_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
-		   dy = 220 - (_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._y);
+		   dx = 275 - (_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
+		   dy = 200 - (_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._y);
 		}
 		
 		dx = Math.round(dx);
@@ -591,6 +591,7 @@ class PlancheDeJeu
 	
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Method is not used now
 	function switchColor(laCase:Case)
 	{
 		//trace("--- switchColor ---");
@@ -619,6 +620,28 @@ class PlancheDeJeu
 				   
 		}
 
+        
+	}///////// end methode
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////// Method used 
+	function switchColorFlash(laCase:Case)
+	{
+		//trace("--- switchColor ---");
+		var mClip:MovieClip = new MovieClip();
+		
+		
+		if(laCase.obtenirMiniGame())
+		{
+		   mClip = laCase.obtenirClipCase().minigame.interieur;
+		   mClip.attachMovie("flashCase", "Alpha", mClip.getNextHighestDepth());
+		   mClip.Alpha._alpha = 75;
+		}
+		else
+		{
+		   mClip = laCase.obtenirClipCase().interieur;
+		   mClip.attachMovie("flashCase", "Alpha", mClip.getNextHighestDepth());
+		}
         
 	}///////// end methode
 	
@@ -663,9 +686,8 @@ class PlancheDeJeu
 		 
 	  }
     }
-	//////////////////////
 	
-
+	//////////////////////
 	function switchBackColor(laCase:Case)
 	{
 		//trace("--- switchBackColor ---");
@@ -690,6 +712,24 @@ class PlancheDeJeu
 			
 		}
 	}
+	
+	/////////////////////////////////////
+	/// 
+	function switchBackColorFlash(laCase:Case)
+	{
+	    var mClip:MovieClip = new MovieClip();
+		
+		if(laCase.obtenirMiniGame())
+		{
+		   mClip = laCase.obtenirClipCase().minigame.interieur;
+		   mClip.Alpha.removeMovieClip();
+		}
+		else
+		{
+		   mClip = laCase.obtenirClipCase().interieur;
+		   mClip.Alpha.removeMovieClip();
+		}
+	} // end method
 
 	
     function afficherCasesPossibles(p:Personnage)
@@ -702,7 +742,7 @@ class PlancheDeJeu
 	 //trace("Move : " + moveVisibility);
 	 if( !(p.getRole() == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") && isInWinTheGame)
 	 { 
-		trace("Debut afficherCasesPossibles");
+		//trace("Debut afficherCasesPossibles");
 		
         var i:Number;
         var nb:Number = 0;
@@ -715,9 +755,10 @@ class PlancheDeJeu
 		// il faudra enlever completement
 		var pointageMin:Number = -1;//_level0.loader.contentHolder.objGestionnaireEvenements.obtenirPointageMinimalWinTheGame();
 
-		switchColor(tableauDesCases[p.obtenirL()][p.obtenirC()]);
+		//switchColor(tableauDesCases[p.obtenirL()][p.obtenirC()]);
+		switchColorFlash(tableauDesCases[p.obtenirL()][p.obtenirC()]);
 		
-		trace("ds afficherCasesPossibles");
+		//trace("ds afficherCasesPossibles");
         for(i = 1; i <= Math.min(mat.length-p.obtenirL()-1,moveVisibility); i++)
         {
 			temp = Number(p.obtenirL());
@@ -730,11 +771,12 @@ class PlancheDeJeu
 				trace(pointageMin);
 				if(tableauDesCases[temp][p.obtenirC()].obtenirType() > 40000 && _level0.loader.contentHolder.planche.obtenirPerso().obtenirPointage() < pointageMin)
 				{
-					trace("pas assez de points pour atteindre le WinTheGame");
+					//trace("pas assez de points pour atteindre le WinTheGame");
 				}
 				else
 				{
-					switchColor(tableauDesCases[temp][p.obtenirC()]);
+					//switchColor(tableauDesCases[temp][p.obtenirC()]);
+					switchColorFlash(tableauDesCases[temp][p.obtenirC()]);
 	
 					level = (tableauDesCases.length*tableauDesCases[0].length) +(temp*tableauDesCases[0].length)+Number(p.obtenirC()) + Number(1);
 					//trace("ds if,  level  "+level);
@@ -748,9 +790,9 @@ class PlancheDeJeu
 					}
 					brille._x = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._x;
 					brille._y = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._y;
-					//brille._alpha = 0;
 					brille._width = largeurDeCase/0.55;
 					brille._height = hauteurDeCase/0.55;//0.85
+					trace("ICI INFO DRIFT : " + largeurDeCase/hauteurDeCase );
 					brille._ligne = new Object();
 					brille._colonne = new Object();
 					brille._ligne = temp;
@@ -789,11 +831,12 @@ class PlancheDeJeu
             {
 				if(tableauDesCases[temp][p.obtenirC()].obtenirType() > 40000 && _level0.loader.contentHolder.planche.obtenirPerso().obtenirPointage() < pointageMin)
 				{
-					trace("pas assez de points pour atteindre le WinTheGame");
+					//trace("pas assez de points pour atteindre le WinTheGame");
 				}
 				else
 				{
-					switchColor(tableauDesCases[temp][p.obtenirC()]);
+					//switchColor(tableauDesCases[temp][p.obtenirC()]);
+					switchColorFlash(tableauDesCases[temp][p.obtenirC()]);
 					
 					// trace("tableau des cases  vs  mat  : "+ tableauDesCases.length+"   "+mat.length);
 					// trace("tableau des cases[0]  vs  mat[]  : "+ tableauDesCases[0].length+"   "+mat[0].length);
@@ -810,7 +853,6 @@ class PlancheDeJeu
 					//brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					brille._x = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._x;
 					brille._y = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._y;
-					
 					brille._width = largeurDeCase/0.55;
 					brille._height = hauteurDeCase/0.55;//0.85;
 					brille._ligne = new Object();
@@ -851,11 +893,12 @@ class PlancheDeJeu
             {
 				if(tableauDesCases[p.obtenirL()][temp].obtenirType() > 40000 && _level0.loader.contentHolder.planche.obtenirPerso().obtenirPointage() < pointageMin)
 				{
-					trace("pas assez de points pour atteindre le WinTheGame");
+					//trace("pas assez de points pour atteindre le WinTheGame");
 				}
 				else
 				{
-					switchColor(tableauDesCases[p.obtenirL()][temp]);
+					//switchColor(tableauDesCases[p.obtenirL()][temp]);
+					switchColorFlash(tableauDesCases[p.obtenirL()][temp]);
 			
 					level = (tableauDesCases.length*tableauDesCases[0].length) + Number(p.obtenirL()*tableauDesCases[0].length) + temp + Number(1);
 					//trace("ds if : level :   "+level);
@@ -869,7 +912,6 @@ class PlancheDeJeu
 					//brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					brille._x = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._x;
 					brille._y = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._y;
-					
 					brille._width = largeurDeCase/0.55;
 					brille._height = hauteurDeCase/0.55;//0.85;
 					brille._ligne = new Object();
@@ -909,11 +951,12 @@ class PlancheDeJeu
             {
 				if(tableauDesCases[p.obtenirL()][temp].obtenirType() > 40000 && _level0.loader.contentHolder.planche.obtenirPerso().obtenirPointage() < pointageMin)
 				{
-					trace("pas assez de points pour atteindre le WinTheGame");
+					//trace("pas assez de points pour atteindre le WinTheGame");
 				}
 				else
 				{
-					switchColor(tableauDesCases[p.obtenirL()][temp]);
+					//switchColor(tableauDesCases[p.obtenirL()][temp]);
+					switchColorFlash(tableauDesCases[p.obtenirL()][temp]);
 			
 					level = (tableauDesCases.length*tableauDesCases[0].length) + (Number(p.obtenirL())*tableauDesCases[0].length)+temp+Number(1);
 					//trace("ds if,  level: "+level);
@@ -927,7 +970,6 @@ class PlancheDeJeu
 					//brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					brille._x = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._x;
 					brille._y = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._y;
-					
 					brille._width = largeurDeCase/0.55;
 					brille._height = hauteurDeCase/0.55;//0.85;
 					brille._ligne = new Object();
@@ -1048,9 +1090,11 @@ class PlancheDeJeu
         var i:Number;
 		var temp:Number;
 	
-		trace("Debut effacerCasesPossibles");
+		//trace("Debut effacerCasesPossibles");
 	
-		switchBackColor(tableauDesCases[p.obtenirL()][p.obtenirC()]);
+		//switchBackColor(tableauDesCases[p.obtenirL()][p.obtenirC()]);
+		//another version more light
+		switchBackColorFlash(tableauDesCases[p.obtenirL()][p.obtenirC()]);
 	
         for(i=1;i<=Math.min(mat.length-p.obtenirL()-1,6);i++)
         {
@@ -1061,7 +1105,8 @@ class PlancheDeJeu
             {
 		    	//trace("ds if premier for");
                 tableauDesCases[temp][p.obtenirC()].effacerCasePossible();
-				switchBackColor(tableauDesCases[temp][p.obtenirC()]);
+				//switchBackColor(tableauDesCases[temp][p.obtenirC()]);
+				switchBackColorFlash(tableauDesCases[temp][p.obtenirC()]);
             }
             else
             {
@@ -1077,7 +1122,8 @@ class PlancheDeJeu
             {
 				// trace("ds if deuxieme for");
                 tableauDesCases[p.obtenirL()-i][p.obtenirC()].effacerCasePossible();
-				switchBackColor(tableauDesCases[p.obtenirL()-i][p.obtenirC()]);
+				//switchBackColor(tableauDesCases[p.obtenirL()-i][p.obtenirC()]);
+				switchBackColorFlash(tableauDesCases[p.obtenirL()-i][p.obtenirC()]);
             }
             else
             {
@@ -1094,7 +1140,8 @@ class PlancheDeJeu
             {
 		    	//trace("ds if troisieme for");
                 tableauDesCases[p.obtenirL()][temp].effacerCasePossible();
-				switchBackColor(tableauDesCases[p.obtenirL()][temp]);
+				//switchBackColor(tableauDesCases[p.obtenirL()][temp]);
+				switchBackColorFlash(tableauDesCases[p.obtenirL()][temp]);
             }
             else
             {
@@ -1110,7 +1157,8 @@ class PlancheDeJeu
             {
 		    	//trace("ds if quatrieme for");
                 tableauDesCases[p.obtenirL()][p.obtenirC()-i].effacerCasePossible();
-				switchBackColor(tableauDesCases[p.obtenirL()][p.obtenirC()-i]);
+				//switchBackColor(tableauDesCases[p.obtenirL()][p.obtenirC()-i]);
+				switchBackColorFlash(tableauDesCases[p.obtenirL()][p.obtenirC()-i]);
             }
             else
             {
@@ -1140,7 +1188,7 @@ class PlancheDeJeu
     // num est le numero du personnage   str est le type de collision
     function teleporterPersonnage(nom:String, ancienL:Number, ancienC:Number, nouveauL:Number, nouveauC:Number, str:String)
     {
-	    trace(" dans teleporterPersonnage, parametres :  "+nom+"   "+ancienL+"   "+ancienC+"   "+nouveauL+"   "+nouveauC+"   "+str);
+	    //trace(" dans teleporterPersonnage, parametres :  "+nom+"   "+ancienL+"   "+ancienC+"   "+nouveauL+"   "+nouveauC+"   "+str);
 	    var listeTemporaire:Array;
 	    //var p:Point = new Point(this.tableauDesCases[nouveauL][nouveauC].obtenirClipCase()._x, this.tableauDesCases[nouveauL][nouveauC].obtenirClipCase()._y);
 	
@@ -1153,14 +1201,14 @@ class PlancheDeJeu
 	    {
 		    if(listeTemporaire[i].obtenirNom() == nom)
 		    {
-			    trace("juste avant de definir la prochaine poisition");
+			    //trace("juste avant de definir la prochaine poisition");
 			    //listeTemporaire[i].definirPosition(p, nouveauL, nouveauC);  // on le met si on veut teleportation, mais probleme avec les collisions...
 			    this.tableauDesCases[ancienL][ancienC].obtenirListeDesPersonnages()[i].definirProchainePosition(p,str);
 			    break;
 		    }
 	    }
 	    
-	    trace("fin de teleporterPersonnage");
+	    //trace("fin de teleporterPersonnage");
     }
     
     
@@ -1169,7 +1217,7 @@ class PlancheDeJeu
 	    //trace("est dans estCaseSpeciale   "+lig+"   "+col);
 		if(tableauDesCases[lig][col].obtenirType()%100 > 90)
         {
-			trace("ds le if de estCaseSpeciale");
+			//trace("ds le if de estCaseSpeciale");
             return true;
         }
 	
