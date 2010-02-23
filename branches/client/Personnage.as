@@ -543,11 +543,11 @@ class Personnage
 		var reafficher1:Boolean = true;
 		var reafficher2:Boolean = false;
 		
-		//trace("ds deplacePersonnage");
+		
 		
 		dx = this.prochainePosition.obtenirX() - this.position.obtenirX();  
 		dy = this.prochainePosition.obtenirY() - this.position.obtenirY();
-		
+		trace("ds deplacePersonnage " + dx/dy);
 		if( boardCentre) //dx == 0 && dy == 0 && image._currentFrame == 1) 
 		{
 			return;
@@ -827,7 +827,7 @@ class Personnage
 			}
 		}
 
-        trace("trace  dx : " + dx + " dy : " + dy);
+        trace("trace  dx : " + dx + " dy : " + dy + " control : " + dx/dy);
 		if (dy < 0)
 		{
 			if(image._currentFrame < 70)
@@ -955,46 +955,6 @@ class Personnage
 		this.image.gotoAndPlay("rest");
 	}
 	
-	////////////////////////////****************/////////////////////////////////////////
-	
-	function setBraniac()
-	{
-	   
-	    _level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("begin"); 
-		
-		var intervalIDBegin = setInterval(etape2Bran, 1000);	// to pass to phase 2 of Braniac
-		
-		function etape2Bran():Void
-		{
-			_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("inBegin"); 
-		 	clearInterval(intervalIDBegin);
-		}
-		
-		
-		
-		var intervalIdIn = setInterval(etape3Bran, 3000);	// to pass to phase 3 of Braniac
-		
-		function etape3Bran():Void
-		{
-			_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("in"); 
-		 	clearInterval(intervalIdIn);
-		}
-		
-		
-		var intervalIdEnd = setInterval(etape4Bran, 85000);	// to pass to phase 4 of Braniac
-		
-		function etape4Bran():Void
-		{
-			_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("end");
-			//_level0.loader.contentHolder.array_sons[7].start(0,1);
-		 	clearInterval(intervalIdEnd);
-		}
-	}
-	// do we realy need it???
-	function getOutBraniac()
-	{
-		
-	}
 	
 	
 }
