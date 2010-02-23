@@ -3345,7 +3345,7 @@ class GestionnaireEvenements
 		
 		if(objetEvenement.objetUtilise == "Braniac")
 		{
-			_level0.loader.contentHolder.planche.getBraniacAnimaton(playerThat);
+			_level0.loader.contentHolder.planche.getBraniacAnimaton(playerUnder);
 			
 		}
 		
