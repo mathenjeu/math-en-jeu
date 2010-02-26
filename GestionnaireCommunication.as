@@ -4429,8 +4429,8 @@ class GestionnaireCommunication
 								var lstObjMagasin:Array = objEvenementMagasin.childNodes;
 								trace(lstObjMagasin);
 								
-								trace("************************");
-								trace("objets du magasin");
+								//trace("************************");
+								//trace("objets du magasin");
 								
 								for(var j:Number = 0; j<lstObjMagasin.length; j++)
 								{
@@ -4447,7 +4447,7 @@ class GestionnaireCommunication
 								trace("************************");
 								
 								_level0.loader.contentHolder.planche.obtenirPerso().definirMagasin(lstObjMagasin);
-								trace("gest comm : " + _level0.loader.contentHolder.planche.obtenirPerso().obtenirMagasin());
+								//trace("gest comm : " + _level0.loader.contentHolder.planche.obtenirPerso().obtenirMagasin());
 
 							}
 							/*else if(objNoeudParametre.firstChild.nodeValue == "piece")
@@ -4461,7 +4461,7 @@ class GestionnaireCommunication
 
                         	objEvenement.collision =  String(objNoeudParametre.firstChild.nodeValue);
 							//objEvenement.collision = "minigame";
-							trace("collision ds gestComm "+objEvenement.collision+"   "+objNoeudParametre.firstChild.nodeValue);
+							//trace("collision ds gestComm "+objEvenement.collision+"   "+objNoeudParametre.firstChild.nodeValue);
 						}
                         break;
                 }

@@ -492,6 +492,7 @@ class Personnage
 			target_mc.dtNom._x = 42;
 			
 			target_mc.clothesCol = cloColor;
+			target_mc.gotoAndPlay("rest");
 			//trace(" new color 2!!! " + target_mc.clothesCol)
 			
         };
@@ -721,6 +722,11 @@ class Personnage
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
+						
+						// with Braniac a little different - we use it instantly
+						// so the player in the state of Braniac at the time to reach the case
+						// 
+						getBraniacAnimaton();
                         
 					break;
 
@@ -955,6 +961,47 @@ class Personnage
 		this.image.gotoAndPlay("rest");
 	}
 	
+	// used to put the Braniac animation on the player  for the 90 sec.
+	function getBraniacAnimaton()
+	{
+	   var playerThat:String = this.nom;
+	   	  	    
+	   image.braniacState = "begin";
+		
+	   var intervalIDBegin = setInterval(etape2Bran, 2000, playerThat);	// to pass to phase 2 of Braniac
+		
+		function etape2Bran():Void
+		{
+			//_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("in");
+			_level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().braniacState = "in";
+			//trace("control bran in set " + _level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().braniacState);
+		 	clearInterval(intervalIDBegin);
+		}
+		
+		
+		
+		var intervalIdIn = setInterval(etape3Bran, 90000, playerThat);	// to pass to phase 3 of Braniac
+		
+		function etape3Bran():Void
+		{
+			//_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("end"); 
+			_level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().braniacState = "end";
+		 	clearInterval(intervalIdIn);
+		}
+		
+		var intervalIdOut = setInterval(etape4Bran, 90500, playerThat);	// to pass to phase 3 of Braniac
+		
+		function etape4Bran():Void
+		{
+			//_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("end"); 
+			_level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().braniacState = "out";
+		 	clearInterval(intervalIdOut);
+		}
+			
+			
+	
+	} // end of getBraniacAnimation
+
 	
 	
 }
