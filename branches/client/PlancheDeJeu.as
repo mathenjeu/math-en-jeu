@@ -1282,47 +1282,6 @@ class PlancheDeJeu
 	   
 	}// end function
 	
-	// used to put the Braniac animation on the player  for the 90 sec.
-	function getBraniacAnimaton(playerThat:String)
-	{
-	   //var num:Number = getPersonnageByName(playerThat).obtenirNumero();
-	   //getPersonnageByName(playerThat).setBraniac(num);
-	  	    
-	   getPersonnageByName(playerThat).obtenirImage().braniacState = "begin";
-		
-	   var intervalIDBegin = setInterval(etape2Bran, 5000, playerThat);	// to pass to phase 2 of Braniac
-		
-		function etape2Bran():Void
-		{
-			//_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("in");
-			_level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().braniacState = "in";
-			//trace("control bran in set " + _level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().braniacState);
-		 	clearInterval(intervalIDBegin);
-		}
-		
-		
-		
-		var intervalIdIn = setInterval(etape3Bran, 90000, playerThat);	// to pass to phase 3 of Braniac
-		
-		function etape3Bran():Void
-		{
-			//_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("end"); 
-			_level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().braniacState = "end";
-		 	clearInterval(intervalIdIn);
-		}
-		
-		var intervalIdOut = setInterval(etape4Bran, 90500, playerThat);	// to pass to phase 3 of Braniac
-		
-		function etape4Bran():Void
-		{
-			//_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("end"); 
-			_level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().braniacState = "out";
-		 	clearInterval(intervalIdOut);
-		}
-			
-			
 	
-	}
-
         
 }

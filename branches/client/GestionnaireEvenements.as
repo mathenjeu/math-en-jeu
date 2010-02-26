@@ -3342,13 +3342,13 @@ class GestionnaireEvenements
 			
 		}
 		//***********  END treat the Banana **************************
-		
+		/*
 		if(objetEvenement.objetUtilise == "Braniac")
 		{
-			_level0.loader.contentHolder.planche.getBraniacAnimaton(playerUnder);
+			//_level0.loader.contentHolder.planche.getBraniacAnimaton(playerUnder);
 			
 		}
-		
+		*/
      	trace("fin de evenementUtiliserObjet");
      	trace("*********************************************\n");
     } // end methode
