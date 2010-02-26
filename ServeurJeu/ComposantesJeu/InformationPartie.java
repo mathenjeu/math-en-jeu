@@ -513,7 +513,7 @@ public class InformationPartie
 		// une question
 		if (intDifficulte > 0)
 		{
-			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte, true);
+			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
 		}
 		
 		// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
@@ -525,11 +525,12 @@ public class InformationPartie
 			lstQuestionsRepondues.put(new Integer(objQuestionTrouvee.obtenirCodeQuestion()), objQuestionTrouvee);
 			objQuestionCourante = objQuestionTrouvee;
 			objPositionJoueurDesiree = nouvellePosition;
+			objBoiteQuestions.popQuestion(objQuestionTrouvee);
 		}
 		else if (intDifficulte > 0)
 		{
 			objGestionnaireBD.remplirBoiteQuestions( getObjBoiteQuestions(), objJoueurHumain);
-			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte, true);
+			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
 			
 			lstQuestionsRepondues.clear();
 			
@@ -541,6 +542,7 @@ public class InformationPartie
 				lstQuestionsRepondues.put(new Integer(objQuestionTrouvee.obtenirCodeQuestion()), objQuestionTrouvee);
 				objQuestionCourante = objQuestionTrouvee;
 				objPositionJoueurDesiree = nouvellePosition;
+				objBoiteQuestions.popQuestion(objQuestionTrouvee);
 			}
 			else
 			{
@@ -593,14 +595,18 @@ public class InformationPartie
 		int intCategorieQuestion = catScolaires[UtilitaireNombres.genererNbAleatoire(catValues.length - 1)]; 
 				
 		Question objQuestionTrouvee = null;
+		
+		      
 		if (intDifficulte > 1)
 			intDifficulte--;
 		//if is Banana used to this player
 		//if(!isUnderBananaEffect.equals(""))
 		//	intDifficulte++;
 		
-		objQuestionTrouvee = trouverQuestionCristall(intCategorieQuestion, intDifficulte, oldQuestion, false);
-		
+		if (intDifficulte > 0)
+		{
+		   objQuestionTrouvee = trouverQuestionCristall(intCategorieQuestion, intDifficulte, oldQuestion);
+		}
 				
 		// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
 		// des questions posées et on la garde en mémoire pour pouvoir ensuite
@@ -611,12 +617,13 @@ public class InformationPartie
 			lstQuestionsRepondues.put(new Integer(objQuestionTrouvee.obtenirCodeQuestion()), objQuestionTrouvee);
 			objQuestionCourante = objQuestionTrouvee;
 			//objPositionJoueurDesiree = nouvellePosition;
+			objBoiteQuestions.popQuestion(objQuestionTrouvee);
 		}
 		else 
 		{
 			objGestionnaireBD.remplirBoiteQuestions( getObjBoiteQuestions(), objJoueurHumain);
 			
-			objQuestionTrouvee = trouverQuestionCristall(intCategorieQuestion, intDifficulte, oldQuestion, false);
+			objQuestionTrouvee = trouverQuestionCristall(intCategorieQuestion, intDifficulte, oldQuestion);
 			
 			lstQuestionsRepondues.clear();
 			
@@ -628,6 +635,7 @@ public class InformationPartie
 				lstQuestionsRepondues.put(new Integer(objQuestionTrouvee.obtenirCodeQuestion()), objQuestionTrouvee);
 				objQuestionCourante = objQuestionTrouvee;
 				//objPositionJoueurDesiree = nouvellePosition;
+				objBoiteQuestions.popQuestion(objQuestionTrouvee);
 			}
 			else
 			{
@@ -660,77 +668,38 @@ public class InformationPartie
 	 * @param intDifficulte
 	 * @return la question trouver ou null si aucune question n'a pu être pigée
 	 */
-	private Question trouverQuestionCristall(int intCategorieQuestion, int intDifficulte, int codeOld, boolean moreDifficultQuestions)
+	private Question trouverQuestionCristall(int intCategorieQuestion, int intDifficulte, int codeOld)
 	{
 		
 		Question objQuestionTrouvee = null;
 		
 		// to not get the same question
-		do{
-			// pour le premier on voir la catégorie et difficulté demandées
-			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intDifficulte);
+		// pour le premier on voir la catégorie et difficulté demandées
 
-			/*
-			//on prend les catégories scolaires en utilisant enum Categories
-			Categories[] catValues = Categories.values();
-			int[] catScolaires = new int[catValues.length];
-			for(int i = 0; i < catValues.length; i++)
-			{
-				catScolaires[i] = catValues[i].getCode();
-			}
+		objQuestionTrouvee = getObjBoiteQuestions().pigerQuestionCristall(intDifficulte, codeOld);
 
-			LinkedList<Integer> catScolairesTemp = new LinkedList<Integer>();
-			for(int numbers : catScolaires)
-				catScolairesTemp.add(numbers);
-			int intRandom = 0;
-			System.out.println("Avant diff : " + intDifficulte);
-
-			//sinon on cherche pour toutes les catégories de la même difficulté 
-			int i = 0;
-			while(i < catScolaires.length && objQuestionTrouvee == null )
-			{
-				intRandom = UtilitaireNombres.genererNbAleatoire( catScolairesTemp.size() );	
-				intCategorieQuestion =  catScolairesTemp.get(intRandom).intValue();
-				objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulte);
-				catScolairesTemp.remove(intRandom); 
-				i++;
-
-			}
-
-			//après pour les difficultés moins grands 
-			int intDifficulteTemp = intDifficulte;
-			LinkedList<Integer> catScolairesTemp2 = new LinkedList<Integer>();
-
-			while(objQuestionTrouvee == null && intDifficulteTemp > 0 ) 
-			{
-				for(int numbers : catScolaires)
-					catScolairesTemp2.add(numbers);
-				intDifficulteTemp--;
-				i = 0;
-				while(i < catScolaires.length && objQuestionTrouvee == null )
-				{
-					intRandom = UtilitaireNombres.genererNbAleatoire( catScolairesTemp2.size() );	
-					intCategorieQuestion =  catScolairesTemp2.get(intRandom).intValue();
-					objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulteTemp);
-					catScolairesTemp2.remove(intRandom);
-					i++;
-				}
-			}// fin while
-			*/
-			
-			//après pour les difficultés moins grands 
-			int intDifficulteTemp = intDifficulte;
-			        
-			while(objQuestionTrouvee == null && intDifficulteTemp > 0 ) 
-			{
-				intDifficulteTemp--;
-				objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intDifficulteTemp);
-			   	
-			}// fin while
-
-
-		}while( objQuestionTrouvee.obtenirCodeQuestion() == codeOld );		
 		
+		//après pour les difficultés moins grands 
+		int intDifficulteTemp = intDifficulte;
+
+		while(objQuestionTrouvee == null && intDifficulteTemp > 0 ) 
+		{
+			intDifficulteTemp--;
+			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestionCristall(intDifficulteTemp, codeOld);
+
+		}// fin while
+		
+		//au pire cas les difficultés plus grands 
+		intDifficulteTemp = intDifficulte;
+
+		while(objQuestionTrouvee == null && intDifficulteTemp < 7 ) 
+		{
+			intDifficulteTemp++;
+			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestionCristall(intDifficulteTemp, codeOld);
+
+		}// fin while
+
+		//System.out.println(" verification " + objQuestionTrouvee);
 		return objQuestionTrouvee;
 		
 	}// fin méthode
@@ -745,7 +714,7 @@ public class InformationPartie
 	 * @param intDifficulte
 	 * @return la question trouver ou null si aucune question n'a pu être pigée
 	 */
-	private Question trouverQuestion(int intCategorieQuestion, int intDifficulte, boolean moreDifficultQuestions)
+	private Question trouverQuestion(int intCategorieQuestion, int intDifficulte)
 	{
 		
 		Question objQuestionTrouvee = null;
@@ -1020,12 +989,12 @@ public class InformationPartie
 							if (objJoueur instanceof JoueurHumain)
 							{
 								Braniac.utiliserBraniac((JoueurHumain)objJoueur);
-								table.preparerEvenementUtiliserObjet(((JoueurHumain) objJoueur).obtenirNomUtilisateur(), ((JoueurHumain) objJoueur).obtenirNomUtilisateur(), "Braniac", "");
+								//table.preparerEvenementUtiliserObjet(((JoueurHumain) objJoueur).obtenirNomUtilisateur(), ((JoueurHumain) objJoueur).obtenirNomUtilisateur(), "Braniac", "");
 							}
 							else if (objJoueur instanceof JoueurVirtuel)
 							{
 								Braniac.utiliserBraniac((JoueurVirtuel)objJoueur);
-								table.preparerEvenementUtiliserObjet(((JoueurVirtuel) objJoueur).obtenirNom(), ((JoueurVirtuel) objJoueur).obtenirNom(), "Braniac", "");
+								//table.preparerEvenementUtiliserObjet(((JoueurVirtuel) objJoueur).obtenirNom(), ((JoueurVirtuel) objJoueur).obtenirNom(), "Braniac", "");
 
 							}
 							

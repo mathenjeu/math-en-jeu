@@ -63,7 +63,7 @@ public class Braniac extends ObjetUtilisable {
 	public static void utiliserBraniac(JoueurVirtuel player)
 	{		
 		if(player != null){
-			player.setUnderBraniacEffect(false);
+			player.setUnderBraniacEffect(true);
 
 			// Create TimerTask and Timer.
 			BraniacTask bTask = new BraniacTask(player);
