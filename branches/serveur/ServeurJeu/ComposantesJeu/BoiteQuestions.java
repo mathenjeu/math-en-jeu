@@ -95,7 +95,7 @@ public class BoiteQuestions
      * @param int intCategorieQuestion : la categorie de la question
      * @return Question : La question pigée
      */
-	public Question pigerQuestion( int intCategorieQuestion, int intDifficulte )
+	public Question pigerQuestion(int intCategorieQuestion, int intDifficulte)
 	{
 		// ajout acouet - tient en compte la categorie
 		Question question = null;
@@ -107,7 +107,7 @@ public class BoiteQuestions
 		{
 	    	   int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
 	    	   question = (Question)questions.elementAt( intRandom );
-			   questions.remove( intRandom );
+			  
 		}
 		else
 		{
@@ -126,7 +126,7 @@ public class BoiteQuestions
      * @param int intCategorieQuestion : la categorie de la question
      * @return Question : La question pigée
      */
-	public Question pigerQuestion( int intDifficulte )
+	public Question pigerQuestion(int intDifficulte)
 	{
 		
 		Question question = null;
@@ -135,7 +135,58 @@ public class BoiteQuestions
 		Set<Map.Entry<Integer, TreeMap<Integer, Vector<Question>>>> catQuestions = lstQuestions.entrySet();
 		//TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );
 		
-		// Obtenir un itérateur pour l'ensemble contenant les personnages
+		// Obtenir un itérateur pour l'ensemble contenant les questions
+		Iterator<Entry<Integer, TreeMap<Integer, Vector<Question>>>> objIterateurListeQuestions = catQuestions.iterator();
+
+		while(objIterateurListeQuestions.hasNext())
+		{
+			TreeMap<Integer, Vector<Question>> difficultes = objIterateurListeQuestions.next().getValue();
+
+			if( difficultes != null )
+			{
+				questions = difficultes.get( intDifficulte );
+				if (questions != null)
+				   questionsDiff.addAll(questions); 
+			}
+
+		}
+		
+		//System.out.println(questionsDiff.toString());
+				
+
+		// Let's choose a question among the possible ones
+	    if( questionsDiff != null && questionsDiff.size() > 0 )
+		{
+	    	   int intRandom = UtilitaireNombres.genererNbAleatoire( questionsDiff.size() );
+	    	   question = (Question)questionsDiff.elementAt( intRandom );
+			   
+		}
+		else
+		{
+			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+		}
+		
+		return question;
+	}
+	
+	/**
+     * Cette fonction permet de sélectionner une question dans la
+     * boite de questions selon son niveau de difficulté
+     *
+     * @param int intDifficulte : la difficulte de la question
+     * @param int intCategorieQuestion : la categorie de la question
+     * @return Question : La question pigée
+     */
+	public Question pigerQuestionCristall( int intDifficulte, int oldQuestionId )
+	{
+		
+		Question question = null;
+		Vector<Question> questionsDiff = new Vector<Question>();
+		Vector<Question> questions = new Vector<Question>();
+		Set<Map.Entry<Integer, TreeMap<Integer, Vector<Question>>>> catQuestions = lstQuestions.entrySet();
+		//TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );
+		
+		// Obtenir un itérateur pour l'ensemble contenant les questions
 		Iterator<Entry<Integer, TreeMap<Integer, Vector<Question>>>> objIterateurListeQuestions = catQuestions.iterator();
 
 		while(objIterateurListeQuestions.hasNext())
@@ -152,21 +203,28 @@ public class BoiteQuestions
 
 		}
 		
-		//System.out.println(questionsDiff.toString());
+		System.out.println("ver1 " + questionsDiff.toString());
 				
 
 		// Let's choose a question among the possible ones
 	    if( questionsDiff != null && questionsDiff.size() > 0 )
 		{
-	    	   int intRandom = UtilitaireNombres.genererNbAleatoire( questionsDiff.size() );
-	    	   question = (Question)questionsDiff.elementAt( intRandom );
-			   //questions.remove( intRandom );
+	    	int limit =0;
+	    	do{   
+	    		int intRandom = UtilitaireNombres.genererNbAleatoire( questionsDiff.size() );
+	    		question = (Question)questionsDiff.elementAt( intRandom );
+	    		//to not take the same question twice
+	    		questionsDiff.remove( intRandom );
+	    		limit++;
+
+	    	}while(question.obtenirCodeQuestion() == oldQuestionId || limit > 10);
 		}
 		else
 		{
 			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
 		}
 		
+	    System.out.println("ver2 " + question);
 		return question;
 	}
 	

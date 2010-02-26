@@ -4122,6 +4122,7 @@ public class ProtocoleJoueur implements Runnable
              else if(strTypeObjet.equals("Braniac"))
              {
 
+            	 
             	 /*
             	 objNoeudCommande.setAttribute("type", "OK");
 
