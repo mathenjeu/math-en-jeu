@@ -3264,10 +3264,10 @@ class GestionnaireEvenements
 		      
 			  if(_level0.loader.contentHolder.miniGameLayer["Minigame"])
 			  {
-               _level0.loader.contentHolder.miniGameLayer["Minigame"].loader.contentHolder.quitter(true);
+                  _level0.loader.contentHolder.miniGameLayer["Minigame"].loader.contentHolder.quitter(true);
 			  }else  if(_level0.loader.contentHolder.miniGameLayer["magasin"])
 			  {
-               _level0.loader.contentHolder.miniGameLayer["magasin"].loader.contentHolder.quitter();
+                  _level0.loader.contentHolder.miniGameLayer["magasin"].loader.contentHolder.quitter();
 			  }
 			 			  
 			  _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
@@ -3342,13 +3342,13 @@ class GestionnaireEvenements
 			
 		}
 		//***********  END treat the Banana **************************
-		/*
-		if(objetEvenement.objetUtilise == "Braniac")
+		
+		if(objetEvenement.objetUtilise == "Braniac" && objetEvenement.joueurAffecte == this.nomUtilisateur)
 		{
-			//_level0.loader.contentHolder.planche.getBraniacAnimaton(playerUnder);
+			//this.moveVisibility = +1;
 			
 		}
-		*/
+		
      	trace("fin de evenementUtiliserObjet");
      	trace("*********************************************\n");
     } // end methode
