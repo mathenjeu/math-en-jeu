@@ -91,7 +91,8 @@ public class InformationPartie
     private boolean wasOnFinish;
 
     // The number of cases on that user can to move. At the begining is set to 3.
-	// After for all 3 correct answers running add one unity. Not bigger than 6. 
+	// After 3 correct answers add one unity. Not bigger than 6, but 
+    // in the case of Braniac is possible to have 7 cases. 
 	private int moveVisibility;
 	
 	// Number of running correct answers. If is 3 moveVisibility is increasing by 1 
@@ -351,13 +352,24 @@ public class InformationPartie
 		}
 
 		// Si la distance parcourue dépasse le nombre de cases maximal possible, alors il y a une erreur
-		if (bolEstPermis == true && ((nouvellePosition.x != objPositionJoueur.x && Math.abs(nouvellePosition.x - objPositionJoueur.x) > objTable.getObjSalle().getRegles().obtenirDeplacementMaximal()) || 
-									 (nouvellePosition.y != objPositionJoueur.y && Math.abs(nouvellePosition.y - objPositionJoueur.y) > objTable.getObjSalle().getRegles().obtenirDeplacementMaximal())))
-		{
-			bolEstPermis = false;
+		// If we are in the Braniac maximal cases = + 1
+		if(isInBraniacState){
+			
+			if (bolEstPermis == true && ((nouvellePosition.x != objPositionJoueur.x && Math.abs(nouvellePosition.x - objPositionJoueur.x) > objTable.getObjSalle().getRegles().obtenirDeplacementMaximal() + 1) || 
+					(nouvellePosition.y != objPositionJoueur.y && Math.abs(nouvellePosition.y - objPositionJoueur.y) > objTable.getObjSalle().getRegles().obtenirDeplacementMaximal() + 1)))
+			{
+				bolEstPermis = false;
+			}
+		}else{
+			
+			if (bolEstPermis == true && ((nouvellePosition.x != objPositionJoueur.x && Math.abs(nouvellePosition.x - objPositionJoueur.x) > objTable.getObjSalle().getRegles().obtenirDeplacementMaximal()) || 
+					(nouvellePosition.y != objPositionJoueur.y && Math.abs(nouvellePosition.y - objPositionJoueur.y) > objTable.getObjSalle().getRegles().obtenirDeplacementMaximal())))
+			{
+				bolEstPermis = false;
+			}
 		}
 		
-		// Si le déplacement est toujours permis jusqu'ˆ maintenant, alors on 
+		// Si le déplacement est toujours permis jusqu'a maintenant, alors on 
 		// va vérifier qu'il n'y a pas de trous séparant le joueur de la 
 		// position qu'il veut aller
 		if (bolEstPermis == true)
@@ -989,13 +1001,14 @@ public class InformationPartie
 							if (objJoueur instanceof JoueurHumain)
 							{
 								Braniac.utiliserBraniac((JoueurHumain)objJoueur);
-								//table.preparerEvenementUtiliserObjet(((JoueurHumain) objJoueur).obtenirNomUtilisateur(), ((JoueurHumain) objJoueur).obtenirNomUtilisateur(), "Braniac", "");
+								table.preparerEvenementUtiliserObjet(((JoueurHumain) objJoueur).obtenirNomUtilisateur(), ((JoueurHumain) objJoueur).obtenirNomUtilisateur(), "Braniac", "");
+								intNouveauPointage += 20;
 							}
 							else if (objJoueur instanceof JoueurVirtuel)
 							{
 								Braniac.utiliserBraniac((JoueurVirtuel)objJoueur);
-								//table.preparerEvenementUtiliserObjet(((JoueurVirtuel) objJoueur).obtenirNom(), ((JoueurVirtuel) objJoueur).obtenirNom(), "Braniac", "");
-
+								table.preparerEvenementUtiliserObjet(((JoueurVirtuel) objJoueur).obtenirNom(), ((JoueurVirtuel) objJoueur).obtenirNom(), "Braniac", "");
+								intNouveauPointage += 20;
 							}
 							
 							// Enlever l'objet de la case du plateau de jeu
@@ -1153,20 +1166,9 @@ public class InformationPartie
 				((JoueurHumain)objJoueur).obtenirPartieCourante().definirPointage(intNouveauPointage);
 				((JoueurHumain)objJoueur).obtenirPartieCourante().definirArgent(intNouvelArgent);
 				((JoueurHumain)objJoueur).obtenirPartieCourante().setTournamentBonus(bonus);
-
-
-				//on increase the number of correct answers and on set moveVisibility
-				//int answers = ((JoueurHumain)objJoueur).obtenirPartieCourante().getRunningAnswers();
 				
-				//if (answers == 2){
-					//((JoueurHumain)objJoueur).obtenirPartieCourante().setRunningAnswers(0);
 					((JoueurHumain)objJoueur).obtenirPartieCourante().setMoveVisibility(((JoueurHumain)objJoueur).obtenirPartieCourante().getMoveVisibility() + 1);
-					
-					
-				//}else{
-					//((JoueurHumain)objJoueur).obtenirPartieCourante().setRunningAnswers(answers + 1);
-					
-				//}
+			
 			}
 			else if (objJoueur instanceof JoueurVirtuel)
 			{
@@ -1399,7 +1401,9 @@ public class InformationPartie
 		public void setMoveVisibility(int moveV) {
 			this.moveVisibility = moveV;
 			
-			if (this.moveVisibility > 6){
+			if (this.moveVisibility > 7 && this.isInBraniacState){
+				this.moveVisibility = 7;
+			}else if (this.moveVisibility > 6 && this.isInBraniacState == false){
 				this.moveVisibility = 6;
 			}else if (this.moveVisibility < 1){
 				this.moveVisibility = 1;
