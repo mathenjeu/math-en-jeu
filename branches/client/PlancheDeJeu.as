@@ -714,7 +714,7 @@ class PlancheDeJeu
 	}
 	
 	/////////////////////////////////////
-	/// 
+	/// method used to remove flash of cases
 	function switchBackColorFlash(laCase:Case)
 	{
 	    var mClip:MovieClip = new MovieClip();
@@ -1035,6 +1035,10 @@ class PlancheDeJeu
 				case 6:
 					mc.valDeplace.valeur = 13;
 				break;
+				case 7:
+					mc.valDeplace.valeur = 20;
+				break;
+				
 			}
 
 		}
@@ -1071,6 +1075,9 @@ class PlancheDeJeu
 				case 6:
 					mc.valDeplace.valeur = 13;
 				break;
+				case 7:
+					mc.valDeplace.valeur = 20;
+				break;
 			}
 				
 			//trace(mc.valDeplace.valeur);
@@ -1089,14 +1096,15 @@ class PlancheDeJeu
     {
         var i:Number;
 		var temp:Number;
-	
+	    var moveVisibility =  _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility;
+	    
 		//trace("Debut effacerCasesPossibles");
 	
 		//switchBackColor(tableauDesCases[p.obtenirL()][p.obtenirC()]);
 		//another version more light
 		switchBackColorFlash(tableauDesCases[p.obtenirL()][p.obtenirC()]);
 	
-        for(i=1;i<=Math.min(mat.length-p.obtenirL()-1,6);i++)
+        for(i=1;i<=Math.min(mat.length-p.obtenirL()-1,moveVisibility);i++)
         {
 			temp = Number(Number(p.obtenirL()) + i);   
 			//trace("ds premier for    i     L    temp"+i+"    "+p.obtenirL()+"    "+temp);
@@ -1114,7 +1122,7 @@ class PlancheDeJeu
             }
         }
 		
-        for(i=1;i<=Math.min(p.obtenirL(),6);i++)
+        for(i=1;i<=Math.min(p.obtenirL(),moveVisibility);i++)
         {
 			//trace("ds deuxieme for");
 		
@@ -1131,7 +1139,7 @@ class PlancheDeJeu
             }
         }
 		
-        for(i=1;i<=Math.min(mat[0].length-p.obtenirC()-1,6);i++)
+        for(i=1;i<=Math.min(mat[0].length-p.obtenirC()-1,moveVisibility);i++)
         {
 			temp = Number(Number(p.obtenirC())+i);   
 			//trace("ds troisieme for    i     L    temp"+i+"    "+p.obtenirC()+"    "+temp);
@@ -1149,7 +1157,7 @@ class PlancheDeJeu
             }
         }
 		
-        for(i=1;i<=Math.min(p.obtenirC(),6);i++)
+        for(i=1;i<=Math.min(p.obtenirC(),moveVisibility);i++)
         {
 			//trace("ds quatrieme for");
 		
