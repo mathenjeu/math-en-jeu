@@ -784,6 +784,9 @@ class PlancheDeJeu
 					{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
 					   tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();
+					}else if(i == moveVisibility && p.getBraniac()){
+					    brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
+					    tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();
 					}else{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					   brille._alpha = 0;
@@ -846,6 +849,9 @@ class PlancheDeJeu
 					   
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
 					   tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();
+					}else if(i == moveVisibility && p.getBraniac()){
+					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
+					   tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();	
 					}else{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					   brille._alpha = 0;
@@ -905,6 +911,9 @@ class PlancheDeJeu
 					if(tableauDesCases[p.obtenirL()][temp].obtenirType() > 40000){
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
 					   tableauDesCases[p.obtenirL()][temp].obtenirWinTheGame().shineWin();
+					}else if(i == moveVisibility && p.getBraniac()){
+					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
+					   tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();
 					}else{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					   brille._alpha = 0;
@@ -963,6 +972,9 @@ class PlancheDeJeu
 					if(tableauDesCases[p.obtenirL()][temp].obtenirType() > 40000){
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
 					   tableauDesCases[p.obtenirL()][temp].obtenirWinTheGame().shineWin();
+					}else if(i == moveVisibility && p.getBraniac()){
+					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
+					   tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();
 					}else{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					   brille._alpha = 0;
