@@ -48,6 +48,7 @@ class Personnage
 	private var listeSurMagasin:Array;	 // sert a recuperer la liste d'objets du magasin lorsque qu'on va sur une case magasin
 	private var minigameLoade:Boolean;
 	private var clothesColor:Number;
+	private var braniacState:Boolean;
 		
 		
 	function setColor(n:Number)
@@ -67,6 +68,16 @@ class Personnage
 	function getRole():Number
 	{
 		return role;
+	}
+	
+	function setBraniac(stateVar:Boolean)
+	{
+		braniacState = stateVar;
+	}
+	
+	function getBraniac():Boolean
+	{
+		return braniacState;
 	}
    
 	////////////////////////////////////////////////////////////
@@ -986,7 +997,7 @@ class Personnage
 		{
 			//_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("end"); 
 			_level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().braniacState = "end";
-			
+			_level0.loader.contentHolder.planche.getPersonnageByName(playerThat).setBraniac(false);
 			
 			
 			if(_level0.loader.contentHolder.planche.obtenirPerso().boardCentre == false || _level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible)

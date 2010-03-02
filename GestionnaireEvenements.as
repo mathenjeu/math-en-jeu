@@ -3343,9 +3343,11 @@ class GestionnaireEvenements
 		}
 		//***********  END treat the Banana **************************
 		
+		// we put our perso in Braniac...  
 		if(objetEvenement.objetUtilise == "Braniac" && objetEvenement.joueurAffecte == this.nomUtilisateur)
 		{
 			//this.moveVisibility = +1;
+			_level0.loader.contentHolder.planche.obtenirPerso().setBraniac(true);
 			
 		}
 		
