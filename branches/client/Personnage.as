@@ -979,7 +979,7 @@ class Personnage
 	   	  	    
 	   image.braniacState = "begin";
 		
-	   var intervalIDBegin = setInterval(etape2Bran, 2000, playerThat);	// to pass to phase 2 of Braniac
+	   var intervalIDBegin = setInterval(etape2Bran, 3000, playerThat);	// to pass to phase 2 of Braniac
 		
 		function etape2Bran():Void
 		{
@@ -990,8 +990,8 @@ class Personnage
 		}
 		
 		
-		
-		var intervalIdIn = setInterval(etape3Bran, 85000, playerThat);	// to pass to phase 3 of Braniac
+		/*
+		//var intervalIdIn = setInterval(etape3Bran, 85000, playerThat);	// to pass to phase 3 of Braniac
 		
 		function etape3Bran():Void
 		{
@@ -1030,7 +1030,7 @@ class Personnage
 		 	clearInterval(intervalIdIn);
 		}
 		
-		var intervalIdOut = setInterval(etape4Bran, 85500, playerThat);	// to pass to phase 3 of Braniac
+		//var intervalIdOut = setInterval(etape4Bran, 85500, playerThat);	// to pass to phase 3 of Braniac
 		
 		function etape4Bran():Void
 		{
@@ -1041,7 +1041,7 @@ class Personnage
 			
 		}
 			
-			
+			*/
 	
 	} // end of getBraniacAnimation
 
