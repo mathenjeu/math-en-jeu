@@ -514,14 +514,14 @@ public class InformationPartie
                 
                 System.out.println("Difficulte de la question : " + intDifficulte);   // test
                 
-                if(intDifficulte > 6) intDifficulte = 6;
-                
                 // if is under Banana effects
                 if(!isUnderBananaEffect.equals("") && intDifficulte < 6)
         			intDifficulte++;
                 // if is under Braniac effects
                 if(isInBraniacState && intDifficulte > 1 )
         			intDifficulte--;
+                
+                if(intDifficulte > 6) intDifficulte = 6;
                 System.out.println("Difficulte de la question2 : " + intDifficulte);   // test
 		
 		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
@@ -861,6 +861,10 @@ public class InformationPartie
 		boolean bolReponseEstBonne;
 		boolean boolWasOnFinish = false;
 		int intNouveauPointage = 0;
+		int deplacementJoueur = 0;
+		
+		
+		
 		
 		// Obtenir les divers informations à utiliser dépendamment de si
 		// la fonction s'applique à un joueur humain ou un joueur virtuel
@@ -881,23 +885,24 @@ public class InformationPartie
 		    nomJoueur = ((JoueurHumain)objJoueur).obtenirNomUtilisateur();
 		    boolWasOnFinish = objPartieCourante.wasOnFinish;
 		    
-		    //if Banana is used on this Humain Player
-		    if(!objPartieCourante.getIsUnderBananaEffect().equals("") && intDifficulteQuestion > 1)
-		    	intDifficulteQuestion = intDifficulteQuestion - 1;
-                    
-		    //if  Humain Player  is on Braniac
-		    if(objPartieCourante.isInBraniacState && intDifficulteQuestion < 6)
-		    {
-		    	intDifficulteQuestion = intDifficulteQuestion + 1;
-		    	
-		    }else if(objPartieCourante.isInBraniacState && intDifficulteQuestion == 6)
-		    {
-		    	intNouveauPointage += 8;
-		    }
 		    
-		    System.out.println("Difficulte de la question3 : " + intDifficulteQuestion + " bran : " + objPartieCourante.isInBraniacState);   // test
-
-                    // If we're in debug mode, accept any answer
+		    // Si la position en x est différente de celle désirée, alors
+	        // c'est qu'il y a eu un déplacement sur l'axe des x
+	        if (positionJoueur.x != objPositionDesiree.x)
+	        {
+	        	deplacementJoueur = Math.abs(objPositionDesiree.x - positionJoueur.x);
+	        }
+	        // Si la position en y est différente de celle désirée, alors
+	        // c'est qu'il y a eu un déplacement sur l'axe des y
+	        else if (positionJoueur.y != objPositionDesiree.y)
+	        {
+	        	deplacementJoueur = Math.abs(objPositionDesiree.y - positionJoueur.y);
+	        }
+		    
+	        if(deplacementJoueur == 1 && !objPartieCourante.getIsUnderBananaEffect().equals(""))
+	        	intNouveauPointage -= 1;
+	        	 
+		            // If we're in debug mode, accept any answer
                     if(ControleurJeu.modeDebug)
                     {
                         bolReponseEstBonne = true;
@@ -916,20 +921,26 @@ public class InformationPartie
             intArgentCourant   = objJoueurVirtuel.obtenirArgent();
 		    table = objJoueurVirtuel.obtenirTable();
 		    intDifficulteQuestion = objJoueurVirtuel.obtenirPointage(objJoueurVirtuel.obtenirPositionJoueur(), objPositionDesiree);
-		    
-		    //if Banana is used on this Virtual Player
-		    if(!objJoueurVirtuel.isUnderBananaEffect.equals("") && intDifficulteQuestion > 1)
-		    	intDifficulteQuestion = intDifficulteQuestion - 1;
-		    
-		    //if Virtual Player is on Braniac
-		    if(objJoueurVirtuel.isUnderBraniacEffect() && intDifficulteQuestion < 6)
-		    	intDifficulteQuestion = intDifficulteQuestion + 1;
-		    	
-		    	
 		    objListeObjetsUtilisablesRamasses = objJoueurVirtuel.obtenirListeObjetsRamasses();
 		    positionJoueur = objJoueurVirtuel.obtenirPositionJoueur();
 		    gestionnaireEv = objJoueurVirtuel.obtenirGestionnaireEvenements();
 		    
+		    // Si la position en x est différente de celle désirée, alors
+	        // c'est qu'il y a eu un déplacement sur l'axe des x
+	        if (positionJoueur.x != objPositionDesiree.x)
+	        {
+	        	deplacementJoueur = Math.abs(objPositionDesiree.x - positionJoueur.x);
+	        }
+	        // Si la position en y est différente de celle désirée, alors
+	        // c'est qu'il y a eu un déplacement sur l'axe des y
+	        else if (positionJoueur.y != objPositionDesiree.y)
+	        {
+	        	deplacementJoueur = Math.abs(objPositionDesiree.y - positionJoueur.y);
+	        }
+		    
+	        if(deplacementJoueur == 1 && !objJoueurVirtuel.isUnderBananaEffect.equals(""))
+	        	intNouveauPointage -= 1;
+	        
 		    // Pas de question pour les joueurs virtuels
 		    objQuestion = null;
 		    nomJoueur = objJoueurVirtuel.obtenirNom();
@@ -965,25 +976,28 @@ public class InformationPartie
 			Case objCaseDestination = table.obtenirPlateauJeuCourant()[objPositionDesiree.x][objPositionDesiree.y];
 			
 			// Calculer le nouveau pointage du joueur
-                        switch(intDifficulteQuestion)
+                        switch(deplacementJoueur)
                         {
                             case 1:
-                                intNouveauPointage += 1;
-                                break;
-                            case 2:
                                 intNouveauPointage += 2;
                                 break;
-                            case 3:
+                            case 2:
                                 intNouveauPointage += 3;
                                 break;
-                            case 4:
+                            case 3:
                                 intNouveauPointage += 5;
                                 break;
-                            case 5:
+                            case 4:
                                 intNouveauPointage += 8;
                                 break;
-                            case 6:
+                            case 5:
                                 intNouveauPointage += 13;
+                                break;
+                            case 6:
+                                intNouveauPointage += 21;
+                                break;
+                            case 7:
+                                intNouveauPointage += 34;
                                 break;
                         }
 			
@@ -1014,13 +1028,13 @@ public class InformationPartie
 							{
 								Braniac.utiliserBraniac((JoueurHumain)objJoueur);
 								table.preparerEvenementUtiliserObjet(((JoueurHumain) objJoueur).obtenirNomUtilisateur(), ((JoueurHumain) objJoueur).obtenirNomUtilisateur(), "Braniac", "");
-								intNouveauPointage += 21;
+								
 							}
 							else if (objJoueur instanceof JoueurVirtuel)
 							{
 								Braniac.utiliserBraniac((JoueurVirtuel)objJoueur);
 								table.preparerEvenementUtiliserObjet(((JoueurVirtuel) objJoueur).obtenirNom(), ((JoueurVirtuel) objJoueur).obtenirNom(), "Braniac", "");
-								intNouveauPointage += 21;
+								
 							}
 							
 							// Enlever l'objet de la case du plateau de jeu
