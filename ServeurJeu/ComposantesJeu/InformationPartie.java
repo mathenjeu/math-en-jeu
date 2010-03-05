@@ -514,12 +514,15 @@ public class InformationPartie
                 
                 System.out.println("Difficulte de la question : " + intDifficulte);   // test
                 
+                if(intDifficulte > 6) intDifficulte = 6;
+                
                 // if is under Banana effects
                 if(!isUnderBananaEffect.equals("") && intDifficulte < 6)
         			intDifficulte++;
                 // if is under Braniac effects
-                if(!isInBraniacState && intDifficulte > 1 )
+                if(isInBraniacState && intDifficulte > 1 )
         			intDifficulte--;
+                System.out.println("Difficulte de la question2 : " + intDifficulte);   // test
 		
 		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
 		// une question
@@ -857,6 +860,7 @@ public class InformationPartie
 		String nomJoueur; 
 		boolean bolReponseEstBonne;
 		boolean boolWasOnFinish = false;
+		int intNouveauPointage = 0;
 		
 		// Obtenir les divers informations à utiliser dépendamment de si
 		// la fonction s'applique à un joueur humain ou un joueur virtuel
@@ -882,8 +886,16 @@ public class InformationPartie
 		    	intDifficulteQuestion = intDifficulteQuestion - 1;
                     
 		    //if  Humain Player  is on Braniac
-		    if(!objPartieCourante.isInBraniacState && intDifficulteQuestion < 6)
+		    if(objPartieCourante.isInBraniacState && intDifficulteQuestion < 6)
+		    {
 		    	intDifficulteQuestion = intDifficulteQuestion + 1;
+		    	
+		    }else if(objPartieCourante.isInBraniacState && intDifficulteQuestion == 6)
+		    {
+		    	intNouveauPointage += 8;
+		    }
+		    
+		    System.out.println("Difficulte de la question3 : " + intDifficulteQuestion + " bran : " + objPartieCourante.isInBraniacState);   // test
 
                     // If we're in debug mode, accept any answer
                     if(ControleurJeu.modeDebug)
@@ -929,7 +941,7 @@ public class InformationPartie
 		}
 		
 		// Le nouveau pointage est initialement le pointage courant
-		int intNouveauPointage = intPointageCourant;
+		intNouveauPointage += intPointageCourant;
                 
         int intNouvelArgent = intArgentCourant;
 		
@@ -1002,13 +1014,13 @@ public class InformationPartie
 							{
 								Braniac.utiliserBraniac((JoueurHumain)objJoueur);
 								table.preparerEvenementUtiliserObjet(((JoueurHumain) objJoueur).obtenirNomUtilisateur(), ((JoueurHumain) objJoueur).obtenirNomUtilisateur(), "Braniac", "");
-								intNouveauPointage += 20;
+								intNouveauPointage += 21;
 							}
 							else if (objJoueur instanceof JoueurVirtuel)
 							{
 								Braniac.utiliserBraniac((JoueurVirtuel)objJoueur);
 								table.preparerEvenementUtiliserObjet(((JoueurVirtuel) objJoueur).obtenirNom(), ((JoueurVirtuel) objJoueur).obtenirNom(), "Braniac", "");
-								intNouveauPointage += 20;
+								intNouveauPointage += 21;
 							}
 							
 							// Enlever l'objet de la case du plateau de jeu
