@@ -139,6 +139,7 @@
   mathemaQuoi_betaNEW = ""  
     errorPWD = "Mauvais mot de passe! Réessayez ou faites un autre choix! "
 	  pwdAlert = "Erreur!"
+	  fermerAlert = "Voulez vous vraiment quitter le jeu?"
 	  textGUI_PWD = "Cette salle requiert un mot de passe..."
 	  errorSelect = "Sélectionnez une salle"
 	  nomAlert = "Donnez un nom SVP!"

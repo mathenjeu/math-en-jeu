@@ -139,6 +139,7 @@
 	mathemaQuoi_betaNEW = ""
 	  errorPWD = "Wrong password! Try again or choose another room!"
     pwdAlert = "Error!"
+    fermerAlert = "Do you really want to go out?"
     textGUI_PWD = "You need a password to enter this room..."  
 	  errorSelect = "Select a room first!"
 	  nomAlert = "Give a name to the room!"

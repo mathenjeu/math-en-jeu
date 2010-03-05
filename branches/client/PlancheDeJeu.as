@@ -624,7 +624,7 @@ class PlancheDeJeu
 	}///////// end methode
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	////////// Method used 
+	////////// Method used to put flah on the cases
 	function switchColorFlash(laCase:Case)
 	{
 		//trace("--- switchColor ---");
@@ -641,6 +641,28 @@ class PlancheDeJeu
 		{
 		   mClip = laCase.obtenirClipCase().interieur;
 		   mClip.attachMovie("flashCase", "Alpha", mClip.getNextHighestDepth());
+		}
+        
+	}///////// end methode
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////// Method used to put flah on the Braniac cases
+	function switchColorBran(laCase:Case)
+	{
+		//trace("--- switchColor ---");
+		var mClip:MovieClip = new MovieClip();
+		
+		
+		if(laCase.obtenirMiniGame())
+		{
+		   mClip = laCase.obtenirClipCase().minigame.interieur;
+		   mClip.attachMovie("flashCaseBran", "Alpha", mClip.getNextHighestDepth());
+		   mClip.Alpha._alpha = 75;
+		}
+		else
+		{
+		   mClip = laCase.obtenirClipCase().interieur;
+		   mClip.attachMovie("flashCaseBran", "Alpha", mClip.getNextHighestDepth());
 		}
         
 	}///////// end methode
@@ -776,17 +798,21 @@ class PlancheDeJeu
 				else
 				{
 					//switchColor(tableauDesCases[temp][p.obtenirC()]);
-					switchColorFlash(tableauDesCases[temp][p.obtenirC()]);
-	
+					if(i == moveVisibility && p.getBraniac())
+					{
+						switchColorBran(tableauDesCases[temp][p.obtenirC()]);
+					
+					}else
+					{
+					   switchColorFlash(tableauDesCases[temp][p.obtenirC()]);
+					}
+					
 					level = (tableauDesCases.length*tableauDesCases[0].length) +(temp*tableauDesCases[0].length)+Number(p.obtenirC()) + Number(1);
 					//trace("ds if,  level  "+level);
 					if(tableauDesCases[temp][p.obtenirC()].obtenirType() > 40000)
 					{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
 					   tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();
-					}else if(i == moveVisibility && p.getBraniac()){
-					    brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
-					    tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();
 					}else{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					   brille._alpha = 0;
@@ -839,8 +865,14 @@ class PlancheDeJeu
 				else
 				{
 					//switchColor(tableauDesCases[temp][p.obtenirC()]);
-					switchColorFlash(tableauDesCases[temp][p.obtenirC()]);
-					
+					//if we have Bran
+					if(i == moveVisibility && p.getBraniac())
+					{
+						switchColorBran(tableauDesCases[temp][p.obtenirC()]);
+					}else
+					{
+					   switchColorFlash(tableauDesCases[temp][p.obtenirC()]);
+					}
 					// trace("tableau des cases  vs  mat  : "+ tableauDesCases.length+"   "+mat.length);
 					// trace("tableau des cases[0]  vs  mat[]  : "+ tableauDesCases[0].length+"   "+mat[0].length);
 					level = (tableauDesCases.length*tableauDesCases[0].length)  +  ((temp)*tableauDesCases[0].length)  +  Number(p.obtenirC()) + Number(1);
@@ -849,9 +881,6 @@ class PlancheDeJeu
 					   
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
 					   tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();
-					}else if(i == moveVisibility && p.getBraniac()){
-					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
-					   tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();	
 					}else{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					   brille._alpha = 0;
@@ -904,16 +933,19 @@ class PlancheDeJeu
 				else
 				{
 					//switchColor(tableauDesCases[p.obtenirL()][temp]);
-					switchColorFlash(tableauDesCases[p.obtenirL()][temp]);
-			
+					if(i == moveVisibility && p.getBraniac())
+					{
+					   switchColorBran(tableauDesCases[p.obtenirL()][temp]);
+					}else
+				    {
+					   switchColorFlash(tableauDesCases[p.obtenirL()][temp]);
+					}
+					
 					level = (tableauDesCases.length*tableauDesCases[0].length) + Number(p.obtenirL()*tableauDesCases[0].length) + temp + Number(1);
 					//trace("ds if : level :   "+level);
 					if(tableauDesCases[p.obtenirL()][temp].obtenirType() > 40000){
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
 					   tableauDesCases[p.obtenirL()][temp].obtenirWinTheGame().shineWin();
-					}else if(i == moveVisibility && p.getBraniac()){
-					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
-					   tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();
 					}else{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					   brille._alpha = 0;
@@ -965,16 +997,19 @@ class PlancheDeJeu
 				else
 				{
 					//switchColor(tableauDesCases[p.obtenirL()][temp]);
-					switchColorFlash(tableauDesCases[p.obtenirL()][temp]);
-			
+					if(i == moveVisibility && p.getBraniac())
+					{
+     				   switchColorBran(tableauDesCases[p.obtenirL()][temp]);
+					}else
+					{
+					   switchColorFlash(tableauDesCases[p.obtenirL()][temp]);
+					}
+					
 					level = (tableauDesCases.length*tableauDesCases[0].length) + (Number(p.obtenirL())*tableauDesCases[0].length)+temp+Number(1);
 					//trace("ds if,  level: "+level);
 					if(tableauDesCases[p.obtenirL()][temp].obtenirType() > 40000){
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
 					   tableauDesCases[p.obtenirL()][temp].obtenirWinTheGame().shineWin();
-					}else if(i == moveVisibility && p.getBraniac()){
-					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
-					   tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();
 					}else{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					   brille._alpha = 0;
@@ -1038,17 +1073,26 @@ class PlancheDeJeu
 				
 			switch(mc.valDeplace.valeur)
 			{
-				case 4:
+				case 1:
+					mc.valDeplace.valeur = 2;
+				break;
+				case 2:
+					mc.valDeplace.valeur = 3;
+				break;
+				case 3:
 					mc.valDeplace.valeur = 5;
 				break;
-				case 5:
+				case 4:
 					mc.valDeplace.valeur = 8;
 				break;
-				case 6:
+				case 5:
 					mc.valDeplace.valeur = 13;
 				break;
+				case 6:
+					mc.valDeplace.valeur = 21;
+				break;
 				case 7:
-					mc.valDeplace.valeur = 20;
+					mc.valDeplace.valeur = 34;
 				break;
 				
 			}
@@ -1078,17 +1122,26 @@ class PlancheDeJeu
 			
 			switch(mc.valDeplace.valeur)
 			{
-				case 4:
+				case 1:
+					mc.valDeplace.valeur = 2;
+				break;
+				case 2:
+					mc.valDeplace.valeur = 3;
+				break;
+				case 3:
 					mc.valDeplace.valeur = 5;
 				break;
-				case 5:
+				case 4:
 					mc.valDeplace.valeur = 8;
 				break;
-				case 6:
+				case 5:
 					mc.valDeplace.valeur = 13;
 				break;
+				case 6:
+					mc.valDeplace.valeur = 21;
+				break;
 				case 7:
-					mc.valDeplace.valeur = 20;
+					mc.valDeplace.valeur = 34;
 				break;
 			}
 				
