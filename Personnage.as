@@ -988,63 +988,9 @@ class Personnage
 			//trace("control bran in set " + _level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().braniacState);
 		 	clearInterval(intervalIDBegin);
 		}
-		
-		
-		/*
-		//var intervalIdIn = setInterval(etape3Bran, 85000, playerThat);	// to pass to phase 3 of Braniac
-		
-		function etape3Bran():Void
-		{
-			//_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("end"); 
-			_level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().braniacState = "end";
-			_level0.loader.contentHolder.planche.getPersonnageByName(playerThat).setBraniac(false);
 			
-			
-			if(_level0.loader.contentHolder.planche.obtenirPerso().boardCentre == false || _level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible)
-			{
-				//_root.objGestionnaireInterface.effacerBoutons(1);
-				
-               // _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-				_level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility--;
-			   // _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			   // _root.objGestionnaireInterface.afficherBoutons(1);
-			
-			}else if(_level0.loader.contentHolder.box_question.monScroll._visible || _level0.loader.contentHolder.planche.obtenirPerso().minigameLoade)
-			{
-			  
-			   //_root.objGestionnaireInterface.afficherBoutons(1);
-			   //_level0.loader.contentHolder.sortieDunMinigame = false;
-			   //_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			   _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility--;
-		       //_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			
-			}else{
-				
-                _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-				_level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility--;
-			    _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-				
-			}
-			
-			
-		 	clearInterval(intervalIdIn);
-		}
-		
-		//var intervalIdOut = setInterval(etape4Bran, 85500, playerThat);	// to pass to phase 3 of Braniac
-		
-		function etape4Bran():Void
-		{
-			//_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("end"); 
-			_level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().braniacState = "out";
-						
-			clearInterval(intervalIdOut);
-			
-		}
-			
-			*/
-	
 	} // end of getBraniacAnimation
-
+	
 	
 	
 }
