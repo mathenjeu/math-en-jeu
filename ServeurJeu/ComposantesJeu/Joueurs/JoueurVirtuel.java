@@ -35,12 +35,6 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	// Cette variable va contenir le nom du joueur virtuel
 	private String strNom;
         
-    // Le joueur virtuel est-il destiné à subir une banane?
-    public String isUnderBananaEffect;
-    
-    // Le joueur virtuel est-il sous effets du Braniac?
-    private boolean isUnderBraniacEffect;
-	
     // Déclaration d'une référence vers le gestionnaire d'evenements
 	private GestionnaireEvenements objGestionnaireEv;
 	
@@ -142,6 +136,14 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     // coup à jouer
     private int matPoints[][];
     
+    // object that describe and manipulate 
+    // the Braniac state of the player
+    private PlayerBraniacState braniacState;
+    
+    // object that describe and manipulate 
+    // the Banana state of the player
+    private PlayerBananaState bananaState;
+    
 	// Constante pour la compilation conditionnelle
 	private static final boolean ccDebug = false;
 	
@@ -173,9 +175,11 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    objParametreIA = objControleurJeu.obtenirParametreIA();
 	    
 		strNom = nom;
-		isUnderBananaEffect = "";
+		// Banana state
+		this.bananaState = new PlayerBananaState(this);
 		
-		isUnderBraniacEffect = false;
+		// Braniac state
+		this.braniacState = new PlayerBraniacState(this); 
 		
 		// Cette variable sera utilisée dans la thread
 		objPositionFinaleVisee = null;
@@ -360,11 +364,11 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 					}
 					
 					//if Banana is used on this Virtual Player 
-					if(!isUnderBananaEffect.equals(""))
+					if(bananaState.isUnderBananaEffects())
 						intPourcentageReussite = intPourcentageReussite  - 10;
 					
 					//if Braniac is used on this Virtual Player 
-					if(isUnderBraniacEffect)
+					if(braniacState.isInBraniac())
 						intPourcentageReussite = intPourcentageReussite  + 10;
 					
 	    			// Déterminer si le joueur virtuel répondra à la question
@@ -374,11 +378,11 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    			intTempsReflexionQuestion = obtenirTempsReflexionReponse();
 	    			
 	    			//if Banana is used on this Virtual Player 
-					if(!isUnderBananaEffect.equals(""))
+					if(bananaState.isUnderBananaEffects())
 						intTempsReflexionQuestion = intTempsReflexionQuestion + 4;
 					
 					//if Braniac is used on this Virtual Player 
-					if(isUnderBraniacEffect)
+					if(braniacState.isInBraniac())
 						intTempsReflexionQuestion = intTempsReflexionQuestion - 4;
 	                
 	    			// Pause pour moment de réflexion de réponse
@@ -421,6 +425,38 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		}
 	}
 	
+	/**
+	 * @return the braniacState
+	 */
+	public PlayerBraniacState getBraniacState() {
+		return braniacState;
+	}
+
+
+	/**
+	 * @param braniacState the braniacState to set
+	 */
+	public void setBraniacState(PlayerBraniacState braniacState) {
+		this.braniacState = braniacState;
+	}
+
+
+	/**
+	 * @return the bananaState
+	 */
+	public PlayerBananaState getBananaState() {
+		return bananaState;
+	}
+
+
+	/**
+	 * @param bananaState the bananaState to set
+	 */
+	public void setBananaState(PlayerBananaState bananaState) {
+		this.bananaState = bananaState;
+	}
+
+
 	/* Cette fonction trouve le chemin le plus court entre deux points et
 	 * le retourne sous forme de Vector. Le chemin retourné est en ordre inverse
 	 * (l'indice 0 correspondra au point d'arrivée)
@@ -2571,15 +2607,6 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	public boolean isPlayerNotArrivedOnce() {
 		return isPlayerNotArrivedOnce;
 	}
-
-
-	public void setUnderBraniacEffect(boolean isUnderBraniacEffect) {
-		this.isUnderBraniacEffect = isUnderBraniacEffect;
-	}
-
-
-	public boolean isUnderBraniacEffect() {
-		return isUnderBraniacEffect;
-	}
+	
 }
 

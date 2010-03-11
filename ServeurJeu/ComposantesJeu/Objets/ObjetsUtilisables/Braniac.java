@@ -12,7 +12,7 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 
 public class Braniac extends ObjetUtilisable {
 
-	static final int PRIX = 1;
+	public static final int PRIX = 1;
 
 	// Cette constante affirme que l'objet courant n'est pas limité 
 	// lorsqu'on l'achète (c'est-à-dire qu'un magasin n'épuise jamais 
@@ -27,7 +27,7 @@ public class Braniac extends ObjetUtilisable {
 	// Cette constante définit le nom de cet objet
 	public static final String TYPE_OBJET = "Braniac";
 	
-	private static final int Seconds = 90;
+	//private static final long Seconds = 90;
 
 	/**
 	 * Constructeur de la classe Braniac qui permet de définir les propriétés 
@@ -42,36 +42,37 @@ public class Braniac extends ObjetUtilisable {
 		super(id, estVisible, UID_OU_BRANIAC, PRIX, EST_LIMITE, PEUT_ETRE_ARME, TYPE_OBJET);
 	}
 
-	public static void utiliserBraniac(JoueurHumain player)
+	public static BraniacTask utiliserBraniac(JoueurHumain player, long delay)
 	{
 		// player under Braniac
 		// Create TimerTask and Timer.
 		BraniacTask bTask = new BraniacTask(player);
 		Timer bTimer = new Timer();
 					
-		// effects of Braniac
-		player.obtenirPartieCourante().setInBraniacState(true);
+		// effect of Braniac - the rest in the BraniacState
 		player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() + 1);
-						
+								
 		// used timer to take out effects of braniac after the needed time
-		bTimer.schedule(bTask, Seconds * 1000);
+		bTimer.schedule(bTask, delay);
+		//System.out.println("BraniacTask !!!! " + bTimer + " " + Seconds + " " + bTask);
+		return bTask;
 			
 	}
 	
 	
 	
-	public static void utiliserBraniac(JoueurVirtuel player)
+	public static BraniacTask utiliserBraniac(JoueurVirtuel player, long delay)
 	{		
-		if(player != null){
-			player.setUnderBraniacEffect(true);
-
-			// Create TimerTask and Timer.
-			BraniacTask bTask = new BraniacTask(player);
-			Timer bTimer = new Timer();
-
-			// used timer to take out effects of braniac after the needed time
-			bTimer.schedule(bTask, Seconds * 1000);
-		}
+		
+		// Create TimerTask and Timer.
+		BraniacTask bTask = new BraniacTask(player);
+		Timer bTimer = new Timer();
+		
+		player.getBraniacState().setInBraniac(true);
+		// used timer to take out effects of braniac after the needed time
+		bTimer.schedule(bTask, delay);
+		
+		return bTask;
 
 	}// end method
 }// end class
