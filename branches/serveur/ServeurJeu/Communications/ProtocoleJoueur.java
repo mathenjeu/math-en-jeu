@@ -4115,35 +4115,14 @@ public class ProtocoleJoueur implements Runnable
             	 }
             	 
             	 objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliserObjet(objJoueurHumain.obtenirNomUtilisateur(), playerName, "Banane", "");
-            	
-            	 Banane.utiliserBanane(objJoueurHumain, playerName, estHumain);
+            	 if(estHumain)
+            		 objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(playerName).obtenirPartieCourante().getBananaState().bananaIsTossed();
+            		 //Banane.utiliserBanane(objJoueurHumain, playerName, estHumain);
             	 
              }
              else if(strTypeObjet.equals("Braniac"))
              {
-
-            	 
-            	 /*
-            	 objNoeudCommande.setAttribute("type", "OK");
-
-                 boolean estHumain =  false; //Le joueur choisi est'il humain?
-       			
-                 // On obtient la liste des joueurs humains, puis la liste des joueurs virtuels
-            	 TreeMap<String, JoueurHumain> listeJoueursHumains = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs();
-            	 Set<Map.Entry<String, JoueurHumain>> nomsJoueursHumains = listeJoueursHumains.entrySet();
-            	 Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = nomsJoueursHumains.iterator();
-            	 Vector<JoueurVirtuel> listeJoueursVirtuels = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();             	 
-            	 
-            	 while(objIterateurListeJoueurs.hasNext() == true)
-            	 {
-            		 if(((Map.Entry<String, JoueurHumain>)(objIterateurListeJoueurs.next())).getValue().obtenirNomUtilisateur().equals(playerName))
-            		 {
-            			 estHumain = true;
-            		 }
-
-            	 }
-            	 
-             */
+               //all is did on the time when the player go on the case
              }
 
              

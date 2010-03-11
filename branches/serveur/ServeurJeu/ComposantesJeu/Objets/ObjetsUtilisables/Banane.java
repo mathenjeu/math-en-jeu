@@ -8,6 +8,7 @@ import java.util.Timer;
 /**
  * @author François Gingras
  * changed Oloieri Lilian
+ * last change 10 March 2010
  */
 public class Banane extends ObjetUtilisable 
 {
@@ -27,7 +28,7 @@ public class Banane extends ObjetUtilisable
 	// Cette constante définit le nom de cet objet
 	public static final String TYPE_OBJET = "Banane";
 	
-	private static final int Seconds = 90;
+	//private static final long Seconds = 90;
 
 	/**
 	 * Constructeur de la classe Banane qui permet de définir les propriétés 
@@ -42,49 +43,37 @@ public class Banane extends ObjetUtilisable
 		super(id, estVisible, UID_OU_BANANE, PRIX, EST_LIMITE, PEUT_ETRE_ARME, TYPE_OBJET);
 	}
 
-	public static void utiliserBanane(JoueurHumain player, String nomJoueurChoisi, boolean estHumain)
+	public static BananaTask utiliserBanane(JoueurHumain player, long delay)
 	{
-		// On prépare l'événement à envoyer à tous
-	    //joueur.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliserObjet(joueur.obtenirNomUtilisateur(), nomJoueurChoisi, "Banane", "");///strCodeXML);
-		
-		if(estHumain)
-		{
-			// player under Banana
-			JoueurHumain second = player.obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(nomJoueurChoisi); 
-			
 			// Create TimerTask and Timer.
-			BananaTask bTask = new BananaTask(second);
+			BananaTask bTask = new BananaTask(player);
 			Timer bTimer = new Timer();
 			//bkTimer.cancel();
 			
 			// effects of Banana
-			second.obtenirPartieCourante().setIsUnderBananaEffect(player.obtenirNomUtilisateur());
-			second.obtenirPartieCourante().setMoveVisibility(second.obtenirPartieCourante().getMoveVisibility() - 2);
+			player.obtenirPartieCourante().getBananaState().setisUnderBananaEffects(true);
+			player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() - 2);
 						
 			// used timer to take out effects of banana after the needed time
-			bTimer.schedule(bTask, Seconds * 1000);
-			
-		}
-		else
-		{
-			// player under Banana
-			JoueurVirtuel vsecond = player.obtenirPartieCourante().obtenirTable().obtenirJoueurVirtuelParSonNom(nomJoueurChoisi); 
-			if(vsecond != null){
-			   vsecond.isUnderBananaEffect = player.obtenirNomUtilisateur();
-			// Create TimerTask and Timer.
-				BananaTask bTask = new BananaTask(vsecond);
-				Timer bTimer = new Timer();
-				//bkTimer.cancel();
-				
-				// used timer to take out effects of banana after the needed time
-				bTimer.schedule(bTask, Seconds * 1000);
-				
-			}else{
-				System.out.println("Message Banane : joueur null");
-			}
+			bTimer.schedule(bTask, delay);
+			return bTask;
 						
-		}
-
-				
+	}
+	
+	// if VitualPlayer use the Banana
+	public static BananaTask utiliserBanane(JoueurVirtuel player, long delay)
+	{
+		
+			// Create TimerTask and Timer.
+			BananaTask bTask = new BananaTask(player);
+			Timer bTimer = new Timer();
+					
+			// effects of Banana
+			player.getBananaState().setisUnderBananaEffects(true);
+									
+			// used timer to take out effects of banana after the needed time
+			bTimer.schedule(bTask, delay);
+			return bTask;
+			
 	}
 }// end class

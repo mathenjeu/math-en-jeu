@@ -13,6 +13,8 @@ import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
+import ServeurJeu.ComposantesJeu.Joueurs.PlayerBananaState;
+import ServeurJeu.ComposantesJeu.Joueurs.PlayerBraniacState;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
@@ -76,12 +78,18 @@ public class InformationPartie
         
     // Déclaration d'un boolean qui dit si le joueur est 'targeté' pour subir une banane
     // (si le string n'est pas "", et alors le string dit qui l'a utilisée)
-    private String isUnderBananaEffect;
+    //private String isUnderBananaEffect;
     
-    //is our player in Braniac state?
-    private boolean isInBraniacState;
+    // object that describe and manipulate 
+    // the Banana state of the player
+    private PlayerBananaState bananaState;
+    
+    
+    // object that describe and manipulate 
+    // the Braniac state of the player
+    private PlayerBraniacState braniacState;
         
-    // If is true intArgent is taken from DB and at the end 
+	// If is true intArgent is taken from DB and at the end 
     //of the game is writen to the DB
     private boolean moneyPermit;
     
@@ -95,10 +103,6 @@ public class InformationPartie
     // in the case of Braniac is possible to have 7 cases. 
 	private int moveVisibility;
 	
-	// Number of running correct answers. If is 3 moveVisibility is increasing by 1 
-	// and this is set to 0. if one incorrect answer this is set too to 0. 
-	//private int runningAnswers;
-    
 	// Number for bonus in Tournament type of game
 	// Bonus is given while arrived at finish line and is calculated
 	// as number of rested sec to game time
@@ -117,10 +121,7 @@ public class InformationPartie
 	public InformationPartie( GestionnaireEvenements gestionnaireEv, GestionnaireBD gestionnaireBD, JoueurHumain joueur, Table tableCourante)
 	{
             //maxNbObj = tableCourante.obtenirRegles().getMaxNbObjectsAndMoney();    
-		
-		    // Au début, on ne subit pas de banane!
-            isUnderBananaEffect = "";
-            
+				               
             // Faire la référence vers le gestionnaire de base de données
             objGestionnaireBD = gestionnaireBD;
 
@@ -173,6 +174,15 @@ public class InformationPartie
 			
 			// set the color to default
 			clothesColor = 0;
+			
+			//set the number
+			///braniacsNumber = 0;
+			
+			// Braniac state
+			this.braniacState = new PlayerBraniacState(joueur);
+			
+			// Banana state
+			this.bananaState = new PlayerBananaState(joueur);
 	        
 			String language = joueur.obtenirProtocoleJoueur().langue;
             setObjBoiteQuestions(new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language), joueur));
@@ -180,6 +190,8 @@ public class InformationPartie
             
 	}// fin constructeur
 
+	
+	
 	/**
 	 * @return the tournamentBonus
 	 */
@@ -353,7 +365,7 @@ public class InformationPartie
 
 		// Si la distance parcourue dépasse le nombre de cases maximal possible, alors il y a une erreur
 		// If we are in the Braniac maximal cases = + 1
-		if(isInBraniacState){
+		if(this.braniacState.isInBraniac()){
 			
 			if (bolEstPermis == true && ((nouvellePosition.x != objPositionJoueur.x && Math.abs(nouvellePosition.x - objPositionJoueur.x) > objTable.getObjSalle().getRegles().obtenirDeplacementMaximal() + 1) || 
 					(nouvellePosition.y != objPositionJoueur.y && Math.abs(nouvellePosition.y - objPositionJoueur.y) > objTable.getObjSalle().getRegles().obtenirDeplacementMaximal() + 1)))
@@ -515,10 +527,10 @@ public class InformationPartie
                 System.out.println("Difficulte de la question : " + intDifficulte);   // test
                 
                 // if is under Banana effects
-                if(!isUnderBananaEffect.equals("") && intDifficulte < 6)
+                if(this.bananaState.isUnderBananaEffects() && intDifficulte < 6)
         			intDifficulte++;
                 // if is under Braniac effects
-                if(isInBraniacState && intDifficulte > 1 )
+                if(this.braniacState.isInBraniac() && intDifficulte > 1 )
         			intDifficulte--;
                 
                 if(intDifficulte > 6) intDifficulte = 6;
@@ -899,7 +911,7 @@ public class InformationPartie
 	        	deplacementJoueur = Math.abs(objPositionDesiree.y - positionJoueur.y);
 	        }
 		    
-	        if(deplacementJoueur == 1 && !objPartieCourante.getIsUnderBananaEffect().equals(""))
+	        if(deplacementJoueur == 1 && objPartieCourante.bananaState.isUnderBananaEffects())
 	        	intNouveauPointage -= 1;
 	        	 
 		            // If we're in debug mode, accept any answer
@@ -938,7 +950,7 @@ public class InformationPartie
 	        	deplacementJoueur = Math.abs(objPositionDesiree.y - positionJoueur.y);
 	        }
 		    
-	        if(deplacementJoueur == 1 && !objJoueurVirtuel.isUnderBananaEffect.equals(""))
+	        if(deplacementJoueur == 1 && objJoueurVirtuel.getBananaState().isUnderBananaEffects())
 	        	intNouveauPointage -= 1;
 	        
 		    // Pas de question pour les joueurs virtuels
@@ -1026,13 +1038,13 @@ public class InformationPartie
 							// put the player on the Braniac state
 							if (objJoueur instanceof JoueurHumain)
 							{
-								Braniac.utiliserBraniac((JoueurHumain)objJoueur);
+								((JoueurHumain) objJoueur).obtenirPartieCourante().getBraniacState().putTheOneBraniac();
 								table.preparerEvenementUtiliserObjet(((JoueurHumain) objJoueur).obtenirNomUtilisateur(), ((JoueurHumain) objJoueur).obtenirNomUtilisateur(), "Braniac", "");
 								
 							}
 							else if (objJoueur instanceof JoueurVirtuel)
 							{
-								Braniac.utiliserBraniac((JoueurVirtuel)objJoueur);
+								((JoueurVirtuel)objJoueur).getBraniacState().putTheOneBraniac();
 								table.preparerEvenementUtiliserObjet(((JoueurVirtuel) objJoueur).obtenirNom(), ((JoueurVirtuel) objJoueur).obtenirNom(), "Braniac", "");
 								
 							}
@@ -1381,16 +1393,23 @@ public class InformationPartie
             return objGestionnaireBD;
         }
         
-        public String getIsUnderBananaEffect()
-        {
-            return isUnderBananaEffect;
-        }
-        
-        public void setIsUnderBananaEffect(String b)
-        {
-            isUnderBananaEffect = b;
-        }
-        
+             
+        /**
+		 * @return the bananaState
+		 */
+		public PlayerBananaState getBananaState() {
+			return bananaState;
+		}
+
+
+
+		/**
+		 * @param bananaState the bananaState to set
+		 */
+		public void setBananaState(PlayerBananaState bananaState) {
+			this.bananaState = bananaState;
+		}
+
         public int obtenirDistanceAuFinish()
         {
             Point objPoint = objTable.getPositionPointFinish();
@@ -1427,29 +1446,16 @@ public class InformationPartie
 		public void setMoveVisibility(int moveV) {
 			this.moveVisibility = moveV;
 			
-			if (this.moveVisibility > 7 && this.isInBraniacState){
+			if (this.moveVisibility > 7 && this.braniacState.isInBraniac()){
 				this.moveVisibility = 7;
-			}else if (this.moveVisibility > 6 && this.isInBraniacState == false){
+			}else if (this.moveVisibility > 6 && this.braniacState.isInBraniac() == false){
 				this.moveVisibility = 6;
 			}else if (this.moveVisibility < 1){
 				this.moveVisibility = 1;
 			}
 		}
 
-		/**
-		 * @return the isInBraniacState
-		 */
-		public boolean isInBraniacState() {
-			return isInBraniacState;
-		}
-
-		/**
-		 * @param isInBraniacState the isInBraniacState to set
-		 */
-		public void setInBraniacState(boolean isInBraniacState) {
-			this.isInBraniacState = isInBraniacState;
-		}
-
+			
 		public void setClothesColor(int clothesColor) {
 			this.clothesColor = clothesColor;
 		}
@@ -1458,19 +1464,23 @@ public class InformationPartie
 			return clothesColor;
 		}
 
-		/*
-		 * *
-		 * @return the runningAnswers
-		 
-		public int getRunningAnswers() {
-			return runningAnswers;
-		}
+
 
 		/**
-		 * @param runningAnswers the runningAnswers to set
-		 
-		public void setRunningAnswers(int runningAnswers) {
-			this.runningAnswers = runningAnswers;
-		}*/
-		
+		 * @return the braniacState
+		 */
+		public PlayerBraniacState getBraniacState() {
+			return braniacState;
+		}
+
+
+
+		/**
+		 * @param braniacState the braniacState to set
+		 */
+		public void setBraniacState(PlayerBraniacState braniacState) {
+			this.braniacState = braniacState;
+		}
+
+			
 }
