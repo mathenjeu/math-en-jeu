@@ -13,6 +13,7 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
  * (reduced move possibility and harder questions)
  *
  */
+
 public class BananaTask extends TimerTask {
 
 	private JoueurHumain player;
@@ -29,13 +30,13 @@ public class BananaTask extends TimerTask {
 	// override abstract run methode 
 	public void run() {
 	    if(player != null){
-	    	player.obtenirPartieCourante().setIsUnderBananaEffect("");
+	    	player.obtenirPartieCourante().getBananaState().setisUnderBananaEffects(false);
 	    	player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() + 2);
 	    	System.out.println("BananaTask humain!!!!");
 	    }else{
 	    	
-	    	vplayer.isUnderBananaEffect = "";
-	    	System.out.println("BananaTask virtuel!!!!");
+	    	vplayer.getBananaState().setisUnderBananaEffects(false);
+	    	//System.out.println("BananaTask virtuel!!!!");
 	    }
 	      
 	}// end run

@@ -10,9 +10,10 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
  * @author Oloieri Lilian
  * 
  * Used to take out the effects of Braniac on the player
- * after the amount of time declared in Braniac (Seconds)
+ * after the needed amount of time (Seconds)
  * (more move possibility and softer questions)
  *
+ * last change 10 March 2010
  */
 
 public class BraniacTask extends TimerTask {
@@ -31,14 +32,18 @@ public class BraniacTask extends TimerTask {
 	// override abstract run methode 
 	public void run() {
 	    if(player != null){
-	    	player.obtenirPartieCourante().setInBraniacState(false);
-	    	player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() - 1);
-	    	System.out.println("BraniacTask humain!!!!");
+	    	
+	    		//player.obtenirPartieCourante().setBraniacsNumberMinus();
+	    		player.obtenirPartieCourante().getBraniacState().setInBraniac(false);
+	    		player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() - 1);
+	    		//System.out.println("BraniacTask humain!!!!");
+	    	
 	    }else{
 	    	
-	    	vplayer.setUnderBraniacEffect(false);
-	    	System.out.println("BraniacTask virtuel!!!!");
+	    	vplayer.getBraniacState().setInBraniac(false);
+	    	//System.out.println("BraniacTask virtuel!!!!");
 	    }
 	      
+	  
 	}// end run
 }
