@@ -3361,9 +3361,9 @@ class GestionnaireEvenements
 			_level0.loader.contentHolder.planche.obtenirPerso().setBraniac(true);
 			this.setBraniacTimer(playerUnder);
 			
-		}else
+		}else if (objetEvenement.objetUtilise == "Braniac" && objetEvenement.joueurAffecte != this.nomUtilisateur)
 		{
-			this.setBraniacTimer(playerUnder);
+			_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).setOutBraniac();
 		}
 		
      	trace("fin de evenementUtiliserObjet");
@@ -3374,6 +3374,8 @@ class GestionnaireEvenements
 	// after the time finished it must disapear
 	function setBraniacTimer(playerUnder)
 	{
+		
+		
 		
 		//first on put on the sprite the box for the timer if is our perso
 		if(playerUnder == this.nomUtilisateur)
@@ -3408,19 +3410,33 @@ class GestionnaireEvenements
            _level0.loader.contentHolder.branBox.braniacTime.setNewTextFormat(formatTimer);
 		}//end if
 		
-		   var restedTime:Number = 89;
 		
-		   var intervalIdBran:Number;
-	       intervalIdBran = setInterval(branTimerSet, 1000, playerUnder);	// sert pour attendre la jusqu'a la fin de action de Braniac
+		if(_global.restedTime > 0) 
+		{ 
+		    _global.restedTime += 89;
+		}else
+		{
+		    _global.restedTime = 89; 
+		}
+		  
+		
+		if(_global.intervalIdBran != null) {
+		
+             // trace("clearInterval************************************    " + tempTime);
+			 clearInterval(_global.intervalIdBran);
+        }
+
+		   // _global.restedTime:Number = 89;
+	      _global.intervalIdBran = setInterval(branTimerSet, 1000, playerUnder);	// sert pour attendre la jusqu'a la fin de action de Braniac
 	   
-	      function branTimerSet(playerUnder){
-	       restedTime--;	  
-		   _level0.loader.contentHolder.branBox.braniacTime.text = restedTime; 
-		   if(restedTime == 3)
+	      function branTimerSet(playerUnder:String){
+	        _global.restedTime--;	  
+		   _level0.loader.contentHolder.branBox.braniacTime.text =  _global.restedTime; 
+		   if( _global.restedTime == 2)
 		   {
 			  _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().braniacState = "end";
 		   }
-		   else if(restedTime == 0)
+		   else if( _global.restedTime == 0)
 	       {
 			  _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).setBraniac(false);
 			 
@@ -3445,11 +3461,11 @@ class GestionnaireEvenements
 		   } // 
 		   
 		   // to end the Braniac and remove the timer box
-		   if(restedTime < 0)
+		   if( _global.restedTime < 0)
 		   { 
 		      _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().braniacState = "out";
               _level0.loader.contentHolder.branBox.removeMovieClip();
-		      clearInterval(intervalIdBran);
+		      clearInterval(_global.intervalIdBran);
 		   }
 			
 	   } // end function branTimerSet
@@ -3459,7 +3475,7 @@ class GestionnaireEvenements
 	//*****************************************************************************************
 	// this function is used to put on the Sprite the Timer of the Banana
 	// after the time finished it must disapear
-	function setBananaTimer(playerUnder)
+	function setBananaTimer(playerUnder:String)
 	{
 		//first on put on the sprite the box for the timer
 		var banBox:MovieClip = 	_level0.loader.contentHolder.attachMovie("timeBox", "bananaBox", 7);//_level0.loader.contentHolder.getNextHigesthDepth());
@@ -3491,20 +3507,39 @@ class GestionnaireEvenements
         formatTimer.align = "Center";
         _level0.loader.contentHolder.bananaBox.bananaTime.setNewTextFormat(formatTimer);
 		
-		var restedTime:Number = 89;
+		if(_global.restedTimeBanana > 0) 
+		{ 
+		    _global.restedTimeBanana += 90;
+		}else
+		{
+		    _global.restedTimeBanana = 90; 
+		}
 		
-		var intervalIdBanana:Number;
-	    intervalIdBanana = setInterval(bananaTimerSet, 1000, playerUnder);	// sert pour attendre la jusqu'a la fin de action de Braniac
+		if(_global.intervalIdBanana != null) {
+		
+             // trace("clearInterval************************************    " + tempTime);
+			 clearInterval(_global.intervalIdBanana);
+        }
+
+		//_global.intervalIdBanana:Number;
+	    _global.intervalIdBanana = setInterval(bananaTimerSet, 1000, playerUnder);	// sert pour attendre la jusqu'a la fin de action de Braniac
 	   
 	   function bananaTimerSet(playerUnder){
-	       restedTime--;	  
-		   _level0.loader.contentHolder.bananaBox.bananaTime.text = restedTime; 
+	       
+		   _global.restedTimeBanana--;	  
+		   
+		   _level0.loader.contentHolder.bananaBox.bananaTime.text = _global.restedTimeBanana; 
 		   		   
 		   // to remove the timer box
-		   if(restedTime < 0)
+		   if(_global.restedTimeBanana < 0)
 		   { 
+		      _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			    this.moveVisibility = this.moveVisibility + 2;
+		        if(this.moveVisibility > 6)
+		          this.moveVisibility = 6;
+		       _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 		      _level0.loader.contentHolder.bananaBox.removeMovieClip();
-		      clearInterval(intervalIdBanana);
+		      clearInterval(_global.intervalIdBanana);
 		   }
 			
 	   } // end function bananaTimerSet

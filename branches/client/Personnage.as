@@ -559,7 +559,7 @@ class Personnage
 		
 		dx = this.prochainePosition.obtenirX() - this.position.obtenirX();  
 		dy = this.prochainePosition.obtenirY() - this.position.obtenirY();
-		trace("ds deplacePersonnage " + dx/dy);
+		//trace("ds deplacePersonnage " + dx/dy);
 		if( boardCentre) //dx == 0 && dy == 0 && image._currentFrame == 1) 
 		{
 			return;
@@ -815,7 +815,7 @@ class Personnage
 				{
 					if(!this.minigameLoade) _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 					boardCentre = true;
-					trace(_level0.loader.contentHolder.horlogeNum + "temps restant");
+					//trace(_level0.loader.contentHolder.horlogeNum + "temps restant");
 					
 				}
 			} 
@@ -844,13 +844,13 @@ class Personnage
 			}
 		}
 
-        trace("trace  dx : " + dx + " dy : " + dy + " control : " + dx/dy);
+        //trace("trace  dx : " + dx + " dy : " + dy + " control : " + dx/dy);
 		if (dy < 0)
 		{
 			if(image._currentFrame < 70)
 			{
 				image.gotoAndPlay(70);
-				trace("perso " + image._currentFrame);
+				//trace("perso " + image._currentFrame);
 			}
 			
 		}
@@ -885,7 +885,7 @@ class Personnage
 		position.definirY(position.obtenirY()+dy);
 	
 		// Si le deplacement voulu n'est pas nul mais que le personnage est au repos
-		trace("avant le if le frame  :   "+this.image._currentFrame);
+		//trace("avant le if le frame  :   "+this.image._currentFrame);
 		if (((dx != 0) || (dy != 0)) && (this.image._currentFrame == 1 || this.image._currentFrame > 89))
 		{
 			// place le clip du personnage au debut de la sequence de deplacement
@@ -990,6 +990,38 @@ class Personnage
 		}
 			
 	} // end of getBraniacAnimation
+	
+	function setOutBraniac()
+	{
+		var playerUnder:String = this.nom;
+		
+		var restedTime = 89;
+	   	  	    
+	    var intervalIDEnd = setInterval(etapeEndBran, 1000, playerUnder);	// to pass to phase 3 of Braniac
+		
+		function etapeEndBran():Void
+		{    
+		   restedTime--;	  
+		  
+		   if( restedTime == 2)
+		   {
+			  _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().braniacState = "end";
+		   }
+		   else if(restedTime == 0)
+	       {
+			  _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).setBraniac(false);
+			 				
+		   }  
+		   
+		   // to end the Braniac and remove the timer box
+		   if( restedTime < 0)
+		   { 
+		      _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().braniacState = "out";
+              clearInterval(intervalIDEnd);
+		   }
+			
+		}// end method
+	}//end
 	
 	
 	

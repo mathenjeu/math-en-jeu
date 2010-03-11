@@ -821,7 +821,7 @@ class PlancheDeJeu
 					brille._y = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._y;
 					brille._width = largeurDeCase/0.55;
 					brille._height = hauteurDeCase/0.55;//0.85
-					trace("ICI INFO DRIFT : " + largeurDeCase/hauteurDeCase );
+					//trace("ICI INFO DRIFT : " + largeurDeCase/hauteurDeCase );
 					brille._ligne = new Object();
 					brille._colonne = new Object();
 					brille._ligne = temp;
