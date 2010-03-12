@@ -1812,7 +1812,7 @@ public class ProtocoleJoueur implements Runnable
 						
 						// Obtenir le numéro du couleur des vetements du personnage choisi et le garder 
 						// en mémoire dans une variable
-						int clothesColor = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "ClothesColor").getNodeValue());
+						String clothesColor = obtenirValeurParametre(objNoeudCommandeEntree, "ClothesColor").getNodeValue();
 
 						// Vérifier que ce id de personnage n'est pas déjà utilisé
 						if (!objJoueurHumain.obtenirPartieCourante().obtenirTable().idPersonnageEstLibreEnAttente(intIdPersonnage))
