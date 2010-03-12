@@ -111,7 +111,7 @@ public class InformationPartie
 	// the color of the clothes in the player's picture
 	// user can change it in the frame 3 of the client
 	// if we use default color it will remain = 0
-	private int clothesColor;
+	private String clothesColor;
 	 
     
 	/**
@@ -173,7 +173,7 @@ public class InformationPartie
 			tournamentBonus = 0;
 			
 			// set the color to default
-			clothesColor = 0;
+			clothesColor = "0";
 			
 			//set the number
 			///braniacsNumber = 0;
@@ -1456,11 +1456,11 @@ public class InformationPartie
 		}
 
 			
-		public void setClothesColor(int clothesColor) {
-			this.clothesColor = clothesColor;
+		public void setClothesColor(String string) {
+			this.clothesColor = string;
 		}
 
-		public int getClothesColor() {
+		public String getClothesColor() {
 			return clothesColor;
 		}
 

@@ -90,6 +90,7 @@ public class Salle
 	private final ArrayList<Integer> categories;
 	
 	// last room number
+	// used to give the numbers to the created tables in this room
 	private int lastNumber;
 	
 	   

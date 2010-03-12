@@ -24,9 +24,12 @@ import ServeurJeu.Evenements.EvenementMAJPointage;
 import ServeurJeu.Evenements.EvenementMAJArgent;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
+import ClassesUtilitaires.UtilitaireNombres;
+import Enumerations.Colors;
 import Enumerations.RetourFonctions.ResultatDemarrerPartie;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
+import ServeurJeu.Configuration.GestionnaireMessages;
 import ServeurJeu.Temps.*;
 import ServeurJeu.Evenements.EvenementSynchroniserTemps;
 import ServeurJeu.Evenements.EvenementPartieTerminee;
@@ -131,6 +134,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     // nb columns on the game board
     private int nbColumns;
     
+    // list of colors for the players clothes
+    // after use of one color it is removed from the list
+    // now used mostly for the Tournament type of the game to give automaticaly
+    // colors to players
+    private ArrayList<String> colors;
+    
     
 	
 
@@ -213,6 +222,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Démarrer le thread du gestionnaire d'événements
 		threadEvenements.start();
+		
+		// fill the list off colors
+		this.colors = new ArrayList<String>();
+		this.setColors();
 
 	}
 	
@@ -453,7 +466,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  à s'inquiéter que le mçme joueur soit mis dans la liste 
 	 * 				  des joueurs en attente par un autre thread.
 	 */
-	public String demarrerPartie(JoueurHumain joueur, int idPersonnage, int clothesColor, boolean doitGenererNoCommandeRetour)
+	public String demarrerPartie(JoueurHumain joueur, int idPersonnage, String clothesColor, boolean doitGenererNoCommandeRetour)
 	{
 		// Cette variable va permettre de savoir si le joueur est maintenant
 		// attente ou non
@@ -780,6 +793,19 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     				// Ajouter la position du joueur dans la liste
     				lstPositionsJoueurs.put(objJoueur.obtenirNomUtilisateur(), objtPositionsJoueurs[position]);
     			}
+    			
+    			// if we have a Tournement game type we must assign automaticaly
+    			// the player clothes color
+    			
+    			String name = objSalle.getGameType();
+    			//System.out.println("type: " + name);
+    			if(name.equals("Tournament") || name.equals("Course"))
+    			{
+    				String color = this.getOneColor();
+    				//System.out.println("colors: " + color);
+    				objJoueur.obtenirPartieCourante().setClothesColor(color);
+    			}	
+    				
     		}
     		else
     		{
@@ -806,7 +832,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		        
 		        // to have virtual players of all difficulty levels
 		        intDifficulteJoueurVirtuel = objControleurJeu.genererNbAleatoire(4);
-		        System.out.println("Virtuel : " + intDifficulteJoueurVirtuel);
+		        //System.out.println("Virtuel : " + intDifficulteJoueurVirtuel);
 		        
 		        // Créé le joueur virtuel selon le niveau de difficulté désiré
                 JoueurVirtuel objJoueurVirtuel = new JoueurVirtuel(tNomsJoueursVirtuels[i - nbJoueur], 
@@ -826,6 +852,15 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 
                 // Pour le prochain joueur virtuel
                 intIdPersonnage++;
+                
+                String name = objSalle.getGameType();
+    			//System.out.println("type: " + name);
+    			//if(name.equals("Tournament") || name.equals("Course"))
+    			//{
+    				String color = this.getOneColor();
+    				System.out.println("colors: " + color);
+    				objJoueurVirtuel.setClothesColor(color);
+    			//}	
                 
     		}
 		    position++;
@@ -1905,9 +1940,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @param username
 	 * @return Player clothes color 
 	 */
-    public int getPlayerColor(String username)
+    public String getPlayerColor(String username)
     {
-    	int color = 0;
+    	String color = "0";
     	
     	Set<Map.Entry<String, JoueurHumain>> nomsJoueursHumains = lstJoueurs.entrySet();
         Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = nomsJoueursHumains.iterator();
@@ -1916,8 +1951,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             JoueurHumain j = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
             if(username.equals(j.obtenirNomUtilisateur())) return j.obtenirPartieCourante().getClothesColor();
         }
-		
-        //otherwise we have a virtual player and his color for the moment is = 0
+        
+        //otherwise we have a virtual player and his color 
+        color = this.obtenirJoueurVirtuelParSonNom(username).getClothesColor();
+        
         return color;
        	
     }    
@@ -2184,6 +2221,49 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			this.lstPointsFinish = lstPointsFinish;
 		}
 
+		
+		/**
+		 *  set the list of colors for the user clothes
+		 */
+		private void setColors() {
+			Colors[] colValues = Colors.values();
+			
+			for(int i = 0; i < colValues.length; i++)
+			{
+				colors.add(colValues[i].getCode());
+				System.out.println("Colors : " + colValues[i].getCode());
+			}
+			
+			
+
+		}// end methode
+		
+		/**
+		 * get one color from the list
+		 * it is automatically eliminated from the list
+		 */
+		private String getOneColor()
+		{
+			// default color - black ?
+			String color = "0";
+						
+			// Let's choose a colors among the possible ones
+		    if( colors != null && colors.size() > 0 )
+			{
+		    	   int intRandom = UtilitaireNombres.genererNbAleatoire( colors.size() );
+		    	   color = colors.get( intRandom );
+		    	   colors.remove(intRandom);
+				  
+			}
+			else
+			{
+				//objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+			}
+		    //System.out.println("Color : " + color + "   " + colors.size());
+			return color;
+			
+		}
+		
         /*
         private Boolean controlForRole(int userName)
 		{

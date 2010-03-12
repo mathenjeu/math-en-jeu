@@ -154,6 +154,10 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	// Objet logger pour afficher les erreurs dans le fichier log
 	static private Logger objLogger = Logger.getLogger(JoueurVirtuel.class);
 	
+	// the color of the clothes in the player's picture
+	private String clothesColor;
+	
+	
 	/**
 	 * Constructeur de la classe JoueurVirtuel qui permet d'initialiser les 
 	 * membres privés du joueur virtuel
@@ -2606,6 +2610,16 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 
 	public boolean isPlayerNotArrivedOnce() {
 		return isPlayerNotArrivedOnce;
+	}
+
+
+	public void setClothesColor(String color) {
+		this.clothesColor = color;
+	}
+
+
+	public String getClothesColor() {
+		return clothesColor;
 	}
 	
 }
