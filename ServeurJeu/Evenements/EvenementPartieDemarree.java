@@ -177,7 +177,7 @@ public class EvenementPartieDemarree extends Evenement
 					objNoeudPositionJoueur.setAttribute("nom",  objPositionJoueur.getKey().toString());
 					objNoeudPositionJoueur.setAttribute("x", Integer.toString(objPosition.x));
 					objNoeudPositionJoueur.setAttribute("y", Integer.toString(objPosition.y));
-					objNoeudPositionJoueur.setAttribute("clocolor", Integer.toString(table.getPlayerColor(objPositionJoueur.getKey().toString())));
+					objNoeudPositionJoueur.setAttribute("clocolor", table.getPlayerColor(objPositionJoueur.getKey().toString()));
 					
 					// Ajouter le noeud de position courant au noeud paramètre
 					objNoeudParametrePositionJoueurs.appendChild(objNoeudPositionJoueur);
