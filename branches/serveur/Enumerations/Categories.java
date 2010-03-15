@@ -2,7 +2,7 @@ package Enumerations;
 
 /**
  * Enumération Categories qui décrive les catégories de niveaux scolaire du jouer 
- * @author Lilian
+ * @author Oloieri Lilian
  */
 public enum Categories{
 
