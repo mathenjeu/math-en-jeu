@@ -90,7 +90,7 @@ public class PlayerBraniacState {
 			}else
 			{
 				this.bTask.cancel();
-				long tempDate = this.taskDate - System.currentTimeMillis() + branTime;
+				long tempDate = this.taskDate  + branTime;
 				this.bTask = Braniac.utiliserBraniac(player, tempDate);
 				this.taskDate = tempDate;
 				//System.out.println("BraniacTask !!!! " + tempDate + " " + " " + bTask);
@@ -108,7 +108,7 @@ public class PlayerBraniacState {
 			}else
 			{
 				this.bTask.cancel();
-				long tempDate = this.taskDate - System.currentTimeMillis() + branTime;
+				long tempDate = this.taskDate  + branTime;
 				this.bTask = Braniac.utiliserBraniac(vplayer, tempDate);
 				this.taskDate = tempDate;
 				//System.out.println("BraniacTask !!!! " + tempDate + " " + " " + bTask);

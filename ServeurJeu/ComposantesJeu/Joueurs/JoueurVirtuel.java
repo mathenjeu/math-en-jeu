@@ -28,7 +28,9 @@ import ServeurJeu.Configuration.GestionnaireMessages;
  
 /**
  * @author Jean-François Fournier
+ * 
  * changed Oloieri Lilian
+ * last change March 2010
  */
 public class JoueurVirtuel extends Joueur implements Runnable {
 	
@@ -144,6 +146,10 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     // the Banana state of the player
     private PlayerBananaState bananaState;
     
+    // player with max points to use Banana
+    private String playerToUseBanana;
+    private boolean estHumain;
+    
 	// Constante pour la compilation conditionnelle
 	private static final boolean ccDebug = false;
 	
@@ -179,6 +185,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    objParametreIA = objControleurJeu.obtenirParametreIA();
 	    
 		strNom = nom;
+		
 		// Banana state
 		this.bananaState = new PlayerBananaState(this);
 		
@@ -307,6 +314,10 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 				// Pause pour moment de réflexion de décision
 				pause(intTempsReflexionCoup);
 				
+				//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				// try to use Banana - first control if we have it
+				virtuelUseBanana();
+				
 				
                 // ORIGINAL CODE - TODO CHANGE BACK TO GET WIN THE GAME
                 // AS WELL AS THE CHANGES IN SALLE.JAVA
@@ -428,7 +439,176 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Method called after each step
+	 * 
+	 */
+	private void virtuelUseBanana() {
+		
+		//first control if we have Banana
+		// if yes analyse if do it or not
+		if(controlHaveBanana()) analyseIfDoIt();
+	}
+
+
+	private boolean controlHaveBanana() {
+		// TODO Auto-generated method stub
+		
+		if (lstObjetsUtilisablesRamasses.size() > 0)
+        {
+
+	        Set<Map.Entry<Integer,ObjetUtilisable>> lstEnsembleObjets = lstObjetsUtilisablesRamasses.entrySet();
+	        Iterator<Entry<Integer, ObjetUtilisable>> objIterateurListeObjets = lstEnsembleObjets.iterator();
+	       	        	        
+	        while (objIterateurListeObjets.hasNext())
+	        {
+	        	ObjetUtilisable objObjet = (ObjetUtilisable)(((Map.Entry<Integer,ObjetUtilisable>)(objIterateurListeObjets.next())).getValue());
+	        	      	
+	        	
+	        	if (objObjet instanceof Banane)
+	        	{
+	        		System.out.print("Virtuel - Banana \n");
+	        		return true;
+	        	}
+	        	
+	        }
+	        
+        }
+        else
+        {
+        	System.out.println("I don't have Banana");
+        }
+        
+		
+		return false;
+	}
 	
+	/**
+	 * Method used to analyse and decide if use Banana
+	 * if true is called the method that apply Banana
+	 */
+	private void analyseIfDoIt(){
+		
+		// first decision factor is the time
+		// at the end of the game the points for the time is maximum
+		int gameTime = objTable.getRelativeTime();
+		
+		// after - analyse the diffculty level
+		// minus to decrese the probability to use Banana if 
+		// the harder level 
+		int diffLevel = - intNiveauDifficulte * 5;
+		
+		// emotions factor - use random
+		int emoFactor = genererNbAleatoire(100);
+		
+		// the more Banana we have - more points to use it
+		int bananaNumber = this.nombreObjetsPossedes(Objet.UID_OU_BANANE) * 10;
+		
+		// then find the player to use Banana and analyse it
+		// the difference in the points and is the humain or virtual player
+		int playerFactor = findPlayer();
+		
+		
+		int total = gameTime + diffLevel + emoFactor + bananaNumber + playerFactor;
+		
+		System.out.println("Banana!!!!!!!!!!!!!! " + total + " gameTime " + gameTime + " playerFactor " + playerFactor +
+				" difflevel " + diffLevel + " emofactor " + emoFactor + " bananaNumber " + bananaNumber);
+		
+		if(total > 150)
+		{
+			objTable.preparerEvenementUtiliserObjet(this.strNom, this.playerToUseBanana, "Banane", "");
+       	    if(estHumain)
+       		    objTable.obtenirJoueurHumainParSonNom(this.playerToUseBanana).obtenirPartieCourante().getBananaState().bananaIsTossed();
+       	    else
+       	    	objTable.obtenirJoueurVirtuelParSonNom(this.playerToUseBanana).getBananaState().bananaIsTossed();
+       	    this.enleverObjet(Objet.UID_OU_BANANE);
+       	    System.out.println("Banana!!!!!!!!!!!!!!");
+		}	
+			
+		
+		
+	}// end method
+	
+	/**
+	 * Method to get the player with max points
+	 */
+     private int findPlayer()
+     {
+         int valPoints = 0; // points to return
+    	 int max1 = 0;
+         int max2 = 0;
+         String max1User = "";
+         String max2User = "";
+         boolean estHumain1 = false;
+         boolean estHumain2 = false;
+         
+         // On obtient la liste des joueurs humains, puis la liste des joueurs virtuels
+         TreeMap listeJoueursHumains = objTable.obtenirListeJoueurs();
+         Set nomsJoueursHumains = listeJoueursHumains.entrySet();
+         Iterator objIterateurListeJoueurs = nomsJoueursHumains.iterator();
+         Vector listeJoueursVirtuels = objTable.obtenirListeJoueursVirtuels();
+         
+         // On trouve les deux joueurs les plus susceptibles d'être affectés
+         while(objIterateurListeJoueurs.hasNext() == true)
+         {
+             JoueurHumain j = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
+             if(j.obtenirPartieCourante().obtenirPointage() >= max1)
+             {
+                 max2 = max1;
+                 max2User = max1User;
+                 estHumain2 = estHumain1;
+                 max1 = j.obtenirPartieCourante().obtenirPointage();
+                 max1User = j.obtenirNomUtilisateur();
+                 estHumain1 = true;
+             }
+             else if(j.obtenirPartieCourante().obtenirPointage() >= max2)
+             {
+                 max2 = j.obtenirPartieCourante().obtenirPointage();
+                 max2User = j.obtenirNomUtilisateur();
+                 estHumain2 = true;
+             }
+         }
+         if(listeJoueursVirtuels != null) for(int i=0; i<listeJoueursVirtuels.size(); i++)
+         {
+             JoueurVirtuel j = (JoueurVirtuel)listeJoueursVirtuels.get(i);
+             if(j.obtenirPointage() >= max1)
+             {
+                 max2 = max1;
+                 max2User = max1User;
+                 estHumain2 = estHumain1;
+                 max1 = j.obtenirPointage();
+                 max1User = j.obtenirNom();
+                 estHumain1 = false;
+             }
+             else if(j.obtenirPointage() >= max2)
+             {
+                 max2 = j.obtenirPointage();
+                 max2User = j.obtenirNom();
+                 estHumain2 = false;
+             }
+         }
+         
+                  
+         if(max1User.equals(strNom))
+         {
+             // Celui qui utilise la banane est le 1er, alors on fait glisser le 2ème
+             estHumain = estHumain2;
+             playerToUseBanana = max2User;
+             if(estHumain) valPoints = ((max2 - intPointage) * 50 / max2 )+ 10;
+             else valPoints = ((max2 - intPointage) * 50/ max2) ;
+         }
+         else
+         {
+             // Celui qui utilise la banane n'est pas le 1er, alors on fait glisser le 1er
+             estHumain = estHumain1;
+             playerToUseBanana = max1User;
+             if(estHumain) valPoints = ((max1 - intPointage) * 50  / max1) + 10;
+             else valPoints = ((max1 - intPointage)* 50 / max1) ;
+         }
+        
+         return valPoints;
+     }
+
 	/**
 	 * @return the braniacState
 	 */
@@ -2043,15 +2223,17 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         	case ParametreIA.RAISON_PIECE:
         	
 	        	// Vérifier si la pièce a été capturée
-	    	    if (((CaseCouleur)objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y]).obtenirObjetCase() == null)
-	    	    {
-	    	    	return true;
-	    	    }
-	    	    else
-	    	    {
-	    	    	return false;
-	    	    }
-	    	
+        		if(objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y] instanceof CaseCouleur)
+        		{
+        			if (((CaseCouleur)objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y]).obtenirObjetCase() == null)
+        			{
+        				return true;
+        			}
+        			else
+        			{
+        				return false;
+        			}
+        		}
 	    	case ParametreIA.RAISON_MINIJEU:
 	    	
 	    	    // Vérifier si encore prêt pour un minijeu

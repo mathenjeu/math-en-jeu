@@ -116,6 +116,7 @@ public class ParametreIA {
 	public final static int RAISON_MINIJEU = 2;
 	public final static int RAISON_MAGASIN = 3;
 	public final static int RAISON_OBJET = 4;
+	public final static int RAISON_FINISH = 5;
 
     // Constante représentant les mini-jeus
     public final static int MINIJEU_BALLE_AU_MUR = 0;
@@ -151,19 +152,31 @@ public class ParametreIA {
 		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		
 		// Créer le tableau contenant l'info pour chaque objet utilisable
-		tParametresIAObjetUtilisable = new ParametreIAObjet[1];
+		tParametresIAObjetUtilisable = new ParametreIAObjet[8];
 		
 		// Objet Utilisable "Reponse" UID = 0
 		tParametresIAObjetUtilisable[Objet.UID_OU_LIVRE] = 
 		    new ParametreIAObjet(4950, 101, 6, 800, 200, 100, 20, 3, 60);
 		
+		// Objet Utilisable "Reponse" UID = 0
+		tParametresIAObjetUtilisable[Objet.UID_OU_BOULE] = 
+		    new ParametreIAObjet(4950, 101, 6, 800, 200, 100, 20, 3, 60);
+		
+		// Objet Utilisable "Banane" 
+		tParametresIAObjetUtilisable[Objet.UID_OU_BANANE] = 
+		    new ParametreIAObjet(9950, 201, 6, 300, 100, 2000, 10, 4, 50);
+		
+		// Objet Utilisable "Braniac" 
+		tParametresIAObjetUtilisable[Objet.UID_OU_BRANIAC] = 
+		    new ParametreIAObjet(9950, 151, 6, 300, 100, 900, 10, 4, 50);
+		
 		// Paramètres pour les pièces
 		objParametreIAPiece = 
-		    new ParametreIAObjet(4950, 101, 6, 800, 0, 100, 0, 0, 0);
+		    new ParametreIAObjet(4950, 101, 6, 1000, 0, 100, 0, 0, 0);
 		    
 		// Paramètres pour les magasins
 		objParametreIAMagasin = 
-		    new ParametreIAObjet(4950, 101, 6, 800, 0, 100, 0, 0, 0);
+		    new ParametreIAObjet(4950, 101, 6, 1000, 0, 100, 0, 0, 0);
 		    
 		// Paramètres pour les minijeus
 		objParametreIAMinijeu = 
