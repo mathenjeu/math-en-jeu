@@ -1,9 +1,7 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
 import ClassesUtilitaires.BananaTask;
-import ClassesUtilitaires.BraniacTask;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Banane;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Braniac;
 
 /**
  * Used to treat the Banana's applyed to users
@@ -96,7 +94,7 @@ public class PlayerBananaState {
 			}else
 			{
 				this.bTask.cancel();
-				long tempDate = this.taskDate - System.currentTimeMillis() + bananaTime;
+				long tempDate = this.taskDate  + bananaTime;
 				this.bTask = Banane.utiliserBanane(player, tempDate);
 				this.taskDate = tempDate;
 				//System.out.println("BraniacTask !!!! " + tempDate + " " + " " + bTask);
@@ -114,7 +112,7 @@ public class PlayerBananaState {
 			}else
 			{
 				this.bTask.cancel();
-				long tempDate = this.taskDate - System.currentTimeMillis() + bananaTime;
+				long tempDate = this.taskDate  + bananaTime;
 				this.bTask = Banane.utiliserBanane(vplayer, tempDate);
 				this.taskDate = tempDate;
 				//System.out.println("BraniacTask !!!! " + tempDate + " " + " " + bTask);

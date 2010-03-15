@@ -1747,6 +1747,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		objGestionnaireEvenements.ajouterEvenement(partieTerminee);
 	}
 	
+	
 	public void tempsEcoule()
 	{
 		arreterPartie("");
@@ -1784,6 +1785,21 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    else
 	    {
 	    	return objMinuterie.obtenirTempsActuel();
+	    }
+		
+	}
+	
+	// return a percents of elapsed time
+	public int getRelativeTime()
+	{
+		if (objMinuterie == null)
+	    {
+	    	return 0;
+	    }
+	    else
+	    {
+	    	System.out.println("Table!!!!!!!!!! " + intTempsTotal + " intTempsTotal " + " objMinuterie.obtenirTempsActuel() " + objMinuterie.obtenirTempsActuel());
+	    	return (intTempsTotal * 60 - objMinuterie.obtenirTempsActuel()) * 180 /(intTempsTotal * 60);
 	    }
 		
 	}
@@ -2264,7 +2280,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			
 		}
 		
-        /*
+        /*  Unused now method
         private Boolean controlForRole(int userName)
 		{
 			// Bloc of code to treat the username
