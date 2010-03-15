@@ -11,6 +11,8 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
  * Used to take out the effects of Banana on the player
  * after the amount of time declared in Banane (Seconds)
  * (reduced move possibility and harder questions)
+ * 
+ * last change March 2010
  *
  */
 
