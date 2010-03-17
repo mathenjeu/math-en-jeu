@@ -132,6 +132,13 @@ class Personnage
 		return this.listeDesObjets;
 	}
 	
+	
+	function objectInListe(nomObj:String):Boolean
+	{
+		return this.listeDesObjets[nomObj].length >= 1;
+		
+	}
+	
 	////////////////////////////////////////////////////////////
 	// - sert a ajouter une objet a la banque d'objets du personnage
 	
@@ -196,9 +203,19 @@ class Personnage
 				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
 			}//end 1st if
 		};
-		
+		/*
 		_level0.loader.contentHolder.objectMenu[nomObj + "_mc"].onRollOver = function()
 		{
+			var toolTipMess:String = _root.texteSource_xml.firstChild.attributes["objectMessage" + nomObj];
+
+			_level0.loader.contentHolder.objGestionnaireEvenements.drawToolTip(toolTipMess, _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]);
+	
+	        _level0.loader.contentHolder.objectMenu.onEnterFrame = function(){ 
+                _level0.loader.contentHolder.toolTip._x = _xmouse;
+                _level0.loader.contentHolder.toolTip._y = _ymouse - 40;
+		        _level0.loader.contentHolder.toolTip._visible = true;
+			}
+			
 			if(peutUtiliserObjet(nomObj) && (listeObjets[nomObj].length >= 1))
 			{
 				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 60;
@@ -209,12 +226,20 @@ class Personnage
 		
 		_level0.loader.contentHolder.objectMenu[nomObj + "_mc"].onRollOut = function()
 		{
+			
+			 _level0.loader.contentHolder.toolTip._visible = false;
+	         _level0.loader.contentHolder.toolTip.swapDepths(_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]);
+             _level0.loader.contentHolder.toolTip.removeMovieClip();
+			 
+			 delete _level0.loader.contentHolder.objectMenu.onEnterFrame;
+	
+   
 			if(peutUtiliserObjet(nomObj) && (listeObjets[nomObj].length >= 1))
 			{
 				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
 				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._xscale = _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._yscale = 100;
 			}
-		};
+		}; */
 		
 		trace("--- FIN ajouterImageBanque ! ---");
 	}
