@@ -8,6 +8,21 @@
 	  outMess = "  a quitté le jeu!"
 	  InMess = " est de retour dans le jeu!"
 	  moveMess = "Click sur une case jaune pour te déplacer."
+	  moveMessage = " a changé la Case."
+	  bookUsedMess = " a utilisé le Livre."
+	  braniacUsedMess = " a utilisé le Braniac."
+	  cristallUsedMess = " a utilisé  la Boule."
+	  
+	  bookCollectMess = "Vous avez ramassez un livre. Vous pouvez l'utiliser pour enlever une option du réponse."
+	  cristallCollectMess = "Vous avez ramassez une boule. Vous pouvez l'utiliser pour changer la question poser."
+	  moneyCollectMess = "Vous avez ramassez une pièce de monnaie. Vous pouvez l'échanger contre un objet dans un magasin."
+	  bananaCollectMess = "Vous avez ramassez une banane. Vous pouvez la lancer à un adversaire."
+	  
+	  objectMessageBoule = "Vous pouvez l'utiliser pour changer la question poser."
+	  objectMessageLivre = "Vous pouvez l'utiliser pour enlever une option du réponse."
+	  objectMessagePiece = "  Vous pouvez l'échanger contre un   objet dans un    magasin..."
+	  objectMessageBanane = "Vous pouvez lancer la Banane à un adversaire... "
+	  
 	main_menu = ""
 	  bienvenue = "Bienvenue dans Math en jeu "
     btnPlay = "Jouer" 
@@ -307,8 +322,7 @@
 			reponse = "Réponse:"
 			vrai = "vrai"
 			faux = "faux"
-			pointage = "Pointages"
-			objet = "Objets"
+			
 
 		
 		frame5 = ""

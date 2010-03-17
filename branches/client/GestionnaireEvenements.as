@@ -28,6 +28,7 @@ import mx.controls.Alert;
 import flash.utils.*;
 import flash.geom.Transform;
 import flash.geom.ColorTransform;
+import NewsBox;
 
 class GestionnaireEvenements
 {
@@ -69,7 +70,7 @@ class GestionnaireEvenements
 	                                    // With the 3 running correct answers the level increase by 1 
 	private var langue;
 	private var endGame:Boolean;   // used to ignore the movement of virtual players after the end of the game
-	private var newsArray:Array;  // all the messages to show in newsbox
+	private var newsChat:NewsBox;  // all the messages to show in newsbox
 	private var nbTracks:Number;
 	private var finishPoints:Array;
 	
@@ -193,7 +194,7 @@ class GestionnaireEvenements
 		var url_serveur:String = _level0.configxml_mainnode.attributes.url_server;
 		var port:Number = parseInt(_level0.configxml_mainnode.attributes.port, 10);
 		
-		this.newsArray = new Array();
+		this.newsChat = new NewsBox();
 		this.colorIt = 0;
 				
         this.objGestionnaireCommunication = new GestionnaireCommunication(Delegate.create(this, this.evenementConnexionPhysique), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
@@ -797,11 +798,12 @@ class GestionnaireEvenements
 			case "Ok":
 			
 			    // newsbox
-		        _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
+		        //_level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
 		        var messageInfo:String = objetEvenement.nomUtilisateur + _root.texteSource_xml.firstChild.attributes.restartMess; 
-		        this.newsArray[newsArray.length] = messageInfo;
-		        _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
-		        _level0.loader.contentHolder.orderId = 0;
+				this.newsChat.addMessage(messageInfo);
+		        //this.newsArray[newsArray.length] = messageInfo;
+		        //_level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
+		        //_level0.loader.contentHolder.orderId = 0;
 			   trace("<<<<<<<<<<<<<<<<  feedbackRestartOldGame  finish restart >>>>>>>>>>>>>>>>>>>");
 			
 			break;
@@ -984,11 +986,12 @@ class GestionnaireEvenements
             case "OK":
             
 			   // newsbox
-		       _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
+		       //_level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
 		       var messageInfo:String = _root.texteSource_xml.firstChild.attributes.bugReportMess; 
-		       this.newsArray[newsArray.length] = messageInfo;
-		       _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
-		       _level0.loader.contentHolder.orderId = 0;
+			   this.newsChat.addMessage(messageInfo);
+		       //this.newsArray[newsArray.length] = messageInfo;
+		       //_level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
+		       //_level0.loader.contentHolder.orderId = 0;
 			trace("bug reported  ");
 			
             break;
@@ -2119,6 +2122,30 @@ class GestionnaireEvenements
 								//this.listeDesPersonnages[i].pointage += objetEvenement.bonus;
 								_level0.loader.contentHolder.bonusBox.bonus = objetEvenement.bonus;
 						  }
+						  
+						  // newsbox
+		                 var messageInfo:String;
+						 
+						 if(objetEvenement.collision == "Livre")
+						 {
+						    messageInfo = _root.texteSource_xml.firstChild.attributes.bookCollectMess;
+							this.newsChat.addMessage(messageInfo);
+						 }
+						 else if(objetEvenement.collision == "Banane")
+						 {
+							 messageInfo = _root.texteSource_xml.firstChild.attributes.bananaCollectMess;
+							 this.newsChat.addMessage(messageInfo);
+						 }
+						 else if(objetEvenement.collision == "Piece")
+						 {
+							 messageInfo = _root.texteSource_xml.firstChild.attributes.moneyCollectMess;
+							 this.newsChat.addMessage(messageInfo);
+						 }
+						 else if(objetEvenement.collision == "Boule")
+						 {
+							 messageInfo = _root.texteSource_xml.firstChild.attributes.cristallCollectMess;
+		                     this.newsChat.addMessage(messageInfo);
+						 }
         	           }
         	   	    }
 					
@@ -2710,14 +2737,11 @@ class GestionnaireEvenements
 		   _level0.loader.contentHolder.planche.getPersonnageByName(objetEvenement.nomUtilisateur).cachePersonnage();
 		   dessinerMenu();
 		   remplirMenuPointage();
-		   
+		     
 		   // newsbox
-		   _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
 		   var messageInfo:String = objetEvenement.nomUtilisateur + _root.texteSource_xml.firstChild.attributes.outMess; 
-		   this.newsArray[newsArray.length] = messageInfo;
-		   _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
-		   _level0.loader.contentHolder.orderId = 0;
-		}
+		   this.newsChat.addMessage(messageInfo);
+		 }
 		
 		
 		trace("fin de evenementJoueurQuitteTable");
@@ -2857,10 +2881,9 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder.objectMenu.Livre.countTxt = 0;
 		_level0.loader.contentHolder.objectMenu.piece.countTxt = 0;
 		
-		this.newsArray[0] = _root.texteSource_xml.firstChild.attributes.welcomeMess; 
-		this.newsArray[1] = _root.texteSource_xml.firstChild.attributes.moveMess;
-		_level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[1];
-		_level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[0];
+		//newsbox
+		var messageInfo:String = _root.texteSource_xml.firstChild.attributes.welcomeMess +  "         " + _root.texteSource_xml.firstChild.attributes.moveMess;
+		this.newsChat.addMessage(messageInfo);
 
         remplirMenuPointage();
 		
@@ -2893,12 +2916,9 @@ class GestionnaireEvenements
 		remplirMenuPointage();
 		   
 		 //complete the message box  - newsbox
-		 _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
 		 var messageInfo:String = objetEvenement.nomUtilisateur + _root.texteSource_xml.firstChild.attributes.InMess; 
-		 this.newsArray[newsArray.length] = messageInfo;
-		 _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
-		 _level0.loader.contentHolder.orderId = 0;
-		
+		 this.newsChat.addMessage(messageInfo);
+		 		
 		trace("fin de evenement evenementJoueurRejoindrePartie ");
         trace("*********************************************\n");
 				
@@ -3131,6 +3151,8 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder["box_question"].removeMovieClip();
 		_level0.loader.contentHolder.toss.removeMovieClip();
 		_level0.loader.contentHolder["fond_MiniGame"]._y += 400;
+		_level0.loader.contentHolder.branBox.removeMovieClip();
+		_level0.loader.contentHolder.bananaBox.removeMovieClip();
 		
 		
 		//s'assurer que la musique s'arrete en fin de partie
@@ -3219,6 +3241,9 @@ class GestionnaireEvenements
 		
 		   // show the results
 		   remplirMenuPointage();
+		   // newsbox
+		   var messageInfo:String = objetEvenement.nomUtilisateur + _root.texteSource_xml.firstChild.attributes.moveMessage; 
+		   this.newsChat.addMessage(messageInfo);
 		}
      	trace("fin de evenementJoueurDeplacePersonnage");
      	trace("*********************************************\n");
@@ -3235,18 +3260,32 @@ class GestionnaireEvenements
 		
 		// info for newsbox
 		if(objetEvenement.objetUtilise == "Banane"){
-		   _level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
+		   //_level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
 		   //trace("INfo : " + this.newsArray[this.newsArray.length - 1] + " " + this.newsArray.length );
 		   var messageInfo:String = playerThat + _root.texteSource_xml.firstChild.attributes.bananaMess + playerUnder; 
-		   this.newsArray[newsArray.length] = messageInfo;
-		   _level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
+		   this.newsChat.addMessage(messageInfo);
+		   //this.newsArray[newsArray.length] = messageInfo;
+		   //_level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
 		   
-		   _level0.loader.contentHolder.orderId = 0;
+		  // _level0.loader.contentHolder.orderId = 0;
 		
 		}else if(objetEvenement.objetUtilise == "Livre")
 		{
-		   trace("INfo : " + objetEvenement.objetUtilise);
+		   // newsbox
+		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _root.texteSource_xml.firstChild.attributes.bookUsedMess; 
+		   this.newsChat.addMessage(messageInfo);
+		}else if(objetEvenement.objetUtilise == "Braniac")
+		{
+			 // newsbox
+		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _root.texteSource_xml.firstChild.attributes.braniacUsedMess; 
+		   this.newsChat.addMessage(messageInfo);
+		}else if(objetEvenement.objetUtilise == "Boule")
+		{
+			 // newsbox
+		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _root.texteSource_xml.firstChild.attributes.cristallUsedMess; 
+		   this.newsChat.addMessage(messageInfo);
 		}
+		
 		
 		
 		// here we treat the Banana
@@ -3328,9 +3367,7 @@ class GestionnaireEvenements
 		            this.moveVisibility = 1;
 			    _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 				_global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
-				
-				
-				//_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
+						
 		   
 		   }//end else if
 		   		   
@@ -3341,14 +3378,11 @@ class GestionnaireEvenements
 			
 			
 		    _global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
-			//_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
-			//_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().gotoAndPlay(110);
-		
+					
 		}// end if
 		
 		if(objetEvenement.objetUtilise == "Banane" && playerThat != this.nomUtilisateur)
 		{
-			//_level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().gotoAndPlay("tossing");
 			_level0.loader.contentHolder.planche.tossBananaShell(playerThat, playerUnder);//getPersonnageByName(playerThat).tossBanana();
 			
 		}
@@ -3816,12 +3850,12 @@ function drawRoundedRectangle(target_mc:MovieClip, boxWidth:Number, boxHeight:Nu
     }
 }//end function
 
-function drawToolTip(messInfo:String)
+function drawToolTip(messInfo:String, mcMovie:MovieClip)
 {
 	var stringLength:Number = messInfo.length;
 	var wid:Number = Math.floor(stringLength / 20 * 16);
 	_level0.loader.contentHolder.createEmptyMovieClip("toolTip", _level0.loader.contentHolder.getNextHigesthDepth());
-	_level0.loader.contentHolder.toolTip.swapDepths(_level0.loader.contentHolder.menuPointages);
+	_level0.loader.contentHolder.toolTip.swapDepths(mcMovie);
 	drawRoundedRectangle(_level0.loader.contentHolder.toolTip, 120, wid + 10, 15, 0xFFEB5B, 100);
 	_level0.loader.contentHolder.toolTip.createTextField("toolTipMessage", 60, 5, 3, 110, wid);
 	

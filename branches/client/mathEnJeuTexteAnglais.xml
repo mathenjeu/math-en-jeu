@@ -7,6 +7,20 @@
 	  outMess = " left the game!"
 	  InMess = " is in again!"
 	  moveMess = "To move - click on a yellow sqare!"
+	  moveMessage = " moved to the new Case."
+	  bookUsedMess = " used a Book."
+	  braniacUsedMess = " used a Braniac."
+	  cristallUsedMess = " used a Cristall."
+	  bookCollectMess = "You taked a Book. You can use It to remove one answer."
+	  cristallCollectMess = "You taked a Cristall. You can use It to change the question."
+	  moneyCollectMess = "You taked a Coin. You can use It to buy the objects in the shop."
+	  bananaCollectMess = "You taked a Banana. You can toss It to a another player."
+	  
+	  objectMessageBoule = " You can use It to change the question."
+	  objectMessageLivre = "You can use It to remove one answer."
+	  objectMessagePiece = " You can use It to buy the objects in the shop."
+	  objectMessageBanane = "You can toss It to a another player.... "
+	  
   main_menu = ""
 	  bienvenue = "Welcome to MathAmaze "
     btnPlay = "Play"
@@ -304,9 +318,7 @@
 			reponse = "Answer:"
 			vrai = "true"
 			faux = "false"
-			pointage = "Scores"
-			objet = "Objects"
-		
+			
 
 	
 		frame5 = ""
