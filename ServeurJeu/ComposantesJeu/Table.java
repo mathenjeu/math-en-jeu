@@ -29,7 +29,6 @@ import Enumerations.Colors;
 import Enumerations.RetourFonctions.ResultatDemarrerPartie;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
-import ServeurJeu.Configuration.GestionnaireMessages;
 import ServeurJeu.Temps.*;
 import ServeurJeu.Evenements.EvenementSynchroniserTemps;
 import ServeurJeu.Evenements.EvenementPartieTerminee;
@@ -251,7 +250,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * courante n'est pas complçte et qu'il n'y a pas de parties en cours. 
 	 * Cette fonction va avoir pour effet de connecter le joueur dans la table 
 	 * courante.
-	 * 
+	 * @param humains 
 	 * @param JoueurHumain joueur : Le joueur demandant d'entrer dans la table
 	 * @param boolean doitGenererNoCommandeRetour : Permet de savoir si on doit 
 	 * 								générer un numéro de commande pour le retour de
@@ -271,17 +270,14 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  qu'une partie est en cours (car toutes les fonctions 
 	 * 				  permettant de changer ça sont synchronisées).
 	 */
-	public void entrerTable(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, TreeMap<String, Integer> listePersonnageJoueurs, TreeMap<String, Integer> listeRoleJoueurs)  throws NullPointerException
+	public void entrerTableAutres(JoueurHumain joueur, boolean doitGenererNoCommandeRetour)  throws NullPointerException
 	{
 		//System.out.println("start table: " + System.currentTimeMillis());
 	    // Empçcher d'autres thread de toucher à la liste des joueurs de 
 	    // cette table pendant l'ajout du nouveau joueur dans cette table
 	    synchronized (lstJoueurs)
 	    {
-	    	// Remplir la liste des personnages choisis
-	    	remplirListePersonnageJoueurs(listePersonnageJoueurs, listeRoleJoueurs);
-	    	
-			// Ajouter ce nouveau joueur dans la liste des joueurs de cette table
+	    	// Ajouter ce nouveau joueur dans la liste des joueurs de cette table
 			lstJoueurs.put(joueur.obtenirNomUtilisateur(), joueur);
 			
 			// Le joueur est maintenant entré dans la table courante (il faut
@@ -499,6 +495,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
 				
 				// Garder en mémoire le numero du couleur choisi par le joueur
+				// mais avant retirer cette couleur de la liste
+				clothesColor = getColor(clothesColor);
 				joueur.obtenirPartieCourante().setClothesColor(clothesColor);
 				
 		        //System.out.println(idPersonnage);
@@ -523,7 +521,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					// Cette fonction va passer les joueurs et créer un 
 					// InformationDestination pour chacun et ajouter l'événement 
 					// dans la file de gestion d'événements
-					preparerEvenementJoueurDemarrePartie(joueur.obtenirNomUtilisateur(), idPersonnage);		    	
+					preparerEvenementJoueurDemarrePartie(joueur.obtenirNomUtilisateur(), idPersonnage, clothesColor);		    	
 			    }
 				
 				// Si le nombre de joueurs en attente est maintenant le nombre 
@@ -887,7 +885,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					JoueurVirtuel objJoueurVirtuel = (JoueurVirtuel) lstJoueursVirtuels.get(i);
 					
 					preparerEvenementJoueurEntreTable(objJoueurVirtuel.obtenirNom(), 1);
-					preparerEvenementJoueurDemarrePartie(objJoueurVirtuel.obtenirNom(), objJoueurVirtuel.obtenirIdPersonnage());		    	
+					preparerEvenementJoueurDemarrePartie(objJoueurVirtuel.obtenirNom(), objJoueurVirtuel.obtenirIdPersonnage(), objJoueurVirtuel.getClothesColor());		    	
 			    }
 		    }
 	    }
@@ -1248,6 +1246,39 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			i++;
 		}
 	}
+	
+	/**
+	 * Cette méthode permet de  On suppose que le joueur courant n'est pas 
+	 * encore dans la liste.
+	 * @param humains 
+	 *  
+	 * @throws NullPointerException : Si la liste des personnages est à nulle
+	 */
+	public JoueurHumain[] remplirListePersonnageJoueurs() throws NullPointerException
+	{
+		JoueurHumain[] humains = new JoueurHumain[lstJoueurs.size()];
+		// Créer un ensemble contenant tous les tuples de la liste 
+		// des joueurs de la table (chaque élément est un Map.Entry)
+		Set<Map.Entry<String, JoueurHumain>> lstEnsembleJoueurs = lstJoueurs.entrySet();
+		
+		// Obtenir un itérateur pour l'ensemble contenant les joueurs
+		Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsembleJoueurs.iterator();
+		
+		int iter = 0;
+		
+		// Passer tous les joueurs de la table et leur envoyer un événement
+		while (objIterateurListe.hasNext() == true)
+		{
+			// Créer une référence vers le joueur humain courant dans la liste
+			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
+			
+			// Ajouter le joueur dans la liste des personnages 
+			humains[iter] = objJoueur;
+			iter++;
+		}
+		return humains;		
+	}
+	
 
 	/**
 	 * Cette méthode permet de préparer l'événement de l'entrée d'un joueur 
@@ -1257,6 +1288,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * on va créer un InformationDestination et on va ajouter l'événement dans 
 	 * la file d'événements du gestionnaire d'événements. Lors de l'appel 
 	 * de cette fonction, la liste des joueurs est synchronisée.
+	 * @param colorS 
 	 * 
 	 * @param String nomUtilisateur : Le nom d'utilisateur du joueur qui
 	 * 								  vient d'entrer dans la table
@@ -1357,6 +1389,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * on va créer un InformationDestination et on va ajouter l'événement dans 
 	 * la file d'événements du gestionnaire d'événements. Lors de l'appel 
 	 * de cette fonction, la liste des joueurs est synchronisée.
+	 * @param clothesColor 
 	 * 
 	 * @param String nomUtilisateur : Le nom d'utilisateur du joueur qui
 	 * 								  vient de démarrer la partie
@@ -1365,11 +1398,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * Synchronisme : Cette fonction n'est pas synchronisée ici, mais elle l'est
 	 * 				  par l'appelant (demarrerPartie).
 	 */
-	private void preparerEvenementJoueurDemarrePartie(String nomUtilisateur, int idPersonnage)
+	private void preparerEvenementJoueurDemarrePartie(String nomUtilisateur, int idPersonnage, String clothesColor)
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs qu'un joueur démarré une partie
-	    EvenementJoueurDemarrePartie joueurDemarrePartie = new EvenementJoueurDemarrePartie(nomUtilisateur, idPersonnage);
+	    EvenementJoueurDemarrePartie joueurDemarrePartie = new EvenementJoueurDemarrePartie(nomUtilisateur, idPersonnage, clothesColor);
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
@@ -1798,7 +1831,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    }
 	    else
 	    {
-	    	System.out.println("Table!!!!!!!!!! " + intTempsTotal + " intTempsTotal " + " objMinuterie.obtenirTempsActuel() " + objMinuterie.obtenirTempsActuel());
+	    	//System.out.println("Table!!!!!!!!!! " + intTempsTotal + " intTempsTotal " + " objMinuterie.obtenirTempsActuel() " + objMinuterie.obtenirTempsActuel());
 	    	return (intTempsTotal * 60 - objMinuterie.obtenirTempsActuel()) * 180 /(intTempsTotal * 60);
 	    }
 		
@@ -2278,6 +2311,82 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		    //System.out.println("Color : " + color + "   " + colors.size());
 			return color;
 			
+		}
+		
+		/**
+		 * If gived color is in the list it is automatically eliminated 
+		 * from the list and returned otherwise is taked other one from the list
+		 */
+		private String getColor(String color)
+		{
+					
+			// Let's choose a colors among the possible ones
+		    if( colors != null && colors.size() > 0 )
+			{
+		    	if(colors.contains(color)){
+		    		colors.remove(color);
+		    	}else{
+		    	   int intRandom = UtilitaireNombres.genererNbAleatoire( colors.size() );
+		    	   color = colors.get( intRandom );
+		    	   colors.remove(intRandom);
+		    	}
+			}
+			else
+			{
+				//objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+				return "0";
+			}
+		    //System.out.println("Color : " + color + "   " + colors.size());
+			return color;
+			
+		}
+
+		public void entrerTable(JoueurHumain joueur, boolean doitGenererNoCommandeRetour) {
+			//System.out.println("start table: " + System.currentTimeMillis());
+		    // Empçcher d'autres thread de toucher à la liste des joueurs de 
+		    // cette table pendant l'ajout du nouveau joueur dans cette table
+		    synchronized (lstJoueurs)
+		    {
+		    			    	
+				// Ajouter ce nouveau joueur dans la liste des joueurs de cette table
+				lstJoueurs.put(joueur.obtenirNomUtilisateur(), joueur);
+				
+				// Le joueur est maintenant entré dans la table courante (il faut
+				// créer un objet InformationPartie qui va pointer sur la table
+				// courante)
+				joueur.definirPartieCourante(new InformationPartie(objGestionnaireEvenements, objGestionnaireBD, joueur, this));
+				
+				
+				// Si on doit générer le numéro de commande de retour, alors
+				// on le génçre, sinon on ne fait rien
+				if (doitGenererNoCommandeRetour == true)
+				{
+					// Générer un nouveau numéro de commande qui sera 
+				    // retourné au client
+				    joueur.obtenirProtocoleJoueur().genererNumeroReponse();					    
+				}
+
+				// Empçcher d'autres thread de toucher à la liste des joueurs de 
+			    // cette salle pendant qu'on parcourt tous les joueurs de la salle
+				// pour leur envoyer un événement
+			    synchronized (getObjSalle().obtenirListeJoueurs())
+			    {
+					// Préparer l'événement de nouveau joueur dans la table. 
+					// Cette fonction va passer les joueurs et créer un 
+					// InformationDestination pour chacun et ajouter l'événement 
+					// dans la file de gestion d'événements
+					preparerEvenementJoueurEntreTable(joueur.obtenirNomUtilisateur(), joueur.getRole());		    	
+			    }
+		    }
+			
+		}
+		
+		/**
+		 * 
+		 */
+		public int getMaxNbPlayers()
+		{
+			return this.MAX_NB_PLAYERS;
 		}
 		
         /*  Unused now method
