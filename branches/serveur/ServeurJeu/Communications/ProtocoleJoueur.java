@@ -1552,14 +1552,17 @@ public class ProtocoleJoueur implements Runnable
 						int intNoTable = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "NoTable").getNodeValue());
 
 						// Déclaration d'une nouvelle liste de personnages
-						TreeMap<String, Integer> lstPersonnageJoueurs = new TreeMap<String, Integer>();
+						//TreeMap<String, Integer> lstPersonnageJoueurs = new TreeMap<String, Integer>();
 						// Déclaration d'une nouvelle liste de role des joueurs
-						TreeMap<String, Integer> lstRoleJoueurs = new TreeMap<String, Integer>();
-
+						//TreeMap<String, Integer> lstRoleJoueurs = new TreeMap<String, Integer>();
+						
+						//test
+						JoueurHumain[] listInit = objJoueurHumain.obtenirSalleCourante().obtenirTable(intNoTable).remplirListePersonnageJoueurs(); 
+						
 						// Appeler la méthode permettant d'entrer dans la
 						// table et garder son résultat dans une variable
 						String strResultatEntreeTable = objJoueurHumain.obtenirSalleCourante().entrerTable(objJoueurHumain, 
-								intNoTable, true, lstPersonnageJoueurs, lstRoleJoueurs);
+								intNoTable, true);
 
 
 						// Si le résultat de l'entrée dans la table est true alors le
@@ -1579,37 +1582,48 @@ public class ProtocoleJoueur implements Runnable
 							// On ajoute un attribut type qui va contenir le type
 							// du paramètre
 							objNoeudParametreListePersonnageJoueurs.setAttribute("type", "ListePersonnageJoueurs");
+                           
+							//if(listInit != null){
+								// Passer tous les personnages et créer un noeud pour 
+								// chaque id de personnage et l'ajouter au noeud de paramètre
+								for(int i = 0; i < listInit.length; i++)
+								{
+									// Créer le noeud pour le joueur courant
+									Element objNoeudPersonnage = objDocumentXMLSortie.createElement("personnage");
 
-							// Créer un ensemble contenant tous les tuples de la liste 
-							// lstPersonnageJoueurs (chaque élément est un Map.Entry)
-							Set<Map.Entry<String,Integer>> lstEnsemblePersonnageJoueurs = lstPersonnageJoueurs.entrySet();
-							Set<Map.Entry<String,Integer>> lstEnsembleRoleJoueurs = lstRoleJoueurs.entrySet();
+									// Définir le nom d'utilisateur du joueur ainsi que le id du personnage
+									objNoeudPersonnage.setAttribute("nom", listInit[i].obtenirNomUtilisateur());
+									objNoeudPersonnage.setAttribute("idPersonnage", ((Integer)listInit[i].obtenirPartieCourante().obtenirIdPersonnage()).toString());
+									objNoeudPersonnage.setAttribute("role",  ((Integer)listInit[i].getRole()).toString());
+									objNoeudPersonnage.setAttribute("clothesColor",  listInit[i].obtenirPartieCourante().getClothesColor());
 
-							// Obtenir un itérateur pour l'ensemble contenant les personnages
-							Iterator<Entry<String, Integer>> objIterateurListePersonnageJoueurs = lstEnsemblePersonnageJoueurs.iterator();
-							Iterator<Entry<String, Integer>> objIterateurListeRoleJoueurs = lstEnsembleRoleJoueurs.iterator();
-
-
-							// Passer tous les personnages et créer un noeud pour 
-							// chaque id de personnage et l'ajouter au noeud de paramètre
-							while (objIterateurListePersonnageJoueurs.hasNext() == true)
+									// Ajouter le noeud du personnage au noeud de paramètre
+									objNoeudParametreListePersonnageJoueurs.appendChild(objNoeudPersonnage);
+								}
+							//}
+							
+							// Déclaration d'un compteur
+							int i = 1;
+							int MAX_NB_PLAYERS = objJoueurHumain.obtenirPartieCourante().obtenirTable().getMaxNbPlayers();
+							
+							// Boucler tant qu'on n'a pas atteint le nombre maximal de 
+							// joueurs moins le joueur courant car on ne le met pas dans la liste
+							while (listInit.length + i < MAX_NB_PLAYERS)
 							{
-								// Garder une référence vers l'entrée courante
-								Map.Entry<String,Integer> objEntreeListePersonnageJoueurs = (Map.Entry<String,Integer>)objIterateurListePersonnageJoueurs.next();
-								Map.Entry<String,Integer> objEntreeListeRoleJoueurs = (Map.Entry<String,Integer>)objIterateurListeRoleJoueurs.next();
-
 								// Créer le noeud pour le joueur courant
 								Element objNoeudPersonnage = objDocumentXMLSortie.createElement("personnage");
 
 								// Définir le nom d'utilisateur du joueur ainsi que le id du personnage
-								objNoeudPersonnage.setAttribute("nom", (String) objEntreeListePersonnageJoueurs.getKey());
-								objNoeudPersonnage.setAttribute("idPersonnage", ((Integer) objEntreeListePersonnageJoueurs.getValue()).toString());
-								objNoeudPersonnage.setAttribute("role", ((Integer) objEntreeListeRoleJoueurs.getValue()).toString());
+								objNoeudPersonnage.setAttribute("nom", "Inconnu" + i);
+								objNoeudPersonnage.setAttribute("idPersonnage", (new Integer(0)).toString());
+								objNoeudPersonnage.setAttribute("role",  (new Integer(0)).toString());
+								objNoeudPersonnage.setAttribute("clothesColor",  (new Integer(0).toString()));
 
 								// Ajouter le noeud du personnage au noeud de paramètre
 								objNoeudParametreListePersonnageJoueurs.appendChild(objNoeudPersonnage);
+								i++;
 							}
-
+							
 							// Ajouter le noeud de paramètres au noeud de commande
 							objNoeudCommande.appendChild(objNoeudParametreListePersonnageJoueurs);
 						}
@@ -2863,9 +2877,7 @@ public class ProtocoleJoueur implements Runnable
 					objNoeudCourant.getAttributes().getLength() != 1 ||
 					objNoeudCourant.getAttributes().getNamedItem("type") == null ||
 					objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("ClothesColor") == false ||
-					objNoeudCourant.getChildNodes().getLength() != 1 ||
-					objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false ||
-					UtilitaireNombres.isPositiveNumber(objNoeudCourant.getChildNodes().item(0).getNodeValue()) == false)
+					objNoeudCourant.getChildNodes().getLength() != 1)
 				{
 					bolNoeudValide = false;
 				}
