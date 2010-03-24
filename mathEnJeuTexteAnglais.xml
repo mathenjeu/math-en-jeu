@@ -20,6 +20,14 @@
 	  objectMessageLivre = "You can use It to remove one answer."
 	  objectMessagePiece = " You can use It to buy the objects in the shop."
 	  objectMessageBanane = "You can toss It to a another player.... "
+	  objectMessageHelp = "Help Menu. There you can find info about the game... "
+	  objectMessageClose = "Close button. If you want to live the game... "
+	  objectMessageTime = "Time rested to the game..."
+	  
+	  controlMessageLoopPlus = "Zoom in the board..."
+	  controlMessageLoopMinus = "Zoom out from the board..."
+	  controlMessageMusique = "Activate or deactivate music..."
+	  controlMessageSound = "Activate or deactivate sound effects..."
 	  
   main_menu = ""
 	  bienvenue = "Welcome to MathAmaze "

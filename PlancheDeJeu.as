@@ -624,7 +624,7 @@ class PlancheDeJeu
 	}///////// end methode
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	////////// Method used to put flah on the cases
+	////////// Method used to put flash on the cases
 	function switchColorFlash(laCase:Case)
 	{
 		//trace("--- switchColor ---");
@@ -646,7 +646,7 @@ class PlancheDeJeu
 	}///////// end methode
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	////////// Method used to put flah on the Braniac cases
+	////////// Method used to put flash on the Braniac cases
 	function switchColorBran(laCase:Case)
 	{
 		//trace("--- switchColor ---");
@@ -663,6 +663,28 @@ class PlancheDeJeu
 		{
 		   mClip = laCase.obtenirClipCase().interieur;
 		   mClip.attachMovie("flashCaseBran", "Alpha", mClip.getNextHighestDepth());
+		}
+        
+	}///////// end methode
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////// Method used to put flash on the Banana cases
+	function switchColorFlashBanana(laCase:Case)
+	{
+		//trace("--- switchColor ---");
+		var mClip:MovieClip = new MovieClip();
+		
+		
+		if(laCase.obtenirMiniGame())
+		{
+		   mClip = laCase.obtenirClipCase().minigame.interieur;
+		   mClip.attachMovie("flashCaseBanana", "Alpha", mClip.getNextHighestDepth());
+		   mClip.Alpha._alpha = 75;
+		}
+		else
+		{
+		   mClip = laCase.obtenirClipCase().interieur;
+		   mClip.attachMovie("flashCaseBanana", "Alpha", mClip.getNextHighestDepth());
 		}
         
 	}///////// end methode
@@ -753,7 +775,7 @@ class PlancheDeJeu
 		}
 	} // end method
 
-	
+	////////////////////////////////////////////////////////////////////////////////////////////
     function afficherCasesPossibles(p:Personnage)
     {		
 	 var isInWinTheGame:Boolean = true;
@@ -790,7 +812,6 @@ class PlancheDeJeu
 		
             if(this.mat[temp][p.obtenirC()] > 0)
             {
-				trace(pointageMin);
 				if(tableauDesCases[temp][p.obtenirC()].obtenirType() > 40000 && _level0.loader.contentHolder.planche.obtenirPerso().obtenirPointage() < pointageMin)
 				{
 					//trace("pas assez de points pour atteindre le WinTheGame");
@@ -1047,8 +1068,95 @@ class PlancheDeJeu
             }
         }
 		trace("Fin afficher cases possibles"); 
+		
+		// to put Banana cases 
+		trace("in the GE " + _level0.loader.contentHolder.objGestionnaireEvenements.bananaState);
+		if(_level0.loader.contentHolder.objGestionnaireEvenements.bananaState)
+		   afficherCasesPossiblesBanane(p);
 	 }// end if for watcher
     }
+	
+	
+	////////////////////////////////////////////////////////////////////////////////////////////
+	///  Method used to put on the board the movies of the cases cauted by banana //////////////
+	////////////////////////////////////////////////////////////////////////////////////////////
+    function afficherCasesPossiblesBanane(p:Personnage)
+    {		
+	 
+	    var moveVisi =  _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility;
+	 
+	    var i:Number;
+        var nb:Number = Math.min(6 - moveVisi,2);
+		   
+        var coordonnees:Point = new Point(0,0);
+        var temp:Number;
+				
+		
+        for(i = 0; i < nb; i++)//Math.min(mat.length-p.obtenirL()-1,moveVisi + 2); i++)
+        {
+			temp = Number(p.obtenirL());
+			temp += Number(moveVisi + i + 1);
+					
+            if(this.mat[temp][p.obtenirC()] > 0)
+            {
+				switchColorFlashBanana(tableauDesCases[temp][p.obtenirC()]);
+			}
+            else
+            {
+                break;
+            }
+			
+        }
+	
+	
+        for(i = 0; i < nb; i++)//i <= Math.min(p.obtenirL(),moveVisi + 2); i++)
+        {
+			//trace("ds deuxieme for avant if  i  mat  :  "+i+"   "+mat[p.obtenirL()-i][p.obtenirC()]);
+			temp = p.obtenirL()-(moveVisi + i + 1);
+           
+			if(mat[temp][p.obtenirC()] > 0)
+            {
+				switchColorFlashBanana(tableauDesCases[temp][p.obtenirC()]);
+			}
+            else
+            {
+                break;
+            }
+        }
+	
+        for(i = 0; i < nb; i++)//for(i = moveVisi + 1; i <= Math.min(mat[0].length-p.obtenirC()-1, moveVisi + 2);i++)
+        {
+			temp = Number(p.obtenirC());
+			temp += Number(moveVisi + i + 1);
+			//trace("ds troisieme for avant if  i  temp   mat  L   C  :  "+i+"   "+temp+"    "+mat[p.obtenirL()][temp]+"   "+p.obtenirL()+"   "+p.obtenirC());
+            
+			if(mat[p.obtenirL()][temp] > 0)
+            {
+				switchColorFlashBanana(tableauDesCases[p.obtenirL()][temp]);
+			}
+            else
+            {
+                break;
+            }
+        }
+		
+        for(i = 0; i < nb; i++)//for(i= moveVisi + 1; i <= Math.min(p.obtenirC(), moveVisi + 2);i++)
+        {
+			//trace("ds dernier for avant if  i  mat  :  "+i+"   "+mat[p.obtenirL()][p.obtenirC()-i]);
+			temp = p.obtenirC()-(moveVisi + i + 1);
+			
+            if(mat[p.obtenirL()][temp] > 0)
+            {
+				switchColorFlashBanana(tableauDesCases[p.obtenirL()][temp]);
+            }
+            else
+            {
+                break;
+            }
+        }
+		trace("Fin afficher cases possiblesBanana"); 
+			 
+    }// end function afficherCasesPossiblesBanane
     
 	
 	/*
@@ -1156,7 +1264,7 @@ class PlancheDeJeu
 		}
 	}
 	
-	
+	//////////////////////////////////////////////////////////////////////////////
     function effacerCasesPossibles(p:Personnage)
     {
         var i:Number;
@@ -1239,9 +1347,79 @@ class PlancheDeJeu
             }
         }
 	
-		_root.objGestionnaireInterface.deleterCasesSpeciales();  
+		_root.objGestionnaireInterface.deleterCasesSpeciales(); 
+		
+		trace("efface banana : " + _level0.loader.contentHolder.objGestionnaireEvenements.bananaState );
+		if(_level0.loader.contentHolder.objGestionnaireEvenements.bananaState)
+		  effacerCasesPossiblesBanane(p);
 		//trace("Fin effacerCasesPossibles");
 		//trace("****************************");
+    }	
+	
+	
+	//////////////////////////////////////////////////////////////////////////////
+    function effacerCasesPossiblesBanane(p:Personnage)
+    {
+        var i:Number;
+		var temp:Number;
+	    var moveVisibility =  _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility;
+		
+		 var nb:Number = Math.min(6 - moveVisibility, 2);
+	    
+		for(i = 0; i < nb; i++)//for(i = moveVisibility + 1; i <= Math.min(mat.length-p.obtenirL()-1, moveVisibility + 2); i++) // +2 because Banana cut 2 cases 
+        {
+			temp = Number(Number(p.obtenirL()) + (moveVisibility + i + 1));   
+					
+            if(mat[temp][p.obtenirC()] > 0)
+            {
+		    	switchBackColorFlash(tableauDesCases[temp][p.obtenirC()]);
+            }
+            else
+            {
+                break;
+            }
+        }
+		
+        for(i = 0; i < nb; i++)//for(i = moveVisibility + 1; i <= Math.min(p.obtenirL(), moveVisibility + 2); i++)
+        {
+			if(mat[p.obtenirL()-(moveVisibility + i + 1)][p.obtenirC()] > 0)
+            {
+				switchBackColorFlash(tableauDesCases[p.obtenirL()-(moveVisibility + i + 1)][p.obtenirC()]);
+            }
+            else
+            {
+                break;
+            }
+        }
+		
+        for(i = 0; i < nb; i++)//for(i= moveVisibility + 1; i <= Math.min(mat[0].length-p.obtenirC()-1, moveVisibility + 2); i++)
+        {
+			temp = Number(Number(p.obtenirC())+(moveVisibility + i + 1));   
+			
+            if(mat[p.obtenirL()][temp] > 0)
+            {
+		    	switchBackColorFlash(tableauDesCases[p.obtenirL()][temp]);
+            }
+            else
+            {
+                break;
+            }
+        }
+		
+        for(i = 0; i < nb; i++)//for(i= moveVisibility + 1; i <= Math.min(p.obtenirC(), moveVisibility + 2); i++)
+        {
+			if(mat[p.obtenirL()][p.obtenirC()-(moveVisibility + i + 1)] > 0)
+            {
+		    	switchBackColorFlash(tableauDesCases[p.obtenirL()][p.obtenirC()-(moveVisibility + i + 1)]);
+            }
+            else
+            {
+                break;
+            }
+        }
+	
+		//_root.objGestionnaireInterface.deleterCasesSpeciales();   // ????
+		
     }	
 	
     ////////////////////////////////////////////////////////////////////////////

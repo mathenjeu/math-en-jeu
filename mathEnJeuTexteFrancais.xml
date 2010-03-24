@@ -22,6 +22,14 @@
 	  objectMessageLivre = "Vous pouvez l'utiliser pour enlever une option du réponse."
 	  objectMessagePiece = "  Vous pouvez l'échanger contre un   objet dans un    magasin..."
 	  objectMessageBanane = "Vous pouvez lancer la Banane à un adversaire... "
+	  objectMessageHelp = "Menu d'aide. La vous pouvez trouver d'info comment joueur... "
+	  objectMessageClose = "Bouton quitter. Si vous voulez quitter le jeu ou redémarrer ... "
+	  objectMessageTime = "Temps restant à la partie ... "
+	  
+	  controlMessageLoopPlus = "Avec lui tu peux t'approcher de la planche de jeu..."
+	  controlMessageLoopMinus = "Avec lui tu peux t'éloigner de la planche de jeu..."
+	  controlMessageMusique = "Activer ou de désactiver la musique durant la partie..."
+	  controlMessageSound = "Activer ou de désactiver les effets sonores durant la partie..."
 	  
 	main_menu = ""
 	  bienvenue = "Bienvenue dans Math en jeu "

@@ -53,7 +53,7 @@ class GestionnaireEvenements
 	public var  listeDesTypesDeJeu:Array; //liste des TypesDeJeu de salles
 	public var  listeDesSalles:Array;    //  liste de toutes les salles                !!!! Combiner ici tout dans un Objet
 	private var listeNumeroJoueursSalles:Array;		//liste de numero de joueurs dans chaque salle
-	private var numeroJoueursDansSalle:Number = 0; //??????
+	private var numeroJoueursDansSalle:Number = 0; // Number max of players in the room where we are  
 	
 	private var listeChansons:Array;    //  liste de toutes les chansons
     private var listeDesJoueursConnectes:Array;   // la premiere liste qu'on recoit, tous les joueurs dans toutes les salles. Un joueur contient un nom (nom)
@@ -75,9 +75,10 @@ class GestionnaireEvenements
 	private var finishPoints:Array;
 	
 	private var braniacState:String;
+	private var bananaState:Boolean;
 	
 	//used to color clothes of our perso
-	private var colorIt:Number;
+	private var colorIt:String;
 	
 	function affichageChamps()
 	{
@@ -145,12 +146,12 @@ class GestionnaireEvenements
 		this.finishPoints = a;
 	}
 	
-	function getColorIt():Number
+	function getColorIt():String
 	{
 		return this.colorIt;
 	}
 	
-	function setColorIt(color:Number)
+	function setColorIt(color:String)
     {
     	this.colorIt = color;
     }
@@ -195,7 +196,8 @@ class GestionnaireEvenements
 		var port:Number = parseInt(_level0.configxml_mainnode.attributes.port, 10);
 		
 		this.newsChat = new NewsBox();
-		this.colorIt = 0;
+		this.colorIt = "0";
+		this.bananaState = false;
 				
         this.objGestionnaireCommunication = new GestionnaireCommunication(Delegate.create(this, this.evenementConnexionPhysique), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
 	
@@ -442,7 +444,9 @@ class GestionnaireEvenements
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].idessin = calculatePicture(no);
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].win = 0;
 		this.listeDesPersonnages[numeroJoueursDansSalle-1].clocolor = this.colorIt;
+		trace(" This GE - colors :" + this.colorIt);
 		//this.listeDesPersonnages[numeroJoueursDansSalle-1].lastPoints = 0;
+		
         this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), Delegate.create(this, this.evenementPartieTerminee), Delegate.create(this, this.evenementJoueurRejoindrePartie),  no, colorIt);//this.idPersonnage);//  
 	
 		trace("fin de demarrerPartie");
@@ -1289,12 +1293,9 @@ class GestionnaireEvenements
                
                 _level0.loader.contentHolder.nomJ4 = this.nomUtilisateur;
               
-                var j:Number=0;
+           
 				for(var i:Number = 0; i < numeroJoueursDansSalle-1; i++)
-                {
-	                if(i>3) j=1;
-					if(i>7) j=2;
-					if(i>11) j=3;
+                {	               
 	                this.listeDesPersonnages.push(new Object());
                     this.listeDesPersonnages[i].nom = "Inconnu";
                     this.listeDesPersonnages[i].id = 0;
@@ -1405,14 +1406,15 @@ class GestionnaireEvenements
 					{
 					   this.listeDesPersonnages[i].idessin = idDessin;
 					   
+					   var idPers =  calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
+    				   var cloColor:Number = Number(this.listeDesPersonnages[i].clocolor);
 					   // change back if not used perso load
-					    movClip = _level0.loader.contentHolder.refLayer.createEmptyMovieClip("Personnage" + idDessin,i);
-					    _level0.loader.contentHolder.refLayer["Personnage" + idDessin].loadMovie("persox" + idDessin + ".swf","b" + i);
-					  
-                          //movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage" + idDessin,"b" + i,i);
-                       _level0.loader.contentHolder["joueur"+(i+1)] = objetEvenement.listePersonnageJoueurs[i].nom;
-                       //_level0.loader.contentHolder["dtCadre"+i+1]["joueur"+i]=this.listeDesPersonnages[i].nom;
-                       
+	                   movClip = _level0.loader.contentHolder.refLayer.createEmptyMovieClip("Personnage" + idPers,i);
+					   
+					   this.drawUserFrame3(i, cloColor, idDessin, movClip);
+					  					  
+				       _level0.loader.contentHolder["joueur"+(i+1)] = objetEvenement.listePersonnageJoueurs[i].nom;
+                                              
 					   movClip._x = 510-j*60;
                        movClip._y = 150 + i*60-j*240;
 					   movClip._xscale -= 70;
@@ -2673,8 +2675,12 @@ class GestionnaireEvenements
             	//  on enleve le nom du joueur dans la liste et a l'ecran
             	if(itIsMe && (!alreadyWas))
             	{
-                	//listeDesPersonnages[i].nom = "Inconnu" + i;
-                	//_level0.loader.contentHolder.noms[i] = "Inconnu";
+					var idDessin = listeDesPersonnages[i].idessin;
+					var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
+					 _level0.loader.contentHolder.refLayer["Personnage" + idPers].removeMovieClip();
+                	listeDesPersonnages[i].nom = "Inconnu";
+					listeDesPersonnages[i].id = 0;
+                	_level0.loader.contentHolder["joueur"+(i+1)] = " ";
                 	alreadyWas=true;
                 	break;
             	}
@@ -2715,7 +2721,8 @@ class GestionnaireEvenements
         	if(this.listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur)
         	{
 				trace("un joueur enlever de la liste :   " + objetEvenement.nomUtilisateur + " " + this.listeDesPersonnages[i].nom);
-            	this.listeDesPersonnages.removeItemAt(i);
+            	this.listeDesPersonnages.replaceItemAt(new Object(),i);
+				this.listeDesPersonnages[i].nom = "Inconnu";
            		break;
         	}
         	
@@ -2851,7 +2858,7 @@ class GestionnaireEvenements
 					
 					// after we create the perso's
 					_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(this.listeDesPersonnages[j].id));
-                    _level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin, this.listeDesPersonnages[j].role, objetEvenement.positionJoueurs[i].clocolor);
+                    _level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin, this.listeDesPersonnages[j].role, Number(objetEvenement.positionJoueurs[i].clocolor));
 		    		//trace("Construction du personnage : " + this.listeDesPersonnages[j].clocolor + " " + objetEvenement.positionJoueurs[i].x + " " + objetEvenement.positionJoueurs[i].y + " idDessin:" + idDessin + " idPers:" + idPers);
 					_level0.loader.contentHolder.referenceLayer["Personnage" + idPers].nom = this.listeDesPersonnages[j].nom;
 				}
@@ -2929,7 +2936,7 @@ class GestionnaireEvenements
     {
         // parametre: nomUtilisateur, idPersonnage
      	trace("*********************************************");
-     	trace("debut de evenementJoueurDemarrePartie   "+objetEvenement.nomUtilisateur+"     "+objetEvenement.idPersonnage);
+     	trace("debut de evenementJoueurDemarrePartie   "+objetEvenement.nomUtilisateur+"     "+objetEvenement.idPersonnage + "   " + objetEvenement.clothesColor);
         var movClip:MovieClip;
         var j:Number=0;
         for (var i:Number = 0; i < numeroJoueursDansSalle-1; i++)
@@ -2945,10 +2952,12 @@ class GestionnaireEvenements
             	var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
 				this.listeDesPersonnages[i].idessin = idDessin;
 				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
-            	
+            	var cloCol:Number = Number(objetEvenement.clothesColor);
 				
-				movClip = _level0.loader.contentHolder.refLayer.createEmptyMovieClip("Personnage" + idDessin,i);
-			    _level0.loader.contentHolder.refLayer["Personnage" + idDessin].loadMovie("persox" + idDessin + ".swf","b" + i);
+				movClip = _level0.loader.contentHolder.refLayer.createEmptyMovieClip("Personnage" + idPers,i);
+				
+			   this.drawUserFrame3(i, cloCol, idDessin, movClip);
+				
 
 				//movClip = _level0.loader.contentHolder.refLayer.loadMovie("perso1.swf","b" + i,i);
 					
@@ -3260,28 +3269,19 @@ class GestionnaireEvenements
 		
 		// info for newsbox
 		if(objetEvenement.objetUtilise == "Banane"){
-		   //_level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
-		   //trace("INfo : " + this.newsArray[this.newsArray.length - 1] + " " + this.newsArray.length );
 		   var messageInfo:String = playerThat + _root.texteSource_xml.firstChild.attributes.bananaMess + playerUnder; 
 		   this.newsChat.addMessage(messageInfo);
-		   //this.newsArray[newsArray.length] = messageInfo;
-		   //_level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
-		   
-		  // _level0.loader.contentHolder.orderId = 0;
-		
+		 		
 		}else if(objetEvenement.objetUtilise == "Livre")
 		{
-		   // newsbox
 		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _root.texteSource_xml.firstChild.attributes.bookUsedMess; 
 		   this.newsChat.addMessage(messageInfo);
 		}else if(objetEvenement.objetUtilise == "Braniac")
 		{
-			 // newsbox
 		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _root.texteSource_xml.firstChild.attributes.braniacUsedMess; 
 		   this.newsChat.addMessage(messageInfo);
 		}else if(objetEvenement.objetUtilise == "Boule")
 		{
-			 // newsbox
 		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _root.texteSource_xml.firstChild.attributes.cristallUsedMess; 
 		   this.newsChat.addMessage(messageInfo);
 		}
@@ -3295,6 +3295,8 @@ class GestionnaireEvenements
 		   //if(this.moveVisibility < 1)
 		    //  this.moveVisibility = 1;
 			
+			this.bananaState = true;
+			trace("in the GE " + bananaState);
 			setBananaTimer(playerUnder);
 			
 		   //if the player is in the minigame 
@@ -3310,14 +3312,14 @@ class GestionnaireEvenements
 			  }
 			 			  
 			  _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			  
 			   this.moveVisibility = this.moveVisibility - 2;
 		       if(this.moveVisibility < 1)
 		       this.moveVisibility = 1;
 		      _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			  _global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
+			
+			_global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
 			  
-			  //_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
+			
 			
 			// if the player read at the monment a question
 		   }else if(_level0.loader.contentHolder.box_question.monScroll._visible)
@@ -3333,7 +3335,8 @@ class GestionnaireEvenements
 		        if(this.moveVisibility < 1)
 		          this.moveVisibility = 1;
 		       _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			   _global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
+			  
+			  _global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
 			  
 			   //_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
 			
@@ -3567,11 +3570,13 @@ class GestionnaireEvenements
 		   // to remove the timer box
 		   if(_global.restedTimeBanana < 0)
 		   { 
+		     
 		      _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			    this.moveVisibility = this.moveVisibility + 2;
-		        if(this.moveVisibility > 6)
-		          this.moveVisibility = 6;
-		       _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			   _level0.loader.contentHolder.objGestionnaireEvenements.bananaState = false;
+			  _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility += 2;
+		      if(_level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility > 6)
+		          _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility = 6;
+		      _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 		      _level0.loader.contentHolder.bananaBox.removeMovieClip();
 		      clearInterval(_global.intervalIdBanana);
 		   }
@@ -3880,6 +3885,27 @@ function drawToolTip(messInfo:String, mcMovie:MovieClip)
 	_level0.loader.contentHolder.toolTip._visible = false;
 	//_level0.loader.contentHolder.
 
+}
+
+function drawUserFrame3(i:Number, colorC:Number, idDessin:Number, movClip:MovieClip)
+{
+	 
+	//***********************************************
+	// to load the perso .. use ClipLoader to know the moment of complet load
+    // create them dinamicaly
+	   var mcLoaderString = "myLoader" + i;
+	   this["mcLoaderString"] = new MovieClipLoader();
+	   var mclListenerString = "myListener" + i;
+	   this["mclListenerString"] = new Object();
+       this["mclListenerString"].onLoadComplete = function(target_mc:MovieClip) {
+            		    			  
+		   target_mc.clothesCol = colorC;
+			             
+		};
+		this["mcLoaderString"].addListener(this["mclListenerString"]);
+					
+	   
+	   this["mcLoaderString"].loadClip("persox" + idDessin + ".swf", movClip);
 }
 	
 	
