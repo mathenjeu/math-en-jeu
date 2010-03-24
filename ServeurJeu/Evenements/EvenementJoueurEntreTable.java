@@ -24,10 +24,12 @@ public class EvenementJoueurEntreTable extends Evenement
     // variable for user role
     private int userRole;
     
+       
     /**
      * Constructeur de la classe EvenementJoueurEntreTable qui permet 
      * d'initialiser le numéro de la table et le nom d'utilisateur du 
      * joueur qui vient d'entrer dans la table. 
+     * @param colorS 
      */
     public EvenementJoueurEntreTable(int noTable, String nomUtilisateur, int role)
     {
