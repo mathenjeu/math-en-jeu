@@ -2646,7 +2646,7 @@ class GestionnaireCommunication
 								   evenementUtiliserObjetDelegate:Function,
 				                   evenementPartieTermineeDelegate:Function,
                                    evenementJoueurRejoindrePartieDelegate:Function,
-				                   idPersonnage:Number, clothesColor:Number) 
+				                   idPersonnage:Number, clothesColor:String) 
     {
         // Si on est dans une table, alors on peut continuer le code de la
         // fonction
@@ -2674,14 +2674,16 @@ class GestionnaireCommunication
             var objObjetXML:XML = new XML();
             // Creer tous les noeuds de la commande
             var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
+			
             var objNoeudParametreIdPersonnage:XMLNode = objObjetXML.createElement("parametre");
             var objNoeudParametreIdPersonnageText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(idPersonnage)));
 			var objNoeudParametreClothesColor:XMLNode = objObjetXML.createElement("parametre");
-			var objNoeudParametreClothesColorText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(clothesColor)));
+			var objNoeudParametreClothesColorText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(clothesColor));
 		
             // Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "DemarrerPartie";
+			
             objNoeudParametreIdPersonnage.attributes.type = "IdPersonnage";
             objNoeudParametreIdPersonnage.appendChild(objNoeudParametreIdPersonnageText);
 			objNoeudParametreClothesColor.attributes.type = "ClothesColor";
@@ -4042,7 +4044,8 @@ class GestionnaireCommunication
                 // Ajouter l'objet joueur dans le tableau
                 objEvenement.listePersonnageJoueurs.push({nom:lstChildNodes[i].attributes.nom,
                                                           idPersonnage:lstChildNodes[i].attributes.idPersonnage,
-														  userRoles:lstChildNodes[i].attributes.role});
+														  userRoles:lstChildNodes[i].attributes.role,
+														  clothesColor:lstChildNodes[i].attributes.clothesColor});
             }
         }
         // Si le retour de la fonction est une reponse positive et non une

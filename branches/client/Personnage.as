@@ -60,6 +60,7 @@ class Personnage
 	{
 		return clothesColor;
 	}
+	
 	function setRole(n:Number)
 	{
 		role = n;
@@ -204,6 +205,7 @@ class Personnage
 			}//end 1st if
 		};
 		/*
+		// fonctions transfered to mathemaquoi for hovers needs
 		_level0.loader.contentHolder.objectMenu[nomObj + "_mc"].onRollOver = function()
 		{
 			var toolTipMess:String = _root.texteSource_xml.firstChild.attributes["objectMessage" + nomObj];
@@ -339,6 +341,7 @@ class Personnage
 		return argent;
 	}
 	
+	
 	////////////////////////////////////////////////////////////
 	function modifierArgent(x:Number)
 	{
@@ -363,6 +366,7 @@ class Personnage
 	{
 		return position;
 	}
+	
 	
 	////////////////////////////////////////////////////////////
 	function definirPosition(p:Point, ll:Number, cc:Number)
@@ -602,19 +606,8 @@ class Personnage
 					case "piece":
 						// l'argent est ajoute au personnage dans les fichiers gestEve et gestComm
 						// en gros, ici, on enleve l'image du board
-				
-						/////////////////////////////////////////
-						//fuck : si c'est pas moi qui tombe dessus la piece
-						//aussi, est-ce que les ordis utilisent des pieces ?
-						/////////////////////////////////////////
-					
-						/*if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-						{
-							if(this.obtenirNombreObjet() < 11)
-							{					
-								ajouterImageBanque(this.obtenirNombreObjet(), "pieceFixe", this.obtenirNombreObjet(), SCALE_BOX_OBJET);
-							}
-						}*/
+															
+						
 	
 						_level0.loader.contentHolder.planche.enleverPiece(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -10000);
@@ -681,77 +674,49 @@ class Personnage
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-				        /*	
-						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-						{
-							ajouterImageBanque("Livre");
-						}*/
+				       
 					break;
 				
 					case "Telephone":
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-                        /* 
-						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-						{
-							ajouterImageBanque("Telephone");
-						}*/
+                        
 					break;
 				
 					case "Papillon":
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-                        /*
-						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-						{
-							ajouterImageBanque("Papillon");
-						}*/
+                       
 					break;
 				
 					case "Boule":
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-                        /*
-						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-						{
-							ajouterImageBanque("Boule");
-						}*/
+                      
 					break;
 				
 					case "PotionGros":
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-                        /*
-						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-						{
-							ajouterImageBanque("PotionGros");
-						}*/
+                       
 					break;
 				
 					case "PotionPetit":
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-                        /*
-						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-						{
-							ajouterImageBanque("PotionPetit");
-						}*/
+                       
 					break;
 				
 					case "Banane":
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-                        /*   
-						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
-						{
-							ajouterImageBanque("Banane");
-						} */
+                        
 					break;
 					
 					case "Braniac":
@@ -836,9 +801,13 @@ class Personnage
 			
 			if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 			{
-				if(_level0.loader.contentHolder.planche.recentrerBoard(this.l, this.c, true))
+				if(_level0.loader.contentHolder.planche.recentrerBoard(this.l, this.c, false))
 				{
-					if(!this.minigameLoade) _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+					if(!this.minigameLoade)
+					{
+						_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+						
+					}
 					boardCentre = true;
 					//trace(_level0.loader.contentHolder.horlogeNum + "temps restant");
 					
