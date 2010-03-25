@@ -47,16 +47,16 @@ class Personnage
 	private var boardCentre:Boolean;
 	private var listeSurMagasin:Array;	 // sert a recuperer la liste d'objets du magasin lorsque qu'on va sur une case magasin
 	private var minigameLoade:Boolean;
-	private var clothesColor:Number;
+	private var clothesColor:String;
 	private var braniacState:Boolean;
 		
 		
-	function setColor(n:Number)
+	function setColor(n:String)
 	{
 		clothesColor = n;
 	}
 	
-	function getColor():Number
+	function getColor():String
 	{
 		return clothesColor;
 	}
@@ -508,7 +508,7 @@ class Personnage
 	//////////////////////////////////////////////////////////////////////////////////////
 	//	CONSTRUCTEUR
 	//////////////////////////////////////////////////////////////////////////////////////
-	function Personnage(nom:String, role:Number, niveau:Number, nomClip:Number, ll:Number, cc:Number, xx:Number, yy:Number, cloColor:Number, mag:Array)
+	function Personnage(nom:String, role:Number, niveau:Number, nomClip:Number, ll:Number, cc:Number, xx:Number, yy:Number, cloColor:String, mag:Array)
 	{
 		this.l = ll;
 		this.c = cc;
