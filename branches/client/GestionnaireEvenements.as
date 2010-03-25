@@ -1387,26 +1387,19 @@ class GestionnaireEvenements
 					this.listeDesPersonnages[i].pointage = 0;
 					this.listeDesPersonnages[i].win = 0;
 					//this.listeDesPersonnages[i].argent = 0;
-		    
-                                   
-                    var nextID:Number = 0;
-                    for(var k=0; k < objetEvenement.listePersonnageJoueurs.length; k++)
-                    	if(objetEvenement.listePersonnageJoueurs[k].nom.substr(0,7) != "Inconnu") nextID++;
-                    
+		                           
                     var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
-					
-					//var idPers:Number = this.listeDesPersonnages[i].id-10000-idDessin*100;
-					
+										
 					if(this.listeDesPersonnages[i].id == 0) 
 					   idDessin = 0;
-					
-					_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(nextID));
-		    
+							    
                     if(idDessin != 0)
 					{
+						
 					   this.listeDesPersonnages[i].idessin = idDessin;
 					   
 					   var idPers =  calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
+					   _level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(idPers));
     				   var cloColor:String = this.listeDesPersonnages[i].clocolor;
 					   // change back if not used perso load
 	                   movClip = _level0.loader.contentHolder.refLayer.createEmptyMovieClip("Personnage" + idPers,i);
@@ -2851,14 +2844,14 @@ class GestionnaireEvenements
 	                var idDessin:Number = calculatePicture(this.listeDesPersonnages[j].id);
 					var idPers:Number = calculateIDPers(this.listeDesPersonnages[j].id, idDessin);
 					this.listeDesPersonnages[i].idPers = idPers;
-					if(idDessin < 0) idDessin = 12;   ///????
+					//if(idDessin < 0) idDessin = 12;   ///????
 					//if(idPers<0) idPers=-idPers;
 					
 					// to update clothes color
 					this.listeDesPersonnages[j].clocolor = objetEvenement.positionJoueurs[i].clocolor;
 					
 					// after we create the perso's
-					_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(this.listeDesPersonnages[j].id));
+					_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(idPers));
                     _level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin, this.listeDesPersonnages[j].role, objetEvenement.positionJoueurs[i].clocolor);
 		    		//trace("Construction du personnage : " + this.listeDesPersonnages[j].clocolor + " " + objetEvenement.positionJoueurs[i].x + " " + objetEvenement.positionJoueurs[i].y + " idDessin:" + idDessin + " idPers:" + idPers);
 					_level0.loader.contentHolder.referenceLayer["Personnage" + idPers].nom = this.listeDesPersonnages[j].nom;
@@ -2969,7 +2962,7 @@ class GestionnaireEvenements
 				movClip._yscale -= 70;
 				//trace("idPers : " + idPers + "\n" + "idDessin");
 		
-	    		_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(objetEvenement.idPersonnage));
+	    		_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(idPers));
 	    
             	break;
         	}
@@ -3907,6 +3900,19 @@ function drawUserFrame3(i:Number, colorC:String, idDessin:Number, movClip:MovieC
 					
 	   
 	   this["mcLoaderString"].loadClip("persox" + idDessin + ".swf", movClip);
+}
+
+// to took a good Id for our perso
+function haveThisId(idPers:Number):Boolean
+{
+   	var i:Number;
+	
+	for(i = 0; i < _level0.loader.contentHolder.tableauDesPersoChoisis.length; i++)
+	{
+		if(_level0.loader.contentHolder.tableauDesPersoChoisis[i] == idPers)
+		   return true;
+	}
+	return false;
 }
 	
 	
