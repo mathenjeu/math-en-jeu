@@ -1407,7 +1407,7 @@ class GestionnaireEvenements
 					   this.listeDesPersonnages[i].idessin = idDessin;
 					   
 					   var idPers =  calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
-    				   var cloColor:Number = Number(this.listeDesPersonnages[i].clocolor);
+    				   var cloColor:String = this.listeDesPersonnages[i].clocolor;
 					   // change back if not used perso load
 	                   movClip = _level0.loader.contentHolder.refLayer.createEmptyMovieClip("Personnage" + idPers,i);
 					   
@@ -2723,6 +2723,7 @@ class GestionnaireEvenements
 				trace("un joueur enlever de la liste :   " + objetEvenement.nomUtilisateur + " " + this.listeDesPersonnages[i].nom);
             	this.listeDesPersonnages.replaceItemAt(new Object(),i);
 				this.listeDesPersonnages[i].nom = "Inconnu";
+				this.listeDesPersonnages[i].id = 0;
            		break;
         	}
         	
@@ -2858,7 +2859,7 @@ class GestionnaireEvenements
 					
 					// after we create the perso's
 					_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(this.listeDesPersonnages[j].id));
-                    _level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin, this.listeDesPersonnages[j].role, Number(objetEvenement.positionJoueurs[i].clocolor));
+                    _level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin, this.listeDesPersonnages[j].role, objetEvenement.positionJoueurs[i].clocolor);
 		    		//trace("Construction du personnage : " + this.listeDesPersonnages[j].clocolor + " " + objetEvenement.positionJoueurs[i].x + " " + objetEvenement.positionJoueurs[i].y + " idDessin:" + idDessin + " idPers:" + idPers);
 					_level0.loader.contentHolder.referenceLayer["Personnage" + idPers].nom = this.listeDesPersonnages[j].nom;
 				}
@@ -2952,7 +2953,7 @@ class GestionnaireEvenements
             	var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
 				this.listeDesPersonnages[i].idessin = idDessin;
 				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
-            	var cloCol:Number = Number(objetEvenement.clothesColor);
+            	var cloCol:String = objetEvenement.clothesColor;
 				
 				movClip = _level0.loader.contentHolder.refLayer.createEmptyMovieClip("Personnage" + idPers,i);
 				
@@ -3887,7 +3888,7 @@ function drawToolTip(messInfo:String, mcMovie:MovieClip)
 
 }
 
-function drawUserFrame3(i:Number, colorC:Number, idDessin:Number, movClip:MovieClip)
+function drawUserFrame3(i:Number, colorC:String, idDessin:Number, movClip:MovieClip)
 {
 	 
 	//***********************************************
