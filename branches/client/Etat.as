@@ -123,7 +123,7 @@ class Etat
 						 listeEvenementsAcceptablesApres:new Array()},
 	{nom:"RejoindrePartie", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDeplacePersonnage","SynchroniserTemps", "PartieTerminee","UtiliserObjet", "JoueurRejoindrePartie"), 
 	                        listeEvenementsAcceptablesAvant:new Array(), 
-							listeEvenementsAcceptablesApres:new Array("UtiliserObjet", "SynchroniserTemps", "DeplacerPersonnage", "JoueurDeplacePersonnage", "PartieTerminee", "JoueurRejoindrePartie")}, 
+							listeEvenementsAcceptablesApres:new Array("UtiliserObjet", "SynchroniserTemps", "DeplacerPersonnage","JoueurEntreTable", "JoueurQuitteTable", "JoueurDeplacePersonnage", "PartieTerminee", "JoueurRejoindrePartie")}, 
     {nom:"DeplacerPersonnage", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDeplacePersonnage","SynchroniserTemps", "PartieTerminee","UtiliserObjet", "JoueurRejoindrePartie"), 
 	                           listeEvenementsAcceptablesAvant:new Array("UtiliserObjet"), 
 							   listeEvenementsAcceptablesApres:new Array("UtiliserObjet", "JoueurRejoindrePartie")}, 
