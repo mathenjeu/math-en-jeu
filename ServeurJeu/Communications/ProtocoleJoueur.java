@@ -649,20 +649,37 @@ public class ProtocoleJoueur implements Runnable
 							// qu'il puisse reprendre sa partie
 							JoueurHumain objAncientJoueurHumain = objControleurJeu.obtenirJoueurHumainJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
 
-							
 							// Envoyer la liste des joueurs
-							envoyerListeJoueurs(objAncientJoueurHumain, objNoeudCommandeEntree.getAttribute("no"));
+							envoyerListeJoueurs(objAncientJoueurHumain, objNoeudCommandeEntree.getAttribute("no"));	
+														
+							// Faire en sorte que le joueur est correctement
+							// considéré en train de jouer
+							
+							objJoueurHumain = objAncientJoueurHumain;
+							objAncientJoueurHumain.setObjProtocoleJoueur(this);
+                              objAncientJoueurHumain.obtenirProtocoleJoueur().definirJoueur(objAncientJoueurHumain);
+							bolEnTrainDeJouer = true;
+							
+                            
+                            
+							objJoueurHumain.obtenirPartieCourante().obtenirTable().restartGame(objJoueurHumain, true);
 
+							// Enlever le joueur de la liste des joueurs déconnectés
+							objControleurJeu.enleverJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
+							objControleurJeu.entrerSalle(objJoueurHumain, objJoueurHumain.obtenirPartieCourante().obtenirTable().getObjSalle().getRoomID(), objJoueurHumain.obtenirPartieCourante().obtenirTable().getObjSalle().getStrPassword(), false);
+								
 							// Envoyer le plateau de jeu, la liste des joueurs, 
 							// leurs ids personnage et leurs positions au joueur
 							// qui se reconnecte
 							envoyerPlateauJeu(objAncientJoueurHumain);
-
+							
 							// envoyer le pointage au joueur
 							envoyerPointage(objAncientJoueurHumain, objNoeudCommandeEntree.getAttribute("no"));
 
 							// envoyer l'argent au joueur
 							envoyerArgent(objAncientJoueurHumain, objNoeudCommandeEntree.getAttribute("no"));
+							
+							sendTableNumber(objAncientJoueurHumain, objNoeudCommandeEntree.getAttribute("no"));
 
 
 							// Envoyer la liste des items du joueur qui
@@ -671,19 +688,7 @@ public class ProtocoleJoueur implements Runnable
 
 							// Synchroniser temps
 							envoyerSynchroniserTemps(objAncientJoueurHumain);
-
-							// Faire en sorte que le joueur est correctement
-							// considéré en train de jouer
 							
-							objJoueurHumain = objAncientJoueurHumain;
-							objAncientJoueurHumain.setObjProtocoleJoueur(this);
-                              objAncientJoueurHumain.obtenirProtocoleJoueur().definirJoueur(objAncientJoueurHumain);
-							bolEnTrainDeJouer = true;
-                            objJoueurHumain.obtenirPartieCourante().obtenirTable().restartGame(objJoueurHumain, true);
-							// Enlever le joueur de la liste des joueurs déconnectés
-							objControleurJeu.enleverJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
-							objControleurJeu.entrerSalle(objJoueurHumain, objJoueurHumain.obtenirPartieCourante().obtenirTable().getObjSalle().getRoomID(), objJoueurHumain.obtenirPartieCourante().obtenirTable().getObjSalle().getStrPassword(), false);
-												
 							objNoeudCommande.setAttribute("type", "Reponse");
 							objNoeudCommande.setAttribute("nom", "Ok");
 
@@ -3712,6 +3717,60 @@ public class ProtocoleJoueur implements Runnable
 		objNoeudCommande.setAttribute("nom", "Argent");
 		objNoeudParametre.setAttribute("type", "Argent");	
 		objNoeudParametre.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirArgent()));
+
+		// Ajouter le noeud paramètre au noeud de commande dans
+		// le document de sortie
+		objNoeudCommande.appendChild(objNoeudParametre);
+
+		// Ajouter le noeud de commande au noeud racine dans le document
+		objDocumentXML.appendChild(objNoeudCommande);
+
+    	try
+    	{
+	    	// Transformer le XML en string
+	    	strCodeXML = ClassesUtilitaires.UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+	    	
+	    	// Envoyer le message string
+	    	envoyerMessage(strCodeXML);
+	    }
+	    catch(Exception e)
+	    {
+	    	objLogger.error(e.getMessage());
+	    }
+    }
+    
+    
+    /*
+     * Permet d'envoyer le numero de la table à un joueur qui se reconnecte
+     */
+    private void sendTableNumber(JoueurHumain ancientJoueur, String no)
+    {
+
+		/*
+		 * <commande nom="Argent" no="0" type="MiseAJour">
+		 * <parametre type="Argent" valeur="123"></parametre></commande>
+		 *
+		 */ 
+     
+    	// Déclaration d'une variable qui va contenir le code XML à envoyer
+		String strCodeXML = "";
+
+		// Appeler une fonction qui va créer un document XML dans lequel
+		// on peut ajouter des noeuds
+		Document objDocumentXML = UtilitaireXML.obtenirDocumentXML();
+
+		// Créer le noeud de commande à retourner
+		Element objNoeudCommande = objDocumentXML.createElement("commande");
+
+		// Créer le noeud du paramètre
+		Element objNoeudParametre = objDocumentXML.createElement("parametre");
+
+		// Envoyer une liste des joueurs
+		objNoeudCommande.setAttribute("noClient", no);
+		objNoeudCommande.setAttribute("type", "MiseAJour");
+		objNoeudCommande.setAttribute("nom", "Table");
+		objNoeudParametre.setAttribute("type", "Table");	
+		objNoeudParametre.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirNoTable()));
 
 		// Ajouter le noeud paramètre au noeud de commande dans
 		// le document de sortie

@@ -1978,6 +1978,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             for(int i=0; i<lstJoueursVirtuels.size(); i++)
             {
                 JoueurVirtuel j = (JoueurVirtuel)lstJoueursVirtuels.get(i);
+                System.out.println(username + " compare " + j.obtenirNom());
                 if(username.equals(j.obtenirNom())) return j;
             }
             return (JoueurVirtuel)null;
@@ -1991,20 +1992,28 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 */
     public String getPlayerColor(String username)
     {
-    	String color = "0";
-    	
-    	Set<Map.Entry<String, JoueurHumain>> nomsJoueursHumains = lstJoueurs.entrySet();
-        Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = nomsJoueursHumains.iterator();
-        while(objIterateurListeJoueurs.hasNext() == true)
-        {
-            JoueurHumain j = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
-            if(username.equals(j.obtenirNomUtilisateur())) return j.obtenirPartieCourante().getClothesColor();
-        }
-        
-        //otherwise we have a virtual player and his color 
-        color = this.obtenirJoueurVirtuelParSonNom(username).getClothesColor();
-        
-        return color;
+    	String color;
+    	try{
+    		Set<Map.Entry<String, JoueurHumain>> nomsJoueursHumains = lstJoueurs.entrySet();
+    		Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = nomsJoueursHumains.iterator();
+    		while(objIterateurListeJoueurs.hasNext() == true)
+    		{
+    			JoueurHumain j = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
+    			System.out.println("username " + username + " compare " + j.obtenirNomUtilisateur());
+    			if(username.equals(j.obtenirNomUtilisateur())) return j.obtenirPartieCourante().getClothesColor();
+    		}
+
+    		//otherwise we have a virtual player and his color 
+    		color = this.obtenirJoueurVirtuelParSonNom(username).getClothesColor();
+    	// if we have an error java.lang.NullPointerException
+    	}catch(NullPointerException e ){
+    		//objLogger.error( e.getMessage() );
+		    e.printStackTrace();
+    	}
+    	finally{
+    		color = getOneColor();
+    	}
+         return color;
        	
     }    
 	
