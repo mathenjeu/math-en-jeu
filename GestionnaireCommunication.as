@@ -1525,11 +1525,14 @@ class GestionnaireCommunication
      *      permettant de retourner la reponse a Flash
      */
     public function restartOldGame(feedbackRestartOldGameDelegate:Function,
+								   evenementJoueurEntreTableDelegate:Function,
+                                   evenementJoueurQuitteTableDelegate:Function,
 								   evenementPartieDemarreeDelegate:Function,
 								   evenementJoueurDeplacePersonnageDelegate:Function,
 								   evenementSynchroniserTempsDelegate:Function,
 								   evenementUtiliserObjetDelegate:Function,
-								   evenementPartieTermineeDelegate:Function)
+								   evenementPartieTermineeDelegate:Function,
+								   evenementJoueurRejoindrePartieDelegate:Function)
     {
         // Si on est connecte alors on peut continuer le code de la reconnexion sans la creation d'une nouvelle partie
         if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("RejoindrePartie", "nom") == true)
@@ -1540,11 +1543,14 @@ class GestionnaireCommunication
             // cette fonction
             lstDelegateCommande.push({nom:"RejoindrePartie", delegate:feedbackRestartOldGameDelegate});
 			// Ajouter les autres Delegate d'evenements
+			lstDelegateCommande.push({nom:"JoueurEntreTable", delegate:evenementJoueurEntreTableDelegate});
+			lstDelegateCommande.push({nom:"JoueurQuitteTable", delegate:evenementJoueurQuitteTableDelegate});
             lstDelegateCommande.push({nom:"PartieDemarree", delegate:evenementPartieDemarreeDelegate});
 			lstDelegateCommande.push({nom:"JoueurDeplacePersonnage", delegate:evenementJoueurDeplacePersonnageDelegate});
 			lstDelegateCommande.push({nom:"SynchroniserTemps", delegate:evenementSynchroniserTempsDelegate});
 			lstDelegateCommande.push({nom:"UtiliserObjet", delegate:evenementUtiliserObjetDelegate});
 			lstDelegateCommande.push({nom:"PartieTerminee", delegate:evenementPartieTermineeDelegate});
+			lstDelegateCommande.push({nom:"JoueurRejoindrePartie", delegate:evenementJoueurRejoindrePartieDelegate});
 			
 			
             // Declaration d'une variable qui va contenir le numero de la commande
@@ -3375,6 +3381,7 @@ class GestionnaireCommunication
                 objEvenement.playersListe.push({nom:lstChildNodes[i].attributes.nom,
 												userRole:lstChildNodes[i].attributes.role,
 												pointage:lstChildNodes[i].attributes.pointage,
+												//clocolor:lstChildNodes[i].attributes.clothesColor,
 												idPersonnage:lstChildNodes[i].attributes.id});
 				trace("GCOM : NOW " + lstChildNodes[i].attributes.nom + " " + lstChildNodes[i].attributes.id )
             }
@@ -3390,6 +3397,7 @@ class GestionnaireCommunication
 			trace(lstNoeudsParametre + " ***** " + objEvenement.pointage);
 		}else if(noeudCommande.attributes.nom == "Argent")
 		{
+			
 		    // Declaration d'une reference vers la liste des noeuds
 			var lstNoeudsParametre:Array = noeudCommande.childNodes;
 			
@@ -3398,7 +3406,19 @@ class GestionnaireCommunication
 			
 			objEvenement.argent = Number(objNoeudParametre.attributes.valeur);
 			trace(lstNoeudsParametre + " ***** " + objEvenement.argent);
-		 
+				
+		}else if(noeudCommande.attributes.nom == "Table")
+		{
+			
+		    // Declaration d'une reference vers la liste des noeuds
+			var lstNoeudsParametre:Array = noeudCommande.childNodes;
+			
+			//Le seul et unique noeud est le argent
+			var objNoeudParametre:XMLNode = lstNoeudsParametre[0];
+			
+			objEvenement.noTable = Number(objNoeudParametre.attributes.valeur);
+			trace(lstNoeudsParametre + " ***** " + objEvenement.noTable);
+				 		
 		}else if(noeudCommande.attributes.nom == "ListeObjets")
 		{
 			// Declaration d'une reference vers la liste des noeuds joueurs
