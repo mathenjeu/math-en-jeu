@@ -875,12 +875,12 @@ class GestionnaireCommunication
 				    	break;
 				    
 				    	case "joueurAffecte":
-							trace(strNomType);
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
 							objEvenement["joueurAffecte"] = lstChildNodes[i].firstChild.nodeValue;
 						break;
 				    
 						case "objetUtilise":
-							trace(strNomType);
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
 							var tabPersonnages:Array = _level0.loader.contentHolder.planche.obtenirTableauDesPersonnages();
 							objEvenement["objetUtilise"] = lstChildNodes[i].firstChild.nodeValue;
 							
@@ -4293,6 +4293,17 @@ class GestionnaireCommunication
 				break;
 				
 				case "Boule":
+					objEvenement.objetUtilise = new Object();
+					// Ajouter les parametres de l'objet dans l'objet d'evenement
+					objEvenement.objetUtilise.typeObjet = noeudCommande.attributes.type;
+					objEvenement.objetUtilise.url = noeudCommande.firstChild.firstChild.attributes.url;
+					objEvenement.objetUtilise.type = noeudCommande.firstChild.firstChild.attributes.type;
+					
+					trace(objEvenement.objetUtilise.url);
+					trace(objEvenement.objetUtilise.type);
+				break;
+				
+				case "Banane":
 					objEvenement.objetUtilise = new Object();
 					// Ajouter les parametres de l'objet dans l'objet d'evenement
 					objEvenement.objetUtilise.typeObjet = noeudCommande.attributes.type;

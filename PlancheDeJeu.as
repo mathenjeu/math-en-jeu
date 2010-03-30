@@ -807,7 +807,7 @@ class PlancheDeJeu
         {
 			temp = Number(p.obtenirL());
 			temp += Number(i);
-			// pourquoi il concatene ??????????????
+			
 			 //trace("ds premier for avant if  i  temp   mat  L   C  :  "+i+"   "+temp+"   "+this.mat[temp][p.obtenirC()]+"   "+p.obtenirL()+"   "+p.obtenirC());
 		
             if(this.mat[temp][p.obtenirC()] > 0)
@@ -939,7 +939,7 @@ class PlancheDeJeu
             }
         }
 	
-        for(i=1;i<=Math.min(mat[0].length-p.obtenirC()-1,moveVisibility);i++)
+        for(i=1; i <= Math.min(mat[0].length-p.obtenirC()-1, moveVisibility); i++)
         {
 			temp = Number(p.obtenirC());
 			temp += Number(i);
@@ -1004,7 +1004,7 @@ class PlancheDeJeu
             }
         }
 		
-        for(i=1;i<=Math.min(p.obtenirC(),moveVisibility);i++)
+        for(i = 1; i <= Math.min(p.obtenirC(),moveVisibility); i++)
         {
 			//trace("ds dernier for avant if  i  mat  :  "+i+"   "+mat[p.obtenirL()][p.obtenirC()-i]);
 			temp = p.obtenirC()-i;
@@ -1086,73 +1086,98 @@ class PlancheDeJeu
 	    var moveVisi =  _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility;
 	 
 	    var i:Number;
+		var j:Number;
         var nb:Number = Math.min(6 - moveVisi,2);
 		   
         var coordonnees:Point = new Point(0,0);
         var temp:Number;
-				
+		var tempB:Number;
+		var hasHoles:Boolean = false;
+		
+		for(j = 1; j <= Math.min(mat.length-p.obtenirL()-1,moveVisi + 1); j++)  // moveVisi + 1
+		{                                                                       // because first cases Banana can be on the hole
+				tempB = Number(p.obtenirL());
+			    tempB += Number(j);
+			    if(this.mat[tempB][p.obtenirC()] == 0) hasHoles = true;
+		}		
 		
         for(i = 0; i < nb; i++)//Math.min(mat.length-p.obtenirL()-1,moveVisi + 2); i++)
         {
 			temp = Number(p.obtenirL());
 			temp += Number(moveVisi + i + 1);
-					
-            if(this.mat[temp][p.obtenirC()] > 0)
+						
+            if(this.mat[temp][p.obtenirC()] > 0 && !hasHoles)
             {
+				trace("Test L: " + temp + " " + (mat.length - p.obtenirL()-1));
 				switchColorFlashBanana(tableauDesCases[temp][p.obtenirC()]);
 			}
-            else
-            {
-                break;
-            }
-			
+            
         }
-	
+	    //***************************************************************
+	    hasHoles = false;
+		
+		for(j = 1; j <= Math.min(p.obtenirL()-1,moveVisi + 1); j++)
+		{
+				tempB = Number(p.obtenirL());
+			    tempB -= Number(j);
+			    if(this.mat[tempB][p.obtenirC()] == 0) hasHoles = true;
+		}		
 	
         for(i = 0; i < nb; i++)//i <= Math.min(p.obtenirL(),moveVisi + 2); i++)
         {
-			//trace("ds deuxieme for avant if  i  mat  :  "+i+"   "+mat[p.obtenirL()-i][p.obtenirC()]);
+			trace("ds deuxieme for avant if  i temp mat  :  " + i + "   " + temp + "    "  + mat[p.obtenirL()-i][p.obtenirC()]);
 			temp = p.obtenirL()-(moveVisi + i + 1);
            
-			if(mat[temp][p.obtenirC()] > 0)
+			if(mat[temp][p.obtenirC()] > 0 && !hasHoles)
             {
 				switchColorFlashBanana(tableauDesCases[temp][p.obtenirC()]);
 			}
-            else
-            {
-                break;
-            }
+            
         }
+	    //**************************************************************
+	    hasHoles = false;
+		
+		for(j = 1; j <= Math.min(mat[0].length-p.obtenirC() - 1, moveVisi + 1); j++)
+		{
+				tempB = Number(p.obtenirC());
+			    tempB += Number(j);
+			    if(this.mat[p.obtenirL()][tempB] == 0) hasHoles = true;
+		}		
 	
+	    
         for(i = 0; i < nb; i++)//for(i = moveVisi + 1; i <= Math.min(mat[0].length-p.obtenirC()-1, moveVisi + 2);i++)
         {
 			temp = Number(p.obtenirC());
 			temp += Number(moveVisi + i + 1);
-			//trace("ds troisieme for avant if  i  temp   mat  L   C  :  "+i+"   "+temp+"    "+mat[p.obtenirL()][temp]+"   "+p.obtenirL()+"   "+p.obtenirC());
+			trace("ds troisieme for avant if  i  temp   mat  L   C  :  " + i + "   " + temp + "    " + mat[p.obtenirL()][temp] + "   " + p.obtenirL() + "   " + p.obtenirC());
             
-			if(mat[p.obtenirL()][temp] > 0)
+			if(mat[p.obtenirL()][temp] > 0 && !hasHoles )
             {
 				switchColorFlashBanana(tableauDesCases[p.obtenirL()][temp]);
 			}
-            else
-            {
-                break;
-            }
+           
         }
+		
+		//******************************************************************************
+		 hasHoles = false;
+		
+		for(j = 1; j <= Math.min(p.obtenirC(),moveVisi + 1); j++)
+		{
+				tempB = Number(p.obtenirC());
+			    tempB -= Number(j);
+			    if(this.mat[p.obtenirL()][tempB] == 0) hasHoles = true;
+		}		
 		
         for(i = 0; i < nb; i++)//for(i= moveVisi + 1; i <= Math.min(p.obtenirC(), moveVisi + 2);i++)
         {
-			//trace("ds dernier for avant if  i  mat  :  "+i+"   "+mat[p.obtenirL()][p.obtenirC()-i]);
+			trace("ds dernier for avant if  i  mat  :  " + i + "   " + mat[p.obtenirL()][p.obtenirC()-i]);
 			temp = p.obtenirC()-(moveVisi + i + 1);
 			
-            if(mat[p.obtenirL()][temp] > 0)
+            if(mat[p.obtenirL()][temp] > 0 && !hasHoles)
             {
 				switchColorFlashBanana(tableauDesCases[p.obtenirL()][temp]);
             }
-            else
-            {
-                break;
-            }
+           
         }
 		trace("Fin afficher cases possiblesBanana"); 
 			 
@@ -1511,11 +1536,11 @@ class PlancheDeJeu
 	   
 	   // to resume the banana state
 	    var intervalId3:Number;
-		intervalId3 = setInterval(endOfBanana, 15000, nameTo);
-		function endOfBanana(){
-		   _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).rest();
-		   clearInterval(intervalId3);
-		}
+		   intervalId3 = setInterval(endOfBanana, 15000, nameTo);
+		   function endOfBanana(){
+		      _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).rest();
+		      clearInterval(intervalId3);
+		   }
 	   
 	   	   
 	   var intervalId2:Number;

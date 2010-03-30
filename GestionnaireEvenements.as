@@ -3316,7 +3316,7 @@ class GestionnaireEvenements
 			  
 			
 			
-			// if the player read at the monment a question
+			// if the player read at the moment a question
 		   }else if(_level0.loader.contentHolder.box_question.monScroll._visible)
 		   {
     		   
@@ -3340,10 +3340,7 @@ class GestionnaireEvenements
 		   {
 			   // catch the rested time to be used after banana show
 			   	var tempsRested:Number = _level0.loader.contentHolder.box_question.GUI_retro.tempsPenalite;
-				
-				//trace(tempsRested + " : ici le temps que restent");
-               
-				//_root.objGestionnaireInterface.afficherBoutons(1);
+								
 				_level0.loader.contentHolder.box_question.monScroll._visible = false;
 				_level0.loader.contentHolder.box_question._visible = false;
 				_level0.loader.contentHolder.box_question.GUI_retro.removeMovieClip();
@@ -3375,7 +3372,7 @@ class GestionnaireEvenements
 		{
 			
 			
-		    _global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
+		    _global.timerIntervalBananaAutre = setInterval(this, "waitBananaAutre", 4500, playerUnder);
 					
 		}// end if
 		
@@ -3554,25 +3551,41 @@ class GestionnaireEvenements
         }
 
 		//_global.intervalIdBanana:Number;
-	    _global.intervalIdBanana = setInterval(bananaTimerSet, 1000, playerUnder);	// sert pour attendre la jusqu'a la fin de action de Braniac
+	    _global.intervalIdBanana = setInterval(bananaTimerSet, 1000, playerUnder);	
 	   
 	   function bananaTimerSet(playerUnder){
 	       
 		   _global.restedTimeBanana--;	  
 		   
 		   _level0.loader.contentHolder.bananaBox.bananaTime.text = _global.restedTimeBanana; 
-		   		   
+		   	var repost:Boolean = false;
+			
+			if(_global.restedTimeBanana < 3)
+			   repost = true;
 		   // to remove the timer box
 		   if(_global.restedTimeBanana < 0)
-		   { 
-		     
-		      _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			   _level0.loader.contentHolder.objGestionnaireEvenements.bananaState = false;
-			  _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility += 2;
-		      if(_level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility > 6)
-		          _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility = 6;
-		      _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+		   {  
 		      _level0.loader.contentHolder.bananaBox.removeMovieClip();
+		      
+			  if(repost)
+		      {
+				 _level0.loader.contentHolder.objGestionnaireEvenements.bananaState = false;
+			     _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility += 2;
+		         if(_level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility > 6)
+		            _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility = 6;
+					
+					
+			  }else
+			  {
+		         _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			     _root.objGestionnaireInterface.effacerBoutons(1);
+			     _level0.loader.contentHolder.objGestionnaireEvenements.bananaState = false;
+			     _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility += 2;
+		         if(_level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility > 6)
+		            _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility = 6;
+					//_level0.loader.contentHolder.planche.obtenirPerso().setBoardCentre(false);
+				 _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			  }
 		      clearInterval(_global.intervalIdBanana);
 		   }
 			
@@ -3587,6 +3600,16 @@ class GestionnaireEvenements
     {
         _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).slippingBanana();
 	    clearInterval(_global.timerIntervalBanana);
+						
+    }
+	
+	//****************************************************************************
+	// cette fonction attend jusqu'au signal du compteur
+	// et appelle le fonction d'action de la Banane
+    function waitBananaAutre(playerUnder:String):Void
+    {
+        _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).slippingBanana();
+	    clearInterval(_global.timerIntervalBananaAutre);
 				
     }
 	

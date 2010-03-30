@@ -49,8 +49,29 @@ class Personnage
 	private var minigameLoade:Boolean;
 	private var clothesColor:String;
 	private var braniacState:Boolean;
+	private var repostCases:Boolean;
 		
 		
+	function setRepostCases(repost:Boolean)
+	{
+		this.repostCases = repost;
+	}
+	
+	function getRepostCases():Boolean
+	{
+		return this.repostCases;
+	}
+	
+	function setBoardCentre(centre:Boolean)
+	{
+		this.boardCentre = centre;
+	}
+	
+	function getBoardCentre():Boolean
+	{
+		return this.boardCentre;
+	}
+	
 	function setColor(n:String)
 	{
 		clothesColor = n;
@@ -589,7 +610,7 @@ class Personnage
 		dx = this.prochainePosition.obtenirX() - this.position.obtenirX();  
 		dy = this.prochainePosition.obtenirY() - this.position.obtenirY();
 		//trace("ds deplacePersonnage " + dx/dy);
-		if( boardCentre) //dx == 0 && dy == 0 && image._currentFrame == 1) 
+		if( boardCentre ) //dx == 0 && dy == 0 && image._currentFrame == 1) 
 		{
 			return;
 		}
@@ -735,7 +756,7 @@ class Personnage
 					default :
 						//trace("pas de collision");	
 					break;
-				}
+				}// switch(this.faireCollision)
 			
 				if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 				{
@@ -792,16 +813,17 @@ class Personnage
 							twMove2 = new Tween(mClip1, "_alpha", Regular.easeOut, 100, 0, 1, true);
 							minigame._visible = true;
 						}
-					}
+					} // if(_level0.loader.contentHolder.planche.estCaseSpeciale(this.l, this.c) &&  _level0.loader.contentHolder.sortieDunMinigame == false)
 					else reafficher2 = true;
-				}
-			}
-			if(reafficher1 && reafficher2) this.minigameLoade = false;
-			//Si le perso est le mien et qu'il est au repos, mais que le board n'est pas centre
+				}// if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+			}// if(image._currentFrame != 1 && image._currentFrame < 90)
 			
+			if(reafficher1 && reafficher2) this.minigameLoade = false;
+			
+			//Si le perso est le mien et qu'il est au repos, mais que le board n'est pas centre
 			if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 			{
-				if(_level0.loader.contentHolder.planche.recentrerBoard(this.l, this.c, false))
+				if(_level0.loader.contentHolder.planche.recentrerBoard(this.l, this.c, true))
 				{
 					if(!this.minigameLoade)
 					{
@@ -815,7 +837,7 @@ class Personnage
 			} 
 			
 			return; // pour ne pas faire le reste des verifications inutilement si dx == dy == 0
-		}
+		} // if ((dx == 0) && (dy == 0))
 		
 		//pour le reste, ((dx == 0)&&(dy == 0) != 1)
 		
@@ -951,6 +973,7 @@ class Personnage
 	function tossBanana()
 	{
 		this.image.gotoAndPlay("tossing");
+		trace("tossing !!!!!!!!!!!!!!!!!");
 		
 	}
 	
@@ -958,6 +981,7 @@ class Personnage
 	function slippingBanana()
 	{
 		this.image.gotoAndPlay("slipping");
+		trace("slipping !!!!!!!!!!!!!!!!!");
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////
