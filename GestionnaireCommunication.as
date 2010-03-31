@@ -880,13 +880,15 @@ class GestionnaireCommunication
 						break;
 				    
 						case "objetUtilise":
-							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+							trace(strNomType + " * " + lstChildNodes[i].firstChild.nodeValue);
 							var tabPersonnages:Array = _level0.loader.contentHolder.planche.obtenirTableauDesPersonnages();
 							objEvenement["objetUtilise"] = lstChildNodes[i].firstChild.nodeValue;
 							
 							switch(objEvenement["objetUtilise"])
 							{
 								case "Banane":
+								
+								trace("On utilise Banane ici: " + objEvenement.joueurQuiUtilise + " * " + objEvenement.joueurAffecte + " * " + objEvenement.objetUtilise)
 									//definirIntEtatClient(10);
 									
 									//objEvenement["NouvellePositionX"] = noeudEvenement.firstChild.nextSibling.nextSibling.nextSibling.firstChild.firstChild.firstChild;
