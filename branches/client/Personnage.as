@@ -553,7 +553,7 @@ class Personnage
 			target_mc.dtNom._x = 42;
 			
 			target_mc.clothesCol = cloColor;
-			target_mc.gotoAndPlay("rest");
+			target_mc.gotoAndStop(1);
 			//trace(" new color 2!!! " + target_mc.clothesCol)
 			
         };
@@ -823,7 +823,7 @@ class Personnage
 			//Si le perso est le mien et qu'il est au repos, mais que le board n'est pas centre
 			if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
 			{
-				if(_level0.loader.contentHolder.planche.recentrerBoard(this.l, this.c, true))
+				if(_level0.loader.contentHolder.planche.recentrerBoard(this.l, this.c, false))
 				{
 					if(!this.minigameLoade)
 					{
