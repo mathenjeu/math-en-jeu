@@ -1327,36 +1327,35 @@ class GestionnaireEvenements
 				
                 _level0.loader.contentHolder.nomJ4 = nomUtilisateur;								
                 
-                var j:Number = 0;
-				for(var i:Number = 0; i < objetEvenement.listePersonnageJoueurs.length; i++)
+				// put the players in the liste
+               	for(var i:Number = 0; i < objetEvenement.listePersonnageJoueurs.length; i++)
+                {
+	                
+											
+				   if(!(objetEvenement.listePersonnageJoueurs[i].userRoles == 2 && this.typeDeJeu == "Tournament"))
+				   {   
+					  this.listeDesPersonnages.push(new Object());
+					  this.listeDesPersonnages[this.listeDesPersonnages.length -1].nom = objetEvenement.listePersonnageJoueurs[i].nom;
+                      this.listeDesPersonnages[this.listeDesPersonnages.length -1].id = objetEvenement.listePersonnageJoueurs[i].idPersonnage;
+					  this.listeDesPersonnages[this.listeDesPersonnages.length -1].role = objetEvenement.listePersonnageJoueurs[i].userRoles;
+					  this.listeDesPersonnages[this.listeDesPersonnages.length -1].clocolor = objetEvenement.listePersonnageJoueurs[i].clothesColor;
+					  this.listeDesPersonnages[this.listeDesPersonnages.length -1].pointage = 0;
+					  this.listeDesPersonnages[this.listeDesPersonnages.length -1].win = 0;
+					  //this.listeDesPersonnages[i].argent = 0;
+									
+					  trace("control demarrepartie " + objetEvenement.listePersonnageJoueurs[i].nom + " " + this.listeDesPersonnages[this.listeDesPersonnages.length -1].nom + " "  + this.listeDesPersonnages[this.listeDesPersonnages.length -1].id);
+				   }
+                }// end for
+				
+				
+				var j:Number = 0;
+				for(var i:Number = 0; i <  this.listeDesPersonnages.length; i++)
                 {
 	                if(i>3) {j=1;}
 					if(i>7) {j=2;}
 					if(i>11) {j=3;}
 					
-					// to not duplicate the players in the liste
-					for(var l:Number = 0; l < this.listeDesPersonnages.length; l++)
-				    {
-				       if(this.listeDesPersonnages[l].nom == objetEvenement.listePersonnageJoueurs[i].nom)
-				       { 
-				         this.listeDesPersonnages.removeItemAt(l);
-				       }
-				    }
-									
-				// kill the master in our game - for Tournament type
-				if(!(objetEvenement.listePersonnageJoueurs[i].userRoles == 2 && this.typeDeJeu == "Tournament"))
-				{   
-					this.listeDesPersonnages.push(new Object());
-					this.listeDesPersonnages[i].nom = objetEvenement.listePersonnageJoueurs[i].nom;
-                    this.listeDesPersonnages[i].id = objetEvenement.listePersonnageJoueurs[i].idPersonnage;
-					this.listeDesPersonnages[i].role = objetEvenement.listePersonnageJoueurs[i].userRoles;
-					this.listeDesPersonnages[i].clocolor = objetEvenement.listePersonnageJoueurs[i].clothesColor;
-					this.listeDesPersonnages[i].pointage = 0;
-					this.listeDesPersonnages[i].win = 0;
-					//this.listeDesPersonnages[i].argent = 0;
-									
-					trace("control demarrepartie " + objetEvenement.listePersonnageJoueurs[i].nom + " " + this.listeDesPersonnages[i].nom + " "  + this.listeDesPersonnages[i].id);
-		                           
+					
                     var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
 										    
                     if(idDessin != 0)
@@ -1365,22 +1364,21 @@ class GestionnaireEvenements
 					   this.listeDesPersonnages[i].idessin = idDessin;
 					   
 					   var idPers =  calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
-					   //_level0.loader.contentHolder.tableauDesPersoChoisis.push(Number(idPers));
-    				   var cloColor:String = this.listeDesPersonnages[i].clocolor;
+					   var cloColor:String = this.listeDesPersonnages[i].clocolor;
+					 
 					   // change back if not used perso load
 	                   movClip = _level0.loader.contentHolder.refLayer.createEmptyMovieClip("Personnage" + idPers,i);
 					   
 					   this.drawUserFrame3(i, cloColor, idDessin, movClip);
 					  					  
-				       _level0.loader.contentHolder["joueur"+(i+1)] = objetEvenement.listePersonnageJoueurs[i].nom;
+				       _level0.loader.contentHolder["joueur"+(i+1)] = this.listeDesPersonnages[i].nom;
                                               
 					   movClip._x = 510-j*60;
                        movClip._y = 150 + i*60-j*240;
 					   movClip._xscale -= 70;
 					   movClip._yscale -= 70;
-					}
-				  }
-                }
+					} // if
+				 }// for
 				
             break;
 			
