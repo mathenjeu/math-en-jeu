@@ -1027,7 +1027,7 @@ public class ProtocoleJoueur implements Runnable
 					// cree la salle
 					if (objJoueurHumain != null)
 					{
-						String createur = objJoueurHumain.obtenirNomUtilisateur();
+						//String createur = objJoueurHumain.obtenirNomUtilisateur();
 																						
 						// Déclaration d'une variable qui va contenir le noeud
 						// du nom de la salle a creer le rapport
@@ -1588,7 +1588,7 @@ public class ProtocoleJoueur implements Runnable
 							// du paramètre
 							objNoeudParametreListePersonnageJoueurs.setAttribute("type", "ListePersonnageJoueurs");
                            
-							//if(listInit != null){
+							
 								// Passer tous les personnages et créer un noeud pour 
 								// chaque id de personnage et l'ajouter au noeud de paramètre
 								for(int i = 0; i < listInit.length; i++)
@@ -1605,7 +1605,7 @@ public class ProtocoleJoueur implements Runnable
 									// Ajouter le noeud du personnage au noeud de paramètre
 									objNoeudParametreListePersonnageJoueurs.appendChild(objNoeudPersonnage);
 								}
-							//}
+							/*
 							
 							// Déclaration d'un compteur
 							int i = 1;
@@ -1627,7 +1627,7 @@ public class ProtocoleJoueur implements Runnable
 								// Ajouter le noeud du personnage au noeud de paramètre
 								objNoeudParametreListePersonnageJoueurs.appendChild(objNoeudPersonnage);
 								i++;
-							}
+							}*/
 							
 							// Ajouter le noeud de paramètres au noeud de commande
 							objNoeudCommande.appendChild(objNoeudParametreListePersonnageJoueurs);
@@ -1726,8 +1726,8 @@ public class ProtocoleJoueur implements Runnable
 					{
 						// Obtenir le numéro Id du personnage choisi et le garder 
 						// en mémoire dans une variable
-						int intIdPersonnage = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "IdPersonnage").getNodeValue());
-						objLogger.info( GestionnaireMessages.message("protocole.personnage") + intIdPersonnage );
+						//i//nt intIdPersonnage = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "IdPersonnage").getNodeValue());
+						//objLogger.info( GestionnaireMessages.message("protocole.personnage") + intIdPersonnage );
 
 						try
 						{
@@ -1749,7 +1749,7 @@ public class ProtocoleJoueur implements Runnable
 							// Appeler la méthode permettant de démarrer une partie
 							// et garder son résultat dans une variable
 							String strResultatDemarrerPartie = objJoueurHumain.obtenirPartieCourante().obtenirTable().demarrerMaintenant( objJoueurHumain, 
-									intIdPersonnage, true, strParamJoueurVirtuel);
+									true, strParamJoueurVirtuel);
 
 							objLogger.info( GestionnaireMessages.message("protocole.resultat") + strResultatDemarrerPartie );
 
@@ -1827,47 +1827,41 @@ public class ProtocoleJoueur implements Runnable
 					{
 						// Obtenir le numéro Id du personnage choisi et le garder 
 						// en mémoire dans une variable
-						int intIdPersonnage = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "IdPersonnage").getNodeValue());
+						int intIdDessin = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "IdDessin").getNodeValue());
 						
 						// Obtenir le numéro du couleur des vetements du personnage choisi et le garder 
 						// en mémoire dans une variable
 						String clothesColor = obtenirValeurParametre(objNoeudCommandeEntree, "ClothesColor").getNodeValue();
 
-						// Vérifier que ce id de personnage n'est pas déjà utilisé
-						if (!objJoueurHumain.obtenirPartieCourante().obtenirTable().idPersonnageEstLibreEnAttente(intIdPersonnage))
+						// Appeler la méthode permettant de démarrer une partie
+						// et garder son résultat dans une variable
+						String strResultatDemarrerPartie = objJoueurHumain.obtenirPartieCourante().obtenirTable().demarrerPartie(objJoueurHumain, 
+								intIdDessin, clothesColor, true);
+						int idPersonnage = objJoueurHumain.obtenirPartieCourante().obtenirIdPersonnage();
+
+						// Si le résultat du démarrage de partie est Succes alors le
+						// joueur est maintenant en attente
+						if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.Succes))
 						{
-							// Le id personnage a déjà été choisi
-							objNoeudCommande.setAttribute("nom", "MauvaisId");
+							bolEnTrainDeJouer = true;
+
+							// Il n'y a pas eu d'erreurs
+							objNoeudCommande.setAttribute("type", "Reponse");
+							objNoeudCommande.setAttribute("nom", "Ok");
+							objNoeudCommande.setAttribute("id", Integer.toString(idPersonnage));
+						}
+
+						else if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.PartieEnCours))
+						{
+							// Il y avait déjà une partie en cours
+							objNoeudCommande.setAttribute("nom", "PartieEnCours");
 						}
 						else
 						{
-							// Appeler la méthode permettant de démarrer une partie
-							// et garder son résultat dans une variable
-							String strResultatDemarrerPartie = objJoueurHumain.obtenirPartieCourante().obtenirTable().demarrerPartie(objJoueurHumain, 
-									intIdPersonnage, clothesColor, true);
-
-							// Si le résultat du démarrage de partie est Succes alors le
-							// joueur est maintenant en attente
-							if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.Succes))
-							{
-								bolEnTrainDeJouer = true;
-
-								// Il n'y a pas eu d'erreurs
-								objNoeudCommande.setAttribute("type", "Reponse");
-								objNoeudCommande.setAttribute("nom", "Ok");
-							}
-
-							else if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.PartieEnCours))
-							{
-								// Il y avait déjà une partie en cours
-								objNoeudCommande.setAttribute("nom", "PartieEnCours");
-							}
-							else
-							{
-								// Le joueur était déjà en attente
-								objNoeudCommande.setAttribute("nom", "DejaEnAttente");
-							}
+							// Le joueur était déjà en attente
+							objNoeudCommande.setAttribute("nom", "DejaEnAttente");
 						}
+
 					}
 				}
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.DeplacerPersonnage))
@@ -2863,7 +2857,7 @@ public class ProtocoleJoueur implements Runnable
 				if (objNoeudCourant.getNodeName().equals("parametre") == false || 
 					objNoeudCourant.getAttributes().getLength() != 1 ||
 					objNoeudCourant.getAttributes().getNamedItem("type") == null ||
-					objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("IdPersonnage") == false ||
+					objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("IdDessin") == false ||
 					objNoeudCourant.getChildNodes().getLength() != 1 ||
 					objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false ||
 					UtilitaireNombres.isPositiveNumber(objNoeudCourant.getChildNodes().item(0).getNodeValue()) == false)
@@ -2898,7 +2892,7 @@ public class ProtocoleJoueur implements Runnable
 		{
 			// Si le nombre d'enfants du noeud de commande est de 2, alors
 			// le nombre de paramètres est correct et on peut continuer
-			if (noeudCommande.getChildNodes().getLength() == 2)
+			if (noeudCommande.getChildNodes().getLength() == 1)
 			{
 				// Déclarer une variable qui va permettre de savoir si le 
 				// noeud enfant est valide
@@ -2907,23 +2901,6 @@ public class ProtocoleJoueur implements Runnable
 				// Faire la référence vers le noeud enfant courant
 				Node objNoeudCourant = noeudCommande.getChildNodes().item(0);
 				
-				// Si le noeud enfant n'est pas un paramètre, ou qu'il n'a
-				// pas exactement 1 attribut, ou que le nom de cet attribut 
-				// n'est pas type, ou que le noeud n'a pas de valeurs, alors 
-				// il y a une erreur dans la structure
-				if (objNoeudCourant.getNodeName().equals("parametre") == false || 
-					objNoeudCourant.getAttributes().getLength() != 1 ||
-					objNoeudCourant.getAttributes().getNamedItem("type") == null ||
-					objNoeudCourant.getAttributes().getNamedItem("type").getNodeValue().equals("IdPersonnage") == false ||
-					objNoeudCourant.getChildNodes().getLength() != 1 ||
-					objNoeudCourant.getChildNodes().item(0).getNodeName().equals("#text") == false ||
-					UtilitaireNombres.isPositiveNumber(objNoeudCourant.getChildNodes().item(0).getNodeValue()) == false)
-				{
-					bolNoeudValide = false;
-				}
-
-				//validation du deuxième noeud (NiveauJoueurVirtuel)
-				objNoeudCourant = noeudCommande.getChildNodes().item(1);
 				String valeurParam = objNoeudCourant.getChildNodes().item(0).getNodeValue();
 				
 				//System.out.println(JoueurVirtuel.validerParamNiveau(valeurParam));
@@ -4186,6 +4163,7 @@ public class ProtocoleJoueur implements Runnable
             	 }
             	 
             	 objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliserObjet(objJoueurHumain.obtenirNomUtilisateur(), playerName, "Banane", "");
+            	 //System.out.println("Protocole joueur 4189 Banane " + objJoueurHumain.obtenirNomUtilisateur() + " " + playerName);
             	 if(estHumain)
             		 objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(playerName).obtenirPartieCourante().getBananaState().bananaIsTossed();
             		 //Banane.utiliserBanane(objJoueurHumain, playerName, estHumain);

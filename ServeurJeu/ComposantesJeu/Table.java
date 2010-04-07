@@ -67,9 +67,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	// Déclaration d'une constante qui définit le nombre maximal de joueurs 
 	// dans une table
 	private final int MAX_NB_PLAYERS;
-	
-	private int intNbJoueurDemande; 
-	
+		
 	// Cette variable va contenir le nom d'utilisateur du créateur de cette table
 	private String strNomUtilisateurCreateur;
 	
@@ -139,6 +137,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     // colors to players
     private ArrayList<String> colors;
     
+    // list of idPerso used to calculate idPersonnage
+    // limits - from 0 to 11 for now, but can be changed if 
+    // maxNumbersofPlayers will be changed to be higher then 12
+    // when player got out from table it must return his idPerso in the list
+    private ArrayList<Integer> idPersos;
+    
     
 	
 
@@ -187,11 +191,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		//String nomUtilisateurCreateur = joueur.obtenirNomUtilisateur();
 		//lstJoueursEnAttente.put(joueur.obtenirNomUtilisateur(), joueur);
 		strNomUtilisateurCreateur = joueur.obtenirNomUtilisateur();//nomUtilisateurCreateur;
+		
 		// Au départ, aucune partie ne se joue sur la table
 		bolEstCommencee = false;
 		bolEstArretee = true;
-		intNbJoueurDemande = MAX_NB_PLAYERS;
-				
+						
 		// take new table dimentions if changed in DB
 		objGestionnaireBD.getNewTableDimentions(salleParente);
 				
@@ -225,7 +229,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// fill the list off colors
 		this.colors = new ArrayList<String>();
 		this.setColors();
-
+		
+		this.idPersos = new ArrayList<Integer>();
+        this.setIdPersos();
 	}
 	
 	public void creation()
@@ -310,6 +316,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    //System.out.println("end table : " + System.currentTimeMillis());
 	}// end methode
 
+	
 	/**
 	 * Cette méthode permet au joueur passé en paramçtres de quitter la table. 
 	 * On suppose que le joueur est dans la table.
@@ -462,7 +469,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  à s'inquiéter que le mçme joueur soit mis dans la liste 
 	 * 				  des joueurs en attente par un autre thread.
 	 */
-	public String demarrerPartie(JoueurHumain joueur, int idPersonnage, String clothesColor, boolean doitGenererNoCommandeRetour)
+	public String demarrerPartie(JoueurHumain joueur, int idDessin, String clothesColor, boolean doitGenererNoCommandeRetour)
 	{
 		// Cette variable va permettre de savoir si le joueur est maintenant
 		// attente ou non
@@ -491,16 +498,22 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    		// Ajouter le joueur dans la liste des joueurs en attente
 				lstJoueursEnAttente.put(joueur.obtenirNomUtilisateur(), joueur);
 				
+				int idPersonnage = this.getOneIdPersonnage(idDessin);
+				
+				System.out.println("idPersonnage demarrePartie : " + idPersonnage);
+				
 				// Garder en mémoire le Id du personnage choisi par le joueur
 				joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
 				
 				// Garder en mémoire le numero du couleur choisi par le joueur
 				// mais avant retirer cette couleur de la liste
+				System.out.println("Color demarrePartie avant: " + clothesColor);
 				clothesColor = getColor(clothesColor);
+				System.out.println("Color demarrePartie apres: " + clothesColor);
 				joueur.obtenirPartieCourante().setClothesColor(clothesColor);
 				
 		        //System.out.println(idPersonnage);
-				pictures.add((idPersonnage - 10000)/100);
+				pictures.add(idDessin);
 				
 	    		// Si on doit générer le numéro de commande de retour, alors
 				// on le génçre, sinon on ne fait rien (ça se peut que ce soit
@@ -527,7 +540,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				// Si le nombre de joueurs en attente est maintenant le nombre 
 				// de joueurs que ça prend pour joueur au jeu, alors on lance 
 				// un événement qui indique que la partie est commencée
-				if (lstJoueursEnAttente.size() == intNbJoueurDemande)
+				if (lstJoueursEnAttente.size() == MAX_NB_PLAYERS)
 				{
 					laPartieCommence("Aucun");			
 				}
@@ -537,12 +550,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    return strResultatDemarrerPartie;
 	}
 	
-	public String demarrerMaintenant(JoueurHumain joueur, int idPersonnage, boolean doitGenererNoCommandeRetour, String strParamJoueurVirtuel)
+	public String demarrerMaintenant(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, String strParamJoueurVirtuel)
 	{
 		// Lorsqu'on fait démarré maintenant, le nombre de joueurs sur la
 		// table devient le nombre de joueurs demandé, lorsqu'ils auront tous
 		// fait OK, la partie démarrera
-		intNbJoueurDemande = lstJoueurs.size();
+		//MAX_NB_PLAYERS = lstJoueurs.size();
 		
 		String strResultatDemarrerPartie;
 		synchronized (lstJoueursEnAttente)
@@ -562,7 +575,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				//lstJoueursEnAttente.put(joueur.obtenirNomUtilisateur(), joueur);
 				
 				// Garder en mémoire le Id du personnage choisi par le joueur
-				joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
+				//joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
 				
 							
 	    		// Si on doit générer le numéro de commande de retour, alors
@@ -578,10 +591,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				// Si le nombre de joueurs en attente est maintenant le nombre 
 				// de joueurs que ça prend pour joueur au jeu, alors on lance 
 				// un événement qui indique que la partie est commencée
-				if (lstJoueursEnAttente.size() == intNbJoueurDemande)
-				{
-					laPartieCommence(strParamJoueurVirtuel);			
-				}
+				
+				laPartieCommence(strParamJoueurVirtuel);			
+				
 	    	}
 	    }
 		return strResultatDemarrerPartie;
@@ -1172,7 +1184,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    {
 			// Si la taille de la liste de joueurs égale le nombre maximal de 
 			// joueurs alors la table est complçte, sinon elle ne l'est pas
-			return (lstJoueurs.size() == intNbJoueurDemande);	        
+			return (lstJoueurs.size() == MAX_NB_PLAYERS);	        
 	    }
 	}
 	
@@ -1613,6 +1625,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		{
 			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListe.next())).getValue());
             utiliserObjet.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),objJoueur.obtenirProtocoleJoueur()));
+            System.out.println(utiliserObjet);
 		}
 		objGestionnaireEvenements.ajouterEvenement(utiliserObjet);
 	}
@@ -2348,8 +2361,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		    //System.out.println("Color : " + color + "   " + colors.size());
 			return color;
 			
-		}
-
+		}// end method
+		
+        /**
+         * 
+         * @param joueur
+         * @param doitGenererNoCommandeRetour
+         */
 		public void entrerTable(JoueurHumain joueur, boolean doitGenererNoCommandeRetour) {
 			//System.out.println("start table: " + System.currentTimeMillis());
 		    // Empçcher d'autres thread de toucher à la liste des joueurs de 
@@ -2396,6 +2414,39 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		public int getMaxNbPlayers()
 		{
 			return this.MAX_NB_PLAYERS;
+		}
+
+		/**
+		 * use one id from list of idPersos and create idPersonnage
+		 * idPerso is removed from the list
+		 * @return the idPersonnage
+		 */
+		public int getOneIdPersonnage(int idDessin) {
+			int idPersonnage = this.idPersos.get(0);
+			this.idPersos.remove(0);
+			
+			idPersonnage = 10000 + idDessin*100 + idPersonnage;
+			return idPersonnage;
+		}
+		
+		/**
+		 * if player leave the table he return the idPerso
+		 * that is get back to the list
+		 * @param idPersonnage
+		 */
+		public void getBackOneIdPersonnage(int idPersonnage){
+			idPersonnage = (idPersonnage - 10000)%100;
+			this.idPersos.add(idPersonnage);
+		}
+
+		/**
+		 *  the idPersos to set
+		 */
+		public void setIdPersos() {
+			for(int i = 0; i < 12; i++)
+			{
+				this.idPersos.add(i);				
+			}
 		}
 		
         /*  Unused now method

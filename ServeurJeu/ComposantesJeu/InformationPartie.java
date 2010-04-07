@@ -43,7 +43,6 @@ public class InformationPartie
 	private Table objTable;
 	
     // Déclaration d'une variable qui va contenir le numéro Id du personnage 
-	// choisit par le joueur
 	private int intIdPersonnage;
 	
     // Déclaration d'une variable qui va contenir le pointage de la 
@@ -169,7 +168,6 @@ public class InformationPartie
 	        wasOnFinish = false;
 	        
 	        moveVisibility = 3;
-			//runningAnswers = 0;
 			tournamentBonus = 0;
 			
 			// set the color to default
