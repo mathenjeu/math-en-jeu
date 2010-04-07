@@ -18,8 +18,7 @@ public class EvenementJoueurDemarrePartie extends Evenement
     private String strNomUtilisateur;
     
 	// Déclaration d'une variable qui va garder le numéro Id du personnage 
-	// choisi par le joueur
-    private int intIdPersonnage;
+	private int intIdPersonnage;
     
     private String clothesColor;
     
