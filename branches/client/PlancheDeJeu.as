@@ -850,6 +850,11 @@ class PlancheDeJeu
 			
 					afficherValeurDeplacementColonne(p, brille, temp, p.obtenirC());
 
+                   /* brille.onRollOver = function()
+					{ 
+					  _level0.loader.contentHolder.mouseHand.removeMovieClip();
+					  Mouse.show();
+					};*/
 					brille.onPress = function()
 					{   
 						removeMovieClip(p.obtenirImage().valDeplace);
