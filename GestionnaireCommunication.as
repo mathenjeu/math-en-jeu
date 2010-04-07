@@ -2563,7 +2563,7 @@ class GestionnaireCommunication
      * fonction permettant de savoir si la commande a ete acceptee
 	 * par le serveur.
      */
-    public function demarrerMaintenant(demarrerMaintenantDelegate:Function, idPersonnage:Number, niveau:String)
+    public function demarrerMaintenant(demarrerMaintenantDelegate:Function, niveau:String)
     {
 		
         // Si on est dans une table, alors on peut continuer le code de la
@@ -2584,22 +2584,22 @@ class GestionnaireCommunication
             var objObjetXML:XML = new XML();
             // Creer tous les noeuds de la commande
             var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
-	    	var objNoeudParametreIdPersonnage:XMLNode = objObjetXML.createElement("parametre");
+	    	//var objNoeudParametreIdPersonnage:XMLNode = objObjetXML.createElement("parametre");
 	    	var objNoeudParametreNiveau:XMLNode = objObjetXML.createElement("parametre");
 	    
-            var objNoeudParametreIdPersonnageText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(idPersonnage)));
+            //var objNoeudParametreIdPersonnageText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(idPersonnage)));
 	    	var objNoeudParametreNiveauText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(niveau));
             // Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "DemarrerMaintenant";
 	    
-	    	objNoeudParametreIdPersonnage.attributes.type = "IdPersonnage";
-            objNoeudParametreIdPersonnage.appendChild(objNoeudParametreIdPersonnageText);
+	    	//objNoeudParametreIdPersonnage.attributes.type = "IdPersonnage";
+            //objNoeudParametreIdPersonnage.appendChild(objNoeudParametreIdPersonnageText);
 	    
 	    	objNoeudParametreNiveau.attributes.type = "NiveauJoueurVirtuel";  
 	    	objNoeudParametreNiveau.appendChild(objNoeudParametreNiveauText);
 	    
-            objNoeudCommande.appendChild(objNoeudParametreIdPersonnage);
+            //objNoeudCommande.appendChild(objNoeudParametreIdPersonnage);
 	    	objNoeudCommande.appendChild(objNoeudParametreNiveau);
 	    
             objObjetXML.appendChild(objNoeudCommande);
@@ -2654,7 +2654,7 @@ class GestionnaireCommunication
 								   evenementUtiliserObjetDelegate:Function,
 				                   evenementPartieTermineeDelegate:Function,
                                    evenementJoueurRejoindrePartieDelegate:Function,
-				                   idPersonnage:Number, clothesColor:String) 
+				                   idDessin:Number, clothesColor:String) 
     {
         // Si on est dans une table, alors on peut continuer le code de la
         // fonction
@@ -2683,8 +2683,8 @@ class GestionnaireCommunication
             // Creer tous les noeuds de la commande
             var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
 			
-            var objNoeudParametreIdPersonnage:XMLNode = objObjetXML.createElement("parametre");
-            var objNoeudParametreIdPersonnageText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(idPersonnage)));
+            var objNoeudParametreIdDessin:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreIdDessinText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(idDessin)));
 			var objNoeudParametreClothesColor:XMLNode = objObjetXML.createElement("parametre");
 			var objNoeudParametreClothesColorText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(clothesColor));
 		
@@ -2692,12 +2692,12 @@ class GestionnaireCommunication
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "DemarrerPartie";
 			
-            objNoeudParametreIdPersonnage.attributes.type = "IdPersonnage";
-            objNoeudParametreIdPersonnage.appendChild(objNoeudParametreIdPersonnageText);
+            objNoeudParametreIdDessin.attributes.type = "IdDessin";
+            objNoeudParametreIdDessin.appendChild(objNoeudParametreIdDessinText);
 			objNoeudParametreClothesColor.attributes.type = "ClothesColor";
             objNoeudParametreClothesColor.appendChild(objNoeudParametreClothesColorText);
 
-            objNoeudCommande.appendChild(objNoeudParametreIdPersonnage);
+            objNoeudCommande.appendChild(objNoeudParametreIdDessin);
 			objNoeudCommande.appendChild(objNoeudParametreClothesColor);
 														
             objObjetXML.appendChild(objNoeudCommande);
@@ -4129,7 +4129,7 @@ class GestionnaireCommunication
 		trace("Retour DemarrerPartie GCom");
         // Construire l'objet evenement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
-                                   resultat:noeudCommande.attributes.nom};
+                                   resultat:noeudCommande.attributes.nom, idP:noeudCommande.attributes.id};
         // Si le retour de la fonction est une reponse positive et non une
         // erreur, alors on peut passer a l'autre etat
         if (noeudCommande.attributes.type == "Reponse")
