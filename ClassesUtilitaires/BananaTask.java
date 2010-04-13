@@ -34,7 +34,7 @@ public class BananaTask extends TimerTask {
 	    if(player != null){
 	    	player.obtenirPartieCourante().getBananaState().setisUnderBananaEffects(false);
 	    	player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() + 2);
-	    	System.out.println("BananaTask humain!!!!");
+	    	//System.out.println("BananaTask humain!!!!");
 	    }else{
 	    	
 	    	vplayer.getBananaState().setisUnderBananaEffects(false);

@@ -8,6 +8,8 @@ import ServeurJeu.ControleurJeu;
 import ServeurJeu.Communications.ProtocoleJoueur;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Table;
+
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.TreeMap;
 import java.util.Iterator;
@@ -512,7 +514,7 @@ public class Espion implements Runnable{
                          // Obtenir la liste des joueurs virtuels
                          if (objTable.obtenirListeJoueursVirtuels() != null)
                          {
-                             Vector<JoueurVirtuel> lstJoueursVirtuels = objTable.obtenirListeJoueursVirtuels();
+                             ArrayList<JoueurVirtuel> lstJoueursVirtuels = objTable.obtenirListeJoueursVirtuels();
                              if (intCompteur > 0)
                              {
                              	strTables.append(", ");
