@@ -95,7 +95,7 @@ class PlancheDeJeu
     {
         var i:Number;
 		this.mat = new Array(tab.length)
-        for(i=0;i<tab.length;i++)
+        for(i = 0; i < tab.length; i++)
         {
 			this.mat[i] = new Array(tab[i].length);
             this.tableauDesCases.push(new Array());
@@ -210,8 +210,8 @@ class PlancheDeJeu
                         nouvelleCase.afficher(pt);
                     }
                 }
-                x = x+largeurDeCase/2;
-                y = y-hauteurDeCase/2;
+                x = x + largeurDeCase/2;
+                y = y - hauteurDeCase/2;
             }
         }
     }
@@ -223,7 +223,7 @@ class PlancheDeJeu
         var i:Number;
         var j:Number;
         // on initie les tableaux 
-        for(i=0;i<tab.length;i++)
+        for(i = 0; i < tab.length; i++)
         {
             for(j=0;j<tab[0].length;j++)
             {
@@ -479,12 +479,12 @@ class PlancheDeJeu
     
     function ajouterPersonnage(nom:String, ll:Number,cc:Number,num:Number, idClip:Number, userRole:Number, cloColor:String)
     {
+		
         var p:Personnage;
         //trace("ajouterPersonnage:" + nom + " niveau:" + (5*tableauDesCases.length*tableauDesCases[0].length+2*num) + " idPers:" + num + " idDessin:" + idClip);
         p = new Personnage(nom, userRole, 5*tableauDesCases.length*tableauDesCases[0].length+2*num, idClip ,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y ,cloColor);
         p.afficher();
-		// p.afficherAutreDir();
-     	//   p.zoomer(zoom*10);
+		
         tableauDesCases[ll][cc].ajouterPersonnage(p);
 	
 		this.tableauDesPersonnages.push(p);
@@ -493,11 +493,9 @@ class PlancheDeJeu
         {
             perso = p;
 	    	nomDeMonPersonnage = nom;
-	    	//this.recentrerBoard(ll,cc,false);
-	  		//  p.zoomer(10);
+	    	
         }
-		//else
-		//p.zoomer(-7);  // POURQUOI?
+		
     }
     
     
@@ -800,7 +798,7 @@ class PlancheDeJeu
 		var pointageMin:Number = -1;//_level0.loader.contentHolder.objGestionnaireEvenements.obtenirPointageMinimalWinTheGame();
 
 		//switchColor(tableauDesCases[p.obtenirL()][p.obtenirC()]);
-		switchColorFlash(tableauDesCases[p.obtenirL()][p.obtenirC()]);
+		//switchColorFlash(tableauDesCases[p.obtenirL()][p.obtenirC()]);
 		
 		//trace("ds afficherCasesPossibles");
         for(i = 1; i <= Math.min(mat.length-p.obtenirL()-1,moveVisibility); i++)

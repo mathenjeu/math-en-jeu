@@ -567,15 +567,7 @@ class Personnage
 		    myLoader.loadClip("perso" + nomClip + ".swf", image); 
 		
 		}
-		
-		
-		
-		//image.dtNom._visible = true;
-		//image.dtNom.text = nom;
-		//image.nom = nom;
-		//trace(image.nom + " : ici perso2" );
-		//trace(image + " : ici perso2" );
-		
+				
 		this.pointage = 0;
 		this.argent = 0;
 		this.listeDesObjets = new Object();
