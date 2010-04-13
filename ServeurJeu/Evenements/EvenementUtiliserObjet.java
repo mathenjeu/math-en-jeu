@@ -79,7 +79,7 @@ public class EvenementUtiliserObjet extends Evenement
 			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
                         strCodeXML = strCodeXML.replaceAll("&lt;", "<");
                         strCodeXML = strCodeXML.replaceAll("&gt;", ">");
-            System.out.println("Evenement utilise " + joueurQuiUtilise + " " + joueurAffecte);
+            //System.out.println("Evenement utilise " + joueurQuiUtilise + " " + joueurAffecte);
 		}
 		catch (TransformerConfigurationException tce)
 		{

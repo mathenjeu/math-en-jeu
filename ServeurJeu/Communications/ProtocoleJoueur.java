@@ -13,6 +13,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.Map;
@@ -31,6 +33,7 @@ import Enumerations.RetourFonctions.ResultatDemarrerPartie;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Table;
+import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
@@ -1838,6 +1841,9 @@ public class ProtocoleJoueur implements Runnable
 						String strResultatDemarrerPartie = objJoueurHumain.obtenirPartieCourante().obtenirTable().demarrerPartie(objJoueurHumain, 
 								intIdDessin, clothesColor, true);
 						int idPersonnage = objJoueurHumain.obtenirPartieCourante().obtenirIdPersonnage();
+						
+						// clothesColor can be changed by server - return real color
+						clothesColor = objJoueurHumain.obtenirPartieCourante().getClothesColor();
 
 						// Si le résultat du démarrage de partie est Succes alors le
 						// joueur est maintenant en attente
@@ -1849,6 +1855,7 @@ public class ProtocoleJoueur implements Runnable
 							objNoeudCommande.setAttribute("type", "Reponse");
 							objNoeudCommande.setAttribute("nom", "Ok");
 							objNoeudCommande.setAttribute("id", Integer.toString(idPersonnage));
+							objNoeudCommande.setAttribute("clocolor", clothesColor);
 						}
 
 						else if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.PartieEnCours))
@@ -3383,12 +3390,12 @@ public class ProtocoleJoueur implements Runnable
     	// Obtenir la référence vers la table oè le joueur était
         Table objTable = ancientJoueur.obtenirPartieCourante().obtenirTable();
 
-        // Créer un tableau des positions des joueurs, on a "+ 1" car le joueur
+        // Créer un tableau des des joueurs, on a "+ 1" car le joueur
         // déconnecté n'était plus dans cette liste
-        Point objtPositionsJoueurs[] = new Point[objTable.obtenirListeJoueurs().size() + 1];
+        Joueur lstJoueursTable[] = new Joueur[objTable.obtenirListeJoueurs().size() + objTable.getNombreJoueursVirtuels() + 1];
 
-        // Obtenir a liste des joueurs sur la table
-        TreeMap lstJoueurs = objTable.obtenirListeJoueurs();
+        // Obtenir la liste des joueurs sur la table
+        TreeMap<String, JoueurHumain> lstJoueurs = objTable.obtenirListeJoueurs();
         
         // Déclaration d'une variable qui va contenir le code XML à retourner
         String strCodeXML = "";
@@ -3405,6 +3412,7 @@ public class ProtocoleJoueur implements Runnable
 
         Iterator<Entry<String, JoueurHumain>> objIterateurListe = lstEnsemblePositionJoueurs.iterator();
 
+        int j = 0;
         // Passer tous les positions des joueurs et les ajouter à la liste locale
         while (objIterateurListe.hasNext() == true)
         {
@@ -3412,15 +3420,13 @@ public class ProtocoleJoueur implements Runnable
             Map.Entry<String,JoueurHumain> mapEntry = (Map.Entry<String,JoueurHumain>) objIterateurListe.next();
             
             JoueurHumain joueur = (JoueurHumain) mapEntry.getValue();
-
-            // Créer une référence vers la position du joueur courant
-            Point objPositionJoueur = joueur.obtenirPartieCourante().obtenirPositionJoueur();
-
-            lstPositionsJoueurs.put(joueur.obtenirNomUtilisateur(), objPositionJoueur);
+            lstJoueursTable[j] = joueur;
+            j++;
+            
         }
         
      // Ajouter les joueurs virtuels
-		Vector<JoueurVirtuel> lstJoueursVirtuels = ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();
+		ArrayList<JoueurVirtuel> lstJoueursVirtuels = ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();
 
 		if (lstJoueursVirtuels != null)
 		{
@@ -3429,10 +3435,9 @@ public class ProtocoleJoueur implements Runnable
 			    
 				JoueurVirtuel objJoueurVirtuel = (JoueurVirtuel) lstJoueursVirtuels.get(i);
 				
-				// Créer une référence vers la position du joueur courant
-	            Point objPositionJoueur = objJoueurVirtuel.obtenirPositionJoueur();
-
-	            lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objPositionJoueur);
+				lstJoueursTable[j] = objJoueurVirtuel;
+	            j++;
+	            
 				
 		    }
 		}
@@ -3444,7 +3449,7 @@ public class ProtocoleJoueur implements Runnable
       
         // Créer l'événement contenant toutes les informations sur le plateau et
         // la partie
-        EvenementPartieDemarree objEvenementPartieDemarree = new EvenementPartieDemarree(objTable.obtenirTempsTotal(), lstPositionsJoueurs, objTable);//this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable());
+        EvenementPartieDemarree objEvenementPartieDemarree = new EvenementPartieDemarree(objTable, lstJoueursTable);//this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable());
 
         
         // Créer l'objet information destination pour envoyer l'information à ce joueur
@@ -3554,7 +3559,7 @@ public class ProtocoleJoueur implements Runnable
 	
 		// ----------------------------
 		// Ajouter les joueurs virtuels
-		Vector<JoueurVirtuel> lstJoueursVirtuels = ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();
+		ArrayList<JoueurVirtuel> lstJoueursVirtuels = ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();
 
 		if (lstJoueursVirtuels != null)
 		{
@@ -4151,7 +4156,7 @@ public class ProtocoleJoueur implements Runnable
             	 TreeMap<String, JoueurHumain> listeJoueursHumains = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs();
             	 Set<Map.Entry<String, JoueurHumain>> nomsJoueursHumains = listeJoueursHumains.entrySet();
             	 Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = nomsJoueursHumains.iterator();
-            	 Vector<JoueurVirtuel> listeJoueursVirtuels = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();             	 
+            	 ArrayList<JoueurVirtuel> listeJoueursVirtuels = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();             	 
             	 
             	 while(objIterateurListeJoueurs.hasNext() == true)
             	 {
@@ -4164,10 +4169,11 @@ public class ProtocoleJoueur implements Runnable
             	 
             	 objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementUtiliserObjet(objJoueurHumain.obtenirNomUtilisateur(), playerName, "Banane", "");
             	 //System.out.println("Protocole joueur 4189 Banane " + objJoueurHumain.obtenirNomUtilisateur() + " " + playerName);
-            	 if(estHumain)
-            		 objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(playerName).obtenirPartieCourante().getBananaState().bananaIsTossed();
+            	 if(estHumain){
+            		JoueurHumain joueur = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirJoueurHumainParSonNom(playerName);
+            		if (joueur != null) joueur.obtenirPartieCourante().getBananaState().bananaIsTossed();
             		 //Banane.utiliserBanane(objJoueurHumain, playerName, estHumain);
-            	 
+            	 }
              }
              else if(strTypeObjet.equals("Braniac"))
              {
