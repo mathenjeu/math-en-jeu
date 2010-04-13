@@ -1,10 +1,5 @@
 package ServeurJeu.Evenements;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.Map.Entry;
 import java.awt.Point;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -12,6 +7,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
+import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
@@ -29,9 +27,8 @@ public class EvenementPartieDemarree extends Evenement
 	// Déclaration d'une variable qui va garder le temps de la partie
     private int intTempsPartie;
     
-	// Déclaration d'une liste contenant les positions des joueurs et dont la 
-	// clé est le nom d'utilisateur du joueur
-	private TreeMap<String, Point> lstPositionJoueurs;
+	// Déclaration d'une liste contenant les joueurs 
+	private Joueur[] lstJoueurs;
 	
 	private Document objDocumentXML;
 	private Element objNoeudCommande;
@@ -41,19 +38,20 @@ public class EvenementPartieDemarree extends Evenement
      * Constructeur de la classe EvenementPartieDemarree qui permet 
      * d'initialiser le numéro de la table et le plateau de jeu pour la partie 
      * qui vient de débuter.
+     * @param playersListe 
      *
      * @param int tempsPartie : Le temps total de la partie
      * @param TreeMap listePositionJoueurs : La liste des positions des joueurs
      * @param Case[][] plateauJeu : Un tableau à 2 dimensions représentant le 
      * 								plateau de jeu
      */
-    public EvenementPartieDemarree(int tempsPartie, TreeMap<String, Point> lstPositionsJoueurs, Table table)
+    public EvenementPartieDemarree(Table table, Joueur[] playersListe)
     {
         // Définir le temps de la partie, le plateau de jeu et la liste des
     	// positions des joueurs
-    	intTempsPartie = tempsPartie;
+    	intTempsPartie = table.obtenirTempsTotal();
         this.table = table;
-        lstPositionJoueurs = lstPositionsJoueurs;
+        lstJoueurs = playersListe;
         objDocumentXML = null;
         objNoeudCommande = null;
     }
@@ -153,6 +151,7 @@ public class EvenementPartieDemarree extends Evenement
 				// Ajouter les noeuds enfants aux noeuds paramètres
 				objNoeudParametreTaillePlateauJeu.appendChild(objNoeudParametreTaille);
 				
+				/*
 				// Créer un ensemble contenant tous les tuples de la liste 
 				// des positions de joueurs (chaque élément est un Map.Entry)
 				Set<Entry<String, Point>> lstEnsemblePositionJoueurs = lstPositionJoueurs.entrySet();
@@ -178,7 +177,33 @@ public class EvenementPartieDemarree extends Evenement
 					objNoeudPositionJoueur.setAttribute("x", Integer.toString(objPosition.x));
 					objNoeudPositionJoueur.setAttribute("y", Integer.toString(objPosition.y));
 					objNoeudPositionJoueur.setAttribute("clocolor", table.getPlayerColor(objPositionJoueur.getKey().toString()));
-					
+					System.out.println("EvenementPartieDemarree nom: " + objPositionJoueur.getKey().toString());
+					// Ajouter le noeud de position courant au noeud paramètre
+					objNoeudParametrePositionJoueurs.appendChild(objNoeudPositionJoueur);
+				}*/
+				
+				for(int i = 0; i < lstJoueurs.length; i++)
+				{
+					// Créer un noeud de case en passant le bon nom
+					Element objNoeudPositionJoueur = objDocumentXML.createElement("position");
+					if(lstJoueurs[i] instanceof JoueurHumain)
+					{
+						JoueurHumain joueur = ((JoueurHumain)lstJoueurs[i]);
+						// Définir les attributs du noeud courant
+						objNoeudPositionJoueur.setAttribute("nom", joueur.obtenirNomUtilisateur() );
+						objNoeudPositionJoueur.setAttribute("x", Integer.toString(joueur.obtenirPartieCourante().obtenirPositionJoueur().x));
+						objNoeudPositionJoueur.setAttribute("y", Integer.toString(joueur.obtenirPartieCourante().obtenirPositionJoueur().y));
+						objNoeudPositionJoueur.setAttribute("clocolor", joueur.obtenirPartieCourante().getClothesColor());
+						
+					}else if(lstJoueurs[i] instanceof JoueurVirtuel)
+					{
+						JoueurVirtuel joueurV = ((JoueurVirtuel)lstJoueurs[i]);
+						// Définir les attributs du noeud courant
+						objNoeudPositionJoueur.setAttribute("nom", joueurV.obtenirNom() );
+						objNoeudPositionJoueur.setAttribute("x", Integer.toString(joueurV.obtenirPositionJoueur().x));
+						objNoeudPositionJoueur.setAttribute("y", Integer.toString(joueurV.obtenirPositionJoueur().y));
+						objNoeudPositionJoueur.setAttribute("clocolor", joueurV.getClothesColor());
+					}
 					// Ajouter le noeud de position courant au noeud paramètre
 					objNoeudParametrePositionJoueurs.appendChild(objNoeudPositionJoueur);
 				}

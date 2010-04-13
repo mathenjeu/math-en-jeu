@@ -12,6 +12,7 @@ import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -517,9 +518,11 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		if(total > 150)
 		{
 			objTable.preparerEvenementUtiliserObjet(this.strNom, this.playerToUseBanana, "Banane", "");
-       	    if(estHumain)
-       		    objTable.obtenirJoueurHumainParSonNom(this.playerToUseBanana).obtenirPartieCourante().getBananaState().bananaIsTossed();
-       	    else
+       	    if(estHumain){
+       	    	JoueurHumain joueur = objTable.obtenirJoueurHumainParSonNom(this.playerToUseBanana);
+       	    	joueur.obtenirPartieCourante().getBananaState().bananaIsTossed();
+       		    
+       	    }else
        	    	objTable.obtenirJoueurVirtuelParSonNom(this.playerToUseBanana).getBananaState().bananaIsTossed();
        	    this.enleverObjet(Objet.UID_OU_BANANE);
        	    System.out.println("Banana!!!!!!!!!!!!!!");
@@ -546,7 +549,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
          TreeMap listeJoueursHumains = objTable.obtenirListeJoueurs();
          Set nomsJoueursHumains = listeJoueursHumains.entrySet();
          Iterator objIterateurListeJoueurs = nomsJoueursHumains.iterator();
-         Vector listeJoueursVirtuels = objTable.obtenirListeJoueursVirtuels();
+         ArrayList listeJoueursVirtuels = objTable.obtenirListeJoueursVirtuels();
          
          // On trouve les deux joueurs les plus susceptibles d'être affectés
          while(objIterateurListeJoueurs.hasNext() == true)

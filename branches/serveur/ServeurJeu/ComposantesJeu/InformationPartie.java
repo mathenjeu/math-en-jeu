@@ -522,7 +522,7 @@ public class InformationPartie
                 	intDifficulte = Math.abs(nouvellePosition.y - objPositionJoueur.y);
                 }
                 
-                System.out.println("Difficulte de la question : " + intDifficulte);   // test
+                //System.out.println("Difficulte de la question : " + intDifficulte);   // test
                 
                 // if is under Banana effects
                 if(this.bananaState.isUnderBananaEffects() && intDifficulte < 6)
@@ -532,7 +532,7 @@ public class InformationPartie
         			intDifficulte--;
                 
                 if(intDifficulte > 6) intDifficulte = 6;
-                System.out.println("Difficulte de la question2 : " + intDifficulte);   // test
+                //System.out.println("Difficulte de la question2 : " + intDifficulte);   // test
 		
 		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
 		// une question

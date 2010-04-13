@@ -11,6 +11,7 @@ import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Iterator;
 import java.util.Vector;
@@ -28,14 +29,14 @@ import ServeurJeu.Configuration.GestionnaireMessages;
 public class EvenementPartieTerminee  extends Evenement
 {
 	private TreeMap<String, JoueurHumain> lstJoueurs;
-	private Vector<JoueurVirtuel> lstJoueursVirtuels;
+	private ArrayList<JoueurVirtuel> lstJoueursVirtuels;
     private String joueurGagnant;
 	
-	public EvenementPartieTerminee( TreeMap<String, JoueurHumain> joueurs, Vector<JoueurVirtuel> joueursVirtuels, String joueurGagnant)
+	public EvenementPartieTerminee( TreeMap<String, JoueurHumain> joueurs, ArrayList<JoueurVirtuel> lstVirtuels, String joueurGagnant)
 	{
 		super();
 		lstJoueurs = joueurs;
-		lstJoueursVirtuels = joueursVirtuels;
+		lstJoueursVirtuels = lstVirtuels;
         this.joueurGagnant = joueurGagnant;
 	}
 	

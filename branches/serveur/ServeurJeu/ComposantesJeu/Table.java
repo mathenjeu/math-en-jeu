@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Map.Entry;
 
 import ServeurJeu.BD.GestionnaireBD;
+import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ServeurJeu.Evenements.EvenementJoueurDeplacePersonnage;
@@ -102,7 +103,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     //private Point positionWinTheGame;
         
     // Cet objet est une liste des joueurs virtuels qui jouent sur cette table
-    private Vector<JoueurVirtuel> lstJoueursVirtuels;
+    private ArrayList<JoueurVirtuel> lstJoueursVirtuels;
     
     // Cette variable indique le nombre de joueurs virtuels sur la table
     private int intNombreJoueursVirtuels;
@@ -512,6 +513,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				System.out.println("Color demarrePartie apres: " + clothesColor);
 				joueur.obtenirPartieCourante().setClothesColor(clothesColor);
 				
+								
 		        //System.out.println(idPersonnage);
 				pictures.add(idDessin);
 				
@@ -652,6 +654,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
        return tRetour;
 	}
 	
+	/**
+	 * Method used to start the game
+	 * @param strParamJoueurVirtuel
+	 */
 	private void laPartieCommence(String strParamJoueurVirtuel)
 	{
         // Créer une nouvelle liste qui va garder les points des 
@@ -663,10 +669,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// des joueurs
 		Point[] objtPositionsJoueurs;
 		
-		// Création d'une nouvelle liste dont la clé est le nom 
-		// d'utilisateur du joueur et le contenu est un point 
-		// représentant la position du joueur
-		TreeMap<String, Point> lstPositionsJoueurs = new TreeMap<String, Point>();
+		// Création d'une nouvelle liste
+		Joueur[] lstJoueurs;
         
                 // Contient les noms des joueurs virtuels
                 String tNomsJoueursVirtuels[] = null;
@@ -745,6 +749,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		objtPositionsJoueurs = objSalle.getGameFactory().genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels, lstPointsCaseLibre);	
         
+		lstJoueurs = new Joueur[nbJoueur + intNombreJoueursVirtuels];
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// lstJoueursEnAttente (chaque élément est un Map.Entry)
 		Set<Map.Entry<String,JoueurHumain>> lstEnsembleJoueurs = lstJoueursEnAttente.entrySet();
@@ -756,7 +761,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// qui contiendra ces joueurs
 		if (intNombreJoueursVirtuels > 0)
 		{
-		    lstJoueursVirtuels = new Vector<JoueurVirtuel>();
+		    lstJoueursVirtuels = new ArrayList<JoueurVirtuel>();
 		    
 		    // Aller trouver les noms des joueurs virtuels
 		    tNomsJoueursVirtuels = obtenirNomsJoueursVirtuels(intNombreJoueursVirtuels);
@@ -792,7 +797,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         			objJoueur.obtenirPartieCourante().definirPositionJoueur(objtPositionsJoueurs[objtPositionsJoueurs.length - 1]);
         			
         			// Ajouter la position du master dans la liste
-        			lstPositionsJoueurs.put(objJoueur.obtenirNomUtilisateur(), objtPositionsJoueurs[objtPositionsJoueurs.length - 1]);
+        			//lstPositionsJoueurs.put(objJoueur.obtenirNomUtilisateur(), objtPositionsJoueurs[objtPositionsJoueurs.length - 1]);
         			
         			position--;
     			}else{
@@ -801,20 +806,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     				objJoueur.obtenirPartieCourante().definirPositionJoueur(objtPositionsJoueurs[position]);
 
     				// Ajouter la position du joueur dans la liste
-    				lstPositionsJoueurs.put(objJoueur.obtenirNomUtilisateur(), objtPositionsJoueurs[position]);
+    				//lstPositionsJoueurs.put(objJoueur.obtenirNomUtilisateur(), objtPositionsJoueurs[position]);
     			}
     			
-    			// if we have a Tournement game type we must assign automaticaly
-    			// the player clothes color
+    			lstJoueurs[i] = objJoueur;
     			
-    			String name = objSalle.getGameType();
-    			//System.out.println("type: " + name);
-    			if(name.equals("Tournament") || name.equals("Course"))
-    			{
-    				String color = this.getOneColor();
-    				//System.out.println("colors: " + color);
-    				objJoueur.obtenirPartieCourante().setClothesColor(color);
-    			}	
+    			
     				
     		}
     		else
@@ -858,7 +855,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 
                 // Ajouter le joueur virtuel à la liste des positions, liste qui sera envoyée
                 // aux joueurs humains
-                lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[position]);
+                //lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[position]);
+                lstJoueurs[i] = objJoueurVirtuel;
                 
                 // Pour le prochain joueur virtuel
                 intIdPersonnage++;
@@ -912,7 +910,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			// Cette fonction va passer les joueurs et créer un 
 			// InformationDestination pour chacun et ajouter l'événement 
 			// dans la file de gestion d'événements
-			preparerEvenementPartieDemarree(lstPositionsJoueurs);
+			preparerEvenementPartieDemarree(lstJoueurs);
 	    }
 	    
 	    int tempsStep = 1;
@@ -1083,20 +1081,20 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				JoueurHumain objJoueurHumain = (JoueurHumain)iteratorJoueursHumains.next();
 				if(!(objJoueurHumain.obtenirNomUtilisateur().equals(joueurHumain.obtenirNomUtilisateur())))
 				{
-					System.out.println(objJoueurHumain.obtenirNomUtilisateur() + " nom");
+					//System.out.println(objJoueurHumain.obtenirNomUtilisateur() + " nom");
 
 					Point pozJoueur = objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur();
-					System.out.println(pozJoueur + " poz");
+					//System.out.println(pozJoueur + " poz");
 					Point  objPoint = new Point(getNbLines() - 1, getNbColumns() - 1);
 					Point objPointFinish = new Point();
 					boolean isOn = false;
 					for(int i = 0; i < tracks; i++ )
 					{
 						objPointFinish.setLocation(objPoint.x, objPoint.y - i);
-						System.out.println(objPointFinish  + " finish");
+						//System.out.println(objPointFinish  + " finish");
 						if(pozJoueur.equals(objPointFinish))
 							isOn = true;
-						System.out.println(isOn  + " bool");
+						//System.out.println(isOn  + " bool");
 
 					}
 					if(!isOn)
@@ -1106,7 +1104,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    }
 		
 		
-		System.out.println(isAllPlayers + " isAll");
+		//System.out.println(isAllPlayers + " isAll");
 		return isAllPlayers;
 		
 	}
@@ -1452,17 +1450,18 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * créer un InformationDestination et on va ajouter l'événement dans 
 	 * la file d'événements du gestionnaire d'événements. Lors de l'appel 
 	 * de cette fonction, la liste des joueurs est synchronisée.
+	 * @param playersListe 
 	 * 
 	 * @param TreeMap : La liste contenant les positions des joueurs
 	 * 
 	 * Synchronisme : Cette fonction n'est pas synchronisée ici, mais elle l'est
 	 * 				  par l'appelant (demarrerPartie).
 	 */
-	private void preparerEvenementPartieDemarree(TreeMap<String, Point> listePositionJoueurs)
+	private void preparerEvenementPartieDemarree(Joueur[] playersListe)
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs de la table qu'un joueur a démarré une partie
-	    EvenementPartieDemarree partieDemarree = new EvenementPartieDemarree(intTempsTotal, listePositionJoueurs, this);
+	    EvenementPartieDemarree partieDemarree = new EvenementPartieDemarree(this, playersListe);
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
@@ -1867,7 +1866,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	   return intNombreJoueursVirtuels;
 	}
 	
-	public Vector<JoueurVirtuel> obtenirListeJoueursVirtuels()
+	public ArrayList<JoueurVirtuel> obtenirListeJoueursVirtuels()
 	{
 	   return lstJoueursVirtuels;
 	}
@@ -1991,18 +1990,18 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             for(int i=0; i<lstJoueursVirtuels.size(); i++)
             {
                 JoueurVirtuel j = (JoueurVirtuel)lstJoueursVirtuels.get(i);
-                System.out.println(username + " compare " + j.obtenirNom());
+                //System.out.println(username + " compare " + j.obtenirNom());
                 if(username.equals(j.obtenirNom())) return j;
             }
             return (JoueurVirtuel)null;
 	}
 	
-	/**
+	/*
 	 * method to get player color by his name
 	 * we don't check if we really have this player(for Virtuals)
 	 * @param username
 	 * @return Player clothes color 
-	 */
+	 
     public String getPlayerColor(String username)
     {
     	String color;
@@ -2012,13 +2011,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     		while(objIterateurListeJoueurs.hasNext() == true)
     		{
     			JoueurHumain j = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
-    			System.out.println("username " + username + " compare " + j.obtenirNomUtilisateur());
+    			///System.out.println("username " + username + " compare " + j.obtenirNomUtilisateur());
     			if(username.equals(j.obtenirNomUtilisateur())) return j.obtenirPartieCourante().getClothesColor();
     		}
 
     		//otherwise we have a virtual player and his color 
     		color = this.obtenirJoueurVirtuelParSonNom(username).getClothesColor();
-    	// if we have an error java.lang.NullPointerException
+    		// if we have an error java.lang.NullPointerException
     	}catch(NullPointerException e ){
     		//objLogger.error( e.getMessage() );
 		    e.printStackTrace();
@@ -2028,7 +2027,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     	}
          return color;
        	
-    }    
+    } */  
 	
   /*  // Cette méthode permettra de dire si un joueur a gagné la partie en
     // ayant accumulé assez de points et en ayant rejoint le WinTheGame
@@ -2302,7 +2301,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			for(int i = 0; i < colValues.length; i++)
 			{
 				colors.add(colValues[i].getCode());
-				System.out.println("Colors : " + colValues[i].getCode());
+				//System.out.println("Colors : " + colValues[i].getCode());
 			}
 			
 			
