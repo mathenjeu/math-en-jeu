@@ -4129,7 +4129,7 @@ class GestionnaireCommunication
 		trace("Retour DemarrerPartie GCom");
         // Construire l'objet evenement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
-                                   resultat:noeudCommande.attributes.nom, idP:noeudCommande.attributes.id};
+                                   resultat:noeudCommande.attributes.nom, idP:noeudCommande.attributes.id, clocolor:noeudCommande.attributes.clocolor};
         // Si le retour de la fonction est une reponse positive et non une
         // erreur, alors on peut passer a l'autre etat
         if (noeudCommande.attributes.type == "Reponse")
