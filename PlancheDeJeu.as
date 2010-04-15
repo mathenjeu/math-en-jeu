@@ -94,8 +94,9 @@ class PlancheDeJeu
     function PlancheDeJeu(tab:Array, num:Number, p:GestionnaireInterface)
     {
         var i:Number;
-		this.mat = new Array(tab.length)
-        for(i = 0; i < tab.length; i++)
+		this.mat = new Array(tab.length);
+		var count:Number = tab.length;
+        for(i = 0; i < count; i++)
         {
 			this.mat[i] = new Array(tab[i].length);
             this.tableauDesCases.push(new Array());
@@ -110,7 +111,8 @@ class PlancheDeJeu
 	
 	function getPersonnageByName(playerName:String):Personnage
 	{
-		for(var i:Number = 0; i < tableauDesPersonnages.length; i++)
+		var count:Number = tableauDesPersonnages.length; 
+		for(var i:Number = 0; i < count; i++)
 		{
 			
 		   if(tableauDesPersonnages[i].obtenirNom() == playerName){
@@ -185,11 +187,13 @@ class PlancheDeJeu
         hauteurDeCase = clipTest._height * 0.85;
         clipTest.removeMovieClip();
         ////////////////////////////////////////////////////////////////////////////////////////
-        for(i=0; i < this.mat.length; i++)
+		var count:Number = this.mat.length;
+        for(i=0; i < count; i++)
         {
             x = i*largeurDeCase/2 + largeurDeCase/2;
             y = 200 + i*hauteurDeCase/2;
-            for(j=0; j < this.mat[0].length; j++)
+			var countS:Number = this.mat[0].length;
+            for(j=0; j < countS; j++)
             {
                 pt.definirX(x);
                 pt.definirY(y);
@@ -223,9 +227,11 @@ class PlancheDeJeu
         var i:Number;
         var j:Number;
         // on initie les tableaux 
-        for(i = 0; i < tab.length; i++)
+		var count:Number = tab.length;
+        for(i = 0; i < count; i++)
         {
-            for(j=0;j<tab[0].length;j++)
+			var countS:Number = tab[0].length;
+            for(j = 0; j < countS; j++)
             {
                 this.mat[i][j] = tab[i][j];
                 //trace("ds definirMat  mat   tab i  j  mat  tab :    "+i+"   "+j+"   "+this.mat[i][j]+"     "+tab[i][j]);
@@ -518,9 +524,11 @@ class PlancheDeJeu
             diffY = 200 - this.tableauDesCases[l][c].obtenirClipCase()._y;
 		}
 		
-		for(i=0;i<this.tableauDesCases.length;i++)
+		var count:Number = this.tableauDesCases.length;
+		for(i = 0; i < count; i++)
         {
-            for(j=0;j<this.tableauDesCases[0].length;j++)
+			var countS:Number = this.tableauDesCases[0].length;
+            for(j = 0; j < countS; j++)
             {
                 if(this.tableauDesCases[i][j] != null)
                 {
@@ -1475,8 +1483,9 @@ class PlancheDeJeu
 	    
 	    //trace(" le point :  "+p.obtenirX()+"     "+p.obtenirY());
 	    listeTemporaire = this.tableauDesCases[ancienL][ancienC].obtenirListeDesPersonnages();
+		var count:Number = listeTemporaire.length;
 	    
-	    for(var i:Number = 0; i< listeTemporaire.length; i++)
+	    for(var i:Number = 0; i< count; i++)
 	    {
 		    if(listeTemporaire[i].obtenirNom() == nom)
 		    {

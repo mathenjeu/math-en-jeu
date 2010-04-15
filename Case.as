@@ -360,7 +360,8 @@ class Case
 			this.casePossible._y += ha;
 		}
 
-		for(i = 0; i < this.listeDesPersonnages.length; i++)
+        var count:Number = this.listeDesPersonnages.length;
+		for(i = 0; i < count; i++)
 		{
 			this.listeDesPersonnages[i].translater(la, ha);
 		}
@@ -385,8 +386,8 @@ class Case
 	function retirerPersonnage(p:Personnage)
 	{
 		var i:Number;
-
-		for(i = 0; i < this.listeDesPersonnages.length; i++)
+        var count:Number = this.listeDesPersonnages.length;        
+		for(i = 0; i < count; i++)
 		{
 			if(this.listeDesPersonnages[i].obtenirNumero() == p.obtenirNumero())
 			{
@@ -434,8 +435,8 @@ class Case
 				this.casePossible._yscale += valeur;
 			}
 		
-
-			for(i = 0; i < this.listeDesPersonnages.length; i++)
+            var count:Number = this.listeDesPersonnages.length;
+			for(i = 0; i < count; i++)
 			{
 				this.listeDesPersonnages[i].zoomer(valeur);
 			}
@@ -482,8 +483,8 @@ class Case
 			this.casePossible._x = pt.obtenirX();
 			this.casePossible._y = pt.obtenirY();
 		}
-
-		for(i = 0; i < this.listeDesPersonnages.length; i++)
+        var count:Number = this.listeDesPersonnages.length;
+		for(i = 0; i < count; i++)
 		{
 			var pt2:Point = new Point(l,c);
 			this.listeDesPersonnages[i].definirPosition(pt, l, c);

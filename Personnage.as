@@ -481,8 +481,8 @@ class Personnage
 	function genererListeMagasinXML(lstObjMagasin:Array):Object
 	{
 		var objMagasin:Object = new Object();
-		
-		for(var j:Number = 0; j<lstObjMagasin.length; j++)
+		var count:Number =  lstObjMagasin.length;
+		for(var j:Number = 0; j < count; j++)
 		{
 			var objNoeudObjMagasin:XMLNode = lstObjMagasin[j];
 									
@@ -502,8 +502,8 @@ class Personnage
 		
 		//trace("newID : " + nouveauID);
 		//trace("vieuxID : " + vieuxID);
-		
-		for(var j:Number = 0; j<lstObjMagasin.length; j++)
+		var count:Number = lstObjMagasin.length; 
+		for(var j:Number = 0; j < count; j++)
 		{
 			var objNoeudObjMagasin:XMLNode = lstObjMagasin[j];
 									
