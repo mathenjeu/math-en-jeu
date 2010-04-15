@@ -9,7 +9,8 @@ bt_annulerTextRoll = _level0.loader.contentHolder.texteSource_xml.firstChild.att
 
 var bananaPlayers:Array = new Array();
 
-for (var i:Number = 0; i < _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages.length; i++) {
+var count:Number = _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages.length;
+for (var i:Number = 0; i < count; i++) {
 					bananaPlayers[i] = new Object();
 			        bananaPlayers[i].nom =  _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].nom;
 			        bananaPlayers[i].pointage =  _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].pointage;
@@ -20,7 +21,8 @@ for (var i:Number = 0; i < _level0.loader.contentHolder.objGestionnaireEvenement
 								
 }// end for
 
-for (i = 0; i < bananaPlayers.length; i++) {
+count = bananaPlayers.length;
+for (i = 0; i < count; i++) {
 	if((bananaPlayers[i].role == 2 || bananaPlayers[i].role == 3) && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")
 	   bananaPlayers.removeItemAt(i);
 }// end for
@@ -51,7 +53,7 @@ var mclListener4:Object = new Object();
 */
 
 
-for(var i:Number = 1; i <= bananaPlayers.length; i++)
+for(var i:Number = 1; i <= count; i++)
 {
    id = bananaPlayers[i - 1].idessin;
    

@@ -742,7 +742,8 @@ class GestionnaireCommunication
         
         // Passer tous les noeuds enfants (parametres) et creer chaque parametre
         // dans l'objet d'evenement
-        for (var i:Number = 0; i < lstChildNodes.length; i++)
+		var count:Number = lstChildNodes.length;
+        for (var i:Number = 0; i < count; i++)
         {
 			//trace("ds for envoyer evenement");
             // Declarer une chaine de caractere qui va garder le type courant
@@ -913,8 +914,8 @@ class GestionnaireCommunication
 									// lorsqu'on utilise une potionPetit,
 									// on devient petit pour 30 secondes.
 									trace("on utilise la potionPetit ici.");
-									
-									for(var i:Number = 0; i < tabPersonnages.length; i++)
+									var countX:Number = tabPersonnages.length;
+									for(var i:Number = 0; i < countX; i++)
 									{
 										if(String(objEvenement.joueurQuiUtilise) == String(tabPersonnages[i].obtenirNom()))
 										{
@@ -929,8 +930,8 @@ class GestionnaireCommunication
 								// lorsqu'on utilise une potionGros,
 								// on devient gros pour 30 secondes.
 									trace("on utilise la potionGros ici.");
-									
-									for(var i:Number = 0; i < tabPersonnages.length; i++)
+									var countS:Number = tabPersonnages.length;
+									for(var i:Number = 0; i < countS; i++)
 									{
 										if(String(objEvenement.joueurQuiUtilise) == String(tabPersonnages[i].obtenirNom()))
 										{
@@ -964,8 +965,8 @@ class GestionnaireCommunication
 					   		objEvenement["statistiqueJoueur"] = new Array();
 					   
 				    		//trace("taille de la liste de stat :  "+lstChildNodesStatistique.length);
-				    
-				    		for(var j:Number =0; j < lstChildNodesStatistique.length; j++)
+				            var taille:Number = lstChildNodesStatistique.length;
+				    		for(var j:Number =0; j < taille; j++)
 				    		{
 					    		
 					    		objEvenement.statistiqueJoueur.push({nomUtilisateur:lstChildNodesStatistique[j].attributes.utilisateur, userRole:lstChildNodesStatistique[j].attributes.role, pointage:lstChildNodesStatistique[j].attributes.pointage});	
@@ -1067,7 +1068,8 @@ class GestionnaireCommunication
                         var lstChildNodesPosition:Array = lstChildNodes[i].childNodes;
                         // Passer tous les noeuds position et les ajouter dans
                         // l'objet d'evenement
-                        for (var j:Number = 0; j < lstChildNodesPosition.length; j++)
+						var dimension:Number = lstChildNodesPosition.length;
+                        for (var j:Number = 0; j < dimension; j++)
                         {
                             // Mettre un objet Point contenant position x, y
                             listePoints.push(new Point(lstChildNodesPosition[j].attributes.x, lstChildNodesPosition[j].attributes.y));
@@ -1101,6 +1103,7 @@ class GestionnaireCommunication
                         objEvenement.plateauJeu = new Array();
                         // Passer toutes les lignes et creer un tableau dans
                         // chaque ligne du plateau de jeu
+						
                         for (var j:Number = 0; j < intNbLignes; j++)
                         {
                             // Creer un nouveau tableau pour la ligne courante
@@ -1125,7 +1128,8 @@ class GestionnaireCommunication
                         var lstChildNodesPosition:Array = lstChildNodes[i].childNodes;
                         // Passer tous les noeuds position et les ajouter dans
                         // l'objet d'evenement
-                        for (var j:Number = 0; j < lstChildNodesPosition.length; j++)
+						var nJoueurs:Number = lstChildNodesPosition.length;
+                        for (var j:Number = 0; j < nJoueurs; j++)
                         {
                             // Mettre un objet contenant le nom du joueur et sa
                             // position x, y
@@ -1143,7 +1147,8 @@ class GestionnaireCommunication
                         var lstChildNodesCase:Array = lstChildNodes[i].childNodes;
                         // Passer tous les noeuds case et les ajouter dans
                         // le plateau de jeu
-                        for (var j:Number = 0; j < lstChildNodesCase.length; j++)
+						var ncases:Number = lstChildNodesCase.length;
+                        for (var j:Number = 0; j < ncases; j++)
                         {
                             // Declaration d'une variable qui va contenir la
                             // valeur a mettre dans la case
@@ -3246,7 +3251,8 @@ class GestionnaireCommunication
             var lstNoeudsParametre:Array = noeudCommande.childNodes;
 			
             // Passer tous les parametres et les ajouter dans l'objet evenement
-            for (var i:Number = 0; i < lstNoeudsParametre.length; i++)
+			var count:Number = lstNoeudsParametre.length;
+            for (var i:Number = 0; i < count; i++)
             {
                 // Faire la reference vers le noeud courant
                 var objNoeudParametre:XMLNode = lstNoeudsParametre[i];
@@ -3361,6 +3367,8 @@ class GestionnaireCommunication
         // Construire l'objet evenement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
+	    var count:Number;							   
+	
         // Si le retour de la fonction est une reponse positive et non une
         // erreur, alors on peut passer a l'autre etat
         if (noeudCommande.attributes.type == "MiseAJour" && noeudCommande.attributes.nom == "ListeJoueurs")
@@ -3377,7 +3385,8 @@ class GestionnaireCommunication
             // objets joueurs
             objEvenement.playersListe = new Array();
             // Passer tous les joueurs et les ajouter dans le tableau
-            for (var i:Number = 0; i < lstChildNodes.length; i++)
+			count = lstChildNodes.length;
+            for (var i:Number = 0; i < count; i++)
             {
                 // Ajouter l'objet joueur dans le tableau
                 objEvenement.playersListe.push({nom:lstChildNodes[i].attributes.nom,
@@ -3429,7 +3438,8 @@ class GestionnaireCommunication
             // objets joueurs
             objEvenement.objectsListe = new Array();
             // Passer tous les joueurs et les ajouter dans le tableau
-            for (var i:Number = 0; i < lstChildNodes.length; i++)
+			count = lstChildNodes.length;
+            for (var i:Number = 0; i <  count; i++)
             {
                 // Ajouter l'objet joueur dans le tableau
                 objEvenement.objectsListe.push({idObject:lstChildNodes[i].attributes.id,
@@ -3508,7 +3518,8 @@ class GestionnaireCommunication
             // objets joueurs
             objEvenement.listeNomUtilisateurs = new Array();
             // Passer tous les joueurs et les ajouter dans le tableau
-            for (var i:Number = 0; i < lstChildNodes.length; i++)
+			var count:Number = lstChildNodes.length;
+            for (var i:Number = 0; i < count; i++)
             {
                 // Ajouter l'objet joueur dans le tableau
                 objEvenement.listeNomUtilisateurs.push({nom:lstChildNodes[i].attributes.nom});
@@ -3559,7 +3570,8 @@ class GestionnaireCommunication
             objEvenement.listeNomSalles = new Array();
             
             // Passer toutes les salles et les ajouter dans le tableau
-            for (var i:Number = 0; i < lstChildNodes.length; i++)
+			var count:Number = lstChildNodes.length; 
+            for (var i:Number = 0; i < count; i++)
             {
                 // Ajouter l'objet salle dans le tableau
                 objEvenement.listeNomSalles.push({nom:lstChildNodes[i].attributes.nom,
@@ -3583,8 +3595,8 @@ class GestionnaireCommunication
 			//Creer un tableau listeNumberoJSalles qui va contenir les noumero des joueurs dans salles
 			objEvenement.listeNumberoJSalles = new Array();
 			objEvenement.typeDeJeuAll = new Array();
-			//
-			for (var i:Number = 0; i < lstChildNodes.length; i++)
+			
+			for (var i:Number = 0; i < count; i++)
             {
                 // Ajouter le numero de joueurs dans salle dans le tableau
                 objEvenement.listeNumberoJSalles.push({maxnbplayers:lstChildNodes[i].attributes.maxnbplayers});
@@ -3606,6 +3618,7 @@ class GestionnaireCommunication
         envoyerEtMettreAJourEvenements(noeudCommande, objEvenement);
         // Traiter la prochaine commande
         traiterProchaineCommande();
+		
     }
 	
 	//*******************************************************************
@@ -3803,7 +3816,8 @@ class GestionnaireCommunication
             // objets joueurs
             objEvenement.listeNomUtilisateurs = new Array();
             // Passer tous les joueurs et les ajouter dans le tableau
-            for (var i:Number = 0; i < lstChildNodes.length; i++)
+			var count:Number = lstChildNodes.length;
+            for (var i:Number = 0; i <  count; i++)
             {
                 // Ajouter l'objet joueur dans le tableau
                 objEvenement.listeNomUtilisateurs.push({nom:lstChildNodes[i].attributes.nom});
@@ -3849,7 +3863,8 @@ class GestionnaireCommunication
             // objets tables et leurs joueurs
             objEvenement.listeTables = new Array();
             // Passer toutes les tables et les ajouter dans le tableau
-            for (var i:Number = 0; i < lstTablesChildNodes.length; i++)
+			var count:Number = lstTablesChildNodes.length;
+            for (var i:Number = 0; i < count; i++)
             {
                 // Declaration d'une reference vers la liste des noeuds joueurs
                 var lstJoueursChildNodes:Array = lstTablesChildNodes[i].childNodes;
@@ -3863,7 +3878,8 @@ class GestionnaireCommunication
                 objTable.listeJoueurs = new Array();
                 // Passer les joueurs de la table courante et les ajouter
                 // dans l'objet table courant
-                for (var j:Number = 0; j < lstJoueursChildNodes.length; j++)
+				var countN:Number = lstJoueursChildNodes.length;
+                for (var j:Number = 0; j < countN; j++)
                 {
                     // Ajouter le joueur courant dans la liste des joueurs de
                     // la table
@@ -3995,7 +4011,8 @@ class GestionnaireCommunication
             var lstNoeudsParametre:Array = noeudCommande.childNodes;
 			
             // Passer tous les parametres et les ajouter dans l'objet evenement
-            for (var i:Number = 0; i < lstNoeudsParametre.length; i++)
+			var count:Number = lstNoeudsParametre.length;
+            for (var i:Number = 0; i < count; i++)
             {
                 // Faire la reference vers le noeud courant
                 var objNoeudParametre:XMLNode = lstNoeudsParametre[i];
@@ -4061,7 +4078,8 @@ class GestionnaireCommunication
             // objets personnages
             objEvenement.listePersonnageJoueurs = new Array();
             // Passer tous les personnages et les ajouter dans le tableau
-            for (var i:Number = 0; i < lstChildNodes.length; i++)
+			var count:Number =  lstChildNodes.length;
+            for (var i:Number = 0; i < count; i++)
             {
                 // Ajouter l'objet joueur dans le tableau
                 objEvenement.listePersonnageJoueurs.push({nom:lstChildNodes[i].attributes.nom,

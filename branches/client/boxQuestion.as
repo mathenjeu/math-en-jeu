@@ -135,9 +135,11 @@ loadListener.complete = function(eventObject)
 		monScroll.content._yscale = monScroll.content._xscale;
 		Selection.setFocus(monScroll);
 	
-		
+	var count:Number = _level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet();
+	
 	switch (_level0.loader.contentHolder.type_question)
 	{
+		
 		case "MULTIPLE_CHOICE" ://"ChoixReponse" :
 			btn_a._visible = true;
 			btn_b._visible = true;
@@ -145,7 +147,7 @@ loadListener.complete = function(eventObject)
 			btn_d._visible = true;
 			//btn_e._visible = true;
 			
-			for(var i:Number = 0; i < _level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet(); i++)
+			for(var i:Number = 0; i < count; i++)
 			{
 				if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Livre")
 				{
@@ -165,8 +167,8 @@ loadListener.complete = function(eventObject)
 			btn_a._visible = true;
 			btn_b._visible = true;
 			btn_c._visible = true;
-						
-			for(var i:Number = 0; i < _level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet(); i++)
+			
+			for(var i:Number = 0; i < count; i++)
 			{
 				if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Livre")
 				{
@@ -190,7 +192,7 @@ loadListener.complete = function(eventObject)
 			btn_d._visible = true;
 			btn_e._visible = true;
 			
-			for(var i:Number = 0; i < _level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet(); i++)
+			for(var i:Number = 0; i < count; i++)
 			{
 				if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Livre")
 				{
@@ -214,7 +216,7 @@ loadListener.complete = function(eventObject)
 			//_root.vrai_txt._visible = true;
 			//_root.faux_txt._visible = true;
 			
-			for(var i:Number = 0; i < _level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet(); i++)
+			for(var i:Number = 0; i < count; i++)
 			{
 				if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Boule")
 				{
@@ -231,7 +233,7 @@ loadListener.complete = function(eventObject)
 			btn_ok._visible = true;
 			Key.removeListener(oUserKey);
 			
-			for(var i:Number = 0; i < _level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet(); i++)
+			for(var i:Number = 0; i < count; i++)
 			{
 				if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Boule")
 				{
@@ -416,6 +418,7 @@ function enleverBoutons()
 	btn_faux._visible = false;
 	Key.removeListener(oUserKey);
 	Mouse.addListener(_level0.loader.contentHolder.mouseListener);
+	monScroll.contentPath = null;
 
 	//btnSendError._visible = false;
 }
