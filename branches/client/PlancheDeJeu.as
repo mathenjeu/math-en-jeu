@@ -48,8 +48,8 @@ class PlancheDeJeu
     private var hauteurDeCase:Number = -1;
     private var largeurDeCase:Number = -1;
     private var perso:Personnage;
-    private var monPersonnage:Number = -1;  //  numero dans le tableau des perso du personnage en cours
-    private var nomDeMonPersonnage:String; // nom de notre perso
+    private var monPersonnage:Number = -1;  // numero d'identification de notre perso - utiliser pour cree le movie 
+	private var nomDeMonPersonnage:String; // nom de notre perso
     private var zoom:Number = 0;
     private var gestionnaireInterface:GestionnaireInterface;
     private var rotation:Number = 0;
@@ -184,7 +184,7 @@ class PlancheDeJeu
         clipTest._x = -100;
         clipTest._y = -100;
         largeurDeCase = clipTest._width;
-        hauteurDeCase = clipTest._height * 0.85;
+        hauteurDeCase = clipTest._height * 0.850111857;
         clipTest.removeMovieClip();
         ////////////////////////////////////////////////////////////////////////////////////////
 		var count:Number = this.mat.length;
@@ -292,7 +292,7 @@ class PlancheDeJeu
             case "Nord":
                 la = 0;
                 ha = -hauteurDeCase/2;
-				if (coinHaut.obtenirY()+ha > 250) //Le coin haut du tableau est au centre de l'ecran
+				if (coinHaut.obtenirY()+ha > 200) //Le coin haut du tableau est au centre de l'ecran
 				{
 					ha = 200 - coinHaut.obtenirY();
 					limiteAtteinte = true;
@@ -301,7 +301,7 @@ class PlancheDeJeu
             case "Sud":
                 la = 0;
                 ha = hauteurDeCase/2;
-				if (coinBas.obtenirY()+ha < 250) //Le coin bas du tableau est au centre de l'ecran
+				if (coinBas.obtenirY()+ha < 200) //Le coin bas du tableau est au centre de l'ecran
 				{
 					ha = 200 - coinBas.obtenirY();
 					limiteAtteinte = true;
@@ -483,19 +483,19 @@ class PlancheDeJeu
     }
 
     
-    function ajouterPersonnage(nom:String, ll:Number,cc:Number,num:Number, idClip:Number, userRole:Number, cloColor:String)
+    function ajouterPersonnage(nom:String, ll:Number, cc:Number, idPers:Number, idClip:Number, userRole:Number, cloColor:String)
     {
 		
         var p:Personnage;
         //trace("ajouterPersonnage:" + nom + " niveau:" + (5*tableauDesCases.length*tableauDesCases[0].length+2*num) + " idPers:" + num + " idDessin:" + idClip);
-        p = new Personnage(nom, userRole, 5*tableauDesCases.length*tableauDesCases[0].length+2*num, idClip ,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y ,cloColor);
+        p = new Personnage(idPers, nom, userRole, 5 * tableauDesCases.length * tableauDesCases[0].length + 2 * idPers, idClip ,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y ,cloColor);
         p.afficher();
 		
         tableauDesCases[ll][cc].ajouterPersonnage(p);
 	
 		this.tableauDesPersonnages.push(p);
 	
-        if(num == monPersonnage)
+        if(idPers == monPersonnage)
         {
             perso = p;
 	    	nomDeMonPersonnage = nom;
@@ -563,8 +563,7 @@ class PlancheDeJeu
 		{
 			return true;
 		}
-		//trace("dx = " + dx);
-		//trace("dy = " + dy);
+		
 	
 		if (modeGraduel)
 		{
@@ -589,8 +588,8 @@ class PlancheDeJeu
 		}
 
 		// on deplace le clip sur lequel est attache tous les autres clips
-		_level0.loader.contentHolder.referenceLayer._x +=dx;		
-		_level0.loader.contentHolder.referenceLayer._y +=dy;
+		_level0.loader.contentHolder.referenceLayer._x += dx;		
+		_level0.loader.contentHolder.referenceLayer._y += dy;
 		
 		return false;
 	}
@@ -1477,7 +1476,7 @@ class PlancheDeJeu
     {
 	    //trace(" dans teleporterPersonnage, parametres :  "+nom+"   "+ancienL+"   "+ancienC+"   "+nouveauL+"   "+nouveauC+"   "+str);
 	    var listeTemporaire:Array;
-	    //var p:Point = new Point(this.tableauDesCases[nouveauL][nouveauC].obtenirClipCase()._x, this.tableauDesCases[nouveauL][nouveauC].obtenirClipCase()._y);
+	   //var p:Point = new Point(this.tableauDesCases[nouveauL][nouveauC].obtenirClipCase()._x, this.tableauDesCases[nouveauL][nouveauC].obtenirClipCase()._y);
 	
 	    var p:Point = new Point(nouveauL,nouveauC);
 	    

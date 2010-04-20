@@ -277,7 +277,6 @@ class GestionnaireEvenements
         trace("*********************************************");
         trace("begin New Game");
         this.objGestionnaireCommunication.beginNewGame(Delegate.create(this, this.feedbackBeginNewGame));
-        
         trace("*********************************************\n");
     }
 	
@@ -2117,6 +2116,7 @@ class GestionnaireEvenements
 			    	pt.definirX(objetEvenement.nouvellePosition.x);
 			     	pt.definirY(objetEvenement.nouvellePosition.y);
 					
+					trace("juste avant la teleportation param  " +  objetEvenement.nouvellePosition.x + " " +  objetEvenement.nouvellePosition.y);
 					
 					_level0.loader.contentHolder.planche.obtenirPerso().definirProchainePosition(_level0.loader.contentHolder.planche.calculerPositionTourne(pt.obtenirX(), pt.obtenirY()), objetEvenement.collision);
 					
@@ -3262,7 +3262,7 @@ class GestionnaireEvenements
      
     	pt_final = _level0.loader.contentHolder.planche.calculerPositionTourne(objetEvenement.nouvellePosition.x, objetEvenement.nouvellePosition.y);
    
-		trace("juste avant la teleportation nom du perso et param  " + this.numeroTable);
+		trace("juste avant la teleportation nom du perso et param  " + objetEvenement.anciennePosition.x + " " +  objetEvenement.anciennePosition.y + " " + objetEvenement.nouvellePosition.x + " " +  objetEvenement.nouvellePosition.y);
 		//to cancel after end game virtual players move's
 		if(!endGame){
 			_level0.loader.contentHolder.planche.teleporterPersonnage(objetEvenement.nomUtilisateur, pt_initial.obtenirX(), pt_initial.obtenirY(), pt_final.obtenirX(), pt_final.obtenirY(), objetEvenement.collision);
@@ -3967,7 +3967,8 @@ function drawUserFrame3(i:Number, colorC:String, idDessin:Number, movClip:MovieC
 	   this["mcLoaderString"].loadClip("persox" + idDessin + ".swf", movClip);
 }
 
-// to take a good Id for our perso
+// to take a good Id for our perso 
+/*
 function haveThisId(idPers:Number):Boolean
 {
    	var i:Number;
@@ -3978,7 +3979,7 @@ function haveThisId(idPers:Number):Boolean
 		   return true;
 	}
 	return false;
-}
+}*/
 	
 	
 }// end class
