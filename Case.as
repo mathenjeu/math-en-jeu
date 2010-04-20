@@ -61,11 +61,14 @@ class Case
 		if((nb >= 91)&&(nb <= 95))
 		{
 			this.clipCase = _level0.loader.contentHolder.referenceLayer.attachMovie("case91", "case"+temp, temp);
+			
 			this.miniGame = true;
 		}
 		else
 		{
-			this.clipCase = _level0.loader.contentHolder.referenceLayer.attachMovie("case0", "case"+temp, temp); 
+			this.clipCase = _level0.loader.contentHolder.referenceLayer.attachMovie("case0", "case"+temp, temp);
+			//this.clipCase._width = 120;
+			//this.clipCase._height = 48;
 			this.miniGame = false;
 		}
 		
@@ -106,7 +109,7 @@ class Case
 
 			case 3:	// Item
 				var nomObj:String = new String();
-				trace("num : " + num);
+				
 				switch( ((num - 30000) - (num % 100)) / 100)
 				{
 					case 1:
@@ -143,7 +146,6 @@ class Case
 			break;
 			
 			case 4: //	WinTheGame
-				trace("num : " + num);
 				this.winTheGame = new WinTheGame(3*nombreDeCases + temp);
 				//obtenirClipCase().attachMovie("winPoint", "winPoint1", 100);
 				//winPoint1._x =
@@ -403,7 +405,7 @@ class Case
 	{
 		var i:Number;
 
-		if((this.clipCase._xscale+valeur) > 20 && (this.clipCase._xscale+valeur) < 200)
+		if((this.clipCase._xscale + valeur) > 20 && (this.clipCase._xscale+valeur) < 200)
 		{
 			this.clipCase._xscale += valeur;
 			this.clipCase._yscale += valeur;
@@ -494,8 +496,8 @@ class Case
 			   this.listeDesPersonnages[i].afficher();
 				   
 			//if( this.listeDesPersonnages[i].getRole == 2 &&  _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")
-			   this.listeDesPersonnages[i].cachePersonnage();
+			   //this.listeDesPersonnages[i].cachePersonnage();
 		}
-	}
+	} //end function afficher
 	
 }	// End of Case class

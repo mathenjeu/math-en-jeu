@@ -119,13 +119,13 @@ class Personnage
 	function afficherObjets()
 	{
 		var i:Number;
-		trace("debut afficherObjets\n**********")
+		//trace("debut afficherObjets\n**********")
 		for(var nom:String in listeDesObjets)
 		{
 			for(i = 0; i < listeDesObjets[nom].length; i++) 
 			trace(listeDesObjets[nom][i] + " - id : ");
 		}
-		trace("**********\nfin afficherObjets")
+		//trace("**********\nfin afficherObjets")   
 	}
 	
 	////////////////////////////////////////////////////////////   
@@ -137,7 +137,7 @@ class Personnage
 			total += listeDesObjets[nom].length; 			
 		}
 		
-		trace("total : " + total);
+		//trace("total : " + total);
 		return total;
 	}
 	
@@ -278,15 +278,15 @@ class Personnage
 	{
 		var i:Number;
 		
-		trace("liste d'objets avant avoir enlever 1 obj :");
-		afficherObjets();
+		//trace("liste d'objets avant avoir enlever 1 obj :");
+		//afficherObjets();
 		
 		listeDesObjets[n].pop();
 		_level0.loader.contentHolder.objectMenu[n].countTxt = Number(_level0.loader.contentHolder.objectMenu[n].countTxt) - 1;
 		
 		
-		trace("liste d'objets apres avoir enlever 1 obj :");
-		afficherObjets();
+		//trace("liste d'objets apres avoir enlever 1 obj :");
+		//afficherObjets();
 	}
 	
 	////////////////////////////////////////////////////////////
@@ -302,10 +302,10 @@ class Personnage
 		image._x += la;
 		image._y += ha;
 		
-		this.position.definirX(position.obtenirX()+la);
-		this.position.definirY(position.obtenirY()+ha);
-		this.prochainePosition.definirX(prochainePosition.obtenirX()+la);
-		this.prochainePosition.definirY(prochainePosition.obtenirY()+ha);
+		this.position.definirX(position.obtenirX() + la);
+		this.position.definirY(position.obtenirY() + ha);
+		this.prochainePosition.definirX(prochainePosition.obtenirX() + la);
+		this.prochainePosition.definirY(prochainePosition.obtenirY() + ha);
 	}
 	
 	////////////////////////////////////////////////////////////
@@ -392,8 +392,10 @@ class Personnage
 	////////////////////////////////////////////////////////////
 	function definirPosition(p:Point, ll:Number, cc:Number)
 	{
+		trace("test drift :" + image._x + " " + image._y);
 		image._x = p.obtenirX();
 		image._y = p.obtenirY();
+		trace("test drift after :" + image._x + " " + image._y);
 		this.position.definirX(p.obtenirX());
 		this.position.definirY(p.obtenirY());
 		this.l = ll;
@@ -529,13 +531,13 @@ class Personnage
 	//////////////////////////////////////////////////////////////////////////////////////
 	//	CONSTRUCTEUR
 	//////////////////////////////////////////////////////////////////////////////////////
-	function Personnage(nom:String, role:Number, niveau:Number, nomClip:Number, ll:Number, cc:Number, xx:Number, yy:Number, cloColor:String, mag:Array)
+	function Personnage(idPers:Number, nom:String, role:Number, niveau:Number, nomClip:Number, ll:Number, cc:Number, xx:Number, yy:Number, cloColor:String, mag:Array)
 	{
 		this.l = ll;
 		this.c = cc;
-		this.numero = niveau;
+		this.numero = idPers;
 		this.position = new Point(xx,yy);
-		this.prochainePosition = new Point( xx , yy );
+		this.prochainePosition = new Point(xx,yy);
 		this.clothesColor = cloColor;
 		
 		// to load the perso .. use ClipLoader to know the moment of complet load
@@ -549,7 +551,7 @@ class Personnage
 			
 			// assure que le clip a la bonne orientation
 			target_mc._xscale = - Math.abs(target_mc._xscale);
-			//target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
+			target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
 			target_mc.dtNom._x = 42;
 			
 			target_mc.clothesCol = cloColor;
@@ -563,7 +565,7 @@ class Personnage
 		
 		if(!(role == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")){
   
-           image =  _level0.loader.contentHolder.referenceLayer.createEmptyMovieClip("Personnage" + niveau, niveau);
+           image =  _level0.loader.contentHolder.referenceLayer.createEmptyMovieClip("Personnage" + idPers, niveau);
 		    myLoader.loadClip("perso" + nomClip + ".swf", image); 
 		
 		}
@@ -601,7 +603,9 @@ class Personnage
 		
 		dx = this.prochainePosition.obtenirX() - this.position.obtenirX();  
 		dy = this.prochainePosition.obtenirY() - this.position.obtenirY();
-		//trace("ds deplacePersonnage " + dx/dy);
+		
+		trace("ds deplacePersonnage " + dx + " " + dy);
+		
 		if( boardCentre ) //dx == 0 && dy == 0 && image._currentFrame == 1) 
 		{
 			return;
@@ -840,9 +844,10 @@ class Personnage
 				pourcent = 10/Math.abs(dx);
 				dx *= pourcent;
 				dy *= pourcent;
+				dy = Math.round(dy);
 			}
 		}
-		else
+		else(Math.abs(dy) > Math.abs(dx))
 		{
 			if(Math.abs(dy) > 10)
 			{
@@ -851,8 +856,9 @@ class Personnage
 				dy *= pourcent;
 			}
 		}
-
-        //trace("trace  dx : " + dx + " dy : " + dy + " control : " + dx/dy);
+		
+				
+		trace("trace drift dx : " + dx + " dy : " + dy + " control : " + dx/dy);
 		if (dy < 0)
 		{
 			if(image._currentFrame < 70)
@@ -889,8 +895,8 @@ class Personnage
 		// deplace le clip
 		image._x += dx;  
 		image._y += dy;
-		position.definirX(position.obtenirX()+dx);
-		position.definirY(position.obtenirY()+dy);
+		position.definirX(position.obtenirX()+ dx);
+		position.definirY(position.obtenirY()+ dy);
 	
 		// Si le deplacement voulu n'est pas nul mais que le personnage est au repos
 		//trace("avant le if le frame  :   "+this.image._currentFrame);
@@ -931,13 +937,14 @@ class Personnage
 		
 		this.l = pt.obtenirX();
 		this.c = pt.obtenirY();
- 
-        
- 
+		trace("definirProchainePosition : pt " + pt.obtenirY());
+  
 		_level0.loader.contentHolder.planche.tableauDesCases[this.l][this.c].ajouterPersonnage(this);
 		
 		this.prochainePosition.definirX(_level0.loader.contentHolder.planche.tableauDesCases[this.l][this.c].obtenirClipCase()._x);
 		this.prochainePosition.definirY(_level0.loader.contentHolder.planche.tableauDesCases[this.l][this.c].obtenirClipCase()._y);
+		
+		trace("definirProchainePosition : def Y " + _level0.loader.contentHolder.planche.tableauDesCases[this.l][this.c].obtenirClipCase()._y);
 		
 		this.faireCollision = str;
 		this.boardCentre = false;
