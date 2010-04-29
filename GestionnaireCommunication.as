@@ -529,7 +529,7 @@ class GestionnaireCommunication
                 // La commande est acceptee
                 bolCommandeAcceptee = true;
                 // Passer tous les Delegate de la commande courante
-                for (var i:Number = 0; i < objCommande.listeDelegate.length; i++)
+                for (var i in objCommande.listeDelegate)
                 {
                     // Ajouter un ecouteur pour le Delegate courant
 					//trace("ds traiterProchaineCommande  addEventListener  "+objCommande.listeDelegate[i].nom);
@@ -646,7 +646,7 @@ class GestionnaireCommunication
         }
         // Si la commande n'a pas fonctionnee, alors on doit enlever les
         // ecouteurs pour les evenements qui ont ete ajoutes pour cette
-        // commande
+        // commande for 
         if (noeudCommande.attributes.type == "Erreur")
         {
             // Passer tous les evenements de la liste d'evenements de la
@@ -742,8 +742,9 @@ class GestionnaireCommunication
         
         // Passer tous les noeuds enfants (parametres) et creer chaque parametre
         // dans l'objet d'evenement
-		var count:Number = lstChildNodes.length;
-        for (var i:Number = 0; i < count; i++)
+		//var count:Number = lstChildNodes.length;
+		var i:Number = 0;
+        for(var ii in lstChildNodes)
         {
 			//trace("ds for envoyer evenement");
             // Declarer une chaine de caractere qui va garder le type courant
@@ -1073,14 +1074,14 @@ class GestionnaireCommunication
                         {
                             // Mettre un objet Point contenant position x, y
                             listePoints.push(new Point(lstChildNodesPosition[j].attributes.x, lstChildNodesPosition[j].attributes.y));
-							trace(" x: " + lstChildNodesPosition[j].attributes.x + " y: " + lstChildNodesPosition[j].attributes.y);
+							//trace(" x: " + lstChildNodesPosition[j].attributes.x + " y: " + lstChildNodesPosition[j].attributes.y);
                         }
 						
 						_level0.loader.contentHolder.objGestionnaireEvenements.setListeFinishPoints(listePoints);
 																											
 						//trace("xWinGame : " + xWinGame);
 						//trace("yWinGame : " + yWinGame);
-						trace("nbTracks : " + nbTracks);
+						//trace("nbTracks : " + nbTracks);
 						//trace("PointageRequis : " + lstChildNodes[i].attributes.pointageRequis);
 					break;
 					
@@ -1147,8 +1148,8 @@ class GestionnaireCommunication
                         var lstChildNodesCase:Array = lstChildNodes[i].childNodes;
                         // Passer tous les noeuds case et les ajouter dans
                         // le plateau de jeu
-						var ncases:Number = lstChildNodesCase.length;
-                        for (var j:Number = 0; j < ncases; j++)
+						//var ncases:Number = lstChildNodesCase.length;
+                        for (var j in lstChildNodesCase)
                         {
                             // Declaration d'une variable qui va contenir la
                             // valeur a mettre dans la case
@@ -1285,7 +1286,7 @@ class GestionnaireCommunication
                 // Traiter la prochaine commande
                 //traiterProchaineCommande();
             } //fin du (noeudEvenement.attributes.nom == "PartieDemarree")
-        
+         i++;
 		} // fin de la boucle for
 		
 		trace("fin Evenement envoye : " + objEvenement.type);

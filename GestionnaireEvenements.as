@@ -456,7 +456,7 @@ class GestionnaireEvenements
         trace("*********************************************");
         trace("debut de demarrerMaintenant");
 		trace("idPersonnage: " + this.idPersonnage);
-		trace("niveau des personnages virtuels : " + niveau);
+		//trace("niveau des personnages virtuels : " + niveau);
         this.objGestionnaireCommunication.demarrerMaintenant(Delegate.create(this, this.retourDemarrerMaintenant), niveau);
         trace("fin de demarrerMaintenant");
         trace("*********************************************\n");
@@ -485,12 +485,12 @@ class GestionnaireEvenements
     }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////    
-	function utiliserObjet(id:Number, bananaName:String)
+	function utiliserObjet(id:Number, objectName:String)
     {
         trace("*********************************************");
-        trace("debut de utiliserObjet : " + id + " name : " + bananaName );
+        trace("debut de utiliserObjet : " + id + " name : " + objectName );
 		
-			this.objGestionnaireCommunication.utiliserObjet(Delegate.create(this, this.retourUtiliserObjet), id, bananaName);  
+			this.objGestionnaireCommunication.utiliserObjet(Delegate.create(this, this.retourUtiliserObjet), id, objectName);  
 	   
         trace("fin de utiliserObjet");
         trace("*********************************************\n");
@@ -613,8 +613,7 @@ class GestionnaireEvenements
         switch(objetEvenement.resultat)
         {
 			case "OkEtPartieDejaCommencee":
-			//A faire plus tard
-			trace("<<<<<<<<<<<<<<<< deja connecte ???? >>>>>>>>>>>>>>>>>>>");
+			
 			trace("Q musique " + objetEvenement.listeChansons.length);
 				
 				var count:Number = objetEvenement.listeChansons.length;
@@ -795,7 +794,7 @@ class GestionnaireEvenements
 			case "Table":
 						
 			   this.numeroTable = objetEvenement.noTable;
-			   trace("rejoindre table : " +  this.numeroTable);
+			   //trace("rejoindre table : " +  this.numeroTable);
 			
 			break;
 			
@@ -804,7 +803,7 @@ class GestionnaireEvenements
 			   for(i = 0; i < count; i++)
                {
                    _level0.loader.contentHolder.planche.obtenirPerso().ajouterObjet(objetEvenement.objectsListe[i].idObject, objetEvenement.objectsListe[i].typeObject);
-				   trace(objetEvenement.objectsListe[i].idObject + "  " + objetEvenement.objectsListe[i].typeObject);
+				   //trace(objetEvenement.objectsListe[i].idObject + "  " + objetEvenement.objectsListe[i].typeObject);
 			   }// end for
 			   
 			break;
@@ -1399,7 +1398,7 @@ class GestionnaireEvenements
 					  					  
 				       _level0.loader.contentHolder["joueur"+(i+1)] = this.listeDesPersonnages[i].nom;
                                               
-					   movClip._x = 510-j*60;
+					   movClip._x = 485 - j*60;
                        movClip._y = 150 + i*60-j*240;
 					   movClip._xscale -= 70;
 					   movClip._yscale -= 70;
@@ -1805,6 +1804,7 @@ class GestionnaireEvenements
 		     	_level0.loader.contentHolder.type_question = objetEvenement.question.type;
 				_level0.loader.contentHolder.box_question.gotoAndPlay(2);
 
+                /*
 				switch(objetEvenement.question.type)
 			 	{
 		     		case "MULTIPLE_CHOICE_5":
@@ -1834,7 +1834,7 @@ class GestionnaireEvenements
 		     		default:
 						trace("Pas bon type de question   "+objetEvenement.question.type);
 					break;
-		 		}
+		 		}*/
 				_root.objGestionnaireInterface.effacerBoutons(1);
             break;
 
@@ -1919,7 +1919,7 @@ class GestionnaireEvenements
 					// le serveur envoie une mauvaise reponse
 					// on efface alors un choix
 					case "Livre":
-						trace("mauvaise reponse (livre) : " +objetEvenement.objetUtilise.mauvaiseReponse);
+						trace("mauvaise reponse (livre) : "  + objetEvenement.objetUtilise.mauvaiseReponse);
 					
 						switch((String)(objetEvenement.objetUtilise.mauvaiseReponse))
 						{
@@ -2095,11 +2095,11 @@ class GestionnaireEvenements
 		var pt:Point = new Point(0,0);
 	
     	trace("*********************************************");
-    	trace("debut de retourRepondreQuestion   "+objetEvenement.resultat);
-    	trace("deplacement accepte oui ou non  :  "+objetEvenement.deplacementAccepte);   
-    	trace("url explication  :  "+objetEvenement.explication);
-    	trace("nouveau pointage  :  "+objetEvenement.pointage);
-    	trace("nouvel argent  :  "+objetEvenement.argent);
+    	trace("debut de retourRepondreQuestion   " + objetEvenement.resultat);
+    	trace("deplacement accepte oui ou non  :  " + objetEvenement.deplacementAccepte);   
+    	trace("url explication  :  " + objetEvenement.explication);
+    	trace("nouveau pointage  :  " + objetEvenement.pointage);
+    	trace("nouvel argent  :  " + objetEvenement.argent);
     	trace("collision  :" + objetEvenement.collision);
 		trace("bonus  : " + objetEvenement.bonus);
       
@@ -2117,8 +2117,9 @@ class GestionnaireEvenements
 			     	pt.definirY(objetEvenement.nouvellePosition.y);
 					
 					trace("juste avant la teleportation param  " +  objetEvenement.nouvellePosition.x + " " +  objetEvenement.nouvellePosition.y);
+					var collision:String = objetEvenement.collision;
 					
-					_level0.loader.contentHolder.planche.obtenirPerso().definirProchainePosition(_level0.loader.contentHolder.planche.calculerPositionTourne(pt.obtenirX(), pt.obtenirY()), objetEvenement.collision);
+					_level0.loader.contentHolder.planche.obtenirPerso().definirProchainePosition(_level0.loader.contentHolder.planche.calculerPositionTourne(pt.obtenirX(), pt.obtenirY()), collision);
 					
 					// modifier le pointage
 					_level0.loader.contentHolder.planche.obtenirPerso().modifierPointage(objetEvenement.pointage);
@@ -2139,7 +2140,7 @@ class GestionnaireEvenements
 						  if(objetEvenement.bonus > 0){
 						     	this.listeDesPersonnages[i].win = 1;
 								//this.listeDesPersonnages[i].pointage += objetEvenement.bonus;
-								_level0.loader.contentHolder.bonusBox.bonus = objetEvenement.bonus;
+								//_level0.loader.contentHolder.bonusBox.bonus = objetEvenement.bonus;
 						  }
 						  
 						  // newsbox
@@ -2531,7 +2532,7 @@ class GestionnaireEvenements
 			trace(i + ": "+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
 		}
 		*/
-		objetEvenement = null;
+		//objetEvenement = null;
     	trace("fin de evenementNouvelleTable");
     	trace("*********************************************\n");
     }
@@ -2814,8 +2815,8 @@ class GestionnaireEvenements
 		 
 		 _level0.loader.contentHolder.gotoAndPlay(4);
 		 
-		 var count:Number = objetEvenement.plateauJeu[0].length;
-	    
+		 var count:Number;// = objetEvenement.plateauJeu[0].length;
+	    /*
         for(i = 0; i < count; i++)
         {
             _level0.loader.contentHolder.tab.push(new Array());
@@ -2824,15 +2825,16 @@ class GestionnaireEvenements
             {
                 _level0.loader.contentHolder.tab[i][j] = objetEvenement.plateauJeu[i][j];
             }
-        }
+        }*/
 
 		// ici on initie les noms et pointages des adversaire (dans le panneau qui descend)
 		// et on met la face de leur avatar a cote de leur nom
 		// Initialise our opponents' name and score
 		// and put the face of our opponents' avatar in the panel (next to their name)
- 				
+ 		
+		/*
 		j = 0;
-		for(i=0; i < maxPlayersInTable; i++)
+		for(i = 0; i < maxPlayersInTable; i++)
 		{
        				
 			if((undefined != this.listeDesPersonnages[i].nom) && !(this.listeDesPersonnages[i].role == 2 && this.typeDeJeu == "Tournament")){
@@ -2840,7 +2842,7 @@ class GestionnaireEvenements
 			  this["tete"+j] = new MovieClip();
 			  j++;
 			}
-		}
+		}*/
 		
 		var maTete:MovieClip;
 		
@@ -2859,11 +2861,12 @@ class GestionnaireEvenements
 		       maTete._x = -7;
 		       maTete._y = -6;
 		       // V3 head size
-		       maTete._xscale = 200;
-		       maTete._yscale = 200;
+		       maTete._xscale = 180;
+		       maTete._yscale = 180;
 				
                 _level0.loader.contentHolder.planche = new PlancheDeJeu(objetEvenement.plateauJeu, this.listeDesPersonnages[i].id, _level0.loader.contentHolder.gestionnaireInterface);
-            }
+				//_level0.loader.contentHolder.planche = new PlancheDeJeu(_level0.loader.contentHolder.tab, this.listeDesPersonnages[i].id, _level0.loader.contentHolder.gestionnaireInterface);
+			}
         }
        
 	    _level0.loader.contentHolder.planche.afficher();
@@ -2884,9 +2887,10 @@ class GestionnaireEvenements
 										
 					// to update clothes color
 					this.listeDesPersonnages[j].clocolor = objetEvenement.positionJoueurs[i].clocolor;
+					trace("test color : " + this.listeDesPersonnages[j].clocolor);
 					
 					// after we create the perso's
-					_level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin, this.listeDesPersonnages[j].role, objetEvenement.positionJoueurs[i].clocolor);
+					_level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin, this.listeDesPersonnages[j].role, this.listeDesPersonnages[j].clocolor);
 		    		//trace("Construction du personnage : " + this.listeDesPersonnages[j].clocolor + " " + objetEvenement.positionJoueurs[i].x + " " + objetEvenement.positionJoueurs[i].y + " idDessin:" + idDessin + " idPers:" + idPers);
 					_level0.loader.contentHolder.referenceLayer["Personnage" + idPers].nom = this.listeDesPersonnages[j].nom;
 				}
@@ -2911,7 +2915,7 @@ class GestionnaireEvenements
         remplirMenuPointage();
 		
 		objetEvenement = null;
-        trace("fin de evenementPartieDemarree    "+getTimer());
+        trace("fin de evenementPartieDemarree    " + getTimer());
         trace("*********************************************\n");
     } 
 	
@@ -2983,11 +2987,10 @@ class GestionnaireEvenements
 				
 			    this.drawUserFrame3(i, cloCol, idDessin, movClip);
 				
-
 				//movClip = _level0.loader.contentHolder.refLayer.loadMovie("perso1.swf","b" + i,i);
-					
 				//movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage" + idDessin,"b" + i, 100*i );
-            	movClip._x = 510 - j*60;
+            	
+				movClip._x = 485 - j*60;
                 movClip._y = 150 + i*60 - j*240;
 				movClip._xscale -= 70;
 				movClip._yscale -= 70;
@@ -3019,8 +3022,7 @@ class GestionnaireEvenements
 			        jouersStarted[i].nomUtilisateur = this.listeDesPersonnages[i].nom;
 			        jouersStarted[i].pointage = this.listeDesPersonnages[i].pointage;
 			        jouersStarted[i].role = this.listeDesPersonnages[i].role;
-					jouersStarted[i].idessin = this.listeDesPersonnages[i].idessin;//this.listeDesPersonnages[i].idessin;
-					
+					jouersStarted[i].idessin = this.listeDesPersonnages[i].idessin;					
 					//trace("Dans menuointage : " + jouersStarted[i].pointage + " " + jouersStarted[i].idessin + " " + this.listeDesPersonnages[i].idessin );
 		}// end for
 		
@@ -3031,8 +3033,6 @@ class GestionnaireEvenements
 		         jouersStarted.removeItemAt(i);
 		}
 		   		
-		trace("MP longeur: " + jouersStarted.length)
-		
 		return jouersStarted.length;
     }
 	
@@ -3042,9 +3042,7 @@ class GestionnaireEvenements
 		trace("*********************************************");
     	trace("debut de remplirMenuPointage   ");
 		trace("type: " + this.typeDeJeu);
-		//trace(this.listeDesPersonnages[1].pointage);
-		
-		
+				
 		// we make an array to sort the players regarding theirs points 
 		var jouersStarted:Array = new Array();
 		var count:Number = this.listeDesPersonnages.length;
@@ -3059,13 +3057,10 @@ class GestionnaireEvenements
 					//trace("Dans menuointage : " + jouersStarted[i].nomUtilisateur + " " + this.listeDesPersonnages[i].nom );
 		}// end for
 		
-		//jouersStarted.sortOn("pointage");
 		//sort the elements using a compare function
 		jouersStarted.sort(compareByPointsDescending);
 		//jouersStarted.reverse();
-		
-		
-		
+				
 		// mettre les id en ordre : tabOrdonne.id contient les id des personnages en ordre de pointage
 		// il suffit de mettre les MC correspondants sur le podium
 		
