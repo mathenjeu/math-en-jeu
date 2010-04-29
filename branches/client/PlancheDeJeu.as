@@ -95,8 +95,8 @@ class PlancheDeJeu
     {
         var i:Number;
 		this.mat = new Array(tab.length);
-		var count:Number = tab.length;
-        for(i = 0; i < count; i++)
+		//var count:Number = tab.length;
+        for(i in tab)
         {
 			this.mat[i] = new Array(tab[i].length);
             this.tableauDesCases.push(new Array());
@@ -112,7 +112,7 @@ class PlancheDeJeu
 	function getPersonnageByName(playerName:String):Personnage
 	{
 		var count:Number = tableauDesPersonnages.length; 
-		for(var i:Number = 0; i < count; i++)
+		for(var i in tableauDesPersonnages)
 		{
 			
 		   if(tableauDesPersonnages[i].obtenirNom() == playerName){
@@ -187,13 +187,15 @@ class PlancheDeJeu
         hauteurDeCase = clipTest._height * 0.850111857;
         clipTest.removeMovieClip();
         ////////////////////////////////////////////////////////////////////////////////////////
-		var count:Number = this.mat.length;
-        for(i=0; i < count; i++)
+		//var count:Number = this.mat.length;
+		i = 0;
+        for(var l in this.mat)
         {
-            x = i*largeurDeCase/2 + largeurDeCase/2;
+			x = i*largeurDeCase/2 + largeurDeCase/2;
             y = 200 + i*hauteurDeCase/2;
-			var countS:Number = this.mat[0].length;
-            for(j=0; j < countS; j++)
+			//var countS:Number = this.mat[0].length;
+			j = 0;
+            for(var s in this.mat[0])
             {
                 pt.definirX(x);
                 pt.definirY(y);
@@ -216,7 +218,9 @@ class PlancheDeJeu
                 }
                 x = x + largeurDeCase/2;
                 y = y - hauteurDeCase/2;
+				j++;
             }
+			i++;
         }
     }
 
@@ -227,11 +231,11 @@ class PlancheDeJeu
         var i:Number;
         var j:Number;
         // on initie les tableaux 
-		var count:Number = tab.length;
-        for(i = 0; i < count; i++)
+		//var count:Number = tab.length;
+        for(i in tab)
         {
-			var countS:Number = tab[0].length;
-            for(j = 0; j < countS; j++)
+			//var countS:Number = tab[0].length;
+            for(j in tab[0])
             {
                 this.mat[i][j] = tab[i][j];
                 //trace("ds definirMat  mat   tab i  j  mat  tab :    "+i+"   "+j+"   "+this.mat[i][j]+"     "+tab[i][j]);
@@ -524,11 +528,11 @@ class PlancheDeJeu
             diffY = 200 - this.tableauDesCases[l][c].obtenirClipCase()._y;
 		}
 		
-		var count:Number = this.tableauDesCases.length;
-		for(i = 0; i < count; i++)
+		//var count:Number = this.tableauDesCases.length;
+		for(i in this.tableauDesCases )
         {
-			var countS:Number = this.tableauDesCases[0].length;
-            for(j = 0; j < countS; j++)
+			//var countS:Number = this.tableauDesCases[0].length;
+            for(j in this.tableauDesCases[0])
             {
                 if(this.tableauDesCases[i][j] != null)
                 {

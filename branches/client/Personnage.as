@@ -122,7 +122,7 @@ class Personnage
 		//trace("debut afficherObjets\n**********")
 		for(var nom:String in listeDesObjets)
 		{
-			for(i = 0; i < listeDesObjets[nom].length; i++) 
+			for(i in listeDesObjets[nom]) 
 			trace(listeDesObjets[nom][i] + " - id : ");
 		}
 		//trace("**********\nfin afficherObjets")   
@@ -548,16 +548,14 @@ class Personnage
         mclListener.onLoadComplete = function(target_mc:MovieClip) {
             
 		    target_mc.nom = nom;
+			target_mc.clothesCol = cloColor;
+			target_mc.gotoAndStop(1);
+			//trace(" new color 2!!! " + target_mc.clothesCol)
 			
 			// assure que le clip a la bonne orientation
 			target_mc._xscale = - Math.abs(target_mc._xscale);
 			target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
 			target_mc.dtNom._x = 42;
-			
-			target_mc.clothesCol = cloColor;
-			target_mc.gotoAndStop(1);
-			//trace(" new color 2!!! " + target_mc.clothesCol)
-			
         };
 		myLoader.addListener(mclListener);
 
@@ -604,7 +602,7 @@ class Personnage
 		dx = this.prochainePosition.obtenirX() - this.position.obtenirX();  
 		dy = this.prochainePosition.obtenirY() - this.position.obtenirY();
 		
-		trace("ds deplacePersonnage " + dx + " " + dy);
+		//trace("ds deplacePersonnage " + dx + " " + dy);
 		
 		if( boardCentre ) //dx == 0 && dy == 0 && image._currentFrame == 1) 
 		{
@@ -858,7 +856,7 @@ class Personnage
 		}
 		
 				
-		trace("trace drift dx : " + dx + " dy : " + dy + " control : " + dx/dy);
+		//trace("trace drift dx : " + dx + " dy : " + dy + " control : " + dx/dy);
 		if (dy < 0)
 		{
 			if(image._currentFrame < 70)
@@ -937,14 +935,14 @@ class Personnage
 		
 		this.l = pt.obtenirX();
 		this.c = pt.obtenirY();
-		trace("definirProchainePosition : pt " + pt.obtenirY());
+		//trace("definirProchainePosition : pt " + pt.obtenirY());
   
 		_level0.loader.contentHolder.planche.tableauDesCases[this.l][this.c].ajouterPersonnage(this);
 		
 		this.prochainePosition.definirX(_level0.loader.contentHolder.planche.tableauDesCases[this.l][this.c].obtenirClipCase()._x);
 		this.prochainePosition.definirY(_level0.loader.contentHolder.planche.tableauDesCases[this.l][this.c].obtenirClipCase()._y);
 		
-		trace("definirProchainePosition : def Y " + _level0.loader.contentHolder.planche.tableauDesCases[this.l][this.c].obtenirClipCase()._y);
+		//trace("definirProchainePosition : def Y " + _level0.loader.contentHolder.planche.tableauDesCases[this.l][this.c].obtenirClipCase()._y);
 		
 		this.faireCollision = str;
 		this.boardCentre = false;
