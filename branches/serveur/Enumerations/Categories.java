@@ -71,6 +71,15 @@ public enum Categories{
 	 categorie_level_94(94),
 	 categorie_level_95(95),
 	 
+	 categorie_level_101(101),
+	 categorie_level_102(102),
+	 categorie_level_103(103),
+	 categorie_level_104(104),
+	 
+	 categorie_level_111(111),
+	 categorie_level_112(112),
+	 categorie_level_113(113),
+	 
 	 categorie_level_510(510),
 	 categorie_level_511(511),
 	 categorie_level_512(512),
