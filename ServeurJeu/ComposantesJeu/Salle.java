@@ -84,7 +84,7 @@ public class Salle
 	private final int masterTime;
 	
 	//use all general categories or only room's specyfied categories
-	private final boolean roomCategories;
+	//private final boolean roomCategories;
 	
 	//specifyed room's categories
 	private final ArrayList<Integer> categories;
@@ -110,8 +110,7 @@ public class Salle
 	 */
 	public Salle(String nomSalle, String nomUtilisateurCreateur, String motDePasse, 
 				 Regles reglesSalle, ControleurJeu controleurJeu, String gameType, 
-				 int roomID, Date beginDate, Date endDate, int masterTime, 
-				 boolean roomCategories)
+				 int roomID, Date beginDate, Date endDate, int masterTime)
 	{
 		super();
 		
@@ -134,7 +133,7 @@ public class Salle
         this.setBeginDate(beginDate);
         this.setEndDate(endDate);
         this.masterTime = masterTime;
-        this.roomCategories = roomCategories;
+        //this.roomCategories = roomCategories;
         
         categories = new ArrayList<Integer>();
 		
@@ -888,10 +887,10 @@ public class Salle
 	public int getMasterTime() {
 		return masterTime;
 	}
-
+/*
 	public boolean isRoomCategories() {
 		return roomCategories;
-	}
+	}*/
 
 	public ArrayList<Integer> getCategories() {
 		return categories;
@@ -909,20 +908,45 @@ public class Salle
 
 	}// end methode
 	
+	/**
+	 * Method used to set categories of questions used in this game
+	 * @param categoriesString
+	 */
 	public void setCategories(String categoriesString)
 	{
-
+        
 		if(categoriesString != null){
+			System.out.println("string cat : " + categoriesString);		
 			StringTokenizer cat = new StringTokenizer(categoriesString, ":");
-			while(cat.hasMoreTokens())
+			int whatCategories = Integer.parseInt(cat.nextToken());
+			System.out.println("string cat bool : " + whatCategories);
+			// if whatCategories == 1 we take only categories from BD
+			if(whatCategories == 1){
+				while(cat.hasMoreTokens())
+				{
+					categories.add(Integer.parseInt(cat.nextToken()));
+				}
+			}else if(whatCategories == 0)
+			// we take categories from enum without categories from BD
 			{
-				categories.add(Integer.parseInt(cat.nextToken()));
-			}
-		}
+				setCategories();
+				while(cat.hasMoreTokens())
+				{
+					Integer i = Integer.parseInt(cat.nextToken());
+					categories.remove(i);
+					System.out.println("string cat int : " + i);
+				}
+			}else setCategories(); 	
+		}else setCategories(); 		// if string == null
+		
+		// to not be without any categories
+		if( categories.isEmpty()) setCategories(); 
+		
 		ListIterator<Integer> it = categories.listIterator();	
 		while(it.hasNext())
 			System.out.println(it.next());
 	}// end mathode
+	
 
 	private void setLastNumber(int lastNumber) {
 		this.lastNumber = lastNumber;

@@ -264,7 +264,8 @@ public class GestionnaireBD
 		int cle = player.obtenirCleJoueur();
 		
 		// on prend dans BD les niveaux scolaires du joueur en utilisant les Categories de la salle
-		
+		// commited code - is used single level
+		/*
 		ArrayList<Integer> cat = salle.getCategories();
 		int[] cleNiveau =  new int[cat.size()];
 		ListIterator<Integer> it = cat.listIterator();		
@@ -292,6 +293,38 @@ public class GestionnaireBD
 		catch (Exception e)
 		{
 			System.out.println(GestionnaireMessages.message("bd.erreur_adding_info_subject_user") + e.getMessage());
+		}
+		*/
+		
+		ArrayList<Integer> cat = salle.getCategories();
+		int[] cleNiveau =  new int[cat.size()];
+		int niveau = 0;
+		try
+		{
+			
+			
+				synchronized(requete)
+				{
+					// we take level only for categorie 0 - the all level is the same now
+					ResultSet rs = requete.executeQuery("SELECT user_subject_level.level  FROM user_subject_level " +
+					" WHERE  user_subject_level.user_id = " + cle + " AND user_subject_level.category_id = 0;");
+					if(rs.next())
+					{
+						niveau = rs.getInt("level");
+						//System.out.println("level : " + cleNiveau[i] + " " + i);
+	    			}
+					
+				}
+
+			
+		}
+		catch (Exception e)
+		{
+			System.out.println(GestionnaireMessages.message("bd.erreur_adding_info_subject_user") + e.getMessage());
+		}
+		for(int i = 0; i < cleNiveau.length; i++)
+		{
+			cleNiveau[i] = niveau;
 		}
 		
 		player.definirCleNiveau(cleNiveau);
@@ -379,6 +412,7 @@ public class GestionnaireBD
 		ListIterator<Integer> it = cat.listIterator();		
         
 		int[] niveau = player.obtenirCleNiveau();
+		//int level = niveau[0];
 		// pour chaque catégorie on prend le niveau scolaire du joueur
         for(int i = 0; i < cat.size(); i++)
 		{
@@ -467,7 +501,7 @@ public class GestionnaireBD
 						int difficulte = rs.getInt("value");
 						String reponse = "" + countReponse;
 
-						System.out.println("MC : question " + typeQuestion + " " + codeQuestion + " " + difficulte);
+						//System.out.println("MC : question " + typeQuestion + " " + codeQuestion + " " + difficulte);
 						String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
 						// System.out.println(URL+explication);
 						boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, categorie));
@@ -896,7 +930,6 @@ public class GestionnaireBD
 	    Date beginDate = null;
 	    Date endDate = null;
 	    int masterTime = 0;
-	    boolean roomCategories = false;
 	    String categoriesString = "";
 	    
 		//now fill all the rooms with properties and add this rooms to the game
@@ -906,7 +939,7 @@ public class GestionnaireBD
 			for (int room : rooms){
 				synchronized( requete )
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, game_type.name, beginDate, endDate, masterTime, roomCategories, categories " +
+					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, game_type.name, beginDate, endDate, masterTime, categories " +
 							" FROM room_info, room, user, game_type " +
 							" WHERE room.room_id = " + room +  
 							" AND room.room_id = room_info.room_id " +
@@ -915,7 +948,6 @@ public class GestionnaireBD
 					if(rs.next())
 					{
 						categoriesString = rs.getString("categories");
-						roomCategories = rs.getBoolean("roomCategories");
 						motDePasse = rs.getString("password");
 						createur = rs.getString("user.username");
 						gameType = rs.getString("game_type.name");
@@ -929,21 +961,13 @@ public class GestionnaireBD
 						
 						Regles objReglesSalle = new Regles();
 						chargerRegllesSalle(objReglesSalle, room);
-						Salle objSalle = new Salle(nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType, room, beginDate, endDate, masterTime, roomCategories);
+						Salle objSalle = new Salle(nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType, room, beginDate, endDate, masterTime);
 						objSalle.setRoomDescription(roomDescription);
 						
-						// bloc to fill room's categories
-						if (roomCategories)
-						{
-                            objSalle.setCategories(categoriesString);
-						}else{
-							// for general Categories we use enum Categories
-					 		objSalle.setCategories();
-					 	}
-						
+						objSalle.setCategories(categoriesString);
+												
 						objControleurJeu.ajouterNouvelleSalle(objSalle);
-						 
-						
+											
 						objControleurJeu.preparerEvenementNouvelleSalle(nom, objSalle.protegeeParMotDePasse(), createur, gameType, 
 								           roomDescription, objReglesSalle.getMaxNbPlayers(), masterTime, room);
 						
@@ -1971,7 +1995,6 @@ public class GestionnaireBD
 	    Date beginDate = null;
 	    Date endDate = null;
 	    int masterTime = 0;
-	    boolean roomCategories = false;
 	    String categoriesString = "";
 	    
 		//now fill all the rooms with properties and add this rooms to the list
@@ -1980,7 +2003,7 @@ public class GestionnaireBD
 			{
 				synchronized( requete )
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, game_type.name, beginDate, endDate, masterTime, roomCategories, categories " +
+					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, game_type.name, beginDate, endDate, masterTime, categories " +
 							" FROM room_info, room, user, game_type " +
 							" WHERE room.room_id = " + room +  
 							" AND room.room_id = room_info.room_id " +
@@ -1989,7 +2012,6 @@ public class GestionnaireBD
 					if(rs.next())
 					{
 						categoriesString = rs.getString("categories");
-						roomCategories = rs.getBoolean("roomCategories");
 						motDePasse = rs.getString( "password" );
 						createur = rs.getString("user.username");
 						gameType = rs.getString("game_type.name");
@@ -2003,18 +2025,12 @@ public class GestionnaireBD
 														
 						Regles objReglesSalle = new Regles();
 						chargerRegllesSalle(objReglesSalle, room);
-						Salle objSalle = new Salle(nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType, room, beginDate, endDate, masterTime, roomCategories);
+						Salle objSalle = new Salle(nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType, room, beginDate, endDate, masterTime);
 						objSalle.setRoomDescription(roomDescription);
 						
 						// bloc to fill room's categories
-						if (roomCategories)
-						{
-                            objSalle.setCategories(categoriesString);
-						}else{
-							// for general Categories we use enum Categories
-					 		objSalle.setCategories();
-					 	}
-											
+						objSalle.setCategories(categoriesString);
+																	
 						lstSalles.put(room, objSalle);
 					}   
 

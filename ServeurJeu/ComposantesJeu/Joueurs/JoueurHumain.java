@@ -249,7 +249,7 @@ public class JoueurHumain extends Joueur
 		objPartieCourante.enleverObjet(intIdObjet, strTypeObjet);
 	}
 
-
+    
 	public int[] obtenirCleNiveau() 
 	{
 		return cleNiveau;
@@ -258,7 +258,7 @@ public class JoueurHumain extends Joueur
 	public void definirCleNiveau(int[] cleNiveau) 
 	{
 		this.cleNiveau = cleNiveau;
-	}
+	} 
 	
 	/**
 	 * @return the role
