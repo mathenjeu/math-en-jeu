@@ -362,8 +362,8 @@ class Case
 			this.casePossible._y += ha;
 		}
 
-        var count:Number = this.listeDesPersonnages.length;
-		for(i = 0; i < count; i++)
+        //var count:Number = this.listeDesPersonnages.length;
+		for(i in this.listeDesPersonnages)
 		{
 			this.listeDesPersonnages[i].translater(la, ha);
 		}
@@ -437,8 +437,8 @@ class Case
 				this.casePossible._yscale += valeur;
 			}
 		
-            var count:Number = this.listeDesPersonnages.length;
-			for(i = 0; i < count; i++)
+            //var count:Number = this.listeDesPersonnages.length;
+			for(i in this.listeDesPersonnages)
 			{
 				this.listeDesPersonnages[i].zoomer(valeur);
 			}

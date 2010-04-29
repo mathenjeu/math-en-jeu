@@ -21,8 +21,8 @@ for (var i:Number = 0; i < count; i++) {
 								
 }// end for
 
-count = bananaPlayers.length;
-for (i = 0; i < count; i++) {
+//count = bananaPlayers.length;
+for (i in bananaPlayers) {
 	if((bananaPlayers[i].role == 2 || bananaPlayers[i].role == 3) && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")
 	   bananaPlayers.removeItemAt(i);
 }// end for
