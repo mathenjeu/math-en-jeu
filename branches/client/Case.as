@@ -60,13 +60,13 @@ class Case
 		
 		if((nb >= 91)&&(nb <= 95))
 		{
-			this.clipCase = _level0.loader.contentHolder.referenceLayer.attachMovie("case91", "case"+temp, temp);
+			this.clipCase = _level0.loader.contentHolder.referenceLayer.attachMovie("case91", "case"+temp, temp, {_width:120, _height:44.7});
 			
 			this.miniGame = true;
 		}
 		else
 		{
-			this.clipCase = _level0.loader.contentHolder.referenceLayer.attachMovie("case0", "case"+temp, temp);
+			this.clipCase = _level0.loader.contentHolder.referenceLayer.attachMovie("case0", "case"+temp, temp,{_width:120, _height:44.7});
 			//this.clipCase._width = 120;
 			//this.clipCase._height = 48;
 			this.miniGame = false;

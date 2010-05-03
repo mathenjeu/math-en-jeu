@@ -108,7 +108,7 @@ class ObjetSurCase
 		switch(nom)
 		{
 			case "Livre":
-				image = _level0.loader.contentHolder.referenceLayer.attachMovie("Livre", "Livre", niveau);  
+				image = _level0.loader.contentHolder.referenceLayer.attachMovie("Livre", "Livre", niveau, {_width:34.25, _height:34.25});  
 				image._visible = false;
 				valeur = 1;
 			break;			
@@ -125,7 +125,7 @@ class ObjetSurCase
 			break;
 
 			case "Boule":
-				image = _level0.loader.contentHolder.referenceLayer.attachMovie("Boule", "Boule", niveau);  
+				image = _level0.loader.contentHolder.referenceLayer.attachMovie("Boule", "Boule", niveau,{_width:34.25, _height:34.25} );  
 				image._visible = false;
 				valeur = 4;
 			break;
@@ -143,7 +143,7 @@ class ObjetSurCase
 			break;
 			
 			case "Banane":
-				image = _level0.loader.contentHolder.referenceLayer.attachMovie("Banane", "Banane", niveau);  
+				image = _level0.loader.contentHolder.referenceLayer.attachMovie("Banane", "Banane", niveau, {_width:34.25, _height:34.25});  
 				image._visible = false;
 				valeur = 7;
 			break;

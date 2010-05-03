@@ -66,7 +66,7 @@ class Magasin
 	// constructeur
 	function Magasin(n:String, niveau:Number)
 	{
-		image = _level0.loader.contentHolder.referenceLayer.attachMovie(n, "magasin"+niveau, niveau);  
+		image = _level0.loader.contentHolder.referenceLayer.attachMovie(n, "magasin" + niveau, niveau);  
 		image._visible = false;
 		nom = n;
 	}

@@ -32,6 +32,7 @@ import mx.transitions.Transition;
 
 class PlancheDeJeu
 {
+	/*
 	// if changes here, change also in Case.as
 	// colors used for the different cell (question) categories
 	private var CLR_1:Number = 0x845f1d;
@@ -42,7 +43,7 @@ class PlancheDeJeu
 	private var CLR_6:Number = 0x115599;
 	private var CLR_7:Number = 0x3579bd;
 	private var CLR_8:Number = 0xd1f548;
-					
+    */				
     private var mat:Array;
     private var tableauDesCases:Array = new Array();
     private var hauteurDeCase:Number = -1;
@@ -493,12 +494,12 @@ class PlancheDeJeu
         var p:Personnage;
         //trace("ajouterPersonnage:" + nom + " niveau:" + (5*tableauDesCases.length*tableauDesCases[0].length+2*num) + " idPers:" + num + " idDessin:" + idClip);
         p = new Personnage(idPers, nom, userRole, 5 * tableauDesCases.length * tableauDesCases[0].length + 2 * idPers, idClip ,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y ,cloColor);
-        p.afficher();
+       
 		
         tableauDesCases[ll][cc].ajouterPersonnage(p);
 	
 		this.tableauDesPersonnages.push(p);
-	
+	    p.afficher();
         if(idPers == monPersonnage)
         {
             perso = p;

@@ -392,10 +392,10 @@ class Personnage
 	////////////////////////////////////////////////////////////
 	function definirPosition(p:Point, ll:Number, cc:Number)
 	{
-		trace("test drift :" + image._x + " " + image._y);
+		//trace("test drift :" + image._x + " " + image._y);
 		image._x = p.obtenirX();
 		image._y = p.obtenirY();
-		trace("test drift after :" + image._x + " " + image._y);
+		//trace("test drift after :" + image._x + " " + image._y);
 		this.position.definirX(p.obtenirX());
 		this.position.definirY(p.obtenirY());
 		this.l = ll;
@@ -546,16 +546,20 @@ class Personnage
 		
 		var mclListener:Object = new Object();
         mclListener.onLoadComplete = function(target_mc:MovieClip) {
-            
+            target_mc.clothesCol = cloColor;
 		    target_mc.nom = nom;
-			target_mc.clothesCol = cloColor;
-			target_mc.gotoAndStop(1);
-			//trace(" new color 2!!! " + target_mc.clothesCol)
+			
+			
+			//trace(" new color 2!!! " + target_mc.clothesCol);
+			
 			
 			// assure que le clip a la bonne orientation
 			target_mc._xscale = - Math.abs(target_mc._xscale);
 			target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
 			target_mc.dtNom._x = 42;
+			
+			target_mc.gotoAndPlay(10);
+			target_mc.gotoAndStop(1);
         };
 		myLoader.addListener(mclListener);
 
@@ -565,7 +569,7 @@ class Personnage
   
            image =  _level0.loader.contentHolder.referenceLayer.createEmptyMovieClip("Personnage" + idPers, niveau);
 		    myLoader.loadClip("perso" + nomClip + ".swf", image); 
-		
+					
 		}
 				
 		this.pointage = 0;

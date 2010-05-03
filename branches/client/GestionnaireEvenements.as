@@ -2871,7 +2871,7 @@ class GestionnaireEvenements
        
 	    _level0.loader.contentHolder.planche.afficher();
         
-		trace("longueur de la liste des noms envoyes par serveur    :" + objetEvenement.positionJoueurs.length);
+		//trace("longueur de la liste des noms envoyes par serveur    :" + objetEvenement.positionJoueurs.length);
 		var count1 = objetEvenement.positionJoueurs.length;
         for(i = 0; i < count1; i++)
         {
@@ -2881,18 +2881,18 @@ class GestionnaireEvenements
 	            //trace(this.listeDesPersonnages[j].nom+" : "+objetEvenement.positionJoueurs[i].nom);
                 if(this.listeDesPersonnages[j].nom == objetEvenement.positionJoueurs[i].nom)
                 {
+					// to update clothes color
+					this.listeDesPersonnages[j].clocolor = objetEvenement.positionJoueurs[i].clocolor;
+					//trace("test color : " + this.listeDesPersonnages[j].clocolor);
 	                var idDessin:Number = calculatePicture(this.listeDesPersonnages[j].id);
 					var idPers:Number = calculateIDPers(this.listeDesPersonnages[j].id, idDessin);
 					this.listeDesPersonnages[i].idPers = idPers;
 										
-					// to update clothes color
-					this.listeDesPersonnages[j].clocolor = objetEvenement.positionJoueurs[i].clocolor;
-					trace("test color : " + this.listeDesPersonnages[j].clocolor);
 					
 					// after we create the perso's
 					_level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin, this.listeDesPersonnages[j].role, this.listeDesPersonnages[j].clocolor);
 		    		//trace("Construction du personnage : " + this.listeDesPersonnages[j].clocolor + " " + objetEvenement.positionJoueurs[i].x + " " + objetEvenement.positionJoueurs[i].y + " idDessin:" + idDessin + " idPers:" + idPers);
-					_level0.loader.contentHolder.referenceLayer["Personnage" + idPers].nom = this.listeDesPersonnages[j].nom;
+					//_level0.loader.contentHolder.referenceLayer["Personnage" + idPers].nom = this.listeDesPersonnages[j].nom;
 				}
             }
         }
