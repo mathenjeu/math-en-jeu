@@ -81,7 +81,7 @@ class Piece
 	////////////////////////////////////////////////////////////
 	function Piece(niveau:Number)
 	{ 
-		image = _level0.loader.contentHolder.referenceLayer.attachMovie("piece", "piece"+niveau, niveau); 
+		image = _level0.loader.contentHolder.referenceLayer.attachMovie("piece", "piece"+niveau, niveau, {_width:12.85, _height:26.25}); 
 		image._visible = false;
 		valeur = 1;
 	}
