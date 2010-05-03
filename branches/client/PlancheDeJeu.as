@@ -645,7 +645,7 @@ class PlancheDeJeu
 		{
 		   mClip = laCase.obtenirClipCase().minigame.interieur;
 		   mClip.attachMovie("flashCase", "Alpha", mClip.getNextHighestDepth());
-		   mClip.Alpha._alpha = 75;
+		   //mClip.Alpha._alpha = 75;
 		}
 		else
 		{
@@ -667,7 +667,7 @@ class PlancheDeJeu
 		{
 		   mClip = laCase.obtenirClipCase().minigame.interieur;
 		   mClip.attachMovie("flashCaseBran", "Alpha", mClip.getNextHighestDepth());
-		   mClip.Alpha._alpha = 75;
+		   //mClip.Alpha._alpha = 75;
 		}
 		else
 		{
@@ -689,7 +689,7 @@ class PlancheDeJeu
 		{
 		   mClip = laCase.obtenirClipCase().minigame.interieur;
 		   mClip.attachMovie("flashCaseBanana", "Alpha", mClip.getNextHighestDepth());
-		   mClip.Alpha._alpha = 75;
+		   //mClip.Alpha._alpha = 75;
 		}
 		else
 		{
@@ -842,17 +842,17 @@ class PlancheDeJeu
 					//trace("ds if,  level  "+level);
 					if(tableauDesCases[temp][p.obtenirC()].obtenirType() > 40000)
 					{
-					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
+					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level, {_width:116, _height:36.25});
 					   tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();
 					}else{
-					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
+					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level, {_width:116, _height:36.25});
 					   brille._alpha = 0;
 					}
 					brille._x = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._x;
 					brille._y = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._y;
-					brille._width = largeurDeCase/0.55;
-					brille._height = hauteurDeCase/0.55;//0.85
-					//trace("ICI INFO DRIFT : " + largeurDeCase/hauteurDeCase );
+					//brille._width = largeurDeCase;///0.55;
+					//brille._height = hauteurDeCase;///0.55;//0.85
+					
 					brille._ligne = new Object();
 					brille._colonne = new Object();
 					brille._ligne = temp;
@@ -915,7 +915,7 @@ class PlancheDeJeu
 					// trace("ds if,  level:  "+level);
 					if(tableauDesCases[temp][p.obtenirC()].obtenirType() > 40000 ){
 					   
-					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
+					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level, {_width:116, _height:36.25});
 					   tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();
 					}else{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
@@ -924,8 +924,8 @@ class PlancheDeJeu
 					//brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					brille._x = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._x;
 					brille._y = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._y;
-					brille._width = largeurDeCase/0.55;
-					brille._height = hauteurDeCase/0.55;//0.85;
+					//brille._width = largeurDeCase;///0.55;
+					//brille._height = hauteurDeCase;//0.55;//0.85;
 					brille._ligne = new Object();
 					brille._colonne = new Object();
 					brille._ligne = temp;
@@ -980,7 +980,7 @@ class PlancheDeJeu
 					level = (tableauDesCases.length*tableauDesCases[0].length) + Number(p.obtenirL()*tableauDesCases[0].length) + temp + Number(1);
 					//trace("ds if : level :   "+level);
 					if(tableauDesCases[p.obtenirL()][temp].obtenirType() > 40000){
-					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
+					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level, {_width:116, _height:36.25});
 					   tableauDesCases[p.obtenirL()][temp].obtenirWinTheGame().shineWin();
 					}else{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
@@ -989,8 +989,8 @@ class PlancheDeJeu
 					//brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					brille._x = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._x;
 					brille._y = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._y;
-					brille._width = largeurDeCase/0.55;
-					brille._height = hauteurDeCase/0.55;//0.85;
+					//brille._width = largeurDeCase;///0.55;
+					//brille._height = hauteurDeCase;//0.55;//0.85;
 					brille._ligne = new Object();
 					brille._colonne = new Object();
 					brille._ligne = p.obtenirL();
@@ -1044,7 +1044,7 @@ class PlancheDeJeu
 					level = (tableauDesCases.length*tableauDesCases[0].length) + (Number(p.obtenirL())*tableauDesCases[0].length)+temp+Number(1);
 					//trace("ds if,  level: "+level);
 					if(tableauDesCases[p.obtenirL()][temp].obtenirType() > 40000){
-					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level);
+					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level, {_width:116, _height:36.25});
 					   tableauDesCases[p.obtenirL()][temp].obtenirWinTheGame().shineWin();
 					}else{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
@@ -1053,8 +1053,8 @@ class PlancheDeJeu
 					//brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					brille._x = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._x;
 					brille._y = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._y;
-					brille._width = largeurDeCase/0.55;
-					brille._height = hauteurDeCase/0.55;//0.85;
+					//brille._width = largeurDeCase;//0.55;
+					//brille._height = hauteurDeCase;//0.55;//0.85;
 					brille._ligne = new Object();
 					brille._colonne = new Object();
 					brille._ligne = p.obtenirL();
@@ -1211,14 +1211,12 @@ class PlancheDeJeu
 		{
 			mc.createEmptyMovieClip("valDeplace", 999)
 			mc.valDeplace = _level0.loader.contentHolder.referenceLayer.attachMovie("ptsTxt", "ptsTxt_mc", 999 );
-			//mc.valDeplace._x = p.obtenirX();
-			//mc.valDeplace._y = p.obtenirY()-150;
+			
 			mc.valDeplace._x = brille._x;
 			mc.valDeplace._y = brille._y;
 				
 			mc.valDeplace.valeur = Math.abs(p.obtenirL() - dx);
-			mc.valDeplace._alpha = 100;
-				
+							
 			switch(mc.valDeplace.valeur)
 			{
 				case 1:
@@ -1266,7 +1264,7 @@ class PlancheDeJeu
 			mc.valDeplace._y = brille._y;
 		
 			mc.valDeplace.valeur = Math.abs(p.obtenirC() - dy);
-			mc.valDeplace._alpha = 100;
+			//mc.valDeplace._alpha = 100;
 			
 			switch(mc.valDeplace.valeur)
 			{

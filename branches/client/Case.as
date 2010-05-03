@@ -288,7 +288,7 @@ class Case
 	function effacerCasePossible()
 	{
 		this.casePossible.removeMovieClip();
-		this.casePossible = null;
+		delete this.casePossible;
 		this.winTheGame.removeShineWin();
 	}
 

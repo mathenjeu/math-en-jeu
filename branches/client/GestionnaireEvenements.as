@@ -78,6 +78,7 @@ class GestionnaireEvenements
 	
 	private var braniacState:String;
 	private var bananaState:Boolean;
+	private var winIt:Number;
 	
 	//used to color clothes of our perso
 	private var colorIt:String;
@@ -199,6 +200,7 @@ class GestionnaireEvenements
 		this.newsChat = new NewsBox();
 		this.colorIt = "0";
 		this.bananaState = false;
+		this.winIt = 0;
 				
         this.objGestionnaireCommunication = new GestionnaireCommunication(Delegate.create(this, this.evenementConnexionPhysique), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
 	
@@ -2139,6 +2141,7 @@ class GestionnaireEvenements
 						  // if we have bonus in the tournament game  we must treat this
 						  if(objetEvenement.bonus > 0){
 						     	this.listeDesPersonnages[i].win = 1;
+								 this.winIt = 1;
 								//this.listeDesPersonnages[i].pointage += objetEvenement.bonus;
 								//_level0.loader.contentHolder.bonusBox.bonus = objetEvenement.bonus;
 						  }
@@ -3267,12 +3270,13 @@ class GestionnaireEvenements
 		   for(var i:Number=0; i < count; i++){
 					
 			   if(this.listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur){
-			      this.listeDesPersonnages[i].pointage = objetEvenement.pointage;
+			      
+				  this.listeDesPersonnages[i].pointage = objetEvenement.pointage;
 				  
 				  // to put the flag
 				  if(objetEvenement.bonus > 0)
 		          {
-			         this.listeDesPersonnages[i].win = 1;
+			         this.listeDesPersonnages[i].win = 1;					
 		          }
 			   }
 		   }
