@@ -3443,9 +3443,6 @@ class GestionnaireEvenements
 	// after the time finished it must disapear
 	function setBraniacTimer(playerUnder)
 	{
-		
-		
-		
 		//first on put on the sprite the box for the timer if is our perso
 		if(playerUnder == this.nomUtilisateur)
 		{
@@ -3965,6 +3962,24 @@ function drawUserFrame3(i:Number, colorC:String, idDessin:Number, movClip:MovieC
 	   
 	   this["mcLoaderString"].loadClip("persox" + idDessin + ".swf", movClip);
 }
+/*
+ * Methode used to verify if all users are seted theirs perso's
+ */
+function testPlayers():Boolean
+{
+   	var verify:Boolean = true;
+	var count:Number = this.listeDesPersonnages.length;
+	for (var i:Number = 0; i < count; i++) {
+		if(this.listeDesPersonnages[i].id == 0 || this.listeDesPersonnages[i].idessin == 0 ||
+    		 this.listeDesPersonnages[i].id == undefined || this.listeDesPersonnages[i].idessin == undefined){
+			verify = false;
+		}
+		trace("test verify : " + this.listeDesPersonnages[i].id + " " + this.listeDesPersonnages[i].idessin);
+	}
+	trace(" verify " + verify);
+	return verify;
+}// end methode
+
 
 // to take a good Id for our perso 
 /*
