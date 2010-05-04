@@ -548,18 +548,16 @@ class Personnage
         mclListener.onLoadComplete = function(target_mc:MovieClip) {
             target_mc.clothesCol = cloColor;
 		    target_mc.nom = nom;
-			
-			
+						
 			//trace(" new color 2!!! " + target_mc.clothesCol);
-			
+					
+			target_mc.gotoAndPlay(10);
+			target_mc.gotoAndStop(1);
 			
 			// assure que le clip a la bonne orientation
 			target_mc._xscale = - Math.abs(target_mc._xscale);
 			target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
 			target_mc.dtNom._x = 42;
-			
-			target_mc.gotoAndPlay(10);
-			target_mc.gotoAndStop(1);
         };
 		myLoader.addListener(mclListener);
 
