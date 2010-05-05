@@ -28,6 +28,7 @@ import mx.controls.Alert;
 import flash.utils.*;
 import flash.geom.Transform;
 import flash.geom.ColorTransform;
+import flash.filters.ColorMatrixFilter;
 import NewsBox;
 
 class GestionnaireEvenements
@@ -2861,11 +2862,13 @@ class GestionnaireEvenements
 				// put the face of my avatar in the panel (next to my name)
 		
 		       maTete = _level0.loader.contentHolder.maTete.attachMovie("tete" + idDessin, "maTete", -10099);
-		       maTete._x = -7;
-		       maTete._y = -6;
+		       maTete._x = -5;
+		       maTete._y = -30;
 		       // V3 head size
-		       maTete._xscale = 180;
-		       maTete._yscale = 180;
+		       maTete._xscale = 290;
+		       maTete._yscale = 290;
+			   
+			   colorItMatrix(this.colorIt, maTete.headClo, idDessin);
 				
                 _level0.loader.contentHolder.planche = new PlancheDeJeu(objetEvenement.plateauJeu, this.listeDesPersonnages[i].id, _level0.loader.contentHolder.gestionnaireInterface);
 				//_level0.loader.contentHolder.planche = new PlancheDeJeu(_level0.loader.contentHolder.tab, this.listeDesPersonnages[i].id, _level0.loader.contentHolder.gestionnaireInterface);
@@ -3056,6 +3059,7 @@ class GestionnaireEvenements
 			        jouersStarted[i].role = this.listeDesPersonnages[i].role;
 					jouersStarted[i].idessin = this.listeDesPersonnages[i].idessin;//this.listeDesPersonnages[i].idessin;
 					jouersStarted[i].win = this.listeDesPersonnages[i].win;
+					jouersStarted[i].clocol = this.listeDesPersonnages[i].clocolor;
 					
 					//trace("Dans menuointage : " + jouersStarted[i].nomUtilisateur + " " + this.listeDesPersonnages[i].nom );
 		}// end for
@@ -3118,6 +3122,8 @@ class GestionnaireEvenements
 			this["tete" + (i + 1)]._y = -6;
 			this["tete" + (i + 1)]._xscale = 60;
 			this["tete" + (i + 1)]._yscale = 60;
+			
+			colorItMatrix(jouersStarted[i].clocol , this["tete" + (i + 1)].headClo, jouersStarted[i].idessin);
 	
     	} 
 		delete jouersStarted;
@@ -3980,6 +3986,108 @@ function testPlayers():Boolean
 	return verify;
 }// end methode
 
+
+function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
+{
+  
+   // to obtain RGB values of our color
+   var rr:Number = Number("0x" + clothesCol.substr(2,2).toString(10));
+   var gg:Number = Number("0x" + clothesCol.substr(4,2).toString(10));
+   var bb:Number = Number("0x" + clothesCol.substr(6,2).toString(10));
+
+   //trace("rr : " + rr + " gg : " + gg + " bb : " + bb);
+
+   // to obtain the multipliers
+   // the RGB of base color of perso1 is 245,64,75
+   switch(idD)
+   {
+            case 1:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+            
+			 case 2:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+			
+			 case 3:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+			
+			 case 4:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+			
+			 case 5:
+              /*   rr = rr/45;
+                 gg = gg/50;
+                 bb = bb/88;
+                trace("Choix de la dessin 5");*/
+            break;
+			
+			 case 6:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+			
+			 case 7:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+			
+			 case 8:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+			
+			 case 9:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+			
+			 case 10:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+			
+            default:
+                trace("Erreur Inconnue");
+   }
+   
+  
+
+   var matrix:Array = new Array();
+   matrix = matrix.concat([rr, 0, 0, 0, 0]); // red
+   matrix = matrix.concat([0, gg, 0, 0, 0]); // green
+   matrix = matrix.concat([0, 0, bb, 0, 0]); // blue
+   matrix = matrix.concat([0, 0, 0, 1, 0]); // alpha
+
+   var filterC:ColorMatrixFilter = new ColorMatrixFilter(matrix);
+   //trace("filter: " + filter.matrix);
+   
+   mov.filters = new Array(filterC);
+}
 
 // to take a good Id for our perso 
 /*
