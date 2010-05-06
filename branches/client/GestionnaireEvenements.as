@@ -412,6 +412,17 @@ class GestionnaireEvenements
         trace("*********************************************\n");
 	}
 	
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+    function obtenirListeTables()
+    {
+        trace("*********************************************");
+        trace("debut de sortirTable");
+        this.objGestionnaireCommunication.obtenirListeTablesApres(Delegate.create(this, this.retourObtenirListeTables), FiltreTable.INCOMPLETES_NON_COMMENCEES);
+        trace("fin de sortirTable");
+        trace("*********************************************\n");
+    } 
+	
+	
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     function sortirTable()
     {
@@ -1281,6 +1292,7 @@ class GestionnaireEvenements
             case "NoTable":
                 this.numeroTable = objetEvenement.noTable;
 				this.tablName =  objetEvenement.nameTable;
+				this.colorIt =  objetEvenement.clocolor;
                 _level0.loader.contentHolder.gotoAndPlay(3);
                
                 _level0.loader.contentHolder.nomJ4 = this.nomUtilisateur;
@@ -1317,15 +1329,6 @@ class GestionnaireEvenements
     }
 	
 	
-	//////////////////////////////////////////////////////////////////////////////////////////////////
-    function obtenirListeTables()
-    {
-        trace("*********************************************");
-        trace("debut de sortirTable");
-        this.objGestionnaireCommunication.obtenirListeTablesApres(Delegate.create(this, this.retourObtenirListeTables), FiltreTable.INCOMPLETES_NON_COMMENCEES);
-        trace("fin de sortirTable");
-        trace("*********************************************\n");
-    } 
 	
     //  on ne s'ajoute pas a la liste des joueur dans cette table, c grave ??  c correct pour quand on veut sortir....
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1349,12 +1352,16 @@ class GestionnaireEvenements
                     }
                 }
 				
-                _level0.loader.contentHolder.gotoAndPlay(3);
+				this.colorIt =  objetEvenement.clocolor;
+                
+				_level0.loader.contentHolder.gotoAndPlay(3);
+								
+				//_level0.loader.contentHolder.mc_perso.clothesCol = objetEvenement.clocolor;
 				
                 _level0.loader.contentHolder.nomJ4 = nomUtilisateur;								
                 
 				// put the players in the liste
-				var count:Number = objetEvenement.listePersonnageJoueurs.length;
+				count = objetEvenement.listePersonnageJoueurs.length;
                	for(var i:Number = 0; i < count; i++)
                 {
 	                
@@ -1376,7 +1383,7 @@ class GestionnaireEvenements
 				
 				
 				var j:Number = 0;
-				var count:Number = this.listeDesPersonnages.length; 
+				count = this.listeDesPersonnages.length; 
 				for(var i:Number = 0; i < count; i++)
                 {
 	                if(i>3) {j=1;}
@@ -1407,6 +1414,8 @@ class GestionnaireEvenements
 					   movClip._yscale -= 70;
 					} // if
 				 }// for
+				
+				 _level0.loader.contentHolder.mc_perso.clothesCol = objetEvenement.clocolor;
 				
             break;
 			
