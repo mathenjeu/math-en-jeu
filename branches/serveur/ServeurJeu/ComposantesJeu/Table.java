@@ -230,7 +230,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// fill the list off colors
 		this.colors = new ArrayList<String>();
 		this.setColors();
-		
+				
 		this.idPersos = new ArrayList<Integer>();
         this.setIdPersos();
 	}
@@ -292,6 +292,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			// courante)
 			joueur.definirPartieCourante(new InformationPartie(objGestionnaireEvenements, objGestionnaireBD, joueur, this));
 			
+			// init players colors
+			String color = this.getOneColor();
+			joueur.obtenirPartieCourante().setClothesColor(color);
 			
 			// Si on doit générer le numéro de commande de retour, alors
 			// on le génçre, sinon on ne fait rien
@@ -508,11 +511,14 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				
 				// Garder en mémoire le numero du couleur choisi par le joueur
 				// mais avant retirer cette couleur de la liste
-				System.out.println("Color demarrePartie avant: " + clothesColor);
-				clothesColor = getColor(clothesColor);
-				System.out.println("Color demarrePartie apres: " + clothesColor);
-				joueur.obtenirPartieCourante().setClothesColor(clothesColor);
-				
+				//System.out.println("Color demarrePartie avant: " + clothesColor);
+							
+				if(joueur.obtenirPartieCourante().getClothesColor().equals("0"))				
+				{
+					clothesColor = getColor(clothesColor);
+					joueur.obtenirPartieCourante().setClothesColor(clothesColor);	
+				}
+				//System.out.println("Color demarrePartie apres: " + clothesColor);
 								
 		        //System.out.println(idPersonnage);
 				pictures.add(idDessin);
@@ -862,13 +868,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 intIdPersonnage++;
                 
                 String name = objSalle.getGameType();
-    			//System.out.println("type: " + name);
-    			//if(name.equals("Tournament") || name.equals("Course"))
-    			//{
-    				String color = this.getOneColor();
-    				System.out.println("colors: " + color);
-    				objJoueurVirtuel.setClothesColor(color);
-    			//}	
+    			
+    			String color = this.getOneColor();
+    			//System.out.println("colors: " + color);
+    			objJoueurVirtuel.setClothesColor(color);
+    				
                 
     		}
 		    position++;
@@ -2312,7 +2316,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		 * get one color from the list
 		 * it is automatically eliminated from the list
 		 */
-		private String getOneColor()
+		public String getOneColor()
 		{
 			// default color - black ?
 			String color = "0";
