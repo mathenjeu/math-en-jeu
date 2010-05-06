@@ -4031,7 +4031,11 @@ class GestionnaireCommunication
                     case "NameTable":
                         objEvenement.nameTable = objNoeudParametre.firstChild.nodeValue;
 						break;
-						                   
+						        
+					case "Color":
+				        objEvenement.clocolor = objNoeudParametre.firstChild.nodeValue;
+				        trace("verify clocolor " +  objEvenement.clocolor);
+				        break;
                 }
             }
 			//*********************************************************
@@ -4073,21 +4077,49 @@ class GestionnaireCommunication
         // l'objet a retourner
         if (objEvenement.resultat == "ListePersonnageJoueurs")
         {
-            // Declaration d'une reference vers la liste des noeuds personnage
-            var lstChildNodes:Array = noeudCommande.firstChild.childNodes;
-            // Creer un tableau ListePersonnageJoueurs qui va contenir les
-            // objets personnages
-            objEvenement.listePersonnageJoueurs = new Array();
-            // Passer tous les personnages et les ajouter dans le tableau
-			var count:Number =  lstChildNodes.length;
-            for (var i:Number = 0; i < count; i++)
+			 // Declaration d'une reference vers la liste des noeuds parametres
+            var lstNoeudsParametre:Array = noeudCommande.childNodes;
+			trace("lstNoeudsParametre : "  + lstNoeudsParametre.length);
+			
+            // Passer tous les parametres et les ajouter dans l'objet evenement
+            for (var i:Number = 0; i < lstNoeudsParametre.length; i++)
             {
-                // Ajouter l'objet joueur dans le tableau
-                objEvenement.listePersonnageJoueurs.push({nom:lstChildNodes[i].attributes.nom,
-                                                          idPersonnage:lstChildNodes[i].attributes.idPersonnage,
-														  userRoles:lstChildNodes[i].attributes.role,
-														  clothesColor:lstChildNodes[i].attributes.clothesColor});
-            }
+                // Faire la reference vers le noeud courant
+                var objNoeudParametre:XMLNode = lstNoeudsParametre[i];
+                // Determiner le type du parametre courant et creer l'element
+                // correspondant dans l'objet evenement
+		
+				//trace("avant le switch   "+objNoeudParametre.attributes.type);
+				trace("objNoeudParametre.attributes.type : " + objNoeudParametre.attributes.type);
+                switch (objNoeudParametre.attributes.type)
+                {
+                    case "ListePersonnageJoueurs":
+			
+                   // Declaration d'une reference vers la liste des noeuds personnage
+                   var lstChildNodes:Array = objNoeudParametre.childNodes;
+                   // Creer un tableau ListePersonnageJoueurs qui va contenir les
+                   // objets personnages
+                   objEvenement.listePersonnageJoueurs = new Array();
+                   // Passer tous les personnages et les ajouter dans le tableau
+			       var count:Number =  lstChildNodes.length;
+                   for (var j:Number = 0; j < count; j++)
+                   {
+                       // Ajouter l'objet joueur dans le tableau
+                       objEvenement.listePersonnageJoueurs.push({nom:lstChildNodes[j].attributes.nom,
+                                                          idPersonnage:lstChildNodes[j].attributes.idPersonnage,
+														  userRoles:lstChildNodes[j].attributes.role,
+														  clothesColor:lstChildNodes[j].attributes.clothesColor});
+					   trace("test color " + lstChildNodes[j].attributes.nom);
+                   }
+				   
+				   break;
+				
+				   case "Color":
+				   objEvenement.clocolor = objNoeudParametre.firstChild.nodeValue;
+				   trace("verify clocolor " +  objEvenement.clocolor);
+				   break;
+				}
+			}
         }
         // Si le retour de la fonction est une reponse positive et non une
         // erreur, alors on peut passer a l'autre etat
