@@ -1458,7 +1458,7 @@ public class ProtocoleJoueur implements Runnable
 						
 						}catch(NumberFormatException e){
 						
-							intNbLines = 0;
+							intNbLines = 8;
 						
 						}
 						
@@ -1469,7 +1469,7 @@ public class ProtocoleJoueur implements Runnable
 						
 						}catch(NumberFormatException e){
 						
-							intNbColumns = 0;
+							intNbColumns = 14;
 						
 						}
 
@@ -1512,6 +1512,27 @@ public class ProtocoleJoueur implements Runnable
 						// Ajouter le noeud paramètre au noeud de commande
 						objNoeudCommande.appendChild(objNoeudParametreNoTable);
 						objNoeudCommande.appendChild(objNoeudParametreNameTable);
+						
+						// Créer le noeud pour le paramètre contenant la liste
+						// des personnages à retourner
+						Element objNoeudParametreColorPersonnage = objDocumentXMLSortie.createElement("parametre");
+						
+						// On ajoute un attribut type qui va contenir le type
+						// du paramètre
+						objNoeudParametreColorPersonnage.setAttribute("type", "Color");
+						
+						String color = objJoueurHumain.obtenirPartieCourante().obtenirTable().getOneColor();
+						objJoueurHumain.obtenirPartieCourante().setClothesColor(color);
+
+						// Créer un noeud texte contenant le role du joueur
+						Text objNoeudTexteColor = objDocumentXMLSortie.createTextNode(color);
+
+						// Ajouter le noeud texte au noeud du paramètre
+						objNoeudParametreColorPersonnage.appendChild(objNoeudTexteColor);
+						
+						// Ajouter le noeud paramètre au noeud de commande dans
+						// le document de sortie
+						objNoeudCommande.appendChild(objNoeudParametreColorPersonnage);
 					}
 				}
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.EntrerTable))
@@ -1634,6 +1655,24 @@ public class ProtocoleJoueur implements Runnable
 							
 							// Ajouter le noeud de paramètres au noeud de commande
 							objNoeudCommande.appendChild(objNoeudParametreListePersonnageJoueurs);
+							
+							// Créer le noeud pour le paramètre contenant la liste
+							// des personnages à retourner
+							Element objNoeudParametreColorPersonnage = objDocumentXMLSortie.createElement("parametre");
+							
+							// On ajoute un attribut type qui va contenir le type
+							// du paramètre
+							objNoeudParametreColorPersonnage.setAttribute("type", "Color");
+
+							// Créer un noeud texte contenant le role du joueur
+							Text objNoeudTexteColor = objDocumentXMLSortie.createTextNode(objJoueurHumain.obtenirPartieCourante().getClothesColor());
+
+							// Ajouter le noeud texte au noeud du paramètre
+							objNoeudParametreColorPersonnage.appendChild(objNoeudTexteColor);
+							
+							// Ajouter le noeud paramètre au noeud de commande dans
+							// le document de sortie
+							objNoeudCommande.appendChild(objNoeudParametreColorPersonnage);
 						}
 						else if (strResultatEntreeTable.equals(ResultatEntreeTable.TableNonExistante))
 						{
