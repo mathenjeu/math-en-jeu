@@ -75,10 +75,6 @@ public class InformationPartie
     // cet objet
     private BoiteQuestions objBoiteQuestions;
         
-    // Déclaration d'un boolean qui dit si le joueur est 'targeté' pour subir une banane
-    // (si le string n'est pas "", et alors le string dit qui l'a utilisée)
-    //private String isUnderBananaEffect;
-    
     // object that describe and manipulate 
     // the Banana state of the player
     private PlayerBananaState bananaState;
@@ -92,9 +88,8 @@ public class InformationPartie
     //of the game is writen to the DB
     private boolean moneyPermit;
     
-    //private static int maxNbObj;
-    
     // to not get twice bonus
+    // used in course ou tournament types of game
     private boolean wasOnFinish;
 
     // The number of cases on that user can to move. At the begining is set to 3.
@@ -119,8 +114,7 @@ public class InformationPartie
 	 */
 	public InformationPartie( GestionnaireEvenements gestionnaireEv, GestionnaireBD gestionnaireBD, JoueurHumain joueur, Table tableCourante)
 	{
-            //maxNbObj = tableCourante.obtenirRegles().getMaxNbObjectsAndMoney();    
-				               
+                       
             // Faire la référence vers le gestionnaire de base de données
             objGestionnaireBD = gestionnaireBD;
 
@@ -142,11 +136,9 @@ public class InformationPartie
 		    }else {
 		       	intArgent = 0;
 		    }
-	        
-	        
+	        	        
             intIdPersonnage = 0;
-	        
-	        
+	        	        
 	        // Faire la référence vers la table courante
 	        objTable = tableCourante;
 	    
@@ -172,10 +164,7 @@ public class InformationPartie
 			
 			// set the color to default
 			clothesColor = "0";
-			
-			//set the number
-			///braniacsNumber = 0;
-			
+									
 			// Braniac state
 			this.braniacState = new PlayerBraniacState(joueur);
 			
@@ -183,7 +172,7 @@ public class InformationPartie
 			this.bananaState = new PlayerBananaState(joueur);
 	        
 			String language = joueur.obtenirProtocoleJoueur().langue;
-            setObjBoiteQuestions(new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language), joueur));
+            setObjBoiteQuestions(new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language)));
             objGestionnaireBD.remplirBoiteQuestions(getObjBoiteQuestions(), objJoueurHumain);  
             
 	}// fin constructeur
@@ -486,59 +475,40 @@ public class InformationPartie
 	 */
 	public Question trouverQuestionAPoser(Point nouvellePosition, boolean doitGenererNoCommandeRetour)
 	{
-		//Point nouvellePosition = objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueurDesiree();
-		
-		// Déclarations de variables qui vont contenir la catégorie de question 
-		// à poser, la difficulté et la question à retourner
-		//***************************************************************************************
-		
-		Categories[] catValues = Categories.values();
-        int[] catScolaires = new int[catValues.length];
-        //System.out.println("catValues.length : " + catValues.length);
-        for(int i = 0; i < catValues.length; i++)
-		{
-			catScolaires[i] = catValues[i].getCode();
-						
-		}
-		
-		int intCategorieQuestion = catScolaires[UtilitaireNombres.genererNbAleatoire(catValues.length - 1)]; 
-		//System.out.println("categorie : " + intCategorieQuestion);
-		//***************************************************************************************
-		
 		int intDifficulte = 0;
         //int grandeurDeplacement = 0;
 		Question objQuestionTrouvee = null;
-		
-                // Si la position en x est différente de celle désirée, alors
-                // c'est qu'il y a eu un déplacement sur l'axe des x
-                if (objPositionJoueur.x != nouvellePosition.x)
-                {
-                	intDifficulte = Math.abs(nouvellePosition.x - objPositionJoueur.x);
-                }
-                // Si la position en y est différente de celle désirée, alors
-                // c'est qu'il y a eu un déplacement sur l'axe des y
-                else if (objPositionJoueur.y != nouvellePosition.y)
-                {
-                	intDifficulte = Math.abs(nouvellePosition.y - objPositionJoueur.y);
-                }
-                
-                //System.out.println("Difficulte de la question : " + intDifficulte);   // test
-                
-                // if is under Banana effects
-                if(this.bananaState.isUnderBananaEffects() && intDifficulte < 6)
-        			intDifficulte++;
-                // if is under Braniac effects
-                if(this.braniacState.isInBraniac() && intDifficulte > 1 )
-        			intDifficulte--;
-                
-                if(intDifficulte > 6) intDifficulte = 6;
-                //System.out.println("Difficulte de la question2 : " + intDifficulte);   // test
-		
+
+		// Si la position en x est différente de celle désirée, alors
+		// c'est qu'il y a eu un déplacement sur l'axe des x
+		if (objPositionJoueur.x != nouvellePosition.x)
+		{
+			intDifficulte = Math.abs(nouvellePosition.x - objPositionJoueur.x);
+		}
+		// Si la position en y est différente de celle désirée, alors
+		// c'est qu'il y a eu un déplacement sur l'axe des y
+		else if (objPositionJoueur.y != nouvellePosition.y)
+		{
+			intDifficulte = Math.abs(nouvellePosition.y - objPositionJoueur.y);
+		}
+
+		//System.out.println("Difficulte de la question : " + intDifficulte);   // test
+
+		// if is under Banana effects
+		if(this.bananaState.isUnderBananaEffects() && intDifficulte < 6)
+			intDifficulte++;
+		// if is under Braniac effects
+		if(this.braniacState.isInBraniac() && intDifficulte > 1 )
+			intDifficulte--;
+
+		if(intDifficulte > 6) intDifficulte = 6;
+		//System.out.println("Difficulte de la question2 : " + intDifficulte);   // test
+
 		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
 		// une question
 		if (intDifficulte > 0)
 		{
-			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
+			objQuestionTrouvee = trouverQuestion(intDifficulte);
 		}
 		
 		// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
@@ -555,7 +525,7 @@ public class InformationPartie
 		else if (intDifficulte > 0)
 		{
 			objGestionnaireBD.remplirBoiteQuestions( getObjBoiteQuestions(), objJoueurHumain);
-			objQuestionTrouvee = trouverQuestion(intCategorieQuestion, intDifficulte);
+			objQuestionTrouvee = trouverQuestion(intDifficulte);
 			
 			lstQuestionsRepondues.clear();
 			
@@ -605,23 +575,11 @@ public class InformationPartie
 		//***************************************************************************************
 	   int oldQuestion = objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirCodeQuestion();
 	   int intDifficulte = objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirDifficulte();
-		
-		
-		
-		Categories[] catValues = Categories.values();
-        int[] catScolaires = new int[catValues.length];
-        //System.out.println("catValues.length : " + catValues.length);
-        for(int i = 0; i < catValues.length; i++)
-		{
-			catScolaires[i] = catValues[i].getCode();
-						
-		}
-		
-		int intCategorieQuestion = catScolaires[UtilitaireNombres.genererNbAleatoire(catValues.length - 1)]; 
-				
-		Question objQuestionTrouvee = null;
-		
-		      
+
+
+	   Question objQuestionTrouvee = null;
+
+
 		if (intDifficulte > 1)
 			intDifficulte--;
 		//if is Banana used to this player
@@ -630,7 +588,7 @@ public class InformationPartie
 		
 		if (intDifficulte > 0)
 		{
-		   objQuestionTrouvee = trouverQuestionCristall(intCategorieQuestion, intDifficulte, oldQuestion);
+		   objQuestionTrouvee = trouverQuestionCristall(intDifficulte, oldQuestion);
 		}
 				
 		// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
@@ -648,7 +606,7 @@ public class InformationPartie
 		{
 			objGestionnaireBD.remplirBoiteQuestions( getObjBoiteQuestions(), objJoueurHumain);
 			
-			objQuestionTrouvee = trouverQuestionCristall(intCategorieQuestion, intDifficulte, oldQuestion);
+			objQuestionTrouvee = trouverQuestionCristall(intDifficulte, oldQuestion);
 			
 			lstQuestionsRepondues.clear();
 			
@@ -689,11 +647,10 @@ public class InformationPartie
 	 * reste plus de questions de niveau de difficulté proche 
 	 * de intDifficulte
 	 * 
-	 * @param intCategorieQuestion
 	 * @param intDifficulte
 	 * @return la question trouver ou null si aucune question n'a pu être pigée
 	 */
-	private Question trouverQuestionCristall(int intCategorieQuestion, int intDifficulte, int codeOld)
+	private Question trouverQuestionCristall(int intDifficulte, int codeOld)
 	{
 		
 		Question objQuestionTrouvee = null;
@@ -736,33 +693,17 @@ public class InformationPartie
 	 * de intDifficulte
 	 * 
 	 * @param intCategorieQuestion
-	 * @param intDifficulte
 	 * @return la question trouver ou null si aucune question n'a pu être pigée
 	 */
-	private Question trouverQuestion(int intCategorieQuestion, int intDifficulte)
+	private Question trouverQuestion(int intDifficulte)
 	{
-		
 		Question objQuestionTrouvee = null;
-		
-		
+				
 		// pour le premier on voir la catégorie et difficulté demandées
-		//objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulte);
-		
 		objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion(intDifficulte);
-		
-		 
-	    //après pour les difficultés plus grands 
-		int intDifficulteTemp = intDifficulte;
-		while(objQuestionTrouvee == null &&  intDifficulteTemp < 7 ) 
-		{
-			intDifficulteTemp++;
-			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intDifficulteTemp);
-		   	
-		}// fin while        
-		
-		
+			
 		//après pour les difficultés moins grands 
-		intDifficulteTemp = intDifficulte;
+		int intDifficulteTemp = intDifficulte;
 		        
 		while(objQuestionTrouvee == null && intDifficulteTemp > 0 ) 
 		{
@@ -771,76 +712,15 @@ public class InformationPartie
 		   	
 		}// fin while
 		
-		
-		/*
-		//******************************************************************************************************
-		//on prend les catégories scolaires en utilisant enum Categories
-		Categories[] catValues = Categories.values();
-        int[] catScolaires = new int[catValues.length];
-        for(int i = 0; i < catValues.length; i++)
-		{
-			catScolaires[i] = catValues[i].getCode();
-		}
-        
-        LinkedList<Integer> catScolairesTemp = new LinkedList<Integer>();
-        for(int numbers : catScolaires)
-        	catScolairesTemp.add(numbers);
-        int intRandom = 0;
-        //System.out.println("Avant diff : " + intDifficulte);
-        
-       	//sinon on cherche pour toutes les catégories de la même difficulté 
-		int i = 0;
-	    while(i < catScolaires.length && objQuestionTrouvee == null )
-	    {
-	       intRandom = UtilitaireNombres.genererNbAleatoire( catScolairesTemp.size() );	
-	   	   intCategorieQuestion =  catScolairesTemp.get(intRandom).intValue();
-	   	   objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulte);
-	   	   catScolairesTemp.remove(intRandom); 
-	   	   i++;
-	   	      	  
-	    }
-	    
-	    //après pour les difficultés moins grands 
-		int intDifficulteTemp = intDifficulte;
-		LinkedList<Integer> catScolairesTemp2 = new LinkedList<Integer>();
-        
-		while(objQuestionTrouvee == null && intDifficulteTemp > 0 ) 
-		{
-			for(int numbers : catScolaires)
-	        	catScolairesTemp2.add(numbers);
-			intDifficulteTemp--;
-			i = 0;
-		    while(i < catScolaires.length && objQuestionTrouvee == null )
-		    {
-		       intRandom = UtilitaireNombres.genererNbAleatoire( catScolairesTemp2.size() );	
-			   intCategorieQuestion =  catScolairesTemp2.get(intRandom).intValue();
-		   	   objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulteTemp);
-		   	   catScolairesTemp2.remove(intRandom);
-		   	   i++;
-		    }
-		}// fin while
-		
-		//après pour les difficultés plus grands
+		//après pour les difficultés plus grands 
 		intDifficulteTemp = intDifficulte;
-		LinkedList<Integer> catScolairesTemp3 = new LinkedList<Integer>();
-        
-		while(objQuestionTrouvee == null && intDifficulteTemp < 7 && moreDifficultQuestions) 
+		while(objQuestionTrouvee == null &&  intDifficulteTemp < 7 ) 
 		{
-			for(int numbers : catScolaires)
-	        	catScolairesTemp3.add(numbers);
 			intDifficulteTemp++;
-			i = 0;
-		    while(i < catScolaires.length && objQuestionTrouvee == null )
-		    {
-		       intRandom = UtilitaireNombres.genererNbAleatoire( catScolairesTemp3.size() );	
-			   intCategorieQuestion =  catScolairesTemp3.get(intRandom).intValue();
-		   	   objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intCategorieQuestion, intDifficulteTemp);
-		   	   catScolairesTemp3.remove(intRandom);
-		   	   i++;
-		    }
-		}// fin while
-		//***************************************************************************************
-		*/
+			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intDifficulteTemp);
+		   	
+		}// fin while      
+			
 		return objQuestionTrouvee;
 		
 	}// fin méthode
@@ -1352,9 +1232,9 @@ public class InformationPartie
 	 
 	 public GestionnaireEvenements obtenirGestionnaireEvenements()
 	 {
-	 	return objGestionnaireEv;
+		 return objGestionnaireEv;
 	 }
-	 
+
 	public void enleverObjet(int intIdObjet, String strTypeObjet)
 	{
 		lstObjetsUtilisablesRamasses.remove(intIdObjet);

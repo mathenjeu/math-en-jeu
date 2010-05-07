@@ -1,19 +1,14 @@
 /*
  * Created on 2006-05-31
  *
+ * Last change 06.05.2010 Oloieri Lilian
  */
 package ServeurJeu.ComposantesJeu;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.LinkedList;
 import java.util.TreeMap;
-import java.util.Vector;
-import java.util.Map.Entry;
-
 import org.apache.log4j.Logger;
 import ClassesUtilitaires.UtilitaireNombres;
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
@@ -22,23 +17,17 @@ import ServeurJeu.Configuration.GestionnaireMessages;
 public class BoiteQuestions 
 {
 	static private Logger objLogger = Logger.getLogger( BoiteQuestions.class );
-	private TreeMap<Integer, TreeMap<Integer, Vector<Question>>> lstQuestions;
-	
-	// Déclaration d'une référence vers un joueur humain correspondant à cet
-	// objet d'information de partie
-	//private final JoueurHumain objJoueurHumain;
-	
+	private TreeMap<Integer, LinkedList<Question>> lstQuestions;
+		
 	// Since there is a question box for each player, and all players might not want to play
 	// in the same language, we set a language field for question boxes
 	private final Lang language;
 	
-	public BoiteQuestions(String language, String url, JoueurHumain joueur)
+	public BoiteQuestions(String language, String url)
 	{
-		lstQuestions = new TreeMap<Integer, TreeMap<Integer, Vector<Question>>>();
+		lstQuestions = new TreeMap<Integer, LinkedList<Question>>();
         this.language = new Lang(language, url);
-    	
-        // Faire la référence vers le joueur humain courant
-       // objJoueurHumain = joueur;
+    	       
 	}// fin constructeur
 	
 	
@@ -49,24 +38,16 @@ public class BoiteQuestions
 	 */
 	public void ajouterQuestion( Question question )
 	{
-		// ajout acouet - tient en compte la categorie de la question
-		int intCategorieQuestion = question.obtenirCategorie();
 		int difficulte = question.obtenirDifficulte();
-	
-		TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );
-		if( difficultes == null )
-		{
-			difficultes = new TreeMap<Integer, Vector<Question>>();
-			lstQuestions.put( intCategorieQuestion, difficultes );
-		}
-		
-		Vector<Question> questions = difficultes.get( difficulte );
+					
+		LinkedList<Question> questions = lstQuestions.get( difficulte );
 		if( questions == null )
 		{
-			questions = new Vector<Question>();
-			difficultes.put( difficulte, questions);
+			questions = new LinkedList<Question>();
+			lstQuestions.put( difficulte, questions);
 		}
 	
+		System.out.println("Boite question : " + question.obtenirCodeQuestion() + " diff: " + question.obtenirDifficulte());
 		questions.add( question );
 	}
 	
@@ -77,95 +58,39 @@ public class BoiteQuestions
 	 */
 	public void popQuestion( Question question )
 	{
-		// ajout acouet - tient en compte la categorie de la question
-		int intCategorieQuestion = question.obtenirCategorie();
 		int difficulte = question.obtenirDifficulte();
-		
-		TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );
-		Vector<Question> questions = difficultes.get( difficulte );
+		LinkedList<Question> questions = lstQuestions.get( difficulte );
 		//System.out.println(question.obtenirCodeQuestion());
 		questions.remove(question);		
 	}
 	
-    /**
-     * Cette fonction permet de sélectionner une question dans la
-     * boite de questions selon sa catégorie et son niveau de difficulté
-     *
-     * @param int intDifficulte : la difficulte de la question
-     * @param int intCategorieQuestion : la categorie de la question
-     * @return Question : La question pigée
-     */
-	public Question pigerQuestion(int intCategorieQuestion, int intDifficulte)
-	{
-		// ajout acouet - tient en compte la categorie
-		Question question = null;
-	    Vector<Question> questions = obtenirQuestions( intCategorieQuestion, intDifficulte );
 		
-
-		// Let's choose a question among the possible ones
-	    if( questions != null && questions.size() > 0 )
-		{
-	    	   int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
-	    	   question = (Question)questions.elementAt( intRandom );
-			  
-		}
-		else
-		{
-			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
-		}
-		
-		return question;
-	}
-	
-	
 	/**
      * Cette fonction permet de sélectionner une question dans la
      * boite de questions selon son niveau de difficulté
      *
      * @param int intDifficulte : la difficulte de la question
-     * @param int intCategorieQuestion : la categorie de la question
      * @return Question : La question pigée
      */
 	public Question pigerQuestion(int intDifficulte)
 	{
 		
 		Question question = null;
-		Vector<Question> questionsDiff = new Vector<Question>();
-		Vector<Question> questions = new Vector<Question>();
-		Set<Map.Entry<Integer, TreeMap<Integer, Vector<Question>>>> catQuestions = lstQuestions.entrySet();
-		//TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );
 		
-		// Obtenir un itérateur pour l'ensemble contenant les questions
-		Iterator<Entry<Integer, TreeMap<Integer, Vector<Question>>>> objIterateurListeQuestions = catQuestions.iterator();
-
-		while(objIterateurListeQuestions.hasNext())
-		{
-			TreeMap<Integer, Vector<Question>> difficultes = objIterateurListeQuestions.next().getValue();
-
-			if( difficultes != null )
-			{
-				questions = difficultes.get( intDifficulte );
-				if (questions != null)
-				   questionsDiff.addAll(questions); 
-			}
-
-		}
+		LinkedList<Question> questions = lstQuestions.get(intDifficulte);
 		
-		//System.out.println(questionsDiff.toString());
-				
-
 		// Let's choose a question among the possible ones
-	    if( questionsDiff != null && questionsDiff.size() > 0 )
+	    if( questions != null && questions.size() > 0 )
 		{
-	    	   int intRandom = UtilitaireNombres.genererNbAleatoire( questionsDiff.size() );
-	    	   question = (Question)questionsDiff.elementAt( intRandom );
+	    	   int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
+	    	   question = (Question)questions.get( intRandom );
 			   
 		}
 		else
 		{
 			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
 		}
-		
+		System.out.println("\nquestion : " + question.obtenirCodeQuestion()+"\n");
 		return question;
 	}
 	
@@ -181,40 +106,18 @@ public class BoiteQuestions
 	{
 		
 		Question question = null;
-		Vector<Question> questionsDiff = new Vector<Question>();
-		Vector<Question> questions = new Vector<Question>();
-		Set<Map.Entry<Integer, TreeMap<Integer, Vector<Question>>>> catQuestions = lstQuestions.entrySet();
-		//TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );
 		
-		// Obtenir un itérateur pour l'ensemble contenant les questions
-		Iterator<Entry<Integer, TreeMap<Integer, Vector<Question>>>> objIterateurListeQuestions = catQuestions.iterator();
-
-		while(objIterateurListeQuestions.hasNext())
-		{
-			TreeMap<Integer, Vector<Question>> difficultes = objIterateurListeQuestions.next().getValue();
-
-			if( difficultes != null )
-			{
-				questions = difficultes.get( intDifficulte );
-				if (questions != null)
-				   questionsDiff.addAll(questions); 
-			}
-			
-
-		}
+		LinkedList<Question> questions = lstQuestions.get(intDifficulte);
 		
-		System.out.println("ver1 " + questionsDiff.toString());
-				
-
 		// Let's choose a question among the possible ones
-	    if( questionsDiff != null && questionsDiff.size() > 0 )
+	    if( questions != null && questions.size() > 0 )
 		{
-	    	int limit =0;
+	    	int limit = 0;
 	    	do{   
-	    		int intRandom = UtilitaireNombres.genererNbAleatoire( questionsDiff.size() );
-	    		question = (Question)questionsDiff.elementAt( intRandom );
+	    		int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
+	    		question = (Question)questions.get( intRandom );
 	    		//to not take the same question twice
-	    		questionsDiff.remove( intRandom );
+	    		questions.remove( intRandom );
 	    		limit++;
 
 	    	}while(question.obtenirCodeQuestion() == oldQuestionId || limit > 10);
@@ -224,8 +127,7 @@ public class BoiteQuestions
 			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
 		}
 		
-	    System.out.println("ver2 " + question);
-		return question;
+	   return question;
 	}
 	
 
@@ -235,13 +137,12 @@ public class BoiteQuestions
 	 * -----  Ne semble pas ètre appelée pour l'instant  -----
 	 *
 	 * @param int intDifficulte : la difficulte de la question
-	 * @param int intCategorieQuestion : la categorie de la question
 	 * @return boolean : si la boite est vide ou non
 	 */
-	public boolean estVide( int intCategorieQuestion, int intDifficulte )
+	public boolean estVide( int intDifficulte )
 	{
 		boolean ret = true;
-		Vector<Question> questions = obtenirQuestions( intCategorieQuestion, intDifficulte );
+		LinkedList<Question> questions = obtenirQuestions( intDifficulte );
 		
 		if( questions != null )
 		{
@@ -261,17 +162,12 @@ public class BoiteQuestions
 	 * correspondant aux paramètres (difficulte, categorie)
 	 *
 	 * @param int intDifficulte : la difficulte de la question
-	 * @param int intCategorieQuestion : la categorie de la question
-	 * @return Vector<Question> : un vecteur contenant les questions sélectionnées
+	 * @return LinkedList<Question> : un vecteur contenant les questions sélectionnées
 	 */
-	private Vector<Question> obtenirQuestions( int intCategorieQuestion, int intDifficulte )
+	private LinkedList<Question> obtenirQuestions( int intDifficulte )
 	{
-		Vector<Question> questions = null;
-		TreeMap<Integer, Vector<Question>> difficultes = lstQuestions.get( intCategorieQuestion );	
-		if( difficultes != null )
-		{
-			questions = difficultes.get( intDifficulte );
-		}
+		LinkedList<Question> questions = lstQuestions.get(intDifficulte);
+				
 		return questions;
 	}
      
