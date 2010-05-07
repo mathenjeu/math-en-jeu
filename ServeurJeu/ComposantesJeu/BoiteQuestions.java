@@ -90,7 +90,7 @@ public class BoiteQuestions
 		{
 			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
 		}
-		System.out.println("\nquestion : " + question.obtenirCodeQuestion()+"\n");
+		//System.out.println("\nquestion : " + question.obtenirCodeQuestion()+"\n");
 		return question;
 	}
 	
