@@ -20,8 +20,6 @@ import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
-import ClassesUtilitaires.UtilitaireNombres;
-import Enumerations.Categories;
 import ServeurJeu.ControleurJeu;
 
 /**
