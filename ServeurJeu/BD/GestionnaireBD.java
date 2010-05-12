@@ -28,6 +28,8 @@ import java.util.Vector;
 
 /**
  * @author Jean-François Brind'Amour
+ * 
+ * last changes Oloieri Lilian 11.05.2010
  */
 
 
@@ -793,7 +795,7 @@ public class GestionnaireBD
 			
 			synchronized(requete)
 			{
-				String langue = joueur.obtenirProtocoleJoueur().langue;
+				//String langue = joueur.obtenirProtocoleJoueur().langue;
 				room_id = joueur.obtenirSalleCourante().getRoomID(); 
 								
 				// Création du SQL pour l'ajout
@@ -1585,32 +1587,17 @@ public class GestionnaireBD
         else if (langue.equalsIgnoreCase("en"))
         	cleLang = 2;
         
-        // if room has categories
-        int categorieSelect = 0;
-        for(int i = 0; i < roomCategories.length(); i++)
-		{
-			if(roomCategories.charAt(i) == ':')
-				categorieSelect = 1;
-		}
+        System.out.println("categories " + roomCategories);
         
         String categories = "";
         String strSQL = "";
         
-        // if we use general all categories
-        if(categorieSelect == 0)
-		{
+        
         	// Création du SQL pour l'ajout
-    		strSQL = "INSERT INTO room (password, game_type_id, user_id, rule_id, beginDate, endDate, masterTime, roomCategories) VALUES (PASSWORD('" +
-    		                 pass + "'),1," + user_id + ",1,'" + begin + "','" + end + "'," + masterTime + "," + categorieSelect + ");";
+    		strSQL = "INSERT INTO room (password, game_type_id, user_id, rule_id, beginDate, endDate, masterTime, categories) VALUES (PASSWORD('" +
+    		                 pass + "'),2," + user_id + ",2,'" + begin + "','" + end + "'," + masterTime + ",\"" + roomCategories + "\");";
 
-    	//else if we use room's categories	
-		}else{
-			
-			strSQL = "INSERT INTO room (password, game_type_id, user_id, rule_id, beginDate, endDate, masterTime, roomCategories, categories) VALUES (PASSWORD('" +
-			                 pass + "'),1," + user_id + ",1,'" + begin + "','" + end + "'," + masterTime + "," + categorieSelect + ",'" + roomCategories + "');";
-
-		}
-		
+    
 		try
 		{
 			synchronized(requete)
@@ -1628,7 +1615,7 @@ public class GestionnaireBD
 		}
 		catch (Exception e)
 		{
-			System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_infos") + e.getMessage());
+			System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_modProf") + e.getMessage());
 		}
 
 		//add information of the room to other tables of DB
