@@ -157,7 +157,15 @@
 	     categorie92 = "volume 3, été-automne 2007"
 	     categorie93 = "volume 4, hiver-printemps 2008"
 	     categorie94 = "volume 5, été-automne 2008"
-	  
+	  Subject10 = "ShowMath"
+	     categorie101 = "Pi"
+	     categorie102 = "Probabilités"
+	     categorie103 = "Art"
+	     categorie104 = "Ondes"
+	  Subject11 = "ShowMath2"
+	     categorie111 = "Cryptographie"
+	     categorie112 = "GPS"
+	     categorie113 = "Fractales"
 	  
   mathemaQuoi_betaNEW = ""  
     errorPWD = "Mauvais mot de passe! Réessayez ou faites un autre choix. "

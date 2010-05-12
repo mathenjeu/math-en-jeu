@@ -156,6 +156,15 @@
 	     categorie92 = "volume 3, summer-fall 2007"
 	     categorie93 = "volume 4, winter-spring 2008"
 	     categorie94 = "volume 5, summer-fall 2008"
+	  Subject10 = "ShowMath"
+	     categorie100 = "Pi"
+	     categorie101 = "Probability"
+	     categorie102 = "Art"
+	     categorie103 = "Waves"
+	  Subject11 = "ShowMath2"
+	     categorie110 = "Cryptography"
+	     categorie111 = "GPS"
+	     categorie112 = "Fractals"
 	  
 	  
 	mathemaQuoi_betaNEW = ""
