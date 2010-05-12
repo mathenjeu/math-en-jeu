@@ -127,8 +127,9 @@ public class Question
 		reponse = reponse.replace("é", "e").replace("ê","e").replace("è","e");
 		reponse = reponse.replace("à", "a").replace("â","a").replace(".",",");
 		reponse = reponse.replace("ï", "i").replace("î","i");
+		reponse = reponse.replace(",",".");
 		System.out.println("La reponse : " + reponse + " Est la rep dans BD : " + strReponse);
-		return strReponse.toLowerCase().replace(".",",").equals(reponse);
+		return strReponse.toLowerCase().replace(",",".").equals(reponse);
 	}
 	
 	
