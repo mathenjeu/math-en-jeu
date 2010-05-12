@@ -47,7 +47,7 @@ public class BoiteQuestions
 			lstQuestions.put( difficulte, questions);
 		}
 	
-		System.out.println("Boite question : " + question.obtenirCodeQuestion() + " diff: " + question.obtenirDifficulte());
+		//System.out.println("Boite question : " + question.obtenirCodeQuestion() + " diff: " + question.obtenirDifficulte());
 		questions.add( question );
 	}
 	
