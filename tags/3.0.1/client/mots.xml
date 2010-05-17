@@ -1,0 +1,888 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mots>
+  <unmot>
+    <lemot>abscisse</lemot>
+    <description>première coordonnée d’un point, d’un espace affine muni d’un repère cartésien.</description>
+    <hint>Une des coordonnées d'un point.</hint>
+  </unmot>
+  <unmot>
+    <lemot>addition</lemot>
+    <description>Une des quatre oprations de base en arithmétique, on ajoute un nombre à un autre.</description>
+    <hint>Une des opérations de base en arithmétique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>aire</lemot>
+    <description>La mesure d'une surface, on l'appelle aussi la superficie.</description>
+    <hint>Synonyme de superficie.</hint>
+  </unmot>
+  <unmot>
+    <lemot>aléatoire</lemot>
+    <description>une variable aléatoire est une application d’un ensemble appelé univers et muni d’une probabilité dans l’ensemble des nombres réels.</description>
+    <hint>Type de variable communément employé en statistique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>angle</lemot>
+    <description>La figure formée par deux demi-droites ayant la même extrémité, cette extrémité s'appelle le sommet de l'angle.</description>
+    <hint>Figure formée par deux demi-droites qui se croisent.</hint>
+  </unmot>
+  <unmot>
+    <lemot>angle aigu</lemot>
+    <description>Un angle qui mesure moins de 90 degrés.</description>
+    <hint>Type d'angle.</hint>
+  </unmot>
+  <unmot>
+    <lemot>angle droit</lemot>
+    <description>Un angle qui mesure 90 degrés, ou l'angle formé à l'intersection de deux droites perpendiculaires.</description>
+    <hint>Type d'angle.</hint>
+  </unmot>
+  <unmot>
+    <lemot>angle inscrit</lemot>
+    <description>un angle est dit inscrit dans un cercle si son sommet appartient au cercle et ses côtés coupent le cercle.</description>
+    <hint>Cas particulier d'un angle dans un cercle.</hint>
+  </unmot>
+  <unmot>
+    <lemot>angle obtus</lemot>
+    <description>Un angle qui mesure plus de 90 degrés mais moins de 180 degrés.</description>
+    <hint>Type d'angle.</hint>
+  </unmot>
+  <unmot>
+    <lemot>angle plat</lemot>
+    <description>Un angle qui mesure 180 degrés.</description>
+    <hint>Type d'angle.</hint>
+  </unmot>
+  <unmot>
+    <lemot>angles adjacents</lemot>
+    <description>deux angles sont adjacents s’ils possèdent un même sommet, un côté commun et sont situés de part et d’autre de ce côté.</description>
+    <hint>Qualificatif d'un angle.</hint>
+  </unmot>
+  <unmot>
+    <lemot>arête</lemot>
+    <description>L'intersection de deux faces d'un solide.</description>
+    <hint>Un solide euclidien en compte plusieurs.</hint>
+  </unmot>
+  <unmot>
+    <lemot>arithmétique</lemot>
+    <description>La branche des mathématiques consacrée aux règles de calcul.</description>
+    <hint>Une branche des mathématiques.</hint>
+  </unmot>
+  <unmot>
+    <lemot>arrondir</lemot>
+    <description>Donner une approximation de la valeur d'un nombre.</description>
+    <hint>Synonyme de approximer.</hint>
+  </unmot>
+  <unmot>
+    <lemot>axe de symétrie</lemot>
+    <description>La droite qui sépare une figure de sa réflexion ou son rabattement.</description>
+    <hint>Type de droite.</hint>
+  </unmot>
+  <unmot>
+    <lemot>carré</lemot>
+    <description>Un quadrilatère dont les angles sont droits et les côtés congrus.</description>
+    <hint>Type de polygone.</hint>
+  </unmot>
+  <unmot>
+    <lemot>cartésien</lemot>
+    <description>un repère cartésien est formé d’un point O et d’une base de vecteurs du plan ou de l’espace.</description>
+    <hint>Qualificatif d'un repère.</hint>
+  </unmot>
+  <unmot>
+    <lemot>centre</lemot>
+    <description>point situé à égale distance de tous les points d’un cercle ou d’une sphère.</description>
+    <hint>Un des paramètres utilisé pour décrire un cercle ou une sphère.</hint>
+  </unmot>
+  <unmot>
+    <lemot>cercle</lemot>
+    <description>Une figure à deux dimensions dont l'ensemble de tous les points sont situés à distance égale du centre.</description>
+    <hint>Type de figure plane.</hint>
+  </unmot>
+  <unmot>
+    <lemot>chaîne</lemot>
+    <description>série, succession d'éléments.</description>
+    <hint>Série, succession d'éléments.</hint>
+  </unmot>
+  <unmot>
+    <lemot>chiffre</lemot>
+    <description>Un symbole utilisé pour écrire des nombres; dans notre système de numération à base de 10, il y a dix chiffres: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9.</description>
+    <hint>Un symbole utilisé pour écrire des nombres.</hint>
+  </unmot>
+  <unmot>
+    <lemot>circonférence</lemot>
+    <description>La mesure de la ligne courbe du cercle; on peut dire que c'est le périmètre du cercle.</description>
+    <hint>Un des paramètres utilisé pour décrire un cercle.</hint>
+  </unmot>
+  <unmot>
+    <lemot>classe</lemot>
+    <description>en statistique, une classe est chacun des intervalles disjoints en lesquels on divise l’ensemble des valeurs prises par un caractère quantitatif.</description>
+    <hint>Chacun des intervalles disjoints en lesquels on divise l’ensemble des valeurs prises par un caractère quantitatif.</hint>
+  </unmot>
+  <unmot>
+    <lemot>concave</lemot>
+    <description>se dit d’une figure d’un plan ou de l’espace telle qu’il existe un segment ayant ses extrémités dans cette figure mais qui n’y est pas inclus tout entier.</description>
+    <hint>Antonyme de convexe.</hint>
+  </unmot>
+  <unmot>
+    <lemot>cône</lemot>
+    <description>une figure à trois dimensions ayant une base circulaire délimitée par une surface courbe se terminant en pointe.</description>
+    <hint>Type de figure à trois dimensions.</hint>
+  </unmot>
+  <unmot>
+    <lemot>congru</lemot>
+    <description>Deux figures ayant la même forme et la même taille sont dites congrues.</description>
+    <hint>Deux figures ayant la même forme et la même taille sont dites ...</hint>
+  </unmot>
+  <unmot>
+    <lemot>consécutifs</lemot>
+    <description>des nombres consécutifs sont des nombres qui se suivent; 3, 4, 5, et 6 sont des nombres consécutifs.</description>
+    <hint>Qui se suivent.</hint>
+  </unmot>
+  <unmot>
+    <lemot>constante</lemot>
+    <description>quantité qui conserve toujours la même valeur.</description>
+    <hint>Ce n'est pas une variable.</hint>
+  </unmot>
+  <unmot>
+    <lemot>convexe</lemot>
+    <description>se dit d’une figure du plan ou de l’espace telle que tout segment ayant ses extrémités dans cette figure y est inclus tout entier.</description>
+    <hint>Tous les polygones et polyèdres réguliers le sont.</hint>
+  </unmot>
+  <unmot>
+    <lemot>cosinus</lemot>
+    <description>fonction associant à un angle au centre AOM correspondant, le quotient des mesures algébriques de OP et de OA, où P est la projection orthogonale de M sur la droite OA.</description>
+    <hint>Une fonction périodique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>croissant</lemot>
+    <description>une fonction croissante est une fonction qui varie dans le même sens que la variable dont elle dépend.</description>
+    <hint>Cas particulier d'une fonction.</hint>
+  </unmot>
+  <unmot>
+    <lemot>cube</lemot>
+    <description>Un prisme rectangulaire dont les six faces sont des carrés.</description>
+    <hint>Type de figure à trois dimensions.</hint>
+  </unmot>
+  <unmot>
+    <lemot>cylindre</lemot>
+    <description>Une figure à trois dimensions formée d'une surface courbe et de deux surfaces planes circulaires congrues.</description>
+    <hint>Type de figure à trois dimensions.</hint>
+  </unmot>
+  <unmot>
+    <lemot>décroissant</lemot>
+    <description>une fonction décroissante est une fonction qui varie dans le sens opposé à la variable dont elle dépend.</description>
+    <hint>Cas particulier d'une fonction.</hint>
+  </unmot>
+  <unmot>
+    <lemot>dénominateur</lemot>
+    <description>Le nombre entier qui indique en combien de parties égales l'unité a été divisée; dans la fraction 1/4 , le dénominateur est le nombre 4.</description>
+    <hint>Un élément d'une fraction.</hint>
+  </unmot>
+  <unmot>
+    <lemot>diagonale</lemot>
+    <description>Un segment de droite qui relie deux sommets non consécutifs d'un polygone.</description>
+    <hint>Un type de segment de droite.</hint>
+  </unmot>
+  <unmot>
+    <lemot>diagramme</lemot>
+    <description>représentation graphique permettant de décrire la disposition relative des parties d’un ensemble.</description>
+    <hint>Une représentation graphique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>diamètre</lemot>
+    <description>Le segment de droite qui joint deux points du cercle en passant par le centre du cercle.</description>
+    <hint>Un des paramètres utilisé pour décrire un cercle.</hint>
+  </unmot>
+  <unmot>
+    <lemot>différence</lemot>
+    <description>Le résultat d'une soustraction.</description>
+    <hint>Le résultat d'une des opérations de base en arithmétique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>dimension</lemot>
+    <description>le nombre d’éléments des bases d’un espace vectoriel.</description>
+    <hint>Une figure en possède généralement deux ou trois.</hint>
+  </unmot>
+  <unmot>
+    <lemot>disque</lemot>
+    <description>ensemble des points du plan dont la distance à un point fixe est inférieure ou égale à un nombre donné; la frontière du disque est un cercle.</description>
+    <hint>Une région particulière du plan.</hint>
+  </unmot>
+  <unmot>
+    <lemot>distance</lemot>
+    <description>intervalle séparant deux points dans l’espace ou le plan.</description>
+    <hint>Le mètre est une unité qui mesure ce genre de quantité.</hint>
+  </unmot>
+  <unmot>
+    <lemot>dividende</lemot>
+    <description>Le nombre à diviser dans une opération de division; dans l'opération 18 / 9 = 2, 18 est le dividende.</description>
+    <hint>Un des éléments d'une division.</hint>
+  </unmot>
+  <unmot>
+    <lemot>diviseur</lemot>
+    <description>Le second terme de la division; dans l'opération 18 / 9 = 2, 9 est le diviseur.</description>
+    <hint>Un des éléments d'une division.</hint>
+  </unmot>
+  <unmot>
+    <lemot>division</lemot>
+    <description>Une des quatre opérations de base en arithmétique, on cherche combien de fois un nombre est contenu dans un autre nombre ou on fait un partage.</description>
+    <hint>Une des opérations de base en arithmétique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>dodécaèdre</lemot>
+    <description>Un polyèdre à douze faces.</description>
+    <hint>Type de polyèdre.</hint>
+  </unmot>
+  <unmot>
+    <lemot>dodécagone</lemot>
+    <description>Un polygone ayant douze côtés.</description>
+    <hint>Type de polygone.</hint>
+  </unmot>
+  <unmot>
+    <lemot>double</lemot>
+    <description>quantité égale à deux fois une autre; par exemple, 6 est le double de 3.</description>
+    <hint>Une quantité relative.</hint>
+  </unmot>
+  <unmot>
+    <lemot>droite</lemot>
+    <description>Un ensemble de points en ligne droite, illimitée dans les deux sens.</description>
+    <hint>Ce terme peut être représenté dans le plan par une fonction linéaire.</hint>
+  </unmot>
+  <unmot>
+    <lemot>droites sécantes</lemot>
+    <description>deux droites sont dites sécantes lorsqu'elles ont un seul point commun.</description>
+    <hint>Nombre de points communs: un seul.</hint>
+  </unmot>
+  <unmot>
+    <lemot>échantillon</lemot>
+    <description>Un ensemble de personnes choisies comme étant représentatives d'une population.</description>
+    <hint>Concept couramment utilisé en statistique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>effectif</lemot>
+    <description>nombre d’individus appartenant à une classe donnée.</description>
+    <hint>Un terme quantitatif de statistique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>égalité</lemot>
+    <description>qualité de ce qui est égal.</description>
+    <hint>L'équation en est une.</hint>
+  </unmot>
+  <unmot>
+    <lemot>élévation</lemot>
+    <description>représentation d’un objet projeté sur un plan vertical parallèle à l’une de ses faces.</description>
+    <hint>Projection sur un plan vertical.</hint>
+  </unmot>
+  <unmot>
+    <lemot>ennéagone</lemot>
+    <description>Un polygone ayant neuf côtés.</description>
+    <hint>Type de polygone.</hint>
+  </unmot>
+  <unmot>
+    <lemot>équation</lemot>
+    <description>égalité qui n’est vérifiée que pour une ou des valeurs de la ou les inconnues.</description>
+    <hint>Une égalité avec des inconnues.</hint>
+  </unmot>
+  <unmot>
+    <lemot>équivalent</lemot>
+    <description>qui a la même valeur; égal.</description>
+    <hint>Même quantité.</hint>
+  </unmot>
+  <unmot>
+    <lemot>espace</lemot>
+    <description>ensemble de points, de vecteurs, etc., sur lequel on a défini une structure.</description>
+    <hint>Un ensemble sur lequel on a défini une structure.</hint>
+  </unmot>
+  <unmot>
+    <lemot>estimation</lemot>
+    <description>Le résultat approximatif d'une opération; peut se faire à l'écrit ou mentalement.</description>
+    <hint>Synonyme d'approximation.</hint>
+  </unmot>
+  <unmot>
+    <lemot>étendue</lemot>
+    <description>écart entre la plus petite et la plus grande des valeurs observées d’un échantillon.</description>
+    <hint>Une des mesures en statistique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>expérience</lemot>
+    <description>épreuve, essai effectués pour étudier un phénomène.</description>
+    <hint>Des résultats en découlent.</hint>
+  </unmot>
+  <unmot>
+    <lemot>exposant</lemot>
+    <description>nombre qui figure en haut et à droite de la notation d’une puissance.</description>
+    <hint>Un des éléments d'une puissance.</hint>
+  </unmot>
+  <unmot>
+    <lemot>extrémité</lemot>
+    <description>un des points reliés par un segment.</description>
+    <hint>Un segment de droite en possède deux.</hint>
+  </unmot>
+  <unmot>
+    <lemot>facteur</lemot>
+    <description>Les nombres entiers multipliés dans une multiplication sont des facteurs; dans l'équation 2 x 6 = 12, 2 et 6 sont des facteurs de 12.</description>
+    <hint>Un des éléments d'une multiplication.</hint>
+  </unmot>
+  <unmot>
+    <lemot>figure</lemot>
+    <description>dessin servant à la visualisation de certains êtres mathématiques et permettant d’éclairer une démonstration.</description>
+    <hint>Un dessin servant à la visualisation de certains êtres mathématiques.</hint>
+  </unmot>
+  <unmot>
+    <lemot>formule</lemot>
+    <description>nom usuel de certaines égalités ou inégalités remarquables.</description>
+    <hint>Peut être une égalité ou une inégalité.</hint>
+  </unmot>
+  <unmot>
+    <lemot>fraction</lemot>
+    <description>Représente les parties d'un tout ou d'un ensemble, un rapport entre deux nombres entiers, ou une division.</description>
+    <hint>Peut représenter les parties d'un tout ou d'un ensemble.</hint>
+  </unmot>
+  <unmot>
+    <lemot>géometrie</lemot>
+    <description>science mathématique qui étudie les relations entre points, droites, courbes, surfaces et volumes de l’espace.</description>
+    <hint>Une branche des mathématiques.</hint>
+  </unmot>
+  <unmot>
+    <lemot>graphique</lemot>
+    <description>Un type de représentation visuelle d'un ensemble de données.</description>
+    <hint>Un type de représentation visuelle d'un ensemble de données.</hint>
+  </unmot>
+  <unmot>
+    <lemot>hasard</lemot>
+    <description>cause imprévisible et souvent personnifiée, attribuée à des événements fortuits ou inexplicables.</description>
+    <hint>Une cause imprévisible.</hint>
+  </unmot>
+  <unmot>
+    <lemot>hauteur</lemot>
+    <description>dimension verticale d’un objet, considéré de la base au sommet.</description>
+    <hint>Une des dimensions d'un objet.</hint>
+  </unmot>
+  <unmot>
+    <lemot>heptagone</lemot>
+    <description>Un polygone ayant sept côtés.</description>
+    <hint>Type de polygone.</hint>
+  </unmot>
+  <unmot>
+    <lemot>hexaèdre</lemot>
+    <description>Un polyèdre à six faces.</description>
+    <hint>Type de polyèdre.</hint>
+  </unmot>
+  <unmot>
+    <lemot>hexagone</lemot>
+    <description>Un polygone ayant six côtés.</description>
+    <hint>Type de polygone.</hint>
+  </unmot>
+  <unmot>
+    <lemot>homothétie</lemot>
+    <description>un déplacement dans lequel chaque point s’éloigne ou se rapproche d’un point nommé centre de l’homothétie avec un facteur donné.</description>
+    <hint>Type de déplacement.</hint>
+  </unmot>
+  <unmot>
+    <lemot>inégalite</lemot>
+    <description>relation d’ordre dans un ensemble.</description>
+    <hint>Relation d’ordre dans un ensemble.</hint>
+  </unmot>
+  <unmot>
+    <lemot>inférieur</lemot>
+    <description>élément x vérifiant la relation d’inégalité x plus petit ou égal à y.</description>
+    <hint>Relation d'inégalité.</hint>
+  </unmot>
+  <unmot>
+    <lemot>infini</lemot>
+    <description>Qui n'a pas de fin; l'ensemble des nombres naturels est infini, ce qui veut dire que même si on trouve ce qu'on croit être le plus grand nombre au monde, on peut toujours y ajouter un.</description>
+    <hint>Antonyme de fini.</hint>
+  </unmot>
+  <unmot>
+    <lemot>isocèle</lemot>
+    <description>un triangle est dit isocèle s’il possède deux côtés de même longueur.</description>
+    <hint>Type de triangle.</hint>
+  </unmot>
+  <unmot>
+    <lemot>largeur</lemot>
+    <description>dimension d’un objet dans le sens perpendiculaire à la longueur.</description>
+    <hint>Une des dimensions d'un objet.</hint>
+  </unmot>
+  <unmot>
+    <lemot>ligne</lemot>
+    <description>Une figure géométrique à une dimension.</description>
+    <hint>Une figure géométrique à une dimension.</hint>
+  </unmot>
+  <unmot>
+    <lemot>linéaire</lemot>
+    <description>une fonction linéaire est une fonction de type f(x) = a*x + b, où a et b sont des réels déterminés.</description>
+    <hint>Cas particulier d'une fonction à une variable.</hint>
+  </unmot>
+  <unmot>
+    <lemot>longueur</lemot>
+    <description>dimension d’un objet dans le sens de sa plus grande étendue.</description>
+    <hint>Une des dimensions d'un objet.</hint>
+  </unmot>
+  <unmot>
+    <lemot>losange</lemot>
+    <description>Un parallélogramme qui a quatre côtés congrus.</description>
+    <hint>Le carré en est un.</hint>
+  </unmot>
+  <unmot>
+    <lemot>masse</lemot>
+    <description>La masse d'un objet est sa propriété d'être plus ou moins lourd. La masse d'un objet ne dépend que de son volume et de la matière (des matières) dont l'objet est constitué. Par contre, le poids de cet objet, lui, dépend aussi du lieu où il se trouve (sur la Terre ou sur la Lune, au pôle ou à l'équateur...): le poids mesure la force avec laquelle l'objet est attirée.</description>
+    <hint>Le kilogramme est une unité qui mesure ce genre de quantité.</hint>
+  </unmot>
+  <unmot>
+    <lemot>médiane</lemot>
+    <description>nombre répartissant les termes d’une série numérique, rangée par valeurs non décroissantes, en deux groupes de même fréquence.</description>
+    <hint>Une des mesures en statistique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>moitié</lemot>
+    <description>quantité égale à une autre divisée par deux; par exemple, 5 est la moitié de 10.</description>
+    <hint>Une quantité relative.</hint>
+  </unmot>
+  <unmot>
+    <lemot>moyenne</lemot>
+    <description>quantité obtenue en additionnant toutes les quantités données et en divisant ce total par le nombre de quantités.</description>
+    <hint>Une des mesures en statistique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>multiple</lemot>
+    <description>Un multiple d'un nombre entier est le produit de ce nombre et d'un autre nombre entier; 0, 4, 8, 16... sont des multiples de 4.</description>
+    <hint>Un ... d'un nombre entier est le produit de ce nombre et d'un autre nombre entier</hint>
+  </unmot>
+  <unmot>
+    <lemot>multiplicande</lemot>
+    <description>Le nombre à multiplier par un autre; dans 8 x 4 = 32, 8 est le multiplicande.</description>
+    <hint>Un des éléments d'une multiplication.</hint>
+  </unmot>
+  <unmot>
+    <lemot>multiplicateur</lemot>
+    <description>Le nombre par lequel on multiplie; dans 8 x 4 = 32, 4 est le multiplicateur.</description>
+    <hint>Un des éléments d'une multiplication.</hint>
+  </unmot>
+  <unmot>
+    <lemot>multiplication</lemot>
+    <description>Une des quatre opérations de base en arithmétique, on trouve le produit de deux ou plusieurs termes; la multiplication est une addition r�p�t�e: 8 x 4, est la m�me chose que 8 + 8 + 8 + 8.</description>
+    <hint>Une des opérations de base en arithmétique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>nombre</lemot>
+    <description>Un symbole qui représente une quantité, une grandeur, une position; les symboles utilisés peuvent être des chiffres (6), des lettres (six) ou autres (llll l).</description>
+    <hint>Un symbole qui représente une quantité, une grandeur, une position.</hint>
+  </unmot>
+  <unmot>
+    <lemot>nombre décimal</lemot>
+    <description>Un nombre fractionnaire exprimé sous forme décimale, tel que 2,1 et 129,87.</description>
+    <hint>Peut aussi être exprimé sous forme fractionnaire.</hint>
+  </unmot>
+  <unmot>
+    <lemot>nombre impair</lemot>
+    <description>Un nombre entier qui n'est pas un multiple de 2.</description>
+    <hint>5 en est un.</hint>
+  </unmot>
+  <unmot>
+    <lemot>nombre irrationnel</lemot>
+    <description>Un nombre qui ne peut s'écrire sous la forme d'un rapport de deux nombres entiers, tels que pi.</description>
+    <hint>La racine carrée de 3 en est un.</hint>
+  </unmot>
+  <unmot>
+    <lemot>nombre négatif</lemot>
+    <description>un nombre négatif est un nombre inférieur à zéro.</description>
+    <hint>Caractéristique d'un entier qui n'est pas un nombre naturel.</hint>
+  </unmot>
+  <unmot>
+    <lemot>nombre pair</lemot>
+    <description>Un nombre entier qui est un multiple de deux.</description>
+    <hint>8 en est un.</hint>
+  </unmot>
+  <unmot>
+    <lemot>nombre positif</lemot>
+    <description>un nombre positif est un nombre supérieur ou égal à zéro.</description>
+    <hint>Caractéristique d'un entier qui est aussi un nombre naturel.</hint>
+  </unmot>
+  <unmot>
+    <lemot>nombre premier</lemot>
+    <description>Un nombre entier supérieur à 1, qui n'est divisible que par 1 et lui-même.</description>
+    <hint>7 en est un; 9 n'en est pas un.</hint>
+  </unmot>
+  <unmot>
+    <lemot>nombre rationnel</lemot>
+    <description>Un nombre qui peut s'exprimer sous la forme d'un rapport entre deux nombres entiers (le deuxième nombre étant autre que zéro).</description>
+    <hint>Chaque nombre fractionnaire en est un.</hint>
+  </unmot>
+  <unmot>
+    <lemot>nombres entiers</lemot>
+    <description>Ce sont les nombres naturels et leurs opposés: ...-3, -2, -1, 0, 1, 2, 3... .</description>
+    <hint>4 en est un; -5 aussi.</hint>
+  </unmot>
+  <unmot>
+    <lemot>nombres naturels</lemot>
+    <description>Ce sont les nombres avec lesquels on compte: 0, 1, 2, 3... .</description>
+    <hint>4 en est un; -5 n'en est pas un.</hint>
+  </unmot>
+  <unmot>
+    <lemot>notation</lemot>
+    <description>action d’indiquer, de représenter par un système de signes conventionnels.</description>
+    <hint>Action d’indiquer, de représenter par un système de signes conventionnels.</hint>
+  </unmot>
+  <unmot>
+    <lemot>numérateur</lemot>
+    <description>Indique le nombre de parties en considération; dans la fraction 4/5, le numérateur est le nombre 4.</description>
+    <hint>Un élément d'une fraction.</hint>
+  </unmot>
+  <unmot>
+    <lemot>numérique</lemot>
+    <description>qui relève des nombres.</description>
+    <hint>Qui relève des nombres.</hint>
+  </unmot>
+  <unmot>
+    <lemot>octogone</lemot>
+    <description>Un polygone à huit côtés.</description>
+    <hint>Type de polygone.</hint>
+  </unmot>
+  <unmot>
+    <lemot>opération</lemot>
+    <description>calcul, à l’aide des tables d’addition et de multiplication, d’une somme, d’une différence, d’un produit ou d’un quotient.</description>
+    <hint>L'addition en est une; la multiplication aussi.</hint>
+  </unmot>
+  <unmot>
+    <lemot>ordonnée</lemot>
+    <description>deuxième coordonnée d’un point, d’un espace affine muni d’un repère cartésien.</description>
+    <hint>Une des coordonnées d'un point.</hint>
+  </unmot>
+  <unmot>
+    <lemot>origine</lemot>
+    <description>point commun aux axes de coordonnées.</description>
+    <hint>Un point particulier dans le plan ou dans l'espace.</hint>
+  </unmot>
+  <unmot>
+    <lemot>paire</lemot>
+    <description>Un ensemble qui contient deux éléments.</description>
+    <hint>Un ensemble.</hint>
+  </unmot>
+  <unmot>
+    <lemot>parallèle</lemot>
+    <description>deux droites ou plans sont dits parallèles lorsqu’ils n’ont aucun point commun ou lorsqu’ils sont confondus.</description>
+    <hint>Nombre de points communs: aucun ou une infinité.</hint>
+  </unmot>
+  <unmot>
+    <lemot>pentagone</lemot>
+    <description>Un polygone à 5 côtés.</description>
+    <hint>Type de polygone.</hint>
+  </unmot>
+  <unmot>
+    <lemot>périmètre</lemot>
+    <description>La distance autour d'une figure fermée.</description>
+    <hint>Une des caractéristiques d'une figure plane.</hint>
+  </unmot>
+  <unmot>
+    <lemot>périodique</lemot>
+    <description>une fonction périodique reprend la même valeur lorsque la variable subit un accroissement égal à une valeur fixe.</description>
+    <hint>Les fonctions sinus et cosinus le sont.</hint>
+  </unmot>
+  <unmot>
+    <lemot>pictogramme</lemot>
+    <description>Un graphique dans lequel les données sont représentées par des dessins ou images.</description>
+    <hint>Type de graphique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>point</lemot>
+    <description>Une figure géométrique sans dimension.</description>
+    <hint>Une figure géométrique sans dimension.</hint>
+  </unmot>
+  <unmot>
+    <lemot>polyèdre</lemot>
+    <description>Un solide limité par des polygones plats.</description>
+    <hint>Type de figure à trois dimensions.</hint>
+  </unmot>
+  <unmot>
+    <lemot>polygone</lemot>
+    <description>Une surface plane fermée limitée par des segments de droite.</description>
+    <hint>Type de figure plane.</hint>
+  </unmot>
+  <unmot>
+    <lemot>polygone régulier</lemot>
+    <description>un polygone régulier est un polygone dont les côtés ont la même longueur, et dont tous les angles ont la même mesure.</description>
+    <hint>Le carré en est un; le triangle équilatéral aussi.</hint>
+  </unmot>
+  <unmot>
+    <lemot>population</lemot>
+    <description>ensemble d’éléments (individus, valeurs, etc.) soumis à une étude statistique.</description>
+    <hint>Un ensemble d’éléments soumis à une étude statistique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>position</lemot>
+    <description>situation dans l’espace.</description>
+    <hint>Situation dans l'espace.</hint>
+  </unmot>
+  <unmot>
+    <lemot>pourcent</lemot>
+    <description>unité de mesure d’une proportion de cent unités.</description>
+    <hint>Unité de mesure d'une proportion.</hint>
+  </unmot>
+  <unmot>
+    <lemot>prisme</lemot>
+    <description>Un polyèdre limité par deux polygones parallèles et congrus joints par des parallélogrammes.</description>
+    <hint>Type de polyèdre.</hint>
+  </unmot>
+  <unmot>
+    <lemot>probabilité</lemot>
+    <description>Le rapport entre le nombre de cas favorables et le nombre de cas possibles d'une expérience dont le résultat est déterminé par le hasard; la probabilité d'obtenir le nombre quatre en lançant un dé est 1/6.</description>
+    <hint>Terme commun en statistique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>produit</lemot>
+    <description>Le résultat d'une multiplication.</description>
+    <hint>Le résultat d'une des opérations de base en arithmétique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>profondeur</lemot>
+    <description>dimension d’un objet dans l’espace dans le sens perpendiculaire à la largeur et à la hauteur.</description>
+    <hint>Une des dimensions d'un objet.</hint>
+  </unmot>
+  <unmot>
+    <lemot>proportion</lemot>
+    <description>rapport de grandeur entre deux quantités.</description>
+    <hint>Rapport de grandeur entre deux quantités.</hint>
+  </unmot>
+  <unmot>
+    <lemot>puissance</lemot>
+    <description>application qui à un réel x fait correspondre le nombre noté x^n défini par le produit de n facteurs égaux à x quand n est un entier positif et à 1/(x^m) quand n = -m est un entier négatif.</description>
+    <hint>La base et l'exposant en sont les éléments.</hint>
+  </unmot>
+  <unmot>
+    <lemot>pyramide</lemot>
+    <description>Un polyèdre ayant comme base un polygone et comme côtés des triangles qui se réunissent à un sommet commun.</description>
+    <hint>Type de polyèdre.</hint>
+  </unmot>
+  <unmot>
+    <lemot>quadrant</lemot>
+    <description>Une région du plan cartésien délimitée par deux demi-droites; le plan cartésien possède quatre quadrants.</description>
+    <hint>Une région du plan cartésien délimitée par deux demi-droites.</hint>
+  </unmot>
+  <unmot>
+    <lemot>quadratique</lemot>
+    <description>une fonction quadratique est une fonction de type f(x) = a*x^2 + b*x + c, où a, b et c sont des réels déterminés.</description>
+    <hint>Cas particulier d'une fonction à une variable.</hint>
+  </unmot>
+  <unmot>
+    <lemot>quadrilatère</lemot>
+    <description>Un polygone ayant quatre côtés.</description>
+    <hint>Type de polygone.</hint>
+  </unmot>
+  <unmot>
+    <lemot>quart</lemot>
+    <description>quantité égale à une autre divisée par quatre; par exemple, 3 est le quart de 12.</description>
+    <hint>Une quantité relative.</hint>
+  </unmot>
+  <unmot>
+    <lemot>quotient</lemot>
+    <description>Le résultat d'une division.</description>
+    <hint>Le résultat d'une des opérations de base en arithmétique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>racine</lemot>
+    <description>une racine carrée est un nombre réel dont le carré est égal au nombre initial.</description>
+    <hint>Une application inverse à l'élévation au carré.</hint>
+  </unmot>
+  <unmot>
+    <lemot>radical</lemot>
+    <description>signe désignant une racine.</description>
+    <hint>Un signe désignant une racine.</hint>
+  </unmot>
+  <unmot>
+    <lemot>rapport</lemot>
+    <description>un nombre intervenant dans la définition de plusieurs transformations ponctuelles, telles les homothéties.</description>
+    <hint>Un nombre intervenant dans la définition de plusieurs transformations ponctuelles.</hint>
+  </unmot>
+  <unmot>
+    <lemot>rapporteur</lemot>
+    <description>Un instrument qui sert à mesurer des angles.</description>
+    <hint>Un instrument utilisé en géométrie.</hint>
+  </unmot>
+  <unmot>
+    <lemot>rayon</lemot>
+    <description>Le segment de droite qui joint le centre du cercle à un point quelconque situé sur la circonférence du cercle.</description>
+    <hint>Un des paramètres utilisé pour décrire un cercle.</hint>
+  </unmot>
+  <unmot>
+    <lemot>réflexion</lemot>
+    <description>transformation ponctuelle qui à un point M associe un point M’ tel que le segment MM’ a une droite fixe comme médiatrice.</description>
+    <hint>Type de déplacement.</hint>
+  </unmot>
+  <unmot>
+    <lemot>région</lemot>
+    <description>une partie du plan.</description>
+    <hint>Une partie du plan.</hint>
+  </unmot>
+  <unmot>
+    <lemot>règle</lemot>
+    <description>un instrument qui sert à mesurer des distances.</description>
+    <hint>Un instrument utilisé en géométrie.</hint>
+  </unmot>
+  <unmot>
+    <lemot>réseau</lemot>
+    <description>Une représentation graphique formée de points reliés entre eux par des lignes.</description>
+    <hint>Une représentation graphique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>reste</lemot>
+    <description>La quantité qui reste à la suite d'une division.</description>
+    <hint>Un des éléments d'une division.</hint>
+  </unmot>
+  <unmot>
+    <lemot>résultat</lemot>
+    <description>ce qui résulte d'un calcul, d'une expérience.</description>
+    <hint>Ce qui découle d'une expérience.</hint>
+  </unmot>
+  <unmot>
+    <lemot>rotation</lemot>
+    <description>Un déplacement dans lequel chaque point se déplace selon le même angle autour d'un point appelé centre de rotation; par exemple, le mouvement d'une roue de bicyclette est un mouvement par rotation.</description>
+    <hint>Type de déplacement.</hint>
+  </unmot>
+  <unmot>
+    <lemot>scalène</lemot>
+    <description>un triangle est dit scalène si les trois côtés sont de longueurs inégales.</description>
+    <hint>Type de triangle.</hint>
+  </unmot>
+  <unmot>
+    <lemot>segment de droite</lemot>
+    <description>Une partie de droite, limitée par deux points.</description>
+    <hint>Une partie de droite.</hint>
+  </unmot>
+  <unmot>
+    <lemot>semblable</lemot>
+    <description>On dit que deux figures sont semblables si l'une est un agrandissement ou une réduction de l'autre.</description>
+    <hint>Deux figures congrues sont aussi ... .</hint>
+  </unmot>
+  <unmot>
+    <lemot>signe</lemot>
+    <description>symbole servant à distinguer les nombres positifs des nombres négatifs.</description>
+    <hint>Symbole servant à distinguer deux types de nombres.</hint>
+  </unmot>
+  <unmot>
+    <lemot>sinus</lemot>
+    <description>fonction associant à un angle au centre AOM correspondant, le quotient des mesures algébriques de PM et de OM, où P est la projection orthogonale de M sur la droite OA.</description>
+    <hint>Une fonction périodique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>solide</lemot>
+    <description>Une figure à trois dimensions.</description>
+    <hint>Une figure à trois dimensions.</hint>
+  </unmot>
+  <unmot>
+    <lemot>somme</lemot>
+    <description>Le résultat d'une addition.</description>
+    <hint>Le résultat d'une des opérations de base en arithmétique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>sommet</lemot>
+    <description>Le point de jonction de deux demi-droites d'un angle, de deux côtés d'un polygone, ou de trois (ou plus) arêtes d'un solide.</description>
+    <hint>Un solide euclidien en compte plusieurs.</hint>
+  </unmot>
+  <unmot>
+    <lemot>sondage</lemot>
+    <description>Une enquête pour obtenir des données.</description>
+    <hint>Une enquête pour obtenir des données.</hint>
+  </unmot>
+  <unmot>
+    <lemot>soustraction</lemot>
+    <description>Une des quatre opérations de base en arithmétique, on enlève un nombre à un autre.</description>
+    <hint>Une des quatre opérations de base en arithmétique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>sphère</lemot>
+    <description>Une figure à trois dimensions dont l'ensemble de tous les points sont situés à distance égale du centre.</description>
+    <hint>Type de figure à trois dimensions.</hint>
+  </unmot>
+  <unmot>
+    <lemot>suite</lemot>
+    <description>famille d’éléments indexée par l’ensemble des entiers naturels.</description>
+    <hint>Famille d’éléments.</hint>
+  </unmot>
+  <unmot>
+    <lemot>supérieur</lemot>
+    <description>élément x vérifiant la relation d’inégalité x >= y.</description>
+    <hint>Relation d'inégalité.</hint>
+  </unmot>
+  <unmot>
+    <lemot>surface</lemot>
+    <description>ensemble des points frontières d’une portion d’espace.</description>
+    <hint>Frontière d'un objet.</hint>
+  </unmot>
+  <unmot>
+    <lemot>symétrique</lemot>
+    <description>une figure à deux ou trois dimensions est dite symétrique si elle possède un axe ou un plan de symétrie.</description>
+    <hint>Se dit de choses semblables et opposées l'une par rapport à l'autre.</hint>
+  </unmot>
+  <unmot>
+    <lemot>tangente</lemot>
+    <description>fonction associant à un angle au centre AOM correspondant, le quotient des mesures algébriques de PM et de OP, où P est la projection orthogonale de M sur la droite OA.</description>
+    <hint>Une fonction périodique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>terme</lemot>
+    <description>chacun des éléments d’une suite.</description>
+    <hint>Chacun des éléments d'une suite.</hint>
+  </unmot>
+  <unmot>
+    <lemot>tétraèdre</lemot>
+    <description>un polyèdre à quatre faces.</description>
+    <hint>Type de polyèdre.</hint>
+  </unmot>
+  <unmot>
+    <lemot>tiers</lemot>
+    <description>quantité égale à une autre divisée par trois; par exemple, 6 est le tiers de 18.</description>
+    <hint>Une quantité relative.</hint>
+  </unmot>
+  <unmot>
+    <lemot>total</lemot>
+    <description>Le résultat d'une addition.</description>
+    <hint>Le résultat d'une des opérations de base en arithmétique.</hint>
+  </unmot>
+  <unmot>
+    <lemot>translation</lemot>
+    <description>Le déplacement en ligne droite d'un objet ou d'une figure; un ascenseur est un exemple de translation.</description>
+    <hint>Type de déplacement.</hint>
+  </unmot>
+  <unmot>
+    <lemot>trapèze</lemot>
+    <description>Un quadrilatère qui a deux côtés parallèles.</description>
+    <hint>Type de quadrilatère.</hint>
+  </unmot>
+  <unmot>
+    <lemot>triangle</lemot>
+    <description>Un polygone à trois côtés.</description>
+    <hint>Type de polygone.</hint>
+  </unmot>
+  <unmot>
+    <lemot>triple</lemot>
+    <description>quantité égale à trois fois une autre; par exemple, 15 est le triple de 5.</description>
+    <hint>Une quantité relative.</hint>
+  </unmot>
+  <unmot>
+    <lemot>triplet</lemot>
+    <description>un ensemble de trois éléments pris dans un ordre déterminé.</description>
+    <hint>Un ensemble.</hint>
+  </unmot>
+  <unmot>
+    <lemot>unité</lemot>
+    <description>grandeur finie prise comme terme de comparaison avec des grandeurs de même espèce.</description>
+    <hint>Une grandeur finie.</hint>
+  </unmot>
+  <unmot>
+    <lemot>variable</lemot>
+    <description>élément qui peut prendre des valeurs différentes à l’intérieur d’un ensemble, d’un système, d’une relation.</description>
+    <hint>Est présente dans une équation.</hint>
+  </unmot>
+  <unmot>
+    <lemot>variation</lemot>
+    <description>pour une fonction numérique f de la variable x, une variation est une façon dont les valeurs des images des éléments du domaine de définition de f se situent les unes par rapport aux autres.</description>
+    <hint>Peut être croissante ou décroissante à un point donné d'une fonction.</hint>
+  </unmot>
+  <unmot>
+    <lemot>vitesse</lemot>
+    <description>rapport de la distance parcourue au temps mis à la parcourir.</description>
+    <hint>Rapport de la distance parcourue au temps mis à la parcourir.</hint>
+  </unmot>
+  <unmot>
+    <lemot>volume</lemot>
+    <description>En mathématiques, le volume d'un objet est défini comme étant la place que cet objet occupe dans l'espace et représente la mesure de cet espace. Par exemple, le volume d'une boîte est de 90 cm3.</description>
+    <hint>Le litre est une unité qui mesure ce genre de quantité.</hint>
+  </unmot>
+</mots>

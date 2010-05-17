@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<Texte 
+	consignes = "This game is simple. You must guess the right word before our friend to the left loses all his balloons. If you find the right word, you win points, and you get to try again with a new word. Be careful. If you miss, you lose half the points you have won in this game."
+	
+	boutonJouer = "Start"
+	instruction = "I  N  S  T  R  U  C  T  I  O  N  S"
+	pointage = "Score"
+	boutonMotSuivant = "Next word"
+	boutonTerminer = "Quit"
+
+	indiceTexte = "Hint : "
+
+>
+</Texte> 
