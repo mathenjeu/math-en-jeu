@@ -911,7 +911,7 @@ class PlancheDeJeu
 					}
 					// trace("tableau des cases  vs  mat  : "+ tableauDesCases.length+"   "+mat.length);
 					// trace("tableau des cases[0]  vs  mat[]  : "+ tableauDesCases[0].length+"   "+mat[0].length);
-					level = (tableauDesCases.length*tableauDesCases[0].length)  +  ((temp)*tableauDesCases[0].length)  +  Number(p.obtenirC()) + Number(1);
+					level = (tableauDesCases.length * tableauDesCases[0].length)  +  ((temp) * tableauDesCases[0].length)  +  Number(p.obtenirC()) + Number(1);
 					// trace("ds if,  level:  "+level);
 					if(tableauDesCases[temp][p.obtenirC()].obtenirType() > 40000 ){
 					   
@@ -1530,11 +1530,11 @@ class PlancheDeJeu
 	   function attendre(){
 	     
 		 clearInterval(intervalId);
-	   var coorByX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameBy).obtenirX() - 10;// - getPersonnageByName(nameBy).obtenirImage()._width;
-	   var coorByY:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameBy).obtenirY() - _level0.loader.contentHolder.planche.getPersonnageByName(nameBy).obtenirImage()._height;
+	     var coorByX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameBy).obtenirX() - 10;// - getPersonnageByName(nameBy).obtenirImage()._width;
+	     var coorByY:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameBy).obtenirY() - _level0.loader.contentHolder.planche.getPersonnageByName(nameBy).obtenirImage()._height;
 	   	   
-	   var coorToX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).obtenirProchainePosition().obtenirX();
-	   var coorToY:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).obtenirProchainePosition().obtenirY()- 15;
+	     var coorToX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).obtenirProchainePosition().obtenirX();
+	     var coorToY:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).obtenirProchainePosition().obtenirY()- 15;
 		 
 				  	
 		 
@@ -1550,11 +1550,11 @@ class PlancheDeJeu
 	   
 	   // to resume the banana state
 	    var intervalId3:Number;
-		   intervalId3 = setInterval(endOfBanana, 15000, nameTo);
+		   intervalId3 = setInterval(endOfBanana, 12000, nameTo);
 		   function endOfBanana(){
 		      _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).rest();
 		      clearInterval(intervalId3);
-		   }
+		}
 	   
 	   	   
 	   var intervalId2:Number;
@@ -1564,8 +1564,11 @@ class PlancheDeJeu
 	      	  
 		  if(wait > 35)
 		     _level0.loader.contentHolder.referenceLayer["shell_mc"]._alpha -= 5;
-		  if(wait > 55)
-		     clearInterval(intervalId2);
+		  if(wait > 55){
+		      //_level0.loader.contentHolder.referenceLayer["shell_mc"].swapDepths(_level0.loader.contentHolder.referenceLayer["Personnage" + num]);
+			 _level0.loader.contentHolder.referenceLayer.shell_mc.removeMovieClip();
+			 clearInterval(intervalId2);
+		  }
 		  wait++;   
 	   } // end bananaShell
 	   

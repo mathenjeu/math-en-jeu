@@ -1000,17 +1000,10 @@ class GestionnaireCommunication
 							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
 				    		objEvenement["CreatorUserName"] = lstChildNodes[i].firstChild.nodeValue;
 				       	break;
-						case "GameType":
-							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
-				    		objEvenement["GameType"] = lstChildNodes[i].firstChild.nodeValue;
-				       	break;
+						
 						case "MasterTime":
 							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
 				    		objEvenement["MasterTime"] = lstChildNodes[i].firstChild.nodeValue;
-				       	break;
-						case "MaxNbPlayers":
-							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
-				    		objEvenement["MaxNbPlayers"] = lstChildNodes[i].firstChild.nodeValue;
 				       	break;
 						case "RoomDescriptions":
 							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
@@ -1081,7 +1074,7 @@ class GestionnaireCommunication
 																											
 						//trace("xWinGame : " + xWinGame);
 						//trace("yWinGame : " + yWinGame);
-						//trace("nbTracks : " + nbTracks);
+						trace("nbTracks : " + nbTracks);
 						//trace("PointageRequis : " + lstChildNodes[i].attributes.pointageRequis);
 					break;
 					
@@ -2354,7 +2347,7 @@ class GestionnaireCommunication
      */
     public function creerTable(creerTableDelegate:Function,
                                evenementJoueurDemarrePartieDelegate:Function,
-                               tempsPartie:Number, nbLines:Number, nbColumns:Number, tablName:String)
+                               tempsPartie:Number, nbLines:Number, nbColumns:Number, tablName:String, gameType:String)
     {
         // Si on a obtenu la liste des tables, alors on peut continuer le code
         // de la fonction
@@ -2386,6 +2379,9 @@ class GestionnaireCommunication
 			var objNoeudParametreNomPartie:XMLNode = objObjetXML.createElement("parametre");
             var objNoeudParametreNomPartieText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(tablName));
 			
+			var objNoeudParametreGameType:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreGameTypeText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(gameType));
+			
 			// Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "CreerTable";
@@ -2397,11 +2393,14 @@ class GestionnaireCommunication
             objNoeudParametreNbColumns.appendChild(objNoeudParametreNbColumnsText);
 			objNoeudParametreNomPartie.attributes.type = "TableName";
             objNoeudParametreNomPartie.appendChild(objNoeudParametreNomPartieText);
+			objNoeudParametreGameType.attributes.type = "GameType";
+            objNoeudParametreGameType.appendChild(objNoeudParametreGameTypeText);
 			
             objNoeudCommande.appendChild(objNoeudParametreTempsPartie);
 			objNoeudCommande.appendChild(objNoeudParametreNbLines);
 			objNoeudCommande.appendChild(objNoeudParametreNbColumns);
 			objNoeudCommande.appendChild(objNoeudParametreNomPartie);
+			objNoeudCommande.appendChild(objNoeudParametreGameType);
             objObjetXML.appendChild(objNoeudCommande);
             // Declaration d'un nouvel objet qui va contenir les informations sur
             // la commande a traiter courante
@@ -3578,34 +3577,15 @@ class GestionnaireCommunication
                 objEvenement.listeNomSalles.push({nom:lstChildNodes[i].attributes.nom,
                     possedeMotDePasse:Boolean(lstChildNodes[i].attributes.protegee == "true"),
                     descriptions:lstChildNodes[i].attributes.descriptions, 
-                    maxnbplayers:lstChildNodes[i].attributes.maxnbplayers,
+                    //maxnbplayers:lstChildNodes[i].attributes.maxnbplayers,
 					idRoom:lstChildNodes[i].attributes.id,
-                    typeDeJeu:lstChildNodes[i].attributes.typeDeJeu,
-					nbTracks:lstChildNodes[i].attributes.nbTracks,
+                    //typeDeJeu:lstChildNodes[i].attributes.typeDeJeu,
+					//nbTracks:lstChildNodes[i].attributes.nbTracks,
 					userCreator:lstChildNodes[i].attributes.userCreator,
 					masterTime:lstChildNodes[i].attributes.masterTime});
 								  
             }
-			
-			// Creer un tableau ListeDescrSalles qui va contenir les
-            // descriptions des objets salle
-            objEvenement.listeDescrSalles = new Array();
-			
-            // Passer toutes les salles et les ajouter dans le tableau
-          
-			//Creer un tableau listeNumberoJSalles qui va contenir les noumero des joueurs dans salles
-			objEvenement.listeNumberoJSalles = new Array();
-			objEvenement.typeDeJeuAll = new Array();
-			
-			for (var i:Number = 0; i < count; i++)
-            {
-                // Ajouter le numero de joueurs dans salle dans le tableau
-                objEvenement.listeNumberoJSalles.push({maxnbplayers:lstChildNodes[i].attributes.maxnbplayers});
-                objEvenement.typeDeJeuAll.push({typeDeJeu:lstChildNodes[i].attributes.typeDeJeu});
-				
-			}
-
-
+					
         }
         // Si le retour de la fonction est une reponse positive et non une
         // erreur, alors on peut passer a l'autre etat
@@ -3871,12 +3851,17 @@ class GestionnaireCommunication
                 var lstJoueursChildNodes:Array = lstTablesChildNodes[i].childNodes;
                 // Creer un objet qui va contenir les information sur la table
                 var objTable:Object = new Object();
-                // Definir les proprietes de la table et creer la liste des
-                // joueurs
+                // Definir les proprietes de la table et creer la liste des joueurs
                 objTable.no = lstTablesChildNodes[i].attributes.no;
                 objTable.temps = lstTablesChildNodes[i].attributes.temps;
 				objTable.tablName = lstTablesChildNodes[i].attributes.tablName;
-                objTable.listeJoueurs = new Array();
+				objTable.gameType = lstTablesChildNodes[i].attributes.gameType;
+				objTable.maxNbPlayers = lstTablesChildNodes[i].attributes.maxNbPlayers;
+				objTable.NbTracks = lstTablesChildNodes[i].attributes.NbTracks;  // in server?
+                trace("Verifie - retour liste tables GCom: " + objTable.gameType  + " " + objTable.maxNbPlayers );
+				
+				objTable.listeJoueurs = new Array();
+				
                 // Passer les joueurs de la table courante et les ajouter
                 // dans l'objet table courant
 				var countN:Number = lstJoueursChildNodes.length;
@@ -4036,6 +4021,11 @@ class GestionnaireCommunication
 				        objEvenement.clocolor = objNoeudParametre.firstChild.nodeValue;
 				        trace("verify clocolor " +  objEvenement.clocolor);
 				        break;
+					
+					case "MaxNbPlayers":
+				        objEvenement.maxNbPlayers = objNoeudParametre.firstChild.nodeValue;
+				        trace("verify max " +  objEvenement.maxNbPlayers);
+				        break;
                 }
             }
 			//*********************************************************
@@ -4117,6 +4107,11 @@ class GestionnaireCommunication
 				   case "Color":
 				   objEvenement.clocolor = objNoeudParametre.firstChild.nodeValue;
 				   trace("verify clocolor " +  objEvenement.clocolor);
+				   break;
+				   
+				   case "MaxNbPlayers":
+				   objEvenement.maxNbPlayers = objNoeudParametre.firstChild.nodeValue;
+				   trace("verify max " +  objEvenement.maxNbPlayers);
 				   break;
 				}
 			}

@@ -49,7 +49,7 @@ class Personnage
 	private var minigameLoade:Boolean;
 	private var clothesColor:String;
 	private var braniacState:Boolean;
-	private var repostCases:Boolean;
+	private var repostCases:Boolean; //?
 		
 		
 	function setRepostCases(repost:Boolean)
