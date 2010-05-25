@@ -164,7 +164,7 @@ public class ProtocoleJoueur implements Runnable
 			// etant donné que ce sont seulement de petits messages qui sont 
 			// envoyés entre le client et le serveur, alors il n'est pas 
 			// nécessaire d'attendre un délai supplémentaire
-			objSocketJoueur.setTcpNoDelay(true);
+			objSocketJoueur.setTcpNoDelay(false);
 		}
 
 		catch (SocketException se)
@@ -223,7 +223,7 @@ public class ProtocoleJoueur implements Runnable
 				// stream a été fermé, il faut donc terminer le thread
 				if (intBytesLus == -1)
 				{
-                    //objLogger.error("Une erreur est survenue: nombre d'octets lus = -1");
+                    objLogger.error("Une erreur est survenue: nombre d'octets lus = -1");
 			        bolErreurSocket = true;
 					bolStopThread = true;
 				}
@@ -238,12 +238,12 @@ public class ProtocoleJoueur implements Runnable
 					// traiter la commande reèue
 					if (byttBuffer[i] == (byte) 0)
 					{
-						// Créer une cha”ne temporaire qui va garder la cha”ne 
+						// Créer une chaîne temporaire qui va garder la chaîne 
 						// de caractères lue jusqu'à maintenant
 						String strChaineAccumulee = new String(byttBuffer, 
 												intMarqueur, i - intMarqueur);
 				
-						// Ajouter la cha”ne courante à la cha”ne de commande
+						// Ajouter la chaîne courante à la chaîne de commande
 						strMessageRecu.append(strChaineAccumulee);
 					
     					// On appelle une fonction qui va traiter le message reèu du 
@@ -357,7 +357,8 @@ public class ProtocoleJoueur implements Runnable
 				// client (joueur) a été fermée (on ne doit pas obtenir de
 			    // numéro de commande de cette fonction, car on ne retournera
 			    // rien du tout)
-				objControleurJeu.deconnecterJoueur(objJoueurHumain, false, true);					
+				objControleurJeu.deconnecterJoueur(objJoueurHumain, false, true);
+				System.out.println("!!!!!!!!!!!!! Joueur deconnecter ");
 			}
 			
 			// Enlever le protocole du joueur courant de la liste des 
@@ -710,6 +711,7 @@ public class ProtocoleJoueur implements Runnable
 						// client (joueur) a été fermée (il faut obtenir un numéro
 						// de commandes de cette fonction)
 						objControleurJeu.deconnecterJoueur(objJoueurHumain, true, false);
+						System.out.println("Player " + objJoueurHumain.obtenirNomUtilisateur() + " ask for cancel");
 
 						// Il n'y a pas eu d'erreurs
 						objNoeudCommande.setAttribute("type", "Reponse");
@@ -872,18 +874,16 @@ public class ProtocoleJoueur implements Runnable
                         			 objNoeudSalle.setAttribute("descriptions", objSalle.getRoomDescription(this.langue));
 
                         			 //Add max numbers of players of that room
-                        			 objNoeudSalle.setAttribute("maxnbplayers", Integer.toString(objSalle.getRegles().getMaxNbPlayers()));
+                        			 //objNoeudSalle.setAttribute("maxnbplayers", Integer.toString(objSalle.getRegles().getMaxNbPlayers()));
 
                         			 //Add type of game for that room
-                        			 objNoeudSalle.setAttribute("typeDeJeu", objSalle.getGameType());
+                        			 //objNoeudSalle.setAttribute("typeDeJeu", objSalle.getGameType());
                         			 
                         			//Add type of game for that room
-                        			 objNoeudSalle.setAttribute("nbTracks", Integer.toString(objSalle.getRegles().getNbTracks()));
+                        			 //objNoeudSalle.setAttribute("nbTracks", Integer.toString(objSalle.getRegles().getNbTracks()));
 
-                        			 //Add type of game for that room
+                        			 
                         			 objNoeudSalle.setAttribute("userCreator", objSalle.getStrCreatorUserName());
-                        			 
-                        			//Add type of game for that room
                         			 objNoeudSalle.setAttribute("masterTime", Integer.toString(objSalle.getMasterTime()));
 
 
@@ -1244,7 +1244,7 @@ public class ProtocoleJoueur implements Runnable
 						// le document de sortie
 						objNoeudCommande.appendChild(objNoeudParametreListeJoueurs);
 
-						objNoeudCommande.setAttribute("chatPermis", Boolean.toString(obtenirJoueurHumain().obtenirSalleCourante().getRegles().obtenirPermetChat()));
+						//objNoeudCommande.setAttribute("chatPermis", Boolean.toString(obtenirJoueurHumain().obtenirSalleCourante().getRegles().obtenirPermetChat()));
 					}
 
 				}
@@ -1364,6 +1364,12 @@ public class ProtocoleJoueur implements Runnable
 
 										// Add table name
 										objNoeudTable.setAttribute("tablName", objTable.getTableName());
+										
+										// Add table max players number
+										objNoeudTable.setAttribute("maxNbPlayers", Integer.toString(objTable.getMaxNbPlayers()));
+										
+										// Add table max players number
+										objNoeudTable.setAttribute("gameType", objTable.getGameType());
 
 
 										// Créer un ensemble contenant tous les tuples de la liste 
@@ -1472,15 +1478,23 @@ public class ProtocoleJoueur implements Runnable
 							intNbColumns = 14;
 						
 						}
-
+                        
+						
+						
 						String name = "";
 						if(obtenirValeurParametre(objNoeudCommandeEntree, "TableName") != null) //.getNodeValue()
 							name = obtenirValeurParametre(objNoeudCommandeEntree, "TableName").getNodeValue();
+						
+						String type = "Course";  // default
+						if(obtenirValeurParametre(objNoeudCommandeEntree, "GameType") != null) //.getNodeValue()
+							type = obtenirValeurParametre(objNoeudCommandeEntree, "GameType").getNodeValue();
 
+						System.out.println("Protocole - create table : " + intNbColumns + " " + intNbLines + " " + type);
+						
 						// Appeler la méthode permettant de créer la nouvelle
 						// table et d'entrer le joueur dans cette table
 						int intNoTable = objJoueurHumain.obtenirSalleCourante().creerTable(objJoueurHumain, 
-								intTempsPartie, true, name, intNbLines, intNbColumns);
+								intTempsPartie, true, name, intNbLines, intNbColumns, type);
 
 						name = objJoueurHumain.obtenirPartieCourante().obtenirTable().getTableName();
 
@@ -1533,6 +1547,27 @@ public class ProtocoleJoueur implements Runnable
 						// Ajouter le noeud paramètre au noeud de commande dans
 						// le document de sortie
 						objNoeudCommande.appendChild(objNoeudParametreColorPersonnage);
+						
+						//***************************
+						// Créer le noeud pour le paramètre contenant la liste
+						// des personnages à retourner
+						Element objNoeudParametreMaxNbPlayers = objDocumentXMLSortie.createElement("parametre");
+						
+						// On ajoute un attribut type qui va contenir le type
+						// du paramètre
+						objNoeudParametreMaxNbPlayers.setAttribute("type", "MaxNbPlayers");
+						
+						int number = objJoueurHumain.obtenirPartieCourante().obtenirTable().getMaxNbPlayers();
+						
+						// Créer un noeud texte contenant le role du joueur
+						Text objNoeudTexteMaxNbPlayers = objDocumentXMLSortie.createTextNode(Integer.toString(number));
+
+						// Ajouter le noeud texte au noeud du paramètre
+						objNoeudParametreMaxNbPlayers.appendChild(objNoeudTexteMaxNbPlayers);
+						
+						// Ajouter le noeud paramètre au noeud de commande dans
+						// le document de sortie
+						objNoeudCommande.appendChild(objNoeudParametreMaxNbPlayers);
 					}
 				}
 				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.EntrerTable))
@@ -2427,7 +2462,7 @@ public class ProtocoleJoueur implements Runnable
 					{
 						objNoeudCommande.setAttribute("nom", "JoueurPasDansTable");
 					}
-					else if (!this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().getObjSalle().getRegles().obtenirPermetChat())
+					else if (!this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable().getRegles().obtenirPermetChat())
 					{
 						objNoeudCommande.setAttribute("nom", "ChatNonPermis");
 					}
@@ -2803,7 +2838,7 @@ public class ProtocoleJoueur implements Runnable
 		{
 			// Si le nombre d'enfants du noeud de commande est de 1, alors
 			// le nombre de paramètres est correct et on peut continuer
-			if (noeudCommande.getChildNodes().getLength() == 4)
+			if (noeudCommande.getChildNodes().getLength() == 5)
 			{
 				// Déclarer une variable qui va permettre de savoir si le 
 				// noeud enfant est valide

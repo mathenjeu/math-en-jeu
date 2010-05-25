@@ -78,9 +78,9 @@ public class VerificateurConnexions implements Runnable
 			
 			try
 			{
-				// Stopper le thread du vérificateur pendant 60 secondes pour
+				// Stopper le thread du vérificateur pendant 60 - 100 secondes pour 
 				// laisser un moment de répit au CPU
-				Thread.sleep(60000);
+				Thread.sleep(120000);
 			}
 			catch (InterruptedException ie) {}
 			

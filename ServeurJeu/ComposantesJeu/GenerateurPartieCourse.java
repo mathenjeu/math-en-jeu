@@ -3,7 +3,6 @@ package ServeurJeu.ComposantesJeu;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import Enumerations.Visibilite;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
@@ -23,8 +22,6 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.PotionGros;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.PotionPetit;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Telephone;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 
@@ -70,13 +67,11 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 		this.intCompteurCases = 0;
 		this.intCompteurIdObjet = 1;
 		this.objCaseParcourue = new CaseCouleur(1);
-    	//***************
     	
-    	this.reglesPartie = table.getObjSalle().getRegles();
-		this.objGestionnaireBD = table.getObjSalle().getObjControleurJeu().obtenirGestionnaireBD();
+    	this.reglesPartie = table.getRegles();
+		this.objGestionnaireBD = table.getObjGestionnaireBD();
 		this.objSalle = table.getObjSalle();
-    	
-    	
+    	    	
 		int temps = table.obtenirTempsTotal();
 		
 		// calculate number of lines and of columns 
@@ -416,14 +411,13 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 		
 		// if game type = tournament (plateau semilineaire)
 		// add the start and end points 
-		
-        Iterator objIterateurListePriorite = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
-		ReglesCaseCouleur objReglesCaseCouleur = (ReglesCaseCouleur) objIterateurListePriorite.next();				
+		       			
 		for (int i = 0; i < reglesPartie.getNbTracks(); i++)
 		{
 
 			objPoint = new Point(0,i);
-			objttPlateauJeu[objPoint.x][objPoint.y] = new CaseCouleur(objReglesCaseCouleur.obtenirTypeCase());
+			/// type = 1 for the Cases - we don't have for the moment diff cases
+			objttPlateauJeu[objPoint.x][objPoint.y] = new CaseCouleur(1);   
 			lstPointsCaseLibre.add(objPoint);
 		}
 		
@@ -431,7 +425,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 		{
 				
 			objPoint = new Point(intNbLines - 1,intNbColumns - i - 1);
-			objttPlateauJeu[objPoint.x][objPoint.y] = new CaseCouleur(objReglesCaseCouleur.obtenirTypeCase());
+			objttPlateauJeu[objPoint.x][objPoint.y] = new CaseCouleur(1);
 			lstPointsCaseLibre.add(objPoint);
 		}
 	
@@ -451,15 +445,15 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 		
 		// Si on doit afficher des cases spéciales dans le plateau de jeu, 
 		// alors on fait le code suivant
-		if (reglesPartie.obtenirListeCasesSpecialesPossibles().size() > 0)
-		{
+		//if (reglesPartie.obtenirListeCasesSpecialesPossibles().size() > 0)
+		//{
 			// Réinitialiser le compteur de cases
 			int intCompteurCasesSpeciale = 0;
 			
 			// Obtenir un itérateur pour la liste des règles de cases spéciales
 			// triées par priorité (c'est certain que la première fois il y a au 
 			// moins une règle de case)
-			Iterator objIterateurListePriorite = reglesPartie.obtenirListeCasesSpecialesPossibles().iterator();
+			//Iterator objIterateurListePriorite = reglesPartie.obtenirListeCasesSpecialesPossibles().iterator();
 			
 			// On va choisir des cases spéciales en commençant par la case
 			// la plus prioritaire et on va faire ça tant qu'on n'a pas atteint 
@@ -470,7 +464,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 			{
 				// Faire la référence vers la règle de la case spéciale 
 				// courante
-				ReglesCaseSpeciale objReglesCaseSpeciale = (ReglesCaseSpeciale) objIterateurListePriorite.next();
+				//ReglesCaseSpeciale objReglesCaseSpeciale = (ReglesCaseSpeciale) objIterateurListePriorite.next();
 				
 				// Obtenir un point aléatoirement parmi les points restants
 				// qui n'ont pas de cases spéciales et enlever en même temps 
@@ -483,19 +477,19 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 
 				// Définir la valeur de la case au point spécifié à la case 
 				// d'identification
-				objttPlateauJeu[objPoint.x][objPoint.y] = new CaseSpeciale(objReglesCaseSpeciale.obtenirTypeCase());				
+				objttPlateauJeu[objPoint.x][objPoint.y] = new CaseSpeciale(1);				
 				
 				// Incrémenter le nombre de cases passées
 				intCompteurCasesSpeciale++;
 				
 				// Si on est arrivé à la fin de la liste, alors il faut 
 				// retourner au début
-				if (objIterateurListePriorite.hasNext() == false)
-				{
+				//if (objIterateurListePriorite.hasNext() == false)
+				//{
 					// Obtenir un autre itérateur pour la liste
-					objIterateurListePriorite = reglesPartie.obtenirListeCasesSpecialesPossibles().iterator();
-				}
-			}			
+					//objIterateurListePriorite = reglesPartie.obtenirListeCasesSpecialesPossibles().iterator();
+				//}
+			//}			
 		}
 		
 		// Bloc de code qui va s'assurer de créer les cases de couleur dans le 
@@ -507,7 +501,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 			// Obtenir un itérateur pour la liste des règles de cases de couleur
 			// triées par priorité (c'est certain que la première fois il y a au 
 			// moins une règle de case)
-			Iterator objIterateurListePriorite = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
+			//Iterator objIterateurListePriorite = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
 			
 			// On va choisir des cases de couleur en commençant par la case
 			// la plus prioritaire et on va faire ça tant qu'on n'a pas atteint 
@@ -520,7 +514,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 				
 				// Faire la référence vers la règle de la case de couleur 
 				// courante
-				ReglesCaseCouleur objReglesCaseCouleur = (ReglesCaseCouleur) objIterateurListePriorite.next();
+				//ReglesCaseCouleur objReglesCaseCouleur = (ReglesCaseCouleur) objIterateurListePriorite.next();
 				
 				// Obtenir un point aléatoirement parmi les points restants
 				// qui n'ont pas de cases spéciales et de cases de couleur 
@@ -533,18 +527,18 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 
 				// Définir la valeur de la case au point spécifié à la case 
 				// d'identification
-				objttPlateauJeu[objPoint.x][objPoint.y] = new CaseCouleur(objReglesCaseCouleur.obtenirTypeCase());				
+				objttPlateauJeu[objPoint.x][objPoint.y] = new CaseCouleur(1);				
 				
 				// Incrémenter le nombre de cases passées
 				intCompteurCasesCouleur++;
 				
 				// Si on est arrivé à la fin de la liste, alors il faut 
 				// retourner au début
-				if (objIterateurListePriorite.hasNext() == false)
-				{
+				//if (objIterateurListePriorite.hasNext() == false)
+				//{
 					// Obtenir un autre itérateur pour la liste
-					objIterateurListePriorite = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
-				}
+					//objIterateurListePriorite = reglesPartie.obtenirListeCasesCouleurPossibles().iterator();
+				//}
 			}
 			
 			// La liste des cases présentes est maintenant la liste des cases 
@@ -656,9 +650,9 @@ public class GenerateurPartieCourse extends GenerateurPartie {
      * @param int nbJoueurs : Le nombre de joueurs dont générer la position
      * @return Point[] : Un tableau de points pour chaque joueur 
      */
-    public Point[] genererPositionJoueurs(int nbJoueurs, ArrayList<Point> lstPointsCaseLibre)
+    public Point[] genererPositionJoueurs(Table table, int nbJoueurs, ArrayList<Point> lstPointsCaseLibre)
     {
-    	int nbTracks = objSalle.getRegles().getNbTracks();
+    	int nbTracks = table.getRegles().getNbTracks();
 		// Créer un tableau contenant les nbJoueurs points
 		Point[] objtPositionJoueurs = new Point[nbJoueurs];
 		

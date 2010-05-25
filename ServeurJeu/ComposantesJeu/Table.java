@@ -35,6 +35,7 @@ import ServeurJeu.Evenements.EvenementSynchroniserTemps;
 import ServeurJeu.Evenements.EvenementPartieTerminee;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
+import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.Evenements.EvenementMessageChat;
 import ServeurJeu.Evenements.EvenementUtiliserObjet;
 
@@ -57,7 +58,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	
 	// Déclaration d'une référence vers le gestionnaire de bases de données
 	private GestionnaireBD objGestionnaireBD;
-	
+		
 	// Déclaration d'une référence vers la salle parente dans laquelle se 
 	// trouve cette table 
 	private Salle objSalle;
@@ -70,7 +71,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	private final int MAX_NB_PLAYERS;
 		
 	// Cette variable va contenir le nom d'utilisateur du créateur de cette table
-	private String strNomUtilisateurCreateur;
+	private final String strNomUtilisateurCreateur;
 	
 	// Déclaration d'une variable qui va garder le temps total défini pour 
 	// cette table
@@ -144,6 +145,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     // when player got out from table it must return his idPerso in the list
     private ArrayList<Integer> idPersos;
     
+    // Contient le type de jeu (ex. mathEnJeu)
+	private final String gameType;
+	
+	// Cet objet permet de déterminer les règles de jeu pour cette salle
+	private final Regles objRegles;
+	
+	private GenerateurPartie gameFactory;
     
 	
 
@@ -161,12 +169,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @param int tempsPartie : Le temps de la partie en minute
 	 * @param Regles reglesTable : Les règles pour une partie sur cette table
 	 */
-	public Table(Salle salleParente, int noTable, JoueurHumain joueur ,	int tempsPartie, String name, int intNbLines, int intNbColumns) 
+	public Table(Salle salleParente, int noTable, JoueurHumain joueur ,	int tempsPartie, 
+			String name, int intNbLines, int intNbColumns, String gameType) 
 	{
 		super();
    	
-		MAX_NB_PLAYERS = salleParente.getRegles().getMaxNbPlayers();
-		
 		//positionWinTheGame = new Point(-1, -1); 		
                 
 		// Faire la référence vers le gestionnaire d'événements et le 
@@ -179,10 +186,18 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// total d'une partie
 		setObjSalle(salleParente);
 		intNoTable = noTable;
+		this.gameType = gameType;
 		
+		// Définir les règles de jeu pour la salle courante
+		
+		objRegles = new Regles();
+		objGestionnaireBD.chargerRegllesTable(objRegles, gameType);
+		MAX_NB_PLAYERS = objRegles.getMaxNbPlayers();
 		setTableName(name);
-		setNbLines(intNbLines);
-		setNbColumns(intNbColumns);
+		
+		System.out.println("Cons table : " + intNbLines + " " + intNbColumns);
+		this.nbLines = intNbLines;
+		this.nbColumns = intNbColumns;
 		
 		intTempsTotal = tempsPartie;
                        
@@ -196,10 +211,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Au départ, aucune partie ne se joue sur la table
 		bolEstCommencee = false;
 		bolEstArretee = true;
-						
-		// take new table dimentions if changed in DB
-		objGestionnaireBD.getNewTableDimentions(salleParente);
-				
+					
 		// initialaise gameboard - set null
 		objttPlateauJeu = null;
 		
@@ -233,6 +245,22 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				
 		this.idPersos = new ArrayList<Integer>();
         this.setIdPersos();
+        
+        
+        this.gameFactory = null;
+		
+		try {
+			this.gameFactory = (GenerateurPartie) Class.forName("ServeurJeu.ComposantesJeu.GenerateurPartie" + gameType).newInstance();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void creation()
@@ -699,7 +727,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Générer le plateau de jeu selon les règles de la table et 
 		// garder le plateau en mémoire dans la table
-		objttPlateauJeu = objSalle.getGameFactory().genererPlateauJeu(lstPointsCaseLibre, objProchainIdObjet, lstPointsFinish, this);
+		objttPlateauJeu = getGameFactory().genererPlateauJeu(lstPointsCaseLibre, objProchainIdObjet, lstPointsFinish, this);
 
         // Définir le prochain id pour les objets
         objProchainIdObjet++;
@@ -742,10 +770,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			}
 			
 			// Déterminer combien de joueurs virtuels on veut
-			int maxNombreJoueursVirtuels = objSalle.getRegles().getNbVirtualPlayers();
-			if(nbJoueur < objSalle.getRegles().getNbTracks()){ 
+			int maxNombreJoueursVirtuels = getRegles().getNbVirtualPlayers();
+			if(nbJoueur < getRegles().getNbTracks()){ 
 			   intNombreJoueursVirtuels = maxNombreJoueursVirtuels;
-			   while(maxNombreJoueursVirtuels + nbJoueur > objSalle.getRegles().getNbTracks()){
+			   while(maxNombreJoueursVirtuels + nbJoueur > getRegles().getNbTracks()){
 			      intNombreJoueursVirtuels--;
 			      maxNombreJoueursVirtuels--;
 			   }
@@ -753,7 +781,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 		}
 		
-		objtPositionsJoueurs = objSalle.getGameFactory().genererPositionJoueurs(nbJoueur + intNombreJoueursVirtuels, lstPointsCaseLibre);	
+		objtPositionsJoueurs = this.getGameFactory().genererPositionJoueurs(this, nbJoueur + intNombreJoueursVirtuels, lstPointsCaseLibre);	
         
 		lstJoueurs = new Joueur[nbJoueur + intNombreJoueursVirtuels];
 		// Créer un ensemble contenant tous les tuples de la liste 
@@ -867,7 +895,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 // Pour le prochain joueur virtuel
                 intIdPersonnage++;
                 
-                String name = objSalle.getGameType();
+                //String name = getGameType();
     			
     			String color = this.getOneColor();
     			//System.out.println("colors: " + color);
@@ -1074,7 +1102,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	public boolean isAllTheHumainsOnTheFinish(JoueurHumain joueurHumain)
 	{
 		boolean isAllPlayers = true;
-		int tracks = getObjSalle().getRegles().getNbTracks();
+		int tracks = getRegles().getNbTracks();
 				
 		synchronized (lstJoueurs)
 	    {
@@ -2240,6 +2268,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			return nbLines;
 		}
 
+		
+
 		/**
 		 * @param nbLines the nbLines to set
 		 */
@@ -2258,7 +2288,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		 * @param nbColumns the nbColumns to set
 		 */
 		public void setNbColumns(int nbColumns) {
-			this.nbColumns = nbColumns;			
+			this.nbColumns = nbColumns;
 		}
 		
 		public Point getPositionPointFinish()
@@ -2452,20 +2482,25 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			}
 		}
 		
-        /*  Unused now method
-        private Boolean controlForRole(int userName)
+		public Regles getRegles()
 		{
-			// Bloc of code to treat the username
-	        int firstDel = userName.indexOf("-");                 // find first delimiter
-	        int secondDel = userName.indexOf(".",firstDel + 1);   // find second delimiter
-	        String master = "";
-
-	        //Now extract the 'master' from username
-	        if (firstDel != -1 && secondDel != -1)
-	           master = userName.substring(firstDel + 1, secondDel);
-	       
-			
-			return master.equalsIgnoreCase("master");
-			
-		}*/
+		   return objRegles;
+		}
+		
+		public String getGameType()
+		{
+			return gameType;
+		}
+	    
+		public GenerateurPartie getGameFactory(){
+			return gameFactory;
+		}
+		
+		/**
+		 * @return the objGestionnaireBD
+		 */
+		public GestionnaireBD getObjGestionnaireBD() {
+			return objGestionnaireBD;
+		}
+        
 }// end class    

@@ -10,12 +10,10 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Map.Entry;
-
 import Enumerations.Categories;
 import Enumerations.RetourFonctions.ResultatEntreeTable;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
-import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.Evenements.EvenementJoueurEntreSalle;
 import ServeurJeu.Evenements.EvenementJoueurQuitteSalle;
 import ServeurJeu.Evenements.EvenementNouvelleTable;
@@ -49,12 +47,7 @@ public class Salle
 	
 	// Cette variable va contenir le nom d'utilisateur du créateur de cette salle
 	private final String strCreatorUserName;
-        
-    // Contient le type de jeu (ex. mathEnJeu)
-	private final String gameType;
-	
-	private GenerateurPartie gameFactory;
-	
+     	
 	//Room short description
 	private String roomDescription;
 	
@@ -67,10 +60,7 @@ public class Salle
 	
 	// Cet objet est une liste des tables qui sont présentement dans cette salle
 	private TreeMap<Integer, Table> lstTables;
-	
-	// Cet objet permet de déterminer les règles de jeu pour cette salle
-	private Regles objRegles;
-	
+		
 	// Date when room will be activated
 	private Date beginDate;
 	
@@ -82,10 +72,7 @@ public class Salle
 	
 	//default time for the room 
 	private final int masterTime;
-	
-	//use all general categories or only room's specyfied categories
-	//private final boolean roomCategories;
-	
+		
 	//specifyed room's categories
 	private final ArrayList<Integer> categories;
 	
@@ -106,11 +93,9 @@ public class Salle
 	 * @param String nomUtilisateurCreateur : Le nom d'utilisateur du créateur
 	 * 										  de la salle
 	 * @param String motDePasse : Le mot de passe
-	 * @param Regles reglesSalle : Les règles de jeu pour la salle courante
 	 */
 	public Salle(String nomSalle, String nomUtilisateurCreateur, String motDePasse, 
-				 Regles reglesSalle, ControleurJeu controleurJeu, String gameType, 
-				 int roomID, Date beginDate, Date endDate, int masterTime)
+				 ControleurJeu controleurJeu, int roomID, Date beginDate, Date endDate, int masterTime)
 	{
 		super();
 		
@@ -126,25 +111,19 @@ public class Salle
 		strCreatorUserName = nomUtilisateurCreateur;
 		strPassword = motDePasse;
 		//System.out.println(strPassword);
-                
-        // Type de jeu de la salle
-        this.gameType = gameType;
+             
         this.roomID = roomID;
         this.setBeginDate(beginDate);
         this.setEndDate(endDate);
         this.masterTime = masterTime;
-        //this.roomCategories = roomCategories;
-        
+               
         categories = new ArrayList<Integer>();
 		
 		// Créer une nouvelle liste de joueurs, de tables et de numéros
 		lstJoueurs = new TreeMap <String, JoueurHumain>();
 		lstTables = new TreeMap <Integer, Table>();
 		lstNoTables = new TreeSet <Integer>();
-		
-		// Définir les règles de jeu pour la salle courante
-		objRegles = reglesSalle;
-                
+		               
         // Faire la référence vers le controleur de jeu
 		setObjControleurJeu(controleurJeu);
 		
@@ -153,22 +132,7 @@ public class Salle
 		
 		// Démarrer le thread du gestionnaire d'événements
 		threadEvenements.start();
-		
-		this.gameFactory = null;
-		
-		try {
-			this.gameFactory = (GenerateurPartie) Class.forName("ServeurJeu.ComposantesJeu.GenerateurPartie" + gameType).newInstance();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+			
 	}
 
 	/**
@@ -382,7 +346,7 @@ public class Salle
 	 * 				joueurs de la salle et leur envoyer un événement. La
 	 * 				fonction entrerTable est synchronisée automatiquement.
 	 */
-	public int creerTable(JoueurHumain joueur, int tempsPartie, boolean doitGenererNoCommandeRetour, String name, int intNbLines, int intNbColumns)
+	public int creerTable(JoueurHumain joueur, int tempsPartie, boolean doitGenererNoCommandeRetour, String name, int intNbLines, int intNbColumns, String gameType)
 	{
 		// Déclaration d'une variable qui va contenir le numéro de la table
 		int intNoTable;
@@ -391,9 +355,9 @@ public class Salle
 	    // cette salle pendant la création de la table
 	    synchronized (lstTables)
 	    {
-	    	
+	    	System.out.println("Salle - cree table : " + intNbLines + " " + intNbColumns);
 	    	// Créer une nouvelle table en passant les paramètres appropriés
-	    	Table objTable = new Table( this, genererNoTable(), joueur, tempsPartie, name, intNbLines, intNbColumns);
+	    	Table objTable = new Table( this, genererNoTable(), joueur, tempsPartie, name, intNbLines, intNbColumns, gameType);
 	    		    	
 	    	objTable.creation();
 	    		    	
@@ -421,7 +385,7 @@ public class Salle
 				// Cette fonction va passer les joueurs et créer un 
 				// InformationDestination pour chacun et ajouter l'événement 
 				// dans la file de gestion d'événements
-				preparerEvenementNouvelleTable(objTable.obtenirNoTable(), tempsPartie, joueur.obtenirNomUtilisateur(), objTable.getTableName());
+				preparerEvenementNouvelleTable(objTable, joueur.obtenirNomUtilisateur());
 		    }
 
 		    // Entrer dans la table on ne fait rien avec la liste des 
@@ -703,11 +667,11 @@ public class Salle
 	 * @synchronism Cette fonction n'est pas synchronisée ici, mais elle l'est
 	 * 				par l'appelant (creerTable).
 	 */
-	private void preparerEvenementNouvelleTable(int noTable, int tempsPartie, String nomUtilisateur, String tablName)
+	private void preparerEvenementNouvelleTable(Table objTable, String nomUtilisateur)
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs qu'une table a été créée
-	    EvenementNouvelleTable nouvelleTable = new EvenementNouvelleTable(noTable, tempsPartie, tablName);
+	    EvenementNouvelleTable nouvelleTable = new EvenementNouvelleTable(objTable);
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// lstJoueurs (chaque élément est un Map.Entry)
@@ -810,10 +774,6 @@ public class Salle
 		return strNomSalle;
 	}//end methode
 	
-	public Regles getRegles()
-	{
-	   return objRegles;
-	}
 	
 	/**
 	 * Cette fonction permet de déterminer si la salle possède un mot de passe
@@ -826,15 +786,7 @@ public class Salle
 	{
 		return !(getStrPassword() == null || getStrPassword().equals(""));
 	}
-
-
-	public String getGameType()
-	{
-		return gameType;
-	}
-
-
-	
+   
 	public void setRoomDescription(String roomDescription) {
 		this.roomDescription = roomDescription;
 	}
@@ -887,10 +839,6 @@ public class Salle
 	public int getMasterTime() {
 		return masterTime;
 	}
-/*
-	public boolean isRoomCategories() {
-		return roomCategories;
-	}*/
 
 	public ArrayList<Integer> getCategories() {
 		return categories;
@@ -916,10 +864,10 @@ public class Salle
 	{
         
 		if(categoriesString != null){
-			System.out.println("string cat : " + categoriesString);		
+			//System.out.println("string cat : " + categoriesString);		
 			StringTokenizer cat = new StringTokenizer(categoriesString, ":");
 			int whatCategories = Integer.parseInt(cat.nextToken());
-			System.out.println("string cat bool : " + whatCategories);
+			//System.out.println("string cat bool : " + whatCategories);
 			// if whatCategories == 1 we take only categories from BD
 			if(whatCategories == 1){
 				while(cat.hasMoreTokens())
@@ -934,7 +882,7 @@ public class Salle
 				{
 					Integer i = Integer.parseInt(cat.nextToken());
 					categories.remove(i);
-					System.out.println("string cat int : " + i);
+					//System.out.println("string cat int : " + i);
 				}
 			}else setCategories(); 	
 		}else setCategories(); 		// if string == null
@@ -942,9 +890,9 @@ public class Salle
 		// to not be without any categories
 		if( categories.isEmpty()) setCategories(); 
 		
-		ListIterator<Integer> it = categories.listIterator();	
-		while(it.hasNext())
-			System.out.println(it.next());
+		//ListIterator<Integer> it = categories.listIterator();	
+		//while(it.hasNext())
+			//System.out.println(it.next());
 	}// end mathode
 	
 
@@ -970,11 +918,7 @@ public class Salle
 	public ControleurJeu getObjControleurJeu() {
 		return objControleurJeu;
 	}
-
-	public GenerateurPartie getGameFactory() {
-		return gameFactory;
-	}
-
+	
 	public Table obtenirTable(int intNoTable) {
 		
 		return (Table)lstTables.get( new Integer(intNoTable));
