@@ -209,6 +209,7 @@
 			tableLinesLabel = "Lines"
 			tableColumnsLabel = "Columns"
 			tableOptionalLabel = "*Optional"
+			tableGameType = "Game Type"
 			playersListe = " - Liste of players - "
 			
 			

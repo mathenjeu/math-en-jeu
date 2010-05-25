@@ -52,11 +52,10 @@ class GestionnaireEvenements
     private var idPersonnage:Number;   //  
     private var listeDesJoueursDansSalle:Array;  // liste des joueurs dans la salle qu'on est. Un joueur contient un nom (nom) ???? 
     
-	private var playersNumber:Number;   // ????????
-	public var  listeDesTypesDeJeu:Array; //liste des TypesDeJeu de salles
+	private var playersNumber:Number;   // ???????? we really need it?
 	public var  listeDesSalles:Array;    //  liste de toutes les salles                !!!! Combiner ici tout dans un Objet
-	private var listeNumeroJoueursSalles:Array;		//liste de numero de joueurs dans chaque salle
-	private var maxPlayersInTable:Number = 0; // Number max of players by table in the room where we are  
+	///private var listeNumeroJoueursSalles:Array;		//liste de numero de joueurs dans chaque salle
+	private var maxPlayers:Number; // Number max of players by table in the room where we are  
 	
 	private var listeChansons:Array;    //  liste de toutes les chansons
     private var listeDesJoueursConnectes:Array;   // la premiere liste qu'on recoit, tous les joueurs dans toutes les salles. Un joueur contient un nom (nom)
@@ -68,17 +67,20 @@ class GestionnaireEvenements
 	private var tabPodiumOrdonneID:Array;			// id des personnages ordonnes par pointage une fois la partie terminee
 	private var pointageMinimalWinTheGame:Number = -1 // pointage minimal a avoir droit d'atteindre le WinTheGame
 	
-	public  var typeDeJeu:String = "mathEnJeu";
+	public  var typeDeJeu:String;        // gameType in our table
 	private var moveVisibility:Number;  // The number of cases that user can move. At the begining is 3. 
 	                                    // With the 3 running correct answers the level increase by 1 
 	private var langue;
 	private var endGame:Boolean;   // used to ignore the movement of virtual players after the end of the game
 	private var newsChat:NewsBox;  // all the messages to show in newsbox
-	private var nbTracks:Number;
+	private var nbTracks:Number;   // usually is 4, do we really need it?  it not change...
 	private var finishPoints:Array;
 	
+	// braniac state of our perso
 	private var braniacState:String;
+	// banana state of our perso
 	private var bananaState:Boolean;
+	// used to take bonus
 	private var winIt:Number;
 	
 	//used to color clothes of our perso
@@ -95,8 +97,7 @@ class GestionnaireEvenements
 		trace("numeroTable : " + numeroTable);	
 		trace("tempsPartie : " + tempsPartie);	
 		trace("idPersonnage : " + idPersonnage);	
-		//trace("motDePasseSalle : " + motDePasseSalle);	
-		trace("listeDesJoueursDansSalle : " + listeDesJoueursDansSalle);	
+		
 		trace("listeDesSalles : " + listeDesSalles);	
 		trace("listeChansons : " + listeChansons);	
 		trace("listeDesJoueursConnectes : " + listeDesJoueursConnectes);	
@@ -186,9 +187,8 @@ class GestionnaireEvenements
 		this.langue = langue;
         this.nomSalle = new String();
         this.listeDesSalles = new Array();
-		this.listeNumeroJoueursSalles = new Array();
-		this.listeDesTypesDeJeu = new Array();
-        this.listeDesTables = new Array();
+		//this.listeNumeroJoueursSalles = new Array();
+		this.listeDesTables = new Array();
 		this.listeChansons = new Array();
         this.listeDesJoueursConnectes = new Array();
         this.listeDesJoueursDansSalle = new Array();
@@ -202,6 +202,7 @@ class GestionnaireEvenements
 		this.colorIt = "0";
 		this.bananaState = false;
 		this.winIt = 0;
+		this.maxPlayers = 0;
 				
         this.objGestionnaireCommunication = new GestionnaireCommunication(Delegate.create(this, this.evenementConnexionPhysique), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
 	
@@ -213,13 +214,6 @@ class GestionnaireEvenements
 	{
 		return this.tablName;
 	}
-    
-	
-	function obtenirNumeroJoueurs():Number 
-	{
-		return this.maxPlayersInTable;
-	}
-    
     
 	function obtenirTabPodiumOrdonneID():Array
 	{
@@ -243,9 +237,9 @@ class GestionnaireEvenements
 	}
 	
 	////////////////////////////////////////////////////////////
-	function obtenirNumeroJoueursDansSalle():Number
+	function getMaxPlayers():Number
 	{
-		return this.maxPlayersInTable;
+		return this.maxPlayers;
 	}
 	////////////////////////////////////////////////////////////
 	function definirNumeroDuPersonnage(n:Number)
@@ -340,8 +334,8 @@ class GestionnaireEvenements
         {
             if(listeDesSalles[i].idRoom == roomId)
             {
-	            maxPlayersInTable = listeDesSalles[i].maxnbplayers;
-	            typeDeJeu = listeDesSalles[i].typeDeJeu;
+	            //maxPlayersInTable = listeDesSalles[i].maxnbplayers;
+	            //typeDeJeu = listeDesSalles[i].typeDeJeu;
 	            this.idRoom = listeDesSalles[i].idRoom;
 				this.nomSalle = listeDesSalles[i].nom;
                 if(listeDesSalles[i].possedeMotDePasse == true)
@@ -385,6 +379,7 @@ class GestionnaireEvenements
         trace("*********************************************");
         trace("debut de entrerTable     :" + nTable);
         this.numeroTable = nTable;
+			
         this.objGestionnaireCommunication.entrerTable(Delegate.create(this, this.retourEntrerTable), Delegate.create(this, this.evenementJoueurDemarrePartie), this.numeroTable);
         trace("fin de entrerTable");
         trace("*********************************************\n");
@@ -434,11 +429,12 @@ class GestionnaireEvenements
     }
 	
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    function creerTable(temps:Number, nb_lines:Number, nb_columns:Number, nameTable:String)
+    function creerTable(temps:Number, nb_lines:Number, nb_columns:Number, nameTable:String, gameType:String)
     {
         trace("*********************************************");
         trace("debut de creerTable     " + temps);
-        this.objGestionnaireCommunication.creerTable(Delegate.create(this, this.retourCreerTable), Delegate.create(this, this.evenementJoueurDemarrePartie), temps, nb_lines, nb_columns, nameTable);
+		this.typeDeJeu = gameType;
+        this.objGestionnaireCommunication.creerTable(Delegate.create(this, this.retourCreerTable), Delegate.create(this, this.evenementJoueurDemarrePartie), temps, nb_lines, nb_columns, nameTable, gameType);
         trace("fin de creerTable");
         trace("*********************************************\n");
     }
@@ -554,33 +550,7 @@ class GestionnaireEvenements
     //                                  fonctions retour
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // c'est bon ?????  ca va pas dans le html ??
-    public function retourObtenirChoixLangage(objetEvenement:Object)
-    {
-        trace("*********************************************");
-        trace("debut de retourObtenirChoixLanguage     "+objetEvenement.resultat);
-        //   objetEvenement.resultat = ChoixLangages, CommandeNonReconnue, ParametrePasBon
-        switch(objetEvenement.resultat)
-        {
-            case "ChoixLangues":
-                // choix de la langue
-                trace("Choix de la langue obtenue");
-            break;
-            case "CommandeNonReconnue":
-                trace("CommandeNonReconnue");
-            break;
-            case "ParamettrePasBon":
-                trace("ParamettrePasBon");
-            break;
-            default:
-                trace("Erreur Inconnue");
-        }
-		objetEvenement = null;
-        trace("fin de retourObtenirChoixLanguage");
-        trace("*********************************************\n");
-    }
-    //    etiquettes de langue
-	
+    	/*
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function retourObtenirNomsInterface(objetEvenement:Object)
     {
@@ -606,7 +576,7 @@ class GestionnaireEvenements
 		objetEvenement = null;
         trace("fin de retourObtenirNomsInterface");
         trace("*********************************************\n");
-    }
+    }*/
 	
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function retourConnexion(objetEvenement:Object)
@@ -641,7 +611,7 @@ class GestionnaireEvenements
 				//musique();
 				
 				isOldGame = _level0.loader.contentHolder.attachMovie("GUI_oldGame", "restartGame", 9999);
-				//isOldGame.textGUI_erreur.text = _root.texteSource_xml.firstChild.attributes.GUIdejaConnecte;
+				
 				
 				
 				trace("La connexion a marche");
@@ -649,7 +619,8 @@ class GestionnaireEvenements
 
 			case "Musique":
 				this.objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), Delegate.create(this, this.evenementJoueurConnecte), Delegate.create(this, this.evenementJoueurDeconnecte));
-
+                 //this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), Delegate.create(this, this.evenementNouvelleSalle), this.clientType);
+               
 				//trace("objEvenement");
 				trace("Q musique " + objetEvenement.listeChansons.length);
 				var count:Number = objetEvenement.listeChansons.length;
@@ -712,6 +683,8 @@ class GestionnaireEvenements
 			
 			trace("<<<<<<<<<<<<<<<<  reconnexion with new game >>>>>>>>>>>>>>>>>>>");
 			this.objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), Delegate.create(this, this.evenementJoueurConnecte), Delegate.create(this, this.evenementJoueurDeconnecte));
+			// this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), Delegate.create(this, this.evenementNouvelleSalle), this.clientType);
+            
 			_level0.loader.contentHolder["restartGame"].removeMovieClip();
 			
 			break;
@@ -744,7 +717,7 @@ class GestionnaireEvenements
 			   _level0.loader.contentHolder.gestionBoutons(false);
 			   		 
 			   this.playersNumber = objetEvenement.playersListe.length;
-			   this.typeDeJeu = "mathEnJeu";
+			   this.typeDeJeu = "mathEnJeu";  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			   this.endGame = false;
 			   var count:Number = objetEvenement.playersListe.length;
 			  
@@ -854,7 +827,7 @@ class GestionnaireEvenements
         {  
 	        
             case "ListeJoueurs":
-            	this.playersNumber = objetEvenement.listeNomUtilisateurs.length;
+            	this.playersNumber = objetEvenement.listeNomUtilisateurs.length;  /// !!!!!!!!  ?????????????????
         		        		
                 for(var i:Number = 0; i < this.playersNumber ; i++)
                 {
@@ -900,17 +873,7 @@ class GestionnaireEvenements
 					this.listeDesSalles.push(objetEvenement.listeNomSalles[i]);
 					_level0.loader.contentHolder.listeSalle.addItem({label: this.listeDesSalles[i].nom, data:  this.listeDesSalles[i].idRoom});
 					trace("salle " + i + " : " + this.listeDesSalles[i].nom);
-					//_level0.listeRooms.addItem(this.listeDesSalles[i].nom );
-															
-					this.listeNumeroJoueursSalles.push(objetEvenement.listeNumberoJSalles[i]);
-					_level0.loader.contentHolder.listeNumeroJSalles.push(this.listeNumeroJoueursSalles[i].maxnbplayers );
-					trace("salle " + i + " : " + this.listeDesSalles[i].maxnbplayers + " " + objetEvenement.listeNomSalles[i].maxnbplayers);
 					
-					this.listeDesTypesDeJeu.push(objetEvenement.typeDeJeuAll[i]);
-					_level0.loader.contentHolder.listeDesTypesDeJeu.push(this.listeDesTypesDeJeu[i].typeDeJeu );
-					trace("salle " + i + " : " + objetEvenement.typeDeJeuAll[i].typeDeJeu + " ~ " +this.listeDesTypesDeJeu[i].typeDeJeu);
-					
-
 				}
 								
 				_level0.loader.contentHolder.bt_continuer1._visible = true;
@@ -1072,7 +1035,7 @@ class GestionnaireEvenements
                     if(this.listeDesSalles[i].idRoom == this.idRoom)
                     {
                         this.masterTime = this.listeDesSalles[i].masterTime;
-						this.nbTracks = Number(this.listeDesSalles[i].nbTracks);
+						//this.nbTracks = Number(this.listeDesSalles[i].nbTracks);
 						break;
                     }
                 }
@@ -1141,6 +1104,8 @@ class GestionnaireEvenements
                 this.listeDesSalles = new Array();
                 this.listeDesJoueursConnectes = new Array();
                 objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), Delegate.create(this, this.evenementJoueurConnecte), Delegate.create(this, this.evenementJoueurDeconnecte));
+				//this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), Delegate.create(this, this.evenementNouvelleSalle), this.clientType);
+            
             break;
 			
             case "CommandeNonReconnue":
@@ -1226,7 +1191,7 @@ class GestionnaireEvenements
 				 _level0.loader.contentHolder.listeTable.removeAll();
 				 delete this.listeDesTables;
 				 this.listeDesTables = new Array();
-				 var count:Number = objetEvenement.listeTables.length;
+				var count:Number = objetEvenement.listeTables.length;
                 for (var i:Number = 0; i < count; i++)
                 {
                     this.listeDesTables.push(objetEvenement.listeTables[i]);
@@ -1293,6 +1258,8 @@ class GestionnaireEvenements
                 this.numeroTable = objetEvenement.noTable;
 				this.tablName =  objetEvenement.nameTable;
 				this.colorIt =  objetEvenement.clocolor;
+				this.maxPlayers = objetEvenement.maxNbPlayers;
+				
                 _level0.loader.contentHolder.gotoAndPlay(3);
                
                 _level0.loader.contentHolder.nomJ4 = this.nomUtilisateur;
@@ -1344,14 +1311,17 @@ class GestionnaireEvenements
 			    var count:Number = this.listeDesTables.length;
 				for (var i:Number = 0; i < count; i++)
                 {
-                    if(this.listeDesTables[i].no == numeroTable)
+                    if(this.listeDesTables[i].no == this.numeroTable)
                     {
-                        tempsPartie = this.listeDesTables[i].temps;
-						tablName = this.listeDesTables[i].tablName;
+                        this.tempsPartie = this.listeDesTables[i].temps;
+						this.tablName = this.listeDesTables[i].tablName;
+						this.maxPlayers = this.listeDesTables[i].maxNbPlayers;
+						this.typeDeJeu = this.listeDesTables[i].gameType;
+						trace("Verifie - retour entrer tableX: " + this.tempsPartie + " " + this.tablName + " " + this. maxPlayers + " " + this.typeDeJeu);
                         break;
                     }
                 }
-				
+				trace("Verifie - retour entrer table: " + this.tempsPartie + " " + this.tablName + " " + this. maxPlayers + " " + this.typeDeJeu);
 				this.colorIt =  objetEvenement.clocolor;
                 
 				_level0.loader.contentHolder.gotoAndPlay(3);
@@ -1847,7 +1817,7 @@ class GestionnaireEvenements
 						trace("Pas bon type de question   "+objetEvenement.question.type);
 					break;
 		 		}*/
-				_root.objGestionnaireInterface.effacerBoutons(1);
+				//_root.objGestionnaireInterface.effacerBoutons(1);
             break;
 
 			case "Banane":
@@ -2124,7 +2094,7 @@ class GestionnaireEvenements
 			
 					_level0.loader.contentHolder.box_question.gotoAndPlay(9);
 			
-					_root.objGestionnaireInterface.afficherBoutons(1);
+					//_root.objGestionnaireInterface.afficherBoutons(1);
 			    	pt.definirX(objetEvenement.nouvellePosition.x);
 			     	pt.definirY(objetEvenement.nouvellePosition.y);
 					
@@ -2191,7 +2161,7 @@ class GestionnaireEvenements
 						// Dans le cas d'une erreur de connexion, nous envoyons une reponse
 						// assurement mauvaise au serveur. Il ne faut pas afficher de retro dans ce cas
 						_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-						_root.objGestionnaireInterface.afficherBoutons(1);
+						//_root.objGestionnaireInterface.afficherBoutons(1);
 						_level0.loader.contentHolder.erreurConnexion = false;
 					}
 					else
@@ -2209,7 +2179,7 @@ class GestionnaireEvenements
 						// define new visibility
 						this.moveVisibility = objetEvenement.moveVisibility;
 
-						_root.objGestionnaireInterface.effacerBoutons(1);
+						//_root.objGestionnaireInterface.effacerBoutons(1);
 					}
 		     	}
 			
@@ -2397,8 +2367,6 @@ class GestionnaireEvenements
 			this.listeDesSalles[this.listeDesSalles.length - 1].idRoom = objetEvenement.NoSalle;
 			this.listeDesSalles[this.listeDesSalles.length - 1].possedeMotDePasse = Boolean(objetEvenement.ProtegeeSalle);
 			this.listeDesSalles[this.listeDesSalles.length - 1].descriptions = objetEvenement.RoomDescriptions;
-			this.listeDesSalles[this.listeDesSalles.length - 1].maxnbplayers = objetEvenement.MaxNbPlayers;
-			this.listeDesSalles[this.listeDesSalles.length - 1].typeDeJeu = objetEvenement.GameType;
 			this.listeDesSalles[this.listeDesSalles.length - 1].userCreator = objetEvenement.CreatorUserName;
 			this.listeDesSalles[this.listeDesSalles.length - 1].masterTime = objetEvenement.MasterTime;
 			trace(" GE : " + this.listeDesSalles[this.listeDesSalles.length - 1].nom + " * " +  this.listeDesSalles[this.listeDesSalles.length - 1].possedeMotDePasse);
@@ -2406,12 +2374,7 @@ class GestionnaireEvenements
 			_level0.loader.contentHolder.listeSalle.addItem({label: objetEvenement.NomSalle, data:  objetEvenement.NoSalle});
 			_level0.loader.contentHolder.listeSalle.redraw();
 																
-			this.listeNumeroJoueursSalles.push(objetEvenement.MaxNbPlayers);
-			_level0.loader.contentHolder.listeNumeroJSalles.push(objetEvenement.MaxNbPlayers );
-					
-			this.listeDesTypesDeJeu.push(objetEvenement.GameType);
-			_level0.loader.contentHolder.listeDesTypesDeJeu.push(objetEvenement.GameType);
-						
+									
 		objetEvenement = null;
     	trace("fin de evenementNouvelleSalle");
     	trace("*********************************************\n");
@@ -2514,15 +2477,15 @@ class GestionnaireEvenements
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function evenementNouvelleTable(objetEvenement:Object)
     {
-        // parametre: noTable, tempsPartie , tablName
+        // parametre: noTable, tempsPartie , tablName  -- no , temps, tablName, maxNbPlayers, gameType
     	trace("*********************************************");
     	trace("debut de evenementNouvelleTable   " + objetEvenement.noTable + "  " + objetEvenement.tempsPartie + " " + objetEvenement.nameTable);
     	var str:String = new String();
     	// on ajoute une liste pour pouvoir inserer les joueurs quand ils vont entrer
         objetEvenement.listeJoueurs = new Array();
-        objetEvenement.no = objetEvenement.noTable;
-		objetEvenement.temps = objetEvenement.tempsPartie;
-		objetEvenement.tablName = objetEvenement.nameTable;
+        //objetEvenement.no = objetEvenement.noTable;
+		//objetEvenement.temps = objetEvenement.tempsPartie;
+		//objetEvenement.tablName = objetEvenement.nameTable;
         
 		this.listeDesTables.push(objetEvenement);
         
@@ -2624,7 +2587,7 @@ class GestionnaireEvenements
         	}
     	}
     	/*
-		for(var i:Number = 0; i < maxPlayersInTable; i++)
+		for(var i:Number = 0; i < maxPlayers; i++)
         {
 					trace(i + " avant this.listeDesPersonnages[i].nom: " + this.listeDesPersonnages[i].nom + " id:" + this.listeDesPersonnages[i].id);
 	    }
@@ -2646,7 +2609,7 @@ class GestionnaireEvenements
     	{
 			   	
 			// enlever la table de la liste si elle est pleine
-			if(this.listeDesTables[indice].listeJoueurs.length == maxPlayersInTable)
+			if(this.listeDesTables[indice].listeJoueurs.length == this.maxPlayers)
         	{
             	for(i = 0; i < count; i++)
             	{
@@ -2695,8 +2658,7 @@ class GestionnaireEvenements
     	var str:String = new String();
 		
 		var count:Number =  this.listeDesTables.length;
-    	
-		for(i = 0; i < count; i++)
+    	for(i = 0; i < count; i++)
     	{
         	if(this.listeDesTables[i].no == objetEvenement.noTable)
         	{
@@ -2707,12 +2669,12 @@ class GestionnaireEvenements
     	// si la table est la notre (on choisit nos perso frame 3)
     	if(objetEvenement.noTable == this.numeroTable)
     	{
-	    	for(i = 0; i < maxPlayersInTable; i++)
+	    	for(i = 0; i < this.maxPlayers; i++)
         	{
 	        	//  on enleve le nom du joueur dans la liste et a l'ecran
             	if(listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur)
             	{
-					//trace("un joueur enlever de la liste var1!!!:   " + objetEvenement.nomUtilisateur + " " + this.listeDesPersonnages[i].nom);
+					trace("un joueur enlever de la liste var1!!!:   " + objetEvenement.nomUtilisateur + " " + this.listeDesPersonnages[i].nom);
 					var idDessin = listeDesPersonnages[i].idessin;
 					var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
 					 _level0.loader.contentHolder.refLayer["Personnage" + idPers].removeMovieClip();
@@ -2758,13 +2720,13 @@ class GestionnaireEvenements
     	{
         	if(this.listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur)
         	{
-				//trace("un joueur enlever de la liste var2:   " + objetEvenement.nomUtilisateur + " " + this.listeDesPersonnages[i].nom);
+				trace("un joueur enlever de la liste var2:   " + objetEvenement.nomUtilisateur + " " + this.listeDesPersonnages[i].nom);
             	this.listeDesPersonnages.removeItemAt(i);
 				
         	}
         	
     	}
-		
+		count = this.listeDesPersonnages.length;
     	for(var i:Number = 0; i < count; i++)
         {
 			trace(i + ": " + this.listeDesPersonnages[i].nom + " id:" + this.listeDesPersonnages[i].id);
@@ -2942,7 +2904,7 @@ class GestionnaireEvenements
      	trace("*********************************************");
      	trace("debut de evenementJoueurRejoindrePartie   " + objetEvenement.nomUtilisateur + "    " + objetEvenement.idPersonnage + " " + objetEvenement.Pointage);
 		
-		if(this.listeDesPersonnages.length < maxPlayersInTable)
+		if(this.listeDesPersonnages.length < maxPlayers)
 		{
 		   this.listeDesPersonnages.push(new Object());		  
 		}
@@ -2981,7 +2943,7 @@ class GestionnaireEvenements
      	trace("debut de evenementJoueurDemarrePartie   "+objetEvenement.nomUtilisateur+"     "+objetEvenement.idPersonnage + "   " + objetEvenement.clothesColor);
         var movClip:MovieClip;
         var j:Number=0;
-        for (var i:Number = 0; i < maxPlayersInTable; i++)
+        for (var i:Number = 0; i < this.maxPlayers; i++)
         {
 	        
 			if(i>3) j=1;
@@ -3016,7 +2978,7 @@ class GestionnaireEvenements
         	
         }
 		/*
-        for(var i:Number = 0; i < maxPlayersInTable; i++)
+        for(var i:Number = 0; i < maxPlayers; i++)
         {
 					trace( i + ": " + this.listeDesPersonnages[i].nom + " id:" + this.listeDesPersonnages[i].id);
 		}
@@ -3038,7 +3000,7 @@ class GestionnaireEvenements
 			        jouersStarted[i].pointage = this.listeDesPersonnages[i].pointage;
 			        jouersStarted[i].role = this.listeDesPersonnages[i].role;
 					jouersStarted[i].idessin = this.listeDesPersonnages[i].idessin;					
-					//trace("Dans menuointage : " + jouersStarted[i].pointage + " " + jouersStarted[i].idessin + " " + this.listeDesPersonnages[i].idessin );
+					trace("Dans menuointage : " + jouersStarted[i].pointage + " " + jouersStarted[i].idessin + " " + this.listeDesPersonnages[i].idessin );
 		}// end for
 		
 		// to cut the holes ...
@@ -3070,7 +3032,7 @@ class GestionnaireEvenements
 					jouersStarted[i].win = this.listeDesPersonnages[i].win;
 					jouersStarted[i].clocol = this.listeDesPersonnages[i].clocolor;
 					
-					//trace("Dans menuointage : " + jouersStarted[i].nomUtilisateur + " " + this.listeDesPersonnages[i].nom );
+					trace("Dans pointage : " + jouersStarted[i].nomUtilisateur + " " + this.listeDesPersonnages[i].nom );
 		}// end for
 		
 		//sort the elements using a compare function
@@ -3187,9 +3149,10 @@ class GestionnaireEvenements
 												
 			for(k = 0; k < taille; k++){
 				
-				if(listeDesPersonnages[i].nom == this.tabPodiumOrdonneID[k].nomUtilisateur)
+				if(listeDesPersonnages[i].nom == this.tabPodiumOrdonneID[k].nomUtilisateur){
 					this.tabPodiumOrdonneID[k].idessin = this.listeDesPersonnages[i].idessin;
-			      
+					this.tabPodiumOrdonneID[k].clocolor = this.listeDesPersonnages[i].clocolor;
+				}
 			}	
 		} // end find the picture
 		
@@ -3236,12 +3199,15 @@ class GestionnaireEvenements
 					
 			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["nomJoueur" + i] = this.tabPodiumOrdonneID[i - 1].nomUtilisateur;	
 			_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["pointageJoueur" + i] = this.tabPodiumOrdonneID[i - 1].pointage;
+			
 			//_level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["tete" + i].attachMovie("tete" + this.tabPodiumOrdonneID[i].idessin,  "Tete" + i, -10100 + i);
             this["tete" + i] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["tete" + i].attachMovie("tete" + this.tabPodiumOrdonneID[i - 1].idessin,  "Tete" + i, -10100 + i - 1);
 			this["tete" + i]._x = -6;
 			this["tete" + i]._y = -6;
 			this["tete" + i]._xscale = 60;
-			this["tete" + i]._yscale = 60;		
+			this["tete" + i]._yscale = 60;
+			
+			colorItMatrix(this.tabPodiumOrdonneID[i - 1].clocolor , this["tete" + i ].headClo, this.tabPodiumOrdonneID[i - 1].idessin);
     	}
     	this.endGame = true;
 		objetEvenement = null;
@@ -3282,7 +3248,7 @@ class GestionnaireEvenements
 	
 	        // update players array
 			var count:Number = this.listeDesPersonnages.length;
-		   for(var i:Number=0; i < count; i++){
+		   for(var i:Number = 0; i < count; i++){
 					
 			   if(this.listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur){
 			      
@@ -3638,6 +3604,7 @@ class GestionnaireEvenements
 					//_level0.loader.contentHolder.planche.obtenirPerso().setBoardCentre(false);
 				 _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 			  }
+			  
 		      clearInterval(_global.intervalIdBanana);
 		   }
 			
@@ -3697,23 +3664,7 @@ class GestionnaireEvenements
     } // end methode
 	
 	
- /*   ////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function EvenementDeplacementWinTheGame(objetEvenement:Object)
-    {
-    	// parametre: x, y 
-		trace("*********************************************");
-		trace("debut de EvenementDeplacementWinTheGame  " + objetEvenement.x+"   "+objetEvenement.y);
-	
-		var pt_initial:Point = new Point();
-		var pt_final:Point = new Point();
-
-		trace("juste avant la teleportation");
-
-    	trace("fin de EvenementDeplacementWinTheGame");
-    	trace("*********************************************\n");
-    }*/
-	
-	
+ 	
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //                                      Autres
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3743,26 +3694,7 @@ class GestionnaireEvenements
 	{
 		return objGestionnaireCommunication;
 	}
-	/*
-	// here we control if username contain the  'master'
-	// this function is not used for the moment
-	// is not in use now
-	public function controlForMaster(nom:String):Boolean
-    {
-		// Bloc of code to treat the username
-        var firstDel = nom.indexOf(".");                 // find first delimiter
-        var secondDel = nom.indexOf(".",firstDel + 1);   // find second delimiter
-        var master;
-
-        //Now extract the 'master' from username
-        if (firstDel != -1 && secondDel != -1)
-           master = nom.substring(0, firstDel);
-        else
-           master = "";
-		   //trace(" controlForMaster : " + master);
-        return (master == "game-master" || master == "maitre-du-jeu");
-    }// end method  */
-	
+		
 	// used to calculate the id of the players picture to show on the game board
 	private function calculatePicture(perso:Number):Number
 	{
