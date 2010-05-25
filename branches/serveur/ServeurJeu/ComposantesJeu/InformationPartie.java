@@ -352,15 +352,15 @@ public class InformationPartie
 		// If we are in the Braniac maximal cases = + 1
 		if(this.braniacState.isInBraniac()){
 			
-			if (bolEstPermis == true && ((nouvellePosition.x != objPositionJoueur.x && Math.abs(nouvellePosition.x - objPositionJoueur.x) > objTable.getObjSalle().getRegles().obtenirDeplacementMaximal() + 1) || 
-					(nouvellePosition.y != objPositionJoueur.y && Math.abs(nouvellePosition.y - objPositionJoueur.y) > objTable.getObjSalle().getRegles().obtenirDeplacementMaximal() + 1)))
+			if (bolEstPermis == true && ((nouvellePosition.x != objPositionJoueur.x && Math.abs(nouvellePosition.x - objPositionJoueur.x) > objTable.getRegles().obtenirDeplacementMaximal() + 1) || 
+					(nouvellePosition.y != objPositionJoueur.y && Math.abs(nouvellePosition.y - objPositionJoueur.y) > objTable.getRegles().obtenirDeplacementMaximal() + 1)))
 			{
 				bolEstPermis = false;
 			}
 		}else{
 			
-			if (bolEstPermis == true && ((nouvellePosition.x != objPositionJoueur.x && Math.abs(nouvellePosition.x - objPositionJoueur.x) > objTable.getObjSalle().getRegles().obtenirDeplacementMaximal()) || 
-					(nouvellePosition.y != objPositionJoueur.y && Math.abs(nouvellePosition.y - objPositionJoueur.y) > objTable.getObjSalle().getRegles().obtenirDeplacementMaximal())))
+			if (bolEstPermis == true && ((nouvellePosition.x != objPositionJoueur.x && Math.abs(nouvellePosition.x - objPositionJoueur.x) > objTable.getRegles().obtenirDeplacementMaximal()) || 
+					(nouvellePosition.y != objPositionJoueur.y && Math.abs(nouvellePosition.y - objPositionJoueur.y) > objTable.getRegles().obtenirDeplacementMaximal())))
 			{
 				bolEstPermis = false;
 			}
@@ -996,9 +996,9 @@ public class InformationPartie
 				
 				//***********************************
 				//for gametype tourmnament - bonus for finish line
-				 if(table.getObjSalle().getGameType().equals("Tournament")||table.getObjSalle().getGameType().equals("Course"))
+				 if(table.getGameType().equals("Tournament")||table.getGameType().equals("Course"))
 				 {
-					 int tracks = table.getObjSalle().getRegles().getNbTracks();
+					 int tracks = table.getRegles().getNbTracks();
 					 Point  objPoint = new Point(table.getNbLines() - 1, table.getNbColumns() - 1);
 					 Point objPointFinish = new Point();
 					 
@@ -1017,13 +1017,13 @@ public class InformationPartie
 						 }
 					 	 
 		 				 
-		 				 if(isOnThePointsOfFinish && !boolWasOnFinish && table.getObjSalle().getGameType().equals("Tournament"))
+		 				 if(isOnThePointsOfFinish && !boolWasOnFinish && table.getGameType().equals("Tournament"))
 		 				 {
 		 					 ((JoueurHumain)objJoueur).obtenirPartieCourante().wasOnFinish = true;
 		 					 bonus = table.obtenirTempsRestant();
 		 					 intNouveauPointage += bonus; 
 		 				 }
-		 				 else if (isOnThePointsOfFinish && !boolWasOnFinish && table.getObjSalle().getGameType().equals("Course"))
+		 				 else if (isOnThePointsOfFinish && !boolWasOnFinish && table.getGameType().equals("Course"))
 		 				 {
 		 					((JoueurHumain)objJoueur).obtenirPartieCourante().wasOnFinish = true;
 		 					bonus = table.obtenirTempsRestant();

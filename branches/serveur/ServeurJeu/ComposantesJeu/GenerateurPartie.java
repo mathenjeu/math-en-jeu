@@ -90,6 +90,8 @@ public abstract class GenerateurPartie
 		this.reglesPartie = null;//salle.getRegles();
 		this.objGestionnaireBD = null;//salle.getObjControleurJeu().obtenirGestionnaireBD();
 		this.objSalle = null;//salle;
+		this.intNbColumns = 0;
+		this.intNbLines = 0;
 		
 	}
 
@@ -134,5 +136,5 @@ public abstract class GenerateurPartie
      * @param Vector listePointsCaseLibre : La liste des points des cases libres
      * @return Point[] : Un tableau de points pour chaque joueur 
      */
-    protected abstract Point[] genererPositionJoueurs(int nbJoueurs, ArrayList<Point> lstPointsCaseLibre);
+    protected abstract Point[] genererPositionJoueurs(Table table, int nbJoueurs, ArrayList<Point> lstPointsCaseLibre);
 }

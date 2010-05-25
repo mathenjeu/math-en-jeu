@@ -183,7 +183,7 @@ public class ControleurJeu
 		//Start spyDb to update periodically the rooms list
 		// Add new rooms or out the olds 
 		
-		int delay = 60000;
+		int delay = 600000;
 		objSpyDB = new SpyRooms(this, delay); 
 		//Start spy thread's
 		Thread threadSpy = new Thread(objSpyDB);
@@ -195,9 +195,9 @@ public class ControleurJeu
         objParametreIA = new ParametreIA();
 
 		//Demarrer une tache de monitoring
-		TacheLogMoniteur objTacheLogMoniteur = new TacheLogMoniteur();
-		int intStepMonitor = config.obtenirNombreEntier( "controleurjeu.monitoring.step" );
-		objGestionnaireTemps.ajouterTache( objTacheLogMoniteur, intStepMonitor );
+		//TacheLogMoniteur objTacheLogMoniteur = new TacheLogMoniteur();
+		//int intStepMonitor = config.obtenirNombreEntier( "controleurjeu.monitoring.step" );
+		//objGestionnaireTemps.ajouterTache( objTacheLogMoniteur, intStepMonitor );
 		
 		//Démarrer l'écoute des connexions clientes
 		//Cette methode est la loop de l'application
@@ -696,13 +696,13 @@ public class ControleurJeu
 	 * @synchronism Cette fonction n'est pas synchronisée ici, mais elle l'est
 	 * 				par l'appelant ().
 	 */
-	public void preparerEvenementNouvelleSalle(String roomName, Boolean protegee, String strCreatorUserName, String gameType, 
-    		String roomDescription, int maxnbplayers, int masterTime, int roomID)
+	public void preparerEvenementNouvelleSalle(String roomName, Boolean protegee, String strCreatorUserName, 
+			String roomDescription, int masterTime, int roomID)
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs qu'une table a été créée
-	    EvenementNouvelleSalle nouvelleSalle = new EvenementNouvelleSalle(roomName, protegee, strCreatorUserName, gameType, 
-	    		roomDescription, maxnbplayers, masterTime, roomID);
+	    EvenementNouvelleSalle nouvelleSalle = new EvenementNouvelleSalle(roomName, protegee, strCreatorUserName,  
+	    		roomDescription, masterTime, roomID);
 	    
 	    // Créer un ensemble contenant tous les tuples de la liste 
 		// lstJoueursConnectes (chaque élément est un Map.Entry)

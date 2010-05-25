@@ -11,7 +11,6 @@ import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
@@ -928,8 +927,7 @@ public class GestionnaireBD
 		String nom = "";
 		String motDePasse = "";
 		String createur = "";
-		String gameType = "";
-	    Date beginDate = null;
+		Date beginDate = null;
 	    Date endDate = null;
 	    int masterTime = 0;
 	    String categoriesString = "";
@@ -941,37 +939,32 @@ public class GestionnaireBD
 			for (int room : rooms){
 				synchronized( requete )
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, game_type.name, beginDate, endDate, masterTime, categories " +
+					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, beginDate, endDate, masterTime, categories " +
 							" FROM room_info, room, user, game_type " +
 							" WHERE room.room_id = " + room +  
 							" AND room.room_id = room_info.room_id " +
-							" AND room.game_type_id = game_type.game_type_id " +
 							" AND user.user_id = room.user_id ;" );
 					if(rs.next())
 					{
 						categoriesString = rs.getString("categories");
 						motDePasse = rs.getString("password");
 						createur = rs.getString("user.username");
-						gameType = rs.getString("game_type.name");
 						beginDate = rs.getTimestamp("beginDate");
 						endDate = rs.getTimestamp("endDate");
 						masterTime = rs.getInt("masterTime");
 												
 						String roomDescription = fillRoomDescription(room);
 						nom = fillRoomName(room);
-						
-						
-						Regles objReglesSalle = new Regles();
-						chargerRegllesSalle(objReglesSalle, room);
-						Salle objSalle = new Salle(nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType, room, beginDate, endDate, masterTime);
+											
+						Salle objSalle = new Salle(nom, createur, motDePasse, objControleurJeu, room, beginDate, endDate, masterTime);
 						objSalle.setRoomDescription(roomDescription);
 						
 						objSalle.setCategories(categoriesString);
 												
 						objControleurJeu.ajouterNouvelleSalle(objSalle);
 											
-						objControleurJeu.preparerEvenementNouvelleSalle(nom, objSalle.protegeeParMotDePasse(), createur, gameType, 
-								           roomDescription, objReglesSalle.getMaxNbPlayers(), masterTime, room);
+						objControleurJeu.preparerEvenementNouvelleSalle(nom, objSalle.protegeeParMotDePasse(), createur,  
+								           roomDescription, masterTime, room);
 						
 					}   
 
@@ -1085,21 +1078,19 @@ public class GestionnaireBD
   	}// end methode
 
    /**                                  
-    *                                          ***
     * @param objReglesSalle
-    * @param roomId
-    * @param langId 
     */
-	@SuppressWarnings("unchecked")
-	public void chargerRegllesSalle(Regles objReglesSalle, int roomId) {
-				
+	//@SuppressWarnings("unchecked")
+	public void chargerRegllesTable(Regles objReglesTable, String gameType) {
+			
+		int gameTypeID = 1; // default type - mathEnJeu
+		if(gameType.equals("Tournament"))gameTypeID = 2;
+		if(gameType.equals("Course"))gameTypeID = 3;
         try
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery( "SELECT rule.*  FROM rule, room" +
-						" WHERE room.room_id = " + roomId +
-				        " AND rule.rule_id = room.rule_id ;" );
+				ResultSet rs = requete.executeQuery( "SELECT rule.*  FROM rule WHERE rule.rule_id = " + gameTypeID + ";" );
 				while(rs.next())
 				{
 					boolean shownumber = rs.getBoolean("show_nb_questions");
@@ -1121,21 +1112,21 @@ public class GestionnaireBD
 					
 								
 					//objReglesSalle.setMaxNbObjectsAndMoney(maxNbObjectsAndMoney);
-					objReglesSalle.setMaxNbPlayers(maxNbPlayers);
-					objReglesSalle.setShowNumber(shownumber);
-					objReglesSalle.definirPermetChat(chat);
-					objReglesSalle.definirRatioTrous( ratioTrous );
-					objReglesSalle.definirRatioMagasins( ratioMagasins );
-					objReglesSalle.definirRatioCasesSpeciales( ratioCasesSpeciales );
-					objReglesSalle.definirRatioPieces( ratioPieces );
-					objReglesSalle.definirRatioObjetsUtilisables(ratioObjetsUtilisables );
-					objReglesSalle.definirValeurPieceMaximale( valeurPieceMax );
-					objReglesSalle.definirTempsMinimal( tempsMin );
-					objReglesSalle.definirTempsMaximal( tempsMax );
-					objReglesSalle.definirDeplacementMaximal( deplacementMax );
-					objReglesSalle.setIntMaxSaledObjects(maxShopObjects);
-					objReglesSalle.setNbTracks(nbTracks);
-					objReglesSalle.setNbVirtualPlayers(nbVirtualPlayers);
+					objReglesTable.setMaxNbPlayers(maxNbPlayers);
+					objReglesTable.setShowNumber(shownumber);
+					objReglesTable.definirPermetChat(chat);
+					objReglesTable.definirRatioTrous( ratioTrous );
+					objReglesTable.definirRatioMagasins( ratioMagasins );
+					objReglesTable.definirRatioCasesSpeciales( ratioCasesSpeciales );
+					objReglesTable.definirRatioPieces( ratioPieces );
+					objReglesTable.definirRatioObjetsUtilisables(ratioObjetsUtilisables );
+					objReglesTable.definirValeurPieceMaximale( valeurPieceMax );
+					objReglesTable.definirTempsMinimal( tempsMin );
+					objReglesTable.definirTempsMaximal( tempsMax );
+					objReglesTable.definirDeplacementMaximal( deplacementMax );
+					objReglesTable.setIntMaxSaledObjects(maxShopObjects);
+					objReglesTable.setNbTracks(nbTracks);
+					objReglesTable.setNbVirtualPlayers(nbVirtualPlayers);
 											
                 }
 			}
@@ -1150,15 +1141,15 @@ public class GestionnaireBD
 		}
 		
 		// charger autres regles
-		TreeSet magasins = objReglesSalle.obtenirListeMagasinsPossibles();
-		TreeSet casesCouleur = objReglesSalle.obtenirListeCasesCouleurPossibles();
-		TreeSet casesSpeciale = objReglesSalle.obtenirListeCasesSpecialesPossibles();
-		TreeSet objetsUtilisables = objReglesSalle.obtenirListeObjetsUtilisablesPossibles();
+		TreeSet magasins = objReglesTable.obtenirListeMagasinsPossibles();
+		//TreeSet casesCouleur = objReglesTable.obtenirListeCasesCouleurPossibles();
+		//TreeSet casesSpeciale = objReglesTable.obtenirListeCasesSpecialesPossibles();
+		TreeSet objetsUtilisables = objReglesTable.obtenirListeObjetsUtilisablesPossibles();
 		
-		this.chargerReglesMagasins(magasins, roomId);
-		this.chargerReglesCasesCouleur(casesCouleur, roomId);
-		this.chargerReglesCasesSpeciale(casesSpeciale, roomId);
-		this.chargerReglesObjetsUtilisables(objetsUtilisables, roomId);
+		this.chargerReglesMagasins(magasins, gameTypeID);
+		//this.chargerReglesCasesCouleur(casesCouleur, roomId);
+		//this.chargerReglesCasesSpeciale(casesSpeciale, roomId);
+		this.chargerReglesObjetsUtilisables(objetsUtilisables, gameTypeID);
 		
 	}// fin méthode chargerReglesSalle
 	
@@ -1237,51 +1228,12 @@ public class GestionnaireBD
 	
     }// fin méthode
 
-
-	/**
-     * Méthode utilisée pour charger la liste des cases couleur  ***
-     * dans les Regles du partie
-     * @param casesCouleur 
-	 * @param roomId
-     */
-     private void chargerReglesCasesCouleur(TreeSet<ReglesCaseCouleur> casesCouleur, int roomId) {
-                   
-        try
-  		{
-  			synchronized( requete )
-  			{
-  				ResultSet rst = requete.executeQuery( "SELECT color_square_rule.priority, color_square_rule.type " +
-  					" FROM color_square_rule " +
-  					" WHERE color_square_rule.room_id = " + roomId +
-  					 ";");
-  				while(rst.next())
-  				{
-  					Integer tmp1 = rst.getInt( "priority" );
-  			        Integer tmp2 = rst.getInt( "type" );
-  			        
-  			        casesCouleur.add(new ReglesCaseCouleur(tmp1, tmp2));
-  					 														
-                  }
-  			}
-  		}
-  		catch (SQLException e)
-  		{
-  			// Une erreur est survenue lors de l'exécution de la requète
-  			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-  			objLogger.error(GestionnaireMessages.message("bd.trace"));
-  			objLogger.error( e.getMessage() );
-  		    e.printStackTrace();			
-  		}// fin catch
-	
-     }// fin méthode
-
-
     /**
      * Méthode utilisée pour charger la liste des magasins dans les Regles du partie ***
      * @param magasins 
      * @param roomId
      */
-    private void chargerReglesMagasins(TreeSet<ReglesMagasin> magasins, int roomId) {
+    private void chargerReglesMagasins(TreeSet<ReglesMagasin> magasins, int ruleId) {
     	 	
          try
  		{
@@ -1291,7 +1243,7 @@ public class GestionnaireBD
  					" FROM room_shop, shop_info " +
  					" WHERE shop_info.language_id = " + 1 + 
  					" AND room_shop.shop_id = shop_info.shop_id " +
- 					" AND  room_shop.room_id = " + roomId +
+ 					" AND  room_shop.room_id = " + ruleId +
  					";");
  				while(rst.next())
  				{
@@ -1512,8 +1464,8 @@ public class GestionnaireBD
 	/*
 	 * Methode used to get from DB table rule the new dimention of the game board
 	 * and set it in the Regles 
-	 */
-	public void getNewTableDimentions(Salle objSalle)
+	
+	public void getNewTableDimentions()
 	{
 		String roomName = objSalle.getRoomName("");
 		Regles objReglesSalle = objSalle.getRegles();
@@ -1544,7 +1496,7 @@ public class GestionnaireBD
   						" where rule_id IN (SELECT rule_id FROM room,room_info where room.room_id = room_info.room_id " +
                         " AND (room_info.name = '" + nomFr + "' OR room_info.name = '" + nomEng + "' OR room_info.name = '" + roomName + "'));");
   				if(rst.next())
-  				{
+  			{
   					tmp1 = rst.getInt( "minimal_time" );
   			        tmp2 = rst.getInt( "maximal_time" );
   			         					 														
@@ -1564,7 +1516,7 @@ public class GestionnaireBD
   			objReglesSalle.definirTempsMinimal(tmp1);
   		if(tmp2 > 0)
   			objReglesSalle.definirTempsMaximal(tmp2);
-	}//end methode
+	}//end methode */	
 	
 	
 	//******************************************************************
@@ -1587,15 +1539,14 @@ public class GestionnaireBD
         else if (langue.equalsIgnoreCase("en"))
         	cleLang = 2;
         
-        System.out.println("categories " + roomCategories);
-        
-        String categories = "";
+        //System.out.println("categories " + roomCategories);
+                
         String strSQL = "";
         
         
         	// Création du SQL pour l'ajout
-    		strSQL = "INSERT INTO room (password, game_type_id, user_id, rule_id, beginDate, endDate, masterTime, categories) VALUES (PASSWORD('" +
-    		                 pass + "'),2," + user_id + ",2,'" + begin + "','" + end + "'," + masterTime + ",\"" + roomCategories + "\");";
+    		strSQL = "INSERT INTO room (password, user_id, beginDate, endDate, masterTime, categories) VALUES (PASSWORD('" +
+    		                 pass + "')," + user_id + ",'" + begin + "','" + end + "'," + masterTime + ",\"" + roomCategories + "\");";
 
     
 		try
@@ -1620,9 +1571,9 @@ public class GestionnaireBD
 
 		//add information of the room to other tables of DB
 		putNewRoomInfo(room_id, cleLang, name, roomDesc);
-		putNewRoomColorSquare(room_id);
-		putNewRoomObjects(room_id);
-		putNewRoomShops(room_id); 
+		//putNewRoomColorSquare(room_id);
+		//putNewRoomObjects(room_id);
+		///putNewRoomShops(room_id); 
 		
 		//System.out.println(room_id);
 		
@@ -1655,32 +1606,7 @@ public class GestionnaireBD
 		
 	}// end methode
 	
-	/**
-	 * Method satellite to putNewRoom() used to put new room in DB from room created in profModule
-	 * put infos in color_square_rule table
-	 * @throws SQLException 
-	 */
-	public void putNewRoomColorSquare(int room_id) 
-	{
-		try {
-				synchronized(requete)
-				{
-					for(int i = 0; i < 5; i++)
-
-					{
-						// Ajouter l'information pour cette salle
-						requete.executeUpdate("INSERT INTO color_square_rule (room_id, type, priority) VALUES ( " + room_id + " ," + (i + 1) + " , " + (i + 1) + ");");
-					}
-				}		
-			}
-			catch (Exception e)
-			{
-				System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_colorSquare") + e.getMessage());
-			}
 		
-		
-	}// end methode
-	
 	/**
 	 * Method satellite to putNewRoom() used to put new room in DB from room created in profModule
 	 * put infos in special_square_rule table
@@ -1978,8 +1904,7 @@ public class GestionnaireBD
 		String nom = "";
 		String motDePasse = "";
 		String createur = "";
-		String gameType = "";
-	    Date beginDate = null;
+		Date beginDate = null;
 	    Date endDate = null;
 	    int masterTime = 0;
 	    String categoriesString = "";
@@ -1990,18 +1915,16 @@ public class GestionnaireBD
 			{
 				synchronized( requete )
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, game_type.name, beginDate, endDate, masterTime, categories " +
-							" FROM room_info, room, user, game_type " +
+					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, beginDate, endDate, masterTime, categories " +
+							" FROM room_info, room, user " +
 							" WHERE room.room_id = " + room +  
 							" AND room.room_id = room_info.room_id " +
-							" AND room.game_type_id = game_type.game_type_id " +
 							" AND user.user_id = room.user_id ;" );
 					if(rs.next())
 					{
 						categoriesString = rs.getString("categories");
 						motDePasse = rs.getString( "password" );
 						createur = rs.getString("user.username");
-						gameType = rs.getString("game_type.name");
 						beginDate = rs.getTimestamp("beginDate");
 						endDate = rs.getTimestamp("endDate");
 						masterTime = rs.getInt("masterTime");
@@ -2009,10 +1932,8 @@ public class GestionnaireBD
 																	
 						String roomDescription = fillRoomDescription(room);
 						nom = fillRoomName(room);
-														
-						Regles objReglesSalle = new Regles();
-						chargerRegllesSalle(objReglesSalle, room);
-						Salle objSalle = new Salle(nom, createur, motDePasse, objReglesSalle, objControleurJeu, gameType, room, beginDate, endDate, masterTime);
+											
+						Salle objSalle = new Salle(nom, createur, motDePasse, objControleurJeu, room, beginDate, endDate, masterTime);
 						objSalle.setRoomDescription(roomDescription);
 						
 						// bloc to fill room's categories

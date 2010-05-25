@@ -2,8 +2,6 @@ package ServeurJeu.ComposantesJeu.ReglesJeu;
 
 import java.util.TreeSet;
 
-import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
-import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 
@@ -14,7 +12,7 @@ public class Regles
 {
 	// Déclaration d'une liste qui contient les cases de couleur possibles (le 
 	// contenu est un objet ReglesCaseCouleur)
-	private TreeSet<CaseCouleur> lstCasesCouleurPossibles;
+	//private TreeSet<CaseCouleur> lstCasesCouleurPossibles;
 	
 	// Déclaration d'une liste qui contient les magasins possibles (le 
 	// contenu est un objet ReglesMagasin)
@@ -22,7 +20,7 @@ public class Regles
 	
 	// Déclaration d'une liste qui contient les cases spéciales possibles (le 
 	// contenu est un objet ReglesCaseSpeciale)
-	private TreeSet<CaseSpeciale> lstCasesSpecialesPossibles;
+	//private TreeSet<CaseSpeciale> lstCasesSpecialesPossibles;
 	
 	// Déclaration d'une liste qui contient les objets utilisables possibles 
 	// (le contenu est un objet ReglesObjetUtilisable)
@@ -79,7 +77,7 @@ public class Regles
 	// This is the maximum number of coins and items a player can hold at one time
 	//private int maxNbObjectsAndMoney;
 	
-	//This is the number of tracks of the board of the game of type "Tournament"
+	//This is the number of tracks of the board of the game of type "Tournament" or "Course"
 	private int nbTracks;
 	
 	//This is the number of virtual players for the game. Defined in DB in room options
@@ -96,9 +94,10 @@ public class Regles
 		
 	    // Créer les listes de couleurs possibles, cases spéciales possibles,
 		// d'objets utilisables possibles et de magasins possibles
-	    lstCasesCouleurPossibles = new TreeSet<CaseCouleur>(objReglesComparator);
+	    
 	    lstMagasinsPossibles = new TreeSet<Magasin>(objReglesComparator);
-	    lstCasesSpecialesPossibles = new TreeSet<CaseSpeciale>(objReglesComparator);
+	    //lstCasesSpecialesPossibles = new TreeSet<CaseSpeciale>(objReglesComparator);
+	    //lstCasesCouleurPossibles = new TreeSet<CaseCouleur>(objReglesComparator);
 	    lstObjetsUtilisablesPossibles = new TreeSet<Objet>(objReglesComparator);
 	    
 	    // Initialiser les variables par défaut
@@ -119,16 +118,16 @@ public class Regles
 	    setNbVirtualPlayers(0);
 	}
 
-	/**
+	/*
 	 * Cette fonction permet de retourner la liste des cases de couleur 
 	 * possibles.
 	 * 
 	 * @return TreeSet : La liste des cases de couleur possibles
-	 */
+	
 	public TreeSet<CaseCouleur> obtenirListeCasesCouleurPossibles()
 	{
 	   return lstCasesCouleurPossibles;
-	}
+	} */
 	
 	/**
 	 * Cette fonction permet de retourner la liste des magasins possibles.
@@ -140,16 +139,16 @@ public class Regles
 	   return lstMagasinsPossibles;
 	}
 	
-	/**
+	/*
 	 * Cette fonction permet de retourner la liste des cases spéciales 
 	 * possibles.
 	 * 
 	 * @return TreeSet : La liste des cases spéciales possibles
-	 */
+	
 	public TreeSet<CaseSpeciale> obtenirListeCasesSpecialesPossibles()
 	{
 	   return lstCasesSpecialesPossibles;
-	}
+	} */
 	
 	/**
 	 * Cette fonction permet de retourner la liste des objets utilisables 
