@@ -932,6 +932,7 @@ public class GestionnaireBD
 	    int masterTime = 0;
 	    String categoriesString = "";
 	    
+	    
 		//now fill all the rooms with properties and add this rooms to the game
 		
 		try
@@ -946,6 +947,7 @@ public class GestionnaireBD
 							" AND user.user_id = room.user_id ;" );
 					if(rs.next())
 					{
+						
 						categoriesString = rs.getString("categories");
 						motDePasse = rs.getString("password");
 						createur = rs.getString("user.username");
@@ -958,13 +960,16 @@ public class GestionnaireBD
 											
 						Salle objSalle = new Salle(nom, createur, motDePasse, objControleurJeu, room, beginDate, endDate, masterTime);
 						objSalle.setRoomDescription(roomDescription);
-						
 						objSalle.setCategories(categoriesString);
+						
+						ArrayList<String> types = new ArrayList<String>();
+						this.getAllowedRoomsGameTypes(types, room);
+						objSalle.setRoomAllowedTypes(types);
 												
 						objControleurJeu.ajouterNouvelleSalle(objSalle);
 											
 						objControleurJeu.preparerEvenementNouvelleSalle(nom, objSalle.protegeeParMotDePasse(), createur,  
-								           roomDescription, masterTime, room);
+								           roomDescription, masterTime, room, objSalle.getRoomAllowedTypes().toString());
 						
 					}   
 
@@ -992,6 +997,42 @@ public class GestionnaireBD
 				
 	}// fin méthode fillRoomList
 	
+	
+	/**
+	 * Méthode utilisée pour charger les types du jeux admissibles  
+	 * @param types ***
+	 * @param objetsUtilisables 
+	 * @param roomId
+	 * @param langId 
+	 */
+	private void getAllowedRoomsGameTypes(ArrayList<String> types, int roomId) {
+		try
+  		{
+  			synchronized( requete )
+  			{
+  				ResultSet rst = requete.executeQuery( "SELECT game_type.name " +
+  					" FROM room_game_types, game_type WHERE room_game_types.room_id = " + roomId + 
+  				" And room_game_types.game_type_id = game_type.game_type_id;");
+  				while(rst.next())
+  				{
+  					String tmp1 = rst.getString("name");
+  					
+  					types.add(tmp1);
+
+  				}
+  			}
+  		}
+  		catch (SQLException e)
+  		{
+  			// Une erreur est survenue lors de l'exécution de la requète
+  			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_game_types"));
+  			objLogger.error(GestionnaireMessages.message("bd.trace"));
+  			objLogger.error( e.getMessage() );
+  		    e.printStackTrace();			
+  		}// fin catch
+		
+    }// fin méthode
+
 
  /**
   * Methode to fill the room name in both languages  ***
@@ -1095,6 +1136,7 @@ public class GestionnaireBD
 				{
 					boolean shownumber = rs.getBoolean("show_nb_questions");
 					boolean chat = rs.getBoolean( "chat" );
+					boolean money = rs.getBoolean( "money_permit" );
 					Float ratioTrous  = Float.parseFloat( rs.getString( "hole_ratio" ));
 					Float ratioMagasins  = Float.parseFloat( rs.getString( "shop_ratio" ));
 					Float ratioCasesSpeciales  = Float.parseFloat( rs.getString( "special_square_ratio" ));
@@ -1114,6 +1156,7 @@ public class GestionnaireBD
 					//objReglesSalle.setMaxNbObjectsAndMoney(maxNbObjectsAndMoney);
 					objReglesTable.setMaxNbPlayers(maxNbPlayers);
 					objReglesTable.setShowNumber(shownumber);
+					objReglesTable.setBolMoneyPermit(money);
 					objReglesTable.definirPermetChat(chat);
 					objReglesTable.definirRatioTrous( ratioTrous );
 					objReglesTable.definirRatioMagasins( ratioMagasins );
@@ -1381,42 +1424,7 @@ public class GestionnaireBD
 	}// end methode
 
 
-	/**
-	 * Methode to determine from DB if is permited to charge money from user's  ***
-	 * account in DB
-	 * @param roomName
-	 * @return permit
-	 */
-	public boolean getMoneyRule(String roomName) {
-		
-		boolean permit = true; // as default is permited to take money from DB
-		try
-		{
-			synchronized( requete )
-			{
-				ResultSet rs = requete.executeQuery( "SELECT rule.money_permit FROM rule, room, room_info " +
-                " WHERE room_info.name = '" + roomName + "' AND room_info.room_id = room.room_id " +
-                " AND rule.rule_id = room.rule_id;" );
-				while(rs.next())
-				{
-					permit = rs.getBoolean("money_permit");
-										
-                }
-			}
-		}
-		catch (SQLException e)
-		{
-			// Une erreur est survenue lors de l'exécution de la requète
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error( e.getMessage() );
-		    e.printStackTrace();			
-		}
 	
-		return permit;
-	}
-
-
 	/**
 	 * Return full name (in both languages) by name  ***
 	 * @param nomSalle
@@ -1527,7 +1535,8 @@ public class GestionnaireBD
 	 * Method used to put new room in DB from room created in profModule
 	 * put it in room table
 	 */
-	public int putNewRoom(String pass, int user_id, String name, String roomDesc, String langue, String begin, String end, int masterTime, String roomCategories )
+	public int putNewRoom(String pass, int user_id, String name, String roomDesc, String langue, 
+			String begin, String end, int masterTime, String roomCategories, String gameTypes )
 	{
 		int room_id = 0;
 		
@@ -1545,7 +1554,7 @@ public class GestionnaireBD
         
         
         	// Création du SQL pour l'ajout
-    		strSQL = "INSERT INTO room (password, user_id, beginDate, endDate, masterTime, categories) VALUES (PASSWORD('" +
+    	strSQL = "INSERT INTO room (password, user_id, beginDate, endDate, masterTime, categories) VALUES (PASSWORD('" +
     		                 pass + "')," + user_id + ",'" + begin + "','" + end + "'," + masterTime + ",\"" + roomCategories + "\");";
 
     
@@ -1572,7 +1581,7 @@ public class GestionnaireBD
 		//add information of the room to other tables of DB
 		putNewRoomInfo(room_id, cleLang, name, roomDesc);
 		//putNewRoomColorSquare(room_id);
-		//putNewRoomObjects(room_id);
+		putNewRoomGameTypes(room_id, gameTypes);
 		///putNewRoomShops(room_id); 
 		
 		//System.out.println(room_id);
@@ -1582,9 +1591,56 @@ public class GestionnaireBD
 	
 	/**
 	 * Method satellite to putNewRoom() used to put new room in DB from room created in profModule
+	 * put gameTypes in room_game_types table
+	 */
+	private void putNewRoomGameTypes(int room_id, String gameTypes) {
+		
+		ArrayList<Integer> roomAllowedTypes = new ArrayList<Integer>();
+		StringTokenizer types = new StringTokenizer(gameTypes, ":");
+		
+		while(types.hasMoreTokens())
+		{
+			String var = types.nextToken();
+			if(var.equals("mathEnJeu"))
+				roomAllowedTypes.add(1);
+			else if(var.equals("Tournament"))
+				roomAllowedTypes.add(2);
+			else if(var.equals("Course"))
+				roomAllowedTypes.add(3);
+			System.out.println("Add new room types : " + var);
+		}
+		
+		int length = roomAllowedTypes.size();
+		// Création du SQL pour l'ajout
+		PreparedStatement prepStatement = null;
+		try {
+			prepStatement = connexion.prepareStatement("INSERT INTO room_game_types (room_id, game_type_id) VALUES ( ? , ?);");
+						
+					for(int i = 0; i < length; i++)
+					{
+
+						// Ajouter l'information pour cette salle
+						prepStatement.setInt(1, room_id);
+						prepStatement.setInt(2, roomAllowedTypes.get(i));
+						
+						prepStatement.addBatch();//executeUpdate();
+
+					}
+					prepStatement.executeBatch();
+				
+			}
+			catch (Exception e)
+			{
+				System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_gameTypes") + e.getMessage());
+			}
+	}
+
+
+	/**
+	 * Method satellite to putNewRoom() used to put new room in DB from room created in profModule
 	 * put infos in room_info table
 	 */
-	public void putNewRoomInfo(int room_id, int lang_id, String name, String roomDesc)
+	private void putNewRoomInfo(int room_id, int lang_id, String name, String roomDesc)
 	{
 		
 		// Création du SQL pour l'ajout
@@ -1612,7 +1668,7 @@ public class GestionnaireBD
 	 * put infos in special_square_rule table
 	 * @throws SQLException 
 	 */
-	public void putNewRoomSpecialSquare(int room_id) 
+	private void putNewRoomSpecialSquare(int room_id) 
 	{
 		
 		PreparedStatement prepStatement = null;
@@ -1645,7 +1701,7 @@ public class GestionnaireBD
 	 * put infos in room_object table
 	 * @throws SQLException 
 	 */
-	public void putNewRoomObjects(int room_id) 
+	private void putNewRoomObjects(int room_id) 
 	{
 		
 		PreparedStatement prepStatement = null;
@@ -1686,7 +1742,7 @@ public class GestionnaireBD
 	 * put infos in room_shop table
 	 * @throws SQLException 
 	 */
-	public void putNewRoomShops(int room_id) 
+	private void putNewRoomShops(int room_id) 
 	{
 		
 		PreparedStatement prepStatement = null;

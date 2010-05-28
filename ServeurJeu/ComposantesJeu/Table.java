@@ -1036,7 +1036,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 						objGestionnaireBD.mettreAJourJoueur(joueur, intTempsTotal);
 						
 						// if the game was with the permission to use user's money from DB
-						if (joueur.obtenirPartieCourante().isMoneyPermit())
+						if (joueur.obtenirPartieCourante().obtenirTable().getRegles().isBolMoneyPermit())
 						{
 						   objGestionnaireBD.setNewPlayersMoney(joueur.obtenirCleJoueur(), joueur.obtenirPartieCourante().obtenirArgent());
 						} 

@@ -66,7 +66,7 @@ public class Regles
 	private int intMaxSaledObjects;
 	
 	//Room is active in tournament and you enter directly in a board of this room
-	//private boolean tournamentState;
+	private boolean bolMoneyPermit;
 	
 	// show or not the question number in client
 	private boolean showNumber;
@@ -102,6 +102,7 @@ public class Regles
 	    
 	    // Initialiser les variables par défaut
 	    bolPermetChat = true;
+	    bolMoneyPermit = false;
 	    fltRatioTrous = 0.0f;
 	    fltRatioMagasins = 0.0f;
 	    fltRatioCasesSpeciales = 0.0f;
@@ -426,5 +427,19 @@ public class Regles
 	 */
 	public void setNbVirtualPlayers(int nbVirtualPlayers) {
 		this.nbVirtualPlayers = nbVirtualPlayers;
+	}
+	
+	/**
+	 * @return the bolMoneyPermit
+	 */
+	public boolean isBolMoneyPermit() {
+		return bolMoneyPermit;
+	}
+
+	/**
+	 * @param bolMoneyPermit the bolMoneyPermit to set
+	 */
+	public void setBolMoneyPermit(boolean bolMoneyPermit) {
+		this.bolMoneyPermit = bolMoneyPermit;
 	}
 }

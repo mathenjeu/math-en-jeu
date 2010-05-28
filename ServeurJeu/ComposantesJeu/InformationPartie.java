@@ -82,11 +82,7 @@ public class InformationPartie
     // the Braniac state of the player
     private PlayerBraniacState braniacState;
         
-	// If is true intArgent is taken from DB and at the end 
-    //of the game is writen to the DB
-    private boolean moneyPermit;
-    
-    // to not get twice bonus
+	// to not get twice bonus
     // used in course ou tournament types of game
     private boolean wasOnFinish;
 
@@ -124,22 +120,18 @@ public class InformationPartie
 		
 	        // Définir les propriétés de l'objet InformationPartie
 	        intPointage = 0;
-	        
-	        // is permited or not to charge money from DB
-	        setMoneyPermit(objGestionnaireBD.getMoneyRule(joueur.obtenirSalleCourante().getRoomName(joueur.obtenirProtocoleJoueur().langue)));
-	        
-	        // charge money from DB if is permited
-	        if (isMoneyPermit()){
-	        	intArgent = objGestionnaireBD.getPlayersMoney(joueur.obtenirCleJoueur());
-		    }else {
-		       	intArgent = 0;
-		    }
-	        	        
+	               	        
             intIdPersonnage = 0;
 	        	        
 	        // Faire la référence vers la table courante
 	        objTable = tableCourante;
 	    
+	        // charge money from DB if is permited
+	        intArgent = 0;
+	        if (objTable.getRegles().isBolMoneyPermit())
+	        	intArgent = objGestionnaireBD.getPlayersMoney(joueur.obtenirCleJoueur());
+		    
+	        
 	        // Au départ, le joueur est nul part
 	        objPositionJoueur = null;
 	    
@@ -1292,16 +1284,7 @@ public class InformationPartie
         	return Math.abs(objPositionJoueur.x - objPoint.x) + Math.abs(objPositionJoueur.y - objPoint.y);
         }
 
-     
-        public void setMoneyPermit(boolean moneyPermit) {
-			this.moneyPermit = moneyPermit;
-		}
-
-		public boolean isMoneyPermit() {
-			return moneyPermit;
-		}
-
-		public void setObjBoiteQuestions(BoiteQuestions objBoiteQuestions) {
+        public void setObjBoiteQuestions(BoiteQuestions objBoiteQuestions) {
 			this.objBoiteQuestions = objBoiteQuestions;
 		}
 

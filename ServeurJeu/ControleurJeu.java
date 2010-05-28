@@ -697,12 +697,12 @@ public class ControleurJeu
 	 * 				par l'appelant ().
 	 */
 	public void preparerEvenementNouvelleSalle(String roomName, Boolean protegee, String strCreatorUserName, 
-			String roomDescription, int masterTime, int roomID)
+			String roomDescription, int masterTime, int roomID, String gameTypes)
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs qu'une table a été créée
 	    EvenementNouvelleSalle nouvelleSalle = new EvenementNouvelleSalle(roomName, protegee, strCreatorUserName,  
-	    		roomDescription, masterTime, roomID);
+	    		roomDescription, masterTime, roomID, gameTypes);
 	    
 	    // Créer un ensemble contenant tous les tuples de la liste 
 		// lstJoueursConnectes (chaque élément est un Map.Entry)
