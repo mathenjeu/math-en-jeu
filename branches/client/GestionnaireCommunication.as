@@ -1009,6 +1009,10 @@ class GestionnaireCommunication
 							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
 				    		objEvenement["RoomDescriptions"] = lstChildNodes[i].firstChild.nodeValue;
 				       	break;
+						case "GameTypres":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["GameTypes"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
 					} // end switch
 				
 				} // fin NouvelleSalle
@@ -1748,7 +1752,7 @@ class GestionnaireCommunication
      */
     public function createRoom(createRoomDelegate:Function,
                                nameRoom:String, description:String, pass:String, fromDate:String,
-							   toDate:String, defaultTime:String, roomCategories:String)
+							   toDate:String, defaultTime:String, roomCategories:String, gameTypes:String)
     {
         // Si on a obtenu la liste des tables, alors on peut continuer le code
         // de la fonction
@@ -1789,6 +1793,9 @@ class GestionnaireCommunication
 			var objNoeudParametreRoomCategories:XMLNode = objObjetXML.createElement("parametre");
             var objNoeudParametreRoomCategoriesText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(roomCategories));
 			
+			var objNoeudParametreGameTypes:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreGameTypesText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(gameTypes));
+			
 			// Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
             objNoeudCommande.attributes.nom = "CreateRoom";
@@ -1806,6 +1813,8 @@ class GestionnaireCommunication
             objNoeudParametreDefaultTime.appendChild(objNoeudParametreDefaultTimeText);
 			objNoeudParametreRoomCategories.attributes.type = "RoomCategories";
             objNoeudParametreRoomCategories.appendChild(objNoeudParametreRoomCategoriesText);
+			objNoeudParametreGameTypes.attributes.type = "GameTypes";
+            objNoeudParametreGameTypes.appendChild(objNoeudParametreGameTypesText);
 			
 			//trace ("GC : defT : " + defaultTime + " " + ExtendedString.encodeToUTF8(defaultTime));
 						
@@ -1816,6 +1825,7 @@ class GestionnaireCommunication
             objNoeudCommande.appendChild(objNoeudParametreEndDate);
 			objNoeudCommande.appendChild(objNoeudParametreDefaultTime);
 			objNoeudCommande.appendChild(objNoeudParametreRoomCategories);
+			objNoeudCommande.appendChild(objNoeudParametreGameTypes);
 					
 			objObjetXML.appendChild(objNoeudCommande);
             // Declaration d'un nouvel objet qui va contenir les informations sur
@@ -3579,7 +3589,7 @@ class GestionnaireCommunication
                     descriptions:lstChildNodes[i].attributes.descriptions, 
                     //maxnbplayers:lstChildNodes[i].attributes.maxnbplayers,
 					idRoom:lstChildNodes[i].attributes.id,
-                    //typeDeJeu:lstChildNodes[i].attributes.typeDeJeu,
+                    gameTypes:lstChildNodes[i].attributes.gameTypes,
 					//nbTracks:lstChildNodes[i].attributes.nbTracks,
 					userCreator:lstChildNodes[i].attributes.userCreator,
 					masterTime:lstChildNodes[i].attributes.masterTime});
