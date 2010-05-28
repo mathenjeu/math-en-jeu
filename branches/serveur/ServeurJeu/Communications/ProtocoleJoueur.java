@@ -875,11 +875,13 @@ public class ProtocoleJoueur implements Runnable
 
                         			 //Add max numbers of players of that room
                         			 //objNoeudSalle.setAttribute("maxnbplayers", Integer.toString(objSalle.getRegles().getMaxNbPlayers()));
-
-                        			 //Add type of game for that room
-                        			 //objNoeudSalle.setAttribute("typeDeJeu", objSalle.getGameType());
                         			 
-                        			//Add type of game for that room
+                        			 //Add allowed types of game for that room
+                        			 String gameTypes = objSalle.getRoomAllowedTypes().toString();
+                        			 System.out.println(gameTypes);
+                        			 objNoeudSalle.setAttribute("gameTypes", gameTypes);
+                        			 
+                        			 //Add type of game for that room
                         			 //objNoeudSalle.setAttribute("nbTracks", Integer.toString(objSalle.getRegles().getNbTracks()));
 
                         			 
@@ -906,12 +908,7 @@ public class ProtocoleJoueur implements Runnable
 					// Si le joueur est connecté au serveur de jeu, alors on va
 					// cree la salle
 					if (objJoueurHumain != null)
-					{
-						
-						
-						String createur = objJoueurHumain.obtenirNomUtilisateur();
-						String gameType = "mathEnJeu";
-																
+					{																						
 						// Déclaration d'une variable qui va contenir le noeud
 						// du nom de la salle a creer
 						Node objRoomName = obtenirValeurParametre(objNoeudCommandeEntree, "NameRoom");
@@ -960,8 +957,13 @@ public class ProtocoleJoueur implements Runnable
 						String roomCategories = "";
 						roomCategories = objRoomCategories.getNodeValue();
 						
+						Node objGameTypes = obtenirValeurParametre(objNoeudCommandeEntree, "GameTypes");
+						String gameTypes = "";
+						if(objGameTypes != null)
+						   gameTypes = objGameTypes.getNodeValue();
+						
 						//add room to the DB too
-						int room_id = objControleurJeu.obtenirGestionnaireBD().putNewRoom(motDePasse, objJoueurHumain.obtenirCleJoueur(), name, roomDescription, this.langue, beginDate, endDate, masterTime, roomCategories);
+						int room_id = objControleurJeu.obtenirGestionnaireBD().putNewRoom(motDePasse, objJoueurHumain.obtenirCleJoueur(), name, roomDescription, this.langue, beginDate, endDate, masterTime, roomCategories, gameTypes);
                         
 						// Il n'y a pas eu d'erreurs et il va falloir retourner 
 						// une liste des salles ?
@@ -2693,7 +2695,7 @@ public class ProtocoleJoueur implements Runnable
 		// TODO 
 		else if (noeudCommande.getAttribute("nom").equals(Commande.CreateRoom))
 		{
-			if (noeudCommande.getChildNodes().getLength() == 7)
+			if (noeudCommande.getChildNodes().getLength() == 8)
 			{
 				bolCommandeValide = true;
 			}

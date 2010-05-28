@@ -3,7 +3,6 @@ package ServeurJeu.ComposantesJeu;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -80,6 +79,9 @@ public class Salle
 	// used to give the numbers to the created tables in this room
 	private int lastNumber;
 	
+	//types of game for the tables in this room
+	private ArrayList<String> roomAllowedTypes;
+	
 	   
 	
 	/**
@@ -117,7 +119,8 @@ public class Salle
         this.setEndDate(endDate);
         this.masterTime = masterTime;
                
-        categories = new ArrayList<Integer>();
+        this.categories = new ArrayList<Integer>();
+        this.setRoomAllowedTypes(new ArrayList<String>());
 		
 		// Créer une nouvelle liste de joueurs, de tables et de numéros
 		lstJoueurs = new TreeMap <String, JoueurHumain>();
@@ -355,7 +358,7 @@ public class Salle
 	    // cette salle pendant la création de la table
 	    synchronized (lstTables)
 	    {
-	    	System.out.println("Salle - cree table : " + intNbLines + " " + intNbColumns);
+	    	//System.out.println("Salle - cree table : " + intNbLines + " " + intNbColumns);
 	    	// Créer une nouvelle table en passant les paramètres appropriés
 	    	Table objTable = new Table( this, genererNoTable(), joueur, tempsPartie, name, intNbLines, intNbColumns, gameType);
 	    		    	
@@ -922,6 +925,17 @@ public class Salle
 	public Table obtenirTable(int intNoTable) {
 		
 		return (Table)lstTables.get( new Integer(intNoTable));
+	}
+
+	/**
+	 * @return the roomAdmitedTypes
+	 */
+	public ArrayList<String> getRoomAllowedTypes() {
+		return roomAllowedTypes;
+	}
+
+	public void setRoomAllowedTypes(ArrayList<String> roomAllowedTypes) {
+		this.roomAllowedTypes = roomAllowedTypes;
 	}
 	
 }// end class 
