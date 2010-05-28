@@ -73,6 +73,7 @@
 	  roomBTimeLabel = "Heure d'ouverture"
 	  roomEDateLabel = "Date de fermeture"
 	  roomETimeLabel = "Heure de fermeture"
+	  allowedTypesLabel = "Types du jeu permis"
 	  createRoomText = "Créer"
 	  roomListLabel  = "LISTE DES SALLES"
 	  roomReportLabel = "RAPPORT"

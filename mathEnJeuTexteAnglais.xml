@@ -72,6 +72,7 @@
 	  roomBTimeLabel = "Opening time"
 	  roomEDateLabel = "Closing date"
 	  roomETimeLabel = "Closing time"
+	  allowedTypesLabel = "Allowed game types"
 	  createRoomText = "Create"
 	  roomListLabel  = "ROOMS LIST"
 	  roomReportLabel = "REPORT"

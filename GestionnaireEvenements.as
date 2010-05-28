@@ -86,6 +86,8 @@ class GestionnaireEvenements
 	//used to color clothes of our perso
 	private var colorIt:String;
 	
+	private var allowedTypes:Array;
+	
 	function affichageChamps()
 	{
 		trace("------ debut affichage ------");
@@ -187,6 +189,7 @@ class GestionnaireEvenements
 		this.langue = langue;
         this.nomSalle = new String();
         this.listeDesSalles = new Array();
+		this.allowedTypes = new Array();
 		//this.listeNumeroJoueursSalles = new Array();
 		this.listeDesTables = new Array();
 		this.listeChansons = new Array();
@@ -268,7 +271,7 @@ class GestionnaireEvenements
 		this.objGestionnaireCommunication = new GestionnaireCommunication(Delegate.create(this, this.evenementConnexionPhysiqueTunneling), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
 	}
 	
-	 ///////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////
     function beginNewGame()
     {
         trace("*********************************************");
@@ -277,7 +280,7 @@ class GestionnaireEvenements
         trace("*********************************************\n");
     }
 	
-	 ///////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////
     function restartOldGame()
     {
 	    trace("*********************************************");
@@ -289,11 +292,11 @@ class GestionnaireEvenements
 	
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////
-    function createRoom(nameRoom:String, description:String, pass:String, fromDate:String, toDate:String, defaultTime:String, roomCategories:String)
+    function createRoom(nameRoom:String, description:String, pass:String, fromDate:String, toDate:String, defaultTime:String, roomCategories:String, gameTypes:String)
     {
         trace("*********************************************");
-        trace("debut de createRoom     :" + nameRoom + " " + toDate + " " + defaultTime);
-        this.objGestionnaireCommunication.createRoom(Delegate.create(this, this.retourCreateRoom), nameRoom, description, pass, fromDate, toDate, defaultTime, roomCategories);
+        trace("debut de createRoom     :" + nameRoom + " " + toDate + " " + gameTypes);
+        this.objGestionnaireCommunication.createRoom(Delegate.create(this, this.retourCreateRoom), nameRoom, description, pass, fromDate, toDate, defaultTime, roomCategories, gameTypes);
         trace("fin de createRoom");
         trace("*********************************************\n");
     }
@@ -1024,6 +1027,7 @@ class GestionnaireEvenements
         //objetEvenement.resultat = Ok, CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte, MauvaisMotDePasseSalle, SalleNonExistante, JoueurDansSalle
         trace("*********************************************");
         trace("debut de retourEntrerSalle   " + objetEvenement.resultat);
+		var listeTypes:String;
         switch(objetEvenement.resultat)
         {
             case "Ok":
@@ -1035,7 +1039,14 @@ class GestionnaireEvenements
                     if(this.listeDesSalles[i].idRoom == this.idRoom)
                     {
                         this.masterTime = this.listeDesSalles[i].masterTime;
-						//this.nbTracks = Number(this.listeDesSalles[i].nbTracks);
+						// to treat allowed types of game in this room
+						listeTypes = this.listeDesSalles[i].gameTypes;
+						listeTypes = listeTypes.slice(1, listeTypes.length - 1);
+						this.allowedTypes = listeTypes.split(", ");
+						if(this.allowedTypes.length == 1 && this.allowedTypes[0] == "")
+						   this.allowedTypes = new Array("mathEnJeu", "Course");
+						//trace(this.allowedTypes);
+						
 						break;
                     }
                 }
@@ -2369,6 +2380,7 @@ class GestionnaireEvenements
 			this.listeDesSalles[this.listeDesSalles.length - 1].descriptions = objetEvenement.RoomDescriptions;
 			this.listeDesSalles[this.listeDesSalles.length - 1].userCreator = objetEvenement.CreatorUserName;
 			this.listeDesSalles[this.listeDesSalles.length - 1].masterTime = objetEvenement.MasterTime;
+			this.listeDesSalles[this.listeDesSalles.length - 1].gameTypes = objetEvenement.GameTypes;
 			trace(" GE : " + this.listeDesSalles[this.listeDesSalles.length - 1].nom + " * " +  this.listeDesSalles[this.listeDesSalles.length - 1].possedeMotDePasse);
 			
 			_level0.loader.contentHolder.listeSalle.addItem({label: objetEvenement.NomSalle, data:  objetEvenement.NoSalle});
