@@ -334,7 +334,11 @@ class GestionnaireCommunication
                             break;
                         case "ObtenirListeSalles":
                             retourObtenirListeSalles(objNoeudCommande);
+							break;
+						case "ObtenirListeSallesRetour":
+                            retourObtenirListeSalles(objNoeudCommande);
                             break;
+						    
 						case "ReportBugQuestion":
                             retourReportBugQuestion(objNoeudCommande);
                             break;
@@ -1675,7 +1679,7 @@ class GestionnaireCommunication
      *          fonction permettant de retourner la liste des salles
      */
     public function obtenirListeSalles(obtenirListeSallesDelegate:Function, evenementNouvelleSalleDelegate:Function,
-									   client:Number)
+									   client:Number, roomsType:String)
     {
         // Si on a obtenu la liste des joueurs, alors on peut continuer le code
         // de la fonction
@@ -1701,15 +1705,19 @@ class GestionnaireCommunication
             //*************************
 			var objNoeudParametreClientType:XMLNode = objObjetXML.createElement("parametre");
             var objNoeudParametreClientTypeText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(client)));
+			
+			var objNoeudParametreRoomsType:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreRoomsTypeText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(roomsType)));
             
             // Construire l'arbre du document XML
-            
             objNoeudParametreClientType.attributes.type = "ClientType";
-           
             objNoeudParametreClientType.appendChild(objNoeudParametreClientTypeText);
-            
             objNoeudCommande.appendChild(objNoeudParametreClientType);
             
+			objNoeudParametreRoomsType.attributes.type = "RoomsType";
+            objNoeudParametreRoomsType.appendChild(objNoeudParametreRoomsTypeText);
+            objNoeudCommande.appendChild(objNoeudParametreRoomsType);
+		   
 			//***************************
             objObjetXML.appendChild(objNoeudCommande);
             // Declaration d'un nouvel objet qui va contenir les informations sur
@@ -1740,6 +1748,81 @@ class GestionnaireCommunication
             // TODO: Dire qu'on n'est pas connecte
         }
     }
+	
+	/**
+     * Cette methode permet d'obtenir la liste des salles .
+     *
+     * @param Function obtenirListeSallesDelegate : Un pointeur sur la
+     *          fonction permettant de retourner la liste des salles
+     */
+    public function obtenirListeSallesRetour(obtenirListeSallesRetourDelegate:Function, client:Number, roomsType:String)
+    {
+        // Si on a obtenu la liste des joueurs, alors on peut continuer le code
+        // de la fonction
+        if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("ObtenirListeSallesRetour", "nom") == true)
+        {
+           // Declaration d'un tableau dont le contenu est un Delegate
+            var lstDelegateCommande:ExtendedArray = new ExtendedArray();
+            // Ajouter le Delegate de retour dans le tableau des delegate pour
+            // cette fonction
+            lstDelegateCommande.push({nom:"ObtenirListeSallesRetour", delegate:obtenirListeSallesRetourDelegate});
+            // Declaration d'une variable qui va contenir le numero de la commande
+            // generee
+            var intNumeroCommande:Number = obtenirNumeroCommande();
+            // Creer l'objet XML qui va contenir la commande a envoyer au serveur
+            var objObjetXML:XML = new XML();
+            // Creer tous les noeuds de la commande
+            var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
+            // Construire l'arbre du document XML
+            objNoeudCommande.attributes.no = String(intNumeroCommande);
+            objNoeudCommande.attributes.nom = "ObtenirListeSallesRetour";
+            //*************************
+			var objNoeudParametreClientType:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreClientTypeText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(client)));
+			
+			var objNoeudParametreRoomsType:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreRoomsTypeText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(roomsType)));
+            
+            // Construire l'arbre du document XML
+            objNoeudParametreClientType.attributes.type = "ClientType";
+            objNoeudParametreClientType.appendChild(objNoeudParametreClientTypeText);
+            objNoeudCommande.appendChild(objNoeudParametreClientType);
+			
+			objNoeudParametreRoomsType.attributes.type = "RoomsType";
+            objNoeudParametreRoomsType.appendChild(objNoeudParametreRoomsTypeText);
+            objNoeudCommande.appendChild(objNoeudParametreRoomsType);
+            
+			//***************************
+            objObjetXML.appendChild(objNoeudCommande);
+            // Declaration d'un nouvel objet qui va contenir les informations sur
+            // la commande a traiter courante
+            var objObjetCommande:Object = new Object();
+            // Definir les proprietes de l'objet de la commande a ajouter dans le
+            // tableau des commandes a envoyer
+            objObjetCommande.no = intNumeroCommande;
+            objObjetCommande.nom = "ObtenirListeSallesRetour";
+            objObjetCommande.objetXML = objObjetXML;
+            objObjetCommande.listeDelegate = lstDelegateCommande;
+            // Ajouter l'objet de commande a envoyer courant a la fin du tableau
+            var intNbElements:Number = lstCommandesAEnvoyer.push(objObjetCommande);
+            // Si le nombre d'elements dans la liste est de 1 (celui qu'on vient
+            // juste d'ajouter) et qu'il n'y aucune commande en traitement, alors
+            // on peut envoyer la commande pour la faire traiter (normalement, il
+            // ne devrait y avoir aucune commande en traitement), sinon alors elle
+            // va se faire traiter tres prochainement
+            if (intNbElements == 1 && objCommandeEnTraitement == null)
+            {
+                // Appeler la fonction qui va permettre de traiter la prochaine
+                // commande et de charger tout ce qu'il faut en memoire
+                traiterProchaineCommande();
+            }
+        }
+        else
+        {
+            // TODO: Dire qu'on n'est pas connecte
+        }
+    }
+	
 	
 	//*********************************************************************
 	 /**

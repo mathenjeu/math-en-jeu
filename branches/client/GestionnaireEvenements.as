@@ -271,6 +271,16 @@ class GestionnaireEvenements
 		this.objGestionnaireCommunication = new GestionnaireCommunication(Delegate.create(this, this.evenementConnexionPhysiqueTunneling), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
 	}
 	
+	//////////////////////////////////////////////////////////////////////////////////////////
+	public function backToFrameOneGetRooms()
+	{
+		trace("*********************************************");
+        trace("back to frame1 " + _level0.roomsType);
+		this.objGestionnaireCommunication.obtenirListeSallesRetour(Delegate.create(this, this.retourObtenirListeSalles), this.clientType, _level0.roomsType);
+		
+	}// end method  
+	
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////////
     function beginNewGame()
     {
@@ -836,7 +846,7 @@ class GestionnaireEvenements
                 {
                     this.listeDesJoueursConnectes.push(objetEvenement.listeNomUtilisateurs[i]);
                 }
-                this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), Delegate.create(this, this.evenementNouvelleSalle), this.clientType);
+                this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), Delegate.create(this, this.evenementNouvelleSalle), this.clientType, _level0.roomsType);
             break;
 			
             case "CommandeNonReconnue":
