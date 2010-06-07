@@ -877,4 +877,40 @@ public class ControleurJeu
     {
     	return objParametreIA;
     }
-}
+
+	public TreeMap<Integer, Salle> obtenirListeSalles(String langue,
+			String roomsType) {
+		synchronized(lstSalles){
+	        // On crée une liste de salles vide, et on parcourt toutes les salles connues
+            TreeMap<Integer, Salle> copieListeSalles = (TreeMap<Integer, Salle>) lstSalles.clone();
+            copieListeSalles.clear();
+            Set<Integer> keySet = lstSalles.keySet();
+            Iterator<Integer> it = keySet.iterator();
+            //boolean repeat = true;
+           
+            while (it.hasNext())//&& repeat)
+            { 
+            	int key = (int)it.next();
+            	Salle salle = (Salle)lstSalles.get(key);
+            	
+            	// here we test if the room has the language of player
+            	Boolean permetCetteLangue = objGestionnaireBD.roomLangControl(salle, langue);
+
+            	// Si les paramètres en entrée sont des strings vides,
+            	// alors on ignore le paramètre correspondant
+            	if(langue.equals("")) permetCetteLangue = true;
+
+            	// On ajoute la salle à la liste si elle correspond à ce qu'on veut
+            	if(permetCetteLangue && salle.getRoomType().equals(roomsType)) 
+            	{
+            		copieListeSalles.put(key, salle);
+               	}
+
+
+            }
+            
+            return copieListeSalles;
+		}
+		
+	} /// end method
+}// end class

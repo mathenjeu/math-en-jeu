@@ -82,8 +82,12 @@ public class Salle
 	//types of game for the tables in this room
 	private ArrayList<String> roomAllowedTypes;
 	
-	   
+	//type of room 
+	//we have 2 types for the moment, General and profsType
+	private String roomType;
 	
+	
+
 	/**
 	 * Constructeur de la classe Salle qui permet d'initialiser les membres 
 	 * privés de la salle. Ce constructeur a en plus un mot de passe permettant
@@ -97,7 +101,7 @@ public class Salle
 	 * @param String motDePasse : Le mot de passe
 	 */
 	public Salle(String nomSalle, String nomUtilisateurCreateur, String motDePasse, 
-				 ControleurJeu controleurJeu, int roomID, Date beginDate, Date endDate, int masterTime)
+				 ControleurJeu controleurJeu, int roomID, Date beginDate, Date endDate, int masterTime, String type)
 	{
 		super();
 		
@@ -118,6 +122,7 @@ public class Salle
         this.setBeginDate(beginDate);
         this.setEndDate(endDate);
         this.masterTime = masterTime;
+        this.roomType = type;
                
         this.categories = new ArrayList<Integer>();
         this.setRoomAllowedTypes(new ArrayList<String>());
@@ -936,6 +941,14 @@ public class Salle
 
 	public void setRoomAllowedTypes(ArrayList<String> roomAllowedTypes) {
 		this.roomAllowedTypes = roomAllowedTypes;
+	}
+	
+	public String getRoomType() {
+		return roomType;
+	}
+
+	public void setRoomType(String roomType) {
+		this.roomType = roomType;
 	}
 	
 }// end class 

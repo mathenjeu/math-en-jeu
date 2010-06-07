@@ -805,7 +805,121 @@ public class ProtocoleJoueur implements Runnable
 						
 						client = Integer.parseInt((obtenirValeurParametre(objNoeudCommandeEntree, "ClientType")).getNodeValue());
 						
+						String roomsType = (obtenirValeurParametre(objNoeudCommandeEntree, "RoomsType")).getNodeValue();
+
+						// Créer le noeud pour le paramètre contenant la liste
+						// des salles à retourner
+						Element objNoeudParametreListeSalles = objDocumentXMLSortie.createElement("parametre");
+
+						// On ajoute un attribut type qui va contenir le type
+						// du paramètre
+						objNoeudParametreListeSalles.setAttribute("type", "ListeNomSalles");
+
+						TreeMap<Integer, Salle> lstListeSalles = new TreeMap<Integer, Salle>();
+						if(client == 1)  // if is game
+						{
+							// take list of rooms from Controleur
+							lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue, roomsType);
 						
+						}else if (client == 2) // if is moduleProf
+						{
+							// else take it from DB - the rooms maden by this user prof
+							objControleurJeu.obtenirGestionnaireBD().listRoomsProf(this.langue, objJoueurHumain.obtenirCleJoueur(), lstListeSalles);
+							
+						}
+						// Générer un nouveau numéro de commande qui sera 
+						// retourné au client
+						genererNumeroReponse();
+						synchronized(lstListeSalles)
+                        {
+                        	// Créer un ensemble contenant tous les tuples de la liste 
+                        	// lstListeSalles (chaque élément est un Map.Entry)
+                        	Set<Map.Entry<Integer, Salle>> lstEnsembleSalles = lstListeSalles.entrySet();
+
+                        	// Obtenir un itérateur pour l'ensemble contenant les salles
+                        	Iterator<Entry<Integer, Salle>> objIterateurListe = lstEnsembleSalles.iterator();
+
+                        	//we find if room is set tournamentActive
+                        	Set<Integer> keySet =  lstListeSalles.keySet();
+                        	Iterator<Integer> it = keySet.iterator();
+                        	
+
+                        	// Passer toutes les salles et créer un noeud pour 
+                        	// chaque salle et l'ajouter au noeud de paramètre
+                        	while (objIterateurListe.hasNext() == true)
+                        	{
+                        		// Créer une référence vers la salle courante dans la liste
+                        		Salle objSalle = (Salle)(((Map.Entry<Integer, Salle>)(objIterateurListe.next())).getValue());
+
+                        		 //if (objSalle.getStrCreatorUserName().equals(objJoueurHumain.obtenirNomUtilisateur()))
+                        		 
+
+                        			 // Créer le noeud de la salle courante
+                        			 Element objNoeudSalle = objDocumentXMLSortie.createElement("salle");
+
+                        			 // On ajoute un attribut nom qui va contenir le nom
+                        			 // de la salle
+                        			 objNoeudSalle.setAttribute("nom", objSalle.getRoomName(this.langue));
+
+                        			 // add too the room id
+                        			 objNoeudSalle.setAttribute("id", Integer.toString(objSalle.getRoomID()));
+
+                        			 //System.out.println(objSalle.getRoomName(""));
+
+                        			 // On ajoute un attribut protegee qui va contenir
+                        			 // une valeur booléenne permettant de savoir si la
+                        			 // salle est protégée par un mot de passe ou non
+                        			 objNoeudSalle.setAttribute("protegee", Boolean.toString(objSalle.protegeeParMotDePasse()));
+
+                        			 //Add room description to the node
+                        			 objNoeudSalle.setAttribute("descriptions", objSalle.getRoomDescription(this.langue));
+
+                        			 //Add max numbers of players of that room
+                        			 //objNoeudSalle.setAttribute("maxnbplayers", Integer.toString(objSalle.getRegles().getMaxNbPlayers()));
+                        			 
+                        			 //Add allowed types of game for that room
+                        			 String gameTypes = objSalle.getRoomAllowedTypes().toString();
+                        			 System.out.println(gameTypes);
+                        			 objNoeudSalle.setAttribute("gameTypes", gameTypes);
+                        			 
+                        			 //Add type of game for that room
+                        			 //objNoeudSalle.setAttribute("nbTracks", Integer.toString(objSalle.getRegles().getNbTracks()));
+
+                        			 
+                        			 objNoeudSalle.setAttribute("userCreator", objSalle.getStrCreatorUserName());
+                        			 objNoeudSalle.setAttribute("masterTime", Integer.toString(objSalle.getMasterTime()));
+
+
+                        			 // Ajouter le noeud de la salle au noeud du paramètre
+                        			 objNoeudParametreListeSalles.appendChild(objNoeudSalle);
+                        		 
+                        	}
+                        }
+						// Ajouter le noeud paramètre au noeud de commande dans
+						// le document de sortie
+						objNoeudCommande.appendChild(objNoeudParametreListeSalles);
+					} else {
+						// Sinon, il y a une erreur car le joueur doit ètre connecté
+						// pour pouvoir avoir accès à la liste des salles
+						objNoeudCommande.setAttribute("nom", "JoueurNonConnecte");
+					}
+				}
+				else if (objNoeudCommandeEntree.getAttribute("nom").equals(Commande.ObtenirListeSallesRetour))
+				{
+					// Si le joueur est connecté au serveur de jeu, alors on va
+					// retourner au client la liste des salles actives
+					if (objJoueurHumain != null)
+					{
+						// Il n'est pas nécessaire de synchroniser cette partie
+						// du code car on n'ajoute ou retire jamais de salles
+						// Il n'y a pas eu d'erreurs et il va falloir retourner 
+						// une liste de salles
+						objNoeudCommande.setAttribute("type", "Reponse");
+						objNoeudCommande.setAttribute("nom", "ListeSalles");
+						
+						client = Integer.parseInt((obtenirValeurParametre(objNoeudCommandeEntree, "ClientType")).getNodeValue());
+						
+						String roomsType = (obtenirValeurParametre(objNoeudCommandeEntree, "RoomsType")).getNodeValue();
 
 						// Créer le noeud pour le paramètre contenant la liste
 						// des salles à retourner
@@ -819,7 +933,8 @@ public class ProtocoleJoueur implements Runnable
 						if(client == 1)
 						{
 							// take list of rooms from Controleur
-							lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue);
+							lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue, roomsType);
+							
 						}else if (client == 2)
 						{
 							// else take it from DB - the rooms maden by this user prof
@@ -2673,13 +2788,20 @@ public class ProtocoleJoueur implements Runnable
 			}
 		}
 
-		// Si le nom de la commande est ObtenirListeSalles, alors il ne doit 
-		// pas y avoir de paramètres
+		// Si le nom de la commande est ObtenirListeSalles, alors il doit y avoir 1 paramètre
 		else if (noeudCommande.getAttribute("nom").equals(Commande.ObtenirListeSalles))
 		{
-			// Si le nombre d'enfants du noeud de commande est de 0, alors
-			// il n'y a vraiment aucun paramètres
-			if (noeudCommande.getChildNodes().getLength() == 1)
+			// Si le nombre d'enfants du noeud de commande est de 2, alors c'est correct
+			if (noeudCommande.getChildNodes().getLength() == 2)
+			{
+				bolCommandeValide = true;
+			}
+		}
+		// Si le nom de la commande est ObtenirListeSallesRetour, alors il doit y avoir 2 paramètres
+		else if (noeudCommande.getAttribute("nom").equals(Commande.ObtenirListeSallesRetour))
+		{
+			// Si le nombre d'enfants du noeud de commande est de 2, alors c'est correct
+			if (noeudCommande.getChildNodes().getLength() == 2)
 			{
 				bolCommandeValide = true;
 			}

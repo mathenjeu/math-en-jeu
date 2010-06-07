@@ -931,8 +931,9 @@ public class GestionnaireBD
 	    Date endDate = null;
 	    int masterTime = 0;
 	    String categoriesString = "";
-	    
-	    
+	    int role = 2;
+	    String type = "General";
+		    
 		//now fill all the rooms with properties and add this rooms to the game
 		
 		try
@@ -940,7 +941,7 @@ public class GestionnaireBD
 			for (int room : rooms){
 				synchronized( requete )
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, beginDate, endDate, masterTime, categories " +
+					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, user.role_id, beginDate, endDate, masterTime, categories " +
 							" FROM room_info, room, user, game_type " +
 							" WHERE room.room_id = " + room +  
 							" AND room.room_id = room_info.room_id " +
@@ -954,11 +955,16 @@ public class GestionnaireBD
 						beginDate = rs.getTimestamp("beginDate");
 						endDate = rs.getTimestamp("endDate");
 						masterTime = rs.getInt("masterTime");
+						role = rs.getInt("user.role_id");
 												
 						String roomDescription = fillRoomDescription(room);
 						nom = fillRoomName(room);
+						
+						if(role == 3) type = "profsType";
+						else type = "General";
 											
-						Salle objSalle = new Salle(nom, createur, motDePasse, objControleurJeu, room, beginDate, endDate, masterTime);
+						Salle objSalle = new Salle(nom, createur, motDePasse, objControleurJeu, room, beginDate, endDate, masterTime, type);
+						System.out.println("Test : " + type);
 						objSalle.setRoomDescription(roomDescription);
 						objSalle.setCategories(categoriesString);
 						
@@ -1964,6 +1970,8 @@ public class GestionnaireBD
 	    Date endDate = null;
 	    int masterTime = 0;
 	    String categoriesString = "";
+	    String type = "profsType";
+	    int role = 2;
 	    
 		//now fill all the rooms with properties and add this rooms to the list
 		for (int room : rooms){
@@ -1971,7 +1979,7 @@ public class GestionnaireBD
 			{
 				synchronized( requete )
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, beginDate, endDate, masterTime, categories " +
+					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, user.role_id, beginDate, endDate, masterTime, categories " +
 							" FROM room_info, room, user " +
 							" WHERE room.room_id = " + room +  
 							" AND room.room_id = room_info.room_id " +
@@ -1984,12 +1992,15 @@ public class GestionnaireBD
 						beginDate = rs.getTimestamp("beginDate");
 						endDate = rs.getTimestamp("endDate");
 						masterTime = rs.getInt("masterTime");
+						role = rs.getInt("user.role_id");
 						
+						if(role == 3) type = "profsType";
+						else type = "General";
 																	
 						String roomDescription = fillRoomDescription(room);
 						nom = fillRoomName(room);
 											
-						Salle objSalle = new Salle(nom, createur, motDePasse, objControleurJeu, room, beginDate, endDate, masterTime);
+						Salle objSalle = new Salle(nom, createur, motDePasse, objControleurJeu, room, beginDate, endDate, masterTime, type);
 						objSalle.setRoomDescription(roomDescription);
 						
 						// bloc to fill room's categories
