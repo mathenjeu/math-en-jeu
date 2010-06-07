@@ -34,6 +34,10 @@
     btnPlay = "Play"
     btnQuit = "Quit"
     btnProfile = "Profile"
+    teachBtn = "Teacher's Rooms"
+    playMaze = "Enter the maze
+and be the first 
+to escape!"
     
   page_instructions = ""
     beginPage = "Start a game"

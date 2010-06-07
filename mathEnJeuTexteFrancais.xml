@@ -36,6 +36,8 @@
     btnPlay = "Jouer" 
     btnQuit = "Quitter"
     btnProfile = "Profil"
+    playMaze = "Text français..."
+    teachBtn =   "Salles Prof"
     
   page_instructions = ""
     beginPage = "Débuter une partie"
