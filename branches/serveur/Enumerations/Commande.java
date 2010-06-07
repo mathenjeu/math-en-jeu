@@ -33,6 +33,7 @@ public final class Commande
         public static final String getReport = "getReport";
         public static final String CancelQuestion = "CancelQuestion";
         public static final String ReportBugQuestion = "ReportBugQuestion";
+		public static final String ObtenirListeSallesRetour = "ObtenirListeSallesRetour";
     
 	/**
 	 * Constructeur par défaut est privé pour empêcher de pourvoir créer des 
@@ -54,7 +55,7 @@ public final class Commande
 		// valeurs définies dans cette classe, alors la valeur n'est pas
 		// un membre de cette énumération, sinon elle en est un
 		return (valeur.equals(Connexion) || valeur.equals(Deconnexion) || 
-		        valeur.equals(ObtenirListeJoueurs) || valeur.equals(ObtenirListeSalles) || 
+		        valeur.equals(ObtenirListeJoueurs) || valeur.equals(ObtenirListeSalles) || valeur.equals(ObtenirListeSallesRetour) ||
 		        valeur.equals(EntrerSalle) || valeur.equals(QuitterSalle) || 
 		        valeur.equals(ObtenirListeJoueursSalle) || valeur.equals(ObtenirListeTables) ||
 		        valeur.equals(CreerTable) || valeur.equals(EntrerTable) ||
