@@ -58,6 +58,7 @@ class Etat
 	{nom:"getReport", listeEvenementsAcceptables:new Array("NouvelleSalle"), listeEvenementsAcceptablesAvant:new Array("NouvelleSalle","JoueurConnecte", "JoueurDeconnecte"), listeEvenementsAcceptablesApres:new Array("NouvelleSalle")},
 	{nom:"ObtenirListeSalles", listeEvenementsAcceptables:new Array("JoueurConnecte", "JoueurDeconnecte" ,"NouvelleSalle"), listeEvenementsAcceptablesAvant:new Array("NouvelleSalle"), listeEvenementsAcceptablesApres:new Array("NouvelleSalle")},
     {nom:"EntrerSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("NouvelleSalle", "JoueurConnecte", "JoueurDeconnecte"), listeEvenementsAcceptablesApres:new Array()},
+	{nom:"ObtenirListeSallesRetour", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("ObtenirListeSallesRetour", "NouvelleSalle", "JoueurConnecte", "JoueurDeconnecte"), listeEvenementsAcceptablesApres:new Array()},
 	{nom:"NouvelleSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("NouvelleSalle", "JoueurConnecte", "JoueurDeconnecte"), listeEvenementsAcceptablesApres:new Array()}),
 	listeEvenementsAcceptables:new Array("NouvelleSalle", "JoueurConnecte", "JoueurDeconnecte")};
 
