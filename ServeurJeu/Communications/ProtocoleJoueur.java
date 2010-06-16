@@ -466,8 +466,8 @@ public class ProtocoleJoueur implements Runnable
 			objDocumentXMLEntree.getChildNodes().item(0).getAttributes().getNamedItem("no") != null &&
 			Commande.estUnMembre(objNoeudCommandeEntree.getAttribute("nom")) == true)
 		{
-			// Avant de continuer les vérifications, on va pouvoir retourner
 			// une commande avec le numéro de commande envoyé par le client
+			// Avant de continuer les vérifications, on va pouvoir retourner 
 			objNoeudCommande.setAttribute("noClient", objNoeudCommandeEntree.getAttribute("no"));
 
 			// Si le noeud de commande n'a pas une structure valide ou ne 
