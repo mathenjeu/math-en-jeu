@@ -26,6 +26,7 @@ import mx.utils.Delegate;
 import FiltreTable;
 import mx.controls.Alert;
 import flash.utils.*;
+import mx.utils.*;
 import flash.geom.Transform;
 import flash.geom.ColorTransform;
 import flash.filters.ColorMatrixFilter;
@@ -1210,16 +1211,26 @@ class GestionnaireEvenements
             case "ListeTables":
 			     
 				 _level0.loader.contentHolder.listeTable.removeAll();
+				 
 				 delete this.listeDesTables;
 				 this.listeDesTables = new Array();
 				var count:Number = objetEvenement.listeTables.length;
                 for (var i:Number = 0; i < count; i++)
                 {
                     this.listeDesTables.push(objetEvenement.listeTables[i]);
+					var iconName:String;
+					if(objetEvenement.listeTables[i].gameType == "mathEnJeu")
+					{   
+					   iconName = "maze";
+					}
+					else if (objetEvenement.listeTables[i].gameType == "Course" || objetEvenement.listeTables[i].gameType == "Tournament")
+					{
+						iconName = "flags";
+					}
+					trace("game type liste table : " +  objetEvenement.listeTables[i].gameType + " " + iconName);
+                    str =  "   <<" +  objetEvenement.listeTables[i].tablName + ">>   - " + objetEvenement.listeTables[i].temps + " min. " ;
 					
-                    str = objetEvenement.listeTables[i].no + ".  *" +  objetEvenement.listeTables[i].tablName + "*  " + objetEvenement.listeTables[i].temps + " min. " ;
-					
-					_level0.loader.contentHolder.listeTable.addItem({label : str, data : objetEvenement.listeTables[i].no});
+					_level0.loader.contentHolder.listeTable.addItem({label : str, data : objetEvenement.listeTables[i].no, icon: iconName});
                 }
 				
 				if ( objetEvenement.listeTables.length == 0 &&  _level0.loader.contentHolder._currentframe == 2)
@@ -3351,7 +3362,7 @@ class GestionnaireEvenements
 			  _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 			   this.moveVisibility = this.moveVisibility - 2;
 		       if(this.moveVisibility < 1)
-		       this.moveVisibility = 1;
+		          this.moveVisibility = 1;
 		      _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 			
 			_global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
@@ -3425,30 +3436,36 @@ class GestionnaireEvenements
 		}
 		//***********  END treat the Banana **************************
 		
-		// we put our perso in Braniac...  
+		// we put our perso in Braniac... 
+		// the first part of this action is in the Perssonnage.as line 740
+		// we treat them diffrently because we must have Braniac cases and Timer on our perso
+		/*var delayBraniacProcess:Number;
 		if(objetEvenement.objetUtilise == "Braniac" && objetEvenement.joueurAffecte == this.nomUtilisateur)
 		{
-			//this.moveVisibility = +1;
-			_level0.loader.contentHolder.planche.obtenirPerso().setBraniac(true);
-			this.setBraniacTimer(playerUnder);
+			setBraniacTimer(playerUnder);
 			
-		}else if (objetEvenement.objetUtilise == "Braniac" && objetEvenement.joueurAffecte != this.nomUtilisateur)
-		{
-			_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).setOutBraniac();
-		}
+			delayBraniacProcess = setInterval(setBTimer, 1000);
+            
+			function setBTimer()
+			{
+				trace("ici test Braniac...............................");
+				_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacTimer(playerUnder);
+				clearInterval(delayBraniacProcess);
+			}
+		}*/          /// all treat is passed to Personnage.as
 		
 		objetEvenement = null;
      	trace("fin de evenementUtiliserObjet");
      	trace("*********************************************\n");
     } // end methode
 	
+	
 	// this function is used to put on the Sprite the Timer of the Braniac
 	// after the time finished it must disapear
-	function setBraniacTimer(playerUnder)
+	function setBraniacTimer(playerUnder:String)
 	{
 		//first on put on the sprite the box for the timer if is our perso
-		if(playerUnder == this.nomUtilisateur)
-		{
+		
 		   _level0.loader.contentHolder.attachMovie("timeBox", "branBox",6);//_level0.loader.contentHolder.getNextHigesthDepth());
 		   _level0.loader.contentHolder.branBox._x = 470;
 		   _level0.loader.contentHolder.branBox._xscale = 90;
@@ -3459,7 +3476,6 @@ class GestionnaireEvenements
 		
 		   // Make the field dynamic text field
            _level0.loader.contentHolder.branBox.braniacTime.type = "dynamic";
-           //_level0.loader.contentHolder.branBox.braniacTime.variable = "timeRest";
            with(_level0.loader.contentHolder.branBox.braniacTime)
            {
 	          multiline = false;
@@ -3477,69 +3493,46 @@ class GestionnaireEvenements
            formatTimer.font = "Impact";
            formatTimer.align = "Center";
            _level0.loader.contentHolder.branBox.braniacTime.setNewTextFormat(formatTimer);
-		}//end if
-		
-		
-		if(_global.restedTime > 0) 
-		{ 
-		    _global.restedTime += 89;
-		}else
-		{
-		    _global.restedTime = 89; 
-		}
-		  
-		
+						
 		if(_global.intervalIdBran != null) {
 		
-             // trace("clearInterval************************************    " + tempTime);
-			 clearInterval(_global.intervalIdBran);
+             clearInterval(_global.intervalIdBran);
         }
 
-		   // _global.restedTime:Number = 89;
-	      _global.intervalIdBran = setInterval(branTimerSet, 1000, playerUnder);	// sert pour attendre la jusqu'a la fin de action de Braniac
+		_global.intervalIdBran = setInterval(branTimerSet, 1000, playerUnder);	// sert pour attendre la jusqu'a la fin de action de Braniac
 	   
-	      function branTimerSet(playerUnder:String){
-	        _global.restedTime--;	  
-		   _level0.loader.contentHolder.branBox.braniacTime.text =  _global.restedTime; 
-		   if( _global.restedTime == 2)
-		   {
-			  _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().braniacState = "end";
-		   }
-		   else if( _global.restedTime == 0)
+	    function branTimerSet(playerUnder:String){
+	       
+		   var timeX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).getBraniacTime(); 
+		   _level0.loader.contentHolder.branBox.braniacTime.text = timeX; 
+		   
+		   if(timeX == 0)
 	       {
-			  _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).setBraniac(false);
-			 
-			  if(playerUnder == _level0.loader.contentHolder.objGestionnaireEvenements.nomUtilisateur)
-			  {
-				  if(_level0.loader.contentHolder.planche.obtenirPerso().boardCentre == false || _level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible)
-		          {
+			   if(_level0.loader.contentHolder.planche.obtenirPerso().boardCentre == false || _level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible)
+		       {
 				     _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility--;
 			  			
-		          }else if(_level0.loader.contentHolder.box_question.monScroll._visible || _level0.loader.contentHolder.planche.obtenirPerso().minigameLoade)
-		          {
+		       }else if(_level0.loader.contentHolder.box_question.monScroll._visible || _level0.loader.contentHolder.planche.obtenirPerso().minigameLoade)
+		       {
 			         _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility--;
 		      			
-		          }else{
+		       }else{
 				
-                     _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-				     _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility--;
-			         _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-		          }  
-			  }
-					
-		   } // 
-		   
-		   // to end the Braniac and remove the timer box
-		   if( _global.restedTime < 0)
-		   { 
-		      _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().braniacState = "out";
-              _level0.loader.contentHolder.branBox.removeMovieClip();
+                    _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+				    _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility--;
+			        _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+		       }  
+			  // to remove the timer box
+			  _level0.loader.contentHolder.branBox.removeMovieClip();
 		      clearInterval(_global.intervalIdBran);
-		   }
-			
+					
+		   }		   		
 	   } // end function branTimerSet
+	   
+	    
 		
 	}// end function  setBraniacTimer
+	
 	
 	//*****************************************************************************************
 	// this function is used to put on the Sprite the Timer of the Banana

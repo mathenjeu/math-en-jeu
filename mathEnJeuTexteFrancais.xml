@@ -199,16 +199,20 @@
 	
 		frame1 = ""
 		
+		  selectRoom = "Salle"
+		  selectTable = "Table"
+		  selectPlayer = "Player"
+		 
 			descriptionPrincipale = "C'est le coeur de Math en Jeu. Une immense banque de questions se penchant sur tous les domaines des mathématiques."
 			
 			descriptionAccromath = "Questions plus avancées en lien avec les multiples sujets traités dans la revue Accromath."
 			
 			descriptionDefault = "La banque de questions a été créée par une personne ou un groupe indépendant de l'équipe de Math en Jeu."
 			
-			salle = "Choisissez une salle."
+			salle = "CHOIX DES SALLES"
       chargementSalles = "Chargement de la liste des salles en cours" 
 			boutonRetour = "Retour"
-			boutonContinuer = "Continuer"
+			boutonContinuer = "Joindre"
 			boutonQuitterX = "Quitter la partie.."
 			tableNameLabel = "Nom de la Table"
 			tableLinesLabel = "Lignes"
@@ -216,90 +220,20 @@
 			tableOptionalLabel = "*Optionnel"
 			tableGameType = "Type du jeu"
 			playersListe = " - Liste des joueurs - "
-			
+			sallesOuvertes = "Salles"
 			explication = "Le mode avancé permet au joueur plus expérimenté de sélectionner uniquement les catégories de questions qu'il désire. Il peut ainsi personnaliser son expérience de jeu en choisissant son niveau pour chaque thème mathématique présent dans le jeu."
-			
-			pasQuestion = "Pas de question"
-			primaire1 = "Primaire 1"
-			primaire2 = "Primaire 2"
-			primaire3 = "Primaire 3"
-			primaire4 = "Primaire 4"
-			primaire5 = "Primaire 5"
-			primaire6 = "Primaire 6"
-			secondaire1 = "Secondaire 1"
-			secondaire2 = "Secondaire 2"
-			secondaire3 = "Secondaire 3"
-			secondaire4_CST = "Secondaire 4-Culture"
-			secondaire4_TS = "Secondaire 4-Soc. et Technique"
-			secondaire4_SN = "Secondaire 4-Sc. Naturelles"
-			secondaire5_CST = "Secondaire 5-Culture"
-			secondaire5_TS = "Secondaire 5-Soc. et Technique"
-			secondaire5_SN = "Secondaire 5-Sc. Naturelles"
-			
-			algebre = "Algèbre"
-				conceptsAlgebre = "Concepts"
-				manipulation = "Manipulations algébriques"
-				systemesEquations = "Systèmes d'équations"
-				modelisation = "Modélisation de situations"
-			
-			arithmetique = "Arithmétique"
-				nombresNaturels = "Nombres naturels"
-				fractionsDecimauxPourcentage = "Fractions, décimaux et pourcentage"
-				nombresEntiers = "Nombres entiers"	
-				nombresReels = "Nombres réels"
-				proportions = "Proportions"
-				puissancesRadicauxLogarithmes = "Puissances, radicaux et logarithmes"
-				
-			fonctions = "Fonctions"
-				conceptsFonctions = "Concepts"
-				polynomiale012 = "Polynomiale de degre 0, 1 ou 2"
-				valeurAbsolue = "Valeur absolue"
-				rationnelle = "Rationnelle"
-				parParties = "Définie par parties"
-				partieEntiere = "Partie entière"
-				periodique = "Périodique"
-				exponentielleLogarithmique = "Exponentielle et logarithmique"
-				
-			
-			geometrie = "Géométrie"
-				geometriePlane = "Géométrie plane"
-				geometrie3D = "Géométrie 3D"
-				transformations = "Transformations"
-				distancePointDePartage = "Distance et point de partage"
-								
-			
-			probabilites = "Probabilités"
-				conceptsProbabilites = "Concepts"
-				denombrement = "Dénombrement"
-				calculProbabilite = "Calcul de probabilité"
-				esperanceEquite = "Espérance mathématique et équité"
-				chance = "Chance"
 							
-			statistiques = "Statistiques"
-				conceptsStatistiques = "Concepts"
-				diagrammesTableaux = "Diagrammes et tableaux"
-				mesureTendanceCentrale = "Mesure de tendance centrale"
-				mesureDispersion = "Mesure de dispersion"
-				mesurePosition = "Mesure de position"
-				correlation = "Corrélation"					
-				
-			logique = "Énigmes de logique"
-			
-			histoire = "Histoire des maths"
-			
-			accromath = "Accromath"
-	
-	
 		frame2 = ""
 
-			texteTables = "Choisissez une table ouverte dans la salle"
+			texteTables = " "
       chargementTables = "Chargement de la liste des tables en cours" 
       aucuneTable = "Il n'y a aucune table ouverte dans cette salle" 
 			btnCreerTable = "Nouvelle table"
-			choixTable = "ou attendez qu'une table soit crée .."
+			choixTable = "CHOIX DES TABLES"
 			choixTemps = "Choisissez la durée de la partie que vous désirez jouer."
-			sallesOuvertes = "Salles ouvertes"
-			tablesOuvertes = "Tables ouvertes"
+			selectTableInfo = "Texte en français a ajouter...  "
+			
+			tablesOuvertes = "Tables"
 
 			GUITemps = "Choisissez le temps de la partie que vous désirez jouer (en minutes) :"
 	

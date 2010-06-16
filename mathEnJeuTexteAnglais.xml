@@ -199,16 +199,20 @@ to escape!"
 	
 		frame1 = ""
 			
+			selectRoom = "Choose a room"
+		  selectTable = "Pick a table"
+		  selectPlayer = "Select a player"
+			
 			descriptionPrincipale = "It's the heart of Math en Jeu. There is a huge questions library for each of the specific mathematic domains."
 			
 			descriptionAccromath = "More advanced questions related to the various subjets presented in the Accromath's magazine."
 			
 			descriptionDefault = "This questions libray has been created by a person or a group not affiliated with the Math en Jeu's team."
 			
-			salle = "Choose a room."
+			salle = "ROOM SELECT"
       chargementSalles = "Room list is loading..." 
 			boutonRetour = "Back"
-			boutonContinuer = "Continue"
+			boutonContinuer = "Join"
 			boutonQuitterX = "Quit the game.."
 			tableNameLabel = "Table name"
 			tableLinesLabel = "Lines"
@@ -216,92 +220,24 @@ to escape!"
 			tableOptionalLabel = "*Optional"
 			tableGameType = "Game Type"
 			playersListe = " - Liste of players - "
-			
+			sallesOuvertes = "Rooms"
 			
 	
 			explication = "The advanced mode allows for the more experienced player to select his level among the various mathematical categories of the game. If desired, he can personnalize his gaming experience by choosing only the subjects he is interested in."
 			
-			pasQuestion = "No question"
-			primaire1 = "Primary 1"
-			primaire2 = "Primary 2"
-			primaire3 = "Primary 3"
-			primaire4 = "Primary 4"
-			primaire5 = "Primary 5"
-			primaire6 = "Primary 6"
-			secondaire1 = "High school 1"
-			secondaire2 = "High school 2"
-			secondaire3 = "High school 3"
-			secondaire4_CST = "High school 4 - Culture"
-			secondaire4_TS = "High school 4 - Society and Tech"
-			secondaire4_SN = "High school 4 - Natural Sc."
-			secondaire5_CST = "High school 5 - Culture"
-			secondaire5_TS = "High school 5 - Society and Tech"
-			secondaire5_SN = "High school 5 - Natural Sc."
-			
-			
-			algebre = "Algebra"
-				conceptsAlgebre = "Concepts"
-				manipulation = "Algebraic manipulations"
-				systemesEquations = "Systems of equations"
-				modelisation = "Problem modelling"
-			
-			arithmetique = "Arithmetics"
-				nombresNaturels = "Natural numbers"
-				fractionsDecimauxPourcentage = "Fractions, decimal numbers, and percentages"
-				nombresEntiers = "Integers"	
-				nombresReels = "Real numbers"
-				proportions = "Proportions"
-				puissancesRadicauxLogarithmes = "Powers, roots, and logarithms"
 				
-			fonctions = "Functions"
-				conceptsFonctions = "Concepts"
-				polynomiale012 = "Polynomials of degree 0, 1, and 2"
-				valeurAbsolue = "Absolute value functions"
-				rationnelle = "Rational functions"
-				parParties = "Functions defined by parts"
-				partieEntiere = "Greatest integer function"
-				periodique = "Periodic functions"
-				exponentielleLogarithmique = "Exponential and logarithmic"
-				
-			
-			geometrie = "Geometry"
-				geometriePlane = "Plane geometry"
-				geometrie3D = "3D geometry"
-				transformations = "Transformations"
-				distancePointDePartage = "Distances and midpoints"
-				
-			
-			probabilites = "Probabilities"
-				conceptsProbabilites = "Concepts"
-				denombrement = "Counting"
-				calculProbabilite = "Probability calculations"
-				esperanceEquite = "Expected values and equity"
-				chance = "Chance"
-							
-			statistiques = "Statistics"
-				conceptsStatistiques = "Concepts"
-				diagrammesTableaux = "Diagrams et tables"
-				mesureTendanceCentrale = "Measures of central tendency"
-				mesureDispersion = "Measures of variation"
-				mesurePosition = "Measures of position"
-				correlation = "Correlation"									
-							
-			logique = "Logic enigmas"
-			
-			histoire = "History of maths"
-			
-			accromath = "Accromath"
-	
 		frame2 = ""
 
-			texteTables = "Choose an open table in the room : "	
+			texteTables = " "	
       chargementTables = "Table list is loading..." 
       aucuneTable = "There's no open table in this room"
 			btnCreerTable = "New table"
-			choixTable = "or wait to be opened one"
+			choixTable = "TABLE SELECT"
 			choixTemps = "Choose the duration of the game you wish to play."
-			sallesOuvertes = "Open rooms"
-			tablesOuvertes = "Open tables"
+			selectTableInfo = "Scroll the list to find the table you'd like to 
+join  and the game mode you'd like to play"
+			
+			tablesOuvertes = "Tables"
 
 			GUITemps = "How long would you like to play (in minutes) :"
 	

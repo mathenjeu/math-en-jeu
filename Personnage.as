@@ -32,7 +32,7 @@ import mx.controls.Loader;
 
 class Personnage
 {
-	private var role:Number; // role of user if 1 - simple user , if 2 - master(admin)
+	private var role:Number;             // role of user if 1 - simple user , if 2 - master(admin)
 	public  var image:MovieClip;
 	private var position:Point;
 	private var numero:Number;           // ????
@@ -49,9 +49,13 @@ class Personnage
 	private var minigameLoade:Boolean;
 	private var clothesColor:String;
 	private var braniacState:Boolean;
-	private var repostCases:Boolean; //?
+	private var braniacRestedTime:Number;
+	//private var repostCases:Boolean; //????  don't used for the moment
+	private var idClip:Number;           // number used to identify the movie used for perso - from 1 to 12
+	private var orient:String;
+	
 		
-		
+	/*
 	function setRepostCases(repost:Boolean)
 	{
 		this.repostCases = repost;
@@ -60,6 +64,26 @@ class Personnage
 	function getRepostCases():Boolean
 	{
 		return this.repostCases;
+	} */
+	function setDirection(dir:String)
+	{
+		this.orient = dir;
+	}
+	
+	function getDirection():String
+	{
+		return this.orient;
+	}
+	
+	function decreaseBraniacTime()
+	{
+		if(this.braniacRestedTime > 0)
+		   this.braniacRestedTime--;
+	}
+	
+	function getBraniacTime():Number
+	{
+		return this.braniacRestedTime;
 	}
 	
 	function setBoardCentre(centre:Boolean)
@@ -539,6 +563,9 @@ class Personnage
 		this.position = new Point(xx,yy);
 		this.prochainePosition = new Point(xx,yy);
 		this.clothesColor = cloColor;
+		this.idClip = nomClip;
+		this.braniacState = false;
+		this.braniacRestedTime = 0; 
 		
 		// to load the perso .. use ClipLoader to know the moment of complet load
 		var myLoader:MovieClipLoader = new MovieClipLoader();
@@ -549,8 +576,6 @@ class Personnage
             target_mc.clothesCol = cloColor;
 		    target_mc.nom = nom;
 						
-			//trace(" new color 2!!! " + target_mc.clothesCol);
-					
 			target_mc.gotoAndPlay(10);
 			target_mc.gotoAndStop(1);
 			
@@ -560,10 +585,12 @@ class Personnage
 			target_mc.dtNom._x = 42;
         };
 		myLoader.addListener(mclListener);
-
-
 		
-		if(!(role == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")){
+		this.orient = "right";
+
+
+		// on use if to not see master in tournament game
+		if(!(role == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")){  
   
            image =  _level0.loader.contentHolder.referenceLayer.createEmptyMovieClip("Personnage" + idPers, niveau);
 		    myLoader.loadClip("perso" + nomClip + ".swf", image); 
@@ -743,7 +770,6 @@ class Personnage
 						
 						// with Braniac a little different - we use it instantly
 						// so the player in the state of Braniac at the time to reach the case
-						// 
 						getBraniacAnimaton();
                         
 					break;
@@ -882,6 +908,7 @@ class Personnage
 			image._xscale = - Math.abs(image._xscale);
 			image.dtNom._xscale = - Math.abs(image._xscale);
 			image.dtNom._x = 42;
+			this.orient = "right";
 		}
 		else
 		{
@@ -889,6 +916,7 @@ class Personnage
 			image._xscale =  Math.abs(image._xscale);
 			image.dtNom._xscale =   Math.abs(image._xscale);
 			image.dtNom._x = - 42;
+			this.orient = "left";
 		}
 		
 		
@@ -921,6 +949,7 @@ class Personnage
 			image._xscale = - Math.abs(image._xscale);
 			image.dtNom._xscale = - Math.abs(image._xscale);
 			image.dtNom._x = 42;
+			this.orient = "right";
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -992,53 +1021,106 @@ class Personnage
 	// used to put the Braniac animation on the player  for the 90 sec.
 	function getBraniacAnimaton()
 	{
-	   var playerThat:String = this.nom;
-	   	  	    
-	   image.braniacState = "begin";
+	    var playerUnder:String = this.nom;
+		this.braniacRestedTime += 90;
+				
+	   if(this.braniacState == false)
+	   {
+	      //******************************** new one *************
+		  // to load the perso .. use ClipLoader to know the moment of complet load
+		  var myLoader:MovieClipLoader = new MovieClipLoader();
+	  	
+		  if(this.orient == "right")
+		  {
+				image._xscale = Math.abs(image._xscale);
+			    image.dtNom._xscale = Math.abs(image._xscale);
+			    image.dtNom._x = - 42;
+				this.orient == "left"
+		  } 
+		  var nameX:String = this.nom;
+		  var orientDir:String = this.orient;
+		  var mclListener:Object = new Object();
+          mclListener.onLoadComplete = function(target_mc:MovieClip) {
+            /*
+			trace("orient ::: " + orientDir);
+			if(orientDir == "Est")
+			{
+				target_mc._xscale = - Math.abs(target_mc._xscale);
+			    target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
+			    target_mc.dtNom._x = 42;
+			}*/
+			target_mc.nom = nameX;
+			target_mc.gotoAndPlay("grow");
+          };
+		  myLoader.addListener(mclListener);
+
+          myLoader.loadClip("perso" + this.idClip + "Bran.swf", image); 
+		  
 		
-	   var intervalIDBegin = setInterval(etape2Bran, 3000, playerThat);	// to pass to phase 2 of Braniac
-		
-		function etape2Bran():Void
-		{
-			//_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacState("in");
-			_level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().braniacState = "in";
-			//trace("control bran in set " + _level0.loader.contentHolder.planche.getPersonnageByName(playerThat).obtenirImage().braniacState);
-		 	clearInterval(intervalIDBegin);
-		}
-			
+		 
+		  if(_level0.loader.contentHolder.objGestionnaireEvenements.obtenirNomUtilisateur() == playerUnder)
+		     _level0.loader.contentHolder.objGestionnaireEvenements.setBraniacTimer(playerUnder);
+			 
+		  endOnBraniac();
+		  
+	   }else if(this.braniacState == true)
+	   {
+		   
+	   }
+	   
+	   this.braniacState = true;
+	
 	} // end of getBraniacAnimation
 	
-	function setOutBraniac()
+	function endOnBraniac()
 	{
-		var playerUnder:String = this.nom;
 		
-		var restedTime = 89;
+		var playerUnder:String = this.nom;
+		var id:Number = this.idClip;
+		var restedTime:Number;
+		//var orientDir:String = this.orient;
 	   	  	    
-	    var intervalIDEnd = setInterval(etapeEndBran, 1000, playerUnder);	// to pass to phase 3 of Braniac
+	    var intervalIDEnd = setInterval(etapeEndBran, 1000, playerUnder);	
 		
 		function etapeEndBran():Void
 		{    
-		   restedTime--;	  
+		   var image:MovieClip = _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage(); 
+		   _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).decreaseBraniacTime();
+		   restedTime = _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).getBraniacTime(); 
 		  
-		   if( restedTime == 2)
+		   if( restedTime == 1 && (image._currentFrame == 1 || image._currentFrame == 90))
 		   {
-			  _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().braniacState = "end";
+			  _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().gotoAndPlay("down");
 		   }
-		   else if(restedTime == 0)
+		   else if( restedTime == 0 && (image._currentFrame == 1 ||	image._currentFrame == 90 || image._currentFrame == 96))
 	       {
+			  //_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().gotoAndPlay("down");
 			  _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).setBraniac(false);
-			 				
+			  if(_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).getDirection() == "right")
+			  {
+				image._xscale = Math.abs(image._xscale);
+			    image.dtNom._xscale = Math.abs(image._xscale);
+			    image.dtNom._x = - 42;
+				_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).setDirection("left");
+			  } 
+			  myLoader.loadClip("perso" + id + ".swf",image); 
+			  clearInterval(intervalIDEnd);
+			  
 		   }  
-		   
-		   // to end the Braniac and remove the timer box
-		   if( restedTime < 0)
-		   { 
-		      _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().braniacState = "out";
-              clearInterval(intervalIDEnd);
-		   }
-			
-		}// end method
-	}//end
+		  			
+		}// end method etapeEndBran   
+	   
+	    var myLoader:MovieClipLoader = new MovieClipLoader();
+		var mclListener:Object = new Object();
+		
+        mclListener.onLoadComplete = function(target_mc:MovieClip) {
+            target_mc.nom = playerUnder;
+			target_mc.gotoAndStop(1);
+						
+        };
+		myLoader.addListener(mclListener);
+		
+	}//end endOnBraniac
 	
 	
 	
