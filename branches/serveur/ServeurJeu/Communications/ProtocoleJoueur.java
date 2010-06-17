@@ -1512,6 +1512,14 @@ public class ProtocoleJoueur implements Runnable
 											// On ajoute un attribut nom qui va contenir le 
 											// nom d'utilisateur du joueur
 											objNoeudJoueur.setAttribute("nom", objJoueur.obtenirNomUtilisateur());
+											
+											// On ajoute un attribut nom qui va contenir le 
+											// id du 'perso' utiliser par joueur
+											objNoeudJoueur.setAttribute("idPersonnage", Integer.toString(objJoueur.obtenirPartieCourante().obtenirIdPersonnage()));
+											
+											// On ajoute un attribut nom qui va contenir le 
+											// la couleur utiliser par joueur
+											objNoeudJoueur.setAttribute("cloColor", objJoueur.obtenirPartieCourante().getClothesColor());
 
 											// Ajouter le noeud du joueur au noeud de la table
 											objNoeudTable.appendChild(objNoeudJoueur);
