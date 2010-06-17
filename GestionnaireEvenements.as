@@ -885,7 +885,7 @@ class GestionnaireEvenements
                 {
 					
 					this.listeDesSalles.push(objetEvenement.listeNomSalles[i]);
-					_level0.loader.contentHolder.listeSalle.addItem({label: this.listeDesSalles[i].nom, data:  this.listeDesSalles[i].idRoom});
+					_level0.loader.contentHolder.listeSalle.addItem({label: (this.listeDesSalles[i].userCreator + " - " +  this.listeDesSalles[i].nom), data:  this.listeDesSalles[i].idRoom});
 					trace("salle " + i + " : " + this.listeDesSalles[i].nom);
 					
 				}
@@ -1203,6 +1203,7 @@ class GestionnaireEvenements
     public function retourObtenirListeTables(objetEvenement:Object)
     {
         //   objetEvenement.resultat = ListeTables, CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte, JoueurPasDansSalle, FiltreNonConnu
+		//   objetEvenement.listeTables[i].  --- tablName 
         trace("*********************************************");
         trace("debut de retourObtenirListeTables   "+objetEvenement.resultat);
         var str:String = new String();

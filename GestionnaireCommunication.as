@@ -3962,8 +3962,10 @@ class GestionnaireCommunication
                 {
                     // Ajouter le joueur courant dans la liste des joueurs de
                     // la table
-                    objTable.listeJoueurs.push({nom:lstJoueursChildNodes[j].attributes.nom});
-					//trace("GCom : " + nom:lstJoueursChildNodes[j].attributes.nom);
+                    objTable.listeJoueurs.push({nom:lstJoueursChildNodes[j].attributes.nom,
+												idPersonnage:lstJoueursChildNodes[j].attributes.idPersonnage,
+												cloColor:lstJoueursChildNodes[j].attributes.cloColor});
+					trace("GCom : " + lstJoueursChildNodes[j].attributes.idPersonnage);
                 }
                 // Ajouter l'objet table dans le tableau
                 objEvenement.listeTables.push(objTable);
