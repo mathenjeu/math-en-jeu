@@ -38,6 +38,14 @@
     playMaze = "Enter the maze
 and be the first 
 to escape!"
+    linkProf1 = "Are you a teacher?"
+    linkProf2 = "Click here..."
+    linkProf3 = "to enter the Teacher's Lounge."
+    erreurRole = "Access denied!!!
+This section is for professors only.
+If you are a theacher and you need to use this section contact us..."
+    erreurContact = ""
+    textReturn = "To return to main_menu click on 'OK'"
     
   page_instructions = ""
     beginPage = "Start a game"
