@@ -4346,7 +4346,13 @@ class GestionnaireCommunication
         {
             // On est maintenant a l'autre etat
             intEtatClient = Etat.ATTENTE_REPONSE_QUESTION.no;
-        }
+			//trace("R TEST - " + noeudCommande.attributes.type);
+        }else if(noeudCommande.attributes.type == "Erreur" && noeudCommande.attributes.nom == "DeplacementNonAutorise")
+		{
+			//if we have a bad move we need to simply cancel the move and show cases to move 
+			trace("Error - repost the cases to move " + noeudCommande.attributes.type + " " + noeudCommande.attributes.nom);
+		    
+		}
 
         // Appeler la fonction qui va envoyer tous les evenements et
         // retirer leurs ecouteurs
