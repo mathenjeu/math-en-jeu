@@ -106,7 +106,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     
     // Cette variable contient le nombre maximum d'items que le joueur
     // virtuel traînera
-    private int intNbObjetsMax;
+    //private int intNbObjetsMax;
     
     // Cette liste va contenir les magasins déjà visités
     // par le joueur virtuel, pour empêcher qu'il les visite
@@ -822,8 +822,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
                    }
                }
                
-               else if (((CaseCouleur) objttPlateauJeu[ptTemp.x][ptTemp.y]).obtenirObjetCase() instanceof ObjetUtilisable &&
-                   lstObjetsUtilisablesRamasses.size() < intNbObjetsMax)
+               else if (((CaseCouleur) objttPlateauJeu[ptTemp.x][ptTemp.y]).obtenirObjetCase() instanceof ObjetUtilisable)
                {
                    ObjetUtilisable objObjet = (ObjetUtilisable)((CaseCouleur)objttPlateauJeu[ptTemp.x][ptTemp.y]).obtenirObjetCase();
                    if (objObjet.estVisible() && determinerPretARamasserObjet(objObjet.obtenirUniqueId()))
@@ -1312,8 +1311,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
                     
                     // Objets
                     else if (objttPlateauJeu[x][y] instanceof CaseCouleur && 
-                        ((CaseCouleur)objttPlateauJeu[x][y]).obtenirObjetCase() instanceof ObjetUtilisable &&
-                        lstObjetsUtilisablesRamasses.size() < intNbObjetsMax)
+                        ((CaseCouleur)objttPlateauJeu[x][y]).obtenirObjetCase() instanceof ObjetUtilisable)
                     {
                     	// Ici, dépendamment de l'objet, on peut lui attribuer
                     	// un pointage différent.
@@ -1701,9 +1699,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     		// est dans la liste des magasins à ne pas visiter, alors le 
     		// temps de réflexion est de 0 et la décision est de ne 
     		// rien acheter
-    		if (lstCopieObjetsMagasins.size() >= 0 && 
-    		    lstObjetsUtilisablesRamasses.size() < intNbObjetsMax &&
-    		    !lstMagasinsVisites.contains(objMagasin))
+    		if (lstCopieObjetsMagasins.size() >= 0 && !lstMagasinsVisites.contains(objMagasin))
     		{
     			intTempsReflexion = obtenirTempsReflexionAchat();
 	    		
@@ -2251,15 +2247,18 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    	
 	    	    // Vérifier si l'objet a été capturé et si encore prêt
 	    	    // à ramasser l'objet
-	    	    if (((CaseCouleur)objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y]).obtenirObjetCase() == null ||
-	    	        determinerPretARamasserObjet(((ObjetUtilisable)((CaseCouleur)objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y]).obtenirObjetCase()).obtenirUniqueId()) == false)
-	    	    {
-	    	    	return true;
-	    	    }
-	    	    else
-	    	    {
-	    	    	return false;
-	    	    }
+	    		if(objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y] instanceof CaseCouleur)
+	    		{
+	    			if (((CaseCouleur)objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y]).obtenirObjetCase() == null ||
+	    					determinerPretARamasserObjet(((ObjetUtilisable)((CaseCouleur)objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y]).obtenirObjetCase()).obtenirUniqueId()) == false)
+	    			{
+	    				return true;
+	    			}
+	    			else
+	    			{
+	    				return false;
+	    			}
+        		}
 	    	        
         }
         
@@ -2614,8 +2613,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     {
     	// Vérifier s'il reste assez de temps et que le joueur a de la place
         if (uidObjet>0) return false; //TODO: régler ça
-    	if (lstObjetsUtilisablesRamasses.size() >= intNbObjetsMax || 
-    		objTable.obtenirTempsRestant() <= objParametreIA.tParametresIAObjetUtilisable[uidObjet].intTempsSureteRamasser ||
+    	if (objTable.obtenirTempsRestant() <= objParametreIA.tParametresIAObjetUtilisable[uidObjet].intTempsSureteRamasser ||
     	    nombreObjetsPossedes(uidObjet) >= objParametreIA.tParametresIAObjetUtilisable[uidObjet].intQuantiteMax)
     	{
     		return false;
@@ -2644,13 +2642,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     		return false;
     	}
     	
-    	// Si le joueur a atteint son quotas d'objets, alors
-    	// il ne visite plus de magasins
-    	if (lstObjetsUtilisablesRamasses.size() >= intNbObjetsMax)
-    	{
-    		return false;
-    	}
-    	
+    	    	
     	// Il faut au moins 1 dollar pour acheter ne serait-ce qu'un objet
     	if (intArgent < 1)
     	{
