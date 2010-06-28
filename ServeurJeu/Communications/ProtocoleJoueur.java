@@ -710,8 +710,9 @@ public class ProtocoleJoueur implements Runnable
 						// Informer le contrôleur de jeu que la connexion avec le 
 						// client (joueur) a été fermée (il faut obtenir un numéro
 						// de commandes de cette fonction)
-						objControleurJeu.deconnecterJoueur(objJoueurHumain, true, false);
 						System.out.println("Player " + objJoueurHumain.obtenirNomUtilisateur() + " ask for cancel");
+						objControleurJeu.deconnecterJoueur(objJoueurHumain, true, false);
+
 
 						// Il n'y a pas eu d'erreurs
 						objNoeudCommande.setAttribute("type", "Reponse");
