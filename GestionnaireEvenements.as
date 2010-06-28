@@ -874,6 +874,7 @@ class GestionnaireEvenements
     public function retourObtenirListeSalles(objetEvenement:Object)
     {
         //   objetEvenement.resultat = ListeSalles, CommandeNonReconnue, ParametrePasBon ou JoueurNonConnecte
+		// nom, possedeMotDePasse, descriptions, idRoom, gameTypes, userCreator, masterTime
         trace("*********************************************");
         trace("debut de retourObtenirListeSalles   " + objetEvenement.resultat);
         switch(objetEvenement.resultat)

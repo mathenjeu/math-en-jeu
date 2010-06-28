@@ -48,6 +48,7 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
     textReturn = "Pour retourner à Math en jeu, cliquez ici"
     
     
+    
   page_instructions = ""
     beginPage = "Débuter une partie"
     rulesPage = "Règlements"
@@ -231,7 +232,10 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 			playersListe = " - Liste des joueurs - "
 			sallesOuvertes = "Salles"
 			explication = "Le mode avancé permet au joueur plus expérimenté de sélectionner uniquement les catégories de questions qu'il désire. Il peut ainsi personnaliser son expérience de jeu en choisissant son niveau pour chaque thème mathématique présent dans le jeu."
-							
+		
+		  searchRoomText1 = "Faites défiler la liste ou trouver la salle de votre professeur"
+      searchRoomText2 = "en utilisant la recherche rapide"
+       					
 		frame2 = ""
 
 			texteTables = " "
