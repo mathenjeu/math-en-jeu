@@ -14,10 +14,9 @@ import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin3;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin4;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Banane;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Boule;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Braniac;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Brainiac;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Livre;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Papillon;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.PotionGros;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.PotionPetit;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Telephone;
@@ -215,11 +214,6 @@ public class GenerateurPartieTournament extends GenerateurPartie {
                         Livre objAAjouter = new Livre(intCompteurIdObjet, true);
                         objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
                     }
-                    else if(nomDeLObjet.equals("Papillon"))
-                    {
-                        Papillon objAAjouter = new Papillon(intCompteurIdObjet, true);
-                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                    }
                     else if(nomDeLObjet.equals("Boule"))
                     {
                         Boule objAAjouter = new Boule(intCompteurIdObjet, true);
@@ -245,11 +239,7 @@ public class GenerateurPartieTournament extends GenerateurPartie {
                         Banane objAAjouter = new Banane(intCompteurIdObjet, true);
                         objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
                     }
-                    else if(nomDeLObjet.equals("Braniac"))
-                    {
-                        Braniac objAAjouter = new Braniac(intCompteurIdObjet, false);
-                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                    }
+                    
 
 				}// end for              
 				
@@ -363,11 +353,7 @@ public class GenerateurPartieTournament extends GenerateurPartie {
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Livre(intCompteurIdObjet, bolEstVisible));					
 				}
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Papillon") ||
-                                		objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Butterfly"))
-				{
-					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Papillon(intCompteurIdObjet, bolEstVisible));					
-				}
+                                
                                 else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Telephone"))
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Telephone(intCompteurIdObjet, bolEstVisible));					
@@ -392,10 +378,10 @@ public class GenerateurPartieTournament extends GenerateurPartie {
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Banane(intCompteurIdObjet, bolEstVisible));					
 				}
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Braniac") ||
-                                		objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Braniac"))
+                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Brainiac") ||
+                                		objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Brainiac"))
 				{
-					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Braniac(intCompteurIdObjet, bolEstVisible));					
+					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Brainiac(intCompteurIdObjet, bolEstVisible));					
 				}
 				
 				// Incrémenter le nombre de cases passées

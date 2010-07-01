@@ -139,7 +139,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     
     // object that describe and manipulate 
     // the Braniac state of the player
-    private PlayerBraniacState braniacState;
+    private PlayerBrainiacState brainiacState;
     
     // object that describe and manipulate 
     // the Banana state of the player
@@ -189,7 +189,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		this.bananaState = new PlayerBananaState(this);
 		
 		// Braniac state
-		this.braniacState = new PlayerBraniacState(this); 
+		this.brainiacState = new PlayerBrainiacState(this); 
 		
 		// Cette variable sera utilisée dans la thread
 		objPositionFinaleVisee = null;
@@ -382,7 +382,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 						intPourcentageReussite = intPourcentageReussite  - 10;
 					
 					//if Braniac is used on this Virtual Player 
-					if(braniacState.isInBraniac())
+					if(brainiacState.isInBrainiac())
 						intPourcentageReussite = intPourcentageReussite  + 10;
 					
 	    			// Déterminer si le joueur virtuel répondra à la question
@@ -396,7 +396,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 						intTempsReflexionQuestion = intTempsReflexionQuestion + 4;
 					
 					//if Braniac is used on this Virtual Player 
-					if(braniacState.isInBraniac())
+					if(brainiacState.isInBrainiac())
 						intTempsReflexionQuestion = intTempsReflexionQuestion - 4;
 	                
 	    			// Pause pour moment de réflexion de réponse
@@ -615,16 +615,16 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	/**
 	 * @return the braniacState
 	 */
-	public PlayerBraniacState getBraniacState() {
-		return braniacState;
+	public PlayerBrainiacState getBrainiacState() {
+		return brainiacState;
 	}
 
 
 	/**
 	 * @param braniacState the braniacState to set
 	 */
-	public void setBraniacState(PlayerBraniacState braniacState) {
-		this.braniacState = braniacState;
+	public void setBraniacState(PlayerBrainiacState braniacState) {
+		this.brainiacState = braniacState;
 	}
 
 
@@ -2249,15 +2249,18 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    	    // à ramasser l'objet
 	    		if(objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y] instanceof CaseCouleur)
 	    		{
-	    			if (((CaseCouleur)objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y]).obtenirObjetCase() == null ||
-	    					determinerPretARamasserObjet(((ObjetUtilisable)((CaseCouleur)objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y]).obtenirObjetCase()).obtenirUniqueId()) == false)
+	    			if(((CaseCouleur)objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y]).obtenirObjetCase() instanceof ObjetUtilisable)
 	    			{
-	    				return true;
-	    			}
-	    			else
-	    			{
-	    				return false;
-	    			}
+	    				if (((CaseCouleur)objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y]).obtenirObjetCase() == null ||
+	    						determinerPretARamasserObjet(((ObjetUtilisable)((CaseCouleur)objttPlateauJeu[objPositionFinaleVisee.x][objPositionFinaleVisee.y]).obtenirObjetCase()).obtenirUniqueId()) == false)
+	    				{
+	    					return true;
+	    				}
+	    				else
+	    				{
+	    					return false;
+	    				}
+	    		    }
         		}
 	    	        
         }

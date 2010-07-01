@@ -14,7 +14,7 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Joueurs.PlayerBananaState;
-import ServeurJeu.ComposantesJeu.Joueurs.PlayerBraniacState;
+import ServeurJeu.ComposantesJeu.Joueurs.PlayerBrainiacState;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
@@ -80,7 +80,7 @@ public class InformationPartie
     
     // object that describe and manipulate 
     // the Braniac state of the player
-    private PlayerBraniacState braniacState;
+    private PlayerBrainiacState brainiacState;
         
 	// to not get twice bonus
     // used in course ou tournament types of game
@@ -155,8 +155,8 @@ public class InformationPartie
 			// set the color to default
 			clothesColor = "0";
 									
-			// Braniac state
-			this.braniacState = new PlayerBraniacState(joueur);
+			// Brainiac state
+			this.brainiacState = new PlayerBrainiacState(joueur);
 			
 			// Banana state
 			this.bananaState = new PlayerBananaState(joueur);
@@ -341,8 +341,8 @@ public class InformationPartie
 		}
 
 		// Si la distance parcourue dépasse le nombre de cases maximal possible, alors il y a une erreur
-		// If we are in the Braniac maximal cases = + 1
-		if(this.braniacState.isInBraniac()){
+		// If we are in the Brainiac maximal cases = + 1
+		if(this.brainiacState.isInBrainiac()){
 			
 			if (bolEstPermis == true && ((nouvellePosition.x != objPositionJoueur.x && Math.abs(nouvellePosition.x - objPositionJoueur.x) > objTable.getRegles().obtenirDeplacementMaximal() + 1) || 
 					(nouvellePosition.y != objPositionJoueur.y && Math.abs(nouvellePosition.y - objPositionJoueur.y) > objTable.getRegles().obtenirDeplacementMaximal() + 1)))
@@ -487,8 +487,8 @@ public class InformationPartie
 		// if is under Banana effects
 		if(this.bananaState.isUnderBananaEffects() && intDifficulte < 6)
 			intDifficulte++;
-		// if is under Braniac effects
-		if(this.braniacState.isInBraniac() && intDifficulte > 1 )
+		// if is under Brainiac effects
+		if(this.brainiacState.isInBrainiac() && intDifficulte > 1 )
 			intDifficulte--;
 
 		if(intDifficulte > 6) intDifficulte = 6;
@@ -900,20 +900,20 @@ public class InformationPartie
 					if (objCaseCouleurDestination.obtenirObjetCase() instanceof ObjetUtilisable)
 					{
 
-						if (objCaseCouleurDestination.obtenirObjetCase() instanceof Braniac)
+						if (objCaseCouleurDestination.obtenirObjetCase() instanceof Brainiac)
 						{
 							
-							// put the player on the Braniac state
+							// put the player on the Brainiac state
 							if (objJoueur instanceof JoueurHumain)
 							{
-								((JoueurHumain) objJoueur).obtenirPartieCourante().getBraniacState().putTheOneBraniac();
-								table.preparerEvenementUtiliserObjet(((JoueurHumain) objJoueur).obtenirNomUtilisateur(), ((JoueurHumain) objJoueur).obtenirNomUtilisateur(), "Braniac", "");
+								((JoueurHumain) objJoueur).obtenirPartieCourante().getBrainiacState().putTheOneBrainiac();
+								table.preparerEvenementUtiliserObjet(((JoueurHumain) objJoueur).obtenirNomUtilisateur(), ((JoueurHumain) objJoueur).obtenirNomUtilisateur(), "Brainiac", "");
 								
 							}
 							else if (objJoueur instanceof JoueurVirtuel)
 							{
-								((JoueurVirtuel)objJoueur).getBraniacState().putTheOneBraniac();
-								table.preparerEvenementUtiliserObjet(((JoueurVirtuel) objJoueur).obtenirNom(), ((JoueurVirtuel) objJoueur).obtenirNom(), "Braniac", "");
+								((JoueurVirtuel)objJoueur).getBrainiacState().putTheOneBrainiac();
+								table.preparerEvenementUtiliserObjet(((JoueurVirtuel) objJoueur).obtenirNom(), ((JoueurVirtuel) objJoueur).obtenirNom(), "Brainiac", "");
 								
 							}
 							
@@ -921,7 +921,7 @@ public class InformationPartie
 							objCaseCouleurDestination.definirObjetCase(null);
 
 							// On va dire aux clients qu'il y a eu collision avec cet objet
-							collision = "Braniac";
+							collision = "Brainiac";
 							
 						}else{
 							// Faire la référence vers l'objet utilisable
@@ -1305,9 +1305,9 @@ public class InformationPartie
 		public void setMoveVisibility(int moveV) {
 			this.moveVisibility = moveV;
 			
-			if (this.moveVisibility > 7 && this.braniacState.isInBraniac()){
+			if (this.moveVisibility > 7 && this.brainiacState.isInBrainiac()){
 				this.moveVisibility = 7;
-			}else if (this.moveVisibility > 6 && this.braniacState.isInBraniac() == false){
+			}else if (this.moveVisibility > 6 && this.brainiacState.isInBrainiac() == false){
 				this.moveVisibility = 6;
 			}else if (this.moveVisibility < 1){
 				this.moveVisibility = 1;
@@ -1326,10 +1326,10 @@ public class InformationPartie
 
 
 		/**
-		 * @return the braniacState
+		 * @return the brainiacState
 		 */
-		public PlayerBraniacState getBraniacState() {
-			return braniacState;
+		public PlayerBrainiacState getBrainiacState() {
+			return brainiacState;
 		}
 
 
@@ -1337,8 +1337,8 @@ public class InformationPartie
 		/**
 		 * @param braniacState the braniacState to set
 		 */
-		public void setBraniacState(PlayerBraniacState braniacState) {
-			this.braniacState = braniacState;
+		public void setBrainiacState(PlayerBrainiacState brainiacState) {
+			this.brainiacState = brainiacState;
 		}
 
 			

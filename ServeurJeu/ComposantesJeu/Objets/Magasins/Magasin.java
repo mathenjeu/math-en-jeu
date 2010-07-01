@@ -154,13 +154,6 @@ public abstract class Magasin extends Objet
     				objObjetRemplacement = new Livre(objProchainId, true);
     			}
     		}
-                else if (objObjetAchete instanceof Papillon)
-                {
-    			synchronized (objProchainId)
-    			{
-    				objObjetRemplacement = new Papillon(objProchainId, true);
-    			}
-                }
                 else if (objObjetAchete instanceof Boule)
                 {
     			synchronized (objProchainId)
