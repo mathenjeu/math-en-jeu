@@ -3,9 +3,9 @@
  */
 package ServeurJeu.ComposantesJeu.Joueurs;
 
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Braniac;
+import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Brainiac;
 
-import ClassesUtilitaires.BraniacTask;
+import ClassesUtilitaires.BrainiacTask;
 
 /**
  * Used to treat the Braniac's applyed to users
@@ -18,43 +18,43 @@ import ClassesUtilitaires.BraniacTask;
  * @author Oloieri Lilian
  * date 10 March 2010
  */
-public class PlayerBraniacState {
+public class PlayerBrainiacState {
 	
 	// timertask actually applayed to player
-	private BraniacTask bTask;
+	private BrainiacTask bTask;
 	
 	// time to end of the actual braniac
 	private long taskDate;
 	
 	// is in Braniac our player?
-	private boolean isInBraniac;
+	private boolean isInBrainiac;
 	
 	// is the state to one of them
 	private JoueurHumain player;
 	private JoueurVirtuel vplayer;
 	
-	private static long branTime = 90000;
+	private static long brainTime = 90000;
 
 	// constructor - in the first time we are not in the Braniac
-	public PlayerBraniacState(JoueurHumain player) {
+	public PlayerBrainiacState(JoueurHumain player) {
 		super();
-		this.setInBraniac(false);
+		this.setInBrainiac(false);
 		this.player = player;
 	}
 	
-	public PlayerBraniacState(JoueurVirtuel vplayer) {
+	public PlayerBrainiacState(JoueurVirtuel vplayer) {
 		super();
-		this.setInBraniac(false);
+		this.setInBrainiac(false);
 		this.vplayer = vplayer;
 	}
 
 
 	// setters and getters 
-	public void setBTask(BraniacTask bTask) {
+	public void setBTask(BrainiacTask bTask) {
 		this.bTask = bTask;
 	}
 
-	public BraniacTask getBTask() {
+	public BrainiacTask getBTask() {
 		return bTask;
 	}
 
@@ -66,12 +66,12 @@ public class PlayerBraniacState {
 		return taskDate;
 	}
 
-	public void setInBraniac(boolean isInBraniac) {
-		this.isInBraniac = isInBraniac;
+	public void setInBrainiac(boolean isInBrainiac) {
+		this.isInBrainiac = isInBrainiac;
 	}
 
-	public boolean isInBraniac() {
-		return isInBraniac;
+	public boolean isInBrainiac() {
+		return isInBrainiac;
 	}
 	
 	
@@ -79,19 +79,19 @@ public class PlayerBraniacState {
 	 * Method used to set a Braniac to player with all the
 	 * side effets applayed
 	 */
-	public void putTheOneBraniac()
+	public void putTheOneBrainiac()
 	{
 		if(player != null){
-			if(this.isInBraniac == false){
+			if(this.isInBrainiac == false){
 				
-				this.isInBraniac = true;
-			    this.bTask = Braniac.utiliserBraniac(player, branTime);
-			    this.taskDate = System.currentTimeMillis() + branTime;
+				this.isInBrainiac = true;
+			    this.bTask = Brainiac.utiliserBrainiac(player, brainTime);
+			    this.taskDate = System.currentTimeMillis() + brainTime;
 			}else
 			{
 				this.bTask.cancel();
-				long tempDate = this.taskDate  + branTime;
-				this.bTask = Braniac.utiliserBraniac(player, tempDate);
+				long tempDate = this.taskDate  + brainTime;
+				this.bTask = Brainiac.utiliserBrainiac(player, tempDate);
 				this.taskDate = tempDate;
 				//System.out.println("BraniacTask !!!! " + tempDate + " " + " " + bTask);
 				
@@ -100,16 +100,16 @@ public class PlayerBraniacState {
 		}
 		else if(vplayer != null){
 
-			if(this.isInBraniac == false){
+			if(this.isInBrainiac == false){
 
-				this.isInBraniac = true;
-				this.bTask = Braniac.utiliserBraniac(vplayer, branTime);
-				this.taskDate = System.currentTimeMillis() + branTime;
+				this.isInBrainiac = true;
+				this.bTask = Brainiac.utiliserBrainiac(vplayer, brainTime);
+				this.taskDate = System.currentTimeMillis() + brainTime;
 			}else
 			{
 				this.bTask.cancel();
-				long tempDate = this.taskDate  + branTime;
-				this.bTask = Braniac.utiliserBraniac(vplayer, tempDate);
+				long tempDate = this.taskDate  + brainTime;
+				this.bTask = Brainiac.utiliserBrainiac(vplayer, tempDate);
 				this.taskDate = tempDate;
 				//System.out.println("BraniacTask !!!! " + tempDate + " " + " " + bTask);
 

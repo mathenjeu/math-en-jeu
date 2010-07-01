@@ -4382,7 +4382,7 @@ public class ProtocoleJoueur implements Runnable
             		 //Banane.utiliserBanane(objJoueurHumain, playerName, estHumain);
             	 }
              }
-             else if(strTypeObjet.equals("Braniac"))
+             else if(strTypeObjet.equals("Brainiac"))
              {
                //all is did on the time when the player go on the case
              }
