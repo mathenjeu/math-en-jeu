@@ -48,8 +48,10 @@ class Personnage
 	private var listeSurMagasin:Array;	 // sert a recuperer la liste d'objets du magasin lorsque qu'on va sur une case magasin
 	private var minigameLoade:Boolean;
 	private var clothesColor:String;
-	private var braniacState:Boolean;
-	private var braniacRestedTime:Number;
+	private var brainiacState:Boolean;
+	private var brainiacRestedTime:Number;
+	//private var bananaState:Boolean;
+	//private var bananaRestedTime:Number;
 	//private var repostCases:Boolean; //????  don't used for the moment
 	private var idClip:Number;           // number used to identify the movie used for perso - from 1 to 12
 	private var orient:String;
@@ -75,15 +77,15 @@ class Personnage
 		return this.orient;
 	}
 	
-	function decreaseBraniacTime()
+	function decreaseBrainiacTime()
 	{
-		if(this.braniacRestedTime > 0)
-		   this.braniacRestedTime--;
+		if(this.brainiacRestedTime > 0)
+		   this.brainiacRestedTime--;
 	}
 	
-	function getBraniacTime():Number
+	function getBrainiacTime():Number
 	{
-		return this.braniacRestedTime;
+		return this.brainiacRestedTime;
 	}
 	
 	function setBoardCentre(centre:Boolean)
@@ -116,14 +118,14 @@ class Personnage
 		return role;
 	}
 	
-	function setBraniac(stateVar:Boolean)
+	function setBrainiac(stateVar:Boolean)
 	{
-		braniacState = stateVar;
+		brainiacState = stateVar;
 	}
 	
-	function getBraniac():Boolean
+	function getBrainiac():Boolean
 	{
-		return braniacState;
+		return brainiacState;
 	}
    
 	////////////////////////////////////////////////////////////
@@ -564,8 +566,8 @@ class Personnage
 		this.prochainePosition = new Point(xx,yy);
 		this.clothesColor = cloColor;
 		this.idClip = nomClip;
-		this.braniacState = false;
-		this.braniacRestedTime = 0; 
+		this.brainiacState = false;
+		this.brainiacRestedTime = 0; 
 		
 		// to load the perso .. use ClipLoader to know the moment of complet load
 		var myLoader:MovieClipLoader = new MovieClipLoader();
@@ -698,7 +700,7 @@ class Personnage
 								twMove2 = new Tween(mClip1, "_alpha", Regular.easeOut, 100, 0, 1, true);
 								_level0.loader.contentHolder.menuOutils._visible = false;
 								_level0.loader.contentHolder.enteteHolder._visible = false;
-								_level0.loader.contentHolder.horloge._visible = false;
+								_level0.loader.contentHolder.horloge._visible = false;// ?????  a think is not correct any more all 3 statements
 								minigame._visible = true;
 							}
 						
@@ -726,13 +728,6 @@ class Personnage
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
                         
-					break;
-				
-					case "Papillon":
-						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
-						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
-						this.faireCollision = null;
-                       
 					break;
 				
 					case "Boule":
@@ -763,14 +758,13 @@ class Personnage
                         
 					break;
 					
-					case "Braniac":
+					case "Brainiac":
+					    trace("ligne 760 " + this.faireCollision); 
 						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-						
-						// with Braniac a little different - we use it instantly
-						// so the player in the state of Braniac at the time to reach the case
-						getBraniacAnimaton();
+						trace("ligne 764 " + this.faireCollision);
+						getBrainiacAnimaton();
                         
 					break;
 
@@ -1019,12 +1013,12 @@ class Personnage
 	}
 	
 	// used to put the Braniac animation on the player  for the 90 sec.
-	function getBraniacAnimaton()
+	function getBrainiacAnimaton()
 	{
 	    var playerUnder:String = this.nom;
-		this.braniacRestedTime += 90;
+		this.brainiacRestedTime += 90;
 				
-	   if(this.braniacState == false)
+	   if(this.brainiacState == false)
 	   {
 	      //******************************** new one *************
 		  // to load the perso .. use ClipLoader to know the moment of complet load
@@ -1054,48 +1048,51 @@ class Personnage
           };
 		  myLoader.addListener(mclListener);
 
-          myLoader.loadClip("perso" + this.idClip + "Bran.swf", image); 
+          myLoader.loadClip("perso" + this.idClip + "brainiac.swf", image); 
 		  
 		
 		 
 		  if(_level0.loader.contentHolder.objGestionnaireEvenements.obtenirNomUtilisateur() == playerUnder)
-		     _level0.loader.contentHolder.objGestionnaireEvenements.setBraniacTimer(playerUnder);
+		     _level0.loader.contentHolder.objGestionnaireEvenements.setBrainiacTimer(playerUnder);
 			 
-		  endOnBraniac();
+		  endOnBrainiac();
 		  
-	   }else if(this.braniacState == true)
+	   }else if(this.brainiacState == true)
 	   {
 		   
 	   }
 	   
-	   this.braniacState = true;
+	   this.brainiacState = true;
 	
 	} // end of getBraniacAnimation
 	
-	function endOnBraniac()
+	function endOnBrainiac()
 	{
 		
 		var playerUnder:String = this.nom;
 		var id:Number = this.idClip;
 		var restedTime:Number;
 		//var orientDir:String = this.orient;
+		 trace("test brainiac1 " + image._currentFrame)
 	   	  	    
-	    var intervalIDEnd = setInterval(etapeEndBran, 1000, playerUnder);	
+	    var intervalIDEndBrain = setInterval(etapeEndBrain, 1000, playerUnder);	
 		
-		function etapeEndBran():Void
+		function etapeEndBrain():Void
 		{    
 		   var image:MovieClip = _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage(); 
-		   _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).decreaseBraniacTime();
-		   restedTime = _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).getBraniacTime(); 
-		  
+		   _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).decreaseBrainiacTime();
+		   restedTime = _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).getBrainiacTime(); 
+		   trace("test brainiac2 " + image._currentFrame)
+           		  
 		   if( restedTime == 1 && (image._currentFrame == 1 || image._currentFrame == 90))
 		   {
 			  _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().gotoAndPlay("down");
+			  
 		   }
 		   else if( restedTime == 0 && (image._currentFrame == 1 ||	image._currentFrame == 90 || image._currentFrame == 96))
 	       {
 			  //_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage().gotoAndPlay("down");
-			  _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).setBraniac(false);
+			  _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).setBrainiac(false);
 			  if(_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).getDirection() == "right")
 			  {
 				image._xscale = Math.abs(image._xscale);
@@ -1103,12 +1100,12 @@ class Personnage
 			    image.dtNom._x = - 42;
 				_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).setDirection("left");
 			  } 
-			  myLoader.loadClip("perso" + id + ".swf",image); 
-			  clearInterval(intervalIDEnd);
+			  myLoader.loadClip("perso" + id + ".swf", image); 
+			  clearInterval(intervalIDEndBrain);
 			  
 		   }  
 		  			
-		}// end method etapeEndBran   
+		}// end method etapeEndBrain   
 	   
 	    var myLoader:MovieClipLoader = new MovieClipLoader();
 		var mclListener:Object = new Object();
@@ -1120,7 +1117,7 @@ class Personnage
         };
 		myLoader.addListener(mclListener);
 		
-	}//end endOnBraniac
+	}//end endOnBrainiac
 	
 	
 	

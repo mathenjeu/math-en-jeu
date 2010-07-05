@@ -31,6 +31,7 @@ import flash.geom.Transform;
 import flash.geom.ColorTransform;
 import flash.filters.ColorMatrixFilter;
 import NewsBox;
+import Personnage;
 
 class GestionnaireEvenements
 {
@@ -38,36 +39,29 @@ class GestionnaireEvenements
 	private var nomUtilisateur:String;    // user name of our  user
 	private var userRole:Number;  // if 1 - simple user, if 2 - is admin(master), if 3 - is  prof
 	private var numeroDuPersonnage:Number; // sert a associer la bonne image pour le jeu d'ile au tresor
-	
-    public var  listeDesPersonnages:Array;   // liste associant les idPersonnage avec les nomUtilisateurs dans la table ou on est
-	                                         // contient aussi autre informations sur les joueurs, comme couleur, role, pointage, argent ...
-											 // un tableau complet avec toutes les informations sur les joueurs
+	public var  listeDesPersonnages:Array;   // liste associant les idPersonnage avec les nomUtilisateurs dans la table ou on est
+	                                        // contient aussi autre informations sur les joueurs, comme couleur, role, pointage, argent ...
+						    				 // un tableau complet avec toutes les informations sur les joueurs
     private var motDePasse:String;  // notre mot de passe pour pouvoir jouer
     private var nomSalle:String;  //  nom de la salle dans laquelle on est
 	private var idRoom:Number;    // ID of our room in the server's list of rooms
 	private var masterTime:Number; // masterTime of room, if masterTime != 0 is taked masterTime for the time of game 
-	private var clientType:Number;  // if 1 is game, if 2 is prof's module
-    private var numeroTable:Number;   //   numero de la table dans laquelle on est
+	private var numeroTable:Number;   //   numero de la table dans laquelle on est
 	private var tablName:String;     // name of the created table
     private var tempsPartie:Number;   //  temps que va durer la partie, en minutes
     private var idPersonnage:Number;   //  
     private var listeDesJoueursDansSalle:Array;  // liste des joueurs dans la salle qu'on est. Un joueur contient un nom (nom) ???? 
-    
-	private var playersNumber:Number;   // ???????? we really need it?
+    private var playersNumber:Number;   // ???????? we really need it?
 	public var  listeDesSalles:Array;    //  liste de toutes les salles                !!!! Combiner ici tout dans un Objet
-	///private var listeNumeroJoueursSalles:Array;		//liste de numero de joueurs dans chaque salle
 	private var maxPlayers:Number; // Number max of players by table in the room where we are  
-	
 	private var listeChansons:Array;    //  liste de toutes les chansons
     private var listeDesJoueursConnectes:Array;   // la premiere liste qu'on recoit, tous les joueurs dans toutes les salles. Un joueur contient un nom (nom)
-    
-	//liste de toutes les tables dans la salle ou on est
+    //liste de toutes les tables dans la salle ou on est
     //contient un numero (noTable), le temps (temps) et une liste de joueurs (listeJoueurs) un joueur de la liste contient un nom (nom)
     private var listeDesTables:Array;   // list of tables in our room with list of users in 
     private var objGestionnaireCommunication:GestionnaireCommunication;  //  pour caller les fonctions du serveur 
 	private var tabPodiumOrdonneID:Array;			// id des personnages ordonnes par pointage une fois la partie terminee
 	private var pointageMinimalWinTheGame:Number = -1 // pointage minimal a avoir droit d'atteindre le WinTheGame
-	
 	public  var typeDeJeu:String;        // gameType in our table
 	private var moveVisibility:Number;  // The number of cases that user can move. At the begining is 3. 
 	                                    // With the 3 running correct answers the level increase by 1 
@@ -76,18 +70,17 @@ class GestionnaireEvenements
 	private var newsChat:NewsBox;  // all the messages to show in newsbox
 	private var nbTracks:Number;   // usually is 4, do we really need it?  it not change...
 	private var finishPoints:Array;
-	
 	// braniac state of our perso
-	private var braniacState:String;
+	//private var brainiacState:String;
 	// banana state of our perso
 	private var bananaState:Boolean;
+	private var bananaRestedTime:Number;
 	// used to take bonus
 	private var winIt:Number;
-	
 	//used to color clothes of our perso
 	private var colorIt:String;
-	
-	private var allowedTypes:Array;
+	private var allowedTypes:Array;   // allowed types of game in our room - course, tournament ...
+	private var ourPerso:Personnage;  // reference to our personnage on the table
 	
 	function affichageChamps()
 	{
@@ -109,6 +102,22 @@ class GestionnaireEvenements
 		trace("------  fin affichage  ------");	
 	}
 		
+    function getMoveSight():Number
+	{
+		return this.moveVisibility
+	}
+	
+	// if we need to decrease we add negative number
+	function setMoveSight(addSight:Number)
+	{
+		this.moveVisibility += addSight;
+		
+		if(this.moveVisibility < 1)
+		   this.moveVisibility = 1;
+		if(this.moveVisibility > 7)
+		   this.moveVisibility = 7;
+	}
+	
 	function obtenirNomUtilisateur()
 	{
 		return this.nomUtilisateur;
@@ -163,30 +172,29 @@ class GestionnaireEvenements
     {
     	this.colorIt = color;
     }
-	
-	function getBraniacState():String
+	/*
+	function getBrainiacState():String
 	{
-		return this.braniacState;
+		return this.brainiacState;
 	}
 	
-	function setBraniacState(stateBr:String)
+	function setBrainiacState(stateBr:String)
     {
-    	this.braniacState = stateBr;
-    }
+    	this.brainiacState = stateBr;
+    }*/
 
 
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  CONSTRUCTEUR
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    function GestionnaireEvenements(nom:String, passe:String, langue:String, client:Number)
+    function GestionnaireEvenements(nom:String, passe:String, langue:String)
     {
         trace("*********************************************");
         trace("debut du constructeur de gesEve      " + nom + "      " + passe);
         this.nomUtilisateur = nom;
         this.listeDesPersonnages = new Array();
-       	this.clientType = client;
-	    this.motDePasse = passe;
+       	this.motDePasse = passe;
 		this.langue = langue;
         this.nomSalle = new String();
         this.listeDesSalles = new Array();
@@ -276,8 +284,9 @@ class GestionnaireEvenements
 	public function backToFrameOneGetRooms()
 	{
 		trace("*********************************************");
+		// roomsType - general ou profs rooms
         trace("back to frame1 " + _level0.roomsType);
-		this.objGestionnaireCommunication.obtenirListeSallesRetour(Delegate.create(this, this.retourObtenirListeSalles), this.clientType, _level0.roomsType);
+		this.objGestionnaireCommunication.obtenirListeSallesRetour(Delegate.create(this, this.retourObtenirListeSalles), _level0.roomsType);
 		
 	}// end method  
 	
@@ -301,27 +310,7 @@ class GestionnaireEvenements
         trace("*********************************************\n");
     }
 	
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////////
-    function createRoom(nameRoom:String, description:String, pass:String, fromDate:String, toDate:String, defaultTime:String, roomCategories:String, gameTypes:String)
-    {
-        trace("*********************************************");
-        trace("debut de createRoom     :" + nameRoom + " " + toDate + " " + gameTypes);
-        this.objGestionnaireCommunication.createRoom(Delegate.create(this, this.retourCreateRoom), nameRoom, description, pass, fromDate, toDate, defaultTime, roomCategories, gameTypes);
-        trace("fin de createRoom");
-        trace("*********************************************\n");
-    }
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////
-    function getReport(idRoom:Number)
-    {
-        trace("*********************************************");
-        trace("begin of getReport     :" + idRoom);
-        this.objGestionnaireCommunication.getReport(Delegate.create(this, this.retourGetReport), idRoom);
-        trace("end getReport");
-        trace("*********************************************\n");
-    }
-	
+		
 	///////////////////////////////////////////////////////////////////////////////////////////////////
     function reportBugQuestion(description:String)
     {
@@ -841,13 +830,13 @@ class GestionnaireEvenements
         {  
 	        
             case "ListeJoueurs":
-            	this.playersNumber = objetEvenement.listeNomUtilisateurs.length;  /// !!!!!!!!  ?????????????????
+            	this.playersNumber = objetEvenement.listeNomUtilisateurs.length;  //???
         		        		
                 for(var i:Number = 0; i < this.playersNumber ; i++)
                 {
                     this.listeDesJoueursConnectes.push(objetEvenement.listeNomUtilisateurs[i]);
                 }
-                this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), Delegate.create(this, this.evenementNouvelleSalle), this.clientType, _level0.roomsType);
+                this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), Delegate.create(this, this.evenementNouvelleSalle), _level0.roomsType);
             break;
 			
             case "CommandeNonReconnue":
@@ -893,9 +882,7 @@ class GestionnaireEvenements
 								
 				_level0.loader.contentHolder.bt_continuer1._visible = true;
 				_level0.loader.contentHolder.txtChargementSalles._visible = false;
-				
-				//for the profModule;
-				_level0.gotoAndStop(3);
+								
             break;
 			 
             case "CommandeNonReconnue":
@@ -918,42 +905,6 @@ class GestionnaireEvenements
         trace("*********************************************\n");
     }
 	
-	//*****************************************************************************************
-	 
-    public function retourCreateRoom(objetEvenement:Object)
-    {
-        //   objetEvenement.resultat = , CommandeNonReconnue, ParametrePasBon ou JoueurNonConnecte
-        trace("*********************************************");
-        trace("debut de retourCreateRoom   " + objetEvenement.resultat);
-        switch(objetEvenement.resultat)
-        {
-            case "OK":
-               
-			trace("room created  ");
-			this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), Delegate.create(this, this.evenementNouvelleSalle), this.clientType);
-			
-
-            break;
-			 
-            case "CommandeNonReconnue":
-                trace("CommandeNonReconnue");
-            break;
-			 
-            case "ParametrePasBon":
-                trace("ParamettrePasBon");
-            break;
-			 
-            case "JoueurNonConnecte":
-                trace("Joueur non connecte");
-            break;
-			 
-            default:
-                trace("Erreur Inconnue");
-        }
-		objetEvenement = null;
-        trace("fin de retourCreateRoom");
-        trace("*********************************************\n");
-    }
 	
 	//*****************************************************************************************
 	 
@@ -996,42 +947,6 @@ class GestionnaireEvenements
         trace("fin de retourReportBugQuestion");
         trace("*********************************************\n");
     }
-	
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function retourGetReport(objetEvenement:Object)
-    {
-        //   objetEvenement.resultat = OK, CommandeNonReconnue, ParametrePasBon ou JoueurNonConnecte
-        trace("*********************************************");
-        trace("debut de retourGetReport   " + objetEvenement.resultat);
-        switch(objetEvenement.resultat)
-        {
-            case "OK":
-            trace("report created  ");
-			_level0.roomReportText_txt.text = objetEvenement.report;
-			_level0.roomReportText_txt.setTextFormat(_level0.reportFormat);
-            break;
-			 
-            case "CommandeNonReconnue":
-                trace("CommandeNonReconnue");
-            break;
-			 
-            case "ParametrePasBon":
-                trace("ParamettrePasBon");
-            break;
-			 
-            case "JoueurNonConnecte":
-                trace("Joueur non connecte");
-            break;
-			 
-            default:
-                trace("Erreur Inconnue");
-        }
-		objetEvenement = null;
-        trace("fin de retourGetReport");
-        trace("*********************************************\n");
-    }
-	//*****************************************************************************************
 	
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function retourEntrerSalle(objetEvenement:Object)
@@ -3326,9 +3241,9 @@ class GestionnaireEvenements
 		{
 		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _root.texteSource_xml.firstChild.attributes.bookUsedMess; 
 		   this.newsChat.addMessage(messageInfo);
-		}else if(objetEvenement.objetUtilise == "Braniac")
+		}else if(objetEvenement.objetUtilise == "Brainiac")
 		{
-		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _root.texteSource_xml.firstChild.attributes.braniacUsedMess; 
+		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _root.texteSource_xml.firstChild.attributes.brainiacUsedMess; 
 		   this.newsChat.addMessage(messageInfo);
 		}else if(objetEvenement.objetUtilise == "Boule")
 		{
@@ -3341,11 +3256,7 @@ class GestionnaireEvenements
 		// here we treat the Banana
 		if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte == this.nomUtilisateur )
 		{
-    	   //this.moveVisibility = this.moveVisibility - 2;
-		   //if(this.moveVisibility < 1)
-		    //  this.moveVisibility = 1;
-			
-			this.bananaState = true;
+    	  	this.bananaState = true;
 			trace("in the GE " + bananaState);
 			setBananaTimer(playerUnder);
 			
@@ -3362,9 +3273,7 @@ class GestionnaireEvenements
 			  }
 			 			  
 			  _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			   this.moveVisibility = this.moveVisibility - 2;
-		       if(this.moveVisibility < 1)
-		          this.moveVisibility = 1;
+			  this.setMoveSight(-2);
 		      _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 			
 			_global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
@@ -3381,9 +3290,7 @@ class GestionnaireEvenements
 			   _level0.loader.contentHolder.sortieDunMinigame = false;
 			   
 			   _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			    this.moveVisibility = this.moveVisibility - 2;
-		        if(this.moveVisibility < 1)
-		          this.moveVisibility = 1;
+			   this.setMoveSight(-2);
 		       _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 			  
 			  _global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
@@ -3405,16 +3312,13 @@ class GestionnaireEvenements
 			    // setTimeout( Function, delay in miliseconds, arguments)
                _global.timerInterval = setInterval(this,"funcToRecallFeedback", 7000, tempsRested);
 			   
-			  	   
-				//_root.objGestionnaireInterface.effacerBoutons(1);
 			  
 		   }else{
 		      
                 _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 				
-				 this.moveVisibility = this.moveVisibility - 2;
-		         if(this.moveVisibility < 1)
-		            this.moveVisibility = 1;
+				this.setMoveSight(-2);
+				
 			    _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 				_global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
 						
@@ -3441,44 +3345,31 @@ class GestionnaireEvenements
 		// we put our perso in Braniac... 
 		// the first part of this action is in the Perssonnage.as line 740
 		// we treat them diffrently because we must have Braniac cases and Timer on our perso
-		/*var delayBraniacProcess:Number;
-		if(objetEvenement.objetUtilise == "Braniac" && objetEvenement.joueurAffecte == this.nomUtilisateur)
-		{
-			setBraniacTimer(playerUnder);
-			
-			delayBraniacProcess = setInterval(setBTimer, 1000);
-            
-			function setBTimer()
-			{
-				trace("ici test Braniac...............................");
-				_level0.loader.contentHolder.objGestionnaireEvenements.setBraniacTimer(playerUnder);
-				clearInterval(delayBraniacProcess);
-			}
-		}*/          /// all treat is passed to Personnage.as
+		/// all treat is passed to Personnage.as
 		
 		objetEvenement = null;
      	trace("fin de evenementUtiliserObjet");
      	trace("*********************************************\n");
-    } // end methode
+} // end methode
 	
 	
 	// this function is used to put on the Sprite the Timer of the Braniac
 	// after the time finished it must disapear
-	function setBraniacTimer(playerUnder:String)
+	function setBrainiacTimer(playerUnder:String)
 	{
 		//first on put on the sprite the box for the timer if is our perso
 		
-		   _level0.loader.contentHolder.attachMovie("timeBox", "branBox",6);//_level0.loader.contentHolder.getNextHigesthDepth());
-		   _level0.loader.contentHolder.branBox._x = 470;
-		   _level0.loader.contentHolder.branBox._xscale = 90;
-		   _level0.loader.contentHolder.branBox._y = 320;
+		   _level0.loader.contentHolder.attachMovie("timeBox", "brainBox",6);//_level0.loader.contentHolder.getNextHigesthDepth());
+		   _level0.loader.contentHolder.brainBox._x = 470;
+		   _level0.loader.contentHolder.brainBox._xscale = 90;
+		   _level0.loader.contentHolder.brainBox._y = 320;
 		
 		   //create text field to put info in
-		   _level0.loader.contentHolder.branBox.createTextField("braniacTime", _level0.loader.contentHolder.branBox.getNextHigesthDepth(), 20, 5, 40, 20);
+		   _level0.loader.contentHolder.brainBox.createTextField("brainiacTime", _level0.loader.contentHolder.brainBox.getNextHigesthDepth(), 20, 5, 40, 20);
 		
 		   // Make the field dynamic text field
-           _level0.loader.contentHolder.branBox.braniacTime.type = "dynamic";
-           with(_level0.loader.contentHolder.branBox.braniacTime)
+           _level0.loader.contentHolder.brainBox.brainiacTime.type = "dynamic";
+           with(_level0.loader.contentHolder.brainBox.brainiacTime)
            {
 	          multiline = false;
 	          background = false;
@@ -3494,46 +3385,46 @@ class GestionnaireEvenements
            formatTimer.size = 16;
            formatTimer.font = "Impact";
            formatTimer.align = "Center";
-           _level0.loader.contentHolder.branBox.braniacTime.setNewTextFormat(formatTimer);
+           _level0.loader.contentHolder.brainBox.brainiacTime.setNewTextFormat(formatTimer);
 						
-		if(_global.intervalIdBran != null) {
+		if(_global.intervalIdBrain != null) {
 		
-             clearInterval(_global.intervalIdBran);
+             clearInterval(_global.intervalIdBrain);
         }
 
-		_global.intervalIdBran = setInterval(branTimerSet, 1000, playerUnder);	// sert pour attendre la jusqu'a la fin de action de Braniac
+		_global.intervalIdBrain = setInterval(brainTimerSet, 1000, playerUnder);	// sert pour attendre la jusqu'a la fin de action de Braniac
 	   
-	    function branTimerSet(playerUnder:String){
+	    function brainTimerSet(playerUnder:String){
 	       
-		   var timeX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).getBraniacTime(); 
-		   _level0.loader.contentHolder.branBox.braniacTime.text = timeX; 
+		   var timeX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).getBrainiacTime(); 
+		   _level0.loader.contentHolder.brainBox.brainiacTime.text = timeX; 
 		   
 		   if(timeX == 0)
 	       {
 			   if(_level0.loader.contentHolder.planche.obtenirPerso().boardCentre == false || _level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible)
 		       {
-				     _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility--;
+				     _level0.loader.contentHolder.objGestionnaireEvenements.setMoveSight(-1);
 			  			
 		       }else if(_level0.loader.contentHolder.box_question.monScroll._visible || _level0.loader.contentHolder.planche.obtenirPerso().minigameLoade)
 		       {
-			         _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility--;
+			        _level0.loader.contentHolder.objGestionnaireEvenements.setMoveSight(-1);
 		      			
 		       }else{
 				
                     _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-				    _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility--;
+				    _level0.loader.contentHolder.objGestionnaireEvenements.setMoveSight(-1);
 			        _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 		       }  
 			  // to remove the timer box
-			  _level0.loader.contentHolder.branBox.removeMovieClip();
-		      clearInterval(_global.intervalIdBran);
+			  _level0.loader.contentHolder.brainBox.removeMovieClip();
+		      clearInterval(_global.intervalIdBrain);
 					
 		   }		   		
-	   } // end function branTimerSet
+	   } // end function brainTimerSet
 	   
 	    
 		
-	}// end function  setBraniacTimer
+	}// end function  setBrainiacTimer
 	
 	
 	//*****************************************************************************************
@@ -3605,21 +3496,15 @@ class GestionnaireEvenements
 			  if(repost)
 		      {
 				 _level0.loader.contentHolder.objGestionnaireEvenements.bananaState = false;
-			     _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility += 2;
-		         if(_level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility > 6)
-		            _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility = 6;
-					
+			     _level0.loader.contentHolder.objGestionnaireEvenements.setMoveSight(2);					
 					
 			  }else
 			  {
 		         _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 			     _root.objGestionnaireInterface.effacerBoutons(1);
 			     _level0.loader.contentHolder.objGestionnaireEvenements.bananaState = false;
-			     _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility += 2;
-		         if(_level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility > 6)
-		            _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility = 6;
-					//_level0.loader.contentHolder.planche.obtenirPerso().setBoardCentre(false);
-				 _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			    _level0.loader.contentHolder.objGestionnaireEvenements.setMoveSight(2);
+				_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 			  }
 			  
 		      clearInterval(_global.intervalIdBanana);
@@ -3926,6 +3811,7 @@ function drawUserFrame3(i:Number, colorC:String, idDessin:Number, movClip:MovieC
 	   
 	   this["mcLoaderString"].loadClip("persox" + idDessin + ".swf", movClip);
 }
+
 /*
  * Methode used to verify if all users are seted theirs perso's
  */
