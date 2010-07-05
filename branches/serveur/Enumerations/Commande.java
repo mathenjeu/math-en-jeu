@@ -34,6 +34,8 @@ public final class Commande
         public static final String CancelQuestion = "CancelQuestion";
         public static final String ReportBugQuestion = "ReportBugQuestion";
 		public static final String ObtenirListeSallesRetour = "ObtenirListeSallesRetour";
+		public static final String ObtenirListeSallesProf = "ObtenirListeSallesProf";
+		public static final String ConnexionProf = "ConnexionProf";
     
 	/**
 	 * Constructeur par défaut est privé pour empêcher de pourvoir créer des 
@@ -54,8 +56,9 @@ public final class Commande
 		// Si la valeur passée en paramètre n'est pas égale à aucune des
 		// valeurs définies dans cette classe, alors la valeur n'est pas
 		// un membre de cette énumération, sinon elle en est un
-		return (valeur.equals(Connexion) || valeur.equals(Deconnexion) || 
-		        valeur.equals(ObtenirListeJoueurs) || valeur.equals(ObtenirListeSalles) || valeur.equals(ObtenirListeSallesRetour) ||
+		return (valeur.equals(Connexion) || valeur.equals(ConnexionProf) || valeur.equals(Deconnexion) || 
+		        valeur.equals(ObtenirListeJoueurs) || valeur.equals(ObtenirListeSalles) || 
+		        valeur.equals(ObtenirListeSallesRetour) || valeur.equals(ObtenirListeSallesProf) ||
 		        valeur.equals(EntrerSalle) || valeur.equals(QuitterSalle) || 
 		        valeur.equals(ObtenirListeJoueursSalle) || valeur.equals(ObtenirListeTables) ||
 		        valeur.equals(CreerTable) || valeur.equals(EntrerTable) ||
