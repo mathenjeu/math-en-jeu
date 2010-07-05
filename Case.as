@@ -116,7 +116,7 @@ class Case
 						nomObj = "Livre";
 					break;			
 					case 2:
-						nomObj = "Papillon";
+						nomObj = "Brainiac";
 					break;
 					case 3:
 						nomObj = "Telephone";
@@ -133,12 +133,6 @@ class Case
 					case 7:
 						nomObj = "Banane";
 					break;
-					
-					case 8:
-						nomObj = "Braniac";
-					break;
-
-
 					default:break;
 				}
 			

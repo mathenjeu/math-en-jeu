@@ -502,8 +502,8 @@ class PlancheDeJeu
 	    p.afficher();
         if(idPers == monPersonnage)
         {
-            perso = p;
-	    	nomDeMonPersonnage = nom;
+            this.perso = p;
+	    	this.nomDeMonPersonnage = nom;
 	    	
         }
 		
@@ -792,7 +792,7 @@ class PlancheDeJeu
 	 
 	 if(tableauDesCases[p.obtenirL()][p.obtenirC()].obtenirType() > 41000)
         isInWinTheGame = false;
-	 var moveVisibility =  _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility;
+	 var moveVisibility =  _level0.loader.contentHolder.objGestionnaireEvenements.getMoveSight();
 	 //trace("Move : " + moveVisibility);
 	 if( !(p.getRole() == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") && isInWinTheGame)
 	 { 
@@ -806,12 +806,7 @@ class PlancheDeJeu
 		var temp:Number;
 		var twMove:Tween;
 		var twMove2:Tween;
-		// il faudra enlever completement
-		var pointageMin:Number = -1;//_level0.loader.contentHolder.objGestionnaireEvenements.obtenirPointageMinimalWinTheGame();
-
-		//switchColor(tableauDesCases[p.obtenirL()][p.obtenirC()]);
-		//switchColorFlash(tableauDesCases[p.obtenirL()][p.obtenirC()]);
-		
+						
 		//trace("ds afficherCasesPossibles");
         for(i = 1; i <= Math.min(mat.length-p.obtenirL()-1,moveVisibility); i++)
         {
@@ -821,15 +816,9 @@ class PlancheDeJeu
 			 //trace("ds premier for avant if  i  temp   mat  L   C  :  "+i+"   "+temp+"   "+this.mat[temp][p.obtenirC()]+"   "+p.obtenirL()+"   "+p.obtenirC());
 		
             if(this.mat[temp][p.obtenirC()] > 0)
-            {
-				if(tableauDesCases[temp][p.obtenirC()].obtenirType() > 40000 && _level0.loader.contentHolder.planche.obtenirPerso().obtenirPointage() < pointageMin)
-				{
-					//trace("pas assez de points pour atteindre le WinTheGame");
-				}
-				else
-				{
+            {				
 					//switchColor(tableauDesCases[temp][p.obtenirC()]);
-					if(i == moveVisibility && p.getBraniac())
+					if(i == moveVisibility && p.getBrainiac())
 					{
 						switchColorBran(tableauDesCases[temp][p.obtenirC()]);
 					
@@ -877,7 +866,7 @@ class PlancheDeJeu
 					tableauDesCases[temp][p.obtenirC()].definirCasePossible(brille);
 			
 					_root.objGestionnaireInterface.ajouterBouton(brille, 3);
-				}
+				
             }
             else
             {
@@ -894,15 +883,9 @@ class PlancheDeJeu
            
 			if(mat[temp][p.obtenirC()] > 0)
             {
-				if(tableauDesCases[temp][p.obtenirC()].obtenirType() > 40000 && _level0.loader.contentHolder.planche.obtenirPerso().obtenirPointage() < pointageMin)
-				{
-					//trace("pas assez de points pour atteindre le WinTheGame");
-				}
-				else
-				{
 					//switchColor(tableauDesCases[temp][p.obtenirC()]);
 					//if we have Bran
-					if(i == moveVisibility && p.getBraniac())
+					if(i == moveVisibility && p.getBrainiac())
 					{
 						switchColorBran(tableauDesCases[temp][p.obtenirC()]);
 					}else
@@ -946,7 +929,7 @@ class PlancheDeJeu
 					this.tableauDesCases[temp][p.obtenirC()].definirCasePossible(brille);
 			
 					_root.objGestionnaireInterface.ajouterBouton(brille, 3);
-				}
+				
            	}
             else
             {
@@ -962,14 +945,8 @@ class PlancheDeJeu
             
 			if(mat[p.obtenirL()][temp] > 0)
             {
-				if(tableauDesCases[p.obtenirL()][temp].obtenirType() > 40000 && _level0.loader.contentHolder.planche.obtenirPerso().obtenirPointage() < pointageMin)
-				{
-					//trace("pas assez de points pour atteindre le WinTheGame");
-				}
-				else
-				{
 					//switchColor(tableauDesCases[p.obtenirL()][temp]);
-					if(i == moveVisibility && p.getBraniac())
+					if(i == moveVisibility && p.getBrainiac())
 					{
 					   switchColorBran(tableauDesCases[p.obtenirL()][temp]);
 					}else
@@ -1011,7 +988,7 @@ class PlancheDeJeu
 					this.tableauDesCases[p.obtenirL()][temp].definirCasePossible(brille);
 			
 					_root.objGestionnaireInterface.ajouterBouton(brille, 3);
-				}
+				
 			}
             else
             {
@@ -1026,14 +1003,8 @@ class PlancheDeJeu
 			
             if(mat[p.obtenirL()][temp] > 0)
             {
-				if(tableauDesCases[p.obtenirL()][temp].obtenirType() > 40000 && _level0.loader.contentHolder.planche.obtenirPerso().obtenirPointage() < pointageMin)
-				{
-					//trace("pas assez de points pour atteindre le WinTheGame");
-				}
-				else
-				{
 					//switchColor(tableauDesCases[p.obtenirL()][temp]);
-					if(i == moveVisibility && p.getBraniac())
+					if(i == moveVisibility && p.getBrainiac())
 					{
      				   switchColorBran(tableauDesCases[p.obtenirL()][temp]);
 					}else
@@ -1075,7 +1046,7 @@ class PlancheDeJeu
 					this.tableauDesCases[p.obtenirL()][temp].definirCasePossible(brille);
 			
 					_root.objGestionnaireInterface.ajouterBouton(brille, 3);		
-				}
+				
             }
             else
             {

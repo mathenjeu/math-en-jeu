@@ -112,12 +112,7 @@ class ObjetSurCase
 				image._visible = false;
 				valeur = 1;
 			break;			
-			case "Papillon":
-				image = _level0.loader.contentHolder.referenceLayer.attachMovie("Papillon", "Papillon", niveau);  
-				image._visible = false;
-				valeur = 2;
-			break;
-
+			
 			case "Telephone":
 				image = _level0.loader.contentHolder.referenceLayer.attachMovie("Telephone", "Telephone", niveau);  
 				image._visible = false;
@@ -148,8 +143,8 @@ class ObjetSurCase
 				valeur = 7;
 			break;
 			
-			case "Braniac":
-				image = _level0.loader.contentHolder.referenceLayer.attachMovie("Papillon", "Braniac", niveau);  
+			case "Brainiac":
+				image = _level0.loader.contentHolder.referenceLayer.attachMovie("Papillon", "Brainiac", niveau);  
 				image._visible = false;
 				valeur = 2;
 			break;
