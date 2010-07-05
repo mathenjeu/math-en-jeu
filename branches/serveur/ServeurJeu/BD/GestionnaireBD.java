@@ -625,9 +625,9 @@ public class GestionnaireBD
   /** This function queries the DB to find the player's musical preferences  ***
    * and returns a Vector containing URLs of MP3s the player might like
    */
-  public Vector<Object> obtenirListeURLsMusique(int cleJoueur)
+  public ArrayList<Object> obtenirListeURLsMusique(int cleJoueur)
 	{
-            Vector<Object> liste = new Vector<Object>();
+            ArrayList<Object> liste = new ArrayList<Object>();
             String URLMusique = GestionnaireConfiguration.obtenirInstance().obtenirString("musique.url");
             String strRequeteSQL = "SELECT music_file.filename FROM music_file,music_file_category,music_category,music_category_user WHERE ";
             strRequeteSQL       += "music_file.music_file_id = music_file_category.music_file_id AND ";
