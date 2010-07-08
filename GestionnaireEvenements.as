@@ -63,8 +63,8 @@ class GestionnaireEvenements
 	private var tabPodiumOrdonneID:Array;			// id des personnages ordonnes par pointage une fois la partie terminee
 	private var pointageMinimalWinTheGame:Number = -1 // pointage minimal a avoir droit d'atteindre le WinTheGame
 	public  var typeDeJeu:String;        // gameType in our table
-	private var moveVisibility:Number;  // The number of cases that user can move. At the begining is 3. 
-	                                    // With the 3 running correct answers the level increase by 1 
+	private var moveVisibility:Number;  // The number of cases that our user can move. At the begining is 3. 
+	                                    // With the each running correct answers the level increase by 1 
 	private var langue;
 	private var endGame:Boolean;   // used to ignore the movement of virtual players after the end of the game
 	private var newsChat:NewsBox;  // all the messages to show in newsbox
@@ -80,7 +80,7 @@ class GestionnaireEvenements
 	//used to color clothes of our perso
 	private var colorIt:String;
 	private var allowedTypes:Array;   // allowed types of game in our room - course, tournament ...
-	private var ourPerso:Personnage;  // reference to our personnage on the table
+	private var ourPerso:Personnage;  // reference to our personnage on the table(planche) .. I don't sure if is very useful
 	
 	function affichageChamps()
 	{
@@ -108,14 +108,40 @@ class GestionnaireEvenements
 	}
 	
 	// if we need to decrease we add negative number
-	function setMoveSight(addSight:Number)
+	function addMoveSight(addSight:Number)
 	{
 		this.moveVisibility += addSight;
 		
 		if(this.moveVisibility < 1)
 		   this.moveVisibility = 1;
-		if(this.moveVisibility > 7)
-		   this.moveVisibility = 7;
+		if (this.moveVisibility > 6)
+		{
+			if(this.ourPerso.getBrainiac())
+			{
+		      this.moveVisibility = 7; 
+			} else {
+		      this.moveVisibility = 6;
+			}
+		}
+		trace("getBraniac " + this.ourPerso.getBrainiac());
+	}
+	
+	function setMoveSight(steps:Number)
+	{
+		this.moveVisibility = steps;
+		
+		if(this.moveVisibility < 1)
+		   this.moveVisibility = 1;
+		if (this.moveVisibility > 6)
+		{
+			if(this.ourPerso.getBrainiac())
+			{
+		      this.moveVisibility = 7; 
+			} else {
+		      this.moveVisibility = 6;
+			}
+		}
+		trace("getBraniac " + this.ourPerso.getBrainiac());
 	}
 	
 	function obtenirNomUtilisateur()
@@ -172,19 +198,7 @@ class GestionnaireEvenements
     {
     	this.colorIt = color;
     }
-	/*
-	function getBrainiacState():String
-	{
-		return this.brainiacState;
-	}
-	
-	function setBrainiacState(stateBr:String)
-    {
-    	this.brainiacState = stateBr;
-    }*/
-
-
-    
+	    
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  CONSTRUCTEUR
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -199,7 +213,6 @@ class GestionnaireEvenements
         this.nomSalle = new String();
         this.listeDesSalles = new Array();
 		this.allowedTypes = new Array();
-		//this.listeNumeroJoueursSalles = new Array();
 		this.listeDesTables = new Array();
 		this.listeChansons = new Array();
         this.listeDesJoueursConnectes = new Array();
@@ -553,35 +566,7 @@ class GestionnaireEvenements
     //                                  fonctions retour
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    	/*
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function retourObtenirNomsInterface(objetEvenement:Object)
-    {
-        trace("*********************************************");
-        trace("debut de retourObtenirNomsInterface     "+objetEvenement.resultat);
-
-		switch(objetEvenement.resultat)
-        {
-            case "ListeNomsInterfaces":
-            break;
-            case "CommandeNonReconnue":
-                trace("CommandeNonReconnue");
-            break;
-            case "ParametrePasBon":
-                trace("ParamettrePasBon");
-            break;
-            case "LangageNonConnu":
-                trace("Langage non connu");
-            break;
-            default:
-                trace("Erreur Inconnue");
-        }
-		objetEvenement = null;
-        trace("fin de retourObtenirNomsInterface");
-        trace("*********************************************\n");
-    }*/
-	
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+   
     public function retourConnexion(objetEvenement:Object)
     {
     	// c'est la fonction qui va etre appellee lorsque le GestionnaireCommunication aura
@@ -918,12 +903,9 @@ class GestionnaireEvenements
             case "OK":
             
 			   // newsbox
-		       //_level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
 		       var messageInfo:String = _root.texteSource_xml.firstChild.attributes.bugReportMess; 
 			   this.newsChat.addMessage(messageInfo);
-		       //this.newsArray[newsArray.length] = messageInfo;
-		       //_level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
-		       //_level0.loader.contentHolder.orderId = 0;
+		      
 			trace("bug reported  ");
 			
             break;
@@ -999,10 +981,8 @@ class GestionnaireEvenements
 				_level0.loader.contentHolder["guiPWD"].removeMovieClip();
 				var erreur:String = _root.texteSource_xml.firstChild.attributes.errorPWD;
 	            var pwdAlert:String = _root.texteSource_xml.firstChild.attributes.pwdAlert;
-	            //var myAlert:Alert = new Alert();//createClassObject(Alert,"myAlert", getNextHighestDepth()); 
-				//Alert.setStyle("themeColor", "haloBlue");
-				_global.styles.Alert.setStyle("themeColor", "haloBlue");
-				_global.styles.Alert.setStyle("color", 0x000099);
+	           //	_global.styles.Alert.setStyle("themeColor", "haloBlue");
+				//_global.styles.Alert.setStyle("color", 0x000099);
 
 				Alert.show(erreur, pwdAlert); 
 				
@@ -1734,6 +1714,7 @@ class GestionnaireEvenements
 		     	_level0.loader.contentHolder.url_question = objetEvenement.question.url;
 		     	_level0.loader.contentHolder.type_question = objetEvenement.question.type;
 				_level0.loader.contentHolder.box_question.gotoAndPlay(2);
+				
 
                 /*
 				switch(objetEvenement.question.type)
@@ -2041,10 +2022,10 @@ class GestionnaireEvenements
 		     	{
 					trace("deplacement accepte");
 			
+			       _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 					_level0.loader.contentHolder.box_question.gotoAndPlay(9);
 			
-					//_root.objGestionnaireInterface.afficherBoutons(1);
-			    	pt.definirX(objetEvenement.nouvellePosition.x);
+					pt.definirX(objetEvenement.nouvellePosition.x);
 			     	pt.definirY(objetEvenement.nouvellePosition.y);
 					
 					trace("juste avant la teleportation param  " +  objetEvenement.nouvellePosition.x + " " +  objetEvenement.nouvellePosition.y);
@@ -2056,7 +2037,13 @@ class GestionnaireEvenements
 					_level0.loader.contentHolder.planche.obtenirPerso().modifierPointage(objetEvenement.pointage);
 					_level0.loader.contentHolder.planche.obtenirPerso().modifierArgent(objetEvenement.argent);
 					_level0.loader.contentHolder.sortieDunMinigame = false; 
-					this.moveVisibility = objetEvenement.moveVisibility;
+					//_level0.loader.contentHolder.planche.
+					
+					// the same in evenementUtiliseObjet for all players
+					// we need here that because to have a correct visibility
+					if(objetEvenement.collision == "Brainiac")
+					   _level0.loader.contentHolder.planche.obtenirPerso().setBrainiac(true);
+					this.setMoveSight( objetEvenement.moveVisibility );
 					
 					var count:Number = this.listeDesPersonnages.length;
 					for(var i:Number = 0; i < count;  i++)
@@ -2071,8 +2058,6 @@ class GestionnaireEvenements
 						  if(objetEvenement.bonus > 0){
 						     	this.listeDesPersonnages[i].win = 1;
 								 this.winIt = 1;
-								//this.listeDesPersonnages[i].pointage += objetEvenement.bonus;
-								//_level0.loader.contentHolder.bonusBox.bonus = objetEvenement.bonus;
 						  }
 						  
 						  // newsbox
@@ -2109,8 +2094,8 @@ class GestionnaireEvenements
 					{
 						// Dans le cas d'une erreur de connexion, nous envoyons une reponse
 						// assurement mauvaise au serveur. Il ne faut pas afficher de retro dans ce cas
-						_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-						//_root.objGestionnaireInterface.afficherBoutons(1);
+						//_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+						_level0.loader.contentHolder.planche.setRepostCases(true);
 						_level0.loader.contentHolder.erreurConnexion = false;
 					}
 					else
@@ -2126,9 +2111,8 @@ class GestionnaireEvenements
 						//define the time of penality
 						_level0.loader.contentHolder.box_question.GUI_retro.timeX = 15;
 						// define new visibility
-						this.moveVisibility = objetEvenement.moveVisibility;
+						this.setMoveSight( objetEvenement.moveVisibility );
 
-						//_root.objGestionnaireInterface.effacerBoutons(1);
 					}
 		     	}
 			
@@ -2741,33 +2725,7 @@ class GestionnaireEvenements
 		 _level0.loader.contentHolder.gotoAndPlay(4);
 		 
 		 var count:Number;// = objetEvenement.plateauJeu[0].length;
-	    /*
-        for(i = 0; i < count; i++)
-        {
-            _level0.loader.contentHolder.tab.push(new Array());
-			var count1:Number = objetEvenement.plateauJeu.length;
-            for(j = 0; j < count1; j++)
-            {
-                _level0.loader.contentHolder.tab[i][j] = objetEvenement.plateauJeu[i][j];
-            }
-        }*/
-
-		// ici on initie les noms et pointages des adversaire (dans le panneau qui descend)
-		// et on met la face de leur avatar a cote de leur nom
-		// Initialise our opponents' name and score
-		// and put the face of our opponents' avatar in the panel (next to their name)
- 		
-		/*
-		j = 0;
-		for(i = 0; i < maxPlayersInTable; i++)
-		{
-       				
-			if((undefined != this.listeDesPersonnages[i].nom) && !(this.listeDesPersonnages[i].role == 2 && this.typeDeJeu == "Tournament")){
-				
-			  this["tete"+j] = new MovieClip();
-			  j++;
-			}
-		}*/
+	   
 		
 		var maTete:MovieClip;
 		
@@ -2826,7 +2784,7 @@ class GestionnaireEvenements
 		
 		
         //_level0.loader.contentHolder.planche.afficher();
-				
+		this.ourPerso = _level0.loader.contentHolder.planche.obtenirPerso();
 		
         _level0.loader.contentHolder.horlogeNum = 60*objetEvenement.tempsPartie;
 		
@@ -2836,7 +2794,7 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder.objectMenu.piece.countTxt = 0;
 		
 		//newsbox
-		var messageInfo:String = _root.texteSource_xml.firstChild.attributes.welcomeMess +  "         " + _root.texteSource_xml.firstChild.attributes.moveMess;
+		var messageInfo:String = _root.texteSource_xml.firstChild.attributes.welcomeMess +  "       " + _root.texteSource_xml.firstChild.attributes.moveMess;
 		this.newsChat.addMessage(messageInfo);
 
         remplirMenuPointage();
@@ -3261,7 +3219,7 @@ class GestionnaireEvenements
 			setBananaTimer(playerUnder);
 			
 		   //if the player is in the minigame 
-		   if(_level0.loader.contentHolder.planche.obtenirPerso().minigameLoade)
+		   if(ourPerso.getMinigameLoade())
 		   {
 		      
 			  if(_level0.loader.contentHolder.miniGameLayer["Minigame"])
@@ -3272,10 +3230,9 @@ class GestionnaireEvenements
                   _level0.loader.contentHolder.miniGameLayer["magasin"].loader.contentHolder.quitter();
 			  }
 			 			  
-			  _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			  this.setMoveSight(-2);
-		      _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			
+			 this.addMoveSight(-2);
+			  _level0.loader.contentHolder.planche.setRepostCases(true);
+		     			
 			_global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
 			  
 			
@@ -3288,10 +3245,9 @@ class GestionnaireEvenements
 			   _level0.loader.contentHolder.box_question.gotoAndPlay(9);
 			   _root.objGestionnaireInterface.afficherBoutons(1);
 			   _level0.loader.contentHolder.sortieDunMinigame = false;
-			   
-			   _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			   this.setMoveSight(-2);
-		       _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			   			   
+			   this.addMoveSight(-2);
+		       _level0.loader.contentHolder.planche.setRepostCases(true);
 			  
 			  _global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
 			  
@@ -3311,16 +3267,14 @@ class GestionnaireEvenements
 			    // here show banana in action
 			    // setTimeout( Function, delay in miliseconds, arguments)
                _global.timerInterval = setInterval(this,"funcToRecallFeedback", 7000, tempsRested);
-			   
+			   this.addMoveSight(-2);
 			  
 		   }else{
 		      
-                _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-				
-				this.setMoveSight(-2);
-				
-			    _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-				_global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
+			  this.addMoveSight(-2);
+			  _level0.loader.contentHolder.planche.setRepostCases(true);
+             
+			  _global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
 						
 		   
 		   }//end else if
@@ -3329,8 +3283,6 @@ class GestionnaireEvenements
 		   
 		}else if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte != this.nomUtilisateur)
 		{
-			
-			
 		    _global.timerIntervalBananaAutre = setInterval(this, "waitBananaAutre", 4500, playerUnder);
 					
 		}// end if
@@ -3345,8 +3297,10 @@ class GestionnaireEvenements
 		// we put our perso in Braniac... 
 		// the first part of this action is in the Perssonnage.as line 740
 		// we treat them diffrently because we must have Braniac cases and Timer on our perso
-		/// all treat is passed to Personnage.as
-		
+		if(objetEvenement.objetUtilise == "Brainiac")
+		{
+			_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).setBrainiac(true);
+		}
 		objetEvenement = null;
      	trace("fin de evenementUtiliserObjet");
      	trace("*********************************************\n");
@@ -3357,7 +3311,9 @@ class GestionnaireEvenements
 	// after the time finished it must disapear
 	function setBrainiacTimer(playerUnder:String)
 	{
-		//first on put on the sprite the box for the timer if is our perso
+		  //_level0.loader.contentHolder.planche.setRepostCases(true);
+		   
+		   //first on put on the sprite the box for the timer if is our perso
 		
 		   _level0.loader.contentHolder.attachMovie("timeBox", "brainBox",6);//_level0.loader.contentHolder.getNextHigesthDepth());
 		   _level0.loader.contentHolder.brainBox._x = 470;
@@ -3397,24 +3353,28 @@ class GestionnaireEvenements
 	    function brainTimerSet(playerUnder:String){
 	       
 		   var timeX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).getBrainiacTime(); 
-		   _level0.loader.contentHolder.brainBox.brainiacTime.text = timeX; 
+		   _level0.loader.contentHolder.brainBox.brainiacTime.text = timeX;
 		   
+		   		   
 		   if(timeX == 0)
 	       {
-			   if(_level0.loader.contentHolder.planche.obtenirPerso().boardCentre == false || _level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible)
+			   /*
+			   if(this.ourPerso.boardCentre == false || _level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible)
 		       {
-				     _level0.loader.contentHolder.objGestionnaireEvenements.setMoveSight(-1);
+				     _level0.loader.contentHolder.objGestionnaireEvenements.addMoveSight(-1);
 			  			
-		       }else if(_level0.loader.contentHolder.box_question.monScroll._visible || _level0.loader.contentHolder.planche.obtenirPerso().minigameLoade)
+		       }else if(_level0.loader.contentHolder.box_question.monScroll._visible || this.ourPerso.minigameLoade)
 		       {
-			        _level0.loader.contentHolder.objGestionnaireEvenements.setMoveSight(-1);
+			        _level0.loader.contentHolder.objGestionnaireEvenements.addMoveSight(-1);
 		      			
 		       }else{
 				
-                    _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-				    _level0.loader.contentHolder.objGestionnaireEvenements.setMoveSight(-1);
-			        _level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-		       }  
+                    _level0.loader.contentHolder.objGestionnaireEvenements.addMoveSight(-1);
+			        _level0.loader.contentHolder.planche.setRepostCases(true);
+		       } */
+			   
+			   _level0.loader.contentHolder.objGestionnaireEvenements.addMoveSight(-1);
+			   _level0.loader.contentHolder.planche.setRepostCases(true);
 			  // to remove the timer box
 			  _level0.loader.contentHolder.brainBox.removeMovieClip();
 		      clearInterval(_global.intervalIdBrain);
@@ -3432,6 +3392,7 @@ class GestionnaireEvenements
 	// after the time finished it must disapear
 	function setBananaTimer(playerUnder:String)
 	{
+				
 		//first on put on the sprite the box for the timer
 		var banBox:MovieClip = 	_level0.loader.contentHolder.attachMovie("timeBox", "bananaBox", 7);//_level0.loader.contentHolder.getNextHigesthDepth());
 		_level0.loader.contentHolder.bananaBox._x = 390;
@@ -3484,30 +3445,17 @@ class GestionnaireEvenements
 		   _global.restedTimeBanana--;	  
 		   
 		   _level0.loader.contentHolder.bananaBox.bananaTime.text = _global.restedTimeBanana; 
-		   	var repost:Boolean = false;
-			
-			if(_global.restedTimeBanana < 3)
-			   repost = true;
+		   			
 		   // to remove the timer box
-		   if(_global.restedTimeBanana < 0)
+		   if(_global.restedTimeBanana == 0)
 		   {  
 		      _level0.loader.contentHolder.bananaBox.removeMovieClip();
-		      
-			  if(repost)
-		      {
-				 _level0.loader.contentHolder.objGestionnaireEvenements.bananaState = false;
-			     _level0.loader.contentHolder.objGestionnaireEvenements.setMoveSight(2);					
-					
-			  }else
-			  {
-		         _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			     _root.objGestionnaireInterface.effacerBoutons(1);
-			     _level0.loader.contentHolder.objGestionnaireEvenements.bananaState = false;
-			    _level0.loader.contentHolder.objGestionnaireEvenements.setMoveSight(2);
-				_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			  }
+		     	      
+			  _level0.loader.contentHolder.objGestionnaireEvenements.addMoveSight(2);
+			  _level0.loader.contentHolder.planche.setRepostCases(true);
 			  
-		      clearInterval(_global.intervalIdBanana);
+			  _level0.loader.contentHolder.objGestionnaireEvenements.bananaState = false;
+			  clearInterval(_global.intervalIdBanana);
 		   }
 			
 	   } // end function bananaTimerSet
