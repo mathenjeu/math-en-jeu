@@ -19,7 +19,7 @@ Generale Affero avec ce programme; si ce n'est pas le cas,
 ecrivez a Affero Inc., 510 Third Street - Suite 225,
 San Francisco, CA 94107, USA.
 
-last change - Nov.2009 - Oloieri Lilian
+last change - 2010 - Oloieri Lilian
 *********************************************************************/
 
 import flash.geom.Transform;
@@ -56,6 +56,40 @@ class PlancheDeJeu
     private var rotation:Number = 0;
     private var tableauDesPersonnages:Array = new Array(); // contient les personnages
 	private var intervalCol:Number;
+	private var showCases:Boolean;  // if is true the casesPossibles is in sight
+	private var repostCases:Boolean; // if is true we need to restart casesPossibles because we have changes
+	private var tempoSight:Number;
+	
+	function setTempoSight(tempo:Number)
+	{
+		this.tempoSight = tempo;
+		//if
+	}
+	
+	function getTempoSight():Number
+	{
+		return this.tempoSight;
+	} 
+	
+	function setRepostCases(repost:Boolean)
+	{
+		this.repostCases = repost;
+	}
+	
+	function getRepostCases():Boolean
+	{
+		return this.repostCases;
+	} 
+	
+	function getShowCases():Boolean
+	{
+		return this.showCases;
+	}
+	
+	function setShowCases(showIt:Boolean)
+	{
+		this.showCases = showIt;
+	}
 	
     
     function obtenirPerso():Personnage
@@ -108,6 +142,7 @@ class PlancheDeJeu
         monPersonnage = idPers;//num;
         perso = null;
         gestionnaireInterface = p;
+		this.tempoSight = 3;
     }
 	
 	function getPersonnageByName(playerName:String):Personnage
@@ -785,15 +820,17 @@ class PlancheDeJeu
 		}
 	} // end method
 
+
 	////////////////////////////////////////////////////////////////////////////////////////////
     function afficherCasesPossibles(p:Personnage)
     {		
 	 var isInWinTheGame:Boolean = true;
-	 
 	 if(tableauDesCases[p.obtenirL()][p.obtenirC()].obtenirType() > 41000)
         isInWinTheGame = false;
-	 var moveVisibility =  _level0.loader.contentHolder.objGestionnaireEvenements.getMoveSight();
-	 //trace("Move : " + moveVisibility);
+	 
+	 this.tempoSight = 7;//_level0.loader.contentHolder.objGestionnaireEvenements.getMoveSight();
+	 var tempo = _level0.loader.contentHolder.objGestionnaireEvenements.getMoveSight();
+	 trace("Move : " + tempo + " "+ p.getBrainiac());
 	 if( !(p.getRole() == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") && isInWinTheGame)
 	 { 
 		//trace("Debut afficherCasesPossibles");
@@ -808,7 +845,7 @@ class PlancheDeJeu
 		var twMove2:Tween;
 						
 		//trace("ds afficherCasesPossibles");
-        for(i = 1; i <= Math.min(mat.length-p.obtenirL()-1,moveVisibility); i++)
+        for(i = 1; i <= Math.min(mat.length-p.obtenirL()-1, tempo); i++)
         {
 			temp = Number(p.obtenirL());
 			temp += Number(i);
@@ -818,7 +855,7 @@ class PlancheDeJeu
             if(this.mat[temp][p.obtenirC()] > 0)
             {				
 					//switchColor(tableauDesCases[temp][p.obtenirC()]);
-					if(i == moveVisibility && p.getBrainiac())
+					if(i == tempo && p.getBrainiac())
 					{
 						switchColorBran(tableauDesCases[temp][p.obtenirC()]);
 					
@@ -876,7 +913,7 @@ class PlancheDeJeu
         }
 	
 	
-        for(i=1; i <= Math.min(p.obtenirL(),moveVisibility); i++)
+        for(i=1; i <= Math.min(p.obtenirL(),tempo); i++)
         {
 			//trace("ds deuxieme for avant if  i  mat  :  "+i+"   "+mat[p.obtenirL()-i][p.obtenirC()]);
 			temp = p.obtenirL()-i;
@@ -885,7 +922,7 @@ class PlancheDeJeu
             {
 					//switchColor(tableauDesCases[temp][p.obtenirC()]);
 					//if we have Bran
-					if(i == moveVisibility && p.getBrainiac())
+					if(i == tempo && p.getBrainiac())
 					{
 						switchColorBran(tableauDesCases[temp][p.obtenirC()]);
 					}else
@@ -937,7 +974,7 @@ class PlancheDeJeu
             }
         }
 	
-        for(i=1; i <= Math.min(mat[0].length-p.obtenirC()-1, moveVisibility); i++)
+        for(i=1; i <= Math.min(mat[0].length-p.obtenirC()-1, tempo); i++)
         {
 			temp = Number(p.obtenirC());
 			temp += Number(i);
@@ -946,7 +983,7 @@ class PlancheDeJeu
 			if(mat[p.obtenirL()][temp] > 0)
             {
 					//switchColor(tableauDesCases[p.obtenirL()][temp]);
-					if(i == moveVisibility && p.getBrainiac())
+					if(i == tempo && p.getBrainiac())
 					{
 					   switchColorBran(tableauDesCases[p.obtenirL()][temp]);
 					}else
@@ -954,7 +991,7 @@ class PlancheDeJeu
 					   switchColorFlash(tableauDesCases[p.obtenirL()][temp]);
 					}
 					
-					level = (tableauDesCases.length*tableauDesCases[0].length) + Number(p.obtenirL()*tableauDesCases[0].length) + temp + Number(1);
+					level = (tableauDesCases.length * tableauDesCases[0].length) + Number(p.obtenirL()* tableauDesCases[0].length) + temp + Number(1);
 					//trace("ds if : level :   "+level);
 					if(tableauDesCases[p.obtenirL()][temp].obtenirType() > 40000){
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level, {_width:116, _height:36.25});
@@ -996,7 +1033,7 @@ class PlancheDeJeu
             }
         }
 		
-        for(i = 1; i <= Math.min(p.obtenirC(),moveVisibility); i++)
+        for(i = 1; i <= Math.min(p.obtenirC(),tempo); i++)
         {
 			//trace("ds dernier for avant if  i  mat  :  "+i+"   "+mat[p.obtenirL()][p.obtenirC()-i]);
 			temp = p.obtenirC()-i;
@@ -1004,7 +1041,7 @@ class PlancheDeJeu
             if(mat[p.obtenirL()][temp] > 0)
             {
 					//switchColor(tableauDesCases[p.obtenirL()][temp]);
-					if(i == moveVisibility && p.getBrainiac())
+					if(i == tempo && p.getBrainiac())
 					{
      				   switchColorBran(tableauDesCases[p.obtenirL()][temp]);
 					}else
@@ -1060,6 +1097,9 @@ class PlancheDeJeu
 		if(_level0.loader.contentHolder.objGestionnaireEvenements.bananaState)
 		   afficherCasesPossiblesBanane(p);
 	 }// end if for watcher
+	 
+	 //
+	 this.setShowCases(true);
     }
 	
 	
@@ -1067,20 +1107,21 @@ class PlancheDeJeu
 	///  Method used to put on the board the movies of the cases cauted by banana //////////////
 	////////////////////////////////////////////////////////////////////////////////////////////
     function afficherCasesPossiblesBanane(p:Personnage)
-    {		
-	 
-	    var moveVisi =  _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility;
-	 
+    {	  
 	    var i:Number;
 		var j:Number;
-        var nb:Number = Math.min(6 - moveVisi,2);
-		   
+		var tempo = _level0.loader.contentHolder.objGestionnaireEvenements.getMoveSight();
+		var maxSight:Number = 6;
+		if( p.getBrainiac())
+		   maxSight = 7;
+        var nb:Number = Math.min(maxSight - tempo,2);
+		
         var coordonnees:Point = new Point(0,0);
         var temp:Number;
 		var tempB:Number;
 		var hasHoles:Boolean = false;
 		
-		for(j = 1; j <= Math.min(mat.length-p.obtenirL()-1,moveVisi + 1); j++)  // moveVisi + 1
+		for(j = 1; j <= Math.min(mat.length-p.obtenirL()-1, tempo + 1); j++)  // moveVisi + 1
 		{                                                                       // because first cases Banana can be on the hole
 				tempB = Number(p.obtenirL());
 			    tempB += Number(j);
@@ -1090,7 +1131,7 @@ class PlancheDeJeu
         for(i = 0; i < nb; i++)//Math.min(mat.length-p.obtenirL()-1,moveVisi + 2); i++)
         {
 			temp = Number(p.obtenirL());
-			temp += Number(moveVisi + i + 1);
+			temp += Number(tempo + i + 1);
 						
             if(this.mat[temp][p.obtenirC()] > 0 && !hasHoles)
             {
@@ -1102,7 +1143,7 @@ class PlancheDeJeu
 	    //***************************************************************
 	    hasHoles = false;
 		
-		for(j = 1; j <= Math.min(p.obtenirL()-1,moveVisi + 1); j++)
+		for(j = 1; j <= Math.min(p.obtenirL()-1, tempo + 1); j++)
 		{
 				tempB = Number(p.obtenirL());
 			    tempB -= Number(j);
@@ -1112,7 +1153,7 @@ class PlancheDeJeu
         for(i = 0; i < nb; i++)//i <= Math.min(p.obtenirL(),moveVisi + 2); i++)
         {
 			trace("ds deuxieme for avant if  i temp mat  :  " + i + "   " + temp + "    "  + mat[p.obtenirL()-i][p.obtenirC()]);
-			temp = p.obtenirL()-(moveVisi + i + 1);
+			temp = p.obtenirL()-(tempo + i + 1);
            
 			if(mat[temp][p.obtenirC()] > 0 && !hasHoles)
             {
@@ -1123,7 +1164,7 @@ class PlancheDeJeu
 	    //**************************************************************
 	    hasHoles = false;
 		
-		for(j = 1; j <= Math.min(mat[0].length-p.obtenirC() - 1, moveVisi + 1); j++)
+		for(j = 1; j <= Math.min(mat[0].length-p.obtenirC() - 1, tempo + 1); j++)
 		{
 				tempB = Number(p.obtenirC());
 			    tempB += Number(j);
@@ -1134,7 +1175,7 @@ class PlancheDeJeu
         for(i = 0; i < nb; i++)//for(i = moveVisi + 1; i <= Math.min(mat[0].length-p.obtenirC()-1, moveVisi + 2);i++)
         {
 			temp = Number(p.obtenirC());
-			temp += Number(moveVisi + i + 1);
+			temp += Number(tempo + i + 1);
 			trace("ds troisieme for avant if  i  temp   mat  L   C  :  " + i + "   " + temp + "    " + mat[p.obtenirL()][temp] + "   " + p.obtenirL() + "   " + p.obtenirC());
             
 			if(mat[p.obtenirL()][temp] > 0 && !hasHoles )
@@ -1147,7 +1188,7 @@ class PlancheDeJeu
 		//******************************************************************************
 		 hasHoles = false;
 		
-		for(j = 1; j <= Math.min(p.obtenirC(),moveVisi + 1); j++)
+		for(j = 1; j <= Math.min(p.obtenirC(),tempo + 1); j++)
 		{
 				tempB = Number(p.obtenirC());
 			    tempB -= Number(j);
@@ -1157,7 +1198,7 @@ class PlancheDeJeu
         for(i = 0; i < nb; i++)//for(i= moveVisi + 1; i <= Math.min(p.obtenirC(), moveVisi + 2);i++)
         {
 			trace("ds dernier for avant if  i  mat  :  " + i + "   " + mat[p.obtenirL()][p.obtenirC()-i]);
-			temp = p.obtenirC()-(moveVisi + i + 1);
+			temp = p.obtenirC()-(tempo + i + 1);
 			
             if(mat[p.obtenirL()][temp] > 0 && !hasHoles)
             {
@@ -1278,15 +1319,14 @@ class PlancheDeJeu
     {
         var i:Number;
 		var temp:Number;
-	    var moveVisibility =  _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility;
-	    
+	    	    
 		//trace("Debut effacerCasesPossibles");
 	
 		//switchBackColor(tableauDesCases[p.obtenirL()][p.obtenirC()]);
 		//another version more light
 		switchBackColorFlash(tableauDesCases[p.obtenirL()][p.obtenirC()]);
 	
-        for(i=1;i<=Math.min(mat.length-p.obtenirL()-1,moveVisibility);i++)
+        for(i = 1; i <= Math.min(mat.length-p.obtenirL() - 1, this.tempoSight); i++)
         {
 			temp = Number(Number(p.obtenirL()) + i);   
 			//trace("ds premier for    i     L    temp"+i+"    "+p.obtenirL()+"    "+temp);
@@ -1304,7 +1344,7 @@ class PlancheDeJeu
             }
         }
 		
-        for(i=1;i<=Math.min(p.obtenirL(),moveVisibility);i++)
+        for(i = 1; i <= Math.min(p.obtenirL(), this.tempoSight);i++)
         {
 			//trace("ds deuxieme for");
 		
@@ -1321,7 +1361,7 @@ class PlancheDeJeu
             }
         }
 		
-        for(i=1;i<=Math.min(mat[0].length-p.obtenirC()-1,moveVisibility);i++)
+        for(i = 1; i <= Math.min(mat[0].length-p.obtenirC()-1, this.tempoSight);i++)
         {
 			temp = Number(Number(p.obtenirC())+i);   
 			//trace("ds troisieme for    i     L    temp"+i+"    "+p.obtenirC()+"    "+temp);
@@ -1339,7 +1379,7 @@ class PlancheDeJeu
             }
         }
 		
-        for(i=1;i<=Math.min(p.obtenirC(),moveVisibility);i++)
+        for(i = 1; i <= Math.min(p.obtenirC(), this.tempoSight);i++)
         {
 			//trace("ds quatrieme for");
 		
@@ -1361,6 +1401,8 @@ class PlancheDeJeu
 		trace("efface banana : " + _level0.loader.contentHolder.objGestionnaireEvenements.bananaState );
 		if(_level0.loader.contentHolder.objGestionnaireEvenements.bananaState)
 		  effacerCasesPossiblesBanane(p);
+		  
+		this.setShowCases(false);
 		//trace("Fin effacerCasesPossibles");
 		//trace("****************************");
     }	
@@ -1371,13 +1413,12 @@ class PlancheDeJeu
     {
         var i:Number;
 		var temp:Number;
-	    var moveVisibility =  _level0.loader.contentHolder.objGestionnaireEvenements.moveVisibility;
-		
-		 var nb:Number = Math.min(6 - moveVisibility, 2);
+	    		
+		var nb:Number = Math.min(6 - this.tempoSight, 2);
 	    
-		for(i = 0; i < nb; i++)//for(i = moveVisibility + 1; i <= Math.min(mat.length-p.obtenirL()-1, moveVisibility + 2); i++) // +2 because Banana cut 2 cases 
+		for(i = 0; i < nb; i++)//for(i = this.tempoSight + 1; i <= Math.min(mat.length-p.obtenirL()-1, this.tempoSight + 2); i++) // +2 because Banana cut 2 cases 
         {
-			temp = Number(Number(p.obtenirL()) + (moveVisibility + i + 1));   
+			temp = Number(Number(p.obtenirL()) + (this.tempoSight + i + 1));   
 					
             if(mat[temp][p.obtenirC()] > 0)
             {
@@ -1389,11 +1430,11 @@ class PlancheDeJeu
             }
         }
 		
-        for(i = 0; i < nb; i++)//for(i = moveVisibility + 1; i <= Math.min(p.obtenirL(), moveVisibility + 2); i++)
+        for(i = 0; i < nb; i++)//for(i = this.tempoSight + 1; i <= Math.min(p.obtenirL(), this.tempoSight + 2); i++)
         {
-			if(mat[p.obtenirL()-(moveVisibility + i + 1)][p.obtenirC()] > 0)
+			if(mat[p.obtenirL()-(this.tempoSight + i + 1)][p.obtenirC()] > 0)
             {
-				switchBackColorFlash(tableauDesCases[p.obtenirL()-(moveVisibility + i + 1)][p.obtenirC()]);
+				switchBackColorFlash(tableauDesCases[p.obtenirL()-(this.tempoSight + i + 1)][p.obtenirC()]);
             }
             else
             {
@@ -1401,9 +1442,9 @@ class PlancheDeJeu
             }
         }
 		
-        for(i = 0; i < nb; i++)//for(i= moveVisibility + 1; i <= Math.min(mat[0].length-p.obtenirC()-1, moveVisibility + 2); i++)
+        for(i = 0; i < nb; i++)//for(i= this.tempoSight + 1; i <= Math.min(mat[0].length-p.obtenirC()-1, this.tempoSight + 2); i++)
         {
-			temp = Number(Number(p.obtenirC())+(moveVisibility + i + 1));   
+			temp = Number(Number(p.obtenirC())+(this.tempoSight + i + 1));   
 			
             if(mat[p.obtenirL()][temp] > 0)
             {
@@ -1415,11 +1456,11 @@ class PlancheDeJeu
             }
         }
 		
-        for(i = 0; i < nb; i++)//for(i= moveVisibility + 1; i <= Math.min(p.obtenirC(), moveVisibility + 2); i++)
+        for(i = 0; i < nb; i++)//for(i= this.tempoSight + 1; i <= Math.min(p.obtenirC(), this.tempoSight + 2); i++)
         {
-			if(mat[p.obtenirL()][p.obtenirC()-(moveVisibility + i + 1)] > 0)
+			if(mat[p.obtenirL()][p.obtenirC()-(this.tempoSight + i + 1)] > 0)
             {
-		    	switchBackColorFlash(tableauDesCases[p.obtenirL()][p.obtenirC()-(moveVisibility + i + 1)]);
+		    	switchBackColorFlash(tableauDesCases[p.obtenirL()][p.obtenirC()-(this.tempoSight + i + 1)]);
             }
             else
             {

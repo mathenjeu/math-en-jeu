@@ -52,21 +52,15 @@ class Personnage
 	private var brainiacRestedTime:Number;
 	//private var bananaState:Boolean;
 	//private var bananaRestedTime:Number;
-	//private var repostCases:Boolean; //????  don't used for the moment
+	
 	private var idClip:Number;           // number used to identify the movie used for perso - from 1 to 12
 	private var orient:String;
 	
 		
-	/*
-	function setRepostCases(repost:Boolean)
+	function getMinigameLoade()
 	{
-		this.repostCases = repost;
+		return this.minigameLoade;
 	}
-	
-	function getRepostCases():Boolean
-	{
-		return this.repostCases;
-	} */
 	function setDirection(dir:String)
 	{
 		this.orient = dir;
@@ -635,7 +629,21 @@ class Personnage
 		
 		//trace("ds deplacePersonnage " + dx + " " + dy);
 		
-		if( boardCentre ) //dx == 0 && dy == 0 && image._currentFrame == 1) 
+		if( boardCentre && _level0.loader.contentHolder.planche.getRepostCases() && (this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage()))
+		{
+			_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			_level0.loader.contentHolder.planche.setRepostCases(false);
+			return;
+			
+		}
+		else if( boardCentre  &&  !_level0.loader.contentHolder.planche.getShowCases() && (this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())) // to consider the case that we don't have possibility to move 
+		{
+			_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			//trace("Le test de deplacement!!!!")
+			return;
+		}
+		else if( boardCentre ) //dx == 0 && dy == 0 && image._currentFrame == 1) 
 		{
 			return;
 		}
@@ -759,11 +767,9 @@ class Personnage
 					break;
 					
 					case "Brainiac":
-					    trace("ligne 760 " + this.faireCollision); 
-						_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
+					   	_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-						trace("ligne 764 " + this.faireCollision);
 						getBrainiacAnimaton();
                         
 					break;
@@ -844,6 +850,7 @@ class Personnage
 					if(!this.minigameLoade)
 					{
 						_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+						_level0.loader.contentHolder.planche.setRepostCases(false);
 						
 					}
 					boardCentre = true;
@@ -1014,11 +1021,10 @@ class Personnage
 	
 	// used to put the Braniac animation on the player  for the 90 sec.
 	function getBrainiacAnimaton()
-	{
-	    var playerUnder:String = this.nom;
-		this.brainiacRestedTime += 90;
-				
-	   if(this.brainiacState == false)
+	{		
+	   var playerUnder:String = this.nom;
+						
+	   if(this.brainiacRestedTime == 0)
 	   {
 	      //******************************** new one *************
 		  // to load the perso .. use ClipLoader to know the moment of complet load
@@ -1057,12 +1063,14 @@ class Personnage
 			 
 		  endOnBrainiac();
 		  
-	   }else if(this.brainiacState == true)
+	   }else if(this.brainiacRestedTime > 0)
 	   {
 		   
 	   }
 	   
-	   this.brainiacState = true;
+	   this.brainiacRestedTime += 90;
+	   //this.brainiacState = true;
+	   _level0.loader.contentHolder.planche.setRepostCases(true);
 	
 	} // end of getBraniacAnimation
 	
@@ -1073,7 +1081,7 @@ class Personnage
 		var id:Number = this.idClip;
 		var restedTime:Number;
 		//var orientDir:String = this.orient;
-		 trace("test brainiac1 " + image._currentFrame)
+		// trace("test brainiac1 " + image._currentFrame)
 	   	  	    
 	    var intervalIDEndBrain = setInterval(etapeEndBrain, 1000, playerUnder);	
 		
