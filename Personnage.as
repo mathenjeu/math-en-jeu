@@ -665,6 +665,7 @@ class Personnage
 	
 						_level0.loader.contentHolder.planche.enleverPiece(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -10000);
+						_level0.loader.contentHolder.array_sons[9].start(0,1);
 						this.faireCollision = null;
 					break;
 				
