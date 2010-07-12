@@ -534,7 +534,7 @@ public class ProtocoleJoueur implements Runnable
 								objNoeudCommande.setAttribute("nom","OkEtPartieDejaCommencee");
 
 								// On va envoyer dans le noeud la liste de chansons que le joueur pourrait aimer
-								ArrayList<Object> liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
+								ArrayList<Object> liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain);
 								for(int i=0; i<liste.size(); i++)
 								{
 									Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("parametre");
@@ -576,7 +576,7 @@ public class ProtocoleJoueur implements Runnable
 								objNoeudCommande.setAttribute("nom", "Musique");
 
 								// On va envoyer dans le noeud la liste de chansons que le joueur pourrait aimer
-								ArrayList<Object> liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
+								ArrayList<Object> liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain);
 								for(int i=0; i<liste.size(); i++)
 								{
 									Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("parametre");
@@ -662,7 +662,7 @@ public class ProtocoleJoueur implements Runnable
 							objNoeudCommande.setAttribute("nom", "Musique");
 
 							// On va envoyer dans le noeud la liste de chansons que le joueur pourrait aimer
-							ArrayList<Object> liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain.obtenirCleJoueur());
+							ArrayList<Object> liste = objControleurJeu.obtenirGestionnaireBD().obtenirListeURLsMusique(objJoueurHumain);
 							for(int i=0; i<liste.size(); i++)
 							{
 								Element objNoeudParametreMusique = objDocumentXMLSortie.createElement("parametre");
