@@ -23,7 +23,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.text.SimpleDateFormat; 
 import ServeurJeu.Configuration.GestionnaireMessages;
-import java.util.Vector;
 
 /**
  * @author Jean-François Brind'Amour
@@ -448,6 +447,7 @@ public class GestionnaireBD
         	" and qi.is_valid = 1 " +
         	" and qi.question_flash_file is not NULL" +
         	" and qi.feedback_flash_file is not NULL";
+        	
         	remplirBoiteQuestionsSA( boiteQuestions, strRequeteSQL_SA, categorie );
         	
         	String strRequeteSQL_TF = "SELECT DISTINCT a.is_right,qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
@@ -461,6 +461,7 @@ public class GestionnaireBD
         	" and qi.is_valid = 1 " +
         	" and qi.question_flash_file is not NULL" +
         	" and qi.feedback_flash_file is not NULL";
+        	
         	remplirBoiteQuestionsTF( boiteQuestions, strRequeteSQL_TF, categorie );
         	
        	   
@@ -625,15 +626,18 @@ public class GestionnaireBD
   /** This function queries the DB to find the player's musical preferences  ***
    * and returns a Vector containing URLs of MP3s the player might like
    */
-  public ArrayList<Object> obtenirListeURLsMusique(int cleJoueur)
+  public ArrayList<Object> obtenirListeURLsMusique(JoueurHumain player)
 	{
             ArrayList<Object> liste = new ArrayList<Object>();
+            //int [] levels = player.obtenirCleNiveau();
+            
             String URLMusique = GestionnaireConfiguration.obtenirInstance().obtenirString("musique.url");
-            String strRequeteSQL = "SELECT music_file.filename FROM music_file,music_file_category,music_category,music_category_user WHERE ";
-            strRequeteSQL       += "music_file.music_file_id = music_file_category.music_file_id AND ";
-            strRequeteSQL       += "music_file_category.music_category_id = music_category.music_category_id AND ";
-            strRequeteSQL       += "music_category.music_category_id = music_category_user.music_category_id AND ";
-            strRequeteSQL       += "music_category_user.user_id = " + Integer.toString(cleJoueur);
+            String strRequeteSQL = "SELECT music_file.filename FROM music_file  WHERE  music_file.level_id = ";
+            // we use levels[0] - because all levels has the same value
+            strRequeteSQL       += "(Select level from user_subject_level where user_id = ";
+            strRequeteSQL       += player.obtenirCleJoueur();
+            strRequeteSQL       += " and category_id = 0);";
+            
             try
             {
                     synchronized( requete )
@@ -1778,8 +1782,10 @@ public class GestionnaireBD
 	}// end methode
 	
 	//******************************************************************
+	
 	/**
 	 * Methode used to create the report for a room
+	 * used for the moduleProf
 	 * @param roomName 
 	 */
 	public String getReport(int creator_id, int room_id, String langue)
@@ -1875,6 +1881,7 @@ public class GestionnaireBD
         }
 		
 	}// end methode
+	
 	
 	/**
 	 * Methode satellite to the makeReport()
