@@ -1285,12 +1285,7 @@ class GestionnaireEvenements
 				count = this.listeDesPersonnages.length; 
 				for(var i:Number = 0; i < count; i++)
                 {
-	                if(i>3) {j=1;}
-					if(i>7) {j=2;}
-					if(i>11) {j=3;}
-					
-					
-                    var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
+					var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
 										    
                     if(idDessin != 0)
 					{
@@ -1300,17 +1295,12 @@ class GestionnaireEvenements
 					   var idPers =  calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
 					   var cloColor:String = this.listeDesPersonnages[i].clocolor;
 					 
-					   // change back if not used perso load
-	                  movClip = _level0.loader.contentHolder.refLayer.createEmptyMovieClip("Personnage" + idPers,i);
-					   
-					  this.drawUserFrame3(i, cloColor, idDessin, movClip);
+					   this.drawUserFrame3(i, cloColor, idDessin, _level0.loader.contentHolder["player" + i]);
 					  					  
 				       _level0.loader.contentHolder["joueur"+(i+1)] = this.listeDesPersonnages[i].nom;
-                                              
-					   movClip._x = 485 - j*60;
-                       movClip._y = 150 + i*60-j*240;
-					   movClip._xscale -= 70;
-					   movClip._yscale -= 70;
+					   _level0.loader.contentHolder["player" + i]._xscale -= 70;
+					   _level0.loader.contentHolder["player" + i]._yscale -= 70;
+                     
 					} // if
 				 }// for
 				
@@ -2852,11 +2842,7 @@ class GestionnaireEvenements
         var movClip:MovieClip;
         var j:Number=0;
         for (var i:Number = 0; i < this.maxPlayers; i++)
-        {
-	        
-			if(i>3) j=1;
-			if(i>7) j=2;
-			if(i>11) j=3;
+        {	       
         	if(listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur)
         	{
             	this.listeDesPersonnages[i].id = objetEvenement.idPersonnage;
@@ -2868,19 +2854,12 @@ class GestionnaireEvenements
 				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
             	var cloCol:String = objetEvenement.clothesColor;
 				
-				movClip = _level0.loader.contentHolder.refLayer.createEmptyMovieClip("Personnage" + idPers,i);
-				
-			    this.drawUserFrame3(i, cloCol, idDessin, movClip);
-				
-				//movClip = _level0.loader.contentHolder.refLayer.loadMovie("perso1.swf","b" + i,i);
-				//movClip = _level0.loader.contentHolder.refLayer.attachMovie("Personnage" + idDessin,"b" + i, 100*i );
-            	
-				movClip._x = 485 - j*60;
-                movClip._y = 150 + i*60 - j*240;
-				movClip._xscale -= 70;
-				movClip._yscale -= 70;
-				//trace("idPers : " + idPers + "\n" + "idDessin");
-		    
+				 this.drawUserFrame3(i, cloCol, idDessin, _level0.loader.contentHolder["player" + i]);
+					  					  
+				 _level0.loader.contentHolder["joueur"+(i+1)] = this.listeDesPersonnages[i].nom;
+		         _level0.loader.contentHolder["player" + i]._xscale -= 70;
+			     _level0.loader.contentHolder["player" + i]._yscale -= 70;
+										    
             	break;
         	}
         	
@@ -2908,7 +2887,7 @@ class GestionnaireEvenements
 			        jouersStarted[i].pointage = this.listeDesPersonnages[i].pointage;
 			        jouersStarted[i].role = this.listeDesPersonnages[i].role;
 					jouersStarted[i].idessin = this.listeDesPersonnages[i].idessin;					
-					trace("Dans menuointage : " + jouersStarted[i].pointage + " " + jouersStarted[i].idessin + " " + this.listeDesPersonnages[i].idessin );
+					//trace("Dans menuointage : " + jouersStarted[i].pointage + " " + jouersStarted[i].idessin + " " + this.listeDesPersonnages[i].idessin );
 		}// end for
 		
 		// to cut the holes ...
@@ -2924,9 +2903,9 @@ class GestionnaireEvenements
 	////////////////////////////////////////////////////////////////////////////////////////////////////	
 	function remplirMenuPointage()
     {
-		trace("*********************************************");
-    	trace("debut de remplirMenuPointage   ");
-		trace("type: " + this.typeDeJeu);
+		//trace("*********************************************");
+    	//trace("debut de remplirMenuPointage   ");
+		//trace("type: " + this.typeDeJeu);
 				
 		// we make an array to sort the players regarding theirs points 
 		var jouersStarted:Array = new Array();
@@ -2940,7 +2919,7 @@ class GestionnaireEvenements
 					jouersStarted[i].win = this.listeDesPersonnages[i].win;
 					jouersStarted[i].clocol = this.listeDesPersonnages[i].clocolor;
 					
-					trace("Dans pointage : " + jouersStarted[i].nomUtilisateur + " " + this.listeDesPersonnages[i].nom );
+					//trace("Dans pointage : " + jouersStarted[i].nomUtilisateur + " " + this.listeDesPersonnages[i].nom );
 		}// end for
 		
 		//sort the elements using a compare function
@@ -3757,7 +3736,7 @@ function drawUserFrame3(i:Number, colorC:String, idDessin:Number, movClip:MovieC
 		this["mcLoaderString"].addListener(this["mclListenerString"]);
 					
 	   
-	   this["mcLoaderString"].loadClip("persox" + idDessin + ".swf", movClip);
+	   this["mcLoaderString"].loadClip("Perso/persox" + idDessin + ".swf", movClip);
 }
 
 /*
