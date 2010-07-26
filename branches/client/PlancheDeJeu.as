@@ -830,7 +830,7 @@ class PlancheDeJeu
 	 
 	 this.tempoSight = 7;//_level0.loader.contentHolder.objGestionnaireEvenements.getMoveSight();
 	 var tempo = _level0.loader.contentHolder.objGestionnaireEvenements.getMoveSight();
-	 trace("Move : " + tempo + " "+ p.getBrainiac());
+	 //trace("Move : " + tempo + " "+ p.getBrainiac());
 	 if( !(p.getRole() == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") && isInWinTheGame)
 	 { 
 		//trace("Debut afficherCasesPossibles");
@@ -1093,7 +1093,7 @@ class PlancheDeJeu
 		trace("Fin afficher cases possibles"); 
 		
 		// to put Banana cases 
-		trace("in the GE " + _level0.loader.contentHolder.objGestionnaireEvenements.bananaState);
+		//trace("in the GE " + _level0.loader.contentHolder.objGestionnaireEvenements.bananaState);
 		if(_level0.loader.contentHolder.objGestionnaireEvenements.bananaState)
 		   afficherCasesPossiblesBanane(p);
 	 }// end if for watcher
@@ -1152,7 +1152,7 @@ class PlancheDeJeu
 	
         for(i = 0; i < nb; i++)//i <= Math.min(p.obtenirL(),moveVisi + 2); i++)
         {
-			trace("ds deuxieme for avant if  i temp mat  :  " + i + "   " + temp + "    "  + mat[p.obtenirL()-i][p.obtenirC()]);
+			//trace("ds deuxieme for avant if  i temp mat  :  " + i + "   " + temp + "    "  + mat[p.obtenirL()-i][p.obtenirC()]);
 			temp = p.obtenirL()-(tempo + i + 1);
            
 			if(mat[temp][p.obtenirC()] > 0 && !hasHoles)
@@ -1176,7 +1176,7 @@ class PlancheDeJeu
         {
 			temp = Number(p.obtenirC());
 			temp += Number(tempo + i + 1);
-			trace("ds troisieme for avant if  i  temp   mat  L   C  :  " + i + "   " + temp + "    " + mat[p.obtenirL()][temp] + "   " + p.obtenirL() + "   " + p.obtenirC());
+			//trace("ds troisieme for avant if  i  temp   mat  L   C  :  " + i + "   " + temp + "    " + mat[p.obtenirL()][temp] + "   " + p.obtenirL() + "   " + p.obtenirC());
             
 			if(mat[p.obtenirL()][temp] > 0 && !hasHoles )
             {
@@ -1197,7 +1197,7 @@ class PlancheDeJeu
 		
         for(i = 0; i < nb; i++)//for(i= moveVisi + 1; i <= Math.min(p.obtenirC(), moveVisi + 2);i++)
         {
-			trace("ds dernier for avant if  i  mat  :  " + i + "   " + mat[p.obtenirL()][p.obtenirC()-i]);
+			//trace("ds dernier for avant if  i  mat  :  " + i + "   " + mat[p.obtenirL()][p.obtenirC()-i]);
 			temp = p.obtenirC()-(tempo + i + 1);
 			
             if(mat[p.obtenirL()][temp] > 0 && !hasHoles)
@@ -1398,7 +1398,7 @@ class PlancheDeJeu
 	
 		_root.objGestionnaireInterface.deleterCasesSpeciales(); 
 		
-		trace("efface banana : " + _level0.loader.contentHolder.objGestionnaireEvenements.bananaState );
+		//trace("efface banana : " + _level0.loader.contentHolder.objGestionnaireEvenements.bananaState );
 		if(_level0.loader.contentHolder.objGestionnaireEvenements.bananaState)
 		  effacerCasesPossiblesBanane(p);
 		  

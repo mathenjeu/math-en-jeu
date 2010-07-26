@@ -50,12 +50,22 @@ class Personnage
 	private var clothesColor:String;
 	private var brainiacState:Boolean;
 	private var brainiacRestedTime:Number;
-	//private var bananaState:Boolean;
+	private var bananaId:Number;
 	//private var bananaRestedTime:Number;
 	
 	private var idClip:Number;           // number used to identify the movie used for perso - from 1 to 12
 	private var orient:String;
 	
+	
+	function setBananaId(idNumber:Number)
+	{
+		this.bananaId = idNumber;
+	}
+	
+	function getBananaId():Number
+	{
+		return this.bananaId;
+	}
 		
 	function getMinigameLoade()
 	{
@@ -226,11 +236,14 @@ class Personnage
 			if(peutUtiliserObjet(nomObj)&& (listeObjets[nomObj].length >= 1))
 			{
 				if(nomObj == "Banane"){
-                      var objID:Object = new Object();
-					  objID.id = listeObjets[nomObj][listeObjets[nomObj].length - 1];
+                      var objID:Number = listeObjets[nomObj][listeObjets[nomObj].length - 1];
+					  _level0.loader.contentHolder.planche.obtenirPerso().setBananaId(objID);
 					 
 			          var bananaClip:MovieClip;
-                      bananaClip = _level0.loader.contentHolder.attachMovie("bananaToss", "toss", 2021, objID);
+                      //bananaClip = _level0.loader.contentHolder.attachMovie("bananaToss", "toss", 2021, objID);
+					  bananaClip = _level0.loader.contentHolder.createEmptyMovieClip("toss", 2021);
+					  _level0.loader.contentHolder.toss.loadMovie("GUI/bananaToss.swf");
+					  
 					  
 					  bananaClip._x = 22;
                       bananaClip._y = 70;
@@ -589,7 +602,7 @@ class Personnage
 		if(!(role == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")){  
   
            image =  _level0.loader.contentHolder.referenceLayer.createEmptyMovieClip("Personnage" + idPers, niveau);
-		    myLoader.loadClip("perso" + nomClip + ".swf", image); 
+		    myLoader.loadClip("Perso/perso" + nomClip + ".swf", image); 
 					
 		}
 				
@@ -1011,7 +1024,7 @@ class Personnage
 	function slippingBanana()
 	{
 		this.image.gotoAndPlay("slipping");
-		trace("slipping !!!!!!!!!!!!!!!!!");
+		//trace("slipping !!!!!!!!!!!!!!!!!");
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -1055,7 +1068,7 @@ class Personnage
           };
 		  myLoader.addListener(mclListener);
 
-          myLoader.loadClip("perso" + this.idClip + "brainiac.swf", image); 
+          myLoader.loadClip("Perso/perso" + this.idClip + "brainiac.swf", image); 
 		  
 		
 		 
@@ -1109,7 +1122,7 @@ class Personnage
 			    image.dtNom._x = - 42;
 				_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).setDirection("left");
 			  } 
-			  myLoader.loadClip("perso" + id + ".swf", image); 
+			  myLoader.loadClip("Perso/perso" + id + ".swf", image); 
 			  clearInterval(intervalIDEndBrain);
 			  
 		   }  
