@@ -141,7 +141,7 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 			salle = "CHOIX DES SALLES"
       chargementSalles = "Chargement de la liste des salles en cours" 
 			boutonRetour = "Retour"
-			boutonContinuer = "Joindre"
+			boutonContinuer = "Continue"
 			boutonQuitterX = "Quitter la partie.."
 			tableNameLabel = "Nom de la Table"
 			tableLinesLabel = "Lignes"
@@ -177,8 +177,8 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 			timeLabel = "Temps"
 			
 			choixPerso = "Choisissez votre personnage."
-
-			nonDisponible = "Non disponible"
+			selectPlayerText = "SELECTION DU JOUEUR"
+			selectPlayerInfo = "Sélectionnez un joueur de notre équipe coloré"
 
 			inconnu = "Inconnu"
 			demarrerMaintenant = "Démarrer maintenant"
@@ -239,12 +239,9 @@ Pour les prochaines 90 secondes, les questions qui vous seront posées seront pl
 			
 
 			GUIutiliserLivre = "Voulez-vous vraiment utiliser le livre?"
-			
 			btnOui = "OUI"
-
-			btnNon = "NON"
-
-			deconnecte = "déconnecté"
+  		btnNon = "NON"
+  		deconnecte = "déconnecté"
 
 	
 	
