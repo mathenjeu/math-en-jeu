@@ -3731,6 +3731,9 @@ function drawUserFrame3(i:Number, colorC:String, idDessin:Number, movClip:MovieC
        this["mclListenerString"].onLoadComplete = function(target_mc:MovieClip) {
             		    			  
 		   target_mc.clothesCol = colorC;
+		   // not to see another players on phase 1 of frame 3
+		   if(!_level0.loader.contentHolder.seePlayers)
+		      target_mc._visible = false;
 			             
 		};
 		this["mcLoaderString"].addListener(this["mclListenerString"]);
