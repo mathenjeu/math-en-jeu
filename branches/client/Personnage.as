@@ -27,6 +27,7 @@ import mx.transitions.Tween;
 import mx.transitions.easing.*;
 import flash.filters.*;
 import mx.controls.Loader;
+//import flash.filters.ColorMatrixFilter;
 
 
 
@@ -48,6 +49,7 @@ class Personnage
 	private var listeSurMagasin:Array;	 // sert a recuperer la liste d'objets du magasin lorsque qu'on va sur une case magasin
 	private var minigameLoade:Boolean;
 	private var clothesColor:String;
+	private var colorFilter:ColorMatrixFilter; // filter to color our perso 
 	private var brainiacState:Boolean;
 	private var brainiacRestedTime:Number;
 	private var bananaId:Number;
@@ -573,6 +575,8 @@ class Personnage
 		this.prochainePosition = new Point(xx,yy);
 		this.clothesColor = cloColor;
 		this.idClip = nomClip;
+        this.colorFilter = _level0.loader.contentHolder.objGestionnaireEvenements.colorMatrixPerso(this.clothesColor, this.idClip);
+		var filterC:ColorMatrixFilter = this.colorFilter;
 		this.brainiacState = false;
 		this.brainiacRestedTime = 0; 
 		
@@ -582,7 +586,7 @@ class Personnage
 		
 		var mclListener:Object = new Object();
         mclListener.onLoadComplete = function(target_mc:MovieClip) {
-            target_mc.clothesCol = cloColor;
+            target_mc.filterC = filterC;
 		    target_mc.nom = nom;
 						
 			target_mc.gotoAndPlay(10);
@@ -1037,6 +1041,8 @@ class Personnage
 	function getBrainiacAnimaton()
 	{		
 	   var playerUnder:String = this.nom;
+	   // to color our perso
+	   var filterC:ColorMatrixFilter = this.colorFilter;
 						
 	   if(this.brainiacRestedTime == 0)
 	   {
@@ -1049,7 +1055,8 @@ class Personnage
 				image._xscale = Math.abs(image._xscale);
 			    image.dtNom._xscale = Math.abs(image._xscale);
 			    image.dtNom._x = - 42;
-				this.orient == "left"
+				this.orient == "left";
+				
 		  } 
 		  var nameX:String = this.nom;
 		  var orientDir:String = this.orient;
@@ -1063,8 +1070,12 @@ class Personnage
 			    target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
 			    target_mc.dtNom._x = 42;
 			}*/
+			//target_mc.clothesCol = col;
+			target_mc.filterC = filterC; 
 			target_mc.nom = nameX;
 			target_mc.gotoAndPlay("grow");
+			
+			
           };
 		  myLoader.addListener(mclListener);
 
@@ -1094,9 +1105,8 @@ class Personnage
 		var playerUnder:String = this.nom;
 		var id:Number = this.idClip;
 		var restedTime:Number;
-		//var orientDir:String = this.orient;
-		// trace("test brainiac1 " + image._currentFrame)
-	   	  	    
+		var filterC:ColorMatrixFilter = this.colorFilter;
+			   	  	    
 	    var intervalIDEndBrain = setInterval(etapeEndBrain, 1000, playerUnder);	
 		
 		function etapeEndBrain():Void
@@ -1133,7 +1143,9 @@ class Personnage
 		var mclListener:Object = new Object();
 		
         mclListener.onLoadComplete = function(target_mc:MovieClip) {
-            target_mc.nom = playerUnder;
+            
+			target_mc.filterC = filterC;
+			target_mc.nom = playerUnder;
 			target_mc.gotoAndStop(1);
 						
         };
