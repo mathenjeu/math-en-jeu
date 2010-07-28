@@ -3721,6 +3721,7 @@ function drawToolTip(messInfo:String, mcMovie:MovieClip)
 function drawUserFrame3(i:Number, colorC:String, idDessin:Number, movClip:MovieClip)
 {
 	 
+	 var filterC:ColorMatrixFilter = colorMatrixPerso(colorC, idDessin);
 	//***********************************************
 	// to load the perso .. use ClipLoader to know the moment of complet load
     // create them dinamicaly
@@ -3730,7 +3731,7 @@ function drawUserFrame3(i:Number, colorC:String, idDessin:Number, movClip:MovieC
 	   this["mclListenerString"] = new Object();
        this["mclListenerString"].onLoadComplete = function(target_mc:MovieClip) {
             		    			  
-		   target_mc.clothesCol = colorC;
+		   target_mc.filterC = filterC;
 		   // not to see another players on phase 1 of frame 3
 		   if(!_level0.loader.contentHolder.seePlayers)
 		      target_mc._visible = false;
@@ -3760,7 +3761,7 @@ function testPlayers():Boolean
 	return verify;
 }// end methode
 
-
+// coloring with ColorMatrixFilter a movie
 function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
 {
   
@@ -3783,9 +3784,9 @@ function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
             break;
             
 			 case 2:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
+                 rr = rr/43;
+                 gg = gg/189;
+                 bb = bb/95;
                 trace("Choix de la dessin 1");
             break;
 			
@@ -3862,6 +3863,111 @@ function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
    
    mov.filters = new Array(filterC);
 }
+
+// used to calculate the filter for our persos
+// this take out the delay in coloring our pictures
+// we need as parameters the color to color it and the id of the picture
+// because each picture has his initial parameters
+function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
+{
+  
+	   // to obtain RGB values of our color
+       var rr:Number = Number("0x" + col.substr(2,2).toString(10));
+       var gg:Number = Number("0x" + col.substr(4,2).toString(10));
+       var bb:Number = Number("0x" + col.substr(6,2).toString(10));
+
+       //trace("rr : " + rr + " gg : " + gg + " bb : " + bb);
+
+      // to obtain the multipliers
+      // the RGB of base color of perso1 is 245,64,75
+      switch(idD)
+      {
+            case 1:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+            
+			 case 2:
+                 rr = rr/43;
+                 gg = gg/189;
+                 bb = bb/95;
+                trace("Choix de la dessin 1");
+            break;
+			
+			 case 3:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+			
+			 case 4:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+			
+			 case 5:
+                 rr = rr/45;
+                 gg = gg/50;
+                 bb = bb/88;
+                trace("Choix de la dessin 5");
+            break;
+			
+			 case 6:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+			
+			 case 7:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+			
+			 case 8:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+			
+			 case 9:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+			
+			 case 10:
+                 rr = rr/245;
+                 gg = gg/64;
+                 bb = bb/75;
+                trace("Choix de la dessin 1");
+            break;
+			
+            default:
+                trace("Erreur Inconnue");
+     }
+   
+
+     var mat:Array = new Array();
+     mat = mat.concat([rr, 0, 0, 0, 0]); // red
+     mat = mat.concat([0, gg, 0, 0, 0]); // green
+     mat = mat.concat([0, 0, bb, 0, 0]); // blue
+     mat = mat.concat([0, 0, 0, 1, 0]); // alpha
+	 
+	 var filterC:ColorMatrixFilter = new ColorMatrixFilter(mat);
+	 
+	 return filterC;
+	  
+} //end method
 
 // to take a good Id for our perso 
 /*
