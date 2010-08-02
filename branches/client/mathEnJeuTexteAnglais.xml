@@ -2,7 +2,7 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
 	Messagerie = ""
-	  welcomeMess = "Welcome to Math Amaze!!!"
+	  welcomeMess = "Welcome to Math Amaze!"
 	  bananaMess = " threw a Banana at "
 	  outMess = " left the game."
 	  InMess = " is in again!"
@@ -41,7 +41,7 @@ to escape!"
     linkProf1 = "Are you a teacher?"
     linkProf2 = "Click here..."
     linkProf3 = "to enter the Teacher's Lounge."
-    erreurRole = "Access denied!!!
+    erreurRole = "Access denied!
 This section is for professors only.
 If you are a theacher and you need to use this section contact us..."
     erreurContact = ""
@@ -100,7 +100,7 @@ If you are a theacher and you need to use this section contact us..."
 	  
 	  
 	mathemaQuoi_betaNEW = ""
-	  errorPWD = "Wrong password! Try again or choose another room!"
+	  errorPWD = "Wrong password! Try again or choose another room."
     pwdAlert = "Error!"
     fermerAlert = "Do you really want to go out?"
     textGUI_PWD = "You need a password to enter this room..."  
@@ -201,7 +201,7 @@ join  and the game mode you'd like to play"
 			sonsLabel = "Sounds"
 			musiqueLabel = "Music"
 
-			texteMauvaiseReponse = "Incorrect!!!"
+			texteMauvaiseReponse = "Incorrect"
 			punitionTexte = "Time left to your penalty:"
 			penalite = "Penalty :"
 			secondes = "seconds"

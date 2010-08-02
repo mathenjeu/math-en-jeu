@@ -201,7 +201,7 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 			sonsLabel = "Sons"
 			musiqueLabel = "Musique"
 
-			texteMauvaiseReponse = "Mauvaise réponse!"
+			texteMauvaiseReponse = "Mauvaise réponse"
 			punitionTexte = "Temps restant à votre pénalité:"
 			penalite = "Pénalité:"
 			secondes = "secondes"
