@@ -39,7 +39,7 @@ public class Brainiac extends ObjetUtilisable {
 	public Brainiac(int id, boolean estVisible)
 	{
 		// Appeler le constructeur du parent
-		super(id, estVisible, UID_OU_BRANIAC, PRIX, EST_LIMITE, PEUT_ETRE_ARME, TYPE_OBJET);
+		super(id, estVisible, UID_OU_BRAINIAC, PRIX, EST_LIMITE, PEUT_ETRE_ARME, TYPE_OBJET);
 	}
 
 	public static BrainiacTask utiliserBrainiac(JoueurHumain player, long delay)

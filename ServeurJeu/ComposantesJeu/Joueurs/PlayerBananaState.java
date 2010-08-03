@@ -35,13 +35,13 @@ public class PlayerBananaState {
 	// constructor - in the first time we are not in the Banana
 	public PlayerBananaState(JoueurHumain player) {
 		super();
-		this.setisUnderBananaEffects(false);
+		//this.setisUnderBananaEffects(false);
 		this.player = player;
 	}
 	
 	public PlayerBananaState(JoueurVirtuel vplayer) {
 		super();
-		this.setisUnderBananaEffects(false);
+		//this.setisUnderBananaEffects(false);
 		this.vplayer = vplayer;
 	}
 

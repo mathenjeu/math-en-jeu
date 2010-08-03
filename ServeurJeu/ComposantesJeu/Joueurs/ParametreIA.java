@@ -167,7 +167,7 @@ public class ParametreIA {
 		    new ParametreIAObjet(9950, 201, 6, 300, 100, 2000, 10, 4, 50);
 		
 		// Objet Utilisable "Braniac" 
-		tParametresIAObjetUtilisable[Objet.UID_OU_BRANIAC] = 
+		tParametresIAObjetUtilisable[Objet.UID_OU_BRAINIAC] = 
 		    new ParametreIAObjet(9950, 151, 6, 300, 100, 900, 10, 4, 50);
 		
 		// Paramètres pour les pièces

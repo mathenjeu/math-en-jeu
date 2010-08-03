@@ -38,13 +38,13 @@ public class PlayerBrainiacState {
 	// constructor - in the first time we are not in the Braniac
 	public PlayerBrainiacState(JoueurHumain player) {
 		super();
-		this.setInBrainiac(false);
+		//this.setInBrainiac(false);
 		this.player = player;
 	}
 	
 	public PlayerBrainiacState(JoueurVirtuel vplayer) {
 		super();
-		this.setInBrainiac(false);
+		//this.setInBrainiac(false);
 		this.vplayer = vplayer;
 	}
 
