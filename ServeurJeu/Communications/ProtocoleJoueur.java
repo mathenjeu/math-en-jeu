@@ -106,10 +106,7 @@ public class ProtocoleJoueur implements Runnable
     // On obtiendra la langue du joueur pour pouvoir construire la boîte de questions
     public String langue;
 
-    // Type de jeu (ex. mathEnJeu)
-    //public String gameType;
-
-	// Déclaration d'une variable qui va permettre de savoir si le joueur
+   	// Déclaration d'une variable qui va permettre de savoir si le joueur
 	// en en train de joueur une partie ou non. Cet état sera utile car on
 	// ne déconnectera pas un joeur en train de joueur via le vérification de connexion
 	private boolean bolEnTrainDeJouer;
