@@ -24,7 +24,7 @@ public class Regles
 	
 	// Déclaration d'une liste qui contient les objets utilisables possibles 
 	// (le contenu est un objet ReglesObjetUtilisable)
-	private TreeSet<Objet> lstObjetsUtilisablesPossibles;
+	private TreeSet<ReglesObjetUtilisable> lstObjetsUtilisablesPossibles;
 	
 	// Cette variable permet de savoir si on permet le chat ou non
 	private boolean bolPermetChat;
@@ -98,7 +98,7 @@ public class Regles
 	    lstMagasinsPossibles = new TreeSet<Magasin>(objReglesComparator);
 	    //lstCasesSpecialesPossibles = new TreeSet<CaseSpeciale>(objReglesComparator);
 	    //lstCasesCouleurPossibles = new TreeSet<CaseCouleur>(objReglesComparator);
-	    lstObjetsUtilisablesPossibles = new TreeSet<Objet>(objReglesComparator);
+	    lstObjetsUtilisablesPossibles = new TreeSet<ReglesObjetUtilisable>(objReglesComparator);
 	    
 	    // Initialiser les variables par défaut
 	    bolPermetChat = true;
@@ -157,7 +157,7 @@ public class Regles
 	 * 
 	 * @return TreeSet : La liste des objets utilisables possibles
 	 */
-	public TreeSet<Objet> obtenirListeObjetsUtilisablesPossibles()
+	public TreeSet<ReglesObjetUtilisable> obtenirListeObjetsUtilisablesPossibles()
 	{
 	   return lstObjetsUtilisablesPossibles;
 	}

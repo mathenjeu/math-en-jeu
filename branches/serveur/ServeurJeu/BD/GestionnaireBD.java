@@ -1132,7 +1132,7 @@ public class GestionnaireBD
     * @param objReglesSalle
     */
 	//@SuppressWarnings("unchecked")
-	public void chargerRegllesTable(Regles objReglesTable, String gameType) {
+	public void chargerRegllesTable(Regles objReglesTable, String gameType, int roomId) {
 			
 		int gameTypeID = 1; // default type - mathEnJeu
 		if(gameType.equals("Tournament"))gameTypeID = 2;
@@ -1197,12 +1197,12 @@ public class GestionnaireBD
 		TreeSet magasins = objReglesTable.obtenirListeMagasinsPossibles();
 		//TreeSet casesCouleur = objReglesTable.obtenirListeCasesCouleurPossibles();
 		//TreeSet casesSpeciale = objReglesTable.obtenirListeCasesSpecialesPossibles();
-		TreeSet objetsUtilisables = objReglesTable.obtenirListeObjetsUtilisablesPossibles();
+		TreeSet<ReglesObjetUtilisable> objetsUtilisables = objReglesTable.obtenirListeObjetsUtilisablesPossibles();
 		
-		this.chargerReglesMagasins(magasins, gameTypeID);
+		this.chargerReglesMagasins(magasins, roomId);
 		//this.chargerReglesCasesCouleur(casesCouleur, roomId);
 		//this.chargerReglesCasesSpeciale(casesSpeciale, roomId);
-		this.chargerReglesObjetsUtilisables(objetsUtilisables, gameTypeID);
+		this.chargerReglesObjetsUtilisables(objetsUtilisables, roomId);
 		
 	}// fin méthode chargerReglesSalle
 	
@@ -1286,7 +1286,7 @@ public class GestionnaireBD
      * @param magasins 
      * @param roomId
      */
-    private void chargerReglesMagasins(TreeSet<ReglesMagasin> magasins, int ruleId) {
+    private void chargerReglesMagasins(TreeSet<ReglesMagasin> magasins, int roomId) {
     	 	
          try
  		{
@@ -1296,7 +1296,7 @@ public class GestionnaireBD
  					" FROM room_shop, shop_info " +
  					" WHERE shop_info.language_id = " + 1 + 
  					" AND room_shop.shop_id = shop_info.shop_id " +
- 					" AND  room_shop.room_id = " + ruleId +
+ 					" AND  room_shop.room_id = " + roomId +
  					";");
  				while(rst.next())
  				{

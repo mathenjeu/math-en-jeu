@@ -47,10 +47,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	// Déclaration d'une référence vers le gestionnaire d'événements
 	private GestionnaireEvenements objGestionnaireEvenements;
 	
-    // On déclare la classe qui permettra les déplacements du WinTheGame
-    //private WinTheGame winTheGame;
-	
-	// points for Finish WinTheGame
+    // points for Finish WinTheGame
 	private ArrayList<Point> lstPointsFinish = new ArrayList<Point>();
         
 	// Déclaration d'une référence vers le contr™leur de jeu
@@ -191,7 +188,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Définir les règles de jeu pour la salle courante
 		
 		objRegles = new Regles();
-		objGestionnaireBD.chargerRegllesTable(objRegles, gameType);
+		objGestionnaireBD.chargerRegllesTable(objRegles, gameType, salleParente.getRoomID());
 		MAX_NB_PLAYERS = objRegles.getMaxNbPlayers();
 		setTableName(name);
 		

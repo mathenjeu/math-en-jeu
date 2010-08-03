@@ -173,13 +173,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 					// Définir la valeur de la case au point spécifié à la case 
 					// d'identification
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Magasin3());
-				}else if (objReglesMagasin.obtenirNomMagasin().equals("Magasin4"))
-				{
-					// Définir la valeur de la case au point spécifié à la case 
-					// d'identification
-					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Magasin4());
 				}
-				
 				// Aller chercher une référence vers le magasin que l'on vient de créer
 				Magasin objMagasin = (Magasin)((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).obtenirObjetCase();
 
@@ -369,8 +363,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Banane(intCompteurIdObjet, bolEstVisible));					
 				}
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Brainiac") ||
-                                		objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Brainiac"))
+                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Brainiac"))
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Brainiac(intCompteurIdObjet, bolEstVisible));					
 				}
