@@ -3054,7 +3054,7 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder["box_question"].removeMovieClip();
 		_level0.loader.contentHolder.toss.removeMovieClip();
 		_level0.loader.contentHolder["fond_MiniGame"]._y += 400;
-		_level0.loader.contentHolder.branBox.removeMovieClip();
+		_level0.loader.contentHolder.brainBox.removeMovieClip();
 		_level0.loader.contentHolder.bananaBox.removeMovieClip();
 		_level0.loader.contentHolder.toolTip.removeMovieClip();
 		
