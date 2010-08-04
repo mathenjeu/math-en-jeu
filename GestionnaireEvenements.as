@@ -2092,6 +2092,7 @@ class GestionnaireEvenements
 					{
 			     		trace("deplacement refuse  ");
 						_level0.loader.contentHolder.url_retro = objetEvenement.explication;
+						_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 
                         _level0.loader.contentHolder.box_question.monScroll._visible = false;
 						var ptX:Number = _level0.loader.contentHolder.box_question.monScroll._x;

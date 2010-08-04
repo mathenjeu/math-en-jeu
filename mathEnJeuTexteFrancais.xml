@@ -128,9 +128,9 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 	
 		frame1 = ""
 		
-		  selectRoom = "Salle"
-		  selectTable = "Table"
-		  selectPlayer = "Player"
+		  selectRoom = "Sélectez une Salle"
+		  selectTable = "Sélectez une Table"
+		  selectPlayer = "Sélectez un dessin"
 		 
 			descriptionPrincipale = "C'est le coeur de Math en Jeu. Une immense banque de questions se penchant sur tous les domaines des mathématiques."
 			
