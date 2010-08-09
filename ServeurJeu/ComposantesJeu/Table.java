@@ -45,20 +45,20 @@ import ServeurJeu.Evenements.EvenementUtiliserObjet;
 public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 {
 	// Déclaration d'une référence vers le gestionnaire d'événements
-	private GestionnaireEvenements objGestionnaireEvenements;
+	private final GestionnaireEvenements objGestionnaireEvenements;
 	
     // points for Finish WinTheGame
 	private ArrayList<Point> lstPointsFinish = new ArrayList<Point>();
         
 	// Déclaration d'une référence vers le contr™leur de jeu
-	private ControleurJeu objControleurJeu;
+	private final ControleurJeu objControleurJeu;
 	
 	// Déclaration d'une référence vers le gestionnaire de bases de données
-	private GestionnaireBD objGestionnaireBD;
+	private final GestionnaireBD objGestionnaireBD;
 		
 	// Déclaration d'une référence vers la salle parente dans laquelle se 
 	// trouve cette table 
-	private Salle objSalle;
+	private final Salle objSalle;
 	
 	// Cette variable va contenir le numéro de la table
 	private final int intNoTable;
@@ -93,13 +93,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	private Case[][] objttPlateauJeu;
 	
 	
-	private GestionnaireTemps objGestionnaireTemps;
-	private TacheSynchroniser objTacheSynchroniser;
+	private final GestionnaireTemps objGestionnaireTemps;
+	private final TacheSynchroniser objTacheSynchroniser;
 	private Minuterie objMinuterie;
-        
-    // Position where is placed WinTheGame
-    //private Point positionWinTheGame;
-        
+               
     // Cet objet est une liste des joueurs virtuels qui jouent sur cette table
     private ArrayList<JoueurVirtuel> lstJoueursVirtuels;
     
@@ -121,7 +118,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     // Name of the table
     private String tableName;
     
-    // Array of players pictures 
+    // Array of ID of the players pictures 
     private ArrayList<Integer> pictures; 
     
     // nb lines on the game board
@@ -171,17 +168,20 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	{
 		super();
    	
+		// Faire la référence vers le controleu jeu
+        objControleurJeu = salleParente.getObjControleurJeu();
+        
 		//positionWinTheGame = new Point(-1, -1); 		
                 
 		// Faire la référence vers le gestionnaire d'événements et le 
 		// gestionnaire de base de données
-		objGestionnaireEvenements = new GestionnaireEvenements();
+		objGestionnaireEvenements = objControleurJeu.obtenirGestionnaireEvenements();//new GestionnaireEvenements();
 		objGestionnaireBD = salleParente.getObjControleurJeu().obtenirGestionnaireBD();
 		
 		// Garder en mémoire la référence vers la salle parente, le numéro de 
 		// la table, le nom d'utilisateur du créateur de la table et le temps
 		// total d'une partie
-		setObjSalle(salleParente);
+		objSalle = salleParente;
 		intNoTable = noTable;
 		this.gameType = gameType;
 		
@@ -192,7 +192,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		MAX_NB_PLAYERS = objRegles.getMaxNbPlayers();
 		setTableName(name);
 		
-		System.out.println("Cons table : " + intNbLines + " " + intNbColumns);
+		//System.out.println("Cons table : " + intNbLines + " " + intNbColumns);
 		this.nbLines = intNbLines;
 		this.nbColumns = intNbColumns;
 		
@@ -201,16 +201,14 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Créer une nouvelle liste de joueurs
 		lstJoueurs = new TreeMap<String, JoueurHumain>();
 		lstJoueursEnAttente = new TreeMap<String, JoueurHumain>();
-		//String nomUtilisateurCreateur = joueur.obtenirNomUtilisateur();
-		//lstJoueursEnAttente.put(joueur.obtenirNomUtilisateur(), joueur);
-		strNomUtilisateurCreateur = joueur.obtenirNomUtilisateur();//nomUtilisateurCreateur;
+		strNomUtilisateurCreateur = joueur.obtenirNomUtilisateur();
 		
 		// Au départ, aucune partie ne se joue sur la table
 		bolEstCommencee = false;
 		bolEstArretee = true;
 					
 		// initialaise gameboard - set null
-		objttPlateauJeu = null;
+		//objttPlateauJeu = null;
 		
 		objGestionnaireTemps = salleParente.getObjControleurJeu().obtenirGestionnaireTemps();
 		objTacheSynchroniser = salleParente.getObjControleurJeu().obtenirTacheSynchroniser();
@@ -219,22 +217,18 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         // Lorsque l'on démarrera une partie dans laPartieCommence(), on créera
         // autant de joueurs virtuels que intNombreJoueursVirtuels (qui devra donc
         // çtre affecté du bon nombre au préalable)
-        intNombreJoueursVirtuels = 0;
-        lstJoueursVirtuels = null;
+        //intNombreJoueursVirtuels = 0;
+        //lstJoueursVirtuels = null;
         
         // Cette liste sera modifié si jamais un joueur est déconnecté
         lstJoueursDeconnectes = new Vector<String>();
         pictures = new ArrayList<Integer>();
-        
-        
-        // Faire la référence vers le controleu jeu
-        objControleurJeu = salleParente.getObjControleurJeu();
-        
+               
         // Créer un thread pour le GestionnaireEvenements
-		Thread threadEvenements = new Thread(objGestionnaireEvenements);
+		//Thread threadEvenements = new Thread(objGestionnaireEvenements);
 		
 		// Démarrer le thread du gestionnaire d'événements
-		threadEvenements.start();
+		//threadEvenements.start();
 		
 		// fill the list off colors
 		this.colors = new ArrayList<String>();
@@ -244,8 +238,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         this.setIdPersos();
         
         
-        this.gameFactory = null;
-		
+        //this.gameFactory = null;
 		try {
 			this.gameFactory = (GenerateurPartie) Class.forName("ServeurJeu.ComposantesJeu.GenerateurPartie" + gameType).newInstance();
 		} catch (InstantiationException e) {
@@ -2058,182 +2051,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
        	
     } */  
 	
-  /*  // Cette méthode permettra de dire si un joueur a gagné la partie en
-    // ayant accumulé assez de points et en ayant rejoint le WinTheGame
-    public boolean aRejointLeWinTheGame(int pointageDuJoueur, Point positionDuJoueur)
-    {
-        	
-      	boolean resultat = true;
-       	if (getObjSalle().getGameType().equals("Tournament"))
-       	{
-       	   for(int i = 0; i < positionWinTheGameTournament.length; i++)
-       	   {
-       		   if(positionDuJoueur.equals(positionWinTheGameTournament[i]))
-       			resultat = true;
-        		   
-       	   }
-       	   return (peutAllerSurLeWinTheGame(pointageDuJoueur) && (resultat));
-       	} else{
-       	   return (peutAllerSurLeWinTheGame(pointageDuJoueur) && (positionDuJoueur.equals(positionWinTheGame)));
-       	}
-            
-    } //end method 
-        
-        public Point obtenirPositionWinTheGame()
-        {
-            return positionWinTheGame;
-        }
-        
-       
-        public boolean peutAllerSurLeWinTheGame(int pointage)
-        {
-            return pointage >= pointageRequisPourAllerSurLeWinTheGame();
-        }
-        
-        public int pointageRequisPourAllerSurLeWinTheGame()
-        {
-            return intTempsTotal*5;
-        }   
-       
-      
-        public void definirNouvellePositionWinTheGame()
-        {
-        	if (getObjSalle().getGameType().equals("Tournament"))
-    		{
-        	  positionWinTheGame = new Point(objttPlateauJeu.length - 1,objttPlateauJeu[0].length - 1);
-        	   
-    		}else{
-        	
-    			positionWinTheGame = new Point(-1,-1);
-    			
-            /*   Random objRandom = new Random();
-               boolean pasTrouve = true;
-               int grandeurDeplacement = 3;
-               int nbEssaisI = 0;
-               int nbEssaisJ = 0;
-               int maxEssais = 9000;
-            
-               // On obtient les positions des 4 joueurs afin de ne pas déplacer le WinTheGame
-               // sur un joueur, ou encore sur une case oç un joueur voulait aller
-               Point positionsJoueurs[] = new Point[4];
-               Point positionsJoueursDesirees[] = new Point[4];
-               {
-                   for(int k=0; k<4; k++)
-               {
-                    positionsJoueurs[k] = new Point(0, 0);
-                    positionsJoueursDesirees[k] = new Point(0, 0);
-               }
-                int i=0;
-                {
-                    Set nomsJoueursHumains = lstJoueurs.entrySet();
-                    Iterator objIterateurListeJoueurs = nomsJoueursHumains.iterator();
-                    while(objIterateurListeJoueurs.hasNext() == true)
-                    {
-                        JoueurHumain j = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
-                        positionsJoueurs[i] = j.obtenirPartieCourante().obtenirPositionJoueur();
-                        positionsJoueursDesirees[i] = j.obtenirPartieCourante().obtenirPositionJoueurDesiree();
-                        if(positionsJoueursDesirees[i] == null) positionsJoueursDesirees[i] = positionsJoueurs[i];
-                        i++;
-                    }
-                }
-                {   
-                    for(int k=0; k<lstJoueursVirtuels.size(); k++)
-                    {
-                        JoueurVirtuel j = (JoueurVirtuel)lstJoueursVirtuels.get(k);
-                        positionsJoueurs[i] = j.obtenirPositionJoueur();
-                        positionsJoueursDesirees[i] = positionsJoueurs[i];
-                        i++;
-                    }
-                }
-               }
-            
-               // On commence par regarder si les cases pas trop loin sont OK si on n'est pas en -1 -1
-               if(positionWinTheGame.x != -1 && positionWinTheGame.y != -1)
-               {
-                  for(int i= positionWinTheGame.x-(objRandom.nextInt(grandeurDeplacement+1)-grandeurDeplacement/2); pasTrouve && nbEssaisI<maxEssais; i = positionWinTheGame.x-(objRandom.nextInt(grandeurDeplacement+1)-grandeurDeplacement/2))
-                  {
-                    //System.out.println("i: " + Integer.toString(i));
-                    nbEssaisJ = 0;
-                    objRandom.setSeed(System.currentTimeMillis());
-                    if(i>=0 && i<objttPlateauJeu.length) for(int j=positionWinTheGame.y-(objRandom.nextInt(grandeurDeplacement+1)-grandeurDeplacement/2); pasTrouve && i >= 0 && nbEssaisJ < maxEssais; j = positionWinTheGame.y-(objRandom.nextInt(grandeurDeplacement+1)-grandeurDeplacement/2))
-                    {
-                        //System.out.println("   j: " + Integer.toString(j));
-                        objRandom.setSeed(System.currentTimeMillis());
-                        // Est-ce que la case existe? Est-ce que c'est une case couleur?
-                        if(j>=0 && j<objttPlateauJeu[i].length) if(j >= 0 && objttPlateauJeu[i][j] != null && objttPlateauJeu[i][j] instanceof CaseCouleur)
-                        {
-                            CaseCouleur caseTemp = (CaseCouleur)objttPlateauJeu[i][j];
-                            // Est-ce qu'il n'y a rien dessus?
-                            if(caseTemp.obtenirObjetArme() == null && caseTemp.obtenirObjetCase() == null)
-                            {
-                                // Est-ce que c'est la mçme case? Est-ce dans les limites?
-                                if(i != positionWinTheGame.x && j != positionWinTheGame.y && i >= 0 && j >= 0 && i < objttPlateauJeu.length && j < objttPlateauJeu[i].length)
-                                {
-                                    // Est-ce qu'un joueur est sur cette case ou veut s'y déplacer?
-                                    boolean presence = false;
-                                    for(int k=0; k<4 && !presence; k++) if((new Point(i, j)).equals(positionsJoueurs[k]) || (new Point(i, j)).equals(positionsJoueursDesirees[k])) presence = true;
-                                    if(!presence)
-                                    {
-                                        // Tout est OK, on déplace le WinTheGame
-                                        pasTrouve = false;
-                                        positionWinTheGame.move(i, j);
-                                    }
-                                }
-                            }
-                        }
-                        nbEssaisJ++;
-                    }
-                    nbEssaisI++;
-                }
-            }
-            
-            // Sinon, on prend la case qui minimise la distance maximale à chacun des joueurs
-            if(pasTrouve)
-            {
-                int meilleureDistMax = 666;
-                int meilleurI = positionWinTheGame.x;
-                int meilleurJ = positionWinTheGame.y;
-                for(int i=0; i < objttPlateauJeu.length; i++)
-                {
-                    for(int j=0; j < objttPlateauJeu[i].length; j++)
-                    {
-                        // Est-ce que la case existe? Est-ce que c'est une case couleur?
-                        if(objttPlateauJeu[i][j] != null && objttPlateauJeu[i][j] instanceof CaseCouleur)
-                        {
-                            CaseCouleur caseTemp = (CaseCouleur)objttPlateauJeu[i][j];
-                            // Est-ce qu'il n'y a rien dessus?
-                            if(caseTemp.obtenirObjetArme() == null && caseTemp.obtenirObjetCase() == null)
-                            {
-                                // Est-ce qu'un joueur est sur cette case ou veut s'y déplacer?
-                                boolean presence = false;
-                                for(int k=0; k<4 && !presence; k++) if((new Point(i, j)).equals(positionsJoueurs[k]) || (new Point(i, j)).equals(positionsJoueursDesirees[k])) presence = true;
-                                if(!presence)
-                                {
-                                    // On regarde la distance maximale aux joueurs
-                                    int[] distances = {0,0,0,0};
-                                    for(int z=0; z<positionsJoueurs.length; z++) distances[z] = Math.abs(i - positionsJoueurs[z].x) + Math.abs(j - positionsJoueurs[z].y);
-                                    int distMax = Math.max(Math.max(distances[0], distances[1]), Math.max(distances[2], distances[3]));
-                                    if(distMax <= meilleureDistMax)
-                                    {
-                                        meilleurI = i;
-                                        meilleurJ = j;
-                                        meilleureDistMax = distMax;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                // Tout est OK, on déplace le WinTheGame
-                positionWinTheGame.move(meilleurI, meilleurJ);
-            } 
-        }
-    }// end  */
 
-		public void setObjSalle(Salle objSalle) {
-			this.objSalle = objSalle;
-		}
-
+		
 		public Salle getObjSalle() {
 			return objSalle;
 		}
@@ -2465,8 +2284,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		 * @param idPersonnage
 		 */
 		public void getBackOneIdPersonnage(int idPersonnage){
-			idPersonnage = (idPersonnage - 10000)%100;
-			this.idPersos.add(idPersonnage);
+			
+			this.idPersos.add((idPersonnage - 10000)%100);
 		}
 
 		/**

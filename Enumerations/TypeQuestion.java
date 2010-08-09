@@ -6,11 +6,11 @@ package Enumerations;
 public final class TypeQuestion
 {
 	// Déclaration des membres de cette énumération
-	public static final String ChoixReponse = "MULTIPLE_CHOICE";  // "ChoixReponse";
-	public static final String ChoixReponse3 = "MULTIPLE_CHOICE_3";
+	public static final String ChoixReponse = "MULTIPLE_CHOICE"; 
+	public static final String ChoixReponse3 = "MULTIPLE_CHOICE_3"; 
 	public static final String ChoixReponse5 = "MULTIPLE_CHOICE_5"; 
-	public static final String VraiFaux =  "TRUE_OR_FALSE";        //  "VraiFaux";
-	public static final String ReponseCourte =   "SHORT_ANSWER"; // "ReponseCourte";
+	public static final String VraiFaux =  "TRUE_OR_FALSE";      
+	public static final String ReponseCourte = "SHORT_ANSWER"; 
 	
 	/**
 	 * Constructeur par défaut est privé pour empêcher de pourvoir créer des 
@@ -33,5 +33,32 @@ public final class TypeQuestion
 		// un membre de cette énumération, sinon elle en est un
 		return (valeur.equals(ChoixReponse) || valeur.equals(ChoixReponse3) || valeur.equals(ChoixReponse5) || valeur.equals(VraiFaux) || 
 				valeur.equals(ReponseCourte));
+	}
+	
+	public static String getValue(int type)
+	{
+		String resp = "";
+		switch(type)
+		{
+		   case 1:
+			   resp = ChoixReponse;
+			   break;
+		   case 2:
+			   resp = VraiFaux;
+			   break;
+		   case 3:
+			   resp = ReponseCourte;
+		       break;
+		   case 4:
+			   resp = ChoixReponse5;
+			   break;
+		   case 5:
+			   resp = ChoixReponse3;
+			   break;
+		   default: 
+		       resp = "Error";
+		   
+		}
+	   return resp;	
 	}
 }

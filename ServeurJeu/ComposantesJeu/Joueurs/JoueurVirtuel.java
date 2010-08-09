@@ -13,9 +13,9 @@ import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 import java.util.Map.Entry;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
@@ -34,14 +34,14 @@ import ServeurJeu.Configuration.GestionnaireMessages;
 public class JoueurVirtuel extends Joueur implements Runnable {
 	
 	// Cette variable va contenir le nom du joueur virtuel
-	private String strNom;
+	private final String strNom;
         
     // Déclaration d'une référence vers le gestionnaire d'evenements
-	private GestionnaireEvenements objGestionnaireEv;
+	private final GestionnaireEvenements objGestionnaireEv;
 	
 	// Déclaration d'une référence vers un objet contenant tous
 	// les paramètres des joueurs virtuels
-	private ParametreIA objParametreIA;
+	private final ParametreIA objParametreIA;
 	
 	// Cette variable contient la case ciblée par la joueur virtuel.
 	// Il tentera de s'y rendre. Cette case sera choisie selon 
@@ -56,17 +56,17 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	private int intRaisonPositionFinale;
 	
 	// Cette variable contient le niveau de difficulté du joueur virtuel
-    private int intNiveauDifficulte;
+    private final int intNiveauDifficulte;
 	
 	// Cette variable permet de savoir s'il faut arrêter le thread ou non
 	private boolean bolStopThread;
 	
 	// Déclaration d'une référence vers la table courante
-	private Table objTable;
+	private final Table objTable;
 	
     // Déclaration d'une variable qui va contenir le numéro Id du personnage 
 	// du joueur virtuel
-	private int intIdPersonnage;
+	private final int intIdPersonnage;
 
     // Déclaration d'une variable qui va contenir le pointage de la 
     // partie du joueur virtuel
@@ -82,7 +82,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	private TreeMap<Integer, ObjetUtilisable> lstObjetsUtilisablesRamasses;
 	
 	// Déclaration d'une référence vers le controleur jeu
-	private ControleurJeu objControleurJeu;
+	private final ControleurJeu objControleurJeu;
 	
     // Déclaration d'une variable qui contient le nombre de fois 
     // que le joueur virtuel a joué à un mini-jeu
@@ -111,7 +111,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     // Cette liste va contenir les magasins déjà visités
     // par le joueur virtuel, pour empêcher qu'il les visite
     // à plus d'une reprise
-    private Vector<Magasin> lstMagasinsVisites;
+    private LinkedList<Magasin> lstMagasinsVisites;
     
     // Tableau contenant une référence vers le plateau de jeu
     private Case objttPlateauJeu[][];
@@ -192,7 +192,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		this.brainiacState = new PlayerBrainiacState(this); 
 		
 		// Cette variable sera utilisée dans la thread
-		objPositionFinaleVisee = null;
+		//objPositionFinaleVisee = null;
 		
 		// Faire la référence vers le gestionnaire d'évenements
 		objGestionnaireEv = gestionnaireEv;
@@ -216,11 +216,11 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		}
 		
 		// Initialisation du pointage
-		intPointage = 0;
-        intArgent = 0;
+		//intPointage = 0;
+        //intArgent = 0;
 		
 		// Initialisation à null de la position, le joueur virtuel n'est nul part
-		objPositionJoueur = null;
+		//objPositionJoueur = null;
 		
 	    // Créer la liste des objets utilisables qui ont été ramassés
 	    lstObjetsUtilisablesRamasses = new TreeMap<Integer, ObjetUtilisable>();
@@ -247,19 +247,19 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         determinerJetonsMiniJeu();
 
         // Au départ, le joueur virtuel n'a joué aucun mini-jeu
-        intNbMiniJeuJoues = 0;
+        //intNbMiniJeuJoues = 0;
         
         // Déterminer les temps des jetons pour les magasins
         determinerJetonsMagasins();
         
         // Au départ, le joueur virtuel n'a pas visité de magasin
-        intNbMagasinVisites = 0;
+        //intNbMagasinVisites = 0;
 
         // Définir le nombre d'objets max par une valeur de base
         //intNbObjetsMax = objTable.obtenirRegles().getMaxNbObjectsAndMoney();
         
         // Créer une liste de magasin déjà visité vide
-        lstMagasinsVisites = new Vector<Magasin>();
+        lstMagasinsVisites = new LinkedList<Magasin>();
 	}
 
 
@@ -651,13 +651,13 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	 * @param: Point depart: Point de départ du chemin
 	 * @param: Point arrivee: Point d'arrivée du chemin 
 	 */
-    public Vector<Point> trouverCheminPlusCourt(Point depart, Point arrivee)
+    public ArrayList<Point> trouverCheminPlusCourt(Point depart, Point arrivee)
     {
         // Liste des points à traiter pour l'algorithme de recherche de chemin
-        Vector<Point> lstPointsATraiter = new Vector<Point>();
+        ArrayList<Point> lstPointsATraiter = new ArrayList<Point>();
         
         // Le chemin résultat que l'on retourne à la fonction appelante
-        Vector<Point> lstResultat;
+        ArrayList<Point> lstResultat;
         
         // Point temporaire qui sert dans l'algorithme de recherche
         Point ptPosTemp = new Point();
@@ -760,7 +760,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         if (bolCheminTrouve == true)
         {
             // Préparer le chemin de retour
-            lstResultat = new Vector<Point>();
+            lstResultat = new ArrayList<Point>();
             
             // On part de l'arrivée puis on retrace jusqu'au départ
             ptPosTemp = arrivee;
@@ -791,7 +791,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	 * le nombre de pièces que le chemin contient et aussi le type de case
 	 * que le chemin contient au cas où le joueur virtuel préfèrerait certaines cases.
 	 */
-	private int calculerPointsChemin(Vector<Point> lstPositions, Case objttPlateauJeu[][])
+	private int calculerPointsChemin(ArrayList<Point> lstPositions, Case objttPlateauJeu[][])
 	{
 		Point ptTemp;
 		int intPoints = 0;;
@@ -868,8 +868,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    // Variable contenant la position à retourner à la fonction appelante
 		Point objPositionTrouvee;
 
-        Vector<Point> lstPositions[] = new Vector[5];
-        Vector<Point> lstPositionsTrouvees;
+        ArrayList<Point> lstPositions[] = new ArrayList[5];
+        ArrayList<Point> lstPositionsTrouvees;
         int tPoints[] = new int[5];
         int intPlusGrand = -1;
         
@@ -1134,7 +1134,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         Point ptTemp2 = new Point(0,0);
         
         // Chemin entre le joueur et une case importante analysée
-        Vector<Point> lstChemin;
+        ArrayList<Point> lstChemin;
         
         // Cette variable contiendra le nombre de coups estimé pour se rendre
         // à la case en cours d'analyse
@@ -1659,8 +1659,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     		Magasin objMagasin = (Magasin)((CaseCouleur)objCaseDestination).obtenirObjetCase();
     		
             // Aller chercher une référence vers la liste des objets du magasin
-            Vector<ObjetUtilisable> lstObjetsMagasins = objMagasin.obtenirListeObjetsUtilisables();
-            Vector<ObjetUtilisable> lstCopieObjetsMagasins = new Vector<ObjetUtilisable>();
+            ArrayList<ObjetUtilisable> lstObjetsMagasins = objMagasin.obtenirListeObjetsUtilisables();
+            ArrayList<ObjetUtilisable> lstCopieObjetsMagasins = new ArrayList<ObjetUtilisable>();
             
             synchronized (lstObjetsMagasins)
             {

@@ -57,7 +57,7 @@ public class GestionnaireConfiguration
 		return _config.getBoolean( id );
 	}
         
-	@SuppressWarnings("unchecked")
+	
 	public List obtenirListe( String id )
 	{
 		return _config.getList( id );

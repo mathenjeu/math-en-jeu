@@ -52,7 +52,7 @@ public class Espion implements Runnable{
     private int intModeEspion;
 	
 	// Déclaration d'un objet pour faire référence au Contrôleur de jeu
-	private ControleurJeu objControleurJeu;
+	private final ControleurJeu objControleurJeu;
 	
 	// Déclaration d'une variable qui contiendra le séparateur de ligne
 	private String strFinLigne;
@@ -75,7 +75,7 @@ public class Espion implements Runnable{
 		strFinLigne = System.getProperty("line.separator");
 		strNomFichier = nomFichier;
 		intDelaiMaj = delaiMaj;
-		bolArreterEspion = false;
+		//bolArreterEspion = false;
 	}
 
 

@@ -15,14 +15,14 @@ public class JoueurHumain extends Joueur
 	// Cette variable va contenir le nom d'utilisateur du joueur
 	private final String strNomUtilisateur;
 	
-	// Cetta variable contient la clé de la table joueur
+	// It's player id in the DB
 	private int intCleJoueur;
 	
 	// Cette variable va contenir l'adresse IP du joueur
-	private String strAdresseIP;
+	private final String strAdresseIP;
 	
 	// Cette variable va contenir le port du joueur
-	private String strPort;
+	private final String strPort;
 	
 	// Cette variable va contenir le prénom du joueur
 	private String strPrenom;
@@ -35,9 +35,6 @@ public class JoueurHumain extends Joueur
 	// 2 - admin
 	// 3 - prof
 	private int role;
-		
-	//Cette variable défini si un jouer peut creer une salle ??? utiliser encore??
-	//private boolean bolPeutCreerSalle;
 	
 	/**
 	 * Déclaration d'un tableau qui contient les valeurs des niveaux des catégories
@@ -48,7 +45,7 @@ public class JoueurHumain extends Joueur
 	
 	// Déclaration d'une référence vers la salle dans laquelle le joueur se 
 	// trouve (null si le joueur n'est dans aucune salle)
-	private Salle objSalleCourante;
+	private  Salle objSalleCourante;
 	
 	// Déclaration d'une référence vers l'objet gardant l'information sur la
 	// partie courant de la table où le joueur se trouve (null si le joueur 
@@ -73,7 +70,7 @@ public class JoueurHumain extends Joueur
 		super();
 
 		// Faire la référence vers le protocole du joueur
-		setObjProtocoleJoueur(protocole);
+		objProtocoleJoueur = protocole;
 		
 		// Garder en mémoire le nom d'utilisateur, l'adresse IP et le port du
 		// joueur
@@ -82,13 +79,9 @@ public class JoueurHumain extends Joueur
 		strPort = port;
 		
 		// Initialiser les caractéristiques du joueur
-		strPrenom = "";
-		strNomFamille = "";
-		
-		// Au début, le joueur n'est dans aucune salle ni table
-		objSalleCourante = null;
-		objPartieCourante = null;
-		
+		//strPrenom = "";
+		//strNomFamille = "";
+				
 	}
 
 	/**
@@ -103,11 +96,7 @@ public class JoueurHumain extends Joueur
 		return objProtocoleJoueur;
 	}
 	
-	public void setObjProtocoleJoueur(ProtocoleJoueur objProtocoleJoueur) {
-		this.objProtocoleJoueur = objProtocoleJoueur;
-	}
-
-	
+		
 	/**
 	 * Cette fonction permet de retourner le nom d'utilisateur du joueur.
 	 * 
@@ -220,18 +209,7 @@ public class JoueurHumain extends Joueur
 		return objPartieCourante;
 	}
 		
-	/**
-	 * Cette méthode permet de définir la référence vers l'information sur la 
-	 * partie courante du joueur.
-	 * 
-	 * @param InformationPartie partieCourante : L'information sur la partie
-	 * 					courante du joueur. Si la partie courante est null
-	 * 					alors c'est que le joueur n'est dans aucune table
-	 */
-	public void definirPartieCourante(InformationPartie partieCourante)
-	{
-		objPartieCourante = partieCourante;
-	}
+	
 	
 	public int obtenirCleJoueur()
 	{
@@ -274,6 +252,22 @@ public class JoueurHumain extends Joueur
 		this.role = role;
 	}
 
-	
+	/**
+	 * Cette méthode permet de définir la référence vers l'information sur la 
+	 * partie courante du joueur.
+	 * 
+	 * @param InformationPartie partieCourante : L'information sur la partie
+	 * 					courante du joueur. Si la partie courante est null
+	 * 					alors c'est que le joueur n'est dans aucune table
+	 */
+	public void definirPartieCourante(InformationPartie partieCourante)
+	{
+		objPartieCourante = partieCourante;
+	}
+
+	public void setObjProtocoleJoueur(ProtocoleJoueur protocoleJoueur) {
+		objProtocoleJoueur = protocoleJoueur;
+		
+	}
 	
 }

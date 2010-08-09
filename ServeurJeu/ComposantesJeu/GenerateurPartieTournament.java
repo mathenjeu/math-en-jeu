@@ -73,18 +73,18 @@ public class GenerateurPartieTournament extends GenerateurPartie {
     	    	
 		int temps = table.obtenirTempsTotal();
 		
-		System.out.println("temps : " + temps);
-		System.out.println("lignes avant : " + intNbLines);
-		System.out.println("colognes avant : " + intNbColumns);
-		System.out.println("max min avant : " + reglesPartie.obtenirTempsMaximal() + " " + reglesPartie.obtenirTempsMinimal() + " " + reglesPartie.getNbTracks()); 
+		//System.out.println("temps : " + temps);
+		//System.out.println("lignes avant : " + intNbLines);
+		//System.out.println("colognes avant : " + intNbColumns);
+		//System.out.println("max min avant : " + reglesPartie.obtenirTempsMaximal() + " " + reglesPartie.obtenirTempsMinimal() + " " + reglesPartie.getNbTracks()); 
 		
 		// calculate number of lines and of columns 
 	    intNbColumns = (reglesPartie.getNbTracks() + 1) * (reglesPartie.obtenirTempsMinimal() * 2 + 1) - 1; // factor - 1;
    	    intNbLines = temps + reglesPartie.obtenirTempsMaximal();     	 
     	
-   	    System.out.println("temps : " + temps);
-		System.out.println("lignes avant : " + intNbLines);
-		System.out.println("colognes avant : " + intNbColumns);
+   	    //System.out.println("temps : " + temps);
+		//System.out.println("lignes avant : " + intNbLines);
+		//System.out.println("colognes avant : " + intNbColumns);
    	    
    	    if (intNbLines < 8)
     		  intNbLines = 8;
@@ -94,9 +94,9 @@ public class GenerateurPartieTournament extends GenerateurPartie {
 		if(table.getNbColumns() != 0)
 			intNbColumns = table.getNbColumns();
 		
-		System.out.println("temps : " + temps);
-		System.out.println("lignes av : " + intNbLines);
-		System.out.println("colognes av : " + intNbColumns);
+		//System.out.println("temps : " + temps);
+		//System.out.println("lignes av : " + intNbLines);
+		//System.out.println("colognes av : " + intNbColumns);
 				
 		// Déclaration de variables qui vont garder le nombre de trous, 
 		// le nombre de cases spéciales, le nombres de magasins,
@@ -107,9 +107,9 @@ public class GenerateurPartieTournament extends GenerateurPartie {
 		int intNbPieces = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioPieces());
 		int intNbObjetsUtilisables = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioObjetsUtilisables());
 
-		System.out.println("temps : " + temps);
-		System.out.println("lignes : " + intNbLines);
-		System.out.println("colognes : " + intNbColumns);
+		//System.out.println("temps : " + temps);
+		//System.out.println("lignes : " + intNbLines);
+		//System.out.println("colognes : " + intNbColumns);
 		
 		// to set the correct values on the table
 		table.setNbLines(intNbLines);
@@ -127,7 +127,7 @@ public class GenerateurPartieTournament extends GenerateurPartie {
 		{
 			//objPoint = (Point) lstPointsCasesPresentes.remove(lstPointsCasesPresentes.size()-1);
 			objPoint = new Point(intNbLines - 1,intNbColumns - i - 1);
-			System.out.println("COnttrol : " + objPoint);
+			//System.out.println("COnttrol : " + objPoint);
 			lstPointsFinish.add(objPoint);
 		}
 		caseDefinition(intNbCasesSpeciales, objttPlateauJeu);
@@ -267,7 +267,7 @@ public class GenerateurPartieTournament extends GenerateurPartie {
 			{
 				// Calculer la valeur de la pièce à créer de façon aléatoire 
 				// selon une loi normale
-				int intValeur = Math.max(Math.abs(ClassesUtilitaires.UtilitaireNombres.genererNbAleatoireLoiNormale(0.0d, Math.pow(((double) reglesPartie.obtenirValeurPieceMaximale()) / 3.0d, 2.0d))), 1);
+				int intValeur = 1;//Math.max(Math.abs(ClassesUtilitaires.UtilitaireNombres.genererNbAleatoireLoiNormale(0.0d, Math.pow(((double) reglesPartie.obtenirValeurPieceMaximale()) / 3.0d, 2.0d))), 1);
 					
 				// Obtenir un point aléatoirement parmi les points restants
 				// qui n'ont pas de pièces et enlever en même temps ce point 

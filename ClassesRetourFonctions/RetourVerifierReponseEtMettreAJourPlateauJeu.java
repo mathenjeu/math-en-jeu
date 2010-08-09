@@ -52,12 +52,12 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 		// Initialiser les membres de la classe de retour
 		bolDeplacementAccepte = deplacementAccepte;
 		strExplications = "";
-		objObjetRamasse = null;
-		objObjetSubi = null;
-		objNouvellePosition = null;
+		//objObjetRamasse = null;
+		//objObjetSubi = null;
+		//objNouvellePosition = null;
 		intNouveauPointage = nouveauPointage;
         intNouvelArgent = nouvelArgent;
-		strCollision = "vide";
+		//strCollision = "vide";
 		playerBonus = bonus;
 	}
 	

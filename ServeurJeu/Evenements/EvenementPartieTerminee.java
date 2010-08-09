@@ -7,15 +7,11 @@ package ServeurJeu.Evenements;
 
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Iterator;
-import java.util.Vector;
-
 import ClassesUtilitaires.UtilitaireXML;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;

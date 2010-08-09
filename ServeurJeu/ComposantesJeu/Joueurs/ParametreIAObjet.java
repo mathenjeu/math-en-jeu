@@ -5,33 +5,33 @@ package ServeurJeu.ComposantesJeu.Joueurs;
 public class ParametreIAObjet {
 	
 	// La valeur en points de cet objet
-    public int intValeurPoints;
+    public final int intValeurPoints;
     
     // Une valeur aléatoire pour calculer des points un peu différents
-    public int intValeurAleatoire;
+    public final int intValeurAleatoire;
     
     // Distance maximal pour ne pas enlever trop de points
-    public int intMaxDistance;
+    public final int intMaxDistance;
     
     // Points à enlever par coup de distance
-    public int intPointsEnleverDistance;   
+    public final int intPointsEnleverDistance;   
     
     // Points à enlever par quantité déjà en possession
-    public int intPointsEnleverQuantite;
+    public final int intPointsEnleverQuantite;
     
     // Points à donner lors du calcul des points d'un chemin
-    public int intPointsChemin;
+    public final int intPointsChemin;
     
     // Points à enlever à l'objet dans le calcul des points d'un chemin
     // selon la quantité possédé
-    public int intPointsCheminEnleverQuantite;
+    public final int intPointsCheminEnleverQuantite;
     
     // Nombre d'objets maximum à posséder par ce joueur virtuel
-    public int intQuantiteMax;
+    public final int intQuantiteMax;
     
     // Temps de sûreté de fin de partie (on ne ramasse pas l'objet lorsqu'il
     // reste peu de temps en fin de partie (en secondes)
-    public int intTempsSureteRamasser;
+    public final int intTempsSureteRamasser;
     
     // Constructeur de la classe, on passe tous les variables en paramètres
     public ParametreIAObjet(int valeurPoints, int valeurAleatoire, 

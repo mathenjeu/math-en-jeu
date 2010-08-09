@@ -6,7 +6,7 @@ package ServeurJeu.ComposantesJeu.Cases;
 public abstract class Case
 {
 	// Déclaration d'une variable qui va contenir le type de case
-	protected int intTypeCase;
+	protected final int intTypeCase;
 	
 	/**
 	 * Constructeur de la classe abstraite Case.

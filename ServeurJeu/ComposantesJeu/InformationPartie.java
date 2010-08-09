@@ -28,14 +28,14 @@ import ServeurJeu.ControleurJeu;
 public class InformationPartie
 {
 	// Déclaration d'une référence vers le gestionnaire de bases de données
-	private GestionnaireBD objGestionnaireBD;
+	private final GestionnaireBD objGestionnaireBD;
 	
     // Déclaration d'une référence vers le gestionnaire d'evenements
-	private GestionnaireEvenements objGestionnaireEv;
+	private final GestionnaireEvenements objGestionnaireEv;
 	
 	// Déclaration d'une référence vers un joueur humain correspondant ˆ cet
 	// objet d'information de partie
-	private JoueurHumain objJoueurHumain;
+	private final JoueurHumain objJoueurHumain;
 	
 	// Déclaration d'une référence vers la table courante
 	private Table objTable;
@@ -119,27 +119,27 @@ public class InformationPartie
             objJoueurHumain = joueur;
 		
 	        // Définir les propriétés de l'objet InformationPartie
-	        intPointage = 0;
+	        //intPointage = 0;
 	               	        
-            intIdPersonnage = 0;
+            //intIdPersonnage = 0;
 	        	        
 	        // Faire la référence vers la table courante
 	        objTable = tableCourante;
 	    
 	        // charge money from DB if is permited
-	        intArgent = 0;
+	        //intArgent = 0;
 	        if (objTable.getRegles().isBolMoneyPermit())
 	        	intArgent = objGestionnaireBD.getPlayersMoney(joueur.obtenirCleJoueur());
 		    
 	        
 	        // Au départ, le joueur est nul part
-	        objPositionJoueur = null;
+	        //objPositionJoueur = null;
 	    
 	        // Au départ, le joueur ne veut aller nul part
-	        objPositionJoueurDesiree = null;
+	        //objPositionJoueurDesiree = null;
 	    
 	        // Au départ, aucune question n'est posée au joueur
-	        objQuestionCourante = null;
+	        //objQuestionCourante = null;
 	    
 	        // Créer la liste des questions qui ont été répondues
 	        lstQuestionsRepondues = new TreeMap<Integer, Question>();
@@ -147,7 +147,7 @@ public class InformationPartie
 	        // Créer la liste des objets utilisables qui ont été ramassés
 	        lstObjetsUtilisablesRamasses = new TreeMap<Integer, ObjetUtilisable>();
 	        
-	        wasOnFinish = false;
+	        //wasOnFinish = false;
 	        
 	        moveVisibility = 3;
 			tournamentBonus = 0;

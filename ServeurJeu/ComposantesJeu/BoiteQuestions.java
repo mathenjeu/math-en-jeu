@@ -12,21 +12,22 @@ import ClassesUtilitaires.UtilitaireNombres;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
- * @author Marc
+ * @author Marc changed Oloieri Lilian
+ * 
  */
 public class BoiteQuestions 
 {
-	static private Logger objLogger = Logger.getLogger( BoiteQuestions.class );
+	private static Logger objLogger = Logger.getLogger( BoiteQuestions.class );
 	private TreeMap<Integer, LinkedList<Question>> lstQuestions;
 		
 	// Since there is a question box for each player, and all players might not want to play
 	// in the same language, we set a language field for question boxes
-	private final Lang language;
+	private final Language language;
 	
 	public BoiteQuestions(String language, String url)
 	{
 		lstQuestions = new TreeMap<Integer, LinkedList<Question>>();
-        this.language = new Lang(language, url);
+        this.language = new Language(language, url);
     	       
 	}// fin constructeur
 	
@@ -82,10 +83,8 @@ public class BoiteQuestions
 		// Let's choose a question among the possible ones
 	    if( questions != null && questions.size() > 0 )
 		{
-	    	   int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
-	    	   question = (Question)questions.get( intRandom );
-			   
-		}
+	    	   question = (Question)questions.get( UtilitaireNombres.genererNbAleatoire( questions.size() ) );
+    	}
 		else
 		{
 			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
@@ -155,6 +154,63 @@ public class BoiteQuestions
 		
 		return ret;
 	}
+	
+	/**
+	 * Cette fonction retourne une mauvaise réponse. Utilisé lorsqu'un
+	 * joueur utilise l'objet "Livre" qui permet d'éliminer un choix
+	 * de réponse. Dans le cas d'une question sans choix de réponse, la 
+	 * fonction retourne "PasUnChoixDeReponse"
+	 */
+	 public  String obtenirMauvaiseReponse(Question questo)
+	 {
+		// Choisir aléatoirement une mauvaise réponse
+		int objTypeQuestion = questo.obtenirTypeQuestion();
+		
+		int nbChoix = 0;
+	 	if(objTypeQuestion == 1)
+	 			nbChoix = 4;
+	 	else if(objTypeQuestion == 5)
+	 			nbChoix = 3;
+	 	else if(objTypeQuestion == 4)
+	 			nbChoix = 5; 
+	 	
+	 	// Vérifier si la réponse est un choix de réponse
+	 	if (nbChoix > 2 && nbChoix < 6 )
+	 	{ 		
+	 		
+	 	    int arrShuffle[] = new int[nbChoix];
+	 	    for(int i = 0; i < nbChoix; i++)
+	 	    	arrShuffle[i] = i + 1;
+	 	    
+	 	    for (int x = 1; x < 10; x++)
+	 	    {
+	 	    	int a = UtilitaireNombres.genererNbAleatoire(nbChoix);
+	 	    	int b = UtilitaireNombres.genererNbAleatoire(nbChoix);
+	 	    	
+	 	    	int temp = arrShuffle[a];
+	 	    	arrShuffle[a] = arrShuffle[b];
+	 	    	arrShuffle[b] = temp;
+	 	    }
+	 	    for (int x = 1; x < nbChoix; x++)
+	 	    {
+	 	    	//Character c = new Character((char)(arrShuffle[x] + 48));  // 65 for the letters 48 for the numbers
+	 	    	//String strMauvaiseReponse = c.toString();
+	 	    	
+	 	    	String strMauvaiseReponse = ((Integer)(arrShuffle[x])).toString();
+	 	    	if (!strMauvaiseReponse.equals(questo.getStringAnswer().toUpperCase()))
+	 	    	{
+	 	    		//System.out.println("ICI mauvaise rep : "  + strMauvaiseReponse);
+	 	    		return strMauvaiseReponse;
+	 	    	}
+	 	    }	 
+	 	    
+	 	    return "Erreur";		
+	 	}
+	 	else
+	 	{
+	 		return "PasUnChoixDeReponse";
+	 	}
+	 }
 
 
 	/**
@@ -177,7 +233,7 @@ public class BoiteQuestions
 	 *
 	 * @return Langue : la langue
 	 */
-    public Lang obtenirLangue()
+    public Language obtenirLangue()
     {
         return language;
     }

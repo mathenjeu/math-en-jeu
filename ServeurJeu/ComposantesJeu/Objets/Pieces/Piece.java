@@ -13,10 +13,10 @@ import ServeurJeu.ComposantesJeu.Objets.Objet;
 public class Piece extends Objet
 {
 	// Cette variable va contenir la valeur en points de la pièce
-	private int intValeur;
+	private final int intValeur;
         
     // Cette variable va contenir la valeur en dollars de la pièce
-    private int intMonnaie;
+    private final int intMonnaie;
 	
 	/**
 	 * Constructeur de la classe Piece qui permet d'initialiser

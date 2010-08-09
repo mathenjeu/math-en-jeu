@@ -1,6 +1,6 @@
 package ServeurJeu.ComposantesJeu.Objets.Magasins;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 
@@ -13,7 +13,7 @@ public abstract class Magasin extends Objet
 {
 	// Déclaration d'une liste d'objets utilisables qui va servir à savoir 
 	// quels objets le magasin vend
-	protected Vector<ObjetUtilisable> lstObjetsUtilisables;
+	protected ArrayList<ObjetUtilisable> lstObjetsUtilisables;
         
 	/**
 	 * Constructeur de la classe Magasin qui permet d'initialiser
@@ -22,7 +22,7 @@ public abstract class Magasin extends Objet
 	public Magasin()
 	{
 		// Créer une nouvelle liste d'objets utilisables
-		lstObjetsUtilisables = new Vector<ObjetUtilisable>();
+		lstObjetsUtilisables = new ArrayList<ObjetUtilisable>();
 	}
 
 	/**
@@ -31,7 +31,7 @@ public abstract class Magasin extends Objet
 	 * 
 	 * @return Vector : La liste des ObjetsUtilisables que le magasin vend
 	 */
-	public Vector<ObjetUtilisable> obtenirListeObjetsUtilisables()
+	public ArrayList<ObjetUtilisable> obtenirListeObjetsUtilisables()
 	{
 	   return lstObjetsUtilisables;
 	}
