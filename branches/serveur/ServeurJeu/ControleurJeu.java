@@ -55,26 +55,26 @@ import ServeurJeu.BD.SpyRooms;
  */
 public class ControleurJeu 
 {
-        // Cette modeDebug est vraie, toute reponse des joueurs sera bonne, et
-        // on affichera dans la console des informations sur les communications
-    public static boolean modeDebug;
-        
-	static private Logger objLogger = Logger.getLogger( ControleurJeu.class );
-	
+	// Cette modeDebug est vraie, toute reponse des joueurs sera bonne, et
+	// on affichera dans la console des informations sur les communications
+	public static boolean modeDebug;
+
+	private static Logger objLogger = Logger.getLogger( ControleurJeu.class );
+
 	// Cet objet permet de gérer toutes les interactions avec la base de données
-	private GestionnaireBD objGestionnaireBD;
+	private final GestionnaireBD objGestionnaireBD;
 	
 	// Cet objet permet de gérer toutes les communications entre le serveur et
 	// les clients (les joueurs)
-	private GestionnaireCommunication objGestionnaireCommunication;
+	private final GestionnaireCommunication objGestionnaireCommunication;
 	
 	// Cet objet permet de gérer tous les événements devant être envoyés du
 	// serveur aux clients (l'événement ping n'est pas géré par ce gestionnaire)
-	private GestionnaireEvenements objGestionnaireEvenements;
+	private final GestionnaireEvenements objGestionnaireEvenements;
 	
-	private TacheSynchroniser objTacheSynchroniser;
+	private final TacheSynchroniser objTacheSynchroniser;
 	
-	private GestionnaireTemps objGestionnaireTemps;
+	private final GestionnaireTemps objGestionnaireTemps;
 	
 	
 	// Cet objet est une liste des joueurs qui sont connectés au serveur de jeu 
@@ -98,7 +98,7 @@ public class ControleurJeu
 	private SpyRooms objSpyDB;
 	
 	// Déclaration d'un objet random pour générer des nombres aléatoires
-	private Random objRandom;
+	private final Random objRandom;
 	
 	// Déclaration d'un objet pour conserver tous les paramètres
 	// pour les joueurs virtuels
@@ -116,12 +116,10 @@ public class ControleurJeu
 	{
 		super();
                 
-                modeDebug = GestionnaireConfiguration.obtenirInstance().obtenirValeurBooleenne("controleurjeu.debug");
-		
-                // Initialiser la classe statique GestionnaireMessages
-                GestionnaireMessages.initialiser();
-        
-		objLogger.info(GestionnaireMessages.message("controleur_jeu.serveur_demarre"));
+       modeDebug = GestionnaireConfiguration.obtenirInstance().obtenirValeurBooleenne("controleurjeu.debug");
+	   // Initialiser la classe statique GestionnaireMessages
+       GestionnaireMessages.initialiser();
+       objLogger.info(GestionnaireMessages.message("controleur_jeu.serveur_demarre"));
 		
 		// Préparer l'objet pour créer les nombres aléatoires
         objRandom = new Random();
@@ -183,27 +181,23 @@ public class ControleurJeu
 		//Start spyDb to update periodically the rooms list
 		// Add new rooms or out the olds 
 		
-		int delay = 600000;
+		int delay = 100000;
 		objSpyDB = new SpyRooms(this, delay); 
 		//Start spy thread's
 		Thread threadSpy = new Thread(objSpyDB);
 		threadSpy.start();
 		
 		
-        // Créer une instance de la classe regroupant tous les paramètres
-        // des joueurs virtuels
-        objParametreIA = new ParametreIA();
-
 		//Demarrer une tache de monitoring
-		//TacheLogMoniteur objTacheLogMoniteur = new TacheLogMoniteur();
-		//int intStepMonitor = config.obtenirNombreEntier( "controleurjeu.monitoring.step" );
-		//objGestionnaireTemps.ajouterTache( objTacheLogMoniteur, intStepMonitor );
+		TacheLogMoniteur objTacheLogMoniteur = new TacheLogMoniteur();
+		int intStepMonitor = config.obtenirNombreEntier( "controleurjeu.monitoring.step" );
+		objGestionnaireTemps.ajouterTache( objTacheLogMoniteur, intStepMonitor );
 		
 		//Démarrer l'écoute des connexions clientes
 		//Cette methode est la loop de l'application
 		//Au retour, l'application se termine
 		objGestionnaireCommunication.ecouterConnexions();
-		System.out.println( "arret" );
+		//System.out.println( "arret" );
 	}
 	
 	public void arreter()
@@ -246,7 +240,7 @@ public class ControleurJeu
 	 * @return JoueurNonConnu : Le nom d'utilisateur du joueur n'est pas connu par le 
 	 * 				            serveur ou le mot de passe ne concorde pas au nom 
 	 * 				            d'utilisateur donné
-	 * 		   JoueurDejaConnecte : Le joueur a tenté de se connecter en même temps 
+	 *         JoueurDejaConnecte : Le joueur a tenté de se connecter en même temps 
 	 * 								à deux endroits différents  
 	 * 		   Succes : L'authentification a réussie
 	 * @synchronism  Cette fonction est synchronisée par rapport à la liste des
@@ -875,6 +869,13 @@ public class ControleurJeu
     
     public ParametreIA obtenirParametreIA()
     {
+    	if(objParametreIA == null)
+    	{
+    		// Créer une instance de la classe regroupant tous les paramètres
+            // des joueurs virtuels
+            objParametreIA = new ParametreIA();
+    	}
+    	
     	return objParametreIA;
     }
 

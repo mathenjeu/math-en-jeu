@@ -30,13 +30,13 @@ import ServeurJeu.ControleurJeu;
 public class Salle 
 {
 	// Déclaration d'une référence vers le gestionnaire d'événements
-	private GestionnaireEvenements objGestionnaireEvenements;
+	private final GestionnaireEvenements objGestionnaireEvenements;
 	
 	// Déclaration d'une référence vers le contr™leur de jeu
-	private ControleurJeu objControleurJeu;
+	private final ControleurJeu objControleurJeu;
 	
 	// Déclaration d'une référence vers le gestionnaire de bases de données
-	private GestionnaireBD objGestionnaireBD;
+	private final GestionnaireBD objGestionnaireBD;
 	
 	// Cette variable va contenir le nom de la salle
 	private final String strNomSalle;
@@ -84,7 +84,7 @@ public class Salle
 	
 	//type of room 
 	//we have 2 types for the moment, General and profsType
-	private String roomType;
+	private final String roomType;
 	
 	
 
@@ -107,7 +107,7 @@ public class Salle
 		
 		// Faire la référence vers le gestionnaire d'événements et le 
 		// gestionnaire de base de données
-		objGestionnaireEvenements = new GestionnaireEvenements();
+		objGestionnaireEvenements = controleurJeu.obtenirGestionnaireEvenements();//new GestionnaireEvenements();
 		objGestionnaireBD = controleurJeu.obtenirGestionnaireBD();
 		
 		// Garder en mémoire le nom de la salle, le nom d'utilisateur du 
@@ -133,13 +133,13 @@ public class Salle
 		lstNoTables = new TreeSet <Integer>();
 		               
         // Faire la référence vers le controleur de jeu
-		setObjControleurJeu(controleurJeu);
+		objControleurJeu = controleurJeu;
 		
 		// Créer un thread pour le GestionnaireEvenements
-		Thread threadEvenements = new Thread(objGestionnaireEvenements);
+		//Thread threadEvenements = new Thread(objGestionnaireEvenements);
 		
 		// Démarrer le thread du gestionnaire d'événements
-		threadEvenements.start();
+		//threadEvenements.start();
 			
 	}
 
@@ -856,10 +856,10 @@ public class Salle
 	 * @param categories the categories to set
 	 */
 	public void setCategories() {
-		Categories[] catValues = Categories.values();
-		for(int i = 0; i < catValues.length; i++)
+		//Categories[] catValues = Categories.values();
+		for(Categories catValues: Categories.values())
 		{
-			categories.add(catValues[i].getCode());
+			categories.add(catValues.getCode());
 		}
 
 	}// end methode
@@ -872,11 +872,10 @@ public class Salle
 	{
         
 		if(categoriesString != null){
-			//System.out.println("string cat : " + categoriesString);		
+			
 			StringTokenizer cat = new StringTokenizer(categoriesString, ":");
 			int whatCategories = Integer.parseInt(cat.nextToken());
-			//System.out.println("string cat bool : " + whatCategories);
-			// if whatCategories == 1 we take only categories from BD
+			
 			if(whatCategories == 1){
 				while(cat.hasMoreTokens())
 				{
@@ -897,10 +896,7 @@ public class Salle
 		
 		// to not be without any categories
 		if( categories.isEmpty()) setCategories(); 
-		
-		//ListIterator<Integer> it = categories.listIterator();	
-		//while(it.hasNext())
-			//System.out.println(it.next());
+				
 	}// end mathode
 	
 
@@ -919,9 +915,6 @@ public class Salle
 		return strPassword;
 	}
 
-	public void setObjControleurJeu(ControleurJeu objControleurJeu) {
-		this.objControleurJeu = objControleurJeu;
-	}
 
 	public ControleurJeu getObjControleurJeu() {
 		return objControleurJeu;
@@ -943,12 +936,13 @@ public class Salle
 		this.roomAllowedTypes = roomAllowedTypes;
 	}
 	
+	
 	public String getRoomType() {
 		return roomType;
 	}
-
+    /*
 	public void setRoomType(String roomType) {
 		this.roomType = roomType;
-	}
+	}*/
 	
 }// end class 

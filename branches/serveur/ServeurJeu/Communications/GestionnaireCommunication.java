@@ -11,8 +11,6 @@ import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import ServeurJeu.Evenements.GestionnaireEvenements;
-import ServeurJeu.Temps.GestionnaireTemps;
-import ServeurJeu.Temps.TacheSynchroniser;
 
 /**
  * @author Jean-François Brind'Amour
@@ -78,11 +76,7 @@ public class GestionnaireCommunication
 		
 		// Créer le vérificateur de connexions
 		objVerificateurConnexions = new VerificateurConnexions(this);
-		
-		//objGestionnaireTemps = controleur.obtenirGestionnaireTemps();
-		//objTacheSynchroniser = controleur.obtenirTacheSynchroniser();
-		
-		
+			
 		// Créer un thread pour le vérificateur de connexions
 		Thread threadVerificateur = new Thread(objVerificateurConnexions);
 		

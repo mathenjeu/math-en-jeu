@@ -8,34 +8,33 @@ import ClassesUtilitaires.UtilitaireNombres;
 public class Question
 {
 	// Déclaration d'une variable qui va contenir le code de la question
-	private int intCodeQuestion;
+	private final int intCodeQuestion;
 	
 	// Déclaration d'une variable qui va contenir l'URL de la question
-	private String strURLQuestion;
+	private final String strURLQuestion;
 	
 	// Déclaration d'une variable qui va garder le type de la question
-	private String objTypeQuestion;
+	private final int objTypeQuestion;
 	
 	// Déclaration d'une variable qui va contenir la réponse à la question
-	private String strReponse;
+	private final String strReponse;
 	
 	// Déclaration d'une variable qui va contenir l'url de l'explication de 
 	// la réponse
-	private String strURLExplication;
+	private final String strURLExplication;
 	
     /**
      *  Déclaration d'une variable qui va contenir la catégorie de la question
      * 
      */
-	private int intCategorie;
-	
+	private final int intCategorie;
 	
 	/**
 	 *  Déclaration d'une variable qui va garder la difficulté de la question.
 	 *	Peut avoir une valeur entre 1 et 6, que dépend de niveau scolaire du 
 	 *  joueur pour cette categorie, si 0 est pas applicable pour joueur
      */
-	private int intDifficulte;
+	private final int intDifficulte;
 	 
 	
 	
@@ -50,14 +49,14 @@ public class Question
 	 * @param String reponse : La réponse à la question
 	 * @param String urlExplication : Le URL de l'explication de la réponse
 	 */
-	public Question(int codeQuestion, String typeQuestion, int difficulte, String urlQuestion, String reponse, String urlExplication, int categorie )
+	public Question(int codeQuestion, int typeQuestion, int difficulte, String urlQuestion, String reponse, String urlExplication, int categorie )
 	{
 		// Définir les propriétés des questions
 		intCodeQuestion = codeQuestion;
 		objTypeQuestion = typeQuestion;
 		intDifficulte = difficulte;
 		strURLQuestion = urlQuestion;
-		strReponse = reponse;
+		strReponse = reponse.toLowerCase().replace(",",".");
 		strURLExplication = urlExplication;
 		intCategorie = categorie;
 	}
@@ -88,7 +87,7 @@ public class Question
 	 * 
 	 * @return String : Le type de la question
 	 */
-	public String obtenirTypeQuestion()
+	public int obtenirTypeQuestion()
 	{
 		return objTypeQuestion;
 	}
@@ -121,15 +120,16 @@ public class Question
 	 */
 	public boolean reponseEstValide(String reponse)
 	{
-		// MEJ-91 standartisation des réponses
-		reponse = reponse.trim().toLowerCase().replace("ç","c").replace("ù","u");
-		reponse = reponse.replace("û", "u").replace("ô","o").replace("ò","o");
-		reponse = reponse.replace("é", "e").replace("ê","e").replace("è","e");
-		reponse = reponse.replace("à", "a").replace("â","a").replace(".",",");
-		reponse = reponse.replace("ï", "i").replace("î","i");
-		reponse = reponse.replace(",",".");
-		System.out.println("La reponse : " + reponse + " Est la rep dans BD : " + strReponse);
-		return strReponse.toLowerCase().replace(",",".").equals(reponse);
+		// standartisation des réponses
+		String tempStr = reponse.trim().toLowerCase();
+		tempStr = tempStr.replace("ç","c").replace("ù","u");
+		tempStr = tempStr.replace("û", "u").replace("ô","o").replace("ò","o");
+		tempStr = tempStr.replace("é", "e").replace("ê","e").replace("è","e");
+		tempStr = tempStr.replace("à", "a").replace("â","a").replace(".",",");
+		tempStr = tempStr.replace("ï", "i").replace("î","i");
+		tempStr = tempStr.replace(",",".");
+		//System.out.println("La reponse : " + reponse + " Est la rep dans BD : " + strReponse);
+		return strReponse.equals(tempStr);
 	}
 	
 	
@@ -138,28 +138,22 @@ public class Question
 	 * joueur utilise l'objet "Livre" qui permet d'éliminer un choix
 	 * de réponse. Dans le cas d'une question sans choix de réponse, la 
 	 * fonction retourne "PasUnChoixDeReponse"
-	 */
-	 public String obtenirMauvaiseReponse()
+	
+	 public  String obtenirMauvaiseReponse()
 	 {
-	 	// Vérifier si la réponse est un choix de réponse
-	 	if (strReponse.toUpperCase().equals("1") ||
-	 	    strReponse.toUpperCase().equals("2") ||
-	 	    strReponse.toUpperCase().equals("3") ||
-	 	    strReponse.toUpperCase().equals("4") ||
-	 	    strReponse.toUpperCase().equals("5") ||
-	 	    strReponse.toUpperCase().equals("6") )
-	 	{
-	 		System.out.println(strReponse.toUpperCase());
-	 		
-	 		// Choisir aléatoirement une mauvaise réponse
-	 		int nbChoix = 0;
-	 		if(objTypeQuestion.equals("MULTIPLE_CHOICE"))
+		// Choisir aléatoirement une mauvaise réponse
+	 	
+		int nbChoix = 0;
+	 	if(objTypeQuestion == 1)
 	 			nbChoix = 4;
-	 		else if(objTypeQuestion.equals("MULTIPLE_CHOICE_3"))
+	 	else if(objTypeQuestion == 5)
 	 			nbChoix = 3;
-	 		else if(objTypeQuestion.equals("MULTIPLE_CHOICE_5"))
-	 			nbChoix = 5;
-	 		
+	 	else if(objTypeQuestion == 4)
+	 			nbChoix = 5; 
+	 	
+	 	// Vérifier si la réponse est un choix de réponse
+	 	if (nbChoix > 2 && nbChoix < 6 )
+	 	{ 		
 	 		
 	 	    int arrShuffle[] = new int[nbChoix];
 	 	    for(int i = 0; i < nbChoix; i++)
@@ -182,7 +176,7 @@ public class Question
 	 	    	String strMauvaiseReponse = ((Integer)(arrShuffle[x])).toString();
 	 	    	if (!strMauvaiseReponse.equals(strReponse.toUpperCase()))
 	 	    	{
-	 	    		System.out.println("ICI mauvaise rep : "  + strMauvaiseReponse);
+	 	    		//System.out.println("ICI mauvaise rep : "  + strMauvaiseReponse);
 	 	    		return strMauvaiseReponse;
 	 	    	}
 	 	    }	 
@@ -193,7 +187,7 @@ public class Question
 	 	{
 	 		return "PasUnChoixDeReponse";
 	 	}
-	 }
+	 } */
 	 
 	/**
 	 * Cette fonction retourne le URL de l'explication de la réponse à la 
@@ -206,19 +200,11 @@ public class Question
 		return strURLExplication;
 	}
 	
-	public void definirDifficulte(int difficulte)
-	{
-		intDifficulte = difficulte;
-	}
 
 	public int obtenirCategorie() 
 	{
 		return intCategorie;
 	}
 
-	public void definirCategorie( int categorie ) 
-	{
-		intCategorie = categorie;
-	}
-	
+		
 } // fin classe

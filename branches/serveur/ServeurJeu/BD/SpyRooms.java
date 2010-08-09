@@ -2,12 +2,10 @@ package ServeurJeu.BD;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.Configuration.GestionnaireMessages;
@@ -20,11 +18,11 @@ import org.apache.log4j.Logger;
 public class SpyRooms implements Runnable {
 
 	// Declaration of object that points to ControleurJeu
-	private ControleurJeu objControleurJeu;
+	private final ControleurJeu objControleurJeu;
 	
 	// Declaration of variable that indicate the time in  milliseconds 
 	// between each DB cheqing 
-	private int delay;
+	private final int DELAY;
 	
 	// Used to stop the spyDB
 	private Boolean stopSpy;
@@ -43,7 +41,7 @@ public class SpyRooms implements Runnable {
 	public SpyRooms(ControleurJeu controleur, int controlTime){
 	
 		objControleurJeu = controleur;
-		delay = controlTime;
+		DELAY = controlTime;
 		stopSpy = false;
 		connexionDB();
 	}
@@ -60,7 +58,7 @@ public class SpyRooms implements Runnable {
 				detectNewRooms(objControleurJeu.removeOldRooms());
 
                 // Bloquer la thread jusqu'à la prochaine mise à jour
-               	Thread.sleep(delay);
+               	Thread.sleep(DELAY);
 	               	
 	    	}
 			catch( Exception e )

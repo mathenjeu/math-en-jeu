@@ -95,7 +95,7 @@ public enum Categories{
 
      public int getCode() { return code; }
 
-};
+}
 
 
 

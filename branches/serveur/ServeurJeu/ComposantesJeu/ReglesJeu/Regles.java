@@ -1,8 +1,6 @@
 package ServeurJeu.ComposantesJeu.ReglesJeu;
 
 import java.util.TreeSet;
-
-import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 
 /**
@@ -16,7 +14,7 @@ public class Regles
 	
 	// Déclaration d'une liste qui contient les magasins possibles (le 
 	// contenu est un objet ReglesMagasin)
-	private TreeSet<Magasin> lstMagasinsPossibles;
+	private final TreeSet<Magasin> lstMagasinsPossibles;
 	
 	// Déclaration d'une liste qui contient les cases spéciales possibles (le 
 	// contenu est un objet ReglesCaseSpeciale)
@@ -24,7 +22,7 @@ public class Regles
 	
 	// Déclaration d'une liste qui contient les objets utilisables possibles 
 	// (le contenu est un objet ReglesObjetUtilisable)
-	private TreeSet<ReglesObjetUtilisable> lstObjetsUtilisablesPossibles;
+	private final TreeSet<ReglesObjetUtilisable> lstObjetsUtilisablesPossibles;
 	
 	// Cette variable permet de savoir si on permet le chat ou non
 	private boolean bolPermetChat;
@@ -103,16 +101,16 @@ public class Regles
 	    // Initialiser les variables par défaut
 	    bolPermetChat = true;
 	    bolMoneyPermit = false;
-	    fltRatioTrous = 0.0f;
-	    fltRatioMagasins = 0.0f;
-	    fltRatioCasesSpeciales = 0.0f;
-	    fltRatioPieces = 0.0f;
-	    fltRatioObjetsUtilisables = 0.0f;
-	    intValeurPieceMaximale = 0;
-	    intTempsMinimal = 0;
-	    intTempsMaximal = 0;
+	    //fltRatioTrous = 0.0f;
+	    //fltRatioMagasins = 0.0f;
+	    //fltRatioCasesSpeciales = 0.0f;
+	    //fltRatioPieces = 0.0f;
+	    //fltRatioObjetsUtilisables = 0.0f;
+	    //intValeurPieceMaximale = 0;
+	    //intTempsMinimal = 0;
+	    //intTempsMaximal = 0;
 	    intDeplacementMaximal = 1;
-	    intMaxSaledObjects = 0;
+	    //intMaxSaledObjects = 0;
 	    //tournamentState = false;
 	    showNumber = true;
 	    setNbTracks(4);
@@ -177,11 +175,11 @@ public class Regles
 	 * Cette fonction permet de définir si oui ou non on veut le chat.
 	 * 
 	 * @param boolean chat : Permet de savoir si on permet le chat ou non
-	 */
+	*/
 	public void definirPermetChat(boolean chat)
 	{
 	   bolPermetChat = chat;
-	}
+	} 
 	
 	/**
 	 * Cette fonction permet de retourner le ratio de trous.
@@ -217,11 +215,11 @@ public class Regles
 	 * Cette fonction permet de définir le ratio de magasins.
 	 * 
 	 * @param float ratio : Le ratio de magasins (entre 0 et 1)
-	 */
+	*/
 	public void definirRatioMagasins(float ratio)
 	{
 		fltRatioMagasins = ratio;
-	}
+	} 
 	
 	/**
 	 * Cette fonction permet de retourner le ratio de cases spéciales.

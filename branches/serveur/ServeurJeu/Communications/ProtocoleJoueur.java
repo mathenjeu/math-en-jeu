@@ -13,7 +13,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.Iterator;
@@ -23,6 +22,7 @@ import java.util.TreeMap;
 import java.util.GregorianCalendar;
 import java.awt.Point;
 import Enumerations.Filtre;
+import Enumerations.TypeQuestion;
 import ClassesUtilitaires.UtilitaireXML;
 import ClassesUtilitaires.UtilitaireEncodeurDecodeur;
 import ClassesUtilitaires.UtilitaireNombres;
@@ -62,17 +62,17 @@ public class ProtocoleJoueur implements Runnable
 {
 
 	// Déclaration d'une référence vers le contrôleur de jeu
-	private ControleurJeu objControleurJeu;
+	private final ControleurJeu objControleurJeu;
 
 	// Déclaration d'une référence vers le gestionnaire des communications
-	private GestionnaireCommunication objGestionnaireCommunication;
+	private final GestionnaireCommunication objGestionnaireCommunication;
 
 	// Déclaration d'une référence vers le vérificateur des connexions
-	private VerificateurConnexions objVerificateurConnexions;
+	private final VerificateurConnexions objVerificateurConnexions;
 
 	// Cet objet permet de garder une référence vers le canal de communication 
 	// entre le serveur et le client (joueur) courant
-	private Socket objSocketJoueur;
+	private final Socket objSocketJoueur;
 
 	// Déclaration d'un canal de réception	
 	private InputStream objCanalReception;
@@ -82,7 +82,7 @@ public class ProtocoleJoueur implements Runnable
 
 	// Déclaration d'une référence vers un joueur humain correspondant à ce
 	// protocole
-	private JoueurHumain objJoueurHumain;
+	private  JoueurHumain objJoueurHumain;
 
 	// Déclaration d'une variable qui va servir de compteur pour envoyer des
 	// commandes ou événements au joueur de ce ProtocoleJoueur (sa valeur 
@@ -97,11 +97,11 @@ public class ProtocoleJoueur implements Runnable
 	// retourner au client ayant fait une requète au serveur
 	private int intNumeroCommandeReponse;
 
-	private GestionnaireTemps objGestionnaireTemps;
+	private final GestionnaireTemps objGestionnaireTemps;
 
-	private TacheSynchroniser objTacheSynchroniser;
+	private final TacheSynchroniser objTacheSynchroniser;
 
-	static private Logger objLogger = Logger.getLogger( ProtocoleJoueur.class );
+	private static final Logger objLogger = Logger.getLogger( ProtocoleJoueur.class );
 
     // On obtiendra la langue du joueur pour pouvoir construire la boîte de questions
     public String langue;
@@ -117,11 +117,7 @@ public class ProtocoleJoueur implements Runnable
 	// time in seconds as reference to calculate time of reponse
 	private int lastQuestionTime;
 	
-	// describe the type of client 1 - game and 2 is prof's module
-	//private int client;
-
 	
-
 	/**
      * Constructeur de la classe ProtocoleJoueur qui permet de garder une 
 	 * référence vers le contrôleur de jeu, vers le gestionnaire des 
@@ -144,13 +140,13 @@ public class ProtocoleJoueur implements Runnable
 		objGestionnaireCommunication = controleur.obtenirGestionnaireCommunication();
 		objVerificateurConnexions = verificateur;
 		objSocketJoueur = socketJoueur;
-		objJoueurHumain = null;
-		bolStopThread = false;
-		intCompteurCommande = 0;
+		//objJoueurHumain = null;
+		//bolStopThread = false;
+		//intCompteurCommande = 0;
 		intNumeroCommandeReponse = -1;
 		objGestionnaireTemps = controleur.obtenirGestionnaireTemps();
 		objTacheSynchroniser = controleur.obtenirTacheSynchroniser();
-        bolEnTrainDeJouer = false;
+        //bolEnTrainDeJouer = false;
         objLogger.info( GestionnaireMessages.message("protocole.connexion").replace("$$CLIENT$$", socketJoueur.getInetAddress().toString()));
 
 		questionsAnswers = new StringBuffer();
@@ -2294,7 +2290,7 @@ public class ProtocoleJoueur implements Runnable
 							// Créer un noeud texte contenant l'information sur la question
 							Element objNoeudQuestion = objDocumentXMLSortie.createElement("question");
 							objNoeudQuestion.setAttribute("id", Integer.toString(objQuestionAPoser.obtenirCodeQuestion()));
-							objNoeudQuestion.setAttribute("type", objQuestionAPoser.obtenirTypeQuestion().toString());
+							objNoeudQuestion.setAttribute("type", TypeQuestion.getValue(objQuestionAPoser.obtenirTypeQuestion()));
 							objNoeudQuestion.setAttribute("url", objQuestionAPoser.obtenirURLQuestion());
 
 
@@ -4475,7 +4471,7 @@ public class ProtocoleJoueur implements Runnable
             	 // à la question, et le client fera disparaître ce choix de réponse
             	 // parmi les choix possibles pour le joueur.
             	 // On obtient une mauvaise réponse à la dernière question posée
-            	 String mauvaiseReponse = objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().obtenirMauvaiseReponse();
+            	 String mauvaiseReponse = objJoueurHumain.obtenirPartieCourante().getObjBoiteQuestions().obtenirMauvaiseReponse(objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante());
 
             	 // Créer le noeud contenant le choix de réponse si c'était une question à choix de réponse
             	 Element objNoeudParametreMauvaiseReponse = objDocumentXMLSortie.createElement("parametre");
@@ -4511,7 +4507,7 @@ public class ProtocoleJoueur implements Runnable
             	 objNoeudParametreNouvelleQuestion.setAttribute("type", "nouvelleQuestion");
             	 Element objNoeudParametreQuestion = objDocumentXMLSortie.createElement("question");
             	 objNoeudParametreQuestion.setAttribute("id", Integer.toString(nouvelleQuestion.obtenirCodeQuestion()));
-            	 objNoeudParametreQuestion.setAttribute("type", nouvelleQuestion.obtenirTypeQuestion());
+            	 objNoeudParametreQuestion.setAttribute("type", TypeQuestion.getValue(nouvelleQuestion.obtenirTypeQuestion()));
             	 objNoeudParametreQuestion.setAttribute("url", nouvelleQuestion.obtenirURLQuestion());
             	 objNoeudParametreNouvelleQuestion.appendChild(objNoeudParametreQuestion);
             	 objNoeudCommande.setAttribute("type", "Boule");
@@ -4598,7 +4594,7 @@ public class ProtocoleJoueur implements Runnable
 		synchronized(objMagasin)
 		{					
 	    	// Obtenir la liste des objets en vente au magasin
-	    	Vector<ObjetUtilisable> lstObjetsEnVente = objMagasin.obtenirListeObjetsUtilisables();
+	    	ArrayList<ObjetUtilisable> lstObjetsEnVente = objMagasin.obtenirListeObjetsUtilisables();
 	    	
 	    	// Créer le message XML en parcourant la liste des objets en vente
 	    	for (int i = 0; i < lstObjetsEnVente.size(); i++)

@@ -11,12 +11,12 @@ public class VerificateurConnexions implements Runnable
 	private GestionnaireCommunication objGestionnaireCommunication;
 	
 	// Cette variable permet de savoir s'il faut arrêter le thread ou non
-	private boolean bolStopThread = false;
+	private boolean bolStopThread;
 	
 	// Déclaration d'une variable qui va compter le nombre de fois que 
 	// des messages ping ont été envoyés (une fois rendu à 10, ça va 
 	// retourner à 0)
-	private int intCompteurPing = 0;
+	private int intCompteurPing;
 	
 	// Déclaration d'une liste de ProtocoleJoueur pour les clients qui 
 	// ont répondu au ping

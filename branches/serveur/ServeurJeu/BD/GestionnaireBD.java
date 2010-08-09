@@ -5,7 +5,7 @@ import java.sql.*;
 import org.apache.log4j.Logger;
 import Enumerations.Visibilite;
 import ServeurJeu.ComposantesJeu.BoiteQuestions;
-import ServeurJeu.ComposantesJeu.Lang;
+import ServeurJeu.ComposantesJeu.Language;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ControleurJeu;
@@ -34,7 +34,7 @@ import ServeurJeu.Configuration.GestionnaireMessages;
 public class GestionnaireBD 
 {
 	// Déclaration d'une référence vers le contrôleur de jeu
-	private  ControleurJeu objControleurJeu;
+	private final ControleurJeu objControleurJeu;
 	
     // Objet Connection nécessaire pour le contact avec le serveur MySQL
 	private Connection connexion;
@@ -400,8 +400,8 @@ public class GestionnaireBD
 		//System.out.println("start boite: " + System.currentTimeMillis());
         // Pour tenir compte de la langue
         int cleLang = 1;   
-        Lang lang = boiteQuestions.obtenirLangue();
-        String langue = lang.getLanguage();
+        Language language = boiteQuestions.obtenirLangue();
+        String langue = language.getLanguage();
         if (langue.equalsIgnoreCase("fr")) 
             cleLang = 1;
         else if (langue.equalsIgnoreCase("en"))
@@ -419,8 +419,8 @@ public class GestionnaireBD
         	int categorie = it.next();
         	//System.out.println("x : "+categorie);
         	
-        	String strRequeteSQL = "SELECT answer.is_right,question.question_id, question_info.question_flash_file,question_info.feedback_flash_file, question_level.value, answer_type.tag " +
-        	" FROM question_info, question_level, question, answer_type, answer " +
+        	String strRequeteSQL = "SELECT question.answer_type_id, answer.is_right,question.question_id, question_info.question_flash_file,question_info.feedback_flash_file, question_level.value" +
+        	" FROM question_info, question_level, question, answer " +
         	" WHERE  question_info.language_id = " + cleLang +
         	" AND question.question_id = question_level.question_id " +
         	" AND question_info.question_id = question.question_id " +
@@ -430,16 +430,15 @@ public class GestionnaireBD
         	" and question_info.feedback_flash_file is not NULL " +
         	" and question_level.level_id = " + niveau[i] + 
         	" and question_level.value > 0 " +
-        	" and question.answer_type_id = answer_type.answer_type_id " +
         	" and question.question_id = answer.question_id " +
-        	" and (answer_type.tag = 'MULTIPLE_CHOICE' OR answer_type.tag = 'MULTIPLE_CHOICE_5' OR answer_type.tag = 'MULTIPLE_CHOICE_3')";
+        	" and (answer_type_id = 1 OR answer_type_id = 4 OR answer_type_id = 5)";
         	
         	remplirBoiteQuestionsMC( boiteQuestions, strRequeteSQL, categorie );
         	
         	String strRequeteSQL_SA = "SELECT DISTINCT a.answer_latex, qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
         	"FROM question_info qi, question_level ql, answer_info a " +
-        	"where qi.question_id IN (select q.question_id from question q, answer_type at " +
-        	"where q.answer_type_id = at.answer_type_id and q.category_id = " + categorie + " and at.tag='SHORT_ANSWER')" +
+        	"where qi.question_id IN (select q.question_id from question q " +
+        	"where q.category_id = " + categorie + " and q.answer_type_id = 2)" +
         	" AND qi.question_id = a.question_id and qi.question_id = ql.question_id " +
         	" AND qi.language_id = " + cleLang +
         	" and ql.level_id = " + niveau[i] + 
@@ -453,7 +452,7 @@ public class GestionnaireBD
         	String strRequeteSQL_TF = "SELECT DISTINCT a.is_right,qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
         	" FROM question_info qi, question_level ql, answer a " +
         	"where qi.question_id IN (select q.question_id from question q, answer_type a " +
-        	"where q.answer_type_id=a.answer_type_id and q.category_id = " + categorie + " and a.tag='TRUE_OR_FALSE') " +
+        	"where q.answer_type_id = a.answer_type_id and q.category_id = " + categorie + " and a.tag='TRUE_OR_FALSE') " +
         	" AND qi.question_id=a.question_id and qi.question_id=ql.question_id " +
         	" AND qi.language_id = " + cleLang +
         	" and ql.level_id = " + niveau[i] + 
@@ -497,7 +496,7 @@ public class GestionnaireBD
 					countReponse++;
 					if(condition == 1)
 					{
-						String typeQuestion = rs.getString( "tag" );
+						int typeQuestion = rs.getInt( "answer_type_id" );
 						String question = rs.getString( "question_flash_file" );
 						String explication = rs.getString("feedback_flash_file");
 						int difficulte = rs.getInt("value");
@@ -545,7 +544,7 @@ public class GestionnaireBD
 				{
 					int codeQuestion = rs.getInt("question_id");
 					//int categorie =  Integer.parseInt(rs.getString("category_id"));
-					String typeQuestion = "SHORT_ANSWER";//rs.getString( "tag" );
+					int typeQuestion = 3;//rs.getString( "tag" );
 					String question = rs.getString( "question_flash_file" );
 					String reponse = rs.getString("answer_latex");
 					String explication = rs.getString("feedback_flash_file");
@@ -591,7 +590,7 @@ public class GestionnaireBD
 				{
 					int codeQuestion = rs.getInt("question_id");
 					//int categorie =  Integer.parseInt(rs.getString("category_id"));
-					String typeQuestion = "TRUE_OR_FALSE";   //rs.getString( "tag" );
+					int typeQuestion = 2;   //rs.getString( "tag" );
 					String question = rs.getString( "question_flash_file" );
 					String reponse = rs.getString("is_right");
 					String explication = rs.getString("feedback_flash_file");

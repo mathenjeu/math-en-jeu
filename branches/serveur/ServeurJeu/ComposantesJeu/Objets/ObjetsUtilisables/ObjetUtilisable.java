@@ -9,28 +9,28 @@ public class ObjetUtilisable extends Objet
 {
 	// Déclaration d'une variable qui va garder si oui ou non l'objet 
 	// courant est visible sur la case ou non
-	protected boolean bolEstVisible;
+	protected final boolean bolEstVisible;
 	
 	// Déclaration d'une variable qui va garder le numéro d'identification 
 	// de l'objet courant
-	protected int intId;
+	protected final int intId;
 	
 	// Déclaration d'une variable qui contient un numéro id identifiant le
 	// type d'objet
-	protected int intUID;
+	protected final int intUID;
 	
 	// Le prix de l'objet utilsable
-	protected int intPrix;
+	protected final int intPrix;
 	
 	// Indique si l'objet peut être armé
-	protected boolean bolPeutEtreArme;
+	protected final boolean bolPeutEtreArme;
 	
 	// Indique si l'objet se vend de façon illimité dans les magasins
-	protected boolean bolEstLimite;
+	protected final boolean bolEstLimite;
 	
 	// Le type de l'objet en chaîne de caractères, utilisé de façon
 	// unique pour communiquer avec le client
-	protected String strTypeObjet;
+	protected final String strTypeObjet;
 	
 	/**
 	 * Constructeur de la classe ObjetUtilisable qui permet d'initialiser 

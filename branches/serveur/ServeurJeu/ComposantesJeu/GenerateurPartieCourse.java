@@ -11,7 +11,6 @@ import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin1;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin2;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin3;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin4;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Banane;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Boule;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Brainiac;
@@ -95,9 +94,9 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 		int intNbPieces = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioPieces());
 		int intNbObjetsUtilisables = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioObjetsUtilisables());
 
-		System.out.println("temps : " + temps);
-		System.out.println("lignes : " + intNbLines);
-		System.out.println("colognes : " + intNbColumns);
+		//System.out.println("temps : " + temps);
+		//System.out.println("lignes : " + intNbLines);
+		//System.out.println("colognes : " + intNbColumns);
 		
 		// to set the correct values on the table
 		table.setNbLines(intNbLines);
@@ -252,7 +251,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 			{
 				// Calculer la valeur de la pièce à créer de façon aléatoire 
 				// selon une loi normale
-				int intValeur = Math.max(Math.abs(ClassesUtilitaires.UtilitaireNombres.genererNbAleatoireLoiNormale(0.0d, Math.pow(((double) reglesPartie.obtenirValeurPieceMaximale()) / 3.0d, 2.0d))), 1);
+				int intValeur = 1;//Math.max(Math.abs(ClassesUtilitaires.UtilitaireNombres.genererNbAleatoireLoiNormale(0.0d, Math.pow(((double) reglesPartie.obtenirValeurPieceMaximale()) / 3.0d, 2.0d))), 1);
 					
 				// Obtenir un point aléatoirement parmi les points restants
 				// qui n'ont pas de pièces et enlever en même temps ce point 

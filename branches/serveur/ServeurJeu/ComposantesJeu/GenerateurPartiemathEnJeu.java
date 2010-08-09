@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
-
 import Enumerations.Visibilite;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
@@ -23,8 +22,6 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.PotionGros;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.PotionPetit;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Telephone;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseCouleur;
-import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 
@@ -107,9 +104,9 @@ public class GenerateurPartiemathEnJeu extends GenerateurPartie {
 		int intNbPieces = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioPieces());
 		int intNbObjetsUtilisables = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioObjetsUtilisables());
 
-		System.out.println("temps : " + temps);
-		System.out.println("lignes : " + intNbLines);
-		System.out.println("colognes : " + intNbColumns);
+		//System.out.println("temps : " + temps);
+		//System.out.println("lignes : " + intNbLines);
+		//System.out.println("colognes : " + intNbColumns);
 		
 		// to set the correct values on the table
 		table.setNbLines(intNbLines);
@@ -262,7 +259,7 @@ public class GenerateurPartiemathEnJeu extends GenerateurPartie {
 			{
 				// Calculer la valeur de la pièce à créer de façon aléatoire 
 				// selon une loi normale
-				int intValeur = Math.max(Math.abs(ClassesUtilitaires.UtilitaireNombres.genererNbAleatoireLoiNormale(0.0d, Math.pow(((double) reglesPartie.obtenirValeurPieceMaximale()) / 3.0d, 2.0d))), 1);
+				int intValeur =1; // Math.max(Math.abs(ClassesUtilitaires.UtilitaireNombres.genererNbAleatoireLoiNormale(0.0d, Math.pow(((double) reglesPartie.obtenirValeurPieceMaximale()) / 3.0d, 2.0d))), 1);
 					
 				// Obtenir un point aléatoirement parmi les points restants
 				// qui n'ont pas de pièces et enlever en même temps ce point 

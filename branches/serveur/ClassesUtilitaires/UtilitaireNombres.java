@@ -7,6 +7,8 @@ import java.util.Random;
  */
 public final class UtilitaireNombres 
 {
+	private static final Random objRandom = new Random();
+	
 	/**
 	 * Constructeur par défaut est privé pour empêcher de pourvoir créer des 
 	 * instances de cette classe.
@@ -89,7 +91,7 @@ public final class UtilitaireNombres
     	boolean bolTrouve = false;
     	
     	// Créer un objet permettant de générer des nombres aléatoires
-    	Random objRandom = new Random();
+    	//Random objRandom = new Random();
     	
     	// Déclarations des variables utilisées pour l'algorithme
     	double u1 = 0.0d;
@@ -129,7 +131,7 @@ public final class UtilitaireNombres
     
     public static int genererNbAleatoire(int max)
     {
-    	Random objRandom = new Random();
+    	//Random objRandom = new Random();
     	return objRandom.nextInt(max);
     }
 }

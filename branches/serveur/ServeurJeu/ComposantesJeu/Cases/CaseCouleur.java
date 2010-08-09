@@ -28,8 +28,8 @@ public class CaseCouleur extends Case
 		super(typeCase);
 		
 		// Au départ, il n'y a aucuns objets sur la case
-		objObjetCase = null;
-		objObjetArme = null;
+		//objObjetCase = null;
+		//objObjetArme = null;
 	}
 	
 	/**

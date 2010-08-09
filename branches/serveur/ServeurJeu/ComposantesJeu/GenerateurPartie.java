@@ -15,7 +15,7 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 public abstract class GenerateurPartie 
 {
 	// Création d'un objet permettant de générer des nombres aléatoires
-	protected Random objRandom;
+	protected final static Random objRandom = new Random();
     		
 	// Déclaration de points
 	protected Point objPoint;
@@ -77,21 +77,21 @@ public abstract class GenerateurPartie
 	// Constractor	
 	protected GenerateurPartie() {
 		super();
-		this.objRandom = new Random();
+		//this.objRandom = 
 		this.lstPointsCasesPresentes = new ArrayList<Point>();
 		this.lstPointsCasesSpeciales = new ArrayList<Point>();
 		this.lstPointsCasesCouleur = new ArrayList<Point>();
 		this.lstPointsMagasins = new ArrayList<Point>();
 		this.lstPointsPieces = new ArrayList<Point>();
 		this.lstPointsObjetsUtilisables = new ArrayList<Point>();
-		this.intCompteurCases = 0;
+		//this.intCompteurCases = 0;
 		this.intCompteurIdObjet = 1;
 		this.objCaseParcourue = new CaseCouleur(1);
-		this.reglesPartie = null;//salle.getRegles();
-		this.objGestionnaireBD = null;//salle.getObjControleurJeu().obtenirGestionnaireBD();
-		this.objSalle = null;//salle;
-		this.intNbColumns = 0;
-		this.intNbLines = 0;
+		//this.reglesPartie = null;//salle.getRegles();
+		//this.objGestionnaireBD = null;//salle.getObjControleurJeu().obtenirGestionnaireBD();
+		//this.objSalle = null;//salle;
+		//this.intNbColumns = 0;
+		//this.intNbLines = 0;
 		
 	}
 
