@@ -261,7 +261,7 @@ public class Salle
 				preparerEvenementJoueurEntreSalle(joueur.obtenirNomUtilisateur());
 		    }
 				    
-		    objGestionnaireBD.fillUserLevels(joueur, this);
+		    //objGestionnaireBD.fillUserLevels(joueur, this);
 		   
 			// On retourne vrai
 			return true;

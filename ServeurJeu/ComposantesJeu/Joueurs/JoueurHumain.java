@@ -37,11 +37,10 @@ public class JoueurHumain extends Joueur
 	private int role;
 	
 	/**
-	 * Déclaration d'un tableau qui contient les valeurs des niveaux des catégories
-	 * pour le profil du joueur - informaton garder dans BD -> user_subject_level
+	 * Déclaration d'un variable qui contient la valeur du niveau du joueur 
 	 * valeurs possibles -> entre 1 et 16
 	 */
-	private int[] cleNiveau;
+	private int cleNiveau;
 	
 	// Déclaration d'une référence vers la salle dans laquelle le joueur se 
 	// trouve (null si le joueur n'est dans aucune salle)
@@ -228,12 +227,12 @@ public class JoueurHumain extends Joueur
 	}
 
     
-	public int[] obtenirCleNiveau() 
+	public int obtenirCleNiveau() 
 	{
 		return cleNiveau;
 	}
 
-	public void definirCleNiveau(int[] cleNiveau) 
+	public void definirCleNiveau(int cleNiveau) 
 	{
 		this.cleNiveau = cleNiveau;
 	} 
