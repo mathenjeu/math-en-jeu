@@ -214,12 +214,13 @@ public class GestionnaireBD
 	{
 		int cle = 0;
 		int role = 0;
+		int niveau = 1; // default level is 1 - generic level
 		
 		try
 		{
 			synchronized( requete )
 			{
-				ResultSet rs = requete.executeQuery("SELECT user.user_id,last_name,name,role_id  FROM user " +
+				ResultSet rs = requete.executeQuery("SELECT user.user_id,last_name,name,role_id, level_id  FROM user " +
 						" WHERE username = '" + joueur.obtenirNomUtilisateur() + 
 						"';"); //
 				if (rs.next())
@@ -228,12 +229,14 @@ public class GestionnaireBD
 					String prenom = rs.getString("last_name");
 					String nom = rs.getString("name");
 					cle = rs.getInt("user_id");
-					role = rs.getInt("role_id"); 
+					role = rs.getInt("role_id");
+					niveau = rs.getInt("level_id");
 						
 					joueur.definirPrenom(prenom);
 					joueur.definirNomFamille(nom);
 					joueur.definirCleJoueur(cle);
 					joueur.setRole(role);
+					joueur.definirCleNiveau(niveau);
 				}
 			}
 		}
@@ -257,47 +260,11 @@ public class GestionnaireBD
 	 * @param salle 
 	 * 
 	 * @param JoueurHumain player
-	 */
+	 
 	public void fillUserLevels(JoueurHumain player, Salle salle)
 	{
 		//System.out.println("start level: " + System.currentTimeMillis());
 		int cle = player.obtenirCleJoueur();
-		
-		// on prend dans BD les niveaux scolaires du joueur en utilisant les Categories de la salle
-		// commited code - is used single level
-		/*
-		ArrayList<Integer> cat = salle.getCategories();
-		int[] cleNiveau =  new int[cat.size()];
-		ListIterator<Integer> it = cat.listIterator();		
-		
-		try
-		{
-			
-			for(int i = 0; i < cleNiveau.length; i++)
-			{
-				synchronized(requete)
-				{
-					
-					ResultSet rs = requete.executeQuery("SELECT user_subject_level.level  FROM user_subject_level " +
-					" WHERE  user_subject_level.user_id = " + cle + " AND user_subject_level.category_id = " + it.next() + ";");
-					if(rs.next())
-					{
-						cleNiveau[i] = rs.getInt("level");
-						//System.out.println("level : " + cleNiveau[i] + " " + i);
-	    			}
-					
-				}
-
-			}
-		}
-		catch (Exception e)
-		{
-			System.out.println(GestionnaireMessages.message("bd.erreur_adding_info_subject_user") + e.getMessage());
-		}
-		*/
-		
-		ArrayList<Integer> cat = salle.getCategories();
-		int[] cleNiveau =  new int[cat.size()];
 		int niveau = 0;
 		try
 		{
@@ -322,14 +289,10 @@ public class GestionnaireBD
 		{
 			System.out.println(GestionnaireMessages.message("bd.erreur_adding_info_subject_user") + e.getMessage());
 		}
-		for(int i = 0; i < cleNiveau.length; i++)
-		{
-			cleNiveau[i] = niveau;
-		}
-		
-		player.definirCleNiveau(cleNiveau);
+				
+		player.definirCleNiveau(niveau);
 		//System.out.println("end level : " + System.currentTimeMillis());		
-	}//end methode
+	}//end methode*/
 	
 
 	
@@ -411,67 +374,75 @@ public class GestionnaireBD
         ArrayList<Integer> cat = player.obtenirSalleCourante().getCategories();
 		ListIterator<Integer> it = cat.listIterator();		
         
-		int[] niveau = player.obtenirCleNiveau();
-		//int level = niveau[0];
+		int niveau = player.obtenirCleNiveau();
+
 		// pour chaque catégorie on prend le niveau scolaire du joueur
-        for(int i = 0; i < cat.size(); i++)
+		StringBuffer categorie = new StringBuffer();
+		
+		for(int i = 0; i < cat.size(); i++)
 		{
-        	int categorie = it.next();
-        	//System.out.println("x : "+categorie);
-        	
-        	String strRequeteSQL = "SELECT question.answer_type_id, answer.is_right,question.question_id, question_info.question_flash_file,question_info.feedback_flash_file, question_level.value" +
-        	" FROM question_info, question_level, question, answer " +
-        	" WHERE  question_info.language_id = " + cleLang +
-        	" AND question.question_id = question_level.question_id " +
-        	" AND question_info.question_id = question.question_id " +
-        	" AND question.category_id = " + categorie +
-        	" and question_info.is_valid = 1 " +
-        	" and question_info.question_flash_file is not NULL " +
-        	" and question_info.feedback_flash_file is not NULL " +
-        	" and question_level.level_id = " + niveau[i] + 
-        	" and question_level.value > 0 " +
-        	" and question.question_id = answer.question_id " +
-        	" and (answer_type_id = 1 OR answer_type_id = 4 OR answer_type_id = 5)";
-        	
-        	remplirBoiteQuestionsMC( boiteQuestions, strRequeteSQL, categorie );
-        	
-        	String strRequeteSQL_SA = "SELECT DISTINCT a.answer_latex, qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
-        	"FROM question_info qi, question_level ql, answer_info a " +
-        	"where qi.question_id IN (select q.question_id from question q " +
-        	"where q.category_id = " + categorie + " and q.answer_type_id = 2)" +
-        	" AND qi.question_id = a.question_id and qi.question_id = ql.question_id " +
-        	" AND qi.language_id = " + cleLang +
-        	" and ql.level_id = " + niveau[i] + 
-        	" and ql.value > 0 " +
-        	" and qi.is_valid = 1 " +
-        	" and qi.question_flash_file is not NULL" +
-        	" and qi.feedback_flash_file is not NULL";
-        	
-        	remplirBoiteQuestionsSA( boiteQuestions, strRequeteSQL_SA, categorie );
-        	
-        	String strRequeteSQL_TF = "SELECT DISTINCT a.is_right,qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
-        	" FROM question_info qi, question_level ql, answer a " +
-        	"where qi.question_id IN (select q.question_id from question q, answer_type a " +
-        	"where q.answer_type_id = a.answer_type_id and q.category_id = " + categorie + " and a.tag='TRUE_OR_FALSE') " +
-        	" AND qi.question_id=a.question_id and qi.question_id=ql.question_id " +
-        	" AND qi.language_id = " + cleLang +
-        	" and ql.level_id = " + niveau[i] + 
-        	" and ql.value > 0 " +
-        	" and qi.is_valid = 1 " +
-        	" and qi.question_flash_file is not NULL" +
-        	" and qi.feedback_flash_file is not NULL";
-        	
-        	remplirBoiteQuestionsTF( boiteQuestions, strRequeteSQL_TF, categorie );
-        	
-       	   
-       	   
+			categorie.append(",");
+			categorie.append(it.next());
+			
 		}//fin for
+				
+		categorie.deleteCharAt(0);
+		categorie.toString();
+		//categorie = " 10,11,12,13,14 ";
+		
+		String strRequeteSQL = "SELECT question.answer_type_id, answer.is_right,question.question_id," +
+				" question.category_id, question_info.question_flash_file, question_info.feedback_flash_file, question_level.value" +
+		" FROM question_info, question_level, question, answer " +
+		" WHERE  question.question_id = question_level.question_id " +
+		" AND question.question_id = question_info.question_id " +
+		" AND question.question_id = answer.question_id " +
+		" AND question_info.language_id = " + cleLang +
+		" and question_level.level_id = " + niveau + 
+		" AND question.category_id IN (" + categorie + ") " +
+		" AND question.answer_type_id IN (1,4,5) " +
+		" AND question_info.is_valid = 1 " +
+		" and question_level.value > 0 " +
+		" and question_info.question_flash_file is not NULL " +
+		" and question_info.feedback_flash_file is not NULL ";
+
+		remplirBoiteQuestionsMC( boiteQuestions, strRequeteSQL); 
+
+		String strRequeteSQL_SA = "SELECT DISTINCT q.category_id, a.answer_latex, qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
+		"FROM question q, question_info qi, question_level ql, answer_info a " +
+		"where  q.question_id = ql.question_id " +
+		" AND q.question_id = qi.question_id " +
+		" AND q.question_id = a.question_id " +
+		" AND q.category_id IN (" + categorie + ") and q.answer_type_id = 3 " +
+		" AND qi.language_id = " + cleLang +
+		" and ql.level_id = " + niveau + 
+		" and ql.value > 0 " +
+		" and qi.is_valid = 1 " +
+		" and qi.question_flash_file is not NULL" +
+		" and qi.feedback_flash_file is not NULL";
+
+		remplirBoiteQuestionsSA( boiteQuestions, strRequeteSQL_SA);
+
+		String strRequeteSQL_TF = "SELECT DISTINCT q.category_id,a.is_right,qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
+		" FROM question q, question_info qi, question_level ql, answer a " +
+		"where  q.question_id = ql.question_id " +
+		" AND q.question_id = qi.question_id " +
+		" AND q.question_id = a.question_id " +
+		" AND q.category_id IN (" + categorie + ") and q.answer_type_id = 2 " +
+		" AND qi.language_id = " + cleLang +
+		" and ql.level_id = " + niveau + 
+		" and ql.value > 0 " +
+		" and qi.is_valid = 1 " +
+		" and qi.question_flash_file is not NULL" +
+		" and qi.feedback_flash_file is not NULL";
+
+		remplirBoiteQuestionsTF( boiteQuestions, strRequeteSQL_TF);
+
         //System.out.println("end boite: " + System.currentTimeMillis());
 	}// fin méthode
 	
     // This function follows one of the two previous functions. It queries the database and
     // does the actual filling of the question box with questions of type MULTIPLE_CHOICE.
-	private void remplirBoiteQuestionsMC( BoiteQuestions boiteQuestions, String strRequeteSQL, int categorie )
+	private void remplirBoiteQuestionsMC( BoiteQuestions boiteQuestions, String strRequeteSQL)
 	{	
 		try
 		{
@@ -497,6 +468,7 @@ public class GestionnaireBD
 					if(condition == 1)
 					{
 						int typeQuestion = rs.getInt( "answer_type_id" );
+						int categorie = rs.getInt( "category_id" );
 						String question = rs.getString( "question_flash_file" );
 						String explication = rs.getString("feedback_flash_file");
 						int difficulte = rs.getInt("value");
@@ -532,7 +504,7 @@ public class GestionnaireBD
 	
 	 // This function follows one of the two previous functions. It queries the database and
     // does the actual filling of the question box with questions of type SHORT_ANSWER.
-	private void remplirBoiteQuestionsSA( BoiteQuestions boiteQuestions, String strRequeteSQL, int categorie )
+	private void remplirBoiteQuestionsSA( BoiteQuestions boiteQuestions, String strRequeteSQL)
 	{	
 		try
 		{
@@ -543,6 +515,7 @@ public class GestionnaireBD
 				while(rs.next())
 				{
 					int codeQuestion = rs.getInt("question_id");
+					int categorie = rs.getInt( "category_id" );
 					//int categorie =  Integer.parseInt(rs.getString("category_id"));
 					int typeQuestion = 3;//rs.getString( "tag" );
 					String question = rs.getString( "question_flash_file" );
@@ -578,7 +551,7 @@ public class GestionnaireBD
 	
 	// This function follows one of the two previous functions. It queries the database and
     // does the actual filling of the question box with questions of type TRUE_OR_FALSE.
-	private void remplirBoiteQuestionsTF( BoiteQuestions boiteQuestions, String strRequeteSQL, int categorie )
+	private void remplirBoiteQuestionsTF( BoiteQuestions boiteQuestions, String strRequeteSQL)
 	{	
 		try
 		{
@@ -589,6 +562,7 @@ public class GestionnaireBD
 				while(rs.next())
 				{
 					int codeQuestion = rs.getInt("question_id");
+					int categorie = rs.getInt( "category_id" );
 					//int categorie =  Integer.parseInt(rs.getString("category_id"));
 					int typeQuestion = 2;   //rs.getString( "tag" );
 					String question = rs.getString( "question_flash_file" );
@@ -628,14 +602,13 @@ public class GestionnaireBD
   public ArrayList<Object> obtenirListeURLsMusique(JoueurHumain player)
 	{
             ArrayList<Object> liste = new ArrayList<Object>();
-            //int [] levels = player.obtenirCleNiveau();
-            
+          
             String URLMusique = GestionnaireConfiguration.obtenirInstance().obtenirString("musique.url");
             String strRequeteSQL = "SELECT music_file.filename FROM music_file  WHERE  music_file.level_id = ";
             // we use levels[0] - because all levels has the same value
-            strRequeteSQL       += "(Select level from user_subject_level where user_id = ";
+            strRequeteSQL       += "(Select user.level_id from user where user_id = ";
             strRequeteSQL       += player.obtenirCleJoueur();
-            strRequeteSQL       += " and category_id = 0);";
+            strRequeteSQL       += ");";
             
             try
             {
@@ -781,14 +754,9 @@ public class GestionnaireBD
 		
 		int cleJoueur = joueur.obtenirCleJoueur();
 		int pointage = joueur.obtenirPartieCourante().obtenirPointage();
-		int[] levels = joueur.obtenirCleNiveau();
 		int room_id = 0;
 		String statistics = "";
-		for(int i = 0; i < levels.length; i++)
-		{
-			statistics =  statistics + ":" + levels[i];
-		}
-		
+				
 		statistics = statistics + "/-/" + joueur.obtenirProtocoleJoueur().getQuestionsAnswers();
 		
 		
@@ -967,7 +935,7 @@ public class GestionnaireBD
 						else type = "General";
 											
 						Salle objSalle = new Salle(nom, createur, motDePasse, objControleurJeu, room, beginDate, endDate, masterTime, type);
-						System.out.println("Test : " + type);
+						//System.out.println("Test : " + type);
 						objSalle.setRoomDescription(roomDescription);
 						objSalle.setCategories(categoriesString);
 						

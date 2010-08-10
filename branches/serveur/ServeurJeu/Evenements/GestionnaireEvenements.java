@@ -1,6 +1,6 @@
 package ServeurJeu.Evenements;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * @author Jean-François Brind'Amour
@@ -8,7 +8,7 @@ import java.util.Vector;
 public class GestionnaireEvenements implements Runnable
 {
 	// Déclaration d'une liste d'événements
-	private Vector<Evenement> lstEvenements;
+	private ArrayList<Evenement> lstEvenements;
 	
 	// Cette variable permet de savoir s'il faut arrêter le thread ou non
 	private boolean bolStopThread = false;
@@ -22,7 +22,7 @@ public class GestionnaireEvenements implements Runnable
 		super();
 		
 		// Créer une liste des événements
-		lstEvenements = new Vector<Evenement>();
+		lstEvenements = new ArrayList<Evenement>();
 	}
 	
 	/**

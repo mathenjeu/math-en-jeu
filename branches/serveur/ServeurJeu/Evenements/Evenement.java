@@ -1,6 +1,6 @@
 package ServeurJeu.Evenements;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import java.io.IOException;
 
 /**
@@ -9,7 +9,7 @@ import java.io.IOException;
 public abstract class Evenement
 {
 	// Déclaration d'une liste de InformationDestination
-	protected Vector<InformationDestination> lstInformationDestination = new Vector<InformationDestination>();
+	protected ArrayList<InformationDestination> lstInformationDestination = new ArrayList<InformationDestination>();
 	
 	/**
 	 * Cette fonction permet d'ajouter un nouveau InformationDestination à la
