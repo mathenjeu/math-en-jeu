@@ -57,7 +57,7 @@ public class ControleurJeu
 {
 	// Cette modeDebug est vraie, toute reponse des joueurs sera bonne, et
 	// on affichera dans la console des informations sur les communications
-	public static boolean modeDebug;
+	public  static boolean modeDebug;
 
 	private static Logger objLogger = Logger.getLogger( ControleurJeu.class );
 
@@ -104,6 +104,11 @@ public class ControleurJeu
 	// pour les joueurs virtuels
 	private ParametreIA objParametreIA;
 	
+	// Array for keywords filled from DB
+	// it'a general list of all keywords
+	// each room has his own list of keywords
+	private Integer[] keywords;
+	
 	
 	
 		
@@ -145,6 +150,9 @@ public class ControleurJeu
 
 		// Créer un nouveau gestionnaire de communication
 		objGestionnaireCommunication = new GestionnaireCommunication(this, objGestionnaireEvenements);
+		
+		// fill the list of keywords
+		objGestionnaireBD.fillControlerKeywordsList();
 		
 		// Fills the rooms from DB
 		objGestionnaireBD.fillsRooms();
@@ -197,7 +205,7 @@ public class ControleurJeu
 		//Cette methode est la loop de l'application
 		//Au retour, l'application se termine
 		objGestionnaireCommunication.ecouterConnexions();
-		//System.out.println( "arret" );
+		System.out.println( "arret" );
 	}
 	
 	public void arreter()
@@ -443,11 +451,6 @@ public class ControleurJeu
 	 * @return TreeMap : La liste des salles du serveur de jeu (c'est la 
 	 * 				     référence vers la liste du ControleurJeu, il faut donc
 	 *                   traiter le cas du multithreading)
-	 * @synchronism Cette fonction n'est pas synchronisée ici et il n'est pas
-	 * 				vraiment nécessaire de le faire dans la fonction appelante
-	 * 				pour ce qui est de la corruption des données suite à 
-	 * 				l'ajout et/ou au retrait d'une salle, car ça ne peut pas
-	 * 				se produire.
 	 */
 	public TreeMap<Integer, Salle> obtenirListeSalles(String language)
 	{
@@ -879,8 +882,7 @@ public class ControleurJeu
     	return objParametreIA;
     }
 
-	public TreeMap<Integer, Salle> obtenirListeSalles(String langue,
-			String roomsType) {
+	public TreeMap<Integer, Salle> obtenirListeSalles(String langue, String roomsType) {
 		synchronized(lstSalles){
 	        // On crée une liste de salles vide, et on parcourt toutes les salles connues
             TreeMap<Integer, Salle> copieListeSalles = (TreeMap<Integer, Salle>) lstSalles.clone();
@@ -914,4 +916,18 @@ public class ControleurJeu
 		}
 		
 	} /// end method
+
+	/**
+	 * @param integers the keywords to set
+	 */
+	public void setKeywords(Integer[] integers) {
+		this.keywords = integers;
+	}
+
+	/**
+	 * @return the keywords
+	 */
+	public Integer[] getKeywords() {
+		return keywords;
+	}
 }// end class

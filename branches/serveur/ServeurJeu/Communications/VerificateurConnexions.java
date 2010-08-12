@@ -1,5 +1,7 @@
 package ServeurJeu.Communications;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Vector;
 
 /**
@@ -8,7 +10,7 @@ import java.util.Vector;
 public class VerificateurConnexions implements Runnable
 {
 	// Déclaration d'une référence vers le gestionnaire des communications
-	private GestionnaireCommunication objGestionnaireCommunication;
+	private final GestionnaireCommunication objGestionnaireCommunication;
 	
 	// Cette variable permet de savoir s'il faut arrêter le thread ou non
 	private boolean bolStopThread;
@@ -20,7 +22,7 @@ public class VerificateurConnexions implements Runnable
 	
 	// Déclaration d'une liste de ProtocoleJoueur pour les clients qui 
 	// ont répondu au ping
-	private Vector<ProtocoleJoueur> lstClientsPresents;
+	private LinkedList<ProtocoleJoueur> lstClientsPresents;
 	
 	/**
 	 * Constructeur de la classe VerificateurConnexions qui permet de garder une 
@@ -37,7 +39,7 @@ public class VerificateurConnexions implements Runnable
 		objGestionnaireCommunication = communication;
 		
 		// Créer un nouveau vecteur
-		lstClientsPresents = new Vector<ProtocoleJoueur>();
+		lstClientsPresents = new LinkedList<ProtocoleJoueur>();
 	}
 	
 	/**
@@ -53,19 +55,19 @@ public class VerificateurConnexions implements Runnable
 			// Déclaration d'une liste de ProtocoleJoueur qui contient la 
 			// référence vers la liste des ProtocoleJoueur du gestionnaire de 
 			// communication
-			Vector<ProtocoleJoueur> lstProtocoleJoueur = objGestionnaireCommunication.obtenirListeProtocoleJoueur();
+			LinkedList<ProtocoleJoueur> lstProtocoleJoueur = objGestionnaireCommunication.obtenirListeProtocoleJoueur();
 			
 			// Déclaration d'une liste de ProtocoleJoueur qui va contenir
 			// une copie de la liste des ProtocoleJoueur du gestionnaire de 
 			// communication
-			Vector<ProtocoleJoueur> lstCopieProtocoleJoueur = null;
+			LinkedList<ProtocoleJoueur> lstCopieProtocoleJoueur = null;
 			
 			// Empêcher d'autres threads de toucher à la liste des protocoles 
 			// de joueur
 			synchronized (lstProtocoleJoueur)
 			{
 				// Faire une copie de la liste des ProtocoleJoueur
-				lstCopieProtocoleJoueur = (Vector<ProtocoleJoueur>) lstProtocoleJoueur.clone();
+				lstCopieProtocoleJoueur = (LinkedList<ProtocoleJoueur>) lstProtocoleJoueur.clone();
 			}
 
 			// Passer tous les objets ProtocoleJoueur et envoyer un message ping

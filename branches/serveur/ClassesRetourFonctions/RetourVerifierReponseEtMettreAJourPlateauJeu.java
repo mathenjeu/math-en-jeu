@@ -32,13 +32,13 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 	private Point objNouvellePosition;
 	
 	// Déclaration d'une variable qui va contenir le nouveau pointage
-	private int intNouveauPointage;
+	private final int intNouveauPointage;
         
-    private int intNouvelArgent;
+    private final int intNouvelArgent;
 	
 	private String strCollision;
 	
-	private int playerBonus;
+	private final int playerBonus;
 	
 	/**
 	 * Constructeur de la classe RetourVerifierReponseEtMettreAJourPlateauJeu.
@@ -51,7 +51,7 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 	{
 		// Initialiser les membres de la classe de retour
 		bolDeplacementAccepte = deplacementAccepte;
-		strExplications = "";
+		//strExplications = "";
 		//objObjetRamasse = null;
 		//objObjetSubi = null;
 		//objNouvellePosition = null;
@@ -68,12 +68,7 @@ public class RetourVerifierReponseEtMettreAJourPlateauJeu
 		return playerBonus;
 	}
 
-	/**
-	 * @param playerBonus the playerBonus to set
-	 */
-	public void setPlayerBonus(int playerBonus) {
-		this.playerBonus = playerBonus;
-	}
+	
 
 	/**
 	 * Cette fonction retourne si oui ou non le déplacement est accepté.

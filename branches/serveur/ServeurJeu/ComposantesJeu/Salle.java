@@ -9,7 +9,6 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Map.Entry;
-import Enumerations.Categories;
 import Enumerations.RetourFonctions.ResultatEntreeTable;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
@@ -73,7 +72,7 @@ public class Salle
 	private final int masterTime;
 		
 	//specifyed room's categories
-	private final ArrayList<Integer> categories;
+	//private final Integer[] keywords;
 	
 	// last room number
 	// used to give the numbers to the created tables in this room
@@ -124,7 +123,7 @@ public class Salle
         this.masterTime = masterTime;
         this.roomType = type;
                
-        this.categories = new ArrayList<Integer>();
+        //this.keywords = new ArrayList<Integer>();
         this.setRoomAllowedTypes(new ArrayList<String>());
 		
 		// Créer une nouvelle liste de joueurs, de tables et de numéros
@@ -847,28 +846,25 @@ public class Salle
 	public int getMasterTime() {
 		return masterTime;
 	}
-
-	public ArrayList<Integer> getCategories() {
-		return categories;
+/**
+	public Integer[] getKeywords() {
+		return keywords;
 	}
 
-	/**
+	
 	 * @param categories the categories to set
-	 */
-	public void setCategories() {
-		//Categories[] catValues = Categories.values();
-		for(Categories catValues: Categories.values())
-		{
-			categories.add(catValues.getCode());
-		}
-
-	}// end methode
+	
+	public void setKeywords() {
+		
+		keywords = objControleurJeu.getKeywords();
+		
+	}// end methode */
 	
 	/**
 	 * Method used to set categories of questions used in this game
 	 * @param categoriesString
-	 */
-	public void setCategories(String categoriesString)
+	 
+	public void setRoomKeywords(String categoriesString)
 	{
         
 		if(categoriesString != null){
@@ -879,25 +875,25 @@ public class Salle
 			if(whatCategories == 1){
 				while(cat.hasMoreTokens())
 				{
-					categories.add(Integer.parseInt(cat.nextToken()));
+					keywords.add(Integer.parseInt(cat.nextToken()));
 				}
 			}else if(whatCategories == 0)
 			// we take categories from enum without categories from BD
 			{
-				setCategories();
+				setKeywords();
 				while(cat.hasMoreTokens())
 				{
 					Integer i = Integer.parseInt(cat.nextToken());
-					categories.remove(i);
+					keywords.remove(i);
 					//System.out.println("string cat int : " + i);
 				}
-			}else setCategories(); 	
-		}else setCategories(); 		// if string == null
+			}else setKeywords(); 	
+		}else setKeywords(); 		// if string == null
 		
 		// to not be without any categories
-		if( categories.isEmpty()) setCategories(); 
+		if( keywords.isEmpty()) setKeywords(); 
 				
-	}// end mathode
+	}// end mathode*/
 	
 
 	private void setLastNumber(int lastNumber) {

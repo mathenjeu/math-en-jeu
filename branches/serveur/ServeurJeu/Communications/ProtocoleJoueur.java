@@ -147,7 +147,7 @@ public class ProtocoleJoueur implements Runnable
 		objGestionnaireTemps = controleur.obtenirGestionnaireTemps();
 		objTacheSynchroniser = controleur.obtenirTacheSynchroniser();
         //bolEnTrainDeJouer = false;
-        objLogger.info( GestionnaireMessages.message("protocole.connexion").replace("$$CLIENT$$", socketJoueur.getInetAddress().toString()));
+        //objLogger.info( GestionnaireMessages.message("protocole.connexion").replace("$$CLIENT$$", socketJoueur.getInetAddress().toString()));
 
 		questionsAnswers = new StringBuffer();
 		
@@ -163,7 +163,7 @@ public class ProtocoleJoueur implements Runnable
 
 		{
 
-			objLogger.error( GestionnaireMessages.message("protocole.canal_ferme") );
+			//objLogger.error( GestionnaireMessages.message("protocole.canal_ferme") );
 
 		   // Arrèter le thread
     		bolStopThread = true;
@@ -215,7 +215,7 @@ public class ProtocoleJoueur implements Runnable
 				// stream a été fermé, il faut donc terminer le thread
 				if (intBytesLus == -1)
 				{
-                    objLogger.error("Une erreur est survenue: nombre d'octets lus = -1");
+                    //objLogger.error("Une erreur est survenue: nombre d'octets lus = -1");
 			        bolErreurSocket = true;
 					bolStopThread = true;
 				}
@@ -240,14 +240,14 @@ public class ProtocoleJoueur implements Runnable
 					
     					// On appelle une fonction qui va traiter le message reèu du 
 						// client et mettre le résultat à retourner dans une variable
-						objLogger.info( GestionnaireMessages.message("protocole.message_recu") + strMessageRecu );
+						//objLogger.info( GestionnaireMessages.message("protocole.message_recu") + strMessageRecu );
 
                         // If we're in debug mode (can be set in mathenjeu.xml), print communications
                         GregorianCalendar calendar = new GregorianCalendar();
                           if(ControleurJeu.modeDebug)
                           {
                               String timeB = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
-                              System.out.println("(" + timeB + ") Reèu:  " + strMessageRecu);
+                              //System.out.println("(" + timeB + ") Reèu:  " + strMessageRecu);
                           }
 
                        String strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
@@ -257,7 +257,7 @@ public class ProtocoleJoueur implements Runnable
                           if(ControleurJeu.modeDebug)
                           {
                                 String timeA = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
-                                System.out.println("(" + timeA + ") Envoi: " + strMessageAEnvoyer);
+                               // System.out.println("(" + timeA + ") Envoi: " + strMessageAEnvoyer);
                           }
 
 						// On remet la variable contenant le numéro de commande
@@ -359,7 +359,7 @@ public class ProtocoleJoueur implements Runnable
 		}
 
                 String inetAddress = objSocketJoueur.getInetAddress() == null ? "[?.?.?.?]" : objSocketJoueur.getInetAddress().toString();
-		objLogger.info( GestionnaireMessages.message("protocole.fin_thread").replace("$$CLIENT$$",inetAddress));
+		//objLogger.info( GestionnaireMessages.message("protocole.fin_thread").replace("$$CLIENT$$",inetAddress));
 	}
 	
 	/**
@@ -384,7 +384,7 @@ public class ProtocoleJoueur implements Runnable
 
 	private String traiterCommandeJoueur(String message) throws TransformerConfigurationException, TransformerException
 	{            
-		Moniteur.obtenirInstance().debut( "ProtocoleJoueur.traiterCommandeJoueur" );
+		//Moniteur.obtenirInstance().debut( "ProtocoleJoueur.traiterCommandeJoueur" );
 
 		// Déclaration d'une variable qui permet de savoir si on doit retourner 
 		// une commande au client ou si ce n'était qu'une réponse du client 
@@ -786,7 +786,7 @@ public class ProtocoleJoueur implements Runnable
 						// Informer le contrôleur de jeu que la connexion avec le 
 						// client (joueur) a été fermée (il faut obtenir un numéro
 						// de commandes de cette fonction)
-						System.out.println("Player " + objJoueurHumain.obtenirNomUtilisateur() + " ask for cancel");
+						//System.out.println("Player " + objJoueurHumain.obtenirNomUtilisateur() + " ask for cancel");
 						objControleurJeu.deconnecterJoueur(objJoueurHumain, true, false);
 
 
@@ -1743,7 +1743,7 @@ public class ProtocoleJoueur implements Runnable
 						if(obtenirValeurParametre(objNoeudCommandeEntree, "GameType") != null) //.getNodeValue()
 							type = obtenirValeurParametre(objNoeudCommandeEntree, "GameType").getNodeValue();
 
-						System.out.println("Protocole - create table : " + intNbColumns + " " + intNbLines + " " + type);
+						//System.out.println("Protocole - create table : " + intNbColumns + " " + intNbLines + " " + type);
 						
 						// Appeler la méthode permettant de créer la nouvelle
 						// table et d'entrer le joueur dans cette table
@@ -2082,7 +2082,7 @@ public class ProtocoleJoueur implements Runnable
 							String strResultatDemarrerPartie = objJoueurHumain.obtenirPartieCourante().obtenirTable().demarrerMaintenant( objJoueurHumain, 
 									true, strParamJoueurVirtuel);
 
-							objLogger.info( GestionnaireMessages.message("protocole.resultat") + strResultatDemarrerPartie );
+							//objLogger.info( GestionnaireMessages.message("protocole.resultat") + strResultatDemarrerPartie );
 
 							// Si le résultat du démarrage de partie est Succes alors le
 							// joueur est maintenant en attente
@@ -2101,7 +2101,7 @@ public class ProtocoleJoueur implements Runnable
 							}
 							else
 							{
-								objLogger.error( GestionnaireMessages.message("protocole.erreur_code") + strResultatDemarrerPartie );
+								//objLogger.error( GestionnaireMessages.message("protocole.erreur_code") + strResultatDemarrerPartie );
 								objNoeudCommande.setAttribute("nom", "");
 							}
 						}
@@ -2314,8 +2314,19 @@ public class ProtocoleJoueur implements Runnable
 					// Obtenir la réponse du joueur
 					String strReponse = obtenirValeurParametre(objNoeudCommandeEntree, "Reponse").getNodeValue();
 
+					//objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante();
 					//collect players answers for DB
-					collectPlayerAnswers(strReponse, objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().reponseEstValide(strReponse));
+					if( objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante() != null )
+					{
+						collectPlayerAnswers(strReponse, Question.reponseEstValide(strReponse,
+								objJoueurHumain.obtenirPartieCourante().obtenirQuestionCourante().getStringAnswer()));
+			    	}
+					else
+					{
+						objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+					}
+					
+					
 
 					int timer = lastQuestionTime - objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsRestant();
 					//collect time of reponse for DB
@@ -2395,7 +2406,7 @@ public class ProtocoleJoueur implements Runnable
 						Text objNoeudTexteVisibility = objDocumentXMLSortie.createTextNode(Integer.toString(objJoueurHumain.obtenirPartieCourante().getMoveVisibility()));
 						Text objNoeudTexteBonus = objDocumentXMLSortie.createTextNode(Integer.toString(objJoueurHumain.obtenirPartieCourante().getTournamentBonus()));
 
-						System.out.println(":ICI Bonus retour reponse : " + objJoueurHumain.obtenirPartieCourante().getTournamentBonus());
+						//System.out.println(":ICI Bonus retour reponse : " + objJoueurHumain.obtenirPartieCourante().getTournamentBonus());
 
 						objNoeudParametreDeplacementAccepte.setAttribute("type", "DeplacementAccepte");
 						objNoeudParametrePointage.setAttribute("type", "Pointage");
@@ -2735,7 +2746,7 @@ public class ProtocoleJoueur implements Runnable
 				}
 			}
 		}
-		Moniteur.obtenirInstance().fin();
+		//Moniteur.obtenirInstance().fin();
 
 		// Si on doit retourner une commande alors on ajoute le noeud de commande 
 		// et on retourne le code XML de la commande. Si le numéro de commande 
@@ -2779,7 +2790,7 @@ public class ProtocoleJoueur implements Runnable
 	 */
 	public void envoyerMessage(String message) throws IOException
 	{
-		Moniteur.obtenirInstance().debut( "ProtocoleJoueur.envoyerMessage");
+		//Moniteur.obtenirInstance().debut( "ProtocoleJoueur.envoyerMessage");
 		
 		// Synchroniser cette partie de code pour empècher 2 threads d'envoyer
 		// un message en mème temps sur le canal d'envoi du socket
@@ -2790,11 +2801,11 @@ public class ProtocoleJoueur implements Runnable
 			OutputStream objCanalEnvoi = objSocketJoueur.getOutputStream();
 
 			String chainetemp = UtilitaireEncodeurDecodeur.encodeToUTF8(message);
-
+            /*
 			if (chainetemp.contains("ping") == false)
 			{
 				objLogger.info( GestionnaireMessages.message("protocole.message_envoye") + chainetemp );
-			}
+			}*/
 			// ƒcrire le message sur le canal d'envoi au client
 			objCanalEnvoi.write(message.getBytes("UTF8"));
 			
@@ -2803,9 +2814,9 @@ public class ProtocoleJoueur implements Runnable
 
 			// Envoyer le message sur le canal d'envoi
 			objCanalEnvoi.flush();
-			objLogger.info( GestionnaireMessages.message("protocole.confirmation") + objSocketJoueur.getInetAddress().toString() );
+			//objLogger.info( GestionnaireMessages.message("protocole.confirmation") + objSocketJoueur.getInetAddress().toString() );
 		}
-			Moniteur.obtenirInstance().fin();
+			//Moniteur.obtenirInstance().fin();
 
 	}// fin méthode
 

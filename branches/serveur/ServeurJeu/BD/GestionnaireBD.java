@@ -17,6 +17,7 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -255,47 +256,7 @@ public class GestionnaireBD
 	}//end methode
 	
 
-	/**
-	 * Used to fill user's  level's from DB
-	 * @param salle 
-	 * 
-	 * @param JoueurHumain player
-	 
-	public void fillUserLevels(JoueurHumain player, Salle salle)
-	{
-		//System.out.println("start level: " + System.currentTimeMillis());
-		int cle = player.obtenirCleJoueur();
-		int niveau = 0;
-		try
-		{
-			
-			
-				synchronized(requete)
-				{
-					// we take level only for categorie 0 - the all level is the same now
-					ResultSet rs = requete.executeQuery("SELECT user_subject_level.level  FROM user_subject_level " +
-					" WHERE  user_subject_level.user_id = " + cle + " AND user_subject_level.category_id = 0;");
-					if(rs.next())
-					{
-						niveau = rs.getInt("level");
-						//System.out.println("level : " + cleNiveau[i] + " " + i);
-	    			}
-					
-				}
-
-			
-		}
-		catch (Exception e)
-		{
-			System.out.println(GestionnaireMessages.message("bd.erreur_adding_info_subject_user") + e.getMessage());
-		}
-				
-		player.definirCleNiveau(niveau);
-		//System.out.println("end level : " + System.currentTimeMillis());		
-	}//end methode*/
-	
-
-	
+		
 	/**
 	 * this fonction fill the fields in DB (user.last_access_time,lasr_access_time)
 	 * with incorrect information to indicate that user is connected
@@ -370,14 +331,15 @@ public class GestionnaireBD
         else if (langue.equalsIgnoreCase("en"))
         	cleLang = 2;
        
-        // pour catégories des questions on utilise room's categories 
-        ArrayList<Integer> cat = player.obtenirSalleCourante().getCategories();
-		ListIterator<Integer> it = cat.listIterator();		
-        
+        // pour keywords des questions on utilise room's keywords 
+        //Integer[] key = player.obtenirSalleCourante().getKeywords();
+		
 		int niveau = player.obtenirCleNiveau();
-
+		int room_id = player.obtenirSalleCourante().getRoomID();
+        /*
 		// pour chaque catégorie on prend le niveau scolaire du joueur
-		StringBuffer categorie = new StringBuffer();
+		StringBuffer keywordsString = new StringBuffer();
+		
 		
 		for(int i = 0; i < cat.size(); i++)
 		{
@@ -388,17 +350,17 @@ public class GestionnaireBD
 				
 		categorie.deleteCharAt(0);
 		categorie.toString();
-		//categorie = " 10,11,12,13,14 ";
+		//categorie = " 10,11,12,13,14 ";*/
 		
-		String strRequeteSQL = "SELECT question.answer_type_id, answer.is_right,question.question_id," +
-				" question.category_id, question_info.question_flash_file, question_info.feedback_flash_file, question_level.value" +
+		String strRequeteSQL = "SELECT question.keyword_id1, question.keyword_id2, question.answer_type_id, answer.is_right,question.question_id," +
+				" question_info.question_flash_file, question_info.feedback_flash_file, question_level.value" +
 		" FROM question_info, question_level, question, answer " +
 		" WHERE  question.question_id = question_level.question_id " +
 		" AND question.question_id = question_info.question_id " +
 		" AND question.question_id = answer.question_id " +
 		" AND question_info.language_id = " + cleLang +
 		" and question_level.level_id = " + niveau + 
-		" AND question.category_id IN (" + categorie + ") " +
+		" AND (question.keyword_id1 OR question.keyword_id2)IN (SELECT keyword_id FROM rooms_keywords WHERE room_id = " + room_id + ") " +
 		" AND question.answer_type_id IN (1,4,5) " +
 		" AND question_info.is_valid = 1 " +
 		" and question_level.value > 0 " +
@@ -407,12 +369,13 @@ public class GestionnaireBD
 
 		remplirBoiteQuestionsMC( boiteQuestions, strRequeteSQL); 
 
-		String strRequeteSQL_SA = "SELECT DISTINCT q.category_id, a.answer_latex, qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
+		String strRequeteSQL_SA = "SELECT DISTINCT q.keyword_id1, q.keyword_id2, a.answer_latex, qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
 		"FROM question q, question_info qi, question_level ql, answer_info a " +
 		"where  q.question_id = ql.question_id " +
 		" AND q.question_id = qi.question_id " +
 		" AND q.question_id = a.question_id " +
-		" AND q.category_id IN (" + categorie + ") and q.answer_type_id = 3 " +
+		" AND (q.keyword_id1 OR q.keyword_id2)IN (SELECT keyword_id FROM rooms_keywords WHERE room_id = " + room_id + 
+		") and q.answer_type_id = 3 " +
 		" AND qi.language_id = " + cleLang +
 		" and ql.level_id = " + niveau + 
 		" and ql.value > 0 " +
@@ -422,12 +385,13 @@ public class GestionnaireBD
 
 		remplirBoiteQuestionsSA( boiteQuestions, strRequeteSQL_SA);
 
-		String strRequeteSQL_TF = "SELECT DISTINCT q.category_id,a.is_right,qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
+		String strRequeteSQL_TF = "SELECT DISTINCT q.keyword_id1, q.keyword_id2, a.is_right,qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
 		" FROM question q, question_info qi, question_level ql, answer a " +
 		"where  q.question_id = ql.question_id " +
 		" AND q.question_id = qi.question_id " +
 		" AND q.question_id = a.question_id " +
-		" AND q.category_id IN (" + categorie + ") and q.answer_type_id = 2 " +
+		" AND (q.keyword_id1 OR q.keyword_id2)IN (SELECT keyword_id FROM rooms_keywords WHERE room_id = " + room_id + 
+		") and q.answer_type_id = 2 " +
 		" AND qi.language_id = " + cleLang +
 		" and ql.level_id = " + niveau + 
 		" and ql.value > 0 " +
@@ -468,7 +432,8 @@ public class GestionnaireBD
 					if(condition == 1)
 					{
 						int typeQuestion = rs.getInt( "answer_type_id" );
-						int categorie = rs.getInt( "category_id" );
+						int keyword_id1 = rs.getInt( "keyword_id1" );
+						int keyword_id2 = rs.getInt( "keyword_id2" );
 						String question = rs.getString( "question_flash_file" );
 						String explication = rs.getString("feedback_flash_file");
 						int difficulte = rs.getInt("value");
@@ -477,7 +442,7 @@ public class GestionnaireBD
 						//System.out.println("MC : question " + typeQuestion + " " + codeQuestion + " " + difficulte);
 						String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
 						// System.out.println(URL+explication);
-						boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, categorie));
+						boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, keyword_id1, keyword_id2));
 					}
 					codeQuestionTemp = codeQuestion;
 				}
@@ -515,8 +480,8 @@ public class GestionnaireBD
 				while(rs.next())
 				{
 					int codeQuestion = rs.getInt("question_id");
-					int categorie = rs.getInt( "category_id" );
-					//int categorie =  Integer.parseInt(rs.getString("category_id"));
+					int keyword_id1 = rs.getInt( "keyword_id1" );
+					int keyword_id2 = rs.getInt( "keyword_id2" );
 					int typeQuestion = 3;//rs.getString( "tag" );
 					String question = rs.getString( "question_flash_file" );
 					String reponse = rs.getString("answer_latex");
@@ -527,7 +492,7 @@ public class GestionnaireBD
 					
                     String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
                    // System.out.println(URL+explication);
-					boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, categorie));
+					boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, keyword_id1, keyword_id2));
 				}
 			}
 		}
@@ -562,8 +527,8 @@ public class GestionnaireBD
 				while(rs.next())
 				{
 					int codeQuestion = rs.getInt("question_id");
-					int categorie = rs.getInt( "category_id" );
-					//int categorie =  Integer.parseInt(rs.getString("category_id"));
+					int keyword_id1 = rs.getInt( "keyword_id1" );
+					int keyword_id2 = rs.getInt( "keyword_id2" );
 					int typeQuestion = 2;   //rs.getString( "tag" );
 					String question = rs.getString( "question_flash_file" );
 					String reponse = rs.getString("is_right");
@@ -574,7 +539,7 @@ public class GestionnaireBD
 					
                     String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
                    // System.out.println(URL+explication);
-					boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, categorie));
+					boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, keyword_id1, keyword_id2));
 				}
 			}
 		}
@@ -901,7 +866,6 @@ public class GestionnaireBD
 		Date beginDate = null;
 	    Date endDate = null;
 	    int masterTime = 0;
-	    String categoriesString = "";
 	    int role = 2;
 	    String type = "General";
 		    
@@ -912,7 +876,7 @@ public class GestionnaireBD
 			for (int room : rooms){
 				synchronized( requete )
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, user.role_id, beginDate, endDate, masterTime, categories " +
+					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, user.role_id, beginDate, endDate, masterTime " +
 							" FROM room_info, room, user, game_type " +
 							" WHERE room.room_id = " + room +  
 							" AND room.room_id = room_info.room_id " +
@@ -920,7 +884,7 @@ public class GestionnaireBD
 					if(rs.next())
 					{
 						
-						categoriesString = rs.getString("categories");
+						//categoriesString = rs.getString("categories");
 						motDePasse = rs.getString("password");
 						createur = rs.getString("user.username");
 						beginDate = rs.getTimestamp("beginDate");
@@ -937,7 +901,7 @@ public class GestionnaireBD
 						Salle objSalle = new Salle(nom, createur, motDePasse, objControleurJeu, room, beginDate, endDate, masterTime, type);
 						//System.out.println("Test : " + type);
 						objSalle.setRoomDescription(roomDescription);
-						objSalle.setCategories(categoriesString);
+						//objSalle.setCategories(categoriesString);
 						
 						ArrayList<String> types = new ArrayList<String>();
 						this.getAllowedRoomsGameTypes(types, room);
@@ -1934,6 +1898,7 @@ public class GestionnaireBD
 	/**
 	 * Methode satellite for listRoomsProf()
 	 * @param rooms
+	 * @param keywords 
 	 */
 	public void fillRoomList(ArrayList<Integer> rooms, TreeMap<Integer, Salle> lstSalles) 
 	{
@@ -1943,7 +1908,7 @@ public class GestionnaireBD
 		Date beginDate = null;
 	    Date endDate = null;
 	    int masterTime = 0;
-	    String categoriesString = "";
+	    Integer[] keywords;
 	    String type = "profsType";
 	    int role = 2;
 	    
@@ -1953,14 +1918,14 @@ public class GestionnaireBD
 			{
 				synchronized( requete )
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, user.role_id, beginDate, endDate, masterTime, categories " +
+					ResultSet rs = requete.executeQuery( "SELECT room.password, user.username, user.role_id, beginDate, endDate, masterTime" +
 							" FROM room_info, room, user " +
 							" WHERE room.room_id = " + room +  
 							" AND room.room_id = room_info.room_id " +
 							" AND user.user_id = room.user_id ;" );
 					if(rs.next())
 					{
-						categoriesString = rs.getString("categories");
+						//keywords = rs.getInt("keywords");
 						motDePasse = rs.getString( "password" );
 						createur = rs.getString("user.username");
 						beginDate = rs.getTimestamp("beginDate");
@@ -1978,7 +1943,7 @@ public class GestionnaireBD
 						objSalle.setRoomDescription(roomDescription);
 						
 						// bloc to fill room's categories
-						objSalle.setCategories(categoriesString);
+						//objSalle.setRoomKeywords(categoriesString);
 																	
 						lstSalles.put(room, objSalle);
 					}   
@@ -2044,8 +2009,9 @@ public class GestionnaireBD
 
 
 	public void reportBugQuestion(int user_id, int question, int language_id,
-			String errorDescription) {
-	try {
+			String errorDescription) 
+	{
+	 try {
 			synchronized(requete)
 			{
 				
@@ -2062,5 +2028,74 @@ public class GestionnaireBD
 	
 		
 	}// end methode
+
+
+	/**
+	 * Used to fill general list of keywords in ControleurJeu
+	 */
+	public void fillControlerKeywordsList() 
+	{
+        int keyword;
+        LinkedList<Integer> keywords = new LinkedList<Integer>();
+        
+      	try
+		{
+			synchronized( requete )
+			{
+				ResultSet rs = requete.executeQuery("SELECT keyword.keyword_id FROM keyword;"); 
+				while (rs.next())
+				{					
+					keyword = rs.getInt("keyword_id");
+					keywords.add(keyword);
+				}
+			}
+			
+			
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exécution de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_remplir_keywords_controleur"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();			
+		}
+		
+		Integer[] fit = new Integer[keywords.size()];
+		keywords.toArray(fit);
+		objControleurJeu.setKeywords(fit);
+	} // end method
 	
+	
+	/**
+	 * Used to fill list of room's keywords in Salle
+	 * don't finished and used for now
+	 */
+	public void fillRoomsKeywordsList(int room_id) 
+	{
+        int keyword;
+        LinkedList<Integer> keywords = new LinkedList<Integer>();
+      	try
+		{
+			synchronized( requete )
+			{
+				ResultSet rs = requete.executeQuery("SELECT rooms_keywords.keyword_id FROM rooms_keywords WHERE room_id = " + room_id + ";"); 
+				while (rs.next())
+				{					
+					keyword = rs.getInt("keyword_id");
+					keywords.add(keyword);
+				}
+			}
+			
+			// setKeywords((Integer[])keywords.toArray());
+		}
+		catch (SQLException e)
+		{
+			// Une erreur est survenue lors de l'exécution de la requète
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_remplir_keywords_controleur"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error( e.getMessage() );
+		    e.printStackTrace();			
+		}
+	} // end method
 }// end class

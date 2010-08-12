@@ -492,7 +492,7 @@ public class InformationPartie
 			intDifficulte--;
 
 		if(intDifficulte > 6) intDifficulte = 6;
-		//System.out.println("Difficulte de la question2 : " + intDifficulte);   // test
+		//System.out.println("Difficulte de la question : " + intDifficulte);   // test
 
 		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
 		// une question
@@ -500,6 +500,8 @@ public class InformationPartie
 		{
 			objQuestionTrouvee = trouverQuestion(intDifficulte);
 		}
+		
+		//System.out.println("question : " + intDifficulte); 
 		
 		// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
 		// des questions posées et on la garde en mémoire pour pouvoir ensuite
@@ -789,7 +791,7 @@ public class InformationPartie
                     }
                     else
                     {
-                        bolReponseEstBonne = objQuestion.reponseEstValide(reponse);
+                        bolReponseEstBonne = Question.reponseEstValide(reponse,objQuestion.getStringAnswer());
                     }		    
 		}
 		else
@@ -1251,95 +1253,95 @@ public class InformationPartie
 		
 	}
 	
-        public Point obtenirPositionJoueurDesiree()
-        {
-            return objPositionJoueurDesiree;
-        }
-        
-        public GestionnaireBD obtenirGestionnaireBD()
-        {
-            return objGestionnaireBD;
-        }
-        
-             
-        /**
-		 * @return the bananaState
-		 */
-		public PlayerBananaState getBananaState() {
-			return bananaState;
-		}
+	public Point obtenirPositionJoueurDesiree()
+	{
+		return objPositionJoueurDesiree;
+	}
+
+	public GestionnaireBD obtenirGestionnaireBD()
+	{
+		return objGestionnaireBD;
+	}
+
+
+	/**
+	 * @return the bananaState
+	 */
+	 public PlayerBananaState getBananaState() {
+		 return bananaState;
+	 }
 
 
 
-		/**
-		 * @param bananaState the bananaState to set
-		 */
-		public void setBananaState(PlayerBananaState bananaState) {
-			this.bananaState = bananaState;
-		}
+	 /**
+	  * @param bananaState the bananaState to set
+	  */
+	 public void setBananaState(PlayerBananaState bananaState) {
+		 this.bananaState = bananaState;
+	 }
 
-        public int obtenirDistanceAuFinish()
-        {
-            Point objPoint = objTable.getPositionPointFinish();
-        	return Math.abs(objPositionJoueur.x - objPoint.x) + Math.abs(objPositionJoueur.y - objPoint.y);
-        }
+	 public int obtenirDistanceAuFinish()
+	 {
+		 Point objPoint = objTable.getPositionPointFinish();
+		 return Math.abs(objPositionJoueur.x - objPoint.x) + Math.abs(objPositionJoueur.y - objPoint.y);
+	 }
 
-        public void setObjBoiteQuestions(BoiteQuestions objBoiteQuestions) {
-			this.objBoiteQuestions = objBoiteQuestions;
-		}
+	 public void setObjBoiteQuestions(BoiteQuestions objBoiteQuestions) {
+		 this.objBoiteQuestions = objBoiteQuestions;
+	 }
 
-		public BoiteQuestions getObjBoiteQuestions() {
-			return objBoiteQuestions;
-		}
-		
-		/**
-		 * @return the moveVisibility
-		 */
-		public int getMoveVisibility() {
-			return moveVisibility;
-		}
+	 public BoiteQuestions getObjBoiteQuestions() {
+		 return objBoiteQuestions;
+	 }
 
-		/**
-		 * @param moveVisibility the moveVisibility to set
-		 */
-		public void setMoveVisibility(int moveV) {
-			this.moveVisibility = moveV;
-			
-			if (this.moveVisibility > 7 && this.brainiacState.isInBrainiac()){
-				this.moveVisibility = 7;
-			}else if (this.moveVisibility > 6 && this.brainiacState.isInBrainiac() == false){
-				this.moveVisibility = 6;
-			}else if (this.moveVisibility < 1){
-				this.moveVisibility = 1;
-			}
-		}
+	 /**
+	  * @return the moveVisibility
+	  */
+	 public int getMoveVisibility() {
+		 return moveVisibility;
+	 }
 
-			
-		public void setClothesColor(String string) {
-			this.clothesColor = string;
-		}
+	 /**
+	  * @param moveVisibility the moveVisibility to set
+	  */
+	 public void setMoveVisibility(int moveV) {
+		 this.moveVisibility = moveV;
 
-		public String getClothesColor() {
-			return clothesColor;
-		}
+		 if (this.moveVisibility > 7 && this.brainiacState.isInBrainiac()){
+			 this.moveVisibility = 7;
+		 }else if (this.moveVisibility > 6 && this.brainiacState.isInBrainiac() == false){
+			 this.moveVisibility = 6;
+		 }else if (this.moveVisibility < 1){
+			 this.moveVisibility = 1;
+		 }
+	 }
 
 
+	 public void setClothesColor(String string) {
+		 this.clothesColor = string;
+	 }
 
-		/**
-		 * @return the brainiacState
-		 */
-		public PlayerBrainiacState getBrainiacState() {
-			return brainiacState;
-		}
+	 public String getClothesColor() {
+		 return clothesColor;
+	 }
 
 
 
-		/**
-		 * @param braniacState the braniacState to set
-		 */
-		public void setBrainiacState(PlayerBrainiacState brainiacState) {
-			this.brainiacState = brainiacState;
-		}
+	 /**
+	  * @return the brainiacState
+	  */
+	 public PlayerBrainiacState getBrainiacState() {
+		 return brainiacState;
+	 }
 
-			
+
+
+	 /**
+	  * @param braniacState the braniacState to set
+	  */
+	 public void setBrainiacState(PlayerBrainiacState brainiacState) {
+		 this.brainiacState = brainiacState;
+	 }
+
+
 }

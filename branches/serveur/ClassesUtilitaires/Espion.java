@@ -10,6 +10,7 @@ import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Table;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Vector;
 import java.util.TreeMap;
 import java.util.Iterator;
@@ -186,7 +187,7 @@ public class Espion implements Runnable{
 	    StringBuilder strTables = new StringBuilder();
 	    
 	    // Déclaration d'un objet qui contiendra une référence vers la liste des joueurs
-	    Vector<ProtocoleJoueur> lstProtocoleJoueur = objControleurJeu.obtenirGestionnaireCommunication().obtenirListeProtocoleJoueur();
+	    LinkedList<ProtocoleJoueur> lstProtocoleJoueur = objControleurJeu.obtenirGestionnaireCommunication().obtenirListeProtocoleJoueur();
 	    
 		// Déclaration d'une liste de ProtocoleJoueur qui va contenir une copie
 		Vector<ProtocoleJoueur> lstCopieProtocoleJoueur = null;
