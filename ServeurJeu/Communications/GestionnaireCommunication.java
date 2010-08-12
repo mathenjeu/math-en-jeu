@@ -4,6 +4,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Vector;
 import org.apache.log4j.Logger;
 import ServeurJeu.ControleurJeu;
@@ -18,26 +20,26 @@ import ServeurJeu.Evenements.GestionnaireEvenements;
 public class GestionnaireCommunication 
 {
 	// Déclaration d'une référence vers le contrôleur de jeu
-	private ControleurJeu objControleurJeu;
+	private final ControleurJeu objControleurJeu;
 	
 	// Déclaration d'une liste de ProtocoleJoueur des clients connectés au serveur
-	private Vector<ProtocoleJoueur> lstProtocoleJoueur;
+	private LinkedList<ProtocoleJoueur> lstProtocoleJoueur;
 	
 	// Déclaration d'un objet qui va permettre de vérifier l'état des connexions
 	// entre le serveur et les clients
-	private VerificateurConnexions objVerificateurConnexions;
+	private final VerificateurConnexions objVerificateurConnexions;
 	
 	// Déclaration d'une référence vers le gestionnaire d'événements
-	private GestionnaireEvenements objGestionnaireEvenements;
+	private final GestionnaireEvenements objGestionnaireEvenements;
 	
 	// Déclaration d'une référence vers le gestionnaire de bases de données
-	private GestionnaireBD objGestionnaireBD;
+	private final GestionnaireBD objGestionnaireBD;
 	
 	// Cette variable contient le port sur lequel le serveur va écouter et 
 	// recevoir les connexions clientes
-	private int intPort;
+	private final int intPort;
 	
-	private String bindAddress;
+	private final String bindAddress;
 	
 	// Déclaration d'un socket pour le serveur
 	private ServerSocket objSocketServeur;
@@ -72,7 +74,7 @@ public class GestionnaireCommunication
 		objGestionnaireBD = controleur.obtenirGestionnaireBD();
 		
 		// Créer une liste des ProtocoleJoueur
-		lstProtocoleJoueur = new Vector<ProtocoleJoueur>();
+		lstProtocoleJoueur = new LinkedList<ProtocoleJoueur>();
 		
 		// Créer le vérificateur de connexions
 		objVerificateurConnexions = new VerificateurConnexions(this);
@@ -113,7 +115,7 @@ public class GestionnaireCommunication
 		{
 			try
 			{
-				System.out.println(GestionnaireMessages.message("communication.attente"));
+				//System.out.println(GestionnaireMessages.message("communication.attente"));
 				
 				// Accepter une connexion et créer un objet ProtocoleJoueur
 				// qui va exécuter le protocole pour le joueur
@@ -187,7 +189,7 @@ public class GestionnaireCommunication
 	 * @return Vector : la liste des ProtocoleJoueur des clients 
 	 * 					présentement connectés au serveur de jeu
 	 */
-	public Vector<ProtocoleJoueur> obtenirListeProtocoleJoueur()
+	public LinkedList<ProtocoleJoueur> obtenirListeProtocoleJoueur()
 	{
 		return lstProtocoleJoueur;
 	}

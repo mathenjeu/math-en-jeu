@@ -1,7 +1,5 @@
 package ServeurJeu.ComposantesJeu;
 
-import ClassesUtilitaires.UtilitaireNombres;
-
 /**
  * @author Jean-François Brind'Amour
  */
@@ -24,10 +22,14 @@ public class Question
 	private final String strURLExplication;
 	
     /**
-     *  Déclaration d'une variable qui va contenir la catégorie de la question
-     * 
+     *  Déclaration d'une variable qui va contenir le keyword_id1 de la question
      */
-	private final int intCategorie;
+	private final int intKeyword1;
+	
+	 /**
+     *  Déclaration d'une variable qui va contenir le keyword_id1 de la question
+     */
+	private final int intKeyword2;
 	
 	/**
 	 *  Déclaration d'une variable qui va garder la difficulté de la question.
@@ -49,7 +51,8 @@ public class Question
 	 * @param String reponse : La réponse à la question
 	 * @param String urlExplication : Le URL de l'explication de la réponse
 	 */
-	public Question(int codeQuestion, int typeQuestion, int difficulte, String urlQuestion, String reponse, String urlExplication, int categorie )
+	public Question(int codeQuestion, int typeQuestion, int difficulte, String urlQuestion, 
+			String reponse, String urlExplication, int keyword1, int keyword2)
 	{
 		// Définir les propriétés des questions
 		intCodeQuestion = codeQuestion;
@@ -58,7 +61,8 @@ public class Question
 		strURLQuestion = urlQuestion;
 		strReponse = reponse.toLowerCase().replace(",",".");
 		strURLExplication = urlExplication;
-		intCategorie = categorie;
+		intKeyword1 = keyword1;
+		intKeyword2 = keyword2;
 	}
 	
 	/**
@@ -114,11 +118,12 @@ public class Question
 	
 	/**
 	 * Cette fonction retourne si oui ou non la réponse est valide.
+	 * @param reponseCorrect 
 	 * 
 	 * @return boolean : true si la réponse est valide
 	 * 					 false sinon
 	 */
-	public boolean reponseEstValide(String reponse)
+	public static boolean reponseEstValide(String reponse, String reponseCorrect)
 	{
 		// standartisation des réponses
 		String tempStr = reponse.trim().toLowerCase();
@@ -129,66 +134,9 @@ public class Question
 		tempStr = tempStr.replace("ï", "i").replace("î","i");
 		tempStr = tempStr.replace(",",".");
 		//System.out.println("La reponse : " + reponse + " Est la rep dans BD : " + strReponse);
-		return strReponse.equals(tempStr);
+		return reponseCorrect.equals(tempStr);
 	}
-	
-	
-	/**
-	 * Cette fonction retourne une mauvaise réponse. Utilisé lorsqu'un
-	 * joueur utilise l'objet "Livre" qui permet d'éliminer un choix
-	 * de réponse. Dans le cas d'une question sans choix de réponse, la 
-	 * fonction retourne "PasUnChoixDeReponse"
-	
-	 public  String obtenirMauvaiseReponse()
-	 {
-		// Choisir aléatoirement une mauvaise réponse
-	 	
-		int nbChoix = 0;
-	 	if(objTypeQuestion == 1)
-	 			nbChoix = 4;
-	 	else if(objTypeQuestion == 5)
-	 			nbChoix = 3;
-	 	else if(objTypeQuestion == 4)
-	 			nbChoix = 5; 
-	 	
-	 	// Vérifier si la réponse est un choix de réponse
-	 	if (nbChoix > 2 && nbChoix < 6 )
-	 	{ 		
-	 		
-	 	    int arrShuffle[] = new int[nbChoix];
-	 	    for(int i = 0; i < nbChoix; i++)
-	 	    	arrShuffle[i] = i + 1;
-	 	    
-	 	    for (int x = 1; x < 10; x++)
-	 	    {
-	 	    	int a = UtilitaireNombres.genererNbAleatoire(nbChoix);
-	 	    	int b = UtilitaireNombres.genererNbAleatoire(nbChoix);
-	 	    	
-	 	    	int temp = arrShuffle[a];
-	 	    	arrShuffle[a] = arrShuffle[b];
-	 	    	arrShuffle[b] = temp;
-	 	    }
-	 	    for (int x = 1; x < nbChoix; x++)
-	 	    {
-	 	    	//Character c = new Character((char)(arrShuffle[x] + 48));  // 65 for the letters 48 for the numbers
-	 	    	//String strMauvaiseReponse = c.toString();
-	 	    	
-	 	    	String strMauvaiseReponse = ((Integer)(arrShuffle[x])).toString();
-	 	    	if (!strMauvaiseReponse.equals(strReponse.toUpperCase()))
-	 	    	{
-	 	    		//System.out.println("ICI mauvaise rep : "  + strMauvaiseReponse);
-	 	    		return strMauvaiseReponse;
-	 	    	}
-	 	    }	 
-	 	    
-	 	    return "Erreur";		
-	 	}
-	 	else
-	 	{
-	 		return "PasUnChoixDeReponse";
-	 	}
-	 } */
-	 
+		 
 	/**
 	 * Cette fonction retourne le URL de l'explication de la réponse à la 
 	 * question courante.
@@ -201,10 +149,16 @@ public class Question
 	}
 	
 
-	public int obtenirCategorie() 
+	public int getKeyword1() 
 	{
-		return intCategorie;
+		return intKeyword1;
 	}
+	
+	public int getKeyword2() 
+	{
+		return intKeyword2;
+	}
+
 
 		
 } // fin classe

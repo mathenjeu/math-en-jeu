@@ -84,12 +84,15 @@ public class BoiteQuestions
 	    if( questions != null && questions.size() > 0 )
 		{
 	    	   question = (Question)questions.get( UtilitaireNombres.genererNbAleatoire( questions.size() ) );
+	    	   questions.remove(question);	
     	}
 		else
 		{
 			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
 		}
 		//System.out.println("\nquestion : " + question.obtenirCodeQuestion()+"\n");
+	    //popQuestion(question);
+	    
 		return question;
 	}
 	
@@ -98,7 +101,6 @@ public class BoiteQuestions
      * boite de questions selon son niveau de difficulté
      *
      * @param int intDifficulte : la difficulte de la question
-     * @param int intCategorieQuestion : la categorie de la question
      * @return Question : La question pigée
      */
 	public Question pigerQuestionCristall( int intDifficulte, int oldQuestionId )
@@ -116,7 +118,7 @@ public class BoiteQuestions
 	    		int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
 	    		question = (Question)questions.get( intRandom );
 	    		//to not take the same question twice
-	    		questions.remove( intRandom );
+	    		questions.remove(question);	//questions.remove( intRandom );
 	    		limit++;
 
 	    	}while(question.obtenirCodeQuestion() == oldQuestionId || limit > 10);
@@ -125,7 +127,8 @@ public class BoiteQuestions
 		{
 			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
 		}
-		
+	
+	   //popQuestion(question); 
 	   return question;
 	}
 	
@@ -215,7 +218,7 @@ public class BoiteQuestions
 
 	/**
 	 * Cette fonction permet de retourner toutes les questions 
-	 * correspondant aux paramètres (difficulte, categorie)
+	 * correspondant aux paramètres (difficulte)
 	 *
 	 * @param int intDifficulte : la difficulte de la question
 	 * @return LinkedList<Question> : un vecteur contenant les questions sélectionnées
