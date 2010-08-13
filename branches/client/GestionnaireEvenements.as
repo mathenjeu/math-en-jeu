@@ -3792,24 +3792,24 @@ function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
             break;
 			
 			 case 3:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
+                 rr = rr/189;
+                 gg = gg/137;
+                 bb = bb/42;
                 trace("Choix de la dessin 1");
             break;
 			
 			 case 4:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
+                 rr = rr/48;
+                 gg = gg/149;
+                 bb = bb/74;
                 trace("Choix de la dessin 1");
             break;
 			
 			 case 5:
-              /*   rr = rr/45;
+                 rr = rr/45;
                  gg = gg/50;
                  bb = bb/88;
-                trace("Choix de la dessin 5");*/
+                trace("Choix de la dessin 5");
             break;
 			
 			 case 6:
@@ -3894,27 +3894,27 @@ function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
                  rr = rr/43;
                  gg = gg/189;
                  bb = bb/95;
-                trace("Choix de la dessin 1");
+                trace("Choix de la dessin 2");
             break;
 			
 			 case 3:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
-                trace("Choix de la dessin 1");
+                 rr = rr/189;
+                 gg = gg/137;
+                 bb = bb/42;
+                trace("Choix de la dessin 3");
             break;
 			
 			 case 4:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
-                trace("Choix de la dessin 1");
+                 rr = rr/48;
+                 gg = gg/149;
+                 bb = bb/74;
+                trace("Choix de la dessin 4");
             break;
 			
 			 case 5:
-                 rr = rr/45;
-                 gg = gg/50;
-                 bb = bb/88;
+                 rr = rr/69;
+                 gg = gg/80;
+                 bb = bb/136;
                 trace("Choix de la dessin 5");
             break;
 			
@@ -3922,14 +3922,14 @@ function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
                  rr = rr/245;
                  gg = gg/64;
                  bb = bb/75;
-                trace("Choix de la dessin 1");
+                trace("Choix de la dessin 6");
             break;
 			
 			 case 7:
                  rr = rr/245;
                  gg = gg/64;
                  bb = bb/75;
-                trace("Choix de la dessin 1");
+                trace("Choix de la dessin 7");
             break;
 			
 			 case 8:
