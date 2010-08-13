@@ -908,8 +908,8 @@ public class ProtocoleJoueur implements Runnable
                         	Iterator<Entry<Integer, Salle>> objIterateurListe = lstEnsembleSalles.iterator();
 
                         	//we find if room is set tournamentActive
-                        	Set<Integer> keySet =  lstListeSalles.keySet();
-                        	Iterator<Integer> it = keySet.iterator();
+                        	//Set<Integer> keySet =  lstListeSalles.keySet();
+                        	//Iterator<Integer> it = keySet.iterator();
                         	
 
                         	// Passer toutes les salles et créer un noeud pour 
@@ -997,8 +997,8 @@ public class ProtocoleJoueur implements Runnable
                         	Iterator<Entry<Integer, Salle>> objIterateurListe = lstEnsembleSalles.iterator();
 
                         	//we find if room is set tournamentActive
-                        	Set<Integer> keySet =  lstListeSalles.keySet();
-                        	Iterator<Integer> it = keySet.iterator();
+                        	//Set<Integer> keySet =  lstListeSalles.keySet();
+                        	//Iterator<Integer> it = keySet.iterator();
                         	
 
                         	// Passer toutes les salles et créer un noeud pour 
@@ -1096,8 +1096,8 @@ public class ProtocoleJoueur implements Runnable
                         	Iterator<Entry<Integer, Salle>> objIterateurListe = lstEnsembleSalles.iterator();
 
                         	//we find if room is set tournamentActive
-                        	Set<Integer> keySet =  lstListeSalles.keySet();
-                        	Iterator<Integer> it = keySet.iterator();
+                        	//Set<Integer> keySet =  lstListeSalles.keySet();
+                        	//Iterator<Integer> it = keySet.iterator();
                         	
 
                         	// Passer toutes les salles et créer un noeud pour 
@@ -4560,7 +4560,7 @@ public class ProtocoleJoueur implements Runnable
             	 TreeMap<String, JoueurHumain> listeJoueursHumains = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs();
             	 Set<Map.Entry<String, JoueurHumain>> nomsJoueursHumains = listeJoueursHumains.entrySet();
             	 Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = nomsJoueursHumains.iterator();
-            	 ArrayList<JoueurVirtuel> listeJoueursVirtuels = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();             	 
+            	 //ArrayList<JoueurVirtuel> listeJoueursVirtuels = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();             	 
             	 
             	 while(objIterateurListeJoueurs.hasNext() == true)
             	 {

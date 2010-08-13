@@ -58,7 +58,7 @@ public class GestionnaireConfiguration
 	}
         
 	
-	public List obtenirListe( String id )
+	public List<String> obtenirListe( String id )
 	{
 		return _config.getList( id );
 	}

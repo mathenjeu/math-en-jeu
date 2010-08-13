@@ -794,7 +794,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	private int calculerPointsChemin(ArrayList<Point> lstPositions, Case objttPlateauJeu[][])
 	{
 		Point ptTemp;
-		int intPoints = 0;;
+		int intPoints = 0;
         
         boolean considererMiniJeu = determinerPretAJouerMiniJeu();
         boolean considererMagasin = determinerPretAVisiterMagasin();
