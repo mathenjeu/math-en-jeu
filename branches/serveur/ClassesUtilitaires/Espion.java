@@ -10,6 +10,7 @@ import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Table;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Vector;
 import java.util.TreeMap;
@@ -193,23 +194,23 @@ public class Espion implements Runnable{
 		Vector<ProtocoleJoueur> lstCopieProtocoleJoueur = null;
 		
 		// Déclaration d'un objet qui contiendra une référence vers la liste des joueurs déconnectés
-		TreeMap<String,JoueurHumain> lstJoueursDeconnectes = objControleurJeu.obtenirListeJoueursDeconnectes();
+		HashMap<String, JoueurHumain> lstJoueursDeconnectes = objControleurJeu.obtenirListeJoueursDeconnectes();
 		
 		
 		// Déclaration d'un objet qui contiendra une référence vers la liste des salles
-		TreeMap<Integer, Salle> lstSalles = objControleurJeu.obtenirListeSalles("");
+		HashMap<Integer, Salle> lstSalles = objControleurJeu.obtenirListeSalles("");
 		
 	    // Déclaration d'un objet qui contiendra une référence vers la liste des tables
 	    // pour une certaine salle
-	    TreeMap<Integer, Table> lstTables;
+	    HashMap<Integer, Table> lstTables;
 		
 		// Déclaration d'un objet qui contiendra une référence vers la liste des joueurs
 		// pour une table
-		TreeMap<String, JoueurHumain> lstJoueurs;
+		HashMap<String, JoueurHumain> lstJoueurs;
 
         // Déclaration d'un objet qui contiendra une référence vers la liste des 
         // jouers connectés au serveur
-        TreeMap<String, JoueurHumain> lstJoueursConnectes = objControleurJeu.obtenirListeJoueurs();		
+        HashMap<String, JoueurHumain> lstJoueursConnectes = objControleurJeu.obtenirListeJoueurs();		
 		
 		// Permet de calculer le nombre de connexion refusé
 		int intConnexionRefusee = 0;
@@ -409,7 +410,7 @@ public class Espion implements Runnable{
                 Salle objSalle = (Salle)(((Map.Entry<Integer,Salle>)(objIterateurListeSalles.next())).getValue());				
 				
 				// Aller chercher la liste des tables
-				lstTables = (TreeMap<Integer,Table>)(objSalle.obtenirListeTables());
+				lstTables = (HashMap<Integer,Table>)(objSalle.obtenirListeTables());
 				
 				// Préparation pour parcourir le TreeMap des tables
 				Set<Map.Entry<Integer,Table>> lstEnsembleTables = lstTables.entrySet();

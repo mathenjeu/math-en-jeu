@@ -2,6 +2,7 @@ package ServeurJeu.ComposantesJeu;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.Cases.Case;
@@ -22,27 +23,27 @@ public abstract class GenerateurPartie
 	
 	// Déclaration d'une liste de points contenant les points qui ont 
 	// été passés
-	protected ArrayList<Point> lstPointsCasesPresentes;
+	protected LinkedList<Point> lstPointsCasesPresentes;
 
 	// Déclaration d'une liste de points contenant les points qui 
 	// contiennent des cases spéciales
-	protected ArrayList<Point> lstPointsCasesSpeciales;
+	protected LinkedList<Point> lstPointsCasesSpeciales;
 	
 	// Déclaration d'une liste de points contenant les points qui 
 	// contiennent des cases de couleur
-	protected ArrayList<Point> lstPointsCasesCouleur;
+	protected LinkedList<Point> lstPointsCasesCouleur;
 	
 	// Déclaration d'une liste de points contenant les points qui 
 	// contiennent des magasins
-	protected ArrayList<Point> lstPointsMagasins;
+	protected LinkedList<Point> lstPointsMagasins;
 	
 	// Déclaration d'une liste de points contenant les points qui 
 	// contiennent des pièces
-	protected ArrayList<Point> lstPointsPieces;
+	protected LinkedList<Point> lstPointsPieces;
 	
 	// Déclaration d'une liste de points contenant les points qui 
 	// contiennent des objets utilisables
-	protected ArrayList<Point> lstPointsObjetsUtilisables;
+	protected LinkedList<Point> lstPointsObjetsUtilisables;
 	
 	// Déclaration d'une liste de points contenant les points de start
 	//ArrayList<Point> lstPointsStart = new ArrayList<Point>();
@@ -78,12 +79,12 @@ public abstract class GenerateurPartie
 	protected GenerateurPartie() {
 		super();
 		//this.objRandom = 
-		this.lstPointsCasesPresentes = new ArrayList<Point>();
-		this.lstPointsCasesSpeciales = new ArrayList<Point>();
-		this.lstPointsCasesCouleur = new ArrayList<Point>();
-		this.lstPointsMagasins = new ArrayList<Point>();
-		this.lstPointsPieces = new ArrayList<Point>();
-		this.lstPointsObjetsUtilisables = new ArrayList<Point>();
+		this.lstPointsCasesPresentes = new LinkedList<Point>();
+		this.lstPointsCasesSpeciales = new LinkedList<Point>();
+		this.lstPointsCasesCouleur = new LinkedList<Point>();
+		this.lstPointsMagasins = new LinkedList<Point>();
+		this.lstPointsPieces = new LinkedList<Point>();
+		this.lstPointsObjetsUtilisables = new LinkedList<Point>();
 		//this.intCompteurCases = 0;
 		this.intCompteurIdObjet = 1;
 		this.objCaseParcourue = new CaseCouleur(1);

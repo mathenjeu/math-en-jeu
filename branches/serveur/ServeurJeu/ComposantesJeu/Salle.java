@@ -1,13 +1,12 @@
 package ServeurJeu.ComposantesJeu;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.Map.Entry;
 import Enumerations.RetourFonctions.ResultatEntreeTable;
 import ServeurJeu.BD.GestionnaireBD;
@@ -51,13 +50,13 @@ public class Salle
 	
 	// Cet objet est une liste de numéros utilisés pour les tables (sert à 
 	// générer de nouvelles tables)
-	private TreeSet<Integer> lstNoTables;
+	private HashSet<Integer> lstNoTables;
 	
 	// Cet objet est une liste des joueurs qui sont présentement dans cette salle
-	private TreeMap<String, JoueurHumain> lstJoueurs;
+	private HashMap<String, JoueurHumain> lstJoueurs;
 	
 	// Cet objet est une liste des tables qui sont présentement dans cette salle
-	private TreeMap<Integer, Table> lstTables;
+	private HashMap<Integer, Table> lstTables;
 		
 	// Date when room will be activated
 	private Date beginDate;
@@ -79,7 +78,7 @@ public class Salle
 	private int lastNumber;
 	
 	//types of game for the tables in this room
-	private ArrayList<String> roomAllowedTypes;
+	private HashSet<String> roomAllowedTypes;
 	
 	//type of room 
 	//we have 2 types for the moment, General and profsType
@@ -124,12 +123,12 @@ public class Salle
         this.roomType = type;
                
         //this.keywords = new ArrayList<Integer>();
-        this.setRoomAllowedTypes(new ArrayList<String>());
+        this.setRoomAllowedTypes(new HashSet<String>());
 		
 		// Créer une nouvelle liste de joueurs, de tables et de numéros
-		lstJoueurs = new TreeMap <String, JoueurHumain>();
-		lstTables = new TreeMap <Integer, Table>();
-		lstNoTables = new TreeSet <Integer>();
+		lstJoueurs = new HashMap <String, JoueurHumain>();
+		lstTables = new HashMap <Integer, Table>();
+		lstNoTables = new HashSet <Integer>();
 		               
         // Faire la référence vers le controleur de jeu
 		objControleurJeu = controleurJeu;
@@ -536,7 +535,7 @@ public class Salle
 	 * 				l'être par l'appelant de cette fonction tout dépendant
 	 * 				du traitement qu'elle doit faire
 	 */
-	public TreeMap<String, JoueurHumain> obtenirListeJoueurs()
+	public HashMap<String, JoueurHumain> obtenirListeJoueurs()
 	{
 		return lstJoueurs;
 	}
@@ -551,7 +550,7 @@ public class Salle
 	 * 				l'être par l'appelant de cette fonction tout dépendant
 	 * 				du traitement qu'elle doit faire
 	 */
-	public TreeMap<Integer, Table> obtenirListeTables()
+	public HashMap<Integer, Table> obtenirListeTables()
 	{
 		return lstTables;
 	}
@@ -924,11 +923,11 @@ public class Salle
 	/**
 	 * @return the roomAdmitedTypes
 	 */
-	public ArrayList<String> getRoomAllowedTypes() {
+	public HashSet<String> getRoomAllowedTypes() {
 		return roomAllowedTypes;
 	}
 
-	public void setRoomAllowedTypes(ArrayList<String> roomAllowedTypes) {
+	public void setRoomAllowedTypes(HashSet<String> roomAllowedTypes) {
 		this.roomAllowedTypes = roomAllowedTypes;
 	}
 	

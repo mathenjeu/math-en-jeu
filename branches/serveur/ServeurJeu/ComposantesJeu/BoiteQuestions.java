@@ -5,8 +5,8 @@
  */
 package ServeurJeu.ComposantesJeu;
 
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.TreeMap;
 import org.apache.log4j.Logger;
 import ClassesUtilitaires.UtilitaireNombres;
 import ServeurJeu.Configuration.GestionnaireMessages;
@@ -18,7 +18,8 @@ import ServeurJeu.Configuration.GestionnaireMessages;
 public class BoiteQuestions 
 {
 	private static Logger objLogger = Logger.getLogger( BoiteQuestions.class );
-	private TreeMap<Integer, LinkedList<Question>> lstQuestions;
+	private HashMap<Integer, LinkedList<Question>> lstQuestions;
+	
 		
 	// Since there is a question box for each player, and all players might not want to play
 	// in the same language, we set a language field for question boxes
@@ -26,7 +27,7 @@ public class BoiteQuestions
 	
 	public BoiteQuestions(String language, String url)
 	{
-		lstQuestions = new TreeMap<Integer, LinkedList<Question>>();
+		lstQuestions = new HashMap<Integer, LinkedList<Question>>();
         this.language = new Language(language, url);
     	       
 	}// fin constructeur
@@ -37,10 +38,10 @@ public class BoiteQuestions
 	 * 
 	 * @param Question question : la question à ajouter
 	 */
-	public void ajouterQuestion( Question question )
+	public void ajouterQuestion( Question question)
 	{
 		int difficulte = question.obtenirDifficulte();
-					
+							
 		LinkedList<Question> questions = lstQuestions.get( difficulte );
 		if( questions == null )
 		{
@@ -48,8 +49,9 @@ public class BoiteQuestions
 			lstQuestions.put( difficulte, questions);
 		}
 	
+		
 		//System.out.println("Boite question : " + question.obtenirCodeQuestion() + " diff: " + question.obtenirDifficulte());
-		questions.add( question );
+		questions.addLast(question );
 	}
 	
 	/**
@@ -75,24 +77,25 @@ public class BoiteQuestions
      */
 	public Question pigerQuestion(int intDifficulte)
 	{
-		
+		//System.out.println("Question1: " + System.currentTimeMillis());
 		Question question = null;
 		
 		LinkedList<Question> questions = lstQuestions.get(intDifficulte);
-		
+						
 		// Let's choose a question among the possible ones
 	    if( questions != null && questions.size() > 0 )
 		{
-	    	   question = (Question)questions.get( UtilitaireNombres.genererNbAleatoire( questions.size() ) );
-	    	   questions.remove(question);	
+	    	   question = (Question)(questions.get(UtilitaireNombres.genererNbAleatoire(questions.size())));
+	    	   
     	}
 		else
 		{
 			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
 		}
-		//System.out.println("\nquestion : " + question.obtenirCodeQuestion()+"\n");
-	    //popQuestion(question);
-	    
+		
+	    questions.remove(question);
+		//System.out.println("Question2: " + System.currentTimeMillis());
+	    //System.out.println("\nquestion : " + question.obtenirCodeQuestion()+ "  " + lstQuestions.containsValue(question) +  " " + questions.indexOf(question) + "\n");
 		return question;
 	}
 	
@@ -135,7 +138,7 @@ public class BoiteQuestions
 
 	/**
 	 * Cette fonction permet de determiner si la boite a question
-	 * est vide pour une certaine difficulte et catégorie
+	 * est vide pour une certaine difficulte 
 	 * -----  Ne semble pas ètre appelée pour l'instant  -----
 	 *
 	 * @param int intDifficulte : la difficulte de la question
@@ -157,6 +160,30 @@ public class BoiteQuestions
 		
 		return ret;
 	}
+	
+	/**
+	 * Cette fonction permet de determiner si la boite a question
+	 * est vide en general
+	 * -----  Ne semble pas ètre appelée pour l'instant  -----
+	 *
+	 * @param int intDifficulte : la difficulte de la question
+	 * @return boolean : si la boite est vide ou non
+	 */
+	public boolean estVide()
+	{
+		boolean ret = false;
+		//LinkedList<Question> questions = obtenirQuestions( intDifficulte );
+		
+		
+		if(lstQuestions.isEmpty())
+		{
+			ret = true;
+			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+		}
+				
+		return ret;
+	}
+	
 	
 	/**
 	 * Cette fonction retourne une mauvaise réponse. Utilisé lorsqu'un

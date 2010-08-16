@@ -3,6 +3,8 @@ package ServeurJeu.ComposantesJeu;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+
 import Enumerations.Visibilite;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
@@ -57,13 +59,13 @@ public class GenerateurPartieTournament extends GenerateurPartie {
     {
     	
     	//*********** for all new game we need to have a null start point
-    	this.lstPointsCasesPresentes = new ArrayList<Point>();
-		this.lstPointsCasesSpeciales = new ArrayList<Point>();
-		this.lstPointsCasesCouleur = new ArrayList<Point>();
-		this.lstPointsMagasins = new ArrayList<Point>();
-		this.lstPointsPieces = new ArrayList<Point>();
-		this.lstPointsObjetsUtilisables = new ArrayList<Point>();
-		this.intCompteurCases = 0;
+    	this.lstPointsCasesPresentes = new LinkedList<Point>();
+		this.lstPointsCasesSpeciales = new LinkedList<Point>();
+		this.lstPointsCasesCouleur = new LinkedList<Point>();
+		this.lstPointsMagasins = new LinkedList<Point>();
+		this.lstPointsPieces = new LinkedList<Point>();
+		this.lstPointsObjetsUtilisables = new LinkedList<Point>();
+		//this.intCompteurCases = 0;
 		this.intCompteurIdObjet = 1;
 		this.objCaseParcourue = new CaseCouleur(1);
     	

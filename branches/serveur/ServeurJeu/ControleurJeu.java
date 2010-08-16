@@ -2,7 +2,7 @@ package ServeurJeu;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.TreeMap;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.Iterator;
 import java.util.Map;
@@ -80,16 +80,16 @@ public class ControleurJeu
 	// Cet objet est une liste des joueurs qui sont connectés au serveur de jeu 
 	// (cela inclus les joueurs dans les salles ainsi que les joueurs jouant
 	// présentement dans des tables de jeu)
-	private TreeMap<String, JoueurHumain> lstJoueursConnectes;
+	private HashMap<String, JoueurHumain> lstJoueursConnectes;
 	
     
     // Déclaration d'une variable pour contenir une liste des joueurs
     // qui ont étés déconnectés et qui étaient en train de joueur une partie
-    private TreeMap<String, JoueurHumain> lstJoueursDeconnectes;
+    private HashMap<String, JoueurHumain> lstJoueursDeconnectes;
 	
 	// Cet objet est une liste des salles créées qui se trouvent dans le serveur
 	// de jeu. Chaque élément de cette liste a comme clé le id de la salle 
-	private TreeMap<Integer, Salle> lstSalles;
+	private HashMap<Integer, Salle> lstSalles;
 	
 	// Déclaration de l'objet Espion qui va inscrire des informationsà proppos
 	// du serveur en parallète
@@ -130,13 +130,13 @@ public class ControleurJeu
         objRandom = new Random();
 		
 		// Créer une liste des joueurs
-		lstJoueursConnectes = new TreeMap<String, JoueurHumain>();
+		lstJoueursConnectes = new HashMap<String, JoueurHumain>();
 		
 		// Créer une liste des joueurs déconnectés
-		lstJoueursDeconnectes = new TreeMap<String, JoueurHumain>();
+		lstJoueursDeconnectes = new HashMap<String, JoueurHumain>();
 		
 		// Créer une liste des salles
-		lstSalles = new TreeMap<Integer, Salle>();
+		lstSalles = new HashMap<Integer, Salle>();
 		
 		// Créer un nouveau gestionnaire d'événements
 		objGestionnaireEvenements = new GestionnaireEvenements();
@@ -439,7 +439,7 @@ public class ControleurJeu
 	 * 				l'être par l'appelant de cette fonction tout dépendant
 	 * 				du traitement qu'elle doit faire
 	 */
-	public TreeMap<String, JoueurHumain> obtenirListeJoueurs()
+	public HashMap<String, JoueurHumain> obtenirListeJoueurs()
 	{
 		return lstJoueursConnectes;
 	}
@@ -452,11 +452,11 @@ public class ControleurJeu
 	 * 				     référence vers la liste du ControleurJeu, il faut donc
 	 *                   traiter le cas du multithreading)
 	 */
-	public TreeMap<Integer, Salle> obtenirListeSalles(String language)
+	public HashMap<Integer, Salle> obtenirListeSalles(String language)
 	{
 		synchronized(lstSalles){
 	        // On crée une liste de salles vide, et on parcourt toutes les salles connues
-            TreeMap<Integer, Salle> copieListeSalles = (TreeMap<Integer, Salle>) lstSalles.clone();
+            HashMap<Integer, Salle> copieListeSalles = (HashMap<Integer, Salle>) lstSalles.clone();
             copieListeSalles.clear();
             Set<Integer> keySet = lstSalles.keySet();
             Iterator<Integer> it = keySet.iterator();
@@ -859,9 +859,12 @@ public class ControleurJeu
     	}
     }
     
-    public TreeMap<String, JoueurHumain> obtenirListeJoueursDeconnectes()
+    public HashMap<String, JoueurHumain> obtenirListeJoueursDeconnectes()
     {
-    	return lstJoueursDeconnectes;
+    	synchronized(lstJoueursDeconnectes)
+    	{
+    	   return lstJoueursDeconnectes;
+    	}
     }
     
     
@@ -882,10 +885,10 @@ public class ControleurJeu
     	return objParametreIA;
     }
 
-	public TreeMap<Integer, Salle> obtenirListeSalles(String langue, String roomsType) {
+	public HashMap<Integer, Salle> obtenirListeSalles(String langue, String roomsType) {
 		synchronized(lstSalles){
 	        // On crée une liste de salles vide, et on parcourt toutes les salles connues
-            TreeMap<Integer, Salle> copieListeSalles = (TreeMap<Integer, Salle>) lstSalles.clone();
+            HashMap<Integer, Salle> copieListeSalles = (HashMap<Integer, Salle>) lstSalles.clone();
             copieListeSalles.clear();
             Set<Integer> keySet = lstSalles.keySet();
             Iterator<Integer> it = keySet.iterator();

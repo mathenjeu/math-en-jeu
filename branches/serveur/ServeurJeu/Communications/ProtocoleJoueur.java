@@ -14,7 +14,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 import java.util.ArrayList;
-import java.util.Vector;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -820,7 +820,7 @@ public class ProtocoleJoueur implements Runnable
 						objNoeudParametreListeJoueurs.setAttribute("type", "ListeNomUtilisateurs");
 
 						// Obtenir la liste des joueurs connectés au serveur de jeu
-						TreeMap<String, JoueurHumain> lstListeJoueurs = objControleurJeu.obtenirListeJoueurs();
+						HashMap<String, JoueurHumain> lstListeJoueurs = objControleurJeu.obtenirListeJoueurs();
 
 						// Empècher d'autres thread de toucher à la liste des
 						// joueurs connectés au serveur de jeu
@@ -890,7 +890,7 @@ public class ProtocoleJoueur implements Runnable
 						// du paramètre
 						objNoeudParametreListeSalles.setAttribute("type", "ListeNomSalles");
 
-						TreeMap<Integer, Salle> lstListeSalles = new TreeMap<Integer, Salle>();
+						HashMap<Integer, Salle> lstListeSalles = new HashMap<Integer, Salle>();
 						
 						// take list of rooms from Controleur
 						lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue, roomsType);
@@ -980,7 +980,7 @@ public class ProtocoleJoueur implements Runnable
 						// du paramètre
 						objNoeudParametreListeSalles.setAttribute("type", "ListeNomSalles");
 
-						TreeMap<Integer, Salle> lstListeSalles = new TreeMap<Integer, Salle>();
+						HashMap<Integer, Salle> lstListeSalles = new HashMap<Integer, Salle>();
 						
 						objControleurJeu.obtenirGestionnaireBD().listRoomsProf(this.langue, objJoueurHumain.obtenirCleJoueur(), lstListeSalles);
 							
@@ -1078,7 +1078,7 @@ public class ProtocoleJoueur implements Runnable
 						// du paramètre
 						objNoeudParametreListeSalles.setAttribute("type", "ListeNomSalles");
 
-						TreeMap<Integer, Salle> lstListeSalles = new TreeMap<Integer, Salle>();
+						HashMap<Integer, Salle> lstListeSalles = new HashMap<Integer, Salle>();
 						
 						// take list of rooms from Controleur
 						lstListeSalles = objControleurJeu.obtenirListeSalles(this.langue, roomsType);
@@ -1450,7 +1450,7 @@ public class ProtocoleJoueur implements Runnable
 
 						// Obtenir la liste des joueurs se trouvant dans la 
 						// salle courante
-						TreeMap<String, JoueurHumain> lstListeJoueurs = objJoueurHumain.obtenirSalleCourante().obtenirListeJoueurs();
+						HashMap<String, JoueurHumain> lstListeJoueurs = objJoueurHumain.obtenirSalleCourante().obtenirListeJoueurs();
 
 						// Empècher d'autres thread de toucher à la liste des
 						// joueurs se trouvant dans la salle courante
@@ -1549,7 +1549,7 @@ public class ProtocoleJoueur implements Runnable
 
 						// Obtenir la liste des tables se trouvant dans la 
 						// salle courante
-						TreeMap<Integer, Table> lstListeTables = objJoueurHumain.obtenirSalleCourante().obtenirListeTables();
+						HashMap<Integer, Table> lstListeTables = objJoueurHumain.obtenirSalleCourante().obtenirListeTables();
 
 						// Empècher d'autres thread de toucher à la liste des
 						// tables se trouvant dans la salle courante
@@ -1577,7 +1577,7 @@ public class ProtocoleJoueur implements Runnable
 								// Obtenir la liste des joueurs se trouvant dans la 
 								// table courante
 								//TreeMap lstListeJoueurs = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueursEnAttente();
-								TreeMap lstListeJoueurs = objTable.obtenirListeJoueurs();
+								HashMap lstListeJoueurs = objTable.obtenirListeJoueurs();
 
 								// Empècher d'autres thread de toucher à la liste des
 								// joueurs de la table courante
@@ -3799,7 +3799,7 @@ public class ProtocoleJoueur implements Runnable
         Joueur lstJoueursTable[] = new Joueur[objTable.obtenirListeJoueurs().size() + objTable.getNombreJoueursVirtuels() + 1];
 
         // Obtenir la liste des joueurs sur la table
-        TreeMap<String, JoueurHumain> lstJoueurs = objTable.obtenirListeJoueurs();
+        HashMap<String, JoueurHumain> lstJoueurs = objTable.obtenirListeJoueurs();
         
         // Déclaration d'une variable qui va contenir le code XML à retourner
         String strCodeXML = "";
@@ -3808,7 +3808,7 @@ public class ProtocoleJoueur implements Runnable
         Case[][] objttPlateauJeu = objTable.obtenirPlateauJeuCourant();
 
         // Créer la liste des positions des joueurs à retourner
-        TreeMap<String, Point> lstPositionsJoueurs = new TreeMap<String, Point>();
+        HashMap<String, Point> lstPositionsJoueurs = new HashMap<String, Point>();
 
         // Parcourir les positions des joueurs de la table et les ajouter
         // à notre liste locale
@@ -3911,7 +3911,7 @@ public class ProtocoleJoueur implements Runnable
 		objNoeudParametreListeJoueurs.setAttribute("type", "ListeJoueurs");
 		
         // Obtenir la liste des joueurs que l'on doit envoyer
-        TreeMap<String, JoueurHumain> lstJoueurs = ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs();
+        HashMap<String, JoueurHumain> lstJoueurs = ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs();
 
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// lstJoueurs (chaque élément est un Map.Entry)
@@ -4218,7 +4218,7 @@ public class ProtocoleJoueur implements Runnable
 		objNoeudParametreListeItems.setAttribute("type", "ListeObjets");
 
 	    // Obtenir la liste des items du joueur déconnecté
-		TreeMap<Integer,ObjetUtilisable> lstListeItems = ancientJoueur.obtenirPartieCourante().obtenirListeObjets();
+		HashMap<Integer, ObjetUtilisable> lstListeItems = ancientJoueur.obtenirPartieCourante().obtenirListeObjets();
 		
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// lstListeItemss (chaque élément est un Map.Entry)
@@ -4557,7 +4557,7 @@ public class ProtocoleJoueur implements Runnable
                  boolean estHumain =  false; //Le joueur choisi est'il humain?
        			
                  // On obtient la liste des joueurs humains, puis la liste des joueurs virtuels
-            	 TreeMap<String, JoueurHumain> listeJoueursHumains = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs();
+            	 HashMap<String, JoueurHumain> listeJoueursHumains = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueurs();
             	 Set<Map.Entry<String, JoueurHumain>> nomsJoueursHumains = listeJoueursHumains.entrySet();
             	 Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = nomsJoueursHumains.iterator();
             	 //ArrayList<JoueurVirtuel> listeJoueursVirtuels = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirListeJoueursVirtuels();             	 

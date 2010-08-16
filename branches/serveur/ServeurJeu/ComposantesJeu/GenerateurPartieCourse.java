@@ -3,6 +3,8 @@ package ServeurJeu.ComposantesJeu;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+
 import Enumerations.Visibilite;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
@@ -56,12 +58,12 @@ public class GenerateurPartieCourse extends GenerateurPartie {
     {
 		
     	//*********** for all new game we need to have a null start point
-    	this.lstPointsCasesPresentes = new ArrayList<Point>();
-		this.lstPointsCasesSpeciales = new ArrayList<Point>();
-		this.lstPointsCasesCouleur = new ArrayList<Point>();
-		this.lstPointsMagasins = new ArrayList<Point>();
-		this.lstPointsPieces = new ArrayList<Point>();
-		this.lstPointsObjetsUtilisables = new ArrayList<Point>();
+    	this.lstPointsCasesPresentes = new LinkedList<Point>();
+		this.lstPointsCasesSpeciales = new LinkedList<Point>();
+		this.lstPointsCasesCouleur = new LinkedList<Point>();
+		this.lstPointsMagasins = new LinkedList<Point>();
+		this.lstPointsPieces = new LinkedList<Point>();
+		this.lstPointsObjetsUtilisables = new LinkedList<Point>();
 		this.intCompteurCases = 0;
 		this.intCompteurIdObjet = 1;
 		this.objCaseParcourue = new CaseCouleur(1);
@@ -326,7 +328,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 				
 				// Ajouter le point trouvé dans la liste des points d'objets 
 				// utilisables trouvés
-				lstPointsObjetsUtilisables.add(objPoint);
+				lstPointsObjetsUtilisables.addLast(objPoint);
 
 				// Si le nom de l'objet est Livre, alors on met un objet 
 				// Livre sur la case, sinon on fait le même genre de 
@@ -456,7 +458,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 				
 				// Ajouter le point trouvé dans la liste des points de cases 
 				// spéciales trouvées
-				lstPointsCasesSpeciales.add(objPoint);
+				lstPointsCasesSpeciales.addLast(objPoint);
 
 				// Définir la valeur de la case au point spécifié à la case 
 				// d'identification
@@ -506,7 +508,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 				
 				// Ajouter le point trouvé dans la liste des points de cases 
 				// de couleur trouvées
-				lstPointsCasesCouleur.add(objPoint);
+				lstPointsCasesCouleur.addLast(objPoint);
 
 				// Définir la valeur de la case au point spécifié à la case 
 				// d'identification
@@ -554,7 +556,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 					objttPlateauJeu[objPoint.x][objPoint.y] = objCaseParcourue;
 					
 					// Ajouter le point dans la liste des points passés
-					lstPointsCasesPresentes.add(objPoint);
+					lstPointsCasesPresentes.addLast(objPoint);
 					intCompteurCases++;
 				}
 				

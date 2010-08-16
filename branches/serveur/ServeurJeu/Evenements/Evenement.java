@@ -52,12 +52,10 @@ public abstract class Evenement
 	        
 	        try
 	        {
-                
                 String strTemp = genererCodeXML(information);
 		        
 		        // Envoyer l'événement au joueur courant
 		        information.obtenirProtocoleJoueur().envoyerMessage(strTemp);	            
-   
 	        }
 	        catch (IOException ioe)
 	        {
