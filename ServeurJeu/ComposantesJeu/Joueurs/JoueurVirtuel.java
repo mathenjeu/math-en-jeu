@@ -4,14 +4,15 @@ import ClassesUtilitaires.UtilitaireNombres;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.InformationPartie;
 import java.awt.Point;
-import java.util.TreeMap;
 import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
@@ -79,7 +80,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 
 	// Déclaration d'une liste d'objets utilisables ramassés par le joueur
 	// virtuel
-	private TreeMap<Integer, ObjetUtilisable> lstObjetsUtilisablesRamasses;
+	private HashMap<Integer, ObjetUtilisable> lstObjetsUtilisablesRamasses;
 	
 	// Déclaration d'une référence vers le controleur jeu
 	private final ControleurJeu objControleurJeu;
@@ -223,7 +224,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		//objPositionJoueur = null;
 		
 	    // Créer la liste des objets utilisables qui ont été ramassés
-	    lstObjetsUtilisablesRamasses = new TreeMap<Integer, ObjetUtilisable>();
+	    lstObjetsUtilisablesRamasses = new HashMap<Integer, ObjetUtilisable>();
 		
         // Création du profil du joueur virtuel
         intNiveauDifficulte = niveauDifficulte;
@@ -428,6 +429,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    			
 	    	    }	
 			}
+			
+			
 		}
 		catch (Exception e)
 		{
@@ -451,7 +454,6 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 
 
 	private boolean controlHaveBanana() {
-		// TODO Auto-generated method stub
 		
 		if (lstObjetsUtilisablesRamasses.size() > 0)
         {
@@ -466,7 +468,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	        	
 	        	if (objObjet instanceof Banane)
 	        	{
-	        		System.out.print("Virtuel - Banana \n");
+	        		//System.out.print("Virtuel - Banana \n");
 	        		return true;
 	        	}
 	        	
@@ -475,7 +477,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         }
         else
         {
-        	System.out.println("I don't have Banana");
+        	//System.out.println("I don't have Banana");
         }
         
 		
@@ -510,8 +512,8 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		
 		int total = gameTime + diffLevel + emoFactor + bananaNumber + playerFactor;
 		
-		System.out.println("Banana!!!!!!!!!!!!!! " + total + " gameTime " + gameTime + " playerFactor " + playerFactor +
-				" difflevel " + diffLevel + " emofactor " + emoFactor + " bananaNumber " + bananaNumber);
+		//System.out.println("Banana!!!!!!!!!!!!!! " + total + " gameTime " + gameTime + " playerFactor " + playerFactor +
+		//		" difflevel " + diffLevel + " emofactor " + emoFactor + " bananaNumber " + bananaNumber);
 		
 		if(total > 150)
 		{
@@ -523,7 +525,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
        	    }else
        	    	objTable.obtenirJoueurVirtuelParSonNom(this.playerToUseBanana).getBananaState().bananaIsTossed();
        	    this.enleverObjet(Objet.UID_OU_BANANE);
-       	    System.out.println("Banana!!!!!!!!!!!!!!");
+       	    //System.out.println("Banana!!!!!!!!!!!!!!");
 		}	
 			
 		
@@ -544,7 +546,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
          boolean estHumain2 = false;
          
          // On obtient la liste des joueurs humains, puis la liste des joueurs virtuels
-         TreeMap listeJoueursHumains = objTable.obtenirListeJoueurs();
+         HashMap listeJoueursHumains = objTable.obtenirListeJoueurs();
          Set nomsJoueursHumains = listeJoueursHumains.entrySet();
          Iterator objIterateurListeJoueurs = nomsJoueursHumains.iterator();
          ArrayList listeJoueursVirtuels = objTable.obtenirListeJoueursVirtuels();
@@ -1579,7 +1581,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		RetourVerifierReponseEtMettreAJourPlateauJeu objRetour =
 		    InformationPartie.verifierReponseEtMettreAJourPlateauJeu(reponse, objNouvellePosition, this);
     	
-    	Case objCaseDestination = objTable.obtenirPlateauJeuCourant()[objNouvellePosition.x][objNouvellePosition.y];
+    	Case objCaseDestination = objttPlateauJeu[objNouvellePosition.x][objNouvellePosition.y];//objTable.getCase(objNouvellePosition.x, objNouvellePosition.y);
         
         ObjetUtilisable objObjetRamasse = objRetour.obtenirObjetRamasse();
         
@@ -2041,7 +2043,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     	return objPositionJoueur;
     }
     
-    public TreeMap<Integer, ObjetUtilisable> obtenirListeObjetsRamasses()
+    public HashMap<Integer, ObjetUtilisable> obtenirListeObjetsRamasses()
     {
     	return lstObjetsUtilisablesRamasses;
     }
@@ -2083,7 +2085,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     public void arreterThread()
     {
         bolStopThread = true;
-        //Thread.currentThread().stop();
+        Thread.currentThread().interrupt();
     }
     
     /* Cette fonction permet d'obtenir un tableau qui contient les pourcentages de
@@ -2207,7 +2209,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     	}
     	
     	// Aller chercher le plateau de jeu
-    	Case objttPlateauJeu[][] = objTable.obtenirPlateauJeuCourant();
+    	//Case objttPlateauJeu[][] = uCourant();
         
         // Vérifier si l'état de la case a changé
         switch (intRaisonPositionFinale)

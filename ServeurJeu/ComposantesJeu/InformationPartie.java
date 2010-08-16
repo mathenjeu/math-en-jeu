@@ -1,7 +1,10 @@
 package ServeurJeu.ComposantesJeu;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -38,7 +41,7 @@ public class InformationPartie
 	private final JoueurHumain objJoueurHumain;
 	
 	// Déclaration d'une référence vers la table courante
-	private Table objTable;
+	private final Table objTable;
 	
     // Déclaration d'une variable qui va contenir le numéro Id du personnage 
 	private int intIdPersonnage;
@@ -59,7 +62,7 @@ public class InformationPartie
 	
 	// Déclaration d'une liste de questions qui ont été répondues 
 	// par le joueur
-	private TreeMap<Integer, Question> lstQuestionsRepondues;
+	private ArrayList<Integer> lstQuestionsRepondues;
 	
 	// Déclaration d'une variable qui va garder la question qui est 
 	// présentement posée au joueur. S'il n'y en n'a pas, alors il y a 
@@ -67,7 +70,7 @@ public class InformationPartie
 	private Question objQuestionCourante;
 	
 	// Déclaration d'une liste d'objets utilisables ramassés par le joueur
-	private TreeMap<Integer, ObjetUtilisable> lstObjetsUtilisablesRamasses;
+	private HashMap<Integer, ObjetUtilisable> lstObjetsUtilisablesRamasses;
         
     // Déclaration de la boîte de question personnelle au joueur possédant
     // cet objet
@@ -75,12 +78,12 @@ public class InformationPartie
         
     // object that describe and manipulate 
     // the Banana state of the player
-    private PlayerBananaState bananaState;
+    private final PlayerBananaState bananaState;
     
     
     // object that describe and manipulate 
     // the Braniac state of the player
-    private PlayerBrainiacState brainiacState;
+    private final PlayerBrainiacState brainiacState;
         
 	// to not get twice bonus
     // used in course ou tournament types of game
@@ -100,6 +103,10 @@ public class InformationPartie
 	// user can change it in the frame 3 of the client
 	// if we use default color it will remain = 0
 	private String clothesColor;
+	
+	// used to count how many times the QuestionsBox is filled
+	// if is filled after 
+	private int countFillBox;
 	 
     
 	/**
@@ -142,15 +149,15 @@ public class InformationPartie
 	        //objQuestionCourante = null;
 	    
 	        // Créer la liste des questions qui ont été répondues
-	        lstQuestionsRepondues = new TreeMap<Integer, Question>();
+	        lstQuestionsRepondues = new ArrayList<Integer>();
 	    
 	        // Créer la liste des objets utilisables qui ont été ramassés
-	        lstObjetsUtilisablesRamasses = new TreeMap<Integer, ObjetUtilisable>();
+	        lstObjetsUtilisablesRamasses = new HashMap<Integer, ObjetUtilisable>();
 	        
 	        //wasOnFinish = false;
 	        
 	        moveVisibility = 3;
-			tournamentBonus = 0;
+			//tournamentBonus = 0;
 			
 			// set the color to default
 			clothesColor = "0";
@@ -163,8 +170,7 @@ public class InformationPartie
 	        
 			String language = joueur.obtenirProtocoleJoueur().langue;
             setObjBoiteQuestions(new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language)));
-            objGestionnaireBD.remplirBoiteQuestions(getObjBoiteQuestions(), objJoueurHumain);  
-            
+                        
 	}// fin constructeur
 
 	
@@ -281,7 +287,7 @@ public class InformationPartie
 	 * 
 	 * @return TreeMap : La liste des questions qui ont été répondues
 	 */
-	public TreeMap<Integer, Question> obtenirListeQuestionsRepondues()
+	public ArrayList<Integer> obtenirListeQuestionsRepondues()
 	{
 	   return lstQuestionsRepondues;
 	}
@@ -376,7 +382,7 @@ public class InformationPartie
 				{
 					// S'il n'y a aucune case ˆ la position courante, alors on 
 					// a trouvé un trou et le déplacement n'est pas possible
-					if (objTable.obtenirPlateauJeuCourant()[i][objPositionJoueur.y] == null)
+					if (objTable.getCase(i, objPositionJoueur.y) == null)
 					{
 						bolEstPermis = false;
 					}
@@ -463,6 +469,7 @@ public class InformationPartie
 	 * @return Question : La question trouvée, s'il n'y a pas eu de déplacement,
 	 * 					  alors la question retournée est null
 	 */
+	@SuppressWarnings("unused")
 	public Question trouverQuestionAPoser(Point nouvellePosition, boolean doitGenererNoCommandeRetour)
 	{
 		int intDifficulte = 0;
@@ -491,53 +498,38 @@ public class InformationPartie
 		if(this.brainiacState.isInBrainiac() && intDifficulte > 1 )
 			intDifficulte--;
 
+		// to be sure...
 		if(intDifficulte > 6) intDifficulte = 6;
+		if(intDifficulte < 1) intDifficulte = 1;
 		//System.out.println("Difficulte de la question : " + intDifficulte);   // test
+		do{		
+			// find a question
+			objQuestionTrouvee = trouverQuestion(intDifficulte);
+			//System.out.println("question : " + intDifficulte); 
 
-		// Il faut que la difficulté soit plus grande que 0 pour pouvoir trouver 
-		// une question
-		if (intDifficulte > 0)
-		{
-			objQuestionTrouvee = trouverQuestion(intDifficulte);
-		}
-		
-		//System.out.println("question : " + intDifficulte); 
-		
-		// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
-		// des questions posées et on la garde en mémoire pour pouvoir ensuite
-		// traiter la réponse du joueur, on va aussi garder la position que le
-		// joueur veut se déplacer
-		if (objQuestionTrouvee != null)
-		{
-			lstQuestionsRepondues.put(new Integer(objQuestionTrouvee.obtenirCodeQuestion()), objQuestionTrouvee);
-			objQuestionCourante = objQuestionTrouvee;
-			objPositionJoueurDesiree = nouvellePosition;
-			objBoiteQuestions.popQuestion(objQuestionTrouvee);
-		}
-		else if (intDifficulte > 0)
-		{
-			objGestionnaireBD.remplirBoiteQuestions( getObjBoiteQuestions(), objJoueurHumain);
-			objQuestionTrouvee = trouverQuestion(intDifficulte);
-			
-			lstQuestionsRepondues.clear();
-			
 			// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
 			// des questions posées et on la garde en mémoire pour pouvoir ensuite
-			// traiter la réponse du joueur
+			// traiter la réponse du joueur, on va aussi garder la position que le
+			// joueur veut se déplacer
 			if (objQuestionTrouvee != null)
 			{
-				lstQuestionsRepondues.put(new Integer(objQuestionTrouvee.obtenirCodeQuestion()), objQuestionTrouvee);
+				lstQuestionsRepondues.add(new Integer(objQuestionTrouvee.obtenirCodeQuestion()));
 				objQuestionCourante = objQuestionTrouvee;
 				objPositionJoueurDesiree = nouvellePosition;
-				objBoiteQuestions.popQuestion(objQuestionTrouvee);
-			}
-			else
-			{
-				// en théorie on ne devrait plus entrer dans ce else 
-				System.out.println( "‚a va mal : aucune question" );
-			}
-		}
+			}else if (objQuestionTrouvee == null && objBoiteQuestions.estVide())
+	        {
+				objGestionnaireBD.remplirBoiteQuestions(objJoueurHumain, countFillBox);
+				countFillBox++;
+		    }
 		
+        }while(objQuestionTrouvee == null);
+		
+		if(objQuestionTrouvee == null)
+		{
+			// en théorie on ne devrait plus entrer dans ce if 
+			System.out.println( "‚a va mal : aucune question" );
+		}
+						
 		// Si on doit générer le numéro de commande de retour, alors
 		// on le génêre, sinon on ne fait rien (ùa devrait toujours
 		// être vrai, donc on le génêre tout le temps)
@@ -549,7 +541,46 @@ public class InformationPartie
 		}
 		
 		return objQuestionTrouvee;
-	}
+	}// end method
+	
+	/**
+	 * Cette fonction essaie de piger une question du niveau de dificulté proche 
+	 * de intDifficulte, si on y arrive pas, ça veut dire qu'il ne 
+	 * reste plus de questions de niveau de difficulté proche 
+	 * de intDifficulte
+	 * 
+	 * @param intCategorieQuestion
+	 * @return la question trouver ou null si aucune question n'a pu être pigée
+	 */
+	private Question trouverQuestion(int intDifficulte)
+	{
+		Question objQuestionTrouvee = null;
+		do{
+			// pour le premier on voir la catégorie et difficulté demandées
+			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion(intDifficulte);
+
+			//après pour les difficultés moins grands 
+			int intDifficulteTemp = intDifficulte;
+
+			while(objQuestionTrouvee == null && intDifficulteTemp > 0 ) 
+			{
+				intDifficulteTemp--;
+				objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intDifficulteTemp);
+
+			}// fin while
+
+			//après pour les difficultés plus grands 
+			intDifficulteTemp = intDifficulte;
+			while(objQuestionTrouvee == null &&  intDifficulteTemp < 7 ) 
+			{
+				intDifficulteTemp++;
+				objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intDifficulteTemp);
+
+			}// fin while      
+		}while(lstQuestionsRepondues.contains(objQuestionTrouvee.obtenirCodeQuestion()) || objBoiteQuestions.estVide()); 	
+		return objQuestionTrouvee;
+		
+	}// fin méthode
 	
 	
 	/**
@@ -560,6 +591,7 @@ public class InformationPartie
 	 * @return Question : La question trouvée, s'il n'y a pas eu de déplacement,
 	 * 					  alors la question retournée est null
 	 */
+	@SuppressWarnings("unused")
 	public Question trouverQuestionAPoserCristall(JoueurHumain objJoueurHumain, boolean doitGenererNoCommandeRetour)
 	{
 		// Déclarations de variables qui vont contenir la catégorie de question 
@@ -572,51 +604,35 @@ public class InformationPartie
 	   Question objQuestionTrouvee = null;
 
 
-		if (intDifficulte > 1)
-			intDifficulte--;
-		//if is Banana used to this player
-		//if(!isUnderBananaEffect.equals(""))
-		//	intDifficulte++;
-		
-		if (intDifficulte > 0)
-		{
-		   objQuestionTrouvee = trouverQuestionCristall(intDifficulte, oldQuestion);
-		}
-				
-		// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
-		// des questions posées et on la garde en mémoire pour pouvoir ensuite
-		// traiter la réponse du joueur, on va aussi garder la position que le
-		// joueur veut se déplacer
-		if (objQuestionTrouvee != null)
-		{
-			lstQuestionsRepondues.put(new Integer(objQuestionTrouvee.obtenirCodeQuestion()), objQuestionTrouvee);
-			objQuestionCourante = objQuestionTrouvee;
-			//objPositionJoueurDesiree = nouvellePosition;
-			objBoiteQuestions.popQuestion(objQuestionTrouvee);
-		}
-		else 
-		{
-			objGestionnaireBD.remplirBoiteQuestions( getObjBoiteQuestions(), objJoueurHumain);
-			
+	    // to be sure...
+		if(intDifficulte > 6) intDifficulte = 6;
+		if(intDifficulte < 1) intDifficulte = 1;
+		//System.out.println("Difficulte de la question : " + intDifficulte);   // test
+		do{
+			// find a question
 			objQuestionTrouvee = trouverQuestionCristall(intDifficulte, oldQuestion);
-			
-			lstQuestionsRepondues.clear();
-			
+
 			// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
 			// des questions posées et on la garde en mémoire pour pouvoir ensuite
-			// traiter la réponse du joueur
+			// traiter la réponse du joueur, on va aussi garder la position que le
+			// joueur veut se déplacer
 			if (objQuestionTrouvee != null)
 			{
-				lstQuestionsRepondues.put(new Integer(objQuestionTrouvee.obtenirCodeQuestion()), objQuestionTrouvee);
+				lstQuestionsRepondues.add(new Integer(objQuestionTrouvee.obtenirCodeQuestion()));
 				objQuestionCourante = objQuestionTrouvee;
-				//objPositionJoueurDesiree = nouvellePosition;
 				objBoiteQuestions.popQuestion(objQuestionTrouvee);
 			}
-			else
+			else if (objQuestionTrouvee == null && objBoiteQuestions.estVide())
 			{
-				// en théorie on ne devrait plus entrer dans ce else 
-				System.out.println( "‚a va mal : aucune question" );
+				objGestionnaireBD.remplirBoiteQuestions(objJoueurHumain, countFillBox);
+				countFillBox++;
 			}
+		}while(objQuestionTrouvee == null);
+		
+		if(objQuestionTrouvee == null)
+		{
+			// en théorie on ne devrait plus entrer dans ce if 
+			System.out.println( "‚a va mal : aucune question" );
 		}
 		
 		// Si on doit générer le numéro de commande de retour, alors
@@ -648,74 +664,37 @@ public class InformationPartie
 		Question objQuestionTrouvee = null;
 		
 		// to not get the same question
-		// pour le premier on voir la catégorie et difficulté demandées
+		do{
+			// pour le premier on voir la catégorie et difficulté demandées
+			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestionCristall(intDifficulte, codeOld);
 
-		objQuestionTrouvee = getObjBoiteQuestions().pigerQuestionCristall(intDifficulte, codeOld);
 
-		
-		//après pour les difficultés moins grands 
-		int intDifficulteTemp = intDifficulte;
+			//après pour les difficultés moins grands 
+			int intDifficulteTemp = intDifficulte;
 
-		while(objQuestionTrouvee == null && intDifficulteTemp > 0 ) 
-		{
-			intDifficulteTemp--;
-			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestionCristall(intDifficulteTemp, codeOld);
+			while(objQuestionTrouvee == null && intDifficulteTemp > 0 ) 
+			{
+				intDifficulteTemp--;
+				objQuestionTrouvee = getObjBoiteQuestions().pigerQuestionCristall(intDifficulteTemp, codeOld);
 
-		}// fin while
-		
-		//au pire cas les difficultés plus grands 
-		intDifficulteTemp = intDifficulte;
+			}// fin while
 
-		while(objQuestionTrouvee == null && intDifficulteTemp < 7 ) 
-		{
-			intDifficulteTemp++;
-			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestionCristall(intDifficulteTemp, codeOld);
+			//au pire cas les difficultés plus grands 
+			intDifficulteTemp = intDifficulte;
 
-		}// fin while
+			while(objQuestionTrouvee == null && intDifficulteTemp < 7 ) 
+			{
+				intDifficulteTemp++;
+				objQuestionTrouvee = getObjBoiteQuestions().pigerQuestionCristall(intDifficulteTemp, codeOld);
 
+			}// fin while
+		}while(lstQuestionsRepondues.contains(objQuestionTrouvee.obtenirCodeQuestion()) || objBoiteQuestions.estVide()); 	
 		//System.out.println(" verification " + objQuestionTrouvee);
 		return objQuestionTrouvee;
 		
 	}// fin méthode
 	
-	/**
-	 * Cette fonction essaie de piger une question du niveau de dificulté proche 
-	 * de intDifficulte, si on y arrive pas, ça veut dire qu'il ne 
-	 * reste plus de questions de niveau de difficulté proche 
-	 * de intDifficulte
-	 * 
-	 * @param intCategorieQuestion
-	 * @return la question trouver ou null si aucune question n'a pu être pigée
-	 */
-	private Question trouverQuestion(int intDifficulte)
-	{
-		Question objQuestionTrouvee = null;
-				
-		// pour le premier on voir la catégorie et difficulté demandées
-		objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion(intDifficulte);
-			
-		//après pour les difficultés moins grands 
-		int intDifficulteTemp = intDifficulte;
-		        
-		while(objQuestionTrouvee == null && intDifficulteTemp > 0 ) 
-		{
-			intDifficulteTemp--;
-			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intDifficulteTemp);
-		   	
-		}// fin while
-		
-		//après pour les difficultés plus grands 
-		intDifficulteTemp = intDifficulte;
-		while(objQuestionTrouvee == null &&  intDifficulteTemp < 7 ) 
-		{
-			intDifficulteTemp++;
-			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intDifficulteTemp);
-		   	
-		}// fin while      
-			
-		return objQuestionTrouvee;
-		
-	}// fin méthode
+	
 	
 	/**
 	 * Cette fonction met à jour le plateau de jeu si le joueur a bien répondu
@@ -735,7 +714,7 @@ public class InformationPartie
         int bonus = 0;
 		Table table;
 		int intDifficulteQuestion;
-		TreeMap<Integer, ObjetUtilisable> objListeObjetsUtilisablesRamasses; 
+		HashMap<Integer, ObjetUtilisable> objListeObjetsUtilisablesRamasses; 
 		Point positionJoueur; 
 		GestionnaireEvenements gestionnaireEv;
 		Question objQuestion; 
@@ -855,7 +834,7 @@ public class InformationPartie
 			
 			
 			// Faire la référence vers la case de destination
-			Case objCaseDestination = table.obtenirPlateauJeuCourant()[objPositionDesiree.x][objPositionDesiree.y];
+			Case objCaseDestination = table.getCase(objPositionDesiree.x, objPositionDesiree.y);
 			
 			// Calculer le nouveau pointage du joueur
                         switch(deplacementJoueur)
@@ -1107,7 +1086,7 @@ public class InformationPartie
 	/**
 	 * This method is used to cancel the question. 
 	 * The first use is for Banana - to cancel question if banana is applied
-	 * then used read the question. 
+	 * when used read the question. 
 	 *  
 	 */
 	public void cancelPosedQuestion(boolean doitGenererNoCommandeRetour)
@@ -1122,7 +1101,7 @@ public class InformationPartie
 		    objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();					    
 		}
 		
-		getObjBoiteQuestions().popQuestion(objQuestionCourante);
+		//getObjBoiteQuestions().popQuestion(objQuestionCourante);
 		objQuestionCourante = null;
 	}
 	
@@ -1164,7 +1143,7 @@ public class InformationPartie
 	/*
 	 * Retourne une référence vers la liste des objets ramassés
 	 */
-	public TreeMap<Integer, ObjetUtilisable> obtenirListeObjets()
+	public HashMap<Integer, ObjetUtilisable> obtenirListeObjets()
 	{
 		return lstObjetsUtilisablesRamasses;
 	}
@@ -1238,10 +1217,12 @@ public class InformationPartie
 		Objet objObjet = null;
 		
 		// Aller chercher le plateau de jeu
-		Case[][] objPlateauJeu = objTable.obtenirPlateauJeuCourant();
+		//Case[][] objPlateauJeu = objTable.obtenirPlateauJeuCourant();
 		
 		// Aller chercher la case où le joueur se trouve
-		Case objCaseJoueur = objPlateauJeu[objPositionJoueur.x][objPositionJoueur.y];
+		//Case objCaseJoueur = objPlateauJeu[objPositionJoueur.x][objPositionJoueur.y];
+		
+		Case objCaseJoueur = objTable.getCase(objPositionJoueur.x, objPositionJoueur.y);
 		
 		// Si c'est une case couleur, retourner l'objet, sinon on va retourner null
 		if (objCaseJoueur instanceof CaseCouleur)
@@ -1271,14 +1252,6 @@ public class InformationPartie
 		 return bananaState;
 	 }
 
-
-
-	 /**
-	  * @param bananaState the bananaState to set
-	  */
-	 public void setBananaState(PlayerBananaState bananaState) {
-		 this.bananaState = bananaState;
-	 }
 
 	 public int obtenirDistanceAuFinish()
 	 {
@@ -1335,13 +1308,4 @@ public class InformationPartie
 	 }
 
 
-
-	 /**
-	  * @param braniacState the braniacState to set
-	  */
-	 public void setBrainiacState(PlayerBrainiacState brainiacState) {
-		 this.brainiacState = brainiacState;
-	 }
-
-
-}
+} // end class

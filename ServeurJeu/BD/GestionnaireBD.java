@@ -17,6 +17,8 @@ import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.StringTokenizer;
@@ -319,12 +321,13 @@ public class GestionnaireBD
      * This function fills a Question box with the questions of player's level 
      * for each category and player's lang 
      */
-	public void remplirBoiteQuestions( BoiteQuestions boiteQuestions, JoueurHumain player)
+	public void remplirBoiteQuestions( JoueurHumain objJoueurHumain, int countFillQuestions)
 	{
 		//System.out.println("start boite: " + System.currentTimeMillis());
         // Pour tenir compte de la langue
-        int cleLang = 1;   
-        Language language = boiteQuestions.obtenirLangue();
+        int cleLang = 1;
+        BoiteQuestions boite = objJoueurHumain.obtenirPartieCourante().getObjBoiteQuestions();
+        Language language = boite.obtenirLangue();
         String langue = language.getLanguage();
         if (langue.equalsIgnoreCase("fr")) 
             cleLang = 1;
@@ -334,8 +337,12 @@ public class GestionnaireBD
         // pour keywords des questions on utilise room's keywords 
         //Integer[] key = player.obtenirSalleCourante().getKeywords();
 		
-		int niveau = player.obtenirCleNiveau();
-		int room_id = player.obtenirSalleCourante().getRoomID();
+        // to not fill the Box with the same questions
+		int niveau = objJoueurHumain.obtenirCleNiveau() - countFillQuestions;
+		// it's little risk for that, but to be sure....
+		if(niveau < 0 )
+			niveau = objJoueurHumain.obtenirCleNiveau() + 1;
+		int room_id = objJoueurHumain.obtenirSalleCourante().getRoomID();
         /*
 		// pour chaque catégorie on prend le niveau scolaire du joueur
 		StringBuffer keywordsString = new StringBuffer();
@@ -367,7 +374,7 @@ public class GestionnaireBD
 		" and question_info.question_flash_file is not NULL " +
 		" and question_info.feedback_flash_file is not NULL ";
 
-		remplirBoiteQuestionsMC( boiteQuestions, strRequeteSQL); 
+		remplirBoiteQuestionsMC( boite, strRequeteSQL); 
 
 		String strRequeteSQL_SA = "SELECT DISTINCT q.keyword_id1, q.keyword_id2, a.answer_latex, qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
 		"FROM question q, question_info qi, question_level ql, answer_info a " +
@@ -383,7 +390,7 @@ public class GestionnaireBD
 		" and qi.question_flash_file is not NULL" +
 		" and qi.feedback_flash_file is not NULL";
 
-		remplirBoiteQuestionsSA( boiteQuestions, strRequeteSQL_SA);
+		remplirBoiteQuestionsSA( boite, strRequeteSQL_SA);
 
 		String strRequeteSQL_TF = "SELECT DISTINCT q.keyword_id1, q.keyword_id2, a.is_right,qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
 		" FROM question q, question_info qi, question_level ql, answer a " +
@@ -399,7 +406,7 @@ public class GestionnaireBD
 		" and qi.question_flash_file is not NULL" +
 		" and qi.feedback_flash_file is not NULL";
 
-		remplirBoiteQuestionsTF( boiteQuestions, strRequeteSQL_TF);
+		remplirBoiteQuestionsTF( boite, strRequeteSQL_TF);
 
         //System.out.println("end boite: " + System.currentTimeMillis());
 	}// fin méthode
@@ -442,7 +449,9 @@ public class GestionnaireBD
 						//System.out.println("MC : question " + typeQuestion + " " + codeQuestion + " " + difficulte);
 						String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
 						// System.out.println(URL+explication);
+						//System.out.println("MC1: " + System.currentTimeMillis());
 						boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, keyword_id1, keyword_id2));
+						//System.out.println("MC2: " + System.currentTimeMillis());					
 					}
 					codeQuestionTemp = codeQuestion;
 				}
@@ -492,7 +501,9 @@ public class GestionnaireBD
 					
                     String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
                    // System.out.println(URL+explication);
+                   // System.out.println("SA1: " + System.currentTimeMillis());
 					boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, keyword_id1, keyword_id2));
+					//System.out.println("SA2: " + System.currentTimeMillis());
 				}
 			}
 		}
@@ -539,7 +550,9 @@ public class GestionnaireBD
 					
                     String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
                    // System.out.println(URL+explication);
+                   // System.out.println("TF1: " + System.currentTimeMillis());
 					boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL+question, reponse, URL+explication, keyword_id1, keyword_id2));
+					//System.out.println("TF2: " + System.currentTimeMillis());
 				}
 			}
 		}
@@ -903,7 +916,7 @@ public class GestionnaireBD
 						objSalle.setRoomDescription(roomDescription);
 						//objSalle.setCategories(categoriesString);
 						
-						ArrayList<String> types = new ArrayList<String>();
+						HashSet<String> types = new HashSet<String>();
 						this.getAllowedRoomsGameTypes(types, room);
 						objSalle.setRoomAllowedTypes(types);
 												
@@ -946,7 +959,7 @@ public class GestionnaireBD
 	 * @param roomId
 	 * @param langId 
 	 */
-	private void getAllowedRoomsGameTypes(ArrayList<String> types, int roomId) {
+	private void getAllowedRoomsGameTypes(HashSet<String> types, int roomId) {
 		try
   		{
   			synchronized( requete )
@@ -1850,7 +1863,7 @@ public class GestionnaireBD
 	 * @param obtenirCleJoueur
 	 * @return
 	 */
-	public void listRoomsProf(String langue, int userID, TreeMap<Integer, Salle> lstListeSalles) 
+	public void listRoomsProf(String langue, int userID, HashMap<Integer, Salle> lstListeSalles) 
 	{
 		ArrayList<Integer> rooms = new ArrayList<Integer>();
 		
@@ -1900,7 +1913,7 @@ public class GestionnaireBD
 	 * @param rooms
 	 * @param keywords 
 	 */
-	public void fillRoomList(ArrayList<Integer> rooms, TreeMap<Integer, Salle> lstSalles) 
+	public void fillRoomList(ArrayList<Integer> rooms, HashMap<Integer, Salle> lstListeSalles) 
 	{
 		String nom = "";
 		String motDePasse = "";
@@ -1945,7 +1958,7 @@ public class GestionnaireBD
 						// bloc to fill room's categories
 						//objSalle.setRoomKeywords(categoriesString);
 																	
-						lstSalles.put(room, objSalle);
+						lstListeSalles.put(room, objSalle);
 					}   
 
 				}

@@ -1,16 +1,16 @@
 package ServeurJeu.ComposantesJeu;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Vector;
 import java.awt.Point;
 import java.util.Date;
 import java.util.Map.Entry;
-
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
@@ -75,10 +75,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	private final int intTempsTotal;
 	
 	// Cet objet est une liste des joueurs qui sont présentement sur cette table
-	private TreeMap<String, JoueurHumain> lstJoueurs;
+	private HashMap<String, JoueurHumain> lstJoueurs;
 	
 	// Cet objet est une liste des joueurs qui attendent de joueur une partie
-	private TreeMap<String, JoueurHumain> lstJoueursEnAttente;
+	private HashMap<String, JoueurHumain> lstJoueursEnAttente;
 	
 	// Déclaration d'une variable qui va permettre de savoir si la partie est 
 	// commencée ou non
@@ -107,7 +107,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     // dans cette table, ce qui nous permettra, lorsqu'une partie se termine, de
     // faire la mise à jour de la liste des joueurs déconnectés du gestionnaire
     // de communication
-    private Vector<String> lstJoueursDeconnectes;
+    private LinkedList<String> lstJoueursDeconnectes;
       
     private Date objDateDebutPartie;
     
@@ -119,7 +119,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     private String tableName;
     
     // Array of ID of the players pictures 
-    private ArrayList<Integer> pictures; 
+    private LinkedList<Integer> pictures; 
     
     // nb lines on the game board
     private int nbLines;
@@ -131,7 +131,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     // after use of one color it is removed from the list
     // now used mostly for the Tournament type of the game to give automaticaly
     // colors to players
-    private ArrayList<String> colors;
+    private LinkedList<String> colors;
     
     // list of idPerso used to calculate idPersonnage
     // limits - from 0 to 11 for now, but can be changed if 
@@ -199,8 +199,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		intTempsTotal = tempsPartie;
                        
 		// Créer une nouvelle liste de joueurs
-		lstJoueurs = new TreeMap<String, JoueurHumain>();
-		lstJoueursEnAttente = new TreeMap<String, JoueurHumain>();
+		lstJoueurs = new HashMap<String, JoueurHumain>();
+		lstJoueursEnAttente = new HashMap<String, JoueurHumain>();
 		strNomUtilisateurCreateur = joueur.obtenirNomUtilisateur();
 		
 		// Au départ, aucune partie ne se joue sur la table
@@ -221,8 +221,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         //lstJoueursVirtuels = null;
         
         // Cette liste sera modifié si jamais un joueur est déconnecté
-        lstJoueursDeconnectes = new Vector<String>();
-        pictures = new ArrayList<Integer>();
+        lstJoueursDeconnectes = new LinkedList<String>();
+        pictures = new LinkedList<Integer>();
                
         // Créer un thread pour le GestionnaireEvenements
 		//Thread threadEvenements = new Thread(objGestionnaireEvenements);
@@ -231,7 +231,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		//threadEvenements.start();
 		
 		// fill the list off colors
-		this.colors = new ArrayList<String>();
+		this.colors = new LinkedList<String>();
 		this.setColors();
 				
 		this.idPersos = new ArrayList<Integer>();
@@ -309,6 +309,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			// créer un objet InformationPartie qui va pointer sur la table
 			// courante)
 			joueur.definirPartieCourante(new InformationPartie(objGestionnaireEvenements, objGestionnaireBD, joueur, this));
+			// 0 - because it's first time that we fill the QuestionsBox
+            // after we'll cut the level of questions by this number
+            objGestionnaireBD.remplirBoiteQuestions(joueur, 0);  
 			
 			// init players colors
 			String color = this.getOneColor();
@@ -1071,7 +1074,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		    }
 		    
 		    // Enlever les joueurs déconnectés de cette table
-		    lstJoueursDeconnectes = new Vector<String>();
+		    lstJoueursDeconnectes = new LinkedList<String>();
 		    
 		    // Si jamais les joueurs humains sont tous déconnectés, alors
 		    // il faut détruire la table ici
@@ -1151,7 +1154,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  l'çtre par l'appelant de cette fonction tout dépendant
 	 * 				  du traitement qu'elle doit faire
 	 */
-	public TreeMap<String, JoueurHumain> obtenirListeJoueurs()
+	public HashMap<String, JoueurHumain> obtenirListeJoueurs()
 	{
 		return lstJoueurs;
 	}
@@ -1167,7 +1170,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  l'çtre par l'appelant de cette fonction tout dépendant
 	 * 				  du traitement qu'elle doit faire
 	 */
-	public TreeMap<String, JoueurHumain> obtenirListeJoueursEnAttente()
+	public HashMap<String, JoueurHumain> obtenirListeJoueursEnAttente()
 	{
 		return lstJoueursEnAttente;
 	}
@@ -1230,6 +1233,17 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	public Case[][] obtenirPlateauJeuCourant()
 	{
 		return objttPlateauJeu;
+	}
+	
+	/**
+	 * Cette fonction retourne une case du plateau de jeu courant.
+	 * 
+	 * @return Case[][] : Le plateau de jeu courant,
+	 * 					  null s'il n'y a pas de partie en cours
+	 */
+	public Case getCase(int playerX,int playerY)
+	{
+		return objttPlateauJeu[playerX][playerY];
 	}
 	
 	/**
@@ -1903,7 +1917,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		lstJoueursDeconnectes.add(joueurHumain.obtenirNomUtilisateur().toLowerCase());
 	}
 	
-	public Vector<String> obtenirListeJoueursDeconnectes()
+	public LinkedList<String> obtenirListeJoueursDeconnectes()
 	{
 		return lstJoueursDeconnectes;
 	}
@@ -1976,8 +1990,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					return false;
 				}	   	     	
 			}
-
-
 		}
 		
 		// Si on se rend ici, on a parcouru tous les joueurs et on n'a pas
@@ -1986,7 +1998,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	}// end method
      
 	/**
-	 * 
 	 * @param username
 	 * @return Humain player
 	 */
@@ -2231,7 +2242,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				// créer un objet InformationPartie qui va pointer sur la table
 				// courante)
 				joueur.definirPartieCourante(new InformationPartie(objGestionnaireEvenements, objGestionnaireBD, joueur, this));
-				
+				// 0 - because it's first time that we fill the QuestionsBox
+	            // after we'll cut the level of questions by this number
+	            objGestionnaireBD.remplirBoiteQuestions(joueur, 0);  
 				
 				// Si on doit générer le numéro de commande de retour, alors
 				// on le génçre, sinon on ne fait rien
