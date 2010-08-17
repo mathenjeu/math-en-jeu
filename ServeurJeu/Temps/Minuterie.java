@@ -7,7 +7,7 @@
 package ServeurJeu.Temps;
 
 
-import java.util.TreeMap;
+import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -20,7 +20,7 @@ public class Minuterie extends Tache
 {
 	private int intTemps;
 	private int intStep;
-	private TreeMap<Integer, ObservateurMinuterie> lstObservateurs;
+	private HashMap<Integer, ObservateurMinuterie> lstObservateurs;
 	private boolean bolStopped;
 	
 	public Minuterie( int tempsDepart, int step )
@@ -28,7 +28,7 @@ public class Minuterie extends Tache
 		intTemps = tempsDepart;
 		intStep = step;
 		bolStopped = false;
-		lstObservateurs = new TreeMap<Integer, ObservateurMinuterie>();
+		lstObservateurs = new HashMap<Integer, ObservateurMinuterie>();
 	}
 	
 	public void ajouterObservateur( ObservateurMinuterie obs )

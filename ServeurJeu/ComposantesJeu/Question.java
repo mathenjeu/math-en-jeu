@@ -1,5 +1,7 @@
 package ServeurJeu.ComposantesJeu;
 
+import java.util.LinkedList;
+
 /**
  * @author Jean-François Brind'Amour
  */
@@ -22,15 +24,10 @@ public class Question
 	private final String strURLExplication;
 	
     /**
-     *  Déclaration d'une variable qui va contenir le keyword_id1 de la question
+     *  Déclaration d'une variable qui va contenir les keywords de la question
      */
-	private final int intKeyword1;
-	
-	 /**
-     *  Déclaration d'une variable qui va contenir le keyword_id1 de la question
-     */
-	private final int intKeyword2;
-	
+	//private final LinkedList<Integer> intKeywords;
+		
 	/**
 	 *  Déclaration d'une variable qui va garder la difficulté de la question.
 	 *	Peut avoir une valeur entre 1 et 6, que dépend de niveau scolaire du 
@@ -52,7 +49,7 @@ public class Question
 	 * @param String urlExplication : Le URL de l'explication de la réponse
 	 */
 	public Question(int codeQuestion, int typeQuestion, int difficulte, String urlQuestion, 
-			String reponse, String urlExplication, int keyword1, int keyword2)
+			String reponse, String urlExplication)//, LinkedList<Integer> keywords)
 	{
 		// Définir les propriétés des questions
 		intCodeQuestion = codeQuestion;
@@ -61,8 +58,7 @@ public class Question
 		strURLQuestion = urlQuestion;
 		strReponse = reponse.toLowerCase().replace(",",".");
 		strURLExplication = urlExplication;
-		intKeyword1 = keyword1;
-		intKeyword2 = keyword2;
+		//intKeywords = keywords;
 	}
 	
 	/**
@@ -149,16 +145,13 @@ public class Question
 	}
 	
 
-	public int getKeyword1() 
+	/**
+	 * 
+	 * @return
+	 
+	public LinkedList<Integer> getKeyword() 
 	{
-		return intKeyword1;
-	}
-	
-	public int getKeyword2() 
-	{
-		return intKeyword2;
-	}
-
-
-		
+		return intKeywords;
+	}*/
+			
 } // fin classe

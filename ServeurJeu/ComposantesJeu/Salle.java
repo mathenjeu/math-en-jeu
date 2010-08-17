@@ -71,7 +71,7 @@ public class Salle
 	private final int masterTime;
 		
 	//specifyed room's categories
-	//private final Integer[] keywords;
+	private final Integer[] keywords;
 	
 	// last room number
 	// used to give the numbers to the created tables in this room
@@ -99,7 +99,7 @@ public class Salle
 	 * @param String motDePasse : Le mot de passe
 	 */
 	public Salle(String nomSalle, String nomUtilisateurCreateur, String motDePasse, 
-				 ControleurJeu controleurJeu, int roomID, Date beginDate, Date endDate, int masterTime, String type)
+				 ControleurJeu controleurJeu, int roomID, Date beginDate, Date endDate, int masterTime, String type, Integer[] keywords)
 	{
 		super();
 		
@@ -122,7 +122,7 @@ public class Salle
         this.masterTime = masterTime;
         this.roomType = type;
                
-        //this.keywords = new ArrayList<Integer>();
+        this.keywords = keywords;
         this.setRoomAllowedTypes(new HashSet<String>());
 		
 		// Créer une nouvelle liste de joueurs, de tables et de numéros
