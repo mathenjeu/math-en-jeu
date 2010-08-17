@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.TreeMap;
 import java.awt.Point;
 import java.util.Date;
 import java.util.Map.Entry;
@@ -1256,7 +1255,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 										   pour chaque joueur
 	 * @throws NullPointerException : Si la liste des personnages est à nulle
 	 */
-	private void remplirListePersonnageJoueurs(TreeMap<String, Integer> listePersonnageJoueurs, TreeMap<String, Integer> listeRoleJoueurs) throws NullPointerException
+	private void remplirListePersonnageJoueurs(HashMap<String, Integer> listePersonnageJoueurs, HashMap<String, Integer> listeRoleJoueurs) throws NullPointerException
 	{
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)

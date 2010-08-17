@@ -28,4 +28,9 @@ public class GestionnaireTemps extends Timer
 		}
 		this.purge();
 	}
+	
+	public void putNewTask( Tache t, int delay)
+	{
+		this.schedule(t, delay);
+	}
 }

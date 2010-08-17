@@ -85,7 +85,8 @@ public class SpyRooms implements Runnable {
 				//System.out.println(list);
 			}
 		    int ind = list.lastIndexOf(",");
-		    list = list.substring(0, list.lastIndexOf(","));  
+		    if(ind > 0)
+		       list = list.substring(0, ind);  
             //Object[] roomS =  rooms.toArray();
 			rooms.clear();
             /*
