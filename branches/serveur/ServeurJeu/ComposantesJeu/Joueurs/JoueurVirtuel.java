@@ -545,72 +545,74 @@ public class JoueurVirtuel extends Joueur implements Runnable {
          boolean estHumain1 = false;
          boolean estHumain2 = false;
          
-         // On obtient la liste des joueurs humains, puis la liste des joueurs virtuels
-         HashMap listeJoueursHumains = objTable.obtenirListeJoueurs();
-         Set nomsJoueursHumains = listeJoueursHumains.entrySet();
-         Iterator objIterateurListeJoueurs = nomsJoueursHumains.iterator();
-         ArrayList listeJoueursVirtuels = objTable.obtenirListeJoueursVirtuels();
-         
-         // On trouve les deux joueurs les plus susceptibles d'être affectés
-         while(objIterateurListeJoueurs.hasNext() == true)
+         synchronized (objTable.obtenirListeJoueurs())
          {
-             JoueurHumain j = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
-             if(j.obtenirPartieCourante().obtenirPointage() >= max1)
-             {
-                 max2 = max1;
-                 max2User = max1User;
-                 estHumain2 = estHumain1;
-                 max1 = j.obtenirPartieCourante().obtenirPointage();
-                 max1User = j.obtenirNomUtilisateur();
-                 estHumain1 = true;
-             }
-             else if(j.obtenirPartieCourante().obtenirPointage() >= max2)
-             {
-                 max2 = j.obtenirPartieCourante().obtenirPointage();
-                 max2User = j.obtenirNomUtilisateur();
-                 estHumain2 = true;
-             }
-         }
-         
-         if(listeJoueursVirtuels != null)
-        	 for(int i=0; i < listeJoueursVirtuels.size(); i++)
+        	 // On obtient la liste des joueurs humains, puis la liste des joueurs virtuels
+        	 HashMap<String, JoueurHumain> listeJoueursHumains = objTable.obtenirListeJoueurs();
+        	 Set<Entry<String, JoueurHumain>> nomsJoueursHumains = listeJoueursHumains.entrySet();
+        	 Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = nomsJoueursHumains.iterator();
+        	 ArrayList<JoueurVirtuel> listeJoueursVirtuels = objTable.obtenirListeJoueursVirtuels();
+
+        	 // On trouve les deux joueurs les plus susceptibles d'être affectés
+        	 while(objIterateurListeJoueurs.hasNext() == true)
         	 {
-        		 JoueurVirtuel j = (JoueurVirtuel)listeJoueursVirtuels.get(i);
-        		 if(j.obtenirPointage() >= max1)
+        		 JoueurHumain j = (JoueurHumain)(((Map.Entry)(objIterateurListeJoueurs.next())).getValue());
+        		 if(j.obtenirPartieCourante().obtenirPointage() >= max1)
         		 {
         			 max2 = max1;
         			 max2User = max1User;
         			 estHumain2 = estHumain1;
-        			 max1 = j.obtenirPointage();
-        			 max1User = j.obtenirNom();
-        			 estHumain1 = false;
+        			 max1 = j.obtenirPartieCourante().obtenirPointage();
+        			 max1User = j.obtenirNomUtilisateur();
+        			 estHumain1 = true;
         		 }
-        		 else if(j.obtenirPointage() >= max2)
+        		 else if(j.obtenirPartieCourante().obtenirPointage() >= max2)
         		 {
-        			 max2 = j.obtenirPointage();
-        			 max2User = j.obtenirNom();
-        			 estHumain2 = false;
+        			 max2 = j.obtenirPartieCourante().obtenirPointage();
+        			 max2User = j.obtenirNomUtilisateur();
+        			 estHumain2 = true;
         		 }
         	 }
-         
-                  
-         if(max1User.equals(strNom))
-         {
-             // Celui qui utilise la banane est le 1er, alors on fait glisser le 2ème
-             estHumain = estHumain2;
-             playerToUseBanana = max2User;
-             if(estHumain) valPoints = ((max2 - intPointage) * 50 / (max2 + 1) )+ 10;
-             else valPoints = ((max2 - intPointage) * 50/ (max2 + 1)) ;
+
+        	 if(listeJoueursVirtuels != null)
+        		 for(int i=0; i < listeJoueursVirtuels.size(); i++)
+        		 {
+        			 JoueurVirtuel j = (JoueurVirtuel)listeJoueursVirtuels.get(i);
+        			 if(j.obtenirPointage() >= max1)
+        			 {
+        				 max2 = max1;
+        				 max2User = max1User;
+        				 estHumain2 = estHumain1;
+        				 max1 = j.obtenirPointage();
+        				 max1User = j.obtenirNom();
+        				 estHumain1 = false;
+        			 }
+        			 else if(j.obtenirPointage() >= max2)
+        			 {
+        				 max2 = j.obtenirPointage();
+        				 max2User = j.obtenirNom();
+        				 estHumain2 = false;
+        			 }
+        		 }
+
+
+        	 if(max1User.equals(strNom))
+        	 {
+        		 // Celui qui utilise la banane est le 1er, alors on fait glisser le 2ème
+        		 estHumain = estHumain2;
+        		 playerToUseBanana = max2User;
+        		 if(estHumain) valPoints = ((max2 - intPointage) * 50 / (max2 + 1) )+ 10;
+        		 else valPoints = ((max2 - intPointage) * 50/ (max2 + 1)) ;
+        	 }
+        	 else
+        	 {
+        		 // Celui qui utilise la banane n'est pas le 1er, alors on fait glisser le 1er
+        		 estHumain = estHumain1;
+        		 playerToUseBanana = max1User;
+        		 if(estHumain) valPoints = ((max1 - intPointage) * 50  / (max1 + 1)) + 10;
+        		 else valPoints = ((max1 - intPointage)* 50 / (max1 + 1)) ;
+        	 }
          }
-         else
-         {
-             // Celui qui utilise la banane n'est pas le 1er, alors on fait glisser le 1er
-             estHumain = estHumain1;
-             playerToUseBanana = max1User;
-             if(estHumain) valPoints = ((max1 - intPointage) * 50  / (max1 + 1)) + 10;
-             else valPoints = ((max1 - intPointage)* 50 / (max1 + 1)) ;
-         }
-        
          return valPoints;
      }
 

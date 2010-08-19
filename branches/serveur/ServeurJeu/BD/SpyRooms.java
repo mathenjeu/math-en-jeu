@@ -55,6 +55,7 @@ public class SpyRooms implements Runnable {
 			try
 	    	{
 	            // Update rooms liste 
+				System.out.println("test - ");
 				detectNewRooms(objControleurJeu.removeOldRooms());
 
                 // Bloquer la thread jusqu'à la prochaine mise à jour

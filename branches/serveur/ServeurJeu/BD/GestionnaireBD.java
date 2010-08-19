@@ -348,14 +348,14 @@ public class GestionnaireBD
 				
 		String strRequeteSQL = "SELECT  question.answer_type_id, answer.is_right,question.question_id," +
 				" question_info.question_flash_file, question_info.feedback_flash_file, question_level.value" +
-		" FROM question_info, question_level, question, answer, questions_keywords " +
+		" FROM question_info, question_level, question, answer " +
 		" WHERE  question.question_id = question_level.question_id " +
 		" AND question.question_id = question_info.question_id " +
 		" AND question.question_id = answer.question_id " +
 		" AND question_info.language_id = " + cleLang +
 		" and question_level.level_id = " + niveau + 
-		" AND question.question_id = questions_keywords.question_id " +
-		" AND questions_keywords.keyword_id IN (SELECT rooms_keywords.keyword_id FROM rooms_keywords WHERE room_id = " + room_id + ") " +
+		" AND question.question_id IN (SELECT question.question_id FROM question, questions_keywords " +
+		" WHERE question.question_id = questions_keywords.question_id AND questions_keywords.keyword_id IN (SELECT rooms_keywords.keyword_id FROM rooms_keywords WHERE room_id = " + room_id + ")) " +
 		" AND question.answer_type_id IN (1,4,5) " +
 		" AND question_info.is_valid = 1 " +
 		" and question_level.value > 0 " +
@@ -436,7 +436,7 @@ public class GestionnaireBD
 						int difficulte = rs.getInt("value");
 						String reponse = "" + countReponse;
 
-						//System.out.println("MC : question " + typeQuestion + " " + codeQuestion + " " + difficulte);
+						//System.out.println("MC : question "  + codeQuestion + " " + reponse + " "+ difficulte );
 						
 						// System.out.println(URL+explication);
 						//System.out.println("MC1: " + System.currentTimeMillis());
@@ -1568,12 +1568,53 @@ public class GestionnaireBD
 		putNewRoomInfo(room_id, cleLang, name, roomDesc);
 		//putNewRoomColorSquare(room_id);
 		putNewRoomGameTypes(room_id, gameTypes);
+		putNewRoomKeywords(room_id, roomCategories);
 		///putNewRoomShops(room_id); 
 		
 		//System.out.println(room_id);
 		
 		return room_id;
 	}// end methode
+	
+	/**
+	 * Method satellite to putNewRoom() used to put new room in DB from room created in profModule
+	 * put gameTypes in room_game_types table
+	 */
+	private void putNewRoomKeywords(int room_id, String roomCategories) {
+		
+		LinkedList<Integer> roomKeywords = new LinkedList<Integer>();
+		StringTokenizer keys = new StringTokenizer(roomCategories, ":");
+				
+		while(keys.hasMoreTokens())
+		{
+			roomKeywords.addLast( Integer.parseInt(keys.nextToken()));
+			//System.out.println("Add new room types : " + var);
+		}
+		
+		int length = roomKeywords.size();
+		// Création du SQL pour l'ajout
+		PreparedStatement prepStatement = null;
+		try {
+			prepStatement = connexion.prepareStatement("INSERT INTO rooms_keywords (room_id, keyword_id) VALUES ( ? , ?);");
+						
+					for(int i = 0; i < length; i++)
+					{
+
+						// Ajouter l'information pour cette salle
+						prepStatement.setInt(1, room_id);
+						prepStatement.setInt(2, roomKeywords.removeFirst());
+						
+						prepStatement.addBatch();//executeUpdate();
+
+					}
+					prepStatement.executeBatch();
+				
+			}
+			catch (Exception e)
+			{
+				System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_Keywords") + e.getMessage());
+			}
+	}// end method
 	
 	/**
 	 * Method satellite to putNewRoom() used to put new room in DB from room created in profModule
