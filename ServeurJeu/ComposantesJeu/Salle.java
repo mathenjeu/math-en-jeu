@@ -59,10 +59,10 @@ public class Salle
 	private HashMap<Integer, Table> lstTables;
 		
 	// Date when room will be activated
-	private Date beginDate;
+	private final Date beginDate;
 	
 	// Date untill room will be activ
-	private Date endDate;
+	private final Date endDate;
 	
 	// ID in DB.  
 	private final int roomID;
@@ -117,8 +117,8 @@ public class Salle
 		//System.out.println(strPassword);
              
         this.roomID = roomID;
-        this.setBeginDate(beginDate);
-        this.setEndDate(endDate);
+        this.beginDate = beginDate;
+        this.endDate = endDate;
         this.masterTime = masterTime;
         this.roomType = type;
                
@@ -139,37 +139,6 @@ public class Salle
 		// Démarrer le thread du gestionnaire d'événements
 		//threadEvenements.start();
 			
-	}
-
-	/**
-	 * @return the beginDate
-	 */
-	public Date getBeginDate() {
-		return beginDate;
-	}
-
-	
-	/**
-	 * @return the endDate
-	 */
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	
-	/**
-	 * @param beginDate the beginDate to set
-	 */
-	public void setBeginDate(Date beginDate) {
-		this.beginDate = beginDate;
-	}
-
-	
-	/**
-	 * @param endDate the endDate to set
-	 */
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
 	}
 
 	
@@ -521,6 +490,7 @@ public class Salle
 			// Cette fonction va passer les joueurs et créer un 
 			// InformationDestination pour chacun et ajouter l'événement 
 			// dans la file de gestion d'événements
+	    	System.out.println(" RTest - table " + tableADetruire.obtenirNoTable());
 			preparerEvenementTableDetruite(tableADetruire.obtenirNoTable());	    	
 	    }
 	}
@@ -845,56 +815,12 @@ public class Salle
 	public int getMasterTime() {
 		return masterTime;
 	}
-/**
+
 	public Integer[] getKeywords() {
 		return keywords;
 	}
 
-	
-	 * @param categories the categories to set
-	
-	public void setKeywords() {
 		
-		keywords = objControleurJeu.getKeywords();
-		
-	}// end methode */
-	
-	/**
-	 * Method used to set categories of questions used in this game
-	 * @param categoriesString
-	 
-	public void setRoomKeywords(String categoriesString)
-	{
-        
-		if(categoriesString != null){
-			
-			StringTokenizer cat = new StringTokenizer(categoriesString, ":");
-			int whatCategories = Integer.parseInt(cat.nextToken());
-			
-			if(whatCategories == 1){
-				while(cat.hasMoreTokens())
-				{
-					keywords.add(Integer.parseInt(cat.nextToken()));
-				}
-			}else if(whatCategories == 0)
-			// we take categories from enum without categories from BD
-			{
-				setKeywords();
-				while(cat.hasMoreTokens())
-				{
-					Integer i = Integer.parseInt(cat.nextToken());
-					keywords.remove(i);
-					//System.out.println("string cat int : " + i);
-				}
-			}else setKeywords(); 	
-		}else setKeywords(); 		// if string == null
-		
-		// to not be without any categories
-		if( keywords.isEmpty()) setKeywords(); 
-				
-	}// end mathode*/
-	
-
 	private void setLastNumber(int lastNumber) {
 		this.lastNumber = lastNumber;
 		
@@ -940,4 +866,18 @@ public class Salle
 		this.roomType = roomType;
 	}*/
 	
+	/**
+	 * @return the beginDate
+	 */
+	public Date getBeginDate() {
+		return beginDate;
+	}
+
+	
+	/**
+	 * @return the endDate
+	 */
+	public Date getEndDate() {
+		return endDate;
+	}
 }// end class 

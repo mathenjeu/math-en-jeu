@@ -163,7 +163,7 @@ public class ProtocoleJoueur implements Runnable
 
 		{
 
-			//objLogger.error( GestionnaireMessages.message("protocole.canal_ferme") );
+		   objLogger.error( GestionnaireMessages.message("protocole.canal_ferme") );
 
 		   // Arrèter le thread
     		bolStopThread = true;
@@ -215,7 +215,7 @@ public class ProtocoleJoueur implements Runnable
 				// stream a été fermé, il faut donc terminer le thread
 				if (intBytesLus == -1)
 				{
-                    //objLogger.error("Une erreur est survenue: nombre d'octets lus = -1");
+                    objLogger.error("Une erreur est survenue: nombre d'octets lus = -1");
 			        bolErreurSocket = true;
 					bolStopThread = true;
 				}
@@ -240,7 +240,7 @@ public class ProtocoleJoueur implements Runnable
 					
     					// On appelle une fonction qui va traiter le message reèu du 
 						// client et mettre le résultat à retourner dans une variable
-						//objLogger.info( GestionnaireMessages.message("protocole.message_recu") + strMessageRecu );
+						objLogger.info( GestionnaireMessages.message("protocole.message_recu") + strMessageRecu );
 
                         // If we're in debug mode (can be set in mathenjeu.xml), print communications
                         GregorianCalendar calendar = new GregorianCalendar();
@@ -359,7 +359,7 @@ public class ProtocoleJoueur implements Runnable
 		}
 
                 String inetAddress = objSocketJoueur.getInetAddress() == null ? "[?.?.?.?]" : objSocketJoueur.getInetAddress().toString();
-		//objLogger.info( GestionnaireMessages.message("protocole.fin_thread").replace("$$CLIENT$$",inetAddress));
+		objLogger.info( GestionnaireMessages.message("protocole.fin_thread").replace("$$CLIENT$$",inetAddress));
 	}
 	
 	/**
@@ -2057,7 +2057,7 @@ public class ProtocoleJoueur implements Runnable
 					{
 						// Obtenir le numéro Id du personnage choisi et le garder 
 						// en mémoire dans une variable
-						//i//nt intIdPersonnage = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "IdPersonnage").getNodeValue());
+						
 						//objLogger.info( GestionnaireMessages.message("protocole.personnage") + intIdPersonnage );
 
 						try
@@ -2082,7 +2082,7 @@ public class ProtocoleJoueur implements Runnable
 							String strResultatDemarrerPartie = objJoueurHumain.obtenirPartieCourante().obtenirTable().demarrerMaintenant( objJoueurHumain, 
 									true, strParamJoueurVirtuel);
 
-							//objLogger.info( GestionnaireMessages.message("protocole.resultat") + strResultatDemarrerPartie );
+							objLogger.info( GestionnaireMessages.message("protocole.resultat") + strResultatDemarrerPartie );
 
 							// Si le résultat du démarrage de partie est Succes alors le
 							// joueur est maintenant en attente
@@ -2101,7 +2101,7 @@ public class ProtocoleJoueur implements Runnable
 							}
 							else
 							{
-								//objLogger.error( GestionnaireMessages.message("protocole.erreur_code") + strResultatDemarrerPartie );
+								objLogger.error( GestionnaireMessages.message("protocole.erreur_code") + strResultatDemarrerPartie );
 								objNoeudCommande.setAttribute("nom", "");
 							}
 						}
@@ -2814,7 +2814,7 @@ public class ProtocoleJoueur implements Runnable
 
 			// Envoyer le message sur le canal d'envoi
 			objCanalEnvoi.flush();
-			//objLogger.info( GestionnaireMessages.message("protocole.confirmation") + objSocketJoueur.getInetAddress().toString() );
+			objLogger.info( GestionnaireMessages.message("protocole.confirmation") + objSocketJoueur.getInetAddress().toString() );
 		}
 			//Moniteur.obtenirInstance().fin();
 

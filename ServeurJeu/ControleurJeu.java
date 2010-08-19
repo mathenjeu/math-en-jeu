@@ -189,8 +189,8 @@ public class ControleurJeu
 		//Start spyDb to update periodically the rooms list
 		// Add new rooms or out the olds 
 		
-		int delay = 100000;
-		objSpyDB = new SpyRooms(this, delay); 
+		
+		objSpyDB = new SpyRooms(this, 50000); 
 		//Start spy thread's
 		Thread threadSpy = new Thread(objSpyDB);
 		threadSpy.start();
@@ -397,7 +397,12 @@ public class ControleurJeu
 			// Le joueur courant quitte la salle dans laquelle il se trouve
 			joueur.obtenirSalleCourante().quitterSalle(joueur, false, !ajouterJoueurDeconnecte);
 		}
-		
+		/*
+		if (joueur.obtenirPartieCourante().obtenirTable() != null)
+		{
+			// Le joueur courant quitte la salle dans laquelle il se trouve
+			System.out.println("test dexonnexion !!!");
+		}*/
 		// fill in DB the date and time of of last connection with server
 		this.objGestionnaireBD.fillEndDate(joueur.obtenirCleJoueur());
 		

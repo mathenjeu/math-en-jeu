@@ -26,6 +26,7 @@ public class Question
     /**
      *  Déclaration d'une variable qui va contenir les keywords de la question
      */
+	// we don't need it for the moment
 	//private final LinkedList<Integer> intKeywords;
 		
 	/**
