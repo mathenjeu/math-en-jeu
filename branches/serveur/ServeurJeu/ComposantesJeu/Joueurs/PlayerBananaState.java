@@ -1,14 +1,14 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
-import ClassesUtilitaires.BananaTask;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Banane;
+import ServeurJeu.Temps.BananaTask;
 
 /**
- * Used to treat the Banana's applyed to users
- * both Virtual and Humain
+ * Used to treat the Banana's applied to users
+ * both Virtual and Human
  * We can't have two banana's task in the same time, so we 
  * cancel the old one and put another one with the 
- * sheduled time = + of the rest of first and 90 s 
+ * Scheduled time = + of the rest of first and 90 s 
  * for the second  
  * 
  * @author Oloieri Lilian
@@ -17,13 +17,13 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Banane;
 
 public class PlayerBananaState {
 	
-	// timertask actually applayed to player
+	// timertask actually applied to player
 	private BananaTask bTask;
 	
 	// time to end of the actual banana
 	private long taskDate;
 	
-	// is Banana applayed to our player?
+	// is Banana applied to our player?
 	private boolean isUnderBananaEffects;
 	
 	// is the state to one of them
@@ -34,13 +34,13 @@ public class PlayerBananaState {
 
 	// constructor - in the first time we are not in the Banana
 	public PlayerBananaState(JoueurHumain player) {
-		super();
+		//super();
 		//this.setisUnderBananaEffects(false);
 		this.player = player;
 	}
 	
 	public PlayerBananaState(JoueurVirtuel vplayer) {
-		super();
+		//super();
 		//this.setisUnderBananaEffects(false);
 		this.vplayer = vplayer;
 	}

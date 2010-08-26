@@ -1,9 +1,9 @@
 package ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables;
 
 import java.util.Timer;
-import ClassesUtilitaires.BrainiacTask;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
+import ServeurJeu.Temps.BrainiacTask;
 
 /**
  * @author Oloieri Lilian

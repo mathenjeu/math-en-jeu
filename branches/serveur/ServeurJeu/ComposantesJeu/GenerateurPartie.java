@@ -109,7 +109,7 @@ public abstract class GenerateurPartie
      * @throws NullPointerException : Si la liste passée en paramètre qui doit 
      * 								  être remplie est nulle
      */
-    protected abstract Case[][] genererPlateauJeu(ArrayList<Point> lstPointsCaseLibre, Integer objDernierIdObjets, ArrayList<Point> lstPointsFinish, 
+    protected abstract Case[][] genererPlateauJeu(ArrayList<Point> lstPointsCaseLibre, ArrayList<Point> lstPointsFinish, 
     		Table table) throws NullPointerException;
 
 

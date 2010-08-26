@@ -128,8 +128,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     
     // list of colors for the players clothes
     // after use of one color it is removed from the list
-    // now used mostly for the Tournament type of the game to give automaticaly
-    // colors to players
+    // automaticaly - randomly is done to players
     private LinkedList<String> colors;
     
     // list of idPerso used to calculate idPersonnage
@@ -334,7 +333,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				// Cette fonction va passer les joueurs et créer un 
 				// InformationDestination pour chacun et ajouter l'événement 
 				// dans la file de gestion d'événements
-				preparerEvenementJoueurEntreTable(joueur.obtenirNomUtilisateur(), joueur.getRole());		    	
+				preparerEvenementJoueurEntreTable(joueur.obtenirNomUtilisateur(), joueur.getRole(), color);		    	
 		    }
 	    }
 	    //System.out.println("end table : " + System.currentTimeMillis());
@@ -493,7 +492,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  à s'inquiéter que le mçme joueur soit mis dans la liste 
 	 * 				  des joueurs en attente par un autre thread.
 	 */
-	public String demarrerPartie(JoueurHumain joueur, int idDessin, String clothesColor, boolean doitGenererNoCommandeRetour)
+	public String demarrerPartie(JoueurHumain joueur, int idDessin,  boolean doitGenererNoCommandeRetour)
 	{
 		// Cette variable va permettre de savoir si le joueur est maintenant
 		// attente ou non
@@ -524,20 +523,16 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				
 				int idPersonnage = this.getOneIdPersonnage(idDessin);
 				
-				System.out.println("idPersonnage demarrePartie : " + idPersonnage);
+				//System.out.println("idPersonnage demarrePartie : " + idPersonnage);
 				
 				// Garder en mémoire le Id du personnage choisi par le joueur
 				joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
 				
-				// Garder en mémoire le numero du couleur choisi par le joueur
-				// mais avant retirer cette couleur de la liste
+				// Garder en mémoire le numero du couleur  mais avant retirer cette couleur de la liste
 				//System.out.println("Color demarrePartie avant: " + clothesColor);
-							
-				if(joueur.obtenirPartieCourante().getClothesColor().equals("0"))				
-				{
-					clothesColor = getColor(clothesColor);
-					joueur.obtenirPartieCourante().setClothesColor(clothesColor);	
-				}
+				//String clothesColor = getOneColor();
+				//joueur.obtenirPartieCourante().setClothesColor(clothesColor);	
+				
 				//System.out.println("Color demarrePartie apres: " + clothesColor);
 								
 		        //System.out.println(idPersonnage);
@@ -562,7 +557,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					// Cette fonction va passer les joueurs et créer un 
 					// InformationDestination pour chacun et ajouter l'événement 
 					// dans la file de gestion d'événements
-					preparerEvenementJoueurDemarrePartie(joueur.obtenirNomUtilisateur(), idPersonnage, clothesColor);		    	
+					preparerEvenementJoueurDemarrePartie(joueur.obtenirNomUtilisateur(), idPersonnage);		    	
 			    }
 				
 				// Si le nombre de joueurs en attente est maintenant le nombre 
@@ -725,7 +720,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Générer le plateau de jeu selon les règles de la table et 
 		// garder le plateau en mémoire dans la table
-		objttPlateauJeu = getGameFactory().genererPlateauJeu(lstPointsCaseLibre, objProchainIdObjet, lstPointsFinish, this);
+		objttPlateauJeu = getGameFactory().genererPlateauJeu(lstPointsCaseLibre, lstPointsFinish, this);
 
         // Définir le prochain id pour les objets
         objProchainIdObjet++;
@@ -924,8 +919,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					// dans la file de gestion d'événements
 					JoueurVirtuel objJoueurVirtuel = (JoueurVirtuel) lstJoueursVirtuels.get(i);
 					
-					preparerEvenementJoueurEntreTable(objJoueurVirtuel.obtenirNom(), 1);
-					preparerEvenementJoueurDemarrePartie(objJoueurVirtuel.obtenirNom(), objJoueurVirtuel.obtenirIdPersonnage(), objJoueurVirtuel.getClothesColor());		    	
+					preparerEvenementJoueurEntreTable(objJoueurVirtuel.obtenirNom(), 1, objJoueurVirtuel.getClothesColor());
+					preparerEvenementJoueurDemarrePartie(objJoueurVirtuel.obtenirNom(), objJoueurVirtuel.obtenirIdPersonnage());		    	
 			    }
 		    }
 	    }
@@ -1356,11 +1351,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * Synchronisme : Cette fonction n'est pas synchronisée ici, mais elle l'est
 	 * 				  par l'appelant (entrerTable).
 	 */
-	private void preparerEvenementJoueurEntreTable(String nomUtilisateur, int role)
+	private void preparerEvenementJoueurEntreTable(String nomUtilisateur, int role, String cloColor)
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs qu'un joueur est entré dans la table
-	    EvenementJoueurEntreTable joueurEntreTable = new EvenementJoueurEntreTable(intNoTable, nomUtilisateur, role);
+	    EvenementJoueurEntreTable joueurEntreTable = new EvenementJoueurEntreTable(intNoTable, nomUtilisateur, role, cloColor);
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la salle (chaque élément est un Map.Entry)
@@ -1449,8 +1444,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * on va créer un InformationDestination et on va ajouter l'événement dans 
 	 * la file d'événements du gestionnaire d'événements. Lors de l'appel 
 	 * de cette fonction, la liste des joueurs est synchronisée.
-	 * @param clothesColor 
-	 * 
 	 * @param String nomUtilisateur : Le nom d'utilisateur du joueur qui
 	 * 								  vient de démarrer la partie
 	 * @param int idPersonnage : Le numéro Id du personnage choisi par le joueur 
@@ -1458,11 +1451,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * Synchronisme : Cette fonction n'est pas synchronisée ici, mais elle l'est
 	 * 				  par l'appelant (demarrerPartie).
 	 */
-	private void preparerEvenementJoueurDemarrePartie(String nomUtilisateur, int idPersonnage, String clothesColor)
+	private void preparerEvenementJoueurDemarrePartie(String nomUtilisateur, int idPersonnage)
 	{
 	    // Créer un nouvel événement qui va permettre d'envoyer l'événement 
 	    // aux joueurs qu'un joueur démarré une partie
-	    EvenementJoueurDemarrePartie joueurDemarrePartie = new EvenementJoueurDemarrePartie(nomUtilisateur, idPersonnage, clothesColor);
+	    EvenementJoueurDemarrePartie joueurDemarrePartie = new EvenementJoueurDemarrePartie(nomUtilisateur, idPersonnage);
 	    
 		// Créer un ensemble contenant tous les tuples de la liste 
 		// des joueurs de la table (chaque élément est un Map.Entry)
@@ -1694,33 +1687,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		objGestionnaireEvenements.ajouterEvenement(messageChat);
 	}
 
-/*	public void preparerEvenementDeplacementWinTheGame()
-	{
-        definirNouvellePositionWinTheGame();
-                
-		EvenementDeplacementWinTheGame deplacementWTG = new EvenementDeplacementWinTheGame(positionWinTheGame.x, positionWinTheGame.y);
-		
-		// Créer un ensemble contenant tous les tuples de la liste des joueurs de la table
-		Set lstEnsembleJoueurs = lstJoueurs.entrySet();
-		
-		// Obtenir un itérateur pour l'ensemble contenant les joueurs
-		Iterator objIterateurListe = lstEnsembleJoueurs.iterator();
-		
-		// Passser tous les joueurs de la table et leur envoyer l'événement
-		while (objIterateurListe.hasNext() == true)
-		{
-			// Créer une référence vers le joueur humain courant dans la liste
-			JoueurHumain objJoueur = (JoueurHumain)(((Map.Entry)(objIterateurListe.next())).getValue());
-			
-			// Obtenir un numéro de commande pour le joueur courant, créer
-			// un InformationDestination et l'ajouter à l'événement
-		deplacementWTG.ajouterInformationDestination(new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(), objJoueur.obtenirProtocoleJoueur()));
-		}
-		
-		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
-		objGestionnaireEvenements.ajouterEvenement(deplacementWTG);
-	}  */
-
 	/**
 	 * Method that is used to prepare event of move of player
 	 * @param nomUtilisateur
@@ -1942,6 +1908,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		return objProchainIdObjet;
 	}
 	
+	public void setObjProchainIdObjet(Integer objProchainIdObjet) {
+		this.objProchainIdObjet = objProchainIdObjet;
+	}
+
 	/** 
 	 * Aller chercher dans la liste des joueurs sur cette table
 	 * les ID des personnages choisi et vérifier si le id intID est
@@ -2190,20 +2160,20 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		 */
 		public String getOneColor()
 		{
-			// default color - black ?
-			String color = "0";
+			// default color - black or white?
+			String color = "0xFFFFFF";
 						
 			// Let's choose a colors among the possible ones
 		    if( colors != null && colors.size() > 0 )
 			{
-		    	   int intRandom = UtilitaireNombres.genererNbAleatoire( colors.size() );
-		    	   color = colors.get( intRandom );
-		    	   colors.remove(intRandom);
+		    	int intRandom = UtilitaireNombres.genererNbAleatoire( colors.size() );
+		    	color = colors.get( intRandom );
+		    	colors.remove(intRandom);
 				  
 			}
 			else
 			{
-				//objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+				//objLogger.error(GestionnaireMessages.message("colors_liste_empty"));
 			}
 		    //System.out.println("Color : " + color + "   " + colors.size());
 			return color;
@@ -2213,7 +2183,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		/**
 		 * If gived color is in the list it is automatically eliminated 
 		 * from the list and returned otherwise is taked other one from the list
-		 */
+		
 		private String getColor(String color)
 		{
 					
@@ -2236,7 +2206,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		    //System.out.println("Color : " + color + "   " + colors.size());
 			return color;
 			
-		}// end method
+		}// end method */
 		
         /**
          * 
@@ -2261,6 +2231,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	            // after we'll cut the level of questions by this number
 	            objGestionnaireBD.remplirBoiteQuestions(joueur, 0);  
 				
+	            String color = getOneColor();
+				joueur.obtenirPartieCourante().setClothesColor(color);
 				// Si on doit générer le numéro de commande de retour, alors
 				// on le génçre, sinon on ne fait rien
 				if (doitGenererNoCommandeRetour == true)
@@ -2279,14 +2251,16 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					// Cette fonction va passer les joueurs et créer un 
 					// InformationDestination pour chacun et ajouter l'événement 
 					// dans la file de gestion d'événements
-					preparerEvenementJoueurEntreTable(joueur.obtenirNomUtilisateur(), joueur.getRole());		    	
+					preparerEvenementJoueurEntreTable(joueur.obtenirNomUtilisateur(), joueur.getRole(), color);		    	
 			    }
 		    }
 			
 		}
 		
 		/**
-		 * 
+		 * Return the max number of tlayers that can be on 
+		 * the table. In general and course types of the game the player 
+		 * number is filled with the virtuals till this constant
 		 */
 		public int getMaxNbPlayers()
 		{

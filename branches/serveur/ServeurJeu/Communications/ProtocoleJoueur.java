@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.GregorianCalendar;
 import java.awt.Point;
 import Enumerations.Filtre;
@@ -135,6 +134,7 @@ public class ProtocoleJoueur implements Runnable
 	{
 		super();
 
+		
 		// Initialiser les valeurs du ProtocoleJoueur courant
 		objControleurJeu = controleur;
 		objGestionnaireCommunication = controleur.obtenirGestionnaireCommunication();
@@ -147,7 +147,7 @@ public class ProtocoleJoueur implements Runnable
 		objGestionnaireTemps = controleur.obtenirGestionnaireTemps();
 		objTacheSynchroniser = controleur.obtenirTacheSynchroniser();
         //bolEnTrainDeJouer = false;
-        //objLogger.info( GestionnaireMessages.message("protocole.connexion").replace("$$CLIENT$$", socketJoueur.getInetAddress().toString()));
+        objLogger.info( GestionnaireMessages.message("protocole.connexion").replace("$$CLIENT$$", socketJoueur.getInetAddress().toString()));
 
 		questionsAnswers = new StringBuffer();
 		
@@ -247,7 +247,7 @@ public class ProtocoleJoueur implements Runnable
                           if(ControleurJeu.modeDebug)
                           {
                               String timeB = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
-                              //System.out.println("(" + timeB + ") Reèu:  " + strMessageRecu);
+                              System.out.println("(" + timeB + ") Reèu:  " + strMessageRecu);
                           }
 
                        String strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
@@ -257,7 +257,7 @@ public class ProtocoleJoueur implements Runnable
                           if(ControleurJeu.modeDebug)
                           {
                                 String timeA = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
-                               // System.out.println("(" + timeA + ") Envoi: " + strMessageAEnvoyer);
+                                System.out.println("(" + timeA + ") Envoi: " + strMessageAEnvoyer);
                           }
 
 						// On remet la variable contenant le numéro de commande
@@ -384,7 +384,7 @@ public class ProtocoleJoueur implements Runnable
 
 	private String traiterCommandeJoueur(String message) throws TransformerConfigurationException, TransformerException
 	{            
-		//Moniteur.obtenirInstance().debut( "ProtocoleJoueur.traiterCommandeJoueur" );
+		Moniteur.obtenirInstance().debut( "ProtocoleJoueur.traiterCommandeJoueur" );
 
 		// Déclaration d'une variable qui permet de savoir si on doit retourner 
 		// une commande au client ou si ce n'était qu'une réponse du client 
@@ -1789,9 +1789,8 @@ public class ProtocoleJoueur implements Runnable
 						// du paramètre
 						objNoeudParametreColorPersonnage.setAttribute("type", "Color");
 						
-						String color = objJoueurHumain.obtenirPartieCourante().obtenirTable().getOneColor();
-						objJoueurHumain.obtenirPartieCourante().setClothesColor(color);
-
+						String color = objJoueurHumain.obtenirPartieCourante().getClothesColor();
+												
 						// Créer un noeud texte contenant le role du joueur
 						Text objNoeudTexteColor = objDocumentXMLSortie.createTextNode(color);
 
@@ -2159,20 +2158,14 @@ public class ProtocoleJoueur implements Runnable
 						// Obtenir le numéro Id du personnage choisi et le garder 
 						// en mémoire dans une variable
 						int intIdDessin = Integer.parseInt(obtenirValeurParametre(objNoeudCommandeEntree, "IdDessin").getNodeValue());
-						
-						// Obtenir le numéro du couleur des vetements du personnage choisi et le garder 
-						// en mémoire dans une variable
-						String clothesColor = obtenirValeurParametre(objNoeudCommandeEntree, "ClothesColor").getNodeValue();
-
+												
 						// Appeler la méthode permettant de démarrer une partie
 						// et garder son résultat dans une variable
 						String strResultatDemarrerPartie = objJoueurHumain.obtenirPartieCourante().obtenirTable().demarrerPartie(objJoueurHumain, 
-								intIdDessin, clothesColor, true);
+								intIdDessin, true);
 						int idPersonnage = objJoueurHumain.obtenirPartieCourante().obtenirIdPersonnage();
 						
-						// clothesColor can be changed by server - return real color
-						clothesColor = objJoueurHumain.obtenirPartieCourante().getClothesColor();
-
+						
 						// Si le résultat du démarrage de partie est Succes alors le
 						// joueur est maintenant en attente
 						if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.Succes))
@@ -2183,7 +2176,7 @@ public class ProtocoleJoueur implements Runnable
 							objNoeudCommande.setAttribute("type", "Reponse");
 							objNoeudCommande.setAttribute("nom", "Ok");
 							objNoeudCommande.setAttribute("id", Integer.toString(idPersonnage));
-							objNoeudCommande.setAttribute("clocolor", clothesColor);
+							
 						}
 
 						else if (strResultatDemarrerPartie.equals(ResultatDemarrerPartie.PartieEnCours))
@@ -2746,7 +2739,7 @@ public class ProtocoleJoueur implements Runnable
 				}
 			}
 		}
-		//Moniteur.obtenirInstance().fin();
+		Moniteur.obtenirInstance().fin();
 
 		// Si on doit retourner une commande alors on ajoute le noeud de commande 
 		// et on retourne le code XML de la commande. Si le numéro de commande 
@@ -2790,7 +2783,7 @@ public class ProtocoleJoueur implements Runnable
 	 */
 	public void envoyerMessage(String message) throws IOException
 	{
-		//Moniteur.obtenirInstance().debut( "ProtocoleJoueur.envoyerMessage");
+		Moniteur.obtenirInstance().debut( "ProtocoleJoueur.envoyerMessage");
 		
 		// Synchroniser cette partie de code pour empècher 2 threads d'envoyer
 		// un message en mème temps sur le canal d'envoi du socket
@@ -2801,11 +2794,11 @@ public class ProtocoleJoueur implements Runnable
 			OutputStream objCanalEnvoi = objSocketJoueur.getOutputStream();
 
 			String chainetemp = UtilitaireEncodeurDecodeur.encodeToUTF8(message);
-            /*
+            
 			if (chainetemp.contains("ping") == false)
 			{
 				objLogger.info( GestionnaireMessages.message("protocole.message_envoye") + chainetemp );
-			}*/
+			}
 			// ƒcrire le message sur le canal d'envoi au client
 			objCanalEnvoi.write(message.getBytes("UTF8"));
 			
@@ -2816,7 +2809,7 @@ public class ProtocoleJoueur implements Runnable
 			objCanalEnvoi.flush();
 			objLogger.info( GestionnaireMessages.message("protocole.confirmation") + objSocketJoueur.getInetAddress().toString() );
 		}
-			//Moniteur.obtenirInstance().fin();
+			Moniteur.obtenirInstance().fin();
 
 	}// fin méthode
 
@@ -3252,7 +3245,7 @@ public class ProtocoleJoueur implements Runnable
 			// Si le nombre d'enfants du noeud de commande est de 1, alors
 			// le nombre de paramètres est correct et on peut continuer
 
-			if (noeudCommande.getChildNodes().getLength() == 2)
+			if (noeudCommande.getChildNodes().getLength() == 1)
 			{
 				// Déclarer une variable qui va permettre de savoir si le 
 				// noeud enfant est valide
@@ -3276,6 +3269,7 @@ public class ProtocoleJoueur implements Runnable
 					bolNoeudValide = false;
 				}
 				
+				/*
 				//validation du deuxième noeud (NiveauJoueurVirtuel)
 				objNoeudCourant = noeudCommande.getChildNodes().item(1);
 				
@@ -3290,7 +3284,7 @@ public class ProtocoleJoueur implements Runnable
 					objNoeudCourant.getChildNodes().getLength() != 1)
 				{
 					bolNoeudValide = false;
-				}
+				}*/
 
 				// Si l'enfant du noeud courant est valide alors la commande 
 				// est valide
@@ -4347,6 +4341,7 @@ public class ProtocoleJoueur implements Runnable
 	                	{
 		                	// Acheter l'objet
                             Integer idProchainObjet = objTable.obtenirProchainIdObjet();
+                            System.out.println("New - " + idProchainObjet);
 		                	ObjetUtilisable objObjetAcheter = ((Magasin)objObjet).acheterObjet(intIdObjet, idProchainObjet);
 		                	
 		                	// L'ajouter à la liste des objets du joueur
@@ -4368,12 +4363,15 @@ public class ProtocoleJoueur implements Runnable
 		                	Element objNoeudObjetAchete = objDocumentXMLSortie.createElement("objetAchete");
 		                	objNoeudObjetAchete.setAttribute("type", objObjetAcheter.obtenirTypeObjet());
 		                	objNoeudObjetAchete.setAttribute("id", Integer.toString(intIdObjet));
+		                	objNoeudObjetAchete.setAttribute("newId", Integer.toString(idProchainObjet));
 		                	objNoeudCommande.appendChild(objNoeudObjetAchete);
                              
+		                	/*
 		                	// Ajouter l'id du nouvel objet dans la réponse
 		                	Element objNoeudNouveauID = objDocumentXMLSortie.createElement("nouveauID");
-		                	objNoeudNouveauID.setAttribute("id", Integer.toString(idProchainObjet-1));
-		                	objNoeudCommande.appendChild(objNoeudNouveauID);
+		                	objNoeudNouveauID.setAttribute("id", Integer.toString(idProchainObjet-1));  //TODO  why -1
+		                	objNoeudCommande.appendChild(objNoeudNouveauID);*/
+		                	
                             Element objNoeudParametreArgent = objDocumentXMLSortie.createElement("parametre");
         					Text objNoeudTexteArgent = objDocumentXMLSortie.createTextNode(Integer.toString(objJoueurHumain.obtenirPartieCourante().obtenirArgent()));
          					objNoeudParametreArgent.setAttribute("type", "Argent");

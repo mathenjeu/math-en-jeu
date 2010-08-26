@@ -5,7 +5,8 @@
  */
 package ServeurJeu.Temps;
 
-import java.util.TreeMap;
+import java.util.HashMap;
+import java.util.TimerTask;
 import java.util.Iterator;
 
 /**
@@ -14,10 +15,10 @@ import java.util.Iterator;
  * Classe qui implémente une tâche pour la synchronisation des joueurs 
  * 
  */
-public class TacheSynchroniser extends Tache
+public class TacheSynchroniser extends TimerTask
 {
 	//Liste des observateurs qui seront notifiés pour la synchronisation
-	private TreeMap<Integer, ObservateurSynchroniser> lstObservateurs;
+	private HashMap<Integer, ObservateurSynchroniser> lstObservateurs;
 	
 	/**
 	 * Constructeur de la classe TacheSynchroniser
@@ -25,7 +26,7 @@ public class TacheSynchroniser extends Tache
 	 */
 	public TacheSynchroniser()
 	{
-		lstObservateurs = new TreeMap<Integer, ObservateurSynchroniser>();
+		lstObservateurs = new HashMap<Integer, ObservateurSynchroniser>();
 	}
 	
 	/**

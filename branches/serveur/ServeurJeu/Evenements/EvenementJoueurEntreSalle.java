@@ -6,6 +6,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 import ClassesUtilitaires.UtilitaireXML;
+import ServeurJeu.ControleurJeu;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
@@ -67,13 +68,7 @@ public class EvenementJoueurEntreSalle extends Evenement
 			// Ajouter le noeud texte au noeud du paramètre
 			objNoeudParametre.appendChild(objNoeudTexte);
 			
-			/*********************** client n'a pas besoin de réponse *********
-			Text objNoeudTexteNiveaux = objDocumentXML.createTextNode("0");
-			objNoeudParametre.setAttribute("type", "Niveaux");
-			objNoeudParametre.appendChild(objNoeudTexteNiveaux);
-			******************************************************************/
-			
-			// Ajouter le noeud paramètre au noeud de commande
+		    // Ajouter le noeud paramètre au noeud de commande
 			objNoeudCommande.appendChild(objNoeudParametre);
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
@@ -91,6 +86,7 @@ public class EvenementJoueurEntreSalle extends Evenement
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
 		
+		if(ControleurJeu.modeDebug) System.out.println("Evenement: " + strCodeXML);
 		return strCodeXML;
 	}
 }
