@@ -22,7 +22,8 @@ for (var i:Number = 0; i < count; i++) {
 			        bananaPlayers[i].role = _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].role;
 					bananaPlayers[i].idessin = _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].idessin;
 					bananaPlayers[i].clocolor = _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].clocolor;
-					//trace("ICI CLOCOLOR : " + bananaPlayers[i].clocolor + " " + _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].clocolor);
+					bananaPlayers[i].filterC = _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].filterC;
+					//trace("ICI CLOCOLOR : " + bananaPlayers[i].filterC + " " + _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].filterC);
 								
 }// end for
 
@@ -37,25 +38,11 @@ var ID:Number = _level0.loader.contentHolder.planche.obtenirPerso().getBananaId(
 
 bananaPlayers.sort(_level0.loader.contentHolder.objGestionnaireEvenements.compareByPointsDescending);
 
-
+// put the graphics 
 if(_level0.loader.contentHolder.langue == "en")
    this.attachMovie("lancer_en", "lancer", 121, {_x:100, _y:244});
 else 
    this.attachMovie("lancer_fr", "lancer", 121, {_x:58, _y:249});
-
-/*
-var myLoader1:MovieClipLoader = new MovieClipLoader();
-var mclListener1:Object = new Object();
-
-var myLoader2:MovieClipLoader = new MovieClipLoader();
-var mclListener2:Object = new Object();
-
-var myLoader3:MovieClipLoader = new MovieClipLoader();
-var mclListener3:Object = new Object();
-
-var myLoader4:MovieClipLoader = new MovieClipLoader();
-var mclListener4:Object = new Object();
-*/
 
 
 for(var i:Number = 1; i <= count; i++)
@@ -64,24 +51,7 @@ for(var i:Number = 1; i <= count; i++)
    
    if(bananaPlayers[i - 1].nom != _level0.loader.contentHolder.objGestionnaireEvenements.nomUtilisateur){
      	    	 
-	  // to load the perso .. use ClipLoader to know the moment of complet load
-	  // we are in for so load it dynamically
-        mclListenerString = "mclListener" + i;
-		this["mclListenerString"] = new Object();
-		this["mclListenerString"].onLoadComplete = function(target_mc:MovieClip) {
-    
-	       // attention if use 10 or more players!!! must be changed! 10 == 0
-		    var nameX:String = "x" + target_mc;
-	        var i:Number = Number(nameX.slice(-1,nameX.length));
-			target_mc.clothesCol = _level0.loader.contentHolder.toss.bananaPlayers[i - 1].clocolor;
-			//trace("ICI TOSS " + target_mc.clothesCol + " " + nameX.slice(-1,nameX.length) + "  " + nameX);
-						
-        };
-		myLoaderString = "myLoader" + i;
-		this["myLoaderString"] = new MovieClipLoader();
-		this["myLoaderString"].addListener(this["mclListenerString"]);
-		
-		this["myLoaderString"].loadClip("Perso/persox" + id + ".swf", this["perso" + i].createEmptyMovieClip("persoBanana"  + i, 100 + i)); 
+	  drawUserBanana(i, id);
 				  
 	  //this["perso" + i].createEmptyMovieClip("persoBanana"  + i, 100 + i);
 	  //this["perso" + i]["persoBanana"  + i].loadMovie("perso" + id + ".swf");
@@ -89,7 +59,7 @@ for(var i:Number = 1; i <= count; i++)
       this["perso" + i]["persoBanana" + i]._y = 65;
 	  this["perso" + i]["persoBanana" + i]._xscale = 55;
       this["perso" + i]["persoBanana" + i]._yscale = 55;
-      this["name" + i]["persoName" + i] = bananaPlayers[i - 1].nom;
+      this["name" + i]["persoName"] = bananaPlayers[i - 1].nom;
   }//end if
  
  
@@ -128,7 +98,7 @@ this.perso1.onRollOut = function()
 };
 this.perso1.onRelease = function()
 {
-		var namePlayer:String = _level0.loader.contentHolder.toss.name1.persoName1;
+		var namePlayer:String = _level0.loader.contentHolder.toss.name1.persoName;
 		useBanana(namePlayer);
 }; 
 
@@ -147,7 +117,7 @@ this.perso2.onRollOut = function()
 
 this.perso2.onRelease = function()
 {
-		var namePlayer:String = _level0.loader.contentHolder.toss.name2.persoName2;
+		var namePlayer:String = _level0.loader.contentHolder.toss.name2.persoName;
 		useBanana(namePlayer);
 };  
 
@@ -165,7 +135,7 @@ this.perso3.onRollOut = function()
 };
 this.perso3.onRelease = function()
 {
-		var namePlayer:String = _level0.loader.contentHolder.toss.name3.persoName3;
+		var namePlayer:String = _level0.loader.contentHolder.toss.name3.persoName;
 		useBanana(namePlayer);
 }; 
 
@@ -184,7 +154,7 @@ this.perso4.onRollOut = function()
 
 this.perso4.onRelease = function()
 {
-		var namePlayer:String = _level0.loader.contentHolder.toss.name4.persoName4;
+		var namePlayer:String = _level0.loader.contentHolder.toss.name4.persoName;
 		useBanana(namePlayer);
 }; 
 
@@ -203,13 +173,13 @@ this.perso5.onRollOut = function()
 
 this.perso5.onRelease = function()
 {
-		var namePlayer:String = _level0.loader.contentHolder.toss.name5.persoName5;
+		var namePlayer:String = _level0.loader.contentHolder.toss.name5.persoName;
 		useBanana(namePlayer);
 };
 
 this.perso6.onRelease = function()
 {
-		var namePlayer:String = _level0.loader.contentHolder.toss.name6.persoName6;
+		var namePlayer:String = _level0.loader.contentHolder.toss.name6.persoName;
 		useBanana(namePlayer);
 };
 
@@ -228,7 +198,7 @@ this.perso6.onRollOut = function()
 
 this.perso7.onRelease = function()
 {
-		var namePlayer:String = _level0.loader.contentHolder.toss.name7.persoName7;
+		var namePlayer:String = _level0.loader.contentHolder.toss.name7.persoName;
 		useBanana(namePlayer);
 }; 
 this.perso7.onRollOver = function()
@@ -246,7 +216,7 @@ this.perso7.onRollOut = function()
 
 this.perso8.onRelease = function()
 {
-		var namePlayer:String = _level0.loader.contentHolder.toss.name8.persoName8;
+		var namePlayer:String = _level0.loader.contentHolder.toss.name8.persoName;
 		useBanana(namePlayer);
 };
 
@@ -265,7 +235,7 @@ this.perso8.onRollOut = function()
 
 this.perso9.onRelease = function()
 {
-		var namePlayer:String = _level0.loader.contentHolder.toss.name9.persoName9;
+		var namePlayer:String = _level0.loader.contentHolder.toss.name9.persoName;
 		useBanana(namePlayer);
 }; 
 
@@ -284,7 +254,7 @@ this.perso9.onRollOut = function()
 
 this.perso10.onRelease = function()
 {
-		var namePlayer:String = _level0.loader.contentHolder.toss.name10.persoName10;
+		var namePlayer:String = _level0.loader.contentHolder.toss.name10.persoName;
 		useBanana(namePlayer);
 };  
 
@@ -303,7 +273,7 @@ this.perso10.onRollOut = function()
 
 this.perso11.onRelease = function()
 {
-		var namePlayer:String = _level0.loader.contentHolder.toss.name11.persoName11;
+		var namePlayer:String = _level0.loader.contentHolder.toss.name11.persoName;
 		useBanana(namePlayer);
 };  
 
@@ -322,7 +292,7 @@ this.perso11.onRollOut = function()
 
 this.perso12.onRelease = function()
 {
-		var namePlayer:String = _level0.loader.contentHolder.toss.name12.persoName12;
+		var namePlayer:String = _level0.loader.contentHolder.toss.name12.persoName;
 		useBanana(namePlayer);
 };  
 
@@ -354,3 +324,22 @@ function useBanana(namePlayer:String):Void
   _level0.loader.contentHolder.toss.removeMovieClip();
 }
 
+// used to draw the persos with the color on the table
+function drawUserBanana(i:Number, id:Number)
+{
+      // to load the perso .. use ClipLoader to know the moment of complet load
+	  // we are in for so load it dynamically
+       var mclListenerString:String = "mclListener" + i;
+		this["mclListenerString"] = new Object();
+		this["mclListenerString"].onLoadComplete = function(target_mc:MovieClip) {
+    
+	        target_mc.filterC = _level0.loader.contentHolder.toss.bananaPlayers[i - 1].filterC;
+			//trace("ICI TOSS " + target_mc.filterC + " " + nameX + "  " + _level0.loader.contentHolder.toss.bananaPlayers[i - 1].filterC);
+						
+        };
+		myLoaderString = "myLoader" + i;
+		this["myLoaderString"] = new MovieClipLoader();
+		this["myLoaderString"].addListener(this["mclListenerString"]);
+		
+		this["myLoaderString"].loadClip("Perso/persox" + id + ".swf", this["perso" + i].createEmptyMovieClip("persoBanana"  + i, 100 + i)); 	
+}
