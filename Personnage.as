@@ -324,6 +324,8 @@ class Personnage
 		//afficherObjets();
 	}
 	
+	
+	
 	////////////////////////////////////////////////////////////
 	function zoomer(valeur:Number)
 	{		
@@ -509,12 +511,41 @@ class Personnage
 		twMove2 = new Tween(mClip1, "_yscale", Bounce.easeIn, y, 100, 2, true);
 	}
 
+    ////////////////////////////////////////////////////////////
+	// this function remove the object from liste in Shop
+	function removeShopObject(idRemove:Number)
+	{		
+		var count:Number =  listeSurMagasin.length;
+		for(var j:Number = 0; j < count; j++)
+		{
+			if(listeSurMagasin[j].id = idRemove)
+			   listeSurMagasin.splice(j,1);
+			   
+		}
+		for(var j:Number = 0; j < count; j++)
+		{
+			trace(" control - " + listeSurMagasin[j].id);
+			   			   
+		}
+	}
+	
+	function putNewShopObject(idPut:Number, objetType:String)
+	{
+		 var objMagasin = new Object();
+		 objMagasin.cout = 1;
+	     objMagasin.id = idPut;
+		 objMagasin.type = objetType;
+		 
+		 listeSurMagasin.push(objMagasin);
+	}
+	
 	////////////////////////////////////////////////////////////
 	// cette fonction transforme des donnees stockees dans un array
 	// dans un XMLNode.
 	// ca permet de garder en memoire les objets contenus dans un magasin,
 	// leur ID et leur cout
 	//
+	/*
 	function genererListeMagasinXML(lstObjMagasin:Array):Object
 	{
 		var objMagasin:Object = new Object();
@@ -560,7 +591,7 @@ class Personnage
 			//trace("id ds generer #2 : " + objMagasin["objet"+j].id);
 		}
 		return objMagasin;
-	}
+	}*/
 	
 	
 	//////////////////////////////////////////////////////////////////////////////////////

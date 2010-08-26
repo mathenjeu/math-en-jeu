@@ -467,10 +467,10 @@ class GestionnaireEvenements
 		this.listeDesPersonnages[this.listeDesPersonnages.length - 1].pointage = 0;
 		this.listeDesPersonnages[this.listeDesPersonnages.length - 1].idessin = idDessin;
 		this.listeDesPersonnages[this.listeDesPersonnages.length - 1].win = 0;
-		this.listeDesPersonnages[this.listeDesPersonnages.length - 1].clocolor = this.colorIt;
+		//this.listeDesPersonnages[this.listeDesPersonnages.length - 1].clocolor = this.colorIt;
 		//this.listeDesPersonnages[numeroJoueursDansSalle-1].lastPoints = 0;
 		
-        this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), Delegate.create(this, this.evenementPartieTerminee), Delegate.create(this, this.evenementJoueurRejoindrePartie),  idDessin, colorIt);//this.idPersonnage);//  
+        this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), Delegate.create(this, this.evenementPartieTerminee), Delegate.create(this, this.evenementJoueurRejoindrePartie),  idDessin);//this.idPersonnage);//  
 	
 		trace("fin de demarrerPartie");
         trace("*********************************************\n");
@@ -1178,7 +1178,7 @@ class GestionnaireEvenements
         //   objetEvenement.resultat = "NoTable", CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte, JoueurPasDansSalle,  JoueurDansTable
         // parametre : noTable, name
         trace("*********************************************");
-        trace("debut de retourCreerTable   " + objetEvenement.resultat + "    " + objetEvenement.noTable + "  " + objetEvenement.nameTable);
+        trace("debut de retourCreerTable   " + objetEvenement.resultat + "    " + objetEvenement.clocolor + "  " + objetEvenement.nameTable);
         var movClip:MovieClip;
 
         switch(objetEvenement.resultat)
@@ -1609,7 +1609,7 @@ class GestionnaireEvenements
         {
             case "Ok":
 			    this.idPersonnage = objetEvenement.idP;
-				this.colorIt =  objetEvenement.clocolor;
+				//this.colorIt =  objetEvenement.clocolor;
 				_level0.loader.contentHolder.mc_perso.clothesCol = objetEvenement.clocolor;
 				var count:Number =  this.listeDesPersonnages.length; 
 			    for(var i:Number = 0; i < count; i++)
@@ -1773,13 +1773,17 @@ class GestionnaireEvenements
     {
 		//   objetEvenement.resultat = Ok, CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte
     	trace("*********************************************");
-    	trace("debut de retourAcheterObjet   "+objetEvenement.resultat);
+    	trace("debut de retourAcheterObjet   " + objetEvenement.resultat);
     	switch(objetEvenement.resultat)
         {
 			case "Ok":
 				
-					trace("nom de l'objet : " + objetEvenement.argent.type + " " + objetEvenement.argent.id);
-					_level0.loader.contentHolder.planche.obtenirPerso().ajouterObjet(objetEvenement.argent.id, objetEvenement.argent.type); /// id???
+				    var idObjet:Number =  objetEvenement.objet.id;
+					trace("nom de l'objet : " + objetEvenement.objet.type + " " + objetEvenement.objet.id);
+					_level0.loader.contentHolder.planche.obtenirPerso().ajouterObjet(objetEvenement.objet.id, objetEvenement.objet.type); /// id???
+					_level0.loader.contentHolder.planche.obtenirPerso().removeShopObject(idObjet);
+					_level0.loader.contentHolder.planche.obtenirPerso().putNewShopObject(objetEvenement.objet.newId, objetEvenement.objet.type);
+					
 					break;
 			
 			case "CommandeNonReconnue":
@@ -2526,6 +2530,7 @@ class GestionnaireEvenements
 			  listeDesPersonnages.push(new Object());
 			  listeDesPersonnages[listeDesPersonnages.length - 1].nom = objetEvenement.nomUtilisateur;
 			  listeDesPersonnages[listeDesPersonnages.length - 1].role = objetEvenement.userRole;
+			  listeDesPersonnages[listeDesPersonnages.length - 1].clocolor = objetEvenement.userColor;
 			  _level0.loader.contentHolder["joueur" + listeDesPersonnages.length] = listeDesPersonnages[listeDesPersonnages.length - 1].nom;
 		   }
     	}// if
@@ -2546,12 +2551,13 @@ class GestionnaireEvenements
             	}
         	}
     	}
-		  _level0.loader.contentHolder.listeTable.removeAll();
-			 for (var i:Number = 0; i < count; i++)
-			 {
+		 /// Verifie si est encore actuel!
+		 _level0.loader.contentHolder.listeTable.removeAll();
+		 for (var i:Number = 0; i < count; i++)
+		 {
 				str = this.listeDesTables[i].no + ".  *" +  this.listeDesTables[i].tablName + "*  " + this.listeDesTables[i].temps + " min. " ;
 				_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
-			 }
+		 }
 		
 		if (this.listeDesTables.length == 0 &&  _level0.loader.contentHolder._currentframe == 2 && _level0.loader.contentHolder["p0"]._visible == false)
 		{
@@ -2763,7 +2769,8 @@ class GestionnaireEvenements
 	                var idDessin:Number = calculatePicture(this.listeDesPersonnages[j].id);
 					var idPers:Number = calculateIDPers(this.listeDesPersonnages[j].id, idDessin);
 					this.listeDesPersonnages[i].idPers = idPers;
-										
+					//var filterC:ColorMatrixFilter = 
+					
 					
 					// after we create the perso's
 					_level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin, this.listeDesPersonnages[j].role, this.listeDesPersonnages[j].clocolor);
@@ -2853,7 +2860,8 @@ class GestionnaireEvenements
             	var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
 				this.listeDesPersonnages[i].idessin = idDessin;
 				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
-            	var cloCol:String = objetEvenement.clothesColor;
+            	var cloCol:String = this.listeDesPersonnages[i].clocolor;//objetEvenement.clothesColor;
+				this.listeDesPersonnages[i].filterC = _level0.loader.contentHolder.objGestionnaireEvenements.colorMatrixPerso(cloCol, idDessin);
 				
 				 this.drawUserFrame3(i, cloCol, idDessin, _level0.loader.contentHolder["player" + i]);
 					  					  
@@ -2865,12 +2873,12 @@ class GestionnaireEvenements
         	}
         	
         }
-		/*
-        for(var i:Number = 0; i < maxPlayers; i++)
+		
+       /* for(var i:Number = 0; i < maxPlayers; i++)
         {
-					trace( i + ": " + this.listeDesPersonnages[i].nom + " id:" + this.listeDesPersonnages[i].id);
-		}
-		*/
+					trace( i + ": " + this.listeDesPersonnages[i].nom + " id:" + this.listeDesPersonnages[i].filterC);
+		}*/
+		
     	
 		objetEvenement = null;
 		trace("fin de evenementJoueurDemarrePartie");

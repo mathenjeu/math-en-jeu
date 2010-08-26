@@ -2538,7 +2538,7 @@ class GestionnaireCommunication
 								   evenementUtiliserObjetDelegate:Function,
 				                   evenementPartieTermineeDelegate:Function,
                                    evenementJoueurRejoindrePartieDelegate:Function,
-				                   idDessin:Number, clothesColor:String) 
+				                   idDessin:Number) 
     {
         // Si on est dans une table, alors on peut continuer le code de la
         // fonction
@@ -2569,8 +2569,8 @@ class GestionnaireCommunication
 			
             var objNoeudParametreIdDessin:XMLNode = objObjetXML.createElement("parametre");
             var objNoeudParametreIdDessinText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(idDessin)));
-			var objNoeudParametreClothesColor:XMLNode = objObjetXML.createElement("parametre");
-			var objNoeudParametreClothesColorText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(clothesColor));
+			//var objNoeudParametreClothesColor:XMLNode = objObjetXML.createElement("parametre");
+			//var objNoeudParametreClothesColorText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(clothesColor));
 		
             // Construire l'arbre du document XML
             objNoeudCommande.attributes.no = String(intNumeroCommande);
@@ -2578,11 +2578,11 @@ class GestionnaireCommunication
 			
             objNoeudParametreIdDessin.attributes.type = "IdDessin";
             objNoeudParametreIdDessin.appendChild(objNoeudParametreIdDessinText);
-			objNoeudParametreClothesColor.attributes.type = "ClothesColor";
-            objNoeudParametreClothesColor.appendChild(objNoeudParametreClothesColorText);
+			//objNoeudParametreClothesColor.attributes.type = "ClothesColor";
+            //objNoeudParametreClothesColor.appendChild(objNoeudParametreClothesColorText);
 
             objNoeudCommande.appendChild(objNoeudParametreIdDessin);
-			objNoeudCommande.appendChild(objNoeudParametreClothesColor);
+			//objNoeudCommande.appendChild(objNoeudParametreClothesColor);
 														
             objObjetXML.appendChild(objNoeudCommande);
             // Declaration d'un nouvel objet qui va contenir les informations sur
@@ -3981,7 +3981,7 @@ class GestionnaireCommunication
 		trace("Retour DemarrerPartie GCom");
         // Construire l'objet evenement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
-                                   resultat:noeudCommande.attributes.nom, idP:noeudCommande.attributes.id, clocolor:noeudCommande.attributes.clocolor};
+                                   resultat:noeudCommande.attributes.nom, idP:noeudCommande.attributes.id};
         // Si le retour de la fonction est une reponse positive et non une
         // erreur, alors on peut passer a l'autre etat
         if (noeudCommande.attributes.type == "Reponse")
@@ -4079,26 +4079,24 @@ class GestionnaireCommunication
 		
 		//trace(noeudCommande);
 		//trace(noeudCommande.childNodes);
-		trace(noeudCommande.firstChild);
+		trace(noeudCommande.firstChild + "buy it");
 
         // Construire l'objet evenement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
-        // Si le resultat est la question a poser, alors on peut ajouter la
-        // question dans l'objet a retourner
-     	
+             	
 		//trace("avant gest comm : " + _level0.loader.contentHolder.planche.obtenirPerso().obtenirMagasin());
 
 		if (objEvenement.resultat == "Ok")
         {
-            var noeudArgent:XMLNode = noeudCommande.firstChild;
+            var noeudObjet:XMLNode = noeudCommande.firstChild;
             // Creer la question dans l'objet d'evenement
-            objEvenement.argent = new Object();
-            // Ajouter les parametres de la question dans l'objet d'evenement
-            objEvenement.argent.id = Number(noeudArgent.attributes.id);
-            objEvenement.argent.type = noeudArgent.attributes.type;
-			
-
+            objEvenement.objet = new Object();
+            objEvenement.objet.id = Number(noeudObjet.attributes.id);
+            objEvenement.objet.type = noeudObjet.attributes.type;
+		    objEvenement.objet.newId = noeudObjet.attributes.newId;
+			     
+          
 			var noeudMagasin:XMLNode;
 			noeudMagasin = noeudCommande.firstChild.nextSibling;
 						
@@ -4250,11 +4248,11 @@ class GestionnaireCommunication
 						
                     case "Explication":
                         objEvenement.explication = objNoeudParametre.firstChild.nodeValue;
-						trace("Explication ds gestComm");
+						//trace("Explication ds gestComm");
                         break;
 						
                     case "ObjetRamasse":
-						trace("ObjetRamasse ds gestComm");
+						//trace("ObjetRamasse ds gestComm");
                         objEvenement.objetRamasse = null;
                         // Si le noeud courant a un enfant, alors on garde
                         // ses informations dans l'objet ramasse
@@ -4282,34 +4280,34 @@ class GestionnaireCommunication
                             objEvenement.objetSubi.id = Number(objNoeudParametre.firstChild.attributes.id);
                             objEvenement.objetSubi.type = objNoeudParametre.firstChild.attributes.type;
                         }
-						trace("ObjetSubi ds gestComm");
+						//trace("ObjetSubi ds gestComm");
                         break;
 						
                     case "NouvellePosition":
                         objEvenement.nouvellePosition = new Object();
                         objEvenement.nouvellePosition.x = Number(objNoeudParametre.firstChild.attributes.x);
                         objEvenement.nouvellePosition.y = Number(objNoeudParametre.firstChild.attributes.y);
-						trace("NouvellePosition ds gestComm   "+objEvenement.nouvellePosition.x);
+						//trace("NouvellePosition ds gestComm   "+objEvenement.nouvellePosition.x);
                         break;
 						
                     case "Pointage":
                         objEvenement.pointage = Number(objNoeudParametre.firstChild.nodeValue);
-						trace("Pointage ds gestComm   "+objEvenement.pointage);
+						//trace("Pointage ds gestComm   "+objEvenement.pointage);
 						break;
 						
 					case "Bonus":
                         objEvenement.bonus = Number(objNoeudParametre.firstChild.nodeValue);
-						trace("Bonus ds gestComm   " + objEvenement.bonus);
+						//trace("Bonus ds gestComm   " + objEvenement.bonus);
 						break;
 		   
 		    		case "Argent":
                         objEvenement.argent = Number(objNoeudParametre.firstChild.nodeValue);
-						trace("Argent ds gestComm   "+objEvenement.argent);
+						//trace("Argent ds gestComm   "+objEvenement.argent);
 						break;
 		   
 		            case "MoveVisibility":
                         objEvenement.moveVisibility = Number(objNoeudParametre.firstChild.nodeValue);
-						trace("moveVisibility ds gestComm   " + objEvenement.moveVisibility);
+						//trace("moveVisibility ds gestComm   " + objEvenement.moveVisibility);
 						break;
 		   
 		   			case "Collision":  
@@ -4321,11 +4319,25 @@ class GestionnaireCommunication
 								objEvenementMagasin = noeudCommande.firstChild.nextSibling;
 								//trace(objEvenementMagasin);
 								var lstObjMagasin:Array = objEvenementMagasin.childNodes;
-								trace(lstObjMagasin);
-								
-								//trace("************************");
-								//trace("objets du magasin");
-								
+								//trace(lstObjMagasin);
+							//******************************************
+								var objMagasin:Array = new Array();
+		                        var count:Number =  lstObjMagasin.length;
+		                        for(var j:Number = 0; j < count; j++)
+		                        {
+			                        var objNoeudObjMagasin:XMLNode = lstObjMagasin[j];
+									
+			                        var objMagasinObjet:Object = new Object();
+			                        objMagasinObjet.cout = objNoeudObjMagasin.attributes.cout;
+			                        objMagasinObjet.id = objNoeudObjMagasin.attributes.id;
+			                        objMagasinObjet.type = objNoeudObjMagasin.attributes.type;
+		
+		                            objMagasin.push(objMagasinObjet);
+			                        trace("id GCOM: " + objMagasinObjet.id);
+		                        }
+		                    
+		                     //**************************************************************
+								/*
 								for(var j:Number = 0; j<lstObjMagasin.length; j++)
 								{
 									var objNoeudObjMagasin:XMLNode = lstObjMagasin[j];
@@ -4334,13 +4346,12 @@ class GestionnaireCommunication
 									objEvenement["objet"+j].cout = objNoeudObjMagasin.attributes.cout;
 									objEvenement["objet"+j].id = objNoeudObjMagasin.attributes.id;
 									objEvenement["objet"+j].type = objNoeudObjMagasin.attributes.type;
-									trace("objet"+j+".cout :" + objEvenement["objet"+j].cout);
-									trace("objet"+j+".id :" + objEvenement["objet"+j].id);
-									trace("objet"+j+".type :" + objEvenement["objet"+j].type);
-								}
-								trace("************************");
-								
-								_level0.loader.contentHolder.planche.obtenirPerso().definirMagasin(lstObjMagasin);
+									//trace("objet"+j+".cout :" + objEvenement["objet"+j].cout);
+									//trace("objet"+j+".id :" + objEvenement["objet"+j].id);
+									//trace("objet"+j+".type :" + objEvenement["objet"+j].type);
+								}*/
+																
+								_level0.loader.contentHolder.planche.obtenirPerso().definirMagasin(objMagasin);
 								//trace("gest comm : " + _level0.loader.contentHolder.planche.obtenirPerso().obtenirMagasin());
 
 							}
