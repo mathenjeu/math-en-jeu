@@ -51,7 +51,7 @@ public class GenerateurPartiemathEnJeu extends GenerateurPartie {
      * @throws NullPointerException : Si la liste passée en paramètre qui doit 
      * 								  être remplie est nulle
      */
-    public Case[][] genererPlateauJeu(ArrayList<Point> lstPointsCaseLibre, Integer objDernierIdObjets, ArrayList<Point> lstPointsFinish, 
+    public Case[][] genererPlateauJeu(ArrayList<Point> lstPointsCaseLibre, ArrayList<Point> lstPointsFinish, 
     		Table table) throws NullPointerException
     {
 		//*********** 
@@ -398,7 +398,7 @@ public class GenerateurPartiemathEnJeu extends GenerateurPartie {
 		 lstPointsCaseLibre.addAll(lstPointsCasesPresentes);
 		
 		// Indiquer quel a été le dernier id des objets
-		objDernierIdObjets = intCompteurIdObjet;
+		table.setObjProchainIdObjet(intCompteurIdObjet);
 				
 		return objttPlateauJeu;
     }// end method

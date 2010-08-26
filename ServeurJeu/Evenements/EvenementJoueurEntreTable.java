@@ -24,6 +24,9 @@ public class EvenementJoueurEntreTable extends Evenement
     // variable for user role
     private int userRole;
     
+    // var for color used for the player clothes
+    private String clothesColor;
+    
        
     /**
      * Constructeur de la classe EvenementJoueurEntreTable qui permet 
@@ -31,13 +34,14 @@ public class EvenementJoueurEntreTable extends Evenement
      * joueur qui vient d'entrer dans la table. 
      * @param colorS 
      */
-    public EvenementJoueurEntreTable(int noTable, String nomUtilisateur, int role)
+    public EvenementJoueurEntreTable(int noTable, String nomUtilisateur, int role, String color)
     {
         // Définir le numéro de la table et le nom d'utilisateur du joueur 
     	// qui est entré
     	intNoTable = noTable;
         strNomUtilisateur = nomUtilisateur;
         userRole = role;
+        clothesColor = color;
     }
 	
 	/**
@@ -66,12 +70,15 @@ public class EvenementJoueurEntreTable extends Evenement
 			Element objNoeudParametreNoTable = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreNomUtilisateur = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreRoleUtilisateur = objDocumentXML.createElement("parametre");
+			Element objNoeudParametreCouleurUtilisateur = objDocumentXML.createElement("parametre");
 			
 			// Créer des noeuds texte contenant le numéro de la table et le 
 			// nom d'utilisateur des noeuds paramètre
 			Text objNoeudTexteNoTable = objDocumentXML.createTextNode(Integer.toString(intNoTable));
 			Text objNoeudTexteNomUtilisateur = objDocumentXML.createTextNode(strNomUtilisateur);
 			Text objNoeudTexteRoleUtilisateur = objDocumentXML.createTextNode(Integer.toString(userRole));
+			Text objNoeudTexteCouleurUtilisateur = objDocumentXML.createTextNode(clothesColor);
+			
 			
 			// Définir les attributs du noeud de commande
 			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
@@ -83,16 +90,19 @@ public class EvenementJoueurEntreTable extends Evenement
 			objNoeudParametreNoTable.setAttribute("type", "NoTable");
 			objNoeudParametreNomUtilisateur.setAttribute("type", "NomUtilisateur");
 			objNoeudParametreRoleUtilisateur.setAttribute("type", "userRole");
+			objNoeudParametreCouleurUtilisateur.setAttribute("type", "userColor");
 			
 			// Ajouter les noeuds texte aux noeuds des paramètres
 			objNoeudParametreNoTable.appendChild(objNoeudTexteNoTable);
 			objNoeudParametreNomUtilisateur.appendChild(objNoeudTexteNomUtilisateur);
 			objNoeudParametreRoleUtilisateur.appendChild(objNoeudTexteRoleUtilisateur);
+			objNoeudParametreCouleurUtilisateur.appendChild(objNoeudTexteCouleurUtilisateur);
 			
 			// Ajouter les noeuds paramètres au noeud de commande
 			objNoeudCommande.appendChild(objNoeudParametreNoTable);
 			objNoeudCommande.appendChild(objNoeudParametreNomUtilisateur);
 			objNoeudCommande.appendChild(objNoeudParametreRoleUtilisateur);
+			objNoeudCommande.appendChild(objNoeudParametreCouleurUtilisateur);
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
 			objDocumentXML.appendChild(objNoeudCommande);

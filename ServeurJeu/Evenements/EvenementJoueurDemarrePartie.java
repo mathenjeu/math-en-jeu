@@ -19,21 +19,19 @@ public class EvenementJoueurDemarrePartie extends Evenement
     
 	// Déclaration d'une variable qui va garder le numéro Id du personnage 
 	private int intIdPersonnage;
-    
-    private String clothesColor;
+     
     
     /**
      * Constructeur de la classe EvenementJoueurDemarrePartie qui permet 
      * d'initialiser le numéro Id du personnage et le nom d'utilisateur du 
      * joueur qui vient de démarrer la partie. 
      */
-    public EvenementJoueurDemarrePartie(String nomUtilisateur, int idPersonnage, String cloColor)
+    public EvenementJoueurDemarrePartie(String nomUtilisateur, int idPersonnage)
     {
         // Définir le numéro Id du personnage et le nom d'utilisateur du joueur 
     	// qui a démarré la partie
     	intIdPersonnage = idPersonnage;
-        strNomUtilisateur = nomUtilisateur;
-        this.clothesColor = cloColor;
+        strNomUtilisateur = nomUtilisateur;       
     }
 	
 	/**
@@ -61,14 +59,12 @@ public class EvenementJoueurDemarrePartie extends Evenement
 			// Créer les noeuds de paramètre
 			Element objNoeudParametreIdPersonnage = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreNomUtilisateur = objDocumentXML.createElement("parametre");
-			Element objNoeudParametreCouleur = objDocumentXML.createElement("parametre");
-			
+						
 			// Créer des noeuds texte contenant le numéro Id du personnage et le 
 			// nom d'utilisateur des noeuds paramètre
 			Text objNoeudTexteIdPersonnage = objDocumentXML.createTextNode(Integer.toString(intIdPersonnage));
 			Text objNoeudTexteNomUtilisateur = objDocumentXML.createTextNode(strNomUtilisateur);
-			Text objNoeudTexteCouleur = objDocumentXML.createTextNode(clothesColor);
-			
+						
 			// Définir les attributs du noeud de commande
 			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
 			objNoeudCommande.setAttribute("type", "Evenement");
@@ -78,18 +74,15 @@ public class EvenementJoueurDemarrePartie extends Evenement
 			// du paramètre
 			objNoeudParametreIdPersonnage.setAttribute("type", "IdPersonnage");
 			objNoeudParametreNomUtilisateur.setAttribute("type", "NomUtilisateur");
-			objNoeudParametreCouleur.setAttribute("type", "ClothesColor");
-			
+						
 			// Ajouter les noeuds texte aux noeuds des paramètres
 			objNoeudParametreIdPersonnage.appendChild(objNoeudTexteIdPersonnage);
 			objNoeudParametreNomUtilisateur.appendChild(objNoeudTexteNomUtilisateur);
-			objNoeudParametreCouleur.appendChild(objNoeudTexteCouleur);
-			
+						
 			// Ajouter les noeuds paramètres au noeud de commande
 			objNoeudCommande.appendChild(objNoeudParametreNomUtilisateur);
 			objNoeudCommande.appendChild(objNoeudParametreIdPersonnage);
-			objNoeudCommande.appendChild(objNoeudParametreCouleur);
-			
+						
 			// Ajouter le noeud de commande au noeud racine dans le document
 			objDocumentXML.appendChild(objNoeudCommande);
 

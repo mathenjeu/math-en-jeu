@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
 import ClassesUtilitaires.UtilitaireXML;
+import ServeurJeu.ControleurJeu;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
@@ -146,6 +147,7 @@ public class EvenementJoueurDeplacePersonnage extends Evenement
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
 		
+		if(ControleurJeu.modeDebug) System.out.println("Evenement: " + strCodeXML);
 		return strCodeXML;
 	}
 }

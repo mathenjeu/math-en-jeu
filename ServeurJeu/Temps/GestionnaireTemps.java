@@ -8,6 +8,7 @@ package ServeurJeu.Temps;
 
 
 import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author Marc
@@ -15,12 +16,12 @@ import java.util.Timer;
  */
 public class GestionnaireTemps extends Timer
 {
-	public void ajouterTache( Tache t, int stepSeconds )
+	public void ajouterTache( TimerTask t, int stepSeconds )
 	{
 		this.scheduleAtFixedRate( t, stepSeconds * 1000, stepSeconds * 1000 );
 	}
 	
-	public void enleverTache( Tache t )
+	public void enleverTache( TimerTask t )
 	{
 		if (t != null)
 		{
@@ -29,7 +30,12 @@ public class GestionnaireTemps extends Timer
 		this.purge();
 	}
 	
-	public void putNewTask( Tache t, int delay)
+	public void putNewTask( BananaTask t, int delay)
+	{
+		this.schedule(t, delay);
+	}
+	
+	public void putNewTask( BrainiacTask t, int delay)
 	{
 		this.schedule(t, delay);
 	}

@@ -1,6 +1,8 @@
 package ServeurJeu.ComposantesJeu;
 
 import java.util.LinkedList;
+import java.util.StringTokenizer;
+import java.lang.Character;
 
 /**
  * @author Jean-François Brind'Amour
@@ -127,10 +129,89 @@ public class Question
 		tempStr = tempStr.replace("ç","c").replace("ù","u");
 		tempStr = tempStr.replace("û", "u").replace("ô","o").replace("ò","o");
 		tempStr = tempStr.replace("é", "e").replace("ê","e").replace("è","e");
-		tempStr = tempStr.replace("à", "a").replace("â","a").replace(".",",");
+		tempStr = tempStr.replace("à", "a").replace("â","a");
 		tempStr = tempStr.replace("ï", "i").replace("î","i");
 		tempStr = tempStr.replace(",",".");
-		//System.out.println("La reponse : " + reponse + " Est la rep dans BD : " + strReponse);
+		
+		
+		char[] tampon = tempStr.toCharArray();
+		boolean hasLetters = false;
+		boolean hasSpaces = false;
+		int tamponLength = tampon.length;
+		
+		
+		for(int i = 0; i < tamponLength; i++)
+		{
+			if(Character.isLetter(tampon[i]))
+				hasLetters = true;
+			if(Character.isSpaceChar(tampon[i]))
+				hasSpaces = true;
+		}
+		/*
+		for(int i = 0; i < tamponLength; i++)
+		{
+			switch(tampon[i])
+			{
+			 case 'ç' :
+				tampon[i] = 'c';
+				break;
+			 case 'ù' :
+				tampon[i] = 'u';
+				break;
+			 case 'ô' :
+				tampon[i] = 'o';
+				break;
+			 case 'ò':
+				tampon[i] = 'c';
+				break;
+			 case 'û':
+				tampon[i] = 'u';
+				break;
+			 case 'é':
+				tampon[i] = 'e';
+				break;
+			 case 'à':
+				tampon[i] = 'a';
+				break;
+			 case 'ï':
+				tampon[i] = 'i';
+				break;
+			 case ',':
+				tampon[i] = '.';
+				break;
+			 case 'è':
+				tampon[i] = 'e';
+				break;
+			 case 'ê':
+				tampon[i] = 'e';
+				break;
+			 case 'â':
+				tampon[i] = 'a';
+				break;
+			 case 'î':
+				tampon[i] = 'i';
+				break;
+						 
+			}// end switch
+						
+		}*/
+		
+			
+		System.out.println("La reponse : " + reponseCorrect + " Est la rep dans : " + tempStr);
+		//tempStr = tampon.toString();
+		
+		String tempBuffer = "";
+		if(!hasLetters && hasSpaces)
+		{   
+			//tempStr.replace(" ", "*");
+     		StringTokenizer st = new StringTokenizer(tempStr , " " , false);
+		    while (st.hasMoreElements()) tempBuffer += st.nextElement();
+            tempStr = tempBuffer;		
+		}
+		
+		
+		
+		System.out.println("La reponse : " + reponseCorrect + " Est la rep dans : " + tempStr);		
 		return reponseCorrect.equals(tempStr);
 	}
 		 

@@ -9,6 +9,7 @@ package ServeurJeu.Temps;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.TimerTask;
 
 /**
  * @author Marc
@@ -16,7 +17,7 @@ import java.util.Iterator;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class Minuterie extends Tache 
+public class Minuterie extends TimerTask 
 {
 	private int intTemps;
 	private int intStep;

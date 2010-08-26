@@ -1,11 +1,12 @@
 package ServeurJeu.Monitoring;
 
-import ServeurJeu.Temps.Tache;
+import java.util.TimerTask;
 
-public class TacheLogMoniteur extends Tache 
+
+public class TacheLogMoniteur extends TimerTask 
 {
 
-	@Override
+	
 	public void run() 
 	{
 		Moniteur.obtenirInstance().log();

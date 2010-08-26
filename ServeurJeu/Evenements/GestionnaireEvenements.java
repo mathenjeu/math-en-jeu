@@ -1,6 +1,6 @@
 package ServeurJeu.Evenements;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * @author Jean-François Brind'Amour
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class GestionnaireEvenements implements Runnable
 {
 	// Déclaration d'une liste d'événements
-	private ArrayList<Evenement> lstEvenements;
+	private LinkedList<Evenement> lstEvenements;
 	
 	// Cette variable permet de savoir s'il faut arrêter le thread ou non
 	private boolean bolStopThread = false;
@@ -22,7 +22,7 @@ public class GestionnaireEvenements implements Runnable
 		super();
 		
 		// Créer une liste des événements
-		lstEvenements = new ArrayList<Evenement>();
+		lstEvenements = new LinkedList<Evenement>();
 	}
 	
 	/**
@@ -36,7 +36,7 @@ public class GestionnaireEvenements implements Runnable
 		{
 		    // Si la liste des événements contient au moins un événement, alors
 		    // on va traiter celui qui est au début du vecteur
-		    if (lstEvenements.size() > 0)
+		    if (!lstEvenements.isEmpty())
 		    {
 		        // Faire la référence vers l'événement se trouvant au début de 
 		        // la liste
@@ -53,9 +53,12 @@ public class GestionnaireEvenements implements Runnable
 			{
 				// Stopper le thread du gestionnaire d'événements pour
 				// laisser un moment de répit au CPU
-				Thread.sleep(50);
+				Thread.sleep(40);
 			}
-			catch (InterruptedException ie) {}
+			catch (InterruptedException ie) 
+			{
+				System.out.println("Error GestEvenements - " + ie.getStackTrace());
+			}
 		}
 	}
 	

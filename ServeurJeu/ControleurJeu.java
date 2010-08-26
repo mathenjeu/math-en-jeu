@@ -58,7 +58,7 @@ public class ControleurJeu
 	// Cette modeDebug est vraie, toute reponse des joueurs sera bonne, et
 	// on affichera dans la console des informations sur les communications
 	public  static boolean modeDebug;
-
+		
 	private static Logger objLogger = Logger.getLogger( ControleurJeu.class );
 
 	// Cet objet permet de gérer toutes les interactions avec la base de données

@@ -4,8 +4,8 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Brainiac;
+import ServeurJeu.Temps.BrainiacTask;
 
-import ClassesUtilitaires.BrainiacTask;
 
 /**
  * Used to treat the Braniac's applyed to users

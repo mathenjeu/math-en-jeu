@@ -1,8 +1,9 @@
 package ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables;
 
-import ClassesUtilitaires.BananaTask;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
+import ServeurJeu.Temps.BananaTask;
+
 import java.util.Timer;
 
 /**
