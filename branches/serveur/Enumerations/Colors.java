@@ -20,7 +20,9 @@ public enum Colors {
 	color9("0xFFCC00"),
 	color10("0x330000"),
 	color11("0x990066"),
-	color12("0xFF6600");
+	color12("0xFF6600"),
+	color13("0x660099"),
+	color14("0x0000FF");
 
 	 private String code;
 
