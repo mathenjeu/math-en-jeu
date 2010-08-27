@@ -4340,7 +4340,7 @@ public class ProtocoleJoueur implements Runnable
 	                	else
 	                	{
 		                	// Acheter l'objet
-                            Integer idProchainObjet = objTable.obtenirProchainIdObjet();
+                            Integer idProchainObjet = objTable.getAndIncrementNewId();
                             System.out.println("New - " + idProchainObjet);
 		                	ObjetUtilisable objObjetAcheter = ((Magasin)objObjet).acheterObjet(intIdObjet, idProchainObjet);
 		                	
