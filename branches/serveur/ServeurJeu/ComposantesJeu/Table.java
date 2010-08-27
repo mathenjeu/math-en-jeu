@@ -1908,6 +1908,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		return objProchainIdObjet;
 	}
 	
+	public Integer getAndIncrementNewId()
+	{
+		this.objProchainIdObjet++;
+		return this.objProchainIdObjet - 1;
+	}
+	
 	public void setObjProchainIdObjet(Integer objProchainIdObjet) {
 		this.objProchainIdObjet = objProchainIdObjet;
 	}
