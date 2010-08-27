@@ -518,80 +518,41 @@ class Personnage
 		var count:Number =  listeSurMagasin.length;
 		for(var j:Number = 0; j < count; j++)
 		{
-			if(listeSurMagasin[j].id = idRemove)
-			   listeSurMagasin.splice(j,1);
-			   
-		}
-		for(var j:Number = 0; j < count; j++)
-		{
-			trace(" control - " + listeSurMagasin[j].id);
+			trace(" control - " + j + " " + listeSurMagasin[j].id);
 			   			   
 		}
+		
+		
+		for(var j:Number = 0; j < count; j++)
+		{
+			if(listeSurMagasin[j].id == idRemove)
+			   listeSurMagasin[j].id = 0;
+			   
+		}
+		trace("Liste dans mag : " + listeSurMagasin.length);
+		
 	}
 	
 	function putNewShopObject(idPut:Number, objetType:String)
 	{
-		 var objMagasin = new Object();
-		 objMagasin.cout = 1;
-	     objMagasin.id = idPut;
-		 objMagasin.type = objetType;
+		// var objMagasinObjet = new Object();
+		// objMagasinObjet.cout = 1;
+	    // objMagasinObjet.id = idPut;
+		// objMagasinObjet.type = objetType;
 		 
-		 listeSurMagasin.push(objMagasin);
-	}
-	
-	////////////////////////////////////////////////////////////
-	// cette fonction transforme des donnees stockees dans un array
-	// dans un XMLNode.
-	// ca permet de garder en memoire les objets contenus dans un magasin,
-	// leur ID et leur cout
-	//
-	/*
-	function genererListeMagasinXML(lstObjMagasin:Array):Object
-	{
-		var objMagasin:Object = new Object();
-		var count:Number =  lstObjMagasin.length;
+		// listeSurMagasin.push(objMagasinObjet);
+		 
+		var count:Number =  listeSurMagasin.length;
 		for(var j:Number = 0; j < count; j++)
 		{
-			var objNoeudObjMagasin:XMLNode = lstObjMagasin[j];
-									
-			objMagasin["objet"+j] = new Object();
-			objMagasin["objet"+j].cout = objNoeudObjMagasin.attributes.cout;
-			objMagasin["objet"+j].id = objNoeudObjMagasin.attributes.id;
-			objMagasin["objet"+j].type = objNoeudObjMagasin.attributes.type;
-		
-			trace("id : " + objMagasin["objet"+j].id);
+			trace(" control put new - " + j + " " + listeSurMagasin[j].id);
+			if(listeSurMagasin[j].type == objetType)
+			   listeSurMagasin[j].id = idPut;
+			   			   
 		}
-		return objMagasin;
 	}
 	
-	function genererListeMagasinXML2(lstObjMagasin:Array, nouveauID:Number, vieuxID:Number):Object
-	{
-		var objMagasin:Object = new Object();
-		
-		//trace("newID : " + nouveauID);
-		//trace("vieuxID : " + vieuxID);
-		var count:Number = lstObjMagasin.length; 
-		for(var j:Number = 0; j < count; j++)
-		{
-			var objNoeudObjMagasin:XMLNode = lstObjMagasin[j];
-									
-			objMagasin["objet"+j] = new Object();
-			objMagasin["objet"+j].cout = objNoeudObjMagasin.attributes.cout;
-			objMagasin["objet"+j].type = objNoeudObjMagasin.attributes.type;
-			
-			if(vieuxID == objNoeudObjMagasin.attributes.id)
-			{
-				objMagasin["objet"+j].id = nouveauID;
-			}
-			else
-			{
-				objMagasin["objet"+j].id = objNoeudObjMagasin.attributes.id;
-			}
-		
-			//trace("id ds generer #2 : " + objMagasin["objet"+j].id);
-		}
-		return objMagasin;
-	}*/
+	
 	
 	
 	//////////////////////////////////////////////////////////////////////////////////////
