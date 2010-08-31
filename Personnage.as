@@ -512,27 +512,29 @@ class Personnage
 	}
 
     ////////////////////////////////////////////////////////////
-	// this function remove the object from liste in Shop
+	// When buy an object this function put the 0 for the id of the object 
+	// in liste in Shop - in this case it became unvalid object - it is selled
+	//
+	
 	function removeShopObject(idRemove:Number)
 	{		
 		var count:Number =  listeSurMagasin.length;
-		for(var j:Number = 0; j < count; j++)
-		{
-			trace(" control - " + j + " " + listeSurMagasin[j].id);
-			   			   
-		}
-		
-		
+				
 		for(var j:Number = 0; j < count; j++)
 		{
 			if(listeSurMagasin[j].id == idRemove)
 			   listeSurMagasin[j].id = 0;
 			   
 		}
-		trace("Liste dans mag : " + listeSurMagasin.length);
+		//trace("Liste dans mag : " + listeSurMagasin.length);
 		
 	}
 	
+	////////////////////////////////////////////////////////////
+	// After buy an object the server sent the new id for the same object 
+	// in the shop - the object became valid - the next object of the same 
+	// type to sell to player 
+	//
 	function putNewShopObject(idPut:Number, objetType:String)
 	{
 		// var objMagasinObjet = new Object();
@@ -545,7 +547,7 @@ class Personnage
 		var count:Number =  listeSurMagasin.length;
 		for(var j:Number = 0; j < count; j++)
 		{
-			trace(" control put new - " + j + " " + listeSurMagasin[j].id);
+			//trace(" control put new - " + j + " " + listeSurMagasin[j].id);
 			if(listeSurMagasin[j].type == objetType)
 			   listeSurMagasin[j].id = idPut;
 			   			   
