@@ -13,20 +13,15 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
  * after the needed amount of time (Seconds)
  * (more move possibility and softer questions)
  *
- * last change 10 March 2010
+ * last change 10 September 2010
  */
 
-public class BrainiacTask extends TimerTask {
+public class BrainiacHumainTask extends TimerTask {
 
 	private JoueurHumain player;
-	private JoueurVirtuel vplayer;
-	
-	public BrainiacTask(JoueurHumain player){
+		
+	public BrainiacHumainTask(JoueurHumain player){
 		this.player = player;
-	}
-	
-	public BrainiacTask(JoueurVirtuel vplayer){
-		this.vplayer = vplayer;
 	}
 	
 	// override abstract run methode 
@@ -38,12 +33,6 @@ public class BrainiacTask extends TimerTask {
 	    		player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() - 1);
 	    		//System.out.println("BraniacTask humain!!!!");
 	    	
-	    }else{
-	    	
-	    	vplayer.getBrainiacState().setInBrainiac(false);
-	    	//System.out.println("BraniacTask virtuel!!!!");
-	    }
-	      
-	  
+	    }  
 	}// end run
 }

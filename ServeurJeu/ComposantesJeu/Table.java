@@ -173,7 +173,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 
 		// Faire la référence vers le gestionnaire d'événements et le 
 		// gestionnaire de base de données
-		objGestionnaireEvenements = new GestionnaireEvenements();//objControleurJeu.obtenirGestionnaireEvenements();//new GestionnaireEvenements();
+		objGestionnaireEvenements = new GestionnaireEvenements();
 		objGestionnaireBD = salleParente.getObjControleurJeu().obtenirGestionnaireBD();
 		
 		// Garder en mémoire la référence vers la salle parente, le numéro de 
@@ -952,7 +952,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	    {
     	    for (int i = 0; i < lstJoueursVirtuels.size(); i++)
     	    {
-                Thread threadJoueurVirtuel = new Thread((JoueurVirtuel) lstJoueursVirtuels.get(i));
+                Thread threadJoueurVirtuel = new Thread((JoueurVirtuel) lstJoueursVirtuels.get(i), "Virtuel");
                 threadJoueurVirtuel.start();
             }
                  
@@ -1908,7 +1908,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		return objProchainIdObjet;
 	}
 	
-	public Integer getAndIncrementNewId()
+	/**
+	 * Used to return the current valid id for the objects in 
+	 * Magasins(Shop) and automaticaly icrement to the new value
+	 */
+	public Integer getAndIncrementNewIdObject()
 	{
 		this.objProchainIdObjet++;
 		return this.objProchainIdObjet - 1;

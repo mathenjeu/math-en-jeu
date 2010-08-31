@@ -12,11 +12,11 @@ import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
+import ServeurJeu.ComposantesJeu.Joueurs.HumainPlayerBrainiacState;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
-import ServeurJeu.ComposantesJeu.Joueurs.PlayerBananaState;
-import ServeurJeu.ComposantesJeu.Joueurs.PlayerBrainiacState;
+import ServeurJeu.ComposantesJeu.Joueurs.HumainPlayerBananaState;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
@@ -77,12 +77,12 @@ public class InformationPartie
         
     // object that describe and manipulate 
     // the Banana state of the player
-    private final PlayerBananaState bananaState;
+    private final HumainPlayerBananaState bananaState;
     
     
     // object that describe and manipulate 
     // the Braniac state of the player
-    private final PlayerBrainiacState brainiacState;
+    private final HumainPlayerBrainiacState brainiacState;
         
 	// to not get twice bonus
     // used in course ou tournament types of game
@@ -106,6 +106,12 @@ public class InformationPartie
 	// used to count how many times the QuestionsBox is filled
 	// if is filled after 
 	private int countFillBox;
+	
+	// used to calculate the statistics on the answers
+	private int goodAnswersStats;
+	
+	private int countQuestions;
+	private int countGoodAnswers;
 	 
     
 	/**
@@ -162,10 +168,10 @@ public class InformationPartie
 			clothesColor = "0";
 									
 			// Brainiac state
-			this.brainiacState = new PlayerBrainiacState(joueur);
+			this.brainiacState = new HumainPlayerBrainiacState(joueur);
 			
 			// Banana state
-			this.bananaState = new PlayerBananaState(joueur);
+			this.bananaState = new HumainPlayerBananaState(joueur);
 	        
 			String language = joueur.obtenirProtocoleJoueur().langue;
             setObjBoiteQuestions(new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language)));
@@ -771,6 +777,10 @@ public class InformationPartie
                     {
                         bolReponseEstBonne = Question.reponseEstValide(reponse,objQuestion.getStringAnswer());
                     }		    
+		
+              // to have statistics 
+              if(bolReponseEstBonne) 
+		    	 objPartieCourante.incrementGoodAnswers();
 		}
 		else
 		{
@@ -1027,6 +1037,8 @@ public class InformationPartie
 				//************************************  end bonus
 			}
 			
+			
+			
 			// Créer l'objet de retour
 			objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, intNouveauPointage, intNouvelArgent, bonus);
 			objRetour.definirObjetRamasse(objObjetRamasse);
@@ -1247,7 +1259,7 @@ public class InformationPartie
 	/**
 	 * @return the bananaState
 	 */
-	 public PlayerBananaState getBananaState() {
+	 public HumainPlayerBananaState getBananaState() {
 		 return bananaState;
 	 }
 
@@ -1302,9 +1314,42 @@ public class InformationPartie
 	 /**
 	  * @return the brainiacState
 	  */
-	 public PlayerBrainiacState getBrainiacState() {
+	 public HumainPlayerBrainiacState getBrainiacState() {
 		 return brainiacState;
 	 }
 
+
+
+	/**
+	 * @param goodAnswersStats the goodAnswersStats to set
+	 */
+	public void setGoodAnswersStats(int goodAnswersStats) {
+		this.goodAnswersStats = goodAnswersStats;
+	}
+
+
+
+	/**
+	 * @return the goodAnswersStats
+	 */
+	public int getGoodAnswersStats() {
+		return goodAnswersStats;
+	}
+
+	public void incrementQuestions() {
+		this.countQuestions++;
+	}
+	
+	public void incrementGoodAnswers() {
+		this.countGoodAnswers++;
+	}
+	
+	public int getCountQuestions() {
+		return countQuestions;
+	}
+
+	public int getCountGoodAnswers() {
+		return countGoodAnswers;
+	}
 
 } // end class

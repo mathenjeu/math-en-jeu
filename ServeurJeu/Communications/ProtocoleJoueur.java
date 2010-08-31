@@ -203,6 +203,7 @@ public class ProtocoleJoueur implements Runnable
 
 			while (bolStopThread == false)
 			{
+				Thread.sleep(50);
 				// Déclaration d'une variable qui va servir de marqueur 
 				// pour savoir oè on en est rendu dans la lecture
 				int intMarqueur = 0;
@@ -2289,6 +2290,8 @@ public class ProtocoleJoueur implements Runnable
 
 							//collect players questions for DB
 							collectPlayerAnswers(objQuestionAPoser);
+							// for statistics
+							objJoueurHumain.obtenirPartieCourante().incrementQuestions();
 
 							// Ajouter le noeud question au noeud paramètre
 							objNoeudParametreQuestion.appendChild(objNoeudQuestion);
@@ -4340,7 +4343,7 @@ public class ProtocoleJoueur implements Runnable
 	                	else
 	                	{
 		                	// Acheter l'objet
-                            Integer idProchainObjet = objTable.getAndIncrementNewId();
+                            Integer idProchainObjet = objTable.getAndIncrementNewIdObject();
                             System.out.println("New - " + idProchainObjet);
 		                	ObjetUtilisable objObjetAcheter = ((Magasin)objObjet).acheterObjet(intIdObjet, idProchainObjet);
 		                	

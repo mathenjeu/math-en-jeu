@@ -1,10 +1,7 @@
-/**
- * 
- */
 package ServeurJeu.ComposantesJeu.Joueurs;
 
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Brainiac;
-import ServeurJeu.Temps.BrainiacTask;
+import ServeurJeu.Temps.BrainiacVirtuelTask;
 
 
 /**
@@ -18,10 +15,10 @@ import ServeurJeu.Temps.BrainiacTask;
  * @author Oloieri Lilian
  * date 10 March 2010
  */
-public class PlayerBrainiacState {
+public class VirtualPlayerBrainiacState {
 	
 	// timertask actually applayed to player
-	private BrainiacTask bTask;
+	private BrainiacVirtuelTask bTask;
 	
 	// time to end of the actual braniac
 	private long taskDate;
@@ -29,20 +26,13 @@ public class PlayerBrainiacState {
 	// is in Braniac our player?
 	private boolean isInBrainiac;
 	
-	// is the state to one of them
-	private JoueurHumain player;
+	//our player
 	private JoueurVirtuel vplayer;
 	
 	private static long brainTime = 90000;
 
 	// constructor - in the first time we are not in the Braniac
-	public PlayerBrainiacState(JoueurHumain player) {
-		super();
-		//this.setInBrainiac(false);
-		this.player = player;
-	}
-	
-	public PlayerBrainiacState(JoueurVirtuel vplayer) {
+	public VirtualPlayerBrainiacState(JoueurVirtuel vplayer) {
 		super();
 		//this.setInBrainiac(false);
 		this.vplayer = vplayer;
@@ -50,11 +40,11 @@ public class PlayerBrainiacState {
 
 
 	// setters and getters 
-	public void setBTask(BrainiacTask bTask) {
+	public void setBTask(BrainiacVirtuelTask bTask) {
 		this.bTask = bTask;
 	}
 
-	public BrainiacTask getBTask() {
+	public BrainiacVirtuelTask getBTask() {
 		return bTask;
 	}
 
@@ -81,24 +71,7 @@ public class PlayerBrainiacState {
 	 */
 	public void putTheOneBrainiac()
 	{
-		if(player != null){
-			if(this.isInBrainiac == false){
-				
-				this.isInBrainiac = true;
-			    this.bTask = Brainiac.utiliserBrainiac(player, brainTime);
-			    this.taskDate = System.currentTimeMillis() + brainTime;
-			}else
-			{
-				this.bTask.cancel();
-				long tempDate = this.taskDate  + brainTime;
-				this.bTask = Brainiac.utiliserBrainiac(player, tempDate);
-				this.taskDate = tempDate;
-				//System.out.println("BraniacTask !!!! " + tempDate + " " + " " + bTask);
-				
-								
-			}	
-		}
-		else if(vplayer != null){
+		 if(vplayer != null){
 
 			if(this.isInBrainiac == false){
 

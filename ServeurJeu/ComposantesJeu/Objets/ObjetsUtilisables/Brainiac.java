@@ -3,7 +3,8 @@ package ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables;
 import java.util.Timer;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
-import ServeurJeu.Temps.BrainiacTask;
+import ServeurJeu.Temps.BrainiacHumainTask;
+import ServeurJeu.Temps.BrainiacVirtuelTask;
 
 /**
  * @author Oloieri Lilian
@@ -42,11 +43,11 @@ public class Brainiac extends ObjetUtilisable {
 		super(id, estVisible, UID_OU_BRAINIAC, PRIX, EST_LIMITE, PEUT_ETRE_ARME, TYPE_OBJET);
 	}
 
-	public static BrainiacTask utiliserBrainiac(JoueurHumain player, long delay)
+	public static BrainiacHumainTask utiliserBrainiac(JoueurHumain player, long delay)
 	{
 		// player under Braniac
 		// Create TimerTask and Timer.
-		BrainiacTask bTask = new BrainiacTask(player);
+		BrainiacHumainTask bTask = new BrainiacHumainTask(player);
 		Timer bTimer = new Timer();
 					
 		// effect of Braniac - the rest in the BraniacState
@@ -61,11 +62,11 @@ public class Brainiac extends ObjetUtilisable {
 	
 	
 	
-	public static BrainiacTask utiliserBrainiac(JoueurVirtuel player, long delay)
+	public static BrainiacVirtuelTask utiliserBrainiac(JoueurVirtuel player, long delay)
 	{		
 		
 		// Create TimerTask and Timer.
-		BrainiacTask bTask = new BrainiacTask(player);
+		BrainiacVirtuelTask bTask = new BrainiacVirtuelTask(player);
 		Timer bTimer = new Timer();
 		
 		player.getBrainiacState().setInBrainiac(true);

@@ -30,12 +30,20 @@ public class GestionnaireTemps extends Timer
 		this.purge();
 	}
 	
-	public void putNewTask( BananaTask t, int delay)
+	public void putNewTask( BananaHumainTask t, int delay)
+	{
+		this.schedule(t, delay);
+	}
+	public void putNewTask( BananaVirtualTask t, int delay)
 	{
 		this.schedule(t, delay);
 	}
 	
-	public void putNewTask( BrainiacTask t, int delay)
+	public void putNewTask( BrainiacHumainTask t, int delay)
+	{
+		this.schedule(t, delay);
+	}
+	public void putNewTask( BrainiacVirtuelTask t, int delay)
 	{
 		this.schedule(t, delay);
 	}

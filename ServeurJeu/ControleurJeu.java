@@ -169,7 +169,7 @@ public class ControleurJeu
 		objGestionnaireTemps.ajouterTache( objTacheSynchroniser, intStepSynchro );
 		
         // Créer un thread pour le GestionnaireEvenements
-		Thread threadEvenements = new Thread(objGestionnaireEvenements);
+		Thread threadEvenements = new Thread(objGestionnaireEvenements, "GestEvenem - Controleur");
 		
 		// Démarrer le thread du gestionnaire d'événements
 		threadEvenements.start();
@@ -192,7 +192,7 @@ public class ControleurJeu
 		
 		objSpyDB = new SpyRooms(this, 50000); 
 		//Start spy thread's
-		Thread threadSpy = new Thread(objSpyDB);
+		Thread threadSpy = new Thread(objSpyDB, "SpyRooms");
 		threadSpy.start();
 		
 		

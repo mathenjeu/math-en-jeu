@@ -2,7 +2,8 @@ package ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables;
 
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
-import ServeurJeu.Temps.BananaTask;
+import ServeurJeu.Temps.BananaHumainTask;
+import ServeurJeu.Temps.BananaVirtualTask;
 
 import java.util.Timer;
 
@@ -44,10 +45,10 @@ public class Banane extends ObjetUtilisable
 		super(id, estVisible, UID_OU_BANANE, PRIX, EST_LIMITE, PEUT_ETRE_ARME, TYPE_OBJET);
 	}
 
-	public static BananaTask utiliserBanane(JoueurHumain player, long delay)
+	public static BananaHumainTask utiliserBanane(JoueurHumain player, long delay)
 	{
 			// Create TimerTask and Timer.
-			BananaTask bTask = new BananaTask(player);
+			BananaHumainTask bTask = new BananaHumainTask(player);
 			Timer bTimer = new Timer();
 			//bkTimer.cancel();
 			
@@ -62,11 +63,11 @@ public class Banane extends ObjetUtilisable
 	}
 	
 	// if VitualPlayer use the Banana
-	public static BananaTask utiliserBanane(JoueurVirtuel player, long delay)
+	public static BananaVirtualTask utiliserBanane(JoueurVirtuel player, long delay)
 	{
 		
 			// Create TimerTask and Timer.
-			BananaTask bTask = new BananaTask(player);
+			BananaVirtualTask bTask = new BananaVirtualTask(player);
 			Timer bTimer = new Timer();
 					
 			// effects of Banana
