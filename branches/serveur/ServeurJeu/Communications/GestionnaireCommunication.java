@@ -78,7 +78,7 @@ public class GestionnaireCommunication
 		objVerificateurConnexions = new VerificateurConnexions(this);
 			
 		// Créer un thread pour le vérificateur de connexions
-		Thread threadVerificateur = new Thread(objVerificateurConnexions);
+		Thread threadVerificateur = new Thread(objVerificateurConnexions, "objVerificateurConnexions");
 		
 		// Démarrer le thread du vérificateur
 		threadVerificateur.start();
@@ -121,7 +121,7 @@ public class GestionnaireCommunication
 																objSocketServeur.accept());
 				
 				// Créer un thread pour le joueur demandant la connexion
-				Thread threadJoueur = new Thread(objJoueur);
+				Thread threadJoueur = new Thread(objJoueur, "JoueurN" );
 				
 				// Démarrer le thread du joueur courant
 				threadJoueur.start();

@@ -1,7 +1,7 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Banane;
-import ServeurJeu.Temps.BananaTask;
+import ServeurJeu.Temps.BananaHumainTask;
 
 /**
  * Used to treat the Banana's applied to users
@@ -15,10 +15,10 @@ import ServeurJeu.Temps.BananaTask;
  * date 10 March 2010
  */
 
-public class PlayerBananaState {
+public class HumainPlayerBananaState {
 	
 	// timertask actually applied to player
-	private BananaTask bTask;
+	private BananaHumainTask bTask;
 	
 	// time to end of the actual banana
 	private long taskDate;
@@ -28,30 +28,22 @@ public class PlayerBananaState {
 	
 	// is the state to one of them
 	private JoueurHumain player;
-	private JoueurVirtuel vplayer;
-	
+		
 	private static long bananaTime = 90000;
 
 	// constructor - in the first time we are not in the Banana
-	public PlayerBananaState(JoueurHumain player) {
+	public HumainPlayerBananaState(JoueurHumain player) {
 		//super();
 		//this.setisUnderBananaEffects(false);
 		this.player = player;
 	}
 	
-	public PlayerBananaState(JoueurVirtuel vplayer) {
-		//super();
-		//this.setisUnderBananaEffects(false);
-		this.vplayer = vplayer;
-	}
-
-
 	// setters and getters 
-	public void setBTask(BananaTask bTask) {
+	public void setBTask(BananaHumainTask bTask) {
 		this.bTask = bTask;
 	}
 
-	public BananaTask getBTask() {
+	public BananaHumainTask getBTask() {
 		return bTask;
 	}
 
@@ -102,23 +94,7 @@ public class PlayerBananaState {
 								
 			}	
 		}
-		else if(vplayer != null){
-
-			if(this.isUnderBananaEffects == false){
-
-				this.isUnderBananaEffects = true;
-				this.bTask = Banane.utiliserBanane(vplayer, bananaTime);
-				this.taskDate = System.currentTimeMillis() + bananaTime;
-			}else
-			{
-				this.bTask.cancel();
-				long tempDate = this.taskDate  + bananaTime;
-				this.bTask = Banane.utiliserBanane(vplayer, tempDate);
-				this.taskDate = tempDate;
-				//System.out.println("BraniacTask !!!! " + tempDate + " " + " " + bTask);
-
-			}	
-		}	
+		
 	}// end of method
 	
 

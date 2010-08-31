@@ -727,6 +727,9 @@ public class GestionnaireBD
 				
 		statistics = statistics + "/-/" + joueur.obtenirProtocoleJoueur().getQuestionsAnswers();
 		
+		float percents = (float)(joueur.obtenirPartieCourante().getCountGoodAnswers()  * 100) / joueur.obtenirPartieCourante().getCountQuestions();
+		
+		System.out.println("percents : " + percents);
 		
 		try
 		{
@@ -737,8 +740,8 @@ public class GestionnaireBD
 				room_id = joueur.obtenirSalleCourante().getRoomID(); 
 								
 				// Création du SQL pour l'ajout
-				String strSQL = "INSERT INTO game_user(game_id, user_id, score, has_won, questions_answers, room_id) VALUES " +
-				    "(" + clePartie + "," + cleJoueur + "," + pointage + "," + intGagner + ",'" + statistics + "'," + room_id + ");"; 
+				String strSQL = "INSERT INTO game_user(game_id, user_id, score, has_won, questions_answers, room_id, stats) VALUES " +
+				    "(" + clePartie + "," + cleJoueur + "," + pointage + "," + intGagner + ",'" + statistics + "'," + room_id + "," + percents + ");"; 
 				// Ajouter l'information pour ce joueur
 	            requete.executeUpdate(strSQL);
 			}

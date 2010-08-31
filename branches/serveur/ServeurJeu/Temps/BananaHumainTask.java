@@ -2,7 +2,6 @@ package ServeurJeu.Temps;
 
 import java.util.TimerTask;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 
 /**
  * 
@@ -12,22 +11,18 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
  * after the amount of time declared in Banane (Seconds)
  * (reduced move possibility and harder questions)
  * 
- * last change March 2010
+ * last change September 2010 Oloieri Lilian
  *
  */
 
-public class BananaTask extends TimerTask {
+public class BananaHumainTask extends TimerTask {
 
 	private JoueurHumain player;
-	private JoueurVirtuel vplayer;
-	
-	public BananaTask(JoueurHumain player){
+		
+	public BananaHumainTask(JoueurHumain player){
 		this.player = player;
 	}
 	
-	public BananaTask(JoueurVirtuel vplayer){
-		this.vplayer = vplayer;
-	}
 	
 	// override abstract run methode 
 	public void run() {
@@ -35,10 +30,6 @@ public class BananaTask extends TimerTask {
 	    	player.obtenirPartieCourante().getBananaState().setisUnderBananaEffects(false);
 	    	player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() + 2);
 	    	//System.out.println("BananaTask humain!!!!");
-	    }else{
-	    	
-	    	vplayer.getBananaState().setisUnderBananaEffects(false);
-	    	//System.out.println("BananaTask virtuel!!!!");
 	    }
 	      
 	}// end run

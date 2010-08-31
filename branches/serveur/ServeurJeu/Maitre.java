@@ -42,7 +42,7 @@ public class Maitre implements Runnable
 		{
 			System.out.println( "demarrer" );
 			Maitre maitre = new Maitre();
-			Thread thread = new Thread( maitre );
+			Thread thread = new Thread( maitre, "Maitre" );
 			thread.start();
 			maitre.demarrer();
 		}

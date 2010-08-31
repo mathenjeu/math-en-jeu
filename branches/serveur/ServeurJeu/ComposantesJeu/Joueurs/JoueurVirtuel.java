@@ -140,11 +140,11 @@ public class JoueurVirtuel extends Joueur implements Runnable {
     
     // object that describe and manipulate 
     // the Braniac state of the player
-    private PlayerBrainiacState brainiacState;
+    private VirtualPlayerBrainiacState brainiacState;
     
     // object that describe and manipulate 
     // the Banana state of the player
-    private PlayerBananaState bananaState;
+    private VirtualPlayerBananaState bananaState;
     
     // player with max points to use Banana
     private String playerToUseBanana;
@@ -187,10 +187,10 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		strNom = nom;
 		
 		// Banana state
-		this.bananaState = new PlayerBananaState(this);
+		this.bananaState = new VirtualPlayerBananaState(this);
 		
 		// Braniac state
-		this.brainiacState = new PlayerBrainiacState(this); 
+		this.brainiacState = new VirtualPlayerBrainiacState(this); 
 		
 		// Cette variable sera utilisée dans la thread
 		//objPositionFinaleVisee = null;
@@ -619,7 +619,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	/**
 	 * @return the braniacState
 	 */
-	public PlayerBrainiacState getBrainiacState() {
+	public VirtualPlayerBrainiacState getBrainiacState() {
 		return brainiacState;
 	}
 
@@ -627,7 +627,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	/**
 	 * @param braniacState the braniacState to set
 	 */
-	public void setBraniacState(PlayerBrainiacState braniacState) {
+	public void setBraniacState(VirtualPlayerBrainiacState braniacState) {
 		this.brainiacState = braniacState;
 	}
 
@@ -635,7 +635,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	/**
 	 * @return the bananaState
 	 */
-	public PlayerBananaState getBananaState() {
+	public VirtualPlayerBananaState getBananaState() {
 		return bananaState;
 	}
 
@@ -643,7 +643,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	/**
 	 * @param bananaState the bananaState to set
 	 */
-	public void setBananaState(PlayerBananaState bananaState) {
+	public void setBananaState(VirtualPlayerBananaState bananaState) {
 		this.bananaState = bananaState;
 	}
 

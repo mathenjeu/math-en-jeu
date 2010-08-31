@@ -105,7 +105,7 @@ public class Salle
 		
 		// Faire la référence vers le gestionnaire d'événements et le 
 		// gestionnaire de base de données
-		objGestionnaireEvenements = controleurJeu.obtenirGestionnaireEvenements();//new GestionnaireEvenements();
+		objGestionnaireEvenements = new GestionnaireEvenements();
 		objGestionnaireBD = controleurJeu.obtenirGestionnaireBD();
 		
 		// Garder en mémoire le nom de la salle, le nom d'utilisateur du 
@@ -134,10 +134,10 @@ public class Salle
 		objControleurJeu = controleurJeu;
 		
 		// Créer un thread pour le GestionnaireEvenements
-		//Thread threadEvenements = new Thread(objGestionnaireEvenements);
+		Thread threadEvenements = new Thread(objGestionnaireEvenements, "Salle");
 		
 		// Démarrer le thread du gestionnaire d'événements
-		//threadEvenements.start();
+		threadEvenements.start();
 			
 	}
 
