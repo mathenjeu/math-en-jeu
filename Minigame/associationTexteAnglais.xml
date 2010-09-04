@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<Texte 
+	
+	consignes = "This game is simple. You must associate each word with it's definition. Simply drag the ball associated with a word, drop it near the good definition and click 'Validate' when you think your answers are good. Be careful, you only have 30 seconds to do this."
+	
+	boutonJouer = "Start"
+	instruction = "I  N  S  T  R  U  C  T  I  O  N  S"
+	temps = "Time"
+	boutonValider = "Validate"
+	boutonTerminer = "Quit"
+  bonneReponse = "Well done! You earned 10 pts."
+  mauvaiseReponse = "Wrong guess! Here is the correct answer:"
+  tempsEcoule = "Time over! Here is the correct answer:"
+	
+>
+</Texte> 
