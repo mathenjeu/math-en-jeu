@@ -23,14 +23,10 @@ btn_c._visible = false;
 btn_d._visible = false;
 btn_e._visible = false;
 
-livre._visible = false;
-boule._visible = false;
-
 btn_vrai._visible = false;
 btn_faux._visible = false;
 //_root.vrai_txt._visible = false;
 //_root.faux_txt._visible = false;
-
 
 rep._visible = false;
 btn_ok._visible = false;
@@ -151,12 +147,10 @@ loadListener.complete = function(eventObject)
 			{
 				if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Livre")
 				{
-					livre._visible = true;
 					livreIndice =  _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangIDObjet(i);
 				}
 				else if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Boule")
 				{
-					boule._visible = true;
 					bouleIndice =  _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangIDObjet(i);
 				}
 			}
@@ -172,12 +166,10 @@ loadListener.complete = function(eventObject)
 			{
 				if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Livre")
 				{
-					livre._visible = true;
 					livreIndice =  _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangIDObjet(i);
 				}
 				else if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Boule")
 				{
-					boule._visible = true;
 					bouleIndice =  _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangIDObjet(i);
 				}
 			}
@@ -196,12 +188,10 @@ loadListener.complete = function(eventObject)
 			{
 				if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Livre")
 				{
-					livre._visible = true;
 					livreIndice =  _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangIDObjet(i);
 				}
 				else if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Boule")
 				{
-					boule._visible = true;
 					bouleIndice =  _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangIDObjet(i);
 				}
 			}
@@ -220,7 +210,6 @@ loadListener.complete = function(eventObject)
 			{
 				if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Boule")
 				{
-					boule._visible = true;
 					bouleIndice =  _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangIDObjet(i);
 				}
 			}
@@ -237,7 +226,6 @@ loadListener.complete = function(eventObject)
 			{
 				if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Boule")
 				{
-					boule._visible = true;
 					bouleIndice =  _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangIDObjet(i);
 				}
 			}
@@ -286,7 +274,7 @@ this.btnSendError.onPress = function(){
 	Key.removeListener(oUserKey);
 }
 
-
+/*
 livre.onPress = function()
 {
 	trace("utilisation du livre (ds mathemaquoi.GUI_question)\n");
@@ -309,7 +297,7 @@ boule.onPress = function()
 	
 	boule._visible = false;
 }
-
+*/
 monScroll.addEventListener("complete", loadListener);
 
 monScroll.contentPath = _level0.loader.contentHolder.url_question;
@@ -411,14 +399,13 @@ function enleverBoutons()
 	btn_d._visible = false;
 	btn_e._visible = false;
 	btn_ok._visible = false;
-	livre._visible = false;
-	boule._visible = false;
 	rep._visible = false;
 	btn_vrai._visible = false;
 	btn_faux._visible = false;
 	Key.removeListener(oUserKey);
 	Mouse.addListener(_level0.loader.contentHolder.mouseListener);
 	monScroll.contentPath = null;
+	_level0.loader.contentHolder.planche.obtenirPerso().setUsedBook(false);
 
 	//btnSendError._visible = false;
 }
