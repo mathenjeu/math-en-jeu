@@ -562,11 +562,10 @@ class GestionnaireEvenements
         trace("*********************************************\n");
     }
 	
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                  fonctions retour
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-   
+    ////////////////////////////////////////////////////////////////////////////////////
+    //                                  fonctions retour                             ///
+    ////////////////////////////////////////////////////////////////////////////////////
+    
     public function retourConnexion(objetEvenement:Object)
     {
     	// c'est la fonction qui va etre appellee lorsque le GestionnaireCommunication aura
@@ -1276,7 +1275,7 @@ class GestionnaireEvenements
 					  this.listeDesPersonnages[this.listeDesPersonnages.length -1].win = 0;
 					  //this.listeDesPersonnages[i].argent = 0;
 									
-					  trace("control demarrepartie " + objetEvenement.listePersonnageJoueurs[i].nom + " " + this.listeDesPersonnages[this.listeDesPersonnages.length -1].nom + " "  + this.listeDesPersonnages[this.listeDesPersonnages.length -1].id);
+					  trace("control demarrepartie " + this.listeDesPersonnages[this.listeDesPersonnages.length -1].clocolor + " " + this.listeDesPersonnages[this.listeDesPersonnages.length -1].nom + " "  + this.listeDesPersonnages[this.listeDesPersonnages.length -1].id);
 				   }
                 }// end for
 				
@@ -2564,10 +2563,10 @@ class GestionnaireEvenements
 			_level0.loader.contentHolder.txtChargementTables._visible = true;
 			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
 		}
-    	/*
-		for(var i:Number = 0; i < maxPlayersInTable; i++)
+    	
+		/*for(var i:Number = 0; i < maxPlayersInTable; i++)
         {
-			trace(i+"this.listeDesPersonnages[i].nom: "+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
+			trace(i + "this.listeDesPersonnages[i].nom: " + this.listeDesPersonnages[i].nom + " color : " + this.listeDesPersonnages[i].clocolor);
 	    }*/
 		
 		objetEvenement = null;
@@ -2768,9 +2767,11 @@ class GestionnaireEvenements
 					//trace("test color : " + this.listeDesPersonnages[j].clocolor);
 	                var idDessin:Number = calculatePicture(this.listeDesPersonnages[j].id);
 					var idPers:Number = calculateIDPers(this.listeDesPersonnages[j].id, idDessin);
-					this.listeDesPersonnages[i].idPers = idPers;
-					//var filterC:ColorMatrixFilter = 
-					
+					this.listeDesPersonnages[j].idPers = idPers;
+					var cloCol:String = this.listeDesPersonnages[j].clocolor;//objetEvenement.clothesColor;
+				    this.listeDesPersonnages[j].filterC = _level0.loader.contentHolder.objGestionnaireEvenements.colorMatrixPerso(cloCol, idDessin);
+				
+					trace(" evdempartie clocolor : " + this.listeDesPersonnages[j].filterC);
 					
 					// after we create the perso's
 					_level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin, this.listeDesPersonnages[j].role, this.listeDesPersonnages[j].clocolor);
@@ -3204,7 +3205,7 @@ class GestionnaireEvenements
 		{
     	  	this.bananaState = true;
 			trace("in the GE " + bananaState);
-			setBananaTimer(playerUnder);
+			
 			
 		   //if the player is in the minigame 
 		   if(ourPerso.getMinigameLoade())
@@ -3268,6 +3269,8 @@ class GestionnaireEvenements
 		   }//end else if
 		   		   
 		   _global.timerIntervalMessage = setInterval(this,"funcToCallMessage", 6000, playerThat);
+		   
+		   setBananaTimer(playerUnder);
 		   
 		}else if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte != this.nomUtilisateur)
 		{
@@ -3473,15 +3476,18 @@ class GestionnaireEvenements
 	
 	function funcToCallMessage(playerThat:String)
 	{
-		var twMove:Tween;
-        var guiBanane:MovieClip
-		guiBanane = _level0.loader.contentHolder.attachMovie("GUI_banane", "banane", 9998);
-		guiBanane._y = 200;
-        guiBanane._x = 275;
-		_level0.loader.contentHolder["banane"].nomCible = " ";
-	    _level0.loader.contentHolder["banane"].nomJoueurUtilisateur = playerThat;
-	    twMove = new Tween(guiBanane, "_alpha", Strong.easeOut, 40, 100, 1, true);
-		 clearInterval(_global.timerIntervalMessage);
+		if(_level0.loader.contentHolder.horlogeNum > 7)
+		{
+			var twMove:Tween;
+            var guiBanane:MovieClip
+		    guiBanane = _level0.loader.contentHolder.attachMovie("GUI_banane", "banane", 9998);
+		    guiBanane._y = 200;
+            guiBanane._x = 275;
+		    _level0.loader.contentHolder["banane"].nomCible = " ";
+	        _level0.loader.contentHolder["banane"].nomJoueurUtilisateur = playerThat;
+	        twMove = new Tween(guiBanane, "_alpha", Strong.easeOut, 40, 100, 1, true);
+		    clearInterval(_global.timerIntervalMessage);
+		}
 	}
     
 	function funcToRecallFeedback(tempsRested:Number):Void
@@ -3613,7 +3619,7 @@ class GestionnaireEvenements
         //background
         _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i].attachMovie("fondBleu_mc","fondBleu" + i, 20 + i, {_x:12, _y:0});
         // players face
-        _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i].attachMovie("faceHolder2","tete" + i, 40 + i, {_x:22, _y:7});
+        _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i].attachMovie("faceHolder2","tete" + i, 40 + i, {_x:20, _y:5});
         // players name
         _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i].createTextField("dtNamePlayer" + i, 60 + i, 30, -4, 55, 14);
       
