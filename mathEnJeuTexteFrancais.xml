@@ -19,7 +19,7 @@
 	  bananaCollectMess = "Vous avez ramassez une banane. Vous pouvez la lancer à un adversaire."
 	  
 	  objectMessageBoule = "Vous pouvez l'utiliser pour changer la question posée."
-	  objectMessageLivre = "Vous pouvez l'utiliser pour éliminer un mauvais choix de réponse."
+	  objectMessageLivre = "Vous pouvez l'utiliser pour éliminer un mauvais choix de réponse. Seulement un par question."
 	  objectMessagePiece = "  Vous pouvez l'échanger contre un   objet dans un    magasin."
 	  objectMessageBanane = "Vous pouvez lancer la banane à un adversaire. "
 	  objectMessageHelp = "Menu d'aide. Vous y trouverez des réponses à vos questions... "

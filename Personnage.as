@@ -54,10 +54,20 @@ class Personnage
 	private var brainiacRestedTime:Number;
 	private var bananaId:Number;
 	//private var bananaRestedTime:Number;
+	private var usedBook:Boolean;        // set in true if used one book in current question
 	
 	private var idClip:Number;           // number used to identify the movie used for perso - from 1 to 12
 	private var orient:String;
 	
+	function setUsedBook(bool:Boolean)
+	{
+		this.usedBook = bool;
+	}
+	
+	function getUsedBook():Boolean
+	{
+		return this.usedBook;
+	}
 	
 	function setBananaId(idNumber:Number)
 	{
@@ -218,6 +228,7 @@ class Personnage
 					{
 						if(_level0.loader.contentHolder.objGestionnaireEvenements.obtenirGestionnaireCommunication().obtenirEtatClient() != Etat.ATTENTE_REPONSE_QUESTION.no) return false;
 						if((_level0.loader.contentHolder.type_question != "MULTIPLE_CHOICE") && (_level0.loader.contentHolder.type_question != "MULTIPLE_CHOICE_3") && (_level0.loader.contentHolder.type_question != "MULTIPLE_CHOICE_5" )) return false;
+						if(_level0.loader.contentHolder.planche.obtenirPerso().getUsedBook()) return false;
 						return true;
 					}
 				case "Boule":
@@ -255,6 +266,8 @@ class Personnage
 					_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet(nomObj);
 				}
 				
+				if(nomObj == "Livre")
+				   _level0.loader.contentHolder.planche.obtenirPerso().setUsedBook(true);
 				
 				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._xscale = _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._yscale = 100;
 				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
@@ -820,8 +833,8 @@ class Personnage
 							case "ileTresor.swf":
 								minigame._x = 40;
 								minigame._y = -40;
-								minigame._width = 670;
-								minigame._height= 500;
+								minigame._width = 550;
+								minigame._height= 400;
 							break;
 							
 							case "balleAuMur2.swf":

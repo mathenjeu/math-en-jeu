@@ -17,7 +17,7 @@
 	  bananaCollectMess = "You found a banana. You can toss it to another player!"
 	  
 	  objectMessageBoule = " You can use this to swap your question."
-	  objectMessageLivre = "You can use this to remove one bad choice."
+	  objectMessageLivre = "You can use this to remove one bad choice. Only one by question."
 	  objectMessagePiece = " You can use coins to buy objects in the shop."
 	  objectMessageBanane = "You can toss it to a another player!"
 	  objectMessageHelp = "Help Menu. Here you can find info about the game..."
