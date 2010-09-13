@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config
+
+	language="fr"
+	gameType="mathEnJeu"
+
+	url_server="localhost"
+	port="6100"
+	
+	url_server="mejdev.mat.ulaval.ca"
+	port="8080"
+
+
+
+	url_server_tunneling1="mejdev.mat.ulaval.ca"
+	port_tunneling="80"
+
+  username4 = "testd"
+	password4 = "0123456789101112"
+
+	username ="demo-155"
+	password ="3437a2cf2af95fe8"
+	
+  usernamex ="demo-156"
+	passwordx ="3437a1682af95c81"
+	
+	username3 = "demo-158"
+	password3 = "3437aa3e2af95757"
+		
+	gamepath="mathemaQuoi_beta.swf"
+
+	masterTime="10"
+	masterFinalTime="15"
+	windowOption = "http://mathenjeu.mat.ulaval.ca/mathenjeu/flash/pop-up.php"
+	windowOption1 = "Close"
+>
+
+</config>
