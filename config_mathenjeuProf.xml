@@ -20,11 +20,14 @@
 	url_server_tunneling1="mejdev.mat.ulaval.ca"
 	port_tunneling="80"
 
-  username1 = "demo-155"
-	password1 = "3437a2cf2af95fe8"
+  username = "demo-155"
+	password = "3437a2cf2af95fe8"
 	
-	username ="demo-156"
-	password ="3437a1682af95c81"
+	username1 = "demo-157"
+	password1 = "3437af952af95aae"
+	
+	username1 ="demo-156"
+	password1 ="3437a1682af95c81"
 		
 	>
 
