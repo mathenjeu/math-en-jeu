@@ -50,13 +50,13 @@ public class Salle
 	
 	// Cet objet est une liste de numéros utilisés pour les tables (sert à 
 	// générer de nouvelles tables)
-	private HashSet<Integer> lstNoTables;
+	private final HashSet<Integer> lstNoTables;
 	
 	// Cet objet est une liste des joueurs qui sont présentement dans cette salle
-	private HashMap<String, JoueurHumain> lstJoueurs;
+	private final  HashMap<String, JoueurHumain> lstJoueurs;
 	
 	// Cet objet est une liste des tables qui sont présentement dans cette salle
-	private HashMap<Integer, Table> lstTables;
+	private final HashMap<Integer, Table> lstTables;
 		
 	// Date when room will be activated
 	private final Date beginDate;
@@ -853,6 +853,7 @@ public class Salle
 		return roomAllowedTypes;
 	}
 
+	
 	public void setRoomAllowedTypes(HashSet<String> roomAllowedTypes) {
 		this.roomAllowedTypes = roomAllowedTypes;
 	}

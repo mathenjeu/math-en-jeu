@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -30,17 +29,17 @@ import ServeurJeu.ControleurJeu;
 public class InformationPartie
 {
 	// Déclaration d'une référence vers le gestionnaire de bases de données
-	private final GestionnaireBD objGestionnaireBD;
+	private GestionnaireBD objGestionnaireBD;
 	
     // Déclaration d'une référence vers le gestionnaire d'evenements
-	private final GestionnaireEvenements objGestionnaireEv;
+	private GestionnaireEvenements objGestionnaireEv;
 	
 	// Déclaration d'une référence vers un joueur humain correspondant ˆ cet
 	// objet d'information de partie
-	private final JoueurHumain objJoueurHumain;
+	private JoueurHumain objJoueurHumain;
 	
 	// Déclaration d'une référence vers la table courante
-	private final Table objTable;
+	private Table objTable;
 	
     // Déclaration d'une variable qui va contenir le numéro Id du personnage 
 	private int intIdPersonnage;
@@ -61,7 +60,7 @@ public class InformationPartie
 	
 	// Déclaration d'une liste de questions qui ont été répondues 
 	// par le joueur
-	private ArrayList<Integer> lstQuestionsRepondues;
+	private final ArrayList<Integer> lstQuestionsRepondues;
 	
 	// Déclaration d'une variable qui va garder la question qui est 
 	// présentement posée au joueur. S'il n'y en n'a pas, alors il y a 
@@ -69,20 +68,20 @@ public class InformationPartie
 	private Question objQuestionCourante;
 	
 	// Déclaration d'une liste d'objets utilisables ramassés par le joueur
-	private HashMap<Integer, ObjetUtilisable> lstObjetsUtilisablesRamasses;
+	private final HashMap<Integer, ObjetUtilisable> lstObjetsUtilisablesRamasses;
         
     // Déclaration de la boîte de question personnelle au joueur possédant
     // cet objet
-    private BoiteQuestions objBoiteQuestions;
+    private final BoiteQuestions objBoiteQuestions;
         
     // object that describe and manipulate 
     // the Banana state of the player
-    private final HumainPlayerBananaState bananaState;
+    private HumainPlayerBananaState bananaState;
     
     
     // object that describe and manipulate 
     // the Braniac state of the player
-    private final HumainPlayerBrainiacState brainiacState;
+    private HumainPlayerBrainiacState brainiacState;
         
 	// to not get twice bonus
     // used in course ou tournament types of game
@@ -112,6 +111,10 @@ public class InformationPartie
 	
 	private int countQuestions;
 	private int countGoodAnswers;
+	
+	// relative time of the last change of players points
+	// used for finish statistics
+	private int pointsFinalTime;
 	 
     
 	/**
@@ -173,12 +176,26 @@ public class InformationPartie
 			// Banana state
 			this.bananaState = new HumainPlayerBananaState(joueur);
 	        
-			String language = joueur.obtenirProtocoleJoueur().langue;
-            setObjBoiteQuestions(new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language)));
+			String language = joueur.obtenirProtocoleJoueur().getLang();
+			this.objBoiteQuestions = new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language));
+            //setBoiteQuestions(new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language)));
+			
+			countQuestions = 0;
+			countGoodAnswers = 0;
                         
 	}// fin constructeur
 
-	
+	public void destruction()
+	{
+		this.brainiacState.destruction();
+		this.bananaState.destruction();
+		this.brainiacState = null;
+		this.bananaState = null;
+		objGestionnaireBD = null;
+		objGestionnaireEv = null;
+		objJoueurHumain = null;
+		objTable = null;
+	}
 	
 	/**
 	 * @return the tournamentBonus
@@ -1012,7 +1029,7 @@ public class InformationPartie
 		 					intNouveauPointage += bonus; 
 		 					// if all the humains is on the finish line we stop the game
 		 					if(table.isAllTheHumainsOnTheFinish((JoueurHumain)objJoueur))
-		 						 table.arreterPartie(((JoueurHumain)objJoueur).obtenirNomUtilisateur());
+		 					 table.arreterPartie(""); //to do - cleaner end of game!!!!
 		 				 }
 		 			 }
 		 			 else if (objJoueur instanceof JoueurVirtuel)
@@ -1062,6 +1079,7 @@ public class InformationPartie
 			{
 				((JoueurHumain)objJoueur).obtenirPartieCourante().definirPositionJoueur(objPositionDesiree);
 				((JoueurHumain)objJoueur).obtenirPartieCourante().definirPointage(intNouveauPointage);
+				((JoueurHumain)objJoueur).obtenirPartieCourante().setPointsFinalTime(table.obtenirTempsRestant());
 				((JoueurHumain)objJoueur).obtenirPartieCourante().definirArgent(intNouvelArgent);
 				((JoueurHumain)objJoueur).obtenirPartieCourante().setTournamentBonus(bonus);
 				
@@ -1072,6 +1090,7 @@ public class InformationPartie
 			{
 				((JoueurVirtuel)objJoueur).definirPositionJoueurVirtuel(objPositionDesiree);
 				((JoueurVirtuel)objJoueur).definirPointage(intNouveauPointage);
+				((JoueurVirtuel)objJoueur).setPointsFinalTime(table.obtenirTempsRestant());
                 ((JoueurVirtuel)objJoueur).definirArgent(intNouvelArgent);
 			}
 		}
@@ -1270,9 +1289,10 @@ public class InformationPartie
 		 return Math.abs(objPositionJoueur.x - objPoint.x) + Math.abs(objPositionJoueur.y - objPoint.y);
 	 }
 
+	 /*
 	 public void setObjBoiteQuestions(BoiteQuestions objBoiteQuestions) {
 		 this.objBoiteQuestions = objBoiteQuestions;
-	 }
+	 }*/
 
 	 public BoiteQuestions getObjBoiteQuestions() {
 		 return objBoiteQuestions;
@@ -1350,6 +1370,20 @@ public class InformationPartie
 
 	public int getCountGoodAnswers() {
 		return countGoodAnswers;
+	}
+
+	/**
+	 * @param pointsFinalTime the pointsFinalTime to set
+	 */
+	public void setPointsFinalTime(int pointsFinalTime) {
+		this.pointsFinalTime = pointsFinalTime;
+	}
+
+	/**
+	 * @return the pointsFinalTime
+	 */
+	public int getPointsFinalTime() {
+		return pointsFinalTime;
 	}
 
 } // end class

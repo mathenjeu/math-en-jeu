@@ -3,7 +3,6 @@ package ServeurJeu.Temps;
 import java.util.TimerTask;
 
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 
 /**
  * 

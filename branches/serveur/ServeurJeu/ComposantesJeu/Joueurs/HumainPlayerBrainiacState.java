@@ -90,5 +90,12 @@ public class HumainPlayerBrainiacState {
 		
 	}// end of method
 	
+	public void destruction()
+	{
+		if(this.bTask != null)
+		   this.bTask.cancel();
+		this.player = null;
+	}
+	
 
 }//end of class 

@@ -80,16 +80,16 @@ public class ControleurJeu
 	// Cet objet est une liste des joueurs qui sont connectés au serveur de jeu 
 	// (cela inclus les joueurs dans les salles ainsi que les joueurs jouant
 	// présentement dans des tables de jeu)
-	private HashMap<String, JoueurHumain> lstJoueursConnectes;
+	private final HashMap<String, JoueurHumain> lstJoueursConnectes;
 	
     
     // Déclaration d'une variable pour contenir une liste des joueurs
     // qui ont étés déconnectés et qui étaient en train de joueur une partie
-    private HashMap<String, JoueurHumain> lstJoueursDeconnectes;
+    private final HashMap<String, JoueurHumain> lstJoueursDeconnectes;
 	
 	// Cet objet est une liste des salles créées qui se trouvent dans le serveur
 	// de jeu. Chaque élément de cette liste a comme clé le id de la salle 
-	private HashMap<Integer, Salle> lstSalles;
+	private final HashMap<Integer, Salle> lstSalles;
 	
 	// Déclaration de l'objet Espion qui va inscrire des informationsà proppos
 	// du serveur en parallète
@@ -417,6 +417,7 @@ public class ControleurJeu
 			// (cela va avoir pour effet que le protocole du joueur va penser que
 			// le joueur n'est plus connecté au serveur de jeu)
 			joueur.obtenirProtocoleJoueur().definirJoueur(null);
+			
 
 			// Si on doit générer le numéro de commande de retour, alors
 			// on le génère, sinon on ne fait rien
@@ -862,6 +863,11 @@ public class ControleurJeu
     	{
     		lstJoueursDeconnectes.remove(nomUtilisateur.toLowerCase());
     	}
+    }
+    
+    public void clearDeconnectedPlayersList()
+    {
+    	lstJoueursDeconnectes.clear();
     }
     
     public HashMap<String, JoueurHumain> obtenirListeJoueursDeconnectes()

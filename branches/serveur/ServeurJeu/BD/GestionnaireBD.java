@@ -727,9 +727,12 @@ public class GestionnaireBD
 				
 		statistics = statistics + "/-/" + joueur.obtenirProtocoleJoueur().getQuestionsAnswers();
 		
-		float percents = (float)(joueur.obtenirPartieCourante().getCountGoodAnswers()  * 100) / joueur.obtenirPartieCourante().getCountQuestions();
+		double percents = 0.0;
+		if(joueur.obtenirPartieCourante().getCountQuestions() != 0)
+			percents = (double)(joueur.obtenirPartieCourante().getCountGoodAnswers()  * 100) / joueur.obtenirPartieCourante().getCountQuestions();
 		
-		System.out.println("percents : " + percents);
+		//System.out.println("percents1 : " + percents);
+		
 		
 		try
 		{
