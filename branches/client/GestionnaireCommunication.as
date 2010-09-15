@@ -968,7 +968,7 @@ class GestionnaireCommunication
 				    		for(var j:Number =0; j < taille; j++)
 				    		{
 					    		
-					    		objEvenement.statistiqueJoueur.push({nomUtilisateur:lstChildNodesStatistique[j].attributes.utilisateur, userRole:lstChildNodesStatistique[j].attributes.role, pointage:lstChildNodesStatistique[j].attributes.pointage});	
+					    		objEvenement.statistiqueJoueur.push({nomUtilisateur:lstChildNodesStatistique[j].attributes.utilisateur, userRole:lstChildNodesStatistique[j].attributes.role, pointage:lstChildNodesStatistique[j].attributes.pointage, position:lstChildNodesStatistique[j].attributes.position});	
 				    		}
 																
 					    break;
