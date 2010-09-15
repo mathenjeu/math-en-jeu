@@ -3025,19 +3025,20 @@ class GestionnaireEvenements
 		// jouersStarted est liste de nom de joueurs et leurs pointage et IDs 
 		//var jouersStarted:Array = new Array();
 		
-		for (i = 0; i < taille; i++) {
+		for(i = 0; i < taille; i++) {
 					
 			this.tabPodiumOrdonneID[i] = new Object();
 			this.tabPodiumOrdonneID[i].nomUtilisateur = objetEvenement.statistiqueJoueur[i].nomUtilisateur;
 			this.tabPodiumOrdonneID[i].pointage = objetEvenement.statistiqueJoueur[i].pointage;
 			this.tabPodiumOrdonneID[i].role = objetEvenement.statistiqueJoueur[i].userRole;
+			this.tabPodiumOrdonneID[i].position = objetEvenement.statistiqueJoueur[i].position;
 			this.tabPodiumOrdonneID[i].idessin = 0; 
 						
 		}// end for
 						
 		//this.tabPodiumOrdonneID.sortOn("pointage");
 		//sort the elements using a compare function
-		this.tabPodiumOrdonneID.sort(compareByPointsDescending);
+		this.tabPodiumOrdonneID.sort(compareByPositionAscending);
 		//this.tabPodiumOrdonneID.reverse();
 		
 		taille = this.tabPodiumOrdonneID.length;
@@ -3049,6 +3050,8 @@ class GestionnaireEvenements
 				if(listeDesPersonnages[i].nom == this.tabPodiumOrdonneID[k].nomUtilisateur){
 					this.tabPodiumOrdonneID[k].idessin = this.listeDesPersonnages[i].idessin;
 					this.tabPodiumOrdonneID[k].clocolor = this.listeDesPersonnages[i].clocolor;
+					this.tabPodiumOrdonneID[k].role = this.listeDesPersonnages[i].role;
+					trace(" OPPSS Patrie terminee : " + this.listeDesPersonnages[i].role);
 				}
 			}	
 		} // end find the picture
@@ -3112,6 +3115,7 @@ class GestionnaireEvenements
     	trace("*********************************************\n");
     }// end methode
 	
+	
 	// methode used as compare function to sort our players by their points
 	public function compareByPointsAscending(element1, element2)
 	{
@@ -3119,9 +3123,22 @@ class GestionnaireEvenements
 	}
 	
 	// methode used as compare function to sort our players by their points
+	public function compareByPositionAscending(element1, element2)
+	{
+		return element1.position - element2.position;
+	}
+	
+	
+	// methode used as compare function to sort our players by their points
 	public function compareByPointsDescending(element1, element2)
 	{
 		return element2.pointage - element1.pointage;
+	}
+	
+	// methode used as compare function to sort our players by their points
+	public function compareByPositionDescending(element1, element2)
+	{
+		return element2.position - element1.position;
 	}
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////
