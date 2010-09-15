@@ -10,7 +10,6 @@ import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,17 +31,17 @@ import ServeurJeu.Configuration.GestionnaireMessages;
  * changed Oloieri Lilian
  * last change March 2010
  */
-public class JoueurVirtuel extends Joueur implements Runnable {
+public class JoueurVirtuel extends Joueur implements Runnable{
 	
 	// Cette variable va contenir le nom du joueur virtuel
 	private final String strNom;
         
     // Déclaration d'une référence vers le gestionnaire d'evenements
-	private final GestionnaireEvenements objGestionnaireEv;
+	private GestionnaireEvenements objGestionnaireEv;
 	
 	// Déclaration d'une référence vers un objet contenant tous
 	// les paramètres des joueurs virtuels
-	private final ParametreIA objParametreIA;
+	private ParametreIA objParametreIA;
 	
 	// Cette variable contient la case ciblée par la joueur virtuel.
 	// Il tentera de s'y rendre. Cette case sera choisie selon 
@@ -63,7 +62,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	private boolean bolStopThread;
 	
 	// Déclaration d'une référence vers la table courante
-	private final Table objTable;
+	private Table objTable;
 	
     // Déclaration d'une variable qui va contenir le numéro Id du personnage 
 	// du joueur virtuel
@@ -83,7 +82,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	private HashMap<Integer, ObjetUtilisable> lstObjetsUtilisablesRamasses;
 	
 	// Déclaration d'une référence vers le controleur jeu
-	private final ControleurJeu objControleurJeu;
+	private ControleurJeu objControleurJeu;
 	
     // Déclaration d'une variable qui contient le nombre de fois 
     // que le joueur virtuel a joué à un mini-jeu
@@ -163,6 +162,9 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	// the color of the clothes in the player's picture
 	private String clothesColor;
 	
+	// relative time the last change of points or get the finish line
+	private int pointsFinalTime;
+	
 	
 	/**
 	 * Constructeur de la classe JoueurVirtuel qui permet d'initialiser les 
@@ -178,9 +180,9 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 
 	 */
 	public JoueurVirtuel(String nom, int niveauDifficulte, Table tableCourante, 
-		    GestionnaireEvenements gestionnaireEv, ControleurJeu controleur, int idPersonnage)
+		     int idPersonnage)
 		{
-	    objControleurJeu = controleur;
+	    objControleurJeu = tableCourante.getObjControleurJeu();
 	    
 	    objParametreIA = objControleurJeu.obtenirParametreIA();
 	    
@@ -196,7 +198,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 		//objPositionFinaleVisee = null;
 		
 		// Faire la référence vers le gestionnaire d'évenements
-		objGestionnaireEv = gestionnaireEv;
+		objGestionnaireEv = tableCourante.getObjGestionnaireEvenements();
 			
 		// Cette variable sert à arrêter la thread lorsqu'à true
 		bolStopThread = false;		
@@ -306,46 +308,49 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 			while(bolStopThread == false)
 			{		
 
-				//System.out.println("bolStopThead == false"); // trace
-			
-				// Déterminer le temps de réflexion pour le prochain coup
-				intTempsReflexionCoup = obtenirTempsReflexionCoup();
-	
-				// Pause pour moment de réflexion de décision
-				pause(intTempsReflexionCoup);
-				
-				//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				// try to use Banana - first control if we have it
-				virtuelUseBanana();
-				
+				System.out.println("bolStopThread = " + bolStopThread); // trace
 				
                 // ORIGINAL CODE - TODO CHANGE BACK TO GET WIN THE GAME
                 // AS WELL AS THE CHANGES IN SALLE.JAVA
 				
-                // Trouver une case intéressante à atteindre
-                // Si on a assez de points pour atteindre le WinTheGame, allons-y!
-                
-               objPositionFinaleVisee = this.obtenirTable().getPositionPointFinish();
+				if(bolStopThread == false){ 
+
+					// Déterminer le temps de réflexion pour le prochain coup
+					intTempsReflexionCoup = obtenirTempsReflexionCoup();
+
+					// Pause pour moment de réflexion de décision
+					pause(intTempsReflexionCoup);
+				}
                
-               if (reviserPositionFinaleVisee() == true)
-               {
-               		int essais = 0;
-                	do
-                	{
-                		objPositionFinaleVisee = trouverPositionFinaleVisee();
-                			essais++;
-                	}while(essais < 50 &&  this.obtenirTable().checkPositionPointsFinish(objPositionFinaleVisee));
-                	
-                }
+				if(bolStopThread == false){ 
+					//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					// try to use Banana - first control if we have it
+					virtuelUseBanana();
+					
+					// Trouver une case intéressante à atteindre
+                    // Si on a assez de points pour atteindre le WinTheGame, allons-y!
+					objPositionFinaleVisee = this.obtenirTable().getPositionPointFinish();
 
-                // On trouve une position entre le joueur virtuel et son objectif
 
-                objPositionIntermediaire = trouverPositionIntermediaire();
-                
+					if (reviserPositionFinaleVisee() == true )
+					{
+						int essais = 0;
+						do
+						{
+							objPositionFinaleVisee = trouverPositionFinaleVisee();
+							essais++;
+						}while(essais < 50 &&  this.obtenirTable().checkPositionPointsFinish(objPositionFinaleVisee));
+
+					}
+
+					// On trouve une position entre le joueur virtuel et son objectif
+
+					objPositionIntermediaire = trouverPositionIntermediaire();
+				}
 				// S'il y a erreur de recherche ou si le joueur virtuel est pris
 				// on ne le fait pas bouger
-				if (objPositionIntermediaire.x != objPositionJoueur.x || 
-				    objPositionIntermediaire.y != objPositionJoueur.y)
+				if ((objPositionIntermediaire.x != objPositionJoueur.x || 
+				    objPositionIntermediaire.y != objPositionJoueur.y )&& bolStopThread == false)
 				{
 					// Calculer la grandeur du déplacement demandé
 					intGrandeurDeplacement = obtenirPointage(objPositionJoueur, objPositionIntermediaire);
@@ -405,7 +410,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    					
 	    			// Faire déplacer le personnage si le joueur virtuel a 
 	    			// réussi à répondre à la question
-	    			if (bolQuestionReussie == true)
+	    			if (bolQuestionReussie == true && bolStopThread == false)
 	    			{
 	    				
 	    				deplacerJoueurVirtuelEtMajPlateau(objPositionIntermediaire);
@@ -427,8 +432,9 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 	    				pause(ParametreIA.TEMPS_RETROACTION);
 	    			}
 	    			
-	    	    }	
-			}
+	    	    }
+								
+			}// end while
 			
 			
 		}
@@ -601,18 +607,24 @@ public class JoueurVirtuel extends Joueur implements Runnable {
         		 // Celui qui utilise la banane est le 1er, alors on fait glisser le 2ème
         		 estHumain = estHumain2;
         		 playerToUseBanana = max2User;
-        		 if(estHumain) valPoints = ((max2 - intPointage) * 50 / (max2 + 1) )+ 10;
-        		 else valPoints = ((max2 - intPointage) * 50/ (max2 + 1)) ;
+        		 if(estHumain) valPoints = ((max2 - intPointage) * 50 / (max2 + 2) )+ 10;
+        		 else valPoints = ((max2 - intPointage) * 50/ (max2 + 2)) ;
+        		 
+        		 System.out.println((max2 - intPointage) * 50/ (max2 + 2) + " : ici banane");
+        		 
         	 }
         	 else
         	 {
         		 // Celui qui utilise la banane n'est pas le 1er, alors on fait glisser le 1er
         		 estHumain = estHumain1;
         		 playerToUseBanana = max1User;
-        		 if(estHumain) valPoints = ((max1 - intPointage) * 50  / (max1 + 1)) + 10;
-        		 else valPoints = ((max1 - intPointage)* 50 / (max1 + 1)) ;
+        		 if(estHumain) valPoints = ((max1 - intPointage) * 50  / (max1 + 2)) + 10;
+        		 else valPoints = ((max1 - intPointage)* 50 / (max1 + 2)) ;
+        		 
+        		 System.out.println((max1 - intPointage) * 50/ (max1 + 2) + " : ici banane");
         	 }
          }
+         
          return valPoints;
      }
 
@@ -2086,8 +2098,21 @@ public class JoueurVirtuel extends Joueur implements Runnable {
      */
     public void arreterThread()
     {
-        bolStopThread = true;
-        Thread.currentThread().interrupt();
+    	Thread.currentThread().interrupt();
+        
+    	bolStopThread = true;
+    	this.brainiacState.destruction();
+    	this.brainiacState = null;
+    	this.bananaState.destruction();
+    	this.bananaState = null;
+        objControleurJeu = null;
+        objGestionnaireEv = null;
+        objTable = null;
+        objParametreIA = null;
+       // objLogger = null;
+        objttPlateauJeu = null;
+        
+        
     }
     
     /* Cette fonction permet d'obtenir un tableau qui contient les pourcentages de
@@ -2140,8 +2165,7 @@ public class JoueurVirtuel extends Joueur implements Runnable {
      */
     private int obtenirTempsReflexionCoup()
     {
-        
-        return objParametreIA.tTempsReflexionBase[ParametreIA.TYPE_REFLEXION_COUP][intNiveauDifficulte] + 
+       return objParametreIA.tTempsReflexionBase[ParametreIA.TYPE_REFLEXION_COUP][intNiveauDifficulte] + 
             genererNbAleatoire(objParametreIA.tTempsReflexionAleatoire[ParametreIA.TYPE_REFLEXION_COUP][intNiveauDifficulte]);
 
     }
@@ -2153,7 +2177,6 @@ public class JoueurVirtuel extends Joueur implements Runnable {
      */
     private int obtenirTempsReflexionReponse()
     {
-        
         return objParametreIA.tTempsReflexionBase[ParametreIA.TYPE_REFLEXION_REPONSE][intNiveauDifficulte] + 
             genererNbAleatoire(objParametreIA.tTempsReflexionAleatoire[ParametreIA.TYPE_REFLEXION_REPONSE][intNiveauDifficulte]);
     }   
@@ -2804,6 +2827,22 @@ public class JoueurVirtuel extends Joueur implements Runnable {
 
 	public String getClothesColor() {
 		return clothesColor;
+	}
+
+
+	/**
+	 * @param  the positionFinale  the pointsFinalTime to set
+	 */
+	public void setPointsFinalTime(int positionFinale) {
+		this.pointsFinalTime = positionFinale;
+	}
+
+
+	/**
+	 * @return the pointsFinalTime
+	 */
+	public int getPointsFinalTime() {
+		return pointsFinalTime;
 	}
 	
 }

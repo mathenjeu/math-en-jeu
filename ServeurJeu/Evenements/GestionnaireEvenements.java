@@ -82,5 +82,6 @@ public class GestionnaireEvenements implements Runnable
 	public void arreterGestionnaireEvenements()
 	{
 		bolStopThread = true;
+		Thread.currentThread().interrupt();
 	}
 }

@@ -103,7 +103,7 @@ public class ProtocoleJoueur implements Runnable
 	private static final Logger objLogger = Logger.getLogger( ProtocoleJoueur.class );
 
     // On obtiendra la langue du joueur pour pouvoir construire la boîte de questions
-    public String langue;
+    private String langue;
 
    	// Déclaration d'une variable qui va permettre de savoir si le joueur
 	// en en train de joueur une partie ou non. Cet état sera utile car on
@@ -158,11 +158,8 @@ public class ProtocoleJoueur implements Runnable
 			// nécessaire d'attendre un délai supplémentaire
 			objSocketJoueur.setTcpNoDelay(false);
 		}
-
 		catch (SocketException se)
-
 		{
-
 		   objLogger.error( GestionnaireMessages.message("protocole.canal_ferme") );
 
 		   // Arrèter le thread
@@ -351,7 +348,8 @@ public class ProtocoleJoueur implements Runnable
 			    // numéro de commande de cette fonction, car on ne retournera
 			    // rien du tout)
 				objControleurJeu.deconnecterJoueur(objJoueurHumain, false, true);
-				System.out.println("!!!!!!!!!!!!! Joueur deconnecter ");
+				System.out.println("! Joueur deconnecter - Protocole ");
+				//Thread.currentThread().interrupt();
 			}
 			
 			// Enlever le protocole du joueur courant de la liste des 
@@ -787,7 +785,7 @@ public class ProtocoleJoueur implements Runnable
 						// Informer le contrôleur de jeu que la connexion avec le 
 						// client (joueur) a été fermée (il faut obtenir un numéro
 						// de commandes de cette fonction)
-						//System.out.println("Player " + objJoueurHumain.obtenirNomUtilisateur() + " ask for cancel");
+						System.out.println("Player " + objJoueurHumain.obtenirNomUtilisateur() + " ask for cancel");
 						objControleurJeu.deconnecterJoueur(objJoueurHumain, true, false);
 
 
@@ -2613,6 +2611,7 @@ public class ProtocoleJoueur implements Runnable
 						int nouveauPointage = objJoueurHumain.obtenirPartieCourante().obtenirPointage();
 						nouveauPointage += pointage;
 						objJoueurHumain.obtenirPartieCourante().definirPointage( nouveauPointage );
+						objJoueurHumain.obtenirPartieCourante().setPointsFinalTime(objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsRestant());
 
 						//	Il n'y a pas eu d'erreurs
 						objNoeudCommande.setAttribute("type", "Reponse");
@@ -3707,6 +3706,7 @@ public class ProtocoleJoueur implements Runnable
 	 */
 	public void arreterProtocoleJoueur()
 	{
+		Thread.currentThread().interrupt();
 		try
 		{
 			// On tente de fermer le canal de réception. Cela va provoquer 
@@ -3730,6 +3730,8 @@ public class ProtocoleJoueur implements Runnable
 		{
 			objLogger.error( ioe.getMessage() );
 		}
+		
+		
 	}
 
 	/**
@@ -4684,6 +4686,11 @@ public class ProtocoleJoueur implements Runnable
     // getter 
     public String getQuestionsAnswers() {
 		return questionsAnswers.toString();
+	}
+
+
+	public String getLang() {
+		return langue;
 	}
 
     

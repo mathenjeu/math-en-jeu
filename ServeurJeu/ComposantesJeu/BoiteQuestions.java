@@ -86,14 +86,14 @@ public class BoiteQuestions
 	    if( questions != null && questions.size() > 0 )
 		{
 	    	   question = (Question)(questions.get(UtilitaireNombres.genererNbAleatoire(questions.size())));
-	    	   
+	    	   questions.remove(question);
     	}
 		else
 		{
 			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
 		}
 		
-	    questions.remove(question);
+	   
 		//System.out.println("Question2: " + System.currentTimeMillis());
 	    //System.out.println("\nquestion : " + question.obtenirCodeQuestion()+ "  " + lstQuestions.containsValue(question) +  " " + questions.indexOf(question) + "\n");
 		return question;

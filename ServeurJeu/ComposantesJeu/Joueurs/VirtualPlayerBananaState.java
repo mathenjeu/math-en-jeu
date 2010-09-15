@@ -95,6 +95,13 @@ public class VirtualPlayerBananaState {
 		}	
 	}// end of method
 	
+	public void destruction()
+	{
+		if(this.bTask != null)
+		   this.bTask.cancel();
+		this.vplayer = null;
+	}
+	
 
 
 }// end of the class

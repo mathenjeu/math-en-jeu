@@ -170,9 +170,10 @@ public class GestionnaireCommunication
 		// Enlever le protocole joueur de la liste des ProtocoleJoueur
 		try
 		{
-			
+			protocole.arreterProtocoleJoueur();
 			lstProtocoleJoueur.remove(protocole);
 			miseAJourInfo();
+			
 		}
 		catch( Exception e )
 		{
