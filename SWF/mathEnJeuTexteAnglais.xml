@@ -33,8 +33,8 @@
 	  bienvenue = "Welcome to MathAmaze "
     btnPlay = "Play"
     btnQuit = "Quit"
-    btnProfile = "Profile"
-    teachBtn = "Teacher's Rooms"
+    btnProfile = "My Profile"
+    teachBtn = "My class"
     playMaze = "Enter the maze
 and be the first 
 to escape!"
