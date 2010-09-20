@@ -35,12 +35,12 @@
 	  bienvenue = "Bienvenue dans Math en jeu "
     btnPlay = "Jouer" 
     btnQuit = "Quitter"
-    btnProfile = "Profil"
-    playMaze = "Text français..."
-    teachBtn =   "Salles Prof"
-    linkProf1 = "Est vous un professeur?"
+    btnProfile = "Mon Profil"
+    playMaze = "Entrez le labyrinthe pour être le premier a échapper..."
+    teachBtn =   "Ma classe"
+    linkProf1 = "Est vous un proffeseur?"
     linkProf2 = "Cliquez ici..."
-    linkProf3 = "pour entrer dans le Salon des Professeurs."
+    linkProf3 = "pour entrer dans le Salon des Proffeseurs."
     erreurRole = "Accès interdit!!!
 Cette section est réservée aux professeurs.
 Si vous êtes un professeur et que vous voulez accéder à cette section réservée, contactez-nous..."
@@ -141,7 +141,7 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 			salle = "CHOIX DES SALLES"
       chargementSalles = "Chargement de la liste des salles en cours" 
 			boutonRetour = "Retour"
-			boutonContinuer = "Continue"
+			boutonContinuer = "Continuer"
 			boutonQuitterX = "Quitter la partie.."
 			tableNameLabel = "Nom de la Table"
 			tableLinesLabel = "Lignes"
@@ -163,7 +163,8 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 			btnCreerTable = "Nouvelle table"
 			choixTable = "CHOIX DES TABLES"
 			choixTemps = "Choisissez la durée de la partie que vous désirez jouer."
-			selectTableInfo = "Texte en français a ajouter...  "
+			selectTableInfo = "Faites défiler la liste pour trouver la table que vous souhaitez
+joindre et le mode de jeu que vous souhaitez jouer...  "
 			
 			tablesOuvertes = "Tables"
 
