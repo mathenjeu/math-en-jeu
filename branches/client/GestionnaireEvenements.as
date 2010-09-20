@@ -38,7 +38,7 @@ class GestionnaireEvenements
     private var roomDescription:String;  // short room description taked from DB
 	private var nomUtilisateur:String;    // user name of our  user
 	private var userRole:Number;  // if 1 - simple user, if 2 - is admin(master), if 3 - is  prof
-	private var numeroDuPersonnage:Number; // sert a associer la bonne image pour le jeu d'ile au tresor
+	private var numeroDuDessin:Number; // sert a associer la bonne image pour le jeu d'ile au tresor
 	public var  listeDesPersonnages:Array;   // liste associant les idPersonnage avec les nomUtilisateurs dans la table ou on est
 	                                        // contient aussi autre informations sur les joueurs, comme couleur, role, pointage, argent ...
 						    				 // un tableau complet avec toutes les informations sur les joueurs
@@ -86,7 +86,6 @@ class GestionnaireEvenements
 	{
 		trace("------ debut affichage ------");
 		trace("nomUtilisateur : " + nomUtilisateur);
-		trace("numeroDuPersonnage : " + numeroDuPersonnage);	
 		trace("listeDesPersonnages : " + listeDesPersonnages);	
 		trace("motDePasse : " + motDePasse);	
 		trace("nomSalle : " + nomSalle);	
@@ -256,9 +255,9 @@ class GestionnaireEvenements
 	}
 	
 	////////////////////////////////////////////////////////////
-	function obtenirNumeroDuPersonnage():Number
+	function obtenirNumeroDuDessin():Number
 	{
-		return this.numeroDuPersonnage;
+		return this.numeroDuDessin;
 	}
 	
 	////////////////////////////////////////////////////////////
@@ -267,9 +266,9 @@ class GestionnaireEvenements
 		return this.maxPlayers;
 	}
 	////////////////////////////////////////////////////////////
-	function definirNumeroDuPersonnage(n:Number)
+	function definirNumeroDuDessin(n:Number)
 	{
-		this.numeroDuPersonnage = n;
+		this.numeroDuDessin = n;
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -734,7 +733,7 @@ class GestionnaireEvenements
                   if(this.listeDesPersonnages[i].nom == this.nomUtilisateur)
                   {
 						this.idPersonnage = this.listeDesPersonnages[i].id;
-						this.numeroDuPersonnage = this.listeDesPersonnages[i].idessin;
+						this.numeroDuDessin = this.listeDesPersonnages[i].idessin;
 						
 				  }
 			   }
@@ -1297,8 +1296,8 @@ class GestionnaireEvenements
 					   this.drawUserFrame3(i, cloColor, idDessin, _level0.loader.contentHolder["player" + i]);
 					  					  
 				       _level0.loader.contentHolder["joueur"+(i+1)] = this.listeDesPersonnages[i].nom;
-					   _level0.loader.contentHolder["player" + i]._xscale -= 70;
-					   _level0.loader.contentHolder["player" + i]._yscale -= 70;
+					   _level0.loader.contentHolder["player" + i]._xscale = 90;
+					   _level0.loader.contentHolder["player" + i]._yscale = 90;
                      
 					} // if
 				 }// for
@@ -2700,7 +2699,7 @@ class GestionnaireEvenements
     {
         // parametre: tempsRestant
     	trace("*********************************************");
-    	trace("debut de evenementSynchroniserTemps   "+objetEvenement.tempsRestant);
+    	trace("debut de evenementSynchroniserTemps   " + objetEvenement.tempsRestant);
     	_level0.loader.contentHolder.horlogeNum = objetEvenement.tempsRestant;
 		objetEvenement = null;
     	trace("*********************************************\n");
@@ -2867,8 +2866,8 @@ class GestionnaireEvenements
 				 this.drawUserFrame3(i, cloCol, idDessin, _level0.loader.contentHolder["player" + i]);
 					  					  
 				 _level0.loader.contentHolder["joueur"+(i+1)] = this.listeDesPersonnages[i].nom;
-		         _level0.loader.contentHolder["player" + i]._xscale -= 70;
-			     _level0.loader.contentHolder["player" + i]._yscale -= 70;
+		         _level0.loader.contentHolder["player" + i]._xscale = 90;
+			     _level0.loader.contentHolder["player" + i]._yscale = 90;
 										    
             	break;
         	}
@@ -3772,7 +3771,7 @@ function drawUserFrame3(i:Number, colorC:String, idDessin:Number, movClip:MovieC
 		this["mcLoaderString"].addListener(this["mclListenerString"]);
 					
 	   
-	   this["mcLoaderString"].loadClip("Perso/persox" + idDessin + ".swf", movClip);
+	   this["mcLoaderString"].loadClip("Perso/persos" + idDessin + ".swf", movClip);
 }
 
 /*
