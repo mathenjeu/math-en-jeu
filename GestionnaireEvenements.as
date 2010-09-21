@@ -1178,6 +1178,7 @@ class GestionnaireEvenements
         trace("*********************************************");
         trace("debut de retourCreerTable   " + objetEvenement.resultat + "    " + objetEvenement.clocolor + "  " + objetEvenement.nameTable);
         var movClip:MovieClip;
+		var i:Number;
 
         switch(objetEvenement.resultat)
         {
@@ -1188,6 +1189,11 @@ class GestionnaireEvenements
 				this.maxPlayers = objetEvenement.maxNbPlayers;
 				
                 _level0.loader.contentHolder.gotoAndPlay(3);
+				
+				for(i = 0; i <= 12; i++)
+                {
+                   this.drawUserVoidHidden(i);
+                }
                
                 _level0.loader.contentHolder.nomJ4 = this.nomUtilisateur;
               
@@ -1222,6 +1228,45 @@ class GestionnaireEvenements
     	trace("*********************************************\n");
     }
 	
+	// used to draw the void circles on frame 3
+    function drawUserVoidHidden(i:Number)
+    {
+      // to load the perso .. use ClipLoader to know the moment of complet load
+	  // we are in for so load it dynamically
+       var mclListenerString:String = "mclListener" + i;
+		this["mclListenerString"] = new Object();
+		this["mclListenerString"].onLoadComplete = function(target_mc:MovieClip) {
+    
+	        target_mc._xscale = 95;
+			target_mc._yscale = 95;
+			target_mc._visible = false;
+						
+        };
+		var myLoaderString:String = "myLoader" + i;
+		this["myLoaderString"] = new MovieClipLoader();
+		this["myLoaderString"].addListener(this["mclListenerString"]);
+		
+		this["myLoaderString"].loadClip("Perso/persosVoid.swf", _level0.loader.contentHolder["player" + i]); 	
+     }
+	 
+	 // used to draw the void circles on frame 3
+    function drawUserVoidVisible(i:Number)
+    {
+      // to load the perso .. use ClipLoader to know the moment of complet load
+	  // we are in for so load it dynamically
+       var mclListenerString:String = "mclListener" + i;
+		this["mclListenerString"] = new Object();
+		this["mclListenerString"].onLoadComplete = function(target_mc:MovieClip) {
+    
+	        target_mc._xscale = 95;
+			target_mc._yscale = 95;									
+        };
+		var myLoaderString:String = "myLoader" + i;
+		this["myLoaderString"] = new MovieClipLoader();
+		this["myLoaderString"].addListener(this["mclListenerString"]);
+		
+		this["myLoaderString"].loadClip("Perso/persosVoid.swf", _level0.loader.contentHolder["player" + i]); 	
+     }
 	
 	
     //  on ne s'ajoute pas a la liste des joueur dans cette table, c grave ??  c correct pour quand on veut sortir....
@@ -1252,6 +1297,12 @@ class GestionnaireEvenements
 				this.colorIt =  objetEvenement.clocolor;
                 
 				_level0.loader.contentHolder.gotoAndPlay(3);
+				
+				for(i = 0; i <= 12; i++)
+                {
+                   drawUserVoidHidden(i);
+                }
+               
 								
 				//_level0.loader.contentHolder.mc_perso.clothesCol = objetEvenement.clocolor;
 				
@@ -2606,7 +2657,8 @@ class GestionnaireEvenements
 					trace("un joueur enlever de la liste var1!!!:   " + objetEvenement.nomUtilisateur + " " + this.listeDesPersonnages[i].nom);
 					var idDessin = listeDesPersonnages[i].idessin;
 					var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
-					 _level0.loader.contentHolder.refLayer["Personnage" + idPers].removeMovieClip();
+					// _level0.loader.contentHolder.refLayer["Personnage" + idPers].removeMovieClip();
+					this.drawUserVoidVisible(i);
                 	this.listeDesPersonnages.removeItemAt(i);
 				   
                 	_level0.loader.contentHolder["joueur"+(i+1)] = " ";
@@ -3763,6 +3815,8 @@ function drawUserFrame3(i:Number, colorC:String, idDessin:Number, movClip:MovieC
        this["mclListenerString"].onLoadComplete = function(target_mc:MovieClip) {
             		    			  
 		   target_mc.filterC = filterC;
+		   target_mc._xscale = 90;
+		   target_mc._yscale = 90;
 		   // not to see another players on phase 1 of frame 3
 		   if(!_level0.loader.contentHolder.seePlayers)
 		      target_mc._visible = false;
