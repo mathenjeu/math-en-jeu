@@ -177,6 +177,11 @@ join  and the game mode you'd like to play"
 			numSalle = " "
 			temps = "Time :"
 			timeLabel = "Select the time"
+			
+			mathEnJeu = "Classic"
+			Tournament = "Tournament"
+			Course = "Race"
+			
 			selectPlayerText = "PLAYER SELECT"
 			selectPlayerInfo = "Select a player fron our colorful crew"
 

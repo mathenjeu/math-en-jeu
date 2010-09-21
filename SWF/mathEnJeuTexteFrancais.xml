@@ -177,6 +177,10 @@ joindre et le mode de jeu que vous souhaitez jouer...  "
 			temps = "Temps :"
 			timeLabel = "Temps"
 			
+			mathEnJeu = "Classique"
+			Tournament = "Tournoi"
+			Course = "Course"
+			
 			choixPerso = "Choisissez votre personnage."
 			selectPlayerText = "SELECTION DU JOUEUR"
 			selectPlayerInfo = "Sélectionnez un joueur de notre équipe coloré"
