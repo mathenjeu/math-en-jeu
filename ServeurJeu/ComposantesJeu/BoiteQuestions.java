@@ -166,7 +166,6 @@ public class BoiteQuestions
 	 * est vide en general
 	 * -----  Ne semble pas ètre appelée pour l'instant  -----
 	 *
-	 * @param int intDifficulte : la difficulte de la question
 	 * @return boolean : si la boite est vide ou non
 	 */
 	public boolean estVide()
