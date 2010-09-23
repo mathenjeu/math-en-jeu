@@ -126,7 +126,9 @@ If you are a theacher and you need to use this section contact us..."
 	
 		frame1 = ""
 			
-			selectRoom = "Choose a room"
+			textAcceptStats = "I agree that my use of the room to be reported to "
+			
+      selectRoom = "Choose a room"
 		  selectTable = "Pick a table"
 		  selectPlayer = "Select a player"
 			
@@ -174,7 +176,8 @@ join  and the game mode you'd like to play"
 		frame3 = ""
 
 			noTable = "Table number :"	
-			numSalle = " "
+			numSalle = "Room :"
+			tableInfo = "Table :"
 			temps = "Time :"
 			timeLabel = "Select the time"
 			
