@@ -2137,7 +2137,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		public void setTableName(String tableName) {
 			if(tableName == "")
 			{
-			   this.tableName = "Table. " + this.intNoTable;
+			   this.tableName = "" + this.intNoTable;
 			}else
 			{
 				this.tableName = tableName;

@@ -599,7 +599,7 @@ public class InformationPartie
 				objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intDifficulteTemp);
 
 			}// fin while      
-		}while(lstQuestionsRepondues.contains(objQuestionTrouvee.obtenirCodeQuestion()) || objBoiteQuestions.estVide()); 	
+		}while(!objBoiteQuestions.estVide() && lstQuestionsRepondues.contains( objQuestionTrouvee.obtenirCodeQuestion())); 	
 		return objQuestionTrouvee;
 		
 	}// fin méthode
