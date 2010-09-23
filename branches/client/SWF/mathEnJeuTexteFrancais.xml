@@ -128,7 +128,9 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 	
 		frame1 = ""
 		
-		  selectRoom = "Sélectez une Salle"
+		  textAcceptStats = "J'accepte que mon utilisation de cette salle soit rapportée à  "
+		  
+      selectRoom = "Sélectez une Salle"
 		  selectTable = "Sélectez une Table"
 		  selectPlayer = "Sélectez un dessin"
 		 
@@ -173,7 +175,8 @@ joindre et le mode de jeu que vous souhaitez jouer...  "
 		frame3 = ""
 
 			noTable = "Numéro de la table :"	
-			numSalle = " "
+			numSalle = "Salle :"
+			tableInfo = "Table :"
 			temps = "Temps :"
 			timeLabel = "Temps"
 			
