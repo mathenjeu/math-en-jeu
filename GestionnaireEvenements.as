@@ -357,7 +357,7 @@ class GestionnaireEvenements
                 {
 					
 	               guiPWD = _level0.loader.contentHolder.attachMovie("GUI_pwd", "guiPWD", 2003);//_level0.loader.contentHolder.getNextHighestDepth());
-                   guiPWD.textGUI_PWD.text = _root.texteSource_xml.firstChild.attributes.textGUI_PWD;
+                   //guiPWD.textGUI_PWD.text = _root.texteSource_xml.firstChild.attributes.textGUI_PWD;
 					
                    
 			     }else{
@@ -1237,8 +1237,8 @@ class GestionnaireEvenements
 		this["mclListenerString"] = new Object();
 		this["mclListenerString"].onLoadComplete = function(target_mc:MovieClip) {
     
-	        target_mc._xscale = 95;
-			target_mc._yscale = 95;
+	        target_mc._xscale = 94;
+			target_mc._yscale = 94;
 			target_mc._visible = false;
 						
         };
@@ -1258,8 +1258,8 @@ class GestionnaireEvenements
 		this["mclListenerString"] = new Object();
 		this["mclListenerString"].onLoadComplete = function(target_mc:MovieClip) {
     
-	        target_mc._xscale = 95;
-			target_mc._yscale = 95;									
+	        target_mc._xscale = 94;
+			target_mc._yscale = 94;									
         };
 		var myLoaderString:String = "myLoader" + i;
 		this["myLoaderString"] = new MovieClipLoader();
@@ -3374,14 +3374,15 @@ class GestionnaireEvenements
 		   
 		   //first on put on the sprite the box for the timer if is our perso
 		
-		   _level0.loader.contentHolder.attachMovie("timeBox", "brainBox",6);//_level0.loader.contentHolder.getNextHigesthDepth());
+		   _level0.loader.contentHolder.attachMovie("timeBox", "brainBox", 6);//_level0.loader.contentHolder.getNextHigesthDepth());
 		   _level0.loader.contentHolder.brainBox._x = 470;
 		   _level0.loader.contentHolder.brainBox._xscale = 90;
 		   _level0.loader.contentHolder.brainBox._y = 320;
 		
 		   //create text field to put info in
-		   _level0.loader.contentHolder.brainBox.createTextField("brainiacTime", _level0.loader.contentHolder.brainBox.getNextHigesthDepth(), 20, 5, 40, 20);
+		   _level0.loader.contentHolder.brainBox.createTextField("brainiacTime", _level0.loader.contentHolder.brainBox.getNextHigesthDepth(), 25, 8, 40, 20);
 		
+		   _level0.loader.contentHolder.brainBox.nameObject = "BRAINIAC";
 		   // Make the field dynamic text field
            _level0.loader.contentHolder.brainBox.brainiacTime.type = "dynamic";
            with(_level0.loader.contentHolder.brainBox.brainiacTime)
@@ -3397,8 +3398,8 @@ class GestionnaireEvenements
    
            var formatTimer:TextFormat = new TextFormat();
            formatTimer.bold = true;
-           formatTimer.size = 16;
-           formatTimer.font = "Impact";
+           formatTimer.size = 15;
+           formatTimer.font = "ArialBlack";
            formatTimer.align = "Center";
            _level0.loader.contentHolder.brainBox.brainiacTime.setNewTextFormat(formatTimer);
 						
@@ -3458,8 +3459,10 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder.bananaBox._xscale = 90;
 		_level0.loader.contentHolder.bananaBox._y = 320;
 		
+		_level0.loader.contentHolder.bananaBox.nameObject = _root.texteSource_xml.firstChild.attributes.bananaLabel;
+		
 		//create text field to put info in
-		_level0.loader.contentHolder.bananaBox.createTextField("bananaTime", _level0.loader.contentHolder.branBox.getNextHigesthDepth(), 20, 5, 40, 20);
+		_level0.loader.contentHolder.bananaBox.createTextField("bananaTime", _level0.loader.contentHolder.branBox.getNextHigesthDepth(), 25, 8, 40, 20);
 		
 		 // Make the field dynamic text field
         _level0.loader.contentHolder.bananaBox.bananaTime.type = "dynamic";
@@ -3477,8 +3480,8 @@ class GestionnaireEvenements
    
         var formatTimer:TextFormat = new TextFormat();
         formatTimer.bold = true;
-        formatTimer.size = 16;
-        formatTimer.font = "Impact";
+        formatTimer.size = 15;
+        formatTimer.font = "ArialBlack";
         formatTimer.align = "Center";
         _level0.loader.contentHolder.bananaBox.bananaTime.setNewTextFormat(formatTimer);
 		
