@@ -3849,6 +3849,35 @@ function testPlayers():Boolean
 	return verify;
 }// end methode
 
+// creating filters for plyerSelect
+function calculColorsAndLoadPlayerSelect()
+{
+   var clothesCol:String = this.colorIt;
+   var colorsFilters:Array = new Array();
+   var i:Number;
+   
+   for(i = 0; i < 12; i++)
+   {
+	  colorsFilters.push(colorMatrixPerso(clothesCol, i + 1));
+   }
+   
+   var mcLoaderString = "myLoader";
+	   this["mcLoaderString"] = new MovieClipLoader();
+	   var mclListenerString = "myListener";
+	   this["mclListenerString"] = new Object();
+       this["mclListenerString"].onLoadComplete = function(target_mc:MovieClip) {
+            		    			  
+		   target_mc.filtersC = colorsFilters;
+		   			             
+		};
+		this["mcLoaderString"].addListener(this["mclListenerString"]);
+					
+	   
+	   this["mcLoaderString"].loadClip("GUI/playerSelect.swf", _level0.loader.contentHolder.selectHolder);
+   
+}
+
+
 // coloring with ColorMatrixFilter a movie
 function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
 {
@@ -3865,39 +3894,40 @@ function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
    switch(idD)
    {
             case 1:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
+			     rr = Math.abs(rr - 21)/245;
+                 gg = Math.abs(gg - 21)/74;
+                 bb = Math.abs(bb - 21)/65;
                 trace("Choix de la dessin 1");
             break;
             
 			 case 2:
-                 rr = rr/43;
-                 gg = gg/189;
-                 bb = bb/95;
-                trace("Choix de la dessin 1");
+			     rr = Math.abs(rr - 42)/43;
+                 gg = Math.abs(gg - 42)/189;
+                 bb = Math.abs(bb - 42)/95;
+				trace("Choix de la dessin 1");
             break;
 			
 			 case 3:
-                 rr = rr/189;
-                 gg = gg/137;
-                 bb = bb/42;
+                 rr = Math.abs(rr - 63)/189;
+                 gg = Math.abs(gg - 63)/137;
+                 bb = Math.abs(bb - 63)/42;
                 trace("Choix de la dessin 1");
             break;
 			
 			 case 4:
-                 rr = rr/48;
-                 gg = gg/149;
-                 bb = bb/74;
+                rr = Math.abs(rr - 84)/48;
+                gg = Math.abs(gg - 84)/149;
+                bb = Math.abs(bb - 84)/74;
                 trace("Choix de la dessin 1");
             break;
 			
 			 case 5:
-                 rr = rr/45;
-                 gg = gg/50;
-                 bb = bb/88;
+                rr = Math.abs(rr - 105)/69;
+                gg = Math.abs(gg - 105)/80;
+                bb = Math.abs(bb - 105)/136;
                 trace("Choix de la dessin 5");
             break;
+			
 			
 			 case 6:
                  rr = rr/245;
@@ -3970,40 +4000,41 @@ function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
       // the RGB of base color of perso1 is 245,64,75
       switch(idD)
       {
-            case 1:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
+           case 1:
+			     rr = Math.abs(rr - 21)/245;
+                 gg = Math.abs(gg - 21)/74;
+                 bb = Math.abs(bb - 21)/65;
                 trace("Choix de la dessin 1");
             break;
             
 			 case 2:
-                 rr = rr/43;
-                 gg = gg/189;
-                 bb = bb/95;
-                trace("Choix de la dessin 2");
+			     rr = Math.abs(rr - 42)/43;
+                 gg = Math.abs(gg - 42)/189;
+                 bb = Math.abs(bb - 42)/95;
+				trace("Choix de la dessin 1");
             break;
 			
 			 case 3:
-                 rr = rr/189;
-                 gg = gg/137;
-                 bb = bb/42;
-                trace("Choix de la dessin 3");
+                 rr = Math.abs(rr - 63)/189;
+                 gg = Math.abs(gg - 63)/137;
+                 bb = Math.abs(bb - 63)/42;
+                trace("Choix de la dessin 1");
             break;
 			
 			 case 4:
-                 rr = rr/48;
-                 gg = gg/149;
-                 bb = bb/74;
-                trace("Choix de la dessin 4");
+                rr = Math.abs(rr - 84)/48;
+                gg = Math.abs(gg - 84)/149;
+                bb = Math.abs(bb - 84)/74;
+                trace("Choix de la dessin 1");
             break;
 			
 			 case 5:
-                 rr = rr/69;
-                 gg = gg/80;
-                 bb = bb/136;
+                rr = Math.abs(rr - 105)/69;
+                gg = Math.abs(gg - 105)/80;
+                bb = Math.abs(bb - 105)/136;
                 trace("Choix de la dessin 5");
             break;
+			
 			
 			 case 6:
                  rr = rr/245;
