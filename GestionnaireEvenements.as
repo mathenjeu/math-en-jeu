@@ -3930,23 +3930,23 @@ function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
 			
 			
 			 case 6:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
-                trace("Choix de la dessin 1");
+                 rr = Math.abs(rr - 126)/102;
+                 gg = Math.abs(gg - 126)/51;
+                 bb = Math.abs(bb - 126)/153;
+                trace("Choix de la dessin 6");
             break;
 			
 			 case 7:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
-                trace("Choix de la dessin 1");
+                 rr = Math.abs(rr - 147)/15;
+                 gg = Math.abs(gg - 147)/136;
+                 bb = Math.abs(bb - 147)/52;
+                trace("Choix de la dessin 7");
             break;
 			
 			 case 8:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
+                 rr = Math.abs(rr - 168)/255;
+                 gg = Math.abs(gg - 168)/255;
+                 bb = Math.abs(bb - 168)/255;
                 trace("Choix de la dessin 1");
             break;
 			
@@ -4037,25 +4037,26 @@ function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
 			
 			
 			 case 6:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
+                 rr = Math.abs(rr - 126)/102;
+                 gg = Math.abs(gg - 126)/51;
+                 bb = Math.abs(bb - 126)/153;
                 trace("Choix de la dessin 6");
             break;
 			
 			 case 7:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
+                 rr = Math.abs(rr - 147)/15;
+                 gg = Math.abs(gg - 147)/136;
+                 bb = Math.abs(bb - 147)/52;
                 trace("Choix de la dessin 7");
             break;
 			
 			 case 8:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
-                trace("Choix de la dessin 1");
+                 rr = Math.abs(rr - 168)/255;
+                 gg = Math.abs(gg - 168)/255;
+                 bb = Math.abs(bb - 168)/255;
+                trace("Choix de la dessin 8");
             break;
+			
 			
 			 case 9:
                  rr = rr/245;
