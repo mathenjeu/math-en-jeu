@@ -309,10 +309,7 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 			{		
 
 				System.out.println("bolStopThread = " + bolStopThread); // trace
-				
-                // ORIGINAL CODE - TODO CHANGE BACK TO GET WIN THE GAME
-                // AS WELL AS THE CHANGES IN SALLE.JAVA
-				
+							
 				if(bolStopThread == false){ 
 
 					// Déterminer le temps de réflexion pour le prochain coup
@@ -1591,14 +1588,15 @@ public class JoueurVirtuel extends Joueur implements Runnable{
     {
     	
     	String reponse = "";
+    	RetourVerifierReponseEtMettreAJourPlateauJeu objRetour = null;
+    	Case objCaseDestination = null;
+    	ObjetUtilisable objObjetRamasse = null;
     	
-		RetourVerifierReponseEtMettreAJourPlateauJeu objRetour =
-		    InformationPartie.verifierReponseEtMettreAJourPlateauJeu(reponse, objNouvellePosition, this);
-    	
-    	Case objCaseDestination = objttPlateauJeu[objNouvellePosition.x][objNouvellePosition.y];//objTable.getCase(objNouvellePosition.x, objNouvellePosition.y);
-        
-        ObjetUtilisable objObjetRamasse = objRetour.obtenirObjetRamasse();
-        
+    	if(bolStopThread == false){
+    		objRetour = InformationPartie.verifierReponseEtMettreAJourPlateauJeu(reponse, objNouvellePosition, this);
+            objCaseDestination = objttPlateauJeu[objNouvellePosition.x][objNouvellePosition.y];//objTable.getCase(objNouvellePosition.x, objNouvellePosition.y);
+    		objObjetRamasse = objRetour.obtenirObjetRamasse();
+    	}
         if (ccDebug)
         {
         	System.out.println("Nouvelle position: "  + objPositionJoueur.x + "," + 

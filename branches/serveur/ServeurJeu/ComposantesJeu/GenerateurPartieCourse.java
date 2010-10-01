@@ -95,7 +95,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 		int intNbMagasins = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioMagasins());
 		int intNbPieces = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioPieces());
 		int intNbObjetsUtilisables = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioObjetsUtilisables());
-
+         
 		//System.out.println("temps : " + temps);
 		//System.out.println("lignes : " + intNbLines);
 		//System.out.println("colognes : " + intNbColumns);
