@@ -99,7 +99,8 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 	  AllLevels = "Niveaux"
 	  
 	 
-  mathemaQuoi_betaNEW = ""  
+  mathemaQuoi_betaNEW = ""
+    GUIerrorConnection = "Une erreur s'est produite. Vous êtes déconnecté du serveur de jeu. Fermez le fureteur et recommencer!"  
     errorPWD = "Mauvais mot de passe! Réessayez ou faites un autre choix. "
 	  pwdAlert = "Erreur!"
 	  fermerAlert = "Voulez vous vraiment quitter le jeu?"
