@@ -175,7 +175,7 @@ class GestionnaireCommunication
         // sinon on le remet a NON_CONNECTE (normalement il devrait deja etre
         // a cette valeur)
 		//trace("ds gestCom resultat de la connection :  "+objetEvenement.succes);
-        if (objetEvenement.succes==true)
+        if (objetEvenement.succes == true)
         {
             intEtatClient = Etat.DECONNECTE.no;
             // Ajouter l'ecouteur de l'evenement du timer
@@ -329,6 +329,7 @@ class GestionnaireCommunication
                         case "Deconnexion":
                             retourDeconnexion(objNoeudCommande);
                             break;
+							
                         case "ObtenirListeJoueurs":
                             retourObtenirListeJoueurs(objNoeudCommande);
                             break;
@@ -393,17 +394,17 @@ class GestionnaireCommunication
 							break;
 							
 						case "Erreur":
-							trace("reponse du serveur: "+objCommandeEnTraitement.nom);
+							trace("reponse du serveur: " + objCommandeEnTraitement.nom);
 							//retourErreur(objNoeudCommande);
 						break;
 						default:
-							trace("reponse du serveur: "+objCommandeEnTraitement.nom);
+							trace("reponse du serveur: " + objCommandeEnTraitement.nom);
 						break;
                         // TODO: Ajouter d'autres cas
                     }
                 }
 				else
-					trace("find me in gesComm ! : "+objNoeudCommande.attributes.nom + " " + objNoeudCommande.attributes.noClient + " " + objCommandeEnTraitement.no);
+					trace("find me in gesComm ! : " + objNoeudCommande.attributes.nom + " " + objNoeudCommande.attributes.noClient + " " + objCommandeEnTraitement.no);
             }
         }
     }
@@ -802,68 +803,7 @@ class GestionnaireCommunication
 				    
 			    	}// fin du switch
 		    	}	// fin du if(noeudEvenement.attributes.nom == "JoueurDeplacePersonnage")
-				
-				/* else if(noeudEvenement.attributes.nom == "DeplacementWinTheGame")
-				{
-					//trouver la case actuelle du win the game, corriger le numero de la case
-					//deplacer le win the game et corriger le numero de la case
-
-					var p:Point = new Point(noeudEvenement.firstChild.attributes.x, noeudEvenement.firstChild.attributes.y);
-					
-					trace(p.obtenirX());
-					trace(p.obtenirY());
-					
-					var winTheGame:WinTheGame = new WinTheGame(10+p.obtenirX()+p.obtenirY());
-					var tabCases:Array = _level0.loader.contentHolder.planche.obtenirTableauDesCases();
-					
-					var oListener:Object = new Object();  
-					var twMove1:Tween;
-					var mMemoire:Number;
-					var nMemoire:Number
-								
-					oListener.onMotionFinished = function():Void 
-					{ 
-						tabCases[mMemoire][nMemoire].obtenirClipCase()["winTheGame1"].removeMovieClip();
-						
-						for(var m:Number = 0; m < tabCases.length; m++)
-						{
-							for(var n:Number = 0; n < tabCases[m].length; n++)
-							{
-								if( (tabCases[m][n].obtenirL() == p.obtenirX()) && (tabCases[m][n].obtenirC() == p.obtenirY()) )
-								{
-									tabCases[m][n].definirType(tabCases[m][n].obtenirType()+41000);
-									tabCases[m][n].definirWinTheGame(winTheGame);
-									tabCases[m][n].obtenirClipCase().attachMovie("winTheGame", "winTheGame1", 100);
-									twMove1 = new Tween(tabCases[m][n].obtenirClipCase()["winTheGame1"], "_y", Bounce.easeOut, -500,  tabCases[m][n].obtenirClipCase()["winTheGame1"]._y, 2, true);
-								   
-									if(intEtatClient != Etat.ATTENTE_REPONSE_QUESTION.no)
-									{
-								   		_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-									}
-								}
-							}
-						}
-					}
-					
-					// si tu veux le faire disparaitre dans les airs, il faut se rappeler de son m et n.
-					for(var m:Number = 0; m < tabCases.length; m++)
-					{
-						for(var n:Number = 0; n < tabCases[m].length; n++)
-						{
-							if(tabCases[m][n].obtenirWinTheGame() != null)
-							{
-								tabCases[m][n].effacerWinTheGame();   
-								
-								twMove1 = new Tween(tabCases[m][n].obtenirClipCase()["winTheGame1"], "_y", Bounce.easeIn, tabCases[m][n].obtenirClipCase()["winTheGame1"]._y, -500, 2, true);
-								twMove1.addListener(oListener);
-								
-								mMemoire = m;
-								nMemoire = n;
-							}
-						}
-					}
-				}	// fin du if(noeudEvenement.attributes.nom == "DeplacementWinTheGame") */
-				
+							
 				else if(noeudEvenement.attributes.nom == "UtiliserObjet")
 				{
 					switch(strNomType)
@@ -942,7 +882,7 @@ class GestionnaireCommunication
 								break;
 								
 								default:
-									trace("Erreur : impossible...");
+									trace("Erreur : impossible... ObjetUtilise ...");
 								break;
 							}
 				    		
@@ -952,7 +892,7 @@ class GestionnaireCommunication
 				
 		    	else if(noeudEvenement.attributes.nom == "PartieTerminee")
 			    {
-					setInterval(30000);
+					//setInterval(30000);
 				   	//trace("if = partieTerminee,  avant le switch : "+strNomType);
 					trace(noeudEvenement.firstChild);
 	
@@ -3180,7 +3120,7 @@ class GestionnaireCommunication
      */
     private function retourDeconnexion(noeudCommande:XMLNode)
     {
-		trace("Retour Deconnexion");
+		trace("Retour Deconnexion GestComm");
         // Construire l'objet evenement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
