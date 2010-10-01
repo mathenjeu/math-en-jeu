@@ -66,7 +66,7 @@ class GestionnaireEvenements
 	private var moveVisibility:Number;  // The number of cases that our user can move. At the begining is 3. 
 	                                    // With the each running correct answers the level increase by 1 
 	private var langue;
-	private var endGame:Boolean;   // used to ignore the movement of virtual players after the end of the game
+	private var endGame:Boolean;   // used to indicate the end of game
 	private var newsChat:NewsBox;  // all the messages to show in newsbox
 	private var nbTracks:Number;   // usually is 4, do we really need it?  it not change...
 	private var finishPoints:Array;
@@ -80,7 +80,7 @@ class GestionnaireEvenements
 	//used to color clothes of our perso
 	private var colorIt:String;
 	private var allowedTypes:Array;   // allowed types of game in our room - course, tournament ...
-	private var ourPerso:Personnage;  // reference to our personnage on the table(planche) .. I don't sure if is very useful
+	private var ourPerso:Personnage;  // reference to our personnage on the table(planche) .. I am not sure that is very useful...
 	
 	function affichageChamps()
 	{
@@ -835,10 +835,10 @@ class GestionnaireEvenements
             break;
              
 			default:
-                trace("Erreur Inconnue");
+                trace("Erreur Inconnue - retourObtenirListeJoueurs");
         }
 		objetEvenement = null;
-        trace("fin de retourObtenirListeJoueur");
+        trace("fin de retourObtenirListeJoueurs");
         trace("*********************************************\n");
     }
 	
@@ -881,7 +881,7 @@ class GestionnaireEvenements
             break;
 			 
             default:
-                trace("Erreur Inconnue");
+                trace("Erreur Inconnue - retourObtenirListeSalles");
         }
 		objetEvenement = null;
         trace("fin de retourObtenirListeSalles" + " " + objetEvenement.resultat);
@@ -1472,7 +1472,7 @@ class GestionnaireEvenements
             break;
              
 			default:
-                trace("Erreur Inconnue");
+                trace("Erreur Inconnue + retourQuitterTable");
         }
 		objetEvenement = null;
         trace("fin de retourQuitterTable");
@@ -1712,7 +1712,7 @@ class GestionnaireEvenements
     {
         //   objetEvenement.resultat = Ok, CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte
     	trace("*********************************************");
-    	trace("debut de retourDeconnexion   "+objetEvenement.resultat);
+    	trace("debut de retourDeconnexion   " + objetEvenement.resultat);
     	switch(objetEvenement.resultat)
         {
             case "Ok":
@@ -1732,10 +1732,10 @@ class GestionnaireEvenements
             break;
 			
             default:
-                trace("Erreur Inconnue");
+                trace("Erreur Inconnue = retourDeconnexion");
         }
 		objetEvenement = null;
-    	trace("fin de retourDeconnexion");
+    	trace("fin de retourDeconnexion - GestEven");
     	trace("*********************************************\n");
     }
 
@@ -1810,7 +1810,7 @@ class GestionnaireEvenements
             break; 
 			 
             default:
-                trace("Erreur Inconnue");
+                trace("Erreur Inconnue - retourDeplacerpersonnage");
         }
 		objetEvenement = null;
     	trace("fin de retourDeplacerpersonnage");
@@ -1938,7 +1938,7 @@ class GestionnaireEvenements
            	break;
 			
 			default:
-				trace("Erreur Inconnue. Message du serveur: "+objetEvenement.resultat);
+				trace("Erreur Inconnue. Message du serveur: " + objetEvenement.resultat);
 			break;
         }
 		objetEvenement = null;
@@ -1987,7 +1987,7 @@ class GestionnaireEvenements
             break;
 			
             default:
-                trace("Erreur Inconnue. Message du serveur: "+objetEvenement.resultat);
+                trace("Erreur Inconnue. Message du serveur: " + objetEvenement.resultat);
         }
 		objetEvenement = null;
     	trace("fin de retourDefinirPointageApresMinigame");
@@ -2035,7 +2035,7 @@ class GestionnaireEvenements
             break;
 			 
             default:
-                trace("Erreur Inconnue. Message du serveur: "+objetEvenement.resultat);
+                trace("Erreur Inconnue. Message du serveur: " + objetEvenement.resultat);
         }
 		objetEvenement = null;
     	trace("fin de retourDefinirArgentApresMinigame");
@@ -2175,10 +2175,10 @@ class GestionnaireEvenements
             break;
 			 
             default:
-                trace("Erreur Inconnue");
+                trace("Erreur Inconnue - retourRepondreQuestion");
         }
 		objetEvenement = null;
-     	trace("fin de retourRepondreQuestion");
+     	trace("fin de ");
     	trace("*********************************************\n");
     }
 	
@@ -2315,7 +2315,15 @@ class GestionnaireEvenements
     public function evenementDeconnexionPhysique(objetEvenement:Object)
     {
         trace("*********************************************");
-    	trace("debut de evenementDeconnexionPhysique   ");
+    	trace("debut de evenementDeconnexionPhysique  GestEven ");
+		var errorDeconnexion:MovieClip;
+		
+		errorDeconnexion = _level0.loader.contentHolder.attachMovie("GUI_erreur", "deconnexion", 9999);
+		errorDeconnexion.linkGUI_erreur._visible = false;
+		errorDeconnexion.btn_ok._visible = false;
+			
+		errorDeconnexion.textGUI_erreur.text = _root.texteSource_xml.firstChild.attributes.GUIerrorConnection;
+		
 		objetEvenement = null;
     	trace("fin de evenementDeconnexionPhysique");
     	trace("*********************************************\n");
@@ -2326,7 +2334,7 @@ class GestionnaireEvenements
     {
         // parametre: nomUtilisateur
     	trace("*********************************************");
-    	trace("debut de evenementJoueurConnecte   "+objetEvenement.nomUtilisateur);
+    	trace("debut de evenementJoueurConnecte   " + objetEvenement.nomUtilisateur);
 		objetEvenement = null;
     	trace("fin de evenementJoueurConnecte");
     	trace("*********************************************\n");
@@ -2364,7 +2372,7 @@ class GestionnaireEvenements
     {
         // parametre: nomUtilisateur
     	trace("*********************************************");
-    	trace("debut de evenementJoueurDeconnecte   "+objetEvenement.nomUtilisateur);
+    	trace("debut de evenementJoueurDeconnecte   " + objetEvenement.nomUtilisateur);
 		
 		var count:Number = this.listeDesPersonnages.length;
 		for(var i:Number = 0; i < count; i++)
@@ -2378,7 +2386,7 @@ class GestionnaireEvenements
         	
     	}
 		objetEvenement = null;
-    	trace("fin de evenementJoueurDeconnecte");
+    	trace("fin de evenementJoueurDeconnecte GestEven");
     	trace("*********************************************\n");
     }
 	
@@ -2740,7 +2748,7 @@ class GestionnaireEvenements
     {
         // parametre: nomUtilisateur, message
     	trace("*********************************************");
-    	trace("debut de evenementMessage   "+objetEvenement.message+"    "+objetEvenement.nomUtilisateur);
+    	trace("debut de evenementMessage   " + objetEvenement.message + "    " + objetEvenement.nomUtilisateur);
 		objetEvenement = null;
     	trace("fin de evenementMessage");
     	trace("*********************************************\n");
@@ -2935,7 +2943,9 @@ class GestionnaireEvenements
 		objetEvenement = null;
 		trace("fin de evenementJoueurDemarrePartie");
     	trace("*********************************************\n");
-    }
+    }// end function
+	
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	function calculateMenu():Number
 	{
@@ -2959,7 +2969,7 @@ class GestionnaireEvenements
 		}
 		   		
 		return jouersStarted.length;
-    }
+    }// end function
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////	
 	function remplirMenuPointage()
@@ -2995,11 +3005,11 @@ class GestionnaireEvenements
 		for(i = 0; i < count; i++){
 		      if((jouersStarted[i].role == 2 && this.typeDeJeu == "Tournament"))   
 		         jouersStarted.removeItemAt(i);
-		   }
+		}
 		for(i = 0; i < count; i++){
 		      if((jouersStarted[i].role == 2 && this.typeDeJeu == "Tournament"))   
 		         jouersStarted.removeItemAt(i);
-		   } 
+		} 
 		
 		
 		var fondClip:MovieClip = new MovieClip();
@@ -3046,7 +3056,7 @@ class GestionnaireEvenements
 	
     	} 
 		delete jouersStarted;
-    }// end methode
+    }// end function
 	
 	
     
@@ -3061,7 +3071,7 @@ class GestionnaireEvenements
 		var k:Number = 0;
 				
 		//for(i = 0; i < objetEvenement.statistiqueJoueur.length; i++)
-			//trace(i+" joueur objetEvenement "+objetEvenement.statistiqueJoueur[i].nomUtilisateur+"   "+objetEvenement.statistiqueJoueur[i].pointage);
+		//trace(i+" joueur objetEvenement "+objetEvenement.statistiqueJoueur[i].nomUtilisateur+"   "+objetEvenement.statistiqueJoueur[i].pointage);
 		    	
     	    	
     	var taille:Number = objetEvenement.statistiqueJoueur.length;
@@ -3121,6 +3131,7 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder.brainBox.removeMovieClip();
 		_level0.loader.contentHolder.bananaBox.removeMovieClip();
 		_level0.loader.contentHolder.toolTip.removeMovieClip();
+		//_level0.loader.contentHolder["deconnexion"].removeMovieClip(); 
 		
 		
 		//s'assurer que la musique s'arrete en fin de partie
@@ -3160,6 +3171,7 @@ class GestionnaireEvenements
 			
 			colorItMatrix(this.tabPodiumOrdonneID[i - 1].clocolor , this["tete" + i ].headClo, this.tabPodiumOrdonneID[i - 1].idessin);
     	}
+		
     	this.endGame = true;
 		objetEvenement = null;
     	trace("fin de evenementPartieTerminee    ");
