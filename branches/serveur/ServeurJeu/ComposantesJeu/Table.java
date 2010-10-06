@@ -228,7 +228,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Démarrer le thread du gestionnaire d'événements
 		threadEvenements.start();
 				
-		// fill the list off colors
+		// fill the list of colors
 		this.colors = new LinkedList<String>();
 						
 		this.idPersos = new ArrayList<Integer>();
@@ -241,6 +241,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	{
 		objGestionnaireBD.chargerRegllesTable(objRegles, gameType, objSalle.getRoomID());
 		MAX_NB_PLAYERS = objRegles.getMaxNbPlayers();
+		System.out.println("We test Colors in the table  : " );
 		this.setColors();
 		this.setIdPersos();
 		try {
@@ -2215,10 +2216,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		private void setColors() {
 			Colors[] colValues = Colors.values();
 			
+			System.out.println("ColorsX : " + colValues.length);
+			
 			for(int i = 0; i < colValues.length; i++)
 			{
 				colors.add(colValues[i].getCode());
-				//System.out.println("Colors : " + colValues[i].getCode());
+				System.out.println("Colors : " + colValues[i].getCode());
 			}
 			
 			
