@@ -1190,12 +1190,12 @@ class GestionnaireEvenements
 				
                 _level0.loader.contentHolder.gotoAndPlay(3);
 				
-				for(i = 0; i <= 12; i++)
+				for(i = 0; i < 12; i++)
                 {
                    this.drawUserVoidHidden(i);
                 }
                
-                _level0.loader.contentHolder.nomJ4 = this.nomUtilisateur;
+                //_level0.loader.contentHolder.nomJ4 = this.nomUtilisateur;
               
 			 				
             break;
@@ -1240,7 +1240,7 @@ class GestionnaireEvenements
 	        target_mc._xscale = 94;
 			target_mc._yscale = 94;
 			target_mc._visible = false;
-						
+									
         };
 		var myLoaderString:String = "myLoader" + i;
 		this["myLoaderString"] = new MovieClipLoader();
@@ -1259,7 +1259,8 @@ class GestionnaireEvenements
 		this["mclListenerString"].onLoadComplete = function(target_mc:MovieClip) {
     
 	        target_mc._xscale = 94;
-			target_mc._yscale = 94;									
+			target_mc._yscale = 94;
+			target_mc.gotoAndPlay(1);
         };
 		var myLoaderString:String = "myLoader" + i;
 		this["myLoaderString"] = new MovieClipLoader();
@@ -1298,7 +1299,7 @@ class GestionnaireEvenements
                 
 				_level0.loader.contentHolder.gotoAndPlay(3);
 				
-				for(i = 0; i <= 12; i++)
+				for(i = 0; i < 12; i++)
                 {
                    drawUserVoidHidden(i);
                 }
@@ -1306,7 +1307,7 @@ class GestionnaireEvenements
 								
 				//_level0.loader.contentHolder.mc_perso.clothesCol = objetEvenement.clocolor;
 				
-                _level0.loader.contentHolder.nomJ4 = nomUtilisateur;								
+                //_level0.loader.contentHolder.nomJ4 = nomUtilisateur;								
                 
 				// put the players in the liste
 				count = objetEvenement.listePersonnageJoueurs.length;
@@ -1316,16 +1317,18 @@ class GestionnaireEvenements
 											
 				   if(!(objetEvenement.listePersonnageJoueurs[i].userRoles == 2 && this.typeDeJeu == "Tournament"))
 				   {   
+					  
 					  this.listeDesPersonnages.push(new Object());
-					  this.listeDesPersonnages[this.listeDesPersonnages.length -1].nom = objetEvenement.listePersonnageJoueurs[i].nom;
-                      this.listeDesPersonnages[this.listeDesPersonnages.length -1].id = objetEvenement.listePersonnageJoueurs[i].idPersonnage;
-					  this.listeDesPersonnages[this.listeDesPersonnages.length -1].role = objetEvenement.listePersonnageJoueurs[i].userRoles;
-					  this.listeDesPersonnages[this.listeDesPersonnages.length -1].clocolor = objetEvenement.listePersonnageJoueurs[i].clothesColor;
-					  this.listeDesPersonnages[this.listeDesPersonnages.length -1].pointage = 0;
-					  this.listeDesPersonnages[this.listeDesPersonnages.length -1].win = 0;
+					  var n:Number =this.listeDesPersonnages.length -1;
+					  this.listeDesPersonnages[n].nom = objetEvenement.listePersonnageJoueurs[i].nom;
+                      this.listeDesPersonnages[n].id = objetEvenement.listePersonnageJoueurs[i].idPersonnage;
+					  this.listeDesPersonnages[n].role = objetEvenement.listePersonnageJoueurs[i].userRoles;
+					  this.listeDesPersonnages[n].clocolor = objetEvenement.listePersonnageJoueurs[i].clothesColor;
+					  this.listeDesPersonnages[n].pointage = 0;
+					  this.listeDesPersonnages[n].win = 0;
 					  //this.listeDesPersonnages[i].argent = 0;
 									
-					  trace("control demarrepartie " + this.listeDesPersonnages[this.listeDesPersonnages.length -1].clocolor + " " + this.listeDesPersonnages[this.listeDesPersonnages.length -1].nom + " "  + this.listeDesPersonnages[this.listeDesPersonnages.length -1].id);
+					  trace("control demarrepartie " + this.listeDesPersonnages[n].clocolor + " " + this.listeDesPersonnages[n].nom + " "  + this.listeDesPersonnages[n].id);
 				   }
                 }// end for
 				
@@ -1335,6 +1338,7 @@ class GestionnaireEvenements
 				for(var i:Number = 0; i < count; i++)
                 {
 					var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
+					 trace("control demarrepartie2 " + this.listeDesPersonnages[i].nom);
 										    
                     if(idDessin != 0)
 					{
@@ -1346,14 +1350,14 @@ class GestionnaireEvenements
 					 
 					   this.drawUserFrame3(i, cloColor, idDessin, _level0.loader.contentHolder["player" + i]);
 					  					  
-				       _level0.loader.contentHolder["joueur"+(i+1)] = this.listeDesPersonnages[i].nom;
+				       _level0.loader.contentHolder["joueur" + i] = this.listeDesPersonnages[i].nom;
 					   _level0.loader.contentHolder["player" + i]._xscale = 90;
 					   _level0.loader.contentHolder["player" + i]._yscale = 90;
                      
 					} // if
 				 }// for
 				
-				 _level0.loader.contentHolder.mc_perso.clothesCol = objetEvenement.clocolor;
+				 //_level0.loader.contentHolder.mc_perso.clothesCol = objetEvenement.clocolor;
 				
             break;
 			
@@ -1447,6 +1451,7 @@ class GestionnaireEvenements
 					
 					_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
 			 	}
+				
 				this.listeDesPersonnages.removeAll();
 								
             break;
@@ -1561,7 +1566,7 @@ class GestionnaireEvenements
         trace("*********************************************\n");
     }
 	 
-    //  pour kicker out un joueur
+    //  pour kicker out un joueur  --- it is used??? OL .. is yes must be updated
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function retourSortirJoueurTable(objetEvenement:Object)
     {
@@ -1574,10 +1579,10 @@ class GestionnaireEvenements
 			var count:Number = this.listeDesTables.length;
             for(var i = 0; i <  count; i++)
     	    {
-			    var countS:Number = this.listeDesTables[i].listeJoueurs.length;
+			   var countS:Number = this.listeDesTables[i].listeJoueurs.length;
         	   for(var j = 0; j < countS; j++)
                {
-                   if(this.listeDesTables[i].listeJoueurs[j].nom == objetEvenement.nomUtilisateur)
+                  if(this.listeDesTables[i].listeJoueurs[j].nom == objetEvenement.nomUtilisateur)
                   {
                     this.listeDesTables[i].listeJoueurs.splice(j,1);
                     break;
@@ -1646,7 +1651,7 @@ class GestionnaireEvenements
 		objetEvenement = null;
         trace("fin de retourSortirJoueurTable");
         trace("*********************************************\n");
-    }
+    }//end 
 	
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function retourDemarrerPartie(objetEvenement:Object)
@@ -1659,14 +1664,33 @@ class GestionnaireEvenements
             case "Ok":
 			    this.idPersonnage = objetEvenement.idP;
 				//this.colorIt =  objetEvenement.clocolor;
-				_level0.loader.contentHolder.mc_perso.clothesCol = objetEvenement.clocolor;
+				//_level0.loader.contentHolder.mc_perso.clothesCol = objetEvenement.clocolor;
 				var count:Number =  this.listeDesPersonnages.length; 
 			    for(var i:Number = 0; i < count; i++)
 				{
 				   if(this.listeDesPersonnages[i].nom == this.nomUtilisateur)
 				   {
 				      this.listeDesPersonnages[i].id = objetEvenement.idP;
-					  trace("nom and idP = " + this.listeDesPersonnages[i].nom +  " " + this.listeDesPersonnages[i].id );
+					  this.listeDesPersonnages[i].clocolor = this.colorIt;
+					  trace("nom and idP = " + this.listeDesPersonnages[i].nom +  " " + this.listeDesPersonnages[i].id + " " + i);
+					  
+					  _level0.loader.contentHolder["joueur" + i] = this.listeDesPersonnages[i].nom;
+					 var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
+					 									    
+                     if(idDessin != 0)
+					 {
+						
+					    this.listeDesPersonnages[i].idessin = idDessin;
+					   
+					    var idPers =  calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
+					    var cloColor:String = this.listeDesPersonnages[i].clocolor;
+					 
+					    this.drawUserFrame3(i, cloColor, idDessin, _level0.loader.contentHolder["player" + i]);
+					  				        
+					    _level0.loader.contentHolder["player" + i]._xscale = 90;
+					    _level0.loader.contentHolder["player" + i]._yscale = 90;
+                     
+					 } // if
 				   }
 				
 				}
@@ -2520,6 +2544,7 @@ class GestionnaireEvenements
 		
 		var str:String = new String();
 		_level0.loader.contentHolder.listeTable.removeAll();
+		count = this.listeDesTables.length;
 		
 		for (var i:Number = 0; i < count; i++)
 		{
@@ -2584,11 +2609,13 @@ class GestionnaireEvenements
 	       if(!(objetEvenement.userRole == 2 && this.typeDeJeu == "Tournament"))
 		   {
 			   //trace(" evenementJoueurEntreTable length = " + listeDesPersonnages.length + " "  + objetEvenement.nomUtilisateur + " " + objetEvenement.userRole);
+			  
 			  listeDesPersonnages.push(new Object());
-			  listeDesPersonnages[listeDesPersonnages.length - 1].nom = objetEvenement.nomUtilisateur;
-			  listeDesPersonnages[listeDesPersonnages.length - 1].role = objetEvenement.userRole;
-			  listeDesPersonnages[listeDesPersonnages.length - 1].clocolor = objetEvenement.userColor;
-			  _level0.loader.contentHolder["joueur" + listeDesPersonnages.length] = listeDesPersonnages[listeDesPersonnages.length - 1].nom;
+			  var n:Number = listeDesPersonnages.length - 1;
+			  listeDesPersonnages[n].nom = objetEvenement.nomUtilisateur;
+			  listeDesPersonnages[n].role = objetEvenement.userRole;
+			  listeDesPersonnages[n].clocolor = objetEvenement.userColor;
+			  _level0.loader.contentHolder["joueur" + n ] = listeDesPersonnages[n].nom;
 		   }
     	}// if
 		
@@ -2657,6 +2684,32 @@ class GestionnaireEvenements
     	// si la table est la notre (on choisit nos perso frame 3)
     	if(objetEvenement.noTable == this.numeroTable)
     	{
+			//first we clear all the list from screen and update our list
+			for(i = 0; i < this.maxPlayers; i++)
+        	{
+	        	this.drawUserVoidVisible(i - 1);
+                _level0.loader.contentHolder["joueur" + i] = " ";
+				if(listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur)
+            	{
+                    this.listeDesPersonnages.removeItemAt(i);
+				}
+            }
+			
+			// after we replace the list on the screen
+			count = listeDesPersonnages.length;
+			for(i = 0; i < count; i++)
+        	{
+	        	var idDessin = listeDesPersonnages[i].idessin;
+				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
+				var cloCol:String = this.listeDesPersonnages[i].clocolor;
+				this.drawUserFrame3(i, cloCol, idDessin, _level0.loader.contentHolder["player" + i]);
+					  					  
+				 _level0.loader.contentHolder["joueur" + i] = this.listeDesPersonnages[i].nom;
+		         _level0.loader.contentHolder["player" + i]._xscale = 90;
+			     _level0.loader.contentHolder["player" + i]._yscale = 90;               		
+        	}
+			
+			/*
 	    	for(i = 0; i < this.maxPlayers; i++)
         	{
 	        	//  on enleve le nom du joueur dans la liste et a l'ecran
@@ -2666,15 +2719,14 @@ class GestionnaireEvenements
 					var idDessin = listeDesPersonnages[i].idessin;
 					var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
 					// _level0.loader.contentHolder.refLayer["Personnage" + idPers].removeMovieClip();
-					this.drawUserVoidVisible(i);
+					this.drawUserVoidVisible(i - 1);
                 	this.listeDesPersonnages.removeItemAt(i);
 				   
-                	_level0.loader.contentHolder["joueur"+(i+1)] = " ";
+                	_level0.loader.contentHolder["joueur" + (i - 1)] = " ";
                 	                	
             	}
-            	
-            		
-        	}
+                   		
+        	}*/
         	
     	}
     	// si ce n'est pas notre table
@@ -2775,12 +2827,10 @@ class GestionnaireEvenements
         var i:Number;
         var j:Number;
         
-		 _level0.loader.contentHolder["att"].removeMovieClip();
+		_level0.loader.contentHolder["att"].removeMovieClip();		 
+		_level0.loader.contentHolder.gotoAndPlay(4);
 		 
-		 _level0.loader.contentHolder.gotoAndPlay(4);
-		 
-		 var count:Number;// = objetEvenement.plateauJeu[0].length;
-	   
+		var count:Number;// = objetEvenement.plateauJeu[0].length;   
 		
 		var maTete:MovieClip;
 		
@@ -2925,11 +2975,10 @@ class GestionnaireEvenements
 				
 				 this.drawUserFrame3(i, cloCol, idDessin, _level0.loader.contentHolder["player" + i]);
 					  					  
-				 _level0.loader.contentHolder["joueur"+(i+1)] = this.listeDesPersonnages[i].nom;
+				 _level0.loader.contentHolder["joueur" + i] = this.listeDesPersonnages[i].nom;
 		         _level0.loader.contentHolder["player" + i]._xscale = 90;
 			     _level0.loader.contentHolder["player" + i]._yscale = 90;
-										    
-            	break;
+					           	
         	}
         	
         }
@@ -3832,6 +3881,7 @@ function drawUserFrame3(i:Number, colorC:String, idDessin:Number, movClip:MovieC
 		   target_mc.filterC = filterC;
 		   target_mc._xscale = 90;
 		   target_mc._yscale = 90;
+		   target_mc.gotoAndPlay(1);
 		   // not to see another players on phase 1 of frame 3
 		   if(!_level0.loader.contentHolder.seePlayers)
 		      target_mc._visible = false;
@@ -3908,7 +3958,7 @@ function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
             case 1:
 			     rr = Math.abs(rr - 21)/245;
                  gg = Math.abs(gg - 21)/74;
-                 bb = Math.abs(bb - 21)/65;
+                 bb = Math.abs(bb - 21)/64;
                 trace("Choix de la dessin 1");
             break;
             
@@ -3916,21 +3966,21 @@ function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
 			     rr = Math.abs(rr - 42)/43;
                  gg = Math.abs(gg - 42)/189;
                  bb = Math.abs(bb - 42)/95;
-				trace("Choix de la dessin 1");
+				trace("Choix de la dessin 2");
             break;
 			
 			 case 3:
                  rr = Math.abs(rr - 63)/189;
                  gg = Math.abs(gg - 63)/137;
                  bb = Math.abs(bb - 63)/42;
-                trace("Choix de la dessin 1");
+                trace("Choix de la dessin 3");
             break;
 			
 			 case 4:
                 rr = Math.abs(rr - 84)/48;
                 gg = Math.abs(gg - 84)/149;
                 bb = Math.abs(bb - 84)/74;
-                trace("Choix de la dessin 1");
+                trace("Choix de la dessin 4");
             break;
 			
 			 case 5:
@@ -3962,18 +4012,32 @@ function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
                 trace("Choix de la dessin 1");
             break;
 			
-			 case 9:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
-                trace("Choix de la dessin 1");
+			case 9:
+                 rr = Math.abs(rr - 189)/1;
+                 gg = Math.abs(gg - 189)/150;
+                 bb = Math.abs(bb - 189)/74;
+                trace("Choix de la dessin 9");
             break;
 			
 			 case 10:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
-                trace("Choix de la dessin 1");
+                 rr = Math.abs(rr - 1)/5;
+                 gg = Math.abs(gg - 1)/1;
+                 bb = Math.abs(bb - 1)/1;
+                trace("Choix de la dessin 10");
+            break;
+			
+			case 11:
+                 rr = Math.abs(rr - 231)/255;
+                 gg = Math.abs(gg - 231)/255;
+                 bb = Math.abs(bb - 231)/255;
+                trace("Choix de la dessin 11");
+            break;
+			
+			case 12:
+                rr = Math.abs(rr - 255)/215;
+                 gg = Math.abs(gg - 255)/5;
+                 bb = Math.abs(bb - 255)/3;
+                trace("Choix de la dessin 12");
             break;
 			
             default:
@@ -4013,9 +4077,9 @@ function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
       switch(idD)
       {
            case 1:
-			     rr = Math.abs(rr - 21)/245;
+			    rr = Math.abs(rr - 21)/245;
                  gg = Math.abs(gg - 21)/74;
-                 bb = Math.abs(bb - 21)/65;
+                 bb = Math.abs(bb - 21)/64;
                 trace("Choix de la dessin 1");
             break;
             
@@ -4023,21 +4087,21 @@ function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
 			     rr = Math.abs(rr - 42)/43;
                  gg = Math.abs(gg - 42)/189;
                  bb = Math.abs(bb - 42)/95;
-				trace("Choix de la dessin 1");
+				trace("Choix de la dessin 2");
             break;
 			
 			 case 3:
                  rr = Math.abs(rr - 63)/189;
                  gg = Math.abs(gg - 63)/137;
                  bb = Math.abs(bb - 63)/42;
-                trace("Choix de la dessin 1");
+                trace("Choix de la dessin 3");
             break;
 			
 			 case 4:
                 rr = Math.abs(rr - 84)/48;
                 gg = Math.abs(gg - 84)/149;
                 bb = Math.abs(bb - 84)/74;
-                trace("Choix de la dessin 1");
+                trace("Choix de la dessin 4");
             break;
 			
 			 case 5:
@@ -4071,17 +4135,31 @@ function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
 			
 			
 			 case 9:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
-                trace("Choix de la dessin 1");
+                 rr = Math.abs(rr - 189)/1;
+                 gg = Math.abs(gg - 189)/150;
+                 bb = Math.abs(bb - 189)/74;
+                trace("Choix de la dessin 9");
             break;
 			
 			 case 10:
-                 rr = rr/245;
-                 gg = gg/64;
-                 bb = bb/75;
-                trace("Choix de la dessin 1");
+                rr = Math.abs(rr - 1)/5;
+                 gg = Math.abs(gg - 1)/1;
+                 bb = Math.abs(bb - 1)/1;
+                trace("Choix de la dessin 10");
+            break;
+			
+			case 11:
+                 rr = Math.abs(rr - 231)/255;
+                 gg = Math.abs(gg - 231)/255;
+                 bb = Math.abs(bb - 231)/255;
+                trace("Choix de la dessin 11");
+            break;
+			
+			case 12:
+                 rr = Math.abs(rr - 255)/215;
+                 gg = Math.abs(gg - 255)/5;
+                 bb = Math.abs(bb - 255)/3;
+                trace("Choix de la dessin 12");
             break;
 			
             default:
