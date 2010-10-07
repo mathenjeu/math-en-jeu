@@ -597,9 +597,7 @@ class GestionnaireEvenements
 				//musique();
 				
 				isOldGame = _level0.loader.contentHolder.attachMovie("GUI_oldGame", "restartGame", 9999);
-				
-				
-				
+							
 				trace("La connexion a marche");
 			break;
 
@@ -3943,115 +3941,173 @@ function calculColorsAndLoadPlayerSelect()
 // coloring with ColorMatrixFilter a movie
 function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
 {
-  
-   // to obtain RGB values of our color
-   var rr:Number = Number("0x" + clothesCol.substr(2,2).toString(10));
-   var gg:Number = Number("0x" + clothesCol.substr(4,2).toString(10));
-   var bb:Number = Number("0x" + clothesCol.substr(6,2).toString(10));
+     // to obtain RGB values of our color
+       var rr:Number = Number("0x" + clothesCol.substr(2,2).toString(10));
+       var gg:Number = Number("0x" + clothesCol.substr(4,2).toString(10));
+       var bb:Number = Number("0x" + clothesCol.substr(6,2).toString(10));
+	   
+	   var angle:Number;
 
-   //trace("rr : " + rr + " gg : " + gg + " bb : " + bb);
+       //trace("rr : " + rr + " gg : " + gg + " bb : " + bb);
 
-   // to obtain the multipliers
-   // the RGB of base color of perso1 is 245,64,75
-   switch(idD)
-   {
-            case 1:
-			     rr = Math.abs(rr - 21)/245;
-                 gg = Math.abs(gg - 21)/74;
-                 bb = Math.abs(bb - 21)/64;
-                trace("Choix de la dessin 1");
+      // to obtain the multipliers
+      // the RGB of base color of perso1 is 245,64,75
+      switch(idD)
+      {
+           case 1:
+			     rr = rr/255/0.96;
+                 gg = gg/255/0.251;
+                 bb = bb/255/0.294;
+				 angle = 0;
+                trace("Choix de la dessin 1"); // 245,64,75
             break;
             
 			 case 2:
-			     rr = Math.abs(rr - 42)/43;
-                 gg = Math.abs(gg - 42)/189;
-                 bb = Math.abs(bb - 42)/95;
-				trace("Choix de la dessin 2");
+			     rr = rr/255/0.169;
+                 gg = gg/255/0.741;
+                 bb = bb/255/0.373;
+				 angle = 30;
+				trace("Choix de la dessin 2"); // 43,189/95
             break;
 			
 			 case 3:
-                 rr = Math.abs(rr - 63)/189;
-                 gg = Math.abs(gg - 63)/137;
-                 bb = Math.abs(bb - 63)/42;
-                trace("Choix de la dessin 3");
+                  rr = rr/255/0.741;
+                 gg = gg/255/0.537;
+                 bb = bb/255/0.165;
+				 angle = 60;
+                trace("Choix de la dessin 3"); // 189,137,42
             break;
 			
 			 case 4:
-                rr = Math.abs(rr - 84)/48;
-                gg = Math.abs(gg - 84)/149;
-                bb = Math.abs(bb - 84)/74;
-                trace("Choix de la dessin 4");
+                rr = rr/255/0.188;
+                gg = gg/255/0.584;
+                bb = bb/255/0.29;
+				angle = 90;
+                trace("Choix de la dessin 4"); // 48,149,74
             break;
 			
 			 case 5:
-                rr = Math.abs(rr - 105)/69;
-                gg = Math.abs(gg - 105)/80;
-                bb = Math.abs(bb - 105)/136;
-                trace("Choix de la dessin 5");
+                rr = rr/255/0.27;
+                gg = gg/2550.314;
+                bb = bb/255/0.53;
+				angle = 120;
+                trace("Choix de la dessin 5");  // 69,80,136
             break;
 			
-			
 			 case 6:
-                 rr = Math.abs(rr - 126)/102;
-                 gg = Math.abs(gg - 126)/51;
-                 bb = Math.abs(bb - 126)/153;
-                trace("Choix de la dessin 6");
+                 rr = rr/255/0.4;
+                 gg = gg/255/0.2;
+                 bb = bb/255/0.6;
+				 angle = 150;
+                trace("Choix de la dessin 6"); // 102,51,153
             break;
 			
 			 case 7:
-                 rr = Math.abs(rr - 147)/15;
-                 gg = Math.abs(gg - 147)/136;
-                 bb = Math.abs(bb - 147)/52;
-                trace("Choix de la dessin 7");
+                 rr = rr/255/0.059;
+                 gg = gg/255/0.53;
+                 bb = bb/255/0.204;
+				 angle = 180;
+                trace("Choix de la dessin 7"); // 15,136,52
             break;
 			
 			 case 8:
-                 rr = Math.abs(rr - 168)/255;
-                 gg = Math.abs(gg - 168)/255;
-                 bb = Math.abs(bb - 168)/255;
-                trace("Choix de la dessin 1");
+                 rr = rr/255;
+                 gg = gg/255;
+                 bb = bb/255;
+				 angle = 210;
+                trace("Choix de la dessin 8");  // 255.255.255
             break;
 			
-			case 9:
-                 rr = Math.abs(rr - 189)/1;
-                 gg = Math.abs(gg - 189)/150;
-                 bb = Math.abs(bb - 189)/74;
-                trace("Choix de la dessin 9");
+			
+			 case 9:
+                 rr = rr/255/0.004;
+                 gg = gg/255/0.588;
+                 bb = bb/255/0.29;
+				 angle = 240;
+                trace("Choix de la dessin 9");  //  1.150.74
             break;
 			
 			 case 10:
-                 rr = Math.abs(rr - 1)/5;
-                 gg = Math.abs(gg - 1)/1;
-                 bb = Math.abs(bb - 1)/1;
-                trace("Choix de la dessin 10");
+                 rr = rr/255;
+                 gg = gg/255/0.004;
+                 bb = bb/255/0.004;
+				 angle = 270;
+                trace("Choix de la dessin 10");  // 255.0.0 
             break;
 			
 			case 11:
-                 rr = Math.abs(rr - 231)/255;
-                 gg = Math.abs(gg - 231)/255;
-                 bb = Math.abs(bb - 231)/255;
-                trace("Choix de la dessin 11");
+                 rr = rr/255;
+                 gg = gg/255;
+                 bb = bb/255;
+				 angle = 300;
+                trace("Choix de la dessin 11");   // 255.255.255
             break;
 			
 			case 12:
-                rr = Math.abs(rr - 255)/215;
-                 gg = Math.abs(gg - 255)/5;
-                 bb = Math.abs(bb - 255)/3;
-                trace("Choix de la dessin 12");
+                 rr = rr/255/0.843;
+                 gg = gg/255/0.019;
+                 bb = bb/255/0.0118;
+				 angle = 330;
+                trace("Choix de la dessin 12");   //  215.5.3
             break;
 			
             default:
                 trace("Erreur Inconnue");
-   }
+     }
    
-  
 
-   var matrix:Array = new Array();
-   matrix = matrix.concat([rr, 0, 0, 0, 0]); // red
-   matrix = matrix.concat([0, gg, 0, 0, 0]); // green
-   matrix = matrix.concat([0, 0, bb, 0, 0]); // blue
-   matrix = matrix.concat([0, 0, 0, 1, 0]); // alpha
-
+     var matrix:Array = new Array();
+     matrix = matrix.concat([rr, 0, 0, 0, 0]); // red
+     matrix = matrix.concat([0, gg, 0, 0, 0]); // green
+     matrix = matrix.concat([0, 0, bb, 0, 0]); // blue
+     matrix = matrix.concat([0, 0, 0, 1, 0]); // alpha
+	 
+	 // Author: Mario Klingemann
+     // http://www.quasimondo.com
+	 function adjustHue( angle:Number ):Array
+	{
+			angle *= Math.PI/180;
+			
+			var c:Number = Math.cos( angle );
+            var s:Number = Math.sin( angle );
+			
+            var f1:Number = 0.213;
+            var f2:Number = 0.715;
+            var f3:Number = 0.072;
+			
+            var mat:Array = Array((f1 + (c * (1 - f1))) + (s * (-f1)), (f2 + (c * (-f2))) + (s * (-f2)), (f3 + (c * (-f3))) + (s * (1 - f3)), 0, 0, (f1 + (c * (-f1))) + (s * 0.143), (f2 + (c * (1 - f2))) + (s * 0.14), (f3 + (c * (-f3))) + (s * -0.283), 0, 0, (f1 + (c * (-f1))) + (s * (-(1 - f1))), (f2 + (c * (-f2))) + (s * f2), (f3 + (c * (1 - f3))) + (s * f3), 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1);
+			
+			return mat;
+	} // end function adjustHue
+	
+	// Author: Mario Klingemann
+    // http://www.quasimondo.com
+	function concatS(mat:Array):Void
+	{
+		
+		var temp:Array = Array ();
+		var i:Number = 0;
+		
+		for (var y:Number = 0; y < 4; y++ )
+		{
+			
+			for (var x:Number = 0; x < 5; x++ )
+			{
+				temp[i + x] = mat[i    ] * matrix[x     ] + 
+							   mat[i+1] * matrix[x +  5] + 
+							   mat[i+2] * matrix[x + 10] + 
+							   mat[i+3] * matrix[x + 15] +
+							   (x == 4 ? mat[i+4] : 0);
+			}
+			i+=5;
+		}
+		
+		matrix = temp;
+		
+	}// end function concatS
+	
+	concatS(adjustHue(angle));
+	
    var filterC:ColorMatrixFilter = new ColorMatrixFilter(matrix);
    //trace("filter: " + filter.matrix);
    
@@ -4069,6 +4125,8 @@ function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
        var rr:Number = Number("0x" + col.substr(2,2).toString(10));
        var gg:Number = Number("0x" + col.substr(4,2).toString(10));
        var bb:Number = Number("0x" + col.substr(6,2).toString(10));
+	   
+	   var angle:Number;
 
        //trace("rr : " + rr + " gg : " + gg + " bb : " + bb);
 
@@ -4077,89 +4135,100 @@ function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
       switch(idD)
       {
            case 1:
-			    rr = Math.abs(rr - 21)/245;
-                 gg = Math.abs(gg - 21)/74;
-                 bb = Math.abs(bb - 21)/64;
-                trace("Choix de la dessin 1");
+			     rr = rr/255/0.96;  // to take in consideration the base color of the movie
+                 gg = gg/255/0.251;
+                 bb = bb/255/0.294;
+				 angle = 0;
+                trace("Choix de la dessin 1"); // 245,64,75
             break;
             
 			 case 2:
-			     rr = Math.abs(rr - 42)/43;
-                 gg = Math.abs(gg - 42)/189;
-                 bb = Math.abs(bb - 42)/95;
-				trace("Choix de la dessin 2");
+			     rr = rr/255/0.169;
+                 gg = gg/255/0.741;
+                 bb = bb/255/0.373;
+				 angle = 30;
+				trace("Choix de la dessin 2"); // 43,189/95
             break;
 			
 			 case 3:
-                 rr = Math.abs(rr - 63)/189;
-                 gg = Math.abs(gg - 63)/137;
-                 bb = Math.abs(bb - 63)/42;
-                trace("Choix de la dessin 3");
+                 rr = rr/255/0.741;
+                 gg = gg/255/0.537;
+                 bb = bb/255/0.165;
+				 angle = 60;
+                trace("Choix de la dessin 3"); // 189,137,42
             break;
 			
-			 case 4:
-                rr = Math.abs(rr - 84)/48;
-                gg = Math.abs(gg - 84)/149;
-                bb = Math.abs(bb - 84)/74;
-                trace("Choix de la dessin 4");
+			case 4:
+                rr = rr/255/0.188;
+                gg = gg/255/0.584;
+                bb = bb/255/0.29;
+				angle = 90;
+                trace("Choix de la dessin 4"); // 48,149,74
             break;
 			
 			 case 5:
-                rr = Math.abs(rr - 105)/69;
-                gg = Math.abs(gg - 105)/80;
-                bb = Math.abs(bb - 105)/136;
-                trace("Choix de la dessin 5");
+                rr = rr/255/0.27;
+                gg = gg/2550.314;
+                bb = bb/255/0.53;
+				angle = 120;
+                trace("Choix de la dessin 5");  // 69,80,136
             break;
 			
-			
 			 case 6:
-                 rr = Math.abs(rr - 126)/102;
-                 gg = Math.abs(gg - 126)/51;
-                 bb = Math.abs(bb - 126)/153;
-                trace("Choix de la dessin 6");
+                 rr = rr/255/0.4;
+                 gg = gg/255/0.2;
+                 bb = bb/255/0.6;
+				 angle = 150;
+                trace("Choix de la dessin 6"); // 102,51,153
             break;
 			
 			 case 7:
-                 rr = Math.abs(rr - 147)/15;
-                 gg = Math.abs(gg - 147)/136;
-                 bb = Math.abs(bb - 147)/52;
-                trace("Choix de la dessin 7");
+                 rr = rr/255/0.059;
+                 gg = gg/255/0.53;
+                 bb = bb/255/0.204;
+				 angle = 180;
+                trace("Choix de la dessin 7"); // 15,136,52
             break;
 			
 			 case 8:
-                 rr = Math.abs(rr - 168)/255;
-                 gg = Math.abs(gg - 168)/255;
-                 bb = Math.abs(bb - 168)/255;
-                trace("Choix de la dessin 8");
+                 rr = rr/255;
+                 gg = gg/255;
+                 bb = bb/255;
+				 angle = 210;
+                trace("Choix de la dessin 8");  // 255.255.255
             break;
 			
 			
 			 case 9:
-                 rr = Math.abs(rr - 189)/1;
-                 gg = Math.abs(gg - 189)/150;
-                 bb = Math.abs(bb - 189)/74;
-                trace("Choix de la dessin 9");
+                 rr = rr/255/0.004;
+                 gg = gg/255/0.588;
+                 bb = bb/255/0.29;
+				 angle = 240;
+                trace("Choix de la dessin 9");  //  1.150.74
             break;
 			
 			 case 10:
-                rr = Math.abs(rr - 1)/5;
-                 gg = Math.abs(gg - 1)/1;
-                 bb = Math.abs(bb - 1)/1;
-                trace("Choix de la dessin 10");
+                 rr = rr/255;
+                 gg = gg/255/0.004;
+                 bb = bb/255/0.004;
+				 angle = 270;
+                trace("Choix de la dessin 10");  // 255.0.0 
             break;
 			
 			case 11:
-                 rr = Math.abs(rr - 231)/255;
-                 gg = Math.abs(gg - 231)/255;
-                 bb = Math.abs(bb - 231)/255;
-                trace("Choix de la dessin 11");
+                 rr = rr/255;
+                 gg = gg/255;
+                 bb = bb/255;
+				 angle = 300;
+                trace("Choix de la dessin 11");   // 255.255.255
             break;
 			
 			case 12:
-                 rr = Math.abs(rr - 255)/215;
-                 gg = Math.abs(gg - 255)/5;
-                 bb = Math.abs(bb - 255)/3;
-                trace("Choix de la dessin 12");
+                 rr = rr/255/0.843;
+                 gg = gg/255/0.019;
+                 bb = bb/255/0.0118;
+				 angle = 330;
+                trace("Choix de la dessin 12");   //  215.5.3
             break;
 			
             default:
@@ -4167,15 +4236,61 @@ function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
      }
    
 
-     var mat:Array = new Array();
-     mat = mat.concat([rr, 0, 0, 0, 0]); // red
-     mat = mat.concat([0, gg, 0, 0, 0]); // green
-     mat = mat.concat([0, 0, bb, 0, 0]); // blue
-     mat = mat.concat([0, 0, 0, 1, 0]); // alpha
+     var matrix:Array = new Array();
+     matrix = matrix.concat([rr, 0, 0, 0, 0]); // red
+     matrix = matrix.concat([0, gg, 0, 0, 0]); // green
+     matrix = matrix.concat([0, 0, bb, 0, 0]); // blue
+     matrix = matrix.concat([0, 0, 0, 1, 0]); // alpha
 	 
-	 var filterC:ColorMatrixFilter = new ColorMatrixFilter(mat);
+	 // Author: Mario Klingemann
+     // http://www.quasimondo.com
+	 function adjustHue( angle:Number ):Array
+	{
+			angle *= Math.PI/180;
+			
+			var c:Number = Math.cos( angle );
+            var s:Number = Math.sin( angle );
+			
+            var f1:Number = 0.213;
+            var f2:Number = 0.715;
+            var f3:Number = 0.072;
+			
+            var mat:Array = Array((f1 + (c * (1 - f1))) + (s * (-f1)), (f2 + (c * (-f2))) + (s * (-f2)), (f3 + (c * (-f3))) + (s * (1 - f3)), 0, 0, (f1 + (c * (-f1))) + (s * 0.143), (f2 + (c * (1 - f2))) + (s * 0.14), (f3 + (c * (-f3))) + (s * -0.283), 0, 0, (f1 + (c * (-f1))) + (s * (-(1 - f1))), (f2 + (c * (-f2))) + (s * f2), (f3 + (c * (1 - f3))) + (s * f3), 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1);
+			
+			return mat;
+	}
+	
+	// Author: Mario Klingemann
+    // http://www.quasimondo.com
+	function concatM(mat:Array):Void
+	{
+		
+		var temp:Array = Array ();
+		var i:Number = 0;
+		
+		for (var y:Number = 0; y < 4; y++ )
+		{
+			
+			for (var x:Number = 0; x < 5; x++ )
+			{
+				temp[i + x] = mat[i    ] * matrix[x     ] + 
+							   mat[i+1] * matrix[x +  5] + 
+							   mat[i+2] * matrix[x + 10] + 
+							   mat[i+3] * matrix[x + 15] +
+							   (x == 4 ? mat[i+4] : 0);
+			}
+			i+=5;
+		}
+		
+		matrix = temp;
+		
+	}
+	
+	concatM(adjustHue(angle));
 	 
-	 return filterC;
+	var filterC:ColorMatrixFilter = new ColorMatrixFilter(matrix);
+	 
+	return filterC;
 	  
 } //end method
 
