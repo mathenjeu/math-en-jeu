@@ -3,7 +3,7 @@
 <Texte 
 	
 	Messagerie = ""
-	  welcomeMess = "Bienvenue à Math en jeu!!!"
+	  welcomeMess = "Bienvenue à Math en jeu!"
 	  bananaMess = " a lancé une Banane à "
 	  outMess = "  a quitté le jeu!"
 	  InMess = " est de retour dans le jeu!"
@@ -19,11 +19,11 @@
 	  bananaCollectMess = "Vous avez ramassez une banane. Vous pouvez la lancer à un adversaire."
 	  
 	  objectMessageBoule = "Vous pouvez l'utiliser pour changer la question posée."
-	  objectMessageLivre = "Vous pouvez l'utiliser pour éliminer un mauvais choix de réponse. Seulement un par question."
-	  objectMessagePiece = "  Vous pouvez l'échanger contre un   objet dans un    magasin."
+	  objectMessageLivre = "Vous pouvez l'utiliser pour éliminer un mauvais choix de réponse. Seulement une par question."
+	  objectMessagePiece = "  Vous pouvez l'échanger contre un objet dans un magasin."
 	  objectMessageBanane = "Vous pouvez lancer la banane à un adversaire. "
-	  objectMessageHelp = "Menu d'aide. Vous y trouverez des réponses à vos questions... "
-	  objectMessageClose = "Bouton quitter. Si vous voulez quitter le jeu ou redémarrer. "
+	  objectMessageHelp = "Menu d'aide. Vous y trouverez des réponses à vos questions."
+	  objectMessageClose = "Bouton quitter. Si vous voulez quitter le jeu ou redémarrer..."
 	  objectMessageTime = "Temps restant à la partie. "
 	  
 	  controlMessageLoopPlus = "Pour t'approcher de la planche de jeu."
@@ -32,18 +32,18 @@
 	  controlMessageSound = "Pour activer ou désactiver les effets sonores durant la partie."
 	  
 	main_menu = ""
-	  bienvenue = "Bienvenue dans Math en jeu "
+	  bienvenue = "Bienvenue dans Math en jeu!"
     btnPlay = "Jouer" 
     btnQuit = "Quitter"
     btnProfile = "Mon Profil"
-    playMaze = "Entrez le labyrinthe pour être le premier a échapper..."
+    playMaze = "Entrez dans le labyrinthe et soyez le premier a vous échapper..."
     teachBtn =   "Ma classe"
-    linkProf1 = "Est vous un proffeseur?"
+    linkProf1 = "Est vous un professeur?"
     linkProf2 = "Cliquez ici..."
-    linkProf3 = "pour entrer dans le Salon des Proffeseurs."
-    erreurRole = "Accès interdit!!!
+    linkProf3 = "pour entrer dans le Salon des Professeurs."
+    erreurRole = "Accès interdit.
 Cette section est réservée aux professeurs.
-Si vous êtes un professeur et que vous voulez accéder à cette section réservée, contactez-nous..."
+Si vous êtes un professeur et que vous voulez accéder à cette section réservée, contactez-nous."
     erreurContact = ""
     textReturn = "Pour retourner à Math en jeu, cliquez ici"
     
@@ -69,7 +69,7 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
         
   chargement_beta_local = ""	
 
-		version = "Version 2.5"
+		version = "Version 0.4 Beta"
 		boutonEntrer = "Entrer"
 		barLabel = "Chargement en cours..."
 
@@ -100,11 +100,11 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 	  
 	 
   mathemaQuoi_betaNEW = ""
-    GUIerrorConnection = "Une erreur s'est produite. Vous êtes déconnecté du serveur de jeu. Fermez le fureteur et recommencer!"  
-    errorPWD = "Mauvais mot de passe! Réessayez ou faites un autre choix. "
-	  pwdAlert = "Erreur!"
-	  fermerAlert = "Voulez vous vraiment quitter le jeu?"
-	  textGUI_PWD = "Cette salle requiert un mot de passe..."
+    GUIerrorConnection = "Une erreur s'est produite. Vous êtes déconnecté du serveur de jeu. Utilisez le X en haut à la droite de l'écran pour quitter le jeu et recommencer!"  
+    errorPWD = "Mauvais mot de passe. Réessayez ou faites un autre choix. "
+	  pwdAlert = "Erreur"
+	  fermerAlert = "Voulez-vous vraiment quitter le jeu?"
+	  textGUI_PWD = "Cette salle requiert un mot de passe."
 	  errorSelect = "Sélectionnez une salle"
 	  nomAlert = "Donnez un nom SVP."
 	  descAlert = "Donnez une description SVP."
@@ -114,7 +114,7 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 	  
 	  buttonNew = "Nouvelle"
 	  buttonOld = "Rejoindre"
-	  restartText = "Vous êtes déjà assigné à une partie en cours. Voulez vous rejoindre la partie en cours ou désirez-vous en recommencer une nouvelle? "
+	  restartText = "Vous êtes déjà assigné à une partie en cours. Voulez vous rejoindre la partie en cours ou désirez-vous en commencer une nouvelle? "
 	  buttonBug = " Signaler une erreur "
 	  userText = "Joueur : "
 	  buttonSend = "Envoyer"
@@ -131,9 +131,9 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 		
 		  textAcceptStats = "J'accepte que mon utilisation de cette salle soit rapportée à  "
 		  
-      selectRoom = "Sélectez une Salle"
-		  selectTable = "Sélectez une Table"
-		  selectPlayer = "Sélectez un dessin"
+      selectRoom = "Choisissez une salle"
+		  selectTable = "Choisissez une table"
+		  selectPlayer = "Choisissez un personnage"
 		 
 			descriptionPrincipale = "C'est le coeur de Math en Jeu. Une immense banque de questions se penchant sur tous les domaines des mathématiques."
 			
@@ -142,10 +142,10 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 			descriptionDefault = "La banque de questions a été créée par une personne ou un groupe indépendant de l'équipe de Math en Jeu."
 			
 			salle = "CHOIX DES SALLES"
-      chargementSalles = "Chargement de la liste des salles en cours" 
+      chargementSalles = "Chargement de la liste des salles en cours..." 
 			boutonRetour = "Retour"
 			boutonContinuer = "Continuer"
-			boutonQuitterX = "Quitter la partie.."
+			boutonQuitterX = "Quitter la partie."
 			tableNameLabel = "Nom de la Table"
 			tableLinesLabel = "Lignes"
 			tableColumnsLabel = "Colognes"
@@ -161,7 +161,7 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 		frame2 = ""
 
 			texteTables = " "
-      chargementTables = "Chargement de la liste des tables en cours" 
+      chargementTables = "Chargement de la liste des tables en cours..." 
       aucuneTable = "Il n'y a aucune table ouverte dans cette salle" 
 			btnCreerTable = "Nouvelle table"
 			choixTable = "CHOIX DES TABLES"
@@ -187,7 +187,7 @@ joindre et le mode de jeu que vous souhaitez jouer...  "
 			
 			choixPerso = "Choisissez votre personnage."
 			selectPlayerText = "SELECTION DU JOUEUR"
-			selectPlayerInfo = "Sélectionnez un joueur de notre équipe coloré"
+			selectPlayerInfo = "Sélectionnez un joueur de notre équipe colorée"
 
 			inconnu = "Inconnu"
 			demarrerMaintenant = "Démarrer maintenant"
