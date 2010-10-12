@@ -2340,7 +2340,7 @@ class GestionnaireEvenements
     	trace("debut de evenementDeconnexionPhysique  GestEven ");
 		var errorDeconnexion:MovieClip;
 		
-		errorDeconnexion = _level0.loader.contentHolder.attachMovie("GUI_erreur", "deconnexion", 9999);
+		errorDeconnexion = _level0.loader.contentHolder.attachMovie("GUI_erreur", "deconnexion", 9999);//, {x: 20, y: 20});
 		errorDeconnexion.linkGUI_erreur._visible = false;
 		errorDeconnexion.btn_ok._visible = false;
 			
@@ -3955,7 +3955,7 @@ function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
       switch(idD)
       {
            case 1:
-			     rr = rr/255/0.96;
+			     rr = rr/255/0.96;  // to take in consideration the base color of the movie
                  gg = gg/255/0.251;
                  bb = bb/255/0.294;
 				 angle = 0;
@@ -3988,7 +3988,7 @@ function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
 			
 			 case 5:
                 rr = rr/255/0.27;
-                gg = gg/2550.314;
+                gg = gg/255/0.314;
                 bb = bb/255/0.53;
 				angle = 120;
                 trace("Choix de la dessin 5");  // 69,80,136
@@ -4020,17 +4020,17 @@ function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
 			
 			
 			 case 9:
-                 rr = rr/255/0.004;
+                 rr = rr/255/0.3;
                  gg = gg/255/0.588;
                  bb = bb/255/0.29;
 				 angle = 240;
-                trace("Choix de la dessin 9");  //  1.150.74
+                trace("Choix de la dessin 9");  //  79.150.74
             break;
 			
 			 case 10:
                  rr = rr/255;
-                 gg = gg/255/0.004;
-                 bb = bb/255/0.004;
+                 gg = gg/255/0.12;
+                 bb = bb/255/0.12;
 				 angle = 270;
                 trace("Choix de la dessin 10");  // 255.0.0 
             break;
@@ -4106,7 +4106,7 @@ function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
 		
 	}// end function concatS
 	
-	concatS(adjustHue(angle));
+   concatS(adjustHue(angle));
 	
    var filterC:ColorMatrixFilter = new ColorMatrixFilter(matrix);
    //trace("filter: " + filter.matrix);
@@ -4168,7 +4168,7 @@ function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
 			
 			 case 5:
                 rr = rr/255/0.27;
-                gg = gg/2550.314;
+                gg = gg/255/0.314;
                 bb = bb/255/0.53;
 				angle = 120;
                 trace("Choix de la dessin 5");  // 69,80,136
@@ -4200,19 +4200,19 @@ function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
 			
 			
 			 case 9:
-                 rr = rr/255/0.004;
+                 rr = rr/255/0.3;
                  gg = gg/255/0.588;
                  bb = bb/255/0.29;
 				 angle = 240;
-                trace("Choix de la dessin 9");  //  1.150.74
+                trace("Choix de la dessin 9");  //  79.150.74
             break;
 			
 			 case 10:
                  rr = rr/255;
-                 gg = gg/255/0.004;
-                 bb = bb/255/0.004;
+                 gg = gg/255/0.12;
+                 bb = bb/255/0.12;
 				 angle = 270;
-                trace("Choix de la dessin 10");  // 255.0.0 
+                trace("Choix de la dessin 10");  // 255.31.31 
             break;
 			
 			case 11:
