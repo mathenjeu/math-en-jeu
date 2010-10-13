@@ -200,7 +200,7 @@ public class ProtocoleJoueur implements Runnable
 
 			while (bolStopThread == false)
 			{
-				Thread.sleep(50);
+				//Thread.sleep(1);
 				// Déclaration d'une variable qui va servir de marqueur 
 				// pour savoir oè on en est rendu dans la lecture
 				int intMarqueur = 0;

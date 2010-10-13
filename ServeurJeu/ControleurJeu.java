@@ -884,6 +884,7 @@ public class ControleurJeu
     	return objRandom.nextInt(max);
     }
     
+    
     public ParametreIA obtenirParametreIA()
     {
     	if(objParametreIA == null)
