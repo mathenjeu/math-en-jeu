@@ -334,6 +334,7 @@ function drawUserBanana(i:Number, id:Number)
 		this["mclListenerString"].onLoadComplete = function(target_mc:MovieClip) {
     
 	        target_mc.filterC = _level0.loader.contentHolder.toss.bananaPlayers[i - 1].filterC;
+			target_mc.gotoAndPlay("bored");
 			//trace("ICI TOSS " + target_mc.filterC + " " + nameX + "  " + _level0.loader.contentHolder.toss.bananaPlayers[i - 1].filterC);
 						
         };
