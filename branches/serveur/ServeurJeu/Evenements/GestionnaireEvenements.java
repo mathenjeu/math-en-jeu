@@ -49,16 +49,17 @@ public class GestionnaireEvenements implements Runnable
 		        lstEvenements.remove(evenementPrioritaire);
 		    }
 		    
+		    /*
 			try
 			{
 				// Stopper le thread du gestionnaire d'événements pour
 				// laisser un moment de répit au CPU
-				Thread.sleep(100);
+				Thread.sleep(5);
 			}
 			catch (InterruptedException ie) 
 			{
 				System.out.println("Error GestEvenements - " + ie.getStackTrace());
-			}
+			}*/
 		}
 	}
 	
