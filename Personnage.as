@@ -596,8 +596,8 @@ class Personnage
             target_mc.filterC = filterC;
 		    target_mc.nom = nom;
 						
-			target_mc.gotoAndPlay(10);
-			target_mc.gotoAndStop(1);
+			target_mc.gotoAndPlay("bored");
+			//target_mc.gotoAndStop(1);
 			
 			// assure que le clip a la bonne orientation
 			target_mc._xscale = - Math.abs(target_mc._xscale);
@@ -1153,7 +1153,7 @@ class Personnage
             
 			target_mc.filterC = filterC;
 			target_mc.nom = playerUnder;
-			target_mc.gotoAndStop(1);
+			target_mc.gotoAndPlay("bored");
 						
         };
 		myLoader.addListener(mclListener);
