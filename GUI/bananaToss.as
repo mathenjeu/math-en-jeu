@@ -84,11 +84,14 @@ var but:MovieClip;
 
 this.perso1.onRollOver = function()
 {
+	if(_level0.loader.contentHolder.toss.perso1.persoBanana1 != undefined)
+	{
 	   // var movieY:Number = _level0.loader.contentHolder.toss.perso1._height * 0.9;
 	    //Mouse.hide();
 		but = _level0.loader.contentHolder.toss.perso1.attachMovie("bananaShell", "but1", this.getNextHighestDepth(), {_x:10, _y:10});
 		but._xscale = 100;
 		but._yscale = 100;
+	}
 };
 
 this.perso1.onRollOut = function()
@@ -98,16 +101,22 @@ this.perso1.onRollOut = function()
 };
 this.perso1.onRelease = function()
 {
+	if(_level0.loader.contentHolder.toss.perso1.persoBanana1 != undefined)
+	{
 		var namePlayer:String = _level0.loader.contentHolder.toss.name1.persoName;
 		useBanana(namePlayer);
+	}
 }; 
 
 this.perso2.onRollOver = function()
 {
+	if(_level0.loader.contentHolder.toss.perso2.persoBanana2 != undefined)
+	{
 	    //var movieY:Number = _level0.loader.contentHolder.toss.perso2._height * 0.9;
     	but = _level0.loader.contentHolder.toss.perso2.attachMovie("bananaShell", "but2", this.getNextHighestDepth(), {_x:10, _y:10});
 		but._xscale = 100;
 		but._yscale = 100;
+	}
 };
 
 this.perso2.onRollOut = function()
@@ -117,16 +126,22 @@ this.perso2.onRollOut = function()
 
 this.perso2.onRelease = function()
 {
+	if(_level0.loader.contentHolder.toss.perso2.persoBanana2 != undefined)
+	{
 		var namePlayer:String = _level0.loader.contentHolder.toss.name2.persoName;
 		useBanana(namePlayer);
+	}
 };  
 
 this.perso3.onRollOver = function()
 {
-	    // var movieY:Number = _level0.loader.contentHolder.toss.perso3.persoBanana3._height * 0.9;
+	 if(_level0.loader.contentHolder.toss.perso3.persoBanana3 != undefined)
+	{
+	 // var movieY:Number = _level0.loader.contentHolder.toss.perso3.persoBanana3._height * 0.9;
 		but = _level0.loader.contentHolder.toss.perso3.attachMovie("bananaShell", "but3", this.getNextHighestDepth(), {_x:10, _y:10});
 		but._xscale = 100;
-		but._yscale = 100;;
+		but._yscale = 100;
+	}
 };
 
 this.perso3.onRollOut = function()
@@ -135,16 +150,22 @@ this.perso3.onRollOut = function()
 };
 this.perso3.onRelease = function()
 {
+	if(_level0.loader.contentHolder.toss.perso3.persoBanana3 != undefined)
+	{
 		var namePlayer:String = _level0.loader.contentHolder.toss.name3.persoName;
 		useBanana(namePlayer);
+	}
 }; 
 
 this.perso4.onRollOver = function()
 {
-	    //var movieY:Number = _level0.loader.contentHolder.toss.perso4.persoBanana4._height * 0.9;
+	if(_level0.loader.contentHolder.toss.perso4.persoBanana4 != undefined)
+	{
+	//var movieY:Number = _level0.loader.contentHolder.toss.perso4.persoBanana4._height * 0.9;
 		but = _level0.loader.contentHolder.toss.perso4.attachMovie("bananaShell", "but4", this.getNextHighestDepth(), {_x:10, _y:10});
 		but._xscale = 100;
 		but._yscale = 100;
+	}
 };
 
 this.perso4.onRollOut = function()
@@ -154,16 +175,22 @@ this.perso4.onRollOut = function()
 
 this.perso4.onRelease = function()
 {
+	if(_level0.loader.contentHolder.toss.perso4.persoBanana4 != undefined)
+	{
 		var namePlayer:String = _level0.loader.contentHolder.toss.name4.persoName;
 		useBanana(namePlayer);
+	}
 }; 
 
 this.perso5.onRollOver = function()
 {
+	if(_level0.loader.contentHolder.toss.perso5.persoBanana5 != undefined)
+	{
 	    //var movieY:Number = _level0.loader.contentHolder.toss.perso5.persoBanana5._height * 0.9;
 		but = _level0.loader.contentHolder.toss.perso5.attachMovie("bananaShell", "but5", this.getNextHighestDepth(), {_x:10, _y:10});
 		but._xscale = 100;
 		but._yscale = 100;
+	}
 };
 
 this.perso5.onRollOut = function()
@@ -173,22 +200,32 @@ this.perso5.onRollOut = function()
 
 this.perso5.onRelease = function()
 {
-		var namePlayer:String = _level0.loader.contentHolder.toss.name5.persoName;
+	if(_level0.loader.contentHolder.toss.perso5.persoBanana5 != undefined)
+	{
+	    var namePlayer:String = _level0.loader.contentHolder.toss.name5.persoName;
 		useBanana(namePlayer);
+	}
 };
 
 this.perso6.onRelease = function()
 {
+	if(_level0.loader.contentHolder.toss.perso6.persoBanana6 != undefined)
+	{
 		var namePlayer:String = _level0.loader.contentHolder.toss.name6.persoName;
 		useBanana(namePlayer);
+	}
+			
 };
 
 this.perso6.onRollOver = function()
 {
-	    ///var movieY:Number = _level0.loader.contentHolder.toss.perso6.persoBanana6._height * 0.9;
-		but = _level0.loader.contentHolder.toss.perso6.persoBanana6.attachMovie("bananaShell", "but6", this.getNextHighestDepth(), {_x:10, _y:10});
+	if(_level0.loader.contentHolder.toss.perso6.persoBanana6 != undefined)
+	{
+	  ///var movieY:Number = _level0.loader.contentHolder.toss.perso6.persoBanana6._height * 0.9;
+		but = _level0.loader.contentHolder.toss.perso6.attachMovie("bananaShell", "but6", this.getNextHighestDepth(), {_x:10, _y:10});
 		but._xscale = 100;
 		but._yscale = 100;
+	}
 };
 
 this.perso6.onRollOut = function()
@@ -198,15 +235,21 @@ this.perso6.onRollOut = function()
 
 this.perso7.onRelease = function()
 {
+	if(_level0.loader.contentHolder.toss.perso7.persoBanana7 != undefined)
+	{
 		var namePlayer:String = _level0.loader.contentHolder.toss.name7.persoName;
 		useBanana(namePlayer);
+	}
 }; 
 this.perso7.onRollOver = function()
 {
+	if(_level0.loader.contentHolder.toss.perso7.persoBanana7 != undefined)
+	{
 	    //var movieY:Number = _level0.loader.contentHolder.toss.perso7.persoBanana7._height * 0.9;
-		but = _level0.loader.contentHolder.toss.perso7.persoBanana7.attachMovie("bananaShell", "but7", this.getNextHighestDepth(), {_x:10, _y:10});
+		but = _level0.loader.contentHolder.toss.perso7.attachMovie("bananaShell", "but7", this.getNextHighestDepth(), {_x:10, _y:10});
 		but._xscale = 100;
 		but._yscale = 100;
+	}
 };
 
 this.perso7.onRollOut = function()
@@ -216,16 +259,22 @@ this.perso7.onRollOut = function()
 
 this.perso8.onRelease = function()
 {
+	if(_level0.loader.contentHolder.toss.perso8.persoBanana8 != undefined)
+	{
 		var namePlayer:String = _level0.loader.contentHolder.toss.name8.persoName;
 		useBanana(namePlayer);
+	}
 };
 
 this.perso8.onRollOver = function()
 {
-	    //var movieY:Number = _level0.loader.contentHolder.toss.perso7.persoBanana7._height * 0.9;
-		but = _level0.loader.contentHolder.toss.perso8.persoBanana8.attachMovie("bananaShell", "but8", this.getNextHighestDepth(), {_x:10, _y:10});
+	if(_level0.loader.contentHolder.toss.perso8.persoBanana8 != undefined)
+	{
+	 //var movieY:Number = _level0.loader.contentHolder.toss.perso7.persoBanana7._height * 0.9;
+		but = _level0.loader.contentHolder.toss.perso8.attachMovie("bananaShell", "but8", this.getNextHighestDepth(), {_x:10, _y:10});
 		but._xscale = 100;
 		but._yscale = 100;
+	}
 };
 
 this.perso8.onRollOut = function()
@@ -235,16 +284,22 @@ this.perso8.onRollOut = function()
 
 this.perso9.onRelease = function()
 {
+	if(_level0.loader.contentHolder.toss.perso9.persoBanana9 != undefined)
+	{
 		var namePlayer:String = _level0.loader.contentHolder.toss.name9.persoName;
 		useBanana(namePlayer);
+	}
 }; 
 
 this.perso9.onRollOver = function()
 {
+	if(_level0.loader.contentHolder.toss.perso9.persoBanana9 != undefined)
+	{
 	    //var movieY:Number = _level0.loader.contentHolder.toss.perso7.persoBanana7._height * 0.9;
-		but = _level0.loader.contentHolder.toss.perso9.persoBanana9.attachMovie("bananaShell", "but9", this.getNextHighestDepth(), {_x:10, _y:10});
+		but = _level0.loader.contentHolder.toss.perso9.attachMovie("bananaShell", "but9", this.getNextHighestDepth(), {_x:10, _y:10});
 		but._xscale = 100;
 		but._yscale = 100;
+	}
 };
 
 this.perso9.onRollOut = function()
@@ -254,16 +309,22 @@ this.perso9.onRollOut = function()
 
 this.perso10.onRelease = function()
 {
+	if(_level0.loader.contentHolder.toss.perso10.persoBanana10 != undefined)
+	{
 		var namePlayer:String = _level0.loader.contentHolder.toss.name10.persoName;
 		useBanana(namePlayer);
+	}
 };  
 
 this.perso10.onRollOver = function()
 {
+	if(_level0.loader.contentHolder.toss.perso10.persoBanana10 != undefined)
+	{
 	    //var movieY:Number = _level0.loader.contentHolder.toss.perso7.persoBanana7._height * 0.9;
-		but = _level0.loader.contentHolder.toss.perso10.persoBanana10.attachMovie("bananaShell", "but10", this.getNextHighestDepth(), {_x:10, _y:10});
+		but = _level0.loader.contentHolder.toss.perso10.attachMovie("bananaShell", "but10", this.getNextHighestDepth(), {_x:10, _y:10});
 		but._xscale = 100;
 		but._yscale = 100;
+	}
 };
 
 this.perso10.onRollOut = function()
@@ -273,16 +334,22 @@ this.perso10.onRollOut = function()
 
 this.perso11.onRelease = function()
 {
+	if(_level0.loader.contentHolder.toss.perso11.persoBanana11 != undefined)
+	{
 		var namePlayer:String = _level0.loader.contentHolder.toss.name11.persoName;
 		useBanana(namePlayer);
+	}
 };  
 
 this.perso11.onRollOver = function()
 {
+	if(_level0.loader.contentHolder.toss.perso11.persoBanana11 != undefined)
+	{
 	    //var movieY:Number = _level0.loader.contentHolder.toss.perso7.persoBanana7._height * 0.9;
-		but = _level0.loader.contentHolder.toss.perso11.persoBanana11.attachMovie("bananaShell", "but11", this.getNextHighestDepth(), {_x:10, _y:10});
+		but = _level0.loader.contentHolder.toss.perso11.attachMovie("bananaShell", "but11", this.getNextHighestDepth(), {_x:10, _y:10});
 		but._xscale = 100;
 		but._yscale = 100;
+	}
 };
 
 this.perso11.onRollOut = function()
@@ -292,16 +359,22 @@ this.perso11.onRollOut = function()
 
 this.perso12.onRelease = function()
 {
+	if(_level0.loader.contentHolder.toss.perso12.persoBanana12 != undefined)
+	{
 		var namePlayer:String = _level0.loader.contentHolder.toss.name12.persoName;
 		useBanana(namePlayer);
+	}
 };  
 
 this.perso12.onRollOver = function()
 {
+	if(_level0.loader.contentHolder.toss.perso12.persoBanana12 != undefined)
+	{
 	    //var movieY:Number = _level0.loader.contentHolder.toss.perso7.persoBanana7._height * 0.9;
-		but = _level0.loader.contentHolder.toss.perso12.persoBanana12.attachMovie("bananaShell", "but12", this.getNextHighestDepth(), {_x:10, _y:10});
+		but = _level0.loader.contentHolder.toss.perso12.attachMovie("bananaShell", "but12", this.getNextHighestDepth(), {_x:10, _y:10});
 		but._xscale = 100;
 		but._yscale = 100;
+	}
 };
 
 this.perso12.onRollOut = function()
