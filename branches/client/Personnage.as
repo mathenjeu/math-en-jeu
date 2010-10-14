@@ -258,8 +258,8 @@ class Personnage
 					  _level0.loader.contentHolder.toss.loadMovie("GUI/bananaToss.swf");
 					  
 					  
-					  bananaClip._x = 22;
-                      bananaClip._y = 70;
+					  bananaClip._x = 30;
+                      bananaClip._y = 40;
 					  
 		        }else{
 					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(listeObjets[nomObj][listeObjets[nomObj].length - 1], "NA");

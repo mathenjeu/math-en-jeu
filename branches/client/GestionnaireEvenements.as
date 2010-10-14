@@ -3433,13 +3433,13 @@ class GestionnaireEvenements
 		   
 		   //first on put on the sprite the box for the timer if is our perso
 		
-		   _level0.loader.contentHolder.attachMovie("timeBox", "brainBox", 6);//_level0.loader.contentHolder.getNextHigesthDepth());
-		   _level0.loader.contentHolder.brainBox._x = 470;
-		   _level0.loader.contentHolder.brainBox._xscale = 90;
-		   _level0.loader.contentHolder.brainBox._y = 320;
+		   _level0.loader.contentHolder.attachMovie("brainBox", "brainBox", 6);//_level0.loader.contentHolder.getNextHigesthDepth());
+		   _level0.loader.contentHolder.brainBox._x = 460;
+		   //_level0.loader.contentHolder.brainBox._xscale = 90;
+		   _level0.loader.contentHolder.brainBox._y = 304;
 		
 		   //create text field to put info in
-		   _level0.loader.contentHolder.brainBox.createTextField("brainiacTime", _level0.loader.contentHolder.brainBox.getNextHigesthDepth(), 25, 8, 40, 20);
+		   _level0.loader.contentHolder.brainBox.createTextField("brainiacTime", _level0.loader.contentHolder.brainBox.getNextHigesthDepth(), 5, 18, 40, 30);
 		
 		   _level0.loader.contentHolder.brainBox.nameObject = "BRAINIAC";
 		   // Make the field dynamic text field
@@ -3449,7 +3449,7 @@ class GestionnaireEvenements
 	          multiline = false;
 	          background = false;
 	          //text = "5";
-	          textColor = 0x65FF00;
+	          textColor = 0xFFFFFF;
 	          border = false;
 	          _visible = true;
 	          //autoSize = true;
@@ -3457,7 +3457,7 @@ class GestionnaireEvenements
    
            var formatTimer:TextFormat = new TextFormat();
            formatTimer.bold = true;
-           formatTimer.size = 15;
+           formatTimer.size = 21;
            formatTimer.font = "ArialBlack";
            formatTimer.align = "Center";
            _level0.loader.contentHolder.brainBox.brainiacTime.setNewTextFormat(formatTimer);
@@ -3513,15 +3513,15 @@ class GestionnaireEvenements
 	{
 				
 		//first on put on the sprite the box for the timer
-		var banBox:MovieClip = 	_level0.loader.contentHolder.attachMovie("timeBox", "bananaBox", 7);//_level0.loader.contentHolder.getNextHigesthDepth());
-		_level0.loader.contentHolder.bananaBox._x = 390;
-		_level0.loader.contentHolder.bananaBox._xscale = 90;
-		_level0.loader.contentHolder.bananaBox._y = 320;
+		var banBox:MovieClip = 	_level0.loader.contentHolder.attachMovie("bananaBox", "bananaBox", 7);//_level0.loader.contentHolder.getNextHigesthDepth());
+		_level0.loader.contentHolder.bananaBox._x = 405;
+		//_level0.loader.contentHolder.bananaBox._xscale = 90;
+		_level0.loader.contentHolder.bananaBox._y = 304;
 		
 		_level0.loader.contentHolder.bananaBox.nameObject = _root.texteSource_xml.firstChild.attributes.bananaLabel;
 		
 		//create text field to put info in
-		_level0.loader.contentHolder.bananaBox.createTextField("bananaTime", _level0.loader.contentHolder.branBox.getNextHigesthDepth(), 25, 8, 40, 20);
+		_level0.loader.contentHolder.bananaBox.createTextField("bananaTime", _level0.loader.contentHolder.branBox.getNextHigesthDepth(), 5, 18, 40, 30);
 		
 		 // Make the field dynamic text field
         _level0.loader.contentHolder.bananaBox.bananaTime.type = "dynamic";
@@ -3531,7 +3531,7 @@ class GestionnaireEvenements
 	       multiline = false;
 	       background = false;
 	       //text = "5";
-	       textColor = 0x65FF00;
+	       textColor = 0xFFFFFF;
 	       border = false;
 	       _visible = true;
 	       //autoSize = true;
@@ -3539,7 +3539,7 @@ class GestionnaireEvenements
    
         var formatTimer:TextFormat = new TextFormat();
         formatTimer.bold = true;
-        formatTimer.size = 15;
+        formatTimer.size = 21;
         formatTimer.font = "ArialBlack";
         formatTimer.align = "Center";
         _level0.loader.contentHolder.bananaBox.bananaTime.setNewTextFormat(formatTimer);
