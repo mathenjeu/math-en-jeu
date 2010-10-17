@@ -4,6 +4,7 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
 /**
+ * Used to collect stats about player
  * @author Oloieri Lilian 09.2010
  *
  */
@@ -87,8 +88,7 @@ public class StatisticsPlayer implements Comparable<Object>{
 
 	@Override
 	public int compareTo(Object arg0) {
-		// TODO Auto-generated method stub
-		
+				
 		assert((arg0 instanceof StatisticsPlayer) && (arg0 != null));
 		StatisticsPlayer player = (StatisticsPlayer)arg0;
 		int relValue = this.points.compareTo(player.getPoints());

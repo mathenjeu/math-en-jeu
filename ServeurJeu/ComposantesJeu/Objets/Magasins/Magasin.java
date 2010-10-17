@@ -161,13 +161,6 @@ public abstract class Magasin extends Objet
     				objObjetRemplacement = new Boule(objProchainId, true);
     			}
                 }
-                else if (objObjetAchete instanceof Telephone)
-                {
-    			synchronized (objProchainId)
-    			{
-    				objObjetRemplacement = new Telephone(objProchainId, true);
-    			}
-                }
                 else if (objObjetAchete instanceof PotionGros)
                 {
     			synchronized (objProchainId)

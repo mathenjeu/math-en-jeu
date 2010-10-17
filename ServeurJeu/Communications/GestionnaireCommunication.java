@@ -131,6 +131,7 @@ public class GestionnaireCommunication
 				// déjà cette synchronisation)
 				lstProtocoleJoueur.add( objJoueur );
 				miseAJourInfo();
+				
 			}
 			catch (IOException e)
 			{

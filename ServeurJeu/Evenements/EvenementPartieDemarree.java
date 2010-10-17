@@ -67,7 +67,7 @@ public class EvenementPartieDemarree extends Evenement
 	 */
 	protected String genererCodeXML(InformationDestination information)
 	{
-		Moniteur.obtenirInstance().debut( "EvenementPartieDemarree.genererCodeXML" );
+		//Moniteur.obtenirInstance().debut( "EvenementPartieDemarree.genererCodeXML" );
 	    // Déclaration d'une variable qui va contenir le code XML à retourner
 	    String strCodeXML = "";
 	 
@@ -91,7 +91,7 @@ public class EvenementPartieDemarree extends Evenement
 			e.printStackTrace();
 		}
 		
-		Moniteur.obtenirInstance().fin();
+		//Moniteur.obtenirInstance().fin();
                 if(ControleurJeu.modeDebug) System.out.println("EvenementPartieDemarrer: " + strCodeXML);
 		return strCodeXML;
 	}
@@ -133,17 +133,6 @@ public class EvenementPartieDemarree extends Evenement
                                            
 
 			// Créer le noeud contenant la position initiale du pointsFinish
-			
-			/*	Point objPoint = table.getPositionPointFinish();
-				int z=0;
-				while((objPoint.x == -1 || objPoint.y == -1) && z < 100)
-				{
-					table.definirNouvellePositionWinTheGame();
-					z++;
-				} */ 
-			
-
-
 			Element objNoeudParametrePositionPointsFinish = objDocumentXML.createElement("parametre");
 			objNoeudParametrePositionPointsFinish.setAttribute("type", "positionPointsFinish");
 			objNoeudParametrePositionPointsFinish.setAttribute("tracks", Integer.toString(table.getRegles().getNbTracks()));
@@ -176,38 +165,7 @@ public class EvenementPartieDemarree extends Evenement
 			
 			// Ajouter les noeuds enfants aux noeuds paramètres
 			objNoeudParametreTaillePlateauJeu.appendChild(objNoeudParametreTaille);
-			
-			/*
-			// Créer un ensemble contenant tous les tuples de la liste 
-			// des positions de joueurs (chaque élément est un Map.Entry)
-			Set<Entry<String, Point>> lstEnsemblePositionJoueurs = lstPositionJoueurs.entrySet();
-			
-			// Obtenir un itérateur pour l'ensemble contenant les positions 
-			// des joueurs
-			Iterator<Entry<String, Point>> objIterateurListe = lstEnsemblePositionJoueurs.iterator();
-			
-			// Passer tous les positions des joueurs et créer leur code XML
-			while (objIterateurListe.hasNext() == true)
-			{
-				// Déclaration d'une référence vers l'objet clé valeur courant
-				Entry<String, Point> objPositionJoueur = (Map.Entry<String, Point>) objIterateurListe.next();
-				
-				// Créer une référence vers la position du joueur courant
-				Point objPosition = (Point) objPositionJoueur.getValue();
-				
-				// Créer un noeud de case en passant le bon nom
-				Element objNoeudPositionJoueur = objDocumentXML.createElement("position");
-				
-				// Définir les attributs du noeud courant
-				objNoeudPositionJoueur.setAttribute("nom",  objPositionJoueur.getKey().toString());
-				objNoeudPositionJoueur.setAttribute("x", Integer.toString(objPosition.x));
-				objNoeudPositionJoueur.setAttribute("y", Integer.toString(objPosition.y));
-				objNoeudPositionJoueur.setAttribute("clocolor", table.getPlayerColor(objPositionJoueur.getKey().toString()));
-				System.out.println("EvenementPartieDemarree nom: " + objPositionJoueur.getKey().toString());
-				// Ajouter le noeud de position courant au noeud paramètre
-				objNoeudParametrePositionJoueurs.appendChild(objNoeudPositionJoueur);
-			}*/
-			
+						
 			for(int i = 0; i < lstJoueurs.length; i++)
 			{
 				// Créer un noeud de case en passant le bon nom

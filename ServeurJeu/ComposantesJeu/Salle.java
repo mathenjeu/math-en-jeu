@@ -201,35 +201,37 @@ public class Salle
 		
 		if (getStrPassword().equals(objGestionnaireBD.controlPWD(motDePasse)))
 		{
-		    // Empêcher d'autres thread de toucher à la liste des joueurs de 
-		    // cette salle pendant l'ajout du nouveau joueur dans cette salle
-		    synchronized (lstJoueurs)
-		    {
+			// Empêcher d'autres thread de toucher à la liste des joueurs de 
+			// cette salle pendant l'ajout du nouveau joueur dans cette salle
+			synchronized (lstJoueurs)
+			{
 				// Ajouter ce nouveau joueur dans la liste des joueurs de cette salle
 				lstJoueurs.put(joueur.obtenirNomUtilisateur(), joueur);
-				
-				// Le joueur est maintenant entré dans la salle courante
-				joueur.definirSalleCourante(this);
-				
-				// Si on doit générer le numéro de commande de retour, alors
-				// on le génère, sinon on ne fait rien (ça devrait toujours
-				// être vrai, donc on le génère tout le temps)
-				if (doitGenererNoCommandeRetour == true)
-				{
-					// Générer un nouveau numéro de commande qui sera 
-				    // retourné au client
-				    joueur.obtenirProtocoleJoueur().genererNumeroReponse();					    
-				}
+			}	
+			// Le joueur est maintenant entré dans la salle courante
+			joueur.definirSalleCourante(this);
 
-				// Préparer l'événement de nouveau joueur dans la salle. 
-				// Cette fonction va passer les joueurs et créer un 
-				// InformationDestination pour chacun et ajouter l'événement 
-				// dans la file de gestion d'événements
+			// Si on doit générer le numéro de commande de retour, alors
+			// on le génère, sinon on ne fait rien (ça devrait toujours
+			// être vrai, donc on le génère tout le temps)
+			if (doitGenererNoCommandeRetour == true)
+			{
+				// Générer un nouveau numéro de commande qui sera 
+				// retourné au client
+				joueur.obtenirProtocoleJoueur().genererNumeroReponse();					    
+			}
+
+			// Préparer l'événement de nouveau joueur dans la salle. 
+			// Cette fonction va passer les joueurs et créer un 
+			// InformationDestination pour chacun et ajouter l'événement 
+			// dans la file de gestion d'événements
+			synchronized (lstJoueurs)
+			{
 				preparerEvenementJoueurEntreSalle(joueur.obtenirNomUtilisateur());
-		    }
-				    
-		    //objGestionnaireBD.fillUserLevels(joueur, this);
-		   
+			}
+
+			//objGestionnaireBD.fillUserLevels(joueur, this);
+
 			// On retourne vrai
 			return true;
 		}

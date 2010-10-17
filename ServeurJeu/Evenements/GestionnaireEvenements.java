@@ -4,6 +4,8 @@ import java.util.LinkedList;
 
 /**
  * @author Jean-François Brind'Amour
+ * 
+ * changed Oloieri Lilian 2010
  */
 public class GestionnaireEvenements implements Runnable
 {
@@ -40,13 +42,13 @@ public class GestionnaireEvenements implements Runnable
 		    {
 		        // Faire la référence vers l'événement se trouvant au début de 
 		        // la liste
-		        Evenement evenementPrioritaire = (Evenement) lstEvenements.get(0);
+		        Evenement evenementPrioritaire = (Evenement) lstEvenements.poll();
 		        
 		        // Envoyer l'événement à tous les joueurs qui doivent le recevoir
 		        evenementPrioritaire.envoyerEvenement();
 		        
 		        // Enlever l'événement de la liste d'événements à traiter
-		        lstEvenements.remove(evenementPrioritaire);
+		        //lstEvenements.remove(evenementPrioritaire);                   // we use poll
 		    }
 		    
 		    
