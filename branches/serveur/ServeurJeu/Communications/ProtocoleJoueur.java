@@ -200,7 +200,7 @@ public class ProtocoleJoueur implements Runnable
 
 			while (bolStopThread == false)
 			{
-				Thread.sleep(300);
+				Thread.sleep(400);
 				// Déclaration d'une variable qui va servir de marqueur 
 				// pour savoir oè on en est rendu dans la lecture
 				int intMarqueur = 0;
@@ -3793,22 +3793,10 @@ public class ProtocoleJoueur implements Runnable
     	// Obtenir la référence vers la table oè le joueur était
         Table objTable = ancientJoueur.obtenirPartieCourante().obtenirTable();
 
-        // Créer un tableau des des joueurs, on a "+ 1" car le joueur
+        // Créer un tableau des joueurs, on a "+ 1" car le joueur
         // déconnecté n'était plus dans cette liste
         Joueur lstJoueursTable[] = new Joueur[objTable.obtenirListeJoueurs().size() + objTable.getNombreJoueursVirtuels() + 1];
-
-        // Obtenir la liste des joueurs sur la table
-        HashMap<String, JoueurHumain> lstJoueurs = objTable.obtenirListeJoueurs();
-        
-        // Déclaration d'une variable qui va contenir le code XML à retourner
-        String strCodeXML = "";
-
-        // Obtenir une référence vers le plateau de jeu
-        Case[][] objttPlateauJeu = objTable.obtenirPlateauJeuCourant();
-
-        // Créer la liste des positions des joueurs à retourner
-        HashMap<String, Point> lstPositionsJoueurs = new HashMap<String, Point>();
-
+       
         // Parcourir les positions des joueurs de la table et les ajouter
         // à notre liste locale
         Set<Map.Entry<String, JoueurHumain>> lstEnsemblePositionJoueurs = objTable.obtenirListeJoueurs().entrySet();
@@ -3843,13 +3831,8 @@ public class ProtocoleJoueur implements Runnable
 	            
 				
 		    }
-		}
-    
-        
-        // Ajouter la position du joueur déconnecté à la liste
-        lstPositionsJoueurs.put(ancientJoueur.obtenirNomUtilisateur(),
-            ancientJoueur.obtenirPartieCourante().obtenirPositionJoueur());
-      
+		}       
+       
         // Créer l'événement contenant toutes les informations sur le plateau et
         // la partie
         EvenementPartieDemarree objEvenementPartieDemarree = new EvenementPartieDemarree(objTable, lstJoueursTable);//this.obtenirJoueurHumain().obtenirPartieCourante().obtenirTable());
@@ -4148,18 +4131,32 @@ public class ProtocoleJoueur implements Runnable
 		Element objNoeudCommande = objDocumentXML.createElement("commande");
 
 		// Créer le noeud du paramètre
-		Element objNoeudParametre = objDocumentXML.createElement("parametre");
+		Element objNoeudParametreNbTable = objDocumentXML.createElement("parametre");
+		
+		// Create another param for the max nb players in this game
+		Element objNoeudParametreMaxPlayers = objDocumentXML.createElement("parametre");
+		
+		// Create another param for the game type
+		Element objNoeudParametreGameType = objDocumentXML.createElement("parametre");
 
-		// Envoyer une liste des joueurs
+
+		// send the id of the game and max nb players in this game
 		objNoeudCommande.setAttribute("noClient", no);
 		objNoeudCommande.setAttribute("type", "MiseAJour");
 		objNoeudCommande.setAttribute("nom", "Table");
-		objNoeudParametre.setAttribute("type", "Table");	
-		objNoeudParametre.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirNoTable()));
+		objNoeudParametreNbTable.setAttribute("type", "Table");	
+		objNoeudParametreNbTable.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirNoTable()));
+		objNoeudParametreMaxPlayers.setAttribute("type", "MaxPlayers");	
+		objNoeudParametreMaxPlayers.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirTable().getMaxNbPlayers()));
+		objNoeudParametreGameType.setAttribute("type", "GameType");	
+		objNoeudParametreGameType.setAttribute("valeur", ancientJoueur.obtenirPartieCourante().obtenirTable().getGameType());
 
-		// Ajouter le noeud paramètre au noeud de commande dans
+
+		// Ajouter les noeuds paramètres au noeud de commande dans
 		// le document de sortie
-		objNoeudCommande.appendChild(objNoeudParametre);
+		objNoeudCommande.appendChild(objNoeudParametreNbTable);
+		objNoeudCommande.appendChild(objNoeudParametreMaxPlayers);
+		objNoeudCommande.appendChild(objNoeudParametreGameType);
 
 		// Ajouter le noeud de commande au noeud racine dans le document
 		objDocumentXML.appendChild(objNoeudCommande);

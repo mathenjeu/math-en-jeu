@@ -94,7 +94,7 @@ public class InformationPartie
 	
 	// Number for bonus in Tournament type of game
 	// Bonus is given while arrived at finish line and is calculated
-	// as number of rested sec to game time
+	// as number of rested game time(in sec)
 	private int tournamentBonus;
 	
 	// the color of the clothes in the player's picture
@@ -491,12 +491,11 @@ public class InformationPartie
 	 * @return Question : La question trouvée, s'il n'y a pas eu de déplacement,
 	 * 					  alors la question retournée est null
 	 */
-	@SuppressWarnings("unused")
+	
 	public Question trouverQuestionAPoser(Point nouvellePosition, boolean doitGenererNoCommandeRetour)
 	{
 		int intDifficulte = 0;
-        //int grandeurDeplacement = 0;
-		Question objQuestionTrouvee = null;
+        Question objQuestionTrouvee = null;
 
 		// Si la position en x est différente de celle désirée, alors
 		// c'est qu'il y a eu un déplacement sur l'axe des x
@@ -523,11 +522,13 @@ public class InformationPartie
 		// to be sure...
 		if(intDifficulte > 6) intDifficulte = 6;
 		if(intDifficulte < 1) intDifficulte = 1;
+		
 		//System.out.println("Difficulte de la question : " + intDifficulte);   // test
+		
 		do{		
 			// find a question
 			objQuestionTrouvee = trouverQuestion(intDifficulte);
-			//System.out.println("question : " + intDifficulte); 
+			//System.out.println("question : " + intDifficulte + " " + objQuestionTrouvee); 
 
 			// S'il y a eu une question trouvée, alors on l'ajoute dans la liste 
 			// des questions posées et on la garde en mémoire pour pouvoir ensuite
@@ -538,19 +539,20 @@ public class InformationPartie
 				lstQuestionsRepondues.add(new Integer(objQuestionTrouvee.obtenirCodeQuestion()));
 				objQuestionCourante = objQuestionTrouvee;
 				objPositionJoueurDesiree = nouvellePosition;
-			}else if (objQuestionTrouvee == null && objBoiteQuestions.estVide())
+			
+			}else if (objQuestionTrouvee == null && objBoiteQuestions.dontHaveQuestions())
 	        {
 				objGestionnaireBD.remplirBoiteQuestions(objJoueurHumain, countFillBox);
 				countFillBox++;
 		    }
 		
-        }while(objQuestionTrouvee == null);
-		
+        }while(objQuestionTrouvee == null && countFillBox < 10); // must find right number for countFillBox
+		/*
 		if(objQuestionTrouvee == null)
 		{
 			// en théorie on ne devrait plus entrer dans ce if 
 			System.out.println( "‚a va mal : aucune question" );
-		}
+		}*/
 						
 		// Si on doit générer le numéro de commande de retour, alors
 		// on le génêre, sinon on ne fait rien (ùa devrait toujours
@@ -580,6 +582,7 @@ public class InformationPartie
 		do{
 			// pour le premier on voir la catégorie et difficulté demandées
 			objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion(intDifficulte);
+			//System.out.println("trouve1 " + objQuestionTrouvee.obtenirCodeQuestion());
 
 			//après pour les difficultés moins grands 
 			int intDifficulteTemp = intDifficulte;
@@ -598,8 +601,17 @@ public class InformationPartie
 				intDifficulteTemp++;
 				objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion( intDifficulteTemp);
 
-			}// fin while      
-		}while(!objBoiteQuestions.estVide() && lstQuestionsRepondues.contains( objQuestionTrouvee.obtenirCodeQuestion())); 	
+			}// fin while 
+			
+			// to not repeat questions 
+			if(objQuestionTrouvee != null && lstQuestionsRepondues.contains( objQuestionTrouvee.obtenirCodeQuestion()))
+			{
+				//objBoiteQuestions.popQuestion(objQuestionTrouvee);
+				objQuestionTrouvee = null;
+			}
+				
+		}while(objQuestionTrouvee == null && !objBoiteQuestions.dontHaveQuestions()); 	
+				
 		return objQuestionTrouvee;
 		
 	}// fin méthode
@@ -642,14 +654,14 @@ public class InformationPartie
 			{
 				lstQuestionsRepondues.add(new Integer(objQuestionTrouvee.obtenirCodeQuestion()));
 				objQuestionCourante = objQuestionTrouvee;
-				objBoiteQuestions.popQuestion(objQuestionTrouvee);
+				//objBoiteQuestions.popQuestion(objQuestionTrouvee);
 			}
-			else if (objQuestionTrouvee == null && objBoiteQuestions.estVide())
+			else if (objQuestionTrouvee == null && objBoiteQuestions.dontHaveQuestions())
 			{
 				objGestionnaireBD.remplirBoiteQuestions(objJoueurHumain, countFillBox);
 				countFillBox++;
 			}
-		}while(objQuestionTrouvee == null);
+		}while(objQuestionTrouvee == null && countFillBox < 10);
 		
 		if(objQuestionTrouvee == null)
 		{
@@ -710,8 +722,18 @@ public class InformationPartie
 				objQuestionTrouvee = getObjBoiteQuestions().pigerQuestionCristall(intDifficulteTemp, codeOld);
 
 			}// fin while
-		}while(lstQuestionsRepondues.contains(objQuestionTrouvee.obtenirCodeQuestion()) || objBoiteQuestions.estVide()); 	
+			
+			// to not repeat questions 
+			if(objQuestionTrouvee != null && lstQuestionsRepondues.contains( objQuestionTrouvee.obtenirCodeQuestion()))
+			{
+				//objBoiteQuestions.popQuestion(objQuestionTrouvee);
+				objQuestionTrouvee = null;
+			}
+			
+			
+		}while(objQuestionTrouvee == null && !objBoiteQuestions.dontHaveQuestions()); 	
 		//System.out.println(" verification " + objQuestionTrouvee);
+		
 		return objQuestionTrouvee;
 		
 	}// fin méthode
@@ -1164,7 +1186,7 @@ public class InformationPartie
 		    objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();					    
 		}
 		
-		getObjBoiteQuestions().popQuestion(objQuestionCourante);
+		//getObjBoiteQuestions().popQuestion(objQuestionCourante);
 		objQuestionCourante = null;
 
 		return objRetour;

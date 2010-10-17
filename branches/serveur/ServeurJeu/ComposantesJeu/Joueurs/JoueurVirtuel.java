@@ -308,7 +308,7 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 			while(bolStopThread == false)
 			{		
 
-				System.out.println("bolStopThread = " + bolStopThread); // trace
+				//System.out.println("bolStopThread = " + bolStopThread); 
 							
 				if(bolStopThread == false){ 
 

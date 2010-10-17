@@ -48,10 +48,9 @@ public class BoiteQuestions
 			questions = new LinkedList<Question>();
 			lstQuestions.put( difficulte, questions);
 		}
-	
-		
-		//System.out.println("Boite question : " + question.obtenirCodeQuestion() + " diff: " + question.obtenirDifficulte());
+			
 		questions.addLast(question );
+		
 	}
 	
 	/**
@@ -85,18 +84,21 @@ public class BoiteQuestions
 		// Let's choose a question among the possible ones
 	    if( questions != null && questions.size() > 0 )
 		{
-	    	   question = (Question)(questions.get(UtilitaireNombres.genererNbAleatoire(questions.size())));
-	    	   questions.remove(question);
+	    	System.out.println("erreur " + questions.size());  
+	    	question = (Question)(questions.remove(UtilitaireNombres.genererNbAleatoire(questions.size())));
+	    	//questions.remove(question);
     	}
 		else
 		{
-			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+			//System.out.println("erreur boite");
+			//objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
 		}
 		
 	   
 		//System.out.println("Question2: " + System.currentTimeMillis());
 	    //System.out.println("\nquestion : " + question.obtenirCodeQuestion()+ "  " + lstQuestions.containsValue(question) +  " " + questions.indexOf(question) + "\n");
-		return question;
+		//System.out.println("boite " + question);
+	    return question;
 	}
 	
 	/**
@@ -119,9 +121,9 @@ public class BoiteQuestions
 	    	int limit = 0;
 	    	do{   
 	    		int intRandom = UtilitaireNombres.genererNbAleatoire( questions.size() );
-	    		question = (Question)questions.get( intRandom );
+	    		question = (Question)questions.remove( intRandom );
 	    		//to not take the same question twice
-	    		questions.remove(question);	//questions.remove( intRandom );
+	    		//questions.remove(intRandom);	//questions.remove( intRandom );
 	    		limit++;
 
 	    	}while(question.obtenirCodeQuestion() == oldQuestionId || limit > 10);
@@ -168,18 +170,15 @@ public class BoiteQuestions
 	 *
 	 * @return boolean : si la boite est vide ou non
 	 */
-	public boolean estVide()
+	public boolean dontHaveQuestions()
 	{
-		boolean ret = false;
-		//LinkedList<Question> questions = obtenirQuestions( intDifficulte );
-		
-		
-		if(lstQuestions.isEmpty())
+		boolean ret = true;
+		for(int i = 1; i < 7; i++)
 		{
-			ret = true;
-			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+			if(!lstQuestions.get(i).isEmpty())
+				ret = false;		
 		}
-				
+						
 		return ret;
 	}
 	

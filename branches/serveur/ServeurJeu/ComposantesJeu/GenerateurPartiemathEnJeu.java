@@ -666,7 +666,7 @@ public class GenerateurPartiemathEnJeu extends GenerateurPartie {
      * est généré sur une case vide.
      * 
      * @param int nbJoueurs : Le nombre de joueurs dont générer la position
-     * @param Vector listePointsCaseLibre : La liste des points des cases libres
+     * @param ArrayList listePointsCaseLibre : La liste des points des cases libres
      * @return Point[] : Un tableau de points pour chaque joueur 
      */
     public Point[] genererPositionJoueurs( Table table, int nbJoueurs, ArrayList<Point> lstPointsCaseLibre)

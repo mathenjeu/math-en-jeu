@@ -2,7 +2,6 @@ package ServeurJeu.Communications;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Vector;
 
 /**
  * @author Jean-François Brind'Amour
@@ -82,7 +81,7 @@ public class VerificateurConnexions implements Runnable
 			{
 				// Stopper le thread du vérificateur pendant 60 - 100 secondes pour 
 				// laisser un moment de répit au CPU
-				Thread.sleep(100000);
+				Thread.sleep(60000);
 			}
 			catch (InterruptedException ie) {}
 			
