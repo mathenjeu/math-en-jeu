@@ -699,6 +699,8 @@ class GestionnaireEvenements
 			   this.listeDesPersonnages.removeAll();
 			   _level0.loader.contentHolder["restartGame"].removeMovieClip();
 			   _level0.loader.contentHolder.gestionBoutons(false);
+			   
+			  // trace( _level0.loader.contentHolder.planche.getShowCases() + " verification+++++++++++++++++++++++++++");
 			   		 
 			   this.playersNumber = objetEvenement.playersListe.length;
 			   this.typeDeJeu = "mathEnJeu";  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -713,7 +715,7 @@ class GestionnaireEvenements
                   this.listeDesPersonnages[i].id = objetEvenement.playersListe[i].idPersonnage;
 			      this.listeDesPersonnages[i].role = objetEvenement.playersListe[i].userRole;
 			      this.listeDesPersonnages[i].pointage = objetEvenement.playersListe[i].pointage;
-				  //this.listeDesPersonnages[i].clocolor = objetEvenement.playersListe[i].clocolor;
+				  this.listeDesPersonnages[i].clocolor = objetEvenement.playersListe[i].clocolor;
 			      this.listeDesPersonnages[i].win = 0;
 				  					
 		          var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
@@ -732,6 +734,7 @@ class GestionnaireEvenements
                   {
 						this.idPersonnage = this.listeDesPersonnages[i].id;
 						this.numeroDuDessin = this.listeDesPersonnages[i].idessin;
+						this.colorIt = this.listeDesPersonnages[i].clocolor;
 						
 				  }
 			   }
@@ -765,7 +768,9 @@ class GestionnaireEvenements
 			case "Table":
 						
 			   this.numeroTable = objetEvenement.noTable;
-			   //trace("rejoindre table : " +  this.numeroTable);
+			   this.maxPlayers = objetEvenement.maxPlayers;
+			   this.typeDeJeu = objetEvenement.gameType;
+			   trace("rejoindre table : " +  this.numeroTable + " " + this.maxPlayers + " " + this.typeDeJeu);
 			
 			break;
 			
@@ -785,6 +790,10 @@ class GestionnaireEvenements
 		        //_level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
 		        var messageInfo:String = objetEvenement.nomUtilisateur + _root.texteSource_xml.firstChild.attributes.restartMess; 
 				this.newsChat.addMessage(messageInfo);
+				//_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+				//_level0.loader.contentHolder.planche.setRepostCases(true);
+				//_level0.loader.contentHolder.planche.setShowCases(true);
+				//_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 		        //this.newsArray[newsArray.length] = messageInfo;
 		        //_level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
 		        //_level0.loader.contentHolder.orderId = 0;
@@ -1303,10 +1312,6 @@ class GestionnaireEvenements
                 }
                
 								
-				//_level0.loader.contentHolder.mc_perso.clothesCol = objetEvenement.clocolor;
-				
-                //_level0.loader.contentHolder.nomJ4 = nomUtilisateur;								
-                
 				// put the players in the liste
 				count = objetEvenement.listePersonnageJoueurs.length;
                	for(var i:Number = 0; i < count; i++)
@@ -1354,9 +1359,7 @@ class GestionnaireEvenements
                      
 					} // if
 				 }// for
-				
-				 //_level0.loader.contentHolder.mc_perso.clothesCol = objetEvenement.clocolor;
-				
+												
             break;
 			
             case "CommandeNonReconnue":
@@ -2437,7 +2440,7 @@ class GestionnaireEvenements
         	if(this.listeDesJoueursDansSalle[i] == objetEvenement.nomUtilisateur)
         	{
             	this.listeDesJoueursDansSalle.splice(i,1);
-           		trace("un joueur enlever de la liste :   "+objetEvenement.nomUtilisateur);
+           		trace("un joueur enlever de la liste :   " + objetEvenement.nomUtilisateur);
             	break;
         	}
         	
@@ -2663,7 +2666,7 @@ class GestionnaireEvenements
     {
         // parametre: noTable, nomUtilisateur
     	//trace("*********************************************");
-    	trace("debut de evenementJoueurQuitteTable   "+objetEvenement.noTable+"    "+objetEvenement.nomUtilisateur);
+    	trace("debut de evenementJoueurQuitteTable   " + objetEvenement.noTable + "    " + objetEvenement.nomUtilisateur);
     	var indice:Number = -1;
     	var i:Number;
     	var j:Number;
@@ -2828,7 +2831,7 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder["att"].removeMovieClip();		 
 		_level0.loader.contentHolder.gotoAndPlay(4);
 		 
-		var count:Number;// = objetEvenement.plateauJeu[0].length;   
+		var count:Number;
 		
 		var maTete:MovieClip;
 		
@@ -2839,7 +2842,7 @@ class GestionnaireEvenements
             {
 	            var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
 				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
-				this.listeDesPersonnages[i].clocolor = this.colorIt;
+				//this.colorIt = objetEvenement.positionJoueurs[i].clocolor;
 				
 				// put the face of my avatar in the panel (next to my name)
 		

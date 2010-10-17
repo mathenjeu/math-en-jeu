@@ -143,6 +143,7 @@ class PlancheDeJeu
         perso = null;
         gestionnaireInterface = p;
 		this.tempoSight = 3;
+		//this.showCases = true;
     }
 	
 	function getPersonnageByName(playerName:String):Personnage
