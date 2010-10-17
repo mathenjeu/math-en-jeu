@@ -987,7 +987,7 @@ class GestionnaireCommunication
 			
             else	//donc (noeudEvenement.attributes.nom == "PartieDemarree")
             {
-				trace("ds else ds for envoyer evenement : "+strNomType);
+				trace("ds else ds for envoyer evenement : " + strNomType);
                 // Traiter les differents cas et creer leurs objets dans objEvenement
                 switch (strNomType)
                 {
@@ -3182,7 +3182,7 @@ class GestionnaireCommunication
      */
     private function feedbackRestartOldGame(noeudCommande:XMLNode)
     {
-		trace("Retour feedbackRestartOldGame");
+		//trace("Retour feedbackRestartOldGame");
         // Construire l'objet evenement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
                                    resultat:noeudCommande.attributes.nom};
@@ -3211,9 +3211,9 @@ class GestionnaireCommunication
                 objEvenement.playersListe.push({nom:lstChildNodes[i].attributes.nom,
 												userRole:lstChildNodes[i].attributes.role,
 												pointage:lstChildNodes[i].attributes.pointage,
-												//clocolor:lstChildNodes[i].attributes.clothesColor,
+												clocolor:lstChildNodes[i].attributes.clothesColor,
 												idPersonnage:lstChildNodes[i].attributes.id});
-				trace("GCOM : NOW " + lstChildNodes[i].attributes.nom + " " + lstChildNodes[i].attributes.id )
+				//trace("GCOM : NOW " + lstChildNodes[i].attributes.nom + " " + lstChildNodes[i].attributes.id )
             }
 		} else if(noeudCommande.attributes.nom == "Pointage")
 		{
@@ -3224,7 +3224,7 @@ class GestionnaireCommunication
 			var objNoeudParametre:XMLNode = lstNoeudsParametre[0];
 			
 			objEvenement.pointage = Number(objNoeudParametre.attributes.valeur);
-			trace(lstNoeudsParametre + " ***** " + objEvenement.pointage);
+			//trace(lstNoeudsParametre + " ***** " + objEvenement.pointage);
 		}else if(noeudCommande.attributes.nom == "Argent")
 		{
 			
@@ -3235,19 +3235,23 @@ class GestionnaireCommunication
 			var objNoeudParametre:XMLNode = lstNoeudsParametre[0];
 			
 			objEvenement.argent = Number(objNoeudParametre.attributes.valeur);
-			trace(lstNoeudsParametre + " ***** " + objEvenement.argent);
+			//trace(lstNoeudsParametre + " ***** " + objEvenement.argent);
 				
 		}else if(noeudCommande.attributes.nom == "Table")
 		{
 			
 		    // Declaration d'une reference vers la liste des noeuds
 			var lstNoeudsParametre:Array = noeudCommande.childNodes;
+						
+			var objNoeudParametreNmTable:XMLNode = lstNoeudsParametre[0];
+			objEvenement.noTable = Number(objNoeudParametreNmTable.attributes.valeur);
 			
-			//Le seul et unique noeud est le argent
-			var objNoeudParametre:XMLNode = lstNoeudsParametre[0];
+			var objNoeudParametreMaxPlayers:XMLNode = lstNoeudsParametre[1];
+			objEvenement.maxPlayers = Number(objNoeudParametreMaxPlayers.attributes.valeur);
 			
-			objEvenement.noTable = Number(objNoeudParametre.attributes.valeur);
-			trace(lstNoeudsParametre + " ***** " + objEvenement.noTable);
+			var objNoeudParametreGameType:XMLNode = lstNoeudsParametre[2];
+			objEvenement.gameType = objNoeudParametreGameType.attributes.valeur;
+						
 				 		
 		}else if(noeudCommande.attributes.nom == "ListeObjets")
 		{
