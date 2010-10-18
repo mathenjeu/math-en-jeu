@@ -29,13 +29,15 @@ public final class Commande
         public static final String Argent = "Argent";
         public static final String ChatMessage = "ChatMessage";
         public static final String CreateRoom = "CreateRoom";
+        public static final String UpdateRoom = "UpdateRoom";
+        public static final String DeleteRoom = "DeleteRoom";
         public static final String CloseRoom = "CloseRoom";
-        public static final String getReport = "getReport";
+        public static final String ReportRoom = "ReportRoom";
         public static final String CancelQuestion = "CancelQuestion";
         public static final String ReportBugQuestion = "ReportBugQuestion";
-		public static final String ObtenirListeSallesRetour = "ObtenirListeSallesRetour";
-		public static final String ObtenirListeSallesProf = "ObtenirListeSallesProf";
-		public static final String ConnexionProf = "ConnexionProf";
+	public static final String ObtenirListeSallesRetour = "ObtenirListeSallesRetour";
+	public static final String ObtenirListeSallesProf = "ObtenirListeSallesProf";
+	public static final String ConnexionProf = "ConnexionProf";
     
 	/**
 	 * Constructeur par défaut est privé pour empêcher de pourvoir créer des 
@@ -57,7 +59,7 @@ public final class Commande
 		// valeurs définies dans cette classe, alors la valeur n'est pas
 		// un membre de cette énumération, sinon elle en est un
 		return (valeur.equals(Connexion) || valeur.equals(ConnexionProf) || valeur.equals(Deconnexion) || 
-		        valeur.equals(ObtenirListeJoueurs) || valeur.equals(ObtenirListeSalles) || 
+		        valeur.equals(ObtenirListeJoueurs) || valeur.equals(ObtenirListeSalles) ||
 		        valeur.equals(ObtenirListeSallesRetour) || valeur.equals(ObtenirListeSallesProf) ||
 		        valeur.equals(EntrerSalle) || valeur.equals(QuitterSalle) || 
 		        valeur.equals(ObtenirListeJoueursSalle) || valeur.equals(ObtenirListeTables) ||
@@ -67,6 +69,7 @@ public final class Commande
 		        valeur.equals(DemarrerMaintenant) || valeur.equals(Pointage) ||
 		        valeur.equals(RejoindrePartie) || valeur.equals(NePasRejoindrePartie) ||valeur.equals(UtiliserObjet) ||
 		        valeur.equals(AcheterObjet) || valeur.equals(Argent) || valeur.equals(ReportBugQuestion) ||
-		        valeur.equals(ChatMessage)||valeur.equals(CreateRoom)||valeur.equals(CloseRoom)||valeur.equals(getReport));
+		        valeur.equals(ChatMessage)||valeur.equals(CloseRoom)||
+                        valeur.equals(CreateRoom)||valeur.equals(UpdateRoom)||valeur.equals(DeleteRoom) || valeur.equals(ReportRoom));
 	}
 }

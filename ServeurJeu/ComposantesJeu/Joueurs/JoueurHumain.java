@@ -17,6 +17,9 @@ public class JoueurHumain extends Joueur
 	
 	// It's player id in the DB
 	private int intCleJoueur;
+
+        // La langue du joueur: "fr" ou "en"
+        private String strLangue;
 	
 	// Cette variable va contenir l'adresse IP du joueur
 	private final String strAdresseIP;
@@ -80,6 +83,7 @@ public class JoueurHumain extends Joueur
 		// Initialiser les caractéristiques du joueur
 		//strPrenom = "";
 		//strNomFamille = "";
+                strLangue = "fr";
 				
 	}
 
@@ -105,7 +109,7 @@ public class JoueurHumain extends Joueur
 	{
 		return strNomUtilisateur;
 	}
-	
+
 	/**
 	 * Cette fonction permet de retourner l'adresse IP du joueur.
 	 * 
@@ -219,6 +223,18 @@ public class JoueurHumain extends Joueur
 	{
 		intCleJoueur = cle;
 	}
+
+        public String obtenirLangue()
+        {
+            return strLangue;
+        }
+
+        public void definirLangue(String lang)
+        {
+            strLangue = lang;
+            if (!lang.equals("fr") && !lang.equals("en"))
+                strLangue = "fr";
+        }
 
 	
 	public void enleverObjet(int intIdObjet, String strTypeObjet)

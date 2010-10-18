@@ -239,7 +239,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	
 	public void creation()
 	{
-		objGestionnaireBD.chargerRegllesTable(objRegles, gameType, objSalle.getRoomID());
+		objGestionnaireBD.chargerReglesTable(objRegles, gameType, objSalle.getRoomId());
 		MAX_NB_PLAYERS = objRegles.getMaxNbPlayers();
 		///System.out.println("We test Colors in the table  : " );
 		this.setColors();
