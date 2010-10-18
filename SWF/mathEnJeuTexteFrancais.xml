@@ -1,346 +1,3 @@
-﻿
-<?xml version="1.0" encoding="UTF-8"?> 
-<Texte 
-	
-	Messagerie = ""
-	  welcomeMess = "Bienvenue à Math en jeu!!!"
-	  bananaMess = " a lancé une Banane à "
-	  outMess = "  a quitté le jeu!"
-	  InMess = " est de retour dans le jeu!"
-	  moveMess = "Click sur une case jaune pour te déplacer."
-	  moveMessage = " a avancé."
-	  bookUsedMess = " a utilisé un livre."
-	  braniacUsedMess = " a utilisé Brainiac."
-	  cristallUsedMess = " a utilisé une boule de cristal."
-	  
-	  bookCollectMess = "Vous avez ramassez un livre. Vous pouvez l'utiliser pour éliminer un mauvais choix de réponse."
-	  cristallCollectMess = "Vous avez ramassez une boule de cristal. Vous pouvez l'utiliser pour changer la question posée."
-	  moneyCollectMess = "Vous avez ramassez une pièce de monnaie. Vous pouvez l'échanger contre un objet dans un magasin."
-	  bananaCollectMess = "Vous avez ramassez une banane. Vous pouvez la lancer à un adversaire."
-	  
-	  objectMessageBoule = "Vous pouvez l'utiliser pour changer la question posée."
-	  objectMessageLivre = "Vous pouvez l'utiliser pour éliminer un mauvais choix de réponse. Seulement un par question."
-	  objectMessagePiece = "  Vous pouvez l'échanger contre un   objet dans un    magasin."
-	  objectMessageBanane = "Vous pouvez lancer la banane à un adversaire. "
-	  objectMessageHelp = "Menu d'aide. Vous y trouverez des réponses à vos questions... "
-	  objectMessageClose = "Bouton quitter. Si vous voulez quitter le jeu ou redémarrer. "
-	  objectMessageTime = "Temps restant à la partie. "
-	  
-	  controlMessageLoopPlus = "Pour t'approcher de la planche de jeu."
-	  controlMessageLoopMinus = "Pour t'éloigner de la planche de jeu."
-	  controlMessageMusique = "Pour activer ou désactiver la musique durant la partie."
-	  controlMessageSound = "Pour activer ou désactiver les effets sonores durant la partie."
-	  
-	main_menu = ""
-	  bienvenue = "Bienvenue dans Math en jeu "
-    btnPlay = "Jouer" 
-    btnQuit = "Quitter"
-    btnProfile = "Mon Profil"
-    playMaze = "Entrez le labyrinthe pour être le premier a échapper..."
-    teachBtn =   "Ma classe"
-    linkProf1 = "Est vous un proffeseur?"
-    linkProf2 = "Cliquez ici..."
-    linkProf3 = "pour entrer dans le Salon des Proffeseurs."
-    erreurRole = "Accès interdit!!!
-Cette section est réservée aux professeurs.
-Si vous êtes un professeur et que vous voulez accéder à cette section réservée, contactez-nous..."
-    erreurContact = ""
-    textReturn = "Pour retourner à Math en jeu, cliquez ici"
-    
-    
-    
-  page_instructions = ""
-    beginPage = "Débuter une partie"
-    rulesPage = "Règlements"
-    objectsPage = "Les objets"
-    backBtnTxt = "Retour" 
-    bookLabel = "LIVRE"
-    coinLabel = "MONNAIE"
-    shopLabel = "MAGASIN"
-    bananaLabel = "BANANE"
-    crystallLabel = "BOULE DE CRISTAL"
-    stepsTxt = "Voici les étapes à suivre pour débuter une partie :"
-    
-    bananaTxt = "  La banane te permet de jouer un tour à un de tes adversaires! Lorsque tu la lances à un adversaire, tu rends ce dernier momentanément moins habile. En effet, pendant les 90 secondes qui suive le lancé de la banane, ton adversaire aura des questions plus difficiles et 2 cases jaunes lui seront retirées!"
-    crystalTxt = "  Si tu te sens incapable de répondre à une question, utilise la boule de cristal. Tu recevras alors une question différente et plus facile!"
-    bookTxt = "  Le livre élimine un mauvais choix de réponse lors d'une question à choix multiples."
-    shopTxt = "Tu peux y échanger tes pièces contre des objets."
-    coinTxt = "Les pièces que tu trouves sur la planche de jeu te permettent d'acheter des objets."
-        
-  chargement_beta_local = ""	
-
-		version = "Version 2.5"
-		boutonEntrer = "Entrer"
-		barLabel = "Chargement en cours..."
-
-  moduleProf = ""
-    teachersCornerLoadingLabel = "Chargement de vos salles en cours..." 
-	teachersCornerTitleLabel = "Coin des professeurs"
-	teachersCornerListFrameLabel = "Chambre de sélection"
-	teachersCornerEditingFrameLabel = "Chambre d'éditage"
-	teachersCornerReportFrameLabel = "Rapport"
-	teachersCornerMonitorFrameLabel = "Chambre de surveillance"
-	
-	alertNoRoomSelected = "Sélectionnez une salle"
-	alertReallyDeleteRoom = "Êtes-vous sur de vouloir effacer cette salle?  Cette opération est irréversible."
-	alertMissingNameOrDescription = "Pour chaque langue vous devez définir soit le nom ET la description de la salle soit ni l'un ni l'autre"
-	alertNoNameDescription = "Vous devez nommer et décrire cette salle dans au moins une langue"
-	alertNoBeginDate = "Vous devez choisir une date d'ouverture pour la salle"
-	alertNoEndDate = "Vous devez choisir une date de fermeture pour la salle"
-	alertWhitespacePassword = "Le mot de passe ne doit  pas contenir d'espaces blancs"
-	alertInvalidPasswordLength = "Le mot de passe doit contenir entre 5 et 15 caractères"
-	alertNoGameTypes = "Vous devez sélectioner au moins un type de jeu permis pour la salle"
-	alertNoKeywords = "Vous devez sélectioner au moins un keyword pour la salle"
-
-	createCommand = "Créer"
-	editCommand = "Éditer"
-	deleteCommand = "Effacer"
-	reportCommand = "Rapport"
-	saveCommand = "Sauvegarder"
-	resetCommand = "Annuler"
-	backCommand = "Retour"
-	printCommand = "Imprimer"
-	refreshCommand = "Actualiser"
-	okCommand = "OK"
-	cancelCommand = "Annuler"
-	createRoomText = "Créer une salle"
-	updateRoomText = "Modifier cette salle"
-    roomNameText = "Nom"
-    roomDescriptionText = "Description"
-	roomKeywordsText = "Keywords"
-	roomPasswordText = "Mot de passe"
-	roomBeginDateText = "Date d'ouverture"
-	roomEndDateText = "Date de fermeture"
-	roomAllowedGameTypesText = "Types permis"
-    roomMasterTimeText = "Temps des parties"
-	minutesText = "(en minutes)"
-	frenchText = "Français"
-	englishText = "Anglais"
-	roomUnavailableMessage = "&lt;Salle non-disponible en francais&gt;"
-	 
-  mathemaQuoi_betaNEW = ""  
-    errorPWD = "Mauvais mot de passe! Réessayez ou faites un autre choix. "
-	  pwdAlert = "Erreur!"
-	  fermerAlert = "Voulez vous vraiment quitter le jeu?"
-	  textGUI_PWD = "Cette salle requiert un mot de passe..."
-	  errorSelect = "Sélectionnez une salle"
-	  nomAlert = "Donnez un nom SVP."
-	  descAlert = "Donnez une description SVP."
-	  dateBeginAlert = "Date d'ouverture invalide"
-	  dateEndAlert = "Date de fermeture invalide"
-	  passAlert = "Protéger votre salle par un mot de passe permet de contrôler l’accéder à celle-ci et assure que seulement vos élèves peuvent y accéder. Cela permet aussi de n'avoir que leurs résultats dans vos rapports."
-	  
-	  buttonNew = "Nouvelle"
-	  buttonOld = "Rejoindre"
-	  restartText = "Vous êtes déjà assigné à une partie en cours. Voulez vous rejoindre la partie en cours ou désirez-vous en recommencer une nouvelle? "
-	  buttonBug = " Signaler une erreur "
-	  userText = "Joueur : "
-	  buttonSend = "Envoyer"
-	  buttonBack = "Annuler"
-	  
-	  bugReportMess = "L'erreur a été envoyée avec succès. Merci!"
-	  pointsMessage = "Points bonus pour franchir la ligne d'arrivée"
-  
-    
-	
-	mathemaQuoi_beta = ""
-	
-		frame1 = ""
-		
-		  textAcceptStats = "J'accepte que mon utilisation de cette salle soit rapportée à  "
-		  
-      selectRoom = "Sélectez une Salle"
-		  selectTable = "Sélectez une Table"
-		  selectPlayer = "Sélectez un dessin"
-		 
-			descriptionPrincipale = "C'est le coeur de Math en Jeu. Une immense banque de questions se penchant sur tous les domaines des mathématiques."
-			
-			descriptionAccromath = "Questions plus avancées en lien avec les multiples sujets traités dans la revue Accromath."
-			
-			descriptionDefault = "La banque de questions a été créée par une personne ou un groupe indépendant de l'équipe de Math en Jeu."
-			
-			salle = "CHOIX DES SALLES"
-      chargementSalles = "Chargement de la liste des salles en cours" 
-			boutonRetour = "Retour"
-			boutonContinuer = "Continuer"
-			boutonQuitterX = "Quitter la partie.."
-			tableNameLabel = "Nom de la Table"
-			tableLinesLabel = "Lignes"
-			tableColumnsLabel = "Colognes"
-			tableOptionalLabel = "*Optionnel"
-			tableGameType = "Type du jeu"
-			playersListe = " - Liste des joueurs - "
-			sallesOuvertes = "Salles"
-			explication = "Le mode avancé permet au joueur plus expérimenté de sélectionner uniquement les catégories de questions qu'il désire. Il peut ainsi personnaliser son expérience de jeu en choisissant son niveau pour chaque thème mathématique présent dans le jeu."
-		
-		  searchRoomText1 = "Faites défiler la liste ou trouver la salle de votre professeur"
-      searchRoomText2 = "en utilisant la recherche rapide"
-       					
-		frame2 = ""
-
-			texteTables = " "
-      chargementTables = "Chargement de la liste des tables en cours" 
-      aucuneTable = "Il n'y a aucune table ouverte dans cette salle" 
-			btnCreerTable = "Nouvelle table"
-			choixTable = "CHOIX DES TABLES"
-			choixTemps = "Choisissez la durée de la partie que vous désirez jouer."
-			selectTableInfo = "Faites défiler la liste pour trouver la table que vous souhaitez
-joindre et le mode de jeu que vous souhaitez jouer...  "
-			
-			tablesOuvertes = "Tables"
-
-			GUITemps = "Choisissez le temps de la partie que vous désirez jouer (en minutes) :"
-	
-		frame3 = ""
-
-			noTable = "Numéro de la table :"	
-			numSalle = "Salle :"
-			tableInfo = "Table :"
-			temps = "Temps :"
-			timeLabel = "Temps"
-			
-			mathEnJeu = "Classique"
-			Tournament = "Tournoi"
-			Course = "Course"
-			
-			choixPerso = "Choisissez votre personnage."
-			selectPlayerText = "SELECTION DU JOUEUR"
-			selectPlayerInfo = "Sélectionnez un joueur de notre équipe coloré"
-
-			inconnu = "Inconnu"
-			demarrerMaintenant = "Démarrer maintenant"
-			attente = "En attente des autres joueurs ..."
-
-			difficulte = "Difficulté"
-			
-			choixNiveau = "Ne pas attendre d'autres joueurs!
-                        Démarrer la partie!"
-			niveauFacile = "Facile"
-			niveauInt = "Intermédiaire"
-			niveauDiff = "Difficile"
-			niveauTrDiff = "Très difficile"
-
-			joueur = "Joueur"
-	
-	
-		frame4 = ""
-
-			sonsLabel = "Sons"
-			musiqueLabel = "Musique"
-
-			texteMauvaiseReponse = "Mauvaise réponse"
-			punitionTexte = "Temps restant à votre pénalité:"
-			penalite = "Pénalité:"
-			secondes = "secondes"
-			reponse = "Réponse:"
-			vrai = "vrai"
-			faux = "faux"
-			
-
-		
-		frame5 = ""
-
-			btn_rejouer = "Rejouer"
-			btn_retourSite = "Retour à Math en Jeu"
-			btn_quitter = "Quitter"
-			joueurs = "Joueurs"
-			pointage = "Pointages"
-			resultat = "Résultats"
-
-
-		autre = ""
-
-
-			GUIdejaConnecte = "Cet utilisateur est déjà connecté. Veuillez fermer la fenêtre et recommencer avec un autre nom d'utilisateur."
-			GUIhorsService = "Le serveur ne répond pas. Veuillez vérifier votre connexion et recommencer. Si le problème persiste, veuillez s'il-vous-plaît cliquer sur le lien suivant afin d'exécuter un test de connexion. Faites ensuite parvenir les résultats de ce test à l'équipe technique de SMAC. Nous sommes sincèrement désolés que vous éprouviez de telles difficultés."
-			GUIhorsService2 = "Test de Connexion"
-			GUIhorsServiceURL = "http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_16466&sliceId=1"
-
-			GUIerreurQuestion = "Math en jeu est incapable de télécharger la question. S'il-vous-plait veillez vérifier votre connexion internet. Si le problème persiste, communiquez avec l'équipe technique de SMAC. Nous sommes sincèrement désolé que vous éprouviez de telles difficultés."
-			GUIerreurRetroaction = "Math en jeu est incapable de télécharger la rétroaction. S'il-vous-plait veillez vérifier votre connexion internet. Si le problème persiste, communiquez avec l'équipe technique de SMAC. Nous sommes sincèrement désolé que vous éprouviez de telles difficultés."	
-			
-			GUIbanane = "vous a lancé une banane.
-Pour les prochaines 90 secondes, les questions qui vous seront posées seront plus difficiles. Aussi, vos déplacements possibles ont été réduits de 2 pas."
-			
-			GUIbananeUser = "Vous avez utilisé une banane."
-			
-
-			GUIutiliserLivre = "Voulez-vous vraiment utiliser le livre?"
-			btnOui = "OUI"
-  		btnNon = "NON"
-  		deconnecte = "déconnecté"
-
-	
-	
-	
-		menuAide = "Menu d'aide"
-		
-			aideQuitter = "Fermer"
-			nomCasesSpeciales  = " Magasin           Pièce            Case '?' "
-			nomCasesSpeciales2 = "        Pièce                          Case '?' "			
-			nomObjets 		   = " Banane                 Livre            Boule de cristal"
-			salleListe = "Avant de jouer"
-			salleTitre = "1. Préparer la partie"
-			salleTexte = "•  Sur le menu principal, clique sur le bouton Jouer.
-•  Choisis une salle où jouer. Par exemple, tu peux choisir la salle Newton. Clique sur le nom de la salle et clique ensuite sur Continuer.
-•  S'il y a une table ouverte et que tu veux jouer avec ces personnes, clique sur cette table. Clique ensuite sur Continuer. Sinon, clique sur Créer une nouvelle table et entre un nombre de minutes pour jouer.
-•  En cliquant sur les flèches qui pointent vers la gauche et la droite, sélectionne ton personnage. Clique sur OK.
-•  Le niveau choisi n'affecte pas la difficulté des questions. Il modifie la capacité des joueurs virtuels à bien répondre aux questions. Clique sur le niveau de ton choix et clique ensuite sur Continuer."
-		
-			elementsJeuListe = "Jeu"
-			elementsJeuTitre = "2. Éléments du jeu"
-			elementsJeuTexte = "Règles de base:			
-•  Sur la planche de jeu, votre personnage apparaîtra plus gros que celui des autres joueurs.
-•  Ton personnage peut se déplacer dans 4 directions. Les cases accessibles sont d'une couleur différentes des autres et apparaissent en jaune.
-•  Ton personnage peut se déplacer de 1 à 6 cases à la fois. Plus le déplacement est grand, plus la question est difficile, mais toujours adaptée au niveau académique choisi lors de l'enregistrement du profile.
-•  Le nombre de points attribués à une bonne réponse dépend de la longueur d'un déplacement. Un déplacement d'une case vaut 3 points, un déplacement de deux cases vaut 5 points et ainsi de suite.
-•  Si tu te rends sur une case contenant un point d'interrogation, tu cours la chance de remporter encore plus de points.
-•  Le gagnant est le joueur qui a le plus de points."
-			
-			objetsListe = "Objets"
-			objetsTitre = "3. Les objets"
-			objetsTexte = "Les objets que tu peux acheter ou trouver sont:
-
-La banane
-•La banane te permet de jouer un tour à un des joueurs ! 
-
-Le livre
-•Le livre élimine un mauvais choix de réponse lors d'une question à choix multiples. Le nombre de choix possible passe alors de quatre à trois.
-
-La boule de cristal
-•Si tu te sens incapable de répondre à une question, utilise la boule de cristal. Tu recevras alors une question différente."
-						
-			casesSpecialesListe = "Cases spéciales"
-			casesSpecialesTitre = "4. Les cases spéciales"
-			casesSpecialesTexte = "Il y a 3 cases spéciales dans le jeu:
-    
-Les pièces
-•Les pièces que tu trouves sur la planche de jeu te permettent d'acheter des objets.
- 
-Les magasins
-•Tu peux y échanger tes pièces contre des objets.
-
-Case ?
-•Quelque chose de spécial survient lorsque tu tombes sur cette case..."
-
-			
-			optionsListe = "Options"
-			optionsTitre = "5. Les options"
-			optionsTexte = "Tu peux changer les configurations suivantes de ton écran de jeu:
-
-
-Activer ou de désactiver les effets sonores durant la partie...
-
-Activer ou de désactiver la musique durant la partie...
-
-Déplacer l'écran de jeu dans la direction de ton choix...
-
-S'approcher ou s'éloigner de la planche de jeu."
-			
-			
->
-</Texte> 
-=======
 
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
@@ -417,36 +74,55 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 		barLabel = "Chargement en cours..."
 
   moduleProf = ""
-    teacherFrame1 = "Coin des Professeurs
-    Chargement de la liste des salles..."
-    boutonNewRoom = "Créer"
-    teacherExploreFrame1 = "Explorer"
-    roomNameLabel = "Nom"
-    roomDescLabel = "Description"
-	  roomPassLabel = "Mot de Passe"
-	  roomBDateLabel = "Date d'ouverture"
-	  roomBTimeLabel = "Heure d'ouverture"
-	  roomEDateLabel = "Date de fermeture"
-	  roomETimeLabel = "Heure de fermeture"
-	  allowedTypesLabel = "Types du jeu permis"
-	  createRoomText = "Créer"
-	  roomListLabel  = "LISTE DES SALLES"
-	  roomReportLabel = "RAPPORT"
-	  roomReportText = "Rapport"
-	  editRoomText = "Éditer"
-	  saveReportText = "Sauvegarder"
-	  printReportText = "Imprimer"
-	  reportTextChange = "Sélectionnez une salle pour voir le rapport..."
-	  roomTimeLabel = "Temps des parties"
-	  All = "Toutes"
-	  AllLevels = "Niveaux"
-	  
+    teachersCornerLoadingLabel = "Chargement de vos salles en cours..." 
+	teachersCornerTitleLabel = "Coin des professeurs"
+	teachersCornerListFrameLabel = "Chambre de sélection"
+	teachersCornerEditingFrameLabel = "Chambre d'éditage"
+	teachersCornerReportFrameLabel = "Rapport"
+	teachersCornerMonitorFrameLabel = "Chambre de surveillance"
+	
+	alertNoRoomSelected = "Sélectionnez une salle"
+	alertReallyDeleteRoom = "Êtes-vous sur de vouloir effacer cette salle?  Cette opération est irréversible."
+	alertMissingNameOrDescription = "Pour chaque langue vous devez définir soit le nom ET la description de la salle soit ni l'un ni l'autre"
+	alertNoNameDescription = "Vous devez nommer et décrire cette salle dans au moins une langue"
+	alertNoBeginDate = "Vous devez choisir une date d'ouverture pour la salle"
+	alertNoEndDate = "Vous devez choisir une date de fermeture pour la salle"
+	alertWhitespacePassword = "Le mot de passe ne doit  pas contenir d'espaces blancs"
+	alertInvalidPasswordLength = "Le mot de passe doit contenir entre 5 et 15 caractères"
+	alertNoGameTypes = "Vous devez sélectioner au moins un type de jeu permis pour la salle"
+	alertNoKeywords = "Vous devez sélectioner au moins un keyword pour la salle"
+
+	createCommand = "Créer"
+	editCommand = "Éditer"
+	deleteCommand = "Effacer"
+	reportCommand = "Rapport"
+	saveCommand = "Sauvegarder"
+	resetCommand = "Annuler"
+	backCommand = "Retour"
+	printCommand = "Imprimer"
+	refreshCommand = "Actualiser"
+	okCommand = "OK"
+	cancelCommand = "Annuler"
+	createRoomText = "Créer une salle"
+	updateRoomText = "Modifier cette salle"
+    roomNameText = "Nom"
+    roomDescriptionText = "Description"
+	roomKeywordsText = "Keywords"
+	roomPasswordText = "Mot de passe"
+	roomBeginDateText = "Date d'ouverture"
+	roomEndDateText = "Date de fermeture"
+	roomAllowedGameTypesText = "Types permis"
+    roomMasterTimeText = "Temps des parties"
+	minutesText = "(en minutes)"
+	frenchText = "Français"
+	englishText = "Anglais"
+	roomUnavailableMessage = "&lt;Salle non-disponible en francais&gt;"
 	 
-  mathemaQuoi_betaNEW = ""
-    GUIerrorConnection = "Une erreur s'est produite. Vous êtes déconnecté du serveur de jeu. Utilisez le X en haut à la droite de l'écran pour quitter le jeu et recommencer!"  
-    errorPWD = "Mauvais mot de passe. Réessayez ou faites un autre choix. "
+  mathemaQuoi_betaNEW = ""  
+    GUIerrorConnection = "Une erreur s'est produite. Vous êtes déconnecté du serveur de jeu. Utilisez le X en haut à la droite de l'écran pour quitter le jeu et recommencer!"
+    errorPWD = "Mauvais mot de passe! Réessayez ou faites un autre choix. "
 	  pwdAlert = "Erreur"
-	  fermerAlert = "Voulez-vous vraiment quitter le jeu?"
+	  fermerAlert = "Voulez vous vraiment quitter le jeu?"
 	  textGUI_PWD = "Cette salle requiert un mot de passe."
 	  errorSelect = "Sélectionnez une salle"
 	  nomAlert = "Donnez un nom SVP."
@@ -457,7 +133,7 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 	  
 	  buttonNew = "Nouvelle"
 	  buttonOld = "Rejoindre"
-	  restartText = "Vous êtes déjà assigné à une partie en cours. Voulez vous rejoindre la partie en cours ou désirez-vous en commencer une nouvelle? "
+	  restartText = "Vous êtes déjà assigné à une partie en cours. Voulez vous rejoindre la partie en cours ou désirez-vous en recommencer une nouvelle? "
 	  buttonBug = " Signaler une erreur "
 	  userText = "Joueur : "
 	  buttonSend = "Envoyer"
@@ -485,7 +161,7 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 			descriptionDefault = "La banque de questions a été créée par une personne ou un groupe indépendant de l'équipe de Math en Jeu."
 			
 			salle = "CHOIX DES SALLES"
-      chargementSalles = "Chargement de la liste des salles en cours..." 
+      chargementSalles = "Chargement de la liste des salles en cours..."
 			boutonRetour = "Retour"
 			boutonContinuer = "Continuer"
 			boutonQuitterX = "Quitter la partie."
@@ -504,7 +180,7 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 		frame2 = ""
 
 			texteTables = " "
-      chargementTables = "Chargement de la liste des tables en cours..." 
+      chargementTables = "Chargement de la liste des tables en cours..."
       aucuneTable = "Il n'y a aucune table ouverte dans cette salle" 
 			btnCreerTable = "Nouvelle table"
 			choixTable = "CHOIX DES TABLES"
@@ -530,7 +206,7 @@ joindre et le mode de jeu que vous souhaitez jouer...  "
 			
 			choixPerso = "Choisissez votre personnage."
 			selectPlayerText = "SELECTION DU JOUEUR"
-			selectPlayerInfo = "Sélectionnez un joueur de notre équipe colorée"
+			selectPlayerInfo = "Sélectionnez un joueur de notre équipe coloré"
 
 			inconnu = "Inconnu"
 			demarrerMaintenant = "Démarrer maintenant"
