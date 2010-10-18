@@ -30,26 +30,47 @@ class EtatProfModule
 {
     // Constante objet indiquant que le joueur est déconnecté (non connecté au
     // serveur physiquement)
-    public static var NON_CONNECTE:Object = {no:0, listeCommandesPossibles:new Array(), listeEvenementsAcceptables:new Array()};
-
+    public static var NON_CONNECTE:Object = {
+		no:0, 
+		listeCommandesPossibles:new Array(), 
+		listeEvenementsAcceptables:new Array()
+	};
     // Constante objet indiquant que le joueur est connecté au serveur
     // physiquement, mais qu'on n'est pas connecté (authentifié) au serveur
     // de jeu
-    public static var DECONNECTE:Object = {no:1, listeCommandesPossibles:new Array({nom:"ConnexionProf", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()}), listeEvenementsAcceptables:new Array()};
+    public static var DECONNECTE:Object = {
+		no:1, 
+		listeCommandesPossibles:new Array(
+			{nom:"ConnexionProf", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()}
+		), 
+		listeEvenementsAcceptables:new Array()
+	};
 
     // Constante objet indiquant que le joueur est connecté au serveur
     // physiquement et authentifié
-    public static var CONNECTE:Object = {no:2, listeCommandesPossibles:new Array({nom:"Musique", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()},
-	{nom:"Deconnexion", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()},
-	{nom:"ObtenirListeSallesProf", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()}), 
-    listeEvenementsAcceptables:new Array()};
+    public static var CONNECTE:Object = {
+		no:2, 
+		listeCommandesPossibles:new Array(
+			{nom:"Musique", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()},
+			{nom:"Deconnexion", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()},
+			{nom:"ObtenirListeSallesProf", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()}
+		), 
+    	listeEvenementsAcceptables:new Array()
+	};
 
     // Constante objet indiquant que le joueur a obtenu la liste des salles
-    public static var LISTE_SALLES_OBTENUE:Object = {no:3, listeCommandesPossibles:new Array({nom:"Deconnexion", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()},
-    {nom:"CreateRoom", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()},
-	{nom:"getReport", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()},
-	{nom:"ObtenirListeSallesProf", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()}),
-	listeEvenementsAcceptables:new Array()};
+    public static var LISTE_SALLES_OBTENUE:Object = {
+		no:3, 
+		listeCommandesPossibles:new Array(
+			{nom:"Deconnexion", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()},
+    		{nom:"CreateRoom", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()},
+			{nom:"DeleteRoom", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()},
+			{nom:"UpdateRoom", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()},
+			{nom:"ReportRoom", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()},
+			{nom:"ObtenirListeSallesProf", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()}
+		),
+		listeEvenementsAcceptables:new Array()
+	};
 
       
     // Déclaration d'un tableau qui va contenir pour chaque numéro d'état l'objet
