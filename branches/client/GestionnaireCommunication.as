@@ -521,17 +521,17 @@ class GestionnaireCommunication
             // Si la commande courante est dans la liste des commandes
             // acceptables, alors on peut la charger en memoire et commencer a
             // ecouter pour ses evenements
-			trace("**Commande traitee: "+objCommande.nom+" **");
+			trace("**Commande traitee: "+objCommande.nom+" **&&&&&&");
             if (lstCommandesAcceptables.containsByProperty(objCommande.nom, "nom") == true)
             {
-		    	trace("la commande est acceptee");
+		    	trace("la commande est acceptee: [" + objCommande.listeDelegate + "]");
                 // La commande est acceptee
                 bolCommandeAcceptee = true;
                 // Passer tous les Delegate de la commande courante
                 for (var i in objCommande.listeDelegate)
                 {
                     // Ajouter un ecouteur pour le Delegate courant
-					//trace("ds traiterProchaineCommande  addEventListener  "+objCommande.listeDelegate[i].nom);
+					trace("ds traiterProchaineCommande  addEventListener  "+objCommande.listeDelegate[i].nom);
                     this.addEventListener(objCommande.listeDelegate[i].nom, objCommande.listeDelegate[i].delegate);
                     // Si on est rendu a passer les evenements, on va les
                     // ajouter dans la liste des Delegate (le premier est

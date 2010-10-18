@@ -1,12 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <config
 
 	language="fr"
 	gameType="mathEnJeu"
 
-	url_server="localhost"
+	url_server="moe"
 	port="6100"
-	
+
+	username = "Tournoi"
+  	password = "0123456789101112"
 	url_server="mejdev.mat.ulaval.ca"
 	port="8080"
 
@@ -18,8 +20,8 @@
   username4 = "testd"
 	password4 = "0123456789101112"
 
-	username ="demo-155"
-	password ="3437a2cf2af95fe8"
+	username ="Tournoi"
+	password ="0123456789101112"
 	
   usernamex ="demo-156"
 	passwordx ="3437a1682af95c81"

@@ -30,55 +30,60 @@ import flash.geom.Transform;
 import flash.geom.ColorTransform;
 import flash.filters.ColorMatrixFilter;
 
-
 class GestionnaireEvenementsProfModule
 {
     private var nomUtilisateur:String;    // user name of our  user
-	private var userRole:Number;  // if 1 - simple user, if 2 - is admin(master), if 3 - is  prof
-	private var motDePasse:String;  // notre mot de passe pour pouvoir jouer
-	private var langue;
-   	public var  listeDesSalles:Array;    //  liste de toutes les salles                !!!! Combiner ici tout dans un Objet	
-	private var listeChansons:Array;    //  liste de toutes les chansons    
+	private var motDePasse:String;        // le mot de passe du user pour se connecter au serveur
+	private var abreviationLangue:String; // la langue desiree par le client pour la duree de la connection
+	private var userRole:Number;          // if 1 - simple user, if 2 - is admin(master), if 3 - is  prof
+	public var keywordsMap:Object;
+	public var gameTypesMap:Object;
+	private var report:String;
+	public var  listeDesSalles:Array;    //  liste de toutes les salles de l'utilisateur
+	private var nouvellesSalles:Boolean; //  denote le fait que l'array 'listeDesSalles' a ete update depuis la dernier 
+										 //  command 'ObtenirListeSallesProf'
+	private var listeChansons:Array;     //  liste de toutes les chansons 
     private var objGestionnaireCommunication:GestionnaireCommunicationProfModule;  //  pour caller les fonctions du serveur 	
-	
-	
-	
-    
+
+  
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  CONSTRUCTEUR
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    function GestionnaireEvenementsProfModule(nom:String, passe:String, langue:String)
+    function GestionnaireEvenementsProfModule(nom:String, passe:String, abrevLangue:String, url_server:String, port:Number)
     {
         trace("*********************************************");
-        trace("debut du constructeur de gesEve      " + nom + "      " + passe);
+        trace("debut du constructeur de gesEve      " + nom + " " + url_server + " " + port);
         this.nomUtilisateur = nom;
         this.motDePasse = passe;
-		this.langue = langue;
+		this.abreviationLangue = abrevLangue;
+		this.keywordsMap = new Object();
+		this.gameTypesMap = new Object();
         this.listeDesSalles = new Array();
 		this.listeChansons = new Array();
-        var url_serveur:String = _level0.configxml_mainnode.attributes.url_server;
-		var port:Number = parseInt(_level0.configxml_mainnode.attributes.port, 10);
-						
-        this.objGestionnaireCommunication = new GestionnaireCommunicationProfModule(Delegate.create(this, this.evenementConnexionPhysique), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
-	
+		this.nouvellesSalles = false;
+		this.report = "";
+        this.objGestionnaireCommunication = 
+				new GestionnaireCommunicationProfModule(
+							Delegate.create(this, this.evenementConnexionPhysique), 
+							Delegate.create(this, this.evenementDeconnexionPhysique), 
+							url_server, port);
     	trace("fin du constructeur de gesEve");
     	trace("*********************************************\n");
     }
-		  
-	
-	function obtenirNomUtilisateur()
+		
+	//Indique qu'une nouvelle liste de salles est arrivée depuis que le dernier GUI update du client.
+	function nouvelleListeDesSalles() : Boolean
 	{
-		return this.nomUtilisateur;
+		return this.nouvellesSalles;
 	}
-	
-	function obtenirMotDePasse()
+	//Indique que le client vient d'updater son GUI en utilisant la liste des salles la plus récente.
+	function nouvelleListeDesSallesRecue()
 	{
-		return this.motDePasse;
+		this.nouvellesSalles = false;
 	}
-
-	function obtenirGestComm()
+	function obtenirRapport():String
 	{
-		return this.objGestionnaireCommunication;
+		return this.report;
 	}
 		
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,38 +92,69 @@ class GestionnaireEvenementsProfModule
 		var url_serveur:String = _level0.configxml_mainnode.attributes.url_server_secondaire;
 		var port:Number = parseInt(_level0.configxml_mainnode.attributes.port_secondaire, 10);
 		
-        this.objGestionnaireCommunication = new GestionnaireCommunicationProfModule(Delegate.create(this, this.evenementConnexionPhysique2), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
+        this.objGestionnaireCommunication = 
+			new GestionnaireCommunicationProfModule(Delegate.create(this, this.evenementConnexionPhysique2), 
+													Delegate.create(this, this.evenementDeconnexionPhysique), 
+													url_serveur, port);
 	}
-	
 	///////////////////////////////////////////////////////////////////////////////////////////////////
 	function tryTunneling()
 	{
-		//var url_serveur:String = _level0.configxml_mainnode.attributes.url_server_tunneling;
-		//var port:Number = parseInt(_level0.configxml_mainnode.attributes.port_tunneling, 10);
-		var url_serveur:String = _level0.configxml_mainnode.attributes.url_server_secondaire;
-		var port:Number = parseInt(_level0.configxml_mainnode.attributes.port_secondaire, 10);
-		
-        //this.objGestionnaireCommunication = new GestionnaireCommunicationTunneling(Delegate.create(this, this.evenementConnexionPhysiqueTunneling), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
-		this.objGestionnaireCommunication = new GestionnaireCommunicationProfModule(Delegate.create(this, this.evenementConnexionPhysiqueTunneling), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
+		var url_serveur:String = _level0.configxml_mainnode.attributes.url_server_tunneling;
+		var port:Number = parseInt(_level0.configxml_mainnode.attributes.port_tunneling, 10);
+
+		this.objGestionnaireCommunication = 
+			new GestionnaireCommunicationProfModule(Delegate.create(this, this.evenementConnexionPhysiqueTunneling), 
+													Delegate.create(this, this.evenementDeconnexionPhysique), 
+													url_serveur, port);
 	}
 		
 	///////////////////////////////////////////////////////////////////////////////////////////////////
-    function createRoom(nameRoom:String, description:String, pass:String, fromDate:String, toDate:String, defaultTime:String, roomCategories:String, gameTypes:String)
+    function createRoom(objRoom:Object)
     {
         trace("*********************************************");
-        trace("debut de createRoom     :" + nameRoom + " " + toDate + " " + gameTypes);
-        this.objGestionnaireCommunication.createRoom(Delegate.create(this, this.retourCreateRoom), nameRoom, description, pass, fromDate, toDate, defaultTime, roomCategories, gameTypes);
+        trace("debut de createRoom     ");
+        this.objGestionnaireCommunication.createRoom(Delegate.create(this, this.retourCreateRoom), objRoom);
         trace("fin de createRoom");
         trace("*********************************************\n");
     }
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////
-    function getReport(idRoom:Number)
+	function updateRoom(objRoom:Object)
     {
         trace("*********************************************");
-        trace("begin of getReport     :" + idRoom);
-        this.objGestionnaireCommunication.getReport(Delegate.create(this, this.retourGetReport), idRoom);
-        trace("end getReport");
+        trace("debut de updateRoom     ");
+		for (var sss:String in objRoom)
+		{
+			if (sss == "descriptions") continue;
+			if (sss == "names")
+				for (var ttt:String in objRoom[sss]) {
+					trace("objEditedRoom.names["+ttt+"] = " + objRoom.names[ttt]);
+					trace("objEditedRoom.descriptions["+ttt+"] = " + objRoom.descriptions[ttt]);
+				}
+			else
+				trace("objEditedRoom["+sss+"] = " + objRoom[sss]);
+		}
+        this.objGestionnaireCommunication.updateRoom(Delegate.create(this, this.retourUpdateRoom), objRoom);
+        trace("fin de updateRoom");
+        trace("*********************************************\n");
+    }
+
+	function deleteRoom(roomId:String)
+    {
+        trace("*********************************************");
+        trace("debut de deleteRoom     :" + roomId);
+        this.objGestionnaireCommunication.deleteRoom(Delegate.create(this, this.retourDeleteRoom), roomId);
+        trace("fin de deleteRoom");
+        trace("*********************************************\n");
+    }
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+    function reportRoom(roomId:Number)
+    {
+        trace("*********************************************");
+        trace("begin of reportRoom     :" + roomId);
+        this.objGestionnaireCommunication.reportRoom(Delegate.create(this, this.retourReportRoom), roomId);
+        trace("end reportRoom");
         trace("*********************************************\n");
     }
 			
@@ -143,45 +179,48 @@ class GestionnaireEvenementsProfModule
     	// c'est la fonction qui va etre appellee lorsque le GestionnaireCommunication aura
         // recu la reponse du serveur
         // objetEvenement est un objet qui est propre a chaque fonction comme retourConnexion
-        // (en termes plus informatiques, on appelle ca un eventHandler -> fonction qui gere
-        // les evenements). Selon la fonction que vous appelerez, il y aura differentes valeurs
+        // Selon la fonction que vous appelerez, il y aura differentes valeurs
         // dedans. Ici, il y a juste une valeur qui est succes qui est de type booleen
-    	// objetEvenement.resultat = Ok, JoueurNonConnu, JoueurDejaConnecte
+    	// objetEvenement.resultat = DBInfo, JoueurNonConnu, JoueurDejaConnecte, JoueurNonAutorise
     	trace("*********************************************");
     	trace("debut de retourConnexion     " + objetEvenement.resultat);
-        // param:  userRoleMaster == 1 if simple user or 2 if master
-    	var dejaConnecte:MovieClip;
-		
         switch(objetEvenement.resultat)
         {
-			case "Musique":
-			    // TO DO - play 
-				trace("Q musique " + objetEvenement.listeChansons.length);
+			//Content of objetEvenement:
+			//    listeChansons:Array
+			//    keywordsMap:Object   (keywordsMap[keyword_id]= name,group,isHeader)
+			//    gameTypesMap:Object  (gameTypesMap[game_type_id]= game type name)
+			//    userRole:Number      (1=user has normal account, 2=user has admin account, 3=user has prof account)
+			case "DBInfo":
+			    this.listeChansons = new Array();
+				this.keywordsMap = new Object();
+				this.gameTypesMap = new Object();
 				var count:Number = objetEvenement.listeChansons.length;
-				for(var k:Number = 0;  k < count; k++)
-				{
+				for(var k:Number=0;  k<count; k++)
 					this.listeChansons.push(objetEvenement.listeChansons[k]);
-					trace(objetEvenement.listeChansons[k]);
-				}
-				
-				this.userRole = objetEvenement.userRoleMaster; 
-				
-				this.objGestionnaireCommunication.obtenirListeSallesProf(Delegate.create(this, this.retourObtenirListeSalles));
+				for (var id:String in objetEvenement.keywordsMap)
+					this.keywordsMap[id] = objetEvenement.keywordsMap[id].split(",");
+				for (var id:String in objetEvenement.gameTypesMap)
+					this.gameTypesMap[id] = objetEvenement.gameTypesMap[id];
+				this.userRole = objetEvenement.userRoleMaster;  //1==ordinary user, 2==admin, 3==prof
+				this.objGestionnaireCommunication.obtenirListeSallesProf(
+														Delegate.create(this, this.retourObtenirListeSalles));
 				trace("La connexion a marche");
-			break;
+				break;
 			 
             case "JoueurNonConnu":
                 trace("Joueur non connu");
-            break;
+            	break;
              
 			case "JoueurDejaConnecte":
-	  									
-	     		dejaConnecte = _level0.attachMovie("GUI_erreur", "DejaConnecte", 9999);
+				var dejaConnecte = _level0.attachMovie("GUI_erreur", "DejaConnecte", 9999);
 				dejaConnecte.textGUI_erreur.text = _root.texteSource_xml.firstChild.attributes.GUIdejaConnecte;
-			
                 trace("Joueur deja connecte");
-            break;
-	     
+            	break;
+			case "JoueurNonAutorise":
+				trace("Joueur non autorisé à entrer dans le module prof");
+				break;
+
             default:
             	trace("Erreur Inconnue");
         }
@@ -194,124 +233,141 @@ class GestionnaireEvenementsProfModule
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function retourObtenirListeSalles(objetEvenement:Object)
     {
-        //   objetEvenement.resultat = ListeSalles, CommandeNonReconnue, ParametrePasBon ou JoueurNonConnecte
-		// nom, possedeMotDePasse, descriptions, idRoom, gameTypes, userCreator, masterTime
+        //objetEvenement.resultat = ListeSalles, CommandeNonReconnue, ParametrePasBon ou JoueurNonConnecte
         trace("*********************************************");
         trace("debut de retourObtenirListeSalles   " + objetEvenement.resultat);
         switch(objetEvenement.resultat)
-        {
-            case "ListeSalles":
-			    this.listeDesSalles.removeAll();
+		{
+			case "ListeSalles":
+				this.listeDesSalles = new Array();
 				var count:Number = objetEvenement.listeNomSalles.length;
-                for (var i:Number = 0; i < count; i++)
-                {
+            	for (var i:Number = 0; i < count; i++) {
 					this.listeDesSalles.push(objetEvenement.listeNomSalles[i]);
-					trace("salle " + i + " : " + this.listeDesSalles[i].nom);
+					trace("salle " + i + " : " + this.listeDesSalles[i].names["fr"]);
 				}
-												
-				_level0.gotoAndStop(2);
-            break;
+				nouvellesSalles = true;
+				_level0.unloadDataTransferAnimation(); //this was loaded when the command was sent
+				//If we are already in frame 2, all we need is to refresh the GUI.
+				//Otherwise gotoAndStop(2) will automatically refresh the GUI
+				if (_level0._currentframe == 2) 
+					_level0.updateRoomDataGrid();
+				else
+					gotoAndStop(2);
+            	break;
 			 
             case "CommandeNonReconnue":
-                trace("CommandeNonReconnue");
-            break;
-			 
             case "ParametrePasBon":
-                trace("ParamettrePasBon");
-            break;
-			 
             case "JoueurNonConnecte":
-                trace("Joueur non connecte");
-            break;
-			 
-            default:
-                trace("Erreur Inconnue");
-        }
-		
+			default:
+	        	trace("Erreur ObtenirListeSalles: " + objetEvenement.resultat);
+    }
         trace("fin de retourObtenirListeSalles" + " " + objetEvenement.resultat);
         objetEvenement = null;
 		trace("*********************************************\n");
     }
 	
-	//*****************************************************************************************
-	 
+	////////////////////////////////////////////////////////////////////////////////////////////////////	 
     public function retourCreateRoom(objetEvenement:Object)
     {
-        //   objetEvenement.resultat = , CommandeNonReconnue, ParametrePasBon ou JoueurNonConnecte
+        //objetEvenement.resultat = OK, CommandeNonReconnue, ParametrePasBon ou JoueurNonConnecte
         trace("*********************************************");
         trace("debut de retourCreateRoom   " + objetEvenement.resultat);
         switch(objetEvenement.resultat)
         {
             case "OK":
-               
-			trace("room created  ");
-			this.objGestionnaireCommunication.obtenirListeSallesProf(Delegate.create(this, this.retourObtenirListeSalles));
-			
-
-            break;
-			 
-            case "CommandeNonReconnue":
-                trace("CommandeNonReconnue");
-            break;
-			 
-            case "ParametrePasBon":
-                trace("ParamettrePasBon");
-            break;
-			 
-            case "JoueurNonConnecte":
-                trace("Joueur non connecte");
-            break;
-			 
+				trace("room created");
+				//Do we have to do this?  Since clients can't have more than one connection to the
+				//server at a time, this list can be maintained locally, saving a call to the server.
+				this.objGestionnaireCommunication.obtenirListeSallesProf(
+													Delegate.create(this, this.retourObtenirListeSalles));
+		        break;
             default:
-                trace("Erreur Inconnue");
+				trace("Résultat de l'opération: " + objetEvenement.resultat);
         }
 		objetEvenement = null;
         trace("fin de retourCreateRoom");
         trace("*********************************************\n");
     }
-		
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-    public function retourGetReport(objetEvenement:Object)
+	public function retourUpdateRoom(objetEvenement:Object)
     {
-        //   objetEvenement.resultat = OK, CommandeNonReconnue, ParametrePasBon ou JoueurNonConnecte
+        //objetEvenement.resultat = OK, CommandeNonReconnue, ParametrePasBon ou JoueurNonConnecte
         trace("*********************************************");
-        trace("debut de retourGetReport   " + objetEvenement.resultat);
+        trace("debut de retourUpdateRoom   " + objetEvenement.resultat);
         switch(objetEvenement.resultat)
         {
             case "OK":
-            trace("report created  ");
-			_level0.roomReportText_txt.text = objetEvenement.report;
-			_level0.roomReportText_txt.setTextFormat(_level0.reportFormat);
-            break;
-			 
-            case "CommandeNonReconnue":
-                trace("CommandeNonReconnue");
-            break;
-			 
-            case "ParametrePasBon":
-                trace("ParamettrePasBon");
-            break;
-			 
-            case "JoueurNonConnecte":
-                trace("Joueur non connecte");
-            break;
-			 
+				trace("room updated");
+				//Do we have to do this?  Since clients can't have more than one connection to the
+				//server at a time, this list can be maintained locally, saving a call to the server.
+				this.objGestionnaireCommunication.obtenirListeSallesProf(
+													Delegate.create(this, this.retourObtenirListeSalles));
+		        break;
             default:
-                trace("Erreur Inconnue");
+				trace("Résultat de l'opération: " + objetEvenement.resultat);
         }
 		objetEvenement = null;
-        trace("fin de retourGetReport");
+        trace("fin de retourUpdateRoom");
         trace("*********************************************\n");
     }
 	
-	
+	////////////////////////////////////////////////////////////////////////////////////////////////////	
+	public function retourDeleteRoom(objetEvenement:Object)
+    {
+        //objetEvenement.resultat = OK, CommandeNonReconnue, ParametrePasBon ou JoueurNonConnecte
+        trace("*********************************************");
+        trace("debut de retourDeleteRoom   " + objetEvenement.resultat);
+        switch(objetEvenement.resultat)
+        {
+            case "OK":
+				trace("room deleted");
+				//Do we have to do this?  Since clients can't have more than one connection to the
+				//server at a time, this list can be maintained locally, saving a call to the server.
+				this.objGestionnaireCommunication.obtenirListeSallesProf(
+													Delegate.create(this, this.retourObtenirListeSalles));
+		        break;
+            default:
+				trace("Résultat de l'opération: " + objetEvenement.resultat);
+        }
+		objetEvenement = null;
+        trace("fin de retourDeleteRoom");
+        trace("*********************************************\n");
+    }
+		
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+    public function retourReportRoom(objetEvenement:Object)
+    {
+        //objetEvenement.resultat = OK, CommandeNonReconnue, ParametrePasBon ou JoueurNonConnecte
+        trace("*********************************************");
+        trace("debut de retourReportRoom   " + objetEvenement.resultat);
+        switch(objetEvenement.resultat)
+        {
+            case "OK":
+	            trace("report created");
+				this.report = objetEvenement.report;
+				trace("longueur du rapport: " + report.length);
+				_level0.unloadDataTransferAnimation(); //this was loaded when the command was sent
+				//If we are already in frame 4, all we need is to refresh the GUI.
+				//Otherwise gotoAndStop(4) will automatically refresh the GUI
+				if (_level0._currentframe == 4) 
+					_level0.updateReport();
+				else
+					gotoAndStop(4);
+            	break;
+            
+			default:
+				trace("Résultat de l'opération: " + objetEvenement.resultat);
+        }
+		objetEvenement = null;
+        trace("fin de retourReportRoom");
+        trace("*********************************************\n");
+    }
 	
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Ca c'est la fonction qui va etre appelee lorsque le GestionnaireCommunication aura
-    // recu la reponse du serveur
     public function retourDeconnexion(objetEvenement:Object)
     {
-        //   objetEvenement.resultat = Ok, CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte
+        // objetEvenement.resultat = Ok, CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte
     	trace("*********************************************");
     	trace("debut de retourDeconnexion   "+objetEvenement.resultat);
     	switch(objetEvenement.resultat)
@@ -320,20 +376,8 @@ class GestionnaireEvenementsProfModule
                 trace("deconnexion");
             break;
 			
-            case "CommandeNonReconnue":
-                trace("CommandeNonReconnue");
-            break;
-			
-            case "ParametrePasBon":
-                trace("ParamettrePasBon");
-            break;
-			
-            case "JoueurNonConnecte":
-                trace("Joueur non connecte");
-            break;
-			
-            default:
-                trace("Erreur Inconnue");
+			default:
+				trace("Résultat de l'opération: " + objetEvenement.resultat);
         }
 		objetEvenement = null;
     	trace("fin de retourDeconnexion");
@@ -354,7 +398,9 @@ class GestionnaireEvenementsProfModule
         trace("debut de evenementConnexionPhysique GEv");
         if(objetEvenement.resultat == true)
         {
-            this.objGestionnaireCommunication.connexion(Delegate.create(this, this.retourConnexion), this.nomUtilisateur, this.motDePasse, this.langue);
+            this.objGestionnaireCommunication.connexion(
+									Delegate.create(this, this.retourConnexion), 
+									this.nomUtilisateur, this.motDePasse, this.abreviationLangue);
 		}
         else
         {
@@ -372,7 +418,9 @@ class GestionnaireEvenementsProfModule
         trace("debut de evenementConnexionPhysique2");
         if(objetEvenement.resultat == true)
         {
-            this.objGestionnaireCommunication.connexion(Delegate.create(this, this.retourConnexion), this.nomUtilisateur, this.motDePasse, this.langue);
+            this.objGestionnaireCommunication.connexion(
+									Delegate.create(this, this.retourConnexion), 
+									this.nomUtilisateur, this.motDePasse, this.abreviationLangue);
 		}
         else
         {
@@ -390,34 +438,13 @@ class GestionnaireEvenementsProfModule
         trace("debut de evenementConnexionPhysiqueTunneling");
         if(objetEvenement.resultat == true)
         {
-            this.objGestionnaireCommunication.connexion(Delegate.create(this, this.retourConnexion), this.nomUtilisateur, this.motDePasse);
+            this.objGestionnaireCommunication.connexion(
+									Delegate.create(this, this.retourConnexion), 
+									this.nomUtilisateur, this.motDePasse, this.abreviationLangue);
 		}
         else
         {
             trace("pas de connexion physique");
-			// a refaire
-			/*
-			var horsService:MovieClip;
-			
-			horsService = _level0.loader.contentHolder.attachMovie("GUI_erreur", "HorsService", 9999);
-			
-			horsService.textGUI_erreur.text = _root.texteSource_xml.firstChild.attributes.GUIhorsService;
-			horsService.linkGUI_erreur.text = _root.texteSource_xml.firstChild.attributes.GUIhorsService2;
-			horsService.linkGUI_erreur.html = true;
-			horsService.btn_ok._visible = false;
-			
-			var formatLink = new TextFormat();
-			formatLink.url = _root.texteSource_xml.firstChild.attributes.GUIhorsServiceURL;
-			formatLink.target = "_blank";
-			formatLink.font = "Arial";
-			formatLink.size = 12;
-			formatLink.color = 0xFFFFFF;
-			formatLink.bold = true;
-			formatLink.underline = true;
-			formatLink.align = "Center";
-			
-			
-			horsService.linkGUI_erreur.setTextFormat(formatLink);*/
         }
 		objetEvenement = null;
         trace("fin de evenementConnexionPhysiqueTunneling");
@@ -453,13 +480,5 @@ class GestionnaireEvenementsProfModule
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //                                      Autres
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////
-   
-	
-	public function obtenirGestionnaireCommunication():GestionnaireCommunicationProfModule
-	{
-		return objGestionnaireCommunication;
-	}
-
 	
 }// end class

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config
+
+	language="en"
+	gameType="mathEnJeu"
+
+	url_server="moe"
+	port="6100"
+	
+
+	username="hudrv"
+	password="71cc088e4bb924c5"
+        language="francais"
+		
+	gamepath="mathemaQuoi_beta.swf"
+
+>
+
+</config>
