@@ -719,7 +719,8 @@ public class GestionnaireBD {
         Map<String, Object> roomData = new TreeMap<String, Object>();
         try {
             synchronized (DB_LOCK) {
-                ResultSet rs = requete.executeQuery("SELECT room.password, user.username, user.role_id, beginDate, endDate, masterTime, room_info.language_id,room_info.name,room_info.description " +
+                ResultSet rs = requete.executeQuery(
+                        "SELECT room.password, user.username, user.role_id, beginDate, endDate, masterTime, room_info.language_id,room_info.name,room_info.description " +
                         "FROM room_info, room, user, game_type " +
                         "WHERE room.room_id = " + roomId + " " +
                         "AND room.room_id = room_info.room_id " +
@@ -1199,10 +1200,12 @@ public class GestionnaireBD {
             int masterTime,
             String keywordIds, String gameTypeIds) {
 
+        String strBeginDate = (beginDate==null || beginDate.isEmpty())?"NULL":"'"+beginDate+"'";
+        String strEndDate = (endDate==null || endDate.isEmpty())?"NULL":"'"+endDate+"'";
         String strSQL = "UPDATE room SET " +
                 "password='"+password+"'," +
-                "beginDate='"+beginDate+"'," +
-                "endDate='"+endDate+"',"+
+                "beginDate="+strBeginDate+"," +
+                "endDate="+strEndDate+","+
                 "masterTime="+masterTime + " " +
                 "WHERE room_id=" + room_id;
         try {
@@ -1249,11 +1252,14 @@ public class GestionnaireBD {
             String keywordIds, String gameTypeIds) {
 
         int room_id = 0;
+        String strBeginDate = (beginDate==null || beginDate.isEmpty())?"NULL":"'"+beginDate+"'";
+        String strEndDate = (endDate==null || endDate.isEmpty())?"NULL":"'"+endDate+"'";
+
         String strSQL = "INSERT INTO room (password, user_id, rule_id, beginDate, endDate, masterTime) VALUES ('" +
                 password + "'," + 
-                user_id + ",1,'" +
-                beginDate + "','" + 
-                endDate + "'," + 
+                user_id + ",1," +
+                strBeginDate + "," +
+                strEndDate + "," +
                 masterTime + ")";
         try {
             synchronized (DB_LOCK) {

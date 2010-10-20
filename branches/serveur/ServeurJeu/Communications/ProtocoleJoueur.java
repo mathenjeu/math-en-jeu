@@ -860,10 +860,14 @@ public class ProtocoleJoueur implements Runnable {
                             Element objNoeudBDate = objDocumentXMLSortie.createElement("beginDate");
                             if (objSalle.getBeginDate() != null)
                                 objNoeudBDate.appendChild(objDocumentXMLSortie.createTextNode(GestionnaireBD.mejFormatDateHeure.format(objSalle.getBeginDate())));
+                            else
+                                objNoeudBDate.appendChild(objDocumentXMLSortie.createTextNode(""));
                             objNoeudSalle.appendChild(objNoeudBDate);
                             Element objNoeudEDate = objDocumentXMLSortie.createElement("endDate");
                             if (objSalle.getEndDate() != null)
                                 objNoeudEDate.appendChild(objDocumentXMLSortie.createTextNode(GestionnaireBD.mejFormatDateHeure.format(objSalle.getEndDate())));
+                            else
+                                objNoeudEDate.appendChild(objDocumentXMLSortie.createTextNode(""));
                             objNoeudSalle.appendChild(objNoeudEDate);
                             Element objNoeudTime = objDocumentXMLSortie.createElement("masterTime");
                             objNoeudTime.appendChild(objDocumentXMLSortie.createTextNode(""+objSalle.getMasterTime()));
@@ -972,8 +976,20 @@ public class ProtocoleJoueur implements Runnable {
                                 if (noeudsParam.item(i).getChildNodes().getLength() == 0) password = "";
                                 else password = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
                             }
-                            else if (paramType.equals("beginDate")) beginDate = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
-                            else if (paramType.equals("endDate")) endDate = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
+                            else if (paramType.equals("beginDate"))
+                            {
+                                if (noeudsParam.item(i).getChildNodes().item(0) != null)
+                                    beginDate = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
+                                else
+                                    beginDate = "";
+                            }
+                            else if (paramType.equals("endDate"))
+                            {
+                                if (noeudsParam.item(i).getChildNodes().item(0) != null)
+                                    endDate = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
+                                else
+                                    endDate = "";
+                            }
                             else if (paramType.equals("masterTime")) masterTime = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
                             else if (paramType.equals("gameTypeIds")) gameTypeIds = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
                             else if (paramType.equals("keywordIds")) keywordIds = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
@@ -1029,8 +1045,20 @@ public class ProtocoleJoueur implements Runnable {
                                 if (noeudsParam.item(i).getChildNodes().getLength() == 0) password = "";
                                 else password = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
                             }
-                            else if (paramType.equals("beginDate")) beginDate = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
-                            else if (paramType.equals("endDate")) endDate = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
+                            else if (paramType.equals("beginDate"))
+                            {
+                                if (noeudsParam.item(i).getChildNodes().item(0) != null)
+                                    beginDate = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
+                                else
+                                    beginDate = "";
+                            }
+                            else if (paramType.equals("endDate"))
+                            {
+                                if (noeudsParam.item(i).getChildNodes().item(0) != null)
+                                    endDate = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
+                                else
+                                    endDate = "";
+                            }
                             else if (paramType.equals("masterTime")) masterTime = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
                             else if (paramType.equals("gameTypeIds")) gameTypeIds = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
                             else if (paramType.equals("keywordIds")) keywordIds = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
