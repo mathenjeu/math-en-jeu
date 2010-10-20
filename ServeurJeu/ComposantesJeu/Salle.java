@@ -47,10 +47,10 @@ public class Salle
     // Contient le nom d'utilisateur du créateur de cette salle
     // BD:  [user.username] pour le user avec id [room.user_id]
     private final String strCreatorUsername;
-    // Contient la date d'ouverture de la salle.
+    // Contient la date d'ouverture de la salle. Peut etre null
     // BD:  [room.beginDate]
     private final Date dateBeginDate;
-    // Contient la date de fermeture de la salle.
+    // Contient la date de fermeture de la salle. Peut etre null
     // BD:  [room.endDate]
     private final Date dateEndDate;
     // Contient le numéro d'indentification unique pour la salle dans la BD
@@ -109,8 +109,16 @@ public class Salle
         intRoomId = roomId;
         strPassword = (String)roomData.get("password");
         strCreatorUsername = (String)roomData.get("username");
-        dateBeginDate = (Date)roomData.get("beginDate");
-        dateEndDate = (Date)roomData.get("endDate");
+        Object objDate = roomData.get("beginDate");
+        if (objDate == null || objDate.toString().isEmpty())
+            dateBeginDate = null;
+        else
+            dateBeginDate = (Date)objDate;
+        objDate = roomData.get("endDate");
+        if (objDate == null || objDate.toString().isEmpty())
+            dateEndDate = null;
+        else
+            dateEndDate = (Date)objDate;
         intMasterTime = (Integer)roomData.get("masterTime");
         mapRoomLanguageIdToName = (Map<Integer, String>)roomData.get("names");
         mapRoomLanguageIdToDescription = (Map<Integer, String>)roomData.get("descriptions");
