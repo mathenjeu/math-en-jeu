@@ -858,10 +858,12 @@ public class ProtocoleJoueur implements Runnable {
                             objNoeudPwd.appendChild(objDocumentXMLSortie.createTextNode(objSalle.getPassword()));
                             objNoeudSalle.appendChild(objNoeudPwd);
                             Element objNoeudBDate = objDocumentXMLSortie.createElement("beginDate");
-                            objNoeudBDate.appendChild(objDocumentXMLSortie.createTextNode(GestionnaireBD.mejFormatDateHeure.format(objSalle.getBeginDate())));
+                            if (objSalle.getBeginDate() != null)
+                                objNoeudBDate.appendChild(objDocumentXMLSortie.createTextNode(GestionnaireBD.mejFormatDateHeure.format(objSalle.getBeginDate())));
                             objNoeudSalle.appendChild(objNoeudBDate);
                             Element objNoeudEDate = objDocumentXMLSortie.createElement("endDate");
-                            objNoeudEDate.appendChild(objDocumentXMLSortie.createTextNode(GestionnaireBD.mejFormatDateHeure.format(objSalle.getEndDate())));
+                            if (objSalle.getEndDate() != null)
+                                objNoeudEDate.appendChild(objDocumentXMLSortie.createTextNode(GestionnaireBD.mejFormatDateHeure.format(objSalle.getEndDate())));
                             objNoeudSalle.appendChild(objNoeudEDate);
                             Element objNoeudTime = objDocumentXMLSortie.createElement("masterTime");
                             objNoeudTime.appendChild(objDocumentXMLSortie.createTextNode(""+objSalle.getMasterTime()));

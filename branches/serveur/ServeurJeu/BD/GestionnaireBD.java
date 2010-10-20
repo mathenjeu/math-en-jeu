@@ -1509,7 +1509,9 @@ public class GestionnaireBD {
 
             synchronized (DB_LOCK) {
 
-                ResultSet rs = requete.executeQuery("SELECT game_user.user_id,name,last_name,username,score,questions_answers,has_won FROM game_user, user where room_id = '" + room_id + "' AND game_user.user_id = user.user_id;");
+                ResultSet rs = requete.executeQuery("SELECT game_user.user_id,name,last_name,username,score,questions_answers,has_won " +
+                        "FROM game_user, user " +
+                        "WHERE room_id = '" + room_id + "' AND game_user.user_id = user.user_id;");
                 while (rs.next()) {
                     user_id = rs.getInt("user_id");
                     score = rs.getInt("score");
@@ -1671,19 +1673,22 @@ public class GestionnaireBD {
         TreeMap<Integer, TreeMap<Integer, String>> keywords = new TreeMap<Integer, TreeMap<Integer, String>>();
         try {
             synchronized (DB_LOCK) {
-                ResultSet rs = requete.executeQuery("SELECT * FROM keyword_info,keyword_group WHERE keyword_info.keyword_id=keyword_group.keyword_id");
+                ResultSet rs = requete.executeQuery(
+                        "SELECT keyword_info.*,group_info.group_id,group_info.name FROM keyword " +
+                        "LEFT JOIN keyword_info ON keyword_info.keyword_id=keyword.keyword_id " +
+                        "LEFT JOIN group_info ON group_info.group_id = keyword.group_id AND group_info.language_id = keyword_info.language_id");
                 while (rs.next()) {
                     int kid = rs.getInt("keyword_info.keyword_id");
-                    int lid = rs.getInt("language_id");
-                    int gid = rs.getInt("group_id");
-                    int isHeader = rs.getInt("is_group_head");
-                    String kname = rs.getString("name");
+                    int lid = rs.getInt("keyword_info.language_id");
+                    int gid = rs.getInt("group_info.group_id");
+                    String gname = rs.getString("group_info.name");
+                    String kname = rs.getString("keyword_info.name");
                     TreeMap<Integer, String> kmap = keywords.get(lid);
                     if (kmap == null) {
                         kmap = new TreeMap<Integer, String>();
                         keywords.put(lid, kmap);
                     }
-                    kmap.put(kid, kname+","+gid+","+isHeader);
+                    kmap.put(kid, kname+","+gid+","+gname);
                 }
             }
         } catch (SQLException e) {
