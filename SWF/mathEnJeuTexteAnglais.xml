@@ -287,7 +287,7 @@ join and the game mode you'd like to play"
 			GUIdejaConnecte = "This user is already connected. Close this window and start again with another user."
 			GUIhorsService = "The server does not answer. Check you connection and start again. If the problem persists, please click on the following link to perform a connection test and then send the result to the SMAC technical team. We are sincerely sorry that you are experimenting this problem."
 			GUIhorsService2 = "Connection Test"
-			GUIhorsServiceURL = "http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_16466&sliceId=1"
+			GUIhorsServiceURL = ""
 			
 			
 			GUIerreurQuestion = "MathAmaze is unable to load the question. Please check your internet connection or communicate with the SMAC technical team. We are sincerely sorry that you are experimenting this problem."
