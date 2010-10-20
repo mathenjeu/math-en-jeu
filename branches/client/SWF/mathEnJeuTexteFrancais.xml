@@ -255,7 +255,7 @@ joindre et le mode de jeu que vous souhaitez jouer...  "
 			GUIdejaConnecte = "Cet utilisateur est déjà connecté. Veuillez fermer la fenêtre et recommencer avec un autre nom d'utilisateur."
 			GUIhorsService = "Le serveur ne répond pas. Veuillez vérifier votre connexion et recommencer. Si le problème persiste, veuillez s'il-vous-plaît cliquer sur le lien suivant afin d'exécuter un test de connexion. Faites ensuite parvenir les résultats de ce test à l'équipe technique de SMAC. Nous sommes sincèrement désolés que vous éprouviez de telles difficultés."
 			GUIhorsService2 = "Test de Connexion"
-			GUIhorsServiceURL = "http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_16466&sliceId=1"
+			GUIhorsServiceURL = ""
 
 			GUIerreurQuestion = "Math en jeu est incapable de télécharger la question. S'il-vous-plait veillez vérifier votre connexion internet. Si le problème persiste, communiquez avec l'équipe technique de SMAC. Nous sommes sincèrement désolé que vous éprouviez de telles difficultés."
 			GUIerreurRetroaction = "Math en jeu est incapable de télécharger la rétroaction. S'il-vous-plait veillez vérifier votre connexion internet. Si le problème persiste, communiquez avec l'équipe technique de SMAC. Nous sommes sincèrement désolé que vous éprouviez de telles difficultés."	
