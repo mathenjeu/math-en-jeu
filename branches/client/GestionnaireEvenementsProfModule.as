@@ -188,7 +188,7 @@ class GestionnaireEvenementsProfModule
         {
 			//Content of objetEvenement:
 			//    listeChansons:Array
-			//    keywordsMap:Object   (keywordsMap[keyword_id]= name,group,isHeader)
+			//    keywordsMap:Object   (keywordsMap[keyword_id]= kname,group,gname)
 			//    gameTypesMap:Object  (gameTypesMap[game_type_id]= game type name)
 			//    userRole:Number      (1=user has normal account, 2=user has admin account, 3=user has prof account)
 			case "DBInfo":
