@@ -40,7 +40,6 @@ import ServeurJeu.Monitoring.Moniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
 import ServeurJeu.Evenements.EvenementSynchroniserTemps;
-import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.Evenements.EvenementPartieDemarree;
 import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.ComposantesJeu.Question;
@@ -49,7 +48,6 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import java.util.Calendar;
-import java.util.Map.Entry;
 import java.util.TreeSet;
 
 /**
@@ -71,6 +69,8 @@ public class ProtocoleJoueur implements Runnable {
     private InputStream objCanalReception;
     // Cette variable permet de savoir s'il faut arrèter le thread ou non
     private boolean bolStopThread;
+    // To indicate if the thread is sleepping
+    private boolean bolSleep;
     // Déclaration d'une référence vers un joueur humain correspondant à ce
     // protocole
     private JoueurHumain objJoueurHumain;
@@ -171,7 +171,9 @@ public class ProtocoleJoueur implements Runnable {
             // traiter tant que le client n'a pas décidé de quitter (ou que la
             // connexion ne s'est pas déconnectée)
             while (bolStopThread == false) {
-                Thread.sleep(400);
+            	
+            	//Thread.sleep(50);
+                
                 // Déclaration d'une variable qui va servir de marqueur
                 // pour savoir oè on en est rendu dans la lecture
                 int intMarqueur = 0;
@@ -255,6 +257,8 @@ public class ProtocoleJoueur implements Runnable {
                     // recevra le EOM
                     strMessageRecu.append(new String(byttBuffer, intMarqueur, intBytesLus - intMarqueur));
                 }
+                
+                
             }
         } catch (IOException ioe) {
             objLogger.error(GestionnaireMessages.message("protocole.erreur_reception"));
@@ -294,9 +298,10 @@ public class ProtocoleJoueur implements Runnable {
                 // client (joueur) a été fermée (on ne doit pas obtenir de
                 // numéro de commande de cette fonction, car on ne retournera
                 // rien du tout)
+            	Thread.currentThread().interrupt();
                 objControleurJeu.deconnecterJoueur(objJoueurHumain, false, true);
                 System.out.println("! Joueur deconnecter - Protocole ");
-                //Thread.currentThread().interrupt();
+               
             }
 
             // Enlever le protocole du joueur courant de la liste des
@@ -1164,7 +1169,7 @@ public class ProtocoleJoueur implements Runnable {
                         int room_id = Integer.parseInt(objRoomID.getNodeValue());
                         //add report from DB
                         String report = objControleurJeu.obtenirGestionnaireBD().createRoomReport(room_id, this.langue);
-                        System.out.println(report);
+                        //System.out.println(report);
 
                         // Il n'y a pas eu d'erreurs et il va falloir retourner
                         // une liste des salles ?

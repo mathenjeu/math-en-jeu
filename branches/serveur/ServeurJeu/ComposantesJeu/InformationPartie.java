@@ -187,6 +187,7 @@ public class InformationPartie
 
 	public void destruction()
 	{
+		/*
 		this.brainiacState.destruction();
 		this.bananaState.destruction();
 		this.brainiacState = null;
@@ -194,7 +195,7 @@ public class InformationPartie
 		objGestionnaireBD = null;
 		objGestionnaireEv = null;
 		objJoueurHumain = null;
-		objTable = null;
+		objTable = null;*/
 	}
 	
 	/**
@@ -767,6 +768,7 @@ public class InformationPartie
 		boolean boolWasOnFinish = false;
 		int intNouveauPointage = 0;
 		int deplacementJoueur = 0;
+		boolean stopTheGame = false;
 		
 		
 		
@@ -1051,7 +1053,7 @@ public class InformationPartie
 		 					intNouveauPointage += bonus; 
 		 					// if all the humains is on the finish line we stop the game
 		 					if(table.isAllTheHumainsOnTheFinish((JoueurHumain)objJoueur))
-		 					 table.arreterPartie(""); //to do - cleaner end of game!!!!
+		 					 stopTheGame = true;
 		 				 }
 		 			 }
 		 			 else if (objJoueur instanceof JoueurVirtuel)
@@ -1130,6 +1132,9 @@ public class InformationPartie
 				objRetour.definirExplications(objQuestion.obtenirURLExplication());
 			}
 		}
+		
+		if(stopTheGame)
+			table.arreterPartie(""); //to do - cleaner end of game!!!!
 		 
 		return objRetour;
 		

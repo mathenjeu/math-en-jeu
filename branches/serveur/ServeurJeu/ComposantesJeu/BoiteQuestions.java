@@ -173,10 +173,12 @@ public class BoiteQuestions
 	public boolean dontHaveQuestions()
 	{
 		boolean ret = true;
-		for(int i = 1; i < 7; i++)
-		{
-			if(!lstQuestions.get(i).isEmpty())
-				ret = false;		
+		if(!lstQuestions.isEmpty()){
+			for(int i = 1; i < 7; i++)
+			{
+				if(!lstQuestions.get(i).isEmpty())
+					ret = false;		
+			}
 		}
 						
 		return ret;

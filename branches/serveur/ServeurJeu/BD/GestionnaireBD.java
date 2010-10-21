@@ -384,7 +384,7 @@ public class GestionnaireBD {
                         int difficulte = rs.getInt("value");
                         String reponse = "" + countReponse;
 
-                        //System.out.println("MC : question "  + codeQuestion + " " + reponse + " "+ difficulte );
+                        System.out.println("MC : question "  + codeQuestion + " " + reponse + " "+ difficulte );
 
                         // System.out.println(URL+explication);
                         //System.out.println("MC1: " + System.currentTimeMillis());
@@ -426,7 +426,7 @@ public class GestionnaireBD {
                     String explication = rs.getString("feedback_flash_file");
                     int difficulte = rs.getInt("value");
 
-                    //System.out.println("SA : question " + codeQuestion + " " + reponse + " " + difficulte);
+                    System.out.println("SA : question " + codeQuestion + " " + reponse + " " + difficulte);
 
                     //String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
                     // System.out.println(URL+explication);
@@ -467,7 +467,7 @@ public class GestionnaireBD {
                     String explication = rs.getString("feedback_flash_file");
                     int difficulte = rs.getInt("value");
 
-                    //System.out.println("TF : question " + codeQuestion + " " + reponse + " " + difficulte);
+                    System.out.println("TF : question " + codeQuestion + " " + reponse + " " + difficulte);
 
                     //String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
                     // System.out.println(URL+explication);

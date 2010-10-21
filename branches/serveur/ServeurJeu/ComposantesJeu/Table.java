@@ -170,9 +170,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
    	
 		// Faire la référence vers le controleu jeu
         objControleurJeu = salleParente.getObjControleurJeu();
-        
-		//positionWinTheGame = new Point(-1, -1); 		
-                
+        		                
 		// Faire la référence vers le gestionnaire d'événements et le 
 		// gestionnaire de base de données
 		objGestionnaireEvenements = new GestionnaireEvenements();
@@ -191,7 +189,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		setTableName(name);
 		
-		//System.out.println("Cons table : " + intNbLines + " " + intNbColumns);
 		this.nbLines = intNbLines;
 		this.nbColumns = intNbColumns;
 		
@@ -224,7 +221,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         pictures = new LinkedList<Integer>();
                
         // Créer un thread pour le GestionnaireEvenements
-		Thread threadEvenements = new Thread(objGestionnaireEvenements, "GestEven table - " + name);
+		Thread threadEvenements = new Thread(objGestionnaireEvenements, "GestEven table ");
 		// Démarrer le thread du gestionnaire d'événements
 		threadEvenements.start();
 				
@@ -373,7 +370,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			// Enlever le joueur de la liste des joueurs de cette table
 			lstJoueurs.remove(joueur.obtenirNomUtilisateur());
 			lstJoueursEnAttente.remove(joueur.obtenirNomUtilisateur());
-		}
+		
 		// Le joueur est maintenant dans aucune table
 		if (detruirePartieCourante == true)
 		{
@@ -390,7 +387,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			// retourné au client
 			joueur.obtenirProtocoleJoueur().genererNumeroReponse();					    
 		}
-
+      
 
 
 
@@ -422,6 +419,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 			}
 		}
+		}// !!!!!!!
+		 
 	}// end method
 	
 	
@@ -1086,6 +1085,14 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             // wipeout players from the table
             if (!lstJoueurs.isEmpty())
 		    {
+            	/*
+            	int xx;
+            	for(int i =0; i < 1000000000; i++)
+            		xx = i; 
+            	for(int i =0; i < 1000000000; i++)
+            		xx = i;
+            	for(int i =0; i < 1000000000; i++)
+            		xx = i;
             	synchronized (lstJoueurs)
 			    {
 			    	// Parcours des joueurs pour trouver le meilleur pointage
@@ -1098,7 +1105,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					}
                    lstJoueurs.clear();
                    
-      	        }
+      	        }*/
             	
             	System.out.println("table - etape 1 lst Humains " + lstJoueurs.size() );
 		    }
@@ -1130,10 +1137,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			
 			//objGestionnaireEvenements.arreterGestionnaireEvenements();
 			//this.objGestionnaireEvenements = null;
-			strNomUtilisateurCreateur = null;
-			objSalle = null;
-			objControleurJeu = null;
-			this.objGestionnaireBD = null;
+			//strNomUtilisateurCreateur = null;
+			//objSalle = null;
+			//objControleurJeu = null;
+			//this.objGestionnaireBD = null;
 			this.objttPlateauJeu = null;
 			this.gameFactory = null;
 			System.out.println("table - etape 2");		
@@ -2251,34 +2258,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				return color;
 			}
 		}
-		
-		/**
-		 * If gived color is in the list it is automatically eliminated 
-		 * from the list and returned otherwise is taked other one from the list
-		
-		private String getColor(String color)
-		{
-					
-			// Let's choose a colors among the possible ones
-		    if( colors != null && colors.size() > 0 )
-			{
-		    	if(colors.contains(color)){
-		    		colors.remove(color);
-		    	}else{
-		    	   int intRandom = UtilitaireNombres.genererNbAleatoire( colors.size() );
-		    	   color = colors.get( intRandom );
-		    	   colors.remove(intRandom);
-		    	}
-			}
-			else
-			{
-				//objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
-				return "0";
-			}
-		    //System.out.println("Color : " + color + "   " + colors.size());
-			return color;
-			
-		}// end method */
+				
 		
         /**
          * 
