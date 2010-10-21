@@ -81,6 +81,7 @@ class GestionnaireEvenements
 	private var colorIt:String;
 	private var allowedTypes:Array;   // allowed types of game in our room - course, tournament ...
 	private var ourPerso:Personnage;  // reference to our personnage on the table(planche) .. I am not sure that is very useful...
+	private var allowedTypesMap:Array;
 	
 	function affichageChamps()
 	{
@@ -227,6 +228,7 @@ class GestionnaireEvenements
 		this.bananaState = false;
 		this.winIt = 0;
 		this.maxPlayers = 0;
+		this.allowedTypesMap = new Array("mathEnJeu", "Tournament", "Course");
 				
         this.objGestionnaireCommunication = new GestionnaireCommunication(Delegate.create(this, this.evenementConnexionPhysique), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
 	
@@ -449,6 +451,7 @@ class GestionnaireEvenements
         trace("*********************************************");
         trace("debut de creerTable     " + temps);
 		this.typeDeJeu = gameType;
+		trace("debut de creerTable     " + this.typeDeJeu);
         this.objGestionnaireCommunication.creerTable(Delegate.create(this, this.retourCreerTable), Delegate.create(this, this.evenementJoueurDemarrePartie), temps, nb_lines, nb_columns, nameTable, gameType);
         trace("fin de creerTable");
         trace("*********************************************\n");
@@ -699,11 +702,8 @@ class GestionnaireEvenements
 			   this.listeDesPersonnages.removeAll();
 			   _level0.loader.contentHolder["restartGame"].removeMovieClip();
 			   _level0.loader.contentHolder.gestionBoutons(false);
-			   
-			  // trace( _level0.loader.contentHolder.planche.getShowCases() + " verification+++++++++++++++++++++++++++");
-			   		 
+			 		 
 			   this.playersNumber = objetEvenement.playersListe.length;
-			   this.typeDeJeu = "mathEnJeu";  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			   this.endGame = false;
 			   var count:Number = objetEvenement.playersListe.length;
 			  
@@ -717,6 +717,8 @@ class GestionnaireEvenements
 			      this.listeDesPersonnages[i].pointage = objetEvenement.playersListe[i].pointage;
 				  this.listeDesPersonnages[i].clocolor = objetEvenement.playersListe[i].clocolor;
 			      this.listeDesPersonnages[i].win = 0;
+				  
+				  trace("rejoindre !!! - " +  this.listeDesPersonnages[i].nom  + " " + this.listeDesPersonnages[i].clocolor);
 				  					
 		          var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
 				  
@@ -735,6 +737,8 @@ class GestionnaireEvenements
 						this.idPersonnage = this.listeDesPersonnages[i].id;
 						this.numeroDuDessin = this.listeDesPersonnages[i].idessin;
 						this.colorIt = this.listeDesPersonnages[i].clocolor;
+						
+						trace("rejoindre !!! - " +  this.colorIt + " " + this.idPersonnage + " " + this.numeroDuDessin);
 						
 				  }
 			   }
@@ -958,8 +962,8 @@ class GestionnaireEvenements
 						listeTypes = listeTypes.slice(1, listeTypes.length - 1);
 						this.allowedTypes = listeTypes.split(", ");
 						if(this.allowedTypes.length == 1 && this.allowedTypes[0] == "")
-						   this.allowedTypes = new Array("mathEnJeu", "Course");
-						//trace(this.allowedTypes);
+						   this.allowedTypes = new Array("1", "3");
+						trace(this.allowedTypes);
 						
 						break;
                     }
