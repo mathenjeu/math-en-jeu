@@ -1,4 +1,4 @@
-﻿
+
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
 	Messagerie = ""
@@ -206,9 +206,9 @@ join and the game mode you'd like to play"
 			temps = "Time :"
 			timeLabel = "Duration"
 			
-			mathEnJeu = "Classic"
-			Tournament = "Tournament"
-			Course = "Race"
+			1 = "Classic"
+			2 = "Tournament"
+			3 = "Race"
 			
 			selectPlayerText = "PLAYER SELECT"
 			selectPlayerInfo = "Select a player fron our colorful crew"
