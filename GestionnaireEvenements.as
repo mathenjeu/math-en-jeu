@@ -638,7 +638,7 @@ class GestionnaireEvenements
 				dejaConnecte.linkGUI_erreur._visible = false;
 				dejaConnecte.btn_ok._visible = false;
 			
-				dejaConnecte.textGUI_erreur.text = _root.texteSource_xml.firstChild.attributes.GUIdejaConnecte;
+				dejaConnecte.textGUI_erreur.text = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIdejaConnecte;
 			
                 trace("Joueur deja connecte");
             break;
@@ -912,7 +912,7 @@ class GestionnaireEvenements
             case "OK":
             
 			   // newsbox
-		       var messageInfo:String = _root.texteSource_xml.firstChild.attributes.bugReportMess; 
+		       var messageInfo:String = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.bugReportMess; 
 			   this.newsChat.addMessage(messageInfo);
 		      
 			trace("bug reported  ");
@@ -2137,22 +2137,22 @@ class GestionnaireEvenements
 						 
 						 if(objetEvenement.collision == "Livre")
 						 {
-						    messageInfo = _root.texteSource_xml.firstChild.attributes.bookCollectMess;
+						    messageInfo = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.bookCollectMess;
 							this.newsChat.addMessage(messageInfo);
 						 }
 						 else if(objetEvenement.collision == "Banane")
 						 {
-							 messageInfo = _root.texteSource_xml.firstChild.attributes.bananaCollectMess;
+							 messageInfo = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.bananaCollectMess;
 							 this.newsChat.addMessage(messageInfo);
 						 }
 						 else if(objetEvenement.collision == "Piece")
 						 {
-							 messageInfo = _root.texteSource_xml.firstChild.attributes.moneyCollectMess;
+							 messageInfo = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.moneyCollectMess;
 							 this.newsChat.addMessage(messageInfo);
 						 }
 						 else if(objetEvenement.collision == "Boule")
 						 {
-							 messageInfo = _root.texteSource_xml.firstChild.attributes.cristallCollectMess;
+							 messageInfo = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.cristallCollectMess;
 		                     this.newsChat.addMessage(messageInfo);
 						 }
         	           }
@@ -2317,14 +2317,14 @@ class GestionnaireEvenements
 			
 			horsService = _level0.loader.contentHolder.attachMovie("GUI_erreur", "HorsService", 9999);
 			
-			horsService.textGUI_erreur.text = _root.texteSource_xml.firstChild.attributes.GUIhorsService;
+			horsService.textGUI_erreur.text = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIhorsService;
 			
-			horsService.linkGUI_erreur.text = _root.texteSource_xml.firstChild.attributes.GUIhorsService2;
+			horsService.linkGUI_erreur.text = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIhorsService2;
 			horsService.linkGUI_erreur.html = true;
 			horsService.btn_ok._visible = false;
 			
 			var formatLink = new TextFormat();
-			formatLink.url = _root.texteSource_xml.firstChild.attributes.GUIhorsServiceURL;
+			formatLink.url = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIhorsServiceURL;
 			formatLink.target = "_blank";
 			formatLink.font = "Arial";
 			formatLink.size = 12;
@@ -2351,7 +2351,7 @@ class GestionnaireEvenements
 		errorDeconnexion.linkGUI_erreur._visible = false;
 		errorDeconnexion.btn_ok._visible = false;
 			
-		errorDeconnexion.textGUI_erreur.text = _root.texteSource_xml.firstChild.attributes.GUIerrorConnection;
+		errorDeconnexion.textGUI_erreur.text = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIerrorConnection;
 		
 		objetEvenement = null;
     	trace("fin de evenementDeconnexionPhysique");
@@ -2791,7 +2791,7 @@ class GestionnaireEvenements
 		   remplirMenuPointage();
 		     
 		   // newsbox
-		   var messageInfo:String = objetEvenement.nomUtilisateur + _root.texteSource_xml.firstChild.attributes.outMess; 
+		   var messageInfo:String = objetEvenement.nomUtilisateur + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.outMess; 
 		   this.newsChat.addMessage(messageInfo);
 		 }
 		
@@ -2907,7 +2907,7 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder.objectMenu.piece.countTxt = 0;
 		
 		//newsbox
-		var messageInfo:String = _root.texteSource_xml.firstChild.attributes.welcomeMess +  "       " + _root.texteSource_xml.firstChild.attributes.moveMess;
+		var messageInfo:String = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.welcomeMess +  "       " + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.moveMess;
 		this.newsChat.addMessage(messageInfo);
 
         remplirMenuPointage();
@@ -2947,7 +2947,7 @@ class GestionnaireEvenements
 		remplirMenuPointage();
 		   
 		 //complete the message box  - newsbox
-		 var messageInfo:String = objetEvenement.nomUtilisateur + _root.texteSource_xml.firstChild.attributes.InMess; 
+		 var messageInfo:String = objetEvenement.nomUtilisateur + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.InMess; 
 		 this.newsChat.addMessage(messageInfo);
 		
 		objetEvenement = null;
@@ -3296,7 +3296,7 @@ class GestionnaireEvenements
 		   // show the results
 		   remplirMenuPointage();
 		   // newsbox
-		   var messageInfo:String = objetEvenement.nomUtilisateur + _root.texteSource_xml.firstChild.attributes.moveMessage; 
+		   var messageInfo:String = objetEvenement.nomUtilisateur + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.moveMessage; 
 		   this.newsChat.addMessage(messageInfo);
 		}
 		objetEvenement = null;
@@ -3315,20 +3315,20 @@ class GestionnaireEvenements
 		
 		// info for newsbox
 		if(objetEvenement.objetUtilise == "Banane"){
-		   var messageInfo:String = playerThat + _root.texteSource_xml.firstChild.attributes.bananaMess + playerUnder; 
+		   var messageInfo:String = playerThat + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.bananaMess + playerUnder; 
 		   this.newsChat.addMessage(messageInfo);
 		 		
 		}else if(objetEvenement.objetUtilise == "Livre")
 		{
-		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _root.texteSource_xml.firstChild.attributes.bookUsedMess; 
+		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.bookUsedMess; 
 		   this.newsChat.addMessage(messageInfo);
 		}else if(objetEvenement.objetUtilise == "Brainiac")
 		{
-		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _root.texteSource_xml.firstChild.attributes.brainiacUsedMess; 
+		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.brainiacUsedMess; 
 		   this.newsChat.addMessage(messageInfo);
 		}else if(objetEvenement.objetUtilise == "Boule")
 		{
-		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _root.texteSource_xml.firstChild.attributes.cristallUsedMess; 
+		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.cristallUsedMess; 
 		   this.newsChat.addMessage(messageInfo);
 		}
 		
