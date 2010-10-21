@@ -1,4 +1,4 @@
-
+﻿
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
 	Messagerie = ""
@@ -95,6 +95,7 @@ If you are a theacher and you need to use this section contact us."
 	editCommand = "Edit"
 	deleteCommand = "Delete"
 	reportCommand = "Report"
+	monitorCommand = "Monitor"
 	saveCommand = "Save"
 	resetCommand = "Reset"
 	backCommand = "Back"
@@ -115,6 +116,9 @@ If you are a theacher and you need to use this section contact us."
 	minutesText = "(in minutes)"
 	frenchText = "French"
 	englishText = "English"
+	selectAllText = "All"
+	unselectAllText = "None"
+	nullDateText = "None"
 	roomUnavailableMessage = "&lt;Room unavailable in English&gt;"
 
 	roomButton = "Rooms"

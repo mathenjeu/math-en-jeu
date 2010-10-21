@@ -123,17 +123,6 @@ class GestionnaireEvenementsProfModule
     {
         trace("*********************************************");
         trace("debut de updateRoom     ");
-		for (var sss:String in objRoom)
-		{
-			if (sss == "descriptions") continue;
-			if (sss == "names")
-				for (var ttt:String in objRoom[sss]) {
-					trace("objEditedRoom.names["+ttt+"] = " + objRoom.names[ttt]);
-					trace("objEditedRoom.descriptions["+ttt+"] = " + objRoom.descriptions[ttt]);
-				}
-			else
-				trace("objEditedRoom["+sss+"] = " + objRoom[sss]);
-		}
         this.objGestionnaireCommunication.updateRoom(Delegate.create(this, this.retourUpdateRoom), objRoom);
         trace("fin de updateRoom");
         trace("*********************************************\n");

@@ -1034,7 +1034,7 @@ class GestionnaireCommunicationProfModule
 				else
 				{
 					objNoeudParam = objObjetXML.createElement("parametre");
-					if (paramType == "beginDate" || paramType == "endDate" && objRoom[paramType] == null)
+					if ((paramType == "beginDate" || paramType == "endDate") && objRoom[paramType] == null)
 						objNoeudParamText = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(""));
 					else
 						objNoeudParamText = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(""+objRoom[paramType]));
@@ -1121,12 +1121,13 @@ class GestionnaireCommunicationProfModule
 				else
 				{
 					objNoeudParam = objObjetXML.createElement("parametre");
-					if (paramType == "beginDate" || paramType == "endDate" && objRoom[paramType] == null)
+					
+					if ((paramType == "beginDate" || paramType == "endDate") && objRoom[paramType] == null)
 						objNoeudParamText = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(""));
 					else
-						objNoeudParamText = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(""+objRoom[paramType]));						
-
-objNoeudParam.attributes.type = paramType;
+						objNoeudParamText = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(""+objRoom[paramType]));
+					trace("param: " + paramType + " " + objRoom[paramType] + " " + objNoeudParamText);
+					objNoeudParam.attributes.type = paramType;
 					objNoeudParam.appendChild(objNoeudParamText);
 					objNoeudCommande.appendChild(objNoeudParam);
 				}
