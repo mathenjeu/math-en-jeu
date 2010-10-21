@@ -1,4 +1,4 @@
-﻿
+
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
 	
@@ -206,9 +206,9 @@ joindre et le mode de jeu que vous souhaitez jouer...  "
 			temps = "Temps :"
 			timeLabel = "Temps"
 			
-			mathEnJeu = "Classique"
-			Tournament = "Tournoi"
-			Course = "Course"
+			1 = "Classique"
+			2 = "Tournoi"
+			3 = "Course"
 			
 			choixPerso = "Choisissez votre personnage."
 			selectPlayerText = "SELECTION DU JOUEUR"
