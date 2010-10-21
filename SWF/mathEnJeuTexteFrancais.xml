@@ -117,6 +117,7 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 	roomAllowedGameTypesText = "Types permis"
     roomMasterTimeText = "Temps des parties"
 	minutesText = "(en minutes)"
+	gameTimePlayerChoiceText = "Le joueur choisi"
 	frenchText = "Français"
 	englishText = "Anglais"
 	selectAllText = "Tous"
