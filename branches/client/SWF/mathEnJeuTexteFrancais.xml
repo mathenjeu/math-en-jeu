@@ -81,6 +81,7 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 	teachersCornerReportFrameLabel = "Rapport"
 	teachersCornerMonitorFrameLabel = "Chambre de surveillance"
 	
+	alertTitle = "Erreur"
 	alertNoRoomSelected = "Sélectionnez une salle"
 	alertReallyDeleteRoom = "Êtes-vous sur de vouloir effacer cette salle?  Cette opération est irréversible."
 	alertMissingNameOrDescription = "Pour chaque langue vous devez définir soit le nom ET la description de la salle soit ni l'un ni l'autre"
@@ -97,6 +98,7 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 	deleteCommand = "Effacer"
 	reportCommand = "Rapport"
 	monitorCommand = "Surveiller"
+	exitCommand = "Retourner au menu principal"
 	saveCommand = "Sauvegarder"
 	resetCommand = "Annuler"
 	backCommand = "Retour"
@@ -204,9 +206,9 @@ joindre et le mode de jeu que vous souhaitez jouer...  "
 			temps = "Temps :"
 			timeLabel = "Temps"
 			
-			1 = "Classique"
-			2 = "Tournoi"
-			3 = "Course"
+			mathEnJeu = "Classique"
+			Tournament = "Tournoi"
+			Course = "Course"
 			
 			choixPerso = "Choisissez votre personnage."
 			selectPlayerText = "SELECTION DU JOUEUR"

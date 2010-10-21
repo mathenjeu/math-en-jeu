@@ -174,7 +174,7 @@ class GestionnaireCommunicationProfModule
         // Si la connexion a reussi, alors on change l'etat a DECONNECTE,
         // sinon on le remet a NON_CONNECTE (normalement il devrait deja etre
         // a cette valeur)
-		//trace("ds gestCom resultat de la connection :  "+objetEvenement.succes);
+		//trace("gestCom resultat de la connection :  "+objetEvenement.succes);
         if (objetEvenement.succes == true)
         {
             intEtatClient = EtatProfModule.DECONNECTE.no;
@@ -476,7 +476,7 @@ class GestionnaireCommunicationProfModule
                 for (var i in objCommande.listeDelegate)
                 {
                     // Ajouter un ecouteur pour le Delegate courant
-					trace("ds traiterProchaineCommande  addEventListener  "+objCommande.listeDelegate[i].nom);
+					trace("traiterProchaineCommande  addEventListener  "+objCommande.listeDelegate[i].nom);
                     this.addEventListener(objCommande.listeDelegate[i].nom, objCommande.listeDelegate[i].delegate);
                     // Si on est rendu a passer les evenements, on va les
                     // ajouter dans la liste des Delegate (le premier est
@@ -676,7 +676,7 @@ class GestionnaireCommunicationProfModule
 		var i:Number = 0;
         for(var ii in lstChildNodes)
         {
-			//trace("ds for envoyer evenement");
+			//trace("envoyer evenement");
             // Declarer une chaine de caractere qui va garder le type courant
             var strNomType:String = String(lstChildNodes[i].attributes.type);
             // Si l'evenement n'est pas PartieDemarree, alors on peut simplement
@@ -685,7 +685,7 @@ class GestionnaireCommunicationProfModule
 			trace(i + " strNomType = " + strNomType);
             
 				
-				 	//trace("ds if ds for envoyer evenement  :  "+noeudEvenement.attributes.nom+"   "+lstChildNodes[i].firstChild.nodeValue+"   "+strNomType.substring(0, 1).toLowerCase() + strNomType.substring(1, strNomType.length));
+				 	//trace("envoyer evenement  :  "+noeudEvenement.attributes.nom+"   "+lstChildNodes[i].firstChild.nodeValue+"   "+strNomType.substring(0, 1).toLowerCase() + strNomType.substring(1, strNomType.length));
 					// Le firstChild va pointer vers un noeud texte
 					objEvenement[strNomType.substring(0, 1).toLowerCase() + strNomType.substring(1, strNomType.length)] = lstChildNodes[i].firstChild.nodeValue;
 			   
@@ -998,6 +998,7 @@ class GestionnaireCommunicationProfModule
      */
     public function createRoom(createRoomDelegate:Function, objRoom:Object)
     {
+		traceDebugObj(objRoom,"objRoom",1);
         // Si on a obtenu la liste des tables, alors on peut continuer le code
         // de la fonction
         if (ExtendedArray.fromArray(EtatProfModule.obtenirCommandesPossibles(intEtatClient)).containsByProperty("CreateRoom", "nom") == true)
@@ -1043,7 +1044,6 @@ class GestionnaireCommunicationProfModule
 					objNoeudCommande.appendChild(objNoeudParam);
 				}
 			}
-			trace(objNoeudCommande);
 			
 			objObjetXML.appendChild(objNoeudCommande);
             // Declaration d'un nouvel objet qui va contenir les informations sur
@@ -1055,7 +1055,6 @@ class GestionnaireCommunicationProfModule
             objObjetCommande.nom = "CreateRoom";
             objObjetCommande.objetXML = objObjetXML;
             objObjetCommande.listeDelegate = lstDelegateCommande;
-			//trace(objObjetXML);
             // Ajouter l'objet de commande a envoyer courant a la fin du tableau
             var intNbElements:Number = lstCommandesAEnvoyer.push(objObjetCommande);
             // Si le nombre d'elements dans la liste est de 1 (celui qu'on vient
@@ -1085,6 +1084,7 @@ class GestionnaireCommunicationProfModule
      */
     public function updateRoom(updateRoomDelegate:Function, objRoom:Object)
     {
+		traceDebugObj(objRoom,"objRoom",1);
         // Si on a obtenu la liste des tables, alors on peut continuer le code
         // de la fonction
         if (ExtendedArray.fromArray(EtatProfModule.obtenirCommandesPossibles(intEtatClient)).containsByProperty("UpdateRoom", "nom") == true)
@@ -1126,13 +1126,11 @@ class GestionnaireCommunicationProfModule
 						objNoeudParamText = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(""));
 					else
 						objNoeudParamText = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(""+objRoom[paramType]));
-					trace("param: " + paramType + " " + objRoom[paramType] + " " + objNoeudParamText);
 					objNoeudParam.attributes.type = paramType;
 					objNoeudParam.appendChild(objNoeudParamText);
 					objNoeudCommande.appendChild(objNoeudParam);
 				}
 			}
-			trace(objNoeudCommande);
 			
 			objObjetXML.appendChild(objNoeudCommande);
             // Declaration d'un nouvel objet qui va contenir les informations sur
@@ -1144,7 +1142,6 @@ class GestionnaireCommunicationProfModule
             objObjetCommande.nom = "UpdateRoom";
             objObjetCommande.objetXML = objObjetXML;
             objObjetCommande.listeDelegate = lstDelegateCommande;
-			//trace(objObjetXML);
             // Ajouter l'objet de commande a envoyer courant a la fin du tableau
             var intNbElements:Number = lstCommandesAEnvoyer.push(objObjetCommande);
             // Si le nombre d'elements dans la liste est de 1 (celui qu'on vient
@@ -1202,7 +1199,6 @@ class GestionnaireCommunicationProfModule
             objNoeudCommande.attributes.nom = "ReportRoom";
             objNoeudParametreNameRoom.attributes.type = "RoomId";
             objNoeudParametreNameRoom.appendChild(objNoeudParametreNameRoomText);
-			trace(objNoeudCommande);
             objNoeudCommande.appendChild(objNoeudParametreNameRoom);
 								
 			objObjetXML.appendChild(objNoeudCommande);
@@ -1215,7 +1211,6 @@ class GestionnaireCommunicationProfModule
             objObjetCommande.nom = "ReportRoom";
             objObjetCommande.objetXML = objObjetXML;
             objObjetCommande.listeDelegate = lstDelegateCommande;
-			//trace(objObjetXML);
             // Ajouter l'objet de commande a envoyer courant a la fin du tableau
             var intNbElements:Number = lstCommandesAEnvoyer.push(objObjetCommande);
             // Si le nombre d'elements dans la liste est de 1 (celui qu'on vient
@@ -1571,5 +1566,17 @@ class GestionnaireCommunicationProfModule
 	public function obtenirEtatClient():Number
 	{
 		return intEtatClient;
+	}
+	
+	
+	function traceDebugObj(obj:Object,strName:String,depth:Number)
+	{
+		for (var sss:String in obj)
+		{
+			if (obj[sss] instanceof Object && depth>0)
+				traceDebugObj(obj[sss],strName+"["+sss+"]",depth-1);
+			else
+				trace(strName+"["+sss+"] = " + obj[sss]);
+		}
 	}
 }
