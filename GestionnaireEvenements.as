@@ -3525,7 +3525,7 @@ class GestionnaireEvenements
 		//_level0.loader.contentHolder.bananaBox._xscale = 90;
 		_level0.loader.contentHolder.bananaBox._y = 304;
 		
-		_level0.loader.contentHolder.bananaBox.nameObject = _root.texteSource_xml.firstChild.attributes.bananaLabel;
+		_level0.loader.contentHolder.bananaBox.nameObject = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.bananaLabel;
 		
 		//create text field to put info in
 		_level0.loader.contentHolder.bananaBox.createTextField("bananaTime", _level0.loader.contentHolder.branBox.getNextHigesthDepth(), 5, 18, 40, 30);
