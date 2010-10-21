@@ -1,4 +1,4 @@
-
+﻿
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
 	
@@ -96,6 +96,7 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 	editCommand = "Éditer"
 	deleteCommand = "Effacer"
 	reportCommand = "Rapport"
+	monitorCommand = "Surveiller"
 	saveCommand = "Sauvegarder"
 	resetCommand = "Annuler"
 	backCommand = "Retour"
@@ -116,6 +117,9 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 	minutesText = "(en minutes)"
 	frenchText = "Français"
 	englishText = "Anglais"
+	selectAllText = "Tous"
+	unselectAllText = "Aucun"
+	nullDateText = "Aucune"
 	roomUnavailableMessage = "&lt;Salle non-disponible en francais&gt;"
 	 
   mathemaQuoi_betaNEW = ""  
