@@ -197,7 +197,7 @@ public class Question
 		}*/
 		
 			
-		System.out.println("La reponse : " + reponseCorrect + " Est la rep dans : " + tempStr);
+		//System.out.println("La reponse : " + reponseCorrect + " Est la rep dans : " + tempStr);
 		//tempStr = tampon.toString();
 		
 		String tempBuffer = "";

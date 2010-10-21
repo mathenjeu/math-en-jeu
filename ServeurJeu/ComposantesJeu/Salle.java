@@ -47,10 +47,10 @@ public class Salle
     // Contient le nom d'utilisateur du créateur de cette salle
     // BD:  [user.username] pour le user avec id [room.user_id]
     private final String strCreatorUsername;
-    // Contient la date d'ouverture de la salle. Peut etre null
+    // Contient la date d'ouverture de la salle.
     // BD:  [room.beginDate]
     private final Date dateBeginDate;
-    // Contient la date de fermeture de la salle. Peut etre null
+    // Contient la date de fermeture de la salle.
     // BD:  [room.endDate]
     private final Date dateEndDate;
     // Contient le numéro d'indentification unique pour la salle dans la BD
@@ -109,16 +109,8 @@ public class Salle
         intRoomId = roomId;
         strPassword = (String)roomData.get("password");
         strCreatorUsername = (String)roomData.get("username");
-        Object objDate = roomData.get("beginDate");
-        if (objDate == null || objDate.toString().isEmpty())
-            dateBeginDate = null;
-        else
-            dateBeginDate = (Date)objDate;
-        objDate = roomData.get("endDate");
-        if (objDate == null || objDate.toString().isEmpty())
-            dateEndDate = null;
-        else
-            dateEndDate = (Date)objDate;
+        dateBeginDate = (Date)roomData.get("beginDate");
+        dateEndDate = (Date)roomData.get("endDate");
         intMasterTime = (Integer)roomData.get("masterTime");
         mapRoomLanguageIdToName = (Map<Integer, String>)roomData.get("names");
         mapRoomLanguageIdToDescription = (Map<Integer, String>)roomData.get("descriptions");
@@ -190,7 +182,7 @@ public class Salle
             synchronized (lstJoueurs) {
                 // Ajouter ce nouveau joueur dans la liste des joueurs de cette salle
                 lstJoueurs.put(joueur.obtenirNomUtilisateur(), joueur);
-            }
+           
 
             // Le joueur est maintenant entré dans la salle courante
             joueur.definirSalleCourante(this);
@@ -209,7 +201,7 @@ public class Salle
             // InformationDestination pour chacun et ajouter l'événement
             // dans la file de gestion d'événements
             preparerEvenementJoueurEntreSalle(joueur.obtenirNomUtilisateur());
-
+           }
 
             //objGestionnaireBD.fillUserLevels(joueur, this);
 
