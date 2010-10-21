@@ -1223,6 +1223,7 @@ public class GestionnaireBD {
             putNewRoomInfo(room_id, language_id, names.get(language_id), descriptions.get(language_id));
         putNewRoomGameTypes(room_id, gameTypeIds);
         putNewRoomKeywords(room_id, keywordIds);
+        putNewRoomObjectsAndShops(room_id, "1,2,3,7","1,2,3");
 
         //System.out.println(room_id);
 
@@ -1236,6 +1237,8 @@ public class GestionnaireBD {
                 requete.executeUpdate("DELETE FROM room_info WHERE room_id=" + room_id);
                 requete.executeUpdate("DELETE FROM rooms_keywords WHERE room_id=" + room_id);
                 requete.executeUpdate("DELETE FROM room_game_types WHERE room_id=" + room_id);
+                requete.executeUpdate("DELETE FROM room_shop WHERE room_id=" + room_id);
+                requete.executeUpdate("DELETE FROM room_object WHERE room_id=" + room_id);
             }
         } catch (Exception e) {
             System.out.println(GestionnaireMessages.message("bd.erreur_delete_rooms_modProf") + e.getMessage());
@@ -1282,6 +1285,7 @@ public class GestionnaireBD {
             putNewRoomInfo(room_id, language_id, names.get(language_id), descriptions.get(language_id));
         putNewRoomGameTypes(room_id, gameTypeIds);
         putNewRoomKeywords(room_id, keywordIds);
+        putNewRoomObjectsAndShops(room_id,"1,2,3,7","1,2,3");
 
         //System.out.println(room_id);
 
@@ -1357,7 +1361,54 @@ public class GestionnaireBD {
             System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_gameTypes") + e.getMessage());
         }
     }
+    private void putNewRoomObjectsAndShops(int room_id, String objectIds, String shopIds) {
+        ArrayList<Integer> objects = new ArrayList<Integer>();
+        ArrayList<Integer> shops = new ArrayList<Integer>();
+        StringTokenizer objectsST = new StringTokenizer(objectIds, ",");
+        StringTokenizer shopsST = new StringTokenizer(shopIds, ",");
 
+        while (objectsST.hasMoreTokens()) {
+            objects.add(Integer.parseInt(objectsST.nextToken()));
+        }
+        while (shopsST.hasMoreTokens()) {
+            shops.add(Integer.parseInt(shopsST.nextToken()));
+        }
+
+        int length = objects.size();
+        // Création du SQL pour l'ajout
+        PreparedStatement prepStatement = null;
+        try {
+            if (length >0)
+            {
+                prepStatement = connexion.prepareStatement("INSERT INTO room_object (room_id, object_id, priority) VALUES ( ? , ?, ?)");
+                for (int i = 0; i < length; i++) {
+                    // Ajouter l'information pour cette salle
+                    prepStatement.setInt(1, room_id);
+                    prepStatement.setInt(2, objects.get(i));
+                    prepStatement.setInt(3, (i+1));
+                    prepStatement.addBatch();
+                }
+                prepStatement.executeBatch();
+            }
+            length = shops.size();
+            if (length > 0)
+            {
+                prepStatement = connexion.prepareStatement("INSERT INTO room_shop (room_id, shop_id, priority) VALUES ( ? , ?, ?)");
+                for (int i = 0; i < length; i++) {
+                    // Ajouter l'information pour cette salle
+                    prepStatement.setInt(1, room_id);
+                    prepStatement.setInt(2, shops.get(i));
+                    prepStatement.setInt(3, (i+1));
+                    prepStatement.addBatch();//executeUpdate();
+                }
+                prepStatement.executeBatch();
+            }
+
+
+        } catch (Exception e) {
+            System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_gameTypes") + e.getMessage());
+        }
+    }
     /**
      * Method satellite to putNewRoom() used to put new room in DB from room created in profModule
      * put infos in room_info table
