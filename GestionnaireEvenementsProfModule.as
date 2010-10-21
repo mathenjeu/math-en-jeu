@@ -85,6 +85,10 @@ class GestionnaireEvenementsProfModule
 	{
 		return this.report;
 	}
+	function obtenirUserRole():Number
+	{
+		return userRole;
+	}
 		
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 	function utiliserPortSecondaire()
