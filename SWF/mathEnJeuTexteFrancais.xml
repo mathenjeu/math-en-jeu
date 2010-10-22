@@ -1,4 +1,4 @@
-
+﻿
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
 	
@@ -124,6 +124,26 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 	unselectAllText = "Aucun"
 	nullDateText = "Aucune"
 	roomUnavailableMessage = "&lt;Salle non-disponible en francais&gt;"
+	
+	timePeriodLabel = "période"
+	sinceOpeningLabel = "depuis l'ouverture"
+	lastWeekLabel = "cette semaine"
+	lastMonthLabel = "ce mois-ci"
+	fromLabel = "du"
+	toLabel = "au"
+	numQuestionsLabel = "#questions"
+	numCorrectLabel = "#bonnes"
+	gamePlayedLabel = "#parties jouées"
+	numPlayersLabel = "#joueurs"
+	numDifferentPlayerLabel = "#joueurs différents"
+	numQuestionsLabel = "#questions"
+	numDifferentQuestionsLabel = "#questions différentes"
+	overviewReportCommand = "Sommaire"
+	playerReportCommand = "Joueurs"
+	questionReportCommand = "Questions"
+	playerReportDetail = "Détail sur ce joueur"
+	questionReportDetail = "Rapport détaillé"
+
 	 
   mathemaQuoi_betaNEW = ""  
     GUIerrorConnection = "Une erreur s'est produite. Vous êtes déconnecté du serveur de jeu. Utilisez le X en haut à la droite de l'écran pour quitter le jeu et recommencer!"

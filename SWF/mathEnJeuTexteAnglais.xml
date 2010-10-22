@@ -1,4 +1,4 @@
-
+﻿
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
 	Messagerie = ""
@@ -123,6 +123,25 @@ If you are a theacher and you need to use this section contact us."
 	unselectAllText = "None"
 	nullDateText = "None"
 	roomUnavailableMessage = "&lt;Room unavailable in English&gt;"
+	
+	timePeriodLabel = "time period"
+	sinceOpeningLabel = "since opening"
+	lastWeekLabel = "last week"
+	lastMonthLabel = "last month"
+	fromLabel = "from"
+	toLabel = "to"
+	numQuestionsLabel = "#questions"
+	numCorrectLabel = "#correct"
+	gamePlayedLabel = "#games played"
+	numPlayersLabel = "#players"
+	numDifferentPlayerLabel = "#different players"
+	numQuestionsLabel = "#questions"
+	numDifferentQuestionsLabel = "#different questions"
+	overviewReportCommand = "Overview"
+	playerReportCommand = "Players"
+	questionReportCommand = "Questions"
+	playerReportDetail = "More on this player"
+	questionReportDetail = "Detailed report"
 	  
 	mathemaQuoi_betaNEW = ""
 	  errorPWD = "Wrong password! Try again or choose another room."
