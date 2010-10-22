@@ -17,21 +17,21 @@
 	
 	boutonAcheter = "Buy"
 
-	boutonRetour = "Leave"
+	boutonRetour = "Exit"
 
-	Livre = "The book costs 1 piece. Use it in a multiple choices questions to eliminate a wrong answer."
+	Livre = "The book costs 1 coin. Use it in a multiple choices questions to eliminate a wrong answer."
 
-	Papillon = "The butterfly costs 1 piece. It gives the possibility to go anywhere on the board."
+	Papillon = "The butterfly costs 1 coin. It gives the possibility to go anywhere on the board."
 
-	Telephone = "The phone costs 1 piece. It gives the power of the phone."
+	Telephone = "The phone costs 1 coin. It gives the power of the phone."
 
-	Boule = "The crystal ball costs 1 piece. Use it when a question screen appear if you wish to change the question."
+	Boule = "The crystal ball costs 1 coin. Use it when a question screen appear if you wish to change the question."
 
-	PotionGros = "The Blue Potion costs 1 piece. It makes your character bigger than the others for a certain amount of time."
+	PotionGros = "The Blue Potion costs 1 coin. It makes your character bigger than the others for a certain amount of time."
 
-	PotionPetit = "The Red Potion costs 1 piece. It makes your character smaller than the others for a certain amount of time."
+	PotionPetit = "The Red Potion costs 1 coin. It makes your character smaller than the others for a certain amount of time."
 
-	Banane = "The banana costs 1 piece. It allows your character to send your strongest rival farther from the 'InstantVictory' icon."
+	Banane = "The banana costs 1 coin. It allows your character to send your strongest rival farther from the 'InstantVictory' icon."
 
 	PasObjet = "Sorry, we don't have this object anymore."
 	
@@ -42,7 +42,7 @@
 
 	tTelephone = "Phone"
 
-	tBoule = "Ball"
+	tBoule = "Crystal ball"
 
 	tPotionGros = "Red Potion"
 
