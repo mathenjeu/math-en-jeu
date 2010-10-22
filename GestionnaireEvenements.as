@@ -865,12 +865,18 @@ class GestionnaireEvenements
             case "ListeSalles":
 			    this.listeDesSalles.removeAll();
 				var count:Number = objetEvenement.listeNomSalles.length;
+				var roomLabel:String;
+				
                 for (var i:Number = 0; i < count; i++)
-                {
-					
+                {					
 					this.listeDesSalles.push(objetEvenement.listeNomSalles[i]);
-					_level0.loader.contentHolder.listeSalle.addItem({label: (this.listeDesSalles[i].userCreator + " - " +  this.listeDesSalles[i].nom), data:  this.listeDesSalles[i].idRoom});
-					trace("salle " + i + " : " + this.listeDesSalles[i].nom);
+					if(_level0.loader.contentHolder.roomsType == "General")
+					   roomLabel = " * " +  this.listeDesSalles[i].nom;
+					else if (_level0.loader.contentHolder.roomsType == "profsType")
+					   roomLabel = this.listeDesSalles[i].userCreator + " - " +  this.listeDesSalles[i].nom;
+					
+					_level0.loader.contentHolder.listeSalle.addItem({label: (roomLabel), data:  this.listeDesSalles[i].idRoom});
+					//trace("salle " + i + " : " + this.listeDesSalles[i].nom);
 					
 				}
 								
