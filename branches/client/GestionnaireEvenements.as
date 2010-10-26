@@ -706,8 +706,7 @@ class GestionnaireEvenements
 			   this.playersNumber = objetEvenement.playersListe.length;
 			   this.endGame = false;
 			   var count:Number = objetEvenement.playersListe.length;
-			  
-        	   for(i = 0; i < count; i++)
+			   for(i = 0; i < count; i++)
                {
                   this.listeDesJoueursConnectes.push(objetEvenement.playersListe[i]);
                   this.listeDesPersonnages.push(new Object());
@@ -791,22 +790,15 @@ class GestionnaireEvenements
 			case "Ok":
 			
 			    // newsbox
-		        //_level0.loader.contentHolder.newsbox_mc.newsone = this.newsArray[this.newsArray.length - 1];
 		        var messageInfo:String = objetEvenement.nomUtilisateur + _root.texteSource_xml.firstChild.attributes.restartMess; 
 				this.newsChat.addMessage(messageInfo);
-				//_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-				//_level0.loader.contentHolder.planche.setRepostCases(true);
-				//_level0.loader.contentHolder.planche.setShowCases(true);
-				//_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-		        //this.newsArray[newsArray.length] = messageInfo;
-		        //_level0.loader.contentHolder.newsbox_mc.newstwo = this.newsArray[this.newsArray.length - 1];
-		        //_level0.loader.contentHolder.orderId = 0;
+				
 			   trace("<<<<<<<<<<<<<<<<  feedbackRestartOldGame  finish restart >>>>>>>>>>>>>>>>>>>" + this.numeroTable);
 			
 			break;
 	     
             default:
-            	trace("resultat Inconnue");
+            	trace("resultat Inconnue - feedbackRestartOldGame");
         }
 		objetEvenement = null;
      	trace("fin de feedbackRestartOldGame");
@@ -901,8 +893,8 @@ class GestionnaireEvenements
                 trace("Erreur Inconnue - retourObtenirListeSalles");
         }
 		objetEvenement = null;
-        trace("fin de retourObtenirListeSalles" + " " + objetEvenement.resultat);
-        trace("*********************************************\n");
+        //trace("fin de retourObtenirListeSalles" + " " + objetEvenement.resultat);
+        //trace("*********************************************\n");
     }
 	
 	
@@ -2529,6 +2521,7 @@ class GestionnaireEvenements
 			trace(i + ": "+this.listeDesPersonnages[i].nom+" id:"+this.listeDesPersonnages[i].id);
 		}
 		*/
+		_level0.loader.contentHolder.listeTable.redraw();
 		//objetEvenement = null;
     	trace("fin de evenementNouvelleTable");
     	trace("*********************************************\n");
@@ -2944,7 +2937,7 @@ class GestionnaireEvenements
 		            this.listeDesPersonnages[this.listeDesPersonnages -1].pointage = objetEvenement.Pointage;
 		            this.listeDesPersonnages[this.listeDesPersonnages -1].win = 0;
 		            this.listeDesPersonnages[this.listeDesPersonnages -1].idessin = calculatePicture(this.listeDesPersonnages[this.listeDesPersonnages -1].id);
-					trace("test Rejoindre: "  + this.listeDesPersonnages[this.listeDesPersonnages -1].nom + objetEvenement.nomUtilisateur);
+					trace("test Rejoindre: "  + this.listeDesPersonnages[this.listeDesPersonnages -1].nom + " " + objetEvenement.nomUtilisateur);
                 	
 		
 	
