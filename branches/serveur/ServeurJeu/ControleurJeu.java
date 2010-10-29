@@ -772,7 +772,7 @@ public class ControleurJeu {
      */
     public JoueurHumain obtenirJoueurHumainJoueurDeconnecte(String nomUtilisateur) {
         synchronized (lstJoueursDeconnectes) {
-            return (JoueurHumain) lstJoueursDeconnectes.get(nomUtilisateur);
+            return (JoueurHumain) lstJoueursDeconnectes.get(nomUtilisateur.toLowerCase());
         }
     }
 
@@ -788,7 +788,9 @@ public class ControleurJeu {
     }
 
     public void clearDeconnectedPlayersList() {
-        lstJoueursDeconnectes.clear();
+    	synchronized (lstJoueursDeconnectes) {
+    	   lstJoueursDeconnectes.clear();
+    	}
     }
 
     public HashMap<String, JoueurHumain> obtenirListeJoueursDeconnectes() {

@@ -468,7 +468,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				    joueur.obtenirProtocoleJoueur().genererNumeroReponse();					    
 				}
 			
-				preparerEvenementJoueurRejoindrePartie(joueur.obtenirNomUtilisateur(), joueur.obtenirPartieCourante().obtenirIdPersonnage(), joueur.obtenirPartieCourante().obtenirPointage());
+				preparerEvenementJoueurRejoindrePartie(joueur);
 			   
 		    }
 		    synchronized (lstJoueursDeconnectes)
@@ -1629,11 +1629,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @param nomUtilisateur
 	 * @param nouveauPointage
 	 */
-	public void preparerEvenementJoueurRejoindrePartie(String userName, int idPersonnage, int points)
+	public void preparerEvenementJoueurRejoindrePartie(JoueurHumain player)
 	{
 		// Créer un nouveal événement qui va permettre d'envoyer l'événment
 		// aux joueurs pour signifier une modification du pointage
-		EvenementJoueurRejoindrePartie maPartie = new EvenementJoueurRejoindrePartie(userName, idPersonnage, points);
+		EvenementJoueurRejoindrePartie maPartie = new EvenementJoueurRejoindrePartie(player.obtenirNomUtilisateur(),
+				player.obtenirPartieCourante().obtenirIdPersonnage(), player.obtenirPartieCourante().obtenirPointage(),
+				player.getRole(), player.obtenirPartieCourante().getClothesColor());
 		
 		// Créer un ensemble contenant tous les tuples de la liste des joueurs
 		// de la table
@@ -1644,7 +1646,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		
 		// Passser tous les joueurs de la table et leur envoyer l'événement
 		// NOTE: On omet d'envoyer au joueur nomUtilisateur étant donné
-		//       qu'il connait déjà son pointage
+		//       qu'il connait déjà son etat
 		while (objIterateurListe.hasNext() == true)
 		{
 			// Créer une référence vers le joueur humain courant dans la liste
@@ -1652,7 +1654,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			
 			// Si le nom d'utilisateur du joueur n'est pas nomUtilisateur, alors
 			// on peut envoyer un événement à cet utilisateur
-			if (objJoueur.obtenirNomUtilisateur().equals(userName) == false)
+			if (objJoueur.equals(player) == false)
 			{
 				// Obtenir un numéro de commande pour le joueur courant, créer
 				// un InformationDestination et l'ajouter à l'événement

@@ -643,6 +643,7 @@ public class ProtocoleJoueur implements Runnable {
                             // qu'il puisse reprendre sa partie
                             JoueurHumain objAncientJoueurHumain = objControleurJeu.obtenirJoueurHumainJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
 
+                            //System.out.println("Verify  --- " + objAncientJoueurHumain + " humain " + objJoueurHumain.obtenirNomUtilisateur());
                             // Envoyer la liste des joueurs
                             envoyerListeJoueurs(objAncientJoueurHumain, objNoeudCommandeEntree.getAttribute("no"));
 
@@ -3459,7 +3460,7 @@ public class ProtocoleJoueur implements Runnable {
         } catch (Exception e) {
             objLogger.error(e.getMessage());
         }
-    }
+    }// end method
 
     /*
      * Permet d'envoyer un événement pour synchroniser le temps
@@ -3601,6 +3602,9 @@ public class ProtocoleJoueur implements Runnable {
 
 	// Create another param for the game type
 	Element objNoeudParametreGameType = objDocumentXML.createElement("parametre");
+	
+	// Create another param for the game type
+	Element objNoeudParametreMoveStep = objDocumentXML.createElement("parametre");
 
 	// send the id of the game and max nb players in this game
 	objNoeudCommande.setAttribute("noClient", no);
@@ -3612,12 +3616,17 @@ public class ProtocoleJoueur implements Runnable {
 	objNoeudParametreMaxPlayers.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirTable().getMaxNbPlayers()));
 	objNoeudParametreGameType.setAttribute("type", "GameType");
 	objNoeudParametreGameType.setAttribute("valeur", ancientJoueur.obtenirPartieCourante().obtenirTable().getGameType());
+	objNoeudParametreMoveStep.setAttribute("type", "MoveStep");
+	objNoeudParametreMoveStep.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().getMoveVisibility()));
+	
+	System.out.println("Move " + ancientJoueur.obtenirPartieCourante().getMoveVisibility());
 
 	// Ajouter les noeuds paramètres au noeud de commande dans
 	// le document de sortie
 	objNoeudCommande.appendChild(objNoeudParametreNbTable);
 	objNoeudCommande.appendChild(objNoeudParametreMaxPlayers);
 	objNoeudCommande.appendChild(objNoeudParametreGameType);
+	objNoeudCommande.appendChild(objNoeudParametreMoveStep);
 	// Ajouter le noeud de commande au noeud racine dans le document
 	objDocumentXML.appendChild(objNoeudCommande);
         try {
@@ -3629,7 +3638,7 @@ public class ProtocoleJoueur implements Runnable {
         } catch (Exception e) {
             objLogger.error(e.getMessage());
         }
-    }
+    }// end method
 
     /*
      * Permet d'envoyer la liste des items d'un joueur qui rejoint une partie
