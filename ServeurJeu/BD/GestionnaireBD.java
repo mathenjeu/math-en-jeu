@@ -697,6 +697,13 @@ public class GestionnaireBD {
         return money;
     }// end methode
 
+    /**
+     * Used to get from DB the user role_Id
+     * 
+     * @param username
+     * @param password
+     * @return
+     */
     public int getUserRole(String username, String password) {
         int role = 0;
         try {
@@ -713,7 +720,7 @@ public class GestionnaireBD {
             e.printStackTrace();
         }
         return role;
-    }
+    }// end method
     
     public Map<String, Object> getRoomInfo(int roomId) throws SQLException {
         Map<String, Object> roomData = new TreeMap<String, Object>();
@@ -860,7 +867,8 @@ public class GestionnaireBD {
                     }
             }
         }
-    }
+    }// end method
+    
     /**
      * @param objReglesSalle
      */
@@ -1187,6 +1195,7 @@ public class GestionnaireBD {
     if(tmp2 > 0)
     objReglesSalle.definirTempsMaximal(tmp2);
     }//end methode */
+    
     //******************************************************************
     //  Bloc used to put new room in DB from room created in profModule
     //******************************************************************

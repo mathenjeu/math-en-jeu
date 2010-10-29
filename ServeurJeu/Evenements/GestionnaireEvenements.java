@@ -56,7 +56,7 @@ public class GestionnaireEvenements implements Runnable
 			{
 				// Stopper le thread du gestionnaire d'événements pour
 				// laisser un moment de répit au CPU
-				Thread.sleep(300);
+				Thread.sleep(10);
 			}
 			catch (InterruptedException ie) 
 			{

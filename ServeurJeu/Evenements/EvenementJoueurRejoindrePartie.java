@@ -24,18 +24,26 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
     // Déclaration d'une variable qui va garder les points du joueur
     private int intPointage;
     
+    // Déclaration d'une variable qui va garder le role du joueur
+    private int userRole;
+    
+    // Déclaration d'une variable qui va garder la clocolor du joueur
+    private String userColor;
+    
     /**
      * Constructeur de la classe EvenementJoueurDemarrePartie qui permet 
      * d'initialiser le numéro Id du personnage et le nom d'utilisateur du 
      * joueur qui vient de démarrer la partie. 
      */
-    public EvenementJoueurRejoindrePartie(String nomUtilisateur, int idPersonnage, int pointage)
+    public EvenementJoueurRejoindrePartie(String nomUtilisateur, int idPersonnage, int pointage, int role, String color)
     {
         // Définir le numéro Id du personnage et le nom d'utilisateur du joueur 
     	// qui a démarré la partie
     	intIdPersonnage = idPersonnage;
         strNomUtilisateur = nomUtilisateur;
         intPointage = pointage;
+        userRole = role;
+        userColor = color;
     }
 	
 	/**
@@ -64,12 +72,16 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
 			Element objNoeudParametreIdPersonnage = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreNomUtilisateur = objDocumentXML.createElement("parametre");
 			Element objNoeudParametrePointage = objDocumentXML.createElement("parametre");
+			Element objNoeudParametreCloColor = objDocumentXML.createElement("parametre");
+			Element objNoeudParametreRole = objDocumentXML.createElement("parametre");
 			
 			// Créer des noeuds texte contenant le numéro Id du personnage et le 
 			// nom d'utilisateur des noeuds paramètre
 			Text objNoeudTexteIdPersonnage = objDocumentXML.createTextNode(Integer.toString(intIdPersonnage));
 			Text objNoeudTexteNomUtilisateur = objDocumentXML.createTextNode(strNomUtilisateur);
 			Text objNoeudTextePointage = objDocumentXML.createTextNode(Integer.toString(intPointage));
+			Text objNoeudTexteRole = objDocumentXML.createTextNode(Integer.toString(userRole));
+			Text objNoeudTexteColor = objDocumentXML.createTextNode(userColor);
 			
 			// Définir les attributs du noeud de commande
 			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
@@ -81,16 +93,22 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
 			objNoeudParametreIdPersonnage.setAttribute("type", "IdPersonnage");
 			objNoeudParametreNomUtilisateur.setAttribute("type", "NomUtilisateur");
 			objNoeudParametrePointage.setAttribute("type", "Pointage");
+			objNoeudParametreCloColor.setAttribute("type", "Color");
+			objNoeudParametreRole.setAttribute("type", "Role");
 			
 			// Ajouter les noeuds texte aux noeuds des paramètres
 			objNoeudParametreIdPersonnage.appendChild(objNoeudTexteIdPersonnage);
 			objNoeudParametreNomUtilisateur.appendChild(objNoeudTexteNomUtilisateur);
 			objNoeudParametrePointage.appendChild(objNoeudTextePointage);
+			objNoeudParametreRole.appendChild(objNoeudTexteRole);
+			objNoeudParametreCloColor.appendChild(objNoeudTexteColor);
 			
 			// Ajouter les noeuds paramètres au noeud de commande
 			objNoeudCommande.appendChild(objNoeudParametreNomUtilisateur);
 			objNoeudCommande.appendChild(objNoeudParametreIdPersonnage);
 			objNoeudCommande.appendChild(objNoeudParametrePointage);
+			objNoeudCommande.appendChild(objNoeudParametreRole);
+			objNoeudCommande.appendChild(objNoeudParametreCloColor);
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
 			objDocumentXML.appendChild(objNoeudCommande);
