@@ -973,6 +973,16 @@ class GestionnaireCommunication
 							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
 				    		objEvenement["Pointage"] = lstChildNodes[i].firstChild.nodeValue;
 				       	break;
+						
+						case "Color":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["Color"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+						
+						case "Pointage":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["Role"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
 					} // end switch
 				
 				} // fin "JoueurRejoindrePartie"
@@ -3211,9 +3221,9 @@ class GestionnaireCommunication
                 objEvenement.playersListe.push({nom:lstChildNodes[i].attributes.nom,
 												userRole:lstChildNodes[i].attributes.role,
 												pointage:lstChildNodes[i].attributes.pointage,
-												clocolor:lstChildNodes[i].attributes.clothesColor,
+												//clocolor:lstChildNodes[i].attributes.clothesColor,
 												idPersonnage:lstChildNodes[i].attributes.id});
-				//trace("GCOM : NOW " + lstChildNodes[i].attributes.nom + " " + lstChildNodes[i].attributes.id )
+				trace("GCOM : NOW " + lstChildNodes[i].attributes.nom + " " + lstChildNodes[i].attributes.clothesColor )
             }
 		} else if(noeudCommande.attributes.nom == "Pointage")
 		{
@@ -3251,6 +3261,9 @@ class GestionnaireCommunication
 			
 			var objNoeudParametreGameType:XMLNode = lstNoeudsParametre[2];
 			objEvenement.gameType = objNoeudParametreGameType.attributes.valeur;
+			
+			var objNoeudParametreMoveStep:XMLNode = lstNoeudsParametre[3];
+			objEvenement.moveVisibility = objNoeudParametreMoveStep.attributes.valeur;
 						
 				 		
 		}else if(noeudCommande.attributes.nom == "ListeObjets")

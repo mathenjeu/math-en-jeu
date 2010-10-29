@@ -123,7 +123,7 @@ class GestionnaireEvenements
 		      this.moveVisibility = 6;
 			}
 		}
-		trace("getBraniac " + this.ourPerso.getBrainiac());
+		//trace("getBraniac " + this.ourPerso.getBrainiac());
 	}
 	
 	function setMoveSight(steps:Number)
@@ -141,7 +141,7 @@ class GestionnaireEvenements
 		      this.moveVisibility = 6;
 			}
 		}
-		trace("getBraniac " + this.ourPerso.getBrainiac());
+		trace("getBraniac " + this.moveVisibility);
 	}
 	
 	function obtenirNomUtilisateur()
@@ -644,7 +644,7 @@ class GestionnaireEvenements
             break;
 	     
             default:
-            	trace("Erreur Inconnue");
+            	trace("Erreur Inconnue Message du serveur: " + objetEvenement.resultat);
         }
 		objetEvenement = null;
      	trace("fin de retourConnexion");
@@ -710,14 +710,15 @@ class GestionnaireEvenements
                {
                   this.listeDesJoueursConnectes.push(objetEvenement.playersListe[i]);
                   this.listeDesPersonnages.push(new Object());
-			      this.listeDesPersonnages[i].nom = objetEvenement.playersListe[i].nom;
+			      
+				  this.listeDesPersonnages[i].nom = objetEvenement.playersListe[i].nom;
                   this.listeDesPersonnages[i].id = objetEvenement.playersListe[i].idPersonnage;
 			      this.listeDesPersonnages[i].role = objetEvenement.playersListe[i].userRole;
 			      this.listeDesPersonnages[i].pointage = objetEvenement.playersListe[i].pointage;
 				  this.listeDesPersonnages[i].clocolor = objetEvenement.playersListe[i].clocolor;
 			      this.listeDesPersonnages[i].win = 0;
 				  
-				  trace("rejoindre !!! - " +  this.listeDesPersonnages[i].nom  + " " + this.listeDesPersonnages[i].clocolor);
+				  //trace("rejoindre !!! - " +  this.listeDesPersonnages[i].nom  + " " + objetEvenement.playersListe[i].clocolor);
 				  					
 		          var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
 				  
@@ -735,9 +736,8 @@ class GestionnaireEvenements
                   {
 						this.idPersonnage = this.listeDesPersonnages[i].id;
 						this.numeroDuDessin = this.listeDesPersonnages[i].idessin;
-						this.colorIt = this.listeDesPersonnages[i].clocolor;
-						
-						trace("rejoindre !!! - " +  this.colorIt + " " + this.idPersonnage + " " + this.numeroDuDessin);
+												
+						//trace("rejoindre !!! - " +  this.colorIt + " " + this.idPersonnage + " " + this.numeroDuDessin);
 						
 				  }
 			   }
@@ -773,7 +773,8 @@ class GestionnaireEvenements
 			   this.numeroTable = objetEvenement.noTable;
 			   this.maxPlayers = objetEvenement.maxPlayers;
 			   this.typeDeJeu = objetEvenement.gameType;
-			   trace("rejoindre table : " +  this.numeroTable + " " + this.maxPlayers + " " + this.typeDeJeu);
+			   this.setMoveSight(objetEvenement.moveVisibility);
+			   trace("rejoindre table : " +  this.numeroTable + " " + this.maxPlayers + " " + this.moveVisibility);
 			
 			break;
 			
@@ -968,6 +969,8 @@ class GestionnaireEvenements
                 }
                 this.objGestionnaireCommunication.obtenirListeJoueursSalle(Delegate.create(this, this.retourObtenirListeJoueursSalle), Delegate.create(this, this.evenementJoueurEntreSalle), Delegate.create(this, this.evenementJoueurQuitteSalle));
                 _level0.loader.contentHolder.gotoAndPlay(2);
+				
+				
 			break;
 			
             case "CommandeNonReconnue":
@@ -1004,9 +1007,9 @@ class GestionnaireEvenements
             break;
 			
             default:
-                trace("Erreur Inconnue");
+                trace("Erreur Inconnue Message du serveur: " + objetEvenement.resultat);
         }
-		objetEvenement = null;
+		//objetEvenement = null;
         trace("fin de retourEntrerSalle");
         trace("*********************************************\n");
     }
@@ -1135,6 +1138,7 @@ class GestionnaireEvenements
                     str =  "   <<" +  objetEvenement.listeTables[i].tablName + ">>   - " + objetEvenement.listeTables[i].temps + " min. " ;
 					
 					_level0.loader.contentHolder.listeTable.addItem({label : str, data : objetEvenement.listeTables[i].no, icon: iconName});
+					
                 }
 				
 				if ( objetEvenement.listeTables.length == 0 &&  _level0.loader.contentHolder._currentframe == 2)
@@ -1149,6 +1153,9 @@ class GestionnaireEvenements
 					_level0.loader.contentHolder.chargementTables._visible = false;
 				}
 				_level0.loader.contentHolder.bt_continuer2._visible = true;
+				//_level0.loader.contentHolder.listeTable.invalidate();
+				_level0.loader.contentHolder.listeTable.redraw(true);
+				
             break;
 			 
             case "CommandeNonReconnue":
@@ -1172,7 +1179,7 @@ class GestionnaireEvenements
             break;
 			 
             default:
-                trace("Erreur Inconnue");
+                trace("Erreur Inconnue in  retourObtenirListeTables");
         }
 		objetEvenement = null;
         trace("fin de retourObtenirListeTables");
@@ -1230,7 +1237,7 @@ class GestionnaireEvenements
             break;
 			 
             default:
-                trace("Erreur Inconnue");
+                trace("Erreur Inconnue Message du serveur: " + objetEvenement.resultat);
         }
 		objetEvenement = null;
     	trace("fin de retourCreerTable");
@@ -1392,7 +1399,7 @@ class GestionnaireEvenements
 			break;
 			
             default:
-                trace("Erreur Inconnue");
+                trace("Erreur Inconnue Message du serveur: " + objetEvenement.resultat);
 				obtenirListeTables();
         }
 		objetEvenement = null;
@@ -1522,7 +1529,7 @@ class GestionnaireEvenements
             break;
 			
             default:
-                trace("Erreur Inconnue");
+                trace("Erreur Inconnue Message du serveur: " + objetEvenement.resultat);
         }
 		objetEvenement = null;
         trace("fin de retourDemarrerMaintenant");
@@ -1562,7 +1569,7 @@ class GestionnaireEvenements
             break;
 			
             default:
-                trace("Erreur Inconnue");
+                trace("Erreur Inconnue Message du serveur: " + objetEvenement.resultat);
         }
 		objetEvenement = null;
         trace("fin de retourEnvoyerMessage");
@@ -1649,7 +1656,7 @@ class GestionnaireEvenements
             break;
 			
             default:
-                trace("Erreur Inconnue");
+                trace("Erreur Inconnue Message du serveur: " + objetEvenement.resultat);
         }
 		objetEvenement = null;
         trace("fin de retourSortirJoueurTable");
@@ -1725,7 +1732,7 @@ class GestionnaireEvenements
             break;
 			
             default:
-                trace("Erreur Inconnue");
+                trace("Erreur Inconnue Message du serveur: " + objetEvenement.resultat);
         }
 		objetEvenement = null;
         trace("fin de retourDemarrerPartie");
@@ -2562,6 +2569,8 @@ class GestionnaireEvenements
 			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
 		}
 		
+		_level0.loader.contentHolder.listeTable.redraw();
+		
 		if(!endGame && objetEvenement.noTable == this.numeroTable){
 		   sortirSalle();
 		   //_level0.loader.contentHolder.gestionBoutons(true);
@@ -2884,7 +2893,7 @@ class GestionnaireEvenements
 					var cloCol:String = this.listeDesPersonnages[j].clocolor;//objetEvenement.clothesColor;
 				    this.listeDesPersonnages[j].filterC = _level0.loader.contentHolder.objGestionnaireEvenements.colorMatrixPerso(cloCol, idDessin);
 				
-					trace(" evdempartie clocolor : " + this.listeDesPersonnages[j].filterC);
+					//trace(" evdempartie clocolor : " + this.listeDesPersonnages[j].filterC);
 					
 					// after we create the perso's
 					_level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin, this.listeDesPersonnages[j].role, this.listeDesPersonnages[j].clocolor);
@@ -2893,6 +2902,28 @@ class GestionnaireEvenements
 				}
             }
         }
+		
+		// color aur head
+		count = this.listeDesPersonnages.length;
+        for(i = 0; i < count; i++)
+        {
+            if(this.listeDesPersonnages[i].nom == this.nomUtilisateur)
+            {
+	            var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
+				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
+				this.colorIt = this.listeDesPersonnages[i].clocolor;
+				
+				// put the face of my avatar in the panel (next to my name)
+		       maTete = _level0.loader.contentHolder.maTete.attachMovie("tete" + idDessin, "maTete", -10099);
+		       maTete._x = -5;
+		       maTete._y = -30;
+		       // V3 head size
+		       maTete._xscale = 290;
+		       maTete._yscale = 290;
+			   
+			   colorItMatrix(this.colorIt, maTete.headClo, idDessin);
+			}
+		}
 		
 		
         //_level0.loader.contentHolder.planche.afficher();
@@ -2923,21 +2954,21 @@ class GestionnaireEvenements
         // parametre: nomUtilisateur, idPersonnage, Pointage
      	trace("*********************************************");
      	trace("debut de evenementJoueurRejoindrePartie   " + objetEvenement.nomUtilisateur + "    " + objetEvenement.idPersonnage + " " + objetEvenement.Pointage);
+				
+		this.listeDesPersonnages.push(new Object());		  
 		
-		if(this.listeDesPersonnages.length < maxPlayers)
-		{
-		   this.listeDesPersonnages.push(new Object());		  
-		}
-		
-		
-					this.listeDesPersonnages[this.listeDesPersonnages -1].nom = objetEvenement.nomUtilisateur;
-                    this.listeDesPersonnages[this.listeDesPersonnages -1].id = objetEvenement.idPersonnage;
-		            this.listeDesPersonnages[this.listeDesPersonnages -1].clocolor = objetEvenement.clocolor;
-		            this.listeDesPersonnages[this.listeDesPersonnages -1].role = 1;//objetEvenement.userRole;   !!!!!!!!!!!!!!!!!!!!!!
-		            this.listeDesPersonnages[this.listeDesPersonnages -1].pointage = objetEvenement.Pointage;
-		            this.listeDesPersonnages[this.listeDesPersonnages -1].win = 0;
-		            this.listeDesPersonnages[this.listeDesPersonnages -1].idessin = calculatePicture(this.listeDesPersonnages[this.listeDesPersonnages -1].id);
-					trace("test Rejoindre: "  + this.listeDesPersonnages[this.listeDesPersonnages -1].nom + " " + objetEvenement.nomUtilisateur);
+		var n:Number = this.listeDesPersonnages.length -1;
+		this.listeDesPersonnages[n].nom = objetEvenement.nomUtilisateur;
+        this.listeDesPersonnages[n].id = objetEvenement.idPersonnage;
+		this.listeDesPersonnages[n].clocolor = objetEvenement.Color;
+		this.listeDesPersonnages[n].role = objetEvenement.Role;   
+		this.listeDesPersonnages[n].pointage = objetEvenement.Pointage;
+		this.listeDesPersonnages[n].win = 0;
+		var idDessin:Number = calculatePicture(this.listeDesPersonnages[n].id);
+		this.listeDesPersonnages[n].idessin = idDessin;
+		var cloCol:String = this.listeDesPersonnages[n].clocolor;
+	    this.listeDesPersonnages[n].filterC = _level0.loader.contentHolder.objGestionnaireEvenements.colorMatrixPerso(cloCol, idDessin);
+		trace("test Rejoindre: "  + this.listeDesPersonnages[n].nom + " " + this.listeDesPersonnages[n].clocolor + " " + this.listeDesPersonnages.length);
                 	
 		
 	
@@ -3337,7 +3368,7 @@ class GestionnaireEvenements
 		if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte == this.nomUtilisateur )
 		{
     	  	this.bananaState = true;
-			trace("in the GE " + bananaState);
+			trace("in the GestE " + bananaState);
 			
 			
 		   //if the player is in the minigame 
@@ -3549,7 +3580,7 @@ class GestionnaireEvenements
         formatTimer.font = "ArialBlack";
         formatTimer.align = "Center";
         _level0.loader.contentHolder.bananaBox.bananaTime.setNewTextFormat(formatTimer);
-		
+		trace("time banana ************************************    " + _global.restedTimeBanana );
 		if(_global.restedTimeBanana > 0) 
 		{ 
 		    _global.restedTimeBanana += 90;
@@ -3560,7 +3591,7 @@ class GestionnaireEvenements
 		
 		if(_global.intervalIdBanana != null) {
 		
-             // trace("clearInterval************************************    " + tempTime);
+             trace("clearInterval************************************    " + _global.restedTimeBanana );
 			 clearInterval(_global.intervalIdBanana);
         }
 
@@ -3569,6 +3600,7 @@ class GestionnaireEvenements
 	   
 	   function bananaTimerSet(playerUnder){
 	       
+		   trace("banana timer ************************************    " + _global.restedTimeBanana );
 		   _global.restedTimeBanana--;	  
 		   
 		   _level0.loader.contentHolder.bananaBox.bananaTime.text = _global.restedTimeBanana; 
