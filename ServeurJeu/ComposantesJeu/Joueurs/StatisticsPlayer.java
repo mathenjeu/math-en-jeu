@@ -8,7 +8,7 @@ package ServeurJeu.ComposantesJeu.Joueurs;
  * @author Oloieri Lilian 09.2010
  *
  */
-public class StatisticsPlayer implements Comparable<Object>{
+public class StatisticsPlayer implements Comparable<StatisticsPlayer>{
 	private String username;
 	private Integer points;
 	private Integer timePosition;
@@ -87,10 +87,9 @@ public class StatisticsPlayer implements Comparable<Object>{
 
 
 	@Override
-	public int compareTo(Object arg0) {
+	public int compareTo(StatisticsPlayer player) {
 				
-		assert((arg0 instanceof StatisticsPlayer) && (arg0 != null));
-		StatisticsPlayer player = (StatisticsPlayer)arg0;
+		assert(player != null);
 		int relValue = this.points.compareTo(player.getPoints());
 		if(relValue == 0)
 		{

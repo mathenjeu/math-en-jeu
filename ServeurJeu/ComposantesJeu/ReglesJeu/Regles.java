@@ -1,7 +1,6 @@
 package ServeurJeu.ComposantesJeu.ReglesJeu;
 
 import java.util.TreeSet;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 
 /**
  * @author Jean-François Brind'Amour
@@ -14,7 +13,7 @@ public class Regles
 	
 	// Déclaration d'une liste qui contient les magasins possibles (le 
 	// contenu est un objet ReglesMagasin)
-	private final TreeSet<Magasin> lstMagasinsPossibles;
+	private final TreeSet<ReglesMagasin> lstMagasinsPossibles;
 	
 	// Déclaration d'une liste qui contient les cases spéciales possibles (le 
 	// contenu est un objet ReglesCaseSpeciale)
@@ -93,7 +92,7 @@ public class Regles
 	    // Créer les listes de couleurs possibles, cases spéciales possibles,
 		// d'objets utilisables possibles et de magasins possibles
 	    
-	    lstMagasinsPossibles = new TreeSet<Magasin>(objReglesComparator);
+	    lstMagasinsPossibles = new TreeSet<ReglesMagasin>(objReglesComparator);
 	    //lstCasesSpecialesPossibles = new TreeSet<CaseSpeciale>(objReglesComparator);
 	    //lstCasesCouleurPossibles = new TreeSet<CaseCouleur>(objReglesComparator);
 	    lstObjetsUtilisablesPossibles = new TreeSet<ReglesObjetUtilisable>(objReglesComparator);
@@ -133,7 +132,7 @@ public class Regles
 	 * 
 	 * @return TreeSet : La liste des magasins possibles
 	 */
-	public TreeSet<Magasin> obtenirListeMagasinsPossibles()
+	public TreeSet<ReglesMagasin> obtenirListeMagasinsPossibles()
 	{
 	   return lstMagasinsPossibles;
 	}

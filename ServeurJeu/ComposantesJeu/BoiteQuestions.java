@@ -84,7 +84,7 @@ public class BoiteQuestions
 		// Let's choose a question among the possible ones
 	    if( questions != null && questions.size() > 0 )
 		{
-	    	System.out.println("erreur " + questions.size());  
+	    	//System.out.println("erreur " + questions.size());
 	    	question = (Question)(questions.remove(UtilitaireNombres.genererNbAleatoire(questions.size())));
 	    	//questions.remove(question);
     	}

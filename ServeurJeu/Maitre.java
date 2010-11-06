@@ -120,7 +120,6 @@ public class Maitre implements Runnable
 					if( commande == (byte)_ARRETER )
 					{
 						System.out.println( "arreter le serveur" );
-						arret = true;
 						objJeu.arreter();
 						System.exit( 0 );
 					}

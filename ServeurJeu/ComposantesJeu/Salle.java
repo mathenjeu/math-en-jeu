@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
 import Enumerations.RetourFonctions.ResultatEntreeTable;
-import ServeurJeu.BD.GestionnaireBD;
+import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.Evenements.EvenementJoueurEntreSalle;
 import ServeurJeu.Evenements.EvenementJoueurQuitteSalle;
@@ -14,7 +17,6 @@ import ServeurJeu.Evenements.EvenementNouvelleTable;
 import ServeurJeu.Evenements.EvenementTableDetruite;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
-import ServeurJeu.ControleurJeu;
 
 //TODO: Le mot de passe d'une salle ne doit pas être modifiée pendant le jeu,
 //      sinon il va falloir ajouter des synchronisations à chaque fois qu'on
@@ -31,8 +33,6 @@ public class Salle
     private final GestionnaireEvenements objGestionnaireEvenements;
     // Déclaration d'une référence vers le contrôleur de jeu
     private final ControleurJeu objControleurJeu;
-    // Déclaration d'une référence vers le gestionnaire de bases de données
-    private final GestionnaireBD objGestionnaireBD;
     // Contient le nom de la salle dans chaque langue. La map est construite
     // avec l'information contenu dans la table room_info.
     // BD:  [room_info.language_id --> room_info.name]
@@ -87,36 +87,44 @@ public class Salle
      * Une {@code Salle} est un endroit qui contient une ou plusieurs {@link Table}
      * de jeu similaire.  La salle régit le types de questions posées aux
      * tables ainsi que le temps et type de partie qui peuvent y être jouées.
-     * Pour construire une salle, elle doit déjà exister dans la BD donc
-     * seul un room_id est nécessaire parce que le reste de l'information
-     * sera extraite automatiquement par le gestionnaire de BD associé
-     * au contrôleur de jeu pour la salle à construire.
-     * @param controleurJeu une référence au contrôleur de jeu qui devra
-     *                      gérer cette salle.
-     * @param roomId le room_id pour cette salle tel que spécifié dans la
-     *               table 'room' de la BD.
-     * @throws java.sql.SQLException si le gestionnaire de BD associé ne peut
-     *                               extraire l'information nécessaire dans la
-     *                               BD pour construire la salle.
-     *                               See {@link GestionnaireBD#}
+     * @param controleurJeu
+     * @param roomId un id unique qui réfère à la table
+     * @param password le mot de passe nécéssaire pour entrer dans la salle ("" signifie pas de mot de passe)
+     * @param username le nom d'utilisateur du prof qui crée la salle
+     * @param type le type de la salle (profsType ou general)
+     * @param beginDate la date à laquelle la salle devient disponible
+     * @param endDate la date à laquelle la salle ferme
+     * @param gameDuration la durée des partie dans la salle (0 signifie le joueur décide)
+     * @param names noms de la salle pour chaque langues dans lesquelles la salle est disponible
+     * @param descriptions descriptions de la salle pour chaque langues dans lesquelles la salle est disponible
+     * @param keywordIds les ids des keywords associés à la salle (détermine le genre de question qui y seront posées)
+     * @param gameTypeIds les ids des type de jeu permit dans la salle
      */
-    public Salle(ControleurJeu controleurJeu, int roomId) throws java.sql.SQLException {
-        objGestionnaireEvenements = new GestionnaireEvenements();
-        objControleurJeu = controleurJeu;
-        objGestionnaireBD = controleurJeu.obtenirGestionnaireBD();
+    public Salle(ControleurJeu controleurJeu, 
+    		int roomId, String password, String username, String type,
+    		Date beginDate, Date endDate, int gameDuration,
+    		Map<Integer,String> names, Map<Integer,String> descriptions,
+    		Set<Integer> keywordIds, Set<Integer> gameTypeIds) {
 
-        Map<String, Object> roomData = objGestionnaireBD.getRoomInfo(roomId);
+    	objGestionnaireEvenements = new GestionnaireEvenements();
+        objControleurJeu = controleurJeu;
+
         intRoomId = roomId;
-        strPassword = (String)roomData.get("password");
-        strCreatorUsername = (String)roomData.get("username");
-        dateBeginDate = (Date)roomData.get("beginDate");
-        dateEndDate = (Date)roomData.get("endDate");
-        intMasterTime = (Integer)roomData.get("masterTime");
-        mapRoomLanguageIdToName = (Map<Integer, String>)roomData.get("names");
-        mapRoomLanguageIdToDescription = (Map<Integer, String>)roomData.get("descriptions");
-        strRoomType = (String)roomData.get("roomType");
-        setKeywordIds = objGestionnaireBD.getRoomKeywordIds(roomId);
-        setGameTypeIds = objGestionnaireBD.getRoomGameTypeIds(roomId);
+        strPassword = password;
+        strCreatorUsername = username;
+        dateBeginDate = beginDate;
+        dateEndDate = endDate;
+        intMasterTime = gameDuration;
+        mapRoomLanguageIdToName = new TreeMap<Integer,String>();
+        mapRoomLanguageIdToName.putAll(names);
+        mapRoomLanguageIdToDescription = new TreeMap<Integer,String>();
+        mapRoomLanguageIdToDescription.putAll(descriptions);
+        strRoomType = type;
+        setKeywordIds = new TreeSet<Integer>();
+        setKeywordIds.addAll(keywordIds);
+        setGameTypeIds = new TreeSet<Integer>();
+        setGameTypeIds.addAll(gameTypeIds);
+        
         // Créer une nouvelle liste de joueurs, de tables et de numéros
         lstJoueurs = new HashMap<String, JoueurHumain>();
         lstTables = new HashMap<Integer, Table>();
@@ -165,7 +173,7 @@ public class Salle
      *
      * @synchronism Cette fonction est synchronisée pour éviter que deux
      * 		puissent entrer ou quitter une salle en même temps.
-     * 		On n'a pas à s'inquiéter que le joueur soit modifié
+     * 		On n'a pas à s'inquièter que le joueur soit modifié
      * 		pendant le temps qu'on exécute cette fonction. De plus
      * 		on n'a pas à revérifier que la salle existe bien (car
      * 		elle ne peut être supprimée) et que le joueur n'est
@@ -176,7 +184,7 @@ public class Salle
         // Si le mot de passe est le bon, alors on ajoute le joueur dans la liste
         // des joueurs de cette salle et on envoit un événement aux autres
         // joueurs de cette salle pour leur dire qu'il y a un nouveau joueur
-        if (strPassword.equals(objGestionnaireBD.controlPWD(motDePasse))) {
+        if (strPassword.equals(objControleurJeu.obtenirGestionnaireBD().controlPWD(motDePasse))) {
             // Empêcher d'autres thread de toucher à la liste des joueurs de
             // cette salle pendant l'ajout du nouveau joueur dans cette salle
             synchronized (lstJoueurs) {
@@ -188,8 +196,8 @@ public class Salle
             joueur.definirSalleCourante(this);
 
             // Si on doit générer le numéro de commande de retour, alors
-            // on le génère, sinon on ne fait rien (ça devrait toujours
-            // être vrai, donc on le génère tout le temps)
+            // on le génére, sinon on ne fait rien (ça devrait toujours
+            // être vrai, donc on le génére tout le temps)
             if (doitGenererNoCommandeRetour == true) {
                 // Générer un nouveau numéro de commande qui sera
                 // retourné au client
@@ -203,7 +211,7 @@ public class Salle
             preparerEvenementJoueurEntreSalle(joueur.obtenirNomUtilisateur());
            }
 
-            //objGestionnaireBD.fillUserLevels(joueur, this);
+            //objControleurJeu.obtenirGestionnaireBD().fillUserLevels(joueur, this);
 
             return true;
         }
@@ -215,19 +223,19 @@ public class Salle
      * On suppose que le joueur est dans la salle et qu'il n'est pas en train
      * de jouer dans aucune table.
      *
-     * @param joueur : Le joueur demandant de quitter la salle
-     * @param doitGenererNoCommandeRetour : Permet de savoir si on doit
-     * 								générer un numéro de commande pour le retour de
-     * 								l'appel de fonction
-     *
+     * @param joueur Le joueur demandant de quitter la salle
+     * @param doitGenererNoCommandeRetour Permet de savoir si on doit générer un
+     *        numéro de commande pour le retour de l'appel de fonction
+     * @param detruirePartieCourante Permet de savoir si on doi détruire la salle
+     *        après l'avoir quittée.
      * @synchronism Cette fonction est synchronisée pour éviter que deux
-     * 				puissent entrer ou quitter une salle en même temps.
-     * 				On n'a pas à s'inquiéter que le joueur soit modifié
-     * 				pendant le temps qu'on exécute cette fonction. De plus
-     * 				on n'a pas à revérifier que la salle existe bien (car
-     * 				elle ne peut être supprimée) et que le joueur n'est
-     * 				pas toujours dans une autre salle (car le protocole
-     * 				ne peut pas exécuter plusieurs fonctions en même temps)
+     *              puissent entrer ou quitter une salle en même temps.
+     *              On n'a pas à s'inquièter que le joueur soit modifié
+     *              pendant le temps qu'on exécute cette fonction. De plus
+     *              on n'a pas à revérifier que la salle existe bien (car
+     *              elle ne peut être supprimée) et que le joueur n'est
+     *              pas toujours dans une autre salle (car le protocole
+     *              ne peut pas exécuter plusieurs fonctions en même temps)
      */
     public void quitterSalle(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, boolean detruirePartieCourante) {
         //TODO: Peut-être va-t-il falloir ajouter une synchronisation ici
@@ -360,18 +368,18 @@ public class Salle
      *		courante qui a des chances d'être détruite si le joueur
      *		qui veut quitter est le dernier de la table.
      */
-    public String entrerTable(JoueurHumain joueur, int noTable, boolean doitGenererNoCommandeRetour) {
+    public ResultatEntreeTable entrerTable(JoueurHumain joueur, int noTable, boolean doitGenererNoCommandeRetour) {
         // Déclaration d'une variable qui va contenir le résultat à retourner
         // à la fonction appelante, soit les valeurs de l'énumération
         // ResultatEntreeTable
-        String strResultatEntreeTable;
+        ResultatEntreeTable strResultatEntreeTable;
 
         // Empêcher d'autres thread de toucher à la liste des tables de
         // cette salle pendant que le joueur entre dans la table
         synchronized (lstTables) {
             // Si la table n'existe pas dans la salle où se trouve le joueur,
             // alors il y a une erreur
-            if (lstTables.containsKey(new Integer(noTable)) == false) {
+            if (lstTables.containsKey(noTable) == false) {
                 // La table n'existe pas
                 strResultatEntreeTable = ResultatEntreeTable.TableNonExistante;
             } // Si la table est complète, alors il y a une erreur (aucune
@@ -379,7 +387,7 @@ public class Salle
             // complète ou ne plus l'être que par l'entrée ou la sortie d'un
             // joueur dans la table. Or ces actions sont synchronisées avec
             // lstTables, donc ça va.
-            else if (((Table)lstTables.get(new Integer(noTable))).estComplete() == true) {
+            else if (lstTables.get(noTable).estComplete() == true) {
                 // La table est complète
                 strResultatEntreeTable = ResultatEntreeTable.TableComplete;
             } //TODO: Cette validation dépend de l'état de la partie (de la table)
@@ -387,13 +395,12 @@ public class Salle
             //		il va donc falloir revoir cette validation
             // Si la table n'est pas complète et une partie est en cours,
             // alors il y a une erreur
-            else if (((Table)lstTables.get(new Integer(noTable))).estCommencee() == true) {
+            else if (lstTables.get(noTable).estCommencee() == true) {
                 // Une partie est en cours
                 strResultatEntreeTable = ResultatEntreeTable.PartieEnCours;
             } else {
                 // Appeler la méthode permettant d'entrer dans la table
-                ((Table)lstTables.get(new Integer(noTable))).entrerTableAutres(joueur, doitGenererNoCommandeRetour);
-
+                lstTables.get(noTable).entrerTableAutres(joueur, doitGenererNoCommandeRetour);
                 // Il n'y a eu aucun problème pour entrer dans la table
                 strResultatEntreeTable = ResultatEntreeTable.Succes;
             }
@@ -721,6 +728,21 @@ public class Salle
     public Map<Integer,String> getDescriptionMap() {
         return mapRoomLanguageIdToDescription;
     }
+    public String getName(String language) {
+        if (language.equals("fr"))
+            return mapRoomLanguageIdToName.get(1);
+        else if (language.equals("en"))
+            return mapRoomLanguageIdToName.get(2);
+        return null;
+    }
+    public String getDescription(String language) {
+        if (language.equals("fr"))
+            return mapRoomLanguageIdToDescription.get(1);
+        else if (language.equals("en"))
+            return mapRoomLanguageIdToDescription.get(2);
+        return null;
+    }
+
     public int getMasterTime() {
         return intMasterTime;
     }
