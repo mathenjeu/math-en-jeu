@@ -59,13 +59,10 @@ public class JoueurHumain extends Joueur
 	 * membres privés du joueur humain et de garder une référence vers l'objet
 	 * permettant de faire la gestion du protocole du joueur
 	 * 
-	 * @param ProtocoleJoueur protocole : L'objet gérant le protocole de 
-	 * 									  communication du joueur
-	 * @param String nomUtilisateur : Le nom d'utilisateur du joueur
-	 * @param String adresseIP : L'adresse IP du joueur
-	 * @param String port : Le port du joueur
-	 * @param boolean peutCreerSalle : Permet de savoir si le joueur peut créer
-	 * 								   de nouvelles salles
+	 * @param protocole L'objet gérant le protocole de communication du joueur
+	 * @param nomUtilisateur : Le nom d'utilisateur du joueur
+	 * @param adresseIP : L'adresse IP du joueur
+	 * @param port : Le port du joueur
 	 */
 	public JoueurHumain(ProtocoleJoueur protocole, String nomUtilisateur, String adresseIP, String port) 
 	{
@@ -144,7 +141,7 @@ public class JoueurHumain extends Joueur
 	/**
 	 * Cette méthode permet de définir le prénom du joueur.
 	 * 
-	 * @param String prenom : Le prénom du joueur à définir
+	 * @param prenom Le prénom du joueur à définir
 	 */
 	public void definirPrenom(String prenom)
 	{
@@ -154,7 +151,7 @@ public class JoueurHumain extends Joueur
 	/**
 	 * Cette fonction permet de retourner le nom de famille du joueur.
 	 * 
-	 * @return String : Le nom de famille du joueur
+	 * @return Le nom de famille du joueur
 	 */
 	public String obtenirNomFamille()
 	{
@@ -164,7 +161,7 @@ public class JoueurHumain extends Joueur
 	/**
 	 * Cette méthode permet de définir le nom de famille du joueur.
 	 * 
-	 * @param String prenom : Le nom de famille du joueur à définir
+	 * @param nomFamille Le nom de famille du joueur à définir
 	 */
 	public void definirNomFamille(String nomFamille)
 	{
@@ -176,9 +173,9 @@ public class JoueurHumain extends Joueur
 	 * Cette fonction permet de retourner la référence vers la salle dans 
 	 * laquelle se trouve le joueur présentement.
 	 * 
-	 * @return Salle : La salle courante dans laquelle se trouve le joueur.
-	 * 				   Si null est retourné, alors le joueur ne se trouve dans
-	 * 				   aucune salle.
+	 * @return La salle courante dans laquelle se trouve le joueur.
+         *         Si null est retourné, alors le joueur ne se trouve dans
+         *         aucune salle.
 	 */
 	public Salle obtenirSalleCourante()
 	{
@@ -189,10 +186,9 @@ public class JoueurHumain extends Joueur
 	 * Cette méthode permet de définir la référence vers la salle dans laquelle
 	 * le joueur se trouve.
 	 * 
-	 * @param Salle salleCourante : La salle dans laquelle le joueur se
-	 * 								trouve présentement. Si la salle est null
-	 * 								alors c'est que le joueur n'est dans aucune
-	 * 								salle.
+	 * @param salleCourante La salle dans laquelle le joueur se trouve
+         *        présentement. Si la salle est null alors c'est que le joueur
+         *        n'est dans aucune salle.
 	 */
 	public void definirSalleCourante(Salle salleCourante)
 	{
@@ -211,8 +207,6 @@ public class JoueurHumain extends Joueur
 	{
 		return objPartieCourante;
 	}
-		
-	
 	
 	public int obtenirCleJoueur()
 	{
@@ -271,9 +265,9 @@ public class JoueurHumain extends Joueur
 	 * Cette méthode permet de définir la référence vers l'information sur la 
 	 * partie courante du joueur.
 	 * 
-	 * @param InformationPartie partieCourante : L'information sur la partie
-	 * 					courante du joueur. Si la partie courante est null
-	 * 					alors c'est que le joueur n'est dans aucune table
+	 * @param partieCourante L'information sur la partie courante du joueur.
+         *        Si la partie courante est null alors c'est que le joueur n'est
+         *        dans aucune table.
 	 */
 	public void definirPartieCourante(InformationPartie partieCourante)
 	{
@@ -285,5 +279,4 @@ public class JoueurHumain extends Joueur
 		objProtocoleJoueur = protocoleJoueur;
 		
 	}
-
 }

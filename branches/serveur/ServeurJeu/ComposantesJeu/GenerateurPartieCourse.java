@@ -131,7 +131,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 			// Obtenir un itérateur pour la liste des règles de magasins
 			// triées par priorité (c'est certain que la première fois il y a au 
 			// moins une règle de case)
-			Iterator objIterateurListePriorite = reglesPartie.obtenirListeMagasinsPossibles().iterator();
+			Iterator<ReglesMagasin> objIterateurListePriorite = reglesPartie.obtenirListeMagasinsPossibles().iterator();
 			
 			// On va choisir des magasins en commençant par la case la plus 
 			// prioritaire et on va faire ça tant qu'on n'a pas atteint le 
@@ -141,7 +141,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 			while (intCompteurCases <= intNbMagasins)
 			{
 				// Faire la référence vers la règle du magasin courant 
-				ReglesMagasin objReglesMagasin = (ReglesMagasin) objIterateurListePriorite.next();
+				ReglesMagasin objReglesMagasin = objIterateurListePriorite.next();
 				
 				// Obtenir un point aléatoirement parmi les points restants
 				// qui n'ont pas de magasins et enlever en même temps ce point 
@@ -284,7 +284,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 			// Obtenir un itérateur pour la liste des règles d'objets utilisables
 			// triés par priorité (c'est certain que la première fois il y a au 
 			// moins une règle de case)
-			Iterator objIterateurListePriorite = reglesPartie.obtenirListeObjetsUtilisablesPossibles().iterator();
+			Iterator<ReglesObjetUtilisable> objIterateurListePriorite = reglesPartie.obtenirListeObjetsUtilisablesPossibles().iterator();
 			
 			// On va choisir des objets utilisables en commençant par 
 			// l'objet le plus prioritaire et on va faire ça tant qu'on n'a 
@@ -295,7 +295,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 			{
 				// Faire la référence vers la règle de l'objet utilisable 
 				// courant
-				ReglesObjetUtilisable objReglesObjetUtilisable = (ReglesObjetUtilisable) objIterateurListePriorite.next();
+				ReglesObjetUtilisable objReglesObjetUtilisable = objIterateurListePriorite.next();
 				
 				// Déclaration d'une variable qui va permettre de savoir si 
 				// l'objet doit être visible ou non
