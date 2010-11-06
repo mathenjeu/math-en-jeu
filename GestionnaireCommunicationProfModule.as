@@ -1035,7 +1035,7 @@ class GestionnaireCommunicationProfModule
 				else
 				{
 					objNoeudParam = objObjetXML.createElement("parametre");
-					if ((paramType == "beginDate" || paramType == "endDate") && objRoom[paramType] == null)
+					if (paramType == "endDate" && objRoom[paramType] == null)
 						objNoeudParamText = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(""));
 					else
 						objNoeudParamText = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(""+objRoom[paramType]));
@@ -1122,7 +1122,7 @@ class GestionnaireCommunicationProfModule
 				{
 					objNoeudParam = objObjetXML.createElement("parametre");
 					
-					if ((paramType == "beginDate" || paramType == "endDate") && objRoom[paramType] == null)
+					if (paramType == "endDate" && objRoom[paramType] == null)
 						objNoeudParamText = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(""));
 					else
 						objNoeudParamText = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(""+objRoom[paramType]));
@@ -1533,15 +1533,13 @@ class GestionnaireCommunicationProfModule
 		trace("Retour ReportRoom");
         // Construire l'objet evenement pour le retour de la fonction
         var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
-                                   resultat:noeudCommande.attributes.nom, report:noeudCommande.attributes.report};
-        // Si le resultat est le numero de la table, alors on peut
-        // ajouter le numero de la table dans l'objet a retourner
+                                   resultat:noeudCommande.attributes.nom};
+        
+		// La classe RoomReport convertit le noeud en un object plus facile a manipuler.
         if (objEvenement.resultat == "OK")
-        {
-           
-			
-        }
-        // Si le retour de la fonction est une reponse positive et non une
+            objEvenement.report = new RoomReport(noeudCommande.firstChild);
+
+		// Si le retour de la fonction est une reponse positive et non une
         // erreur, alors on peut passer a l'autre etat
         if (noeudCommande.attributes.type == "Reponse")
         {

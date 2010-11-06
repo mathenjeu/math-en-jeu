@@ -38,7 +38,7 @@ class GestionnaireEvenementsProfModule
 	private var userRole:Number;          // if 1 - simple user, if 2 - is admin(master), if 3 - is  prof
 	public var keywordsMap:Object;
 	public var gameTypesMap:Object;
-	private var report:String;
+	private var report:RoomReport;
 	public var  listeDesSalles:Array;    //  liste de toutes les salles de l'utilisateur
 	private var nouvellesSalles:Boolean; //  denote le fait que l'array 'listeDesSalles' a ete update depuis la dernier 
 										 //  command 'ObtenirListeSallesProf'
@@ -61,7 +61,7 @@ class GestionnaireEvenementsProfModule
         this.listeDesSalles = new Array();
 		this.listeChansons = new Array();
 		this.nouvellesSalles = false;
-		this.report = "";
+		this.report = null;
         this.objGestionnaireCommunication = 
 				new GestionnaireCommunicationProfModule(
 							Delegate.create(this, this.evenementConnexionPhysique), 
@@ -81,7 +81,7 @@ class GestionnaireEvenementsProfModule
 	{
 		this.nouvellesSalles = false;
 	}
-	function obtenirRapport():String
+	function obtenirRapport():RoomReport
 	{
 		return this.report;
 	}
@@ -339,7 +339,6 @@ class GestionnaireEvenementsProfModule
             case "OK":
 	            trace("report created");
 				this.report = objetEvenement.report;
-				trace("longueur du rapport: " + report.length);
 				_level0.unloadDataTransferAnimation(); //this was loaded when the command was sent
 				//If we are already in frame 4, all we need is to refresh the GUI.
 				//Otherwise gotoAndStop(4) will automatically refresh the GUI
