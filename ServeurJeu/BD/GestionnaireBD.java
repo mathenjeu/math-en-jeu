@@ -374,7 +374,7 @@ public class GestionnaireBD {
                         int difficulte = rs.getInt("value");
                         String reponse = "" + countReponse;
 
-                        System.out.println("MC : question " + codeQuestion + " " + reponse + " " + difficulte);
+                        //System.out.println("MC : question " + codeQuestion + " " + reponse + " " + difficulte);
 
                         // System.out.println(URL+explication);
                         //System.out.println("MC1: " + System.currentTimeMillis());
@@ -416,7 +416,7 @@ public class GestionnaireBD {
                     String explication = rs.getString("feedback_flash_file");
                     int difficulte = rs.getInt("value");
 
-                    System.out.println("SA : question " + codeQuestion + " " + reponse + " " + difficulte);
+                    //System.out.println("SA : question " + codeQuestion + " " + reponse + " " + difficulte);
 
                     //String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
                     // System.out.println(URL+explication);
@@ -457,7 +457,7 @@ public class GestionnaireBD {
                     String explication = rs.getString("feedback_flash_file");
                     int difficulte = rs.getInt("value");
 
-                    System.out.println("TF : question " + codeQuestion + " " + reponse + " " + difficulte);
+                    //System.out.println("TF : question " + codeQuestion + " " + reponse + " " + difficulte);
 
                     //String URL = boiteQuestions.obtenirLangue().getURLQuestionsAnswers();
                     // System.out.println(URL+explication);
@@ -628,6 +628,7 @@ public class GestionnaireBD {
             addFullStats(gameId, joueur);
 
         updatePlayerLastAccessDate(joueur.obtenirCleJoueur());
+        addInfoGameStatistics(gameId, joueur, estGagnant);
 
     }// end methode
 
@@ -775,6 +776,53 @@ public class GestionnaireBD {
             System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
         }
     }
+    
+
+    /**
+     * Cette fonction permet d'ajouter les informations sur une partie pour  ***
+     * un joueur dans la table game_user;
+     *
+     */
+    private void addInfoGameStatistics(int clePartie, JoueurHumain joueur, boolean gagner)
+    {
+    	int intGagner = 0;
+    	if (gagner == true)
+    	{
+    		intGagner = 1;
+    	}
+
+    	int cleJoueur = joueur.obtenirCleJoueur();
+    	int pointage = joueur.obtenirPartieCourante().obtenirPointage();
+    	int level = joueur.obtenirCleNiveau();
+    	int room_id = joueur.obtenirPartieCourante().obtenirTable().getObjSalle().getRoomId();
+    	String statistics = "";
+
+    	double percents = 0.0;
+		if(joueur.obtenirPartieCourante().getCountQuestions() != 0)
+			percents = (double)(joueur.obtenirPartieCourante().getCountGoodAnswers()  * 100) / joueur.obtenirPartieCourante().getCountQuestions();
+		
+    	//statistics = statistics + "/-/" + joueur.obtenirProtocoleJoueur().getQuestionsAnswers();
+
+    	try
+    	{
+
+    		synchronized(DB_LOCK)
+    		{
+    			// Création du SQL pour l'ajout
+    			String strSQL = "INSERT INTO game_user(game_id, user_id, score, has_won, questions_answers, room_id, stats) VALUES " +
+    			"(" + clePartie + "," + cleJoueur + "," + pointage + "," + intGagner + ",'" + statistics + "'," + room_id + "," + percents + ");"; 
+    			// Ajouter l'information pour ce joueur
+    			requete.executeUpdate(strSQL);
+    			
+    		}
+    	}
+    	catch (Exception e)
+    	{
+    		System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_game_user") + e.getMessage());
+    	}
+
+
+    }// end methode
 
     /**
      * Methode used to update in DB the player's money ****
