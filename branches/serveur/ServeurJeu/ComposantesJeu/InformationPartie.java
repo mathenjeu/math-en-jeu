@@ -86,12 +86,15 @@ public class InformationPartie
     // used to count how many times the QuestionsBox is filled
     // if is filled after
     private int countFillBox;
-
    
-    
     // relative time of the last change of players points
     // used for finish statistics
     private int pointsFinalTime;
+    
+    // used to calculate the statistics on the answers
+	private int goodAnswersStats;
+	private int countQuestions;
+	private int countGoodAnswers;
 
     /**
      * Constructeur de la classe InformationPartie qui permet d'initialiser
@@ -1205,7 +1208,39 @@ public class InformationPartie
         return brainiacState;
     }
 
-    /**
+	/**
+	 * @param goodAnswersStats the goodAnswersStats to set
+	 */
+	public void setGoodAnswersStats(int goodAnswersStats) {
+		this.goodAnswersStats = goodAnswersStats;
+	}
+
+
+
+	/**
+	 * @return the goodAnswersStats
+	 */
+	public int getGoodAnswersStats() {
+		return goodAnswersStats;
+	}
+
+	public void incrementQuestions() {
+		this.countQuestions++;
+	}
+	
+	public void incrementGoodAnswers() {
+		this.countGoodAnswers++;
+	}
+	
+	public int getCountQuestions() {
+		return countQuestions;
+	}
+
+	public int getCountGoodAnswers() {
+		return countGoodAnswers;
+	}
+
+	/**
      * @param pointsFinalTime the pointsFinalTime to set
      */
     public void setPointsFinalTime(int pointsFinalTime) {
