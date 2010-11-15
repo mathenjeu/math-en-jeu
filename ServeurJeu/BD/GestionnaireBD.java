@@ -571,7 +571,7 @@ public class GestionnaireBD {
         String strDate = mejFormatDate.format(dateDebut);
         String strHeure = mejFormatHeure.format(dateDebut);
         // Création du SQL pour l'ajout
-        System.out.println("Game type: " + gameType);
+        //System.out.println("Game type: " + gameType);
         int gameTypeId;
         if (gameType.equalsIgnoreCase("mathEnJeu"))
             gameTypeId = 1;
@@ -800,7 +800,7 @@ public class GestionnaireBD {
     	double percents = 0.0;
 		if(joueur.obtenirPartieCourante().getCountQuestions() != 0)
 			percents = (double)(joueur.obtenirPartieCourante().getCountGoodAnswers()  * 100) / joueur.obtenirPartieCourante().getCountQuestions();
-		
+		//System.out.println("persents " + percents);
     	//statistics = statistics + "/-/" + joueur.obtenirProtocoleJoueur().getQuestionsAnswers();
 
     	try
