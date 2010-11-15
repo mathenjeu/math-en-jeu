@@ -129,7 +129,6 @@ public class InformationPartie
             intArgent = objGestionnaireBD.getPlayersMoney(joueur.obtenirCleJoueur());
         }
 
-
         // Au départ, le joueur est nul part
         //objPositionJoueur = null;
 
@@ -161,8 +160,10 @@ public class InformationPartie
 
         String language = joueur.obtenirProtocoleJoueur().getLang();
         this.objBoiteQuestions = new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language));
-        //setBoiteQuestions(new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language)));
-
+        
+        //countQuestions = 0;
+		//countGoodAnswers = 0;
+        
     }// fin constructeur
 
     public void destruction() {
@@ -496,12 +497,12 @@ public class InformationPartie
             }
 
         } while (objQuestionTrouvee == null && countFillBox < 10); // must find right number for countFillBox
-		/*
+		
         if(objQuestionTrouvee == null)
         {
         // en théorie on ne devrait plus entrer dans ce if
         System.out.println( "ça va mal : aucune question" );
-        }*/
+        }
 
         // Si on doit générer le numéro de commande de retour, alors
         // on le génére, sinon on ne fait rien (ça devrait toujours
@@ -511,7 +512,9 @@ public class InformationPartie
             // retourné au client
             objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();
         }
-
+        
+        if(objQuestionTrouvee != null)
+           this.incrementQuestions();
         return objQuestionTrouvee;
     }// end method
 
@@ -618,6 +621,8 @@ public class InformationPartie
             objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();
         }
 
+        if(objQuestionTrouvee != null)
+            this.incrementQuestions();
         return objQuestionTrouvee;
     }// end methode
 
@@ -766,6 +771,10 @@ public class InformationPartie
             InformationQuestion iq = objPartieCourante.lstQuestionsRepondues.getLast();
             iq.definirTempsRequis(tempsReponse);
             iq.definirValiditee(bolReponseEstBonne?InformationQuestion.RIGHT_ANSWER:InformationQuestion.WRONG_ANSWER);
+            
+            // to have statistics 
+            if(bolReponseEstBonne) 
+		    	 objPartieCourante.incrementGoodAnswers();
 
 
         } else {
@@ -1215,8 +1224,6 @@ public class InformationPartie
 		this.goodAnswersStats = goodAnswersStats;
 	}
 
-
-
 	/**
 	 * @return the goodAnswersStats
 	 */
@@ -1230,6 +1237,7 @@ public class InformationPartie
 	
 	public void incrementGoodAnswers() {
 		this.countGoodAnswers++;
+		//System.out.println("goodAnswers : " + this.countGoodAnswers);
 	}
 	
 	public int getCountQuestions() {
