@@ -4,15 +4,23 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
 import org.apache.log4j.Logger;
+import ServeurJeu.GUI.ServerFrame;
 
-public class Maitre implements Runnable
+public class Maitre implements Runnable 
 {
-	static private Logger objLogger = Logger.getLogger( Maitre.class );
+	private static Logger objLogger = Logger.getLogger( Maitre.class );
 	private ControleurJeu objJeu = null;
-	private static final int _ARRETER = 1;
+	private static final int _STOP = 1;
 	private static final int _STATUS = 2;
+	private static final int _START = 3;
+	private static final int _RESTART = 4;
+	
+	// Boolean to indicate if server is on or off
+    private boolean isOn;
+    
+    // String for a command that server must do
+    //private String commandToDo;
 	
 	public static void main(String[] args) 
 	{
@@ -27,11 +35,17 @@ public class Maitre implements Runnable
 	public Maitre()
 	{
 		objJeu = new ControleurJeu();
+		//this.commandToDo = "";
+		
+		ServerFrame window = new ServerFrame(this);
+		window.showIt("Server MathEnJeu");
+		this.isOn = false;
+		
 	}
 	
 	public static void traiterCommande( String commande )
 	{
-		
+		Maitre maitre = new Maitre();
 		if(commande != null)
 		{
 			//on enlève les \r de la commande
@@ -40,11 +54,11 @@ public class Maitre implements Runnable
 		
 		if( commande == null || commande.equals("") || commande.equals( "demarrer" ))
 		{
-			System.out.println( "demarrer" );
-			Maitre maitre = new Maitre();
+			//System.out.println( "demarrer -- commande = " + commande );
+				
 			Thread thread = new Thread( maitre, "Maitre" );
 			thread.start();
-			maitre.demarrer();
+			maitre.demarrer();								
 		}
 		else if( commande.equals( "arreter" ) )
 		{
@@ -53,9 +67,13 @@ public class Maitre implements Runnable
 			{
 				Socket socket = new Socket( "localhost", 6101 );   
 				byte [] buffer = new byte[2];
-				buffer[0] = (byte)_ARRETER;
+				buffer[0] = (byte)_STOP;
 				buffer[1] = (byte)0;
 				socket.getOutputStream().write( buffer );
+				if(maitre != null)
+				   maitre.stopServer();
+				
+
 			} 
 			catch (UnknownHostException e) 
 			{
@@ -100,27 +118,53 @@ public class Maitre implements Runnable
 	
 	public void demarrer()
 	{
-		objJeu.demarrer();
+		//System.out.println( "le serveur tests start "  + this.isOn);	
+		if(!this.isOn){
+		   System.out.println( "demarrer le serveur" );
+		   this.isOn = true;
+           objJeu.demarrer();		   
+		}
+	}
+	
+	public void stopServer()
+	{
+		//System.out.println( "le serveur test stop "  + this.isOn);		
+		if(this.isOn){
+			System.out.println( "arreter le serveur" );		
+			this.isOn = false;
+			objJeu.arreter();
+			objJeu = new ControleurJeu();
+			//System.exit( 0 );				
+		}
+		//System.out.println( "le serveur "  + this.isOn);
+	}
+	
+	public void exitServer() {
+		System.exit( 0 );
 	}
 	
 	public void run()
 	{
+		
+		
 		try 
 		{
 			boolean arret = false;
 			ServerSocket socketServeur = new ServerSocket( 6101 ); 
 			while( !arret )
 			{
+				//System.out.println( "le maitre "  + this.commandToDo);
+
 				Socket socket = socketServeur.accept();
 				if( socket.getInetAddress().isLoopbackAddress() == true )
 				{
 					byte [] buffer = new byte[256];
 					socket.getInputStream().read( buffer );
 					byte commande = (byte)buffer[0];
-					if( commande == (byte)_ARRETER )
+					if( commande == (byte)_STOP )
 					{
 						System.out.println( "arreter le serveur" );
-						objJeu.arreter();
+						this.stopServer();
 						System.exit( 0 );
 					}
 					else if( commande == (byte)_STATUS )
@@ -134,7 +178,25 @@ public class Maitre implements Runnable
 					{
 						System.out.println( "ERREUR : Mauvaise commande" );
 					}
+				}// end first if
+
+				/*
+				// check the command from GUI buttons
+				if(this.commandToDo.equalsIgnoreCase("stop"))
+				{
+					this.stopServer();
 				}
+				else if(this.commandToDo.equalsIgnoreCase("start"))
+				{
+					this.demarrer();
+				}
+				else if(this.commandToDo.equalsIgnoreCase("restart"))
+				{
+					this.stopServer();
+					this.demarrer();
+				}*/
+				
+				
 			}
 		} 
 		catch (IOException e) 
@@ -142,4 +204,15 @@ public class Maitre implements Runnable
 			objLogger.error( e.getMessage() );
 		}
 	}
+
+	
+    
+	/*
+	public void setCommandToDo(String commandToDo) {
+		this.commandToDo = commandToDo;
+	}
+
+	public String getCommandToDo() {
+		return commandToDo;
+	}*/
 }
