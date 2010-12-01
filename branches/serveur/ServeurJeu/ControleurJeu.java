@@ -59,15 +59,15 @@ public class ControleurJeu {
     public static boolean modeDebug;
     private static Logger objLogger = Logger.getLogger(ControleurJeu.class);
     // Cet objet permet de gérer toutes les interactions avec la base de données
-    private final GestionnaireBD objGestionnaireBD;
+    private GestionnaireBD objGestionnaireBD;
     // Cet objet permet de gérer toutes les communications entre le serveur et
     // les clients (les joueurs)
-    private final GestionnaireCommunication objGestionnaireCommunication;
+    private GestionnaireCommunication objGestionnaireCommunication;
     // Cet objet permet de gérer tous les événements devant être envoyés du
     // serveur aux clients (l'événement ping n'est pas géré par ce gestionnaire)
-    private final GestionnaireEvenements objGestionnaireEvenements;
-    private final TacheSynchroniser objTacheSynchroniser;
-    private final GestionnaireTemps objGestionnaireTemps;
+    private GestionnaireEvenements objGestionnaireEvenements;
+    private TacheSynchroniser objTacheSynchroniser;
+    private GestionnaireTemps objGestionnaireTemps;
     // Cet objet est une liste des joueurs qui sont connectés au serveur de jeu
     // (cela inclus les joueurs dans les salles ainsi que les joueurs jouant
     // présentement dans des tables de jeu)
@@ -77,11 +77,11 @@ public class ControleurJeu {
     private final HashMap<String, JoueurHumain> lstJoueursDeconnectes;
     // Cet objet est une liste des salles créées qui se trouvent dans le serveur
     // de jeu. Chaque élément de cette liste a comme clé le id de la salle
-    private final HashMap<Integer, Salle> lstSalles;
+    private HashMap<Integer, Salle> lstSalles;
     // Déclaration de l'objet Espion qui va inscrire des informations à proppos
     // du serveur en parallèle
     //private Espion objEspion;
-    private SpyRooms objSpyDB;
+   
     // Déclaration d'un objet random pour générer des nombres aléatoires
     private final Random objRandom;
     // Déclaration d'un objet pour conserver tous les paramètres
@@ -89,13 +89,19 @@ public class ControleurJeu {
     private ParametreIA objParametreIA;
     // Déclaration d'une map qui permet d'obtenir une liste de tous les
     // keywords disponible: keyword_id --> [language_id --> name]
-    private final TreeMap<Integer, TreeMap<Integer, String>> keywordsMap;
+    private TreeMap<Integer, TreeMap<Integer, String>> keywordsMap;
     // Déclaration d'une map qui permet d'obtenir une liste de tous les
     // langues disponible: language_id --> [translated_language_id --> name]
-    private final TreeMap<Integer, TreeMap<Integer, String>> languagesMap;
+    private TreeMap<Integer, TreeMap<Integer, String>> languagesMap;
     // Déclaration d'une map qui permet d'obtenir une liste de tous les
     // 'game_types' disponible: game_type_id --> [name]
-    private final TreeMap<Integer, String> gameTypesMap;
+    private TreeMap<Integer, String> gameTypesMap;
+    // Boolean to indicate if server is on or off
+    //private boolean isOn;
+    
+    // thread to look for new rooms to add or old rooms to delete
+    private SpyRooms objSpyDB;
+    
 
     /**
      * Constructeur de la classe ControleurJeu qui permet de créer le gestionnaire
@@ -104,6 +110,7 @@ public class ControleurJeu {
      */
     public ControleurJeu() {
         super();
+       
         modeDebug = GestionnaireConfiguration.obtenirInstance().obtenirValeurBooleenne("controleurjeu.debug");
         // Initialiser la classe statique GestionnaireMessages
         GestionnaireMessages.initialiser();
@@ -117,16 +124,27 @@ public class ControleurJeu {
 
         // Créer une liste des joueurs déconnectés
         lstJoueursDeconnectes = new HashMap<String, JoueurHumain>();
+      
+    }
 
-        // Créer une liste des salles
+    /**
+     * To start the controler actions
+     */
+    public void demarrer() {
+    	
+    	//this.isOn = true;
+    	
+    	//System.out.println("Le serveur demarre 1 ...");
+    	// Créer une liste des salles
         lstSalles = new HashMap<Integer, Salle>();
-
-        // Créer un nouveau gestionnaire d'événements
+    	
+    	// Créer un nouveau gestionnaire d'événements
         objGestionnaireEvenements = new GestionnaireEvenements();
 
         // Créer un nouveau gestionnaire de base de données MySQL
         objGestionnaireBD = new GestionnaireBD(this);
 
+        //System.out.println("Le serveur demarre 2 ...");
 
         objGestionnaireTemps = new GestionnaireTemps();
         objTacheSynchroniser = new TacheSynchroniser();
@@ -138,22 +156,25 @@ public class ControleurJeu {
         keywordsMap = objGestionnaireBD.getKeywordsMap();
         languagesMap = objGestionnaireBD.getLanguagesMap();
         gameTypesMap = objGestionnaireBD.getGameTypesMap();
-        // Fills the rooms from DB
+        
+        //System.out.println("Le serveur demarre 3 ...");
+    	 // Fills the rooms from DB
         objGestionnaireBD.fillsRooms();
 
         // Control user accounts to not be blocked
-        objGestionnaireBD.controlPlayerAccount();
-    }
-
-    public void demarrer() {
-        GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+        //objGestionnaireBD.controlPlayerAccount();
+    	
+    	GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 
         int intStepSynchro = config.obtenirNombreEntier("controleurjeu.synchro.step");
         objGestionnaireTemps.ajouterTache(objTacheSynchroniser, intStepSynchro);
 
+        //System.out.println("Le serveur demarre 4 ...");
         // Créer un thread pour le GestionnaireEvenements
+        objGestionnaireEvenements = new GestionnaireEvenements();
         Thread threadEvenements = new Thread(objGestionnaireEvenements, "GestEvenem - Controleur");
 
+        //System.out.println("Le serveur demarre 5 ...");
         // Démarrer le thread du gestionnaire d'événements
         threadEvenements.start();
 
@@ -176,22 +197,64 @@ public class ControleurJeu {
         Thread threadSpy = new Thread(objSpyDB, "SpyRooms");
         threadSpy.start();
 
+        //System.out.println("Le serveur demarre 6 ...");
 
         //Demarrer une tache de monitoring
         TacheLogMoniteur objTacheLogMoniteur = new TacheLogMoniteur();
         int intStepMonitor = config.obtenirNombreEntier("controleurjeu.monitoring.step");
         objGestionnaireTemps.ajouterTache(objTacheLogMoniteur, intStepMonitor);
 
+        //System.out.println("Le serveur demarre 7 ...");
         //Démarrer l'écoute des connexions clientes
         //Cette methode est la loop de l'application
         //Au retour, l'application se termine
         objGestionnaireCommunication.ecouterConnexions();
-        System.out.println("arret");
+        //System.out.println("Le serveur demarre 8 ...");
+        
     }
 
+    /**
+     * Stop the controler
+     */
     public void arreter() {
-        System.out.println("Le serveur arrete...");
+        //System.out.println("Le serveur arrete...");
+        
+    	
+        for(JoueurHumain objJoueur: this.lstJoueursConnectes.values())
+        {
+        	 // Si le joueur courant est dans une salle, alors on doit le retirer de
+            // cette salle (pas besoin de faire la synchronisation sur la salle
+            // courante du joueur car elle ne peut être modifiée par aucun autre
+            // thread que celui courant)
+            if (objJoueur.obtenirSalleCourante() != null) {
+                // Le joueur courant quitte la salle dans laquelle il se trouve
+                objJoueur.obtenirSalleCourante().quitterSalle(objJoueur, false, false);
+            }
+            
+           // objJoueur.obtenirProtocoleJoueur().definirJoueur(null);
+
+        }
+        
+        
+        for(Salle room: this.lstSalles.values())
+        {
+        	//room.destroyRoom();
+        }
+        this.lstSalles.clear();
+        
+        this.objSpyDB.stopSpy();
         objGestionnaireCommunication.arreter();
+        objGestionnaireCommunication = null;
+        //objGestionnaireTemps.stopIt();
+        objGestionnaireTemps.enleverTache(objTacheSynchroniser);
+        objTacheSynchroniser = null;
+        objGestionnaireTemps = null;
+        objGestionnaireEvenements.arreterGestionnaireEvenements();
+        objGestionnaireEvenements = null;
+        
+        //this.lstJoueursConnectes.clear();
+        
+        //this.isOn = false;
     }
 
     /**
@@ -373,7 +436,7 @@ public class ControleurJeu {
         System.out.println("test dexonnexion !!!");
         }*/
         // fill in DB the date and time of of last connection with server
-        this.objGestionnaireBD.updatePlayerLastAccessDate(joueur.obtenirCleJoueur());
+        //this.objGestionnaireBD.updatePlayerLastAccessDate(joueur.obtenirCleJoueur());
 
         // Empêcher d'autres thread de venir utiliser la liste des joueurs
         // connectés au serveur de jeu pendant qu'on déconnecte le joueur
@@ -826,5 +889,13 @@ public class ControleurJeu {
     public TreeMap<Integer, String> getGameTypesMap() {
         return gameTypesMap;
     }
+/*
+	public boolean isOn() {
+		return isOn;
+	}
+
+	public void setOn(boolean isOn) {
+		this.isOn = isOn;
+	}*/
 }// end class
 
