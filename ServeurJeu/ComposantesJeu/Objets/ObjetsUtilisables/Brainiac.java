@@ -45,6 +45,9 @@ public class Brainiac extends ObjetUtilisable {
 
 	public static BrainiacHumainTask utiliserBrainiac(JoueurHumain player, long delay)
 	{
+		//first cancel the Banana
+		player.obtenirPartieCourante().getBananaState().setOffBanana();
+		
 		// player under Braniac
 		// Create TimerTask and Timer.
 		BrainiacHumainTask bTask = new BrainiacHumainTask(player);
@@ -64,6 +67,8 @@ public class Brainiac extends ObjetUtilisable {
 	
 	public static BrainiacVirtuelTask utiliserBrainiac(JoueurVirtuel player, long delay)
 	{		
+		//first cancel the Banana
+		player.getBananaState().setOffBanana();		
 		
 		// Create TimerTask and Timer.
 		BrainiacVirtuelTask bTask = new BrainiacVirtuelTask(player);

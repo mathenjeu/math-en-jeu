@@ -167,12 +167,12 @@ public class InformationPartie
     }// fin constructeur
 
     public void destruction() {
-        /*
+       
         this.brainiacState.destruction();
         this.bananaState.destruction();
         this.brainiacState = null;
         this.bananaState = null;
-        objGestionnaireBD = null;
+      /*   objGestionnaireBD = null;
         objGestionnaireEv = null;
         objJoueurHumain = null;
         objTable = null;*/
@@ -500,8 +500,8 @@ public class InformationPartie
 		
         if(objQuestionTrouvee == null)
         {
-        // en théorie on ne devrait plus entrer dans ce if
-        System.out.println( "ça va mal : aucune question" );
+        	// en théorie on ne devrait plus entrer dans ce if
+        	System.out.println( "ça va mal : aucune question" );
         }
 
         // Si on doit générer le numéro de commande de retour, alors

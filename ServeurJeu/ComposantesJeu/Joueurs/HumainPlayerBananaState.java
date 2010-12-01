@@ -17,7 +17,7 @@ import ServeurJeu.Temps.BananaHumainTask;
 
 public class HumainPlayerBananaState {
 	
-	// timertask actually applied to player
+	// timer task actually applied to player
 	private BananaHumainTask bTask;
 	
 	// time to end of the actual banana
@@ -26,7 +26,7 @@ public class HumainPlayerBananaState {
 	// is Banana applied to our player?
 	private boolean isUnderBananaEffects;
 	
-	// is the state to one of them
+	// our player
 	private JoueurHumain player;
 		
 	private static long bananaTime = 90000;
@@ -97,10 +97,25 @@ public class HumainPlayerBananaState {
 		
 	}// end of method
 	
+	/*
+	 *  Used to set off the effects off Banana...
+	 *  Now for the case if Brainiac is used on player
+	 */
+	public void setOffBanana()
+	{
+		if(this.isUnderBananaEffects){
+			this.isUnderBananaEffects = false;
+			this.bTask.cancel();
+			player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() + 2);
+		}
+	}
+	
 	public void destruction()
 	{
-		if(this.bTask != null)
+		if(this.bTask != null){
 		   this.bTask.cancel();
+		   this.bTask.cancelTask();
+		}
 		this.player = null;
 	}
 	

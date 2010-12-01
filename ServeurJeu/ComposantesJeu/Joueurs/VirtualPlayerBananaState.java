@@ -29,7 +29,7 @@ public class VirtualPlayerBananaState {
 	// is the state of our player
 	private JoueurVirtuel vplayer;
 	
-	private static long bananaTime = 90000;
+	private static long BANANATIME = 90000;
 
 	// constructor - in the first time we are not in the Banana
 	public VirtualPlayerBananaState(JoueurVirtuel player) {
@@ -78,18 +78,19 @@ public class VirtualPlayerBananaState {
 	{
 		 if(vplayer != null){
 
+			//System.out.println("Banana is tossed to virtual !!!! " );
 			if(this.isUnderBananaEffects == false){
 
 				this.isUnderBananaEffects = true;
-				this.bTask = Banane.utiliserBanane(vplayer, bananaTime);
-				this.taskDate = System.currentTimeMillis() + bananaTime;
+				this.bTask = Banane.utiliserBanane(vplayer, BANANATIME);
+				this.taskDate = System.currentTimeMillis() + BANANATIME;
 			}else
 			{
 				this.bTask.cancel();
-				long tempDate = this.taskDate  + bananaTime;
+				long tempDate = this.taskDate  + BANANATIME;
 				this.bTask = Banane.utiliserBanane(vplayer, tempDate);
 				this.taskDate = tempDate;
-				//System.out.println("BraniacTask !!!! " + tempDate + " " + " " + bTask);
+				
 
 			}	
 		}	
@@ -97,11 +98,24 @@ public class VirtualPlayerBananaState {
 	
 	public void destruction()
 	{
-		if(this.bTask != null)
+		if(this.bTask != null){
+		   this.bTask.cancelTask();
 		   this.bTask.cancel();
+		}
 		this.vplayer = null;
 	}
 	
+	/*
+	 *  Used to set off the effects off Banana...
+	 *  Now for the case if Brainiac is used on player
+	 */
+	public void setOffBanana()
+	{
+		if(this.isUnderBananaEffects){
+			this.isUnderBananaEffects = false;
+			this.bTask.cancel();
+		}
+	}
 
 
 }// end of the class
