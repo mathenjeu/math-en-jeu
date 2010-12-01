@@ -76,14 +76,7 @@ public class GestionnaireCommunication
 		
 		// Créer le vérificateur de connexions
 		objVerificateurConnexions = new VerificateurConnexions(this);
-			
-		// Créer un thread pour le vérificateur de connexions
-		Thread threadVerificateur = new Thread(objVerificateurConnexions, "objVerificateurConnexions");
-		
-		// Démarrer le thread du vérificateur
-		threadVerificateur.start();
-		
-		miseAJourInfo();
+				
 	}
 	
 	/**
@@ -92,6 +85,13 @@ public class GestionnaireCommunication
 	 */
 	public void ecouterConnexions()
 	{
+		// Créer un thread pour le vérificateur de connexions
+		Thread threadVerificateur = new Thread(objVerificateurConnexions, "objVerificateurConnexions");
+		// Démarrer le thread du vérificateur
+		threadVerificateur.start();
+		
+		miseAJourInfo();
+		
 		try
 		{
 			// Créer un socket pour le serveur qui va écouter sur le port définit
@@ -113,7 +113,7 @@ public class GestionnaireCommunication
 		{
 			try
 			{
-				//System.out.println(GestionnaireMessages.message("communication.attente"));
+				System.out.println(GestionnaireMessages.message("communication.attente"));
 				
 				// Accepter une connexion et créer un objet ProtocoleJoueur
 				// qui va exécuter le protocole pour le joueur
@@ -144,17 +144,13 @@ public class GestionnaireCommunication
 		}
 	}
 	
+	/**
+	 * this function is used to finish the work of the Gestionnaire
+	 */
 	public void arreter()
 	{
-		try 
-		{
-			objSocketServeur.close();
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
 		boolStopThread = true;
+		this.finalize();
 	}
 	
 	/**
@@ -186,7 +182,7 @@ public class GestionnaireCommunication
 	 * Cette fonction permet de retourner la liste des 
 	 * ProtocoleJoueur des clients connectés au serveur de jeu.
 	 * 
-	 * @return Vector : la liste des ProtocoleJoueur des clients 
+	 * @return LinkedList : la liste des ProtocoleJoueur des clients 
 	 * 					présentement connectés au serveur de jeu
 	 */
 	public LinkedList<ProtocoleJoueur> obtenirListeProtocoleJoueur()
@@ -221,20 +217,31 @@ public class GestionnaireCommunication
 	 */
 	protected void finalize()
 	{
+		// Vider la liste des protocoles de joueurs
+		for(ProtocoleJoueur protocole: this.lstProtocoleJoueur)
+        {
+			protocole.arreterProtocoleJoueur();
+        }
+		lstProtocoleJoueur.clear();
+		
+		
 		try
 		{
 			// Fermer le socket du serveur
-			objSocketServeur.close();
+			if(!objSocketServeur.isClosed())
+			   objSocketServeur.close();
 		}
 		catch (IOException e)
 		{
 			// Le socket du serveur est déjà fermé
 			System.out.println(GestionnaireMessages.message("communication.erreur_socket"));
 		}
-		
-		// Vider la liste des protocoles de joueurs
-		lstProtocoleJoueur.clear();
-		
+		catch (NullPointerException e)
+		{
+			// Le socket du serveur est déjà fermé
+			System.out.println(GestionnaireMessages.message("communication.erreur_socket"));
+		}
+				
 		// Arrêter le thread de vérification des connexions
 		objVerificateurConnexions.arreterVerificateurConnexions();
 		
@@ -245,4 +252,4 @@ public class GestionnaireCommunication
 		objGestionnaireBD.arreterGestionnaireBD();
 	}
 
-}
+} //end class 

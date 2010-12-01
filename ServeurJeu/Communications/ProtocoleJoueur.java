@@ -1823,7 +1823,9 @@ public class ProtocoleJoueur implements Runnable
                 if (joueur != null) {
                     joueur.obtenirPartieCourante().getBananaState().bananaIsTossed();
                 }
-                //Banane.utiliserBanane(objJoueurHumain, playerName, estHumain);
+                
+            }else{
+            	infoPartie.obtenirTable().obtenirJoueurVirtuelParSonNom(playerName).getBananaState().bananaIsTossed();
             }
 
         } else if (strTypeObjet.equals("Brainiac")) {
@@ -1868,7 +1870,7 @@ public class ProtocoleJoueur implements Runnable
                     } else {
                         // Acheter l'objet
                         Integer idProchainObjet = objTable.getAndIncrementNewIdObject();
-                        System.out.println("New - " + idProchainObjet);
+                        //System.out.println("New - " + idProchainObjet);
                         ObjetUtilisable objObjetAcheter = ((Magasin)objObjet).acheterObjet(intIdObjet, idProchainObjet);
 
                         // L'ajouter à la liste des objets du joueur et en défrayer les coûts.
@@ -2653,9 +2655,11 @@ public class ProtocoleJoueur implements Runnable
 
 
     }
+    
     public int obtenirLastQuestionTime() {
         return lastQuestionTime;
     }
+    
     /**
      * Cette fonction permet de retourner l'adresse IP du joueur courant.
      *
