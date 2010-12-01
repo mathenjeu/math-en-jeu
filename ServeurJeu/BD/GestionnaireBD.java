@@ -231,8 +231,8 @@ public class GestionnaireBD {
             e.printStackTrace();
         }
 
-        if (cle != -1)
-            updatePlayerLastAccessDate(cle);
+        //if (cle != -1)
+            //updatePlayerLastAccessDate(cle);
 
     }//end methode
 
@@ -627,7 +627,7 @@ public class GestionnaireBD {
         if (requiresFullStats)
             addFullStats(gameId, joueur);
 
-        updatePlayerLastAccessDate(joueur.obtenirCleJoueur());
+        //updatePlayerLastAccessDate(joueur.obtenirCleJoueur());
         addInfoGameStatistics(gameId, joueur, estGagnant);
 
     }// end methode
@@ -1335,6 +1335,8 @@ public class GestionnaireBD {
     if(tmp2 > 0)
     objReglesSalle.definirTempsMaximal(tmp2);
     }//end methode */
+    
+    
     //******************************************************************
     //  Bloc used to put new room in DB from room created in profModule
     //******************************************************************

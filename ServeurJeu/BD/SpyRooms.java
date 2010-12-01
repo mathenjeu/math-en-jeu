@@ -198,5 +198,10 @@ public class SpyRooms implements Runnable {
 		
 	}//end methode connexionDB
 	
+	public void stopSpy(){
+		this.stopSpy = true;
+		Thread.currentThread().interrupt();
+	}
+	
 	
 }
