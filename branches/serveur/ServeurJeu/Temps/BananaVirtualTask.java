@@ -19,17 +19,30 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 
 public class BananaVirtualTask extends TimerTask {
 
+	// reference to the virtual player to suffer the banana
 	private JoueurVirtuel vplayer;
+	// boolean to cancel the task if the game is over
+	private boolean runIt;
 	
 	public BananaVirtualTask(JoueurVirtuel player){
 		this.vplayer = player;
+		this.runIt = true;
 	}
 	
 
 	// override abstract run methode 
 	public void run() {
-		vplayer.getBananaState().setisUnderBananaEffects(false);
+		if(runIt){
+			vplayer.getBananaState().setisUnderBananaEffects(false);
+		}
+		
     	//System.out.println("BananaTask virtuel!!!!");
 	}// end run
+	
+	public void cancelTask(){
+		this.runIt = false;
+		Thread.currentThread().interrupt();
+		
+	}
 
 }// end class

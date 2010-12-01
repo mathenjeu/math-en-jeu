@@ -47,4 +47,16 @@ public class GestionnaireTemps extends Timer
 	{
 		this.schedule(t, delay);
 	}
+	
+	public void stopIt()
+	{
+		/*//this.cancel();
+		try {
+			this.finalize();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		//this.purge();
+	}
 }
