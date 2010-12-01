@@ -220,13 +220,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     public void destruction() {
         System.out.println("table - wipeout the table - destruction");
         arreterPartie("");
-
-
-        /*   // On doit aussi arrêter le thread du WinTheGame si nécessaire
-        if(winTheGame.thread.isAlive())
-        {
-        winTheGame.arreter();
-        }*/
+       
     }// end method
 
     /**
@@ -453,15 +447,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
                 // Garder en mémoire le Id du personnage choisi par le joueur
                 joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
-
-                // Garder en mémoire le numero du couleur  mais avant retirer cette couleur de la liste
-                //System.out.println("Color demarrePartie avant: " + clothesColor);
-                //String clothesColor = getOneColor();
-                //joueur.obtenirPartieCourante().setClothesColor(clothesColor);
-
-                //System.out.println("Color demarrePartie apres: " + clothesColor);
-
-                //System.out.println(idPersonnage);
+               
                 pictures.add(idDessin);
 
                 // Si on doit générer le numéro de commande de retour, alors
@@ -833,10 +819,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             }
 
         }
-        // On trouve une position initiale au WinTheGame et on part son thread si nécessaire
-        //definirNouvellePositionWinTheGame();
-        //winTheGame.demarrer();
-
+        
     }// end method
 
     public void arreterPartie(String joueurGagnant) {
@@ -922,7 +905,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
                 }
                 lstJoueursVirtuels.clear();
-                System.out.println("table - etape 1 lst Virtuels " + lstJoueursVirtuels.size());
+                //System.out.println("table - etape 1 lst Virtuels " + lstJoueursVirtuels.size());
             }
 
             // wipeout players from the table
@@ -949,7 +932,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
                 }*/
 
-                System.out.println("table - etape 1 lst Humains " + lstJoueurs.size());
+                //System.out.println("table - etape 1 lst Humains " + lstJoueurs.size());
             }
 
             // Enlever les joueurs déconnectés de cette table de la
@@ -961,7 +944,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
             // Enlever les joueurs déconnectés de cette table
             lstJoueursDeconnectes = new LinkedList<String>();
-            System.out.println("table - etape 1 " + lstJoueurs.size());
+            //System.out.println("table - etape 1 " + lstJoueurs.size());
             // Si jamais les joueurs humains sont tous déconnectés, alors
             // il faut détruire la table ici
             if (lstJoueurs.isEmpty()) {
@@ -1824,11 +1807,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     private void setColors() {
         Colors[] colValues = Colors.values();
 
-        System.out.println("ColorsX : " + colValues.length);
+        //System.out.println("ColorsX : " + colValues.length);
 
         for (int i = 0; i < colValues.length; i++) {
             colors.add(colValues[i].getCode());
-            System.out.println("Colors : " + colValues[i].getCode());
+            //System.out.println("Colors : " + colValues[i].getCode());
         }
 
 

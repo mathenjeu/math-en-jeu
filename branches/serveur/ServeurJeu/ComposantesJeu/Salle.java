@@ -134,6 +134,14 @@ public class Salle
     }
 
     /**
+     * This method is used to wipe the lists of room and finally 
+     * destroy the room
+     */
+    public void destroyRoom(){
+    	this.lstNoTables.clear();
+    }// end method
+    
+    /**
      * Cette fonction permet de générer un nouveau numéro de table.
      *
      * @return int : Le numéro de table généré

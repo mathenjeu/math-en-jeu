@@ -28,7 +28,7 @@ public class HumainPlayerBrainiacState {
 	// is the state to one of them
 	private JoueurHumain player;
 		
-	private static long brainTime = 90000;
+	private static long brainTime = 60000;
 
 	// constructor - in the first time we are not in the Braniac
 	public HumainPlayerBrainiacState(JoueurHumain player) {
@@ -92,9 +92,25 @@ public class HumainPlayerBrainiacState {
 	
 	public void destruction()
 	{
-		if(this.bTask != null)
+		if(this.bTask != null){
 		   this.bTask.cancel();
+		   this.bTask.cancelTask();
+		}
 		this.player = null;
+	}
+
+
+	/*
+	 *  Used to set off the effects off Brainiac...
+	 *  Now for the case if Banana is used on player
+	 */
+	public void setOffBrainiac() {
+		if(this.isInBrainiac){
+			this.isInBrainiac = false;
+			this.bTask.cancel();
+			player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() - 1);
+		}
+		
 	}
 	
 
