@@ -4273,13 +4273,18 @@ class GestionnaireCommunication
 							if(objNoeudParametre.firstChild.nodeValue == "magasin")
 							{
 								var objEvenementMagasin:Object;
-								objEvenementMagasin = noeudCommande.firstChild.nextSibling;
-								//trace(objEvenementMagasin);
+								for(var n:Number = 0; n < noeudCommande.childNodes.length; n++)
+								{
+									if(noeudCommande.childNodes[n].nodeName == "objetsMagasin")
+      								   objEvenementMagasin = noeudCommande.childNodes[n];//firstChild.nextSibling; //.getNamedItem("objetsMagasin");
+								}
+								//trace(objEvenementMagasin + " s " + noeudCommande.firstChild.previousSibling);
 								var lstObjMagasin:Array = objEvenementMagasin.childNodes;
 								//trace(lstObjMagasin);
 							//******************************************
 								var objMagasin:Array = new Array();
 		                        var count:Number =  lstObjMagasin.length;
+								//trace("liste " + lstObjMagasin.length);
 		                        for(var j:Number = 0; j < count; j++)
 		                        {
 			                        var objNoeudObjMagasin:XMLNode = lstObjMagasin[j];
