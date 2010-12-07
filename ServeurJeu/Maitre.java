@@ -38,7 +38,7 @@ public class Maitre implements Runnable
 		objJeu = new ControleurJeu();
 		//this.commandToDo = "";
 		
-		ServerFrame window = new ServerFrame(this);
+		//ServerFrame window = new ServerFrame(this);
 		//window.showIt("Server MathEnJeu");
 		this.isOn = false;
 		
