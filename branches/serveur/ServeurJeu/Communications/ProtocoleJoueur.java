@@ -1981,7 +1981,7 @@ public class ProtocoleJoueur implements Runnable
         // définit pas tout de suite le numéro de commande à envoyer au client
         objNoeudCommande.setAttribute("type", "Erreur");
         objNoeudCommande.setAttribute("nom", "CommandeNonReconnue");
-        System.out.println("Commande: " + message);
+        //System.out.println("Commande: " + message);
         Commande commande;
         // Si la commande est un ping et qu'il a bel et bien un numéro, alors
         // on peut appeler la méthode du vérificateur de connexions pour lui

@@ -11,6 +11,7 @@ public class Maitre implements Runnable
 {
 	private static Logger objLogger = Logger.getLogger( Maitre.class );
 	private ControleurJeu objJeu = null;
+	private ServerFrame serverWindow;
 	private static final int _STOP = 1;
 	private static final int _STATUS = 2;
 	private static final int _START = 3;
@@ -38,27 +39,47 @@ public class Maitre implements Runnable
 		//this.commandToDo = "";
 		
 		ServerFrame window = new ServerFrame(this);
-		window.showIt("Server MathEnJeu");
+		//window.showIt("Server MathEnJeu");
 		this.isOn = false;
 		
 	}
 	
-	public static void traiterCommande( String commande )
+	public static void traiterCommande( String commandes )
 	{
 		Maitre maitre = new Maitre();
-		if(commande != null)
+		ServerFrame window = new ServerFrame(maitre);
+		//window.showIt("Server MathEnJeu");
+		
+		String commande;
+		
+		if(commandes != null)
 		{
 			//on enlève les \r de la commande
-			commande = commande.replaceAll("\\r","");
+			commande = commandes.replaceAll("\\r","");
+		}else
+		{
+			commande = "";
 		}
 		
-		if( commande == null || commande.equals("") || commande.equals( "demarrer" ))
+		if(commande.equals("") || commande.equals( "demarrer" ))
 		{
-			//System.out.println( "demarrer -- commande = " + commande );
-				
+			System.out.println( "demarrer -- commande = " + commande );
+			
+			
 			Thread thread = new Thread( maitre, "Maitre" );
 			thread.start();
-			maitre.demarrer();								
+			maitre.demarrer();	
+			
+		}else if( commande.equals( "win" ) )
+		{
+			window.showIt("Server MathEnJeu");
+			
+            System.out.println( "demarrer -- commande = " + commande );
+			
+			
+			Thread thread = new Thread( maitre, "Maitre" );
+			thread.start();
+			maitre.demarrer();	
 		}
 		else if( commande.equals( "arreter" ) )
 		{
@@ -145,8 +166,6 @@ public class Maitre implements Runnable
 	
 	public void run()
 	{
-		
-		
 		try 
 		{
 			boolean arret = false;
@@ -179,30 +198,27 @@ public class Maitre implements Runnable
 						System.out.println( "ERREUR : Mauvaise commande" );
 					}
 				}// end first if
-
-				/*
-				// check the command from GUI buttons
-				if(this.commandToDo.equalsIgnoreCase("stop"))
-				{
-					this.stopServer();
-				}
-				else if(this.commandToDo.equalsIgnoreCase("start"))
-				{
-					this.demarrer();
-				}
-				else if(this.commandToDo.equalsIgnoreCase("restart"))
-				{
-					this.stopServer();
-					this.demarrer();
-				}*/
-				
-				
+			
 			}
 		} 
 		catch (IOException e) 
 		{	
 			objLogger.error( e.getMessage() );
 		}
+	}
+
+	/**
+	 * @param serverMonitor the serverMonitor to set
+	 */
+	public void setServerWindow(ServerFrame serverWindow) {
+		this.serverWindow = serverWindow;
+	}
+
+	/**
+	 * @return the serverMonitor
+	 */
+	public ServerFrame getServerWindow() {
+		return serverWindow;
 	}
 
 	
