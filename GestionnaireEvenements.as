@@ -70,39 +70,17 @@ class GestionnaireEvenements
 	private var newsChat:NewsBox;  // all the messages to show in newsbox
 	private var nbTracks:Number;   // usually is 4, do we really need it?  it not change...
 	private var finishPoints:Array;
-	// braniac state of our perso
-	//private var brainiacState:String;
-	// banana state of our perso
-	private var bananaState:Boolean;
-	private var bananaRestedTime:Number;
+	
 	// used to take bonus
 	private var winIt:Number;
 	//used to color clothes of our perso
 	private var colorIt:String;
+	
 	private var allowedTypes:Array;   // allowed types of game in our room - course, tournament ...
 	private var ourPerso:Personnage;  // reference to our personnage on the table(planche) .. I am not sure that is very useful...
 	private var allowedTypesMap:Array;
 	
-	function affichageChamps()
-	{
-		trace("------ debut affichage ------");
-		trace("nomUtilisateur : " + nomUtilisateur);
-		trace("listeDesPersonnages : " + listeDesPersonnages);	
-		trace("motDePasse : " + motDePasse);	
-		trace("nomSalle : " + nomSalle);	
-		trace("numeroTable : " + numeroTable);	
-		trace("tempsPartie : " + tempsPartie);	
-		trace("idPersonnage : " + idPersonnage);	
-		
-		trace("listeDesSalles : " + listeDesSalles);	
-		trace("listeChansons : " + listeChansons);	
-		trace("listeDesJoueursConnectes : " + listeDesJoueursConnectes);	
-		trace("listeDesTables : " + listeDesTables);	
-		trace("tabPodiumOrdonneID : " + tabPodiumOrdonneID);
-		trace("------  fin affichage  ------");	
-	}
-		
-    function getMoveSight():Number
+	function getMoveSight():Number
 	{
 		return this.moveVisibility
 	}
@@ -141,7 +119,7 @@ class GestionnaireEvenements
 		      this.moveVisibility = 6;
 			}
 		}
-		trace("getBraniac " + this.moveVisibility);
+		//trace("getBraniac " + this.moveVisibility);
 	}
 	
 	function obtenirNomUtilisateur()
@@ -225,7 +203,7 @@ class GestionnaireEvenements
 		
 		this.newsChat = new NewsBox();
 		this.colorIt = "0";
-		this.bananaState = false;
+		
 		this.winIt = 0;
 		this.maxPlayers = 0;
 		this.allowedTypesMap = new Array("mathEnJeu", "Tournament", "Course");
@@ -650,9 +628,8 @@ class GestionnaireEvenements
      	trace("fin de retourConnexion");
      	trace("*********************************************\n");
     }
-	//********** new code *************************************************
-	
-	 public function feedbackBeginNewGame(objetEvenement:Object)
+		
+	public function feedbackBeginNewGame(objetEvenement:Object)
     {
     	// c'est la fonction qui va etre appellee lorsque le GestionnaireCommunication aura
         // recu la reponse du serveur
@@ -794,7 +771,7 @@ class GestionnaireEvenements
 		        var messageInfo:String = objetEvenement.nomUtilisateur + _root.texteSource_xml.firstChild.attributes.restartMess; 
 				this.newsChat.addMessage(messageInfo);
 				
-			   trace("<<<<<<<<<<<<<<<<  feedbackRestartOldGame  finish restart >>>>>>>>>>>>>>>>>>>" + this.numeroTable);
+			   //trace("<<<<<<<<<<<<<<<<  feedbackRestartOldGame  finish restart >>>>>>>>>>>>>>>>>>>" + this.numeroTable);
 			
 			break;
 	     
@@ -3347,7 +3324,7 @@ class GestionnaireEvenements
 		if(objetEvenement.objetUtilise == "Banane"){
 		   var messageInfo:String = playerThat + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.bananaMess + playerUnder; 
 		   this.newsChat.addMessage(messageInfo);
-		 		
+		  	 		
 		}else if(objetEvenement.objetUtilise == "Livre")
 		{
 		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.bookUsedMess; 
@@ -3356,6 +3333,11 @@ class GestionnaireEvenements
 		{
 		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.brainiacUsedMess; 
 		   this.newsChat.addMessage(messageInfo);
+		   
+		   
+		   _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).setBrainiac(true);
+		   
+		   
 		}else if(objetEvenement.objetUtilise == "Boule")
 		{
 		   var messageInfo:String = objetEvenement.joueurQuiUtilise + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.cristallUsedMess; 
@@ -3367,11 +3349,7 @@ class GestionnaireEvenements
 		// here we treat the Banana
 		if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte == this.nomUtilisateur )
 		{
-    	  	this.bananaState = true;
-			trace("in the GestE " + bananaState);
-			
-			
-		   //if the player is in the minigame 
+    	   //if the player is in the minigame 
 		   if(ourPerso.getMinigameLoade())
 		   {
 		      
@@ -3386,7 +3364,7 @@ class GestionnaireEvenements
 			 this.addMoveSight(-2);
 			  _level0.loader.contentHolder.planche.setRepostCases(true);
 		     			
-			_global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
+			_global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
 			  
 			
 			
@@ -3402,7 +3380,7 @@ class GestionnaireEvenements
 			   this.addMoveSight(-2);
 		       _level0.loader.contentHolder.planche.setRepostCases(true);
 			  
-			  _global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
+			  _global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
 			  
 			   //_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
 			
@@ -3415,7 +3393,7 @@ class GestionnaireEvenements
 				_level0.loader.contentHolder.box_question.monScroll._visible = false;
 				_level0.loader.contentHolder.box_question._visible = false;
 				_level0.loader.contentHolder.box_question.GUI_retro.removeMovieClip();
-				_global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
+				_global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
 				
 			    // here show banana in action
 			    // setTimeout( Function, delay in miliseconds, arguments)
@@ -3427,18 +3405,19 @@ class GestionnaireEvenements
 			  this.addMoveSight(-2);
 			  _level0.loader.contentHolder.planche.setRepostCases(true);
              
-			  _global.timerIntervalBanana = setInterval(this, "waitBanana", 4500, playerUnder);
+			  _global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
 						
 		   
 		   }//end else if
 		   		   
 		   _global.timerIntervalMessage = setInterval(this,"funcToCallMessage", 6000, playerThat);
 		   
-		   setBananaTimer(playerUnder);
+		   
 		   
 		}else if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte != this.nomUtilisateur)
 		{
-		    _global.timerIntervalBananaAutre = setInterval(this, "waitBananaAutre", 4500, playerUnder);
+		    _global.timerIntervalBananaAutre = setInterval(this, "waitBananaAutre", 5000, playerUnder);
+			
 					
 		}// end if
 		
@@ -3452,10 +3431,11 @@ class GestionnaireEvenements
 		// we put our perso in Braniac... 
 		// the first part of this action is in the Perssonnage.as line 740
 		// we treat them diffrently because we must have Braniac cases and Timer on our perso
-		if(objetEvenement.objetUtilise == "Brainiac")
+		/*if(objetEvenement.objetUtilise == "Brainiac")
 		{
-			_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).setBrainiac(true);
-		}
+			//_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).setBrainiac(true);
+			//_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).setBananaState(false);
+		}*/
 		objetEvenement = null;
      	trace("fin de evenementUtiliserObjet");
      	trace("*********************************************\n");
@@ -3514,21 +3494,6 @@ class GestionnaireEvenements
 		   		   
 		   if(timeX == 0)
 	       {
-			   /*
-			   if(this.ourPerso.boardCentre == false || _level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible)
-		       {
-				     _level0.loader.contentHolder.objGestionnaireEvenements.addMoveSight(-1);
-			  			
-		       }else if(_level0.loader.contentHolder.box_question.monScroll._visible || this.ourPerso.minigameLoade)
-		       {
-			        _level0.loader.contentHolder.objGestionnaireEvenements.addMoveSight(-1);
-		      			
-		       }else{
-				
-                    _level0.loader.contentHolder.objGestionnaireEvenements.addMoveSight(-1);
-			        _level0.loader.contentHolder.planche.setRepostCases(true);
-		       } */
-			   
 			   _level0.loader.contentHolder.objGestionnaireEvenements.addMoveSight(-1);
 			   _level0.loader.contentHolder.planche.setRepostCases(true);
 			  // to remove the timer box
@@ -3548,7 +3513,16 @@ class GestionnaireEvenements
 	// after the time finished it must disapear
 	function setBananaTimer(playerUnder:String)
 	{
-				
+		// to remove Brainiac after used banana
+		//_level0.loader.contentHolder.objGestionnaireEvenements.addMoveSight(-1);
+	    //_level0.loader.contentHolder.planche.setRepostCases(true);
+		
+	    // to remove the timer box
+	    //_level0.loader.contentHolder.brainBox.removeMovieClip();
+        //clearInterval(_global.intervalIdBrain);
+		
+		var perso:Personnage = _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder);
+		
 		//first on put on the sprite the box for the timer
 		var banBox:MovieClip = 	_level0.loader.contentHolder.attachMovie("bananaBox", "bananaBox", 7);//_level0.loader.contentHolder.getNextHigesthDepth());
 		_level0.loader.contentHolder.bananaBox._x = 405;
@@ -3580,40 +3554,34 @@ class GestionnaireEvenements
         formatTimer.font = "ArialBlack";
         formatTimer.align = "Center";
         _level0.loader.contentHolder.bananaBox.bananaTime.setNewTextFormat(formatTimer);
-		trace("time banana ************************************    " + _global.restedTimeBanana );
-		if(_global.restedTimeBanana > 0) 
-		{ 
-		    _global.restedTimeBanana += 90;
-		}else
-		{
-		    _global.restedTimeBanana = 90; 
-		}
+		
+		perso.addBananaTime(90);
 		
 		if(_global.intervalIdBanana != null) {
 		
-             trace("clearInterval************************************    " + _global.restedTimeBanana );
+            // trace("clearInterval************************************    " + _global.restedTimeBanana );
 			 clearInterval(_global.intervalIdBanana);
         }
 
 		//_global.intervalIdBanana:Number;
-	    _global.intervalIdBanana = setInterval(bananaTimerSet, 1000, playerUnder);	
+	    _global.intervalIdBanana = setInterval(bananaTimerSet, 1000, perso);	
 	   
 	   function bananaTimerSet(playerUnder){
 	       
-		   trace("banana timer ************************************    " + _global.restedTimeBanana );
-		   _global.restedTimeBanana--;	  
+		  playerUnder.decreaseBananaTime(); 
 		   
-		   _level0.loader.contentHolder.bananaBox.bananaTime.text = _global.restedTimeBanana; 
+		   var time:Number = playerUnder.getBananaTime(); 
+		   _level0.loader.contentHolder.bananaBox.bananaTime.text = time;
 		   			
 		   // to remove the timer box
-		   if(_global.restedTimeBanana == 0)
+		   if(time == 0)
 		   {  
 		      _level0.loader.contentHolder.bananaBox.removeMovieClip();
 		     	      
 			  _level0.loader.contentHolder.objGestionnaireEvenements.addMoveSight(2);
 			  _level0.loader.contentHolder.planche.setRepostCases(true);
 			  
-			  _level0.loader.contentHolder.objGestionnaireEvenements.bananaState = false;
+			  playerUnder.setBananaState(false);
 			  clearInterval(_global.intervalIdBanana);
 		   }
 			
@@ -3627,6 +3595,7 @@ class GestionnaireEvenements
     function waitBanana(playerUnder:String):Void
     {
         _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).slippingBanana();
+		setBananaTimer(playerUnder);
 	    clearInterval(_global.timerIntervalBanana);
 						
     }

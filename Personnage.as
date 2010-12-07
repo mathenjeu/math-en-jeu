@@ -52,12 +52,42 @@ class Personnage
 	private var colorFilter:ColorMatrixFilter; // filter to color our perso 
 	private var brainiacState:Boolean;
 	private var brainiacRestedTime:Number;
-	private var bananaId:Number;
-	//private var bananaRestedTime:Number;
+	private var bananaId:Number;  
+	
+	  private var bananaState:Boolean;
+	  private var bananaRestedTime:Number;
+	
 	private var usedBook:Boolean;        // set in true if used one book in current question
 	
 	private var idClip:Number;           // number used to identify the movie used for perso - from 1 to 12
 	private var orient:String;
+	
+	function getBananaState():Boolean
+	{
+		return this.bananaState;
+	}
+	
+	function setBananaState(bananaState:Boolean)
+	{
+		this.bananaState = bananaState;
+	}
+	
+	function addBananaTime(bananaTime:Number)
+	{
+		this.bananaRestedTime += bananaTime;
+	}
+	
+	function decreaseBananaTime()
+	{
+		if(this.bananaRestedTime > 0)
+		   this.bananaRestedTime--;
+	}
+	
+	function getBananaTime():Number
+	{
+		return this.bananaRestedTime;
+	}
+	
 	
 	function setUsedBook(bool:Boolean)
 	{
@@ -102,6 +132,11 @@ class Personnage
 	function getBrainiacTime():Number
 	{
 		return this.brainiacRestedTime;
+	}
+	
+	function setBrainiacTime(time:Number)
+	{
+		this.brainiacRestedTime = time;
 	}
 	
 	function setBoardCentre(centre:Boolean)
@@ -587,6 +622,9 @@ class Personnage
 		this.brainiacState = false;
 		this.brainiacRestedTime = 0; 
 		
+		bananaState = false;
+	    bananaRestedTime = 0;
+		
 		// to load the perso .. use ClipLoader to know the moment of complet load
 		var myLoader:MovieClipLoader = new MovieClipLoader();
 	    //myLoader.addListener(image);
@@ -1035,6 +1073,11 @@ class Personnage
 	function slippingBanana()
 	{
 		this.image.gotoAndPlay("slipping");
+		
+		 // in this 3 lines we transfer player from Brainiac state to Banana state
+		 this.setBrainiac(false);
+		 this.setBrainiacTime(0);
+		 this.setBananaState(true);
 		//trace("slipping !!!!!!!!!!!!!!!!!");
 	}
 	
@@ -1044,11 +1087,15 @@ class Personnage
 		this.image.gotoAndPlay("rest");
 	}
 	
-	// used to put the Braniac animation on the player  for the 90 sec.
+	// used to put the Braniac animation on the player  for the 60 sec.
 	function getBrainiacAnimaton()
 	{		
 	   var playerUnder:String = this.nom;
 	   // to color our perso
+	   
+	   // to set off Banana effects on the player
+	   this.cancelBanana();
+	   
 	   var filterC:ColorMatrixFilter = this.colorFilter;
 						
 	   if(this.brainiacRestedTime == 0)
@@ -1100,8 +1147,8 @@ class Personnage
 		   
 	   }
 	   
-	   this.brainiacRestedTime += 90;
-	   //this.brainiacState = true;
+	   this.brainiacRestedTime += 60;
+	   
 	   _level0.loader.contentHolder.planche.setRepostCases(true);
 	
 	} // end of getBraniacAnimation
@@ -1121,7 +1168,7 @@ class Personnage
 		   var image:MovieClip = _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).obtenirImage(); 
 		   _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).decreaseBrainiacTime();
 		   restedTime = _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).getBrainiacTime(); 
-		   trace("test brainiac2 " + image._currentFrame)
+		   //trace("test brainiac2 " + image._currentFrame)
            		  
 		   if( restedTime == 1 && (image._currentFrame == 1 || image._currentFrame == 90))
 		   {
@@ -1160,6 +1207,11 @@ class Personnage
 		
 	}//end endOnBrainiac
 	
-	
+	private function cancelBanana()
+	{
+		bananaState = false;
+	    bananaRestedTime = 1;
+		//_level0.loader.contentHolder.objGestionnaireEvenements.setBrainiacTimer(playerUnder); 
+	}
 	
 }
