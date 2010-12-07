@@ -32,19 +32,7 @@ import mx.transitions.Transition;
 
 class PlancheDeJeu
 {
-	/*
-	// if changes here, change also in Case.as
-	// colors used for the different cell (question) categories
-	private var CLR_1:Number = 0x845f1d;
-	private var CLR_2:Number = 0x123456;
-	private var CLR_3:Number = 0xfedcba;
-	private var CLR_4:Number = 0x559911;
-	private var CLR_5:Number = 0x991155;
-	private var CLR_6:Number = 0x115599;
-	private var CLR_7:Number = 0x3579bd;
-	private var CLR_8:Number = 0xd1f548;
-    */				
-    private var mat:Array;
+	private var mat:Array;
     private var tableauDesCases:Array = new Array();
     private var hauteurDeCase:Number = -1;
     private var largeurDeCase:Number = -1;
@@ -63,7 +51,7 @@ class PlancheDeJeu
 	function setTempoSight(tempo:Number)
 	{
 		this.tempoSight = tempo;
-		//if
+		
 	}
 	
 	function getTempoSight():Number
@@ -1095,7 +1083,7 @@ class PlancheDeJeu
 		
 		// to put Banana cases 
 		//trace("in the GE " + _level0.loader.contentHolder.objGestionnaireEvenements.bananaState);
-		if(_level0.loader.contentHolder.objGestionnaireEvenements.bananaState)
+		if(p.getBananaState())
 		   afficherCasesPossiblesBanane(p);
 	 }// end if for watcher
 	 
@@ -1113,8 +1101,8 @@ class PlancheDeJeu
 		var j:Number;
 		var tempo = _level0.loader.contentHolder.objGestionnaireEvenements.getMoveSight();
 		var maxSight:Number = 6;
-		if( p.getBrainiac())
-		   maxSight = 7;
+		//if( p.getBrainiac())
+		  // maxSight = 7;
         var nb:Number = Math.min(maxSight - tempo,2);
 		
         var coordonnees:Point = new Point(0,0);
