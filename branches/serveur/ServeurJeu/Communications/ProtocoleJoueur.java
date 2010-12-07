@@ -643,7 +643,7 @@ public class ProtocoleJoueur implements Runnable
         // faut donc aviser le contrà´leur de jeu pour qu'il enlève
         // le joueur du serveur de jeu (il faut obtenir un numéro
         // de commandes de cette fonction)
-        System.out.println("Player " + objJoueurHumain.obtenirNomUtilisateur() + " ask for cancel");
+        //System.out.println("Player " + objJoueurHumain.obtenirNomUtilisateur() + " ask for cancel");
         objControleurJeu.deconnecterJoueur(objJoueurHumain, true, false);
     }
 
