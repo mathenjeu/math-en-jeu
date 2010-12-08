@@ -47,9 +47,7 @@ public class Maitre implements Runnable
 	public static void traiterCommande( String commandes )
 	{
 		Maitre maitre = new Maitre();
-		ServerFrame window = new ServerFrame(maitre);
-		//window.showIt("Server MathEnJeu");
-		
+						
 		String commande;
 		
 		if(commandes != null)
@@ -72,7 +70,8 @@ public class Maitre implements Runnable
 			
 		}else if( commande.equals( "win" ) )
 		{
-			window.showIt("Server MathEnJeu");
+			maitre.setServerWindow();
+			maitre.getServerWindow().showIt("Server MathEnJeu");
 			
             System.out.println( "demarrer -- commande = " + commande );
 			
@@ -210,8 +209,8 @@ public class Maitre implements Runnable
 	/**
 	 * @param serverMonitor the serverMonitor to set
 	 */
-	public void setServerWindow(ServerFrame serverWindow) {
-		this.serverWindow = serverWindow;
+	public void setServerWindow() {
+		this.serverWindow  = new ServerFrame(this);
 	}
 
 	/**
