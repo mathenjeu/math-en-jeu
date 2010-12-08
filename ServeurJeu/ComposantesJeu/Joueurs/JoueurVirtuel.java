@@ -520,10 +520,11 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 			objTable.preparerEvenementUtiliserObjet(this.strNom, this.playerToUseBanana, "Banane", "");
        	    if(estHumain){
        	    	JoueurHumain joueur = objTable.obtenirJoueurHumainParSonNom(this.playerToUseBanana);
-       	    	joueur.obtenirPartieCourante().getBananaState().bananaIsTossed();
+       	    	joueur.obtenirPartieCourante().getBananaState().startBanana();
        		    
        	    }else
-       	    	objTable.obtenirJoueurVirtuelParSonNom(this.playerToUseBanana).getBananaState().bananaIsTossed();
+       	    	objTable.obtenirJoueurVirtuelParSonNom(this.playerToUseBanana).getBananaState().startBanana();
+       	    
        	    this.enleverObjet(Objet.UID_OU_BANANE);
        	    //System.out.println("Banana!!!!!!!!!!!!!!");
 		}	

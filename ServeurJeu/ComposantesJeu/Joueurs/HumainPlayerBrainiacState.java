@@ -28,7 +28,7 @@ public class HumainPlayerBrainiacState {
 	// is the state to one of them
 	private JoueurHumain player;
 		
-	private static long brainTime = 60000;
+	private static long BRAIN_TIME = 60000;
 
 	// constructor - in the first time we are not in the Braniac
 	public HumainPlayerBrainiacState(JoueurHumain player) {
@@ -74,12 +74,12 @@ public class HumainPlayerBrainiacState {
 			if(this.isInBrainiac == false){
 				
 				this.isInBrainiac = true;
-			    this.bTask = Brainiac.utiliserBrainiac(player, brainTime);
-			    this.taskDate = System.currentTimeMillis() + brainTime;
+			    this.bTask = Brainiac.utiliserBrainiac(player, BRAIN_TIME);
+			    this.taskDate = System.currentTimeMillis() + BRAIN_TIME;
 			}else
 			{
 				this.bTask.cancel();
-				long tempDate = this.taskDate  + brainTime;
+				long tempDate = this.taskDate  + BRAIN_TIME;
 				this.bTask = Brainiac.utiliserBrainiac(player, tempDate);
 				this.taskDate = tempDate;
 				//System.out.println("BraniacTask !!!! " + tempDate + " " + " " + bTask);

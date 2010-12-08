@@ -1821,11 +1821,11 @@ public class ProtocoleJoueur implements Runnable
             if (estHumain) {
                 JoueurHumain joueur = infoPartie.obtenirTable().obtenirJoueurHumainParSonNom(playerName);
                 if (joueur != null) {
-                    joueur.obtenirPartieCourante().getBananaState().bananaIsTossed();
+                    joueur.obtenirPartieCourante().getBananaState().startBanana();
                 }
                 
             }else{
-            	infoPartie.obtenirTable().obtenirJoueurVirtuelParSonNom(playerName).getBananaState().bananaIsTossed();
+            	infoPartie.obtenirTable().obtenirJoueurVirtuelParSonNom(playerName).getBananaState().startBanana();
             }
 
         } else if (strTypeObjet.equals("Brainiac")) {

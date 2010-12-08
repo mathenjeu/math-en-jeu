@@ -1,7 +1,10 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
+import java.util.Timer;
+
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Banane;
 import ServeurJeu.Temps.BananaHumainTask;
+import ServeurJeu.Temps.HumainBananaStartTask;
 
 /**
  * Used to treat the Banana's applied to users
@@ -17,6 +20,11 @@ import ServeurJeu.Temps.BananaHumainTask;
 
 public class HumainPlayerBananaState {
 	
+	// timer task to start effets of Banana
+	// we need to wait 5 sec to apply the effets
+	// time to banana arrive to the player feets
+	private HumainBananaStartTask startTask;
+	
 	// timer task actually applied to player
 	private BananaHumainTask bTask;
 	
@@ -29,12 +37,12 @@ public class HumainPlayerBananaState {
 	// our player
 	private JoueurHumain player;
 		
-	private static long bananaTime = 90000;
+	private static final long BANANA_TIME = 90000;
+	private static final int START_TIME = 5000;
 
 	// constructor - in the first time we are not in the Banana
 	public HumainPlayerBananaState(JoueurHumain player) {
 		//super();
-		//this.setisUnderBananaEffects(false);
 		this.player = player;
 	}
 	
@@ -69,6 +77,18 @@ public class HumainPlayerBananaState {
 		this.isUnderBananaEffects = isBananaOn;
 	}
 	
+	/*
+	 * method used to start the effects of banana 
+	 * after the delay specified in a constant START_TIME
+	 */
+	public void startBanana()
+	{
+		this.startTask = new HumainBananaStartTask(this);
+		
+		Timer xTimer = new Timer();
+		// used timer to put the effects of banana after the needed time
+		xTimer.schedule(this.startTask, START_TIME);
+	}
 	
 	/*
 	 * Method used to set a Banana to player with all the
@@ -80,13 +100,13 @@ public class HumainPlayerBananaState {
 			if(this.isUnderBananaEffects == false){
 				
 				this.isUnderBananaEffects = true;
-			    this.bTask = Banane.utiliserBanane(player, bananaTime);
-			    this.taskDate = System.currentTimeMillis() + bananaTime;
+			    this.bTask = Banane.utiliserBanane(player, BANANA_TIME);
+			    this.taskDate = System.currentTimeMillis() + BANANA_TIME;
 			    
 			}else
 			{
-				this.bTask.cancel();
-				long tempDate = this.taskDate  + bananaTime;
+				this.bTask.cancelTask();
+				long tempDate = this.taskDate  + BANANA_TIME;
 				this.bTask = Banane.utiliserBanane(player, tempDate);
 				this.taskDate = tempDate;
 				//System.out.println("BraniacTask !!!! " + tempDate + " " + " " + bTask);
@@ -113,8 +133,13 @@ public class HumainPlayerBananaState {
 	public void destruction()
 	{
 		if(this.bTask != null){
-		   this.bTask.cancel();
 		   this.bTask.cancelTask();
+		   this.bTask = null;
+		}
+		if(this.startTask != null)
+		{
+			this.startTask.cancelTask();
+			this.startTask = null;
 		}
 		this.player = null;
 	}
