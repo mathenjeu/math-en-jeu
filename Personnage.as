@@ -62,6 +62,8 @@ class Personnage
 	private var idClip:Number;           // number used to identify the movie used for perso - from 1 to 12
 	private var orient:String;
 	
+	private var BRAINIAC_TIME:Number = 60;
+	
 	function getBananaState():Boolean
 	{
 		return this.bananaState;
@@ -619,11 +621,12 @@ class Personnage
 		this.idClip = nomClip;
         this.colorFilter = _level0.loader.contentHolder.objGestionnaireEvenements.colorMatrixPerso(this.clothesColor, this.idClip);
 		var filterC:ColorMatrixFilter = this.colorFilter;
+		
 		this.brainiacState = false;
 		this.brainiacRestedTime = 0; 
 		
-		bananaState = false;
-	    bananaRestedTime = 0;
+		this.bananaState = false;
+	    this.bananaRestedTime = 0;
 		
 		// to load the perso .. use ClipLoader to know the moment of complet load
 		var myLoader:MovieClipLoader = new MovieClipLoader();
@@ -684,6 +687,7 @@ class Personnage
 		var reafficher1:Boolean = true;
 		var reafficher2:Boolean = false;
 		
+		var isOurName:Boolean = this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage();
 		
 		
 		dx = this.prochainePosition.obtenirX() - this.position.obtenirX();  
@@ -691,7 +695,7 @@ class Personnage
 		
 		//trace("ds deplacePersonnage " + dx + " " + dy);
 		
-		if( boardCentre && _level0.loader.contentHolder.planche.getRepostCases() && (this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage()))
+		if( boardCentre && _level0.loader.contentHolder.planche.getRepostCases() && (isOurName))
 		{
 			_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 			_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
@@ -699,7 +703,7 @@ class Personnage
 			return;
 			
 		}
-		else if( boardCentre  &&  !_level0.loader.contentHolder.planche.getShowCases() && (this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())) // to consider the case that we don't have possibility to move 
+		else if( boardCentre  &&  !_level0.loader.contentHolder.planche.getShowCases() && (isOurName)) // to consider the case that we don't have possibility to move 
 		{
 			_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 			//trace("Le test de deplacement!!!!")
@@ -733,7 +737,7 @@ class Personnage
 				
 					case "magasin":
 						//si notre personnage tombe sur un magasin, on charge le GUI_magasin
-						if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+						if(isOurName)
 						{
 							this.minigameLoade = true;
 							reafficher1 = false;
@@ -843,7 +847,7 @@ class Personnage
 					break;
 				}// switch(this.faireCollision)
 			
-				if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+				if(isOurName)
 				{
 					if(_level0.loader.contentHolder.planche.estCaseSpeciale(this.l, this.c) &&  _level0.loader.contentHolder.sortieDunMinigame == false)
 					{
@@ -906,7 +910,7 @@ class Personnage
 			if(reafficher1 && reafficher2) this.minigameLoade = false;
 			
 			//Si le perso est le mien et qu'il est au repos, mais que le board n'est pas centre
-			if(this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage())
+			if(isOurName)
 			{
 				if(_level0.loader.contentHolder.planche.recentrerBoard(this.l, this.c, false))
 				{
@@ -1147,7 +1151,7 @@ class Personnage
 		   
 	   }
 	   
-	   this.brainiacRestedTime += 60;
+	   this.brainiacRestedTime += this.BRAINIAC_TIME;
 	   
 	   _level0.loader.contentHolder.planche.setRepostCases(true);
 	
