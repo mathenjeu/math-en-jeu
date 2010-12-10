@@ -64,8 +64,7 @@ public class SpyRooms implements Runnable {
 	    	}
 			catch( Exception e )
 			{
-				
-				objLogger.info(GestionnaireMessages.message("spy.erreur_thread"));
+    			objLogger.info(GestionnaireMessages.message("spy.erreur_thread"));
 				objLogger.error( e.getMessage());
 				e.printStackTrace();
 			}
@@ -73,7 +72,7 @@ public class SpyRooms implements Runnable {
 	}
 
 	/**
-	 * Methode used to detect new rooms to be activated and puted in list
+	 * Method used to detect new rooms to be activated and put in the list
 	 */
 	private void detectNewRooms(ArrayList<Integer> rooms)
 	{
@@ -83,45 +82,20 @@ public class SpyRooms implements Runnable {
 			for (int room : rooms)
 			{
 				list += room + ",";
-				//System.out.println(list);
 			}
+			
 		    int ind = list.lastIndexOf(",");
 		    if(ind > 0)
 		       list = list.substring(0, ind);  
             //Object[] roomS =  rooms.toArray();
 			rooms.clear();
-            /*
-			PreparedStatement prepStatement = null;
-			try {
-				   prepStatement = connexion.prepareStatement("SELECT room.room_id FROM room where ((beginDate < NOW() AND endDate > NOW()) OR beginDate is NULL OR endDate is NULL) AND room_id NOT IN (?);" );
-			
-					
-						
-						// Ajouter l'information pour cette salle
-						prepStatement.setObject(1, roomS);
-								
-						ResultSet rs = prepStatement.executeQuery();
-						while(rs.next())
-						{
-							int roomId = rs.getInt("room.room_id");
-							//System.out.println(roomId + "NEW");				
-							rooms.add(roomId);
-						}   
-					
-				}
-				catch (Exception e)
-				{
-					System.out.println(GestionnaireMessages.message("bd.erreur_spy_rooms") + e.getMessage());
-				}
-			
-            */
-			
+            
 			//find all new rooms  and fill in ArrayList
 			try
 			{
 				synchronized( requete )
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room.room_id FROM room where ((beginDate < NOW() AND endDate > NOW()) OR beginDate is NULL OR endDate is NULL) AND room_id NOT IN (" + list + ");" );
+					ResultSet rs = requete.executeQuery( "SELECT room.room_id FROM room where ((beginDate < NOW() AND endDate > NOW()) OR (beginDate is NULL AND endDate > NOW()) OR (beginDate < NOW() AND endDate is NULL) OR (beginDate is NULL AND endDate is NULL)) AND room_id NOT IN (" + list + ");" );
 					while(rs.next())
 					{
 						int roomId = rs.getInt("room.room_id");

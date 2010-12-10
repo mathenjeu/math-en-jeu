@@ -192,7 +192,8 @@ public class ControleurJeu {
          *********************************/
         //Start spyDb to update periodically the rooms list
         // Add new rooms or out the olds
-        objSpyDB = new SpyRooms(this, 50000);
+        int intSpyStep = config.obtenirNombreEntier("controleurjeu.monitoring.spyDB");
+        objSpyDB = new SpyRooms(this, intSpyStep);
         //Start spy thread's
         Thread threadSpy = new Thread(objSpyDB, "SpyRooms");
         threadSpy.start();
@@ -693,6 +694,14 @@ public class ControleurJeu {
     public void preparerEvenementNouvelleSalle(Salle nouvelleSalle)
     {
         String createurSalle = nouvelleSalle.getCreatorUsername();
+        
+        String g_types = "";
+        for (Integer gameTypeId: nouvelleSalle.getGameTypeIds()) {
+            g_types += gameTypeId + ",";
+        }
+        if (g_types.endsWith(",")) {
+            g_types = g_types.substring(0, g_types.length() - 1);
+        }
         // Créer un nouvel événement qui va permettre d'envoyer l'événement
         // aux joueurs qu'une table a été créée
         EvenementNouvelleSalle evNouvelleSalle = new EvenementNouvelleSalle(
@@ -702,7 +711,8 @@ public class ControleurJeu {
                 nouvelleSalle.getRoomDescription(""),
                 nouvelleSalle.getMasterTime(),
                 nouvelleSalle.getRoomId(),
-                nouvelleSalle.getRoomType()
+                nouvelleSalle.getRoomType(),
+                g_types
                 );
         
         for (JoueurHumain objJoueur : lstJoueursConnectes.values())
