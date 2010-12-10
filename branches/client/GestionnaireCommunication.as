@@ -947,7 +947,13 @@ class GestionnaireCommunication
 							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
 				    		objEvenement["RoomDescriptions"] = lstChildNodes[i].firstChild.nodeValue;
 				       	break;
-						case "GameTypres":
+						
+						case "RoomType":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["RoomType"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+						
+						case "GameTypes":
 							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
 				    		objEvenement["GameTypes"] = lstChildNodes[i].firstChild.nodeValue;
 				       	break;

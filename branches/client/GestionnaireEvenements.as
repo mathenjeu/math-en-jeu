@@ -2365,12 +2365,16 @@ class GestionnaireEvenements
 			this.listeDesSalles[this.listeDesSalles.length - 1].descriptions = objetEvenement.RoomDescriptions;
 			this.listeDesSalles[this.listeDesSalles.length - 1].userCreator = objetEvenement.CreatorUserName;
 			this.listeDesSalles[this.listeDesSalles.length - 1].masterTime = objetEvenement.MasterTime;
+			this.listeDesSalles[this.listeDesSalles.length - 1].roomType = objetEvenement.RoomType;
 			this.listeDesSalles[this.listeDesSalles.length - 1].gameTypes = objetEvenement.GameTypes;
-			trace(" GE : " + this.listeDesSalles[this.listeDesSalles.length - 1].nom + " * " +  this.listeDesSalles[this.listeDesSalles.length - 1].possedeMotDePasse);
+			trace(" GE : " + this.listeDesSalles[this.listeDesSalles.length - 1].roomType + " * " +  _level0.loader.contentHolder.roomsType);
 			
-			_level0.loader.contentHolder.listeSalle.addItem({label: objetEvenement.NomSalle, data:  objetEvenement.NoSalle});
-			_level0.loader.contentHolder.listeSalle.redraw();
-																
+			if(_level0.loader.contentHolder.roomsType == objetEvenement.RoomType)
+			{
+			   _level0.loader.contentHolder.listeSalle.addItem({label: objetEvenement.NomSalle, data:  objetEvenement.NoSalle});
+			   _level0.loader.contentHolder.listeSalle.redraw();
+			}
+															
 									
 		objetEvenement = null;
     	trace("fin de evenementNouvelleSalle");
@@ -3364,7 +3368,7 @@ class GestionnaireEvenements
 			 this.addMoveSight(-2);
 			  _level0.loader.contentHolder.planche.setRepostCases(true);
 		     			
-			_global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
+			//_global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
 			  
 			
 			
@@ -3380,7 +3384,7 @@ class GestionnaireEvenements
 			   this.addMoveSight(-2);
 		       _level0.loader.contentHolder.planche.setRepostCases(true);
 			  
-			  _global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
+			  //_global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
 			  
 			   //_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
 			
@@ -3393,7 +3397,7 @@ class GestionnaireEvenements
 				_level0.loader.contentHolder.box_question.monScroll._visible = false;
 				_level0.loader.contentHolder.box_question._visible = false;
 				_level0.loader.contentHolder.box_question.GUI_retro.removeMovieClip();
-				_global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
+				//_global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
 				
 			    // here show banana in action
 			    // setTimeout( Function, delay in miliseconds, arguments)
@@ -3405,11 +3409,12 @@ class GestionnaireEvenements
 			  this.addMoveSight(-2);
 			  _level0.loader.contentHolder.planche.setRepostCases(true);
              
-			  _global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
+			  //_global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
 						
 		   
 		   }//end else if
-		   		   
+		   
+		   _global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
 		   _global.timerIntervalMessage = setInterval(this,"funcToCallMessage", 6000, playerThat);
 		   
 		   
@@ -3513,14 +3518,6 @@ class GestionnaireEvenements
 	// after the time finished it must disapear
 	function setBananaTimer(playerUnder:String)
 	{
-		// to remove Brainiac after used banana
-		//_level0.loader.contentHolder.objGestionnaireEvenements.addMoveSight(-1);
-	    //_level0.loader.contentHolder.planche.setRepostCases(true);
-		
-	    // to remove the timer box
-	    //_level0.loader.contentHolder.brainBox.removeMovieClip();
-        //clearInterval(_global.intervalIdBrain);
-		
 		var perso:Personnage = _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder);
 		
 		//first on put on the sprite the box for the timer
@@ -3574,7 +3571,7 @@ class GestionnaireEvenements
 		   _level0.loader.contentHolder.bananaBox.bananaTime.text = time;
 		   			
 		   // to remove the timer box
-		   if(time == 0)
+		   if(time < 1)
 		   {  
 		      _level0.loader.contentHolder.bananaBox.removeMovieClip();
 		     	      
@@ -3620,9 +3617,10 @@ class GestionnaireEvenements
 		    guiBanane = _level0.loader.contentHolder.attachMovie("GUI_banane", "banane", 9998);
 		    guiBanane._y = 200;
             guiBanane._x = 275;
+			
 		    _level0.loader.contentHolder["banane"].nomCible = " ";
 	        _level0.loader.contentHolder["banane"].nomJoueurUtilisateur = playerThat;
-	        twMove = new Tween(guiBanane, "_alpha", Strong.easeOut, 40, 100, 1, true);
+	        twMove = new Tween(guiBanane, "_alpha", Strong.easeOut, 20, 60, 1, true);
 		    clearInterval(_global.timerIntervalMessage);
 		}
 	}
