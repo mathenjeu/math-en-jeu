@@ -2236,6 +2236,7 @@ public class ProtocoleJoueur implements Runnable
             case ObtenirListeJoueursSalle:
             case CloseRoom:
             case QuitterTable:
+            case QuitterSalle:
             case CancelQuestion:
             case Deconnexion: return validerCommande(noeudCommande, new String[0]);
 

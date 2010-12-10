@@ -985,7 +985,7 @@ public class GestionnaireBD {
         //find all rooms  and fill in ArrayList
         try {
             synchronized (DB_LOCK) {
-                ResultSet rs = requete.executeQuery("SELECT room.room_id FROM room where (beginDate < NOW() AND endDate > NOW()) OR beginDate is NULL OR endDate is NULL;");
+                ResultSet rs = requete.executeQuery("SELECT room.room_id FROM room where (beginDate < NOW() AND endDate > NOW()) OR (beginDate is NULL AND endDate is NULL) OR (beginDate is NULL AND endDate > NOW()) OR (beginDate < NOW() AND endDate is NULL);");
                 while (rs.next()) {
                     rooms.add(rs.getInt("room.room_id"));
 

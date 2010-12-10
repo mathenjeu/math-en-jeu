@@ -32,6 +32,9 @@ public class EvenementNouvelleSalle extends Evenement {
 	//default time for the room 
 	private int masterTime;
 	
+	// General or profsType
+	private String roomType;
+	
 	private String gameTypes;
 			
 	 /**
@@ -39,7 +42,7 @@ public class EvenementNouvelleSalle extends Evenement {
      * d'initialiser le numéro de la salle. 
      */
     public EvenementNouvelleSalle(String roomName, boolean protegee, String strCreatorUserName,  
-    		String roomDescription, int masterTime, int roomID, String gameTypes)
+    		String roomDescription, int masterTime, int roomID, String roomType, String gameTypes)
     {
          strNomSalle = roomName;
          hasPassword = protegee;
@@ -47,6 +50,7 @@ public class EvenementNouvelleSalle extends Evenement {
          this.roomDescription = roomDescription;
          this.roomID = roomID;
          this.masterTime = masterTime;
+         this.roomType = roomType;
          this.gameTypes = gameTypes;
                    
     }
@@ -79,6 +83,7 @@ public class EvenementNouvelleSalle extends Evenement {
 			Element objNoeudParametreCreatorUserName = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreMasterTime = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreRoomDescriptions = objDocumentXML.createElement("parametre");
+			Element objNoeudParametreRoomType = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreGameTypes = objDocumentXML.createElement("parametre");
 			
 			// Créer des noeuds contenant le numéro de la table du noeud 
@@ -89,6 +94,7 @@ public class EvenementNouvelleSalle extends Evenement {
 			Text objNoeudTexteCreatorUserName = objDocumentXML.createTextNode(strCreatorUserName);
 			Text objNoeudTexteMasterTime = objDocumentXML.createTextNode(Integer.toString(masterTime));
 			Text objNoeudTexteRoomDescriptions = objDocumentXML.createTextNode(roomDescription);
+			Text objNoeudTexteRoomType = objDocumentXML.createTextNode(roomType);
 			Text objNoeudTexteGameTypes = objDocumentXML.createTextNode(gameTypes);
 			
 			// Définir les attributs du noeud de commande
@@ -104,6 +110,7 @@ public class EvenementNouvelleSalle extends Evenement {
 			objNoeudParametreCreatorUserName.setAttribute("type", "CreatorUserName");
 			objNoeudParametreMasterTime.setAttribute("type", "MasterTime");
 			objNoeudParametreRoomDescriptions.setAttribute("type", "RoomDescriptions");
+			objNoeudParametreRoomType.setAttribute("type", "RoomType");
 			objNoeudParametreGameTypes.setAttribute("type", "GameTypes");
 			
 			
@@ -114,6 +121,7 @@ public class EvenementNouvelleSalle extends Evenement {
 			objNoeudParametreCreatorUserName.appendChild(objNoeudTexteCreatorUserName);
 			objNoeudParametreMasterTime.appendChild(objNoeudTexteMasterTime);
 			objNoeudParametreRoomDescriptions.appendChild(objNoeudTexteRoomDescriptions);
+			objNoeudParametreRoomType.appendChild(objNoeudTexteRoomType);
 			objNoeudParametreGameTypes.appendChild(objNoeudTexteGameTypes);
 			
 			// Ajouter les noeuds paramètre au noeud de commande
@@ -123,6 +131,7 @@ public class EvenementNouvelleSalle extends Evenement {
 			objNoeudCommande.appendChild(objNoeudParametreCreatorUserName);
 			objNoeudCommande.appendChild(objNoeudParametreMasterTime);
 			objNoeudCommande.appendChild(objNoeudParametreRoomDescriptions);
+			objNoeudCommande.appendChild(objNoeudParametreRoomType);
 			objNoeudCommande.appendChild(objNoeudParametreGameTypes);
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
