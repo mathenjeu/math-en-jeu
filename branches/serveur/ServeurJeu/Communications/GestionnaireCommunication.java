@@ -98,12 +98,13 @@ public class GestionnaireCommunication
 			// par la variable "intPort"
 			boolStopThread = false;
 			objSocketServeur = new ServerSocket(intPort, 0, InetAddress.getByName(bindAddress));
+			//objSocketServeur.
 		}
 		catch (IOException e)
 		{
 			// L'écoute n'a pas pu être démarrée
-			System.out.println(GestionnaireMessages.message("communication.erreur_demarrage") + intPort);
-			System.out.println(GestionnaireMessages.message("communication.serveur_arrete"));
+			objLogger.error(GestionnaireMessages.message("communication.erreur_demarrage") + intPort);
+			objLogger.error(GestionnaireMessages.message("communication.serveur_arrete"));
 			boolStopThread = true;
 		}
 		
@@ -113,7 +114,7 @@ public class GestionnaireCommunication
 		{
 			try
 			{
-				System.out.println(GestionnaireMessages.message("communication.attente"));
+				objLogger.info(GestionnaireMessages.message("communication.attente"));
 				
 				// Accepter une connexion et créer un objet ProtocoleJoueur
 				// qui va exécuter le protocole pour le joueur
@@ -136,9 +137,9 @@ public class GestionnaireCommunication
 			catch (IOException e)
 			{
 				// Une erreur est survenue lors de l'acceptation de la connexion
-				System.out.println(GestionnaireMessages.message("communication.erreur_accept"));
+				objLogger.error(GestionnaireMessages.message("communication.erreur_accept"));
 				objLogger.error( e.getMessage() );
-				System.out.println(GestionnaireMessages.message("communication.serveur_arrete"));
+				objLogger.error(GestionnaireMessages.message("communication.serveur_arrete"));
 				boolStopThread = true;
 			}
 		}
@@ -174,7 +175,7 @@ public class GestionnaireCommunication
 		}
 		catch( Exception e )
 		{
-			System.out.println(GestionnaireMessages.message("communication.erreur_protocole"));
+			objLogger.error(GestionnaireMessages.message("communication.erreur_protocole"));
 		}
 	}
 	
@@ -222,6 +223,7 @@ public class GestionnaireCommunication
         {
 			protocole.arreterProtocoleJoueur();
         }
+		
 		lstProtocoleJoueur.clear();
 		
 		
@@ -234,12 +236,12 @@ public class GestionnaireCommunication
 		catch (IOException e)
 		{
 			// Le socket du serveur est déjà fermé
-			System.out.println(GestionnaireMessages.message("communication.erreur_socket"));
+			objLogger.error(GestionnaireMessages.message("communication.erreur_socket"));
 		}
 		catch (NullPointerException e)
 		{
 			// Le socket du serveur est déjà fermé
-			System.out.println(GestionnaireMessages.message("communication.erreur_socket"));
+			objLogger.error(GestionnaireMessages.message("communication.erreur_socket"));
 		}
 				
 		// Arrêter le thread de vérification des connexions

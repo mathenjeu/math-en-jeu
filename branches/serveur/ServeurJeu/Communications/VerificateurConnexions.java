@@ -66,24 +66,17 @@ public class VerificateurConnexions implements Runnable
 			{
 				// Faire une copie de la liste des ProtocoleJoueur
 				lstCopieProtocoleJoueur = (LinkedList<ProtocoleJoueur>) lstProtocoleJoueur.clone();
-			}
 
-			// Passer tous les objets ProtocoleJoueur et envoyer un message ping
-			// à chacun pour savoir s'il est là
-			for (int i = 0; i < lstCopieProtocoleJoueur.size(); i++)
-			{
-				// Envoyer un message ping au client courant
-				((ProtocoleJoueur) lstCopieProtocoleJoueur.get(i)).envoyerEvenementPing(intCompteurPing);
+
+				// Passer tous les objets ProtocoleJoueur et envoyer un message ping
+				// à chacun pour savoir s'il est là
+				for (int i = 0; i < lstCopieProtocoleJoueur.size(); i++)
+				{
+					// Envoyer un message ping au client courant
+					((ProtocoleJoueur) lstCopieProtocoleJoueur.get(i)).envoyerEvenementPing(intCompteurPing);
+				}
 			}
-			
-			try
-			{
-				// Stopper le thread du vérificateur pendant 60 - 100 secondes pour 
-				// laisser un moment de répit au CPU
-				Thread.sleep(60 * 1000);
-			}
-			catch (InterruptedException ie) {}
-			
+						
 			// Passer tous les ProtocoleJoueur et vérifier s'ils ont 
 			// répondus au ping. S'ils n'ont pas répondus, alors on va les
 			// faire se fermer et s'assurer qu'ils se sont bien enlevé de 
@@ -130,6 +123,14 @@ public class VerificateurConnexions implements Runnable
 			
 			// Vider la liste des clients
 			lstClientsPresents.clear();
+			
+			try
+			{
+				// Stopper le thread du vérificateur pendant 60 - 100 secondes pour 
+				// laisser un moment de répit au CPU
+				Thread.sleep(60 * 1000);
+			}
+			catch (InterruptedException ie) {}
 		}
 	}
 	
