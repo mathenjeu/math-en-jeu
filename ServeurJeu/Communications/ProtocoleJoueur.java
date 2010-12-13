@@ -114,6 +114,7 @@ public class ProtocoleJoueur implements Runnable
         objGestionnaireCommunication = controleur.obtenirGestionnaireCommunication();
         objVerificateurConnexions = verificateur;
         objSocketJoueur = socketJoueur;
+                
         //objJoueurHumain = null;
         //bolStopThread = false;
         //intCompteurCommande = 0;
@@ -143,7 +144,9 @@ public class ProtocoleJoueur implements Runnable
      */
     public void run() {
         try {
-            // Créer le canal qui permet de recevoir des données sur le canal
+        	
+        	   objSocketJoueur.setSoLinger(true, 1000);
+        	// Créer le canal qui permet de recevoir des données sur le canal
             // de communication entre le client et le serveur
             objCanalReception = objSocketJoueur.getInputStream();
 
@@ -270,7 +273,7 @@ public class ProtocoleJoueur implements Runnable
                 // On tente de fermer le socket liant le client au serveur
                 objSocketJoueur.close();
             } catch (IOException ioe) {
-                objLogger.error(ioe.getMessage());
+                objLogger.error(ioe.getMessage() + " on close the socket!");
             }
 
             // Si le joueur humain a été défini dans le protocole, alors
@@ -2635,14 +2638,14 @@ public class ProtocoleJoueur implements Runnable
      * de jeu, alors il sera complétement déconnecté.
      */
     public void arreterProtocoleJoueur() {
-        Thread.currentThread().interrupt();
+        
         try {
             // On tente de fermer le canal de réception. Cela va provoquer
             // une erreur dans le thread et le joueur va être déconnecté et
             // le thread va arrêter
             objCanalReception.close();
         } catch (IOException ioe) {
-            objLogger.error(ioe.getMessage());
+            objLogger.error(ioe.getMessage() +  " close reception canal");
         }
 
         try {
@@ -2651,9 +2654,10 @@ public class ProtocoleJoueur implements Runnable
             // déconnecté et le thread va arrêter
             objSocketJoueur.close();
         } catch (IOException ioe) {
-            objLogger.error(ioe.getMessage());
+            objLogger.error(ioe.getMessage() + "close socket in protocole");
         }
-
+        
+        Thread.currentThread().interrupt();
 
     }
     

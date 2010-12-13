@@ -255,9 +255,6 @@ public class JoueurVirtuel extends Joueur implements Runnable{
         // Au départ, le joueur virtuel n'a pas visité de magasin
         //intNbMagasinVisites = 0;
 
-        // Définir le nombre d'objets max par une valeur de base
-        //intNbObjetsMax = objTable.obtenirRegles().getMaxNbObjectsAndMoney();
-        
         // Créer une liste de magasin déjà visité vide
         lstMagasinsVisites = new LinkedList<Magasin>();
 	}

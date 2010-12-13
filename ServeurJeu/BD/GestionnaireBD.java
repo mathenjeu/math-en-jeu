@@ -76,7 +76,8 @@ public class GestionnaireBD {
             objLogger.error(GestionnaireMessages.message("bd.erreur_creer_pilote1"));
             objLogger.error(GestionnaireMessages.message("bd.erreur_creer_pilote2"));
             objLogger.error(e.getMessage());
-            e.printStackTrace();
+            objLogger.error(e.getStackTrace());
+            
             return;
         }
         connexionDB();
@@ -253,7 +254,7 @@ public class GestionnaireBD {
                 requete.executeUpdate(strSQL);
             }
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_update_user_game_endtime") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update_user_game_endtime") + e.getMessage());
         }
 
 
@@ -593,7 +594,7 @@ public class GestionnaireBD {
                 return gameId;
             }
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos") + e.getMessage());
         }
 
         // Au cas où il y aurait erreur, on retourne -1
@@ -620,7 +621,7 @@ public class GestionnaireBD {
                 rs.close();
             }
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
         }
 
         addSummaryStats(joueur, estGagnant);
@@ -663,7 +664,7 @@ public class GestionnaireBD {
                 prepStatement.close();
             }
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
         }
     }
 
@@ -773,7 +774,7 @@ public class GestionnaireBD {
             }
 
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
         }
     }
     
@@ -818,7 +819,7 @@ public class GestionnaireBD {
     	}
     	catch (Exception e)
     	{
-    		System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_game_user") + e.getMessage());
+    		objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_game_user") + e.getMessage());
     	}
 
 
@@ -840,7 +841,7 @@ public class GestionnaireBD {
                 requete.executeUpdate(strMoney);
             }
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_update_money") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update_money") + e.getMessage());
         }
 
     }//end methode
@@ -1373,7 +1374,7 @@ public class GestionnaireBD {
                 requete.executeUpdate(strSQL);
             }
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_modProf") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_modProf") + e.getMessage());
         }
 
         //add information of the room to other tables of DB
@@ -1398,7 +1399,7 @@ public class GestionnaireBD {
                 requete.executeUpdate("DELETE FROM room_object WHERE room_id=" + room_id);
             }
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_delete_rooms_modProf") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_delete_rooms_modProf") + e.getMessage());
         }
     }
 
@@ -1447,7 +1448,7 @@ public class GestionnaireBD {
                 room_id = rs.getInt("GENERATED_KEY");
             }
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_modProf") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_modProf") + e.getMessage());
         }
 
         //add information of the room to other tables of DB
@@ -1494,7 +1495,7 @@ public class GestionnaireBD {
             prepStatement.executeBatch();
 
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_Keywords") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_Keywords") + e.getMessage());
         }
     }// end method
 
@@ -1529,7 +1530,7 @@ public class GestionnaireBD {
             prepStatement.executeBatch();
 
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_gameTypes") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_gameTypes") + e.getMessage());
         }
     }
 
@@ -1548,7 +1549,7 @@ public class GestionnaireBD {
                 requete.executeUpdate(strSQL);
             }
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_infosTable") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_infosTable") + e.getMessage());
         }
 
 
@@ -1577,7 +1578,7 @@ public class GestionnaireBD {
             prepStatement.executeBatch();
 
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_specialSquare") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_specialSquare") + e.getMessage());
         }
 
 
@@ -1612,7 +1613,7 @@ public class GestionnaireBD {
                 prepStatement.executeBatch();
             }
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_objects") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_objects") + e.getMessage());
         }
     }// end methode
 
@@ -1645,7 +1646,7 @@ public class GestionnaireBD {
                 prepStatement.executeBatch();
             }
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_adding_rooms_shops") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_shops") + e.getMessage());
         }
     }// end methode
 
@@ -1678,7 +1679,7 @@ public class GestionnaireBD {
                 rs.close();
             }
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
         }
         if (requiresFullStats)
             return createRoomFullReport(room_id);
@@ -1725,7 +1726,7 @@ public class GestionnaireBD {
                 }
             }
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_create_report") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_create_report") + e.getMessage());
         }
         return rapport;
 
@@ -1780,7 +1781,7 @@ public class GestionnaireBD {
                 rs.close();
             }
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_create_report") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_create_report") + e.getMessage());
 
         }
         return rapport;
@@ -1820,7 +1821,7 @@ public class GestionnaireBD {
                 requete.executeUpdate("INSERT INTO questions_with_error (question_id, user_id, language_id, description) VALUES ( " + question + " ," + user_id + " , " + language_id + " ,'" + errorDescription + "');");
             }
         } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_adding_questions_errors") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_adding_questions_errors") + e.getMessage());
         }
 
 
