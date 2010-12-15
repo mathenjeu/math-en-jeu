@@ -3238,6 +3238,7 @@ class GestionnaireEvenements
     	}
 		
     	this.endGame = true;
+		_level0.loader.contentHolder.objGestionnaireEvenements.deconnexion();
 		objetEvenement = null;
     	trace("fin de evenementPartieTerminee    ");
     	trace("*********************************************\n");
@@ -3842,12 +3843,12 @@ function drawToolTip(messInfo:String, mcMovie:MovieClip)
 	var wid:Number = Math.floor(stringLength / 20 * 16);
 	_level0.loader.contentHolder.createEmptyMovieClip("toolTip", _level0.loader.contentHolder.getNextHigesthDepth());
 	_level0.loader.contentHolder.toolTip.swapDepths(mcMovie);
-	drawRoundedRectangle(_level0.loader.contentHolder.toolTip, 120, wid + 10, 15, 0xFFEB5B, 100);
+	this.drawRoundedRectangle(_level0.loader.contentHolder.toolTip, 120, wid + 10, 15, 0xFFEB5B, 100);
 	_level0.loader.contentHolder.toolTip.createTextField("toolTipMessage", 60, 5, 3, 110, wid);
 	
 	 // Make the field an label text field
        _level0.loader.contentHolder.toolTip.toolTipMessage.type = "dynamic";
-       
+        _level0.loader.contentHolder.toolTip.toolTipMessage.setStyle("fontSize", "2");
        with(_level0.loader.contentHolder.toolTip.toolTipMessage)
        {
 	       multiline = true;
@@ -3861,9 +3862,10 @@ function drawToolTip(messInfo:String, mcMovie:MovieClip)
 	       autoSize = "left";
 		   maxChars = 70;
        }
-	  _level0.loader.contentHolder.toolTip.toolTipMessage.setStyle("fontSize", "7");
+	   
+	 
 	
-	_level0.loader.contentHolder.toolTip._visible = false;
+	  _level0.loader.contentHolder.toolTip._visible = false;
 	//_level0.loader.contentHolder.
 
 }
