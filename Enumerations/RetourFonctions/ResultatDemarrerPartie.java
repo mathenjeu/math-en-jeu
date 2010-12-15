@@ -7,5 +7,5 @@ public enum ResultatDemarrerPartie
 {
     Succes,
     DejaEnAttente,
-    PartieEnCours
+    PartieEnCours;
 }

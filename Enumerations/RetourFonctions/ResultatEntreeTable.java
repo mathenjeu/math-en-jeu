@@ -8,5 +8,5 @@ public enum ResultatEntreeTable
     Succes,
     TableNonExistante,
     TableComplete,
-    PartieEnCours
+    PartieEnCours;
 }

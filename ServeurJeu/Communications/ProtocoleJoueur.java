@@ -125,8 +125,10 @@ public class ProtocoleJoueur implements Runnable
         try {
             // etant donné que ce sont seulement de petits messages qui sont
             // envoyés entre le client et le serveur, alors il n'est pas
-            // nécessaire d'attendre un délai supplémentaire
-            objSocketJoueur.setTcpNoDelay(false);
+            // nécessaire d'attendre un délai supplémentaire -- this is false!!!
+        	// for games or gui interactive application it must be set to true to
+        	// sent all the packets as soon as possible without buffering
+            objSocketJoueur.setTcpNoDelay(true);
         } catch (SocketException se) {
             objLogger.error(GestionnaireMessages.message("protocole.canal_ferme"));
 
@@ -145,7 +147,9 @@ public class ProtocoleJoueur implements Runnable
     public void run() {
         try {
         	
-        	   objSocketJoueur.setSoLinger(true, 1000);
+        	
+        	objSocketJoueur.setSoLinger(true, 1000);
+        	
         	// Créer le canal qui permet de recevoir des données sur le canal
             // de communication entre le client et le serveur
             objCanalReception = objSocketJoueur.getInputStream();
@@ -261,10 +265,11 @@ public class ProtocoleJoueur implements Runnable
             objLogger.error(GestionnaireMessages.message("protocole.erreur_thread"));
             objLogger.error(e.getMessage());
             e.printStackTrace();
+            
         } finally {
             try {
                 // On tente de fermer le canal de réception
-                objCanalReception.close();
+            	objCanalReception.close();
             } catch (IOException ioe) {
                 objLogger.error(ioe.getMessage());
             }
@@ -276,6 +281,8 @@ public class ProtocoleJoueur implements Runnable
                 objLogger.error(ioe.getMessage() + " on close the socket!");
             }
 
+            // to be sure...
+            this.bolStopThread = true;
             // Si le joueur humain a été défini dans le protocole, alors
             // c'est qu'il a réussi à se connecter au serveur de jeu, il
             // faut donc aviser le contrôleur de jeu pour qu'il enlève
@@ -285,9 +292,9 @@ public class ProtocoleJoueur implements Runnable
                 // client (joueur) a été fermée (on ne doit pas obtenir de
                 // numéro de commande de cette fonction, car on ne retournera
                 // rien du tout)
-                Thread.currentThread().interrupt();
+                
                 objControleurJeu.deconnecterJoueur(objJoueurHumain, false, true);
-                System.out.println("! Joueur deconnecter - Protocole ");
+                //System.out.println("! Joueur deconnecter - Protocole ");          
 
             }
 
@@ -2628,7 +2635,7 @@ public class ProtocoleJoueur implements Runnable
         } catch (IOException e) {
 
             objLogger.info(GestionnaireMessages.message("protocole.erreur_ping"));
-            objLogger.error(e.getMessage());
+            objLogger.error(e.getMessage() + " ping  is not sent");
         }
     }
 
@@ -2653,6 +2660,7 @@ public class ProtocoleJoueur implements Runnable
             // va provoquer une erreur dans le thread et le joueur va être
             // déconnecté et le thread va arrêter
             objSocketJoueur.close();
+            
         } catch (IOException ioe) {
             objLogger.error(ioe.getMessage() + "close socket in protocole");
         }
@@ -3025,7 +3033,7 @@ public class ProtocoleJoueur implements Runnable
 	objNoeudParametreMoveStep.setAttribute("type", "MoveStep");
 	objNoeudParametreMoveStep.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().getMoveVisibility()));
 	
-	System.out.println("Move " + ancientJoueur.obtenirPartieCourante().getMoveVisibility());
+	//System.out.println("Move " + ancientJoueur.obtenirPartieCourante().getMoveVisibility());
 
 	// Ajouter les noeuds paramètres au noeud de commande dans
 	// le document de sortie
