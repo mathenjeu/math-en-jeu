@@ -11,64 +11,64 @@ public class ParametreIA {
 	
 	// Ce tableau contient les informations pour tous les objets
 	// utilisables
-	public ParametreIAObjet tParametresIAObjetUtilisable[];
+	public static ParametreIAObjet tParametresIAObjetUtilisable[];
 	
 	// Paramètres pour les pièces
 	// (Séparé car différent, pourrait être regroupé dans un 
 	// tableau d'objet à usage immédiat, on ne se sert
 	// pas des champs qui tiennent compte de la quantité)
-	public ParametreIAObjet objParametreIAPiece;
+	public static ParametreIAObjet objParametreIAPiece;
 	
 	// Paramètres pour les magasins, on ne se sert pas de tout
-	public ParametreIAObjet objParametreIAMagasin;
+	public static ParametreIAObjet objParametreIAMagasin;
 	
 	// Paramètres pour les minijeus, on ne se sert pas de tout
-	public ParametreIAObjet objParametreIAMinijeu;
+	public static ParametreIAObjet objParametreIAMinijeu;
 	
 	// Tableau pour le pourcentage des choix
-	public int tPourcentageChoix[][];
+	public static int tPourcentageChoix[][];
 	
 	// Tableau pour le pourcentage des réponses
-	public int tPourcentageReponse[][];
+	public static int tPourcentageReponse[][];
 	
 	// Tableau pour le pourcentage des choix lorsqu'on possède l'objet Livre
-	public int tPourcentageChoixObjetLivre[][];
+	public static int tPourcentageChoixObjetLivre[][];
 	
 	// Tableau pour le pourcentage des réponses lorsqu'on possède l'objet Livre
-	public int tPourcentageReponseObjetLivre[][];
+	public static int tPourcentageReponseObjetLivre[][];
 		
 	// Tableaux pour les temps de réflexion
-	public int tTempsReflexionBase[][];
-	public int tTempsReflexionAleatoire[][];
+	public static int tTempsReflexionBase[][];
+	public static int tTempsReflexionAleatoire[][];
 	
 	// Tableau pour le déplacement moyen
-	public double tDeplacementMoyen[];
+	public static double tDeplacementMoyen[];
 	
 	// Tableau pour le nombre de points maximum qu'un joueur
     // virtuel peut négliger lors du choix de la position finale
-    public int tNombrePointsMaximalChoixFinal[];
+    public static int tNombrePointsMaximalChoixFinal[];
 	
 	// Tableau pour les choix alternatif final
-	public int tPourcentageChoixAlternatifFinal[][];
+	public static int tPourcentageChoixAlternatifFinal[][];
 	
     // Ce tableau nous permettra de traiter les 4 cases autour d'une case
     // à l'intérieur d'une boucle.
-    public Point ptDxDy[];
+    public static Point ptDxDy[];
 	
     // Ce tableau contient des paramètres pour prioriser les
     // regroupement de pièces
-    public int ttPointsRegionPiece[][];
+    public static int ttPointsRegionPiece[][];
 	
 	// Ces tableaux permettent de générer les jetons pour les minijeus
-	public int tNbJetonsMinijeuBase[];
-	public int tNbJetonsMinijeuAleatoire[];
+	public static int tNbJetonsMinijeuBase[];
+	public static int tNbJetonsMinijeuAleatoire[];
 	
 	// Ces tableaux permettent de générer les jetons pour les magasins
-	public int tNbJetonsMagasinBase[];
-	public int tNbJetonsMagasinAleatoire[];
+	public static int tNbJetonsMagasinBase[];
+	public static int tNbJetonsMagasinAleatoire[];
 	
 	// Ce tableau contient les noms des joueurs virtuels
-	public String tBanqueNomsJoueurVirtuels[];	
+	public static String tBanqueNomsJoueurVirtuels[];	
 	
 	//-----------------------------
 	//           CONSTANTES
