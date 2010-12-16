@@ -14,7 +14,8 @@
     crystallLabel = "BOULE DE CRISTAL"
     stepsTxt = "Voici les étapes à suivre pour débuter une partie :"
     
-    bananaTxt = "  La banane te permet de jouer un tour à un de tes adversaires! Lorsque tu la lances à un adversaire, tu rends ce dernier momentanément moins habile. En effet, pendant les 90 secondes qui suive le lancé de la banane, ton adversaire aura des questions plus difficiles et 2 cases jaunes lui seront retirées!"
+    brainiacTxt = "Brainiac is an instantaneous object, meaning that you don't accumulate it in your inventory but use it as soon as you pick it up. It's kind of the opposite of the banana in the sense that it makes you momentarily better. For 60 seconds starting right when you pick it up the questions asked to you are easier and you get an extra yellow square. Brainiac cancels the banana."
+    bananaTxt = "  La banane te permet de jouer un tour à un de tes adversaires! Lorsque tu la lances à un adversaire, tu rends ce dernier momentanément moins habile. En effet, pendant les 90 secondes qui suive le lancé de la banane, ton adversaire aura des questions plus difficiles et 2 cases jaunes lui seront retirées. La banane annule aussi le brainiac de ton adversaire!"
     crystallTxt = "  Si tu te sens incapable de répondre à une question, utilise la boule de cristal. Tu recevras alors une question différente et plus facile!"
     bookTxt = "  Le livre élimine un mauvais choix de réponse lors d'une question à choix multiples."
     shopTxt = "Tu peux y échanger tes pièces contre des objets."
@@ -46,7 +47,8 @@
 			objetsListe = "Objets"
 			objetsTitre = "3. Les objets"
 			objetsTexte = "Les objets que tu peux acheter ou trouver sont:
-La banane --- La banane te permet de jouer un tour à un des joueurs ! 
+La banane --- La banane te permet de jouer un tour à un de tes adversaires!
+Brainiac --- Brainiac te rend temporairement plus intelligent. 
 Le livre --- Le livre élimine un mauvais choix de réponse lors d'une question à choix multiples. Le nombre de choix possible passe alors de quatre à trois.
 La boule de cristal --- Si tu te sens incapable de répondre à une question, utilise la boule de cristal. Tu recevras alors une question différente."
 						
