@@ -2,7 +2,6 @@ package ServeurJeu.ComposantesJeu.Joueurs;
 
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import java.awt.Point;
-import ServeurJeu.Configuration.GestionnaireConfiguration;
 
 // Cette classe contient tous les paramètres utilisés
 // par les joueurs virtuels
@@ -41,6 +40,12 @@ public class ParametreIA {
 	public static int tTempsReflexionBase[][];
 	public static int tTempsReflexionAleatoire[][];
 	
+	// Créer les tableaux pour les jetons minijeu
+	// Ces tableaux permettent de générer les jetons pour les minijeus
+	public final static int tNbJetonsMinijeuBase[];
+		
+	public final static int tNbJetonsMinijeuAleatoire[];
+	
 	// Tableau pour le déplacement moyen
 	public static double tDeplacementMoyen[];
 	
@@ -58,17 +63,13 @@ public class ParametreIA {
     // Ce tableau contient des paramètres pour prioriser les
     // regroupement de pièces
     public static int ttPointsRegionPiece[][];
-	
-	// Ces tableaux permettent de générer les jetons pour les minijeus
-	public static int tNbJetonsMinijeuBase[];
-	public static int tNbJetonsMinijeuAleatoire[];
-	
+		
 	// Ces tableaux permettent de générer les jetons pour les magasins
 	public static int tNbJetonsMagasinBase[];
 	public static int tNbJetonsMagasinAleatoire[];
 	
 	// Ce tableau contient les noms des joueurs virtuels
-	public static String tBanqueNomsJoueurVirtuels[];	
+	//public static String tBanqueNomsJoueurVirtuels[];	
 	
 	//-----------------------------
 	//           CONSTANTES
@@ -87,18 +88,19 @@ public class ParametreIA {
 	// Constante pour le nombre de niveau de difficulté disponible
 	public final static int NOMBRE_NIVEAU_DIFFICULTE = 4;
 	
+	// Constantes pour définir les niveaux de difficulté disponibles
+    public static final int DIFFICULTE_FACILE = 0;
+    public static final int DIFFICULTE_MOYEN = 1;
+    public static final int DIFFICULTE_DIFFICILE = 2;
+    public static final int DIFFICULTE_TRES_DIFFICILE = 3;
+    	
 	// Constante pour le nombre de type de réflexion
 	public final static int NOMBRE_TYPE_REFLEXION = 3;
 	
     // Déplacement maximum autorisé
     public final static int DEPLACEMENT_MAX = 6;
     
-	// Constantes pour définir les niveaux de difficulté disponibles
-    public static final int DIFFICULTE_FACILE = 0;
-    public static final int DIFFICULTE_MOYEN = 1;
-    public static final int DIFFICULTE_DIFFICILE = 2;
-    public static final int DIFFICULTE_TRES_DIFFICILE = 3;
-    
+	    
     // Constantes pour définir le type de réflexion
     public static final int TYPE_REFLEXION_COUP = 0;
     public static final int TYPE_REFLEXION_REPONSE = 1;
@@ -146,10 +148,11 @@ public class ParametreIA {
     // Ratio de questions à choix de réponse (pour objet Livre)
     public final static int RATIO_CHOIX_DE_REPONSE = 85;
     
-	public ParametreIA()
-	{
+	public ParametreIA(){}
+	
+	static {
 		// Aller chercher la référence vers le gestionnaire de configuration
-		GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+		//GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		
 		// Créer le tableau contenant l'info pour chaque objet utilisable
 		tParametresIAObjetUtilisable = new ParametreIAObjet[8];
@@ -394,6 +397,7 @@ public class ParametreIA {
 	    tNbJetonsMinijeuBase[DIFFICULTE_MOYEN] = 2;
 	    tNbJetonsMinijeuBase[DIFFICULTE_DIFFICILE] = 3;
 	    tNbJetonsMinijeuBase[DIFFICULTE_TRES_DIFFICILE] = 3;
+	    
 	    tNbJetonsMinijeuAleatoire = new int[NOMBRE_NIVEAU_DIFFICULTE];
 	    tNbJetonsMinijeuAleatoire[DIFFICULTE_FACILE] = 3;
 	    tNbJetonsMinijeuAleatoire[DIFFICULTE_MOYEN] = 3;
@@ -413,8 +417,8 @@ public class ParametreIA {
 	    tNbJetonsMagasinAleatoire[DIFFICULTE_TRES_DIFFICILE] = 6;
 	    
 	    // Initialiser les noms des joueurs virtuels        
-        String[] tNomsTemp = config.obtenirString("joueurs-virtuels.noms").split("/");
-	    tBanqueNomsJoueurVirtuels = tNomsTemp;
+       // String[] tNomsTemp = config.obtenirString("joueurs-virtuels.noms").split("/");
+	   // tBanqueNomsJoueurVirtuels = tNomsTemp;
 	    
 	}
 

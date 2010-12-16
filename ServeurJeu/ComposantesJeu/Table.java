@@ -55,10 +55,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     // Déclaration d'une référence vers le contrôleur de jeu
     private ControleurJeu objControleurJeu;
     // Déclaration d'une référence vers le gestionnaire de bases de données
-    private GestionnaireBD objGestionnaireBD;
+    private final GestionnaireBD objGestionnaireBD;
     // Déclaration d'une référence vers la salle parente dans laquelle se
     // trouve cette table
-    private Salle objSalle;
+    private final Salle objSalle;
     // Cette variable va contenir le numéro de la table
     private final int intNoTable;
     // Déclaration d'une constante qui définit le nombre maximal de joueurs
@@ -203,6 +203,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         ///System.out.println("We test Colors in the table  : " );
         this.setColors();
         this.setIdPersos();
+        
         try {
             this.gameFactory = (GenerateurPartie)Class.forName("ServeurJeu.ComposantesJeu.GenerateurPartie" + gameType).newInstance();
         } catch (InstantiationException e) {
@@ -535,12 +536,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
      * noms de joueurs virtuels différents
      */
     private String[] obtenirNomsJoueursVirtuels(int intNombreJoueurs) {
-        // Obtenir une référence vers l'objet ParametreIA contenant
-        // la banque de noms
-        ParametreIA objParametreIA = objControleurJeu.obtenirParametreIA();
-
+        
+    	// Initialiser les noms des joueurs virtuels        
+        String[] tNomsTemp = GestionnaireConfiguration.obtenirInstance().obtenirString("joueurs-virtuels.noms").split("/");
+	        	
         // Obtenir le nombre de noms dans la banque
-        int intQuantiteBanque = objParametreIA.tBanqueNomsJoueurVirtuels.length;
+        int intQuantiteBanque = tNomsTemp.length;
 
         // Déclaration d'un tableau pour mélanger les indices de noms
         int tIndexNom[] = new int[intQuantiteBanque];
@@ -573,7 +574,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
         // Remplir le tableau avec les valeurs trouvées
         for (int i = 0; i < intNombreJoueurs; i++) {
-            tRetour[i] = new String(objParametreIA.tBanqueNomsJoueurVirtuels[(i + intDepart) % intQuantiteBanque]);
+            tRetour[i] = new String(tNomsTemp[(i + intDepart) % intQuantiteBanque]);
         }
 
         return tRetour;
@@ -910,17 +911,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
             // wipeout players from the table
             if (!lstJoueurs.isEmpty()) {
-                /*
-                int xx;
-                for(int i =0; i < 1000000000; i++)
-                xx = i;
-                for(int i =0; i < 1000000000; i++)
-                xx = i;
-                for(int i =0; i < 1000000000; i++)
-                xx = i;
+               /*
                 synchronized (lstJoueurs)
                 {
-                // Parcours des joueurs pour trouver le meilleur pointage
+               
                 Iterator<JoueurHumain> iteratorJoueursHumains = lstJoueurs.values().iterator();
                 while (iteratorJoueursHumains.hasNext())
                 {
@@ -1687,38 +1681,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         return (JoueurVirtuel)null;
     }
 
-    /*
-     * method to get player color by his name
-     * we don't check if we really have this player(for Virtuals)
-     * @param username
-     * @return Player clothes color
-
-    public String getPlayerColor(String username)
-    {
-    String color;
-    try{
-    Set<Map.Entry<String, JoueurHumain>> nomsJoueursHumains = lstJoueurs.entrySet();
-    Iterator<Entry<String, JoueurHumain>> objIterateurListeJoueurs = nomsJoueursHumains.iterator();
-    while(objIterateurListeJoueurs.hasNext() == true)
-    {
-    JoueurHumain j = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
-    ///System.out.println("username " + username + " compare " + j.obtenirNomUtilisateur());
-    if(username.equals(j.obtenirNomUtilisateur())) return j.obtenirPartieCourante().getClothesColor();
-    }
-
-    //otherwise we have a virtual player and his color
-    color = this.obtenirJoueurVirtuelParSonNom(username).getClothesColor();
-    // if we have an error java.lang.NullPointerException
-    }catch(NullPointerException e ){
-    //objLogger.error( e.getMessage() );
-    e.printStackTrace();
-    }
-    finally{
-    color = getOneColor();
-    }
-    return color;
-
-    } */
+    
     public Salle getObjSalle() {
         return objSalle;
     }

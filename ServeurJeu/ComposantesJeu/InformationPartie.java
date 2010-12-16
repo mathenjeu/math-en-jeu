@@ -30,14 +30,14 @@ import java.util.LinkedList;
 public class InformationPartie
 {
     // Déclaration d'une référence vers le gestionnaire de bases de données
-    private GestionnaireBD objGestionnaireBD;
+    private final GestionnaireBD objGestionnaireBD;
     // Déclaration d'une référence vers le gestionnaire d'evenements
-    private GestionnaireEvenements objGestionnaireEv;
+    private final GestionnaireEvenements objGestionnaireEv;
     // Déclaration d'une référence vers un joueur humain correspondant à cet
     // objet d'information de partie
-    private JoueurHumain objJoueurHumain;
+    private final JoueurHumain objJoueurHumain;
     // Déclaration d'une référence vers la table courante
-    private Table objTable;
+    private final Table objTable;
     // Déclaration d'une variable qui va contenir le numéro Id du personnage
     private int intIdPersonnage;
     // Déclaration d'une variable qui va contenir le pointage de la
@@ -1088,16 +1088,14 @@ public class InformationPartie
      * son id
      */
     public ObjetUtilisable obtenirObjetUtilisable(int intObjetId) {
-        Set<Map.Entry<Integer, ObjetUtilisable>> lstEnsembleObjets = lstObjetsUtilisablesRamasses.entrySet();
-        Iterator<Entry<Integer, ObjetUtilisable>> objIterateurListeObjets = lstEnsembleObjets.iterator();
-        while (objIterateurListeObjets.hasNext() == true) {
-            Objet objObjet = (Objet)(((Map.Entry<Integer, ObjetUtilisable>)(objIterateurListeObjets.next())).getValue());
-            if (objObjet instanceof ObjetUtilisable) {
-                if (((ObjetUtilisable)objObjet).obtenirId() == intObjetId) {
-                    return (ObjetUtilisable)objObjet;
-                }
+           	
+    	for(ObjetUtilisable objObjet:lstObjetsUtilisablesRamasses.values())
+    	{
+    		if (objObjet instanceof ObjetUtilisable && objObjet.obtenirId() == intObjetId)
+    		{
+    		   return objObjet;
             }
-        }
+    	}
         return null;
     }
 
@@ -1106,20 +1104,14 @@ public class InformationPartie
      * de valider l'information envoyé par le client lorsqu'il utiliser l'objet
      */
     public boolean joueurPossedeObjet(int id) {
-        // Préparation pour parcourir la liste d'objets
-        Set<Map.Entry<Integer, ObjetUtilisable>> lstEnsembleObjets = lstObjetsUtilisablesRamasses.entrySet();
-        Iterator<Entry<Integer, ObjetUtilisable>> objIterateurListeObjets = lstEnsembleObjets.iterator();
-
-        // Parcours du TreeMap
-        while (objIterateurListeObjets.hasNext() == true) {
-            Objet objObjet = (Objet)(((Map.Entry<Integer, ObjetUtilisable>)(objIterateurListeObjets.next())).getValue());
-            if (objObjet instanceof ObjetUtilisable) {
-                if (((ObjetUtilisable)objObjet).obtenirId() == id) {
-                    return true;
-                }
+    	
+    	for(ObjetUtilisable objObjet:lstObjetsUtilisablesRamasses.values())
+    	{
+    		if (objObjet instanceof ObjetUtilisable && objObjet.obtenirId() == id)
+    		{
+    		   return true;
             }
-        }
-
+    	}
         return false;
     }
 
@@ -1134,12 +1126,6 @@ public class InformationPartie
     public Objet obtenirObjetCaseCourante() {
         // L'objet à retourné
         Objet objObjet = null;
-
-        // Aller chercher le plateau de jeu
-        //Case[][] objPlateauJeu = objTable.obtenirPlateauJeuCourant();
-
-        // Aller chercher la case où le joueur se trouve
-        //Case objCaseJoueur = objPlateauJeu[objPositionJoueur.x][objPositionJoueur.y];
 
         Case objCaseJoueur = objTable.getCase(objPositionJoueur.x, objPositionJoueur.y);
 

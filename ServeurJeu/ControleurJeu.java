@@ -83,10 +83,8 @@ public class ControleurJeu {
     //private Espion objEspion;
    
     // Déclaration d'un objet random pour générer des nombres aléatoires
-    private final Random objRandom;
-    // Déclaration d'un objet pour conserver tous les paramètres
-    // pour les joueurs virtuels
-    private ParametreIA objParametreIA;
+    private static final Random objRandom = new Random();
+   
     // Déclaration d'une map qui permet d'obtenir une liste de tous les
     // keywords disponible: keyword_id --> [language_id --> name]
     private TreeMap<Integer, TreeMap<Integer, String>> keywordsMap;
@@ -117,7 +115,7 @@ public class ControleurJeu {
         objLogger.info(GestionnaireMessages.message("controleur_jeu.serveur_demarre"));
 
         // Préparer l'objet pour créer les nombres aléatoires
-        objRandom = new Random();
+        //objRandom = new Random();
 
         // Créer une liste des joueurs
         lstJoueursConnectes = new HashMap<String, JoueurHumain>();
@@ -133,8 +131,8 @@ public class ControleurJeu {
     public void demarrer() {
     	
     	//this.isOn = true;
-    	
     	//System.out.println("Le serveur demarre 1 ...");
+    	
     	// Créer une liste des salles
         lstSalles = new HashMap<Integer, Salle>();
     	
@@ -551,7 +549,7 @@ public class ControleurJeu {
     public boolean salleExiste(int idRoom) {
         // Retourner si la salle existe déjà ou non
         synchronized (lstSalles) {
-            return lstSalles.containsKey(idRoom);//objGestionnaireBD.getFullRoomName(nomSalle));
+            return lstSalles.containsKey(idRoom);
         }
     }
 
@@ -848,17 +846,7 @@ public class ControleurJeu {
     public int genererNbAleatoire(int max) {
         return objRandom.nextInt(max);
     }
-
-  public ParametreIA obtenirParametreIA() {
-        if (objParametreIA == null) {
-            // Créer une instance de la classe regroupant tous les paramètres
-            // des joueurs virtuels
-            objParametreIA = new ParametreIA();
-        }
-
-        return objParametreIA;
-    }
-
+ 
     /**
      * Find the language_id corresponding to the 2-letter language string.
      * @param language the 2-letter language to look for ("fr","en")
@@ -877,6 +865,7 @@ public class ControleurJeu {
         return defaultLanguageId;
 
     }
+    
     public String getLanguageShortName(int language_id) {
         String shortName = languagesMap.get(0).get(language_id);
         if (shortName != null)
