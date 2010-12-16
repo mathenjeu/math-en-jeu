@@ -62,7 +62,7 @@ class Personnage
 	private var idClip:Number;           // number used to identify the movie used for perso - from 1 to 12
 	private var orient:String;
 	
-	private var BRAINIAC_TIME:Number = 60;
+	private static var BRAINIAC_TIME:Number = 60;    //  constant for the time that brainiac is active
 	
 	function getBananaState():Boolean
 	{
@@ -1151,7 +1151,7 @@ class Personnage
 		   
 	   }
 	   
-	   this.brainiacRestedTime += this.BRAINIAC_TIME;
+	   this.brainiacRestedTime += BRAINIAC_TIME;
 	   
 	   _level0.loader.contentHolder.planche.setRepostCases(true);
 	

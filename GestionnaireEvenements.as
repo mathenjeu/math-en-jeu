@@ -80,6 +80,8 @@ class GestionnaireEvenements
 	private var ourPerso:Personnage;  // reference to our personnage on the table(planche) .. I am not sure that is very useful...
 	private var allowedTypesMap:Array;
 	
+	private static var BANANA_TIME:Number = 90;    //  constant for the time that banana is active
+	
 	function getMoveSight():Number
 	{
 		return this.moveVisibility
@@ -3452,8 +3454,7 @@ class GestionnaireEvenements
 	// after the time finished it must disapear
 	function setBrainiacTimer(playerUnder:String)
 	{
-		  //_level0.loader.contentHolder.planche.setRepostCases(true);
-		   
+		  		   
 		   //first on put on the sprite the box for the timer if is our perso
 		
 		   _level0.loader.contentHolder.attachMovie("brainBox", "brainBox", 6);//_level0.loader.contentHolder.getNextHigesthDepth());
@@ -3553,15 +3554,14 @@ class GestionnaireEvenements
         formatTimer.align = "Center";
         _level0.loader.contentHolder.bananaBox.bananaTime.setNewTextFormat(formatTimer);
 		
-		perso.addBananaTime(90);
+		perso.addBananaTime(BANANA_TIME);
 		
 		if(_global.intervalIdBanana != null) {
 		
             // trace("clearInterval************************************    " + _global.restedTimeBanana );
 			 clearInterval(_global.intervalIdBanana);
         }
-
-		//_global.intervalIdBanana:Number;
+		
 	    _global.intervalIdBanana = setInterval(bananaTimerSet, 1000, perso);	
 	   
 	   function bananaTimerSet(playerUnder){
@@ -3611,6 +3611,7 @@ class GestionnaireEvenements
 	
 	function funcToCallMessage(playerThat:String)
 	{
+		// we put the message only if the game is not in the way to finish
 		if(_level0.loader.contentHolder.horlogeNum > 7)
 		{
 			var twMove:Tween;
