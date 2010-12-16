@@ -1,0 +1,28 @@
+
+<?xml version="1.0" encoding="UTF-8"?> 
+<Texte 
+
+	main_menu = ""
+	  bienvenue = "Bienvenue dans Math en jeu!"
+    btnPlay = "Jouer" 
+    btnQuit = "Quitter"
+    btnProfile = "Mon Profil"
+    playMaze = "Entrez dans le labyrinthe et soyez le premier a vous échapper..."
+    teachBtn =   "Ma classe"
+    linkProf1 = "Est vous un professeur?"
+    linkProf2 = "Cliquez ici..."
+    linkProf3 = "pour entrer dans le Salon des Professeurs."
+    erreurRole = "Accès interdit.
+Cette section est réservée aux professeurs.
+Si vous êtes un professeur et que vous voulez accéder à cette section réservée, contactez-nous."
+    erreurContact = ""
+    textReturn = "Pour retourner à Math en jeu, cliquez ici"
+          
+  chargement_beta = ""	
+
+		version = "Version 0.4 Beta"
+		boutonEntrer = "Entrer"
+		barLabel = "Chargement en cours..."
+  
+>
+</Texte> 
