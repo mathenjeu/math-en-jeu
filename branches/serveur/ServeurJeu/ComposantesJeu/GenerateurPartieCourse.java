@@ -396,8 +396,8 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 		
 		// if game type = tournament (plateau semilineaire)
 		// add the start and end points 
-		       			
-		for (int i = 0; i < reglesPartie.getNbTracks(); i++)
+		int reglesSizeTrack =  reglesPartie.getNbTracks();     			
+		for (int i = 0; i < reglesSizeTrack; i++)
 		{
 
 			objPoint = new Point(0,i);
@@ -406,7 +406,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 			lstPointsCaseLibre.add(objPoint);
 		}
 		
-		for (int i = 0; i < reglesPartie.getNbTracks(); i++)
+		for (int i = 0; i < reglesSizeTrack; i++)
 		{
 				
 			objPoint = new Point(intNbLines - 1,intNbColumns - i - 1);

@@ -2,6 +2,8 @@ package ServeurJeu.Communications;
 
 import java.util.LinkedList;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author Jean-François Brind'Amour
  */
@@ -21,6 +23,8 @@ public class VerificateurConnexions implements Runnable
 	// Déclaration d'une liste de ProtocoleJoueur pour les clients qui 
 	// ont répondu au ping
 	private LinkedList<ProtocoleJoueur> lstClientsPresents;
+	
+	private static final Logger objLogger = Logger.getLogger(VerificateurConnexions.class);
 	
 	/**
 	 * Constructeur de la classe VerificateurConnexions qui permet de garder une 
@@ -130,7 +134,10 @@ public class VerificateurConnexions implements Runnable
 				// laisser un moment de répit au CPU
 				Thread.sleep(60 * 1000);
 			}
-			catch (InterruptedException ie) {}
+			catch (InterruptedException ie)
+			{
+				objLogger.error(" Error to set pause in VerificateurConnexions");
+			}
 		}
 	}
 	
