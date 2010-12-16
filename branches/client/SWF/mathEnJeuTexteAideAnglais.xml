@@ -14,7 +14,8 @@
     crystallLabel = "CRYSTAL BALL"
     stepsTxt = "Here are the steps to follow in order to start a game:"
     
-    bananaTxt = "  The banana allows you to play a wicked trick on another player! When you throw it to an opponent, you make this opponent momentarily less good. Indeed, for the next 90 seconds after a banana toss, the questions asked to your opponent will be more difficult and (s)he will loose 2 yellow squares!"
+    brainiacTxt = "Brainiac is an instantaneous object, meaning that you don't accumulate it in your inventory but use it as soon as you pick it up. It's kind of the opposite of the banana in the sense that it makes you momentarily better. For 60 seconds starting right when you pick it up the questions asked to you are easier and you get an extra yellow square. Brainiac cancels the banana."
+    bananaTxt = "  The banana allows you to play a wicked trick on another player! When you throw it to an opponent, you make this opponent momentarily less good. Indeed, for the next 90 seconds after a banana toss, the questions asked to your opponent will be more difficult and (s)he will loose 2 yellow squares. The banana also cancels your opponent's brainiac!"
     bookTxt = "  The book eliminates an answer choice for you on a multiple choice question."
     crystallTxt = "  If you feel unable to answer a question, you may use the crystal ball. The computer will then give you a new and easier question."
     shopTxt = "  It is here that you can spend your coins!"
@@ -45,6 +46,7 @@
 			objetsTitre = "3. The objects"
 			objetsTexte = "The objects you can buy or find are: 
 The banana --- The banana allows you to play a wicked trick on another player!
+The Brainiac --- Brainiac makes you temporarily more intelligent.
 The book --- The book eliminates an answer choice for you on a multiple choice question. The number of choices then decreases from four to three.     
 The crystal ball --- If you feel unable to answer a question, you may use the crystal ball. The computer will then give you a new question."
 						
