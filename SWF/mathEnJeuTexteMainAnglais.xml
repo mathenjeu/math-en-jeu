@@ -1,0 +1,30 @@
+
+<?xml version="1.0" encoding="UTF-8"?> 
+<Texte 
+	  
+  main_menu = ""
+	  bienvenue = "Welcome to MathAmaze "
+    btnPlay = "Play"
+    btnQuit = "Quit"
+    btnProfile = "My Profile"
+    teachBtn = "My class"
+    playMaze = "Enter the maze
+and be the first 
+to escape!"
+    linkProf1 = "Are you a teacher?"
+    linkProf2 = "Click here..."
+    linkProf3 = "to enter the Teacher's Lounge."
+    erreurRole = "Access denied!
+This section is for teachers only.
+If you are a theacher and you need to use this section contact us."
+    erreurContact = ""
+    textReturn = "To return to the main menu click on 'OK'"
+ 
+	
+	chargement_beta = ""	
+
+		version = "Version 0.4 Beta"
+		boutonEntrer = "Enter"
+		barLabel = "Loading ..."
+>
+</Texte>  

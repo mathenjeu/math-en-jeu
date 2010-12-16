@@ -1,4 +1,4 @@
-﻿
+
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
 	Messagerie = ""
@@ -29,49 +29,8 @@
 	  controlMessageMusique = "Turn on/off music."
 	  controlMessageSound = "Turn on/off sound effects."
 	  
-  main_menu = ""
-	  bienvenue = "Welcome to MathAmaze "
-    btnPlay = "Play"
-    btnQuit = "Quit"
-    btnProfile = "My Profile"
-    teachBtn = "My class"
-    playMaze = "Enter the maze
-and be the first 
-to escape!"
-    linkProf1 = "Are you a teacher?"
-    linkProf2 = "Click here..."
-    linkProf3 = "to enter the Teacher's Lounge."
-    erreurRole = "Access denied!
-This section is for teachers only.
-If you are a theacher and you need to use this section contact us."
-    erreurContact = ""
-    textReturn = "To return to the main menu click on 'OK'"
-    
-  page_instructions = ""
-    beginPage = "Start a game"
-    rulesPage = "Rules"
-    objectsPage = "Objects"
-    backBtnTxt = "Back"
-    bookLabel = "BOOK"
-    coinLabel = "COIN"
-    shopLabel = "SHOP"
-    bananaLabel = "BANANA"
-    crystallLabel = "CRYSTAL BALL"
-    stepsTxt = "Here are the steps to follow in order to start a game:"
-    
-    bananaTxt = "  The banana allows you to play a wicked trick on another player! When you throw it to an opponent, you make this opponent momentarily less good. Indeed, for the next 90 seconds after a banana toss, the questions asked to your opponent will be more difficult and (s)he will loose 2 yellow squares!"
-    bookTxt = "  The book eliminates an answer choice for you on a multiple choice question."
-    crystalTxt = "  If you feel unable to answer a question, you may use the crystal ball. The computer will then give you a new and easier question."
-    
-    shopTxt = "  It is here that you can spend your coins!"
-    coinTxt = "  The coins you pick up on your way allow you to buy objects."
-	
-	chargement_beta_local = ""	
-
-		version = "Version 0.4 Beta"
-		boutonEntrer = "Enter"
-		barLabel = "Loading ..."
-
+ 
+  
   moduleProf = ""
     teachersCornerLoadingLabel = "Retrieving your rooms..." 
 	teachersCornerTitleLabel = "Teacher's Corner"
@@ -330,72 +289,5 @@ For the next 90 seconds, the questions you'll be asked will be more difficult. A
 
 			deconnecte = "disconnected"
 
-
-
-
-
-		menuAide = "Help menu"
-		
-			aideQuitter = "Close"
-			nomCasesSpeciales  = "  Store              Coin             '?' Cell"
-			nomCasesSpeciales2 = "                                      '?' Cell"
-			nomObjets 		   = " Banana               Book            Crystal ball"
-			salleListe = "Before playing"
-			salleTitre = "1. Setting the game"
-			salleTexte = "•  In the main menu choose Play button.
-•  Choose a room to play in. For example, you can choose the Newton room. Click on the room’s name and then click on Continue.
-•  If there is a table open and you want to play with these people, click on this table. Then click on Continue. Otherwise, click on “Create a new table” and choose how many minutes you want to play.
-•  By clicking on the left or on the right-pointing arrow, choose you character. Click on Continue.
-•  The level you choose will not affect the difficulty of your questions. It modifies the capacity of the virtual opponents to answer the quesions. Click on the level you want and then click on Continue."
-		
-			elementsJeuListe = "Game"
-			elementsJeuTitre = "2. Elements of the game"
-			elementsJeuTexte = "Basic rules:
-			
-•  On the game board, you character appears bigger than the other player’s.
-•  You character can move in four directions. To the front, to the back, to the left, and to the right the same line. The accessible cells appear in yellow.
-•  Your character can move between one and six cells at once. The bigger the displacement, the harder the question, relative to the academic level on your registration.
-•  The number of points a question is worth depends on the length of the displacement. A one cell displacement is worth three point, a two cells displacement is worth five points, and so on.
-•  The cells with a question mark bring you to a game if the question is answered correctly. The points won in that game will be added to your score.
-•  The winner is the player with the most points."
-			
-			objetsListe = "Objects"
-			objetsTitre = "3. The objects"
-			objetsTexte = "The objects you can buy or find are:
-
-The banana
-•The banana allows you to play a wicked trick on another player! 
-
-The book
-•The book eliminates an answer choice for you on a multiple choice question. The number of choices then decreases from four to three.
-     
-The crystal ball
-•If you feel unable to answer a question, you may use the crystal ball. The computer will then give you a new question."
-						
-			casesSpecialesListe = "   Special cells"
-			casesSpecialesTitre = "4. The special cells"
-			casesSpecialesTexte = "There are 3 special cells in the game:
-   
-The coins
-•The coins you pick up on your way allow you to buy objects (they cost one coin each).
- 
-The shops
-•It is here that you can spend your coins!
-
-Cell ?
-•Something special happens when you step on this cell..."
-			
-			optionsListe = "Options"
-			optionsTitre = "5. The options"
-			optionsTexte = "You can change different settings of the game:
-
-Activate or deactivate sound effects...
-
-Activate or deactivate music...
-
-Move the screen in the direction of you choice to explore the board...
-
-Zoom in or zoom out from the board..."
-  
 >
 </Texte>  
