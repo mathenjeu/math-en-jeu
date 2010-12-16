@@ -26,7 +26,7 @@
 			aideQuitter = "Close"
 			nomCasesSpeciales  = "  Store            Coin            '?' Cell"
 			nomCasesSpeciales2 = "                                      '?' Cell"
-			nomObjets 		   = " Banana            Book           Crystal ball"
+			nomObjets 		   = " Banana            Book           Crystal ball        Brainiac"
 			salleListe = "Before playing"
 			salleTitre = "1. Setting the game"
 			salleTexte = "•  In the main menu choose Play button.
