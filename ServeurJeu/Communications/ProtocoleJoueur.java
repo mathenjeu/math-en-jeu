@@ -123,12 +123,10 @@ public class ProtocoleJoueur implements Runnable
         objLogger.info(GestionnaireMessages.message("protocole.connexion").replace("$$CLIENT$$", socketJoueur.getInetAddress().toString()));
 
         try {
-            // etant donné que ce sont seulement de petits messages qui sont
-            // envoyés entre le client et le serveur, alors il n'est pas
-            // nécessaire d'attendre un délai supplémentaire -- this is false!!!
-        	// for games or gui interactive application it must be set to true to
+            // for games or gui interactive application it must be set to true to
         	// sent all the packets as soon as possible without buffering
             objSocketJoueur.setTcpNoDelay(true);
+            
         } catch (SocketException se) {
             objLogger.error(GestionnaireMessages.message("protocole.canal_ferme"));
 
@@ -148,7 +146,8 @@ public class ProtocoleJoueur implements Runnable
         try {
         	
         	
-        	objSocketJoueur.setSoLinger(true, 1000);
+        	objSocketJoueur.setSoLinger(true, 3000);
+        	objSocketJoueur.setKeepAlive(true);
         	
         	// Créer le canal qui permet de recevoir des données sur le canal
             // de communication entre le client et le serveur
@@ -164,8 +163,15 @@ public class ProtocoleJoueur implements Runnable
             // traiter tant que le client n'a pas décidé de quitter (ou que la
             // connexion ne s'est pas déconnectée)
             while (bolStopThread == false) {
+            	
+                try{
+                      Thread.sleep(100);
+                }catch(InterruptedException ie )
+                {
+                	objLogger.error("Error to did thead to sleep..." + ie.getMessage());
+                	Thread.currentThread().interrupt();
 
-                //Thread.sleep(50);
+                }
 
                 // Déclaration d'une variable qui va servir de marqueur
                 // pour savoir où on en est rendu dans la lecture

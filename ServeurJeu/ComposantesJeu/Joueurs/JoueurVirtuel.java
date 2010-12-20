@@ -1920,7 +1920,8 @@ public class JoueurVirtuel extends Joueur implements Runnable{
     	}
     	catch(InterruptedException e)
     	{ 
-    		objLogger.error("errror thread Virtual -  pause");
+    		objLogger.error("Error to did thead Virtual to sleep..." + e.getMessage());
+        	Thread.currentThread().interrupt();
     	}
 
     }

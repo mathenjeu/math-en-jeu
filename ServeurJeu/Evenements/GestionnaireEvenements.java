@@ -2,6 +2,10 @@ package ServeurJeu.Evenements;
 
 import java.util.LinkedList;
 
+import org.apache.log4j.Logger;
+
+import ServeurJeu.Communications.VerificateurConnexions;
+
 /**
  * @author Jean-François Brind'Amour
  * 
@@ -15,6 +19,7 @@ public class GestionnaireEvenements implements Runnable
 	// Cette variable permet de savoir s'il faut arrêter le thread ou non
 	private boolean bolStopThread = false;
 	
+	private static final Logger objLogger = Logger.getLogger(GestionnaireEvenements.class);
 	/**
 	 * Constructeur de la classe GestionnaireEvenements qui permet d'initialiser
 	 * la liste des événements
@@ -46,9 +51,7 @@ public class GestionnaireEvenements implements Runnable
 		        
 		        // Envoyer l'événement à tous les joueurs qui doivent le recevoir
 		        evenementPrioritaire.envoyerEvenement();
-		        
-		        // Enlever l'événement de la liste d'événements à traiter
-		        //lstEvenements.remove(evenementPrioritaire);                   // we use poll
+		        		        
 		    }
 		    
 		    
@@ -56,11 +59,12 @@ public class GestionnaireEvenements implements Runnable
 			{
 				// Stopper le thread du gestionnaire d'événements pour
 				// laisser un moment de répit au CPU
-				Thread.sleep(10);
+				Thread.sleep(50);
 			}
 			catch (InterruptedException ie) 
-			{
-				System.out.println("Error GestEvenements - " + ie.getStackTrace());
+			{				
+				objLogger.error(" Error - sleep is canceled in GestEven" + ie.getMessage());
+				Thread.currentThread().interrupt();
 			}
 		}
 	}

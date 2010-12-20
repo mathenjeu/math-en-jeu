@@ -127,10 +127,10 @@ public class GestionnaireCommunication
 				// Démarrer le thread du joueur courant
 				threadJoueur.start();
 				
-				// Ajouter le nouveau ProtocoleJoueur dans la liste (ici on n'a 
-				// pas besoin de synchroniser la liste puisque le vecteur fait 
-				// déjà cette synchronisation)
-				lstProtocoleJoueur.add( objJoueur );
+				// Ajouter le nouveau ProtocoleJoueur dans la liste 
+				synchronized(lstProtocoleJoueur){
+				  lstProtocoleJoueur.add( objJoueur );
+				}
 				miseAJourInfo();
 				
 			}
@@ -142,6 +142,8 @@ public class GestionnaireCommunication
 				objLogger.error(GestionnaireMessages.message("communication.serveur_arrete"));
 				boolStopThread = true;
 			}
+			//Thread.yield( );
+
 		}
 	}
 	
@@ -168,8 +170,10 @@ public class GestionnaireCommunication
 		// Enlever le protocole joueur de la liste des ProtocoleJoueur
 		try
 		{
-			protocole.arreterProtocoleJoueur();
-			lstProtocoleJoueur.remove(protocole);
+			synchronized(lstProtocoleJoueur){
+			   protocole.arreterProtocoleJoueur();
+			   lstProtocoleJoueur.remove(protocole);
+			}
 			miseAJourInfo();
 			
 		}
@@ -188,7 +192,7 @@ public class GestionnaireCommunication
 	 */
 	public LinkedList<ProtocoleJoueur> obtenirListeProtocoleJoueur()
 	{
-		return lstProtocoleJoueur;
+		return lstProtocoleJoueur;   /// synchro ????
 	}
 	
 	public void miseAJourInfo()
@@ -218,13 +222,15 @@ public class GestionnaireCommunication
 	 */
 	protected void finalize()
 	{
-		// Vider la liste des protocoles de joueurs
-		for(ProtocoleJoueur protocole: this.lstProtocoleJoueur)
-        {
-			protocole.arreterProtocoleJoueur();
-        }
-		
-		lstProtocoleJoueur.clear();
+		synchronized(lstProtocoleJoueur){
+			// Vider la liste des protocoles de joueurs
+			for(ProtocoleJoueur protocole: this.lstProtocoleJoueur)
+			{
+				protocole.arreterProtocoleJoueur();
+			}
+
+			lstProtocoleJoueur.clear();
+		}
 		
 		
 		try
