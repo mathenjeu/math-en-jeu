@@ -3179,7 +3179,7 @@ class GestionnaireEvenements
 					this.tabPodiumOrdonneID[k].idessin = this.listeDesPersonnages[i].idessin;
 					this.tabPodiumOrdonneID[k].clocolor = this.listeDesPersonnages[i].clocolor;
 					this.tabPodiumOrdonneID[k].role = this.listeDesPersonnages[i].role;
-					trace(" OPPSS Patrie terminee : " + this.listeDesPersonnages[i].role);
+					//trace(" OPPSS Patrie terminee : " + this.listeDesPersonnages[i].role);
 				}
 			}	
 		} // end find the picture
@@ -3494,7 +3494,7 @@ class GestionnaireEvenements
 		_global.intervalIdBrain = setInterval(brainTimerSet, 1000, playerUnder);	// sert pour attendre la jusqu'a la fin de action de Braniac
 	   
 	    function brainTimerSet(playerUnder:String){
-	       
+	      
 		   var timeX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).getBrainiacTime(); 
 		   _level0.loader.contentHolder.brainBox.brainiacTime.text = timeX;
 		   
@@ -3507,7 +3507,9 @@ class GestionnaireEvenements
 			  _level0.loader.contentHolder.brainBox.removeMovieClip();
 		      clearInterval(_global.intervalIdBrain);
 					
-		   }		   		
+		   }
+		   
+		   
 	   } // end function brainTimerSet
 	   
 	    
@@ -3556,21 +3558,34 @@ class GestionnaireEvenements
 		
 		perso.addBananaTime(BANANA_TIME);
 		
-		if(_global.intervalIdBanana != null) {
+		if(_global.intervalIdBanana != null ) {
 		
             // trace("clearInterval************************************    " + _global.restedTimeBanana );
 			 clearInterval(_global.intervalIdBanana);
         }
 		
-	    _global.intervalIdBanana = setInterval(bananaTimerSet, 1000, perso);	
+	    _global.intervalIdBanana = setInterval(bananaTimerSet, 1000, perso);
+		
+		// to not see the timer if the game is ended
+		if(_level0.loader.contentHolder.objGestionnaireEvenements.endGame)
+		{
+			 _level0.loader.contentHolder.bananaBox.removeMovieClip();
+			 clearInterval(_global.intervalIdBanana);
+		}
+		
 	   
 	   function bananaTimerSet(playerUnder){
 	       
-		  playerUnder.decreaseBananaTime(); 
 		   
+		  playerUnder.decreaseBananaTime(); 
+		  
+		   if(_level0.loader.contentHolder.objGestionnaireEvenements.endGame)
+		   {
+			   _level0.loader.contentHolder.planche.obtenirPerso().setBananaTime(0);
+		   }
 		   var time:Number = playerUnder.getBananaTime(); 
 		   _level0.loader.contentHolder.bananaBox.bananaTime.text = time;
-		   			
+		  		   
 		   // to remove the timer box
 		   if(time < 1)
 		   {  
@@ -3593,7 +3608,12 @@ class GestionnaireEvenements
     function waitBanana(playerUnder:String):Void
     {
         _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).slippingBanana();
-		setBananaTimer(playerUnder);
+		
+		// to not put it if game is ended
+		if(!_level0.loader.contentHolder.objGestionnaireEvenements.endGame)
+		{
+		   setBananaTimer(playerUnder);
+		}
 	    clearInterval(_global.timerIntervalBanana);
 						
     }
