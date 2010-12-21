@@ -146,8 +146,8 @@ public class ProtocoleJoueur implements Runnable
         try {
         	
         	
-        	objSocketJoueur.setSoLinger(true, 3000);
-        	objSocketJoueur.setKeepAlive(true);
+        	objSocketJoueur.setSoLinger(true, 500);
+        	//objSocketJoueur.setKeepAlive(true);
         	
         	// Créer le canal qui permet de recevoir des données sur le canal
             // de communication entre le client et le serveur
@@ -164,14 +164,14 @@ public class ProtocoleJoueur implements Runnable
             // connexion ne s'est pas déconnectée)
             while (bolStopThread == false) {
             	
+            	/*
                 try{
-                      Thread.sleep(100);
+                      Thread.sleep(10);
                 }catch(InterruptedException ie )
                 {
-                	objLogger.error("Error to did thead to sleep..." + ie.getMessage());
+                	objLogger.error("Error - thread is interrupted ..." + ie.getMessage());
                 	Thread.currentThread().interrupt();
-
-                }
+                }*/
 
                 // Déclaration d'une variable qui va servir de marqueur
                 // pour savoir où on en est rendu dans la lecture
@@ -255,7 +255,7 @@ public class ProtocoleJoueur implements Runnable
                     // recevra le EOM
                     strMessageRecu.append(new String(byttBuffer, intMarqueur, intBytesLus - intMarqueur));
                 }
-
+                Thread.yield( );
 
             }
         } catch (IOException ioe) {
@@ -2671,8 +2671,8 @@ public class ProtocoleJoueur implements Runnable
             objLogger.error(ioe.getMessage() + "close socket in protocole");
         }
         
-        Thread.currentThread().interrupt();
-
+        this.bolStopThread = true;
+        
     }
     
     public int obtenirLastQuestionTime() {
