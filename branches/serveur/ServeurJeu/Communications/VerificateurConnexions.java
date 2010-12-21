@@ -60,13 +60,14 @@ public class VerificateurConnexions implements Runnable
 			{
 				// Stopper le thread du vérificateur pendant 60 - 100 secondes pour 
 				// laisser un moment de répit au CPU
-				Thread.sleep(200000);
+				Thread.sleep(100*1000);
 				
 			}
 			catch (InterruptedException ie)
 			{
 				objLogger.error(" Error - sleep is canceled in VerificateurConnexions" + ie.getMessage());
 				Thread.currentThread().interrupt();
+							
 			}
 			
 			// Déclaration d'une liste de ProtocoleJoueur qui contient la 
@@ -85,7 +86,7 @@ public class VerificateurConnexions implements Runnable
 			{
 				// Faire une copie de la liste des ProtocoleJoueur
 				lstCopieProtocoleJoueur = (LinkedList<ProtocoleJoueur>) lstProtocoleJoueur.clone();
-
+	        }
 
 				// Passer tous les objets ProtocoleJoueur et envoyer un message ping
 				// à chacun pour savoir s'il est là
@@ -94,7 +95,7 @@ public class VerificateurConnexions implements Runnable
 					// Envoyer un message ping au client courant
 					((ProtocoleJoueur) lstCopieProtocoleJoueur.get(i)).envoyerEvenementPing(intCompteurPing);
 				}
-			}
+		
 						
 			// Passer tous les ProtocoleJoueur et vérifier s'ils ont 
 			// répondus au ping. S'ils n'ont pas répondus, alors on va les

@@ -128,9 +128,9 @@ public class GestionnaireCommunication
 				threadJoueur.start();
 				
 				// Ajouter le nouveau ProtocoleJoueur dans la liste 
-				synchronized(lstProtocoleJoueur){
+				//synchronized(lstProtocoleJoueur){
 				  lstProtocoleJoueur.add( objJoueur );
-				}
+				//}
 				miseAJourInfo();
 				
 			}
@@ -142,7 +142,7 @@ public class GestionnaireCommunication
 				objLogger.error(GestionnaireMessages.message("communication.serveur_arrete"));
 				boolStopThread = true;
 			}
-			//Thread.yield( );
+			
 
 		}
 	}
@@ -228,9 +228,9 @@ public class GestionnaireCommunication
 			{
 				protocole.arreterProtocoleJoueur();
 			}
-
+        }
 			lstProtocoleJoueur.clear();
-		}
+		
 		
 		
 		try

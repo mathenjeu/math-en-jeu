@@ -2081,8 +2081,7 @@ public class JoueurVirtuel extends Joueur implements Runnable{
      */
     public void arreterThread()
     { 
-    	bolStopThread = true;
-    	Thread.currentThread().interrupt();           	                
+    	bolStopThread = true;    	        	                
     }
     
     /* Cette fonction permet d'obtenir un tableau qui contient les pourcentages de
