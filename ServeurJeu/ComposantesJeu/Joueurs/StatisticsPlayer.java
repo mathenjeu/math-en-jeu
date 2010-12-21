@@ -94,6 +94,10 @@ public class StatisticsPlayer implements Comparable<StatisticsPlayer>{
 		if(relValue == 0)
 		{
 		   relValue = this.timePosition.compareTo(player.getTimePosition());
+		   if(relValue == 0)
+		   {
+			   relValue = this.username.compareTo(player.getUsername());
+		   }
 		}
 		return relValue;
 	}

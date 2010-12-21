@@ -865,13 +865,17 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                         if (infoPartie.obtenirPointage() > meilleurPointage) {
                             meilleurPointage = infoPartie.obtenirPointage();
                         }
+                        
                         ourResults.add(new StatisticsPlayer(objJoueurHumain.obtenirNomUtilisateur(), infoPartie.obtenirPointage(), infoPartie.getPointsFinalTime()));
+                        
                         if (!joueurGagnant.equals("")) {
                             if (objJoueurHumain.obtenirNomUtilisateur().equalsIgnoreCase(joueurGagnant))
                                 cleJoueurGagnant = objJoueurHumain.obtenirCleJoueur();
                         }
                         else if (ourResults.last().getUsername().equalsIgnoreCase(objJoueurHumain.obtenirNomUtilisateur()))
                             cleJoueurGagnant = objJoueurHumain.obtenirCleJoueur();
+                        
+                        System.out.println("table - Joueur H " + " " + objJoueurHumain.obtenirNomUtilisateur() + " " + infoPartie.getPointsFinalTime() + " " + ourResults.size());
                     }
 
                     // Ajouter la partie dans la BD
