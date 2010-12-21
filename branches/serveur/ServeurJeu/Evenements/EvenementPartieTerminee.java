@@ -9,16 +9,10 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.TreeSet;
-
 import ClassesUtilitaires.UtilitaireXML;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Table;
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ServeurJeu.ComposantesJeu.Joueurs.StatisticsPlayer;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import ServeurJeu.Monitoring.Moniteur;
@@ -46,7 +40,7 @@ public class EvenementPartieTerminee  extends Evenement
 	
 	protected String genererCodeXML(InformationDestination information)
 	{
-		Moniteur.obtenirInstance().debut( "EvenementPartieDemarree.genererCodeXML" );
+		Moniteur.obtenirInstance().debut( "EvenementPartieTerminee.genererCodeXML" );
 	    // Déclaration d'une variable qui va contenir le code XML à retourner
 	    String strCodeXML = "";
 	    
@@ -91,53 +85,11 @@ public class EvenementPartieTerminee  extends Evenement
 				// Ajouter le noeud paramètre au noeud de commande
 				objNoeudCommande.appendChild(objNoeudParametre);
 				
-				System.out.println("Stats : " + nomUtilisateur + " " + pointage + " " + i );
+				System.out.println("Stats : " + nomUtilisateur + " " + pointage + " " + i);
 				
 				i--;
 			}
-			
-			
-			/*
-			Iterator<JoueurHumain> it = lstJoueurs.values().iterator();
-			while( it.hasNext() )
-			{
-				JoueurHumain joueur = (JoueurHumain)it.next();
-				String nomUtilisateur = joueur.obtenirNomUtilisateur();
-				int pointage = joueur.obtenirPartieCourante().obtenirPointage();
-				int position = joueur.getPositionFinale();
-				
-				Element objNoeudJoueur = objDocumentXML.createElement("joueur");
-				objNoeudJoueur.setAttribute("utilisateur", nomUtilisateur);
-				objNoeudJoueur.setAttribute("pointage", new Integer( pointage).toString());
-				objNoeudJoueur.setAttribute("position", new Integer( position).toString());
-				
-				objNoeudParametre.appendChild( objNoeudJoueur );
-
-				// Ajouter le noeud paramètre au noeud de commande
-				objNoeudCommande.appendChild(objNoeudParametre);
-			}*/
-			/*
-			if (lstJoueursVirtuels != null)
-			{
-				for (int i = 0; i < lstJoueursVirtuels.size(); i++)
-				{
-                                    JoueurVirtuel joueur = (JoueurVirtuel) lstJoueursVirtuels.get(i);
-                                    String nomUtilisateur = joueur.obtenirNom();
-                                    int pointage = joueur.obtenirPointage();
-                                    int position = joueur.getPositionFinale();
-
-                                    Element objNoeudJoueur = objDocumentXML.createElement("joueur");
-                                    objNoeudJoueur.setAttribute("utilisateur", nomUtilisateur);
-                                    objNoeudJoueur.setAttribute("pointage", new Integer( pointage).toString());
-                                    objNoeudJoueur.setAttribute("position", new Integer( position).toString());
-				    objNoeudParametre.appendChild(objNoeudJoueur);
-
-				    // Ajouter le noeud paramètre au noeud de commande
-				    objNoeudCommande.appendChild(objNoeudParametre);
-					
-				}
-			}*/
-			
+						
 			// Ajouter le noeud de commande au noeud racine dans le document
 			objDocumentXML.appendChild(objNoeudCommande);
 
