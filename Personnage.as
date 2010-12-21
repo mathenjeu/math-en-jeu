@@ -74,6 +74,11 @@ class Personnage
 		this.bananaState = bananaState;
 	}
 	
+	function setBananaTime(bananaTime:Number)
+	{
+		this.bananaRestedTime = bananaTime;
+	}
+	
 	function addBananaTime(bananaTime:Number)
 	{
 		this.bananaRestedTime += bananaTime;
