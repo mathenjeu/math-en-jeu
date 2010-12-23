@@ -3368,28 +3368,18 @@ class GestionnaireEvenements
                   _level0.loader.contentHolder.miniGameLayer["magasin"].loader.contentHolder.quitter();
 			  }
 			 			  
-			 this.addMoveSight(-2);
-			  _level0.loader.contentHolder.planche.setRepostCases(true);
-		     			
-			//_global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
-			  
-			
-			
+			 //_global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
+			 			
 			// if the player read at the moment a question
 		   }else if(_level0.loader.contentHolder.box_question.monScroll._visible)
-		   {
-    		   
+		   {    		   
 			   this.cancelQuestion();
 			   _level0.loader.contentHolder.box_question.gotoAndPlay(9);
 			   _root.objGestionnaireInterface.afficherBoutons(1);
 			   _level0.loader.contentHolder.sortieDunMinigame = false;
-			   			   
-			   this.addMoveSight(-2);
-		       _level0.loader.contentHolder.planche.setRepostCases(true);
-			  
+			  			  			  
 			  //_global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
-			  
-			   //_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
+			  //_global.timerIntervalBananaShell = setInterval(this, "bananaShell", 8000);	
 			
 			// if the player read a feedback of a question 
 		   }else if(_level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible) 
@@ -3405,16 +3395,12 @@ class GestionnaireEvenements
 			    // here show banana in action
 			    // setTimeout( Function, delay in miliseconds, arguments)
                _global.timerInterval = setInterval(this,"funcToRecallFeedback", 7000, tempsRested);
-			   this.addMoveSight(-2);
+			 
 			  
 		   }else{
-		      
-			  this.addMoveSight(-2);
-			  _level0.loader.contentHolder.planche.setRepostCases(true);
-             
+		     		 
 			  //_global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
-						
-		   
+								   
 		   }//end else if
 		   
 		   _global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
@@ -3523,7 +3509,7 @@ class GestionnaireEvenements
 	function setBananaTimer(playerUnder:String)
 	{
 		var perso:Personnage = _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder);
-		
+				
 		//first on put on the sprite the box for the timer
 		var banBox:MovieClip = 	_level0.loader.contentHolder.attachMovie("bananaBox", "bananaBox", 7);//_level0.loader.contentHolder.getNextHigesthDepth());
 		_level0.loader.contentHolder.bananaBox._x = 405;
@@ -3615,6 +3601,8 @@ class GestionnaireEvenements
 		   setBananaTimer(playerUnder);
 		}
 	    clearInterval(_global.timerIntervalBanana);
+		this.addMoveSight(-2);
+		_level0.loader.contentHolder.planche.setRepostCases(true);
 						
     }
 	
