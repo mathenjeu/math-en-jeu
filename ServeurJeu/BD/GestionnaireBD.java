@@ -203,10 +203,10 @@ public class GestionnaireBD {
         try {
             synchronized (DB_LOCK) {
                 ResultSet rs = requete.executeQuery(
-                        "SELECT user.user_id,last_name,name,role_id, level_id, short_name " +
-                        "FROM user,language " +
-                        "WHERE user.language_id=language.language_id " +
-                        "AND username = '" + joueur.obtenirNomUtilisateur() + "'");
+                        "SELECT user.user_id, last_name, name, role_id, level_id, language.short_name " +
+                        "FROM user, language " +
+                        "WHERE user.language_id = language.language_id " +  "AND username = '" + joueur.obtenirNomUtilisateur() + "'");
+                
                 if (rs.next()) {
 
                     String prenom = rs.getString("last_name");
@@ -287,7 +287,7 @@ public class GestionnaireBD {
         // to not fill the Box with the same questions
         int niveau = objJoueurHumain.obtenirCleNiveau() - countFillQuestions;
         // it's little risk for that, but to be sure....
-        if (niveau < 0)
+        if (niveau < 1)
             niveau = objJoueurHumain.obtenirCleNiveau() + 1;
         int room_id = objJoueurHumain.obtenirSalleCourante().getRoomId();
 
