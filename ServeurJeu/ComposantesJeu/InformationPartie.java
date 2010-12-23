@@ -1120,7 +1120,7 @@ public class InformationPartie
 
     public Objet obtenirObjetCaseCourante() {
         // L'objet à retourné
-        Objet objObjet = null;
+        Objet objObjet = null;  /// is not very good design .... 
 
         Case objCaseJoueur = objTable.getCase(objPositionJoueur.x, objPositionJoueur.y);
 
@@ -1153,10 +1153,6 @@ public class InformationPartie
         return Math.abs(objPositionJoueur.x - objPoint.x) + Math.abs(objPositionJoueur.y - objPoint.y);
     }
 
-    /*
-    public void setObjBoiteQuestions(BoiteQuestions objBoiteQuestions) {
-    this.objBoiteQuestions = objBoiteQuestions;
-    }*/
     public BoiteQuestions getObjBoiteQuestions() {
         return objBoiteQuestions;
     }

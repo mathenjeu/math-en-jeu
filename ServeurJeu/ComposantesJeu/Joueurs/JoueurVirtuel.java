@@ -293,7 +293,7 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 				intTempsReflexionCoup = obtenirTempsReflexionCoup();
 
 				// Pause pour moment de réflexion de décision
-				pause(intTempsReflexionCoup);
+				pause(intTempsReflexionCoup * 1000);
 
 
 				if(bolStopThread == false){ 
@@ -380,7 +380,7 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 						intTempsReflexionQuestion = intTempsReflexionQuestion - 4;
 	                
 	    			// Pause pour moment de réflexion de réponse
-	    			pause(intTempsReflexionQuestion);	
+	    			pause(intTempsReflexionQuestion * 1000);	
 	    					
 	    			// Faire déplacer le personnage si le joueur virtuel a
 	    			// réussi à répondre à la question
@@ -393,7 +393,7 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 	    				intTempsDeplacement = obtenirTempsDeplacement(obtenirPointage(objPositionJoueur, objPositionIntermediaire));
 	
 	    				// Pause pour laisser le personnage se déplacer
-	    				pause(intTempsDeplacement);
+	    				pause(intTempsDeplacement * 1000);
 	    			}
 	    			else
 	    			{
@@ -1625,7 +1625,7 @@ public class JoueurVirtuel extends Joueur implements Runnable{
         	//----------------------------------------
         	
         	// On fait une pause pour le laisser jouer
-        	pause(intTempsJeu);
+        	pause(intTempsJeu * 1000);
         	
         	// On incrémente les points du joueur virtuel
         	intPointage += intPointsJeu;
@@ -1770,7 +1770,7 @@ public class JoueurVirtuel extends Joueur implements Runnable{
             }
         	//----------------------------------------
 
-	    	pause(intTempsReflexion);
+	    	pause(intTempsReflexion * 1000);
 
     		if (bolDecision && !this.bolStopThread)
     		{
@@ -1904,13 +1904,13 @@ public class JoueurVirtuel extends Joueur implements Runnable{
      * Cette fonction fait une pause de X secondes émulant une réflexion
      * par le joueur virtuel
      */
-    private void pause(Integer nbSecondes)
+    private void pause(Integer nbMiliSecondes)
     {
     	try
     	{
     		if (!ccFast)
     		{
-    	        Thread.sleep(nbSecondes * 1000);
+    	        Thread.sleep(nbMiliSecondes);
     	    }
     	    else
     	    {
@@ -1921,10 +1921,12 @@ public class JoueurVirtuel extends Joueur implements Runnable{
     	catch(InterruptedException e)
     	{ 
     		objLogger.error("Error to did thead Virtual to sleep..." + e.getMessage());
-        	Thread.currentThread().interrupt();
+        	pause(1);
     	}
 
     }
+    
+    
   
 	
     /* 

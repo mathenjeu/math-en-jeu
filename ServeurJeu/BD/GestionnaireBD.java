@@ -280,10 +280,7 @@ public class GestionnaireBD {
             cleLang = 1;
         else if (langue.equalsIgnoreCase("en"))
             cleLang = 2;
-
-        // pour keywords des questions on utilise room's keywords
-        //Integer[] key = player.obtenirSalleCourante().getKeywords();
-
+        
         // to not fill the Box with the same questions
         int niveau = objJoueurHumain.obtenirCleNiveau() - countFillQuestions;
         // it's little risk for that, but to be sure....
@@ -345,9 +342,59 @@ public class GestionnaireBD {
         remplirBoiteQuestionsTF(boite, strRequeteSQL_TF, URL);
 
         //System.out.println("end boite: " + System.currentTimeMillis());
+        
+         
+       
+       // we consider 5 questions for minuts  
+       if(boite.getBoxSize() > objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsTotal() * 5)
+    	   // now get out the questions from last 3 games
+           this.getLastGamesQuestions(objJoueurHumain, cleLang);
+       
+        
     }// fin méthode
 
-    // This function follows one of the two previous functions. It queries the database and
+    private void getLastGamesQuestions(JoueurHumain objJoueurHumain, int cleLang) {
+    	
+    	String strRequeteSQL = "SELECT  questions_answers " +
+        " FROM game_user WHERE user_id  = " + objJoueurHumain.obtenirCleJoueur() + " ORDER BY game_id DESC LIMIT 3;";
+        
+    	ArrayList<String> liste = new ArrayList<String>();
+
+        try {
+            synchronized (DB_LOCK) {
+                ResultSet rs = requete.executeQuery(strRequeteSQL);
+                while (rs.next()) {
+                    liste.add(rs.getString("questions_answers"));
+                }
+            }
+        } catch (SQLException e) {
+            // Une erreur est survenue lors de l'exécution de la requête
+            objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+            objLogger.error(GestionnaireMessages.message("bd.trace"));
+            objLogger.error(e.getMessage());
+            e.printStackTrace();
+        } catch (RuntimeException e) {
+            // Ce n'est pas le bon message d'erreur mais ce n'est pas grave
+            objLogger.error(GestionnaireMessages.message("bd.error_questions"));
+            objLogger.error(GestionnaireMessages.message("bd.trace"));
+            objLogger.error(e.getMessage());
+            e.printStackTrace();
+        }
+        
+        ArrayList<Integer> lastQuestions = new ArrayList<Integer>();
+        
+        for(String questions: liste)
+        {
+        	StringTokenizer ids = new StringTokenizer(questions, ",");
+
+            while (ids.hasMoreTokens()) {
+            	lastQuestions.add(Integer.parseInt(ids.nextToken()));
+            }
+        }
+		
+	}// end method
+
+	// This function follows one of the two previous functions. It queries the database and
     // does the actual filling of the question box with questions of type MULTIPLE_CHOICE.
     private void remplirBoiteQuestionsMC(BoiteQuestions boiteQuestions, String strRequeteSQL, String URL) {
         try {
@@ -794,7 +841,7 @@ public class GestionnaireBD {
 
     	int cleJoueur = joueur.obtenirCleJoueur();
     	int pointage = joueur.obtenirPartieCourante().obtenirPointage();
-    	int level = joueur.obtenirCleNiveau();
+    	//int level = joueur.obtenirCleNiveau();
     	int room_id = joueur.obtenirPartieCourante().obtenirTable().getObjSalle().getRoomId();
     	String statistics = "";
 

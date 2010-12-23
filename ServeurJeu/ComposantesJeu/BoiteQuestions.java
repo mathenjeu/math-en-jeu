@@ -91,7 +91,7 @@ public class BoiteQuestions
 		else
 		{
 			//System.out.println("erreur boite");
-			//objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
 		}
 		
 	   
@@ -267,4 +267,19 @@ public class BoiteQuestions
     {
         return language;
     }
+
+
+    /**
+     * Its used to take number of questions in our box
+     * @return
+     */
+	public int getBoxSize() {
+		
+		int questionsNumber = 0;
+		for(LinkedList<Question> questions:lstQuestions.values())
+		{
+			questionsNumber += questions.size();
+		}
+		return questionsNumber;
+	}// end method
 }

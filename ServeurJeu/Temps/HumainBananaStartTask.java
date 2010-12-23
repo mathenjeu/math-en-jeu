@@ -31,8 +31,7 @@ public class HumainBananaStartTask extends TimerTask {
 	public void cancelTask(){
 		this.cancel();
 		this.runIt = false;
-		Thread.currentThread().interrupt();
-		
+				
 	}
 
 }
