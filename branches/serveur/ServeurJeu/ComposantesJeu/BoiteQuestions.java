@@ -282,4 +282,18 @@ public class BoiteQuestions
 		}
 		return questionsNumber;
 	}// end method
+
+
+	public boolean popQuestion(Integer id) {
+		for(LinkedList<Question> questions:lstQuestions.values())
+		{
+			 for(Question question: questions)
+				 if(question.obtenirCodeQuestion() == id)
+				 {
+					 questions.remove(question);
+					 return true;
+				 }
+		}
+		return false;
+	}
 }

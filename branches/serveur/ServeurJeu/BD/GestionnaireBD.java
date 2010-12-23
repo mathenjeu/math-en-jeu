@@ -344,16 +344,28 @@ public class GestionnaireBD {
         //System.out.println("end boite: " + System.currentTimeMillis());
         
          
-       
+       ArrayList<Integer> lastQuestions = null;
+       int boxSize = boite.getBoxSize();
+       int temps = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsTotal();
+       int lastSize = 0;
        // we consider 5 questions for minuts  
-      // if(boite.getBoxSize() > objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsTotal() * 5)
+       if(boxSize > temps * 5)
+       {
     	   // now get out the questions from last 3 games
-           //this.getLastGamesQuestions(objJoueurHumain, cleLang);
+    	  //lastQuestions = this.getLastGamesQuestions(objJoueurHumain, cleLang);
+    	  //lastSize = lastQuestions.size();
+       }
+               
+       if(lastQuestions != null && boxSize - lastSize > temps * 3)
+       {
+    	   for(Integer id: lastQuestions)
+    		   boite.popQuestion(id);
+       }   
        
         
     }// fin méthode
 
-    private void getLastGamesQuestions(JoueurHumain objJoueurHumain, int cleLang) {
+    private ArrayList<Integer> getLastGamesQuestions(JoueurHumain objJoueurHumain, int cleLang) {
     	
     	String strRequeteSQL = "SELECT  questions_answers " +
         " FROM game_user WHERE user_id  = " + objJoueurHumain.obtenirCleJoueur() + " ORDER BY game_id DESC LIMIT 3;";
@@ -391,6 +403,7 @@ public class GestionnaireBD {
             	lastQuestions.add(Integer.parseInt(ids.nextToken()));
             }
         }
+		return lastQuestions;
 		
 	}// end method
 
