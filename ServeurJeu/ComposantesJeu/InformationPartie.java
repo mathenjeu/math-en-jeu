@@ -860,7 +860,7 @@ public class InformationPartie
             Case objCaseDestination = null;
             if(table.getCase(objPositionDesiree.x, objPositionDesiree.y) != null)
             	objCaseDestination = table.getCase(objPositionDesiree.x, objPositionDesiree.y);
-            if (objCaseDestination instanceof CaseCouleur) {
+            if (objCaseDestination != null && objCaseDestination instanceof CaseCouleur) {
                 // Faire la référence vers la case de couleur
                 CaseCouleur objCaseCouleurDestination = (CaseCouleur)objCaseDestination;
 
