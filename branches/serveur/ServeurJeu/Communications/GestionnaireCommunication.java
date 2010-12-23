@@ -97,7 +97,7 @@ public class GestionnaireCommunication
 			// Créer un socket pour le serveur qui va écouter sur le port définit
 			// par la variable "intPort"
 			boolStopThread = false;
-			objSocketServeur = new ServerSocket(intPort, 0, InetAddress.getByName(bindAddress));
+			objSocketServeur = new ServerSocket(intPort, 50, InetAddress.getByName(bindAddress));
 			//objSocketServeur.
 		}
 		catch (IOException e)
