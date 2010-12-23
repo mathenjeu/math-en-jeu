@@ -41,7 +41,7 @@ public class BananaVirtualTask extends TimerTask {
 	
 	public void cancelTask(){
 		this.runIt = false;
-		Thread.currentThread().interrupt();
+		//Thread.currentThread().interrupt();
 		
 	}
 

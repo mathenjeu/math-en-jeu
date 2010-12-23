@@ -41,7 +41,7 @@ public class JoueurHumain extends Joueur
 	
 	/**
 	 * Déclaration d'un variable qui contient la valeur du niveau du joueur 
-	 * valeurs possibles -> entre 1 et 16
+	 * valeurs possibles -> entre 1 et 18
 	 */
 	private int cleNiveau;
 	

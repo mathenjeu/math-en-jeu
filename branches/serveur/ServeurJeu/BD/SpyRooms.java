@@ -62,11 +62,13 @@ public class SpyRooms implements Runnable {
                	Thread.sleep(DELAY);
 	               	
 	    	}
-			catch( Exception e )
+			catch( InterruptedException e )
 			{
     			objLogger.info(GestionnaireMessages.message("spy.erreur_thread"));
 				objLogger.error( e.getMessage());
 				e.printStackTrace();
+				
+				Thread.currentThread().interrupt();
 			}
 		}
 	}
@@ -174,7 +176,7 @@ public class SpyRooms implements Runnable {
 	
 	public void stopSpy(){
 		this.stopSpy = true;
-		Thread.currentThread().interrupt();
+		
 	}
 	
 	
