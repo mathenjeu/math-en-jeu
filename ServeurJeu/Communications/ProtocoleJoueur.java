@@ -146,7 +146,7 @@ public class ProtocoleJoueur implements Runnable
         try {
         	
         	
-        	objSocketJoueur.setSoLinger(true, 500);
+        	objSocketJoueur.setSoLinger(true, 1000);
         	//objSocketJoueur.setKeepAlive(true);
         	
         	// Créer le canal qui permet de recevoir des données sur le canal

@@ -857,7 +857,9 @@ public class InformationPartie
             // alors on l'enlève et on le donne au joueur, sinon si c'est une
             // pièce on l'enlève et on met à jour le pointage du joueur, sinon
             // on ne fait rien
-            Case objCaseDestination = table.getCase(objPositionDesiree.x, objPositionDesiree.y);
+            Case objCaseDestination = null;
+            if(table.getCase(objPositionDesiree.x, objPositionDesiree.y) != null)
+            	objCaseDestination = table.getCase(objPositionDesiree.x, objPositionDesiree.y);
             if (objCaseDestination instanceof CaseCouleur) {
                 // Faire la référence vers la case de couleur
                 CaseCouleur objCaseCouleurDestination = (CaseCouleur)objCaseDestination;
