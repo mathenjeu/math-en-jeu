@@ -346,9 +346,9 @@ public class GestionnaireBD {
          
        
        // we consider 5 questions for minuts  
-       if(boite.getBoxSize() > objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsTotal() * 5)
+      // if(boite.getBoxSize() > objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsTotal() * 5)
     	   // now get out the questions from last 3 games
-           this.getLastGamesQuestions(objJoueurHumain, cleLang);
+           //this.getLastGamesQuestions(objJoueurHumain, cleLang);
        
         
     }// fin méthode
