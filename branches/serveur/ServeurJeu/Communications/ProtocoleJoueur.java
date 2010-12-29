@@ -164,16 +164,7 @@ public class ProtocoleJoueur implements Runnable
             // connexion ne s'est pas déconnectée)
             while (bolStopThread == false) {
             	
-            	/*
-                try{
-                      Thread.sleep(10);
-                }catch(InterruptedException ie )
-                {
-                	objLogger.error("Error - thread is interrupted ..." + ie.getMessage());
-                	Thread.currentThread().interrupt();
-                }*/
-
-                // Déclaration d'une variable qui va servir de marqueur
+            	// Déclaration d'une variable qui va servir de marqueur
                 // pour savoir où on en est rendu dans la lecture
                 int intMarqueur = 0;
 
@@ -2273,7 +2264,7 @@ public class ProtocoleJoueur implements Runnable
             case DemarrerPartie: return validerCommande(noeudCommande, new String[]{"IdDessin"}, true);
             case Pointage: return validerCommande(noeudCommande, new String[]{"Pointage"}, true);
             case Argent: return validerCommande(noeudCommande, new String[]{"Argent"}, true);
-            case AcheterObjet: return validerCommande(noeudCommande, new String[]{"Id"}, true);
+            case AcheterObjet: return validerCommande(noeudCommande, new String[]{"id"}, true);
             case ChatMessage: return validerCommande(noeudCommande, new String[]{"ChatMessage"}, true);
 
             //DemarrerMaintenant est spécial parce que le paramètre requiert une méthode spécialisée
