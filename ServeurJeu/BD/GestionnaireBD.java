@@ -352,8 +352,8 @@ public class GestionnaireBD {
        if(boxSize > temps * 5)
        {
     	   // now get out the questions from last 3 games
-    	  //lastQuestions = this.getLastGamesQuestions(objJoueurHumain, cleLang);
-    	  //lastSize = lastQuestions.size();
+    	  lastQuestions = this.getLastGamesQuestions(objJoueurHumain, cleLang);
+    	  lastSize = lastQuestions.size();
        }
                
        if(lastQuestions != null && boxSize - lastSize > temps * 3)
@@ -394,13 +394,21 @@ public class GestionnaireBD {
         }
         
         ArrayList<Integer> lastQuestions = new ArrayList<Integer>();
-        
+        Integer quest = 0;
         for(String questions: liste)
         {
         	StringTokenizer ids = new StringTokenizer(questions, ",");
-
+                    	
             while (ids.hasMoreTokens()) {
-            	lastQuestions.add(Integer.parseInt(ids.nextToken()));
+            	try
+            	{
+            		quest = Integer.parseInt(ids.nextToken());
+            		lastQuestions.add(quest);
+            	}catch(NumberFormatException ex)
+            	{
+            		// For the moment nothing to do
+            	}
+            	
             }
         }
 		return lastQuestions;
@@ -694,36 +702,36 @@ public class GestionnaireBD {
     }// end methode
 
     private void addFullStats(int gameId, JoueurHumain joueur) {
-        try {
-            InformationPartie infoPartie = joueur.obtenirPartieCourante();
-            LinkedList<InformationQuestion> questionsRepondues = infoPartie.obtenirListeQuestionsRepondues();
-            int userId = joueur.obtenirCleJoueur();
-            int pointage = infoPartie.obtenirPointage();
-            synchronized (DB_LOCK) {
-                //Remplir la table 'stats_game' une ligne par joueur pour chaque partie
-                //Ça peut faire beaucoup de lignes, donc on sauve ces lignes seulement
-                //pour les parties dans les salles de prof.
-                requete.executeUpdate(
-                        "INSERT INTO gamestats_scores(game_id, user_id, score) " +
-                        "VALUES (" + gameId + "," + userId + "," + pointage + ")");
-                //Remplir la table 'gamestats_questions' une ligne par question posee.
-                //Ça peut faire ÉNORMÉMENT de lignes, donc on sauve ces lignes seulement
-                //pour les parties dans les salles de prof.
-                PreparedStatement prepStatement = connexion.prepareStatement(
-                        "INSERT INTO gamestats_questions (game_id,user_id,question_id,answer_status,time_taken) " +
-                        "VALUES (?,?,?,?,?)");
-                prepStatement.setInt(1, gameId);
-                prepStatement.setInt(2, userId);
-                for (InformationQuestion iq: questionsRepondues) {
-                    prepStatement.setInt(3, iq.obtenirQuestionId());
-                    prepStatement.setShort(4, iq.obtenirValiditee());
-                    prepStatement.setInt(5, iq.obtenirTempsRequis());
-                    prepStatement.addBatch();
-                }
-                prepStatement.executeBatch();
-                prepStatement.close();
-            }
-        } catch (Exception e) {
+    	try {
+    		InformationPartie infoPartie = joueur.obtenirPartieCourante();
+    		LinkedList<InformationQuestion> questionsRepondues = infoPartie.obtenirListeQuestionsRepondues();
+    		int userId = joueur.obtenirCleJoueur();
+    		int pointage = infoPartie.obtenirPointage();
+    		synchronized (DB_LOCK) {
+    			//Remplir la table 'stats_game' une ligne par joueur pour chaque partie
+    			//Ça peut faire beaucoup de lignes, donc on sauve ces lignes seulement
+    			//pour les parties dans les salles de prof.
+    			requete.executeUpdate(
+    					"INSERT INTO gamestats_scores(game_id, user_id, score) " +
+    					"VALUES (" + gameId + "," + userId + "," + pointage + ")");
+    			//Remplir la table 'gamestats_questions' une ligne par question posee.
+    			//Ça peut faire ÉNORMÉMENT de lignes, donc on sauve ces lignes seulement
+    			//pour les parties dans les salles de prof.
+    			PreparedStatement prepStatement = connexion.prepareStatement(
+    					"INSERT INTO gamestats_questions (game_id,user_id,question_id,answer_status,time_taken) " +
+    			"VALUES (?,?,?,?,?)");
+    			prepStatement.setInt(1, gameId);
+    			prepStatement.setInt(2, userId);
+    			for (InformationQuestion iq: questionsRepondues) {
+    				prepStatement.setInt(3, iq.obtenirQuestionId());
+    				prepStatement.setShort(4, iq.obtenirValiditee());
+    				prepStatement.setInt(5, iq.obtenirTempsRequis());
+    				prepStatement.addBatch();
+    			}
+    			prepStatement.executeBatch();
+    			prepStatement.close();
+    		}
+    	} catch (Exception e) {
         	objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
         }
     }
@@ -854,17 +862,26 @@ public class GestionnaireBD {
 
     	int cleJoueur = joueur.obtenirCleJoueur();
     	int pointage = joueur.obtenirPartieCourante().obtenirPointage();
-    	//int level = joueur.obtenirCleNiveau();
     	int room_id = joueur.obtenirPartieCourante().obtenirTable().getObjSalle().getRoomId();
     	String statistics = "";
 
     	double percents = 0.0;
-		if(joueur.obtenirPartieCourante().getCountQuestions() != 0)
-			percents = (double)(joueur.obtenirPartieCourante().getCountGoodAnswers()  * 100) / joueur.obtenirPartieCourante().getCountQuestions();
-		//System.out.println("persents " + percents);
-    	//statistics = statistics + "/-/" + joueur.obtenirProtocoleJoueur().getQuestionsAnswers();
-
-    	try
+		percents = joueur.obtenirPartieCourante().getRightAnswersStats();
+		System.out.println("percents " + percents);
+    	
+		LinkedList<InformationQuestion> questionsRepondues = joueur.obtenirPartieCourante().obtenirListeQuestionsRepondues();
+		StringBuffer stats = new StringBuffer();
+		for(InformationQuestion info: questionsRepondues)
+		{
+			// we don't put not answered questions - they will be used again in the future games
+			if(info.answerStatus == info.RIGHT_ANSWER || info.answerStatus == info.WRONG_ANSWER)
+			   stats.append(info.obtenirQuestionId() + ",");
+		}
+		if(stats.length() > 0)
+		   stats.deleteCharAt(stats.length() - 1);		
+		statistics = stats.toString();
+		
+		try
     	{
 
     		synchronized(DB_LOCK)
@@ -1846,6 +1863,7 @@ public class GestionnaireBD {
         }
         return rapport;
     }
+    
     public String controlPWD(String clientPWD) {
         String encodedPWD = "";
         try {

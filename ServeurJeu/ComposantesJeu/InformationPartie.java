@@ -86,11 +86,6 @@ public class InformationPartie
     // used for finish statistics
     private int pointsFinalTime;
     
-    // used to calculate the statistics on the answers
-	private int goodAnswersStats;
-	private int countQuestions;
-	private int countGoodAnswers;
-
     /**
      * Constructeur de la classe InformationPartie qui permet d'initialiser
      * les propriétés de la partie et de faire la référence vers la table.
@@ -155,10 +150,7 @@ public class InformationPartie
 
         String language = joueur.obtenirProtocoleJoueur().getLang();
         this.objBoiteQuestions = new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language));
-        
-        //countQuestions = 0;
-		//countGoodAnswers = 0;
-        
+             
     }// fin constructeur
 
     public void destruction() {
@@ -507,9 +499,7 @@ public class InformationPartie
             // retourné au client
             objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();
         }
-        
-        if(objQuestionTrouvee != null)
-           this.incrementQuestions();
+            
         return objQuestionTrouvee;
     }// end method
 
@@ -615,9 +605,7 @@ public class InformationPartie
             // retourné au client
             objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();
         }
-
-        if(objQuestionTrouvee != null)
-            this.incrementQuestions();
+        
         return objQuestionTrouvee;
     }// end methode
 
@@ -766,12 +754,7 @@ public class InformationPartie
             InformationQuestion iq = objPartieCourante.lstQuestionsRepondues.getLast();
             iq.definirTempsRequis(tempsReponse);
             iq.definirValiditee(bolReponseEstBonne?InformationQuestion.RIGHT_ANSWER:InformationQuestion.WRONG_ANSWER);
-            
-            // to have statistics 
-            if(bolReponseEstBonne) 
-		    	 objPartieCourante.incrementGoodAnswers();
-
-
+                        
         } else {
             JoueurVirtuel objJoueurVirtuel = (JoueurVirtuel)objJoueur;
 
@@ -1197,37 +1180,6 @@ public class InformationPartie
     }
 
 	/**
-	 * @param goodAnswersStats the goodAnswersStats to set
-	 */
-	public void setGoodAnswersStats(int goodAnswersStats) {
-		this.goodAnswersStats = goodAnswersStats;
-	}
-
-	/**
-	 * @return the goodAnswersStats
-	 */
-	public int getGoodAnswersStats() {
-		return goodAnswersStats;
-	}
-
-	public void incrementQuestions() {
-		this.countQuestions++;
-	}
-	
-	public void incrementGoodAnswers() {
-		this.countGoodAnswers++;
-		//System.out.println("goodAnswers : " + this.countGoodAnswers);
-	}
-	
-	public int getCountQuestions() {
-		return countQuestions;
-	}
-
-	public int getCountGoodAnswers() {
-		return countGoodAnswers;
-	}
-
-	/**
      * @param pointsFinalTime the pointsFinalTime to set
      */
     public void setPointsFinalTime(int pointsFinalTime) {
@@ -1240,5 +1192,22 @@ public class InformationPartie
     public int getPointsFinalTime() {
         return pointsFinalTime;
     }
+
+	public double getRightAnswersStats() {
+		double percents = 0.0;
+		int total = 0;
+		int right = 0;
+		for (InformationQuestion iq : lstQuestionsRepondues)
+            if (iq.answerStatus == iq.RIGHT_ANSWER)
+            {
+            	total += 1; right += 1;
+            }else if (iq.answerStatus == iq.WRONG_ANSWER)
+            {
+            	total +=1;
+            }
+        if(total > 0)
+		   percents = (double)(right * 100 / total);
+		return percents;
+	}
 } // end class
 
