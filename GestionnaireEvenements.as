@@ -1096,10 +1096,10 @@ class GestionnaireEvenements
         {
             case "ListeTables":
 			     
-				 _level0.loader.contentHolder.listeTable.removeAll();
+				_level0.loader.contentHolder.listeTable.removeAll();
 				 
-				 delete this.listeDesTables;
-				 this.listeDesTables = new Array();
+				 //delete this.listeDesTables;
+				this.listeDesTables = new Array();
 				var count:Number = objetEvenement.listeTables.length;
                 for (var i:Number = 0; i < count; i++)
                 {
@@ -1113,8 +1113,8 @@ class GestionnaireEvenements
 					{
 						iconName = "flags";
 					}
-					trace("game type liste table : " +  objetEvenement.listeTables[i].gameType + " " + iconName);
-                    str =  "   <<" +  objetEvenement.listeTables[i].tablName + ">>   - " + objetEvenement.listeTables[i].temps + " min. " ;
+					//trace("game type liste table : " +  objetEvenement.listeTables[i].gameType + " " + iconName);
+                    str =  "   << " +  objetEvenement.listeTables[i].tablName + " >>   - " + objetEvenement.listeTables[i].temps + " min. " ;
 					
 					_level0.loader.contentHolder.listeTable.addItem({label : str, data : objetEvenement.listeTables[i].no, icon: iconName});
 					
@@ -1436,9 +1436,18 @@ class GestionnaireEvenements
 			 	var count:Number = this.listeDesTables.length;
 			 	for (var i:Number = 0; i < count; i++)
 			 	{
-					str = this.listeDesTables[i].no + ".  *" +  this.listeDesTables[i].tablName + "*  " + this.listeDesTables[i].temps + " min. " ;
+					var iconName:String;
+					if(this.listeDesTables[i].gameType == "mathEnJeu")
+					{   
+					   iconName = "maze";
+					}
+					else if (this.listeDesTables[i].gameType == "Course" ||this.listeDesTables[i].gameType == "Tournament")
+					{
+						iconName = "flags";
+					}
+					str = "  << " +  this.listeDesTables[i].tablName + " >>  " + this.listeDesTables[i].temps + " min. " ;
 					
-					_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
+					_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no, icon: iconName});
 			 	}
 				
 				this.listeDesPersonnages.removeAll();
@@ -2461,8 +2470,19 @@ class GestionnaireEvenements
 		count = this.listeDesTables.length;
 		for (var i:Number = 0; i < count; i++)
 	    {
-			str = this.listeDesTables[i].no + ".  *" +  this.listeDesTables[i].tablName + "*  " + this.listeDesTables[i].temps + " min. " ;
-			_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
+			var iconName:String;
+			if(this.listeDesTables[i].gameType == "mathEnJeu")
+			{   
+			   iconName = "maze";
+			}
+			else if (this.listeDesTables[i].gameType == "Course" ||this.listeDesTables[i].gameType == "Tournament")
+			{
+				iconName = "flags";
+			}
+			str = "  << " +  this.listeDesTables[i].tablName + " >>  " + this.listeDesTables[i].temps + " min. " ;
+			
+		    _level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no, icon: iconName});
+			
 		}
     	
 		
@@ -2491,17 +2511,24 @@ class GestionnaireEvenements
 		//objetEvenement.tablName = objetEvenement.nameTable;
         
 		this.listeDesTables.push(objetEvenement);
-        
-		str = this.listeDesTables[this.listeDesTables.length-1].no + ".  *" + this.listeDesTables[this.listeDesTables.length-1].tablName + "*  "+ this.listeDesTables[this.listeDesTables.length-1].temps + " min. \n    "; ;
-       
+               				
+		_level0.loader.contentHolder.listeTable.removeAll();
+		var count:Number = this.listeDesTables.length;
+		for (var i:Number = 0; i < count; i++)
+		{
+			var iconName:String;
+			if(this.listeDesTables[i].gameType == "mathEnJeu")
+			{   
+			   iconName = "maze";
+			}
+			else if (this.listeDesTables[i].gameType == "Course" ||this.listeDesTables[i].gameType == "Tournament")
+			{
+				iconName = "flags";
+			}
+			str = "  << " +  this.listeDesTables[i].tablName + " >>  " + this.listeDesTables[i].temps + " min. " ;
 				
-		  _level0.loader.contentHolder.listeTable.removeAll();
-		     var count:Number = this.listeDesTables.length;
-			 for (var i:Number = 0; i < count; i++)
-			 {
-				str = this.listeDesTables[i].no + ".  *" +  this.listeDesTables[i].tablName + "*  " + this.listeDesTables[i].temps + " min. " ;
-				_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
-			 }
+			_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no, icon: iconName});
+		}
 		
         
 		_level0.loader.contentHolder.chargementTables = "";
@@ -2542,8 +2569,18 @@ class GestionnaireEvenements
 		
 		for (var i:Number = 0; i < count; i++)
 		{
-			str = this.listeDesTables[i].no + ".  *" +  this.listeDesTables[i].tablName + "*  " + this.listeDesTables[i].temps + " min. " ;
-			_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
+			var iconName:String;
+			if(this.listeDesTables[i].gameType == "mathEnJeu")
+			{   
+			   iconName = "maze";
+			}
+			else if (this.listeDesTables[i].gameType == "Course" ||this.listeDesTables[i].gameType == "Tournament")
+			{
+				iconName = "flags";
+			}
+			str = "  << " +  this.listeDesTables[i].tablName + " >>  " + this.listeDesTables[i].temps + " min. " ;
+					
+			_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no, icon: iconName});
 		}
 				
 		if (this.listeDesTables.length == 0 &&  _level0.loader.contentHolder._currentframe == 2 && _level0.loader.contentHolder["p0"]._visible == false)
@@ -2635,8 +2672,18 @@ class GestionnaireEvenements
 		 _level0.loader.contentHolder.listeTable.removeAll();
 		 for (var i:Number = 0; i < count; i++)
 		 {
-				str = this.listeDesTables[i].no + ".  *" +  this.listeDesTables[i].tablName + "*  " + this.listeDesTables[i].temps + " min. " ;
-				_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
+				var iconName:String;
+				if(this.listeDesTables[i].gameType == "mathEnJeu")
+				{   
+				   iconName = "maze";
+				}
+				else if (this.listeDesTables[i].gameType == "Course" ||this.listeDesTables[i].gameType == "Tournament")
+				{
+					iconName = "flags";
+				}
+				str = "  << " +  this.listeDesTables[i].tablName + " >>  " + this.listeDesTables[i].temps + " min. " ;
+					
+				_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no, icon: iconName});
 		 }
 		
 		if (this.listeDesTables.length == 0 &&  _level0.loader.contentHolder._currentframe == 2 && _level0.loader.contentHolder["p0"]._visible == false)
@@ -2748,8 +2795,18 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder.listeTable.removeAll();
 		for (var i:Number = 0; i < count; i++)
 	    {
-			str = this.listeDesTables[i].no + ".  *" +  this.listeDesTables[i].tablName + "*  " + this.listeDesTables[i].temps + " min. " ;
-			_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no});
+			var iconName:String;
+			if(this.listeDesTables[i].gameType == "mathEnJeu")
+			{   
+				   iconName = "maze";
+			}
+			else if (this.listeDesTables[i].gameType == "Course" ||this.listeDesTables[i].gameType == "Tournament")
+			{
+					iconName = "flags";
+			}
+			str = "  << " +  this.listeDesTables[i].tablName + " >>  " + this.listeDesTables[i].temps + " min. " ;
+				
+			_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no, icon: iconName});
 		}
 		
 		count = this.listeDesPersonnages.length;
