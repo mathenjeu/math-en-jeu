@@ -65,6 +65,7 @@ public class JoueurVirtuel extends Joueur implements Runnable{
     // Déclaration d'une variable qui va contenir le numéro Id du personnage
 	// du joueur virtuel
 	private final int intIdPersonnage;
+	private int idDessin;
 
     // Déclaration d'une variable qui va contenir le pointage de la
     // partie du joueur virtuel
@@ -2798,6 +2799,22 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 	 */
 	public int getPointsFinalTime() {
 		return pointsFinalTime;
+	}
+
+
+	/**
+	 * @param idDessin the idDessin to set
+	 */
+	public void setIdDessin(int idDessin) {
+		this.idDessin = idDessin;
+	}
+
+
+	/**
+	 * @return the idDessin
+	 */
+	public int getIdDessin() {
+		return idDessin;
 	}
 	
 }

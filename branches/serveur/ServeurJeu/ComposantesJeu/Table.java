@@ -35,6 +35,8 @@ import ServeurJeu.Evenements.EvenementPartieDemarree;
 import ServeurJeu.Evenements.EvenementPartieTerminee;
 import ServeurJeu.Evenements.EvenementSynchroniserTemps;
 import ServeurJeu.Evenements.EvenementUtiliserObjet;
+import ServeurJeu.Evenements.EventPlayerPictureCanceled;
+import ServeurJeu.Evenements.EventPlayerSelectedPicture;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.Temps.GestionnaireTemps;
@@ -100,8 +102,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     private Integer objProchainIdObjet;
     // Name of the table
     private String tableName;
-    // Array of ID of the players pictures
-    private LinkedList<Integer> pictures;
     // nb lines on the game board
     private int nbLines;
     // nb columns on the game board
@@ -181,8 +181,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
         // Cette liste sera modifié si jamais un joueur est déconnecté
         lstJoueursDeconnectes = new LinkedList<String>();
-        pictures = new LinkedList<Integer>();
-
+        
         // Créer un thread pour le GestionnaireEvenements
         Thread threadEvenements = new Thread(objGestionnaireEvenements, "GestEven table ");
         // Démarrer le thread du gestionnaire d'événements
@@ -446,11 +445,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
                 //System.out.println("idPersonnage demarrePartie : " + idPersonnage);
 
-                // Garder en mémoire le Id du personnage choisi par le joueur
+                // Garder en mémoire le Id du personnage choisi par le joueur et son dessin
+                joueur.obtenirPartieCourante().setIdDessin(idDessin);
                 joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
                
-                pictures.add(idDessin);
-
                 // Si on doit générer le numéro de commande de retour, alors
                 // on le génére, sinon on ne fait rien (ça se peut que ce soit
                 // faux)
@@ -483,6 +481,83 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     }
 
     /**
+     * This method will cancel the picture used by the player
+     * (action initiate by the player). He will choose another one 
+     * @param player
+     * @param doitGenererNoCommandeRetour
+     */
+    public void cancelPicture(JoueurHumain player, boolean doitGenererNoCommandeRetour)
+    {
+    	 // get id from user to find the id of the picture
+    	 int idPersonnage = player.obtenirPartieCourante().obtenirIdPersonnage();
+    	 //int idDessin = player.obtenirPartieCourante().getIdDessin();
+    	 //cancel the carrent ids
+    	 player.obtenirPartieCourante().definirIdPersonnage(0);
+    	 player.obtenirPartieCourante().setIdDessin(0);
+    	 this.getBackOneIdPersonnage(idPersonnage);
+    	     	 
+         //System.out.println("idPersonnage demarrePartie : " + idPersonnage);
+         
+         // Si on doit générer le numéro de commande de retour, alors
+         // on le génére, sinon on ne fait rien (ça se peut que ce soit
+         // faux)
+         if (doitGenererNoCommandeRetour == true) {
+             // Générer un nouveau numéro de commande qui sera
+             // retourné au client
+             player.obtenirProtocoleJoueur().genererNumeroReponse();
+         }
+
+         // Empêcher d'autres thread de toucher à la liste des joueurs de
+         // cette table pendant qu'on parcourt tous les joueurs de la table
+         // pour leur envoyer un événement
+         synchronized (lstJoueurs) {
+             // Préparer l'événement de joueur en attente.
+             // Cette fonction va passer les joueurs et créer un
+             // InformationDestination pour chacun et ajouter l'événement
+             // dans la file de gestion d'événements
+             prepareEventPlayerCanceledPicture(player.obtenirNomUtilisateur(), idPersonnage);
+         }
+    }
+    
+    /**
+     * This method will put on the system the picture selected  by the player
+     * (action initiate by the player).  
+     * @param player
+     * @param doitGenererNoCommandeRetour
+     */
+    public void setNewPicture(JoueurHumain humainPlayer, int idDessin,
+			boolean doitGenererNoCommandeRetour) {
+    	int idPersonnage = this.getOneIdPersonnage(idDessin);
+
+        //System.out.println("idPersonnage demarrePartie : " + idPersonnage);
+
+        // Garder en mémoire le Id du personnage choisi par le joueur et son dessin
+    	humainPlayer.obtenirPartieCourante().setIdDessin(idDessin);
+    	humainPlayer.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
+       
+        // Si on doit générer le numéro de commande de retour, alors
+        // on le génére, sinon on ne fait rien (ça se peut que ce soit
+        // faux)
+        if (doitGenererNoCommandeRetour == true) {
+            // Générer un nouveau numéro de commande qui sera
+            // retourné au client
+        	humainPlayer.obtenirProtocoleJoueur().genererNumeroReponse();
+        }
+
+        // Empêcher d'autres thread de toucher à la liste des joueurs de
+        // cette table pendant qu'on parcourt tous les joueurs de la table
+        // pour leur envoyer un événement
+        synchronized (lstJoueurs) {
+            // Préparer l'événement de joueur en attente.
+            // Cette fonction va passer les joueurs et créer un
+            // InformationDestination pour chacun et ajouter l'événement
+            // dans la file de gestion d'événements
+            prepareEventPlayerSelectedNewPicture(humainPlayer.obtenirNomUtilisateur(), idPersonnage);
+        }
+		
+	}
+    	
+	/**
      *
      * @param joueur
      * @param doitGenererNoCommandeRetour
@@ -720,11 +795,18 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
             } else {
                 int IDdess;
-
+                boolean weHaveThisNumber;
                 // to have differents pictures for the virtual players
                 do {
-                    IDdess = objControleurJeu.genererNbAleatoire(11) + 1;
-                } while (pictures.contains(IDdess));
+                	weHaveThisNumber = false;
+                	IDdess = objControleurJeu.genererNbAleatoire(11) + 1;
+                    
+                    for(JoueurVirtuel joueur:lstJoueursVirtuels)
+                    {
+                    	if(joueur.getIdDessin() == IDdess)
+                    		weHaveThisNumber = true;
+                    }
+                } while (weHaveThisNumber);
 
                 // On se rendra ici seulement si intNombreJoueursVirtuels > 0
                 // C'est ici qu'on crée les joueurs virtuels, ils vont commencer
@@ -753,8 +835,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 // Ajouter le joueur virtuel à la liste
                 lstJoueursVirtuels.add(objJoueurVirtuel);
 
-                pictures.add(IDdess);
-
                 // Ajouter le joueur virtuel à la liste des positions, liste qui sera envoyée
                 // aux joueurs humains
                 //lstPositionsJoueurs.put(objJoueurVirtuel.obtenirNom(), objtPositionsJoueurs[position]);
@@ -762,12 +842,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
                 // Pour le prochain joueur virtuel
                 intIdPersonnage++;
-
-                //String name = getGameType();
-
+                
                 String color = this.getOneColor();
                 //System.out.println("colors: " + color);
                 objJoueurVirtuel.setClothesColor(color);
+                objJoueurVirtuel.setIdDessin(IDdess);
 
 
             }
@@ -875,7 +954,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                         else if (ourResults.last().getUsername().equalsIgnoreCase(objJoueurHumain.obtenirNomUtilisateur()))
                             cleJoueurGagnant = objJoueurHumain.obtenirCleJoueur();
                         
-                        System.out.println("table - Joueur H " + " " + objJoueurHumain.obtenirNomUtilisateur() + " " + infoPartie.getPointsFinalTime() + " " + ourResults.size());
+                        //System.out.println("table - Joueur H " + " " + objJoueurHumain.obtenirNomUtilisateur() + " " + infoPartie.getPointsFinalTime() + " " + ourResults.size());
                     }
 
                     // Ajouter la partie dans la BD
@@ -948,7 +1027,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             if (lstJoueurs.isEmpty()) {
                 // Détruire la table courante et envoyer les événements
                 // appropriés
-                System.out.println("table - etape - is empty");
+                //System.out.println("table - etape - is empty");
                 getObjSalle().detruireTable(this);
             }
         }// end if bolEstArretee
@@ -963,7 +1042,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             //this.objGestionnaireBD = null;
             this.objttPlateauJeu = null;
             this.gameFactory = null;
-            System.out.println("table - etape 2");
+            //System.out.println("table - etape 2");
         }
         //System.out.println("table - end of method");
     }// end method
@@ -1116,7 +1195,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
      * @param TreeMap listePersonnageJoueurs : La liste des personnages
      * 										   pour chaque joueur
      * @throws NullPointerException : Si la liste des personnages est à nulle
-     */
+    
     private void remplirListePersonnageJoueurs(HashMap<String, Integer> listePersonnageJoueurs, HashMap<String, Integer> listeRoleJoueurs) throws NullPointerException {
         // Passer tous les joueurs de la table et leur envoyer un événement
         for (JoueurHumain objJoueur: lstJoueurs.values()) {
@@ -1133,7 +1212,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             listePersonnageJoueurs.put("Inconnu" + Integer.toString(i), new Integer(0));
             listeRoleJoueurs.put("Inconnu" + Integer.toString(i), new Integer(0));
         }
-    }
+    } */
 
     public JoueurHumain[] remplirListePersonnageJoueurs() throws NullPointerException {
         JoueurHumain[] humains = new JoueurHumain[lstJoueurs.size()];
@@ -1262,7 +1341,78 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         // Ajouter le nouvel événement créé dans la liste d'événements à traiter
         objGestionnaireEvenements.ajouterEvenement(joueurDemarrePartie);
     }
+    
+    /**
+     * Cette méthode permet de préparer l'événement du cancelation du dessin
+     * choisi par joueur avant. Cette méthode va passer tous les joueurs
+     * de la table courante et pour ceux devant être avertis (tous sauf le
+     * joueur courant passé en paramètre), on va obtenir un numéro de commande,
+     * on va créer un InformationDestination et on va ajouter l'événement dans
+     * la file d'événements du gestionnaire d'événements. Lors de l'appel
+     * de cette fonction, la liste des joueurs est synchronisée.
+     * @param String nomUtilisateur : Le nom d'utilisateur du joueur qui
+     * 								  vient de démarrer la partie
+     * @param int idPersonnage : Le numéro Id du personnage annuler par le joueur
+     *
+     * Synchronisme : Cette fonction n'est pas synchronisée ici, mais elle l'est
+     * 				  par l'appelant (playerCanceledPicture).
+     */
+    private void prepareEventPlayerCanceledPicture(String playerName,
+			int idPersonnage) {
+    	// Créer un nouvel événement qui va permettre d'envoyer l'événement
+        // aux joueurs qu'un joueur démarré une partie
+        EventPlayerPictureCanceled canceledPicture = new EventPlayerPictureCanceled(playerName, idPersonnage);
 
+        // Passer tous les joueurs de la table et leur envoyer un événement
+        for (JoueurHumain objJoueur: lstJoueurs.values()) {
+            // Si le nom d'utilisateur du joueur courant n'est pas celui
+            // qui vient de démarrer la partie, alors on peut envoyer un
+            // événement à cet utilisateur
+            if (objJoueur.obtenirNomUtilisateur().equals(playerName) == false) {
+                // Obtenir un numéro de commande pour le joueur courant, créer
+                // un InformationDestination et l'ajouter à l'événement
+                canceledPicture.ajouterInformationDestination(
+                        new InformationDestination(
+                        objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
+                        objJoueur.obtenirProtocoleJoueur()));
+            }
+        }
+
+        // Ajouter le nouvel événement créé dans la liste d'événements à traiter
+        objGestionnaireEvenements.ajouterEvenement(canceledPicture);
+		
+	}
+
+   
+    
+    private void prepareEventPlayerSelectedNewPicture(
+			String playerName, int idPersonnage) {
+    	// Créer un nouvel événement qui va permettre d'envoyer l'événement
+        // aux joueurs qu'un joueur démarré une partie
+        EventPlayerSelectedPicture selectedNewPicture = new EventPlayerSelectedPicture(playerName, idPersonnage);
+
+        // Passer tous les joueurs de la table et leur envoyer un événement
+        for (JoueurHumain objJoueur: lstJoueurs.values()) {
+            // Si le nom d'utilisateur du joueur courant n'est pas celui
+            // qui vient de démarrer la partie, alors on peut envoyer un
+            // événement à cet utilisateur
+            if (objJoueur.obtenirNomUtilisateur().equals(playerName) == false) {
+                // Obtenir un numéro de commande pour le joueur courant, créer
+                // un InformationDestination et l'ajouter à l'événement
+                selectedNewPicture.ajouterInformationDestination(
+                        new InformationDestination(
+                        objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
+                        objJoueur.obtenirProtocoleJoueur()));
+            }
+        }
+
+        // Ajouter le nouvel événement créé dans la liste d'événements à traiter
+        objGestionnaireEvenements.ajouterEvenement(selectedNewPicture);
+		
+		
+	}
+
+    
     /**
      * Cette méthode permet de préparer l'événement du démarrage de partie
      * de la table courante. Cette méthode va passer tous les joueurs
@@ -1876,7 +2026,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             int idPersonnage = this.idPersos.poll();
             //this.idPersos.remove(0);
 
-            idPersonnage = 10000 + idDessin * 100 + idPersonnage;
+            idPersonnage += 10000 + idDessin * 100;
             return idPersonnage;
         }
     }
@@ -1927,5 +2077,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     public ControleurJeu getObjControleurJeu() {
         return objControleurJeu;
     }
+	
 }// end class
 

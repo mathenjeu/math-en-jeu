@@ -1439,6 +1439,69 @@ public class ProtocoleJoueur implements Runnable
         noeudCommande.setAttribute("nom", "Ok");
         noeudCommande.setAttribute("id", Integer.toString(idPersonnage));
     }
+    
+    private void handleCommandPlayerCanceledPicture(Element noeudEntree, Element noeudCommande) {
+
+        if (erreurJoueurNonConnecte(noeudCommande)) {
+            return;
+        }
+        if (erreurJoueurPasDansSalle(noeudCommande)) {
+            return;
+        }
+        if (erreurJoueurPasDansTable(noeudCommande)) {
+            return;
+        }
+
+        // On n'a pas besoin de valider qu'il n'y aucune partie de
+        // commencée, car le joueur doit obligatoirement être dans
+        // la table pour annuler son dessin et comme il ne peut entrer
+        // si une partie est en cours, alors c'est certain qu'il n'y
+        // aura pas de parties en cours
+
+       
+        // Appeler la méthode permettant de annuler le dessin
+        objJoueurHumain.obtenirPartieCourante().obtenirTable().cancelPicture(
+                objJoueurHumain, true);
+        
+        noeudCommande.setAttribute("type", "Reponse");
+        noeudCommande.setAttribute("nom", "Ok");
+        
+    }
+    
+    private void handleCommandPlayerSelectedNewPicture(Element noeudEntree, Element noeudCommande) {
+
+        if (erreurJoueurNonConnecte(noeudCommande)) {
+            return;
+        }
+        if (erreurJoueurPasDansSalle(noeudCommande)) {
+            return;
+        }
+        if (erreurJoueurPasDansTable(noeudCommande)) {
+            return;
+        }
+
+        // On n'a pas besoin de valider qu'il n'y aucune partie de
+        // commencée, car le joueur doit obligatoirement être dans
+        // la table pour selecter son dessin et comme il ne peut entrer
+        // si une partie est en cours, alors c'est certain qu'il n'y
+        // aura pas de parties en cours
+
+
+        // Obtenir le numéro Id du personnage choisi et le garder
+        // en mémoire dans une variable
+        int intIdDessin = Integer.parseInt(obtenirValeurParametre(noeudEntree, "IdDessin").getNodeValue());
+
+        objJoueurHumain.obtenirPartieCourante().obtenirTable().setNewPicture(
+                objJoueurHumain, intIdDessin, true);
+
+        
+        int idPersonnage = objJoueurHumain.obtenirPartieCourante().obtenirIdPersonnage();
+       
+        noeudCommande.setAttribute("type", "Reponse");
+        noeudCommande.setAttribute("nom", "Ok");
+        noeudCommande.setAttribute("id", Integer.toString(idPersonnage));
+    }
+    
 
     private void traiterCommandeDeplacerPersonnage(Element noeudEntree, Element noeudCommande) {
         if (erreurJoueurNonConnecte(noeudCommande)) {
@@ -2112,6 +2175,12 @@ public class ProtocoleJoueur implements Runnable
                     case DemarrerPartie:
                         traiterCommandeDemarrerPartie(objNoeudCommandeEntree, objNoeudCommande);
                         break;
+                    case PlayerCanceledPicture:
+                    	handleCommandPlayerCanceledPicture(objNoeudCommandeEntree, objNoeudCommande);
+                        break;
+                    case PlayerSelectedNewPicture:
+                    	handleCommandPlayerSelectedNewPicture(objNoeudCommandeEntree, objNoeudCommande);
+                        break;
                     case DeplacerPersonnage:
                         traiterCommandeDeplacerPersonnage(objNoeudCommandeEntree, objNoeudCommande);
                         break;
@@ -2242,6 +2311,7 @@ public class ProtocoleJoueur implements Runnable
             case ObtenirListeSallesProf:
             case ObtenirListeJoueursSalle:
             case CloseRoom:
+            case PlayerCanceledPicture:
             case QuitterTable:
             case QuitterSalle:
             case CancelQuestion:
@@ -2262,6 +2332,7 @@ public class ProtocoleJoueur implements Runnable
             case ReportRoom: return validerCommande(noeudCommande, new String[]{"RoomId"}, true);
             case EntrerTable: return validerCommande(noeudCommande, new String[]{"NoTable"}, true);
             case DemarrerPartie: return validerCommande(noeudCommande, new String[]{"IdDessin"}, true);
+            case PlayerSelectedNewPicture: return validerCommande(noeudCommande, new String[]{"IdDessin"}, true);
             case Pointage: return validerCommande(noeudCommande, new String[]{"Pointage"}, true);
             case Argent: return validerCommande(noeudCommande, new String[]{"Argent"}, true);
             case AcheterObjet: return validerCommande(noeudCommande, new String[]{"id"}, true);
