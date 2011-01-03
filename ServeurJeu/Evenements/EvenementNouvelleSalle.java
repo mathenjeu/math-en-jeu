@@ -149,7 +149,7 @@ public class EvenementNouvelleSalle extends Evenement {
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
 		
-		System.out.println(strCodeXML);
+		//System.out.println(strCodeXML);
 		return strCodeXML;
 	}
 

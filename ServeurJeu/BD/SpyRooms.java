@@ -88,8 +88,9 @@ public class SpyRooms implements Runnable {
 			
 		    int ind = list.lastIndexOf(",");
 		    if(ind > 0)
-		       list = list.substring(0, ind);  
-            //Object[] roomS =  rooms.toArray();
+		       list = list.substring(0, ind);
+		    else list = "0";
+            
 			rooms.clear();
             
 			//find all new rooms  and fill in ArrayList

@@ -577,7 +577,7 @@ public class ControleurJeu {
         // contrôleur de jeu
         synchronized (lstSalles) {
             lstSalles.put(nouvelleSalle.getRoomId(), nouvelleSalle);
-            // System.out.println(nouvelleSalle.getRoomID() + " NEW " + nouvelleSalle.toString());
+            //System.out.println(nouvelleSalle.getRoomId() + " NEW " + nouvelleSalle.toString());
         }
     }
 
@@ -602,18 +602,15 @@ public class ControleurJeu {
         ArrayList<Integer> rooms = new ArrayList<Integer>();
         synchronized (lstSalles) {
 
-            Set<Integer> keySet = lstSalles.keySet();
-            Iterator<Integer> it = keySet.iterator();
-            while (it.hasNext()) {
-                int key = it.next();
-                Salle salle = lstSalles.get(key);
-
+            for(Salle salle : lstSalles.values())
+            {
                 if (salle.getEndDate() != null && salle.getEndDate().before(new Date(System.currentTimeMillis())))
-                    it.remove();
+                    lstSalles.remove(salle);
                 else
-                    rooms.add(key);
+                    rooms.add(salle.getRoomId());
             }
         }
+                
         return rooms;
     }
 
@@ -888,13 +885,6 @@ public class ControleurJeu {
     public TreeMap<Integer, String> getGameTypesMap() {
         return gameTypesMap;
     }
-/*
-	public boolean isOn() {
-		return isOn;
-	}
 
-	public void setOn(boolean isOn) {
-		this.isOn = isOn;
-	}*/
 }// end class
 

@@ -451,7 +451,7 @@ public class Salle
             // Cette fonction va passer les joueurs et créer un
             // InformationDestination pour chacun et ajouter l'événement
             // dans la file de gestion d'événements
-            System.out.println(" RTest - table " + tableADetruire.obtenirNoTable());
+           // System.out.println(" RTest - table " + tableADetruire.obtenirNoTable());
             preparerEvenementTableDetruite(tableADetruire.obtenirNoTable());
         }
     }
@@ -778,5 +778,6 @@ public class Salle
     public Date getEndDate() {
         return dateEndDate;
     }
+	
 }// end class 
 

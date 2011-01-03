@@ -35,6 +35,7 @@ public class InformationPartie
     private final Table objTable;
     // Déclaration d'une variable qui va contenir le numéro Id du personnage
     private int intIdPersonnage;
+    private int idDessin;
     // Déclaration d'une variable qui va contenir le pointage de la
     // partie du joueur possèdant cet objet
     private int intPointage;
@@ -1208,6 +1209,20 @@ public class InformationPartie
         if(total > 0)
 		   percents = (double)(right * 100 / total);
 		return percents;
+	}
+
+	/**
+	 * @param idDessin the idDessin to set
+	 */
+	public void setIdDessin(int idDessin) {
+		this.idDessin = idDessin;
+	}
+
+	/**
+	 * @return the idDessin
+	 */
+	public int getIdDessin() {
+		return idDessin;
 	}
 } // end class
 
