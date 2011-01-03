@@ -19,6 +19,8 @@ public enum Commande
     QuitterTable,
     DemarrerMaintenant,
     DemarrerPartie,
+    PlayerCanceledPicture,
+    PlayerSelectedNewPicture,
     DeplacerPersonnage,
     RepondreQuestion,
     Pointage,
