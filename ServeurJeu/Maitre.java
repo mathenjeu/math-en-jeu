@@ -1,6 +1,7 @@
 package ServeurJeu;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -14,8 +15,8 @@ public class Maitre implements Runnable
 	private ServerFrame serverWindow;
 	private static final int _STOP = 1;
 	private static final int _STATUS = 2;
-	private static final int _START = 3;
-	private static final int _RESTART = 4;
+	private static final int _ON = 3;
+	//private static final int _RESTART = 4;
 	
 	// Boolean to indicate if server is on or off
     private boolean isOn;
@@ -168,7 +169,7 @@ public class Maitre implements Runnable
 		try 
 		{
 			boolean arret = false;
-			ServerSocket socketServeur = new ServerSocket( 6101 ); 
+			ServerSocket socketServeur = new ServerSocket( 6101, 3, InetAddress.getByName("localhost")); 
 			while( !arret )
 			{
 				//System.out.println( "le maitre "  + this.commandToDo);
@@ -179,18 +180,19 @@ public class Maitre implements Runnable
 					byte [] buffer = new byte[256];
 					socket.getInputStream().read( buffer );
 					byte commande = (byte)buffer[0];
+					System.out.println(commande);
 					if( commande == (byte)_STOP )
 					{
 						System.out.println( "arreter le serveur" );
 						this.stopServer();
-						System.exit( 0 );
+						//System.exit( 0 );
 					}
 					else if( commande == (byte)_STATUS )
 					{
 						System.out.println( "obtenir le status du serveur" );
-						String message = "Le serveur est en ligne";
-						buffer = message.getBytes();
-						socket.getOutputStream().write( buffer );
+						//String message = "Le serveur est en ligne";
+						//buffer = message.getBytes();
+						socket.getOutputStream().write( (byte)_ON);//buffer );
 					}
 					else
 					{
