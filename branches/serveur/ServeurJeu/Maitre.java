@@ -185,7 +185,8 @@ public class Maitre implements Runnable
 					{
 						System.out.println( "arreter le serveur" );
 						this.stopServer();
-						//System.exit( 0 );
+						socket.getOutputStream().write( (byte)_STOP);//buffer );
+						System.exit( 0 );
 					}
 					else if( commande == (byte)_STATUS )
 					{
