@@ -1519,9 +1519,9 @@ class PlancheDeJeu
 	function tossBananaShell(nameBy:String, nameTo:String ):Void
 	{
 	    // phase 1 - remove old shell_mc
-	   _level0.loader.contentHolder.referenceLayer.shell_mc.removeMovieClip();
+	   //_level0.loader.contentHolder.referenceLayer.shell_mc.removeMovieClip();
 	   // phase 1 - player toss banana
-	   getPersonnageByName(nameBy).tossBanana();
+	   this.getPersonnageByName(nameBy).tossBanana();
 	   
 	   // phase 2 - banana shell fly to the player that support the action
 	   var intervalId:Number;
@@ -1536,28 +1536,17 @@ class PlancheDeJeu
 	   	   
 	     var coorToX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).obtenirProchainePosition().obtenirX();
 	     var coorToY:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).obtenirProchainePosition().obtenirY()- 15;
+		 		 
+		 _level0.loader.contentHolder.referenceLayer.attachMovie("bananaShell", "shell_mc" + nameBy + intervalId, _level0.loader.contentHolder.referenceLayer.getNextHighestDepth(), {_x:coorByX, _y:coorByY});
 		 
-				  	
+		 var twMoveX:Tween = new Tween(_level0.loader.contentHolder.referenceLayer["shell_mc"  + nameBy + intervalId], "_x", Strong.easeOut, coorByX, coorToX, 1, true);
+		 var twMoveY:Tween = new Tween(_level0.loader.contentHolder.referenceLayer["shell_mc"  + nameBy + intervalId], "_y", Strong.easeOut, coorByY, coorToY, 1, true);
+		 var twMoveRot:Tween = new Tween(_level0.loader.contentHolder.referenceLayer["shell_mc"  + nameBy + intervalId], "_rotation", Strong.easeOut, 0, 360, 1, true);
 		 
-		 _level0.loader.contentHolder.referenceLayer.attachMovie("bananaShell", "shell_mc", _level0.loader.contentHolder.referenceLayer.getNextHighestDepth(), {_x:coorByX, _y:coorByY});
-		 
-		 var twMoveX:Tween = new Tween(_level0.loader.contentHolder.referenceLayer.shell_mc, "_x", Strong.easeOut, coorByX, coorToX, 1, true);
-		 var twMoveY:Tween = new Tween(_level0.loader.contentHolder.referenceLayer.shell_mc, "_y", Strong.easeOut, coorByY, coorToY, 1, true);
-		 var twMoveRot:Tween = new Tween(_level0.loader.contentHolder.referenceLayer.shell_mc, "_rotation", Strong.easeOut, 0, 360, 1, true);
-		 
-		 _level0.loader.contentHolder.referenceLayer["shell_mc"].swapDepths(_level0.loader.contentHolder.referenceLayer["Personnage" + num]);
+		 _level0.loader.contentHolder.referenceLayer["shell_mc"  + nameBy + intervalId].swapDepths(_level0.loader.contentHolder.referenceLayer["Personnage" + num]);
 		 
 	   }// end attendre
-	   
-	   // to resume the banana state
-	    var intervalId3:Number;
-		   intervalId3 = setInterval(endOfBanana, 12000, nameTo);
-		   function endOfBanana(){
-		      _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).rest();
-		      clearInterval(intervalId3);
-		}
-	   
-	   	   
+	  /*	     	   
 	   var intervalId2:Number;
 	   var wait:Number = 0;
 	   intervalId2 = setInterval(bananaShell, 200);	// sert pour attendre la jusqu'a la fin de action de 
@@ -1566,12 +1555,11 @@ class PlancheDeJeu
 		  if(wait > 35)
 		     _level0.loader.contentHolder.referenceLayer["shell_mc"]._alpha -= 5;
 		  if(wait > 55){
-		      //_level0.loader.contentHolder.referenceLayer["shell_mc"].swapDepths(_level0.loader.contentHolder.referenceLayer["Personnage" + num]);
-			 _level0.loader.contentHolder.referenceLayer.shell_mc.removeMovieClip();
+		     _level0.loader.contentHolder.referenceLayer.shell_mc.removeMovieClip();
 			 clearInterval(intervalId2);
 		  }
 		  wait++;   
-	   } // end bananaShell
+	   } // end bananaShell */
 	   
 	   
 	}// end function

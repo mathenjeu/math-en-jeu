@@ -79,8 +79,13 @@ class GestionnaireEvenements
 	private var allowedTypes:Array;   // allowed types of game in our room - course, tournament ...
 	private var ourPerso:Personnage;  // reference to our personnage on the table(planche) .. I am not sure that is very useful...
 	private var allowedTypesMap:Array;
+	private var bananaMessageIntervalArray:Array;  //
+	private var bananaIntervalArray:Array;    //
 	
 	private static var BANANA_TIME:Number = 90;    //  constant for the time that banana is active
+// is used in selectPlayer in the cases the player 
+// change his first selected picture
+public var wasHereOnce:Boolean = false;
 	
 	function getMoveSight():Number
 	{
@@ -198,6 +203,8 @@ class GestionnaireEvenements
         this.listeDesJoueursConnectes = new Array();
         this.listeDesJoueursDansSalle = new Array();
 		this.tabPodiumOrdonneID = new Array();
+		this.bananaMessageIntervalArray = new Array();
+		this.bananaIntervalArray = new Array();
 		this.moveVisibility = 3;
 		this.endGame = false;
 		var url_serveur:String = _level0.configxml_mainnode.attributes.url_server;
@@ -452,11 +459,38 @@ class GestionnaireEvenements
 		//this.listeDesPersonnages[this.listeDesPersonnages.length - 1].clocolor = this.colorIt;
 		//this.listeDesPersonnages[numeroJoueursDansSalle-1].lastPoints = 0;
 		
-        this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), Delegate.create(this, this.evenementPartieTerminee), Delegate.create(this, this.evenementJoueurRejoindrePartie),  idDessin);//this.idPersonnage);//  
+        this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), 
+			Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), 
+			Delegate.create(this, this.evenementPartieTerminee), Delegate.create(this, this.evenementJoueurRejoindrePartie), Delegate.create(this, this.eventPlayerPictureCanceled), 
+			Delegate.create(this, this.eventPlayerSelectedPicture),  idDessin);  
 	
 		trace("fin de demarrerPartie");
         trace("*********************************************\n");
     }
+	
+	/*
+	   User decided to cancel picture and he is back to the frame 3 selectPicture
+	*/
+	function playerCanceledPicture()
+	{
+	  trace("*********************************************");
+      trace("debut de cancelPicture "); 
+	  this.objGestionnaireCommunication.playerCanceledPicture(Delegate.create(this, this.returnPlayerCanceledPicture)); 
+	  trace("fin de cancelPicture ");
+      trace("*********************************************\n");
+	}
+	
+	/*
+	   User selected another picture ....
+	*/
+	function playerSelectedNewPicture(idDessin:Number)
+	{
+	  trace("*********************************************");
+      trace("debut de selectedNewPicture "); 
+	  this.objGestionnaireCommunication.playerSelectedNewPicture(Delegate.create(this, this.returnPlayerSelectedNewPicture), idDessin); 
+	  trace("fin de selectedNewPicture ");
+      trace("*********************************************\n");
+	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////// 
     function demarrerMaintenant(niveau:String)
@@ -1650,6 +1684,135 @@ class GestionnaireEvenements
         trace("fin de retourSortirJoueurTable");
         trace("*********************************************\n");
     }//end 
+	
+	////////////////////////////////////////////////////////////////
+	public function returnPlayerCanceledPicture(objetEvenement)
+	{
+		// objetEvenement.resultat = Ok, CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte, JoueurPasDansSalle, JoueurPasDansTable
+        trace("*********************************************");
+        trace("debut de retourPlayerCanceledPicture   " + objetEvenement.resultat);
+		switch(objetEvenement.resultat)
+        {
+            case "Ok":
+			    var count:Number =  this.listeDesPersonnages.length; 
+			    for(var i:Number = 0; i < count; i++)
+				{
+				   if(this.listeDesPersonnages[i].nom == this.nomUtilisateur)
+				   {
+				      this.listeDesPersonnages[i].idessin = 0;
+					   
+					  this.drawUserVoidHidden(i);
+					  
+					 
+				   }
+				
+				}
+                trace("retourCanceledPicture ok");
+            break;
+			case "CommandeNonReconnue":
+                trace("CommandeNonReconnue");
+            break;
+			
+            case "ParametrePasBon":
+                trace("ParamettrePasBon");
+            break;
+			
+            case "JoueurNonConnecte":
+                trace("Joueur non connecte");
+            break;
+			
+            case "JoueurPasDansSalle":
+                trace("Joueur pas dans salle");
+            break;
+			
+            case "JoueurPasDansTable":
+                trace("Joueur pas dans table");
+            break;
+			
+            case "TableNonComplete":
+                trace("Table non complete");
+            break;
+			default:
+                trace("Erreur Inconnue Message du serveur: " + objetEvenement.resultat);
+        }
+		objetEvenement = null;
+        trace("fin de retourCanceledPicture");
+        trace("*********************************************\n");
+		
+	}
+	
+	////////////////////////////////////////////////////////////////
+	public function returnPlayerSelectedNewPicture(objetEvenement)
+	{
+		// objetEvenement.resultat = Ok, CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte, JoueurPasDansSalle, JoueurPasDansTable
+        trace("*********************************************");
+        trace("debut de retourPlayerSelectedNewPicture   " + objetEvenement.resultat);
+		switch(objetEvenement.resultat)
+        {
+            case "Ok":
+			    this.idPersonnage = objetEvenement.idP;
+			    var count:Number =  this.listeDesPersonnages.length; 
+			    for(var i:Number = 0; i < count; i++)
+				{
+				   if(this.listeDesPersonnages[i].nom == this.nomUtilisateur)
+				   {
+				      this.listeDesPersonnages[i].id = objetEvenement.idP;
+					  this.listeDesPersonnages[i].clocolor = this.colorIt;
+					  trace("nom and idP = " + this.listeDesPersonnages[i].nom +  " " + this.listeDesPersonnages[i].id + " " + i);
+					  
+					  _level0.loader.contentHolder["joueur" + i] = this.listeDesPersonnages[i].nom;
+					 var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
+					 									    
+                     if(idDessin != 0)
+					 {
+						
+					    this.listeDesPersonnages[i].idessin = idDessin;
+					   
+					    var idPers =  calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
+					    var cloColor:String = this.listeDesPersonnages[i].clocolor;
+					 
+					    this.drawUserFrame3(i, cloColor, idDessin, _level0.loader.contentHolder["player" + i]);
+					  				        
+					    _level0.loader.contentHolder["player" + i]._xscale = 90;
+					    _level0.loader.contentHolder["player" + i]._yscale = 90;
+                     					 
+				   }
+				
+				 }
+			 }
+                trace("retourCanceledPicture ok");
+            break;
+			case "CommandeNonReconnue":
+                trace("CommandeNonReconnue");
+            break;
+			
+            case "ParametrePasBon":
+                trace("ParamettrePasBon");
+            break;
+			
+            case "JoueurNonConnecte":
+                trace("Joueur non connecte");
+            break;
+			
+            case "JoueurPasDansSalle":
+                trace("Joueur pas dans salle");
+            break;
+			
+            case "JoueurPasDansTable":
+                trace("Joueur pas dans table");
+            break;
+			
+            case "TableNonComplete":
+                trace("Table non complete");
+            break;
+			default:
+                trace("Erreur Inconnue Message du serveur: " + objetEvenement.resultat);
+        }
+		objetEvenement = null;
+        trace("fin de retourCanceledPicture");
+        trace("*********************************************\n");
+		
+	}
 	
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function retourDemarrerPartie(objetEvenement:Object)
@@ -3025,6 +3188,60 @@ class GestionnaireEvenements
         trace("*********************************************\n");
 				
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+    public function eventPlayerPictureCanceled(objetEvenement:Object)
+    {
+        // param:  nomUtilisateur,
+     	trace("*********************************************");
+     	trace("begin eventPlayerPictureCanceled   ");
+		for (var i:Number = 0; i < this.maxPlayers; i++)
+        {	       
+        	if(listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur)
+        	{
+            	this.listeDesPersonnages[i].id = 0;
+				this.listeDesPersonnages[i].idessin = 0;
+				this.drawUserVoidVisible(i);					           	
+        	}
+        	
+        }
+		   	
+		objetEvenement = null;
+		trace("end eventPlayerPictureCanceled");
+    	trace("*********************************************\n");
+    }// end function
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+    public function eventPlayerSelectedPicture(objetEvenement:Object)
+    {
+        // param:  nomUtilisateur, id
+     	trace("*********************************************");
+     	trace("begin eventPlayerSelectedNewPicture   ");
+		for (var i:Number = 0; i < this.maxPlayers; i++)
+        {	       
+        	if(listeDesPersonnages[i].nom == objetEvenement.nomUtilisateur)
+        	{
+            	this.listeDesPersonnages[i].id = objetEvenement.idPersonnage;
+				var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
+				this.listeDesPersonnages[i].idessin = idDessin;
+				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
+            	var cloCol:String = this.listeDesPersonnages[i].clocolor;//objetEvenement.clothesColor;
+				this.listeDesPersonnages[i].filterC = _level0.loader.contentHolder.objGestionnaireEvenements.colorMatrixPerso(cloCol, idDessin);
+				
+				 this.drawUserFrame3(i, cloCol, idDessin, _level0.loader.contentHolder["player" + i]);
+					  					  
+				 _level0.loader.contentHolder["joueur" + i] = this.listeDesPersonnages[i].nom;
+		         _level0.loader.contentHolder["player" + i]._xscale = 90;
+			     _level0.loader.contentHolder["player" + i]._yscale = 90;
+					           			           	
+        	}
+        	
+        }
+		   	
+		objetEvenement = null;
+		trace("end eventPlayerSelectedNewPicture ");
+    	trace("*********************************************\n");
+    }// end function
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function evenementJoueurDemarrePartie(objetEvenement:Object)
@@ -3460,19 +3677,23 @@ class GestionnaireEvenements
 								   
 		   }//end else if
 		   
-		   _global.timerIntervalBanana = setInterval(this, "waitBanana", 5000, playerUnder);
-		   _global.timerIntervalMessage = setInterval(this,"funcToCallMessage", 6000, playerThat);
+		   var timerIntervalBanana:Number  = setInterval(this, "waitBanana", 5000, playerUnder);
+		   this.bananaIntervalArray.push(timerIntervalBanana);
+		   
+		   var timerIntervalMessage:Number = setInterval(this,"funcToCallMessage", 6000, playerThat);
+		   this.bananaMessageIntervalArray.push(timerIntervalMessage);
 		   
 		   
 		   
 		}else if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte != this.nomUtilisateur)
 		{
-		    _global.timerIntervalBananaAutre = setInterval(this, "waitBananaAutre", 5000, playerUnder);
+		    var timerIntervalBananaAutre:Number = setInterval(this, "waitBananaAutre", 5000, playerUnder);
+			this.bananaIntervalArray.push(timerIntervalBananaAutre);
 			
 					
 		}// end if
 		
-		if(objetEvenement.objetUtilise == "Banane" && playerThat != this.nomUtilisateur)
+		if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurQuiUtilise != this.nomUtilisateur)
 		{
 			_level0.loader.contentHolder.planche.tossBananaShell(playerThat, playerUnder);//getPersonnageByName(playerThat).tossBanana();
 			
@@ -3657,7 +3878,7 @@ class GestionnaireEvenements
 		{
 		   setBananaTimer(playerUnder);
 		}
-	    clearInterval(_global.timerIntervalBanana);
+	    clearInterval(_level0.loader.contentHolder.objGestionnaireEvenements.bananaIntervalArray.shift());
 		this.addMoveSight(-2);
 		_level0.loader.contentHolder.planche.setRepostCases(true);
 						
@@ -3669,11 +3890,11 @@ class GestionnaireEvenements
     function waitBananaAutre(playerUnder:String):Void
     {
         _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).slippingBanana();
-	    clearInterval(_global.timerIntervalBananaAutre);
+	    clearInterval(_level0.loader.contentHolder.objGestionnaireEvenements.bananaIntervalArray.shift());
 				
     }
 	
-	
+	// function to display the message of tossed banana
 	function funcToCallMessage(playerThat:String)
 	{
 		// we put the message only if the game is not in the way to finish
@@ -3688,7 +3909,8 @@ class GestionnaireEvenements
 		    _level0.loader.contentHolder["banane"].nomCible = " ";
 	        _level0.loader.contentHolder["banane"].nomJoueurUtilisateur = playerThat;
 	        twMove = new Tween(guiBanane, "_alpha", Strong.easeOut, 20, 60, 1, true);
-		    clearInterval(_global.timerIntervalMessage);
+		    
+			clearInterval(_level0.loader.contentHolder.objGestionnaireEvenements.bananaMessageIntervalArray.shift());//timerIntervalMessage);
 		}
 	}
     

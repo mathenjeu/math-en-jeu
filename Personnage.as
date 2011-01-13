@@ -1081,6 +1081,7 @@ class Personnage
 	//////////////////////////////////////////////////////////////////////////////////////
 	function slippingBanana()
 	{
+		this.image.gotoAndStop("rest");
 		this.image.gotoAndPlay("slipping");
 		
 		 // in this 3 lines we transfer player from Brainiac state to Banana state
@@ -1093,7 +1094,7 @@ class Personnage
 	//////////////////////////////////////////////////////////////////////////////////////
 	function rest()
 	{
-		this.image.gotoAndPlay("rest");
+		this.image.gotoAndStop("rest");
 	}
 	
 	// used to put the Braniac animation on the player  for the 60 sec.
