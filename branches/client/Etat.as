@@ -81,18 +81,30 @@ class Etat
     public static var DANS_TABLE:Object = {no:8, listeCommandesPossibles:new Array({nom:"Deconnexion", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie"), listeEvenementsAcceptablesApres:new Array()},
 	{nom:"QuitterSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie"), listeEvenementsAcceptablesApres:new Array()}, 
 	{nom:"QuitterTable", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite"), listeEvenementsAcceptablesAvant:new Array("JoueurDemarrePartie"), listeEvenementsAcceptablesApres:new Array()}, 
-	{nom:"DemarrerPartie", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie", "JoueurRejoindrePartie"), listeEvenementsAcceptablesAvant:new Array("JoueurDemarrePartie"), listeEvenementsAcceptablesApres:new Array("PartieDemarree", "JoueurDemarrePartie", "JoueurRejoindrePartie")},
+	{nom:"DemarrerPartie", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie", "JoueurRejoindrePartie"), 
+	                       listeEvenementsAcceptablesAvant:new Array("JoueurDemarrePartie"), 
+						   listeEvenementsAcceptablesApres:new Array("PartieDemarree", "JoueurDemarrePartie", "JoueurRejoindrePartie", "PlayerPictureCanceled", "PlayerSelectedNewPicture", "PlayerCanceledPicture"  )},
 	{nom:"ObtenirListeJoueursSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array("JoueurEntreSalle", "JoueurQuitteSalle")}), 
-	listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie", "JoueurRejoindrePartie" )};
+	listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie", "JoueurRejoindrePartie", "PlayerCanceledPicture"  )};
     
-    public static var ATTENTE_DEBUT_PARTIE:Object = {no:9, listeCommandesPossibles:new Array({nom:"Musique", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie", "PartieDemarree", "DemarrerMaintenant"),listeEvenementsAcceptablesApres:new Array()},
+    public static var ATTENTE_DEBUT_PARTIE:Object = {no:9, listeCommandesPossibles:new Array(
+	{nom:"Musique", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie", "PartieDemarree", "DemarrerMaintenant"),listeEvenementsAcceptablesApres:new Array()},
 	{nom:"DemarrerMaintenant", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie", "PartieDemarree", "DemarrerMaintenant"), listeEvenementsAcceptablesApres:new Array()}, 
 	{nom:"Deconnexion", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie", "PartieDemarree"), listeEvenementsAcceptablesApres:new Array()}, 
 	{nom:"QuitterSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie", "PartieDemarree"), listeEvenementsAcceptablesApres:new Array()}, 
     {nom:"QuitterTable", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite"), listeEvenementsAcceptablesAvant:new Array("JoueurDemarrePartie", "PartieDemarree"), listeEvenementsAcceptablesApres:new Array()},
 	{nom:"RejoindrePartie", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "PartieDemarree", "SynchroniserTemps"), listeEvenementsAcceptablesAvant:new Array("JoueurDemarrePartie", "PartieDemarree"), listeEvenementsAcceptablesApres:new Array("PartieDemarree", "SynchroniserTemps")}, 
-    {nom:"ObtenirListeJoueursSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array("JoueurEntreSalle", "JoueurQuitteSalle")}), 
-	listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie", "PartieDemarree", "JoueurDeplacePersonnage","SynchroniserTemps", "PartieTerminee", "UtiliserObjet", "JoueurRejoindrePartie" )}; //Enlever le dernier
+    {nom:"PlayerCanceledPicture", listeEvenementsAcceptables:new Array(), 
+	                    listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurEntreTable", "NouvelleTable", "TableDetruite", "PartieDemarree", "JoueurRejoindrePartie"), 
+						listeEvenementsAcceptablesApres:new Array("PlayerSelectedPicture")},
+	{nom:"PlayerSelectedNewPicture", listeEvenementsAcceptables:new Array(), 
+	                    listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDeplacePersonnage", "SynchroniserTemps", "PartieTerminee","UtiliserObjet", "JoueurRejoindrePartie"), 
+						listeEvenementsAcceptablesApres:new Array()}, 
+	{nom:"ObtenirListeJoueursSalle", listeEvenementsAcceptables:new Array(),
+	                    listeEvenementsAcceptablesAvant:new Array(),
+	                    listeEvenementsAcceptablesApres:new Array("JoueurEntreSalle", "JoueurQuitteSalle")}), 
+	listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie", "PartieDemarree", "JoueurDeplacePersonnage",
+										 "SynchroniserTemps", "PartieTerminee", "UtiliserObjet", "JoueurRejoindrePartie", "PlayerPictureCanceled", "PlayerSelectedPicture", "PlayerCanceledPicture" )}; 
 
     
     
@@ -106,7 +118,8 @@ class Etat
 						  listeEvenementsAcceptablesApres:new Array()}, 
     {nom:"Deconnexion", listeEvenementsAcceptables:new Array(), 
 	                    listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDeplacePersonnage", "SynchroniserTemps", "PartieTerminee","UtiliserObjet", "JoueurRejoindrePartie"), 
-						listeEvenementsAcceptablesApres:new Array()}, 
+						listeEvenementsAcceptablesApres:new Array()},
+	
     {nom:"QuitterSalle", listeEvenementsAcceptables:new Array(), 
 	                     listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDeplacePersonnage", "SynchroniserTemps", "PartieTerminee", "JoueurRejoindrePartie"), 
 						 listeEvenementsAcceptablesApres:new Array()}, 

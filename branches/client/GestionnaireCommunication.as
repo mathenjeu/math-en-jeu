@@ -325,7 +325,7 @@ class GestionnaireCommunication
 						case "RejoindrePartie":
 							feedbackRestartOldGame(objNoeudCommande);
 							break;
-					//************************************************
+					
                         case "Deconnexion":
                             retourDeconnexion(objNoeudCommande);
                             break;
@@ -368,6 +368,12 @@ class GestionnaireCommunication
                         case "DemarrerPartie":
                             retourDemarrerPartie(objNoeudCommande);
                             break;
+						case "PlayerCanceledPicture":
+						    returnPlayerCanceledPicture(objNoeudCommande)
+							break;
+						case "PlayerSelectedNewPicture":
+						    returnPlayerSelectedNewPicture(objNoeudCommande)
+							break;
                         case "DeplacerPersonnage":
                             retourDeplacerPersonnage(objNoeudCommande);
                             break;
@@ -992,6 +998,41 @@ class GestionnaireCommunication
 					} // end switch
 				
 				} // fin "JoueurRejoindrePartie"
+				
+				else if(noeudEvenement.attributes.nom == "PlayerPictureCanceled")
+				{
+					switch(strNomType)
+			    	{
+				    	
+						case "NomUtilisateur":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["nomUtilisateur"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+						
+						case "IdPersonnage":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["idPersonnage"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+					} // end switch
+				} // end "PlayerCanceledPicture"
+				
+				else if(noeudEvenement.attributes.nom == "PlayerSelectedPicture")
+				{
+					switch(strNomType)
+			    	{
+				    	
+						case "NomUtilisateur":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["nomUtilisateur"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+						
+						case "IdPersonnage":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["idPersonnage"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+					} // end switch
+				} // end "PlayerSelectedNewPicture"
+				
 				else	// donc (noeudEvenement.attributes.nom != "PartieDemarree" NI "JoueurDeplacePersonnage" NI "PartieTerminee")
 			    {
 				 	//trace("ds if ds for envoyer evenement  :  "+noeudEvenement.attributes.nom+"   "+lstChildNodes[i].firstChild.nodeValue+"   "+strNomType.substring(0, 1).toLowerCase() + strNomType.substring(1, strNomType.length));
@@ -2494,6 +2535,8 @@ class GestionnaireCommunication
 								   evenementUtiliserObjetDelegate:Function,
 				                   evenementPartieTermineeDelegate:Function,
                                    evenementJoueurRejoindrePartieDelegate:Function,
+								   eventPlayerPictureCanceledDelegate:Function,
+                                   eventPlayerSelectedPictureDelegate:Function,
 				                   idDessin:Number) 
     {
         // Si on est dans une table, alors on peut continuer le code de la
@@ -2514,6 +2557,9 @@ class GestionnaireCommunication
 	    
 	    	lstDelegateCommande.push({nom:"PartieTerminee", delegate:evenementPartieTermineeDelegate});
 			lstDelegateCommande.push({nom:"JoueurRejoindrePartie", delegate:evenementJoueurRejoindrePartieDelegate});
+			
+			lstDelegateCommande.push({nom:"PlayerPictureCanceled", delegate:eventPlayerPictureCanceledDelegate});
+			lstDelegateCommande.push({nom:"PlayerSelectedPicture", delegate:eventPlayerSelectedPictureDelegate});
             
             // Declaration d'une variable qui va contenir le numero de la commande
             // generee
@@ -2548,6 +2594,137 @@ class GestionnaireCommunication
             // tableau des commandes a envoyer
             objObjetCommande.no = intNumeroCommande;
             objObjetCommande.nom = "DemarrerPartie";
+            objObjetCommande.objetXML = objObjetXML;
+            objObjetCommande.listeDelegate = lstDelegateCommande;
+            // Ajouter l'objet de commande a envoyer courant a la fin du tableau
+            var intNbElements:Number = lstCommandesAEnvoyer.push(objObjetCommande);
+            // Si le nombre d'elements dans la liste est de 1 (celui qu'on vient
+            // juste d'ajouter) et qu'il n'y aucune commande en traitement, alors
+            // on peut envoyer la commande pour la faire traiter (normalement, il
+            // ne devrait y avoir aucune commande en traitement), sinon alors elle
+            // va se faire traiter tres prochainement
+            if (intNbElements == 1 && objCommandeEnTraitement == null)
+            {
+                // Appeler la fonction qui va permettre de traiter la prochaine
+                // commande et de charger tout ce qu'il faut en memoire
+                traiterProchaineCommande();
+            }
+        }
+        else
+        {
+            // TODO: Dire qu'on n'est pas connecte
+        }
+    }
+	
+	 /**
+     * Cette methode permet au joueur de annuler le dessin.
+     * Il va choisir un autre
+     * @param Function playerCanceledPictureDelegate : Un pointeur sur la
+     *          fonction permettant au joueur de annuler le dessin 
+     */
+    public function playerCanceledPicture(playerCanceledPictureDelegate:Function) 
+    {
+        // Si on est dans une table, alors on peut continuer le code de la
+        // fonction
+        if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("PlayerCanceledPicture", "nom") == true)
+        {
+            // Declaration d'un tableau dont le contenu est un Delegate
+            var lstDelegateCommande:ExtendedArray = new ExtendedArray();
+            // Ajouter le Delegate de retour dans le tableau des delegate pour
+            // cette fonction
+            lstDelegateCommande.push({nom:"PlayerCanceledPicture", delegate:playerCanceledPictureDelegate});
+            // Ajouter les autres Delegate d'evenements
+                      
+            // Declaration d'une variable qui va contenir le numero de la commande
+            // generee
+            var intNumeroCommande:Number = obtenirNumeroCommande();
+            // Creer l'objet XML qui va contenir la commande a envoyer au serveur
+            var objObjetXML:XML = new XML();
+            // Creer tous les noeuds de la commande
+            var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
+				
+            // Construire l'arbre du document XML
+            objNoeudCommande.attributes.no = String(intNumeroCommande);
+            objNoeudCommande.attributes.nom = "PlayerCanceledPicture";
+			
+            objObjetXML.appendChild(objNoeudCommande);
+            // Declaration d'un nouvel objet qui va contenir les informations sur
+            // la commande a traiter courante
+            var objObjetCommande:Object = new Object();
+            // Definir les proprietes de l'objet de la commande a ajouter dans le
+            // tableau des commandes a envoyer
+            objObjetCommande.no = intNumeroCommande;
+            objObjetCommande.nom = "PlayerCanceledPicture";
+            objObjetCommande.objetXML = objObjetXML;
+            objObjetCommande.listeDelegate = lstDelegateCommande;
+            // Ajouter l'objet de commande a envoyer courant a la fin du tableau
+            var intNbElements:Number = lstCommandesAEnvoyer.push(objObjetCommande);
+            // Si le nombre d'elements dans la liste est de 1 (celui qu'on vient
+            // juste d'ajouter) et qu'il n'y aucune commande en traitement, alors
+            // on peut envoyer la commande pour la faire traiter (normalement, il
+            // ne devrait y avoir aucune commande en traitement), sinon alors elle
+            // va se faire traiter tres prochainement
+            if (intNbElements == 1 && objCommandeEnTraitement == null)
+            {
+                // Appeler la fonction qui va permettre de traiter la prochaine
+                // commande et de charger tout ce qu'il faut en memoire
+                traiterProchaineCommande();
+            }
+        }
+        else
+        {
+            // TODO: Dire qu'on n'est pas connecte
+        }
+    }
+
+	 /**
+     * Cette methode permet au joueur de declare le choix d'un autre dessin.
+     *
+     * @param Function playerSelectedNewPictureDelegate : Un pointeur sur la
+     *          fonction permettant au joueur de selecter un autre dessin
+     */
+    public function playerSelectedNewPicture(playerSelectedNewPictureDelegate:Function, idDessin:Number) 
+    {
+        // Si on est dans une table, alors on peut continuer le code de la
+        // fonction
+        if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("PlayerSelectedNewPicture", "nom") == true)
+        {
+			trace("vrify selected new picture");
+            // Declaration d'un tableau dont le contenu est un Delegate
+            var lstDelegateCommande:ExtendedArray = new ExtendedArray();
+            // Ajouter le Delegate de retour dans le tableau des delegate pour
+            // cette fonction
+            lstDelegateCommande.push({nom:"PlayerSelectedNewPicture", delegate:playerSelectedNewPictureDelegate});
+            // Ajouter les autres Delegate d'evenements
+                      
+            // Declaration d'une variable qui va contenir le numero de la commande
+            // generee
+            var intNumeroCommande:Number = obtenirNumeroCommande();
+            // Creer l'objet XML qui va contenir la commande a envoyer au serveur
+            var objObjetXML:XML = new XML();
+            // Creer tous les noeuds de la commande
+            var objNoeudCommande:XMLNode = objObjetXML.createElement("commande");
+			
+			var objNoeudParametreIdDessin:XMLNode = objObjetXML.createElement("parametre");
+            var objNoeudParametreIdDessinText:XMLNode = objObjetXML.createTextNode(ExtendedString.encodeToUTF8(String(idDessin)));
+				
+            // Construire l'arbre du document XML
+            objNoeudCommande.attributes.no = String(intNumeroCommande);
+            objNoeudCommande.attributes.nom = "PlayerSelectedNewPicture";
+			
+			objNoeudParametreIdDessin.attributes.type = "IdDessin";
+            objNoeudParametreIdDessin.appendChild(objNoeudParametreIdDessinText);
+			
+            objNoeudCommande.appendChild(objNoeudParametreIdDessin);
+			
+            objObjetXML.appendChild(objNoeudCommande);
+            // Declaration d'un nouvel objet qui va contenir les informations sur
+            // la commande a traiter courante
+            var objObjetCommande:Object = new Object();
+            // Definir les proprietes de l'objet de la commande a ajouter dans le
+            // tableau des commandes a envoyer
+            objObjetCommande.no = intNumeroCommande;
+            objObjetCommande.nom = "PlayerSelectedNewPicture";
             objObjetCommande.objetXML = objObjetXML;
             objObjetCommande.listeDelegate = lstDelegateCommande;
             // Ajouter l'objet de commande a envoyer courant a la fin du tableau
@@ -3951,6 +4128,66 @@ class GestionnaireCommunication
         {
             // On est maintenant a l'autre etat
             intEtatClient = Etat.ATTENTE_DEBUT_PARTIE.no;
+        }
+        // Appeler la fonction qui va envoyer tous les evenements et
+        // retirer leurs ecouteurs
+        envoyerEtMettreAJourEvenements(noeudCommande, objEvenement);
+        // Traiter la prochaine commande
+        traiterProchaineCommande();
+    }
+	
+	/**
+     * Cette methode permet de decortiquer le noeud de commande passe en
+     * parametres et de lancer un evenement a ceux qui s'etaient ajoute comme
+     * ecouteur a la fonction demarrerPartie. On va egalement envoyer les
+     * evenements qui attendent d'etre traites dans le tableau d'evenements
+     * et les retirer du tableau.
+     *
+     * @param XMLNode noeudCommande : Le noeud de commande que le serveur
+     *                                nous renvoye et qui contient sa reponse
+     */
+    private function returnPlayerCanceledPicture(noeudCommande:XMLNode)
+    {
+		trace("Retour CancelPicture GCom");
+        // Construire l'objet evenement pour le retour de la fonction
+        var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
+                                   resultat:noeudCommande.attributes.nom};
+        // Si le retour de la fonction est une reponse positive et non une
+        // erreur, alors on peut passer a l'autre etat
+        if (noeudCommande.attributes.type == "Reponse")
+        {
+            // On est maintenant a l'autre etat
+            intEtatClient = Etat.ATTENTE_DEBUT_PARTIE.no;
+        }
+        // Appeler la fonction qui va envoyer tous les evenements et
+        // retirer leurs ecouteurs
+        envoyerEtMettreAJourEvenements(noeudCommande, objEvenement);
+        // Traiter la prochaine commande
+        traiterProchaineCommande();
+    }
+	
+	/**
+     * Cette methode permet de decortiquer le noeud de commande passe en
+     * parametres et de lancer un evenement a ceux qui s'etaient ajoute comme
+     * ecouteur a la fonction demarrerPartie. On va egalement envoyer les
+     * evenements qui attendent d'etre traites dans le tableau d'evenements
+     * et les retirer du tableau.
+     *
+     * @param XMLNode noeudCommande : Le noeud de commande que le serveur
+     *                                nous renvoye et qui contient sa reponse
+     */
+    private function returnPlayerSelectedNewPicture(noeudCommande:XMLNode)
+    {
+		trace("Retour SelectedNewPicture GCom");
+        // Construire l'objet evenement pour le retour de la fonction
+        var objEvenement:Object = {type:objCommandeEnTraitement.listeDelegate[0].nom, target:this,
+                                   resultat:noeudCommande.attributes.nom, idP:noeudCommande.attributes.id};
+        // Si le retour de la fonction est une reponse positive et non une
+        // erreur, alors on peut passer a l'autre etat
+        if (noeudCommande.attributes.type == "Reponse")
+        {
+            // On est maintenant a l'autre etat
+            //intEtatClient = Etat.ATTENTE_DEBUT_PARTIE.no;
         }
         // Appeler la fonction qui va envoyer tous les evenements et
         // retirer leurs ecouteurs
