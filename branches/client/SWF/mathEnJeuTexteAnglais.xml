@@ -9,7 +9,7 @@
 	  moveMess = "To move - click on a yellow square!"
 	  moveMessage = " moved to a new square."
 	  bookUsedMess = " used a book."
-	  braniacUsedMess = " used brainiac."
+	  brainiacUsedMess = " used brainiac."
 	  cristallUsedMess = " used a crystal ball."
 	  bookCollectMess = "You found a book. You can use it to remove one wrong choice."
 	  cristallCollectMess = "You found a crystal ball. You can use it to swap your question with an easier one!"

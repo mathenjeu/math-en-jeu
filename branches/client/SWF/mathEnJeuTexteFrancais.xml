@@ -10,7 +10,7 @@
 	  moveMess = "Click sur une case jaune pour te déplacer."
 	  moveMessage = " a avancé."
 	  bookUsedMess = " a utilisé un livre."
-	  braniacUsedMess = " a utilisé Brainiac."
+	  brainiacUsedMess = " a utilisé Brainiac."
 	  cristallUsedMess = " a utilisé une boule de cristal."
 	  
 	  bookCollectMess = "Vous avez ramassez un livre. Vous pouvez l'utiliser pour éliminer un mauvais choix de réponse."
