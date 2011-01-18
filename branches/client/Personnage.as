@@ -653,8 +653,7 @@ class Personnage
 		myLoader.addListener(mclListener);
 		
 		this.orient = "right";
-
-
+       
 		// on use if to not see master in tournament game
 		if(!(role == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")){  
   
@@ -662,7 +661,7 @@ class Personnage
 		    myLoader.loadClip("Perso/perso" + nomClip + ".swf", image); 
 					
 		}
-				
+					
 		this.pointage = 0;
 		this.argent = 0;
 		this.listeDesObjets = new Object();

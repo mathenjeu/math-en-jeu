@@ -3043,41 +3043,22 @@ public var wasHereOnce:Boolean = false;
         var i:Number;
         var j:Number;
         
-		_level0.loader.contentHolder["att"].removeMovieClip();		 
-		_level0.loader.contentHolder.gotoAndPlay(4);
+		
 		 
 		var count:Number;
-		
 		var maTete:MovieClip;
 		
 		count = this.listeDesPersonnages.length;
         for(i = 0; i < count; i++)
         {
             if(this.listeDesPersonnages[i].nom == this.nomUtilisateur)
-            {
-	            var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
-				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
-				//this.colorIt = objetEvenement.positionJoueurs[i].clocolor;
-				
-				// put the face of my avatar in the panel (next to my name)
-		
-		       maTete = _level0.loader.contentHolder.maTete.attachMovie("tete" + idDessin, "maTete", -10099);
-		       maTete._x = -5;
-		       maTete._y = -30;
-		       // V3 head size
-		       maTete._xscale = 290;
-		       maTete._yscale = 290;
-			   
-			   colorItMatrix(this.colorIt, maTete.headClo, idDessin);
-				
+            {								
                 _level0.loader.contentHolder.planche = new PlancheDeJeu(objetEvenement.plateauJeu, this.listeDesPersonnages[i].id, _level0.loader.contentHolder.gestionnaireInterface);
 				//_level0.loader.contentHolder.planche = new PlancheDeJeu(_level0.loader.contentHolder.tab, this.listeDesPersonnages[i].id, _level0.loader.contentHolder.gestionnaireInterface);
 			}
         }
-       
-	    _level0.loader.contentHolder.planche.afficher();
-        
-		//trace("longueur de la liste des noms envoyes par serveur    :" + objetEvenement.positionJoueurs.length);
+		
+		/////////////////////////////////////////////////
 		var count1 = objetEvenement.positionJoueurs.length;
         for(i = 0; i < count1; i++)
         {
@@ -3094,17 +3075,40 @@ public var wasHereOnce:Boolean = false;
 					var idPers:Number = calculateIDPers(this.listeDesPersonnages[j].id, idDessin);
 					this.listeDesPersonnages[j].idPers = idPers;
 					var cloCol:String = this.listeDesPersonnages[j].clocolor;//objetEvenement.clothesColor;
-				    this.listeDesPersonnages[j].filterC = _level0.loader.contentHolder.objGestionnaireEvenements.colorMatrixPerso(cloCol, idDessin);
-				
-					//trace(" evdempartie clocolor : " + this.listeDesPersonnages[j].filterC);
+					var filterC:ColorMatrixFilter = _level0.loader.contentHolder.objGestionnaireEvenements.colorMatrixPerso(cloCol, idDessin);
+				    this.listeDesPersonnages[j].filterC = filterC;
+					
+				}
+			}
+		}
+		////////////////////////////////////////////////
+		
+		
+		
+       
+	    _level0.loader.contentHolder["att"].removeMovieClip();		 
+		_level0.loader.contentHolder.gotoAndPlay(4);
+	    _level0.loader.contentHolder.planche.afficher();
+        
+		//trace("longueur de la liste des noms envoyes par serveur    :" + objetEvenement.positionJoueurs.length);
+		count1 = objetEvenement.positionJoueurs.length;
+        for(i = 0; i < count1; i++)
+        {
+			
+            for(j = 0; j < count; j++)
+            {
+	            //trace(this.listeDesPersonnages[j].nom+" : "+objetEvenement.positionJoueurs[i].nom);
+                if(this.listeDesPersonnages[j].nom == objetEvenement.positionJoueurs[i].nom)
+                {					
+	                var idDessin:Number = calculatePicture(this.listeDesPersonnages[j].id);
 					
 					// after we create the perso's
-					_level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, idPers, idDessin, this.listeDesPersonnages[j].role, this.listeDesPersonnages[j].clocolor);
+					_level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, this.listeDesPersonnages[j].idPers, idDessin, this.listeDesPersonnages[j].role, this.listeDesPersonnages[j].clocolor);
 		    		//trace("Construction du personnage : " + this.listeDesPersonnages[j].clocolor + " " + objetEvenement.positionJoueurs[i].x + " " + objetEvenement.positionJoueurs[i].y + " idDessin:" + idDessin + " idPers:" + idPers);
-					//_level0.loader.contentHolder.referenceLayer["Personnage" + idPers].nom = this.listeDesPersonnages[j].nom;
 				}
             }
         }
+		
 		
 		// color aur head
 		count = this.listeDesPersonnages.length;
