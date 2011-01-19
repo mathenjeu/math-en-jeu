@@ -26,5 +26,10 @@ If you are a theacher and you need to use this section contact us."
 		version = "Version 0.4 Beta"
 		boutonEntrer = "Enter"
 		barLabel = "Loading ..."
+		
+		GUIdejaConnecte = "This user is already connected. Close this window and start again with another user."
+			GUIhorsService = "The server does not answer. Check you connection and start again. If the problem persists, please click on the following link to perform a connection test and then send the result to the SMAC technical team. We are sincerely sorry that you are experimenting this problem."
+			GUIhorsService2 = "Connection Test"
+			GUIhorsServiceURL = ""
 >
 </Texte>  
