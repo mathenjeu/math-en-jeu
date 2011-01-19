@@ -652,7 +652,7 @@ public var wasHereOnce:Boolean = false;
 				dejaConnecte.linkGUI_erreur._visible = false;
 				dejaConnecte.btn_ok._visible = false;
 			
-				dejaConnecte.textGUI_erreur.text = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIdejaConnecte;
+				dejaConnecte.thisMessage = _root.texteSource_xml.firstChild.attributes.GUIdejaConnecte;
 			
                 trace("Joueur deja connecte");
             break;

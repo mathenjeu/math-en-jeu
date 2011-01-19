@@ -778,7 +778,7 @@ class Personnage
 							{ 
 								twMove2 = new Tween(mClip1, "_alpha", Regular.easeOut, 100, 0, 1, true);
 								_level0.loader.contentHolder.menuOutils._visible = false;
-								_level0.loader.contentHolder.enteteHolder._visible = false;
+								//_level0.loader.contentHolder.enteteHolder._visible = false;
 								_level0.loader.contentHolder.horloge._visible = false;// ?????  a think is not correct any more all 3 statements
 								minigame._visible = true;
 							}
