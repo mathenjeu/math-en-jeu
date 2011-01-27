@@ -3675,8 +3675,24 @@ class GestionnaireCommunication
         // erreur, alors on peut passer a l'autre etat
         if (noeudCommande.attributes.type == "Reponse")
         {
+			
             // On est maintenant a l'autre etat
             intEtatClient = Etat.DANS_SALLE.no;
+			
+			
+			 // Declaration d'une reference vers la liste des noeuds joueurs
+            var lstChildNodes:Array = noeudCommande.firstChild.childNodes;
+            // Creer un tableau ListeNomUtilisateurs qui va contenir les
+            // objets joueurs
+            objEvenement.listeTracks = new Array();
+            // Passer tous les joueurs et les ajouter dans le tableau
+			var count:Number = lstChildNodes.length;
+            for (var i:Number = 0; i <  count; i++)
+            {
+                // Ajouter l'objet joueur dans le tableau
+                objEvenement.listeTracks.push({ids:Number(lstChildNodes[i].attributes.ids), tracks:Number(lstChildNodes[i].attributes.tracks)});
+				trace(objEvenement.listeTracks[i].tracks);
+            }
         }
         // Appeler la fonction qui va envoyer tous les evenements et
         // retirer leurs ecouteurs
