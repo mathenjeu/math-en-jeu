@@ -68,7 +68,7 @@ class GestionnaireEvenements
 	private var langue;
 	private var endGame:Boolean;   // used to indicate the end of game
 	private var newsChat:NewsBox;  // all the messages to show in newsbox
-	private var nbTracks:Number;   // usually is 4, do we really need it?  it not change...
+	private var nbTracks:Number;   // usually is 4, 
 	private var finishPoints:Array;
 	
 	// used to take bonus
@@ -77,8 +77,9 @@ class GestionnaireEvenements
 	private var colorIt:String;
 	
 	private var allowedTypes:Array;   // allowed types of game in our room - course, tournament ...
-	private var ourPerso:Personnage;  // reference to our personnage on the table(planche) .. I am not sure that is very useful...
+	private var ourPerso:Personnage;  // reference to our personnage on the table(planche) ..
 	private var allowedTypesMap:Array;
+	private var allowedTypesTracks:Array;
 	private var bananaMessageIntervalArray:Array;  //
 	private var bananaIntervalArray:Array;    //
 	
@@ -216,6 +217,7 @@ public var wasHereOnce:Boolean = false;
 		this.winIt = 0;
 		this.maxPlayers = 0;
 		this.allowedTypesMap = new Array("mathEnJeu", "Tournament", "Course");
+		this.allowedTypesTracks = new Array();
 				
         this.objGestionnaireCommunication = new GestionnaireCommunication(Delegate.create(this, this.evenementConnexionPhysique), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
 	
@@ -351,11 +353,13 @@ public var wasHereOnce:Boolean = false;
                    
 			     }else{
 					   this.objGestionnaireCommunication.entrerSalle(Delegate.create(this, this.retourEntrerSalle), this.idRoom, motDePasseSalle);
+					   //_level0.loader.contentHolder.gotoAndPlay(2);
 				 }
                 
                 break;
             }
         }
+		
 		
         
         trace("fin de entrerSalle");
@@ -961,10 +965,12 @@ public var wasHereOnce:Boolean = false;
         switch(objetEvenement.resultat)
         {
             case "Ok":
-			    _level0.loader.contentHolder["guiPWD"].removeMovieClip();
-				
+			    if(_level0.loader.contentHolder._currentframe == 1)
+				   _level0.loader.contentHolder.gotoAndPlay(2);
+				_level0.loader.contentHolder["guiPWD"].removeMovieClip();
 				var count:Number = this.listeDesSalles.length;
-				for (var i:Number = 0; i < count; i++)
+				var i:Number;
+				for (i = 0; i < count; i++)
                 {
                     if(this.listeDesSalles[i].idRoom == this.idRoom)
                     {
@@ -980,8 +986,14 @@ public var wasHereOnce:Boolean = false;
 						break;
                     }
                 }
+				this.allowedTypesTracks = objetEvenement.listeTracks;
+				count = this.allowedTypesTracks.length;
+				for(i = 0; i < count; i++)
+				{ 
+				   trace("verify " + this.allowedTypesTracks[i].ids + " t: " + this.allowedTypesTracks[i].tracks);
+				}
                 this.objGestionnaireCommunication.obtenirListeJoueursSalle(Delegate.create(this, this.retourObtenirListeJoueursSalle), Delegate.create(this, this.evenementJoueurEntreSalle), Delegate.create(this, this.evenementJoueurQuitteSalle));
-                _level0.loader.contentHolder.gotoAndPlay(2);
+                
 				
 				
 			break;
@@ -1092,7 +1104,8 @@ public var wasHereOnce:Boolean = false;
                     this.listeDesJoueursDansSalle.push(objetEvenement.listeNomUtilisateurs[i]);
                 }
                 this.objGestionnaireCommunication.obtenirListeTables(Delegate.create(this, this.retourObtenirListeTables), Delegate.create(this, this.evenementJoueurEntreTable), Delegate.create(this, this.evenementJoueurQuitteTable), Delegate.create(this, this.evenementNouvelleTable), Delegate.create(this, this.evenementTableDetruite), FiltreTable.INCOMPLETES_NON_COMMENCEES);
-            break;
+                //_level0.loader.contentHolder.gotoAndPlay(2);
+			break;
 			
             case "CommandeNonReconnue":
                 trace("CommandeNonReconnue");
@@ -1124,50 +1137,14 @@ public var wasHereOnce:Boolean = false;
         //   objetEvenement.resultat = ListeTables, CommandeNonReconnue, ParametrePasBon, JoueurNonConnecte, JoueurPasDansSalle, FiltreNonConnu
 		//   objetEvenement.listeTables[i].  --- tablName 
         trace("*********************************************");
-        trace("debut de retourObtenirListeTables   "+objetEvenement.resultat);
+        trace("debut de retourObtenirListeTables   " + objetEvenement.resultat);
         var str:String = new String();
         switch(objetEvenement.resultat)
         {
             case "ListeTables":
-			     
-				_level0.loader.contentHolder.listeTable.removeAll();
-				 
-				 //delete this.listeDesTables;
-				this.listeDesTables = new Array();
-				var count:Number = objetEvenement.listeTables.length;
-                for (var i:Number = 0; i < count; i++)
-                {
-                    this.listeDesTables.push(objetEvenement.listeTables[i]);
-					var iconName:String;
-					if(objetEvenement.listeTables[i].gameType == "mathEnJeu")
-					{   
-					   iconName = "maze";
-					}
-					else if (objetEvenement.listeTables[i].gameType == "Course" || objetEvenement.listeTables[i].gameType == "Tournament")
-					{
-						iconName = "flags";
-					}
-					//trace("game type liste table : " +  objetEvenement.listeTables[i].gameType + " " + iconName);
-                    str =  "   << " +  objetEvenement.listeTables[i].tablName + " >>   - " + objetEvenement.listeTables[i].temps + " min. " ;
-					
-					_level0.loader.contentHolder.listeTable.addItem({label : str, data : objetEvenement.listeTables[i].no, icon: iconName});
-					
-                }
+			
+			    _global.intervalIdX = setInterval(xTimerSet, 500, objetEvenement);
 				
-				if ( objetEvenement.listeTables.length == 0 &&  _level0.loader.contentHolder._currentframe == 2)
-				{
-					trace("longeur liste table : " +  objetEvenement.listeTables.length);
-					_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
-					_level0.loader.contentHolder.txtChargementTables._visible = true;
-				}
-				else
-				{
-					_level0.loader.contentHolder.chargementTables = "";
-					_level0.loader.contentHolder.chargementTables._visible = false;
-				}
-				_level0.loader.contentHolder.bt_continuer2._visible = true;
-				//_level0.loader.contentHolder.listeTable.invalidate();
-				_level0.loader.contentHolder.listeTable.redraw(true);
 				
             break;
 			 
@@ -1198,6 +1175,52 @@ public var wasHereOnce:Boolean = false;
         trace("fin de retourObtenirListeTables");
         trace("*********************************************\n");
     }
+	
+	// 
+	function xTimerSet(objetEvenement:Object){
+		
+		       var str:String = new String();
+				_level0.loader.contentHolder.listeTable.removeAll();
+				 
+				 //delete this.listeDesTables;
+				_level0.loader.contentHolder.objGestionnaireEvenements.listeDesTables = new Array();
+				var count:Number = objetEvenement.listeTables.length;
+                for (var i:Number = 0; i < count; i++)
+                {
+                    _level0.loader.contentHolder.objetEvenement.listeDesTables.push(objetEvenement.listeTables[i]);
+					var iconName:String;
+					if(objetEvenement.listeTables[i].gameType == "mathEnJeu")
+					{   
+					   iconName = "maze";
+					}
+					else if (objetEvenement.listeTables[i].gameType == "Course" || objetEvenement.listeTables[i].gameType == "Tournament")
+					{
+						iconName = "flags";
+					}
+					trace("game type liste table : " +  objetEvenement.listeTables[i].gameType + " " + iconName);
+                    str =  "   << " +  objetEvenement.listeTables[i].tablName + " >>   - " + objetEvenement.listeTables[i].temps + " min. " ;
+					
+					_level0.loader.contentHolder.listeTable.addItem({label : str, data : objetEvenement.listeTables[i].no, icon: iconName});
+					
+                }
+				
+				if ( objetEvenement.listeTables.length == 0 &&  _level0.loader.contentHolder._currentframe == 2)
+				{
+					//trace("longeur liste table : " +  objetEvenement.listeTables.length);
+					_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
+					_level0.loader.contentHolder.txtChargementTables._visible = true;
+				}
+				else
+				{
+					_level0.loader.contentHolder.chargementTables = "";
+					_level0.loader.contentHolder.chargementTables._visible = false;
+				}
+				_level0.loader.contentHolder.bt_continuer2._visible = true;
+				//_level0.loader.contentHolder.listeTable.invalidate();
+				//_level0.loader.contentHolder.listeTable.redraw(true);
+				
+				 clearInterval(_global.intervalIdX);
+	}// end func
 	
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function retourCreerTable(objetEvenement:Object)
