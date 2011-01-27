@@ -41,6 +41,9 @@ public class Salle
     // construite avec l'information contenu dans la table room_info.
     // BD:  [room_info.language_id --> room_info.name]
     private final Map<Integer, String> mapRoomLanguageIdToDescription;
+    // Contient le nombre des pistes pour les types du jeu addmisible 
+    // dans la salle. Pour les types ou est pas necessaires  = 0
+    private final Map<Integer, Integer> mapRoomTypesIdToNbTracks;
     // Contient le mot de passe permettant d'accéder à la salle
     // BD:  [room.password]
     private final String strPassword;
@@ -119,11 +122,14 @@ public class Salle
         mapRoomLanguageIdToName.putAll(names);
         mapRoomLanguageIdToDescription = new TreeMap<Integer,String>();
         mapRoomLanguageIdToDescription.putAll(descriptions);
+        mapRoomTypesIdToNbTracks = new TreeMap<Integer, Integer>();
+        mapRoomTypesIdToNbTracks.putAll(controleurJeu.obtenirGestionnaireBD().getNbTracks(gameTypeIds));
         strRoomType = type;
         setKeywordIds = new TreeSet<Integer>();
         setKeywordIds.addAll(keywordIds);
         setGameTypeIds = new TreeSet<Integer>();
         setGameTypeIds.addAll(gameTypeIds);
+        
         
         // Créer une nouvelle liste de joueurs, de tables et de numéros
         lstJoueurs = new HashMap<String, JoueurHumain>();
@@ -735,6 +741,10 @@ public class Salle
     }
     public Map<Integer,String> getDescriptionMap() {
         return mapRoomLanguageIdToDescription;
+    }
+    public Map<Integer, Integer> getRoomTypesIdToNbTracks()
+    {
+    	return mapRoomTypesIdToNbTracks;
     }
     public String getName(String language) {
         if (language.equals("fr"))

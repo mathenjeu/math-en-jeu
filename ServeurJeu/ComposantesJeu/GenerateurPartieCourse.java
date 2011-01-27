@@ -74,8 +74,10 @@ public class GenerateurPartieCourse extends GenerateurPartie {
     	    	
 		int temps = table.obtenirTempsTotal();
 		
-		// calculate number of lines and of columns 
-	    intNbColumns = (reglesPartie.getNbTracks() + 1) * (reglesPartie.obtenirTempsMinimal() * 2 + 1) - 1; // factor - 1;
+		// calculate number of lines and of columns
+		// holes - is number of holes between tracks
+		int holes = 2;
+	    intNbColumns = (reglesPartie.getNbTracks() + holes) * (reglesPartie.obtenirTempsMinimal() * 2 + 1) - holes; // factor - 1;
 
    	    intNbLines = temps + reglesPartie.obtenirTempsMaximal();     	 
     	
@@ -110,7 +112,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 		Case[][] objttPlateauJeu = new Case[intNbLines][intNbColumns];	
 		
 		// we build table of game with the houls for the borders
-		boardCreation(intNbTrous ,objttPlateauJeu);
+		this.boardCreation(intNbTrous ,objttPlateauJeu);
 		// fill list with points for finish
 		for(int i = 0; i < reglesPartie.getNbTracks(); i++)
 		{
@@ -118,7 +120,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 			objPoint = new Point(intNbLines - 1,intNbColumns - i - 1);
 			lstPointsFinish.add(objPoint);
 		}
-		caseDefinition(intNbCasesSpeciales, objttPlateauJeu);
+		this.caseDefinition(intNbCasesSpeciales, objttPlateauJeu);
 			
 				
 		// Si on doit afficher des magasins dans le plateau de jeu, 
@@ -389,7 +391,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 		
 		// Ajouter les points restants dans la liste des points représentant 
 		// les cases sans objets et n'étant pas des cases spéciales
-		 lstPointsCaseLibre.addAll(lstPointsCasesPresentes);
+		lstPointsCaseLibre.addAll(lstPointsCasesPresentes);
 		
 		// Indiquer quel a été le dernier id des objets
 		table.setObjProchainIdObjet(intCompteurIdObjet);
@@ -536,7 +538,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 	}// end method
 
 	 /**
-     * Method used to create the game board for the game type "Tournament"
+     * Method used to create the game board for the game type "Course" and "Tournament"
      * @param intNbTrous 
      * @param objttPlateauJeu
      */
@@ -547,7 +549,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 		for(int x = 0; x < intNbLines; x++){
 			for(int y = 0; y < intNbColumns; y++){
 			
-				if(ifNotBorder(x, y, intNbLines, intNbColumns, nbTracks )){
+				if(isCase(x, y, intNbLines, intNbColumns, nbTracks )){
 					// Créer le point de la case courante
 					objPoint = new Point(x, y);
 					
@@ -606,26 +608,40 @@ public class GenerateurPartieCourse extends GenerateurPartie {
      * @param nbTracks 
      * @return boolean if the point will be or not used
      */
-    private boolean ifNotBorder(int x, int y, int intNbLignes, int intNbColonnes, int nbTracks) {
+    private boolean isCase(int x, int y, int intNbLignes, int intNbColonnes, int nbTracks) {
 		
-    	boolean notborder = true;
-		if ( (nbTracks % 2 == 0) && (y + 1) % (nbTracks + 1) == 0 ){
+    	boolean isCase = true;
+		if ( nbTracks % 2 == 0 ){
 			
-			if(y % 2 == 0 && x <= intNbLignes - nbTracks - 1 )
-		      notborder = false;
-			else if (y % 2 == 1 && x > nbTracks - 1 )
-				 notborder = false;
+			if((y + 1) %(nbTracks + 2) == 0){
+				if((y + 1) / (nbTracks + 2) % 2 == 1 && x <= intNbLignes - nbTracks - 1 )
+					isCase = false;
+				else if ((y + 1) / (nbTracks + 2) % 2 == 0 && x > nbTracks - 1 )
+					isCase = false;
+			}else if((y + 2) % (nbTracks + 2) == 0){
+				if((y + 2) / (nbTracks + 2) % 2 == 1 && x <= intNbLignes - nbTracks - 1)
+					isCase = false;
+				else if ((y + 2) / (nbTracks + 2) % 2 == 0 && x > nbTracks - 1 )
+					isCase = false;
+			}
 		
-		}else if (nbTracks % 2 == 1 && (y + 1) % (nbTracks + 1) == 0 ){
+		}else if (nbTracks % 2 == 1 ){
 		
-			if((y + 1) / (nbTracks + 1) %  2 == 1 && x <= intNbLignes - nbTracks - 1 )
-			      notborder = false;
-			else if ((y + 1) / (nbTracks + 1) % 2 == 0 && x > nbTracks - 1 )
-					 notborder = false;
+			if((y + 1) % (nbTracks + 2) == 0){
+				if((y + 1) % 2 == 1 && x <= intNbLignes - nbTracks - 1 )
+					isCase = false;
+				else if ((y + 1) % 2 == 0 && x > nbTracks - 1 )
+					isCase = false;
+			}else if((y + 2) % (nbTracks + 2) == 0){
+				if((y + 1) % 2 == 0 && x <= intNbLignes - nbTracks - 1 )
+					isCase = false;
+				else if ((y + 1) % 2 == 1 && x > nbTracks - 1 )
+					isCase = false;
+			}
 		
 		}
 		
-		return notborder;
+		return isCase;
 	} //end method
     
     /**

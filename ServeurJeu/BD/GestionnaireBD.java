@@ -867,7 +867,7 @@ public class GestionnaireBD {
 
     	double percents = 0.0;
 		percents = joueur.obtenirPartieCourante().getRightAnswersStats();
-		System.out.println("percents " + percents);
+		//System.out.println("percents " + percents);
     	
 		LinkedList<InformationQuestion> questionsRepondues = joueur.obtenirPartieCourante().obtenirListeQuestionsRepondues();
 		StringBuffer stats = new StringBuffer();
@@ -1125,6 +1125,36 @@ public class GestionnaireBD {
                 }
             }
         }
+    }
+    
+    public Map<Integer,Integer> getNbTracks(Set<Integer> iDs)
+    {
+    	Map<Integer, Integer> nbTracksMap = new TreeMap<Integer, Integer>();
+    	
+    	for(Integer Id: iDs){
+    		
+    		 try {
+    	            synchronized (DB_LOCK) {
+    	                ResultSet rs = requete.executeQuery("SELECT rule.nbTracks  FROM rule WHERE rule.rule_id = " + Id + ";");
+    	                if (rs.next()) {
+    	                        	                    
+    	                    int nbTracks = rs.getInt("nbTracks");
+    	                    nbTracksMap.put(Id, nbTracks);
+    	                }
+    	            }
+    	        } catch (SQLException e) {
+    	            // Une erreur est survenue lors de l'exécution de la requête
+    	            objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_rules_NbTracks"));
+    	            objLogger.error(GestionnaireMessages.message("bd.trace"));
+    	            objLogger.error(e.getMessage());
+    	            e.printStackTrace();
+    	        }
+
+    		
+    	}
+    	
+		return nbTracksMap;
+    	
     }
 
     /**
