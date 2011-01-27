@@ -146,7 +146,7 @@ public class ProtocoleJoueur implements Runnable
         try {
         	
         	
-        	objSocketJoueur.setSoLinger(true, 1000);
+        	//objSocketJoueur.setSoLinger(true, 1000);
         	//objSocketJoueur.setKeepAlive(true);
         	
         	// Créer le canal qui permet de recevoir des données sur le canal
@@ -246,7 +246,7 @@ public class ProtocoleJoueur implements Runnable
                     // recevra le EOM
                     strMessageRecu.append(new String(byttBuffer, intMarqueur, intBytesLus - intMarqueur));
                 }
-                Thread.yield( );
+                //Thread.yield( );
 
             }
         } catch (IOException ioe) {
@@ -1086,9 +1086,28 @@ public class ProtocoleJoueur implements Runnable
         }
 
         //** Le joueur est maintenant dans la salle **/
-
+        Document docSortie = noeudCommande.getOwnerDocument();
         noeudCommande.setAttribute("type", "Reponse");
         noeudCommande.setAttribute("nom", "Ok");
+        
+        Map <Integer, Integer> nbTracks = objJoueurHumain.obtenirSalleCourante().getRoomTypesIdToNbTracks();
+                
+        // we send nb tracks for each type in the room
+        // Créer le noeud pour le paramètre contenant la liste
+        // des personnages à  retourner
+        Element objNoeudParametreTypeToNbTracks = docSortie.createElement("parametre");
+        objNoeudParametreTypeToNbTracks.setAttribute("type", "NbTracks");
+        for (Integer id: nbTracks.keySet()) {
+        	 
+            Element objNoeudType = docSortie.createElement("typeTracks");
+            objNoeudType.setAttribute("ids", id.toString());
+            objNoeudType.setAttribute("tracks", nbTracks.get(id).toString());
+            objNoeudParametreTypeToNbTracks.appendChild(objNoeudType);
+            
+        }
+       
+        noeudCommande.appendChild(objNoeudParametreTypeToNbTracks);
+               
     }
 
     private void traiterCommandeQuitterSalle(Element noeudCommande) {

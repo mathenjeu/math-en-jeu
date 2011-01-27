@@ -169,7 +169,7 @@ public class Maitre implements Runnable
 		try 
 		{
 			boolean arret = false;
-			ServerSocket socketServeur = new ServerSocket( 6101, 3, InetAddress.getByName("localhost")); 
+			ServerSocket socketServeur = new ServerSocket( 6101, 10, InetAddress.getByName("localhost")); 
 			while( !arret )
 			{
 				//System.out.println( "le maitre "  + this.commandToDo);

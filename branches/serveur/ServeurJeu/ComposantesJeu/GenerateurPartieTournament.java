@@ -624,24 +624,38 @@ public class GenerateurPartieTournament extends GenerateurPartie {
      */
     private boolean ifNotBorder(int x, int y, int intNbLignes, int intNbColonnes, int nbTracks) {
 		
-    	boolean notborder = true;
-		if ( (nbTracks % 2 == 0) && (y + 1) % (nbTracks + 1) == 0 ){
+    	boolean isCase = true;
+		if ( nbTracks % 2 == 0 ){
 			
-			if(y % 2 == 0 && x <= intNbLignes - nbTracks - 1 )
-		      notborder = false;
-			else if (y % 2 == 1 && x > nbTracks - 1 )
-				 notborder = false;
+			if((y + 1) %(nbTracks + 2) == 0){
+				if((y + 1) / (nbTracks + 2) % 2 == 1 && x <= intNbLignes - nbTracks - 1 )
+					isCase = false;
+				else if ((y + 1) / (nbTracks + 2) % 2 == 0 && x > nbTracks - 1 )
+					isCase = false;
+			}else if((y + 2) % (nbTracks + 2) == 0){
+				if((y + 2) / (nbTracks + 2) % 2 == 1 && x <= intNbLignes - nbTracks - 1)
+					isCase = false;
+				else if ((y + 2) / (nbTracks + 2) % 2 == 0 && x > nbTracks - 1 )
+					isCase = false;
+			}
 		
-		}else if (nbTracks % 2 == 1 && (y + 1) % (nbTracks + 1) == 0 ){
+		}else if (nbTracks % 2 == 1 ){
 		
-			if((y + 1) / (nbTracks + 1) %  2 == 1 && x <= intNbLignes - nbTracks - 1 )
-			      notborder = false;
-			else if ((y + 1) / (nbTracks + 1) % 2 == 0 && x > nbTracks - 1 )
-					 notborder = false;
+			if((y + 1) % (nbTracks + 2) == 0){
+				if((y + 1) % 2 == 1 && x <= intNbLignes - nbTracks - 1 )
+					isCase = false;
+				else if ((y + 1) % 2 == 0 && x > nbTracks - 1 )
+					isCase = false;
+			}else if((y + 2) % (nbTracks + 2) == 0){
+				if((y + 1) % 2 == 0 && x <= intNbLignes - nbTracks - 1 )
+					isCase = false;
+				else if ((y + 1) % 2 == 1 && x > nbTracks - 1 )
+					isCase = false;
+			}
 		
 		}
 		
-		return notborder;
+		return isCase;
 	} //end method
     
     /**

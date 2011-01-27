@@ -147,7 +147,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         intNoTable = noTable;
         this.gameType = gameType;
 
-        // Définir les règles de jeu pour la salle courante
+        // Définir les règles de jeu pour la table
         objRegles = new Regles();
 
         setTableName(name);

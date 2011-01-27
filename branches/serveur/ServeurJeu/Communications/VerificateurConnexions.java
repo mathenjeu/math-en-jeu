@@ -2,7 +2,6 @@ package ServeurJeu.Communications;
 
 import java.util.LinkedList;
 import java.util.logging.Level;
-
 import org.apache.log4j.Logger;
 
 /**
@@ -55,12 +54,12 @@ public class VerificateurConnexions implements Runnable
 		// Boucler tant qu'il ne faut pas arrêter le thread
 		while (bolStopThread == false)
 		{
-			
+			/*
 			try
 			{
 				// Stopper le thread du vérificateur pendant 60 - 100 secondes pour 
 				// laisser un moment de répit au CPU
-				Thread.sleep(500*1000);
+				Thread.sleep(1000);
 				
 			}
 			catch (InterruptedException ie)
@@ -68,7 +67,7 @@ public class VerificateurConnexions implements Runnable
 				objLogger.error(" Error - sleep is canceled in VerificateurConnexions" + ie.getMessage());
 				Thread.currentThread().interrupt();
 							
-			}
+			}*/
 			
 			// Déclaration d'une liste de ProtocoleJoueur qui contient la 
 			// référence vers la liste des ProtocoleJoueur du gestionnaire de 
