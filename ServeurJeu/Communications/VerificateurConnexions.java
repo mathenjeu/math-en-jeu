@@ -16,7 +16,7 @@ public class VerificateurConnexions implements Runnable
 	private boolean bolStopThread;
 	
 	// Déclaration d'une variable qui va compter le nombre de fois que 
-	// des messages ping ont été envoyés (une fois rendu à 10, ça va 
+	// des messages ping ont été envoyés (une fois rendu à 50, ça va 
 	// retourner à 0)
 	private int intCompteurPing;
 	
@@ -54,21 +54,7 @@ public class VerificateurConnexions implements Runnable
 		// Boucler tant qu'il ne faut pas arrêter le thread
 		while (bolStopThread == false)
 		{
-			
-			try
-			{
-				// Stopper le thread du vérificateur pendant 60 - 100 secondes pour 
-				// laisser un moment de répit au CPU
-				Thread.sleep(10);
-				
-			}
-			catch (InterruptedException ie)
-			{
-				objLogger.error(" Error - sleep is canceled in VerificateurConnexions" + ie.getMessage());
-				Thread.currentThread().interrupt();
-							
-			}
-			
+						
 			// Déclaration d'une liste de ProtocoleJoueur qui contient la 
 			// référence vers la liste des ProtocoleJoueur du gestionnaire de 
 			// communication
@@ -85,7 +71,7 @@ public class VerificateurConnexions implements Runnable
 			{
 				// Faire une copie de la liste des ProtocoleJoueur
 				lstCopieProtocoleJoueur = (LinkedList<ProtocoleJoueur>) lstProtocoleJoueur.clone();
-	        }
+	       
 
 				// Passer tous les objets ProtocoleJoueur et envoyer un message ping
 				// à chacun pour savoir s'il est là
@@ -95,7 +81,22 @@ public class VerificateurConnexions implements Runnable
 					((ProtocoleJoueur) lstCopieProtocoleJoueur.get(i)).envoyerEvenementPing(intCompteurPing);
 				}
 		
-						
+			 }	
+		
+			try
+			{
+				// Stopper le thread du vérificateur pendant 60 - 100 secondes pour 
+				// laisser un moment de répit au CPU
+				Thread.sleep(50000);
+				
+			}
+			catch (InterruptedException ie)
+			{
+				objLogger.error(" Error - sleep is canceled in VerificateurConnexions" + ie.getMessage());
+				Thread.currentThread().interrupt();
+							
+			}
+			
 			// Passer tous les ProtocoleJoueur et vérifier s'ils ont 
 			// répondus au ping. S'ils n'ont pas répondus, alors on va les
 			// faire se fermer et s'assurer qu'ils se sont bien enlevé de 
@@ -135,7 +136,7 @@ public class VerificateurConnexions implements Runnable
 			intCompteurPing++;
 			
 			// Si le compteur a dépassé 10, alors on le réinitialise à 0
-			if (intCompteurPing >= 11)
+			if (intCompteurPing >= 51)
 			{
 				intCompteurPing = 0;
 			}
