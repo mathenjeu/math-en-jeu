@@ -30,6 +30,12 @@ public class GestionnaireTemps extends Timer
 		this.purge();
 	}
 	
+	public void putNewTask( TimerTask t, long delay)
+	{
+		this.schedule(t, delay);
+	}
+	
+	/*
 	public void putNewTask( BananaHumainTask t, int delay)
 	{
 		this.schedule(t, delay);
@@ -46,17 +52,11 @@ public class GestionnaireTemps extends Timer
 	public void putNewTask( BrainiacVirtuelTask t, int delay)
 	{
 		this.schedule(t, delay);
-	}
+	} */
 	
 	public void stopIt()
 	{
-		/*//this.cancel();
-		try {
-			this.finalize();
-		} catch (Throwable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		//this.purge();
+		//TO DO
+		this.cancel();
 	}
 }
