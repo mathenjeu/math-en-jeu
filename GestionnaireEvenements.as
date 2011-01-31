@@ -965,8 +965,8 @@ public var wasHereOnce:Boolean = false;
         switch(objetEvenement.resultat)
         {
             case "Ok":
-			    if(_level0.loader.contentHolder._currentframe == 1)
-				   _level0.loader.contentHolder.gotoAndPlay(2);
+			    //if(_level0.loader.contentHolder._currentframe == 1)
+				   //_level0.loader.contentHolder.gotoAndPlay(2);
 				_level0.loader.contentHolder["guiPWD"].removeMovieClip();
 				var count:Number = this.listeDesSalles.length;
 				var i:Number;
@@ -993,8 +993,7 @@ public var wasHereOnce:Boolean = false;
 				   trace("verify " + this.allowedTypesTracks[i].ids + " t: " + this.allowedTypesTracks[i].tracks);
 				}
                 this.objGestionnaireCommunication.obtenirListeJoueursSalle(Delegate.create(this, this.retourObtenirListeJoueursSalle), Delegate.create(this, this.evenementJoueurEntreSalle), Delegate.create(this, this.evenementJoueurQuitteSalle));
-                
-				
+               
 				
 			break;
 			
@@ -1104,7 +1103,7 @@ public var wasHereOnce:Boolean = false;
                     this.listeDesJoueursDansSalle.push(objetEvenement.listeNomUtilisateurs[i]);
                 }
                 this.objGestionnaireCommunication.obtenirListeTables(Delegate.create(this, this.retourObtenirListeTables), Delegate.create(this, this.evenementJoueurEntreTable), Delegate.create(this, this.evenementJoueurQuitteTable), Delegate.create(this, this.evenementNouvelleTable), Delegate.create(this, this.evenementTableDetruite), FiltreTable.INCOMPLETES_NON_COMMENCEES);
-                //_level0.loader.contentHolder.gotoAndPlay(2);
+                _level0.loader.contentHolder.gotoAndPlay(2);
 			break;
 			
             case "CommandeNonReconnue":
@@ -1142,10 +1141,30 @@ public var wasHereOnce:Boolean = false;
         switch(objetEvenement.resultat)
         {
             case "ListeTables":
-			
-			    _global.intervalIdX = setInterval(xTimerSet, 500, objetEvenement);
+			 
+			  _level0.loader.contentHolder.listeTable.removeAll();
+			  _level0.loader.contentHolder.objGestionnaireEvenements.listeDesTables = new Array();
+			  this.listeDesTables = new Array();
+			  var count:Number = objetEvenement.listeTables.length;
+              for (var i:Number = 0; i < count; i++)
+              {
+                    this.listeDesTables.push(objetEvenement.listeTables[i]);
+			  }
+			   _global.intervalIdX = setInterval(xTimerSet, 500);
 				
-				
+				if ( objetEvenement.listeTables.length == 0 &&  _level0.loader.contentHolder._currentframe == 2)
+				{
+					trace("longeur liste table : " +  objetEvenement.listeTables.length);
+					_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
+					_level0.loader.contentHolder.txtChargementTables._visible = true;
+				}
+				else
+				{
+					_level0.loader.contentHolder.chargementTables = "";
+					_level0.loader.contentHolder.chargementTables._visible = false;
+				}
+				_level0.loader.contentHolder.bt_continuer2._visible = true;
+								
             break;
 			 
             case "CommandeNonReconnue":
@@ -1171,7 +1190,7 @@ public var wasHereOnce:Boolean = false;
             default:
                 trace("Erreur Inconnue in  retourObtenirListeTables");
         }
-		objetEvenement = null;
+		//objetEvenement = null;
         trace("fin de retourObtenirListeTables");
         trace("*********************************************\n");
     }
@@ -1180,45 +1199,26 @@ public var wasHereOnce:Boolean = false;
 	function xTimerSet(objetEvenement:Object){
 		
 		       var str:String = new String();
-				_level0.loader.contentHolder.listeTable.removeAll();
-				 
-				 //delete this.listeDesTables;
-				_level0.loader.contentHolder.objGestionnaireEvenements.listeDesTables = new Array();
-				var count:Number = objetEvenement.listeTables.length;
+				
+				var count:Number = _level0.loader.contentHolder.objGestionnaireEvenements.listeDesTables.length;
                 for (var i:Number = 0; i < count; i++)
-                {
-                    _level0.loader.contentHolder.objetEvenement.listeDesTables.push(objetEvenement.listeTables[i]);
+                {                    
 					var iconName:String;
-					if(objetEvenement.listeTables[i].gameType == "mathEnJeu")
+					if(_level0.loader.contentHolder.objGestionnaireEvenements.listeDesTables[i].gameType == "mathEnJeu")
 					{   
 					   iconName = "maze";
 					}
-					else if (objetEvenement.listeTables[i].gameType == "Course" || objetEvenement.listeTables[i].gameType == "Tournament")
+					else if (_level0.loader.contentHolder.objGestionnaireEvenements.listeDesTables[i].gameType == "Course" || _level0.loader.contentHolder.objGestionnaireEvenements.listeDesTables[i].gameType == "Tournament")
 					{
 						iconName = "flags";
 					}
-					trace("game type liste table : " +  objetEvenement.listeTables[i].gameType + " " + iconName);
-                    str =  "   << " +  objetEvenement.listeTables[i].tablName + " >>   - " + objetEvenement.listeTables[i].temps + " min. " ;
+					//trace("game type liste table : " +  objetEvenement.listeTables[i].gameType + " " + iconName);
+                    str =  "   << " +  _level0.loader.contentHolder.objGestionnaireEvenements.listeDesTables[i].tablName + " >>   - " + _level0.loader.contentHolder.objGestionnaireEvenements.listeDesTables[i].temps + " min. " ;
 					
-					_level0.loader.contentHolder.listeTable.addItem({label : str, data : objetEvenement.listeTables[i].no, icon: iconName});
+					_level0.loader.contentHolder.listeTable.addItem({label : str, data : _level0.loader.contentHolder.objGestionnaireEvenements.listeDesTables[i].no, icon: iconName});
 					
                 }
-				
-				if ( objetEvenement.listeTables.length == 0 &&  _level0.loader.contentHolder._currentframe == 2)
-				{
-					//trace("longeur liste table : " +  objetEvenement.listeTables.length);
-					_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
-					_level0.loader.contentHolder.txtChargementTables._visible = true;
-				}
-				else
-				{
-					_level0.loader.contentHolder.chargementTables = "";
-					_level0.loader.contentHolder.chargementTables._visible = false;
-				}
-				_level0.loader.contentHolder.bt_continuer2._visible = true;
-				//_level0.loader.contentHolder.listeTable.invalidate();
-				//_level0.loader.contentHolder.listeTable.redraw(true);
-				
+								
 				 clearInterval(_global.intervalIdX);
 	}// end func
 	
