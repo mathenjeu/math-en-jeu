@@ -131,7 +131,7 @@ public class ProtocoleJoueur implements Runnable
             objLogger.error(GestionnaireMessages.message("protocole.canal_ferme"));
 
             // Arrêter le thread
-            bolStopThread = true;
+            setBolStopThread(true);
         }
 
     }
@@ -143,11 +143,10 @@ public class ProtocoleJoueur implements Runnable
      * @synchronism Cette méthode n'a pas besoin d'être synchronisée
      */
     public void run() {
-        try {
-        	
+        try {        	
         	
         	//objSocketJoueur.setSoLinger(true, 1000);
-        	//objSocketJoueur.setKeepAlive(true);
+        	objSocketJoueur.setKeepAlive(true);
         	
         	// Créer le canal qui permet de recevoir des données sur le canal
             // de communication entre le client et le serveur
@@ -157,12 +156,12 @@ public class ProtocoleJoueur implements Runnable
             StringBuffer strMessageRecu = new StringBuffer();
 
             // Création d'un tableau de 1024 bytes qui va servir à lire sur le canal
-            byte[] byttBuffer = new byte[1024];
+            byte[] byttBuffer = new byte[512];
 
             // Boucler et obtenir les messages du client (joueur), puis les
             // traiter tant que le client n'a pas décidé de quitter (ou que la
             // connexion ne s'est pas déconnectée)
-            while (bolStopThread == false) {
+            while (isBolStopThread() == false) {
             	
             	// Déclaration d'une variable qui va servir de marqueur
                 // pour savoir où on en est rendu dans la lecture
@@ -176,7 +175,7 @@ public class ProtocoleJoueur implements Runnable
                 // stream a été fermé, il faut donc terminer le thread
                 if (intBytesLus == -1) {
                     objLogger.error("Une erreur est survenue: nombre d'octets lus = -1");
-                    bolStopThread = true;
+                    setBolStopThread(true);
                 }
 
                 // Passer tous les bytes lus dans le canal de réception et
@@ -246,7 +245,7 @@ public class ProtocoleJoueur implements Runnable
                     // recevra le EOM
                     strMessageRecu.append(new String(byttBuffer, intMarqueur, intBytesLus - intMarqueur));
                 }
-                //Thread.yield( );
+                Thread.yield( );
 
             }
         } catch (IOException ioe) {
@@ -279,7 +278,7 @@ public class ProtocoleJoueur implements Runnable
             }
 
             // to be sure...
-            this.bolStopThread = true;
+            this.setBolStopThread(true);
             // Si le joueur humain a été défini dans le protocole, alors
             // c'est qu'il a réussi à se connecter au serveur de jeu, il
             // faut donc aviser le contrôleur de jeu pour qu'il enlève
@@ -2737,7 +2736,8 @@ public class ProtocoleJoueur implements Runnable
             // On tente de fermer le canal de réception. Cela va provoquer
             // une erreur dans le thread et le joueur va être déconnecté et
             // le thread va arrêter
-            objCanalReception.close();
+        	if(objCanalReception != null)
+               objCanalReception.close();
         } catch (IOException ioe) {
             objLogger.error(ioe.getMessage() +  " close reception canal");
         }
@@ -2746,13 +2746,14 @@ public class ProtocoleJoueur implements Runnable
             // On tente de fermer le socket liant le client au serveur. Cela
             // va provoquer une erreur dans le thread et le joueur va être
             // déconnecté et le thread va arrêter
-            objSocketJoueur.close();
+        	if(objSocketJoueur != null)
+               objSocketJoueur.close();
             
         } catch (IOException ioe) {
             objLogger.error(ioe.getMessage() + "close socket in protocole");
         }
         
-        this.bolStopThread = true;
+        this.setBolStopThread(true);
         
     }
     
@@ -3271,5 +3272,26 @@ public class ProtocoleJoueur implements Runnable
     public String getLang() {
         return langue;
     }
+
+	/**
+	 * @param bolStopThread the bolStopThread to set
+	 */
+	public void setBolStopThread(boolean bolStopThread) {
+		this.bolStopThread = bolStopThread;
+	}
+
+	/**
+	 * @return the bolStopThread
+	 */
+	public boolean isBolStopThread() {
+		return bolStopThread;
+	}
+
+	/**
+	 * @return the objControleurJeu
+	 */
+	public ControleurJeu getObjControleurJeu() {
+		return objControleurJeu;
+	}
 }// end class
 

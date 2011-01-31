@@ -20,6 +20,7 @@ import ServeurJeu.Evenements.EvenementJoueurConnecte;
 import ServeurJeu.Evenements.EvenementNouvelleSalle;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
+import ServeurJeu.Evenements.StopServerEvent;
 import ServeurJeu.Monitoring.TacheLogMoniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
@@ -211,8 +212,29 @@ public class ControleurJeu {
         //System.out.println("Le serveur demarre 8 ...");
         
     }
+    
+    public void stopItLater(){
+    	this.sendEventServerWillBeReset();
+    }
 
-    /**
+    private void sendEventServerWillBeReset() {
+    	GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+    	int nbSeconds = config.obtenirNombreEntier("controleurjeu.stopTimer");
+    	// Créer un nouvel événement qui va permettre d'envoyer l'événement
+        // aux joueurs qu'un nouveau joueur s'est connecté
+        StopServerEvent stopServer = new StopServerEvent(nbSeconds);
+        // Passer tous les joueurs connectés et leur envoyer un événement
+        for (JoueurHumain objJoueur : lstJoueursConnectes.values()) {
+        	stopServer.ajouterInformationDestination(
+                    new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
+                    objJoueur.obtenirProtocoleJoueur()));
+        }
+
+        // Ajouter le nouvel événement créé dans la liste d'événements à traiter
+        objGestionnaireEvenements.ajouterEvenement(stopServer);
+	}
+
+	/**
      * Stop the controler
      */
     public void arreter() {
@@ -239,6 +261,7 @@ public class ControleurJeu {
         {
         	//room.destroyRoom();
         }
+        
         this.lstSalles.clear();
         
         this.objSpyDB.stopSpy();

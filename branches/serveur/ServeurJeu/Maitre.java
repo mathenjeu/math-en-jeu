@@ -6,7 +6,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import org.apache.log4j.Logger;
+
+import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.GUI.ServerFrame;
+import ServeurJeu.Temps.StopServerTask;
 
 public class Maitre implements Runnable 
 {
@@ -151,16 +154,22 @@ public class Maitre implements Runnable
 	{
 		//System.out.println( "le serveur test stop "  + this.isOn);		
 		if(this.isOn){
+			GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+	    	long nbSeconds = config.obtenirNombreEntier("controleurjeu.stopTimer");
+	    	
+	    	StopServerTask endTask = new StopServerTask(this, objJeu);
 			System.out.println( "arreter le serveur" );		
 			this.isOn = false;
-			objJeu.arreter();
-			objJeu = new ControleurJeu();
+			objJeu.stopItLater();
+			objJeu.obtenirGestionnaireTemps().putNewTask(endTask, nbSeconds * 1000);
+			//objJeu = new ControleurJeu();
 			//System.exit( 0 );				
 		}
 		//System.out.println( "le serveur "  + this.isOn);
 	}
 	
 	public void exitServer() {
+		
 		System.exit( 0 );
 	}
 	
@@ -186,7 +195,7 @@ public class Maitre implements Runnable
 						System.out.println( "arreter le serveur" );
 						this.stopServer();
 						socket.getOutputStream().write( (byte)_STOP);//buffer );
-						System.exit( 0 );
+						//System.exit( 0 );
 					}
 					else if( commande == (byte)_STATUS )
 					{

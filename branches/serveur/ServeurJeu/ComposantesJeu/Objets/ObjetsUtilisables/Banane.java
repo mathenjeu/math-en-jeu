@@ -52,7 +52,7 @@ public class Banane extends ObjetUtilisable
 
 		// Create TimerTask and Timer.
 		BananaHumainTask bTask = new BananaHumainTask(player);
-		Timer bTimer = new Timer();
+		//Timer bTimer = new Timer();
 		//bkTimer.cancel();
 
 		// effects of Banana
@@ -60,7 +60,8 @@ public class Banane extends ObjetUtilisable
 		player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() - 2);
 
 		// used timer to take out effects of banana after the needed time
-		bTimer.schedule(bTask, delay);
+		player.obtenirProtocoleJoueur().getObjControleurJeu().obtenirGestionnaireTemps().schedule(bTask, delay);
+		///bTimer.schedule(bTask, delay);
 		return bTask;
 
 	}
