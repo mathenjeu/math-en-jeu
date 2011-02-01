@@ -1032,6 +1032,18 @@ class GestionnaireCommunication
 				       	break;
 					} // end switch
 				} // end "PlayerSelectedNewPicture"
+				else if(noeudEvenement.attributes.nom == "ServerWillStop")
+				{
+					switch(strNomType)
+			    	{
+				    	
+						case "nrSeconds":
+							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
+				    		objEvenement["seconds"] = lstChildNodes[i].firstChild.nodeValue;
+				       	break;
+												
+					} // end switch
+				} // end "ServerWillStop"
 				
 				else	// donc (noeudEvenement.attributes.nom != "PartieDemarree" NI "JoueurDeplacePersonnage" NI "PartieTerminee")
 			    {
@@ -1529,6 +1541,7 @@ class GestionnaireCommunication
 								   evenementSynchroniserTempsDelegate:Function,
 								   evenementUtiliserObjetDelegate:Function,
 								   evenementPartieTermineeDelegate:Function,
+								   eventServerWillStopDelegate:Function,
 								   evenementJoueurRejoindrePartieDelegate:Function)
     {
         // Si on est connecte alors on peut continuer le code de la reconnexion sans la creation d'une nouvelle partie
@@ -1547,6 +1560,7 @@ class GestionnaireCommunication
 			lstDelegateCommande.push({nom:"SynchroniserTemps", delegate:evenementSynchroniserTempsDelegate});
 			lstDelegateCommande.push({nom:"UtiliserObjet", delegate:evenementUtiliserObjetDelegate});
 			lstDelegateCommande.push({nom:"PartieTerminee", delegate:evenementPartieTermineeDelegate});
+			lstDelegateCommande.push({nom:"ServerWillStop", delegate:eventServerWillStopDelegate});
 			lstDelegateCommande.push({nom:"JoueurRejoindrePartie", delegate:evenementJoueurRejoindrePartieDelegate});
 			
 			
@@ -1607,7 +1621,8 @@ class GestionnaireCommunication
      */
     public function obtenirListeJoueurs(obtenirListeJoueursDelegate:Function,
                                         evenementJoueurConnecteDelegate:Function,
-                                        evenementJoueurDeconnecteDelegate:Function)
+                                        evenementJoueurDeconnecteDelegate:Function,
+										eventServerWillStopDelegate:Function)
     {
         // Si on est connecte alors on peut continuer le code de la fonction
         if (ExtendedArray.fromArray(Etat.obtenirCommandesPossibles(intEtatClient)).containsByProperty("ObtenirListeJoueurs", "nom") == true)
@@ -1620,6 +1635,7 @@ class GestionnaireCommunication
             // Ajouter les autres Delegate d'evenements
             lstDelegateCommande.push({nom:"JoueurConnecte", delegate:evenementJoueurConnecteDelegate});
             lstDelegateCommande.push({nom:"JoueurDeconnecte", delegate:evenementJoueurDeconnecteDelegate});
+			lstDelegateCommande.push({nom:"ServerWillStop", delegate:eventServerWillStopDelegate});
             // Declaration d'une variable qui va contenir le numero de la commande
             // generee
             var intNumeroCommande:Number = obtenirNumeroCommande();

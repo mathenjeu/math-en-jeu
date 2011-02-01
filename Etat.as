@@ -46,11 +46,13 @@ class Etat
 	{nom:"RejoindrePartie", listeEvenementsAcceptables:new Array("PartieDemarree", "SynchroniserTemps"), listeEvenementsAcceptablesAvant:new Array("NouvelleSalle"), listeEvenementsAcceptablesApres:new Array("PartieDemarree", "SynchroniserTemps", "JoueurDeplacePersonnage", "PartieTerminee")}, 
     {nom:"NePasRejoindrePartie", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("NouvelleSalle"), listeEvenementsAcceptablesApres:new Array()}, 
 	{nom:"ObtenirListeJoueurs", listeEvenementsAcceptables:new Array("NouvelleSalle"), listeEvenementsAcceptablesAvant:new Array("NouvelleSalle"), listeEvenementsAcceptablesApres:new Array("JoueurConnecte", "JoueurDeconnecte","NouvelleSalle")}), 
-    listeEvenementsAcceptables:new Array("NouvelleSalle")};
+    listeEvenementsAcceptables:new Array("NouvelleSalle","ServerWillStop")};
 
     // Constante objet indiquant que le joueur a obtenu la liste des joueurs
     // connectés
-    public static var LISTE_JOUEURS_OBTENUE:Object = {no:3, listeCommandesPossibles:new Array({nom:"Deconnexion", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurConnecte", "JoueurDeconnecte"), listeEvenementsAcceptablesApres:new Array()}, {nom:"ObtenirListeSalles", listeEvenementsAcceptables:new Array("JoueurConnecte", "JoueurDeconnecte"), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()}), listeEvenementsAcceptables:new Array("JoueurConnecte", "JoueurDeconnecte")};
+    public static var LISTE_JOUEURS_OBTENUE:Object = {no:3, listeCommandesPossibles:new Array({nom:"Deconnexion", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurConnecte", "JoueurDeconnecte"), listeEvenementsAcceptablesApres:new Array()}, 
+																							{nom:"ObtenirListeSalles", listeEvenementsAcceptables:new Array("JoueurConnecte", "JoueurDeconnecte"), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()}), 
+	                                                  listeEvenementsAcceptables:new Array("JoueurConnecte", "JoueurDeconnecte", "ServerWillStop")};
 
     // Constante objet indiquant que le joueur a obtenu la liste des salles
     public static var LISTE_SALLES_OBTENUE:Object = {no:4, listeCommandesPossibles:new Array({nom:"Deconnexion", listeEvenementsAcceptables:new Array("NouvelleSalle"), listeEvenementsAcceptablesAvant:new Array("NouvelleSalle","JoueurConnecte", "JoueurDeconnecte"), listeEvenementsAcceptablesApres:new Array()},
@@ -58,14 +60,19 @@ class Etat
     {nom:"EntrerSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("NouvelleSalle", "JoueurConnecte", "JoueurDeconnecte"), listeEvenementsAcceptablesApres:new Array()},
 	{nom:"ObtenirListeSallesRetour", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("ObtenirListeSallesRetour", "NouvelleSalle", "JoueurConnecte", "JoueurDeconnecte"), listeEvenementsAcceptablesApres:new Array()},
 	{nom:"NouvelleSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("NouvelleSalle", "JoueurConnecte", "JoueurDeconnecte"), listeEvenementsAcceptablesApres:new Array()}),
-	listeEvenementsAcceptables:new Array("NouvelleSalle", "JoueurConnecte", "JoueurDeconnecte")};
+	listeEvenementsAcceptables:new Array("NouvelleSalle", "JoueurConnecte", "JoueurDeconnecte", "ServerWillStop")};
 
     // Constante objet indiquant que le joueur est entré dans une salle
-    public static var DANS_SALLE:Object = {no:5, listeCommandesPossibles:new Array({nom:"Deconnexion", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()}, {nom:"QuitterSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()}, {nom:"ObtenirListeJoueursSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array("JoueurEntreSalle", "JoueurQuitteSalle")}), listeEvenementsAcceptables:new Array()};
+    public static var DANS_SALLE:Object = {no:5, listeCommandesPossibles:new Array({nom:"Deconnexion", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()},
+																				{nom:"QuitterSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()}, 
+																				{nom:"ObtenirListeJoueursSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array("JoueurEntreSalle", "JoueurQuitteSalle")}), listeEvenementsAcceptables:new Array("ServerWillStop")};
 
     // Constante objet indiquant que le joueur a obtenu la liste des joueurs
     // de la salle
-    public static var LISTE_JOUEURS_SALLE_OBTENUE:Object = {no:6, listeCommandesPossibles:new Array({nom:"Deconnexion", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle"), listeEvenementsAcceptablesApres:new Array()}, {nom:"QuitterSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle"), listeEvenementsAcceptablesApres:new Array()}, {nom:"ObtenirListeTables", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle"), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array("JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite")}), listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle")};
+    public static var LISTE_JOUEURS_SALLE_OBTENUE:Object = {no:6, listeCommandesPossibles:new Array({nom:"Deconnexion", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle"), listeEvenementsAcceptablesApres:new Array()}, 
+																								{nom:"QuitterSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle"), listeEvenementsAcceptablesApres:new Array()}, 
+																								{nom:"ObtenirListeTables", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle"), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array("JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite")}), 
+	listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "ServerWillStop")};
 
     // Constante objet indiquant que le joueur a obtenu la liste des tables
     public static var LISTE_TABLES_OBTENUE:Object = {no:7, listeCommandesPossibles:new Array(
@@ -75,7 +82,7 @@ class Etat
     {nom:"ObtenirListeJoueursSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array("JoueurEntreSalle", "JoueurQuitteSalle")},
 	{nom:"EntrerTable", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite"), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array("JoueurDemarrePartie", "TableDetruite")}, 
     {nom:"CreerTable", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite"), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array("JoueurDemarrePartie", "TableDetruite")}), 
-    listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "ObtenirListeTables","JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite")};
+    listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "ObtenirListeTables","JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "ServerWillStop")};
 
     // Constante objet indiquant que le joueur est entré dans une table
     public static var DANS_TABLE:Object = {no:8, listeCommandesPossibles:new Array({nom:"Deconnexion", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie"), listeEvenementsAcceptablesApres:new Array()},
@@ -85,7 +92,7 @@ class Etat
 	                       listeEvenementsAcceptablesAvant:new Array("JoueurDemarrePartie"), 
 						   listeEvenementsAcceptablesApres:new Array("PartieDemarree", "JoueurDemarrePartie", "JoueurRejoindrePartie", "PlayerPictureCanceled", "PlayerSelectedNewPicture", "PlayerCanceledPicture"  )},
 	{nom:"ObtenirListeJoueursSalle", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array("JoueurEntreSalle", "JoueurQuitteSalle")}), 
-	listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie", "JoueurRejoindrePartie", "PlayerCanceledPicture"  )};
+	listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie", "JoueurRejoindrePartie", "PlayerCanceledPicture", "ServerWillStop")};
     
     public static var ATTENTE_DEBUT_PARTIE:Object = {no:9, listeCommandesPossibles:new Array(
 	{nom:"Musique", listeEvenementsAcceptables:new Array(), listeEvenementsAcceptablesAvant:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie", "PartieDemarree", "DemarrerMaintenant"),listeEvenementsAcceptablesApres:new Array()},
@@ -104,7 +111,7 @@ class Etat
 	                    listeEvenementsAcceptablesAvant:new Array(),
 	                    listeEvenementsAcceptablesApres:new Array("JoueurEntreSalle", "JoueurQuitteSalle")}), 
 	listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDemarrePartie", "PartieDemarree", "JoueurDeplacePersonnage",
-										 "SynchroniserTemps", "PartieTerminee", "UtiliserObjet", "JoueurRejoindrePartie", "PlayerPictureCanceled", "PlayerSelectedPicture", "PlayerCanceledPicture" )}; 
+										 "SynchroniserTemps", "PartieTerminee", "UtiliserObjet", "JoueurRejoindrePartie", "PlayerPictureCanceled", "PlayerSelectedPicture", "PlayerCanceledPicture", "ServerWillStop")}; 
 
     
     
@@ -138,7 +145,7 @@ class Etat
     {nom:"Argent", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDeplacePersonnage","SynchroniserTemps", "PartieTerminee","UtiliserObjet", "JoueurRejoindrePartie"), 
 	               listeEvenementsAcceptablesAvant:new Array(), 
 				   listeEvenementsAcceptablesApres:new Array()}), 
-	listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDeplacePersonnage","SynchroniserTemps", "PartieTerminee", "UtiliserObjet", "DeplacementWinTheGame", "JoueurRejoindrePartie")};
+	listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDeplacePersonnage","SynchroniserTemps", "PartieTerminee", "UtiliserObjet", "DeplacementWinTheGame", "JoueurRejoindrePartie", "ServerWillStop")};
 
     // Constante objet indiquant que le joueur doit répondre à une question qui
     // lui a été posée
@@ -151,7 +158,7 @@ class Etat
 	   {nom:"RejoindrePartie", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDeplacePersonnage", "SynchroniserTemps", "PartieTerminee","UtiliserObjet", "ReportBugQuestion", "JoueurRejoindrePartie"), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array("JoueurDeplacePersonnage", "SynchroniserTemps", "PartieTerminee")},
 	   {nom:"ReportBugQuestion", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDeplacePersonnage", "SynchroniserTemps", "PartieTerminee","UtiliserObjet", "JoueurRejoindrePartie"), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()},
 	   {nom:"CancelQuestion", listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDeplacePersonnage", "SynchroniserTemps", "PartieTerminee","UtiliserObjet", "JoueurRejoindrePartie"), listeEvenementsAcceptablesAvant:new Array(), listeEvenementsAcceptablesApres:new Array()}), 
-	   listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDeplacePersonnage", "SynchroniserTemps", "PartieTerminee", "DeplacementWinTheGame","UtiliserObjet", "JoueurRejoindrePartie")};
+	   listeEvenementsAcceptables:new Array("JoueurEntreSalle", "JoueurQuitteSalle", "JoueurEntreTable", "JoueurQuitteTable", "NouvelleTable", "TableDetruite", "JoueurDeplacePersonnage", "SynchroniserTemps", "PartieTerminee", "DeplacementWinTheGame","UtiliserObjet", "JoueurRejoindrePartie", "ServerWillStop")};
     
     
     
