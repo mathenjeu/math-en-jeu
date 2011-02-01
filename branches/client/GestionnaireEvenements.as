@@ -219,7 +219,9 @@ public var wasHereOnce:Boolean = false;
 		this.allowedTypesMap = new Array("mathEnJeu", "Tournament", "Course");
 		this.allowedTypesTracks = new Array();
 				
-        this.objGestionnaireCommunication = new GestionnaireCommunication(Delegate.create(this, this.evenementConnexionPhysique), Delegate.create(this, this.evenementDeconnexionPhysique), url_serveur, port);
+        this.objGestionnaireCommunication = new GestionnaireCommunication(Delegate.create(this, this.evenementConnexionPhysique), 
+																		  Delegate.create(this, this.evenementDeconnexionPhysique),
+																		  url_serveur, port);
 	
     	trace("fin du constructeur de gesEve");
     	trace("*********************************************\n");
@@ -308,7 +310,16 @@ public var wasHereOnce:Boolean = false;
     {
 	    trace("*********************************************");
         trace("restart Old Game");
-        this.objGestionnaireCommunication.restartOldGame(Delegate.create(this, this.feedbackRestartOldGame), Delegate.create(this, this.evenementJoueurEntreTable), Delegate.create(this, this.evenementJoueurQuitteTable), Delegate.create(this, this.evenementPartieDemarree), Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), Delegate.create(this, this.evenementPartieTerminee), Delegate.create(this, this.evenementJoueurRejoindrePartie));  // , Delegate.create(this, this.feedbackRestartListePlayers)
+        this.objGestionnaireCommunication.restartOldGame(Delegate.create(this, this.feedbackRestartOldGame), 
+											             Delegate.create(this, this.evenementJoueurEntreTable), 
+														 Delegate.create(this, this.evenementJoueurQuitteTable), 
+														 Delegate.create(this, this.evenementPartieDemarree), 
+														 Delegate.create(this, this.evenementJoueurDeplacePersonnage), 
+														 Delegate.create(this, this.evenementSynchroniserTemps), 
+														 Delegate.create(this, this.evenementUtiliserObjet), 
+														 Delegate.create(this, this.evenementPartieTerminee),
+														 Delegate.create(this, this.eventServerWillStop),
+														 Delegate.create(this, this.evenementJoueurRejoindrePartie));  // , Delegate.create(this, this.feedbackRestartListePlayers)
         trace("end restart Old Game");
         trace("*********************************************\n");
     }
@@ -388,7 +399,8 @@ public var wasHereOnce:Boolean = false;
         trace("debut de entrerTable     :" + nTable);
         this.numeroTable = nTable;
 			
-        this.objGestionnaireCommunication.entrerTable(Delegate.create(this, this.retourEntrerTable), Delegate.create(this, this.evenementJoueurDemarrePartie), this.numeroTable);
+        this.objGestionnaireCommunication.entrerTable(Delegate.create(this, this.retourEntrerTable), 
+													  Delegate.create(this, this.evenementJoueurDemarrePartie), this.numeroTable);
         trace("fin de entrerTable");
         trace("*********************************************\n");
     }
@@ -443,7 +455,8 @@ public var wasHereOnce:Boolean = false;
         trace("debut de creerTable     " + temps);
 		this.typeDeJeu = gameType;
 		trace("debut de creerTable     " + this.typeDeJeu);
-        this.objGestionnaireCommunication.creerTable(Delegate.create(this, this.retourCreerTable), Delegate.create(this, this.evenementJoueurDemarrePartie), temps, nb_lines, nb_columns, nameTable, gameType);
+        this.objGestionnaireCommunication.creerTable(Delegate.create(this, this.retourCreerTable), 
+													 Delegate.create(this, this.evenementJoueurDemarrePartie), temps, nb_lines, nb_columns, nameTable, gameType);
         trace("fin de creerTable");
         trace("*********************************************\n");
     }
@@ -463,10 +476,15 @@ public var wasHereOnce:Boolean = false;
 		//this.listeDesPersonnages[this.listeDesPersonnages.length - 1].clocolor = this.colorIt;
 		//this.listeDesPersonnages[numeroJoueursDansSalle-1].lastPoints = 0;
 		
-        this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), Delegate.create(this, this.evenementPartieDemarree), 
-			Delegate.create(this, this.evenementJoueurDeplacePersonnage), Delegate.create(this, this.evenementSynchroniserTemps), Delegate.create(this, this.evenementUtiliserObjet), 
-			Delegate.create(this, this.evenementPartieTerminee), Delegate.create(this, this.evenementJoueurRejoindrePartie), Delegate.create(this, this.eventPlayerPictureCanceled), 
-			Delegate.create(this, this.eventPlayerSelectedPicture),  idDessin);  
+        this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), 
+														 Delegate.create(this, this.evenementPartieDemarree), 
+			                                             Delegate.create(this, this.evenementJoueurDeplacePersonnage), 
+														 Delegate.create(this, this.evenementSynchroniserTemps), 
+														 Delegate.create(this, this.evenementUtiliserObjet), 
+			                                             Delegate.create(this, this.evenementPartieTerminee), 
+														 Delegate.create(this, this.evenementJoueurRejoindrePartie), 
+														 Delegate.create(this, this.eventPlayerPictureCanceled), 
+			                                             Delegate.create(this, this.eventPlayerSelectedPicture),  idDessin);  
 	
 		trace("fin de demarrerPartie");
         trace("*********************************************\n");
@@ -623,7 +641,10 @@ public var wasHereOnce:Boolean = false;
 			break;
 
 			case "Musique":
-				this.objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), Delegate.create(this, this.evenementJoueurConnecte), Delegate.create(this, this.evenementJoueurDeconnecte));
+				this.objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), 
+																	  Delegate.create(this, this.evenementJoueurConnecte), 
+																	  Delegate.create(this, this.evenementJoueurDeconnecte),
+																	  Delegate.create(this, this.eventServerWillStop));
                  //this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), Delegate.create(this, this.evenementNouvelleSalle), this.clientType);
                
 				//trace("objEvenement");
@@ -686,7 +707,10 @@ public var wasHereOnce:Boolean = false;
 			case "Ok":
 			
 			trace("<<<<<<<<<<<<<<<<  reconnexion with new game >>>>>>>>>>>>>>>>>>>");
-			this.objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), Delegate.create(this, this.evenementJoueurConnecte), Delegate.create(this, this.evenementJoueurDeconnecte));
+			this.objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), 
+																  Delegate.create(this, this.evenementJoueurConnecte), 
+																  Delegate.create(this, this.evenementJoueurDeconnecte),
+																  Delegate.create(this, this.eventServerWillStop));
 			// this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), Delegate.create(this, this.evenementNouvelleSalle), this.clientType);
             
 			_level0.loader.contentHolder["restartGame"].removeMovieClip();
@@ -1055,7 +1079,10 @@ public var wasHereOnce:Boolean = false;
                 //this.motDePasseSalle = "";
                 this.listeDesSalles = new Array();
                 this.listeDesJoueursConnectes = new Array();
-                objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), Delegate.create(this, this.evenementJoueurConnecte), Delegate.create(this, this.evenementJoueurDeconnecte));
+                objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), 
+																 Delegate.create(this, this.evenementJoueurConnecte), 
+																 Delegate.create(this, this.evenementJoueurDeconnecte),
+																 Delegate.create(this, this.eventServerWillStop));
 				//this.objGestionnaireCommunication.obtenirListeSalles(Delegate.create(this, this.retourObtenirListeSalles), Delegate.create(this, this.evenementNouvelleSalle), this.clientType);
             
             break;
@@ -2537,6 +2564,27 @@ public var wasHereOnce:Boolean = false;
     	trace("*********************************************\n");
     }
 	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+    public function eventServerWillStop(objetEvenement:Object)
+    {
+        trace("*********************************************");
+    	trace("debut de evenement ServerWillStop  GestEven ");
+		var serverDeconnexion:MovieClip;
+		
+		serverDeconnexion = _level0.loader.contentHolder.attachMovie("GUI_serveur", "deconnexion", 9999);
+		serverDeconnexion.linkGUI_erreur._visible = false;
+		serverDeconnexion.btn_ok._visible = false;
+		serverDeconnexion._x = 100;
+		serverDeconnexion._y = 100;
+		
+			
+		serverDeconnexion.textGUI_erreur.text = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIerrorConnection;
+		
+		objetEvenement = null;
+    	trace("fin de evenement ServerWillStop");
+    	trace("*********************************************\n");
+    }
+	
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public function evenementJoueurConnecte(objetEvenement:Object)
     {
@@ -3935,7 +3983,7 @@ public var wasHereOnce:Boolean = false;
 			
 		    _level0.loader.contentHolder["banane"].nomCible = " ";
 	        _level0.loader.contentHolder["banane"].nomJoueurUtilisateur = playerThat;
-	        twMove = new Tween(guiBanane, "_alpha", Strong.easeOut, 20, 60, 1, true);
+	        //twMove = new Tween(guiBanane, "_alpha", Strong.easeOut, 20, 60, 1, true);
 		    
 			clearInterval(_level0.loader.contentHolder.objGestionnaireEvenements.bananaMessageIntervalArray.shift());//timerIntervalMessage);
 		}
