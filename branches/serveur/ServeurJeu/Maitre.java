@@ -16,6 +16,7 @@ public class Maitre implements Runnable
 	private static Logger objLogger = Logger.getLogger( Maitre.class );
 	private ControleurJeu objJeu = null;
 	private ServerFrame serverWindow;
+	private GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 	private static final int _STOP = 1;
 	private static final int _STATUS = 2;
 	private static final int _ON = 3;
@@ -89,6 +90,7 @@ public class Maitre implements Runnable
 			System.out.println( "arreter" );
 			try 
 			{
+				
 				Socket socket = new Socket( "localhost", 6101 );   
 				byte [] buffer = new byte[2];
 				buffer[0] = (byte)_STOP;
@@ -154,7 +156,7 @@ public class Maitre implements Runnable
 	{
 		//System.out.println( "le serveur test stop "  + this.isOn);		
 		if(this.isOn){
-			GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+			
 	    	long nbSeconds = config.obtenirNombreEntier("controleurjeu.stopTimer");
 	    	
 	    	StopServerTask endTask = new StopServerTask(this, objJeu);
@@ -177,13 +179,16 @@ public class Maitre implements Runnable
 	{
 		try 
 		{
+			int port = config.obtenirNombreEntier("maitre.port");
+			String address = config.obtenirString("maitre.address");
 			boolean arret = false;
-			ServerSocket socketServeur = new ServerSocket( 6101, 2, InetAddress.getByName("localhost")); 
+			ServerSocket socketServeur = new ServerSocket( port, 2, InetAddress.getByName(address)); 
+			Socket socket;
 			while( !arret )
 			{
 				//System.out.println( "le maitre "  + this.commandToDo);
 
-				Socket socket = socketServeur.accept();
+				socket = socketServeur.accept();
 				if( socket.getInetAddress().isLoopbackAddress() == true )
 				{
 					byte [] buffer = new byte[256];
@@ -211,6 +216,11 @@ public class Maitre implements Runnable
 				}// end first if
 			
 			}
+			// to inform the applet about exit
+			socket = socketServeur.accept();
+			if(!socket.isClosed())
+			   socket.getOutputStream().write( (byte)_STOP);
+			System.out.println( "arreter le serveur" );
 		} 
 		catch (IOException e) 
 		{	
