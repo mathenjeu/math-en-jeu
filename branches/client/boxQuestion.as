@@ -127,7 +127,7 @@ loadListener.complete = function(eventObject)
 		//pointillés et mettre les 2 lignes suivantes à la place
 		//FAIRE LA MEME CHOSE DANS GUI_RETRO
 		
-		monScroll.content._width = 410;
+		monScroll.content._width = 406;
 		monScroll.content._yscale = monScroll.content._xscale;
 		Selection.setFocus(monScroll);
 	
@@ -337,7 +337,7 @@ function checkLoadProgress()
 		
 				horsService = _level0.loader.contentHolder.attachMovie("GUI_erreur", "HorsService", 9999);
 				
-				horsService.textGUI_erreur.text = _root.texteSource_xml.firstChild.attributes.GUIerreurQuestion;
+				horsService.textGUI_erreur.text = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIerreurQuestion;
 				horsService.linkGUI_erreur._visible = false;
 				//horsService.linkGUI_erreur.text = _root.texteSource_xml.firstChild.attributes.GUIhorsService2;
 				//horsService.linkGUI_erreur.html = true;
