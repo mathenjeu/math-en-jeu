@@ -280,6 +280,7 @@ join and the game mode you'd like to play"
 For the next 90 seconds, the questions you'll be asked will be more difficult. Also, your allowed movements have been diminished by 2 steps."	
 			
 			GUIbananeUser = "You used a banana."
+			GUIserveur = "We are sincerely sorry, but we are currently experiencing difficulty and need teporarily shut down the server. You will be disconnected in a few seconds!"
 
 			GUIutiliserLivre = "Do you really want to use the book?"
 			

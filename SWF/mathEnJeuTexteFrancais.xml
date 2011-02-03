@@ -278,6 +278,7 @@ joindre et le mode de jeu que vous souhaitez jouer...  "
 Pour les prochaines 90 secondes, les questions qui vous seront posées seront plus difficiles. Aussi, vos déplacements possibles ont été réduits de 2 pas."
 			
 			GUIbananeUser = "Vous avez utilisé une banane."
+			GUIserveur = " Nous sommes sincèrement désolé, mais nous éprouvons présentement des difficulté et devons teporairement désactiver le jeu. Vous serez déconnecté dans quelques seconds!" 
 			
 
 			GUIutiliserLivre = "Voulez-vous vraiment utiliser le livre?"
