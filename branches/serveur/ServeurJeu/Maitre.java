@@ -1,6 +1,8 @@
 package ServeurJeu;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -179,6 +181,7 @@ public class Maitre implements Runnable
 	{
 		try 
 		{
+			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in),1);
 			int port = config.obtenirNombreEntier("maitre.port");
 			String address = config.obtenirString("maitre.address");
 			boolean arret = false;
@@ -186,8 +189,15 @@ public class Maitre implements Runnable
 			Socket socket;
 			while( !arret )
 			{
-				//System.out.println( "le maitre "  + this.commandToDo);
-
+				byte comman = (byte) new Integer(keyboard.readLine()).intValue();
+				if( comman == (byte)_STOP )
+				{
+					System.out.println( "arreter le serveur" );
+					this.stopServer();
+				}
+			}
+				//System.out.println( "le maitre "  + keyboard.readLine());
+/*
 				socket = socketServeur.accept();
 				if( socket.getInetAddress().isLoopbackAddress() == true )
 				{
@@ -213,14 +223,17 @@ public class Maitre implements Runnable
 					{
 						System.out.println( "ERREUR : Mauvaise commande" );
 					}
+					
 				}// end first if
-			
+				
+				 
 			}
 			// to inform the applet about exit
 			socket = socketServeur.accept();
 			if(!socket.isClosed())
 			   socket.getOutputStream().write( (byte)_STOP);
 			System.out.println( "arreter le serveur" );
+*/			
 		} 
 		catch (IOException e) 
 		{	
