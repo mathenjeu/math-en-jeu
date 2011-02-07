@@ -136,7 +136,7 @@ class PlancheDeJeu
 	
 	function getPersonnageByName(playerName:String):Personnage
 	{
-		var count:Number = tableauDesPersonnages.length; 
+		//var count:Number = tableauDesPersonnages.length; 
 		for(var i in tableauDesPersonnages)
 		{
 			
@@ -289,6 +289,7 @@ class PlancheDeJeu
 		var coinHaut = new Point(0,0);
 		var coinBas = new Point(0,0);
 		
+		trace("zoom " + this.zoom);
 		coinGauche.definirX(_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[0][0].obtenirClipCase()._x);
 		coinGauche.definirY(_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[0][0].obtenirClipCase()._y);
 		coinHaut.definirX(coinGauche.obtenirX() + this.largeurDeCase/2 * (this.tableauDesCases[0].length-1));
@@ -345,8 +346,8 @@ class PlancheDeJeu
 		return !(limiteAtteinte);
     }
 
-       
-    function zoomer(sens:String):Boolean
+    //*************************************************
+    function zoomer(sens:String, fois:Number):Boolean
     {
 		var distX:Number;
 		var distY:Number;
@@ -354,13 +355,16 @@ class PlancheDeJeu
 		switch(sens)
 		{
 			case "in":
+			     
 				if(this.zoom < 8)
 				{
-					this.zoom++;
+					fois = 8 - this.zoom >= fois ? fois : (8 - this.zoom);
+					this.zoom = this.zoom + fois; 
+					//this.zoom++;
 					
 					// on zoom le clip sur lequel est attache tous les autres clips
-					_level0.loader.contentHolder.referenceLayer._xscale +=10;
-					_level0.loader.contentHolder.referenceLayer._yscale +=10;
+					_level0.loader.contentHolder.referenceLayer._xscale += 10 * fois;
+					_level0.loader.contentHolder.referenceLayer._yscale += 10 * fois;
 				
 					// on deplace le clip sur lequel est attache tous les autres clips
 					distX = 275 - _level0.loader.contentHolder.referenceLayer._x;
@@ -379,11 +383,13 @@ class PlancheDeJeu
 			case "out":
 				if(this.zoom > -8)
 				{
-					this.zoom--; 
+					fois = Math.abs(- 8 - this.zoom) >= fois ? fois : Math.abs(- 8 - this.zoom);
+					this.zoom = this.zoom - fois; 
+					//this.zoom--; 
 					
 					// on zoom le clip sur lequel est attache tous les autres clips
-					_level0.loader.contentHolder.referenceLayer._xscale -=10;
-					_level0.loader.contentHolder.referenceLayer._yscale -=10;
+					_level0.loader.contentHolder.referenceLayer._xscale -= 10 * fois;
+					_level0.loader.contentHolder.referenceLayer._yscale -= 10 * fois;
 					
 					// on deplace le clip sur lequel est attache tous les autres clips
 					distX = 275 - _level0.loader.contentHolder.referenceLayer._x;
@@ -406,8 +412,72 @@ class PlancheDeJeu
 		if(this.zoom == -8 || this.zoom == 8) return false;
 		return true;
     }
-    
-    
+    //*********************************************************
+	
+	 function zoomerInHalf(sens:String):Boolean
+    {
+		var distX:Number;
+		var distY:Number;
+		
+		switch(sens)
+		{
+			case "in":
+			     
+				if(this.zoom /2 < 8)
+				{
+					
+					this.zoom++;
+					
+					// on zoom le clip sur lequel est attache tous les autres clips
+					_level0.loader.contentHolder.referenceLayer._xscale += 5;
+					_level0.loader.contentHolder.referenceLayer._yscale += 5;
+				
+					// on deplace le clip sur lequel est attache tous les autres clips
+					distX = 275 - _level0.loader.contentHolder.referenceLayer._x;
+					distX *= (5+this.zoom)/(4+this.zoom); 
+					_level0.loader.contentHolder.referenceLayer._x = 275 - distX;
+					distY = 200 - _level0.loader.contentHolder.referenceLayer._y;
+					distY *= (5+this.zoom)/(4+this.zoom); 
+					_level0.loader.contentHolder.referenceLayer._y = 200 - distY;
+					
+					// on modifie largeurDeCase et hauteurDeCase
+					this.largeurDeCase *= (5+this.zoom)/(4+this.zoom);
+					this.hauteurDeCase *= (5+this.zoom)/(4+this.zoom);
+				}
+			break;
+				
+			case "out":
+				if(this.zoom/2 > -8)
+				{
+					this.zoom--; 
+					
+					// on zoom le clip sur lequel est attache tous les autres clips
+					_level0.loader.contentHolder.referenceLayer._xscale -= 5;
+					_level0.loader.contentHolder.referenceLayer._yscale -= 5;
+					
+					// on deplace le clip sur lequel est attache tous les autres clips
+					distX = 275 - _level0.loader.contentHolder.referenceLayer._x;
+					distX *= (5+this.zoom)/(4+this.zoom); 
+					_level0.loader.contentHolder.referenceLayer._x = 275 - distX;
+					distY = 200 - _level0.loader.contentHolder.referenceLayer._y;
+					distY *= (5+this.zoom)/(4+this.zoom); 
+					_level0.loader.contentHolder.referenceLayer._y = 200 - distY;
+					
+					// on modifie largeurDeCase et hauteurDeCase
+					this.largeurDeCase *= (5+this.zoom)/(6+this.zoom);
+					this.hauteurDeCase *= (5+this.zoom)/(6+this.zoom);
+				}
+			break;
+		
+			default:
+			break;
+		}
+		
+		if(this.zoom == -8 || this.zoom == 8) return false;
+		return true;
+    }
+    //*********************************************************
+   
     function obtenirRotation():Number
     {
         return rotation;
@@ -534,7 +604,7 @@ class PlancheDeJeu
     }
     
     
-    
+  /*
 	// c'est quoi la difference entre ca et recentrerBoard ??
     function centrerPersonnage(l:Number, c:Number)
     {
@@ -543,16 +613,9 @@ class PlancheDeJeu
         var i:Number;
         var j:Number;
 		
-		// for different types of game we need different pozitions
-        if(_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament" || _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Course" )
-		{
-		    diffX = 275 - this.tableauDesCases[l][c].obtenirClipCase()._x;
-            diffY = 200 - this.tableauDesCases[l][c].obtenirClipCase()._y;
-		}else{
-        	diffX = 275 - this.tableauDesCases[l][c].obtenirClipCase()._x;
-            diffY = 200 - this.tableauDesCases[l][c].obtenirClipCase()._y;
-		}
-		
+		diffX = 275 - this.tableauDesCases[l][c].obtenirClipCase()._x;
+        diffY = 200 - this.tableauDesCases[l][c].obtenirClipCase()._y;
+				
 		//var count:Number = this.tableauDesCases.length;
 		for(i in this.tableauDesCases )
         {
@@ -565,7 +628,33 @@ class PlancheDeJeu
                 }
             }
         }
-    }
+    }*/
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function startAnimationCourse():Void
+	{
+		var dx:Number;
+		var dy:Number;
+		var pourcent:Number;
+		var l:Number = tableauDesCases.length - 4;
+		var c:Number = tableauDesCases[0].length - 4; 
+		
+		dx = 275 - (_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
+		dy = 200 - (_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._y);
+		
+		dx = Math.round(dx);
+		dy = Math.round(dy);
+		
+		///trace("animation!!!!!!!!!!! : " + dx + " " + dy + " " + _level0.loader.contentHolder.referenceLayer._x);
+		
+		// on deplace le clip sur lequel est attache tous les autres clips
+		_level0.loader.contentHolder.referenceLayer._x += dx;		
+		_level0.loader.contentHolder.referenceLayer._y += dy;
+		
+		///trace("animation!!!!!!!!!!! : " + _level0.loader.contentHolder.referenceLayer._x + " " + _level0.loader.contentHolder.referenceLayer._y);
+		//_level0.loader.contentHolder.planche.obtenirPerso().setBoardCentre(false);
+		
+	}
     
     
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
