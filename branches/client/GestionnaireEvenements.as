@@ -3160,7 +3160,7 @@ public var wasHereOnce:Boolean = false;
 	    _level0.loader.contentHolder["att"].removeMovieClip();		 
 		_level0.loader.contentHolder.gotoAndPlay(4);
 	    _level0.loader.contentHolder.planche.afficher();
-        
+						
 		//trace("longueur de la liste des noms envoyes par serveur    :" + objetEvenement.positionJoueurs.length);
 		count1 = objetEvenement.positionJoueurs.length;
         for(i = 0; i < count1; i++)
@@ -3208,7 +3208,7 @@ public var wasHereOnce:Boolean = false;
 		this.ourPerso = _level0.loader.contentHolder.planche.obtenirPerso();
 		
         _level0.loader.contentHolder.horlogeNum = 60*objetEvenement.tempsPartie;
-		
+				
 		_level0.loader.contentHolder.objectMenu.Boule.countTxt = "0";
 		_level0.loader.contentHolder.objectMenu.Banane.countTxt = "0";
 		_level0.loader.contentHolder.objectMenu.Livre.countTxt = 0;
@@ -3219,11 +3219,65 @@ public var wasHereOnce:Boolean = false;
 		this.newsChat.addMessage(messageInfo);
 
         remplirMenuPointage();
+		_level0.loader.contentHolder.planche.zoomer("out", 8);
+		if(this.typeDeJeu == "mathEnJeu")
+		{
+		   this.startAnimation();
+		   
+		} else {
+           
+		   _level0.loader.contentHolder.planche.startAnimationCourse();
+		   //trace("animaX : "  +  _level0.loader.contentHolder.referenceLayer._x);
+		   //trace("animaY : "  +  _level0.loader.contentHolder.referenceLayer._x);
+		   //_level0.loader.contentHolder.referenceLayer._y += dy;
+		  //_level0.loader.contentHolder.planche.obtenirPerso().setBoardCentre(false);
+		   
+		   this.startAnimationCourse();
+		   
+		}
 		
 		objetEvenement = null;
         trace("fin de evenementPartieDemarree    " + getTimer());
         trace("*********************************************\n");
-    } 
+    }
+	
+	// start animation //***********************************************
+	public function startAnimation(){
+		
+		var intervalIdA:Number = setInterval(animation, 250);	
+		var num:Number = 8;
+							
+        function animation(){
+	            num--;
+				if(num < 4)
+				   _level0.loader.contentHolder.planche.zoomer("in", 1);
+		        if(num < 1)
+		           clearInterval(intervalIdA);
+				
+		}
+		
+	}
+	
+	// start animation //***********************************************
+	public function startAnimationCourse(){
+		
+		var intervalIdC:Number = setInterval(animation, 100);
+		//_level0.loader.contentHolder.planche.
+		
+		var pourcent:Number = _level0.loader.contentHolder.objGestionnaireEvenements.tempsPartie;
+		var num:Number = 35 + pourcent;
+							
+        function animation(){
+	            num--;
+				if(num < 25 + pourcent)
+				  _level0.loader.contentHolder.planche.recentrerBoard(2,3, true);
+		        if(num == 16)
+				  _level0.loader.contentHolder.objGestionnaireEvenements.startAnimation();
+		        if(num < 1)
+				  clearInterval(intervalIdC);
+				
+		}
+	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////
 	//   "JoueurRejoindrePartie"
