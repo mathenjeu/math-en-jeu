@@ -188,7 +188,7 @@ public class Maitre implements Runnable
 			ServerSocket socketServeur = new ServerSocket( port, 2, InetAddress.getByName(address)); 
 			Socket socket;
 			while( !arret )
-			{
+			{/*
 				byte comman = (byte) new Integer(keyboard.readLine()).intValue();
 				if( comman == (byte)_STOP )
 				{
@@ -197,7 +197,7 @@ public class Maitre implements Runnable
 				}
 			}
 				//System.out.println( "le maitre "  + keyboard.readLine());
-/*
+                */	
 				socket = socketServeur.accept();
 				if( socket.getInetAddress().isLoopbackAddress() == true )
 				{
@@ -233,7 +233,7 @@ public class Maitre implements Runnable
 			if(!socket.isClosed())
 			   socket.getOutputStream().write( (byte)_STOP);
 			System.out.println( "arreter le serveur" );
-*/			
+		
 		} 
 		catch (IOException e) 
 		{	
