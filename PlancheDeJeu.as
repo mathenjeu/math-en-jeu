@@ -1399,7 +1399,7 @@ class PlancheDeJeu
 		var temp:Number;
 	    	    
 		//trace("Debut effacerCasesPossibles");
-	
+	    _level0.loader.contentHolder.referenceLayer.ptsTxt_mc.removeMovieClip();  
 		//switchBackColor(tableauDesCases[p.obtenirL()][p.obtenirC()]);
 		//another version more light
 		switchBackColorFlash(tableauDesCases[p.obtenirL()][p.obtenirC()]);
