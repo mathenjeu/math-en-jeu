@@ -1,6 +1,12 @@
 package ServeurJeu.ComposantesJeu;
 
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Evenements.GestionnaireEvenements;
@@ -87,6 +93,8 @@ public class InformationPartie
     // used for finish statistics
     private int pointsFinalTime;
     
+    private StringBuffer boiteQuestionsInfo;
+    
     /**
      * Constructeur de la classe InformationPartie qui permet d'initialiser
      * les propriétés de la partie et de faire la référence vers la table.
@@ -150,7 +158,10 @@ public class InformationPartie
         this.bananaState = new HumainPlayerBananaState(joueur);
 
         String language = joueur.obtenirProtocoleJoueur().getLang();
-        this.objBoiteQuestions = new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language));
+        this.setBoiteQuestionsInfo();
+        this.objBoiteQuestions = new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language),  this.boiteQuestionsInfo);
+        
+        
              
     }// fin constructeur
 
@@ -298,6 +309,7 @@ public class InformationPartie
      */
     public void definirQuestionCourante(Question questionCourante) {
         objQuestionCourante = questionCourante;
+        this.boiteQuestionsInfo.append("Current question : " + questionCourante.obtenirCodeQuestion() + "\n");
     }
 
     /**
@@ -480,8 +492,9 @@ public class InformationPartie
                 objPositionJoueurDesiree = nouvellePosition;
 
             } else if (objQuestionTrouvee == null && objBoiteQuestions.dontHaveQuestions()) {
-                objGestionnaireBD.remplirBoiteQuestions(objJoueurHumain, countFillBox);
+                
                 countFillBox++;
+                objGestionnaireBD.remplirBoiteQuestions(objJoueurHumain, countFillBox);
             }
 
         } while (objQuestionTrouvee == null && countFillBox < 10); // must find right number for countFillBox
@@ -490,6 +503,7 @@ public class InformationPartie
         {
         	// en théorie on ne devrait plus entrer dans ce if
         	System.out.println( "ça va mal : aucune question" );
+        	this.boiteQuestionsInfo.append("ça va mal : aucune question " + this.objBoiteQuestions.getBoxSize() + "\n");
         }
 
         // Si on doit générer le numéro de commande de retour, alors
@@ -588,14 +602,16 @@ public class InformationPartie
                 objQuestionCourante = objQuestionTrouvee;
                 //objBoiteQuestions.popQuestion(objQuestionTrouvee);
             } else if (objQuestionTrouvee == null && objBoiteQuestions.dontHaveQuestions()) {
-                objGestionnaireBD.remplirBoiteQuestions(objJoueurHumain, countFillBox);
                 countFillBox++;
+                objGestionnaireBD.remplirBoiteQuestions(objJoueurHumain, countFillBox);
+                
             }
         } while (objQuestionTrouvee == null && countFillBox < 10);
 
         if (objQuestionTrouvee == null) {
             // en théorie on ne devrait plus entrer dans ce if
             System.out.println("ça va mal : aucune question");
+            this.boiteQuestionsInfo.append("ça va mal : aucune question " + this.objBoiteQuestions.getBoxSize() + "\n");
         }
 
         // Si on doit générer le numéro de commande de retour, alors
@@ -1048,7 +1064,6 @@ public class InformationPartie
      *
      */
     public void cancelPosedQuestion() {
-        //getObjBoiteQuestions().popQuestion(objQuestionCourante);
         lstQuestionsRepondues.removeLast();
         objQuestionCourante = null;
     }
@@ -1223,6 +1238,69 @@ public class InformationPartie
 	 */
 	public int getIdDessin() {
 		return idDessin;
+	}
+
+	/**
+	 * @param boiteQuestionsInfo the boiteQuestionsInfo to set
+	 */
+	public void setBoiteQuestionsInfo() {
+		this.boiteQuestionsInfo = new StringBuffer();
+        String table = this.objTable.getTableName();
+        String joueur = this.objJoueurHumain.obtenirNomUtilisateur();
+		
+		this.boiteQuestionsInfo.append("BoiteQuestions info's for " + joueur + " in the table " + table + "\n");
+		
+	}
+
+	/**
+	 * @return the boiteQuestionsInfo
+	 */
+	public StringBuffer getBoiteQuestionsInfo() {
+		return boiteQuestionsInfo;
+	}
+	
+	public void writeInfo(){
+		String table = this.objTable.getTableName();
+        String joueur = this.objJoueurHumain.obtenirNomUtilisateur();
+		
+		this.boiteQuestionsInfo.append("END INFO ");
+		String info = this.boiteQuestionsInfo.toString();
+		
+		//System.out.println("End info" + info.length());
+		//int slicePart = info.length() / 8000;
+		//int beginIndex = 0;
+		//int endIndex = 8000;
+		BufferedWriter writer = null;
+		Date infoDate = new Date();
+		//String infoPart = "";
+		File file = new File("boiteInfo" + joueur + "_" + table + "_" + infoDate.getTime() + ".txt");
+		try {
+			writer = new BufferedWriter(new FileWriter(file));
+			writer.write(info);
+			writer.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		/*
+		for(int i = 1; i <= slicePart + 1; i++)
+		{
+			infoPart = info.substring(beginIndex, endIndex);
+			try {
+				writer.write(infoPart);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+            beginIndex = endIndex + 1;
+            if(i < slicePart - 1)
+               endIndex += 8000;
+            else if(i == slicePart - 1)
+            	endIndex = info.length();
+		}*/
 	}
 } // end class
 

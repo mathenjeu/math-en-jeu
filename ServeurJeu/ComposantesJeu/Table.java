@@ -975,6 +975,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                         }
                         boolean estGagnant = joueur.obtenirCleJoueur() == cleJoueurGagnant;
                         objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur, estGagnant);
+                        if(joueur.getRole() > 1)
+                        	joueur.obtenirPartieCourante().writeInfo();
 
 
                     }
@@ -1192,27 +1194,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
      * numéro du personnage. On suppose que le joueur courant n'est pas
      * encore dans la liste.
      *
-     * @param TreeMap listePersonnageJoueurs : La liste des personnages
-     * 										   pour chaque joueur
      * @throws NullPointerException : Si la liste des personnages est à nulle
-    
-    private void remplirListePersonnageJoueurs(HashMap<String, Integer> listePersonnageJoueurs, HashMap<String, Integer> listeRoleJoueurs) throws NullPointerException {
-        // Passer tous les joueurs de la table et leur envoyer un événement
-        for (JoueurHumain objJoueur: lstJoueurs.values()) {
-            // Ajouter le joueur dans la liste des personnages (il se peut que
-            // le joueur n'aie pas encore de personnages, alors le id est 0)
-            listePersonnageJoueurs.put(objJoueur.obtenirNomUtilisateur(), new Integer(objJoueur.obtenirPartieCourante().obtenirIdPersonnage()));
-            listeRoleJoueurs.put(objJoueur.obtenirNomUtilisateur(), objJoueur.getRole());
-        }
-
-        // Boucler tant qu'on n'a pas atteint le nombre maximal de
-        // joueurs moins le joueur courant car on ne le met pas dans la liste
-        for (int i = 1; listePersonnageJoueurs.size() < MAX_NB_PLAYERS - 1; i++) {
-            // On ajoute un joueur inconnu ayant le personnage 0
-            listePersonnageJoueurs.put("Inconnu" + Integer.toString(i), new Integer(0));
-            listeRoleJoueurs.put("Inconnu" + Integer.toString(i), new Integer(0));
-        }
-    } */
+     */
 
     public JoueurHumain[] remplirListePersonnageJoueurs() throws NullPointerException {
         JoueurHumain[] humains = new JoueurHumain[lstJoueurs.size()];

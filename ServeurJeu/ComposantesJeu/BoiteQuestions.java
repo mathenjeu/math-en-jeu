@@ -19,16 +19,18 @@ public class BoiteQuestions
 {
 	private static Logger objLogger = Logger.getLogger( BoiteQuestions.class );
 	private HashMap<Integer, LinkedList<Question>> lstQuestions;
+	private StringBuffer info; 
 	
 		
 	// Since there is a question box for each player, and all players might not want to play
 	// in the same language, we set a language field for question boxes
 	private final Language language;
 	
-	public BoiteQuestions(String language, String url)
+	public BoiteQuestions(String language, String url, StringBuffer boiteQuestionsInfo)
 	{
 		lstQuestions = new HashMap<Integer, LinkedList<Question>>();
         this.language = new Language(language, url);
+        this.info = boiteQuestionsInfo;
     	       
 	}// fin constructeur
 	
@@ -51,6 +53,8 @@ public class BoiteQuestions
 			
 		questions.addLast(question );
 		
+		this.info.append("ADD question : " + question.obtenirCodeQuestion() + " difficulty : " + difficulte + "\n");
+		
 	}
 	
 	/**
@@ -63,7 +67,8 @@ public class BoiteQuestions
 		int difficulte = question.obtenirDifficulte();
 		LinkedList<Question> questions = lstQuestions.get( difficulte );
 		//System.out.println(question.obtenirCodeQuestion());
-		questions.remove(question);		
+		questions.remove(question);
+		this.info.append("Remove question : " + question.obtenirCodeQuestion() + "\n");
 	}
 	
 		
@@ -86,18 +91,23 @@ public class BoiteQuestions
 		{
 	    	//System.out.println("erreur " + questions.size());
 	    	question = (Question)(questions.remove(UtilitaireNombres.genererNbAleatoire(questions.size())));
+	    	
 	    	//questions.remove(question);
     	}
 		else
 		{
 			//System.out.println("erreur boite");
 			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+			this.info.append("QuestionsBox is empty for difficulty: " + intDifficulte + "\n");
 		}
 		
 	   
 		//System.out.println("Question2: " + System.currentTimeMillis());
 	    //System.out.println("\nquestion : " + question.obtenirCodeQuestion()+ "  " + lstQuestions.containsValue(question) +  " " + questions.indexOf(question) + "\n");
 		//System.out.println("boite " + question);
+	    if(question != null)
+	       this.info.append("Return question " + question.obtenirCodeQuestion() + " with difficuly : " + question.obtenirDifficulte() + "\n");
+	    
 	    return question;
 	}
 	
@@ -127,13 +137,17 @@ public class BoiteQuestions
 	    		limit++;
 
 	    	}while(question.obtenirCodeQuestion() == oldQuestionId || limit > 10);
+		    
 		}
 		else
 		{
 			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+			this.info.append("QuestionsBox is empty for difficulty: " + intDifficulte + "\n");
 		}
-	
-	   //popQuestion(question); 
+	   if(question != null)
+	      this.info.append("Return question " + question.obtenirCodeQuestion() + " with difficuly : " + question.obtenirDifficulte() + "\n");
+	   //popQuestion(question);
+	   
 	   return question;
 	}
 	
@@ -158,6 +172,7 @@ public class BoiteQuestions
 		else
 		{
 			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+			this.info.append("QuestionsBox is empty for difficulty: " + intDifficulte + "\n");
 		}
 		
 		return ret;
@@ -280,6 +295,8 @@ public class BoiteQuestions
 		{
 			questionsNumber += questions.size();
 		}
+		
+		this.info.append("QuestionsBox size: " + questionsNumber + "\n");
 		return questionsNumber;
 	}// end method
 
