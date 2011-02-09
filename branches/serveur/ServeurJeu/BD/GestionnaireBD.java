@@ -1,5 +1,7 @@
 package ServeurJeu.BD;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -283,6 +285,10 @@ public class GestionnaireBD {
         
         // to not fill the Box with the same questions
         int niveau = objJoueurHumain.obtenirCleNiveau() - countFillQuestions;
+        
+        StringBuffer writer = objJoueurHumain.obtenirPartieCourante().getBoiteQuestionsInfo();
+       	writer.append("ADD questions : Asked level - " + niveau + "\n");
+		
         // it's little risk for that, but to be sure....
         if (niveau < 1)
             niveau = objJoueurHumain.obtenirCleNiveau() + 1;
@@ -342,8 +348,8 @@ public class GestionnaireBD {
         remplirBoiteQuestionsTF(boite, strRequeteSQL_TF, URL);
 
         //System.out.println("end boite: " + System.currentTimeMillis());
-        
-         
+       
+       boite.getBoxSize();
        ArrayList<Integer> lastQuestions = null;
        int boxSize = boite.getBoxSize();
        int temps = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsTotal();
@@ -359,9 +365,14 @@ public class GestionnaireBD {
        if(lastQuestions != null && boxSize - lastSize > temps * 3)
        {
     	   for(Integer id: lastQuestions)
+    	   {
     		   boite.popQuestion(id);
+    		   writer.append("Get out question : " + id + "\n");
+    		   
+    	   }
        }   
        
+       boite.getBoxSize();
         
     }// fin méthode
 

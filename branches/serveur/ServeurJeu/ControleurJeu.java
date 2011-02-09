@@ -435,6 +435,7 @@ public class ControleurJeu {
                 joueur.obtenirPartieCourante().obtenirTable().estCommencee() == true &&
                 joueur.obtenirPartieCourante().obtenirTable().estArretee() == false) {
 
+        	//joueur.obtenirPartieCourante().writeInfo();
             // Ajouter ce joueur à la liste des joueurs déconnectés pour cette
             // table
             joueur.obtenirPartieCourante().obtenirTable().ajouterJoueurDeconnecte(joueur);
