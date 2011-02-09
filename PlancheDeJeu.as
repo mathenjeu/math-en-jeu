@@ -1300,7 +1300,7 @@ class PlancheDeJeu
 		brille.onRollOver = function()
 		{
 			mc.createEmptyMovieClip("valDeplace", 999)
-			mc.valDeplace = _level0.loader.contentHolder.referenceLayer.attachMovie("ptsTxt", "ptsTxt_mc", 999 );
+			mc.valDeplace = _level0.loader.contentHolder.referenceLayer.attachMovie("ptsTxt", "ptsTxt_mc", _level0.loader.contentHolder.referenceLayer.getNextHighestDepth());
 			
 			mc.valDeplace._x = brille._x;
 			mc.valDeplace._y = brille._y;
@@ -1347,7 +1347,7 @@ class PlancheDeJeu
 		brille.onRollOver = function()
 		{
 			mc.createEmptyMovieClip("valDeplace", 999)
-			mc.valDeplace = _level0.loader.contentHolder.referenceLayer.attachMovie("ptsTxt", "ptsTxt_mc", 999 );
+			mc.valDeplace = _level0.loader.contentHolder.referenceLayer.attachMovie("ptsTxt", "ptsTxt_mc", _level0.loader.contentHolder.referenceLayer.getNextHighestDepth() );
 			//mc.valDeplace._x = p.obtenirX();
 			//mc.valDeplace._y = p.obtenirY()-150;
 			mc.valDeplace._x = brille._x;

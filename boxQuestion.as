@@ -127,7 +127,7 @@ loadListener.complete = function(eventObject)
 		//pointillés et mettre les 2 lignes suivantes à la place
 		//FAIRE LA MEME CHOSE DANS GUI_RETRO
 		
-		monScroll.content._width = 406;
+		monScroll.content._width = 450;
 		monScroll.content._yscale = monScroll.content._xscale;
 		Selection.setFocus(monScroll);
 	
