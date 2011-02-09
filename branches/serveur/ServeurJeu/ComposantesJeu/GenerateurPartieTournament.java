@@ -81,8 +81,12 @@ public class GenerateurPartieTournament extends GenerateurPartie {
 		//System.out.println("max min avant : " + reglesPartie.obtenirTempsMaximal() + " " + reglesPartie.obtenirTempsMinimal() + " " + reglesPartie.getNbTracks()); 
 		
 		// calculate number of lines and of columns 
-	    intNbColumns = (reglesPartie.getNbTracks() + 1) * (reglesPartie.obtenirTempsMinimal() * 2 + 1) - 1; // factor - 1;
+		// holes - is number of holes between tracks
+		int holes = 2;
+	    intNbColumns = (reglesPartie.getNbTracks() + holes) * (reglesPartie.obtenirTempsMinimal() * 2 + 1) - holes; // factor - 1;
+
    	    intNbLines = temps + reglesPartie.obtenirTempsMaximal();     	 
+    	   	 
     	
    	    //System.out.println("temps : " + temps);
 		//System.out.println("lignes avant : " + intNbLines);
