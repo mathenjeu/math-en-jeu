@@ -2273,21 +2273,23 @@ public class ProtocoleJoueur implements Runnable
         synchronized (objSocketJoueur) {
             // Créer le canal qui permet d'envoyer des données sur le canal
             // de communication entre le client et le serveur
-            OutputStream objCanalEnvoi = objSocketJoueur.getOutputStream();
+        	if(!objSocketJoueur.isClosed()){
+        		OutputStream objCanalEnvoi = objSocketJoueur.getOutputStream();
 
-            String chainetemp = UtilitaireEncodeurDecodeur.encodeToUTF8(message);
+        		String chainetemp = UtilitaireEncodeurDecodeur.encodeToUTF8(message);
 
-            if (chainetemp.contains("ping") == false) {
-                objLogger.info(GestionnaireMessages.message("protocole.message_envoye") + chainetemp);
-            }
-            // écrire le message sur le canal d'envoi au client
-            objCanalEnvoi.write(message.getBytes("UTF8"));
+        		if (chainetemp.contains("ping") == false) {
+        			objLogger.info(GestionnaireMessages.message("protocole.message_envoye") + chainetemp);
+        		}
+        		// écrire le message sur le canal d'envoi au client
+        		objCanalEnvoi.write(message.getBytes("UTF8"));
 
-            // écrire le byte 0 sur le canal d'envoi pour signifier la fin du message
-            objCanalEnvoi.write((byte)0);
+        		// écrire le byte 0 sur le canal d'envoi pour signifier la fin du message
+        		objCanalEnvoi.write((byte)0);
 
-            // Envoyer le message sur le canal d'envoi
-            objCanalEnvoi.flush();
+        		// Envoyer le message sur le canal d'envoi
+        		objCanalEnvoi.flush();
+        	}
             objLogger.info(GestionnaireMessages.message("protocole.confirmation") + objSocketJoueur.getInetAddress().toString());
         }
         Moniteur.obtenirInstance().fin();
