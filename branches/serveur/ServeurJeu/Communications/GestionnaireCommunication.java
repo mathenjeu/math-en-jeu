@@ -171,7 +171,6 @@ public class GestionnaireCommunication
 		try
 		{
 			synchronized(lstProtocoleJoueur){
-			   protocole.arreterProtocoleJoueur();
 			   lstProtocoleJoueur.remove(protocole);
 			}
 			miseAJourInfo();

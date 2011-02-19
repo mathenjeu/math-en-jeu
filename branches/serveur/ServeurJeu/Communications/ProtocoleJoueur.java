@@ -114,7 +114,7 @@ public class ProtocoleJoueur implements Runnable
         objGestionnaireCommunication = controleur.obtenirGestionnaireCommunication();
         objVerificateurConnexions = verificateur;
         objSocketJoueur = socketJoueur;
-                
+                        
         //objJoueurHumain = null;
         //bolStopThread = false;
         //intCompteurCommande = 0;
@@ -143,114 +143,127 @@ public class ProtocoleJoueur implements Runnable
      * @synchronism Cette méthode n'a pas besoin d'être synchronisée
      */
     public void run() {
-        try {        	
-        	
-        	//objSocketJoueur.setSoLinger(true, 1000);
-        	objSocketJoueur.setKeepAlive(true);
-        	
-        	// Créer le canal qui permet de recevoir des données sur le canal
-            // de communication entre le client et le serveur
-            objCanalReception = objSocketJoueur.getInputStream();
+    	Thread.currentThread().setPriority( Thread.currentThread().getPriority() + 1 );
+    	try {        	
 
-            // Cette objet va contenir le message envoyé par le client au serveur
-            StringBuffer strMessageRecu = new StringBuffer();
+    		//objSocketJoueur.setSoLinger(true, 1000);
+    		//objSocketJoueur.setKeepAlive(true);
 
-            // Création d'un tableau de 1024 bytes qui va servir à lire sur le canal
-            byte[] byttBuffer = new byte[512];
+    		// Créer le canal qui permet de recevoir des données sur le canal
+    		// de communication entre le client et le serveur
+    		objCanalReception = objSocketJoueur.getInputStream();
 
-            // Boucler et obtenir les messages du client (joueur), puis les
-            // traiter tant que le client n'a pas décidé de quitter (ou que la
-            // connexion ne s'est pas déconnectée)
-            while (isBolStopThread() == false) {
-            	
-            	// Déclaration d'une variable qui va servir de marqueur
-                // pour savoir où on en est rendu dans la lecture
-                int intMarqueur = 0;
+    		// Cette objet va contenir le message envoyé par le client au serveur
+    		StringBuffer strMessageRecu = new StringBuffer();
 
-                // Déclaration d'une variable qui va contenir le nombre de
-                // bytes réellement lus dans le canal
-                int intBytesLus = objCanalReception.read(byttBuffer);
+    		// Création d'un tableau de 1024 bytes qui va servir à lire sur le canal
+    		byte[] byttBuffer = new byte[1024];
 
-                // Si le nombre de bytes lus est -1, alors c'est que le
-                // stream a été fermé, il faut donc terminer le thread
-                if (intBytesLus == -1) {
-                    objLogger.error("Une erreur est survenue: nombre d'octets lus = -1");
-                    setBolStopThread(true);
-                }
+    		// Boucler et obtenir les messages du client (joueur), puis les
+    		// traiter tant que le client n'a pas décidé de quitter (ou que la
+    		// connexion ne s'est pas déconnectée)
+    		while (isBolStopThread() == false) {
 
-                // Passer tous les bytes lus dans le canal de réception et
-                // découper le message en chaîne de commandes selon le byte
-                // 0 marquant la fin d'une commande
-                for (int i = 0; i < intBytesLus; i++) {
-                    // Si le byte courant est le byte de fin de message (EOM)
-                    // alors c'est qu'une commande vient de finir, on va donc
-                    // traiter la commande reçue
-                    if (byttBuffer[i] == (byte)0) {
-                        // Créer une chaîne temporaire qui va garder la chaîne
-                        // de caractères lue jusqu'à maintenant
-                        String strChaineAccumulee = new String(byttBuffer,
-                                intMarqueur, i - intMarqueur);
+    			// Déclaration d'une variable qui va servir de marqueur
+    			// pour savoir où on en est rendu dans la lecture
+    			int intMarqueur = 0;
 
-                        // Ajouter la chaîne courante à la chaîne de commande
-                        strMessageRecu.append(strChaineAccumulee);
+    			// Déclaration d'une variable qui va contenir le nombre de
+    			// bytes réellement lus dans le canal
+    			int intBytesLus = objCanalReception.read(byttBuffer);
 
-                        // On appelle une fonction qui va traiter le message reçu du
-                        // client et mettre le résultat à retourner dans une variable
-                        objLogger.info(GestionnaireMessages.message("protocole.message_recu") + strMessageRecu);
+    			// Si le nombre de bytes lus est -1, alors c'est que le
+    			// stream a été fermé, il faut donc terminer le thread
+    			if (intBytesLus == -1) {
+    				objLogger.error("Une erreur est survenue: nombre d'octets lus = -1");
+    				setBolStopThread(true);
+    			}
+    			
+    			if (objSocketJoueur.isClosed()) {
+    				objLogger.error("Une erreur est survenue: sur socket");
+    				setBolStopThread(true);
+    			} 
 
-                        // If we're in debug mode (can be set in mathenjeu.xml), print communications
-                        GregorianCalendar calendar = new GregorianCalendar();
-                        if (ControleurJeu.modeDebug) {
-                            String timeB = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
-                            System.out.println("(" + timeB + ") Reçu:  " + strMessageRecu);
-                        }
+    			// Passer tous les bytes lus dans le canal de réception et
+    			// découper le message en chaîne de commandes selon le byte
+    			// 0 marquant la fin d'une commande
+    			for (int i = 0; i < intBytesLus; i++) {
+    				// Si le byte courant est le byte de fin de message (EOM)
+    				// alors c'est qu'une commande vient de finir, on va donc
+    				// traiter la commande reçue
+    				if (byttBuffer[i] == (byte)0) {
+    					// Créer une chaîne temporaire qui va garder la chaîne
+    					// de caractères lue jusqu'à maintenant
+    					String strChaineAccumulee = new String(byttBuffer,
+    							intMarqueur, i - intMarqueur);
 
-                        String strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
+    					// Ajouter la chaîne courante à la chaîne de commande
+    					strMessageRecu.append(strChaineAccumulee);
 
-                        // If we're in debug mode (can be set in mathenjeu.xml), print communications
+    					// On appelle une fonction qui va traiter le message reçu du
+    					// client et mettre le résultat à retourner dans une variable
+    					objLogger.info(GestionnaireMessages.message("protocole.message_recu") + strMessageRecu);
 
-                        if (ControleurJeu.modeDebug) {
-                            String timeA = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
-                            System.out.println("(" + timeA + ") Envoi: " + strMessageAEnvoyer);
-                        }
+    					// If we're in debug mode (can be set in mathenjeu.xml), print communications
+    					GregorianCalendar calendar = new GregorianCalendar();
+    					if (ControleurJeu.modeDebug) {
+    						String timeB = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
+    						System.out.println("(" + timeB + ") Reçu:  " + strMessageRecu);
+    					}
 
-                        // On remet la variable contenant le numéro de commande
-                        // à retourner à -1, pour dire qu'il n'est pas initialisé
-                        intNumeroCommandeReponse = -1;
+    					String strMessageAEnvoyer = traiterCommandeJoueur(strMessageRecu.toString());
 
-                        // On renvoit une réponse au client seulement si le
-                        // message n'est pas à null
-                        if (strMessageAEnvoyer != null) {
-                            // On appelle la méthode qui permet de renvoyer un
-                            // message au client
-                            envoyerMessage(strMessageAEnvoyer);
-                        }
+    					// If we're in debug mode (can be set in mathenjeu.xml), print communications
 
-                        // Vider la chaîne contenant les commandes à traiter
-                        strMessageRecu.setLength(0);
+    					if (ControleurJeu.modeDebug) {
+    						String timeA = "" + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND);
+    						System.out.println("(" + timeA + ") Envoi: " + strMessageAEnvoyer);
+    					}
 
-                        // Mettre le marqueur à l'endroit courant pour
-                        // pouvoir ensuite recommancer une nouvelle chaîne
-                        // de commande à partir d'ici
-                        intMarqueur = i + 1;
-                    }
-                }
+    					// On remet la variable contenant le numéro de commande
+    					// à retourner à -1, pour dire qu'il n'est pas initialisé
+    					intNumeroCommandeReponse = -1;
 
-                // Si le marqueur est toujours plus petit que le nombre de
-                // caractères lus, alors c'est qu'on n'a pas encore reçu
-                // le marqueur de fin de message EOM (byte 0)
-                if (intMarqueur < intBytesLus) {
-                    // On garde la partie du message non terminé dans la
-                    // chaîne qui va contenir le message à traiter lorsqu'on
-                    // recevra le EOM
-                    strMessageRecu.append(new String(byttBuffer, intMarqueur, intBytesLus - intMarqueur));
-                }
-                Thread.yield( );
+    					// On renvoit une réponse au client seulement si le
+    					// message n'est pas à null
+    					if (strMessageAEnvoyer != null) {
+    						// On appelle la méthode qui permet de renvoyer un
+    						// message au client
+    					    envoyerMessage(strMessageAEnvoyer);
+    						
+    					}
+    					
+    					// if we have problems in transmition
+    					if(i == 0)this.arreterProtocoleJoueur();
+   						
+    					// Vider la chaîne contenant les commandes à traiter
+    					strMessageRecu.setLength(0);
 
-            }
-        } catch (IOException ioe) {
+    					// Mettre le marqueur à l'endroit courant pour
+    					// pouvoir ensuite recommancer une nouvelle chaîne
+    					// de commande à partir d'ici
+    					intMarqueur = i + 1;
+    				}
+    			}
+
+    			// Si le marqueur est toujours plus petit que le nombre de
+    			// caractères lus, alors c'est qu'on n'a pas encore reçu
+    			// le marqueur de fin de message EOM (byte 0)
+    			if (intMarqueur < intBytesLus) {
+    				// On garde la partie du message non terminé dans la
+    				// chaîne qui va contenir le message à traiter lorsqu'on
+    				// recevra le EOM
+    				strMessageRecu.append(new String(byttBuffer, intMarqueur, intBytesLus - intMarqueur));
+    			}
+    			//Thread.yield( );
+
+    		}
+    	} catch (IOException ioe) {
+            
+    		bolStopThread = true;
+    		objLogger.error(ioe.getMessage() + " in reading");
             objLogger.error(GestionnaireMessages.message("protocole.erreur_reception"));
-            objLogger.error(ioe.getMessage());
+            
         } catch (TransformerConfigurationException tce) {
             objLogger.error(GestionnaireMessages.message("protocole.erreurXML_transformer"));
             objLogger.error(tce.getMessage());
@@ -263,44 +276,14 @@ public class ProtocoleJoueur implements Runnable
             e.printStackTrace();
             
         } finally {
-            try {
-                // On tente de fermer le canal de réception
-            	objCanalReception.close();
-            } catch (IOException ioe) {
-                objLogger.error(ioe.getMessage());
-            }
-
-            try {
-                // On tente de fermer le socket liant le client au serveur
-                objSocketJoueur.close();
-            } catch (IOException ioe) {
-                objLogger.error(ioe.getMessage() + " on close the socket!");
-            }
-
-            // to be sure...
-            this.setBolStopThread(true);
-            // Si le joueur humain a été défini dans le protocole, alors
-            // c'est qu'il a réussi à se connecter au serveur de jeu, il
-            // faut donc aviser le contrôleur de jeu pour qu'il enlève
-            // le joueur du serveur de jeu
-            if (objJoueurHumain != null) {
-                // Informer le contrôleur de jeu que la connexion avec le
-                // client (joueur) a été fermée (on ne doit pas obtenir de
-                // numéro de commande de cette fonction, car on ne retournera
-                // rien du tout)
-                
-                objControleurJeu.deconnecterJoueur(objJoueurHumain, false, true);
-                //System.out.println("! Joueur deconnecter - Protocole ");          
-
-            }
-
-            // Enlever le protocole du joueur courant de la liste des
-            // protocoles de joueurs
-            objGestionnaireCommunication.supprimerProtocoleJoueur(this);
+           
+            arreterProtocoleJoueur();
         }
-
+        
+        
         String inetAddress = objSocketJoueur.getInetAddress() == null ? "[?.?.?.?]" : objSocketJoueur.getInetAddress().toString();
         objLogger.info(GestionnaireMessages.message("protocole.fin_thread").replace("$$CLIENT$$", inetAddress));
+        arreterProtocoleJoueur();
     }
 
     // On vérifie si le joueur est bel et bien dans la BD et si son mot de passe est correct
@@ -311,6 +294,19 @@ public class ProtocoleJoueur implements Runnable
                                  objControleurJeu.authentifierJoueur(this, nomUtilisateur, motDePasse, true);
         switch (resultatAuthentification) {
             case JoueurDejaConnecte:
+            	// wait a bit .. if player is just disconnected
+        		// it will be a second verification
+        		try {
+        			Thread.currentThread();
+					Thread.sleep(3000);
+        		}
+        		catch (InterruptedException e) {
+        			e.printStackTrace();
+        		}
+                // on repeat verification
+        		resultatAuthentification =
+                    objControleurJeu.authentifierJoueur(this, nomUtilisateur, motDePasse, true);
+
             case JoueurNonConnu:
                 noeudCommande.setAttribute("nom", resultatAuthentification.toString());
                 return true;
@@ -461,7 +457,9 @@ public class ProtocoleJoueur implements Runnable
         String motDePasse = obtenirValeurParametre(noeudEntree, "MotDePasse").getNodeValue();
 
         if (erreurAuthentification(noeudCommande, nomUtilisateur, motDePasse)) {
-            return;
+            //this.arreterProtocoleJoueur();
+        	bolStopThread = true;
+        	return;
         }
         //** L'authentification est valide le joueur est maintenant connecté    **/
 
@@ -2266,21 +2264,21 @@ public class ProtocoleJoueur implements Runnable
      * @throws IOException : Si on ne peut pas obtenir l'accès en
      * 						 écriture sur le canal de communication
      */
-    public void envoyerMessage(String message) throws IOException {
+    public void envoyerMessage(String message)  {
         Moniteur.obtenirInstance().debut("ProtocoleJoueur.envoyerMessage");
         // Synchroniser cette partie de code pour empêcher 2 threads d'envoyer
         // un message en même temps sur le canal d'envoi du socket
         synchronized (objSocketJoueur) {
             // Créer le canal qui permet d'envoyer des données sur le canal
             // de communication entre le client et le serveur
-        	if(!objSocketJoueur.isClosed()){
+        	
+        	try{
+        		objSocketJoueur.getRemoteSocketAddress();
+        		
         		OutputStream objCanalEnvoi = objSocketJoueur.getOutputStream();
-
+        		
         		String chainetemp = UtilitaireEncodeurDecodeur.encodeToUTF8(message);
-
-        		if (chainetemp.contains("ping") == false) {
-        			objLogger.info(GestionnaireMessages.message("protocole.message_envoye") + chainetemp);
-        		}
+        		
         		// écrire le message sur le canal d'envoi au client
         		objCanalEnvoi.write(message.getBytes("UTF8"));
 
@@ -2289,7 +2287,16 @@ public class ProtocoleJoueur implements Runnable
 
         		// Envoyer le message sur le canal d'envoi
         		objCanalEnvoi.flush();
+        		
+        		//if (chainetemp.contains("ping") == false) {
+        			objLogger.info(GestionnaireMessages.message("protocole.message_envoye") + chainetemp);
+        		//}
+        	}catch(IOException ioe)
+        	{
+        		this.arreterProtocoleJoueur();
+        		objLogger.error(ioe.getMessage() + " in writing");
         	}
+        	
             objLogger.info(GestionnaireMessages.message("protocole.confirmation") + objSocketJoueur.getInetAddress().toString());
         }
         Moniteur.obtenirInstance().fin();
@@ -2717,14 +2724,10 @@ public class ProtocoleJoueur implements Runnable
      *        identifier le ping
      */
     public void envoyerEvenementPing(int numeroPing) {
-        try {
+        
             // Envoyer le message ping au joueur
             envoyerMessage("<ping numero=\"" + numeroPing + "\"/>");
-        } catch (IOException e) {
-
-            objLogger.info(GestionnaireMessages.message("protocole.erreur_ping"));
-            objLogger.error(e.getMessage() + " ping  is not sent");
-        }
+        
     }
 
     /**
@@ -2734,6 +2737,10 @@ public class ProtocoleJoueur implements Runnable
      */
     public void arreterProtocoleJoueur() {
         
+    	// stop the thread
+    	if(bolStopThread == false)
+    	   this.setBolStopThread(true);
+    	
         try {
             // On tente de fermer le canal de réception. Cela va provoquer
             // une erreur dans le thread et le joueur va être déconnecté et
@@ -2754,10 +2761,36 @@ public class ProtocoleJoueur implements Runnable
         } catch (IOException ioe) {
             objLogger.error(ioe.getMessage() + "close socket in protocole");
         }
+               
+        System.out.println("! Joueur deconnecter - Protocole1 " + bolStopThread);          
+
         
-        this.setBolStopThread(true);
+        // Si le joueur humain a été défini dans le protocole, alors
+        // c'est qu'il a réussi à se connecter au serveur de jeu, il
+        // faut donc aviser le contrôleur de jeu pour qu'il enlève
+        // le joueur du serveur de jeu
+        if (objJoueurHumain != null) {
+            // Informer le contrôleur de jeu que la connexion avec le
+            // client (joueur) a été fermée (on ne doit pas obtenir de
+            // numéro de commande de cette fonction, car on ne retournera
+            // rien du tout)
+            
+        	System.out.println("! Joueur deconnecter - Protocole2 " + bolStopThread + " " + objJoueurHumain.obtenirNomUtilisateur());     
+            objControleurJeu.deconnecterJoueur(objJoueurHumain, false, true);
+            //System.out.println("! Joueur deconnecter - Protocole2 ");          
+
+        }
+
         
-    }
+    } // end method
+    
+    /**
+     * Cette méthode permet de detruire completement le thread du protocole du
+     * client. Si le joueur était connecté à une table, une salle ou au serveur
+     * de jeu, alors il sera complétement déconnecté.
+     */
+    public void detruireProtocoleJoueur() {}
+    
     
     public int obtenirLastQuestionTime() {
         return lastQuestionTime;

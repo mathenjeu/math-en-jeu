@@ -38,6 +38,7 @@ public class GestionnaireEvenements implements Runnable
 	 */
 	public void run()
 	{
+		Thread.currentThread().setPriority( Thread.currentThread().getPriority() + 1 );
 		// Boucler tant qu'il ne faut pas arrêter le thread
 		while (bolStopThread == false)
 		{
