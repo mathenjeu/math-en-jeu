@@ -50,7 +50,7 @@ class GestionnaireCommunication
     private var objSocketClient:DispatchingXMLSocket;
     // Declaration d'une constante gardant le delai que le timer doit attendre
     // pour determiner si une commande envoyee s'est perdue en chemin
-    private var TEMPS_TIMER:Number = 8000;
+    private var TEMPS_TIMER:Number = 15000;
     // Declaration d'un delegate qui va pointer vers la fonction qui gere
     // l'evenement de temps ecoule
     private var objTimerDelegate:Function;
@@ -264,10 +264,13 @@ class GestionnaireCommunication
         {
             // Si le nom du noeud de commande est ping, alors il faut renvoyer
             // immediatement le meme objet XML au serveur
-            if (objNoeudCommande.nodeName == "ping")
+            if (objNoeudCommande.nodeName == "ping" && intEtatClient != Etat.NON_CONNECTE.no && intEtatClient != Etat.DECONNECTE.no)
             {
                 objSocketClient.send(objetEvenement.donnees);
-            }
+            }else if (objNoeudCommande.nodeName == "ping" && intEtatClient == Etat.NON_CONNECTE.no && intEtatClient == Etat.DECONNECTE.no )
+			{
+				trace(" ping is received ... strange!");
+			}
             // Si le message recu est une commande, alors on va determiner
             // laquelle est-ce et on va appeler la fonction adequate avec les
             // bons parametres

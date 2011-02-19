@@ -67,10 +67,6 @@ monScroll.setStyle("borderStyle", "none");
 monScroll.setStyle("scrollTrackColor", "0x333333");
 monScroll.setStyle("theme", "simple");
 
-
-
-
-loadListener = new Object();
 var oUserKey:Object = new Object();
 
 oUserKey.onKeyDown = function():Void {
@@ -111,6 +107,7 @@ oUserKey.onKeyDown = function():Void {
    Key.addListener(oUserKey);
 
 
+loadListener = new Object();
 loadListener.complete = function(eventObject)
 {
 	
@@ -118,7 +115,7 @@ loadListener.complete = function(eventObject)
 	if(monScroll.getBytesLoaded()!=0)
 	{
 		loaded = true;
-		this.onEnterFrame = null;
+		
 
 		cadreLoading._visible = false;
 		
@@ -130,8 +127,10 @@ loadListener.complete = function(eventObject)
 		monScroll.content._width = 450;
 		monScroll.content._yscale = monScroll.content._xscale;
 		Selection.setFocus(monScroll);
-	
-	var count:Number = _level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet();
+	    
+		this.onEnterFrame = null;
+	  
+	  var count:Number = _level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet();
 	
 	switch (_level0.loader.contentHolder.type_question)
 	{
@@ -261,7 +260,17 @@ loadListener.complete = function(eventObject)
 	}
 	else
 	{
-		trace("Chargement d'une question : 0 byte chargé => erreur");
+		//trace("Chargement d'une question : 0 byte chargé => erreur");
+		var horsService:MovieClip;
+				
+				cadreLoading._visible = false;
+		
+				horsService = _level0.loader.contentHolder.attachMovie("GUI_erreur", "HorsService", 9999);
+				
+				horsService.textGUI_erreur.text = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIerreurQuestion;
+				horsService.linkGUI_erreur._visible = true;
+				horsService.linkGUI_erreur.text = _level0.loader.contentHolder.url_question;//_root.texteSource_xml.firstChild.attributes.GUIhorsService2;
+				horsService.linkGUI_erreur.html = true;
 	}
 	
 };
@@ -317,7 +326,7 @@ function checkLoadProgress()
 		if(tempsPasse > 5)	// ca fait plus de 5 secondes qu'on essaye de loader la question
 		{
 			trace("Plus de 5 sec...");
-			if(nbEssais < 3)
+			if(nbEssais < 5)
 			{
 				//renvoyer une requête
 				monScroll.contentPath = _level0.loader.contentHolder.url_question;
@@ -339,8 +348,8 @@ function checkLoadProgress()
 				
 				horsService.textGUI_erreur.text = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIerreurQuestion;
 				horsService.linkGUI_erreur._visible = false;
-				//horsService.linkGUI_erreur.text = _root.texteSource_xml.firstChild.attributes.GUIhorsService2;
-				//horsService.linkGUI_erreur.html = true;
+				horsService.linkGUI_erreur.text = _level0.loader.contentHolder.url_question;//_root.texteSource_xml.firstChild.attributes.GUIhorsService2;
+				horsService.linkGUI_erreur.html = true;
 				
 				horsService.btn_ok.onRelease = function()
 				{						
@@ -350,7 +359,7 @@ function checkLoadProgress()
 					_level0.loader.contentHolder.box_question.gotoAndPlay(9);
 					horsService.removeMovieClip();
 				}
-				
+				/*
 				var formatLink = new TextFormat();
 				formatLink.url = _root.texteSource_xml.firstChild.attributes.GUIhorsServiceURL;
 				formatLink.target = "_blank";
@@ -362,7 +371,7 @@ function checkLoadProgress()
 				formatLink.align = "Center";
 				
 				horsService.linkGUI_erreur.setTextFormat(formatLink);
-				
+				*/
 				_level0.loader.contentHolder.type_question = "erreur connexion";
 				
 				
