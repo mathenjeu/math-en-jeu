@@ -1981,7 +1981,7 @@ public var wasHereOnce:Boolean = false;
 		var question:MovieClip;
 	
       	trace("*********************************************");
-      	trace("debut de retourDeplacerpersonnage   " + objetEvenement.resultat);
+      	trace("debut de retourDeplacerpersonnage   " + objetEvenement.resultat + " " + objetEvenement.question.url );
       	switch(objetEvenement.resultat)
         {
             case "Question":
@@ -2021,7 +2021,7 @@ public var wasHereOnce:Boolean = false;
 						trace("Pas bon type de question   "+objetEvenement.question.type);
 					break;
 		 		}*/
-				//_root.objGestionnaireInterface.effacerBoutons(1);
+				_root.objGestionnaireInterface.effacerBoutons(1);
             break;
 
 			case "Banane":
