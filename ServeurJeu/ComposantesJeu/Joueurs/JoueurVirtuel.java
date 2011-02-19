@@ -254,6 +254,7 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 	 */
 	public void run()
 	{
+		Thread.currentThread().setPriority( Thread.currentThread().getPriority() - 1 );
 		try
 		{	
 		    // Assigner le priorité TRACE au logger pour qu'il puisse

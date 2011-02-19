@@ -1,7 +1,6 @@
 package ServeurJeu.Evenements;
 
 import java.util.ArrayList;
-import java.io.IOException;
 
 /**
  * @author Jean-François Brind'Amour
@@ -50,17 +49,12 @@ public abstract class Evenement
 	        // Faire la référence vers l'objet InformationDestination courant
 	        InformationDestination information = (InformationDestination) lstInformationDestination.get(i);
 	        
-	        try
-	        {
+	      
                 String strTemp = genererCodeXML(information);
 		        
 		        // Envoyer l'événement au joueur courant
 		        information.obtenirProtocoleJoueur().envoyerMessage(strTemp);	            
-	        }
-	        catch (IOException ioe)
-	        {
-				System.out.println("L'evenement courant n'a pas pu etre envoye");
-	        }
+	       
 	    }
 	    
 	}

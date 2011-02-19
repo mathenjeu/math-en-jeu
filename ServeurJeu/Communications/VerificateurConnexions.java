@@ -54,7 +54,20 @@ public class VerificateurConnexions implements Runnable
 		// Boucler tant qu'il ne faut pas arrêter le thread
 		while (bolStopThread == false)
 		{
+			
+			try
+			{
+				// Stopper le thread du vérificateur pendant 60 - 100 secondes pour 
+				// laisser un moment de répit au CPU
+				Thread.sleep(10000);
 				
+			}
+			catch (InterruptedException ie)
+			{
+				objLogger.error(" Error - sleep is canceled in VerificateurConnexions" + ie.getMessage());
+				Thread.currentThread().interrupt();
+							
+			}
 			// Déclaration d'une liste de ProtocoleJoueur qui contient la 
 			// référence vers la liste des ProtocoleJoueur du gestionnaire de 
 			// communication
@@ -87,7 +100,7 @@ public class VerificateurConnexions implements Runnable
 			{
 				// Stopper le thread du vérificateur pendant 60 - 100 secondes pour 
 				// laisser un moment de répit au CPU
-				Thread.sleep(100000);
+				Thread.sleep(5000);
 				
 			}
 			catch (InterruptedException ie)
@@ -107,14 +120,15 @@ public class VerificateurConnexions implements Runnable
 			{
 				// Faire la référence vers le ProtocoleJoueur courant
 				ProtocoleJoueur protocole = (ProtocoleJoueur) lstCopieProtocoleJoueur.get(i);
+				System.out.println(protocole.isBolStopThread() + " in VCon2");
 				
 				// Si le joueur est en train de jouer sur une table, alors
 				// on attend, peut-être il se reconnectera et pourra
 				// continuer à jouer
 				// Si le joueur a fermé le browser ou fait refresh(), il sera déconnecté
 				// dans la thread du ProtocoleJoueur, donc n'apparaîtra plus ici
-                if (protocole.isBolStopThread() == true && intCompteurPing % 2 == 0)
-                {
+        //        if (protocole.isBolStopThread() == true)// && intCompteurPing % 2 == 0)
+        //        {
     				// Empêcher d'autres threads de toucher à la liste des protocoles
     				// de joueur ayant répondus au ping
     				synchronized (lstClientsPresents)
@@ -125,18 +139,20 @@ public class VerificateurConnexions implements Runnable
     					if (lstClientsPresents.contains(protocole) == false)
     					{
     						// Arrêter le ProtocoleJoueur
+    						System.out.println(lstClientsPresents.contains(protocole) + " in VCon3");
     						protocole.arreterProtocoleJoueur();
+    						this.objGestionnaireCommunication.supprimerProtocoleJoueur(protocole);
     						
     					}	
     				}
-				}
+				//}
 			}				
 			
 			// Incrémenter le compteur de pings
 			intCompteurPing++;
 			
 			// Si le compteur a dépassé 10, alors on le réinitialise à 0
-			if (intCompteurPing >= 5)
+			if (intCompteurPing >= 10)
 			{
 				intCompteurPing = 0;
 			}
@@ -161,6 +177,7 @@ public class VerificateurConnexions implements Runnable
 	 */
 	public void confirmationPing(ProtocoleJoueur protocole, int compteurPing)
 	{
+		System.out.println(protocole.obtenirJoueurHumain().obtenirNomUtilisateur() + " in VCon2 ping returned");
 		// Empêcher d'autres threads de toucher à la liste des protocoles
 		// de joueur ayant répondus au ping
 		synchronized (lstClientsPresents)

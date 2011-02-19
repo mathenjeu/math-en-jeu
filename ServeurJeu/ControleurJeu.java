@@ -3,6 +3,7 @@ package ServeurJeu;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Timer;
 import java.util.TreeMap;
 import java.util.Set;
 import java.util.Iterator;
@@ -23,6 +24,8 @@ import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.Evenements.StopServerEvent;
 import ServeurJeu.Monitoring.TacheLogMoniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
+import ServeurJeu.Temps.HumainBananaStartTask;
+import ServeurJeu.Temps.RealTimer;
 import ServeurJeu.Temps.TacheSynchroniser;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
@@ -336,8 +339,12 @@ public class ControleurJeu {
     	//Ãªtre JoueurDejaConnecte (la mÃ©thode joueurEstConnecte obtient un lock sur
     	//la liste des joueurs connectÃ©s, donc on a pas besoin de l'obtenir ici.
     	if (joueurEstConnecte(nomUtilisateur))
-    		return ResultatAuthentification.JoueurDejaConnecte;
-
+    	{    		
+    		if (joueurEstConnecte(nomUtilisateur))
+        	{
+        		return ResultatAuthentification.JoueurDejaConnecte;
+        	}
+    	}
         // Déterminer si le joueur dont le nom d'utilisateur est passé en
         // paramètres existe et mettre le résultat dans une variable booléenne
         // la méthode retourne le username de la BD pour que la capitalisation
@@ -426,6 +433,7 @@ public class ControleurJeu {
      */
     public void deconnecterJoueur(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, boolean ajouterJoueurDeconnecte) {
 
+    	 System.out.println("! Joueur deconnecter - controleur1 ");    
         // Si déconnection pendant une partie, ajouterJoueurDeconnecte = true
         // On va donc ajouter ce joueur à la liste des joueurs
         // déconnectés pour cette table et pour le contrôleur du jeu
@@ -438,12 +446,18 @@ public class ControleurJeu {
         	//joueur.obtenirPartieCourante().writeInfo();
             // Ajouter ce joueur à la liste des joueurs déconnectés pour cette
             // table
+        	
             joueur.obtenirPartieCourante().obtenirTable().ajouterJoueurDeconnecte(joueur);
 
             // Ajouter ce joueur à la liste des joueurs déconnectés du serveur
             ajouterJoueurDeconnecte(joueur);
+            System.out.println("! Joueur deconnecter - controleur2 ");     
         }
 
+        // Enlever le protocole du joueur courant de la liste des
+        // protocoles de joueurs
+        objGestionnaireCommunication.supprimerProtocoleJoueur(joueur.obtenirProtocoleJoueur());
+        
         // Si le joueur courant est dans une salle, alors on doit le retirer de
         // cette salle (pas besoin de faire la synchronisation sur la salle
         // courante du joueur car elle ne peut être modifiée par aucun autre
@@ -452,18 +466,15 @@ public class ControleurJeu {
             // Le joueur courant quitte la salle dans laquelle il se trouve
             joueur.obtenirSalleCourante().quitterSalle(joueur, false, !ajouterJoueurDeconnecte);
         }
-        /*
-        if (joueur.obtenirPartieCourante().obtenirTable() != null)
-        {
-        // Le joueur courant quitte la salle dans laquelle il se trouve
-        System.out.println("test dexonnexion !!!");
-        }*/
+       
         // fill in DB the date and time of of last connection with server
         //this.objGestionnaireBD.updatePlayerLastAccessDate(joueur.obtenirCleJoueur());
 
         // Empêcher d'autres thread de venir utiliser la liste des joueurs
         // connectés au serveur de jeu pendant qu'on déconnecte le joueur
         synchronized (lstJoueursConnectes) {
+        	
+        	System.out.println("! Joueur deconnecter - controleur3 ");     
             // Enlever le joueur de la liste des joueurs connectés
             lstJoueursConnectes.remove(joueur.obtenirNomUtilisateur());
             // Enlever la référence du protocole du joueur vers son joueur humain
