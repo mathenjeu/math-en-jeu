@@ -21,14 +21,14 @@ public class ServerButtonsListener implements ActionListener {
 	
 	public void actionPerformed(ActionEvent evt) {
 		String actionCommand = evt.getActionCommand();
-		if(actionCommand.equals("Up")){
+		if(actionCommand.equals("On")){
 		   ServerBufferWorkingThread worker = new ServerBufferWorkingThread();
 		   worker.start();
 		   frame.setLabelOn();
 		}
-		else if(actionCommand.equals("Down")){
+		else if(actionCommand.equals("Off")){
 			maitre.stopServer();
-			frame.setLabelOff();
+			frame.setLabelTerminating();
 		}
 		else if(actionCommand.equals("Reset")){
 			maitre.stopServer();
@@ -43,7 +43,7 @@ public class ServerButtonsListener implements ActionListener {
 
 	}
 	
-	// Internal class used to avoid blocking Up and Reset buttons
+	// Internal class used to avoid blocking On and Reset buttons
 	// by working server thread
 	class ServerBufferWorkingThread extends Thread
 	{

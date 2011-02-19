@@ -46,16 +46,16 @@ public class ServerFrame extends JFrame {
 		  
 		  // add buttons
 		  JLabel nullLabel = new JLabel("");
-		  JButton upButton = new JButton("Up");
-		  JButton downButton = new JButton("Down");
-		  JButton resetButton = new JButton("Reset");
-		  JButton exitButton = new JButton("Exit");
+		  JButton onButton = new JButton("On");
+		  JButton offButton = new JButton("Off");
+		//  JButton resetButton = new JButton("Reset");
+		//  JButton exitButton = new JButton("Exit");
 		  
 		  buttons.add(nullLabel);
-		  buttons.add(upButton);
-		  buttons.add(downButton);
-		  buttons.add(resetButton);
-		  buttons.add(exitButton);
+		  buttons.add(onButton);
+		  buttons.add(offButton);
+		//  buttons.add(resetButton);
+		//  buttons.add(exitButton);
 		  
 		  info.setPreferredSize(new Dimension(300,200));
 		  //info.setBackground(Color.blue);
@@ -73,10 +73,10 @@ public class ServerFrame extends JFrame {
 		  info.validate();
 		 		  
 		  ServerButtonsListener buttonsListener = new ServerButtonsListener(maitre, this);
-		  upButton.addActionListener(buttonsListener);
-		  downButton.addActionListener(buttonsListener);
-		  resetButton.addActionListener(buttonsListener);
-		  exitButton.addActionListener(buttonsListener);
+		  onButton.addActionListener(buttonsListener);
+		  offButton.addActionListener(buttonsListener);
+		 // resetButton.addActionListener(buttonsListener);
+		 // exitButton.addActionListener(buttonsListener);
 		  
 		  this.getContentPane().add(buttons, BorderLayout.WEST);
 		  this.getContentPane().add(info, BorderLayout.EAST);
@@ -113,6 +113,11 @@ public class ServerFrame extends JFrame {
 		   stateLabel.setBackground(Color.GREEN);
 	   }
 	   
+	   public void setLabelTerminating(){
+		   stateLabel.setText("  Server is Terminating...  ");
+		   stateLabel.setBackground(Color.YELLOW);
+	   }
+	
 	   public void setLabelOff(){
 		   stateLabel.setText("  Server is Off  ");
 		   stateLabel.setBackground(Color.RED);
