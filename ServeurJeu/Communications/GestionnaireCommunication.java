@@ -205,7 +205,7 @@ public class GestionnaireCommunication
 		}
 		catch( Exception e )
 		{
-			System.out.println(GestionnaireMessages.message("communication.erreur_fichier"));
+			objLogger.info(GestionnaireMessages.message("communication.erreur_fichier"));
 			objLogger.error( e.getMessage() );
 		}
 	}

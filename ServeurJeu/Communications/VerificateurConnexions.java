@@ -120,7 +120,7 @@ public class VerificateurConnexions implements Runnable
 			{
 				// Faire la référence vers le ProtocoleJoueur courant
 				ProtocoleJoueur protocole = (ProtocoleJoueur) lstCopieProtocoleJoueur.get(i);
-				System.out.println(protocole.isBolStopThread() + " in VCon2");
+				//System.out.println(protocole.isBolStopThread() + " in VCon2");
 				
 				// Si le joueur est en train de jouer sur une table, alors
 				// on attend, peut-être il se reconnectera et pourra
@@ -139,7 +139,7 @@ public class VerificateurConnexions implements Runnable
     					if (lstClientsPresents.contains(protocole) == false)
     					{
     						// Arrêter le ProtocoleJoueur
-    						System.out.println(lstClientsPresents.contains(protocole) + " in VCon3");
+    						//System.out.println(lstClientsPresents.contains(protocole) + " in VCon3");
     						protocole.arreterProtocoleJoueur();
     						this.objGestionnaireCommunication.supprimerProtocoleJoueur(protocole);
     						
@@ -177,7 +177,7 @@ public class VerificateurConnexions implements Runnable
 	 */
 	public void confirmationPing(ProtocoleJoueur protocole, int compteurPing)
 	{
-		System.out.println(protocole.obtenirJoueurHumain().obtenirNomUtilisateur() + " in VCon2 ping returned");
+		//System.out.println(protocole.obtenirJoueurHumain().obtenirNomUtilisateur() + " in VCon2 ping returned");
 		// Empêcher d'autres threads de toucher à la liste des protocoles
 		// de joueur ayant répondus au ping
 		synchronized (lstClientsPresents)
