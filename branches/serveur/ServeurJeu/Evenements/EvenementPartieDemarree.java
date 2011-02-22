@@ -177,7 +177,7 @@ public class EvenementPartieDemarree extends Evenement
 					objNoeudPositionJoueur.setAttribute("nom", joueur.obtenirNomUtilisateur() );
 					objNoeudPositionJoueur.setAttribute("x", Integer.toString(joueur.obtenirPartieCourante().obtenirPositionJoueur().x));
 					objNoeudPositionJoueur.setAttribute("y", Integer.toString(joueur.obtenirPartieCourante().obtenirPositionJoueur().y));
-					objNoeudPositionJoueur.setAttribute("clocolor", joueur.obtenirPartieCourante().getClothesColor());
+					objNoeudPositionJoueur.setAttribute("clocolor", Integer.toString(joueur.obtenirPartieCourante().getClothesColor()));
 					
 				}else if(lstJoueurs[i] instanceof JoueurVirtuel)
 				{
@@ -186,7 +186,7 @@ public class EvenementPartieDemarree extends Evenement
 					objNoeudPositionJoueur.setAttribute("nom", joueurV.obtenirNom() );
 					objNoeudPositionJoueur.setAttribute("x", Integer.toString(joueurV.obtenirPositionJoueur().x));
 					objNoeudPositionJoueur.setAttribute("y", Integer.toString(joueurV.obtenirPositionJoueur().y));
-					objNoeudPositionJoueur.setAttribute("clocolor", joueurV.getClothesColor());
+					objNoeudPositionJoueur.setAttribute("clocolor", Integer.toString(joueurV.getClothesColor()));
 				}
 				// Ajouter le noeud de position courant au noeud paramètre
 				objNoeudParametrePositionJoueurs.appendChild(objNoeudPositionJoueur);

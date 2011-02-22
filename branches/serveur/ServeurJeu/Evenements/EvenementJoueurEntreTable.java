@@ -25,7 +25,7 @@ public class EvenementJoueurEntreTable extends Evenement
     private int userRole;
     
     // var for color used for the player clothes
-    private String clothesColor;
+    private int clothesColor;
     
        
     /**
@@ -34,7 +34,7 @@ public class EvenementJoueurEntreTable extends Evenement
      * joueur qui vient d'entrer dans la table. 
      * @param colorS 
      */
-    public EvenementJoueurEntreTable(int noTable, String nomUtilisateur, int role, String color)
+    public EvenementJoueurEntreTable(int noTable, String nomUtilisateur, int role, int color)
     {
         // Définir le numéro de la table et le nom d'utilisateur du joueur 
     	// qui est entré
@@ -77,7 +77,7 @@ public class EvenementJoueurEntreTable extends Evenement
 			Text objNoeudTexteNoTable = objDocumentXML.createTextNode(Integer.toString(intNoTable));
 			Text objNoeudTexteNomUtilisateur = objDocumentXML.createTextNode(strNomUtilisateur);
 			Text objNoeudTexteRoleUtilisateur = objDocumentXML.createTextNode(Integer.toString(userRole));
-			Text objNoeudTexteCouleurUtilisateur = objDocumentXML.createTextNode(clothesColor);
+			Text objNoeudTexteCouleurUtilisateur = objDocumentXML.createTextNode(Integer.toString(clothesColor));
 			
 			
 			// Définir les attributs du noeud de commande

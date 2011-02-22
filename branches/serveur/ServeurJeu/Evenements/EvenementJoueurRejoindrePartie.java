@@ -28,14 +28,14 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
     private int userRole;
     
     // Déclaration d'une variable qui va garder la clocolor du joueur
-    private String userColor;
+    private int userColor;
     
     /**
      * Constructeur de la classe EvenementJoueurDemarrePartie qui permet 
      * d'initialiser le numéro Id du personnage et le nom d'utilisateur du 
      * joueur qui vient de démarrer la partie. 
      */
-    public EvenementJoueurRejoindrePartie(String nomUtilisateur, int idPersonnage, int pointage, int role, String color)
+    public EvenementJoueurRejoindrePartie(String nomUtilisateur, int idPersonnage, int pointage, int role, int i)
     {
         // Définir le numéro Id du personnage et le nom d'utilisateur du joueur 
     	// qui a démarré la partie
@@ -43,7 +43,7 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
         strNomUtilisateur = nomUtilisateur;
         intPointage = pointage;
         userRole = role;
-        userColor = color;
+        userColor = i;
     }
 	
 	/**
@@ -81,7 +81,7 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
 			Text objNoeudTexteNomUtilisateur = objDocumentXML.createTextNode(strNomUtilisateur);
 			Text objNoeudTextePointage = objDocumentXML.createTextNode(Integer.toString(intPointage));
 			Text objNoeudTexteRole = objDocumentXML.createTextNode(Integer.toString(userRole));
-			Text objNoeudTexteColor = objDocumentXML.createTextNode(userColor);
+			Text objNoeudTexteColor = objDocumentXML.createTextNode(Integer.toString(userColor));
 			
 			// Définir les attributs du noeud de commande
 			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
