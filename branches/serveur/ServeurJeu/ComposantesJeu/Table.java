@@ -109,7 +109,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     // list of colors for the players clothes
     // after use of one color it is removed from the list
     // automaticaly - randomly is done to players
-    private LinkedList<String> colors;
+    private LinkedList<Integer> colors;
     // list of idPerso used to calculate idPersonnage
     // limits - from 0 to 11 for now, but can be changed if
     // maxNumbersofPlayers will be changed to be higher then 12
@@ -188,7 +188,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         threadEvenements.start();
 
         // fill the list of colors
-        this.colors = new LinkedList<String>();
+        this.colors = new LinkedList<Integer>();
 
         this.idPersos = new LinkedList<Integer>();
 
@@ -261,7 +261,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         objGestionnaireBD.remplirBoiteQuestions(joueur, 0);
 
         // init players colors
-        String color = this.getOneColor();
+        int color = this.getOneColor();
         joueur.obtenirPartieCourante().setClothesColor(color);
 
         // Si on doit générer le numéro de commande de retour, alors
@@ -313,7 +313,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             // Enlever le joueur de la liste des joueurs de cette table
             lstJoueurs.remove(joueur.obtenirNomUtilisateur());
             lstJoueursEnAttente.remove(joueur.obtenirNomUtilisateur());
-
+            colors.add(joueur.obtenirPartieCourante().resetColor()); 
             // Le joueur est maintenant dans aucune table
             if (detruirePartieCourante == true) {
                 joueur.obtenirPartieCourante().destruction();
@@ -378,7 +378,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
      *              deadlock avec les personnes entrant dans la salle.
      */
     public void restartGame(JoueurHumain joueur, boolean doitGenererNoCommandeRetour) {
-        // Empécher d'autres thread de toucher à la liste des tables de
+    	// to get back perso's clothes color 
+        //returned to the list when get out from game
+        joueur.obtenirPartieCourante().setClothesColor(colors.getLast());
+    	
+    	// Empécher d'autres thread de toucher à la liste des tables de
         // cette salle pendant que le joueur entre dans cette table
         synchronized (getObjSalle().obtenirListeTables()) {
             // Empêcher d'autres thread de toucher à la liste des joueurs de
@@ -402,7 +406,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             synchronized (lstJoueursDeconnectes) {
                 lstJoueursDeconnectes.remove(joueur);
             }
-        }
+        }        
     }
 
     /**
@@ -843,7 +847,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 // Pour le prochain joueur virtuel
                 intIdPersonnage++;
                 
-                String color = this.getOneColor();
+                int color = this.getOneColor();
                 //System.out.println("colors: " + color);
                 objJoueurVirtuel.setClothesColor(color);
                 objJoueurVirtuel.setIdDessin(IDdess);
@@ -1223,7 +1227,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
      * Synchronisme : Cette fonction n'est pas synchronisée ici, mais elle l'est
      * 				  par l'appelant (entrerTable).
      */
-    private void preparerEvenementJoueurEntreTable(String nomUtilisateur, int role, String cloColor) {
+    private void preparerEvenementJoueurEntreTable(String nomUtilisateur, int role, int cloColor) {
         // Créer un nouvel événement qui va permettre d'envoyer l'événement
         // aux joueurs qu'un joueur est entré dans la table
         EvenementJoueurEntreTable joueurEntreTable = new EvenementJoueurEntreTable(intNoTable, nomUtilisateur, role, cloColor);
@@ -1552,7 +1556,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     }
 
     /**
-     * Method that is used to prepare event of move of player
+     * Method that is used to prepare event of move of the player
      * @param nomUtilisateur
      * @param collision
      * @param oldPosition
@@ -1905,13 +1909,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
      *  set the list of colors for the user clothes
      */
     private void setColors() {
-        Colors[] colValues = Colors.values();
-
+        //Colors[] colValues = Colors.values();
         //System.out.println("ColorsX : " + colValues.length);
 
-        for (int i = 0; i < colValues.length; i++) {
-            colors.add(colValues[i].getCode());
-            //System.out.println("Colors : " + colValues[i].getCode());
+        for (int i = 1; i <= 12; i++) {
+            colors.add(i);
+            //System.out.println("Colors : " + i);
         }
 
 
@@ -1923,15 +1926,15 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
      * it is automatically eliminated from the list
      * @return 
      */
-    public String getOneColor() {
+    public int getOneColor() {
         // default color - black or white?
-        String color = "0xFFFFFF";
+        int color = 0;
         synchronized (colors) {
             // Let's choose a colors among the possible ones
             if (colors != null && colors.size() > 0) {
                 int intRandom = UtilitaireNombres.genererNbAleatoire(colors.size());
-                color = colors.get(intRandom);
-                colors.remove(intRandom);
+                color = colors.remove(intRandom); //colors.get(intRandom);
+                
 
             } else {
                 //objLogger.error(GestionnaireMessages.message("colors_liste_empty"));
@@ -1963,7 +1966,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         // after we'll cut the level of questions by this number
         objGestionnaireBD.remplirBoiteQuestions(joueur, 0);
 
-        String color = getOneColor();
+        int color = getOneColor();
         joueur.obtenirPartieCourante().setClothesColor(color);
 
         // Si on doit générer le numéro de commande de retour, alors
