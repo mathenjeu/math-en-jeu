@@ -987,15 +987,17 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 } //// end sinchro
             }
 
-            // Arrêter les threads des joueurs virtuels
-            if (intNombreJoueursVirtuels > 0) {
-                int n = lstJoueursVirtuels.size();
-                for (int i = 0; i < n; i++) {
-                    ((JoueurVirtuel)lstJoueursVirtuels.get(i)).arreterThread();
+            synchronized(lstJoueursVirtuels){
+            	// Arrêter les threads des joueurs virtuels
+            	if (intNombreJoueursVirtuels > 0) {
+            		int n = lstJoueursVirtuels.size();
+            		for (int i = 0; i < n; i++) {
+            			((JoueurVirtuel)lstJoueursVirtuels.get(i)).arreterThread();
 
-                }
-                lstJoueursVirtuels.clear();
-                //System.out.println("table - etape 1 lst Virtuels " + lstJoueursVirtuels.size());
+            		}
+            		lstJoueursVirtuels.clear();
+            		//System.out.println("table - etape 1 lst Virtuels " + lstJoueursVirtuels.size());
+            	}
             }
 
             // wipeout players from the table
