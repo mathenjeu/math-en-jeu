@@ -3850,7 +3850,7 @@ class GestionnaireCommunication
                     // la table
                     objTable.listeJoueurs.push({nom:lstJoueursChildNodes[j].attributes.nom,
 												idPersonnage:lstJoueursChildNodes[j].attributes.idPersonnage,
-												cloColor:lstJoueursChildNodes[j].attributes.cloColor});
+												colorID:lstJoueursChildNodes[j].attributes.cloColor});
 					trace("GCom : " + lstJoueursChildNodes[j].attributes.idPersonnage);
                 }
                 // Ajouter l'objet table dans le tableau
@@ -3999,12 +3999,12 @@ class GestionnaireCommunication
 						break;
 						        
 					case "Color":
-				        objEvenement.clocolor = objNoeudParametre.firstChild.nodeValue;
+				        objEvenement.clocolor = Number(objNoeudParametre.firstChild.nodeValue);
 				        trace("verify clocolor " +  objEvenement.clocolor);
 				        break;
 					
 					case "MaxNbPlayers":
-				        objEvenement.maxNbPlayers = objNoeudParametre.firstChild.nodeValue;
+				        objEvenement.maxNbPlayers = Number(objNoeudParametre.firstChild.nodeValue);
 				        trace("verify max " +  objEvenement.maxNbPlayers);
 				        break;
                 }
