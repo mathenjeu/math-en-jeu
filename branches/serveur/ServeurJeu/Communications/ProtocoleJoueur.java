@@ -1223,7 +1223,7 @@ public class ProtocoleJoueur implements Runnable
                         Element objNoeudJoueur = docSortie.createElement("joueur");
                         objNoeudJoueur.setAttribute("nom", objJoueur.obtenirNomUtilisateur());
                         objNoeudJoueur.setAttribute("idPersonnage", Integer.toString(objJoueur.obtenirPartieCourante().obtenirIdPersonnage()));
-                        objNoeudJoueur.setAttribute("cloColor", objJoueur.obtenirPartieCourante().getClothesColor());
+                        objNoeudJoueur.setAttribute("cloColor", Integer.toString(objJoueur.obtenirPartieCourante().getClothesColor()));
                         objNoeudTable.appendChild(objNoeudJoueur);
                     }
                     objNoeudParametreListeTables.appendChild(objNoeudTable);
@@ -1278,7 +1278,7 @@ public class ProtocoleJoueur implements Runnable
         // Ajouter le noeud pour le paramètre contenant la couleur du joueur
         Element objNoeudParametreColorPersonnage = docSortie.createElement("parametre");
         objNoeudParametreColorPersonnage.setAttribute("type", "Color");
-        objNoeudParametreColorPersonnage.appendChild(docSortie.createTextNode(objJoueurHumain.obtenirPartieCourante().getClothesColor()));
+        objNoeudParametreColorPersonnage.appendChild(docSortie.createTextNode(Integer.toString(objJoueurHumain.obtenirPartieCourante().getClothesColor())));
         noeudCommande.appendChild(objNoeudParametreColorPersonnage);
 
         // Ajouter le noeud pour le paramètre contenant la nombre maximum de joueur
@@ -1335,15 +1335,15 @@ public class ProtocoleJoueur implements Runnable
             objNoeudPersonnage.setAttribute("nom", listInit[i].obtenirNomUtilisateur());
             objNoeudPersonnage.setAttribute("idPersonnage", ((Integer)listInit[i].obtenirPartieCourante().obtenirIdPersonnage()).toString());
             objNoeudPersonnage.setAttribute("role", ((Integer)listInit[i].getRole()).toString());
-            objNoeudPersonnage.setAttribute("clothesColor", listInit[i].obtenirPartieCourante().getClothesColor());
+            objNoeudPersonnage.setAttribute("clothesColor", Integer.toString(listInit[i].obtenirPartieCourante().getClothesColor()));
             objNoeudParametreListePersonnageJoueurs.appendChild(objNoeudPersonnage);
         }
         noeudCommande.appendChild(objNoeudParametreListePersonnageJoueurs);
 
-        // Créer le noeud pour le paramètre contenant la la couleur du joueur
+        // Créer le noeud pour le paramètre contenant l'ID du couleur du joueur
         Element objNoeudParametreColorPersonnage = docSortie.createElement("parametre");
         objNoeudParametreColorPersonnage.setAttribute("type", "Color");
-        objNoeudParametreColorPersonnage.appendChild(docSortie.createTextNode(objJoueurHumain.obtenirPartieCourante().getClothesColor()));
+        objNoeudParametreColorPersonnage.appendChild(docSortie.createTextNode(Integer.toString(objJoueurHumain.obtenirPartieCourante().getClothesColor())));
         noeudCommande.appendChild(objNoeudParametreColorPersonnage);
     }
 
