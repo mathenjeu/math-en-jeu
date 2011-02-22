@@ -75,6 +75,10 @@ class GestionnaireEvenements
 	private var winIt:Number;
 	//used to color clothes of our perso
 	private var colorIt:String;
+	private var clothesColorID:Number;   // color ID - number of the color set of pictures. Given from server.
+	
+	// sets of persos colors
+	private var colorsSource_xml:XML;
 	
 	private var allowedTypes:Array;   // allowed types of game in our room - course, tournament ...
 	private var ourPerso:Personnage;  // reference to our personnage on the table(planche) ..
@@ -84,9 +88,9 @@ class GestionnaireEvenements
 	private var bananaIntervalArray:Array;    //
 	
 	private static var BANANA_TIME:Number = 90;    //  constant for the time that banana is active
-// is used in selectPlayer in the cases the player 
-// change his first selected picture
-public var wasHereOnce:Boolean = false;
+    // is used in selectPlayer in the cases the player 
+    // change his first selected picture
+    public var wasHereOnce:Boolean = false;
 	
 	function getMoveSight():Number
 	{
@@ -213,6 +217,10 @@ public var wasHereOnce:Boolean = false;
 		
 		this.newsChat = new NewsBox();
 		this.colorIt = "0";
+		this.clothesColorID = 0;
+		this.colorsSource_xml = new XML();
+		// get the xml for perso's colors
+		this.treatTheColorsXML();
 		
 		this.winIt = 0;
 		this.maxPlayers = 0;
@@ -222,10 +230,99 @@ public var wasHereOnce:Boolean = false;
         this.objGestionnaireCommunication = new GestionnaireCommunication(Delegate.create(this, this.evenementConnexionPhysique), 
 																		  Delegate.create(this, this.evenementDeconnexionPhysique),
 																		  url_serveur, port);
+		
 	
     	trace("fin du constructeur de gesEve");
     	trace("*********************************************\n");
-    }
+    } // end cons
+	
+	function treatTheColorsXML()
+	{
+		// Create new XML Object and set ignoreWhite true
+       colorsSource_xml.ignoreWhite = true;
+       // Setup load handler which just invokes another function which will do the parsing of our XML
+       colorsSource_xml.onLoad = function(success) {
+	      if (success) {
+		     processTexteSource();
+	      }
+       };
+	   var path:String = _level0.loader.contentHolder.path;
+	   if(path == undefined) path = "";
+	   colorsSource_xml.load(path + 'colors.xml');
+	   function processTexteSource()
+	   {
+		   trace("colors loaded.......******************");
+	   }
+		  
+	}
+	
+	 
+	
+	// we treat persos colors xml and return the string of color of our perso
+	function getColorByID(colorID:Number, idDessin:Number):String
+	{
+		var ourColor:String;
+		
+		var lstNoeudsPersos:Array = colorsSource_xml.firstChild.childNodes;
+		//trace("lstNoeudsPersos : "  + lstNoeudsPersos.length);
+		// Passer tous les parametres et trouver le notre
+        for (var i:Number = 0; i < lstNoeudsPersos.length; i++)
+        {
+          // Faire la reference vers le noeud courant
+          var objNoeudPerso:XMLNode = lstNoeudsPersos[i];
+		  var nb:Number = Number(objNoeudPerso.attributes.ID);
+		  //trace("color nb  = " + nb);
+		  if(nb == idDessin)
+		  {
+			  var lstNoeudsColors:Array = objNoeudPerso.childNodes;
+		      //trace("lstNoeudsColors : "  + lstNoeudsColors.length);
+			  for (var k:Number = 0; k < lstNoeudsColors.length; k++)
+              {
+                 // Faire la reference vers le noeud courant
+                 var objNoeudColor:XMLNode = lstNoeudsColors[k];
+		         var nmb:Number = Number(objNoeudColor.attributes.ID);
+		         //trace("color nmb  = " + nmb);
+		         if(nmb == colorID)
+		         {
+					 //trace("color value " +  objNoeudColor.toString());
+			        return String(objNoeudColor.firstChild.nodeValue);
+		         }
+			  } // end 2 for
+		  } // endd if
+		 
+		}// end 1 for
+	}// end method
+	
+	// we treat persos colors xml and return the set of 12 string's of colors 
+	function getColorsByID(colorID:Number):Array
+	{
+		trace("color number  = " + colorID);
+		var ourColors:Array;
+		
+		var lstNoeudsPersos:Array = colorsSource_xml.firstChild.childNodes;
+		trace("lstNoeudsPersos : "  + lstNoeudsPersos.length);
+		// Passer tous les parametres et trouver le notre
+        for (var i:Number = 0; i < lstNoeudsPersos.length; i++)
+        {
+           // Faire la reference vers le noeud courant
+           var objNoeudPerso:XMLNode = lstNoeudsPersos[i];
+		   var lstNoeudsColors:Array = objNoeudPerso.childNodes;
+		   for (var k:Number = 0; k < lstNoeudsColors.length; k++)
+           {
+              // Faire la reference vers le noeud courant
+              var objNoeudColor:XMLNode = lstNoeudsColors[k];
+		      var nmb:Number = Number(objNoeudColor.attributes.ID);
+		      //trace("color nmb  = " + nmb);
+		      if(nmb == colorID)
+		      {
+					trace("color value " +  String(objNoeudColor.nodeValue));
+			        ourColors.push(String(objNoeudColor.nodeValue));					
+		      }
+		   } // end 2 for
+		  		 
+		}// end 1 for
+		return ourColors;
+	}// end method
 	
 	function getTableName():String 
 	{
@@ -473,7 +570,9 @@ public var wasHereOnce:Boolean = false;
 		this.listeDesPersonnages[this.listeDesPersonnages.length - 1].pointage = 0;
 		this.listeDesPersonnages[this.listeDesPersonnages.length - 1].idessin = idDessin;
 		this.listeDesPersonnages[this.listeDesPersonnages.length - 1].win = 0;
-		//this.listeDesPersonnages[this.listeDesPersonnages.length - 1].clocolor = this.colorIt;
+		this.listeDesPersonnages[this.listeDesPersonnages.length - 1].colorID = this.clothesColorID;
+		this.colorIt = getColorByID(this.clothesColorID, idDessin);
+		this.listeDesPersonnages[this.listeDesPersonnages.length - 1].clocolor = this.colorIt;
 		//this.listeDesPersonnages[numeroJoueursDansSalle-1].lastPoints = 0;
 		
         this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), 
@@ -756,7 +855,7 @@ public var wasHereOnce:Boolean = false;
                   this.listeDesPersonnages[i].id = objetEvenement.playersListe[i].idPersonnage;
 			      this.listeDesPersonnages[i].role = objetEvenement.playersListe[i].userRole;
 			      this.listeDesPersonnages[i].pointage = objetEvenement.playersListe[i].pointage;
-				  this.listeDesPersonnages[i].clocolor = objetEvenement.playersListe[i].clocolor;
+				  //this.listeDesPersonnages[i].clocolor = objetEvenement.playersListe[i].clocolor;
 			      this.listeDesPersonnages[i].win = 0;
 				  
 				  //trace("rejoindre !!! - " +  this.listeDesPersonnages[i].nom  + " " + objetEvenement.playersListe[i].clocolor);
@@ -777,8 +876,8 @@ public var wasHereOnce:Boolean = false;
                   {
 						this.idPersonnage = this.listeDesPersonnages[i].id;
 						this.numeroDuDessin = this.listeDesPersonnages[i].idessin;
-												
-						//trace("rejoindre !!! - " +  this.colorIt + " " + this.idPersonnage + " " + this.numeroDuDessin);
+																		
+						trace("rejoindre !!! - " +  this.colorIt + " " + this.idPersonnage + " " + this.numeroDuDessin);
 						
 				  }
 			   }
@@ -1222,7 +1321,7 @@ public var wasHereOnce:Boolean = false;
         trace("*********************************************\n");
     }
 	
-	// 
+	// used to renew the list of tables... 
 	function xTimerSet(objetEvenement:Object){
 		
 		       var str:String = new String();
@@ -1264,7 +1363,8 @@ public var wasHereOnce:Boolean = false;
             case "NoTable":
                 this.numeroTable = objetEvenement.noTable;
 				this.tablName =  objetEvenement.nameTable;
-				this.colorIt =  objetEvenement.clocolor;
+				this.clothesColorID = objetEvenement.clocolor;
+				///this.colorIt =  this
 				this.maxPlayers = objetEvenement.maxNbPlayers;
 				
                 _level0.loader.contentHolder.gotoAndPlay(3);
@@ -1307,7 +1407,7 @@ public var wasHereOnce:Boolean = false;
     	trace("*********************************************\n");
     }
 	
-	// used to draw the void circles on frame 3
+	// used to draw the hiddens void circles on frame 3
     function drawUserVoidHidden(i:Number)
     {
       // to load the perso .. use ClipLoader to know the moment of complet load
@@ -1357,24 +1457,25 @@ public var wasHereOnce:Boolean = false;
         trace("*********************************************");
         trace("debut de retourEntrerTable   " + objetEvenement.resultat);
         var movClip:MovieClip;
+		var i:Number;
         switch(objetEvenement.resultat)
         {
             case "ListePersonnageJoueurs":
 			    var count:Number = this.listeDesTables.length;
-				for (var i:Number = 0; i < count; i++)
+				for (i = 0; i < count; i++)
                 {
                     if(this.listeDesTables[i].no == this.numeroTable)
                     {
-                        this.tempsPartie = this.listeDesTables[i].temps;
+                        this.tempsPartie = Number(this.listeDesTables[i].temps);
 						this.tablName = this.listeDesTables[i].tablName;
-						this.maxPlayers = this.listeDesTables[i].maxNbPlayers;
+						this.maxPlayers = Number(this.listeDesTables[i].maxNbPlayers);
 						this.typeDeJeu = this.listeDesTables[i].gameType;
 						trace("Verifie - retour entrer tableX: " + this.tempsPartie + " " + this.tablName + " " + this. maxPlayers + " " + this.typeDeJeu);
                         break;
                     }
                 }
 				trace("Verifie - retour entrer table: " + this.tempsPartie + " " + this.tablName + " " + this. maxPlayers + " " + this.typeDeJeu);
-				this.colorIt =  objetEvenement.clocolor;
+				this.clothesColorID =  objetEvenement.clocolor;
                 
 				_level0.loader.contentHolder.gotoAndPlay(3);
 				
@@ -1386,7 +1487,7 @@ public var wasHereOnce:Boolean = false;
 								
 				// put the players in the liste
 				count = objetEvenement.listePersonnageJoueurs.length;
-               	for(var i:Number = 0; i < count; i++)
+               	for(i = 0; i < count; i++)
                 {
 	                
 											
@@ -1394,11 +1495,11 @@ public var wasHereOnce:Boolean = false;
 				   {   
 					  
 					  this.listeDesPersonnages.push(new Object());
-					  var n:Number =this.listeDesPersonnages.length -1;
+					  var n:Number = this.listeDesPersonnages.length -1;
 					  this.listeDesPersonnages[n].nom = objetEvenement.listePersonnageJoueurs[i].nom;
                       this.listeDesPersonnages[n].id = objetEvenement.listePersonnageJoueurs[i].idPersonnage;
 					  this.listeDesPersonnages[n].role = objetEvenement.listePersonnageJoueurs[i].userRoles;
-					  this.listeDesPersonnages[n].clocolor = objetEvenement.listePersonnageJoueurs[i].clothesColor;
+					  this.listeDesPersonnages[n].colorID = objetEvenement.listePersonnageJoueurs[i].clothesColor;
 					  this.listeDesPersonnages[n].pointage = 0;
 					  this.listeDesPersonnages[n].win = 0;
 					  //this.listeDesPersonnages[i].argent = 0;
@@ -1408,12 +1509,12 @@ public var wasHereOnce:Boolean = false;
                 }// end for
 				
 				
-				var j:Number = 0;
+				
 				count = this.listeDesPersonnages.length; 
 				for(var i:Number = 0; i < count; i++)
                 {
 					var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
-					 trace("control demarrepartie2 " + this.listeDesPersonnages[i].nom);
+					trace("control demarrepartie2 " + this.listeDesPersonnages[i].nom);
 										    
                     if(idDessin != 0)
 					{
@@ -1421,6 +1522,7 @@ public var wasHereOnce:Boolean = false;
 					   this.listeDesPersonnages[i].idessin = idDessin;
 					   
 					   var idPers =  calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
+					   this.listeDesPersonnages[i].clocolor = getColorByID(this.listeDesPersonnages[i].colorID, idDessin);
 					   var cloColor:String = this.listeDesPersonnages[i].clocolor;
 					 
 					   this.drawUserFrame3(i, cloColor, idDessin, _level0.loader.contentHolder["player" + i]);
@@ -1807,18 +1909,18 @@ public var wasHereOnce:Boolean = false;
 				   if(this.listeDesPersonnages[i].nom == this.nomUtilisateur)
 				   {
 				      this.listeDesPersonnages[i].id = objetEvenement.idP;
-					  this.listeDesPersonnages[i].clocolor = this.colorIt;
 					  trace("nom and idP = " + this.listeDesPersonnages[i].nom +  " " + this.listeDesPersonnages[i].id + " " + i);
 					  
 					  _level0.loader.contentHolder["joueur" + i] = this.listeDesPersonnages[i].nom;
-					 var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
-					 									    
+					  var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
+					 					 
                      if(idDessin != 0)
 					 {
 						
 					    this.listeDesPersonnages[i].idessin = idDessin;
 					   
 					    var idPers =  calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
+						this.listeDesPersonnages[i].clocolor = getColorByID(this.clothesColorID, idDessin);
 					    var cloColor:String = this.listeDesPersonnages[i].clocolor;
 					 
 					    this.drawUserFrame3(i, cloColor, idDessin, _level0.loader.contentHolder["player" + i]);
@@ -1882,11 +1984,12 @@ public var wasHereOnce:Boolean = false;
 				   if(this.listeDesPersonnages[i].nom == this.nomUtilisateur)
 				   {
 				      this.listeDesPersonnages[i].id = objetEvenement.idP;
-					  this.listeDesPersonnages[i].clocolor = this.colorIt;
+					  //this.listeDesPersonnages[i].clocolor = this.colorIt;
 					  trace("nom and idP = " + this.listeDesPersonnages[i].nom +  " " + this.listeDesPersonnages[i].id + " " + i);
 					  
 					  _level0.loader.contentHolder["joueur" + i] = this.listeDesPersonnages[i].nom;
 					 var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
+					 this.listeDesPersonnages[i].clocolor = getColorByID(this.clothesColorID, idDessin);
 					 									    
                      if(idDessin != 0)
 					 {
@@ -2881,7 +2984,8 @@ public var wasHereOnce:Boolean = false;
 			  var n:Number = listeDesPersonnages.length - 1;
 			  listeDesPersonnages[n].nom = objetEvenement.nomUtilisateur;
 			  listeDesPersonnages[n].role = objetEvenement.userRole;
-			  listeDesPersonnages[n].clocolor = objetEvenement.userColor;
+			  listeDesPersonnages[n].colorID = objetEvenement.userColor;
+			  //listeDesPersonnages[n].clocolor = getColorByID(this.listeDesPersonnages[n].colorID, idDessin);
 			  _level0.loader.contentHolder["joueur" + n ] = listeDesPersonnages[n].nom;
 		   }
     	}// if
@@ -2978,6 +3082,7 @@ public var wasHereOnce:Boolean = false;
         	{
 	        	var idDessin = listeDesPersonnages[i].idessin;
 				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
+				listeDesPersonnages[i].clocolor = getColorByID(this.listeDesPersonnages[i].colorID, idDessin);
 				var cloCol:String = this.listeDesPersonnages[i].clocolor;
 				this.drawUserFrame3(i, cloCol, idDessin, _level0.loader.contentHolder["player" + i]);
 					  					  
@@ -3139,15 +3244,18 @@ public var wasHereOnce:Boolean = false;
 	            //trace(this.listeDesPersonnages[j].nom+" : "+objetEvenement.positionJoueurs[i].nom);
                 if(this.listeDesPersonnages[j].nom == objetEvenement.positionJoueurs[i].nom)
                 {
-					// to update clothes color
-					this.listeDesPersonnages[j].clocolor = objetEvenement.positionJoueurs[i].clocolor;
 					//trace("test color : " + this.listeDesPersonnages[j].clocolor);
 	                var idDessin:Number = calculatePicture(this.listeDesPersonnages[j].id);
 					var idPers:Number = calculateIDPers(this.listeDesPersonnages[j].id, idDessin);
 					this.listeDesPersonnages[j].idPers = idPers;
+					// to update clothes color
+					this.listeDesPersonnages[j].colorID = objetEvenement.positionJoueurs[i].clocolor;
+					this.listeDesPersonnages[j].clocolor = getColorByID(this.listeDesPersonnages[j].colorID, idDessin);;
 					var cloCol:String = this.listeDesPersonnages[j].clocolor;//objetEvenement.clothesColor;
 					var filterC:ColorMatrixFilter = _level0.loader.contentHolder.objGestionnaireEvenements.colorMatrixPerso(cloCol, idDessin);
 				    this.listeDesPersonnages[j].filterC = filterC;
+					///trace("XXXXXX - " + this.listeDesPersonnages[j].colorID + " " + this.listeDesPersonnages[j].clocolor + " " + this.listeDesPersonnages[j].nom);
+					
 					
 				}
 			}
@@ -3189,8 +3297,9 @@ public var wasHereOnce:Boolean = false;
             {
 	            var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
 				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
+				this.clothesColorID =  this.listeDesPersonnages[i].colorID;
 				this.colorIt = this.listeDesPersonnages[i].clocolor;
-				
+											
 				// put the face of my avatar in the panel (next to my name)
 		       maTete = _level0.loader.contentHolder.maTete.attachMovie("tete" + idDessin, "maTete", -10099);
 		       maTete._x = -5;
@@ -3219,6 +3328,7 @@ public var wasHereOnce:Boolean = false;
 		this.newsChat.addMessage(messageInfo);
 
         remplirMenuPointage();
+		
 		_level0.loader.contentHolder.planche.zoomer("out", 8);
 		if(this.typeDeJeu == "mathEnJeu")
 		{
@@ -3264,10 +3374,13 @@ public var wasHereOnce:Boolean = false;
 		var intervalIdC:Number = setInterval(animation, 100);
 		//_level0.loader.contentHolder.planche.
 		
-		var pourcent:Number = _level0.loader.contentHolder.objGestionnaireEvenements.tempsPartie;
+		var pourcent:Number = Number(_level0.loader.contentHolder.objGestionnaireEvenements.tempsPartie);
+		trace("ici temps partie: " + pourcent);
 		var num:Number = 35 + pourcent;
 							
         function animation(){
+			    trace("ici num: " + num);
+				trace("ici por " + _level0.loader.contentHolder.objGestionnaireEvenements.tempsPartie);
 	            num--;
 				if(num < 25 + pourcent)
 				  _level0.loader.contentHolder.planche.recentrerBoard(2,3, true);
@@ -3292,11 +3405,12 @@ public var wasHereOnce:Boolean = false;
 		var n:Number = this.listeDesPersonnages.length -1;
 		this.listeDesPersonnages[n].nom = objetEvenement.nomUtilisateur;
         this.listeDesPersonnages[n].id = objetEvenement.idPersonnage;
-		this.listeDesPersonnages[n].clocolor = objetEvenement.Color;
+		this.listeDesPersonnages[n].colorID = objetEvenement.Color;
 		this.listeDesPersonnages[n].role = objetEvenement.Role;   
 		this.listeDesPersonnages[n].pointage = objetEvenement.Pointage;
 		this.listeDesPersonnages[n].win = 0;
 		var idDessin:Number = calculatePicture(this.listeDesPersonnages[n].id);
+		this.listeDesPersonnages[n].clocolor = getColorByID(this.listeDesPersonnages[n].colorID, idDessin);
 		this.listeDesPersonnages[n].idessin = idDessin;
 		var cloCol:String = this.listeDesPersonnages[n].clocolor;
 	    this.listeDesPersonnages[n].filterC = _level0.loader.contentHolder.objGestionnaireEvenements.colorMatrixPerso(cloCol, idDessin);
@@ -3354,6 +3468,7 @@ public var wasHereOnce:Boolean = false;
 				var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
 				this.listeDesPersonnages[i].idessin = idDessin;
 				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
+				listeDesPersonnages[i].clocolor = getColorByID(this.listeDesPersonnages[i].colorID, idDessin);
             	var cloCol:String = this.listeDesPersonnages[i].clocolor;//objetEvenement.clothesColor;
 				this.listeDesPersonnages[i].filterC = _level0.loader.contentHolder.objGestionnaireEvenements.colorMatrixPerso(cloCol, idDessin);
 				
@@ -3377,7 +3492,7 @@ public var wasHereOnce:Boolean = false;
     {
         // parametre: nomUtilisateur, idPersonnage
      	trace("*********************************************");
-     	trace("debut de evenementJoueurDemarrePartie   "+objetEvenement.nomUtilisateur+"     "+objetEvenement.idPersonnage + "   " + objetEvenement.clothesColor);
+     	trace("debut de evenementJoueurDemarrePartie   "+objetEvenement.nomUtilisateur+"     "+objetEvenement.idPersonnage);
         var movClip:MovieClip;
         var j:Number=0;
         for (var i:Number = 0; i < this.maxPlayers; i++)
@@ -3391,6 +3506,7 @@ public var wasHereOnce:Boolean = false;
             	var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
 				this.listeDesPersonnages[i].idessin = idDessin;
 				var idPers:Number = calculateIDPers(this.listeDesPersonnages[i].id, idDessin);
+				listeDesPersonnages[i].clocolor = getColorByID(this.listeDesPersonnages[i].colorID, idDessin);
             	var cloCol:String = this.listeDesPersonnages[i].clocolor;//objetEvenement.clothesColor;
 				this.listeDesPersonnages[i].filterC = _level0.loader.contentHolder.objGestionnaireEvenements.colorMatrixPerso(cloCol, idDessin);
 				
@@ -4304,13 +4420,13 @@ function testPlayers():Boolean
 // creating filters for plyerSelect
 function calculColorsAndLoadPlayerSelect()
 {
-   var clothesCol:String = this.colorIt;
+   //var clothesCol:String = this.colorIt;
    var colorsFilters:Array = new Array();
    var i:Number;
    
    for(i = 0; i < 12; i++)
    {
-	  colorsFilters.push(colorMatrixPerso(clothesCol, i + 1));
+	  colorsFilters.push(colorMatrixPerso(getColorByID(this.clothesColorID, i + 1), i + 1));
    }
    
    var mcLoaderString = "myLoader";
@@ -4327,7 +4443,7 @@ function calculColorsAndLoadPlayerSelect()
 	   
 	   this["mcLoaderString"].loadClip("GUI/playerSelect.swf", _level0.loader.contentHolder.selectHolder);
    
-}
+} /// end method calculColors...
 
 
 // coloring with ColorMatrixFilter a movie
@@ -4338,9 +4454,7 @@ function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
        var gg:Number = Number("0x" + clothesCol.substr(4,2).toString(10));
        var bb:Number = Number("0x" + clothesCol.substr(6,2).toString(10));
 	   
-	   var angle:Number;
-
-       //trace("rr : " + rr + " gg : " + gg + " bb : " + bb);
+	   //trace("rr : " + rr + " gg : " + gg + " bb : " + bb);
 
       // to obtain the multipliers
       // the RGB of base color of perso1 is 245,64,75
@@ -4350,64 +4464,56 @@ function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
 			     rr = rr/255/0.96;  // to take in consideration the base color of the movie
                  gg = gg/255/0.251;
                  bb = bb/255/0.294;
-				 angle = 0;
-                trace("Choix de la dessin 1"); // 245,64,75
+				 //trace("Choix de la dessin 1"); // 245,64,75
             break;
             
 			 case 2:
 			     rr = rr/255/0.169;
                  gg = gg/255/0.741;
                  bb = bb/255/0.373;
-				 angle = 30;
-				trace("Choix de la dessin 2"); // 43,189/95
+				 //trace("Choix de la dessin 2"); // 43,189/95
             break;
 			
 			 case 3:
                   rr = rr/255/0.741;
-                 gg = gg/255/0.537;
-                 bb = bb/255/0.165;
-				 angle = 60;
-                trace("Choix de la dessin 3"); // 189,137,42
+                  gg = gg/255/0.537;
+                  bb = bb/255/0.165;
+				  //trace("Choix de la dessin 3"); // 189,137,42
             break;
 			
 			 case 4:
                 rr = rr/255/0.188;
                 gg = gg/255/0.584;
                 bb = bb/255/0.29;
-				angle = 90;
-                trace("Choix de la dessin 4"); // 48,149,74
+				//trace("Choix de la dessin 4"); // 48,149,74
             break;
 			
 			 case 5:
                 rr = rr/255/0.27;
                 gg = gg/255/0.314;
                 bb = bb/255/0.53;
-				angle = 120;
-                trace("Choix de la dessin 5");  // 69,80,136
+				//trace("Choix de la dessin 5");  // 69,80,136
             break;
 			
 			 case 6:
                  rr = rr/255/0.4;
                  gg = gg/255/0.2;
                  bb = bb/255/0.6;
-				 angle = 150;
-                trace("Choix de la dessin 6"); // 102,51,153
+				 //trace("Choix de la dessin 6"); // 102,51,153
             break;
 			
 			 case 7:
                  rr = rr/255/0.059;
                  gg = gg/255/0.53;
                  bb = bb/255/0.204;
-				 angle = 180;
-                trace("Choix de la dessin 7"); // 15,136,52
+				 //trace("Choix de la dessin 7"); // 15,136,52
             break;
 			
 			 case 8:
                  rr = rr/255;
                  gg = gg/255;
                  bb = bb/255;
-				 angle = 210;
-                trace("Choix de la dessin 8");  // 255.255.255
+				 //trace("Choix de la dessin 8");  // 255.255.255
             break;
 			
 			
@@ -4415,32 +4521,28 @@ function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
                  rr = rr/255/0.3;
                  gg = gg/255/0.588;
                  bb = bb/255/0.29;
-				 angle = 240;
-                trace("Choix de la dessin 9");  //  79.150.74
+				 //trace("Choix de la dessin 9");  //  79.150.74
             break;
 			
 			 case 10:
                  rr = rr/255;
                  gg = gg/255/0.12;
                  bb = bb/255/0.12;
-				 angle = 270;
-                trace("Choix de la dessin 10");  // 255.0.0 
+				 //trace("Choix de la dessin 10");  // 255.0.0 
             break;
 			
 			case 11:
                  rr = rr/255;
                  gg = gg/255;
                  bb = bb/255;
-				 angle = 300;
-                trace("Choix de la dessin 11");   // 255.255.255
+				 //trace("Choix de la dessin 11");   // 255.255.255
             break;
 			
 			case 12:
                  rr = rr/255/0.843;
                  gg = gg/255/0.019;
                  bb = bb/255/0.0118;
-				 angle = 330;
-                trace("Choix de la dessin 12");   //  215.5.3
+				 //trace("Choix de la dessin 12");   //  215.5.3
             break;
 			
             default:
@@ -4453,58 +4555,134 @@ function colorItMatrix(clothesCol:String, mov:MovieClip, idD:Number)
      matrix = matrix.concat([0, gg, 0, 0, 0]); // green
      matrix = matrix.concat([0, 0, bb, 0, 0]); // blue
      matrix = matrix.concat([0, 0, 0, 1, 0]); // alpha
-	 
-	 // Author: Mario Klingemann
-     // http://www.quasimondo.com
-	 function adjustHue( angle:Number ):Array
-	{
-			angle *= Math.PI/180;
-			
-			var c:Number = Math.cos( angle );
-            var s:Number = Math.sin( angle );
-			
-            var f1:Number = 0.213;
-            var f2:Number = 0.715;
-            var f3:Number = 0.072;
-			
-            var mat:Array = Array((f1 + (c * (1 - f1))) + (s * (-f1)), (f2 + (c * (-f2))) + (s * (-f2)), (f3 + (c * (-f3))) + (s * (1 - f3)), 0, 0, (f1 + (c * (-f1))) + (s * 0.143), (f2 + (c * (1 - f2))) + (s * 0.14), (f3 + (c * (-f3))) + (s * -0.283), 0, 0, (f1 + (c * (-f1))) + (s * (-(1 - f1))), (f2 + (c * (-f2))) + (s * f2), (f3 + (c * (1 - f3))) + (s * f3), 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1);
-			
-			return mat;
-	} // end function adjustHue
 	
-	// Author: Mario Klingemann
-    // http://www.quasimondo.com
-	function concatS(mat:Array):Void
-	{
-		
-		var temp:Array = Array ();
-		var i:Number = 0;
-		
-		for (var y:Number = 0; y < 4; y++ )
-		{
-			
-			for (var x:Number = 0; x < 5; x++ )
-			{
-				temp[i + x] = mat[i    ] * matrix[x     ] + 
-							   mat[i+1] * matrix[x +  5] + 
-							   mat[i+2] * matrix[x + 10] + 
-							   mat[i+3] * matrix[x + 15] +
-							   (x == 4 ? mat[i+4] : 0);
-			}
-			i+=5;
-		}
-		
-		matrix = temp;
-		
-	}// end function concatS
 	
-   concatS(adjustHue(angle));
+	
 	
    var filterC:ColorMatrixFilter = new ColorMatrixFilter(matrix);
    //trace("filter: " + filter.matrix);
    
    mov.filters = new Array(filterC);
 }
+
+// coloring with ColorMatrixFilter a movie
+function colorItMatrixByID(colorID:Number, mov:MovieClip, idD:Number)
+{
+	  var clothesCol:String = getColorByID(colorID, idD);
+      
+	  // to obtain RGB values of our color
+       var rr:Number = Number("0x" + clothesCol.substr(2,2).toString(10));
+       var gg:Number = Number("0x" + clothesCol.substr(4,2).toString(10));
+       var bb:Number = Number("0x" + clothesCol.substr(6,2).toString(10));
+	   
+	   //trace("rr : " + rr + " gg : " + gg + " bb : " + bb);
+
+      // to obtain the multipliers
+      // the RGB of base color of perso1 is 245,64,75
+      switch(idD)
+      {
+           case 1:
+			     rr = rr/255/0.96;  // to take in consideration the base color of the movie
+                 gg = gg/255/0.251;
+                 bb = bb/255/0.294;
+				 //trace("Choix de la dessin 1"); // 245,64,75
+            break;
+            
+			 case 2:
+			     rr = rr/255/0.169;
+                 gg = gg/255/0.741;
+                 bb = bb/255/0.373;
+				//trace("Choix de la dessin 2"); // 43,189/95
+            break;
+			
+			 case 3:
+                  rr = rr/255/0.741;
+                 gg = gg/255/0.537;
+                 bb = bb/255/0.165;
+				// trace("Choix de la dessin 3"); // 189,137,42
+            break;
+			
+			 case 4:
+                rr = rr/255/0.188;
+                gg = gg/255/0.584;
+                bb = bb/255/0.29;
+				//trace("Choix de la dessin 4"); // 48,149,74
+            break;
+			
+			 case 5:
+                rr = rr/255/0.27;
+                gg = gg/255/0.314;
+                bb = bb/255/0.53;
+				//trace("Choix de la dessin 5");  // 69,80,136
+            break;
+			
+			 case 6:
+                 rr = rr/255/0.4;
+                 gg = gg/255/0.2;
+                 bb = bb/255/0.6;
+				//trace("Choix de la dessin 6"); // 102,51,153
+            break;
+			
+			 case 7:
+                 rr = rr/255/0.059;
+                 gg = gg/255/0.53;
+                 bb = bb/255/0.204;
+				//trace("Choix de la dessin 7"); // 15,136,52
+            break;
+			
+			 case 8:
+                 rr = rr/255;
+                 gg = gg/255;
+                 bb = bb/255;
+				//trace("Choix de la dessin 8");  // 255.255.255
+            break;
+			
+			
+			 case 9:
+                 rr = rr/255/0.3;
+                 gg = gg/255/0.588;
+                 bb = bb/255/0.29;
+				//trace("Choix de la dessin 9");  //  79.150.74
+            break;
+			
+			 case 10:
+                 rr = rr/255;
+                 gg = gg/255/0.12;
+                 bb = bb/255/0.12;
+				//trace("Choix de la dessin 10");  // 255.0.0 
+            break;
+			
+			case 11:
+                 rr = rr/255;
+                 gg = gg/255;
+                 bb = bb/255;
+				 // trace("Choix de la dessin 11");   // 255.255.255
+            break;
+			
+			case 12:
+                 rr = rr/255/0.843;
+                 gg = gg/255/0.019;
+                 bb = bb/255/0.0118;
+				//trace("Choix de la dessin 12");   //  215.5.3
+            break;
+			
+            default:
+                trace("Erreur Inconnue");
+     }
+   
+
+     var matrix:Array = new Array();
+     matrix = matrix.concat([rr, 0, 0, 0, 0]); // red
+     matrix = matrix.concat([0, gg, 0, 0, 0]); // green
+     matrix = matrix.concat([0, 0, bb, 0, 0]); // blue
+     matrix = matrix.concat([0, 0, 0, 1, 0]); // alpha
+		
+   var filterC:ColorMatrixFilter = new ColorMatrixFilter(matrix);
+   //trace("filter: " + filter.matrix);
+   
+   mov.filters = new Array(filterC);
+}
+
 
 // used to calculate the filter for our persos
 // this take out the delay in coloring our pictures
@@ -4530,64 +4708,64 @@ function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
 			     rr = rr/255/0.96;  // to take in consideration the base color of the movie
                  gg = gg/255/0.251;
                  bb = bb/255/0.294;
-				 angle = 0;
-                trace("Choix de la dessin 1"); // 245,64,75
+				 //angle = 0;
+                //trace("Choix de la dessin 1"); // 245,64,75
             break;
             
 			 case 2:
 			     rr = rr/255/0.169;
                  gg = gg/255/0.741;
                  bb = bb/255/0.373;
-				 angle = 30;
-				trace("Choix de la dessin 2"); // 43,189/95
+				 //angle = 30;
+				//trace("Choix de la dessin 2"); // 43,189/95
             break;
 			
 			 case 3:
                  rr = rr/255/0.741;
                  gg = gg/255/0.537;
                  bb = bb/255/0.165;
-				 angle = 60;
-                trace("Choix de la dessin 3"); // 189,137,42
+				 //angle = 60;
+                //trace("Choix de la dessin 3"); // 189,137,42
             break;
 			
 			case 4:
                 rr = rr/255/0.188;
                 gg = gg/255/0.584;
                 bb = bb/255/0.29;
-				angle = 90;
-                trace("Choix de la dessin 4"); // 48,149,74
+				//angle = 90;
+                //trace("Choix de la dessin 4"); // 48,149,74
             break;
 			
 			 case 5:
                 rr = rr/255/0.27;
                 gg = gg/255/0.314;
                 bb = bb/255/0.53;
-				angle = 120;
-                trace("Choix de la dessin 5");  // 69,80,136
+				//angle = 120;
+                //trace("Choix de la dessin 5");  // 69,80,136
             break;
 			
 			 case 6:
                  rr = rr/255/0.4;
                  gg = gg/255/0.2;
                  bb = bb/255/0.6;
-				 angle = 150;
-                trace("Choix de la dessin 6"); // 102,51,153
+				 //angle = 150;
+                //trace("Choix de la dessin 6"); // 102,51,153
             break;
 			
 			 case 7:
                  rr = rr/255/0.059;
                  gg = gg/255/0.53;
                  bb = bb/255/0.204;
-				 angle = 180;
-                trace("Choix de la dessin 7"); // 15,136,52
+				 //angle = 180;
+                //trace("Choix de la dessin 7"); // 15,136,52
             break;
 			
 			 case 8:
                  rr = rr/255;
                  gg = gg/255;
                  bb = bb/255;
-				 angle = 210;
-                trace("Choix de la dessin 8");  // 255.255.255
+				 //angle = 210;
+                //trace("Choix de la dessin 8");  // 255.255.255
             break;
 			
 			
@@ -4595,32 +4773,32 @@ function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
                  rr = rr/255/0.3;
                  gg = gg/255/0.588;
                  bb = bb/255/0.29;
-				 angle = 240;
-                trace("Choix de la dessin 9");  //  79.150.74
+				 //angle = 240;
+                //trace("Choix de la dessin 9");  //  79.150.74
             break;
 			
 			 case 10:
                  rr = rr/255;
                  gg = gg/255/0.12;
                  bb = bb/255/0.12;
-				 angle = 270;
-                trace("Choix de la dessin 10");  // 255.31.31 
+				 //angle = 270;
+                //trace("Choix de la dessin 10");  // 255.31.31 
             break;
 			
 			case 11:
                  rr = rr/255;
                  gg = gg/255;
                  bb = bb/255;
-				 angle = 300;
-                trace("Choix de la dessin 11");   // 255.255.255
+				 //angle = 300;
+                //trace("Choix de la dessin 11");   // 255.255.255
             break;
 			
 			case 12:
                  rr = rr/255/0.843;
                  gg = gg/255/0.019;
                  bb = bb/255/0.0118;
-				 angle = 330;
-                trace("Choix de la dessin 12");   //  215.5.3
+				 //angle = 330;
+                //trace("Choix de la dessin 12");   //  215.5.3
             break;
 			
             default:
@@ -4634,6 +4812,7 @@ function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
      matrix = matrix.concat([0, 0, bb, 0, 0]); // blue
      matrix = matrix.concat([0, 0, 0, 1, 0]); // alpha
 	 
+	 /*
 	 // Author: Mario Klingemann
      // http://www.quasimondo.com
 	 function adjustHue( angle:Number ):Array
@@ -4678,13 +4857,14 @@ function colorMatrixPerso(col:String, idD:Number):ColorMatrixFilter
 		
 	}
 	
-	concatM(adjustHue(angle));
+	concatM(adjustHue(angle));  */
 	 
 	var filterC:ColorMatrixFilter = new ColorMatrixFilter(matrix);
 	 
 	return filterC;
 	  
 } //end method
+
 
 // to take a good Id for our perso 
 /*
