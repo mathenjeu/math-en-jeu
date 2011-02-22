@@ -81,10 +81,12 @@ public class InformationPartie
     // Bonus is given while arrived at finish line and is calculated
     // as number of rested game time(in sec)
     private int tournamentBonus;
-    // the color of the clothes in the player's picture
+    // this is the code of the set of colors of the clothes in the player's picture
     // user can change it in the frame 3 of the client
-    // if we use default color it will remain = 0
-    private String clothesColor;
+    // each of 12 picture in this set has his color
+    // so final color is combination of this code and the picture
+    // selected by user
+    private int clothesColor;
     // used to count how many times the QuestionsBox is filled
     // if is filled after
     private int countFillBox;
@@ -149,7 +151,7 @@ public class InformationPartie
         //tournamentBonus = 0;
 
         // set the color to default
-        clothesColor = "0";
+        clothesColor = 0;
 
         // Brainiac state
         this.brainiacState = new HumainPlayerBrainiacState(joueur);
@@ -1180,11 +1182,11 @@ public class InformationPartie
         }
     }
 
-    public void setClothesColor(String string) {
-        this.clothesColor = string;
+    public void setClothesColor(int colorCode) {
+        this.clothesColor = colorCode;
     }
 
-    public String getClothesColor() {
+    public int getClothesColor() {
         return clothesColor;
     }
 
@@ -1301,6 +1303,12 @@ public class InformationPartie
             else if(i == slicePart - 1)
             	endIndex = info.length();
 		}*/
+	}
+
+	public Integer resetColor() {
+		int temp = this.clothesColor;
+		this.clothesColor = 0;
+		return temp;
 	}
 } // end class
 

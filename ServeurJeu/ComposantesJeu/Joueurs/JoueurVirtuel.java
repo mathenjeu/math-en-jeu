@@ -158,8 +158,8 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 	// Objet logger pour afficher les erreurs dans le fichier log
 	static private Logger objLogger = Logger.getLogger(JoueurVirtuel.class);
 	
-	// the color of the clothes in the player's picture
-	private String clothesColor;
+	// code of the clothes color in the player's picture
+	private int clothesColor;
 	
 	// relative time the last change of points or get the finish line
 	private int pointsFinalTime;
@@ -2777,12 +2777,12 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 	}
 
 
-	public void setClothesColor(String color) {
+	public void setClothesColor(int color) {
 		this.clothesColor = color;
 	}
 
 
-	public String getClothesColor() {
+	public int getClothesColor() {
 		return clothesColor;
 	}
 

@@ -321,8 +321,6 @@ public class Salle
             // Créer une nouvelle table en passant les paramètres appropriés
             Table objTable = new Table(this, genererNoTable(), joueur, tempsPartie, name, intNbLines, intNbColumns, gameType);
 
-            objTable.creation();
-
             // Ajouter la table dans la liste des tables
             lstTables.put(new Integer(objTable.obtenirNoTable()), objTable);
 
