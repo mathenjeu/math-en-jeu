@@ -630,12 +630,11 @@ class PlancheDeJeu
         }
     }*/
 	
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function startAnimationCourse():Void
+	/////////////////////////// Etape 1 de l'animation ////////////////////////////////////////////////////////////////
+	function startAnimationCourseI():Void
 	{
 		var dx:Number;
 		var dy:Number;
-		var pourcent:Number;
 		var l:Number = tableauDesCases.length - 4;
 		var c:Number = tableauDesCases[0].length - 4; 
 		
@@ -644,16 +643,23 @@ class PlancheDeJeu
 		
 		dx = Math.round(dx);
 		dy = Math.round(dy);
-		
-		///trace("animation!!!!!!!!!!! : " + dx + " " + dy + " " + _level0.loader.contentHolder.referenceLayer._x);
-		
-		// on deplace le clip sur lequel est attache tous les autres clips
+				
 		_level0.loader.contentHolder.referenceLayer._x += dx;		
 		_level0.loader.contentHolder.referenceLayer._y += dy;
+								
+	}
+	
+	////////////////////////////// Etape 2 de l'animation //////////////////////////////////////////////////////////////////
+	function startAnimationCourseII():Void
+	{
+		var coorByX:Number = _level0.loader.contentHolder.referenceLayer._x;
+		var coorByY:Number = _level0.loader.contentHolder.referenceLayer._y;
+		var coorToX:Number = 275 - (10+this.zoom)/10*this.tableauDesCases[2][3].obtenirClipCase()._x;
+		var coorToY:Number = 200 - (10+this.zoom)/10*this.tableauDesCases[2][3].obtenirClipCase()._y;
 		
-		///trace("animation!!!!!!!!!!! : " + _level0.loader.contentHolder.referenceLayer._x + " " + _level0.loader.contentHolder.referenceLayer._y);
-		//_level0.loader.contentHolder.planche.obtenirPerso().setBoardCentre(false);
-		
+		var twMoveX:Tween = new Tween(_level0.loader.contentHolder.referenceLayer, "_x", Regular.easeInOut, coorByX, coorToX, 2.8, true);
+		var twMoveY:Tween = new Tween(_level0.loader.contentHolder.referenceLayer, "_y", Regular.easeInOut, coorByY, coorToY, 2.8, true);
+				
 	}
     
     
