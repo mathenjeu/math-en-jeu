@@ -3335,15 +3335,8 @@ class GestionnaireEvenements
 		   this.startAnimation();
 		   
 		} else {
-           
-		   _level0.loader.contentHolder.planche.startAnimationCourse();
-		   //trace("animaX : "  +  _level0.loader.contentHolder.referenceLayer._x);
-		   //trace("animaY : "  +  _level0.loader.contentHolder.referenceLayer._x);
-		   //_level0.loader.contentHolder.referenceLayer._y += dy;
-		  //_level0.loader.contentHolder.planche.obtenirPerso().setBoardCentre(false);
-		   
-		   this.startAnimationCourse();
-		   
+           _level0.loader.contentHolder.planche.startAnimationCourseI();		   
+		   this.startAnimationCourse();		  		   
 		}
 		
 		objetEvenement = null;
@@ -3351,7 +3344,7 @@ class GestionnaireEvenements
         trace("*********************************************\n");
     }
 	
-	// start animation //***********************************************
+	// start animation 
 	public function startAnimation(){
 		
 		var intervalIdA:Number = setInterval(animation, 250);	
@@ -3368,27 +3361,22 @@ class GestionnaireEvenements
 		
 	}
 	
-	// start animation //***********************************************
+	// start animation 
 	public function startAnimationCourse(){
 		
 		var intervalIdC:Number = setInterval(animation, 100);
-		//_level0.loader.contentHolder.planche.
-		
-		var pourcent:Number = Number(_level0.loader.contentHolder.objGestionnaireEvenements.tempsPartie);
-		trace("ici temps partie: " + pourcent);
-		var num:Number = 35 + pourcent;
-							
+						
+		var num:Number = 35;
+	     						
         function animation(){
-			    trace("ici num: " + num);
-				trace("ici por " + _level0.loader.contentHolder.objGestionnaireEvenements.tempsPartie);
-	            num--;
-				if(num < 25 + pourcent)
-				  _level0.loader.contentHolder.planche.recentrerBoard(2,3, true);
-		        if(num == 16)
+			   
+				num--;
+				if(num == 30)
+				  _level0.loader.contentHolder.planche.startAnimationCourseII();				  
+		        if(num == 18)
 				  _level0.loader.contentHolder.objGestionnaireEvenements.startAnimation();
 		        if(num < 1)
-				  clearInterval(intervalIdC);
-				
+				  clearInterval(intervalIdC);				
 		}
 	}
 	
@@ -4227,7 +4215,7 @@ class GestionnaireEvenements
        var playersNumber:Number = calculateMenu();
       // Create the base shape with blue color
       _level0.loader.contentHolder.createEmptyMovieClip("menuPointages", 5);
-      _level0.loader.contentHolder.menuPointages._x = 450;
+      _level0.loader.contentHolder.menuPointages._x = 490;
       _level0.loader.contentHolder.menuPointages._y = 60;
       drawRoundedRectangle(_level0.loader.contentHolder.menuPointages, 100, 31 + 8 + playersNumber*21, 10, 0x2A57F6, 100);
 
