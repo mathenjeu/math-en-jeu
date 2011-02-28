@@ -2088,7 +2088,7 @@ class GestionnaireEvenements
       	switch(objetEvenement.resultat)
         {
             case "Question":
-		     	_level0.loader.contentHolder.url_question = objetEvenement.question.url;
+		     	_level0.loader.contentHolder.url_question = objetEvenement.question.url;//"Q-1-en.swf"
 		     	_level0.loader.contentHolder.type_question = objetEvenement.question.type;
 				_level0.loader.contentHolder.box_question.gotoAndPlay(2);
 				
@@ -2482,7 +2482,7 @@ class GestionnaireEvenements
 					else
 					{
 			     		trace("deplacement refuse  ");
-						_level0.loader.contentHolder.url_retro = objetEvenement.explication;
+						_level0.loader.contentHolder.url_retro =objetEvenement.explication;// "Q-1-F-en.swf";
 						_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 
                         _level0.loader.contentHolder.box_question.monScroll._visible = false;
@@ -4215,7 +4215,7 @@ class GestionnaireEvenements
        var playersNumber:Number = calculateMenu();
       // Create the base shape with blue color
       _level0.loader.contentHolder.createEmptyMovieClip("menuPointages", 5);
-      _level0.loader.contentHolder.menuPointages._x = 490;
+      _level0.loader.contentHolder.menuPointages._x = 451;
       _level0.loader.contentHolder.menuPointages._y = 60;
       drawRoundedRectangle(_level0.loader.contentHolder.menuPointages, 100, 31 + 8 + playersNumber*21, 10, 0x2A57F6, 100);
 
