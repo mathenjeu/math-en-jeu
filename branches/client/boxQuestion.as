@@ -124,7 +124,7 @@ loadListener.complete = function(eventObject)
 		//pointillés et mettre les 2 lignes suivantes à la place
 		//FAIRE LA MEME CHOSE DANS GUI_RETRO
 		
-		monScroll.content._width = 444;
+		monScroll.content._width = 375;
 		monScroll.content._yscale = monScroll.content._xscale;
 		Selection.setFocus(monScroll);
 	    
@@ -268,9 +268,24 @@ loadListener.complete = function(eventObject)
 				horsService = _level0.loader.contentHolder.attachMovie("GUI_erreur", "HorsService", 9999);
 				
 				horsService.textGUI_erreur.text = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIerreurQuestion;
-				horsService.linkGUI_erreur._visible = true;
-				horsService.linkGUI_erreur.text = _level0.loader.contentHolder.url_question;//_root.texteSource_xml.firstChild.attributes.GUIhorsService2;
-				horsService.linkGUI_erreur.html = true;
+				//horsService.linkGUI_erreur._visible = true;
+				//horsService.linkGUI_erreur.text = _level0.loader.contentHolder.url_question;//_root.texteSource_xml.firstChild.attributes.GUIhorsService2;
+				//horsService.linkGUI_erreur.html = true;
+				
+				horsService.btn_ok.onRelease = function()
+				{						
+					_level0.loader.contentHolder.erreurConnexion = true;
+					// envoyer une réponse assurement mauvaise
+					_level0.loader.contentHolder.objGestionnaireEvenements.repondreQuestion("-e+b*x");
+					_level0.loader.contentHolder.box_question.gotoAndPlay(9);
+					horsService.removeMovieClip();
+				}
+				
+				_level0.loader.contentHolder.type_question = "erreur connexion";
+				monScroll.contentPath = null;
+				loaded = true;
+				
+				Mouse.removeListener(_level0.loader.contentHolder.mouseListener);
 	}
 	
 };
@@ -326,11 +341,11 @@ function checkLoadProgress()
 		if(tempsPasse > 5)	// ca fait plus de 5 secondes qu'on essaye de loader la question
 		{
 			trace("Plus de 5 sec...");
-			if(nbEssais < 5)
+			if(nbEssais < 3)
 			{
 				//renvoyer une requête
 				monScroll.contentPath = _level0.loader.contentHolder.url_question;
-				//monScroll.contentPath = "http://mathenjeu.mat.ulaval.ca/~mathenjeu/questions/MP-7701212-Q.swf";
+				//monScroll.contentPath = "Q-1-en.swf";
 				//reset le timer
 				timerInit = getTimer();
 				nbEssais++;
@@ -347,9 +362,9 @@ function checkLoadProgress()
 				horsService = _level0.loader.contentHolder.attachMovie("GUI_erreur", "HorsService", 9999);
 				
 				horsService.textGUI_erreur.text = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIerreurQuestion;
-				horsService.linkGUI_erreur._visible = false;
-				horsService.linkGUI_erreur.text = _level0.loader.contentHolder.url_question;//_root.texteSource_xml.firstChild.attributes.GUIhorsService2;
-				horsService.linkGUI_erreur.html = true;
+				//horsService.linkGUI_erreur._visible = false;
+				//horsService.linkGUI_erreur.text = _level0.loader.contentHolder.url_question;//_root.texteSource_xml.firstChild.attributes.GUIhorsService2;
+				//horsService.linkGUI_erreur.html = true;
 				
 				horsService.btn_ok.onRelease = function()
 				{						
@@ -378,6 +393,8 @@ function checkLoadProgress()
 				
 				monScroll.contentPath = null;
 				loaded = true;
+				
+				Mouse.removeListener(_level0.loader.contentHolder.mouseListener);
 			}
 		}
 	}
