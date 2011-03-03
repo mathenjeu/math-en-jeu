@@ -91,6 +91,7 @@ class GestionnaireEvenements
     // is used in selectPlayer in the cases the player 
     // change his first selected picture
     public var wasHereOnce:Boolean = false;
+	private var isOldGame:Boolean = false;
 	
 	function getMoveSight():Number
 	{
@@ -776,7 +777,7 @@ class GestionnaireEvenements
 				dejaConnecte.linkGUI_erreur._visible = false;
 				dejaConnecte.btn_ok._visible = false;
 			
-				dejaConnecte.thisMessage = _root.texteSource_xml.firstChild.attributes.GUIdejaConnecte;
+				dejaConnecte.thisMessage = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIdejaConnecte;
 			
                 trace("Joueur deja connecte");
             break;
@@ -845,6 +846,7 @@ class GestionnaireEvenements
 			 		 
 			   this.playersNumber = objetEvenement.playersListe.length;
 			   this.endGame = false;
+			   this.isOldGame = true;
 			   var count:Number = objetEvenement.playersListe.length;
 			   for(i = 0; i < count; i++)
                {
@@ -931,7 +933,7 @@ class GestionnaireEvenements
 			case "Ok":
 			
 			    // newsbox
-		        var messageInfo:String = objetEvenement.nomUtilisateur + _root.texteSource_xml.firstChild.attributes.restartMess; 
+		        var messageInfo:String = objetEvenement.nomUtilisateur + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.restartMess; 
 				this.newsChat.addMessage(messageInfo);
 				
 			   //trace("<<<<<<<<<<<<<<<<  feedbackRestartOldGame  finish restart >>>>>>>>>>>>>>>>>>>" + this.numeroTable);
@@ -3328,15 +3330,16 @@ class GestionnaireEvenements
 		this.newsChat.addMessage(messageInfo);
 
         remplirMenuPointage();
-		
-		_level0.loader.contentHolder.planche.zoomer("out", 8);
-		if(this.typeDeJeu == "mathEnJeu")
-		{
-		   this.startAnimation();
+		if(!this.isOldGame)
+		{   _level0.loader.contentHolder.planche.zoomer("out", 8);
+		    if(this.typeDeJeu == "mathEnJeu")
+		    {
+		       this.startAnimation();
 		   
-		} else {
-           _level0.loader.contentHolder.planche.startAnimationCourseI();		   
-		   this.startAnimationCourse();		  		   
+		    } else {
+               _level0.loader.contentHolder.planche.startAnimationCourseI();		   
+		       this.startAnimationCourse();		  		   
+		    }
 		}
 		
 		objetEvenement = null;
