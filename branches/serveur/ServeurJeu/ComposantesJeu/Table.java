@@ -1681,7 +1681,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         if (objMinuterie == null) {
             return 0;
         } else {
-            //System.out.println("Table!!!!!!!!!! " + intTempsTotal + " intTempsTotal " + " objMinuterie.obtenirTempsActuel() " + objMinuterie.obtenirTempsActuel());
             return (intTempsTotal * 60 - objMinuterie.obtenirTempsActuel()) * 180 / (intTempsTotal * 60);
         }
 
@@ -1911,9 +1910,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
      *  set the list of colors for the user clothes
      */
     private void setColors() {
-        //Colors[] colValues = Colors.values();
-        //System.out.println("ColorsX : " + colValues.length);
-
         for (int i = 1; i <= 12; i++) {
             colors.add(i);
             //System.out.println("Colors : " + i);
@@ -1935,13 +1931,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
             // Let's choose a colors among the possible ones
             if (colors != null && colors.size() > 0) {
                 int intRandom = UtilitaireNombres.genererNbAleatoire(colors.size());
-                color = colors.remove(intRandom); //colors.get(intRandom);
+                color = colors.remove(intRandom); 
                 
 
             } else {
                 //objLogger.error(GestionnaireMessages.message("colors_liste_empty"));
             }
-            //System.out.println("Color : " + color + "   " + colors.size());
+            
             return color;
         }
     }
@@ -2012,8 +2008,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     public int getOneIdPersonnage(int idDessin) {
         synchronized (idPersos) {
             int idPersonnage = this.idPersos.poll();
-            //this.idPersos.remove(0);
-
+            
             idPersonnage += 10000 + idDessin * 100;
             return idPersonnage;
         }

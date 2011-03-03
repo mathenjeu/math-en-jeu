@@ -363,7 +363,7 @@ public class ControleurJeu {
         // Trouver les informations sur le joueur dans la BD et remplir le
         // reste des champs tels que les droits
         objGestionnaireBD.remplirInformationsJoueur(objJoueurHumain);
-
+        
         // À ce moment, comme il se peut que le même joueur tente de se
         // connecter en même temps par 2 protocoles de joueur, alors si
         // ça arrive on va le vérifier juste une fois qu'on a fait tous
