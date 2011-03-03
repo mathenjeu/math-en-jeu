@@ -307,7 +307,7 @@ public class BoiteQuestions
 			 for(Question question: questions)
 				 if(question.obtenirCodeQuestion() == id)
 				 {
-					 System.out.println("Get out a question - id = "  + question.obtenirCodeQuestion());
+					 //System.out.println("Get out a question - id = "  + question.obtenirCodeQuestion());
 					 questions.remove(question);
 					 return true;
 				 }

@@ -80,7 +80,7 @@ public class JoueurHumain extends Joueur
 		// Initialiser les caractéristiques du joueur
 		//strPrenom = "";
 		//strNomFamille = "";
-                strLangue = "fr";
+       strLangue = protocole.getLang();
 				
 	}
 

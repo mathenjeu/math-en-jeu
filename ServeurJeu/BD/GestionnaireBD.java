@@ -1,7 +1,5 @@
 package ServeurJeu.BD;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -17,9 +15,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
 import org.apache.log4j.Logger;
-
 import Enumerations.Visibilite;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.BoiteQuestions;
@@ -139,6 +135,7 @@ public class GestionnaireBD {
 
         GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
         String codeErreur = config.obtenirString("gestionnairebd.code_erreur_inactivite");
+        String name = "";
 
         int count = 0;	//compteur du nombre d'essai de la requête
 
@@ -149,10 +146,15 @@ public class GestionnaireBD {
                 if (count != 0)
                     connexionDB();
                 synchronized (DB_LOCK) {
-                    ResultSet rs = requete.executeQuery("SELECT username FROM user WHERE username = '" + nomUtilisateur + "' AND password = '" + motDePasse + "';");
+                    ResultSet rs = requete.executeQuery("SELECT username FROM jos_users WHERE username = '" + nomUtilisateur + "' AND password = '" + motDePasse + "';");
                     if (rs.next() == false)
-                        return null;
-                    return rs.getString("username");
+                    {
+                    	rs.close();
+                    	return null;
+                    }
+                    name = rs.getString("username");
+                    rs.close();  
+                    return name;
                 }
             } catch (SQLException e) {
                 //on vérifie l'état de l'exception
@@ -171,27 +173,7 @@ public class GestionnaireBD {
         }
         return "";
     }
-
-    /**
-     * This methode fill columns with the actual date for the player with the blocked account
-     */
-    public void controlPlayerAccount() {
-
-        //  SQL for update
-        String strSQL = "UPDATE user SET last_access_date = CURDATE(), last_access_time = CURTIME() where last_access_date LIKE '1111-01-01' OR last_access_time LIKE '55:55:55';";
-
-        try {
-
-            synchronized (DB_LOCK) {
-                requete.executeUpdate(strSQL);
-            }
-        } catch (Exception e) {
-            System.out.println(GestionnaireMessages.message("bd.erreur_ajout_infos_update_user_control_account") + e.getMessage());
-        }
-
-
-    }//end methode
-
+   
     /**
      * Cette fonction permet de chercher dans la BD le joueur et de remplir  ***
      * les champs restants du joueur.
@@ -205,26 +187,26 @@ public class GestionnaireBD {
         try {
             synchronized (DB_LOCK) {
                 ResultSet rs = requete.executeQuery(
-                        "SELECT user.user_id, last_name, name, role_id, level_id, language.short_name " +
-                        "FROM user, language " +
-                        "WHERE user.language_id = language.language_id " +  "AND username = '" + joueur.obtenirNomUtilisateur() + "'");
+                        "SELECT jos_users.id, jos_comprofiler.lastname, jos_comprofiler.firstname, gid, cb_gradelevel, jos_users.username " +
+                        " FROM jos_users, jos_comprofiler WHERE jos_users.id = jos_comprofiler.user_id AND jos_users.username = '" + joueur.obtenirNomUtilisateur() + "';");
                 
                 if (rs.next()) {
 
-                    String prenom = rs.getString("last_name");
-                    String nom = rs.getString("name");
-                    cle = rs.getInt("user_id");
-                    int role = rs.getInt("role_id");
-                    int niveau = rs.getInt("level_id");
-                    String langue = rs.getString("short_name");
+                    String prenom = rs.getString("lastname");
+                    String nom = rs.getString("firstname");
+                    cle = rs.getInt("id");
+                    int role = rs.getInt("gid");
+                    int niveau = rs.getInt("cb_gradelevel");
+                    //xxString langue = rs.getString("short_name");
 
                     joueur.definirPrenom(prenom);
                     joueur.definirNomFamille(nom);
                     joueur.definirCleJoueur(cle);
-                    joueur.definirLangue(langue);
+                    //joueur.definirLangue(langue);
                     joueur.setRole(role);
                     joueur.definirCleNiveau(niveau);
                 }
+                rs.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -233,18 +215,16 @@ public class GestionnaireBD {
             objLogger.error(e.getMessage());
             e.printStackTrace();
         }
-
-        //if (cle != -1)
-            //updatePlayerLastAccessDate(cle);
-
+       
     }//end methode
 
+   
     /**
      * this fonction fill the fields in DB (user.last_access_time,lasr_access_time)
      * with the current date at the end of game
      * @param userId The user_id of the player to update
      */
-    public void updatePlayerLastAccessDate(int userId) {
+  /*   public void updatePlayerLastAccessDate(int userId) {
 
 
         //  SQL for update
@@ -260,7 +240,7 @@ public class GestionnaireBD {
         }
 
 
-    }// end methode
+    }// end methode  */
 
     /**
      * La fonction rempli la boiteQuestions avec des questions que correspond
@@ -389,6 +369,7 @@ public class GestionnaireBD {
                 while (rs.next()) {
                     liste.add(rs.getString("questions_answers"));
                 }
+                rs.close();                
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -463,6 +444,7 @@ public class GestionnaireBD {
                     }
                     codeQuestionTemp = codeQuestion;
                 }
+                rs.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -504,6 +486,7 @@ public class GestionnaireBD {
                     boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL + question, reponse, URL + explication));
                     //System.out.println("SA2: " + System.currentTimeMillis());
                 }
+                rs.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -545,6 +528,7 @@ public class GestionnaireBD {
                     boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL + question, reponse, URL + explication));
                     //System.out.println("TF2: " + System.currentTimeMillis());
                 }
+                rs.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -572,7 +556,7 @@ public class GestionnaireBD {
         String URLMusique = GestionnaireConfiguration.obtenirInstance().obtenirString("musique.url");
         String strRequeteSQL = "SELECT music_file.filename FROM music_file  WHERE  music_file.level_id = ";
         // we use levels[0] - because all levels has the same value
-        strRequeteSQL += "(Select user.level_id from user where user_id = ";
+        strRequeteSQL += "(Select jos_comprofiler.cb_gradelevel from jos_comprofiler where id = ";
         strRequeteSQL += player.obtenirCleJoueur();
         strRequeteSQL += ");";
 
@@ -582,6 +566,7 @@ public class GestionnaireBD {
                 while (rs.next()) {
                     liste.add(URLMusique + rs.getString("filename"));
                 }
+                rs.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -603,19 +588,23 @@ public class GestionnaireBD {
     public void mettreAJourJoueur(JoueurHumain joueur, int tempsTotal) {
         try {
             synchronized (DB_LOCK) {
-                ResultSet rs = requete.executeQuery("SELECT number_of_completed_game, best_score, total_time_played FROM user WHERE username = '" + joueur.obtenirNomUtilisateur() + "';");
+                ResultSet rs = requete.executeQuery("SELECT cb_completedgames, cb_bestscore, cb_totaltimeplayed FROM jos_comprofiler WHERE id = '" + 
+                		joueur.obtenirCleJoueur() + "';");
                 if (rs.next()) {
-                    int partiesCompletes = rs.getInt("number_of_completed_game") + 1;
-                    int meilleurPointage = rs.getInt("best_score");
+                    int partiesCompletes = rs.getInt("cb_completedgames") + 1;
+                    int meilleurPointage = rs.getInt("cb_bestscore");
                     int pointageActuel = joueur.obtenirPartieCourante().obtenirPointage();
                     if (meilleurPointage < pointageActuel)
                         meilleurPointage = pointageActuel;
 
-                    int tempsPartie = tempsTotal + rs.getInt("total_time_played");
+                    int tempsPartie = tempsTotal + rs.getInt("cb_totaltimeplayed");
 
                     //mise-a-jour
-                    requete.executeUpdate("UPDATE user SET number_of_completed_game =" + partiesCompletes + ",best_score =" + meilleurPointage + ",total_time_played =" + tempsPartie + " WHERE username = '" + joueur.obtenirNomUtilisateur() + "';");
+                    requete.executeUpdate("UPDATE jos_comprofiler SET cb_completedgames = " + partiesCompletes + 
+                    		" ,cb_bestscore = " + meilleurPointage + " , cb_totaltimeplayed = " + tempsPartie + 
+                    		" WHERE user_id = " + joueur.obtenirCleJoueur() + ";");
                 }
+                rs.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -902,8 +891,7 @@ public class GestionnaireBD {
     			"(" + clePartie + "," + cleJoueur + "," + pointage + "," + intGagner + ",'" + statistics + "'," + room_id + "," + percents + ");"; 
     			// Ajouter l'information pour ce joueur
     			requete.executeUpdate(strSQL);
-    			
-    		}
+       		}
     	}
     	catch (Exception e)
     	{
@@ -920,7 +908,7 @@ public class GestionnaireBD {
      */
     public void setNewPlayersMoney(int cleJoueur, int newMoney) {
         // Update the money in player's account
-        String strMoney = " UPDATE user SET money = " + newMoney + " WHERE user_id = " + cleJoueur + ";";
+        String strMoney = " UPDATE jos_comprofiler SET cb_money = " + newMoney + " WHERE user_id = " + cleJoueur + ";";
 
         try {
 
@@ -944,9 +932,10 @@ public class GestionnaireBD {
         int money = 0;
         try {
             synchronized (DB_LOCK) {
-                ResultSet rs = requete.executeQuery("SELECT user.money  FROM user WHERE user_id = " + userId + ";");
+                ResultSet rs = requete.executeQuery("SELECT jos_comprofiler.cb_money  FROM jos_comprofiler WHERE user_id = " + userId + ";");
                 if (rs.next())
                     money = rs.getInt("money");
+                rs.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -969,9 +958,10 @@ public class GestionnaireBD {
         int role = 0;
         try {
             synchronized (DB_LOCK) {
-                ResultSet rs = requete.executeQuery("SELECT role_id FROM user WHERE username='" + username + "' AND password='" + password + "'");
+                ResultSet rs = requete.executeQuery("SELECT gid FROM jos_users WHERE username='" + username + "' AND password='" + password + "'");
                 if (rs.next())
                     role = rs.getInt("role_id");
+                rs.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -988,11 +978,11 @@ public class GestionnaireBD {
         try {
             synchronized (DB_LOCK) {
                 ResultSet rs = requete.executeQuery(
-                        "SELECT room.password, user.username, user.role_id, beginDate, endDate, masterTime, room_info.language_id,room_info.name,room_info.description " +
-                        "FROM room_info, room, user, game_type " +
+                        "SELECT room.password, jos_users.username, jos_users.gid, beginDate, endDate, masterTime, room_info.language_id,room_info.name,room_info.description " +
+                        "FROM room_info, room, jos_users, game_type " +
                         "WHERE room.room_id = " + roomId + " " +
                         "AND room.room_id = room_info.room_id " +
-                        "AND user.user_id = room.user_id");
+                        "AND jos_users.id = room.user_id");
                 int row = 0;
                 Map<Integer, String> names = new TreeMap<Integer, String>();
                 Map<Integer, String> descriptions = new TreeMap<Integer, String>();
@@ -1003,7 +993,7 @@ public class GestionnaireBD {
                         roomData.put("beginDate", rs.getTimestamp("beginDate"));
                         roomData.put("endDate", rs.getTimestamp("endDate"));
                         roomData.put("masterTime", rs.getInt("masterTime"));
-                        int role_id = rs.getInt("role_id");
+                        int role_id = rs.getInt("gid");
                         roomData.put("roomType", role_id == 3 ? "profsType" : "General");
                         roomData.put("names", names);
                         roomData.put("descriptions", descriptions);
@@ -1013,6 +1003,7 @@ public class GestionnaireBD {
                     descriptions.put(language_id, rs.getString("room_info.description"));
                     row++;
                 }
+                rs.close();
             }
         } catch (SQLException e) {
             objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_room_info"));
@@ -1033,6 +1024,7 @@ public class GestionnaireBD {
                     ids.add(rs.getInt("keyword_id"));
 
                 }
+                rs.close();
             }
         } catch (SQLException e) {
             objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_room_keywordss"));
@@ -1055,6 +1047,7 @@ public class GestionnaireBD {
                     types.add(rs.getInt("game_type_id"));
 
                 }
+                rs.close();
             }
         } catch (SQLException e) {
             objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_game_types"));
@@ -1079,6 +1072,7 @@ public class GestionnaireBD {
                     rooms.add(rs.getInt("room.room_id"));
 
                 }
+                rs.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -1152,6 +1146,7 @@ public class GestionnaireBD {
     	                    int nbTracks = rs.getInt("nbTracks");
     	                    nbTracksMap.put(Id, nbTracks);
     	                }
+    	                rs.close();
     	            }
     	        } catch (SQLException e) {
     	            // Une erreur est survenue lors de l'exécution de la requête
@@ -1222,6 +1217,7 @@ public class GestionnaireBD {
                     objReglesTable.setNbVirtualPlayers(nbVirtualPlayers);
 
                 }
+                rs.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -1266,6 +1262,7 @@ public class GestionnaireBD {
                     objetsUtilisables.add(new ReglesObjetUtilisable(tmp1, tmp2, Visibilite.Aleatoire));
 
                 }
+                rst.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -1296,6 +1293,7 @@ public class GestionnaireBD {
                     casesSpeciale.add(new ReglesCaseSpeciale(tmp1, tmp2));
 
                 }
+                rst.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -1329,6 +1327,7 @@ public class GestionnaireBD {
                     magasins.add(new ReglesMagasin(tmp1, tmp2));
 
                 }
+                rst.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -1354,6 +1353,7 @@ public class GestionnaireBD {
                 while (rs.next()) {
                     url = rs.getString("url");
                 }
+                rs.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -1387,6 +1387,7 @@ public class GestionnaireBD {
                     listObjects.add(object);
 
                 }
+                rst.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -1515,6 +1516,7 @@ public class GestionnaireBD {
                 requete.executeUpdate("DELETE FROM room_game_types WHERE room_id=" + room_id);
                 requete.executeUpdate("DELETE FROM room_shop WHERE room_id=" + room_id);
                 requete.executeUpdate("DELETE FROM room_object WHERE room_id=" + room_id);
+                requete.close();
             }
         } catch (Exception e) {
         	objLogger.error(GestionnaireMessages.message("bd.erreur_delete_rooms_modProf") + e.getMessage());
@@ -1564,6 +1566,7 @@ public class GestionnaireBD {
                 // On retourne la clé de partie
                 rs.next();
                 room_id = rs.getInt("GENERATED_KEY");
+                rs.close();
             }
         } catch (Exception e) {
         	objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_modProf") + e.getMessage());
@@ -1611,6 +1614,7 @@ public class GestionnaireBD {
 
             }
             prepStatement.executeBatch();
+            prepStatement.close();
 
         } catch (Exception e) {
         	objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_Keywords") + e.getMessage());
@@ -1646,6 +1650,7 @@ public class GestionnaireBD {
 
             }
             prepStatement.executeBatch();
+            prepStatement.close();
 
         } catch (Exception e) {
         	objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_gameTypes") + e.getMessage());
@@ -1694,6 +1699,7 @@ public class GestionnaireBD {
 
             }
             prepStatement.executeBatch();
+            prepStatement.close();
 
         } catch (Exception e) {
         	objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_specialSquare") + e.getMessage());
@@ -1729,6 +1735,7 @@ public class GestionnaireBD {
                     prepStatement.addBatch();
                 }
                 prepStatement.executeBatch();
+                prepStatement.close();
             }
         } catch (Exception e) {
         	objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_objects") + e.getMessage());
@@ -1762,6 +1769,7 @@ public class GestionnaireBD {
                     prepStatement.addBatch();//executeUpdate();
                 }
                 prepStatement.executeBatch();
+                prepStatement.close();
             }
         } catch (Exception e) {
         	objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_shops") + e.getMessage());
@@ -1815,9 +1823,9 @@ public class GestionnaireBD {
         RapportDeSalle rapport = new RapportDeSalle(room_id, RapportDeSalle.ReportType.FULL);
         try {
             synchronized (DB_LOCK) {
-                String strSQL = "SELECT game.date,game.game_type_id,game.duration,game.winner_id,gamestats_questions.*,gamestats_scores.score, user.last_name, user.name,question_info.question_flash_file " +
+                String strSQL = "SELECT game.date,game.game_type_id,game.duration,game.winner_id,gamestats_questions.*,gamestats_scores.score, jos_comprofiler.lastname, jos_comprofiler.firstname,question_info.question_flash_file " +
                         "FROM game, gamestats_questions " +
-                        "LEFT JOIN user ON user.user_id=gamestats_questions.user_id " +
+                        "LEFT JOIN jos_comprofiler ON jos_comprofiler.user_id = gamestats_questions.user_id " +
                         "LEFT JOIN question_info ON question_info.question_id=gamestats_questions.question_id " +
                         "LEFT JOIN gamestats_scores ON gamestats_scores.game_id=gamestats_questions.game_id AND gamestats_scores.user_id=gamestats_questions.user_id " +
                         "WHERE game.room_id=" + room_id + " " +
@@ -1834,14 +1842,15 @@ public class GestionnaireBD {
                     short answer_status = rs.getShort("gamestats_questions.answer_status");
                     int time_taken = rs.getInt("gamestats_questions.time_taken");
                     int score = rs.getInt("gamestats_scores.score");
-                    String lastname = rs.getString("user.last_name");
-                    String firstname = rs.getString("user.name");
+                    String lastname = rs.getString("lastname");
+                    String firstname = rs.getString("firstname");
                     String swf = rs.getString("question_info.question_flash_file");
                     
                     rapport.addPlayerInfo(user_id, firstname, lastname);
                     rapport.addQuestionSWF(question_id,swf);
                     rapport.addGameInfo(game_id, date, game_type_id, winner_id, duration, user_id, question_id, answer_status, time_taken, score);
                 }
+                rs.close();
             }
         } catch (Exception e) {
         	objLogger.error(GestionnaireMessages.message("bd.erreur_create_report") + e.getMessage());
@@ -1877,9 +1886,9 @@ public class GestionnaireBD {
                     rapport.addQuestionSWF(question_id, swf);
                 }
                 rs.close();
-                rs = requete.executeQuery("SELECT gamestats_summary_users.*,user.name,user.last_name " +
+                rs = requete.executeQuery("SELECT gamestats_summary_users.*,jos_comprofiler.firstname,jos_comprofiler.lastname " +
                         "FROM gamestats_summary_users " +
-                        "LEFT JOIN user ON user.user_id = gamestats_summary_users.user_id " +
+                        "LEFT JOIN jos_comprofiler ON jos_comprofiler.user_id = gamestats_summary_users.user_id " +
                         "WHERE room_id="+room_id);
                 while (rs.next()) {
                     int user_id = rs.getInt("gamestats_summary_users.user_id");
@@ -1891,8 +1900,8 @@ public class GestionnaireBD {
                     int num_questions = rs.getInt("gamestats_summary_users.num_questions");
                     int num_right = rs.getInt("gamestats_summary_users.num_right");
                     int num_wrong = rs.getInt("gamestats_summary_users.num_wrong");
-                    String firstname = rs.getString("user.name");
-                    String lastname = rs.getString("user.last_name");
+                    String firstname = rs.getString("jos_comprofiler.firstname");
+                    String lastname = rs.getString("jos_comprofiler.lastname");
                     rapport.addPlayerInfo(user_id, firstname, lastname);
                     rapport.addPlayerSummary(user_id, time_period, games_played, max_score, sum_score, num_won, num_questions, num_right, num_wrong);
                 }
@@ -1913,6 +1922,7 @@ public class GestionnaireBD {
 
                 if (rs.next())
                     encodedPWD = rs.getString("password");
+                rs.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -1972,6 +1982,8 @@ public class GestionnaireBD {
                     }
                     kmap.put(kid, kname + "," + gid + "," + gname);
                 }
+                
+                rs.close();
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
@@ -2012,7 +2024,8 @@ public class GestionnaireBD {
                     }
                     tlmap.put(lid, name);
                 }
-            }
+                rs.close();
+           }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête
             objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_creer_langues_map"));
@@ -2038,6 +2051,8 @@ public class GestionnaireBD {
                     String name = rs.getString("name");
                     gameTypes.put(id, name);
                 }
+                
+                rs.close();                
             }
         } catch (SQLException e) {
             // Une erreur est survenue lors de l'exécution de la requête

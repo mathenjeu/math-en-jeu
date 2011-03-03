@@ -455,7 +455,8 @@ public class ProtocoleJoueur implements Runnable
     private void traiterCommandeConnexion(Element noeudEntree, Element noeudCommande) {
         String nomUtilisateur = obtenirValeurParametre(noeudEntree, "NomUtilisateur").getNodeValue();
         String motDePasse = obtenirValeurParametre(noeudEntree, "MotDePasse").getNodeValue();
-
+        
+        
         if (erreurAuthentification(noeudCommande, nomUtilisateur, motDePasse)) {
             //this.arreterProtocoleJoueur();
         	bolStopThread = true;
