@@ -3,14 +3,12 @@ package ServeurJeu;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Timer;
 import java.util.TreeMap;
-import java.util.Set;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import org.apache.log4j.Logger;
 import Enumerations.RetourFonctions.ResultatAuthentification;
+import ServeurJeu.BD.DBConnectionsPoolManager;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.Communications.GestionnaireCommunication;
 import ServeurJeu.Communications.ProtocoleJoueur;
@@ -24,11 +22,8 @@ import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.Evenements.StopServerEvent;
 import ServeurJeu.Monitoring.TacheLogMoniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
-import ServeurJeu.Temps.HumainBananaStartTask;
-import ServeurJeu.Temps.RealTimer;
 import ServeurJeu.Temps.TacheSynchroniser;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
-import ServeurJeu.ComposantesJeu.Joueurs.ParametreIA;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import ServeurJeu.BD.SpyRooms;
 
@@ -133,10 +128,7 @@ public class ControleurJeu {
      * To start the controler actions
      */
     public void demarrer() {
-    	
-    	//this.isOn = true;
-    	//System.out.println("Le serveur demarre 1 ...");
-    	
+
     	// Créer une liste des salles
         lstSalles = new HashMap<Integer, Salle>();
     	
@@ -145,8 +137,6 @@ public class ControleurJeu {
 
         // Créer un nouveau gestionnaire de base de données MySQL
         objGestionnaireBD = new GestionnaireBD(this);
-
-        //System.out.println("Le serveur demarre 2 ...");
 
         objGestionnaireTemps = new GestionnaireTemps();
         objTacheSynchroniser = new TacheSynchroniser();
@@ -171,12 +161,10 @@ public class ControleurJeu {
         int intStepSynchro = config.obtenirNombreEntier("controleurjeu.synchro.step");
         objGestionnaireTemps.ajouterTache(objTacheSynchroniser, intStepSynchro);
 
-        //System.out.println("Le serveur demarre 4 ...");
         // Créer un thread pour le GestionnaireEvenements
         objGestionnaireEvenements = new GestionnaireEvenements();
         Thread threadEvenements = new Thread(objGestionnaireEvenements, "GestEvenem - Controleur");
-
-        //System.out.println("Le serveur demarre 5 ...");
+      
         // Démarrer le thread du gestionnaire d'événements
         threadEvenements.start();
 
@@ -200,19 +188,16 @@ public class ControleurJeu {
         Thread threadSpy = new Thread(objSpyDB, "SpyRooms");
         threadSpy.start();
 
-        //System.out.println("Le serveur demarre 6 ...");
-
         //Demarrer une tache de monitoring
         TacheLogMoniteur objTacheLogMoniteur = new TacheLogMoniteur();
         int intStepMonitor = config.obtenirNombreEntier("controleurjeu.monitoring.step");
         objGestionnaireTemps.ajouterTache(objTacheLogMoniteur, intStepMonitor);
-
-        //System.out.println("Le serveur demarre 7 ...");
+       
         //Démarrer l'écoute des connexions clientes
         //Cette methode est la loop de l'application
         //Au retour, l'application se termine
         objGestionnaireCommunication.ecouterConnexions();
-        //System.out.println("Le serveur demarre 8 ...");
+        
         
     }
     
@@ -276,6 +261,14 @@ public class ControleurJeu {
         objGestionnaireTemps = null;
         objGestionnaireEvenements.arreterGestionnaireEvenements();
         objGestionnaireEvenements = null;
+        
+        this.objGestionnaireBD.finalize();
+        
+        // to close all connections to the DB
+        // if connection is not closed implicitly ... is never closed
+        // DB connection memory leak
+        DBConnectionsPoolManager pool = DBConnectionsPoolManager.getInstance();
+        pool.release();
         
         //this.lstJoueursConnectes.clear();
         

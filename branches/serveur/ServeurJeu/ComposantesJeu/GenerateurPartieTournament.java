@@ -42,7 +42,6 @@ public class GenerateurPartieTournament extends GenerateurPartie {
      * Cette fonction permet de retourner une matrice à deux dimensions
      * représentant le plateau de jeu qui contient les informations sur 
      * chaque case selon des paramètres.
-     * @param objGestionnaireBD 
      * @param lstPointsFinish 
      * @param nbColumns 
      * @param nbLines 

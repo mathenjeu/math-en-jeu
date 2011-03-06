@@ -6,7 +6,9 @@
 package ServeurJeu.ComposantesJeu;
 
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.Iterator;
+
+import org.apache.commons.collections.list.TreeList;
 import org.apache.log4j.Logger;
 import ClassesUtilitaires.UtilitaireNombres;
 import ServeurJeu.Configuration.GestionnaireMessages;
@@ -18,7 +20,7 @@ import ServeurJeu.Configuration.GestionnaireMessages;
 public class BoiteQuestions 
 {
 	private static Logger objLogger = Logger.getLogger( BoiteQuestions.class );
-	private HashMap<Integer, LinkedList<Question>> lstQuestions;
+	private HashMap<Integer, TreeList> lstQuestions;
 	private StringBuffer info; 
 	
 		
@@ -28,7 +30,7 @@ public class BoiteQuestions
 	
 	public BoiteQuestions(String language, String url, StringBuffer boiteQuestionsInfo)
 	{
-		lstQuestions = new HashMap<Integer, LinkedList<Question>>();
+		lstQuestions = new HashMap<Integer, TreeList>();
         this.language = new Language(language, url);
         this.info = boiteQuestionsInfo;
     	       
@@ -44,14 +46,14 @@ public class BoiteQuestions
 	{
 		int difficulte = question.obtenirDifficulte();
 							
-		LinkedList<Question> questions = lstQuestions.get( difficulte );
+		TreeList questions = lstQuestions.get( difficulte );
 		if( questions == null )
 		{
-			questions = new LinkedList<Question>();
+			questions = new TreeList();
 			lstQuestions.put( difficulte, questions);
 		}
 			
-		questions.addLast(question );
+		questions.add(question );
 		
 		this.info.append("ADD question : " + question.obtenirCodeQuestion() + " difficulty : " + difficulte + "\n");
 		
@@ -65,7 +67,7 @@ public class BoiteQuestions
 	public void popQuestion( Question question )
 	{
 		int difficulte = question.obtenirDifficulte();
-		LinkedList<Question> questions = lstQuestions.get( difficulte );
+		TreeList questions = lstQuestions.get( difficulte );
 		//System.out.println(question.obtenirCodeQuestion());
 		questions.remove(question);
 		this.info.append("Remove question : " + question.obtenirCodeQuestion() + "\n");
@@ -84,7 +86,7 @@ public class BoiteQuestions
 		//System.out.println("Question1: " + System.currentTimeMillis());
 		Question question = null;
 		
-		LinkedList<Question> questions = lstQuestions.get(intDifficulte);
+		TreeList questions = lstQuestions.get(intDifficulte);
 						
 		// Let's choose a question among the possible ones
 	    if( questions != null && questions.size() > 0 )
@@ -123,7 +125,7 @@ public class BoiteQuestions
 		
 		Question question = null;
 		
-		LinkedList<Question> questions = lstQuestions.get(intDifficulte);
+		TreeList questions = lstQuestions.get(intDifficulte);
 		
 		// Let's choose a question among the possible ones
 	    if( questions != null && questions.size() > 0 )
@@ -163,7 +165,7 @@ public class BoiteQuestions
 	public boolean estVide( int intDifficulte )
 	{
 		boolean ret = true;
-		LinkedList<Question> questions = obtenirQuestions( intDifficulte );
+		TreeList questions = obtenirQuestions( intDifficulte );
 		
 		if( questions != null )
 		{
@@ -265,9 +267,9 @@ public class BoiteQuestions
 	 * @param int intDifficulte : la difficulte de la question
 	 * @return LinkedList<Question> : un vecteur contenant les questions sélectionnées
 	 */
-	private LinkedList<Question> obtenirQuestions( int intDifficulte )
+	private TreeList obtenirQuestions( int intDifficulte )
 	{
-		LinkedList<Question> questions = lstQuestions.get(intDifficulte);
+		TreeList questions = lstQuestions.get(intDifficulte);
 				
 		return questions;
 	}
@@ -291,7 +293,7 @@ public class BoiteQuestions
 	public int getBoxSize() {
 		
 		int questionsNumber = 0;
-		for(LinkedList<Question> questions:lstQuestions.values())
+		for(TreeList questions:lstQuestions.values())
 		{
 			questionsNumber += questions.size();
 		}
@@ -302,15 +304,18 @@ public class BoiteQuestions
 
 
 	public boolean popQuestion(Integer id) {
-		for(LinkedList<Question> questions:lstQuestions.values())
+		for(TreeList questions:lstQuestions.values())
 		{
-			 for(Question question: questions)
+			Iterator<Question> it = questions.iterator();
+			while(it.hasNext()){
+				Question question = it.next();
 				 if(question.obtenirCodeQuestion() == id)
 				 {
 					 //System.out.println("Get out a question - id = "  + question.obtenirCodeQuestion());
 					 questions.remove(question);
 					 return true;
 				 }
+			}
 		}
 		return false;
 	}

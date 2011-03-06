@@ -1,14 +1,13 @@
 package ServeurJeu.ComposantesJeu;
 
 import java.awt.Point;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
-import ServeurJeu.BD.GestionnaireBD;
+import ServeurJeu.BD.GestionnaireBDJoueur;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
@@ -31,7 +30,7 @@ import java.util.LinkedList;
 public class InformationPartie
 {
     // Déclaration d'une référence vers le gestionnaire de bases de données
-    private final GestionnaireBD objGestionnaireBD;
+    private final GestionnaireBDJoueur objGestionnaireBD;
     // Déclaration d'une référence vers le gestionnaire d'evenements
     private final GestionnaireEvenements objGestionnaireEv;
     // Déclaration d'une référence vers un joueur humain correspondant à cet
@@ -105,10 +104,10 @@ public class InformationPartie
      * @param joueur
      * @param tableCourante
      */
-    public InformationPartie(GestionnaireEvenements gestionnaireEv, GestionnaireBD gestionnaireBD, JoueurHumain joueur, Table tableCourante) {
+    public InformationPartie(GestionnaireEvenements gestionnaireEv, JoueurHumain joueur, Table tableCourante) {
 
         // Faire la référence vers le gestionnaire de base de données
-        objGestionnaireBD = gestionnaireBD;
+        objGestionnaireBD = new GestionnaireBDJoueur(joueur);
 
         // Faire la référence vers le gestionnaire d'evenements
         objGestionnaireEv = gestionnaireEv;
@@ -162,9 +161,7 @@ public class InformationPartie
         String language = joueur.obtenirProtocoleJoueur().getLang();
         this.setBoiteQuestionsInfo();
         this.objBoiteQuestions = new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language),  this.boiteQuestionsInfo);
-        
-        
-             
+                          
     }// fin constructeur
 
     public void destruction() {
@@ -173,8 +170,8 @@ public class InformationPartie
         this.bananaState.destruction();
         this.brainiacState = null;
         this.bananaState = null;
-      /*   objGestionnaireBD = null;
-        objGestionnaireEv = null;
+        objGestionnaireBD.finalize();
+       /*   objGestionnaireEv = null;
         objJoueurHumain = null;
         objTable = null;*/
     }
@@ -496,7 +493,7 @@ public class InformationPartie
             } else if (objQuestionTrouvee == null && objBoiteQuestions.dontHaveQuestions()) {
                 
                 countFillBox++;
-                objGestionnaireBD.remplirBoiteQuestions(objJoueurHumain, countFillBox);
+                objGestionnaireBD.remplirBoiteQuestions(countFillBox);
             }
 
         } while (objQuestionTrouvee == null && countFillBox < 10); // must find right number for countFillBox
@@ -605,7 +602,7 @@ public class InformationPartie
                 //objBoiteQuestions.popQuestion(objQuestionTrouvee);
             } else if (objQuestionTrouvee == null && objBoiteQuestions.dontHaveQuestions()) {
                 countFillBox++;
-                objGestionnaireBD.remplirBoiteQuestions(objJoueurHumain, countFillBox);
+                objGestionnaireBD.remplirBoiteQuestions(countFillBox);
                 
             }
         } while (objQuestionTrouvee == null && countFillBox < 10);
@@ -1139,11 +1136,7 @@ public class InformationPartie
     public Point obtenirPositionJoueurDesiree() {
         return objPositionJoueurDesiree;
     }
-
-    public GestionnaireBD obtenirGestionnaireBD() {
-        return objGestionnaireBD;
-    }
-
+    
     /**
      * @return the bananaState
      */
@@ -1309,6 +1302,13 @@ public class InformationPartie
 		int temp = this.clothesColor;
 		this.clothesColor = 0;
 		return temp;
+	}
+	
+	/**
+	 * @return the objGestionnaireBD
+	 */
+	public GestionnaireBDJoueur getObjGestionnaireBD() {
+		return objGestionnaireBD;
 	}
 } // end class
 
