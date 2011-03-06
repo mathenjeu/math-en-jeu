@@ -255,11 +255,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         // Le joueur est maintenant entré dans la table courante (il faut
         // créer un objet InformationPartie qui va pointer sur la table
         // courante)
-        joueur.definirPartieCourante(new InformationPartie(objGestionnaireEvenements, objGestionnaireBD, joueur, this));
-        // 0 - because it's first time that we fill the QuestionsBox
-        // after we'll cut the level of questions by this number
-        objGestionnaireBD.remplirBoiteQuestions(joueur, 0);
-
+        joueur.definirPartieCourante(new InformationPartie(objGestionnaireEvenements, joueur, this));
+        
         // init players colors
         int color = this.getOneColor();
         joueur.obtenirPartieCourante().setClothesColor(color);
@@ -971,17 +968,15 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                     // Parcours des joueurs pour mise à jour de la BD et
                     // pour ajouter les infos de la partie complétée
                     for (JoueurHumain joueur: lstJoueurs.values()) {
-                        objGestionnaireBD.mettreAJourJoueur(joueur, intTempsTotal);
-
+                        joueur.obtenirPartieCourante().getObjGestionnaireBD().mettreAJourJoueur(intTempsTotal);
                         // if the game was with the permission to use user's money from DB
                         if (joueur.obtenirPartieCourante().obtenirTable().getRegles().isBolMoneyPermit()) {
-                            objGestionnaireBD.setNewPlayersMoney(joueur.obtenirCleJoueur(), joueur.obtenirPartieCourante().obtenirArgent());
+                        	joueur.obtenirPartieCourante().getObjGestionnaireBD().setNewPlayersMoney();
                         }
                         boolean estGagnant = joueur.obtenirCleJoueur() == cleJoueurGagnant;
                         objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur, estGagnant);
                         if(joueur.getRole() > 1)
                         	joueur.obtenirPartieCourante().writeInfo();
-
 
                     }
                 } //// end sinchro
@@ -1959,11 +1954,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         // Le joueur est maintenant entré dans la table courante (il faut
         // créer un objet InformationPartie qui va pointer sur la table
         // courante)
-        joueur.definirPartieCourante(new InformationPartie(objGestionnaireEvenements, objGestionnaireBD, joueur, this));
+        joueur.definirPartieCourante(new InformationPartie(objGestionnaireEvenements, joueur, this));
         // 0 - because it's first time that we fill the QuestionsBox
         // after we'll cut the level of questions by this number
-        objGestionnaireBD.remplirBoiteQuestions(joueur, 0);
-
+        joueur.obtenirPartieCourante().getObjGestionnaireBD().remplirBoiteQuestions(0);
+        
         int color = getOneColor();
         joueur.obtenirPartieCourante().setClothesColor(color);
 

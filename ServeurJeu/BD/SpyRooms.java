@@ -1,13 +1,11 @@
 package ServeurJeu.BD;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import ServeurJeu.ControleurJeu;
-import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import org.apache.log4j.Logger;
 
@@ -43,8 +41,59 @@ public class SpyRooms implements Runnable {
 		objControleurJeu = controleur;
 		DELAY = controlTime;
 		stopSpy = false;
-		connexionDB();
+		
+		DBConnectionsPoolManager pool = DBConnectionsPoolManager.getInstance();
+        connexion = pool.getConnection();
+        
+        this.takeStatement();      		
 	}
+	
+	
+	 /**
+     * Method used to release the problematic connection
+     * and to take another one
+     */
+    public void getNewConnection(){
+    	this.releaseConnection();
+    	DBConnectionsPoolManager pool = DBConnectionsPoolManager.getInstance();
+        connexion = pool.getConnection();
+		this.takeStatement();
+    }
+    
+    
+    /**
+     * Cette fonction permet de créer un objet requête
+     */
+    public void takeStatement() {
+
+    	// Création de l'objet "requête"
+    	try {
+    		requete = connexion.createStatement();
+    	} catch (SQLException e) {
+    		// Une erreur est survenue lors de la création d'une requête
+    		objLogger.error(GestionnaireMessages.message("bd.erreur_creer_requete"));
+    		objLogger.error(GestionnaireMessages.message("bd.trace"));
+    		objLogger.error(e.getMessage());
+    		this.getNewConnection();    		
+    		return;
+    	}
+
+    }
+    
+    /**
+     * Return the connection to the pool, 
+     * but first close the statement created from this connection
+     */
+    public void releaseConnection(){
+    	try {
+			this.requete.close();
+		} catch (SQLException e) {
+			objLogger.error(GestionnaireMessages.message("bd.erreur_fermer_requete"));			
+		}
+    	DBConnectionsPoolManager pool = DBConnectionsPoolManager.getInstance();
+    	pool.freeConnection(this.connexion);
+    	this.connexion = null;
+    }
 	
 	/**
 	 * Thread run and periodically put the new rooms from DB in 'ControleurJeu' 
@@ -52,6 +101,8 @@ public class SpyRooms implements Runnable {
 	 */
 	public void run() {
 		while (stopSpy == false) {
+			if(this.connexion == null)
+				this.getNewConnection();
 			try
 	    	{
 	            // Update rooms liste 
@@ -78,7 +129,6 @@ public class SpyRooms implements Runnable {
 	 */
 	private void detectNewRooms(ArrayList<Integer> rooms)
 	{
-		    //System.out.println("start : " + System.currentTimeMillis());
 		    //to not select the existed rooms   
 			String list = "";
 			for (int room : rooms)
@@ -114,7 +164,9 @@ public class SpyRooms implements Runnable {
 				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_newRoom"));
 				objLogger.error(GestionnaireMessages.message("bd.trace"));
 				objLogger.error( e.getMessage() );
-			    e.printStackTrace();			
+				
+			    e.printStackTrace();
+			    getNewConnection();
 			}
 			catch( RuntimeException e)
 			{
@@ -123,61 +175,18 @@ public class SpyRooms implements Runnable {
 				objLogger.error(GestionnaireMessages.message("bd.trace"));
 				objLogger.error( e.getMessage() );
 			    e.printStackTrace();
+			    getNewConnection();
 			}  
 			
 			//put in Controleur finded rooms
-			//System.out.println(rooms + "NEW");	
 			objControleurJeu.obtenirGestionnaireBD().fillRoomList(rooms);
-			//System.out.println("end : " + System.currentTimeMillis());
+			
 	}// end methode detectNewRooms
-
-	/**
-	* Cette fonction permet d'initialiser une connexion avec le serveur MySQL
-	* et de créer un objet requète
-	*/
-	private void connexionDB()
-	{
-		  GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 		
-		  String hote = config.obtenirString( "gestionnairebd.hote" );
-		  String utilisateur = config.obtenirString( "gestionnairebd.utilisateur" );
-		  String motDePasse = config.obtenirString( "gestionnairebd.mot-de-passe" );
-		
-		// établissement de la connexion avec la base de données
-		try
-		{
-			connexion = DriverManager.getConnection( hote, utilisateur, motDePasse);
-		}
-		catch (SQLException e)
-		{
-			// Une erreur est survenue lors de la connexion ˆ la base de données
-			objLogger.error(GestionnaireMessages.message("bd.erreur_connexion"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error( e.getMessage() );
-		    e.printStackTrace();
-		    return;			
-		}
-		
-		// Création de l'objet "requète"
-		try
-		{
-			requete = connexion.createStatement();
-		}
-		catch (SQLException e)
-		{
-			// Une erreur est survenue lors de la création d'une requète
-			objLogger.error(GestionnaireMessages.message("bd.erreur_creer_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error( e.getMessage() );
-		    e.printStackTrace();
-		    return;			
-		}
-		
-	}//end methode connexionDB
 	
 	public void stopSpy(){
-		this.stopSpy = true;
-		
+		this.releaseConnection();
+		this.stopSpy = true;		
 	}
 	
 	
