@@ -31,6 +31,7 @@ Si vous êtes un professeur et que vous voulez accéder à cette section réserv
 			GUIhorsService = "Le serveur ne répond pas. Veuillez vérifier votre connexion et recommencer. Si le problème persiste, veuillez s'il-vous-plaît cliquer sur le lien suivant afin d'exécuter un test de connexion. Faites ensuite parvenir les résultats de ce test à l'équipe technique de SMAC. Nous sommes sincèrement désolés que vous éprouviez de telles difficultés."
 			GUIhorsService2 = "Test de Connexion"
 			GUIhorsServiceURL = ""
+			GUInonConnu = "Ce nom utilisateur n'est pas connu. Veuillez fermer la fenêtre et recommencer avec un autre nom d'utilisateur!"
   
 >
 </Texte> 
