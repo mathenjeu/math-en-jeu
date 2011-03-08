@@ -716,8 +716,8 @@ class GestionnaireEvenements
     	trace("*********************************************");
     	trace("debut de retourConnexion     " + objetEvenement.resultat);
         // param:  userRoleMaster == 1 if simple user or 2 if master
-    	var dejaConnecte:MovieClip;
-		var isOldGame:MovieClip;
+    	var messageMovie:MovieClip;
+		//var isOldGame:MovieClip;
     
         switch(objetEvenement.resultat)
         {
@@ -735,7 +735,7 @@ class GestionnaireEvenements
 				this.userRole = objetEvenement.userRoleMaster; 
 				//musique();
 				
-				isOldGame = _level0.loader.contentHolder.attachMovie("GUI_oldGame", "restartGame", 9999);
+				messageMovie = _level0.loader.contentHolder.attachMovie("GUI_oldGame", "restartGame", 9999);
 							
 				trace("La connexion a marche");
 			break;
@@ -763,7 +763,20 @@ class GestionnaireEvenements
 			break;
 			 
             case "JoueurNonConnu":
-                trace("Joueur non connu");
+			   
+			    //messageMovie = _level0.loader.contentHolder.attachMovie("GUI_erreur", "DejaConnecte", 9999);
+				//messageMovie.thisMessage = "JoueurNonConnu2";//_level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUInonConnu;		
+				// this is in main_menu, so...
+				messageMovie = _level0.attachMovie("GUI_erreurRole", "DejaConnecte", 9999);
+								
+				
+				messageMovie.linkGUI_erreur._visible = false;
+				messageMovie.btn_ok._visible = false;
+				messageMovie.textReturn._visible = false;
+				trace("Joueur non connu ");
+				messageMovie.messageAlerte = _level0.texteSource_xml.firstChild.attributes.GUInonConnu;				
+				
+                
             break;
              
 			case "JoueurDejaConnecte":
@@ -773,11 +786,11 @@ class GestionnaireEvenements
 				//_root.dejaConnecte_txt._visible = true;
 				_root.texteSalle._visible = false;
 						
-	     		dejaConnecte = _level0.loader.contentHolder.attachMovie("GUI_erreur", "DejaConnecte", 9999);
-				dejaConnecte.linkGUI_erreur._visible = false;
-				dejaConnecte.btn_ok._visible = false;
+	     		messageMovie = _level0.loader.contentHolder.attachMovie("GUI_erreur", "DejaConnecte", 9999);
+				messageMovie.linkGUI_erreur._visible = false;
+				messageMovie.btn_ok._visible = false;
 			
-				dejaConnecte.thisMessage = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIdejaConnecte;
+				messageMovie.thisMessage = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIdejaConnecte;
 			
                 trace("Joueur deja connecte");
             break;
@@ -1001,23 +1014,26 @@ class GestionnaireEvenements
 			    this.listeDesSalles.removeAll();
 				var count:Number = objetEvenement.listeNomSalles.length;
 				var roomLabel:String;
+				var i:Number;
 				
-                for (var i:Number = 0; i < count; i++)
+                for ( i= 0; i < count; i++)
                 {					
 					this.listeDesSalles.push(objetEvenement.listeNomSalles[i]);
 					if(_level0.loader.contentHolder.roomsType == "General")
 					   roomLabel = " * " +  this.listeDesSalles[i].nom;
 					else if (_level0.loader.contentHolder.roomsType == "profsType")
 					   roomLabel = this.listeDesSalles[i].userCreator + " - " +  this.listeDesSalles[i].nom;
-					
-					_level0.loader.contentHolder.listeSalle.addItem({label: (roomLabel), data:  this.listeDesSalles[i].idRoom});
-					//trace("salle " + i + " : " + this.listeDesSalles[i].nom);
-					
+					//trace("salle " + i + " : " + this.listeDesSalles[i].nom);					
 				}
 								
 				_level0.loader.contentHolder.bt_continuer1._visible = true;
 				_level0.loader.contentHolder.txtChargementSalles._visible = false;
-								
+
+                for( i= 0; i < count; i++)
+                {												
+					_level0.loader.contentHolder.listeSalle.addItem({label: (roomLabel), data:  this.listeDesSalles[i].idRoom});
+				}
+
             break;
 			 
             case "CommandeNonReconnue":

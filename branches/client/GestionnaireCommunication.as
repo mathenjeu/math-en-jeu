@@ -155,7 +155,9 @@ class GestionnaireCommunication
         // Ajouter l'ecouteur de l'evenement connect
         objSocketClient.addEventListener("connect", Delegate.create(this, objSocketClient_onConnect));
         // Ajouter l'ecouteur de l'evenement xml
-        objSocketClient.addEventListener("xml", Delegate.create(this, objSocketClient_onXML));
+        //objSocketClient.addEventListener("xml", Delegate.create(this, objSocketClient_onXML));
+		 // Ajouter l'ecouteur de l'evenement xml
+        objSocketClient.addEventListener("data", Delegate.create(this, objSocketClient_onXML));
         // Ajouter l'ecouteur de l'evenement close
         objSocketClient.addEventListener("close", Delegate.create(this, objSocketClient_onClose));
         // Essayer de se connecter au serveur de jeu
@@ -417,6 +419,22 @@ class GestionnaireCommunication
             }
         }
     }
+	
+	
+	  /**
+     * Cet evenement est appele lorsqu'un message XML est recu par le client.
+     * Un document XML est passe en parametres. Si une commande recue n'est
+     * pas connue par le client, alors celle-ci est ignoree.
+     *
+     * @param Object objetEvenement : L'objet contenant les proprietes de
+     *                                l'evenement
+     */
+    private function objSocketClient_onData(objetEvenement:Object)
+    {
+       trace("onData " + objetEvenement.donnees);        
+    }
+	
+	
 	
     /**
      * Cette fonction permet d'obtenir le prochain numero de commande a
