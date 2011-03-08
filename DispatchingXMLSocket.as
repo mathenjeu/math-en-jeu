@@ -52,7 +52,8 @@ class DispatchingXMLSocket extends XMLSocket
         this.onConnect = dispatchOnConnect;
         this.onData = dispatchOnData;
         this.onClose = dispatchOnClose;
-        this.onXML = dispatchOnXML;
+        // use only the onData event because onXml is less reliable ???
+		//this.onXML = dispatchOnXML;
     }
 
     /**
@@ -72,28 +73,35 @@ class DispatchingXMLSocket extends XMLSocket
      * Cette fonction va etre appelee lorsque des donnees vont etre recues.
      *
      * @param String donnees : Le message recu sous forme de String
-     */
+    */
     private function dispatchOnData(donnees:String)
     {
+		var donneesXML:XML = new XML(donnees); 
         // Envoyer l'evenement indiquant l'arrivee de donnees en String
-        dispatchEvent({target:this, type:"data", donnees:donnees});
+        dispatchEvent({target:this, type:"data", donnees:donneesXML});
+		
+		//trace("onDAta!");
 
         // Appeler la methode onData du XMLSocket parent (sinon la fonction
         // dispatchOnXML ne sera pas appelee)
-        super.onData(donnees);
-    }
+        //super.onData(donnees);
+    } 
 
     /**
      * Cette fonction va etre appelee lorsque des donnees XML vont etre recues.
      *
      * @param XML donneesXML : Le message recu sous forme d'objet XML
-     */
+     
     private function dispatchOnXML(donneesXML:XML)
     {
+		//var my_xml:XML = new XML(donneesXML); 
+
+		
         // Envoyer l'evenement indiquant l'arrivee de donnees en XML
         dispatchEvent({target:this, type:"xml", donnees:donneesXML});
         //super.onXML(donneesXML);
-    }
+		trace("onXML!");
+    }*/
 
     /**
      * Cette fonction va etre appelee lorsque la connexion va etre perdue.
