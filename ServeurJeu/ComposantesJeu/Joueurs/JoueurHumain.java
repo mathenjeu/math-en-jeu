@@ -215,7 +215,7 @@ public class JoueurHumain extends Joueur
 	
 	public void definirCleJoueur(int cle)
 	{
-		intCleJoueur = cle;
+		this.intCleJoueur = cle;
 	}
 
         public String obtenirLangue()
@@ -258,7 +258,20 @@ public class JoueurHumain extends Joueur
 	 * @param role the role to set
 	 */
 	public void setRole(int role) {
-		this.role = role;
+		switch(role){
+		 case 18:
+			this.role = 1;
+		    break;
+		 case 25:
+			this.role = 2;
+		    break;
+		 case 31:
+			this.role = 3;
+		    break;
+		 default :
+		   	this.role = 1;
+		   	break;
+		}		
 	}
 
 	/**
