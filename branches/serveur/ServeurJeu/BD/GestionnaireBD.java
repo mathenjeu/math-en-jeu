@@ -185,8 +185,12 @@ public class GestionnaireBD {
         try {
             synchronized (DB_LOCK) {
                 ResultSet rs = requete.executeQuery(
-                        "SELECT jos_users.id, jos_comprofiler.lastname, jos_comprofiler.firstname, gid, cb_gradelevel, jos_users.username " +
-                        " FROM jos_users, jos_comprofiler WHERE jos_users.id = jos_comprofiler.user_id AND jos_users.username = '" + joueur.obtenirNomUtilisateur() + "';");
+                        "SELECT jos_users.id, jos_comprofiler.lastname, jos_comprofiler.firstname, gid, " +
+                        "jos_comprofiler_field_values.fieldvalueid, jos_users.username " +
+                        "FROM jos_users, jos_comprofiler, jos_comprofiler_field_values " +
+                        "WHERE jos_users.id = jos_comprofiler.user_id " +
+                        "AND jos_comprofiler_field_values.fieldtitle = jos_comprofiler.cb_gradelevel " +
+                        "AND jos_users.username =  '" + joueur.obtenirNomUtilisateur() + "';");
                 
                 if (rs.next()) {
 
@@ -194,7 +198,7 @@ public class GestionnaireBD {
                     String nom = rs.getString("firstname");
                     cle = rs.getInt("id");
                     int role = rs.getInt("gid");
-                    int niveau = rs.getInt("cb_gradelevel");
+                    int niveau = rs.getInt("fieldvalueid");
                     //xxString langue = rs.getString("short_name");
 
                     joueur.definirPrenom(prenom);
@@ -226,10 +230,8 @@ public class GestionnaireBD {
 
         String URLMusique = GestionnaireConfiguration.obtenirInstance().obtenirString("musique.url");
         String strRequeteSQL = "SELECT music_file.filename FROM music_file  WHERE  music_file.level_id = ";
-        // we use levels[0] - because all levels has the same value
-        strRequeteSQL += "(Select jos_comprofiler.cb_gradelevel from jos_comprofiler where id = ";
         strRequeteSQL += player.obtenirCleJoueur();
-        strRequeteSQL += ");";
+        strRequeteSQL += ";";
 
         try {
             synchronized (DB_LOCK) {
