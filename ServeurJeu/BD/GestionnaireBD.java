@@ -186,7 +186,7 @@ public class GestionnaireBD {
             synchronized (DB_LOCK) {
                 ResultSet rs = requete.executeQuery(
                         "SELECT jos_users.id, jos_comprofiler.lastname, jos_comprofiler.firstname, gid, " +
-                        "jos_comprofiler_field_values.fieldvalueid, jos_users.username " +
+                        "jos_comprofiler_field_values.ordering, jos_users.username " +
                         "FROM jos_users, jos_comprofiler, jos_comprofiler_field_values " +
                         "WHERE jos_users.id = jos_comprofiler.user_id " +
                         "AND jos_comprofiler_field_values.fieldtitle = jos_comprofiler.cb_gradelevel " +
@@ -198,7 +198,7 @@ public class GestionnaireBD {
                     String nom = rs.getString("firstname");
                     cle = rs.getInt("id");
                     int role = rs.getInt("gid");
-                    int niveau = rs.getInt("fieldvalueid");
+                    int niveau = rs.getInt("ordering");
                     //xxString langue = rs.getString("short_name");
 
                     joueur.definirPrenom(prenom);
