@@ -3439,10 +3439,12 @@ class GestionnaireCommunication
             {
                 // Ajouter l'objet joueur dans le tableau
                 objEvenement.playersListe.push({nom:lstChildNodes[i].attributes.nom,
-												userRole:lstChildNodes[i].attributes.role,
-												pointage:lstChildNodes[i].attributes.pointage,
+												userRole:Number(lstChildNodes[i].attributes.role),
+												pointage:Number(lstChildNodes[i].attributes.pointage),
 												//clocolor:lstChildNodes[i].attributes.clothesColor,
-												idPersonnage:lstChildNodes[i].attributes.id});
+												idPersonnage:Number(lstChildNodes[i].attributes.id),
+												brainiacState:lstChildNodes[i].attributes.brainiacState,
+												brainiacTime:Number(lstChildNodes[i].attributes.brainiacTime)});
 				trace("GCOM : NOW " + lstChildNodes[i].attributes.nom + " " + lstChildNodes[i].attributes.clothesColor )
             }
 		} else if(noeudCommande.attributes.nom == "Pointage")
@@ -3469,7 +3471,10 @@ class GestionnaireCommunication
 				
 		}else if(noeudCommande.attributes.nom == "Table")
 		{
-			
+		
+		 // switch (objNoeudParametre.attributes.type)
+         // {
+           //         case "musique":
 		    // Declaration d'une reference vers la liste des noeuds
 			var lstNoeudsParametre:Array = noeudCommande.childNodes;
 						
@@ -3483,8 +3488,23 @@ class GestionnaireCommunication
 			objEvenement.gameType = objNoeudParametreGameType.attributes.valeur;
 			
 			var objNoeudParametreMoveStep:XMLNode = lstNoeudsParametre[3];
-			objEvenement.moveVisibility = objNoeudParametreMoveStep.attributes.valeur;
-						
+			objEvenement.moveVisibility = Number(objNoeudParametreMoveStep.attributes.valeur);
+			
+			var objNoeudParametreBrainiacState:XMLNode = lstNoeudsParametre[4];
+			objEvenement.brainiacState = objNoeudParametreBrainiacState.attributes.valeur;
+			
+			var objNoeudParametreBrainiacTime:XMLNode = lstNoeudsParametre[5];
+			objEvenement.brainiacTime = Number(objNoeudParametreBrainiacTime.attributes.valeur);
+
+            var objNoeudParametreBananaState:XMLNode = lstNoeudsParametre[6];
+			objEvenement.bananaState = objNoeudParametreBananaState.attributes.valeur;
+			
+			var objNoeudParametreBananaTime:XMLNode = lstNoeudsParametre[7];
+			objEvenement.bananaTime = Number(objNoeudParametreBananaTime.attributes.valeur);
+			
+			 trace("rejoindre tableX: " +  objNoeudParametreBrainiacState.attributes.valeur);
+	   trace("rejoindre table : " +  objEvenement.brainiacState + " " + objEvenement.brainiacTime + " " + objEvenement.bananaState + " " + objEvenement.bananaTime);
+
 				 		
 		}else if(noeudCommande.attributes.nom == "ListeObjets")
 		{
@@ -3498,7 +3518,7 @@ class GestionnaireCommunication
             for (var i:Number = 0; i <  count; i++)
             {
                 // Ajouter l'objet joueur dans le tableau
-                objEvenement.objectsListe.push({idObject:lstChildNodes[i].attributes.id,
+                objEvenement.objectsListe.push({idObject:Number(lstChildNodes[i].attributes.id),
 												typeObject:lstChildNodes[i].attributes.type});
 				trace("GCOM : NOW " + lstChildNodes[i].attributes.type + " " + lstChildNodes[i].attributes.id )
             }
