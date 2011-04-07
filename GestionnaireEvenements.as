@@ -223,6 +223,8 @@ class GestionnaireEvenements
 		// get the xml for perso's colors
 		this.treatTheColorsXML();
 		
+		this.isOldGame = false;
+		
 		this.winIt = 0;
 		this.maxPlayers = 0;
 		this.allowedTypesMap = new Array("mathEnJeu", "Tournament", "Course");
@@ -252,7 +254,7 @@ class GestionnaireEvenements
 	   colorsSource_xml.load(path + 'colors.xml');
 	   function processTexteSource()
 	   {
-		   trace("colors loaded.......******************");
+		   //trace("colors loaded.......******************");
 	   }
 		  
 	}
@@ -870,6 +872,8 @@ class GestionnaireEvenements
                   this.listeDesPersonnages[i].id = objetEvenement.playersListe[i].idPersonnage;
 			      this.listeDesPersonnages[i].role = objetEvenement.playersListe[i].userRole;
 			      this.listeDesPersonnages[i].pointage = objetEvenement.playersListe[i].pointage;
+				  this.listeDesPersonnages[i].brainiacState = objetEvenement.playersListe[i].brainiacState;
+			      this.listeDesPersonnages[i].brainiacTime = objetEvenement.playersListe[i].brainiacTime;
 				  //this.listeDesPersonnages[i].clocolor = objetEvenement.playersListe[i].clocolor;
 			      this.listeDesPersonnages[i].win = 0;
 				  
@@ -924,12 +928,34 @@ class GestionnaireEvenements
 			break;
 			
 			case "Table":
-						
+			
 			   this.numeroTable = objetEvenement.noTable;
 			   this.maxPlayers = objetEvenement.maxPlayers;
 			   this.typeDeJeu = objetEvenement.gameType;
+			   _level0.loader.contentHolder.planche.zoomer("out", 4);
+			   
+			   var xState:Boolean;
+			   if(objetEvenement.brainiacState == "true") 
+			   {
+				  xState = Boolean(true);
+				  _level0.loader.contentHolder.planche.obtenirPerso().setBrainiac(xState);
+			      _level0.loader.contentHolder.planche.obtenirPerso().getReconnectionBrainiacAnimaton(objetEvenement.brainiacTime);
+				  trace("Dans Brainiac" + xState);
+			   }
+			   
 			   this.setMoveSight(objetEvenement.moveVisibility);
-			   trace("rejoindre table : " +  this.numeroTable + " " + this.maxPlayers + " " + this.moveVisibility);
+			   var yState:Boolean; 
+			   if(objetEvenement.bananaState == "true")
+			   {
+				   yState = Boolean(true);
+				  _level0.loader.contentHolder.planche.obtenirPerso().setBananaTime(0);
+				  _level0.loader.contentHolder.planche.obtenirPerso().setBananaState(true);
+			      this.setBananaTimer(objetEvenement.bananaTime);
+  				  trace("Dans Banana " + yState);
+
+			   }
+               
+			   trace("rejoindre table : " +  objetEvenement.brainiacState + " " + objetEvenement.brainiacTime + " " + objetEvenement.bananaState + " " + objetEvenement.bananaTime + " " + this.maxPlayers + " " + this.moveVisibility);
 			
 			break;
 			
@@ -946,7 +972,7 @@ class GestionnaireEvenements
 			case "Ok":
 			
 			    // newsbox
-		        var messageInfo:String = objetEvenement.nomUtilisateur + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.restartMess; 
+		        var messageInfo:String = "Rejoindre partie!!!";//objetEvenement.nomUtilisateur + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.restartMess; 
 				this.newsChat.addMessage(messageInfo);
 				
 			   //trace("<<<<<<<<<<<<<<<<  feedbackRestartOldGame  finish restart >>>>>>>>>>>>>>>>>>>" + this.numeroTable);
@@ -3242,6 +3268,10 @@ class GestionnaireEvenements
 		var count:Number;
 		var maTete:MovieClip;
 		
+		_level0.loader.contentHolder["att"].removeMovieClip();		 
+		_level0.loader.contentHolder.gotoAndPlay(4);
+
+		
 		count = this.listeDesPersonnages.length;
         for(i = 0; i < count; i++)
         {
@@ -3279,12 +3309,8 @@ class GestionnaireEvenements
 			}
 		}
 		////////////////////////////////////////////////
-		
-		
-		
+			
        
-	    _level0.loader.contentHolder["att"].removeMovieClip();		 
-		_level0.loader.contentHolder.gotoAndPlay(4);
 	    _level0.loader.contentHolder.planche.afficher();
 						
 		//trace("longueur de la liste des noms envoyes par serveur    :" + objetEvenement.positionJoueurs.length);
@@ -3301,7 +3327,16 @@ class GestionnaireEvenements
 					
 					// after we create the perso's
 					_level0.loader.contentHolder.planche.ajouterPersonnage(this.listeDesPersonnages[j].nom, objetEvenement.positionJoueurs[i].x, objetEvenement.positionJoueurs[i].y, this.listeDesPersonnages[j].idPers, idDessin, this.listeDesPersonnages[j].role, this.listeDesPersonnages[j].clocolor);
-		    		//trace("Construction du personnage : " + this.listeDesPersonnages[j].clocolor + " " + objetEvenement.positionJoueurs[i].x + " " + objetEvenement.positionJoueurs[i].y + " idDessin:" + idDessin + " idPers:" + idPers);
+		    		
+					//trace("Construction du personnage : " + this.listeDesPersonnages[j].clocolor + " " + objetEvenement.positionJoueurs[i].x + " " + objetEvenement.positionJoueurs[i].y + " idDessin:" + idDessin + " idPers:" + idPers);
+				    
+					 var xState:Boolean;
+			         if(this.listeDesPersonnages[j].brainiacState == "true") 
+			         {
+				        xState = Boolean(true);
+				        _level0.loader.contentHolder.planche.getPersonnageByName(listeDesPersonnages[j].nom).setBrainiac(xState);
+			            _level0.loader.contentHolder.planche.getPersonnageByName(listeDesPersonnages[j].nom).getReconnectionBrainiacAnimaton(this.listeDesPersonnages[j].brainiacTime);				        
+			         }
 				}
             }
         }
@@ -3720,7 +3755,7 @@ class GestionnaireEvenements
 		_level0.loader.contentHolder["GUI_utiliserObjet"].removeMovieClip();
 		_level0.loader.contentHolder["box_question"].removeMovieClip();
 		_level0.loader.contentHolder.toss.removeMovieClip();
-		_level0.loader.contentHolder["fond_MiniGame"]._y += 400;
+		//_level0.loader.contentHolder["fond_MiniGame"]._y += 400;
 		_level0.loader.contentHolder.brainBox.removeMovieClip();
 		_level0.loader.contentHolder.bananaBox.removeMovieClip();
 		_level0.loader.contentHolder.toolTip.removeMovieClip();
@@ -3812,8 +3847,9 @@ class GestionnaireEvenements
      
     	pt_final = _level0.loader.contentHolder.planche.calculerPositionTourne(objetEvenement.nouvellePosition.x, objetEvenement.nouvellePosition.y);
    
-		trace("juste avant la teleportation nom du perso et param  " + objetEvenement.anciennePosition.x + " " +  objetEvenement.anciennePosition.y + " " + objetEvenement.nouvellePosition.x + " " +  objetEvenement.nouvellePosition.y);
+		//trace("juste avant la teleportation nom du perso et param  " + objetEvenement.anciennePosition.x + " " +  objetEvenement.anciennePosition.y + " " + objetEvenement.nouvellePosition.x + " " +  objetEvenement.nouvellePosition.y);
 		//to cancel after end game virtual players move's
+		
 		if(!endGame){
 			_level0.loader.contentHolder.planche.teleporterPersonnage(objetEvenement.nomUtilisateur, pt_initial.obtenirX(), pt_initial.obtenirY(), pt_final.obtenirX(), pt_final.obtenirY(), objetEvenement.collision);
 	
@@ -3929,7 +3965,7 @@ class GestionnaireEvenements
 								   
 		   }//end else if
 		   
-		   var timerIntervalBanana:Number  = setInterval(this, "waitBanana", 5000, playerUnder);
+		   var timerIntervalBanana:Number  = setInterval(this, "waitBanana", 5000, true);
 		   this.bananaIntervalArray.push(timerIntervalBanana);
 		   
 		   var timerIntervalMessage:Number = setInterval(this,"funcToCallMessage", 6000, playerThat);
@@ -3939,7 +3975,7 @@ class GestionnaireEvenements
 		   
 		}else if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurAffecte != this.nomUtilisateur)
 		{
-		    var timerIntervalBananaAutre:Number = setInterval(this, "waitBananaAutre", 5000, playerUnder);
+			var timerIntervalBananaAutre:Number = setInterval(this, "waitBananaAutre", 5000, playerUnder);
 			this.bananaIntervalArray.push(timerIntervalBananaAutre);
 			
 					
@@ -3947,7 +3983,7 @@ class GestionnaireEvenements
 		
 		if(objetEvenement.objetUtilise == "Banane" && objetEvenement.joueurQuiUtilise != this.nomUtilisateur)
 		{
-			_level0.loader.contentHolder.planche.tossBananaShell(playerThat, playerUnder);//getPersonnageByName(playerThat).tossBanana();
+			_level0.loader.contentHolder.planche.tossBananaShell(playerThat, playerUnder);
 			
 		}
 		//***********  END treat the Banana **************************
@@ -4036,13 +4072,13 @@ class GestionnaireEvenements
 	//*****************************************************************************************
 	// this function is used to put on the Sprite the Timer of the Banana
 	// after the time finished it must disapear
-	function setBananaTimer(playerUnder:String)
+	function setBananaTimer(timeS:Number)
 	{
-		var perso:Personnage = _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder);
+		var perso:Personnage = _level0.loader.contentHolder.planche.obtenirPerso();
 				
 		//first on put on the sprite the box for the timer
 		var banBox:MovieClip = 	_level0.loader.contentHolder.attachMovie("bananaBox", "bananaBox", 7);//_level0.loader.contentHolder.getNextHigesthDepth());
-		_level0.loader.contentHolder.bananaBox._x = 405;
+		_level0.loader.contentHolder.bananaBox._x = 460;
 		//_level0.loader.contentHolder.bananaBox._xscale = 90;
 		_level0.loader.contentHolder.bananaBox._y = 304;
 		
@@ -4072,11 +4108,11 @@ class GestionnaireEvenements
         formatTimer.align = "Center";
         _level0.loader.contentHolder.bananaBox.bananaTime.setNewTextFormat(formatTimer);
 		
-		perso.addBananaTime(BANANA_TIME);
+		perso.addBananaTime(timeS);
 		
 		if(_global.intervalIdBanana != null ) {
 		
-            // trace("clearInterval************************************    " + _global.restedTimeBanana );
+             trace("clearInterval************************************    " + _global.restedTimeBanana );
 			 clearInterval(_global.intervalIdBanana);
         }
 		
@@ -4097,7 +4133,7 @@ class GestionnaireEvenements
 		  
 		   if(_level0.loader.contentHolder.objGestionnaireEvenements.endGame)
 		   {
-			   _level0.loader.contentHolder.planche.obtenirPerso().setBananaTime(0);
+			   playerUnder.setBananaTime(0);
 		   }
 		   var time:Number = playerUnder.getBananaTime(); 
 		   _level0.loader.contentHolder.bananaBox.bananaTime.text = time;
@@ -4105,8 +4141,7 @@ class GestionnaireEvenements
 		   // to remove the timer box
 		   if(time < 1)
 		   {  
-		      _level0.loader.contentHolder.bananaBox.removeMovieClip();
-		     	      
+		      _level0.loader.contentHolder.bananaBox.removeMovieClip();		     	      
 			  _level0.loader.contentHolder.objGestionnaireEvenements.addMoveSight(2);
 			  _level0.loader.contentHolder.planche.setRepostCases(true);
 			  
@@ -4120,30 +4155,31 @@ class GestionnaireEvenements
 	
 	//****************************************************************************
 	// cette fonction attend jusqu'au signal du compteur
-	// et appelle le fonction d'action de la Banane
-    function waitBanana(playerUnder:String):Void
+	// et appelle le fonction d'action de la Banane pour our perso
+    function waitBanana(slipping:Boolean):Void
     {
-        _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).slippingBanana();
+		if(slipping)
+           _level0.loader.contentHolder.planche.obtenirPerso().slippingBanana();
 		
 		// to not put it if game is ended
 		if(!_level0.loader.contentHolder.objGestionnaireEvenements.endGame)
 		{
-		   setBananaTimer(playerUnder);
+		   setBananaTimer(BANANA_TIME);
 		}
 	    clearInterval(_level0.loader.contentHolder.objGestionnaireEvenements.bananaIntervalArray.shift());
-		this.addMoveSight(-2);
+		if(slipping)
+		   this.addMoveSight(-2);
 		_level0.loader.contentHolder.planche.setRepostCases(true);
 						
     }
 	
 	//****************************************************************************
 	// cette fonction attend jusqu'au signal du compteur
-	// et appelle le fonction d'action de la Banane
+	// et appelle le fonction d'action de la Banane pour les adversaires
     function waitBananaAutre(playerUnder:String):Void
     {
-        _level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).slippingBanana();
-	    clearInterval(_level0.loader.contentHolder.objGestionnaireEvenements.bananaIntervalArray.shift());
-				
+        clearInterval(_level0.loader.contentHolder.objGestionnaireEvenements.bananaIntervalArray.shift());
+	    //_level0.loader.contentHolder.planche.getPersonnageByName(playerUnder).slippingBanana();
     }
 	
 	// function to display the message of tossed banana

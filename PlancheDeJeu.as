@@ -986,7 +986,7 @@ class PlancheDeJeu
 					};
 					tableauDesCases[temp][p.obtenirC()].definirCasePossible(brille);
 			
-					_root.objGestionnaireInterface.ajouterBouton(brille, 3);
+					_level0.objGestionnaireInterface.ajouterBouton(brille, 3);
 				
             }
             else
@@ -1108,7 +1108,7 @@ class PlancheDeJeu
 					};
 					this.tableauDesCases[p.obtenirL()][temp].definirCasePossible(brille);
 			
-					_root.objGestionnaireInterface.ajouterBouton(brille, 3);
+					_level0.objGestionnaireInterface.ajouterBouton(brille, 3);
 				
 			}
             else
@@ -1166,7 +1166,7 @@ class PlancheDeJeu
 					};
 					this.tableauDesCases[p.obtenirL()][temp].definirCasePossible(brille);
 			
-					_root.objGestionnaireInterface.ajouterBouton(brille, 3);		
+					_level0.objGestionnaireInterface.ajouterBouton(brille, 3);		
 				
             }
             else
@@ -1192,9 +1192,11 @@ class PlancheDeJeu
 	////////////////////////////////////////////////////////////////////////////////////////////
     function afficherCasesPossiblesBanane(p:Personnage)
     {	  
+	    trace("start afficher cases possibles Banane");
 	    var i:Number;
 		var j:Number;
-		var tempo = _level0.loader.contentHolder.objGestionnaireEvenements.getMoveSight();
+		var tempo:Number = _level0.loader.contentHolder.objGestionnaireEvenements.getMoveSight();
+		trace("tempo !!!!!!!!!!!!!" + tempo);
 		var maxSight:Number = 6;
 		//if( p.getBrainiac())
 		  // maxSight = 7;
@@ -1219,7 +1221,7 @@ class PlancheDeJeu
 						
             if(this.mat[temp][p.obtenirC()] > 0 && !hasHoles)
             {
-				trace("Test L: " + temp + " " + (mat.length - p.obtenirL()-1));
+				//trace("Test L: " + temp + " " + (mat.length - p.obtenirL()-1));
 				switchColorFlashBanana(tableauDesCases[temp][p.obtenirC()]);
 			}
             
@@ -1552,6 +1554,7 @@ class PlancheDeJeu
             }
         }
 	
+	    trace("fin afficher cases poss Banane");
 		//_root.objGestionnaireInterface.deleterCasesSpeciales();   // ????
 		
     }	
@@ -1589,7 +1592,8 @@ class PlancheDeJeu
 		    {
 			    //trace("juste avant de definir la prochaine poisition");
 			    //listeTemporaire[i].definirPosition(p, nouveauL, nouveauC);  // on le met si on veut teleportation, mais probleme avec les collisions...
-			    this.tableauDesCases[ancienL][ancienC].obtenirListeDesPersonnages()[i].definirProchainePosition(p,str);
+			    //this.tableauDesCases[ancienL][ancienC].obtenirListeDesPersonnages()[i].definirProchainePosition(p,str);
+				listeTemporaire[i].definirProchainePosition(p, str);
 			    break;
 		    }
 	    }
@@ -1621,7 +1625,7 @@ class PlancheDeJeu
 	   // phase 2 - banana shell fly to the player that support the action
 	   var intervalId:Number;
 	   var num:Number = getPersonnageByName(nameTo).obtenirNumero();
-	   intervalId = setInterval(attendre, 2900, nameTo, nameBy);	// sert pour attendre la jusqu'a la fin de action de 
+	   intervalId = setInterval(attendre, 3000, nameTo, nameBy);	// sert pour attendre la jusqu'a la fin de action de 
 	   
 	   function attendre(){
 	     
@@ -1640,24 +1644,64 @@ class PlancheDeJeu
 		 
 		 _level0.loader.contentHolder.referenceLayer["shell_mc"  + nameBy + intervalId].swapDepths(_level0.loader.contentHolder.referenceLayer["Personnage" + num]);
 		 
+		 trace("fin attendre?");
 	   }// end attendre
-	  /*	     	   
-	   var intervalId2:Number;
-	   var wait:Number = 0;
-	   intervalId2 = setInterval(bananaShell, 200);	// sert pour attendre la jusqu'a la fin de action de 
-	   function bananaShell(){
-	      	  
-		  if(wait > 35)
-		     _level0.loader.contentHolder.referenceLayer["shell_mc"]._alpha -= 5;
-		  if(wait > 55){
-		     _level0.loader.contentHolder.referenceLayer.shell_mc.removeMovieClip();
-			 clearInterval(intervalId2);
-		  }
-		  wait++;   
-	   } // end bananaShell */
-	   
-	   
+	 trace("fin toss banana shell?");
+	 
+	 var intervalIdToss:Number;
+  	 intervalIdToss = setInterval(tossIt, 5000, nameTo);	// sert pour attendre la jusqu'a la fin de action de 
+     function tossIt(){
+		 clearInterval(intervalIdToss);
+		 _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).slippingBanana();       
+	 } 
+	  	   
 	}// end function
+	
+	// used for Banana action on the game
+	function tossBananaShellToAdver(nameTo:String ):Void
+	{
+	    // phase 1 - remove old shell_mc
+	   //_level0.loader.contentHolder.referenceLayer.shell_mc.removeMovieClip();
+	   // phase 1 - player toss banana
+	   this.perso.tossBanana();
+	   
+	   // phase 2 - banana shell fly to the player that support the action
+	   var intervalId:Number;
+	   var num:Number = getPersonnageByName(nameTo).obtenirNumero();
+	   intervalId = setInterval(attendre, 3000, nameTo);	// sert pour attendre la jusqu'a la fin de action de 
+	   
+	   function attendre(){
+	     
+		 clearInterval(intervalId);
+	     var coorByX:Number = _level0.loader.contentHolder.planche.obtenirPerso().obtenirX() - 10;// - getPersonnageByName(nameBy).obtenirImage()._width;
+	     var coorByY:Number = _level0.loader.contentHolder.planche.obtenirPerso().obtenirY() - _level0.loader.contentHolder.planche.obtenirPerso().obtenirImage()._height;
+	   	   
+	     var coorToX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).obtenirProchainePosition().obtenirX();
+	     var coorToY:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).obtenirProchainePosition().obtenirY()- 15;
+		 		 
+		 _level0.loader.contentHolder.referenceLayer.attachMovie("bananaShell", "shell_mc" + nameTo + intervalId, _level0.loader.contentHolder.referenceLayer.getNextHighestDepth(), {_x:coorByX, _y:coorByY});
+		 
+		 var twMoveX:Tween = new Tween(_level0.loader.contentHolder.referenceLayer["shell_mc"  + nameTo + intervalId], "_x", Strong.easeOut, coorByX, coorToX, 1, true);
+		 var twMoveY:Tween = new Tween(_level0.loader.contentHolder.referenceLayer["shell_mc"  + nameTo + intervalId], "_y", Strong.easeOut, coorByY, coorToY, 1, true);
+		 var twMoveRot:Tween = new Tween(_level0.loader.contentHolder.referenceLayer["shell_mc"  + nameTo + intervalId], "_rotation", Strong.easeOut, 0, 360, 1, true);
+		 
+		 _level0.loader.contentHolder.referenceLayer["shell_mc"  + nameTo + intervalId].swapDepths(_level0.loader.contentHolder.referenceLayer["Personnage" + num]);
+		 
+		 trace("fin attendre?");
+		 // _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).slippingBanana();
+		 
+	   }// end attendre
+	 trace("fin toss banana shell?");
+	 
+     var intervalIdToss:Number;
+  	 intervalIdToss = setInterval(tossIt, 5000, nameTo);	// sert pour attendre la jusqu'a la fin de action de 
+     function tossIt(){
+		 clearInterval(intervalIdToss);
+		 _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).slippingBanana();       
+	 } 
+
+	  	
+  }// end function
 	
 	
         
