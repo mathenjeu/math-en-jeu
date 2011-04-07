@@ -393,7 +393,7 @@ function useBanana(namePlayer:String):Void
   _level0.loader.contentHolder.planche.obtenirPerso().enleverObjet("Banane");	
   _level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(ID, namePlayer);
   //_level0.loader.contentHolder.planche.obtenirPerso().tossBanana();
-  _level0.loader.contentHolder.planche.tossBananaShell(_level0.loader.contentHolder.objGestionnaireEvenements.nomUtilisateur, namePlayer);
+  _level0.loader.contentHolder.planche.tossBananaShellToAdver(namePlayer);
   _level0.loader.contentHolder.toss.removeMovieClip();
 }
 
