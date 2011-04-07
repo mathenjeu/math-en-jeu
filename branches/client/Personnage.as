@@ -678,7 +678,7 @@ class Personnage
 		this.listeSurMagasin = mag;
 		this.minigameLoade = false;
 		this.role = role;
-	    
+		this.boardCentre = false;
 	}// end constr
 	
 	
@@ -686,24 +686,30 @@ class Personnage
 	function deplacePersonnage()
 	{
 		var pourcent:Number;
-		var dx:Number;
-		var dy:Number;
+		var dx:Number = 0;
+		var dy:Number = 0;
 		var reafficher1:Boolean = true;
 		var reafficher2:Boolean = false;
 		
-		var isOurName:Boolean = this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage();
+		var isOurName:Boolean = (this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage());
 		
 		
 		dx = this.prochainePosition.obtenirX() - this.position.obtenirX();  
 		dy = this.prochainePosition.obtenirY() - this.position.obtenirY();
 		
+		//trace("ds deplacePersonnage " + this.prochainePosition.obtenirX() + " " + this.position.obtenirX());
 		//trace("ds deplacePersonnage " + dx + " " + dy);
+
+		//if(isOurName)
+		  //trace("Test sur retour!!! " + boardCentre);
 		
 		if( boardCentre && _level0.loader.contentHolder.planche.getRepostCases() && (isOurName))
 		{
 			_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 			_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 			_level0.loader.contentHolder.planche.setRepostCases(false);
+					 // trace("Test sur retour 1 " + boardCentre);
+
 			return;
 			
 		}
@@ -711,10 +717,14 @@ class Personnage
 		{
 			_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 			//trace("Le test de deplacement!!!!")
+//trace("Test sur retour 2 " + boardCentre);
+
 			return;
 		}
 		else if( boardCentre ) //dx == 0 && dy == 0 && image._currentFrame == 1) 
 		{
+					//  trace("Test sur retour 3 " + boardCentre);
+
 			return;
 		}
 		
@@ -841,7 +851,7 @@ class Personnage
 					   	_level0.loader.contentHolder.planche.enleverObjet(this.l, this.c);
 						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -30000);
 						this.faireCollision = null;
-						getBrainiacAnimaton();
+						getBrainiacAnimaton(BRAINIAC_TIME);
                         
 					break;
 
@@ -857,7 +867,7 @@ class Personnage
 					{
 						this.minigameLoade = true;
 						 _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-						_root.objGestionnaireInterface.effacerBoutons(1);
+						_level0.objGestionnaireInterface.effacerBoutons(1);
 					
 						_level0.loader.contentHolder.minigameToLoad = _level0.loader.contentHolder.url_Minigames[Math.floor(Math.random() * _level0.loader.contentHolder.url_Minigames.length)];
 
@@ -1049,6 +1059,8 @@ class Personnage
 		
 		this.faireCollision = str;
 		this.boardCentre = false;
+		
+		trace("board " + this.boardCentre);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -1080,7 +1092,7 @@ class Personnage
 	//////////////////////////////////////////////////////////////////////////////////////
 	function slippingBanana()
 	{
-		this.image.gotoAndStop("rest");
+		//this.image.gotoAndStop("rest");
 		this.image.gotoAndPlay("slipping");
 		
 		 // in this 3 lines we transfer player from Brainiac state to Banana state
@@ -1096,8 +1108,8 @@ class Personnage
 		this.image.gotoAndStop("rest");
 	}
 	
-	// used to put the Braniac animation on the player  for the 60 sec.
-	function getBrainiacAnimaton()
+	// used to put the Braniac animation on the player  for the specified time
+	function getBrainiacAnimaton(brainiacTime:Number)
 	{		
 	   var playerUnder:String = this.nom;
 	   // to color our perso
@@ -1156,11 +1168,77 @@ class Personnage
 		   
 	   }
 	   
-	   this.brainiacRestedTime += BRAINIAC_TIME;
+	   this.brainiacRestedTime += brainiacTime;
 	   
 	   _level0.loader.contentHolder.planche.setRepostCases(true);
 	
 	} // end of getBraniacAnimation
+	
+	// used to put the Braniac animation on the player  for the specified time
+	function getReconnectionBrainiacAnimaton(brainiacTime:Number)
+	{		
+	   var playerUnder:String = this.nom;
+	   // to color our perso
+	   
+	   // to set off Banana effects on the player
+	   this.cancelBanana();
+	   
+	   var filterC:ColorMatrixFilter = this.colorFilter;
+						
+	   if(this.brainiacRestedTime == 0)
+	   {
+	      //******************************** new one *************
+		  // to load the perso .. use ClipLoader to know the moment of complet load
+		  var myLoader:MovieClipLoader = new MovieClipLoader();
+	  	
+		  if(this.orient == "right")
+		  {
+				image._xscale = Math.abs(image._xscale);
+			    image.dtNom._xscale = Math.abs(image._xscale);
+			    image.dtNom._x = - 42;
+				this.orient == "left";
+				
+		  } 
+		  var nameX:String = this.nom;
+		  var orientDir:String = this.orient;
+		  var mclListener:Object = new Object();
+          mclListener.onLoadComplete = function(target_mc:MovieClip) {
+            /*
+			trace("orient ::: " + orientDir);
+			if(orientDir == "Est")
+			{
+				target_mc._xscale = - Math.abs(target_mc._xscale);
+			    target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
+			    target_mc.dtNom._x = 42;
+			}*/
+			//target_mc.clothesCol = col;
+			target_mc.filterC = filterC; 
+			target_mc.nom = nameX;
+			target_mc.gotoAndPlay("bored");
+			
+			
+          };
+		  myLoader.addListener(mclListener);
+
+          myLoader.loadClip("Perso/perso" + this.idClip + "brainiac.swf", image); 
+		  
+		
+		 
+		  if(_level0.loader.contentHolder.objGestionnaireEvenements.obtenirNomUtilisateur() == playerUnder)
+		     _level0.loader.contentHolder.objGestionnaireEvenements.setBrainiacTimer(playerUnder);
+			 
+		  endOnBrainiac();
+		  
+	   }else if(this.brainiacRestedTime > 0)
+	   {
+		   
+	   }
+	   
+	   this.brainiacRestedTime += brainiacTime;
+	   
+	   _level0.loader.contentHolder.planche.setRepostCases(true);
+	
+	} // end of getReconnectionBraniacAnimation
 	
 	function endOnBrainiac()
 	{
