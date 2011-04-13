@@ -1,22 +1,26 @@
-﻿import flash.events.Event;
+﻿package{
+import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.net.URLLoader;
 import flash.net.URLRequest;
 
 public class QuestionsInfo extends EventDispatcher {
+	
 
    private static const QUESTIONS:String = "questions.xml";
    private var questionsArray:Array;
+   
+   //public function QuestionsInfo(){};
    
    private function onXMLLoaded(event:Event):void {
       questionsArray = [];
 	  var loader:URLLoader = event.target as URLLoader;
 	  var xml:XML = new XML(loader.data);
 	  var questions:XMLList = xml.child("question");
-	  var questionsNumb:int = questions.length();
+	  var questionsNumb:uint = questions.length();
 	  var question:XML;
 	  
-	  for(var i:int = 0; i < questionsNum; i++)
+	  for(var i:uint = 0; i < questionsNumb; i++)
 	  {
 		question = questions[i] as XML;
 		questionsArray.push( new Question(question.child("name").toString(),
@@ -30,9 +34,23 @@ public class QuestionsInfo extends EventDispatcher {
    public function loadQuestionsInfo():void {
 	  
 	  var qLoader:URLLoader = new URLLoader();
-	  loader.addEventListener(Event.COMPLETE, onXMLLoaded);
-	  loader.load(new URLRequest(QUESTIONS));
+	  qLoader.addEventListener(Event.COMPLETE, onXMLLoaded);
+	  qLoader.load(new URLRequest(QUESTIONS));
+   }
+   
+   public function getNames():Array {
+      var qArray:Array = [];
+	  var questionsNumb:uint = questionsArray.length;
+	  var question:Question;
+	  for(var i:uint = 0; i < questionsNumb; i++)
+	  {
+		  question = questionsArray[i] as Question;
+		  var link:String = question.getQuestionName();
+		  qArray.push({label:link, data:link});
+		  //trace(link);
+	  }
+	  return qArray;
    }
 	
-	
+}
 }

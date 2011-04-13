@@ -1,11 +1,12 @@
-﻿public class Question {
+﻿package{
+public class Question {
 
    private var qName:String;
    private var qLangue:String;
    
-   public function Question(name:String, langue:String)
+   public function Question(nameS:String, langue:String)
    {
-	   qName = name;
+	   qName = nameS;
 	   qLangue = langue;
    }
 	
@@ -17,4 +18,5 @@
 	   return qLangue;   
    }
 	
+}
 }
