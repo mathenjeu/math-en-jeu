@@ -2,9 +2,37 @@
 import flash.net.URLRequest;
 import fl.controls.Button;
 import fl.containers.ScrollPane;
+import fl.controls.List;
+import fl.data.DataProvider;
 
 var langue:String;
-var quLocation:String = "Q-71-fr.swf"; 
+var questionsInfo:QuestionsInfo;
+var quLocation:String;
+
+loadQuestion_btn.enabled = false;
+questionsList.addEventListener(Event.CHANGE, onQuestionSelected);
+function loadQuestionsInfo():void {
+	questionsInfo = new QuestionsInfo();
+	questionsInfo.addEventListener(Event.COMPLETE, onQuestionsLoaded);
+	questionsInfo.loadQuestionsInfo();
+}
+
+function onQuestionsLoaded(event:Event):void {
+  questionsInfo.removeEventListener(Event.COMPLETE, onQuestionsLoaded);
+  //var qd:Array = 
+  questionsList.dataProvider = new DataProvider(questionsInfo.getNames());
+}
+
+function onQuestionSelected(event:Event):void {
+   	loadQuestion_btn.enabled = true;
+	quLocation = event.target.selectedItem.data;
+}
+
+
+// load questions from xml
+loadQuestionsInfo();
+
+ 
 
 //questionBox.source = "http://dev2.mathamaze.ca/questions5/Q-2071-en.swf";
 //questionBox.source = quLocation;
