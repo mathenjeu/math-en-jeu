@@ -32,6 +32,8 @@ function setInterface(lang:String):void {
 	   previousBtn.label = "Précédent";
        nextBtn.label = "Suivant";
        interfaceL.text = "Langue de l'interface";
+	   previousBtn2.label = "Précédent";
+       nextBtn2.label = "Suivant";
        //questionNr.text = "Question Nr";
 	}
 	else
@@ -39,6 +41,8 @@ function setInterface(lang:String):void {
 	   previousBtn.label = "Previous";
        nextBtn.label = "Next";
        interfaceL.text = "Interface Language";
+	   previousBtn2.label = "Previous";
+       nextBtn2.label = "Next";
        //questionNr.text = "Question Nr";
 	}
 
@@ -112,6 +116,8 @@ function clickHandler(event:MouseEvent):void {
 
 
 previousBtn.addEventListener(MouseEvent.CLICK, previousHandler);
+previousBtn2.addEventListener(MouseEvent.CLICK, previousHandler);
+
 
 // used to obtein the next or previous name of question
 function getNext(questionName:String, forward:Boolean, retro:Boolean):String {
@@ -142,6 +148,8 @@ function previousHandler(event:MouseEvent):void {
 
 
 nextBtn.addEventListener(MouseEvent.CLICK, nextHandler);
+nextBtn2.addEventListener(MouseEvent.CLICK, nextHandler);
+
 
 function nextHandler(event:MouseEvent):void {
 	questionBox.load(new URLRequest(getNext(quLocation, true, false)));
