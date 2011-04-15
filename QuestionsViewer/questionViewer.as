@@ -26,6 +26,7 @@ function loaderComplete(myEvent:Event)
 
 this.loaderInfo.addEventListener(Event.COMPLETE, loaderComplete);
 
+// change the labels
 function setInterface(lang:String):void {
 	if(lang == "fr")
 	{
@@ -47,6 +48,7 @@ function setInterface(lang:String):void {
 	}
 
 }
+
 // to change color of RadioButtons label
 StyleManager.setComponentStyle(RadioButton, "textFormat", new TextFormat("Arial Black", 12, 0x660000));
 
@@ -57,6 +59,8 @@ function setInterfaceFR(event:Event):void { setInterface("fr");}
 function setInterfaceEN(event:Event):void { setInterface("en");}
 
 questionsList.addEventListener(Event.CHANGE, onQuestionSelected);
+//questionsList.addEventListener(Event.SELECT, onQuestionSelected);
+
 
 function onQuestionSelected(event:Event):void {
 	quLocation = event.target.selectedItem.data;
@@ -73,6 +77,12 @@ function loadQuestionsInfo():void {
 function onQuestionsLoaded(event:Event):void {
   questionsInfo.removeEventListener(Event.COMPLETE, onQuestionsLoaded);
   questionsList.dataProvider = new DataProvider(questionsInfo.getNames());
+  
+  questionsList.selectedIndex = 0;
+  quLocation = questionsList.selectedItem.data;
+  questionBox.load(new URLRequest(quLocation));
+  retroBox.load(new URLRequest(getRetro(quLocation)));
+  
 }
 
 // load questions from xml
@@ -94,11 +104,8 @@ function getRetro(questionName:String):String {
    // Decompose the url to obtein the num of the question
    var parties_url:Array = questionName.split("/");
    var parties_nom:Array = parties_url[parties_url.length-1].split("-");
-   //parties_nom[1] += "-F";
    var question:String = questionName.replace(parties_nom[1], parties_nom[1] + "-F");
-   //var partie:String = "";
-   //for each (partie in parties_nom)
-      //question = question + partie + "-";
+  
    questionNumber_txt.text = parties_nom[1];
    return question;
 }
@@ -120,29 +127,42 @@ previousBtn2.addEventListener(MouseEvent.CLICK, previousHandler);
 
 
 // used to obtein the next or previous name of question
-function getNext(questionName:String, forward:Boolean, retro:Boolean):String {
+function getNext(forward:Boolean):void {
+   var nmB:uint = questionsList.selectedIndex;
 
+   if(forward)
+   {
+	   if(nmB < (questionsList.length - 1))
+      	   nmB += 1;
+       questionsList.selectedIndex = nmB; //parties_nombre++;
+   }else
+   {
+	   if(nmB > 0)
+	      nmB -= 1;
+       questionsList.selectedIndex = nmB; //parties_nombre--;
+   }
+   
+   quLocation = questionsList.selectedItem.data;
    // Decompose the url to obtein the num of the question
-   var parties_url:Array = questionName.split("/");
+   var parties_url:Array = quLocation.split("/");
    var parties_nom:Array = parties_url[parties_url.length-1].split("-");
    var parties_nombre:int = int(parties_nom[1]);
-   if(forward)
-      parties_nombre++;
-   else
-      parties_nombre--;
+  
    questionNumber_txt.text = String(parties_nombre);
-   var question:String = "";
-   if(retro)
-      question = questionName.replace(parties_nom[1], parties_nombre + "-F");
-   else
-      question = questionName.replace(parties_nom[1], parties_nombre + "");   
-   return question;
+   
+   var quRetro:String = quLocation.replace(parties_nom[1], parties_nombre + "-F");
+   
+   questionBox.load(new URLRequest(quLocation));
+   retroBox.load(new URLRequest(quRetro));
+
 }
 
 function previousHandler(event:MouseEvent):void {
-	questionBox.load(new URLRequest(getNext(quLocation, false, false)));
-	retroBox.load(new URLRequest(getNext(quLocation, false, true)));
-    quLocation = getNext(quLocation, false, false);
+	//questionBox.load(new URLRequest(getNext(quLocation, false, false)));
+	//retroBox.load(new URLRequest(getNext(quLocation, false, true)));
+    //quLocation = getNext(quLocation, false, false);
+	
+	getNext(false);
 
 }
 
@@ -152,8 +172,9 @@ nextBtn2.addEventListener(MouseEvent.CLICK, nextHandler);
 
 
 function nextHandler(event:MouseEvent):void {
-	questionBox.load(new URLRequest(getNext(quLocation, true, false)));
-	retroBox.load(new URLRequest(getNext(quLocation, true, true)));
-    quLocation = getNext(quLocation, true, false);
+	//questionBox.load(new URLRequest(getNext(quLocation, true, false)));
+	//retroBox.load(new URLRequest(getNext(quLocation, true, true)));
+    //quLocation = getNext(quLocation, true, false);
+	getNext(true);
 
 }
