@@ -2700,14 +2700,15 @@ class GestionnaireEvenements
     	trace("debut de evenementDeconnexionPhysique  GestEven ");
 		var errorDeconnexion:MovieClip;
 		
-		errorDeconnexion = _level0.loader.contentHolder.attachMovie("GUI_erreur", "deconnexion", 9999);//, {x: 20, y: 20});
-		errorDeconnexion.linkGUI_erreur._visible = false;
-		errorDeconnexion.btn_ok._visible = false;
+		if(!this.endGame){
+
+		   errorDeconnexion = _level0.loader.contentHolder.attachMovie("GUI_erreur", "deconnexion", 9999);//, {x: 20, y: 20});
+		   errorDeconnexion.linkGUI_erreur._visible = false;
+		   errorDeconnexion.btn_ok._visible = false;
 			
-		errorDeconnexion.textGUI_erreur.text = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIerrorConnection;
-		
-		objetEvenement = null;
-    	trace("fin de evenementDeconnexionPhysique");
+		   errorDeconnexion.textGUI_erreur.text = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.GUIerrorConnection;
+		}
+		trace("fin de evenementDeconnexionPhysique");
     	trace("*********************************************\n");
     }
 	
