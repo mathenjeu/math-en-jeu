@@ -55,6 +55,8 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
   private String terminateLine = "";     //This variable is used so that message starting with '\r' can overwrite the last line in the text area
   private SmacOptionDialog smacOptionDialog; //A dialog that handles all interaction with the user when exporting files to the DB.
   
+  private final XMLWriter questionsWriter;
+  
   //Main Tab
   private JRadioButton parseRadioButton;
   private JRadioButton generateRadioButton;
@@ -114,6 +116,8 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
     this.addWindowListener(this);
     smacOptionDialog = new SmacOptionDialog(); //used for interaction with the user when exporting
     this.setVisible(true); //here we go, here we go!
+    
+    this.questionsWriter = new XMLWriter(this);
   }
 
   public void init()
@@ -730,6 +734,16 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
     if (!exportToDB)
     {
       outputMessage("Generating SWF for all questions\n");
+      
+      File file = new File(flashFolderName + "questions.xml");
+      if (!file.exists())
+      {      	 
+         // init the xml doc for the questions list to create
+         this.questionsWriter.initXMLDoc();
+      }else{
+    	 this.questionsWriter.getOldXml(flashFolderName); 
+      }
+      
       try
       {
         LatexToMeJ ltmej = new LatexToMeJ(DB_INFO, TEX2SWF_INFO, this, alwaysUseFirstUser, overwriteFlashFiles);
@@ -741,7 +755,7 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
         }
         catch(Exception e)
         {
-          outputMessage(e.getMessage()+"\n");
+          outputMessage(e.getMessage()+" ...exception to read latextomej.ini \n");
         }
         int qid = 1;
         Collection<Map<SmacParser.Tag,String>> allQuestions = parser.allParsedQuestions();
@@ -752,14 +766,27 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
           try
           {
             int language_id = Integer.parseInt(config.getProperty("language_id."+q.get(SmacParser.Tag.Language)));
-            String qidHash = Integer.toHexString(qid);
+            String qidHash =  Integer.toHexString(qid + 999999);//((Integer)qid).hashCode();//
             String question_flash_file_prefix = "Q-" + qidHash + "-" + LatexToMeJ.shortLanguage(language_id);
             String feedback_flash_file_prefix = "Q-" + qidHash + "-F-"+LatexToMeJ.shortLanguage(language_id);
+            
+            //Check if a flash movie with the same name already exists.
+            File flashFile = new File(flashFolderName+question_flash_file_prefix+".swf");
+            boolean writeXml = true;
+            
+            // if movie existe check if the question is in list
+            if(flashFile.exists())
+            	writeXml = this.questionsWriter.verifyQuestion(qid); 
+            
             ltmej.createFlashFiles(qid++, language_id, question_flash_file_prefix, feedback_flash_file_prefix, q);
+            
+            // Process the xml
+            if(writeXml)
+               this.questionsWriter.addQuestions(question_flash_file_prefix, qid, LatexToMeJ.shortLanguage(language_id));
           }
           catch (Exception e)
           {
-            outputMessage(e.getMessage() + "\n");
+            outputMessage(e.getMessage() + " ...error in proccesing question! \n");
           }
         }
       }
@@ -771,6 +798,8 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
         outputMessage("---------------\n");
         outputMessage(e.getMessage() + "\n");
       }
+      
+      this.questionsWriter.writeXmlFile(flashFolderName);
       outputMessage("\nDone\n");
       return;
     }

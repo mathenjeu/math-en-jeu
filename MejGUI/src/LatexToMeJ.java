@@ -16,9 +16,26 @@
 //           0.3  * Fix parser bug when comments appear after the last %End tag.
 //           0.2  * Fix parser bug that did not require last %End tag.
 //                * Made a lookup table of allowable subjects->categories
-import java.io.*;
-import java.sql.*;
-import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 public class LatexToMeJ implements SmacUI
@@ -70,6 +87,8 @@ public class LatexToMeJ implements SmacUI
   private final String tex2swfTmpFolderName;
   private final String tex2swfBaseDir;
   
+  private final XMLWriter questionsWriter;
+  
   public LatexToMeJ() throws Exception
   {
     this(null, new String[]{"./", "tmp/", "flash/", "tmp/"}, null, false, false);
@@ -91,6 +110,8 @@ public class LatexToMeJ implements SmacUI
     tex2swfTmpFolderName = tex2swfData[1];
     flashFolderName = tex2swfData[2];
     tex2swfBaseDir = tex2swfData[3];
+    
+    questionsWriter = new XMLWriter(ui);
   }
 
   private String getProperty(String name) throws Exception
@@ -550,6 +571,8 @@ public class LatexToMeJ implements SmacUI
     ui.outputMessage("INFO: Finishing to add new flash question...\n");
 
   }
+  
+  
   private void getQuestionsFromDB(String sqlSelectQuery)
   {
     Connection conn = null;
@@ -789,6 +812,17 @@ public class LatexToMeJ implements SmacUI
     //As we go through the questions we build a set of confirmed users, this way we often avoid looking into the set of all DB users (which can be very large)
     TreeMap<String,Integer> confirmedUsers = new TreeMap<String, Integer>();
 
+    // init the xml writer
+    File file = new File(flashFolderName + "questions.xml");
+    if (!file.exists())
+    {  
+  	  // msg = "The input files folder you selected does not exists";
+       // init the xml doc for the questions list to create
+       this.questionsWriter.initXMLDoc();
+    }else{
+  	 this.questionsWriter.getOldXml(flashFolderName); 
+    }
+    
     int num=1;
     for (Map<SmacParser.Tag, String> q : allQuestions)
     {
@@ -892,23 +926,38 @@ public class LatexToMeJ implements SmacUI
           executeUpdate(pstmtInsertQuestionWithId, "An SQL error occured when trying to add a question to the DB.");
           
         }
-
+        
+        
         //Create the flash files for the question
         //Integer.toHexString(question_id);
-        String questionHash =  Integer.toHexString(question_id);
+        String questionHash = Integer.toHexString(question_id); //((Integer)question_id).hashCode();// 
         String question_flash_file_prefix = "Q-" + questionHash + "-" + shortLanguage(language_id);
         String feedback_flash_file_prefix = "Q-" + questionHash + "-F-" + shortLanguage(language_id);
+        
+        ////////////////
+      //Check if a flash movie with the same name already exists.
+        File flashFile = new File(flashFolderName + question_flash_file_prefix + ".swf");
+        boolean writeXml = true;
+        
+        // if movie existe check if the question is in list
+        if(flashFile.exists())
+        	writeXml = this.questionsWriter.verifyQuestion(question_id); 
+        ///////////////
         
         ui.outputMessage("WARNING: flash files: " + question_flash_file_prefix + "\n");
 
         try
         {
           createFlashFiles(question_id, language_id, question_flash_file_prefix, feedback_flash_file_prefix, q);
+          //this.questionsWriter.addQuestions(question_flash_file_prefix, question_id, shortLanguage(language_id));
+          // Process the xml
+          if(writeXml)
+             this.questionsWriter.addQuestions(question_flash_file_prefix, question_id, LatexToMeJ.shortLanguage(language_id));
         }
         catch (FlashException e)
         {
           ui.outputMessage(e.getMessage()+"\n");
-          File flashFile = new File(flashFolderName+question_flash_file_prefix+".swf");
+          //File flashFile = new File(flashFolderName+question_flash_file_prefix+".swf");
           if (!flashFile.exists()) question_flash_file_prefix="echec";
           flashFile = new File(flashFolderName+feedback_flash_file_prefix+".swf");
           if (!flashFile.exists()) feedback_flash_file_prefix="echec";
@@ -1058,6 +1107,10 @@ public class LatexToMeJ implements SmacUI
         break;
       }
     }
+    
+    // write the xml with list of questions in flash folder
+    this.questionsWriter.writeXmlFile(flashFolderName);
+    // create the zip of flash files???
   }
   
   //Returns the id of the option selected by the user, possible return value are:
