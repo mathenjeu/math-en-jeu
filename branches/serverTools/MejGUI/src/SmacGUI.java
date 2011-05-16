@@ -17,6 +17,7 @@
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.security.MessageDigest;
 import java.util.*;
 import java.io.*;
 
@@ -763,10 +764,28 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
         for (Map<SmacParser.Tag,String> q : allQuestions)
         {
           outputMessage("\rProcessing question " + qid + " of " + numQuestions);
+          
+          String qidHash = "";
           try
           {
             int language_id = Integer.parseInt(config.getProperty("language_id."+q.get(SmacParser.Tag.Language)));
-            String qidHash =  Integer.toHexString(qid + 999999);//((Integer)qid).hashCode();//
+            //String qidHash = ((Integer)qid).hashCode();//Integer.toHexString(qid + 999999);
+            
+            MessageDigest encoder = MessageDigest.getInstance("SHA-256");
+            
+            String key = config.getProperty("encodingKey");
+            
+            byte [] digest = encoder.digest((key + qid).getBytes("UTF-8"));
+            StringBuffer encodingBuffer = new StringBuffer();
+            for (int i = 0; i < digest.length; i++) {
+             encodingBuffer.append(Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1));
+            }
+
+            qidHash = encodingBuffer.toString();
+
+            outputMessage("\rquestion hash " + qidHash);
+
+            
             String question_flash_file_prefix = "Q-" + qidHash + "-" + LatexToMeJ.shortLanguage(language_id);
             String feedback_flash_file_prefix = "Q-" + qidHash + "-F-"+LatexToMeJ.shortLanguage(language_id);
             
