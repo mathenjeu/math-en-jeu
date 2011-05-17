@@ -14,11 +14,11 @@
     crystallLabel = "CRYSTAL BALL"
     stepsTxt = "Here are the steps to follow in order to start a game:"
     
-    brainiacTxt = "Brainiac is an instantaneous object, meaning that you don't accumulate it in your inventory but use it as soon as you pick it up. It's kind of the opposite of the banana in the sense that it makes you momentarily better. For 60 seconds starting right when you pick it up the questions asked to you are easier and you get an extra yellow square. Brainiac cancels the banana."
-    bananaTxt = "  The banana allows you to play a wicked trick on another player! When you throw it to an opponent, you make this opponent momentarily less good. Indeed, for the next 90 seconds after a banana toss, the questions asked to your opponent will be more difficult and (s)he will loose 2 yellow squares. The banana also cancels your opponent's brainiac!"
-    bookTxt = "  The book eliminates an answer choice for you on a multiple choice question."
-    crystallTxt = "  If you feel unable to answer a question, you may use the crystal ball. The computer will then give you a new and easier question."
-    shopTxt = "  It is here that you can spend your coins!"
+    brainiacTxt = "Brainiac power occurs instantaneously.  For 60 seconds,  the questions asked to you will be easier and you'll  recieve a bonus yellow square. Brainiac cancels the banana."
+    bananaTxt = "Want to slow your opponents down?  Throw a banana at them! Acquiring a banana means that at anytime you can toss it at any player on the board and for the next 90 seconds, (s)he will receive more difficult questions and be forced to lose 2 yellow squares. The banana also cancels your opponent's brainiac!"
+    bookTxt = " The book makes things easier for you by eliminating one multiple choice answer. "
+    crystallTxt = "Stumped on a question? Using the crystal ball will give you a fresh, easier question to answer."
+    shopTxt = "  Here is where you can spend your coins!"
     coinTxt = "  The coins you pick up on your way allow you to buy objects."
 
  		menuAide = "Help menu"
@@ -33,28 +33,28 @@
 •  Choose a room to play in. For example, you can choose the Newton room. Click on the room’s name and then click on Continue.
 •  If there is a table open and you want to play with these people, click on this table. Then click on Continue. Otherwise, click on “Create a new table” and choose how many minutes you want to play.
 •  Choose you character. Click on Continue.
-•  Start the game or wait to be start."
+•  Start the game or wait for one to start."
 		  elementsJeuListe = "Game"
 			elementsJeuTitre = "2. Elements of the game"
-			elementsJeuTexte = "•  You character can move in four directions. To the front, to the back, to the left, and to the right the same line. The accessible cells appear in yellow.
+			elementsJeuTexte = "•  You character can move in four directions. Front, back, left, right and only along the same line. The accessible cells appear in yellow.
 •  Your character can move between one and six cells at once. The bigger the displacement, the harder the question, relative to the academic level on your registration.
-•  The number of points a question is worth depends on the length of the displacement. A one cell displacement is worth three point, a two cells displacement is worth five points, and so on.
-•  The cells with a question mark bring you to a game if the question is answered correctly. The points won in that game will be added to your score.
+•  The number of points a question is worth depends on the length of the displacement. A one cell displacement is worth three points, a two cell displacement is worth five points, and so on.
+•  The cells with a question mark bring you to a mini-game if the question is answered correctly. The points won in that game will be added to your score.
 •  The winner is the player with the most points."
 			
 			objetsListe = "Objects"
 			objetsTitre = "3. The objects"
 			objetsTexte = "The objects you can buy or find are: 
 The banana --- The banana allows you to play a wicked trick on another player!
-The Brainiac --- Brainiac makes you temporarily more intelligent.
-The book --- The book eliminates an answer choice for you on a multiple choice question. The number of choices then decreases from four to three.     
-The crystal ball --- If you feel unable to answer a question, you may use the crystal ball. The computer will then give you a new question."
+The Brainiac --- Brainiac makes you temporarily smarter.
+The book --- The book eliminates one  multiple choice answer for you, decreasing the options from four to three.     
+The crystal ball --- Stumped on a question? Using the crystal ball will give you a fresh, easier question to answer."
 						
 			casesSpecialesListe = "   Special cells"
 			casesSpecialesTitre = "4. The special cells"
 			casesSpecialesTexte = "There are 3 special cells in the game:   
 The coins --- The coins you pick up on your way allow you to buy objects (they cost one coin each).  
-The shops --- It is here that you can spend your coins!  
+The shops --- Here is where  you can spend your coins!  
 Cell ? --- Something special happens when you step on this cell..."
 			
 			optionsListe = "Options"
