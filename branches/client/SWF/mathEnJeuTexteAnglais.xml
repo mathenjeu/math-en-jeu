@@ -1,4 +1,4 @@
-
+﻿
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
 	Messagerie = ""
@@ -143,7 +143,7 @@
 	  descAlert = "Please enter a short description"
 	  dateBeginAlert = "Opening date is invalid."
 	  dateEndAlert = "Closing date is invalid."
-	  passAlert = "Password protecting your room ensure that only your pupils can the access it. Accordingly the report will contain only their game results."
+	  passAlert = "Password protecting your room ensure that only your pupils can access it. Accordingly the report will contain only their game results."
 	  
 	  buttonNew = "New Game"
 	  buttonOld = "Restart"
@@ -220,7 +220,7 @@ join and the game mode you'd like to play"
 			3 = "Race"
 			
 			selectPlayerText = "PLAYER SELECT"
-			selectPlayerInfo = "Select a player fron our colorful crew"
+			selectPlayerInfo = "Select a player from our colourful crew"
 
 			choixPerso = "Choose your character."
 			inconnu = "Unknown"
