@@ -30,6 +30,7 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
   private Thread myThread;             //The thread used to perform the computationally expensive parsing/exporting operations.
   private boolean generateSWF;         //Whether to generate SWF
   private boolean exportToDB;          //Means the application is parsing but won't export to DB
+  private boolean createZip;           //Do or not the zip file with questions swf's
   
   //Global variables used to store GUI state at begining of computation
   private String charset;              //charset used to encode input .tex files
@@ -46,6 +47,7 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
   private String flashFolderName;      //The name of the folder in which to store the .swf files
   private String tex2swfFolderName;    //The name of the folder in which to find the 'tex2swf.sh' script
   private String tex2swfTmpFolderName; //The name of the tempory folder required by the 'tex2swf.sh' script
+  private String zipFilename;          //The name of the file zip to create by flash folder with questions swf's   
   private boolean alwaysUseFirstUser;  //When exporting questions to DB, always use the first match when the DB looks for creators.
   private boolean overwriteFlashFiles; //When true flash files in flashFolderName are overwritten if they already exits, when false the Flash movie creation is skipped for the offending file.
   private boolean overwriteDBEntries;  //When true export to DB overwrites questions already in DB, when false question already in DB are skipped.
@@ -83,12 +85,14 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
   private JTextField flashFolderTextField;
   private JTextField tex2swfFolderTextField;
   private JTextField tex2swfTmpTextField;
+  private JTextField zipFilenameTextField;
   private JButton flashFolderBrowseButton;
   private JButton tex2swfFolderBrowseButton;
   private JButton tex2swfTmpBrowseButton;
   private JCheckBox firstUserCheckBox;
   private JCheckBox overwriteFlashFilesCheckBox;
   private JCheckBox overwriteDBEntriesCheckBox;
+  private JCheckBox createZipCheckBox;
   
   //DB Tab
   private JPanel dbParams;
@@ -137,6 +141,7 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
     goodPatternString = config.getProperty("goodPatternString").trim();
     badPatternString = config.getProperty("badPatternString").trim();
     flashFolderName = config.getProperty("flash_export_dir").trim();
+    zipFilename = config.getProperty("zip_export_name").trim();
     tex2swfFolderName = config.getProperty("tex2swf_script_dir").trim();
     tex2swfTmpFolderName = config.getProperty("tex2swf_tmp_dir").trim();
     recursionDepth = config.getProperty("recursive_search").trim().toUpperCase().equals("Y")?Integer.MAX_VALUE:1;
@@ -298,6 +303,7 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
     flashFolderTextField.setMinimumSize(flashFolderTextField.getPreferredSize());
     tex2swfFolderTextField = new JTextField(tex2swfFolderName, 40);
     tex2swfTmpTextField = new JTextField(tex2swfTmpFolderName, 40);
+    zipFilenameTextField = new JTextField(zipFilename, 40);
     flashFolderBrowseButton = new JButton("Browse...");
     flashFolderBrowseButton.addActionListener(this);
     tex2swfFolderBrowseButton = new JButton("Browse...");
@@ -315,22 +321,29 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
     overwriteDBEntriesCheckBox.setToolTipText("<html>When checked, exporting to DB overwrites questions already present.<br>" +
                                                "When unchecked, questions already in the DB are skipped.</html>");
     
+    createZipCheckBox = new JCheckBox("Create Questions Zip", true);
+    createZipCheckBox.setToolTipText("<html>When checked, create zip file with directory of questions swf's.</html>");
+    
     JLabel flashFolderLabel = new JLabel("Flash folder");
     flashFolderLabel.setToolTipText("Where to store the .swf file produced by tex2swf. Empty means {current directory}");
     JLabel tex2swfFolderLabel = new JLabel("tex2swf folder");
     tex2swfFolderLabel.setToolTipText("The location of the tex2swf script. Empty means {current directory}");
     JLabel tex2swfTmpLabel = new JLabel("tex2swf tmp folder");
     tex2swfTmpLabel.setToolTipText("The folder where tex2swf creates AND deletes all intermediate files. Empty means {current directory}");
-    
-    Component c[][] = new Component[3][3];
+    JLabel zipFilenameLabel = new JLabel("zip file name");
+    zipFilenameLabel.setToolTipText("The name of zip file created swf2zip.sh and that contain all questions swf files and questions.xml file from flash directory.");
+    JLabel nullLabel = new JLabel("");
+        
+    Component c[][] = new Component[4][3];
     c[0][0] = flashFolderLabel;   c[0][1] = flashFolderTextField;    c[0][2] = flashFolderBrowseButton;
     c[1][0] = tex2swfFolderLabel; c[1][1] = tex2swfFolderTextField;  c[1][2] = tex2swfFolderBrowseButton;
     c[2][0] = tex2swfTmpLabel;    c[2][1] = tex2swfTmpTextField;     c[2][2] = tex2swfTmpBrowseButton;
+   	c[3][0] = zipFilenameLabel;   c[3][1] = zipFilenameTextField;    c[3][2] = nullLabel;
     
     JPanel p = createLignedUpPanel(c);
     JPanel flashPanel = new JPanel();
     flashPanel.setLayout(new BoxLayout(flashPanel, BoxLayout.Y_AXIS));
-    flashPanel.setBorder(BorderFactory.createTitledBorder("tex2swf parameters"));
+    flashPanel.setBorder(BorderFactory.createTitledBorder("tex2swf and swf2zip parameters"));
     flashPanel.add(p);
     flashPanel.setMaximumSize(flashPanel.getMinimumSize());
     flashPanel.setAlignmentX(LEFT_ALIGNMENT);
@@ -341,6 +354,7 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
     exportPanel.add(firstUserCheckBox);
     exportPanel.add(overwriteFlashFilesCheckBox);
     exportPanel.add(overwriteDBEntriesCheckBox);
+    exportPanel.add(createZipCheckBox);
     return exportPanel;
   }
   //The DB panel consists of
@@ -604,11 +618,13 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
     flashFolderName = getFolderName(flashFolderTextField.getText());
     tex2swfFolderName = getFolderName(tex2swfFolderTextField.getText());
     tex2swfTmpFolderName = getFolderName(tex2swfTmpTextField.getText());
+    zipFilename = zipFilenameTextField.getText();
     alwaysUseFirstUser = firstUserCheckBox.isSelected();
     overwriteFlashFiles = overwriteFlashFilesCheckBox.isSelected();
     overwriteDBEntries = overwriteDBEntriesCheckBox.isSelected();
+    createZip = createZipCheckBox.isSelected();
     
-    TEX2SWF_INFO = new String[]{tex2swfFolderName, tex2swfTmpFolderName, flashFolderName, rootdir};
+    TEX2SWF_INFO = new String[]{tex2swfFolderName, tex2swfTmpFolderName, flashFolderName, rootdir, zipFilename};
 
     //DB setup variables
     DB_INFO = useConfigFileCheckBox.isSelected()
@@ -747,7 +763,7 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
       
       try
       {
-        LatexToMeJ ltmej = new LatexToMeJ(DB_INFO, TEX2SWF_INFO, this, alwaysUseFirstUser, overwriteFlashFiles);
+        LatexToMeJ ltmej = new LatexToMeJ(DB_INFO, TEX2SWF_INFO, this, alwaysUseFirstUser, overwriteFlashFiles, createZip);
         Properties config = new Properties();
         try
         {
@@ -760,7 +776,8 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
         }
         int qid = 1;
         Collection<Map<SmacParser.Tag,String>> allQuestions = parser.allParsedQuestions();
-        int numQuestions = allQuestions.size();
+        int numQuestions = allQuestions.size();        
+        
         for (Map<SmacParser.Tag,String> q : allQuestions)
         {
           outputMessage("\rProcessing question " + qid + " of " + numQuestions);
@@ -769,22 +786,9 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
           try
           {
             int language_id = Integer.parseInt(config.getProperty("language_id."+q.get(SmacParser.Tag.Language)));
-            //String qidHash = ((Integer)qid).hashCode();//Integer.toHexString(qid + 999999);
             
-            MessageDigest encoder = MessageDigest.getInstance("SHA-256");
-            
-            String key = config.getProperty("encodingKey");
-            
-            byte [] digest = encoder.digest((key + qid).getBytes("UTF-8"));
-            StringBuffer encodingBuffer = new StringBuffer();
-            for (int i = 0; i < digest.length; i++) {
-             encodingBuffer.append(Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1));
-            }
-
-            qidHash = encodingBuffer.toString();
-
-            outputMessage("\rquestion hash " + qidHash);
-
+            qidHash = encodeQuestionNumber(qid);
+            outputMessage("\rquestion code " + qidHash);
             
             String question_flash_file_prefix = "Q-" + qidHash + "-" + LatexToMeJ.shortLanguage(language_id);
             String feedback_flash_file_prefix = "Q-" + qidHash + "-F-"+LatexToMeJ.shortLanguage(language_id);
@@ -819,6 +823,27 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
       }
       
       this.questionsWriter.writeXmlFile(flashFolderName);
+      
+      
+      // create the zip of flash files using the swf2zip.sh script
+      if(createZip){
+    	  String commandToExecute = tex2swfFolderName+"swf2zip.sh " +                    //script name
+    	  zipFilename+".zip " +                                //zip file name
+    	  tex2swfTmpFolderName + " " +                         //tmp folder
+    	  flashFolderName;                                     //flash folder 
+    	  try {
+    		  Runtime.getRuntime().exec(commandToExecute).waitFor();
+    		  outputMessage("\nDone " + zipFilename + " \n");
+
+    	  } catch (InterruptedException e) {
+    		  outputMessage(e.getMessage() + " ...error in creating zip file! \n");
+    		  e.printStackTrace();
+    	  } catch (IOException e) {
+    		  outputMessage(e.getMessage() + " ...error in creating zip file! \n");
+    		  e.printStackTrace();
+    	  }
+      }
+     
       outputMessage("\nDone\n");
       return;
     }
@@ -834,7 +859,7 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
       //   o) Array containing 'tex2swf.sh' parameters [script location, tmp dir, flash dir, graphics root dir]
       //   o) An object responsible for the implementation of the 'SmacUI' interface
       //   o) Whether to always select the first of multiple match when associating .tex creators to DB users
-      LatexToMeJ ltmej = new LatexToMeJ(DB_INFO, TEX2SWF_INFO, this, alwaysUseFirstUser, overwriteFlashFiles);
+      LatexToMeJ ltmej = new LatexToMeJ(DB_INFO, TEX2SWF_INFO, this, alwaysUseFirstUser, overwriteFlashFiles, createZip);
       ltmej.insertInDB(parser.allParsedQuestions(), overwriteDBEntries);
     }
     catch (Exception e)
@@ -952,6 +977,38 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
     }
     if (autoScrollCheckBox.isSelected())
       messageArea.setCaretPosition(messageArea.getDocument().getLength());
+  }
+  
+  public  String encodeQuestionNumber(int qid)
+  {
+	  StringBuffer keyBuffer = new StringBuffer("");
+	  Random rand = new Random();
+	  keyBuffer.setLength(0);
+	  for(int x = 0; x < 3; x++)
+	  {
+		  keyBuffer.append((char)(rand.nextInt(26) + 65));
+		  keyBuffer.append((char)(rand.nextInt(12) + 48));
+		  keyBuffer.append((char)(rand.nextInt(26) + 97));
+	  }
+
+	  keyBuffer.append(qid);
+	  keyBuffer.append((char)(rand.nextInt(26) + 65));
+	  keyBuffer.append((char)(rand.nextInt(26) + 97));
+
+	  byte[] encoder; 
+	  StringBuffer encodingBuffer = new StringBuffer();
+	  try {
+		  encoder = (keyBuffer.toString()).getBytes("UTF-8");
+		  for (int i = 0; i < encoder.length; i++) {
+			  encodingBuffer.append(Integer.toString((encoder[i] & 0xfe) + 0x110, 16).substring(1));
+		  }
+	  } catch (UnsupportedEncodingException e) {
+		  outputMessage("UnsupportedEncodingException in encoding question");
+		  encodingBuffer.append("EncodingError");
+	  }	 
+
+	  return encodingBuffer.toString();
+
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
