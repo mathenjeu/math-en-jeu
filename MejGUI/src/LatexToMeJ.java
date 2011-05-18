@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,6 +34,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -82,23 +84,26 @@ public class LatexToMeJ implements SmacUI
   private SmacUI ui;
   private boolean useFirstUserMatch;
   private boolean overwriteFlashFiles;
+  private boolean createZip;
   private final String flashFolderName;
   private final String tex2swfFolderName;
   private final String tex2swfTmpFolderName;
   private final String tex2swfBaseDir;
+  private final String zipFilename;
   
   private final XMLWriter questionsWriter;
   
   public LatexToMeJ() throws Exception
   {
-    this(null, new String[]{"./", "tmp/", "flash/", "tmp/"}, null, false, false);
+    this(null, new String[]{"./", "tmp/", "flash/", "tmp/", "questions"}, null, false, false, true);
     this.ui = this;
   }
-  public LatexToMeJ(String[] data, String[] tex2swfData, SmacUI ui, boolean alwaysUseFirstUser, boolean overwriteFlashFiles) throws Exception
+  public LatexToMeJ(String[] data, String[] tex2swfData, SmacUI ui, boolean alwaysUseFirstUser, boolean overwriteFlashFiles, boolean createZip) throws Exception
   {
     this.ui = ui;
     this.useFirstUserMatch = alwaysUseFirstUser;
     this.overwriteFlashFiles = overwriteFlashFiles;
+    this.createZip = createZip;
     config = new Properties();
     config.load(new InputStreamReader(new BufferedInputStream(LatexToMeJ.class.getResourceAsStream(configFilename)), "UTF-8"));
     //config.load(new InputStreamReader(new BufferedInputStream(new FileInputStream(configFilename)), "UTF-8"));
@@ -110,6 +115,7 @@ public class LatexToMeJ implements SmacUI
     tex2swfTmpFolderName = tex2swfData[1];
     flashFolderName = tex2swfData[2];
     tex2swfBaseDir = tex2swfData[3];
+    zipFilename = tex2swfData[4];
     
     questionsWriter = new XMLWriter(ui);
   }
@@ -930,7 +936,7 @@ public class LatexToMeJ implements SmacUI
         
         //Create the flash files for the question
         //Integer.toHexString(question_id);
-        String questionHash = Integer.toHexString(question_id); //((Integer)question_id).hashCode();// 
+        String questionHash = encodeQuestionNumber(question_id); //((Integer)question_id).hashCode();// 
         String question_flash_file_prefix = "Q-" + questionHash + "-" + shortLanguage(language_id);
         String feedback_flash_file_prefix = "Q-" + questionHash + "-F-" + shortLanguage(language_id);
         
@@ -1108,9 +1114,23 @@ public class LatexToMeJ implements SmacUI
       }
     }
     
-    // write the xml with list of questions in flash folder
-    this.questionsWriter.writeXmlFile(flashFolderName);
-    // create the zip of flash files???
+    if(createZip){
+    	// write the xml with list of questions in flash folder
+    	this.questionsWriter.writeXmlFile(flashFolderName);
+    	// create the zip of flash files using the swf2zip.sh script
+    	String commandToExecute = tex2swfFolderName+"swf2zip.sh " +                    //script name
+    	zipFilename+".zip " +                                //zip file name
+    	tex2swfTmpFolderName + " " +                         //tmp folder
+    	flashFolderName;                                     //flash folder 
+    	Runtime.getRuntime().exec(commandToExecute).waitFor();
+
+    	//Check if the script was sucessful.
+    	File zipFile = new File(zipFilename+".zip");
+    	if (!zipFile.exists())
+    		throw new FlashException("File " + zipFilename+".zip could not be created automatically.\n" +
+    				"See " + tex2swfTmpFolderName+"mej_convert.log for more details.\n" +
+    				"The failing command was: '" +commandToExecute + "'");
+    }
   }
   
   //Returns the id of the option selected by the user, possible return value are:
@@ -1158,5 +1178,37 @@ public class LatexToMeJ implements SmacUI
         ltm.outputMessage(e.getMessage());
       e.printStackTrace();
     }
+  }
+  
+  public  String encodeQuestionNumber(int qid)
+  {
+	  StringBuffer keyBuffer = new StringBuffer("");
+	  Random rand = new Random();
+	  keyBuffer.setLength(0);
+	  for(int x = 0; x < 3; x++)
+	  {
+		  keyBuffer.append((char)(rand.nextInt(12) + 48));
+		  keyBuffer.append((char)(rand.nextInt(26) + 65));
+		  keyBuffer.append((char)(rand.nextInt(26) + 97));
+	  }
+
+	  keyBuffer.append(qid);
+	  keyBuffer.append((char)(rand.nextInt(26) + 65));
+	  keyBuffer.append((char)(rand.nextInt(26) + 97));
+
+	  byte[] encoder; 
+	  StringBuffer encodingBuffer = new StringBuffer();
+	  try {
+		  encoder = (keyBuffer.toString()).getBytes("UTF-8");
+		  for (int i = 0; i < encoder.length; i++) {
+			  encodingBuffer.append(Integer.toString((encoder[i] & 0xfe) + 0x110, 16).substring(1));
+		  }
+	  } catch (UnsupportedEncodingException e) {
+		  ui.outputMessage("UnsupportedEncodingException in encoding question");
+		  encodingBuffer.append("EncodingError");
+	  }	 
+
+	  return encodingBuffer.toString();
+
   }
 }
