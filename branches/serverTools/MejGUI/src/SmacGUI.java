@@ -984,30 +984,18 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
 	  StringBuffer keyBuffer = new StringBuffer("");
 	  Random rand = new Random();
 	  keyBuffer.setLength(0);
-	  for(int x = 0; x < 3; x++)
+	  for(int x = 0; x < 2; x++)
 	  {
-		  keyBuffer.append((char)(rand.nextInt(26) + 65));
-		  keyBuffer.append((char)(rand.nextInt(12) + 48));
-		  keyBuffer.append((char)(rand.nextInt(26) + 97));
+		  keyBuffer.append(Integer.toHexString(rand.nextInt(126) + 48));
+		  keyBuffer.append(Integer.toHexString(rand.nextInt(333) + 65));
+		  keyBuffer.append(Integer.toHexString(rand.nextInt(777) + 97));
 	  }
 
-	  keyBuffer.append(qid);
-	  keyBuffer.append((char)(rand.nextInt(26) + 65));
-	  keyBuffer.append((char)(rand.nextInt(26) + 97));
+	  keyBuffer.append(Integer.toHexString(qid));
+	  keyBuffer.append(Integer.toHexString(rand.nextInt(126) + 65));
+	  keyBuffer.append(Integer.toHexString(rand.nextInt(126) + 97));
 
-	  byte[] encoder; 
-	  StringBuffer encodingBuffer = new StringBuffer();
-	  try {
-		  encoder = (keyBuffer.toString()).getBytes("UTF-8");
-		  for (int i = 0; i < encoder.length; i++) {
-			  encodingBuffer.append(Integer.toString((encoder[i] & 0xfe) + 0x110, 16).substring(1));
-		  }
-	  } catch (UnsupportedEncodingException e) {
-		  outputMessage("UnsupportedEncodingException in encoding question");
-		  encodingBuffer.append("EncodingError");
-	  }	 
-
-	  return encodingBuffer.toString();
+	  return keyBuffer.toString();
 
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
