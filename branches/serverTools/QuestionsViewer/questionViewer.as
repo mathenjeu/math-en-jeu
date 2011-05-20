@@ -147,7 +147,8 @@ function getNext(forward:Boolean):void {
    var parties_url:Array = quLocation.split("/");
    var parties_nom:Array = parties_url[parties_url.length-1].split("-");
    var parties_nombre:int = int(parties_nom[1]);
-  
+   //Object xsl = new Object(parties_nom[1]);
+   
    questionNumber_txt.text = String(parties_nombre);
    
    var quRetro:String = quLocation.replace(parties_nom[1], parties_nombre + "-F");
