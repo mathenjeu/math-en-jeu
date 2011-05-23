@@ -391,9 +391,10 @@ public class LatexToMeJ implements SmacUI
         throw new Exception("The name you supplied: '" + name + "' has more than 2 parts.  If your name contains a space you must use the format: Last name, First name");
     }
     
+    String email = firstname + ".mathamaze@mitacs.ca";
     pstmtInsertUser.setString(1, firstname);
     pstmtInsertUser.setString(2, username);
-    pstmtInsertUser.setString(3, "N/A");
+    pstmtInsertUser.setString(3, email);
     pstmtInsertUser.setString(4, "cc513cd6325e7f050cf84a13b14d151f:DltwlsZGcKKpsqk4Xzzxmb0hl2V47dFr"); //password 
     pstmtInsertUser.setString(5, "Registered"); //usertype
     pstmtInsertUser.setInt(6, 18); //gid
