@@ -536,8 +536,6 @@ class GestionnaireEvenements
         trace("fin de sortirTable");
         trace("*********************************************\n");
     } 
-	
-	
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     function sortirTable()
     {
@@ -1077,7 +1075,7 @@ class GestionnaireEvenements
             default:
                 trace("Erreur Inconnue - retourObtenirListeSalles");
         }
-		objetEvenement = null;
+//		objetEvenement = null;
         //trace("fin de retourObtenirListeSalles" + " " + objetEvenement.resultat);
         //trace("*********************************************\n");
     }
@@ -1661,7 +1659,7 @@ class GestionnaireEvenements
 				   _level0.loader.contentHolder.txtChargementTables._visible = true;
 		        }
 				
-			 	
+                this.listeDesPersonnages.removeAll();
                 this.objGestionnaireCommunication.obtenirListeJoueursSalle(Delegate.create(this, this.retourObtenirListeJoueursSalle), Delegate.create(this, this.evenementJoueurEntreSalle), Delegate.create(this, this.evenementJoueurQuitteSalle));						
 			 	var count:Number = this.listeDesTables.length;
 			 	for (var i:Number = 0; i < count; i++)
@@ -1679,9 +1677,7 @@ class GestionnaireEvenements
 					
 					_level0.loader.contentHolder.listeTable.addItem({label : str, data : this.listeDesTables[i].no, icon: iconName});
 			 	}
-				
-				this.listeDesPersonnages.removeAll();
-								
+											
             break;
 
 			case "CommandeNonReconnue":
