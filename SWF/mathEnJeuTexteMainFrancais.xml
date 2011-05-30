@@ -9,7 +9,7 @@
     btnProfile = "Mon Profil"
     playMaze = "Entrez dans le labyrinthe et soyez le premier a vous échapper..."
     teachBtn =   "Ma classe"
-    linkProf1 = "Est vous un professeur?"
+    linkProf1 = "Êtes-vous un professeur?"
     linkProf2 = "Cliquez ici..."
     linkProf3 = "pour entrer dans le Salon des Professeurs."
     erreurRole = "Accès interdit.
