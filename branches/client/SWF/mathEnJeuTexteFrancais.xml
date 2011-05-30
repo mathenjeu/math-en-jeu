@@ -181,7 +181,7 @@
 			boutonQuitterX = "Quitter la partie."
 			tableNameLabel = "Nom de la Table"
 			tableLinesLabel = "Lignes"
-			tableColumnsLabel = "Colognes"
+			tableColumnsLabel = "Colonnes"
 			tableOptionalLabel = "*Optionnel"
 			tableGameType = "Type du jeu"
 			playersListe = " - Liste des joueurs - "
