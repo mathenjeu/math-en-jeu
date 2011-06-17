@@ -1,7 +1,10 @@
 public class FlashException extends Exception
 {
-  public FlashException(String message)
-  {
-    super(message);
-  }
+	/** 	 */
+	private static final long serialVersionUID = 1L;
+
+	public FlashException(String message)
+	{
+		super(message);
+	}
 }
