@@ -4,10 +4,9 @@
 //           The author is not liable for any loss caused by the
 //           use of this application.
 //
-//Date:      June 2011
+//Date:      May 2010
 //
-//Version:   0.18 * Web version  
-//           0.17 * French pedantic parsing
+//Version:   0.17 * French pedantic parsing
 //                  Errors are thrown when tags of translated questions conflict
 //                  Errors are thrown for questions with identical identifiers
 //           0.16 * Each question must now have a unique identifier which is either
@@ -48,7 +47,7 @@ import java.util.regex.*;
 
 public class SmacParser implements SmacUI
 {
-  public static final String VERSION = "0.18";
+  public static final String VERSION = "0.17";
   private static int QDIFF_LENGTH = 18;
   private static final String allPossibleMultipleChoiceAnswers = "ABCDEFGH";
   private SmacUI ui = null;
@@ -87,11 +86,19 @@ public class SmacParser implements SmacUI
   //When false the extracted tags with the same values are grouped together and only the group size is displayed
   //When true all tags are listed
   private boolean listAllExtractedTagArguments = false;
-    
+  //When true, the %Qtext and %Ftext tags are parsed to see if they are consistent with other tags.
+  private boolean pedantic = false;
+  //When pedantic is true and %Qtext is not consistent with %Source, the user is asked to select an option
+  //if the user selects 'always ignore' that %Source is added to ignoreBadSource and if that inconsistency
+  //occurs again, the user will not be prompted again.
+  private Set<String> ignoreBadSource = new TreeSet<String>();
   private final Map<Integer,String> rdiffToQdiffMap = new TreeMap<Integer,String>();
 
+  //When false, use Subject,Category parsing, when true use Keywords.  The keywords is a replacement for
+  //the (subject,category) pair which is no longer supported.
+  private boolean legacyParsing = false;
   //The output stream used to display feedback.
-  //private OutputStream messageStream;
+  private OutputStream messageStream;
 
   //Populates the stringToTagMap, allowableValuesMap and translationsMap from
   //the data contained in the specified config file.
@@ -146,7 +153,13 @@ public class SmacParser implements SmacUI
     if (allowableValuesMap.get("Language") == null) throw new Exception("Language tag requires a value list.  That list is missing from the configuration file.");
     if (allowableValuesMap.get("Type") == null) throw new Exception("Type tag requires a value list.  That list is missing from the configuration file.");
     if (allowableValuesMap.get("Type.TF") == null) throw new Exception("Type.TF requires a value list.  That list is missing from the configuration file.");
-    
+    if (legacyParsing)
+    {
+      if (allowableValuesMap.get("Subject") == null) throw new Exception("Subject tag requires a value list.  That list is missing from the configuration file.");
+      for (String subject : allowableValuesMap.get("Subject"))
+        if (allowableValuesMap.get("Category."+subject) == null)
+          throw new Exception("Category."+subject+" tag requires a value list.  That list is missing from the configuration file.");
+    }
     else if (allowableValuesMap.get("Keywords") == null)
       throw new Exception("Keywords tag requires a value list.  That list is missing from the configuration file.");
 
@@ -422,7 +435,139 @@ public class SmacParser implements SmacUI
     return retString;
   }
 
- 
+  //Check %Qtext for the string "Source: ".  If it is present, see if it matches
+  //%Source and throw an exception if it does not.
+  private void checkQtextForSource(Map<Tag, String> questionInfo) throws Exception
+  {
+    String source = questionInfo.get(Tag.Source);
+    String qtext = questionInfo.get(Tag.Qtext);
+    int sourceIndex = qtext.indexOf("Source:");
+    if (sourceIndex >= 0)
+    {
+      String qsource = qtext.substring(sourceIndex+7).trim();
+      if (qsource.indexOf("\n") >= 0)
+        qsource = qsource.substring(0, qsource.indexOf("\n"));
+      qsource = qsource.substring(0, Math.min(source.length(), qsource.length()));
+      if (!source.equals(qsource))
+        throw new Exception("%Source is: " + source + "\n%Qtext contains: 'Source: " + qsource + " ...'");
+    }
+
+  }
+
+  //Given an input string and two characters representing an 'open bracket' and a 'close bracket'
+  //The method returns the sub-string of the input containing the text inside the outer most
+  //occurence of the bracket.  For example if the input is aaa({b[b}cc(ddd{e[]ee}fff)gg)hh
+  //  calling with '(' and ')' will return: {b[b}cc(ddd{e[]ee}fff)gg
+  //  calling with '{' and '}' will return: b[b
+  //  calling with '[' and ']' will return: null (because the outermost '[' is never closed)
+  //The return value does not include the outer most open and close bracket.
+  //The return value is null whenever the open bracket is not present, the close bracket is not
+  //  present or when the outermost open bracket is never closed
+  private String extractOuterMostBracketedText(String input, char openBracket, char closeBracket)
+  {
+    int startIndex = input.indexOf(openBracket);
+    if (startIndex == -1) return null;
+    int endIndex = input.lastIndexOf(closeBracket);
+    if (endIndex < startIndex) return null;
+    
+    int opened = 1;
+    for (int i=startIndex+1; i<=endIndex; i++)
+    {
+      char c = input.charAt(i);
+      if (c == openBracket) opened++;
+      else if (c == closeBracket) opened--;
+      if (opened == 0)
+      {
+        endIndex = i;
+        break;
+      }
+    }
+    if (opened != 0) return null;
+    return input.substring(startIndex+1, endIndex);
+  }
+  //Check %Qtext for the string "The correct answer is".  If it is present, see if it matches
+  //%Answer and throw an exception if it does not.
+  private void checkFtextForAnswer(Map<Tag, String> questionInfo) throws Exception
+  {
+    String language = questionInfo.get(Tag.Language);
+    String answerString = language.equals("English")?"The correct answer is":"La bonne réponse est";
+    String ftext = questionInfo.get(Tag.Ftext).trim();
+    int answerIndex = ftext.indexOf("\\textbf{"+answerString);
+    if (answerIndex == -1)
+      throw new Exception("%Question: " + questionInfo.get(Tag.Question) + "\n%Ftext must contain a \\textbf{"+answerString+"...} box because %Language="+language+".");
+
+    String answer = questionInfo.get(Tag.Answer);
+    String type = questionInfo.get(Tag.Type);
+    String ftextAnswer = extractOuterMostBracketedText(ftext.substring(answerIndex), '{','}');
+    if (ftextAnswer == null)
+      throw new Exception("%Question: " + questionInfo.get(Tag.Question) + "\n%Ftext bracket mismatch.  Most likely, the '{' of \\textbf{ is never closed.");
+    ftextAnswer = ftextAnswer.substring(answerString.length()).trim();
+    if (ftextAnswer.startsWith(":"))
+      ftextAnswer = ftextAnswer.substring(1).trim();
+    
+    if (ftextAnswer.indexOf(answerString) >=0 )
+      throw new Exception("%Ftext contains '" + answerString + "' more than once.");
+
+    //For multiple choice questions we are expecting: 'The correct answer is (X)'
+    //Where X CONTAINS A SINGLE CHARACTER and is the same as %Answer (disregarding capitalization)
+    if (type.startsWith("MC"))
+    {
+      Pattern mc = Pattern.compile("^(\\(?(.)\\)?)");
+      Matcher m = mc.matcher(ftextAnswer);
+      if (m.find() && !m.group(2).trim().equalsIgnoreCase(answer))
+        throw new Exception("%Question: " + questionInfo.get(Tag.Question) + "\n%Answer is: " + answer + "\n%Ftext contains: '" + answerString + " " + m.group(1) + "'");
+    }
+    //For true/false questions we are expecting: 'The correct answer is X'
+    //Where X is represents the same True/False value as %Answer. X must not
+    //be enclosed in any sort of bracket but is allowed to end with a '.'
+    //(which will be removed).  Thus if %Answer is True, X must be one
+    //of: True,T,V,Vrai which means that (Vrai) and $T$ would both throw an
+    //exception.
+    else if (type.equals("TF"))
+    {
+      Pattern tf = Pattern.compile("[^\\s]*");
+      Matcher m = tf.matcher(ftextAnswer);
+      m.find();
+      String answerTF = m.group(0);
+      if (answerTF.endsWith("."))
+        answerTF = answerTF.substring(0, answerTF.length()-1);
+      answerTF = determineTFValue(answerTF);
+      if (answerTF == null || !determineTFValue(answer).equals(answerTF))
+        throw new Exception("%Question: " + questionInfo.get(Tag.Question) + "\n%Answer is: " + answer + "\n%Ftext contains: '" + answerString + " " + m.group(0) + "'");
+    }
+    //For short answer questions we are expecting: 'The correct answer is X' or 'The correct answer is $X$'
+    //Where X HAS NO SPACES and is the same as %Answer (diregarding capitalization).
+    //In addition if %Answer is a fraction, like 3/4, X is allowed to be \frac{3}{4}
+    else if (type.equals("SA"))
+    {
+      String answerSA = ftextAnswer;
+      int opened=0;
+      for (int i=0; i<answerSA.length(); i++)
+      {
+        if (answerSA.charAt(i) == '{') opened++;
+        if (answerSA.charAt(i) == '}')
+        {
+          if (opened == 0)
+          {
+            answerSA = answerSA.substring(0, i);
+            break;
+          }
+          opened--;
+        }
+      }
+      if (answerSA.startsWith("$") && answerSA.endsWith("$"))
+        answerSA = answerSA.substring(1, answerSA.length()-1);
+      if (answerSA.endsWith(".") && !answer.endsWith("."))
+        answerSA = answerSA.substring(0, answerSA.length()-1);
+      Matcher m = LATEX_FRACTION.matcher(answerSA);
+      if (m.matches())
+        answerSA = m.group(1)+"/"+m.group(2);
+        
+      if (!answerSA.equalsIgnoreCase(answer))
+        throw new Exception("%Question: " + questionInfo.get(Tag.Question) + "\n%Answer is: " + answer + "\n%Ftext contains: '" + answerString + " " + answerSA + "'");
+    }
+  }
+
   //Construct a TagLine object from a String.
   //  If the string does not start with (at least) one '%' the
   //    TagLine 'tag' component will have the value Tag.NONE.
@@ -524,7 +669,11 @@ public class SmacParser implements SmacUI
         //outputMessage("TagLine: " + tagLine + "\n");
         if (tagLine.tag == Tag.Begin)
           questionInfo.put(Tag.COMMENT, "Question in file '" + filename + "' starting on line " + linenumber);
-        
+        if (!legacyParsing && (tagLine.tag == Tag.Subject || tagLine.tag == Tag.Category))
+          throw new Exception("The %" + tagLine.tag + " is no longer supported, try using the legacy parsing option");
+        if (legacyParsing && tagLine.tag == Tag.Keywords)
+          throw new Exception("The %Keywords tag is not supported when using the legacy parsing option");
+
         if (tagLine.tag == Tag.COMMENT || tagLine.tag == Tag.NONE)
         {
           switch (currentRegion)
@@ -685,7 +834,51 @@ public class SmacParser implements SmacUI
         }
 
         if (nextRegion == Tag.Begin)
-        {          
+        {
+          if (pedantic)
+          {
+            String msg = null;
+            try
+            {
+              msg = "Suspicious %Ftext content";
+              checkFtextForAnswer(questionInfo);
+              msg = "Suspicious %Qtext content";
+              checkQtextForSource(questionInfo);
+            }
+            catch (Exception e)
+            {
+              String badSource = null;
+              boolean showOptions = true;
+              if (msg.equals("Suspicious %Qtext content"))
+              {
+                badSource = e.getMessage().substring(e.getMessage().indexOf("Source: ") + 8, e.getMessage().length()-1);
+                if (ignoreBadSource.contains(badSource))
+                  showOptions = false;
+              }
+              if (showOptions)
+              {
+                msg +=  " in " + filename + " near line " + linenumber + "\n" + e.getMessage();
+                ArrayList<SmacOptionData> options = new ArrayList<SmacOptionData>();
+                if (badSource != null)
+                {
+                  options.add(new SmacOptionData("Ignore always", 0));
+                  options.add(new SmacOptionData("Ignore once", 1));
+                }
+                else
+                  options.add(new SmacOptionData("Ignore", 1));
+                options.add(new SmacOptionData("Abort", -1));
+                int selection = ui.selectOption(msg, options);
+                while (selection < -1 || 1 < selection)
+                  selection = ui.selectOption(msg, options);
+                if (selection == -1)
+                  throw new Exception("Aborting per user request.");
+                if (selection == 0)
+                  ignoreBadSource.add(badSource);
+              }
+            }
+          }
+
+          
           boolean inserted = allParsedQuestions.add(questionInfo);
           if (!inserted)
           {
@@ -817,23 +1010,23 @@ public class SmacParser implements SmacUI
   // o) Read in the config file
   // o) Populate the various maps
   // o) Set the messageStream.  All feedback is written on this outputstream.
-  public SmacParser(boolean tagListing) throws Exception
+  public SmacParser(OutputStream s, boolean tagListing, boolean pedanticParsing, boolean legacy) throws Exception
   {
     this.ui = this;
     listAllExtractedTagArguments = tagListing;
-    String configFilename = "smacparser.ini";
+    pedantic = pedanticParsing;
+    legacyParsing = legacy;
+    String configFilename = legacy?"smacparser-legacy.ini":"smacparser.ini";
     Properties config = new Properties();
     InputStream conf = SmacParser.class.getResourceAsStream(configFilename);
     config.load(new InputStreamReader(new BufferedInputStream(conf), "UTF-8"));
-    //messageStream = s;
+    messageStream = s;
     populateTagHandlingMaps(config);
 
   }
-  
-  
-  public SmacParser(boolean tagListing, SmacUI smacui) throws Exception
+  public SmacParser(OutputStream s, boolean tagListing, boolean pedanticParsing, boolean legacy, SmacUI smacui) throws Exception
   {
-    this(tagListing);
+    this(s, tagListing, pedanticParsing, legacy);
     this.ui = smacui;
   }
 
@@ -850,7 +1043,8 @@ public class SmacParser implements SmacUI
         continue;
       }
       boolean extractable = (getRegion(t) == Tag.Begin && t != Tag.Begin && t != Tag.COMMENT);
-      
+      if (legacyParsing && t == Tag.Keywords) extractable = false;
+      if (!legacyParsing && (t == Tag.Subject || t == Tag.Keywords)) extractable = false;
       if (!extractable)
         outputMessage("Tag " + tag + " is not extractable\n");
       else
@@ -880,20 +1074,194 @@ public class SmacParser implements SmacUI
     }
   }
 
-  public void outputMessage(String message)
+  //Returns the id of the option selected by the user, possible return value are:
+  //   Integer.MIN_VALUE: something went wrong
+  //   -1               : the user did not find a match in the list
+  //   anything else    : the id (from the MeJ DB) of the option selected by the user
+  public int selectOption(String msg, ArrayList<SmacOptionData> options)
   {
-    if (ui == null) return;
+    int id;
     try
     {
-    	ui.outputMessage(message);
-      //messageStream.write(message.getBytes());
-      //messageStream.flush();
+      BufferedReader cin = new BufferedReader(new InputStreamReader(System.in));
+      System.out.println(msg);
+      for (int i=0; i<options.size(); i++)
+        System.out.println(i + ") " + options.get(i).optionString);
+      System.out.print("> ");
+      int value = Integer.parseInt(cin.readLine());
+      id = options.get(value).optionId;
+    }
+    catch (Exception e)
+    {
+      id = Integer.MIN_VALUE;
+      outputMessage("Error reading your input: " + e.getMessage()+"\n");
+    }
+    return id;
+  }
+
+  public void outputMessage(String message)
+  {
+    if (messageStream == null) return;
+    try
+    {
+      messageStream.write(message.getBytes());
+      messageStream.flush();
     }
     catch (Exception e)
     {
       System.err.println(e.getMessage());
     }
   }
+
+  //Usage:
+  //  java SmacParser arg1 arg2 ... argk
+  // o) If arg_i starts with the special character '%' the argument
+  //    is considered to be a tag name.  The application will extract the
+  //    value of that tag for each processed question.  There can be any
+  //    number of '%' arguments but identical ones will only be reported once.
+  // o) If arg_i does not start with the special character '%' the
+  //    argument is assumed to be a file name and the application will
+  //    parse that file for questions.  Any number of file can be parsed.
+  // o) If arg_i is '-r' recursive mode is used.  This means that if one of
+  //    the argument is a directory, all subdirectory will also be searched
+  //    for files to parse.
+  // o) If arg_i is '-ch' we assume all files are encoded using the charset
+  //    named by arg_{i+1}
+  //
+  //Example:
+  //   java SmacParser smac.tex                          --> parse file smac.tex
+  //   java SmacParser %Source %Title smac.tex smac2.tex --> parse files smac.tex and smac2.tex.  Report all the %Source and %Title tag values.
+  //   java SmacParser smac/*                            --> parse all files in smac/ directory (not just the ones ending in .tex)
+  //   java SmacParser -r smac                           --> parse all .tex files in the directory tree rooted at smac/
+  public static void main(String[] args)
+  {
+    //Valid charset: "UTF-8","ISO-8859-1";
+    SmacParser parser = null;
+    String charset = "UTF-8";
+    boolean recursive = false;
+    boolean tagListing = false;
+    boolean pedanticParsing = false;
+    boolean legacy = false;
+    TreeSet<String> tagArgs = new TreeSet<String>();
+    TreeSet<String> fileArgs = new TreeSet<String>();
+    TreeSet<String> filesToParse = new TreeSet<String>();
+
+    for (int i=0; i<args.length; i++)
+    {
+      if (args[i].equals("-version"))
+      {
+        System.out.println("SmacParser version " + VERSION);
+        System.exit(0);
+      }
+      if (args[i].equals("-h"))
+      {
+        System.out.println("SmacParser [OPTIONS] [TAGS] files");
+        System.out.println("OPTIONS:");
+        System.out.println("  -r: recursive directory search");
+        System.out.println("  -ch: set charset");
+        System.out.println("  -list: list all tag arguments in addition to the frequency table");
+        System.out.println("  -pedantic: parse %Ftext and %Qtext for suspicious content");
+        System.out.println("  -legacy: use the old (Subject,Category) instead of the new Keywords");
+        System.out.println("  -version: print SmacParser version and exit");
+        System.out.println("  -h: display this message");
+        System.out.println("TAGS:");
+        System.out.println("  Anything starting with a % is a tag to be extracted");
+        System.out.println("EXAMPLE:");
+        System.out.println("  java -jar SmacParser.jar -r -ch ISO-8859-1 -list %Source %Creator QuestionsDirectory");
+        System.exit(0);
+      }
+      if (args[i].equals("-r"))
+        recursive = true;
+      else if (args[i].equals("-ch"))
+        charset = args[++i];
+      else if (args[i].startsWith("%"))
+        tagArgs.add(args[i]);
+      else if (args[i].equals("-list"))
+        tagListing = true;
+      else if (args[i].equals("-pedantic"))
+        pedanticParsing = true;
+      else if (args[i].equals("-legacy"))
+        legacy = true;
+      else
+        fileArgs.add(args[i]);
+    }
+    try
+    {
+      parser = new SmacParser(System.out, tagListing, pedanticParsing, legacy);
+      parser.setTagsToExtract(tagArgs);
+      for (String filename: fileArgs)
+      {
+        File f = new File(filename);
+        if (!f.exists()) { parser.outputMessage("file " + filename + " does not exists. Skipping.\n"); continue; }
+        if (!f.canRead()) { parser.outputMessage("file " + filename + " cannot be open for reading, permission denied. Skipping.\n"); continue; }
+        if (!f.isDirectory()) { filesToParse.add(filename); continue; }
+        if (!recursive) { parser.outputMessage("file " + filename + " is a directory but the -r options was not given. Skipping.\n"); continue; }
+        parser.getFileRecursively(filesToParse, f);
+      }
+
+      parser.outputMessage("Charset: " + charset + "\n");
+      parser.outputMessage("A total of " + filesToParse.size() + " files will be parsed\n");
+      for (String filename : filesToParse)
+      {
+        parser.outputMessage("Parsing file: " + filename + "\n");
+        parser.parseFile(filename,charset);
+      }
+      parser.outputMessage("Parsing successful! " + parser.allParsedQuestions.size() + " questions were parsed\n");
+      parser.outputMessage("Validating translations\n");
+      parser.validateTranslations();
+      parser.outputMessage("All translations are valid, output lines starting with 'WARNING' are for your benefit only\n");
+      if (parser.allExtractedTagArguments.size() != 0)
+      {
+        StringBuffer freqStr = new StringBuffer("Frequency    Value\n");
+        parser.outputMessage("EXTRACTED TAGS\n");
+        for (Tag t: parser.allExtractedTagArguments.keySet())
+        {
+          if (parser.listAllExtractedTagArguments) parser.outputMessage("%"+t + "\n");
+          freqStr.append("%"+t + "\n");
+          Map<String, Integer> argCount = new TreeMap<String,Integer>();
+          int missing = 0;
+          for (String value : parser.allExtractedTagArguments.get(t))
+          {
+            if (parser.listAllExtractedTagArguments)
+              parser.outputMessage(value + "\n");
+            if (value == null)
+              missing++;
+            else
+            {
+              Integer count = argCount.get(value);
+              if (count == null) count = 0;
+              argCount.put(value, count+1);
+            }
+          }
+          int sum = 0;
+          for (String arg : argCount.keySet())
+          {
+            String freq = "         "+argCount.get(arg);
+            freq = freq.substring(freq.length()-9);
+            freqStr.append(freq + "    " + arg + "\n");
+            sum += argCount.get(arg);
+          }
+          String totalStr = "         "+missing;
+          totalStr = totalStr.substring(totalStr.length()-9);
+          freqStr.append(totalStr + "    " + "<Questions with no %"+t+">\n");
+          totalStr = "         "+sum;
+          totalStr = totalStr.substring(totalStr.length()-9);
+          freqStr.append(totalStr + "    " + "<Questions with %"+t+">\n");
+        }
+        parser.outputMessage(freqStr.toString());
+      }
+    }
+    catch (Exception e)
+    {
+      if (parser != null)
+        parser.outputMessage(e.getMessage() + "\n");
+      else
+        System.err.println(e.getMessage());
+    }
+
+  }
+
+
 
   static class TagLine
   {
