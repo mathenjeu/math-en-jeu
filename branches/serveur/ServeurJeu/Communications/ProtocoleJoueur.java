@@ -854,14 +854,16 @@ public class ProtocoleJoueur implements Runnable
         }
 
         String roomType = fullStats.equals("1")?"profsType":"General";
-        Date dateBeginDate = new Date();
-        Date dateEndDate = new Date();
+
+        Date dateBeginDate = new Date(); //no arguments means right now
         try {
             dateBeginDate = GestionnaireBD.mejFormatDate.parse(beginDate);
+        } catch (Exception e) {} //if date is malformed, use 'right now'
+        
+        Date dateEndDate = null;
+        try {
             dateEndDate = GestionnaireBD.mejFormatDate.parse(endDate);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {} //if date is malformed, use 'never' (i.e. null)
 
         TreeSet<Integer> setKeywordIds = new TreeSet<Integer>();
         for (String id: keywordIds.split(",")) {

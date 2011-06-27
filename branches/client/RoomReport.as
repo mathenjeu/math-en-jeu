@@ -183,7 +183,7 @@ class RoomReport
 			}
 		}
 	}
-
+		
 	//Adds the SWF filenames to the questions map.  There can be more then one
 	//SWF per question.  There should be one by language for which the question
 	//is available.
@@ -198,14 +198,12 @@ class RoomReport
 			if (questions[qid] == undefined)
 			{
 				questions[qid] = new Object();
+				questions[qid].swfs = new Object();
 			}
-			questions[qid].swfs = new Array();
-			var lstFilenames:Array = questionSWF.childNodes;
-			var numSWF:Number = lstFilenames.length;
-			for (var j = 0; j < numSWF; j++)
-			{
-				questions[qid].swfs.push(lstFilenames[j].nodeValue);
-			}
+			var lid:Number = parseInt(questionSWF.attributes["lid"], 10);
+			questions[qid].swfs[lid] = new Array();
+			questions[qid].swfs[lid].push(questionSWF.attributes["q"]);
+			questions[qid].swfs[lid].push(questionSWF.attributes["f"]);
 		}
 	}
 

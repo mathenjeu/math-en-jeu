@@ -52,6 +52,7 @@
 	alertInvalidPasswordLength = "The password must contain 5 to 15 characters"
 	alertNoGameTypes = "You must select at least one game type for the room"
 	alertNoKeywords = "You must select at least one keyword for the room"
+        alertNoSWF = "This question is not available in this language"
 	
 	createCommand = "Create"
 	editCommand = "Edit"

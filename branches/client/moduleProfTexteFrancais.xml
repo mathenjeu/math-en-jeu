@@ -1,4 +1,4 @@
-
+﻿
 <?xml version="1.0" encoding="UTF-8"?> 
 <Texte 
 	
@@ -37,6 +37,9 @@
 	  passAlert = "Protéger votre salle par un mot de passe permet de contrôler l’accéder à celle-ci et assure que seulement vos élèves peuvent y accéder. Cela permet aussi de n'avoir que leurs résultats dans vos rapports."
 	  
 	  GUIdejaConnecte = "Cet utilisateur est déjà connecté dans une autre fenêtre. Verifié vos connexions."
+
+          languageFR = "Français"
+	  languageEN = "Anglais"
 	  
 	  Subject0 = " Général"
 	     categorie00 = "non-classée" 

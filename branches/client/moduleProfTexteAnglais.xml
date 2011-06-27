@@ -37,7 +37,8 @@
 	  
 	  GUIdejaConnecte = "This user is already connected in another window! Verify your browser!"
 	  
-	  
+	  languageFR = "French"
+          languageEN = "English"
 	  
 	  Subject0 = " General"
 	     categorie00 = "unclassified" 
