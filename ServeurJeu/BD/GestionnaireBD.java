@@ -185,19 +185,18 @@ public class GestionnaireBD {
         try {
             synchronized (DB_LOCK) {
                 ResultSet rs = requete.executeQuery(
-                        "SELECT jos_users.id, jos_comprofiler.lastname, jos_comprofiler.firstname, gid, " +
-                        "jos_comprofiler_field_values.ordering, jos_users.username " +
-                        "FROM jos_users, jos_comprofiler, jos_comprofiler_field_values " +
-                        "WHERE jos_users.id = jos_comprofiler.user_id " +
-                        "AND jos_comprofiler_field_values.fieldtitle = jos_comprofiler.cb_gradelevel " +
-                        "AND jos_users.username =  '" + joueur.obtenirNomUtilisateur() + "';");
+                        "SELECT jos_users.id, jos_comprofiler.lastname, jos_comprofiler.firstname, gid," +
+                        "  jos_comprofiler_field_values.ordering, jos_users.username " +
+                        "FROM jos_users " +
+                        "LEFT JOIN jos_comprofiler ON jos_users.id = jos_comprofiler.user_id " +
+                        "LEFT JOIN jos_comprofiler_field_values ON jos_comprofiler_field_values.fieldtitle = jos_comprofiler.cb_gradelevel " +
+                        "WHERE jos_users.username =  '" + joueur.obtenirNomUtilisateur() + "'");
                 
                 if (rs.next()) {
-
                     String prenom = rs.getString("lastname");
                     String nom = rs.getString("firstname");
                     cle = rs.getInt("id");
-                    int role = rs.getInt("gid");
+                    int gid = rs.getInt("gid");
                     int niveau = rs.getInt("ordering");
                     //xxString langue = rs.getString("short_name");
 
@@ -205,7 +204,7 @@ public class GestionnaireBD {
                     joueur.definirNomFamille(nom);
                     joueur.definirCleJoueur(cle);
                     //joueur.definirLangue(langue);
-                    joueur.setRole(role);
+                    joueur.setRole(convertGIDToRole(gid));
                     joueur.definirCleNiveau(niveau);
                 }
                 rs.close();
@@ -220,6 +219,16 @@ public class GestionnaireBD {
        
     }//end methode
 
+    private int convertGIDToRole(int gid)
+    {
+        switch(gid)
+        {
+            case 18: return 1; //normal users
+            case 25: return 2; //admin
+            case 31: return 3; //teacher
+            default: return 1;
+	}
+    }
     /** This function queries the DB to find the player's musical preferences  ***
      * and returns a Vector containing URLs of MP3s the player might like
      * @param player
@@ -553,12 +562,12 @@ public class GestionnaireBD {
      * @return
      */
     public int getUserRole(String username, String password) {
-        int role = 0;
+        int gid = 0;
         try {
             synchronized (DB_LOCK) {
                 ResultSet rs = requete.executeQuery("SELECT gid FROM jos_users WHERE username='" + username + "' AND password='" + password + "'");
                 if (rs.next())
-                    role = rs.getInt("role_id");
+                    gid = rs.getInt("gid");
                 rs.close();
             }
         } catch (SQLException e) {
@@ -568,7 +577,7 @@ public class GestionnaireBD {
             objLogger.error(e.getMessage());
             e.printStackTrace();
         }
-        return role;
+        return convertGIDToRole(gid);
     }// end method
 
     public Map<String, Object> getRoomInfo(int roomId) throws SQLException {
@@ -577,7 +586,7 @@ public class GestionnaireBD {
             synchronized (DB_LOCK) {
                 ResultSet rs = requete.executeQuery(
                         "SELECT room.password, jos_users.username, jos_users.gid, beginDate, endDate, masterTime, room_info.language_id,room_info.name,room_info.description " +
-                        "FROM room_info, room, jos_users, game_type " +
+                        "FROM room_info, room, jos_users " +
                         "WHERE room.room_id = " + roomId + " " +
                         "AND room.room_id = room_info.room_id " +
                         "AND jos_users.id = room.user_id");
@@ -591,8 +600,8 @@ public class GestionnaireBD {
                         roomData.put("beginDate", rs.getTimestamp("beginDate"));
                         roomData.put("endDate", rs.getTimestamp("endDate"));
                         roomData.put("masterTime", rs.getInt("masterTime"));
-                        int role_id = rs.getInt("gid");
-                        roomData.put("roomType", role_id == 3 ? "profsType" : "General");
+                        int gid = rs.getInt("gid");
+                        roomData.put("roomType", convertGIDToRole(gid) == 3 ? "profsType" : "General");
                         roomData.put("names", names);
                         roomData.put("descriptions", descriptions);
                     }
@@ -735,12 +744,11 @@ public class GestionnaireBD {
     	Map<Integer, Integer> nbTracksMap = new TreeMap<Integer, Integer>();
     	
     	for(Integer Id: iDs){
-    		
     		 try {
     	            synchronized (DB_LOCK) {
-    	                ResultSet rs = requete.executeQuery("SELECT rule.nbTracks  FROM rule WHERE rule.rule_id = " + Id + ";");
-    	                if (rs.next()) {
-    	                        	                    
+    	                ResultSet rs = requete.executeQuery("SELECT nbTracks FROM rule WHERE rule_id=" + Id);
+    	                if (rs.next())
+                        {
     	                    int nbTracks = rs.getInt("nbTracks");
     	                    nbTracksMap.put(Id, nbTracks);
     	                }
@@ -1087,7 +1095,6 @@ public class GestionnaireBD {
                 requete.executeUpdate("DELETE FROM room_game_types WHERE room_id=" + room_id);
                 requete.executeUpdate("DELETE FROM room_shop WHERE room_id=" + room_id);
                 requete.executeUpdate("DELETE FROM room_object WHERE room_id=" + room_id);
-                requete.close();
             }
         } catch (Exception e) {
         	objLogger.error(GestionnaireMessages.message("bd.erreur_delete_rooms_modProf") + e.getMessage());
@@ -1394,7 +1401,7 @@ public class GestionnaireBD {
         RapportDeSalle rapport = new RapportDeSalle(room_id, RapportDeSalle.ReportType.FULL);
         try {
             synchronized (DB_LOCK) {
-                String strSQL = "SELECT game.date,game.game_type_id,game.duration,game.winner_id,gamestats_questions.*,gamestats_scores.score, jos_comprofiler.lastname, jos_comprofiler.firstname,question_info.question_flash_file " +
+                String strSQL = "SELECT game.date,game.game_type_id,game.duration,game.winner_id,gamestats_questions.*,gamestats_scores.score, jos_comprofiler.lastname, jos_comprofiler.firstname, question_info.question_flash_file, question_info.feedback_flash_file, question_info.language_id " +
                         "FROM game, gamestats_questions " +
                         "LEFT JOIN jos_comprofiler ON jos_comprofiler.user_id = gamestats_questions.user_id " +
                         "LEFT JOIN question_info ON question_info.question_id=gamestats_questions.question_id " +
@@ -1415,10 +1422,12 @@ public class GestionnaireBD {
                     int score = rs.getInt("gamestats_scores.score");
                     String lastname = rs.getString("lastname");
                     String firstname = rs.getString("firstname");
-                    String swf = rs.getString("question_info.question_flash_file");
+                    String q_swf = rs.getString("question_info.question_flash_file");
+                    String f_swf = rs.getString("question_info.feedback_falsh_file");
+                    int language_id = rs.getInt("question_info.language_id");
                     
                     rapport.addPlayerInfo(user_id, firstname, lastname);
-                    rapport.addQuestionSWF(question_id,swf);
+                    rapport.addQuestionSWF(question_id, language_id, q_swf, f_swf);
                     rapport.addGameInfo(game_id, date, game_type_id, winner_id, duration, user_id, question_id, answer_status, time_taken, score);
                 }
                 rs.close();
@@ -1447,14 +1456,16 @@ public class GestionnaireBD {
                     rapport.addQuestionSummary(question_id, time_period, frequency, freq_right, freq_wrong, time_taken, time_taken_right, time_taken_wrong);
                 }
                 rs.close();
-                rs = requete.executeQuery("SELECT question_info.question_id,question_info.question_flash_file " +
+                rs = requete.executeQuery("SELECT question_info.question_id, question_info.language_id, question_info.question_flash_file, question_info.feedback_flash_file " +
                         "FROM question_info,gamestats_summary_questions " +
                         "WHERE question_info.question_id = gamestats_summary_questions.question_id " +
                         "AND gamestats_summary_questions.room_id="+room_id);
                 while (rs.next()) {
                     int question_id = rs.getInt("question_info.question_id");
-                    String swf = rs.getString("question_info.question_flash_file");
-                    rapport.addQuestionSWF(question_id, swf);
+                    int language_id = rs.getInt("question_info.language_id");
+                    String q_swf = rs.getString("question_info.question_flash_file");
+                    String fb_swf = rs.getString("question_info.feedback_flash_file");
+                    rapport.addQuestionSWF(question_id, language_id, q_swf, fb_swf);
                 }
                 rs.close();
                 rs = requete.executeQuery("SELECT gamestats_summary_users.*,jos_comprofiler.firstname,jos_comprofiler.lastname " +

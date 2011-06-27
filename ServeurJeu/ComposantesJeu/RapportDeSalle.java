@@ -23,7 +23,7 @@ public class RapportDeSalle
     private final ReportType type;
     private Map<Integer, PlayerInfo> players;
     private Map<Integer, PlayerSummary> playerSummaries;
-    private Map<Integer, Set<String>> questionSWFs;
+    private Map<Integer, Map<Integer, String[]>> questionSWFs;
     private Map<Integer, QuestionSummary> questionSummaries;
     private Map<Integer, GameInfo> games;
 
@@ -31,7 +31,7 @@ public class RapportDeSalle
         this.roomId = roomId;
         this.type = type;
         players = new HashMap<Integer, PlayerInfo>();
-        questionSWFs = new HashMap<Integer, Set<String>>();
+        questionSWFs = new HashMap<Integer, Map<Integer, String[]>>();
         if (type == ReportType.SUMMARY) {
             playerSummaries = new HashMap<Integer, PlayerSummary>();
             questionSummaries = new HashMap<Integer, QuestionSummary>();
@@ -67,15 +67,22 @@ public class RapportDeSalle
 
     }
 
-    public void addQuestionSWF(int question_id, String swf) {
-        Set<String> swfs = questionSWFs.get(question_id);
-        if (swfs == null) {
-            swfs = new TreeSet<String>();
-            questionSWFs.put(question_id, swfs);
+    public void addQuestionSWF(int question_id, int language_id, String q_swf, String fb_swf) {
+        Map<Integer, String[]> swfsMap = questionSWFs.get(question_id);
+        if (swfsMap == null) {
+            swfsMap = new HashMap<Integer, String[]>();
+            questionSWFs.put(question_id, swfsMap);
         }
-        swfs.add(swf);
+        String[] swfs = swfsMap.get(language_id);
+        if (swfs == null)
+        {
+            swfs = new String[2];
+            swfsMap.put(language_id, swfs);
+        }
+        swfs[0] = q_swf;
+        swfs[1] = fb_swf;
     }
-
+    
     public void addQuestionSummary(int question_id, int time_period,
             int frequency, int freq_right, int freq_wrong,
             int time_taken, int time_taken_right, int time_taken_wrong) {
@@ -197,11 +204,15 @@ public class RapportDeSalle
         Element objNoeudParametreListeSWFs = doc.createElement("parametre");
         objNoeudParametreListeSWFs.setAttribute("type", "ListeSWFs");
         for (Integer qid: questionSWFs.keySet()) {
-            Element objNoeudSWF = doc.createElement("swf");
-            objNoeudSWF.setAttribute("qid", qid.toString());
-            for (String filename : questionSWFs.get(qid))
-                objNoeudSWF.appendChild(doc.createTextNode(filename));
-            objNoeudParametreListeSWFs.appendChild(objNoeudSWF);
+            for (Integer lid : questionSWFs.get(qid).keySet()) {
+                String[] swfs = questionSWFs.get(qid).get(lid);
+                Element objNoeudSWF = doc.createElement("swf");
+                objNoeudSWF.setAttribute("qid", qid.toString());
+                objNoeudSWF.setAttribute("lid", lid.toString());
+                objNoeudSWF.setAttribute("q", swfs[0]);
+                objNoeudSWF.setAttribute("f", swfs[1]);
+                objNoeudParametreListeSWFs.appendChild(objNoeudSWF);
+            }
         }
         return objNoeudParametreListeSWFs;
     }
