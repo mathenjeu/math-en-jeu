@@ -154,8 +154,8 @@ class GestionnaireCommunicationProfModule
         objSocketClient = new DispatchingXMLSocket();
         // Ajouter l'ecouteur de l'evenement connect
         objSocketClient.addEventListener("connect", Delegate.create(this, objSocketClient_onConnect));
-        // Ajouter l'ecouteur de l'evenement xml
-        objSocketClient.addEventListener("xml", Delegate.create(this, objSocketClient_onXML));
+        // Ajouter l'ecouteur de l'evenement data:  DispatchingXMLSocket.as --> onData convertit en XML
+        objSocketClient.addEventListener("data", Delegate.create(this, objSocketClient_onXML));
         // Ajouter l'ecouteur de l'evenement close
         objSocketClient.addEventListener("close", Delegate.create(this, objSocketClient_onClose));
         // Essayer de se connecter au serveur de jeu
