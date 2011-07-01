@@ -45,7 +45,7 @@ public class QuestionsInfo extends EventDispatcher {
 	  for(var i:uint = 0; i < questionsNumb; i++)
 	  {
 		  question = questionsArray[i] as Question;
-		  var link:String = question.getQuestionName();
+		  var link:String = question.getQuestionName() + ".swf";
 		  qArray.push({label:link, data:link});
 		  //trace(link);
 	  }
