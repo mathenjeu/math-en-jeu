@@ -147,7 +147,7 @@
 	  passAlert = "Password protecting your room ensure that only your pupils can access it. Accordingly the report will contain only their game results."
 	  
 	  buttonNew = "New Game"
-	  buttonOld = "Restart"
+	  buttonOld = "Rejoin"
 	  restartText = "You are already assigned to a running game. Do you want to rejoin it or start a new game?"
 	  buttonBug = " Report an error "
 	  userText = "Player :"
