@@ -30,9 +30,9 @@ public class Salle
 {
     // Déclaration d'une référence vers le gestionnaire d'événements
 
-    private final GestionnaireEvenements objGestionnaireEvenements;
+    private GestionnaireEvenements objGestionnaireEvenements;
     // Déclaration d'une référence vers le contrôleur de jeu
-    private final ControleurJeu objControleurJeu;
+    private ControleurJeu objControleurJeu;
     // Contient le nom de la salle dans chaque langue. La map est construite
     // avec l'information contenu dans la table room_info.
     // BD:  [room_info.language_id --> room_info.name]
@@ -145,6 +145,9 @@ public class Salle
      */
     public void destroyRoom(){
     	this.lstNoTables.clear();
+    	this.objControleurJeu = null;
+    	this.objGestionnaireEvenements.arreterGestionnaireEvenements();
+    	this.objGestionnaireEvenements = null;
     }// end method
     
     /**
@@ -786,6 +789,15 @@ public class Salle
     public Date getEndDate() {
         return dateEndDate;
     }
+
+	public GestionnaireEvenements getObjGestionnaireEvenements() {
+		return objGestionnaireEvenements;
+	}
+
+	public void setObjGestionnaireEvenements(
+			GestionnaireEvenements objGestionnaireEvenements) {
+		this.objGestionnaireEvenements = objGestionnaireEvenements;
+	}
 	
 }// end class 
 

@@ -1,9 +1,11 @@
 package ServeurJeu.Communications;
 
 import java.awt.Point;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -14,16 +16,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ClassesUtilitaires.UtilitaireEncodeurDecodeur;
 import ClassesUtilitaires.UtilitaireNombres;
@@ -68,8 +67,6 @@ public class ProtocoleJoueur implements Runnable
     // Cet objet permet de garder une référence vers le canal de communication
     // entre le serveur et le client (joueur) courant
     private final Socket objSocketJoueur;
-    // Déclaration d'un canal de réception
-    private InputStream objCanalReception;
     // Cette variable permet de savoir s'il faut arrêter le thread ou non
     private boolean bolStopThread;
     // Déclaration d'une référence vers un joueur humain correspondant à ce
@@ -126,6 +123,7 @@ public class ProtocoleJoueur implements Runnable
             // for games or gui interactive application it must be set to true to
         	// sent all the packets as soon as possible without buffering
             objSocketJoueur.setTcpNoDelay(true);
+            objSocketJoueur.setKeepAlive(true);
             
         } catch (SocketException se) {
             objLogger.error(GestionnaireMessages.message("protocole.canal_ferme"));
@@ -143,21 +141,18 @@ public class ProtocoleJoueur implements Runnable
      * @synchronism Cette méthode n'a pas besoin d'être synchronisée
      */
     public void run() {
-    	Thread.currentThread().setPriority( Thread.currentThread().getPriority() + 1 );
-    	try {        	
-
-    		//objSocketJoueur.setSoLinger(true, 1000);
-    		//objSocketJoueur.setKeepAlive(true);
-
+    	//Thread.currentThread().setPriority( Thread.currentThread().getPriority() - 1 );
+    	try {	
+    		
     		// Créer le canal qui permet de recevoir des données sur le canal
     		// de communication entre le client et le serveur
-    		objCanalReception = objSocketJoueur.getInputStream();
+    		DataInputStream in = new DataInputStream(new BufferedInputStream(objSocketJoueur.getInputStream()));
 
     		// Cette objet va contenir le message envoyé par le client au serveur
     		StringBuffer strMessageRecu = new StringBuffer();
 
     		// Création d'un tableau de 1024 bytes qui va servir à lire sur le canal
-    		byte[] byttBuffer = new byte[1024];
+    		byte[] byttBuffer = new byte[4096];
 
     		// Boucler et obtenir les messages du client (joueur), puis les
     		// traiter tant que le client n'a pas décidé de quitter (ou que la
@@ -170,7 +165,7 @@ public class ProtocoleJoueur implements Runnable
 
     			// Déclaration d'une variable qui va contenir le nombre de
     			// bytes réellement lus dans le canal
-    			int intBytesLus = objCanalReception.read(byttBuffer);
+    			int intBytesLus = in.read(byttBuffer);//objCanalReception.read(byttBuffer);
 
     			// Si le nombre de bytes lus est -1, alors c'est que le
     			// stream a été fermé, il faut donc terminer le thread
@@ -180,7 +175,7 @@ public class ProtocoleJoueur implements Runnable
     			}
     			
     			if (objSocketJoueur.isClosed()) {
-    				objLogger.error("Une erreur est survenue: sur socket");
+    				objLogger.error("Une erreur est survenue: sur socket.....");
     				setBolStopThread(true);
     			} 
 
@@ -202,7 +197,7 @@ public class ProtocoleJoueur implements Runnable
 
     					// On appelle une fonction qui va traiter le message reçu du
     					// client et mettre le résultat à retourner dans une variable
-    					objLogger.info(GestionnaireMessages.message("protocole.message_recu") + strMessageRecu);
+    					//objLogger.info(GestionnaireMessages.message("protocole.message_recu") + strMessageRecu);
 
     					// If we're in debug mode (can be set in mathenjeu.xml), print communications
     					GregorianCalendar calendar = new GregorianCalendar();
@@ -234,7 +229,7 @@ public class ProtocoleJoueur implements Runnable
     					}
     					
     					// if we have problems in transmition
-    					if(i == 0)this.arreterProtocoleJoueur();
+    					//if(i == 0) this.setBolStopThread(true); //this.arreterProtocoleJoueur();
    						
     					// Vider la chaîne contenant les commandes à traiter
     					strMessageRecu.setLength(0);
@@ -255,13 +250,12 @@ public class ProtocoleJoueur implements Runnable
     				// recevra le EOM
     				strMessageRecu.append(new String(byttBuffer, intMarqueur, intBytesLus - intMarqueur));
     			}
-    			//Thread.yield( );
-
+    			
     		}
     	} catch (IOException ioe) {
             
     		bolStopThread = true;
-    		objLogger.error(ioe.getMessage() + " in reading");
+    		objLogger.error(ioe.getMessage() + " IOException in run");
             objLogger.error(GestionnaireMessages.message("protocole.erreur_reception"));
             
         } catch (TransformerConfigurationException tce) {
@@ -272,19 +266,17 @@ public class ProtocoleJoueur implements Runnable
             objLogger.error(te.getMessage());
         } catch (Exception e) {
             objLogger.error(GestionnaireMessages.message("protocole.erreur_thread"));
-            objLogger.error(e.getMessage());
-            e.printStackTrace();
-            
+            objLogger.error(e.getMessage() + " *** " + e.getStackTrace());            
         } finally {
-           
-            arreterProtocoleJoueur();
+        	objLogger.error("We reched finally in protocol");
+        	arreterProtocoleJoueur();
         }
         
         
         String inetAddress = objSocketJoueur.getInetAddress() == null ? "[?.?.?.?]" : objSocketJoueur.getInetAddress().toString();
         objLogger.info(GestionnaireMessages.message("protocole.fin_thread").replace("$$CLIENT$$", inetAddress));
-        arreterProtocoleJoueur();
-    }
+        //arreterProtocoleJoueur();
+    }// end thread
 
     // On vérifie si le joueur est bel et bien dans la BD et si son mot de passe est correct
     // S'il y a erreur:  on ajoute l'erreur à l'attribut "nom" du noeudCommande et on retourne true
@@ -297,7 +289,7 @@ public class ProtocoleJoueur implements Runnable
             	// wait a bit .. if player is just disconnected
         		// it will be a second verification
         		try {
-        			Thread.currentThread();
+        			//Thread.currentThread();
 					Thread.sleep(3000);
         		}
         		catch (InterruptedException e) {
@@ -2276,31 +2268,33 @@ public class ProtocoleJoueur implements Runnable
             // de communication entre le client et le serveur
         	
         	try{
-        		objSocketJoueur.getRemoteSocketAddress();
-        		
-        		OutputStream objCanalEnvoi = objSocketJoueur.getOutputStream();
+        		//objSocketJoueur.getRemoteSocketAddress();        		
+        		//OutputStream objCanalEnvoi = objSocketJoueur.getOutputStream();
+        		//objSocketJoueur.setSendBufferSize(4096);
+        		DataOutputStream outS = new DataOutputStream(new BufferedOutputStream(objSocketJoueur.getOutputStream()));
         		
         		String chainetemp = UtilitaireEncodeurDecodeur.encodeToUTF8(message);
-        		
+        		byte[] bytes = message.getBytes("UTF8");
         		// écrire le message sur le canal d'envoi au client
-        		objCanalEnvoi.write(message.getBytes("UTF8"));
+        		outS.write(bytes);
 
         		// écrire le byte 0 sur le canal d'envoi pour signifier la fin du message
-        		objCanalEnvoi.write((byte)0);
+        		outS.write((byte)0);
 
         		// Envoyer le message sur le canal d'envoi
-        		objCanalEnvoi.flush();
+        		outS.flush();
         		
         		//if (chainetemp.contains("ping") == false) {
         			objLogger.info(GestionnaireMessages.message("protocole.message_envoye") + chainetemp);
         		//}
         	}catch(IOException ioe)
         	{
-        		this.arreterProtocoleJoueur();
-        		objLogger.error(ioe.getMessage() + " in writing");
+        		//this.bolStopThread = true;
+        		//this.arreterProtocoleJoueur();
+        		objLogger.error(ioe.getMessage() + " IOException in writing" + message);
         	}
         	
-            objLogger.info(GestionnaireMessages.message("protocole.confirmation") + objSocketJoueur.getInetAddress().toString());
+            //objLogger.info(GestionnaireMessages.message("protocole.confirmation") + objSocketJoueur.getInetAddress().toString());
         }
         Moniteur.obtenirInstance().fin();
 
@@ -2748,8 +2742,11 @@ public class ProtocoleJoueur implements Runnable
             // On tente de fermer le canal de réception. Cela va provoquer
             // une erreur dans le thread et le joueur va être déconnecté et
             // le thread va arrêter
-        	if(objCanalReception != null)
-               objCanalReception.close();
+        	if(objSocketJoueur != null){
+               objSocketJoueur.shutdownInput();
+        	   objSocketJoueur.shutdownOutput();
+        	   objSocketJoueur.close();
+        	}
         } catch (IOException ioe) {
             objLogger.error(ioe.getMessage() +  " close reception canal");
         }
@@ -2765,7 +2762,7 @@ public class ProtocoleJoueur implements Runnable
             objLogger.error(ioe.getMessage() + "close socket in protocole");
         }
                
-        System.out.println("! Joueur deconnecter - Protocole1 " + bolStopThread);          
+        objLogger.info("! Joueur deconnecter - arreterProtocoleJoueur() in ProtocoleJoueur - bolStopThread = " + bolStopThread);          
 
         
         // Si le joueur humain a été défini dans le protocole, alors
@@ -2778,9 +2775,11 @@ public class ProtocoleJoueur implements Runnable
             // numéro de commande de cette fonction, car on ne retournera
             // rien du tout)
             
-        	System.out.println("! Joueur deconnecter - Protocole2 " + bolStopThread + " " + objJoueurHumain.obtenirNomUtilisateur());     
+        	//System.out.println("! Joueur deconnecter - Protocole2 " + bolStopThread + " " + objJoueurHumain.obtenirNomUtilisateur());     
             objControleurJeu.deconnecterJoueur(objJoueurHumain, false, true);
-            //System.out.println("! Joueur deconnecter - Protocole2 ");          
+           
+        }else{
+            objGestionnaireCommunication.supprimerProtocoleJoueur(this);
 
         }
 
@@ -2945,6 +2944,8 @@ public class ProtocoleJoueur implements Runnable
             objNoeudJoueur.setAttribute("id", Integer.toString(joueurHumain.obtenirPartieCourante().obtenirIdPersonnage()));
             objNoeudJoueur.setAttribute("role", Integer.toString(joueurHumain.getRole()));
             objNoeudJoueur.setAttribute("pointage", Integer.toString(joueurHumain.obtenirPartieCourante().obtenirPointage()));
+            objNoeudJoueur.setAttribute("brainiacState", Boolean.toString(joueurHumain.obtenirPartieCourante().getBrainiacState().isInBrainiac()));
+            objNoeudJoueur.setAttribute("brainiacTime", Integer.toString(joueurHumain.obtenirPartieCourante().getBrainiacState().getTaskTime()));
             // Ajouter le noeud de l'item au noeud du paramètre
             objNoeudParametreListeJoueurs.appendChild(objNoeudJoueur);
         }
@@ -2959,6 +2960,7 @@ public class ProtocoleJoueur implements Runnable
         objNoeudJoueur.setAttribute("id", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirIdPersonnage()));
         objNoeudJoueur.setAttribute("role", Integer.toString(ancientJoueur.getRole()));
         objNoeudJoueur.setAttribute("pointage", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirPointage()));
+        //objNoeudJoueur.setAttribute("pointage", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirPointage()));
 
         // Ajouter le noeud de l'item au noeud du paramètre
         objNoeudParametreListeJoueurs.appendChild(objNoeudJoueur);
@@ -2978,6 +2980,8 @@ public class ProtocoleJoueur implements Runnable
                 objNoeudJoueur.setAttribute("id", Integer.toString(objJoueurVirtuel.obtenirIdPersonnage()));
                 objNoeudJoueur.setAttribute("role", Integer.toString(1));
                 objNoeudJoueur.setAttribute("pointage", Integer.toString(objJoueurVirtuel.obtenirPointage()));
+                objNoeudJoueur.setAttribute("brainiacState", Boolean.toString(objJoueurVirtuel.getBrainiacState().isInBrainiac()));
+                objNoeudJoueur.setAttribute("brainiacTime", Integer.toString(objJoueurVirtuel.getBrainiacState().getTaskTime()));
 
                 // Ajouter le noeud de l'item au noeud du paramètre
                 objNoeudParametreListeJoueurs.appendChild(objNoeudJoueur);
@@ -3115,69 +3119,114 @@ public class ProtocoleJoueur implements Runnable
 
     /*
      * Permet d'envoyer le numero de la table à un joueur qui se reconnecte
+     * et aussi autre proprietes
      */
     private void sendTableNumber(JoueurHumain ancientJoueur, String no) {
 
-        /*
-         * <commande nom="Argent" no="0" type="MiseAJour">
-         * <parametre type="Argent" valeur="123"></parametre></commande>
-         *
-         */
+    	// Déclaration d'une variable qui va contenir le code XML à envoyer
+    	String strCodeXML = "";
 
-        // Déclaration d'une variable qui va contenir le code XML à envoyer
-        String strCodeXML = "";
+    	// Appeler une fonction qui va créer un document XML dans lequel
+    	// on peut ajouter des noeuds
+    	Document objDocumentXML = UtilitaireXML.obtenirDocumentXML();
 
-        // Appeler une fonction qui va créer un document XML dans lequel
-        // on peut ajouter des noeuds
-        Document objDocumentXML = UtilitaireXML.obtenirDocumentXML();
+    	// Créer le noeud de commande à retourner
+    	Element objNoeudCommande = objDocumentXML.createElement("commande");
 
-        // Créer le noeud de commande à retourner
-        Element objNoeudCommande = objDocumentXML.createElement("commande");
+    	// Créer le noeud du paramètre
+    	Element objNoeudParametreNbTable = objDocumentXML.createElement("parametre");
 
-        // Créer le noeud du paramètre
-        Element objNoeudParametreNbTable = objDocumentXML.createElement("parametre");
+    	// Create another param for the max nb players in this game
+    	Element objNoeudParametreMaxPlayers = objDocumentXML.createElement("parametre");
 
-        // Create another param for the max nb players in this game
-        Element objNoeudParametreMaxPlayers = objDocumentXML.createElement("parametre");
+    	// Create another param for the game type
+    	Element objNoeudParametreGameType = objDocumentXML.createElement("parametre");
 
-        // Create another param for the game type
-        Element objNoeudParametreGameType = objDocumentXML.createElement("parametre");
-	
-	// Create another param for the game type
-	Element objNoeudParametreMoveStep = objDocumentXML.createElement("parametre");
+    	// Create another param for the game type
+    	Element objNoeudParametreMoveStep = objDocumentXML.createElement("parametre");
+        //System.out.println("MoveStep " + ancientJoueur.obtenirPartieCourante().getMoveVisibility());
 
-        // send the id of the game and max nb players in this game
-        objNoeudCommande.setAttribute("noClient", no);
-        objNoeudCommande.setAttribute("type", "MiseAJour");
-        objNoeudCommande.setAttribute("nom", "Table");
-        objNoeudParametreNbTable.setAttribute("type", "Table");
-        objNoeudParametreNbTable.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirNoTable()));
-        objNoeudParametreMaxPlayers.setAttribute("type", "MaxPlayers");
-        objNoeudParametreMaxPlayers.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirTable().getMaxNbPlayers()));
-        objNoeudParametreGameType.setAttribute("type", "GameType");
-        objNoeudParametreGameType.setAttribute("valeur", ancientJoueur.obtenirPartieCourante().obtenirTable().getGameType());
-	objNoeudParametreMoveStep.setAttribute("type", "MoveStep");
-	objNoeudParametreMoveStep.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().getMoveVisibility()));
-	
-	//System.out.println("Move " + ancientJoueur.obtenirPartieCourante().getMoveVisibility());
+    	   	
+    	// send the id of the game and max nb players in this game
+    	objNoeudCommande.setAttribute("noClient", no);
+    	objNoeudCommande.setAttribute("type", "MiseAJour");
+    	objNoeudCommande.setAttribute("nom", "Table");
+    	objNoeudParametreNbTable.setAttribute("type", "Table");
+    	objNoeudParametreNbTable.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirTable().obtenirNoTable()));
+    	objNoeudParametreMaxPlayers.setAttribute("type", "MaxPlayers");
+    	objNoeudParametreMaxPlayers.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirTable().getMaxNbPlayers()));
+    	objNoeudParametreGameType.setAttribute("type", "GameType");
+    	objNoeudParametreGameType.setAttribute("valeur", ancientJoueur.obtenirPartieCourante().obtenirTable().getGameType());
+    	objNoeudParametreMoveStep.setAttribute("type", "MoveStep");
+    	objNoeudParametreMoveStep.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().getMoveVisibility()));
+    	
+    	// Ajouter les noeuds paramètres au noeud de commande dans
+    	// le document de sortie
+    	objNoeudCommande.appendChild(objNoeudParametreNbTable);
+    	objNoeudCommande.appendChild(objNoeudParametreMaxPlayers);
+    	objNoeudCommande.appendChild(objNoeudParametreGameType);
+    	objNoeudCommande.appendChild(objNoeudParametreMoveStep);
+    	
+    	boolean brainiacState = ancientJoueur.obtenirPartieCourante().getBrainiacState().isInBrainiac();
+        int brainiacTime = ancientJoueur.obtenirPartieCourante().getBrainiacState().getTaskTime();
+        
+        //it not worth to transmit if time is too short
+        if(brainiacTime < 3)
+        {
+        	brainiacTime = 0;
+        	brainiacState = false;
+        }	
+        //System.out.println(brainiacTime + " " + brainiacState);
 
-	// Ajouter les noeuds paramètres au noeud de commande dans
-	// le document de sortie
-	objNoeudCommande.appendChild(objNoeudParametreNbTable);
-	objNoeudCommande.appendChild(objNoeudParametreMaxPlayers);
-	objNoeudCommande.appendChild(objNoeudParametreGameType);
-	objNoeudCommande.appendChild(objNoeudParametreMoveStep);
-	// Ajouter le noeud de commande au noeud racine dans le document
-	objDocumentXML.appendChild(objNoeudCommande);
-        try {
-            // Transformer le XML en string
-            strCodeXML = ClassesUtilitaires.UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+        // Create another param for the Brainiac state
+    	Element objNoeudParametreBrainiacState = objDocumentXML.createElement("parametre");
+    	// Create another param for the Brainiac state
+    	Element objNoeudParametreBrainiacTime = objDocumentXML.createElement("parametre");
 
-            // Envoyer le message string
-            envoyerMessage(strCodeXML);
-        } catch (Exception e) {
-            objLogger.error(e.getMessage());
-        }
+    	objNoeudParametreBrainiacState.setAttribute("type", "BrainiacState");
+    	objNoeudParametreBrainiacState.setAttribute("valeur", Boolean.toString(brainiacState));
+    	objNoeudParametreBrainiacTime.setAttribute("type", "BrainiacTime");
+    	objNoeudParametreBrainiacTime.setAttribute("valeur", Integer.toString(brainiacTime));
+
+    	objNoeudCommande.appendChild(objNoeudParametreBrainiacState);
+    	objNoeudCommande.appendChild(objNoeudParametreBrainiacTime);
+    	
+    	boolean bananaState = ancientJoueur.obtenirPartieCourante().getBananaState().isUnderBananaEffects();
+        int bananaTime = ancientJoueur.obtenirPartieCourante().getBananaState().getTaskTime();
+        
+        //it not worth to transmit if time is too short
+        if(bananaTime < 3)
+        {
+        	bananaTime = 0;
+        	bananaState = false;
+        }	
+        //System.out.println(bananaTime + " " + bananaState);
+
+        // Create another param for the Brainiac state
+    	Element objNoeudParametreBananaState = objDocumentXML.createElement("parametre");
+    	// Create another param for the Brainiac state
+    	Element objNoeudParametreBananaTime = objDocumentXML.createElement("parametre");
+
+    	objNoeudParametreBananaState.setAttribute("type", "BananaState");
+    	objNoeudParametreBananaState.setAttribute("valeur", Boolean.toString(bananaState));
+    	objNoeudParametreBananaTime.setAttribute("type", "BananaTime");
+    	objNoeudParametreBananaTime.setAttribute("valeur", Integer.toString(bananaTime));
+
+    	objNoeudCommande.appendChild(objNoeudParametreBananaState);
+    	objNoeudCommande.appendChild(objNoeudParametreBananaTime);
+
+    	
+    	// Ajouter le noeud de commande au noeud racine dans le document
+    	objDocumentXML.appendChild(objNoeudCommande);
+    	try {
+    		// Transformer le XML en string
+    		strCodeXML = ClassesUtilitaires.UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+
+    		// Envoyer le message string
+    		envoyerMessage(strCodeXML);
+    	} catch (Exception e) {
+    		objLogger.error(e.getMessage());
+    	}
     }// end method
 
     /*

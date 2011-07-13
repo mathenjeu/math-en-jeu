@@ -28,18 +28,16 @@ public class BananaHumainTask extends TimerTask {
 	
 	// override abstract run methode 
 	public void run() {
-	    if(player != null && this.runIt && player.obtenirPartieCourante() != null){
+	    if(player != null && runIt && player.obtenirPartieCourante() != null){
 	    	player.obtenirPartieCourante().getBananaState().setisUnderBananaEffects(false);
 	    	player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() + 2);
-	    	System.out.println("BananaTask humain!!!!");
-	    }	      
+	    	//System.out.println("BananaTask humain!!!!");
+	    }
+	    runIt = false;
 	}// end run
 	
 	public void cancelTask(){
-		this.cancel();
-		this.runIt = false;
-		//Thread.currentThread().interrupt();
-		
+		this.runIt = false;		
 	}
 
 }// end class

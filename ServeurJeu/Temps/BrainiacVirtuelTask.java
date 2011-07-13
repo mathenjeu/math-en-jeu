@@ -28,14 +28,14 @@ public class BrainiacVirtuelTask extends TimerTask {
 	
 	// override abstract run methode 
 	public void run() {
-	    if(this.runIt && vplayer != null){
+	    if(runIt && vplayer != null){
 	    	vplayer.getBrainiacState().setInBrainiac(false);
 	    	//System.out.println("BraniacTask virtuel!!!!");
 	    }
+	    runIt = false;
 	}// end run
 	
 	public void cancelTask(){
-		this.runIt = false;
-		//Thread.currentThread().interrupt();		
+		this.runIt = false;		
 	}	
 } // end class

@@ -63,6 +63,15 @@ public class HumainPlayerBrainiacState {
 		return isInBrainiac;
 	}
 	
+	public int getTaskTime()
+	{
+		int timeTo = (int) ((this.taskDate - System.currentTimeMillis())/1000);
+		if(this.isInBrainiac)
+		  return timeTo;
+		else
+		  return 0;
+	}
+	
 	
 	/*
 	 * Method used to set a Braniac to player with all the
@@ -78,7 +87,7 @@ public class HumainPlayerBrainiacState {
 			    this.taskDate = System.currentTimeMillis() + BRAIN_TIME;
 			}else
 			{
-				this.bTask.cancel();
+				this.bTask.cancelTask();
 				long tempDate = this.taskDate  + BRAIN_TIME;
 				this.bTask = Brainiac.utiliserBrainiac(player, tempDate);
 				this.taskDate = tempDate;
@@ -93,8 +102,7 @@ public class HumainPlayerBrainiacState {
 	public void destruction()
 	{
 		if(this.bTask != null){
-		   this.bTask.cancel();
-		   this.bTask.cancelTask();
+		  this.bTask.cancelTask();
 		}
 		this.player = null;
 	}
@@ -107,7 +115,7 @@ public class HumainPlayerBrainiacState {
 	public void setOffBrainiac() {
 		if(this.isInBrainiac){
 			this.isInBrainiac = false;
-			this.bTask.cancel();
+			this.bTask.cancelTask();
 			player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() - 1);
 		}
 		

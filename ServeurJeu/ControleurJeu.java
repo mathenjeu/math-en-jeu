@@ -237,17 +237,18 @@ public class ControleurJeu {
             // thread que celui courant)
             if (objJoueur.obtenirSalleCourante() != null) {
                 // Le joueur courant quitte la salle dans laquelle il se trouve
-                objJoueur.obtenirSalleCourante().quitterSalle(objJoueur, false, false);
+            	objJoueur.obtenirProtocoleJoueur().setBolStopThread(true);
+                objJoueur.obtenirSalleCourante().quitterSalle(objJoueur, false, true);
             }
             
-           // objJoueur.obtenirProtocoleJoueur().definirJoueur(null);
+            objJoueur.obtenirProtocoleJoueur().definirJoueur(null);
 
         }
         
         
         for(Salle room: this.lstSalles.values())
         {
-        	//room.destroyRoom();
+        	room.destroyRoom();
         }
         
         this.lstSalles.clear();
@@ -256,7 +257,11 @@ public class ControleurJeu {
         objGestionnaireCommunication.arreter();
         objGestionnaireCommunication = null;
         //objGestionnaireTemps.stopIt();
-        objGestionnaireTemps.enleverTache(objTacheSynchroniser);
+        try{
+           objGestionnaireTemps.enleverTache(objTacheSynchroniser);
+        }catch (IllegalStateException ex){
+			   objLogger.error(" Synchroniser cancel ganerated timer end off... ");	
+		}
         objTacheSynchroniser = null;
         objGestionnaireTemps = null;
         objGestionnaireEvenements.arreterGestionnaireEvenements();
@@ -270,8 +275,7 @@ public class ControleurJeu {
         DBConnectionsPoolManager pool = DBConnectionsPoolManager.getInstance();
         pool.release();
         
-        //this.lstJoueursConnectes.clear();
-        
+        //this.lstJoueursConnectes.clear();        
         //this.isOn = false;
     }
 
@@ -290,8 +294,10 @@ public class ControleurJeu {
         synchronized (lstJoueursConnectes) {
             // Retourner si le joueur est déjà connecté au serveur de jeu ou non
             for (String nom : lstJoueursConnectes.keySet())
+            {
                 if (nom.equalsIgnoreCase(nomUtilisateur))
                     return true;
+            }
             return false;
         }
     }
@@ -373,7 +379,7 @@ public class ControleurJeu {
         	// si le joueur est dÃ©jÃ  connectÃ© dans le cas peu probable
         	// oÃ¹ le joueur aurait lancÃ© une autre demande de connection
         	// depuis l'autre vÃ©rification au dÃ©but de la mÃ©thode.
-        	if (joueurEstConnecte(username) == true) {
+        	if (joueurEstConnecte(username)) {
         		// On va retourner que le joueur est déjà connecté
         		return ResultatAuthentification.JoueurDejaConnecte;
         	} 
@@ -426,7 +432,7 @@ public class ControleurJeu {
      */
     public void deconnecterJoueur(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, boolean ajouterJoueurDeconnecte) {
 
-    	 System.out.println("! Joueur deconnecter - controleur1 ");    
+    	 //System.out.println("! Joueur deconnecter - controleur1 ");    
         // Si déconnection pendant une partie, ajouterJoueurDeconnecte = true
         // On va donc ajouter ce joueur à la liste des joueurs
         // déconnectés pour cette table et pour le contrôleur du jeu
@@ -444,7 +450,7 @@ public class ControleurJeu {
 
             // Ajouter ce joueur à la liste des joueurs déconnectés du serveur
             ajouterJoueurDeconnecte(joueur);
-            System.out.println("! Joueur deconnecter - controleur2 ");     
+            objLogger.info("! Joueur deconnecter - mettre dans la liste deccon ");     
         }
 
         // Enlever le protocole du joueur courant de la liste des
@@ -473,7 +479,9 @@ public class ControleurJeu {
             // Enlever la référence du protocole du joueur vers son joueur humain
             // (cela va avoir pour effet que le protocole du joueur va penser que
             // le joueur n'est plus connecté au serveur de jeu)
+            joueur.obtenirProtocoleJoueur().setBolStopThread(true);
             joueur.obtenirProtocoleJoueur().definirJoueur(null);
+
 
 
             // Si on doit générer le numéro de commande de retour, alors
@@ -487,6 +495,8 @@ public class ControleurJeu {
             // Aviser tous les joueurs connectés au serveur de jeu qu'un joueur
             // s'est déconnecté
             preparerEvenementJoueurDeconnecte(joueur.obtenirNomUtilisateur());
+            joueur.setObjProtocoleJoueur(null);
+
         }
     }
 
@@ -913,6 +923,10 @@ public class ControleurJeu {
     public TreeMap<Integer, String> getGameTypesMap() {
         return gameTypesMap;
     }
+
+	public void setNewTimer() {
+		objGestionnaireTemps = new GestionnaireTemps();
+	}
 
 }// end class
 

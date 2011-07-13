@@ -93,8 +93,7 @@ public class VirtualPlayerBrainiacState {
 	public void destruction()
 	{
 		if(this.bTask != null){
-		   this.bTask.cancelTask();
-		   this.bTask.cancel();
+		   this.bTask.cancelTask();		   
 		}
 		this.vplayer = null;
 	}
@@ -107,9 +106,18 @@ public class VirtualPlayerBrainiacState {
 	public void setOffBrainiac() {
 		if(this.isInBrainiac){
 			this.isInBrainiac = false;
-			this.bTask.cancel();
+			this.bTask.cancelTask();
 		}
 	}
+	
+	public int getTaskTime()
+	{
+		if(this.isInBrainiac)
+		  return (int) ((this.taskDate - System.currentTimeMillis())/1000);
+		else
+		  return 0;
+	}
+	
 	
 
 }//end of class 

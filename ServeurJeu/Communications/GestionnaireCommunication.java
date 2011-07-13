@@ -225,15 +225,13 @@ public class GestionnaireCommunication
 			// Vider la liste des protocoles de joueurs
 			for(ProtocoleJoueur protocole: this.lstProtocoleJoueur)
 			{
-				protocole.arreterProtocoleJoueur();
+				protocole.setBolStopThread(true);
+				//protocole.arreterProtocoleJoueur();
 			}
            lstProtocoleJoueur.clear();
 		
 		}
-			
-		
-		
-		
+
 		try
 		{
 			// Fermer le socket du serveur
@@ -259,6 +257,6 @@ public class GestionnaireCommunication
 		
 		// Fermer toutes les connexions ouvertes pour le gestionnaire de base de données
 		objGestionnaireBD.arreterGestionnaireBD();
-	}
+	}// end method
 
 } //end class 

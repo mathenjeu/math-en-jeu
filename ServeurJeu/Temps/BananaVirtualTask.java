@@ -35,14 +35,14 @@ public class BananaVirtualTask extends TimerTask {
 		if(runIt){
 			vplayer.getBananaState().setisUnderBananaEffects(false);
 		}
-		
+		runIt = false;		
     	//System.out.println("BananaTask virtuel!!!!");
 	}// end run
 	
 	public void cancelTask(){
-		this.runIt = false;
-		//Thread.currentThread().interrupt();
 		
+		this.runIt = false;
+				
 	}
 
 }// end class

@@ -109,9 +109,7 @@ public class HumainPlayerBananaState {
 				long tempDate = this.taskDate  + BANANA_TIME;
 				this.bTask = Banane.utiliserBanane(player, tempDate);
 				this.taskDate = tempDate;
-				//System.out.println("BraniacTask !!!! " + tempDate + " " + " " + bTask);
-				
-								
+				//System.out.println("BraniacTask !!!! " + tempDate + " " + " " + bTask);								
 			}	
 		}
 		
@@ -125,7 +123,7 @@ public class HumainPlayerBananaState {
 	{
 		if(this.isUnderBananaEffects){
 			this.isUnderBananaEffects = false;
-			this.bTask.cancel();
+			this.bTask.cancelTask();
 			player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() + 2);
 		}
 	}
@@ -143,6 +141,15 @@ public class HumainPlayerBananaState {
 		}
 		this.player = null;
 	}
+	
+	public int getTaskTime()
+	{
+		if(this.isUnderBananaEffects)
+		  return (int) ((this.taskDate - System.currentTimeMillis())/1000);
+		else
+		  return 0;
+	}
+
 	
 
 
