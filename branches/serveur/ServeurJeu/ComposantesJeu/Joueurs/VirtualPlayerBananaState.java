@@ -1,9 +1,7 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
 import java.util.Timer;
-
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Banane;
-import ServeurJeu.Temps.HumainBananaStartTask;
 import ServeurJeu.Temps.BananaVirtualTask;
 import ServeurJeu.Temps.VirtualBananaStartTask;
 
@@ -141,6 +139,14 @@ public class VirtualPlayerBananaState {
 			this.isUnderBananaEffects = false;
 			this.bTask.cancelTask();
 		}
+	}
+	
+	public int getTaskTime()
+	{
+		if(this.isUnderBananaEffects)
+		  return (int) ((this.taskDate - System.currentTimeMillis())/1000);
+		else
+		  return 0;
 	}
 
 

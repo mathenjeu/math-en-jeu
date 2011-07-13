@@ -1,10 +1,7 @@
 package ServeurJeu.Evenements;
 
 import java.util.LinkedList;
-
 import org.apache.log4j.Logger;
-
-import ServeurJeu.Communications.VerificateurConnexions;
 
 /**
  * @author Jean-François Brind'Amour
@@ -91,6 +88,11 @@ public class GestionnaireEvenements implements Runnable
 	public void arreterGestionnaireEvenements()
 	{
 		bolStopThread = true;
-		Thread.currentThread().interrupt();
+		this.lstEvenements.clear();
+	}
+	
+	protected void finalize(){
+		bolStopThread = true;
+		this.lstEvenements.clear();
 	}
 }

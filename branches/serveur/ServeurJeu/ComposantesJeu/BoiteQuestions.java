@@ -7,7 +7,6 @@ package ServeurJeu.ComposantesJeu;
 
 import java.util.HashMap;
 import java.util.Iterator;
-
 import org.apache.commons.collections.list.TreeList;
 import org.apache.log4j.Logger;
 import ClassesUtilitaires.UtilitaireNombres;
@@ -20,10 +19,8 @@ import ServeurJeu.Configuration.GestionnaireMessages;
 public class BoiteQuestions 
 {
 	private static Logger objLogger = Logger.getLogger( BoiteQuestions.class );
-	private HashMap<Integer, TreeList> lstQuestions;
-	private StringBuffer info; 
-	
-		
+	private final HashMap<Integer, TreeList> lstQuestions;
+	private final StringBuffer info;		
 	// Since there is a question box for each player, and all players might not want to play
 	// in the same language, we set a language field for question boxes
 	private final Language language;
@@ -53,7 +50,7 @@ public class BoiteQuestions
 			lstQuestions.put( difficulte, questions);
 		}
 			
-		questions.add(question );
+		questions.add(questions.size(), question);
 		
 		this.info.append("ADD question : " + question.obtenirCodeQuestion() + " difficulty : " + difficulte + "\n");
 		

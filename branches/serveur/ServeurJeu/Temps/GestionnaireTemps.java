@@ -21,11 +21,11 @@ public class GestionnaireTemps extends Timer
 		this.scheduleAtFixedRate( t, stepSeconds * 1000, stepSeconds * 1000 );
 	}
 	
-	public void enleverTache( TimerTask t )
+	public void enleverTache( TimerTask t ) throws IllegalStateException
 	{
 		if (t != null)
-		{
-			t.cancel();
+		{			
+		   t.cancel();			
 		}
 		this.purge();
 	}
@@ -55,8 +55,7 @@ public class GestionnaireTemps extends Timer
 	} */
 	
 	public void stopIt()
-	{
-		//TO DO
+	{		
 		this.cancel();
 	}
 }

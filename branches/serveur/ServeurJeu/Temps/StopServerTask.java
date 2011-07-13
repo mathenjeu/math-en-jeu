@@ -1,10 +1,8 @@
 package ServeurJeu.Temps;
 
 import java.util.TimerTask;
-
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.Maitre;
-import ServeurJeu.Configuration.GestionnaireConfiguration;
 
 /**
  * @author Oloieri Lilian
@@ -27,7 +25,7 @@ public class StopServerTask extends TimerTask {
 	public void run() {
 		System.out.println("Server will stop ... ");
 		this.objJeu.arreter();
-		this.maitre.exitServer();
+		this.maitre.exitServer2();
 	}
 
 }

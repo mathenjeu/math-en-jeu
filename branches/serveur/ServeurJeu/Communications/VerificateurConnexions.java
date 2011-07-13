@@ -1,5 +1,6 @@
 package ServeurJeu.Communications;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import org.apache.log4j.Logger;
@@ -51,6 +52,8 @@ public class VerificateurConnexions implements Runnable
 	 */
 	public void run()
 	{
+    	//Thread.currentThread().setPriority( Thread.currentThread().getPriority() - 2 );
+
 		// Boucler tant qu'il ne faut pas arrêter le thread
 		while (bolStopThread == false)
 		{
@@ -59,7 +62,7 @@ public class VerificateurConnexions implements Runnable
 			{
 				// Stopper le thread du vérificateur pendant 60 - 100 secondes pour 
 				// laisser un moment de répit au CPU
-				Thread.sleep(10000);
+				Thread.sleep(60000);
 				
 			}
 			catch (InterruptedException ie)
@@ -100,7 +103,7 @@ public class VerificateurConnexions implements Runnable
 			{
 				// Stopper le thread du vérificateur pendant 60 - 100 secondes pour 
 				// laisser un moment de répit au CPU
-				Thread.sleep(5000);
+				Thread.sleep(60000);
 				
 			}
 			catch (InterruptedException ie)
@@ -120,33 +123,33 @@ public class VerificateurConnexions implements Runnable
 			{
 				// Faire la référence vers le ProtocoleJoueur courant
 				ProtocoleJoueur protocole = (ProtocoleJoueur) lstCopieProtocoleJoueur.get(i);
-				//System.out.println(protocole.isBolStopThread() + " in VCon2");
-				
+
 				// Si le joueur est en train de jouer sur une table, alors
 				// on attend, peut-être il se reconnectera et pourra
 				// continuer à jouer
 				// Si le joueur a fermé le browser ou fait refresh(), il sera déconnecté
 				// dans la thread du ProtocoleJoueur, donc n'apparaîtra plus ici
-        //        if (protocole.isBolStopThread() == true)// && intCompteurPing % 2 == 0)
-        //        {
-    				// Empêcher d'autres threads de toucher à la liste des protocoles
-    				// de joueur ayant répondus au ping
-    				synchronized (lstClientsPresents)
-    				{
-    					// Si le protocole courant ne se trouve pas dans la liste des
-    					// clients qui ont répondus, alors on peut arrêter le 
-    					// ProtocoleJoueur
-    					if (lstClientsPresents.contains(protocole) == false)
-    					{
-    						// Arrêter le ProtocoleJoueur
-    						//System.out.println(lstClientsPresents.contains(protocole) + " in VCon3");
-    						protocole.arreterProtocoleJoueur();
-    						this.objGestionnaireCommunication.supprimerProtocoleJoueur(protocole);
-    						
-    					}	
-    				}
-				//}
-			}				
+
+				// Empêcher d'autres threads de toucher à la liste des protocoles
+				// de joueur ayant répondus au ping
+				synchronized (lstClientsPresents)
+				{
+					// Si le protocole courant ne se trouve pas dans la liste des
+					// clients qui ont répondus, alors on peut arrêter le 
+					// ProtocoleJoueur
+					if (lstClientsPresents.contains(protocole) == false )
+					{
+						// Arrêter le ProtocoleJoueur
+						objLogger.error(" Error - protocol canceled in VerificateurConnexions for "  + protocole.obtenirJoueurHumain().obtenirNomUtilisateur());
+
+						protocole.setBolStopThread(true);
+						this.objGestionnaireCommunication.supprimerProtocoleJoueur(protocole);
+
+
+					}	
+				}
+
+			}	
 			
 			// Incrémenter le compteur de pings
 			intCompteurPing++;
@@ -156,11 +159,10 @@ public class VerificateurConnexions implements Runnable
 			{
 				intCompteurPing = 0;
 			}
-			
+						
 			// Vider la liste des clients
 			lstClientsPresents.clear();
 			
-			//Thread.currentThread().yield();
 		}
 	}
 	
@@ -188,6 +190,7 @@ public class VerificateurConnexions implements Runnable
 			if (compteurPing == intCompteurPing)
 			{
 				lstClientsPresents.add(protocole);
+				objLogger.info("ping N " + compteurPing + " returned for " + protocole.obtenirJoueurHumain().obtenirNomUtilisateur());
 			}
 		}
 	}
@@ -198,6 +201,6 @@ public class VerificateurConnexions implements Runnable
 	 */
 	public void arreterVerificateurConnexions()
 	{
-		bolStopThread = false;
+		bolStopThread = true;
 	}
 }

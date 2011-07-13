@@ -10,7 +10,7 @@ public class RealTimer extends TimerTask {
 	}
 
 	public void run() {
-		System.out.println("Now what to do ... ?");
+		//
 	}
 
 }

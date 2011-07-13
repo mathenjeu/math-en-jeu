@@ -29,19 +29,17 @@ public class BrainiacHumainTask extends TimerTask {
 	
 	// override abstract run methode 
 	public void run() {
-	    if(this.runIt && player != null && player.obtenirPartieCourante() != null){
+	    if(runIt && player != null && player.obtenirPartieCourante() != null){
 	    	
 	    		//player.obtenirPartieCourante().setBraniacsNumberMinus();
 	    		player.obtenirPartieCourante().getBrainiacState().setInBrainiac(false);
 	    		player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() - 1);
 	    		//System.out.println("BraniacTask humain!!!!");
-
 	    }  
+	    runIt = false;
 	}// end run
 	
 	public void cancelTask(){
-		this.runIt = false;
-		//Thread.currentThread().interrupt();
-		
+		this.runIt = false;		
 	}
 }

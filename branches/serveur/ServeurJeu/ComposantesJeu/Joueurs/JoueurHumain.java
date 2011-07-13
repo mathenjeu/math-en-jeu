@@ -279,4 +279,6 @@ public class JoueurHumain extends Joueur
 		objProtocoleJoueur = protocoleJoueur;
 		
 	}
+	
+	
 }

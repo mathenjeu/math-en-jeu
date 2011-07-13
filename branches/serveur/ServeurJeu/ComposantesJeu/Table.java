@@ -8,9 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.TreeSet;
-
 import ClassesUtilitaires.UtilitaireNombres;
-import Enumerations.Colors;
 import Enumerations.RetourFonctions.ResultatDemarrerPartie;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.BD.GestionnaireBD;
@@ -57,10 +55,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     // Déclaration d'une référence vers le contrôleur de jeu
     private ControleurJeu objControleurJeu;
     // Déclaration d'une référence vers le gestionnaire de bases de données
-    private final GestionnaireBD objGestionnaireBD;
+    private GestionnaireBD objGestionnaireBD;
     // Déclaration d'une référence vers la salle parente dans laquelle se
     // trouve cette table
-    private final Salle objSalle;
+    private Salle objSalle;
     // Cette variable va contenir le numéro de la table
     private final int intNoTable;
     // Déclaration d'une constante qui définit le nombre maximal de joueurs
@@ -220,6 +218,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     public void destruction() {
         System.out.println("table - wipeout the table - destruction");
         arreterPartie("");
+        this.objGestionnaireEvenements.arreterGestionnaireEvenements();
+        this.objGestionnaireEvenements = null;
+        strNomUtilisateurCreateur = null;
+        this.objGestionnaireBD = null;
        
     }// end method
 
@@ -281,6 +283,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         }
         //System.out.println("end table : " + System.currentTimeMillis());
     }// end methode
+    
 
     /**
      * Cette méthode permet au joueur passé en paramètres de quitter la table.
@@ -335,23 +338,17 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 // InformationDestination pour chacun et ajouter l'événement
                 // dans la file de gestion d'événements
                 preparerEvenementJoueurQuitteTable(joueur.obtenirNomUtilisateur());
-            }
-            // Empêcher d'autres thread de toucher à la liste des tables de
-            // cette salle pendant que le joueur quitte cette table
-            synchronized (getObjSalle().obtenirListeTables()) {
+           
                 // S'il ne reste aucun joueur dans la table et que la partie
                 // est terminée, alors on doit détruire la table
                 if ((lstJoueurs.isEmpty() && bolEstArretee == true) || (joueur.obtenirNomUtilisateur().equals(strNomUtilisateurCreateur) && !bolEstCommencee)) {
-                    //Arreter le gestionnaire de temps
-                    //objGestionnaireTemps.arreterGestionnaireTemps();
                     // Détruire la table courante et envoyer les événements
                     // appropriés
-                    //System.out.println("live the table - lst " + lstJoueurs.size());
                     getObjSalle().detruireTable(this);
 
                 }
             }
-        }// !!!!!!!
+        }// 
 
     }// end method
 
@@ -378,6 +375,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     	// to get back perso's clothes color 
         //returned to the list when get out from game
         joueur.obtenirPartieCourante().setClothesColor(colors.getLast());
+        
+        joueur.obtenirPartieCourante().cancelPosedQuestion();
     	
     	// Empécher d'autres thread de toucher à la liste des tables de
         // cette salle pendant que le joueur entre dans cette table
@@ -910,10 +909,14 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         // l'état de la partie
         if (bolEstArretee == false) {
             objTacheSynchroniser.enleverObservateur(this);
-            objGestionnaireTemps.enleverTache(objMinuterie);
-            objMinuterie = null;
-            objGestionnaireTemps = null;
-            objTacheSynchroniser = null;
+            try{
+               objGestionnaireTemps.enleverTache(objMinuterie);
+            }catch (IllegalStateException ex){
+ 			   	objControleurJeu.setNewTimer();
+ 			}
+            //objMinuterie = null;
+            //objGestionnaireTemps = null;
+            //objTacheSynchroniser = null;
 
             // Arrêter la partie
             bolEstArretee = true;
@@ -981,10 +984,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                     }
                 } //// end sinchro
             }
+            if (intNombreJoueursVirtuels > 0) {
+            	synchronized(lstJoueursVirtuels){
+            		// Arrêter les threads des joueurs virtuels
 
-            synchronized(lstJoueursVirtuels){
-            	// Arrêter les threads des joueurs virtuels
-            	if (intNombreJoueursVirtuels > 0) {
             		int n = lstJoueursVirtuels.size();
             		for (int i = 0; i < n; i++) {
             			((JoueurVirtuel)lstJoueursVirtuels.get(i)).arreterThread();
@@ -997,10 +1000,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
             // wipeout players from the table
             if (!lstJoueurs.isEmpty()) {
-               /*
+              
                 synchronized (lstJoueurs)
                 {
-               
+                /*
                 Iterator<JoueurHumain> iteratorJoueursHumains = lstJoueurs.values().iterator();
                 while (iteratorJoueursHumains.hasNext())
                 {
@@ -1009,8 +1012,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 objJoueurHumain.definirPartieCourante(null);
                 }
                 lstJoueurs.clear();
-
-                }*/
+                    */
+                }
 
                 //System.out.println("table - etape 1 lst Humains " + lstJoueurs.size());
             }
@@ -1024,6 +1027,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
             // Enlever les joueurs déconnectés de cette table
             lstJoueursDeconnectes = new LinkedList<String>();
+        
             //System.out.println("table - etape 1 " + lstJoueurs.size());
             // Si jamais les joueurs humains sont tous déconnectés, alors
             // il faut détruire la table ici
@@ -1036,19 +1040,18 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         }// end if bolEstArretee
 
         if (bolEstArretee == true) {
-
-            //objGestionnaireEvenements.arreterGestionnaireEvenements();
-            //this.objGestionnaireEvenements = null;
-            //strNomUtilisateurCreateur = null;
-            //objSalle = null;
-            //objControleurJeu = null;
-            //this.objGestionnaireBD = null;
+                      
             this.objttPlateauJeu = null;
             this.gameFactory = null;
             //System.out.println("table - etape 2");
         }
         //System.out.println("table - end of method");
     }// end method
+    
+    protected void finalize(){
+        this.objGestionnaireEvenements.arreterGestionnaireEvenements();
+        this.objGestionnaireEvenements = null;
+    }
 
     /**
      * If all the other players than that in param is on the points of Finish line
@@ -1284,7 +1287,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         }
 
         // Ajouter le nouvel événement créé dans la liste d'événements à traiter
-        objGestionnaireEvenements.ajouterEvenement(joueurQuitteTable);
+        if(objGestionnaireEvenements != null)
+           objGestionnaireEvenements.ajouterEvenement(joueurQuitteTable);
+        else
+        	objSalle.getObjGestionnaireEvenements().ajouterEvenement(joueurQuitteTable);
     }
 
     /**

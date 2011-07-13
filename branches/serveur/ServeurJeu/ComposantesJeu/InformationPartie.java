@@ -94,6 +94,7 @@ public class InformationPartie
     // used for finish statistics
     private int pointsFinalTime;
     
+    // temporary created for analyse the questions posed to the player
     private StringBuffer boiteQuestionsInfo;
     
     /**
@@ -536,7 +537,7 @@ public class InformationPartie
             //après pour les difficultés moins grands
             int intDifficulteTemp = intDifficulte;
 
-            while (objQuestionTrouvee == null && intDifficulteTemp > 0) {
+            while (objQuestionTrouvee == null && intDifficulteTemp > 1) {
                 intDifficulteTemp--;
                 objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion(intDifficulteTemp);
 
@@ -544,7 +545,7 @@ public class InformationPartie
 
             //après pour les difficultés plus grands
             intDifficulteTemp = intDifficulte;
-            while (objQuestionTrouvee == null && intDifficulteTemp < 7) {
+            while (objQuestionTrouvee == null && intDifficulteTemp < 6) {
                 intDifficulteTemp++;
                 objQuestionTrouvee = getObjBoiteQuestions().pigerQuestion(intDifficulteTemp);
 
@@ -648,7 +649,7 @@ public class InformationPartie
             //après pour les difficultés moins grands
             int intDifficulteTemp = intDifficulte;
 
-            while (objQuestionTrouvee == null && intDifficulteTemp > 0) {
+            while (objQuestionTrouvee == null && intDifficulteTemp > 1) {
                 intDifficulteTemp--;
                 objQuestionTrouvee = getObjBoiteQuestions().pigerQuestionCristall(intDifficulteTemp, codeOld);
 
@@ -657,7 +658,7 @@ public class InformationPartie
             //au pire cas les difficultés plus grands
             intDifficulteTemp = intDifficulte;
 
-            while (objQuestionTrouvee == null && intDifficulteTemp < 7) {
+            while (objQuestionTrouvee == null && intDifficulteTemp < 6) {
                 intDifficulteTemp++;
                 objQuestionTrouvee = getObjBoiteQuestions().pigerQuestionCristall(intDifficulteTemp, codeOld);
 
@@ -1016,7 +1017,7 @@ public class InformationPartie
                 // Cette fonction va passer les joueurs et créer un
                 // InformationDestination pour chacun et ajouter l'événement
                 // dans la file de gestion d'événements
-                table.preparerEvenementJoueurDeplacePersonnage(nomJoueur, collision, positionJoueur, objPositionDesiree, intNouveauPointage, intNouvelArgent, bonus, "");
+                   table.preparerEvenementJoueurDeplacePersonnage(nomJoueur, collision, positionJoueur, objPositionDesiree, intNouveauPointage, intNouvelArgent, bonus, "");
 
             }
 
@@ -1059,12 +1060,15 @@ public class InformationPartie
     /**
      * This method is used to cancel the question.
      * The first use is for Banana - to cancel question if banana is applied
-     * when used read the question.
+     * when used read the question. Second after restart game.
      *
      */
     public void cancelPosedQuestion() {
-        lstQuestionsRepondues.removeLast();
-        objQuestionCourante = null;
+    	if( objQuestionCourante != null)
+    	{
+    		lstQuestionsRepondues.removeLast();
+    		objQuestionCourante = null;
+    	}
     }
 
     /*

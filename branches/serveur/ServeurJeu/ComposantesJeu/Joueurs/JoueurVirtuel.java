@@ -287,7 +287,7 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 			// Le pourcentage de réussite à la question
 			int intPourcentageReussite;
 			
-			while(bolStopThread == false)
+			while(bolStopThread == false && objTable.obtenirTempsRestant() > 0)
 			{		
 				//System.out.println("bolStopThread = " + bolStopThread); 
 			
@@ -298,12 +298,12 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 				pause(intTempsReflexionCoup * 1000);
 
 
-				if(bolStopThread == false){ 
+				if(bolStopThread == false && objTable.obtenirTempsRestant() > 0){ 
 					// try to use Banana - first control if we have it 
 					virtuelUseBanana();
 				}	
 				
-				if(bolStopThread == false){ 
+				if(bolStopThread == false && objTable.obtenirTempsRestant() > 0){ 
 					// Trouver une case intéressante à atteindre
                   	objPositionFinaleVisee = this.obtenirTable().getPositionPointFinish();
 
@@ -320,7 +320,7 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 					}
 				}
 					// On trouve une position entre le joueur virtuel et son objectif
-				if(bolStopThread == false){ 
+				if(bolStopThread == false && objTable.obtenirTempsRestant() > 0){ 
 					objPositionIntermediaire = trouverPositionIntermediaire();
 				}
 				// S'il y a erreur de recherche ou si le joueur virtuel est pris
@@ -386,7 +386,7 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 	    					
 	    			// Faire déplacer le personnage si le joueur virtuel a
 	    			// réussi à répondre à la question
-	    			if (bolQuestionReussie == true && bolStopThread == false)
+	    			if (bolQuestionReussie == true && bolStopThread == false && objTable.obtenirTempsRestant() > 0)
 	    			{
 	    				
 	    				deplacerJoueurVirtuelEtMajPlateau(objPositionIntermediaire);
@@ -582,7 +582,7 @@ public class JoueurVirtuel extends Joueur implements Runnable{
         		 }
 
 
-        	 if(max1User.equals(strNom)|| isInBanana1)
+        	 if(max1User.equals(strNom))
         	 {
         		 // Celui qui utilise la banane est le 1er, alors on fait glisser le 2ème
         		 estHumain = estHumain2;

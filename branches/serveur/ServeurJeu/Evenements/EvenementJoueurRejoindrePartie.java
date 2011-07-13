@@ -30,6 +30,8 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
     // Déclaration d'une variable qui va garder la clocolor du joueur
     private int userColor;
     
+    // TODO add coords x and y  
+    
     /**
      * Constructeur de la classe EvenementJoueurDemarrePartie qui permet 
      * d'initialiser le numéro Id du personnage et le nom d'utilisateur du 

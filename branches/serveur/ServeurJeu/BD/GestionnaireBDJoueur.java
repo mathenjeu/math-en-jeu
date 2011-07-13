@@ -1,10 +1,14 @@
 package ServeurJeu.BD;
 
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -26,6 +30,11 @@ public final class GestionnaireBDJoueur {
 	public static final SimpleDateFormat mejFormatDate = new SimpleDateFormat("yyyy-MM-dd");
     public static final SimpleDateFormat mejFormatHeure = new SimpleDateFormat("HH:mm:ss");
     public static final SimpleDateFormat mejFormatDateHeure = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    
+    private static final int[] pointsArray = {  200,   500,   900,  1325,  1775,  2250,  2750,  3275,  3825,  4400,
+	                                           5000,  5625,  6275,  6950,  7650,  8375,  9125,  9900, 10700, 11525, 
+		                                      12375, 13250, 14150, 15075, 16025, 17000, 18000, 19025, 20075, 21150,
+		                                      22250, 23375, 25525, 25700, 26900, 28125, 29375, 30650, 31950, 33275};
    
     // Déclaration d'une référence vers le notre joueur
     private JoueurHumain objJoueurHumain;
@@ -468,7 +477,7 @@ public final class GestionnaireBDJoueur {
     public void mettreAJourJoueur(int tempsTotal) {
         try {
             synchronized (DB_LOCK) {
-                ResultSet rs = requete.executeQuery("SELECT cb_completedgames, cb_bestscore, cb_totaltimeplayed FROM jos_comprofiler WHERE id = '" + 
+                ResultSet rs = requete.executeQuery("SELECT cb_completedgames, cb_bestscore, cb_totaltimeplayed, cb_totalscore FROM jos_comprofiler WHERE id = '" + 
                 		objJoueurHumain.obtenirCleJoueur() + "';");
                 if (rs.next()) {
                     int partiesCompletes = rs.getInt("cb_completedgames") + 1;
@@ -478,11 +487,44 @@ public final class GestionnaireBDJoueur {
                         meilleurPointage = pointageActuel;
 
                     int tempsPartie = tempsTotal + rs.getInt("cb_totaltimeplayed");
+                    int totalScore = pointageActuel + rs.getInt("cb_totalscore");
 
+                    int image = 0;
+                    int i;
+                    for(i = 0; i < pointsArray.length; i++)
+                	{
+                		if(totalScore >= pointsArray[i])
+                			image = 40 - i;	
+                		else
+                			break;
+                	}
+                    
+                    // calculate points percents done to next grade
+                    double percents = 0;
+                    if(i == 0)
+                       percents = (double)totalScore / pointsArray[i] * 100;
+                    else if (i == 39)
+                    	percents = 100;
+                    else 
+                    	percents = (double)(totalScore - pointsArray[i - 1]) / (pointsArray[i] - pointsArray[i - 1]) * 100;
+                    
+                    //Format df = new Format("#.#");
+                    //df.format(percents);
+                    String target = String.format("%.1f", percents) + "%";
+                    
+                    //BigDecimal represent = new BigDecimal(percents, new MathContext(4));                    
+                    //System.out.println("percents - " + percents + " where temp = " + temp + " and  rep = " + represent);
+                                       
                     //mise-a-jour
                     requete.executeUpdate("UPDATE jos_comprofiler SET cb_completedgames = " + partiesCompletes + 
-                    		" ,cb_bestscore = " + meilleurPointage + " , cb_totaltimeplayed = " + tempsPartie + 
-                    		" WHERE user_id = " + objJoueurHumain.obtenirCleJoueur() + ";");
+                    		" ,cb_bestscore = " + meilleurPointage + " , cb_totaltimeplayed = " + tempsPartie +  " , cb_nexttarget = '" + target + 
+                    		"' , cb_totalscore = " + totalScore + " WHERE user_id = " + objJoueurHumain.obtenirCleJoueur() + ";");
+                    
+                    
+                    //String im = "";
+                    String im = "gallery/" + image + ".png";
+                	//mise-a-jour
+                    requete.executeUpdate("UPDATE jos_comprofiler SET avatar = '" + im + "' WHERE user_id = " + objJoueurHumain.obtenirCleJoueur() + ";");
                 }
                 rs.close();
             }

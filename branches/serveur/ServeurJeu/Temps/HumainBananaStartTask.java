@@ -23,15 +23,13 @@ public class HumainBananaStartTask extends TimerTask {
 		
 		if(runIt)
 		{
-			this.playerState.bananaIsTossed();
+			playerState.bananaIsTossed();
 		}
-
+		runIt = false;
 	}
 	
 	public void cancelTask(){
-		this.cancel();
-		this.runIt = false;
-				
+		runIt = false;				
 	}
 
 }
