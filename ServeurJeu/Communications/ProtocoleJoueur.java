@@ -290,7 +290,7 @@ public class ProtocoleJoueur implements Runnable
         		// it will be a second verification
         		try {
         			//Thread.currentThread();
-					Thread.sleep(3000);
+					Thread.sleep(1000);
         		}
         		catch (InterruptedException e) {
         			e.printStackTrace();
@@ -472,7 +472,7 @@ public class ProtocoleJoueur implements Runnable
 
         langue = obtenirValeurParametre(noeudEntree, "Langue").getNodeValue();
         bolEnTrainDeJouer = false;
-
+       
         // Créer le noeud paramètre contenant le role de joueur
         Element objNoeudParametreRoleJoueur = docSortie.createElement("parametre");
         objNoeudParametreRoleJoueur.setAttribute("type", "userRole");
