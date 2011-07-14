@@ -153,8 +153,8 @@ public class ControleurJeu {
     	 // Fills the rooms from DB
         objGestionnaireBD.fillsRooms();
 
-        // Control user accounts to not be blocked
-        //objGestionnaireBD.controlPlayerAccount();
+        // update user accounts - put to all not connected
+        objGestionnaireBD.updatePlayersAccounts();
     	
     	GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 
@@ -357,11 +357,7 @@ public class ControleurJeu {
         // Créer un nouveau joueur humain contenant les bonnes informations
         JoueurHumain objJoueurHumain = new JoueurHumain(protocole, username,
         		protocole.obtenirAdresseIP(),
-        		protocole.obtenirPort());
-
-        // Trouver les informations sur le joueur dans la BD et remplir le
-        // reste des champs tels que les droits
-        objGestionnaireBD.remplirInformationsJoueur(objJoueurHumain);
+        		protocole.obtenirPort());       
         
         // À ce moment, comme il se peut que le même joueur tente de se
         // connecter en même temps par 2 protocoles de joueur, alors si
@@ -389,7 +385,7 @@ public class ControleurJeu {
 
         	// Ajouter ce nouveau joueur dans la liste des joueurs connectés
         	// au serveur de jeu
-        	lstJoueursConnectes.put(nomUtilisateur, objJoueurHumain);
+        	lstJoueursConnectes.put(username, objJoueurHumain);
 
         	// Si on doit générer le numéro de commande de retour, alors
         	// on le génére, sinon on ne fait rien (ça devrait toujours
@@ -406,6 +402,11 @@ public class ControleurJeu {
         	// d'événements
         	preparerEvenementJoueurConnecte(nomUtilisateur);
         }
+        
+        // Trouver les informations sur le joueur dans la BD et remplir le
+        // reste des champs tels que les droits
+        objGestionnaireBD.remplirInformationsJoueur(objJoueurHumain);
+        
         return ResultatAuthentification.Succes;
     }
 
@@ -466,8 +467,8 @@ public class ControleurJeu {
             joueur.obtenirSalleCourante().quitterSalle(joueur, false, !ajouterJoueurDeconnecte);
         }
        
-        // fill in DB the date and time of of last connection with server
-        //this.objGestionnaireBD.updatePlayerLastAccessDate(joueur.obtenirCleJoueur());
+        // update in DB the connection reset to 0 table jos_comprofiler - cb_connected
+        objGestionnaireBD.updatePlayerConnected(joueur.obtenirCleJoueur(), 0);
 
         // Empêcher d'autres thread de venir utiliser la liste des joueurs
         // connectés au serveur de jeu pendant qu'on déconnecte le joueur
@@ -481,8 +482,6 @@ public class ControleurJeu {
             // le joueur n'est plus connecté au serveur de jeu)
             joueur.obtenirProtocoleJoueur().setBolStopThread(true);
             joueur.obtenirProtocoleJoueur().definirJoueur(null);
-
-
 
             // Si on doit générer le numéro de commande de retour, alors
             // on le génére, sinon on ne fait rien

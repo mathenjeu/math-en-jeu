@@ -216,7 +216,9 @@ public class GestionnaireBD {
             objLogger.error(e.getMessage());
             e.printStackTrace();
         }
-       
+        
+        // update DB - set flag connected for web use
+        updatePlayerConnected(joueur.obtenirCleJoueur(), 1);
     }//end methode
 
     private int convertGIDToRole(int gid)
@@ -227,8 +229,9 @@ public class GestionnaireBD {
             case 25: return 2; //admin
             case 31: return 3; //teacher
             default: return 1;
-	}
+	    }
     }
+    
     /** This function queries the DB to find the player's musical preferences  ***
      * and returns a Vector containing URLs of MP3s the player might like
      * @param player
@@ -1645,6 +1648,38 @@ public class GestionnaireBD {
         }
         return gameTypes;
     } // end method
+
+	public void updatePlayersAccounts() {
+		String connected = " UPDATE jos_comprofiler SET cb_connected = " + 0 + " ;";
+
+        try {
+
+            synchronized (DB_LOCK) {
+                // Ajouter l'information pour ce joueur
+                requete.executeUpdate(connected);
+            }
+        } catch (Exception e) {
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update_connected") + e.getMessage());
+        	this.getNewConnection();    	
+        }
+       
+	}
+
+	public void updatePlayerConnected(int cleJoueur, int valeur) {
+		String connected = " UPDATE jos_comprofiler SET cb_connected = " + valeur + " WHERE user_id = " + cleJoueur + ";";
+
+        try {
+
+            synchronized (DB_LOCK) {
+                // Ajouter l'information pour ce joueur
+                requete.executeUpdate(connected);
+            }
+        } catch (Exception e) {
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update_connected") + e.getMessage());
+        	this.getNewConnection();    	
+        }
+		
+	}
     
     
     

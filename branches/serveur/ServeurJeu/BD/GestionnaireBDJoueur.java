@@ -516,7 +516,7 @@ public final class GestionnaireBDJoueur {
                     //System.out.println("percents - " + percents + " where temp = " + temp + " and  rep = " + represent);
                                        
                     //mise-a-jour
-                    requete.executeUpdate("UPDATE jos_comprofiler SET cb_completedgames = " + partiesCompletes + 
+                    requete.executeUpdate("UPDATE jos_comprofiler SET cb_connected = " + 0 + " ,cb_completedgames = " + partiesCompletes + 
                     		" ,cb_bestscore = " + meilleurPointage + " , cb_totaltimeplayed = " + tempsPartie +  " , cb_nexttarget = '" + target + 
                     		"' , cb_totalscore = " + totalScore + " WHERE user_id = " + objJoueurHumain.obtenirCleJoueur() + ";");
                     
@@ -558,7 +558,8 @@ public final class GestionnaireBDJoueur {
         } catch (Exception e) {
         	objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update_money") + e.getMessage());
         	this.getNewConnection();    	
-        }
+        }      
+       
 
     }//end methode
     
