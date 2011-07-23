@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config
+
+	language="fr"
+	gameType="mathEnJeu"
+	
+	url_server="mathamaze.ca"
+	url_flash="http://mathamaze.ca/questions6/"
+	port="8080"
+	
+	
+
+
+  	username4 = "testd"
+	password4 = "0123456789101112"
+
+	username ="not connected"
+	password ="not connected"
+	
+	username3 ="chris3"
+	password3 ="1163aa4b190e2e43e4377e55c7e36a0f:urUlC0R7RQD2ChvJ4mJuFARY0rASev0M"
+	
+	username1="Tournoi"
+	password1="0123456789101112"
+	
+  	usernamex ="demo-156"
+	passwordx ="3437a1682af95c81"
+	
+	username3 = "demo-158"
+	password3 = "3437aa3e2af95757"
+		
+	gamepath="mathemaQuoi_beta.swf"
+
+	masterTime="10"
+	masterFinalTime="15"
+	windowOption = "https://mathamaze.ca/mathenjeu/flash/pop-up.php"
+	closeMain = "javascript:parent.$j.colorbox.close();"
+	profileURL = "https://mathamaze.ca/index.php/profile"
+>
+
+</config>

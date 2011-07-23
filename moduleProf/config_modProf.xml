@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config
+
+  language="fr"
+  gameType="mathEnJeu"
+  
+  url_server1 = "192.168.1.67"
+  port1 = "6100"
+
+ 	url_server="mathamaze.ca"
+	url_flash="http://mathamaze.ca/questions6/"
+	port="8080"
+
+  username = "chris"
+  password = "1d0fcbf18571fe737a43409d83e6a31f:ECbirg4s9TKKiiBSVdQMrU1GyvRKp4HT"
+
+> 
+</config>
