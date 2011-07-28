@@ -11,41 +11,44 @@ bt_annulerTextRoll = _level0.loader.contentHolder.texteSource_xml.firstChild.att
 
 
 var bananaPlayers:Array = new Array();
-
-var count:Number = _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages.length;
+var tableau:Array = _level0.loader.contentHolder.objGestionnaireEvenements.obtenirTableauDesPersonnages();
+var count:Number = tableau.length;
 if(count == undefined)
    count = 0;
-for (var i:Number = 0; i < count; i++) {
-					bananaPlayers[i] = new Object();
-			        bananaPlayers[i].nom =  _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].nom;
-			        bananaPlayers[i].pointage =  _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].pointage;
-			        bananaPlayers[i].role = _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].role;
-					bananaPlayers[i].idessin = _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].idessin;
-					bananaPlayers[i].clocolor = _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].clocolor;
-					bananaPlayers[i].filterC = _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].filterC;
-					//trace("ICI CLOCOLOR : " + bananaPlayers[i].filterC + " " + _level0.loader.contentHolder.objGestionnaireEvenements.listeDesPersonnages[i].filterC);
+var i:Number;
+
+for (i = 0; i < count; i++) {
+	            bananaPlayers.push(new Object());			
+				bananaPlayers[i].nom =  tableau[i].obtenirNom();
+			    bananaPlayers[i].pointage =  tableau[i].obtenirPointage();
+			    bananaPlayers[i].role = Number(tableau[i].getRole());
+				bananaPlayers[i].idessin = tableau[i].getIDessin();
+				bananaPlayers[i].filterC = tableau[i].getColorFilter();
+				trace("ICI CLOCOLOR : " + bananaPlayers[i].filterC + " " +  bananaPlayers[i].nom);
 								
 }// end for
 
-//count = bananaPlayers.length;
-for (i in bananaPlayers) {
+count = bananaPlayers.length;
+
+for (i = 0; i < count; i++) {
+	//trace("ICI CLOCOLOR : " + bananaPlayers[i].role + " " +  bananaPlayers[i].nom);
+	//trace("ICI Banana toss : " + count);
 	if((bananaPlayers[i].role == 2 || bananaPlayers[i].role == 3) && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")
-	   bananaPlayers.removeItemAt(i);
+	   bananaPlayers.splice(i,1);
 }// end for
 
-var ID:Number = _level0.loader.contentHolder.planche.obtenirPerso().getBananaId(); 
+var ID:Number = _level0.loader.contentHolder.objGestionnaireEvenements.getOurPerso().getBananaId(); 
 
 
 bananaPlayers.sort(_level0.loader.contentHolder.objGestionnaireEvenements.compareByPointsDescending);
-
+count = bananaPlayers.length;
 // put the graphics 
 if(_level0.loader.contentHolder.langue == "en")
    this.attachMovie("lancer_en", "lancer", 121, {_x:100, _y:244});
 else 
    this.attachMovie("lancer_fr", "lancer", 121, {_x:58, _y:249});
 
-
-for(var i:Number = 1; i <= count; i++)
+for(i = 1; i <= count; i++)
 {
    id = bananaPlayers[i - 1].idessin;
    
@@ -390,10 +393,7 @@ bt_annulerBanane.onRelease = function()
 
 function useBanana(namePlayer:String):Void
 {
-  _level0.loader.contentHolder.planche.obtenirPerso().enleverObjet("Banane");	
   _level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(ID, namePlayer);
-  //_level0.loader.contentHolder.planche.obtenirPerso().tossBanana();
-  _level0.loader.contentHolder.planche.tossBananaShellToAdver(namePlayer);
   _level0.loader.contentHolder.toss.removeMovieClip();
 }
 
