@@ -113,28 +113,10 @@ class ObjetSurCase
 				valeur = 1;
 			break;			
 			
-			case "Telephone":
-				image = _level0.loader.contentHolder.referenceLayer.attachMovie("Telephone", "Telephone", niveau);  
-				image._visible = false;
-				valeur = 3;
-			break;
-
 			case "Boule":
 				image = _level0.loader.contentHolder.referenceLayer.attachMovie("Boule", "Boule", niveau,{_width:34.25, _height:34.25} );  
 				image._visible = false;
 				valeur = 4;
-			break;
-
-			case "PotionGros":
-				image = _level0.loader.contentHolder.referenceLayer.attachMovie("PotionGros", "PotionGros", niveau);  
-				image._visible = false;
-				valeur = 5;
-			break;
-			
-			case "PotionPetit":
-				image = _level0.loader.contentHolder.referenceLayer.attachMovie("PotionPetit", "PotionPetit", niveau);  
-				image._visible = false;
-				valeur = 6;
 			break;
 			
 			case "Banane":

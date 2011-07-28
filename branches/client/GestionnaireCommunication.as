@@ -809,7 +809,7 @@ class GestionnaireCommunication
 				    	case "Collision":
 				    		objEvenement["collision"] = lstChildNodes[i].firstChild.nodeValue;
 				    		//objEvenement["collision"] = "piece";
-				    		//trace("case collision ds gestComm ligne 679 "+objEvenement.collision+ "   "+lstChildNodes[i].firstChild.nodeValue);
+				    		//trace("case collision ds gestComm ligne "+objEvenement.collision+ "   "+lstChildNodes[i].firstChild.nodeValue);
 				    	break;
 
 				    	case "NouvellePosition":
@@ -848,65 +848,13 @@ class GestionnaireCommunication
 				    
 						case "objetUtilise":
 							trace(strNomType + " * " + lstChildNodes[i].firstChild.nodeValue);
-							var tabPersonnages:Array = _level0.loader.contentHolder.planche.obtenirTableauDesPersonnages();
 							objEvenement["objetUtilise"] = lstChildNodes[i].firstChild.nodeValue;
 							
 							switch(objEvenement["objetUtilise"])
 							{
 								case "Banane":
-								
 								trace("On utilise Banane ici: " + objEvenement.joueurQuiUtilise + " * " + objEvenement.joueurAffecte + " * " + objEvenement.objetUtilise)
-									//definirIntEtatClient(10);
-									
-									//objEvenement["NouvellePositionX"] = noeudEvenement.firstChild.nextSibling.nextSibling.nextSibling.firstChild.firstChild.firstChild;
-									//objEvenement["NouvellePositionY"] = noeudEvenement.firstChild.nextSibling.nextSibling.nextSibling.firstChild.firstChild.nextSibling.firstChild;
-									/*
-									if(_level0.loader.contentHolder.objGestionnaireEvenements.nomUtilisateur == objEvenement["joueurAffecte"]){
-									   var twMove:Tween;
-									   var guiBanane:MovieClip;
-									   guiBanane = _level0.loader.contentHolder.attachMovie("GUI_banane", "banane", 9998);
-									   guiBanane._y = 200;
-									   guiBanane._x = 275;
-									   _level0.loader.contentHolder["banane"].nomCible = objEvenement["joueurAffecte"];
-									   _level0.loader.contentHolder["banane"].nomJoueurUtilisateur = objEvenement["joueurQuiUtilise"];
-									
-									   twMove = new Tween(guiBanane, "_alpha", Strong.easeOut, 40, 100, 1, true);
-									}// end if*/
-									
-									
-								break;
-								
-								case "PotionPetit":
-									// lorsqu'on utilise une potionPetit,
-									// on devient petit pour 30 secondes.
-									trace("on utilise la potionPetit ici.");
-									var countX:Number = tabPersonnages.length;
-									for(var i:Number = 0; i < countX; i++)
-									{
-										if(String(objEvenement.joueurQuiUtilise) == String(tabPersonnages[i].obtenirNom()))
-										{
-											var xBonhomme:Number = tabPersonnages[i].obtenirImage()._xscale;
-											var yBonhomme:Number = tabPersonnages[i]._yscale;
-											tabPersonnages[i].shrinkBonhommeSpecial(tabPersonnages[i].obtenirImage(), 40, 40);
-										}
-									}
-								break;
-								
-								case "PotionGros":
-								// lorsqu'on utilise une potionGros,
-								// on devient gros pour 30 secondes.
-									trace("on utilise la potionGros ici.");
-									var countS:Number = tabPersonnages.length;
-									for(var i:Number = 0; i < countS; i++)
-									{
-										if(String(objEvenement.joueurQuiUtilise) == String(tabPersonnages[i].obtenirNom()))
-										{
-											var xBonhomme:Number = tabPersonnages[i].obtenirImage()._xscale;
-											var yBonhomme:Number = tabPersonnages[i]._yscale;
-											tabPersonnages[i].shrinkBonhommeSpecial(tabPersonnages[i].obtenirImage(), 150, 150);
-										}
-									}
-								break;
+								break;															
 								
 								default:
 									trace("Erreur : impossible... ObjetUtilise ...");
@@ -1103,11 +1051,8 @@ class GestionnaireCommunication
                         }
 						
 						_level0.loader.contentHolder.objGestionnaireEvenements.setListeFinishPoints(listePoints);
-																											
-						//trace("xWinGame : " + xWinGame);
-						//trace("yWinGame : " + yWinGame);
+																													
 						trace("nbTracks : " + nbTracks);
-						//trace("PointageRequis : " + lstChildNodes[i].attributes.pointageRequis);
 					break;
 					
                     // Si le cas est TempsPartie, alors on initialise le temps de la partie
@@ -3441,11 +3386,11 @@ class GestionnaireCommunication
                 objEvenement.playersListe.push({nom:lstChildNodes[i].attributes.nom,
 												userRole:Number(lstChildNodes[i].attributes.role),
 												pointage:Number(lstChildNodes[i].attributes.pointage),
-												//clocolor:lstChildNodes[i].attributes.clothesColor,
+												clocolor:Number(lstChildNodes[i].attributes.clocolorID),
 												idPersonnage:Number(lstChildNodes[i].attributes.id),
 												brainiacState:lstChildNodes[i].attributes.brainiacState,
 												brainiacTime:Number(lstChildNodes[i].attributes.brainiacTime)});
-				trace("GCOM : NOW " + lstChildNodes[i].attributes.nom + " " + lstChildNodes[i].attributes.clothesColor )
+				trace("GCOM : NOW " + lstChildNodes[i].attributes.nom + " " + lstChildNodes[i].attributes.clocolorID )
             }
 		} else if(noeudCommande.attributes.nom == "Pointage")
 		{
@@ -3901,6 +3846,7 @@ class GestionnaireCommunication
         {
             // On est maintenant a l'autre etat
             intEtatClient = Etat.LISTE_TABLES_OBTENUE.no;
+			
         }
         // Appeler la fonction qui va envoyer tous les evenements et
         // retirer leurs ecouteurs
@@ -4170,7 +4116,7 @@ class GestionnaireCommunication
         if (noeudCommande.attributes.type == "Reponse")
         {
             // On est maintenant a l'autre etat
-            intEtatClient = Etat.LISTE_TABLES_OBTENUE.no;
+            intEtatClient = Etat.DANS_SALLE.no;
         }
         // Appeler la fonction qui va envoyer tous les evenements et
         // retirer leurs ecouteurs
@@ -4230,7 +4176,7 @@ class GestionnaireCommunication
         if (noeudCommande.attributes.type == "Reponse")
         {
             // On est maintenant a l'autre etat
-            intEtatClient = Etat.ATTENTE_DEBUT_PARTIE.no;
+           // intEtatClient = Etat.ATTENTE_DEBUT_PARTIE.no;
         }
         // Appeler la fonction qui va envoyer tous les evenements et
         // retirer leurs ecouteurs
@@ -4260,7 +4206,7 @@ class GestionnaireCommunication
         if (noeudCommande.attributes.type == "Reponse")
         {
             // On est maintenant a l'autre etat
-            //intEtatClient = Etat.ATTENTE_DEBUT_PARTIE.no;
+            intEtatClient = Etat.ATTENTE_DEBUT_PARTIE.no;
         }
         // Appeler la fonction qui va envoyer tous les evenements et
         // retirer leurs ecouteurs
@@ -4438,8 +4384,8 @@ class GestionnaireCommunication
 					objEvenement.objetUtilise = new Object();
 					// Ajouter les parametres de l'objet dans l'objet d'evenement
 					objEvenement.objetUtilise.typeObjet = noeudCommande.attributes.type;
-					objEvenement.objetUtilise.url = noeudCommande.firstChild.firstChild.attributes.url;
-					objEvenement.objetUtilise.type = noeudCommande.firstChild.firstChild.attributes.type;
+					//objEvenement.objetUtilise.url = noeudCommande.firstChild.firstChild.attributes.url;
+					//objEvenement.objetUtilise.type = noeudCommande.firstChild.firstChild.attributes.type;
 					
 					trace(objEvenement.objetUtilise.url);
 					trace(objEvenement.objetUtilise.type);

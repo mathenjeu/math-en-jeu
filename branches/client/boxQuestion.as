@@ -37,10 +37,10 @@ btn_ok._visible = false;
 var loaded:Boolean = false;
 
 // pour garder l'indice du livre en cas d'utilisation
-var livreIndice:Number;
+//var livreIndice:Number;
 
 // pour garder l'indice de la boule en cas d'utilisation
-var bouleIndice:Number;
+//var bouleIndice:Number;
 
 /*
 if(_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "MathEnJeu"){ 
@@ -129,9 +129,7 @@ loadListener.complete = function(eventObject)
 		Selection.setFocus(monScroll);
 	    
 		this.onEnterFrame = null;
-	  
-	  var count:Number = _level0.loader.contentHolder.planche.obtenirPerso().obtenirNombreObjet();
-	
+	 	
 	switch (_level0.loader.contentHolder.type_question)
 	{
 		
@@ -141,39 +139,12 @@ loadListener.complete = function(eventObject)
 			btn_c._visible = true;
 			btn_d._visible = true;
 			//btn_e._visible = true;
-			
-			for(var i:Number = 0; i < count; i++)
-			{
-				if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Livre")
-				{
-					livreIndice =  _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangIDObjet(i);
-				}
-				else if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Boule")
-				{
-					bouleIndice =  _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangIDObjet(i);
-				}
-			}
-						
 			break;
 			
 		case "MULTIPLE_CHOICE_3" ://"ChoixReponse" :
 			btn_a._visible = true;
 			btn_b._visible = true;
 			btn_c._visible = true;
-			
-			for(var i:Number = 0; i < count; i++)
-			{
-				if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Livre")
-				{
-					livreIndice =  _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangIDObjet(i);
-				}
-				else if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Boule")
-				{
-					bouleIndice =  _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangIDObjet(i);
-				}
-			}
-			
-			
 			break;
 			
 		case "MULTIPLE_CHOICE_5" ://"ChoixReponse" :
@@ -182,19 +153,6 @@ loadListener.complete = function(eventObject)
 			btn_c._visible = true;
 			btn_d._visible = true;
 			btn_e._visible = true;
-			
-			for(var i:Number = 0; i < count; i++)
-			{
-				if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Livre")
-				{
-					livreIndice =  _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangIDObjet(i);
-				}
-				else if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Boule")
-				{
-					bouleIndice =  _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangIDObjet(i);
-				}
-			}
-						
 			break;
 			
 		case "TRUE_OR_FALSE" :
@@ -202,16 +160,6 @@ loadListener.complete = function(eventObject)
 			btn_vrai._visible = true;
 			btn_faux._visible = true;
 			Key.removeListener(oUserKey);
-			//_root.vrai_txt._visible = true;
-			//_root.faux_txt._visible = true;
-			
-			for(var i:Number = 0; i < count; i++)
-			{
-				if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Boule")
-				{
-					bouleIndice =  _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangIDObjet(i);
-				}
-			}
 			break;
 			
 		case "SHORT_ANSWER" :
@@ -220,16 +168,7 @@ loadListener.complete = function(eventObject)
 			
 			btn_ok._visible = true;
 			Key.removeListener(oUserKey);
-			
-			for(var i:Number = 0; i < count; i++)
-			{
-				if( _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangObjet(i) == "Boule")
-				{
-					bouleIndice =  _level0.loader.contentHolder.planche.obtenirPerso().obtenirRangIDObjet(i);
-				}
-			}
-			
-			
+						
 			btn_ok.onRelease = function()
 			{
 				trace("btnOK tappé");
@@ -298,30 +237,6 @@ this.btnSendError.onPress = function(){
 	Key.removeListener(oUserKey);
 }
 
-/*
-livre.onPress = function()
-{
-	trace("utilisation du livre (ds mathemaquoi.GUI_question)\n");
-	trace("id: " + livreIndice);
-	//_level0.loader.contentHolder.planche.obtenirPerso().afficherObjets();
- 	_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(livreIndice);
-	_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet("Livre");
-		
-	livre._visible = false;
-}
-
-
-boule.onPress = function()
-{
-	trace("utilisation de la boule (ds mathemaquoi.GUI_question)\n");
-	trace("id: " + bouleIndice);
-	
- 	_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(bouleIndice);
-	_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet("Boule");
-	
-	boule._visible = false;
-}
-*/
 monScroll.addEventListener("complete", loadListener);
 
 monScroll.contentPath = _level0.loader.contentHolder.url_question;
@@ -431,7 +346,7 @@ function enleverBoutons()
 	Key.removeListener(oUserKey);
 	Mouse.addListener(_level0.loader.contentHolder.mouseListener);
 	monScroll.contentPath = null;
-	_level0.loader.contentHolder.planche.obtenirPerso().setUsedBook(false);
+	_level0.loader.contentHolder.objGestionnaireEvenements.getOurPerso().setUsedBook(false);
 
 	//btnSendError._visible = false;
 }

@@ -29,12 +29,10 @@ import flash.filters.*;
 import mx.controls.Loader;
 //import flash.filters.ColorMatrixFilter;
 
-
-
-class Personnage
+class Personnage implements IPersonnage
 {
 	private var role:Number;             // role of user if 1 - simple user , if 2 - master(admin)
-	public  var image:MovieClip;
+	private var image:MovieClip;
 	private var position:Point;
 	private var numero:Number;           // ????
 	private var prochainePosition:Point;
@@ -52,17 +50,27 @@ class Personnage
 	private var colorFilter:ColorMatrixFilter; // filter to color our perso 
 	private var brainiacState:Boolean;
 	private var brainiacRestedTime:Number;
-	private var bananaId:Number;  
-	
+	private var bananaId:Number;	
 	  private var bananaState:Boolean;
-	  private var bananaRestedTime:Number;
-	
-	private var usedBook:Boolean;        // set in true if used one book in current question
-	
+	  private var bananaRestedTime:Number;	
+	private var usedBook:Boolean;        // set in true if used one book in current question	
 	private var idClip:Number;           // number used to identify the movie used for perso - from 1 to 12
-	private var orient:String;
+	private var orient:String;           // orientation ... right or left
 	
 	private static var BRAINIAC_TIME:Number = 60;    //  constant for the time that brainiac is active
+	private var planche:PlancheDeJeu;
+	
+	////////////////////////////////////////////////////////////
+	public function getIdPersonnage():Number
+	{
+		return numero;
+	}
+	
+	////////////////////////////////////////////////////////////
+	public function setIdPersonnage(n:Number)
+	{
+		numero = n;
+	}
 	
 	function getBananaState():Boolean
 	{
@@ -114,6 +122,11 @@ class Personnage
 	function getBananaId():Number
 	{
 		return this.bananaId;
+	}
+	
+	public function setMinigameLoade(bool:Boolean)
+	{
+		this.minigameLoade = bool;
 	}
 		
 	function getMinigameLoade()
@@ -314,45 +327,7 @@ class Personnage
 				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._xscale = _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._yscale = 100;
 				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
 			}//end 1st if
-		};
-		/*
-		// fonctions transfered to mathemaquoi for hovers needs
-		_level0.loader.contentHolder.objectMenu[nomObj + "_mc"].onRollOver = function()
-		{
-			var toolTipMess:String = _root.texteSource_xml.firstChild.attributes["objectMessage" + nomObj];
-
-			_level0.loader.contentHolder.objGestionnaireEvenements.drawToolTip(toolTipMess, _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]);
-	
-	        _level0.loader.contentHolder.objectMenu.onEnterFrame = function(){ 
-                _level0.loader.contentHolder.toolTip._x = _xmouse;
-                _level0.loader.contentHolder.toolTip._y = _ymouse - 40;
-		        _level0.loader.contentHolder.toolTip._visible = true;
-			}
-			
-			if(peutUtiliserObjet(nomObj) && (listeObjets[nomObj].length >= 1))
-			{
-				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 60;
-				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._xscale = _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._yscale = 120;
-				
-			}
-		};
-		
-		_level0.loader.contentHolder.objectMenu[nomObj + "_mc"].onRollOut = function()
-		{
-			
-			 _level0.loader.contentHolder.toolTip._visible = false;
-	         _level0.loader.contentHolder.toolTip.swapDepths(_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]);
-             _level0.loader.contentHolder.toolTip.removeMovieClip();
-			 
-			 delete _level0.loader.contentHolder.objectMenu.onEnterFrame;
-	
-   
-			if(peutUtiliserObjet(nomObj) && (listeObjets[nomObj].length >= 1))
-			{
-				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
-				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._xscale = _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._yscale = 100;
-			}
-		}; */
+		};		
 		
 		trace("--- FIN ajouterImageBanque ! ---");
 	}
@@ -365,20 +340,10 @@ class Personnage
 	// du personnage. on enleve ensuite l'image de l'objet
 	//
 	function enleverObjet(n:String)
-	{
-		var i:Number;
-		
-		//trace("liste d'objets avant avoir enlever 1 obj :");
-		//afficherObjets();
-		
+	{		
 		listeDesObjets[n].pop();
-		_level0.loader.contentHolder.objectMenu[n].countTxt = Number(_level0.loader.contentHolder.objectMenu[n].countTxt) - 1;
-		
-		
-		//trace("liste d'objets apres avoir enlever 1 obj :");
-		//afficherObjets();
-	}
-	
+		_level0.loader.contentHolder.objectMenu[n].countTxt = Number(_level0.loader.contentHolder.objectMenu[n].countTxt) - 1;		
+	}	
 	
 	
 	////////////////////////////////////////////////////////////
@@ -514,58 +479,8 @@ class Personnage
 	function definirMagasin(mag:Array)
 	{
 		listeSurMagasin = mag;
-	}
+	}	
 	
-		
-	////////////////////////////////////////////////////////////
-	// cette fonction change l'echelle d'une image lorsqu'on utilise
-	// une potion ( bleue ou rouge : grandit ou rapetisse )
-	// la potion fait effet pour 30 secondes. apres, on rappelle la
-	// la fonction qui retourne a la normale.
-	// on utilise des tween pour une transition plus amusante !
-	//
-	function shrinkBonhommeSpecial(mClip1:MovieClip, x:Number, y:Number)
-	{
-		var twMove1:Tween;
-		var twMove2:Tween;
-		var intervalId:Number;
-		var cpt:Number = 0;
-		var fctPerso:Object = this;	// on garde en memoire qu'on est dans la classe personnage pour etre capable d'utiliser ses fonctions
-
-		intervalId = setInterval(attendre, 1000, cpt);	// sert pour attendre la jusqu'a la fin de l'effet de la potion
-		
-		twMove1 = new Tween(mClip1, "_xscale", Bounce.easeIn, 100, x, 2, true);
-		twMove2 = new Tween(mClip1, "_yscale", Bounce.easeIn, 100, y, 2, true);
-		
-		// cette fonction attend jusqu'au signal du compteur
-		// et appelle le retour au format normal
-		function attendre():Void
-		{
-			var maxCpt:Number = 30;
-			
-			if(cpt >= maxCpt) 
-			{
-				clearInterval(intervalId);
-				fctPerso.shrinkBonhommeNormal(mClip1, x, y);
-			} 
-			cpt++;
-		}
-	}
-
-	////////////////////////////////////////////////////////////
-	// Cette fonction ramene la taille du mClip a sa taille normale
-	// prend les valeurs x et y pour l'echelle
-	// - le tween permet une transition plus amusante !
-	//
-	function shrinkBonhommeNormal(mClip1:MovieClip, x:Number, y:Number)
-	{
-		var twMove1:Tween;
-		var twMove2:Tween;
-		
-		twMove1 = new Tween(mClip1, "_xscale", Bounce.easeIn, x, 100, 2, true);
-		twMove2 = new Tween(mClip1, "_yscale", Bounce.easeIn, y, 100, 2, true);
-	}
-
     ////////////////////////////////////////////////////////////
 	// When buy an object this function put the 0 for the id of the object 
 	// in liste in Shop - in this case it became unvalid object - it is selled
@@ -592,13 +507,6 @@ class Personnage
 	//
 	function putNewShopObject(idPut:Number, objetType:String)
 	{
-		// var objMagasinObjet = new Object();
-		// objMagasinObjet.cout = 1;
-	    // objMagasinObjet.id = idPut;
-		// objMagasinObjet.type = objetType;
-		 
-		// listeSurMagasin.push(objMagasinObjet);
-		 
 		var count:Number =  listeSurMagasin.length;
 		for(var j:Number = 0; j < count; j++)
 		{
@@ -615,8 +523,15 @@ class Personnage
 	//////////////////////////////////////////////////////////////////////////////////////
 	//	CONSTRUCTEUR
 	//////////////////////////////////////////////////////////////////////////////////////
-	function Personnage(idPers:Number, nom:String, role:Number, niveau:Number, nomClip:Number, ll:Number, cc:Number, xx:Number, yy:Number, cloColor:String, mag:Array)
+	function Personnage(idPers:Number, nom:String, role:Number, nomClip:Number, ll:Number, cc:Number, cloColor:String, planches:PlancheDeJeu)
 	{
+		trace(" idPers : " + idPers + " nom : "+ nom + " role : " + role + " nomClip : " + nomClip + " ll : " + ll + " cc : " + cc + " cloColor : " + cloColor + "planches : " + planches);
+		this.planche = planches;
+		var niveau:Number = 5 * planche.obtenirTableauDesCases().length * planche.obtenirTableauDesCases()[0].length + 2 * idPers;
+		var xx:Number = planche.obtenirTableauDesCases()[ll][cc].obtenirClipCase()._x;
+		var yy:Number = planche.obtenirTableauDesCases()[ll][cc].obtenirClipCase()._y;
+				
+		////////////
 		this.l = ll;
 		this.c = cc;
 		this.numero = idPers;
@@ -675,7 +590,7 @@ class Personnage
 		
 		this.faireCollision = null;
 		this.nom = nom;
-		this.listeSurMagasin = mag;
+		//this.listeSurMagasin = mag;
 		this.minigameLoade = false;
 		this.role = role;
 		this.boardCentre = false;
@@ -691,7 +606,7 @@ class Personnage
 		var reafficher1:Boolean = true;
 		var reafficher2:Boolean = false;
 		
-		var isOurName:Boolean = (this.nom == _level0.loader.contentHolder.planche.obtenirNomDeMonPersonnage());
+		var isOurName:Boolean = (this.nom == _level0.loader.contentHolder.objGestionnaireEvenements.obtenirNomUtilisateur());
 		
 		
 		dx = this.prochainePosition.obtenirX() - this.position.obtenirX();  
@@ -703,21 +618,21 @@ class Personnage
 		//if(isOurName)
 		  //trace("Test sur retour!!! " + boardCentre);
 		
-		if( boardCentre && _level0.loader.contentHolder.planche.getRepostCases() && (isOurName))
+		if( boardCentre && planche.getRepostCases() && (isOurName))
 		{
-			_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
-			_level0.loader.contentHolder.planche.setRepostCases(false);
-					 // trace("Test sur retour 1 " + boardCentre);
+			planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			planche.setRepostCases(false);
+			// trace("Test sur retour 1 " + boardCentre);
 
 			return;
 			
 		}
-		else if( boardCentre  &&  !_level0.loader.contentHolder.planche.getShowCases() && (isOurName)) // to consider the case that we don't have possibility to move 
+		else if( boardCentre  &&  !planche.getShowCases() && (isOurName)) // to consider the case that we don't have possibility to move 
 		{
-			_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 			//trace("Le test de deplacement!!!!")
-//trace("Test sur retour 2 " + boardCentre);
+            //trace("Test sur retour 2 " + boardCentre);
 
 			return;
 		}
@@ -740,11 +655,8 @@ class Personnage
 					case "piece":
 						// l'argent est ajoute au personnage dans les fichiers gestEve et gestComm
 						// en gros, ici, on enleve l'image du board
-															
-						
-	
-						_level0.loader.contentHolder.planche.enleverPiece(this.l, this.c);
-						_level0.loader.contentHolder.planche.modifierNumeroCase(this.l, this.c, -10000);
+    					planche.enleverPiece(this.l, this.c);
+						planche.modifierNumeroCase(this.l, this.c, -10000);
 						_level0.loader.contentHolder.array_sons[9].start(0,1);
 						this.faireCollision = null;
 					break;
@@ -755,7 +667,7 @@ class Personnage
 						{
 							this.minigameLoade = true;
 							reafficher1 = false;
-							_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+							planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 							_root.objGestionnaireInterface.effacerBoutons(1);			
 							
 							// on charge le magasin : on ajuste sa position a l'ecran
