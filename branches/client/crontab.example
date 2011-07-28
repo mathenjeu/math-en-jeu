@@ -1,5 +1,0 @@
-First line runs script at 1 minute pass midnight every Sunday
-Second line runs script at 5 minutes pass midnight 1st day each month
-
-1 0 * * 0 /path/to/script/reset_time_period_stats.sh 0
-5 0 1 * * /path/to/script/reset_time_period_stats.sh 1
