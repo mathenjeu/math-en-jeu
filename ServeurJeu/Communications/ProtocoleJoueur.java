@@ -1859,28 +1859,10 @@ public class ProtocoleJoueur implements Runnable
 
             lastQuestionTime = infoPartie.obtenirTable().obtenirTempsRestant();
             //System.out.println("Protocol for Cristall : " + lastQuestionTime);
-        } else if (strTypeObjet.equals("PotionGros")) {
-            // La PotionGros fait grossir le joueur
-            noeudCommande.setAttribute("type", "OK");
-            infoPartie.obtenirTable().preparerEvenementUtiliserObjet(
-                    objJoueurHumain.obtenirNomUtilisateur(),
-                    objJoueurHumain.obtenirNomUtilisateur(),
-                    "PotionGros",
-                    "");
-
-        } else if (strTypeObjet.equals("PotionPetit")) {
-            // La PotionPetit fait rapetisser le joueur
-            noeudCommande.setAttribute("type", "OK");
-            infoPartie.obtenirTable().preparerEvenementUtiliserObjet(
-                    objJoueurHumain.obtenirNomUtilisateur(),
-                    objJoueurHumain.obtenirNomUtilisateur(),
-                    "PotionPetit",
-                    "");
-
         } else if (strTypeObjet.equals("Banane")) {
             // La partie ici ne fait que sélectionner le joueur qui sera affecté
             // Le reste se fait dans Banane.java
-            noeudCommande.setAttribute("type", "OK");
+            noeudCommande.setAttribute("type", "Banane");
             boolean estHumain = false; //Le joueur choisi est'il humain?
 
             // On obtient la liste des joueurs humains, puis la liste des joueurs virtuels
@@ -2944,6 +2926,7 @@ public class ProtocoleJoueur implements Runnable
             objNoeudJoueur.setAttribute("id", Integer.toString(joueurHumain.obtenirPartieCourante().obtenirIdPersonnage()));
             objNoeudJoueur.setAttribute("role", Integer.toString(joueurHumain.getRole()));
             objNoeudJoueur.setAttribute("pointage", Integer.toString(joueurHumain.obtenirPartieCourante().obtenirPointage()));
+            objNoeudJoueur.setAttribute("clocolorID", Integer.toString(joueurHumain.obtenirPartieCourante().getClothesColor()));
             objNoeudJoueur.setAttribute("brainiacState", Boolean.toString(joueurHumain.obtenirPartieCourante().getBrainiacState().isInBrainiac()));
             objNoeudJoueur.setAttribute("brainiacTime", Integer.toString(joueurHumain.obtenirPartieCourante().getBrainiacState().getTaskTime()));
             // Ajouter le noeud de l'item au noeud du paramètre
@@ -2960,7 +2943,7 @@ public class ProtocoleJoueur implements Runnable
         objNoeudJoueur.setAttribute("id", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirIdPersonnage()));
         objNoeudJoueur.setAttribute("role", Integer.toString(ancientJoueur.getRole()));
         objNoeudJoueur.setAttribute("pointage", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirPointage()));
-        //objNoeudJoueur.setAttribute("pointage", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirPointage()));
+        objNoeudJoueur.setAttribute("clocolorID", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirTable().getOneColor()));
 
         // Ajouter le noeud de l'item au noeud du paramètre
         objNoeudParametreListeJoueurs.appendChild(objNoeudJoueur);
@@ -2980,6 +2963,7 @@ public class ProtocoleJoueur implements Runnable
                 objNoeudJoueur.setAttribute("id", Integer.toString(objJoueurVirtuel.obtenirIdPersonnage()));
                 objNoeudJoueur.setAttribute("role", Integer.toString(1));
                 objNoeudJoueur.setAttribute("pointage", Integer.toString(objJoueurVirtuel.obtenirPointage()));
+                objNoeudJoueur.setAttribute("clocolorID", Integer.toString(objJoueurVirtuel.getClothesColor()));
                 objNoeudJoueur.setAttribute("brainiacState", Boolean.toString(objJoueurVirtuel.getBrainiacState().isInBrainiac()));
                 objNoeudJoueur.setAttribute("brainiacTime", Integer.toString(objJoueurVirtuel.getBrainiacState().getTaskTime()));
 
