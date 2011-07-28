@@ -36,76 +36,76 @@ class PlancheDeJeu
     private var tableauDesCases:Array = new Array();
     private var hauteurDeCase:Number = -1;
     private var largeurDeCase:Number = -1;
-    private var perso:Personnage;
-    private var monPersonnage:Number = -1;  // numero d'identification de notre perso - utiliser pour cree le movie 
-	private var nomDeMonPersonnage:String; // nom de notre perso
-    private var zoom:Number = 0;
-    private var gestionnaireInterface:GestionnaireInterface;
+    
+	// reference from GestionnaireEvenements to our personnage
+	private var perso:MyPersonnage; 
+	
+	private var zoom:Number = 0;
     private var rotation:Number = 0;
-    private var tableauDesPersonnages:Array = new Array(); // contient les personnages
-	private var intervalCol:Number;
+    private var intervalCol:Number;
 	private var showCases:Boolean;  // if is true the casesPossibles is in sight
 	private var repostCases:Boolean; // if is true we need to restart casesPossibles because we have changes
 	private var tempoSight:Number;
+	//private var manager:GestionnaireEvenements;
 	
-	function setTempoSight(tempo:Number)
+	public function setTempoSight(tempo:Number)
 	{
 		this.tempoSight = tempo;
 		
 	}
 	
-	function getTempoSight():Number
+	public function getTempoSight():Number
 	{
 		return this.tempoSight;
 	} 
 	
-	function setRepostCases(repost:Boolean)
+	public function setRepostCases(repost:Boolean)
 	{
 		this.repostCases = repost;
 	}
 	
-	function getRepostCases():Boolean
+	public function getRepostCases():Boolean
 	{
 		return this.repostCases;
 	} 
 	
-	function getShowCases():Boolean
+	public function getShowCases():Boolean
 	{
 		return this.showCases;
 	}
 	
-	function setShowCases(showIt:Boolean)
+	public function setShowCases(showIt:Boolean)
 	{
 		this.showCases = showIt;
 	}
 	
     
-    function obtenirPerso():Personnage
+    public function obtenirPerso():MyPersonnage
     {
         return this.perso;
     }
 	
-	function setPerso(p:Personnage):Void
+	public function setPerso(p:MyPersonnage):Void
     {
         perso = p;
     }
-	
-    function obtenirNomDeMonPersonnage():String
-    {
-        return this.nomDeMonPersonnage;
-    }
-    
-	function getNumeroMagasin(ll:Number, cc:Number):Number
+	    
+	public function getNumeroMagasin(ll:Number, cc:Number):Number
 	{
 		return this.tableauDesCases[ll][cc].obtenirNumMagasin();
 	}
 	
-	function obtenirTableauDesCases():Array
+	public function obtenirTableauDesCases():Array
     {
         return this.tableauDesCases;
     }
+	
+	public function getCase(l:Number, c:Number):Case
+    {
+        return this.tableauDesCases[l][c];
+    }
     
-	function obtenirMat():Array
+	public function obtenirMat():Array
     {
         return this.mat;
     }
@@ -114,47 +114,32 @@ class PlancheDeJeu
     ////////////////////////////////////////////////////////////
     //  CONSTUCTEUR
     ////////////////////////////////////////////////////////////
-    function PlancheDeJeu(tab:Array, num:Number, p:GestionnaireInterface)
+    function PlancheDeJeu(tab:Array , gest:GestionnaireEvenements)
     {
         var i:Number;
 		this.mat = new Array(tab.length);
-		//var count:Number = tab.length;
+		
         for(i in tab)
         {
 			this.mat[i] = new Array(tab[i].length);
             this.tableauDesCases.push(new Array());
         }
         definirMat(tab, null);
-        var idDessin:Number =((num - 10000)-(num - 10000) % 100)/100;
-		var idPers:Number = num - 10000 - idDessin * 100;
-        monPersonnage = idPers;//num;
-        perso = null;
-        gestionnaireInterface = p;
-		this.tempoSight = 3;
-		//this.showCases = true;
-    }
+        //var idDessin:Number =((num - 10000)-(num - 10000) % 100)/100;
+		//var idPers:Number = num - 10000 - idDessin * 100;
+        //monPersonnage = idPers;        
+       	this.tempoSight = 3;
+		//this.manager = gest;		
+    }	
 	
-	function getPersonnageByName(playerName:String):Personnage
-	{
-		//var count:Number = tableauDesPersonnages.length; 
-		for(var i in tableauDesPersonnages)
-		{
-			
-		   if(tableauDesPersonnages[i].obtenirNom() == playerName){
-			 
-			  return tableauDesPersonnages[i];
-		   }
-		}
-	}
-	
-    function obtenirNombreDeColonnes():Number
+    public function obtenirNombreDeColonnes():Number
     {
         return this.mat[0].length;
     }
 
    
     // a revoir, pour tout de suite ca sert quand on enleve une piece
-    function modifierNumeroCase(l:Number, c:Number, num:Number)
+    public function modifierNumeroCase(l:Number, c:Number, num:Number)
     {
 	    // si on vient d'enlever un objet il faut mettre comme nouvelle valeur juste la couleur de la case (deux derniers chiffres)
 	    if(num == -30000 || num == -10000)
@@ -168,33 +153,33 @@ class PlancheDeJeu
     }
     
        
-    function enleverPiece(l:Number, c:Number)
+    public function enleverPiece(l:Number, c:Number)
     {
         this.tableauDesCases[l][c].effacerPiece();
     }
 	
 	
 	///////////////////////////////////////////////////////////////////////////
-	function obtenirObjet(l:Number, c:Number):ObjetSurCase
+	public function obtenirObjet(l:Number, c:Number):ObjetSurCase
     {
         return this.tableauDesCases[l][c].obtenirObjet();
     }
 	
 	
-	function enleverObjet(l:Number, c:Number)
+	public function enleverObjet(l:Number, c:Number)
     {
         this.tableauDesCases[l][c].effacerObjet();
     }
 	
 
-    function obtenirNombreDeLignes():Number
+    public function obtenirNombreDeLignes():Number
     {
         return this.mat.length;
     }
    
    	// cette fonction affiche la planche de jeu initiale,
     // idealement il faudrait que les 4 coins soient toujours presents et pas plus de 9998 cases
-    function afficher()
+    public function afficher()
     {
         var i:Number;
         var j:Number;
@@ -211,14 +196,13 @@ class PlancheDeJeu
         largeurDeCase = clipTest._width;
         hauteurDeCase = clipTest._height * 0.850111857;
         clipTest.removeMovieClip();
+		
         ////////////////////////////////////////////////////////////////////////////////////////
-		//var count:Number = this.mat.length;
 		i = 0;
         for(var l in this.mat)
         {
 			x = i*largeurDeCase/2 + largeurDeCase/2;
             y = 200 + i*hauteurDeCase/2;
-			//var countS:Number = this.mat[0].length;
 			j = 0;
             for(var s in this.mat[0])
             {
@@ -247,20 +231,19 @@ class PlancheDeJeu
             }
 			i++;
         }
+		repostCases = true;		
     }
 
     
     ////////////////////////////////////////////////////////////////////////////////////
-    function definirMat(tab:Array, tdc:Array)
+    public function definirMat(tab:Array, tdc:Array)
     {
         var i:Number;
         var j:Number;
         // on initie les tableaux 
-		//var count:Number = tab.length;
-        for(i in tab)
+		for(i in tab)
         {
-			//var countS:Number = tab[0].length;
-            for(j in tab[0])
+			for(j in tab[0])
             {
                 this.mat[i][j] = tab[i][j];
                 //trace("ds definirMat  mat   tab i  j  mat  tab :    "+i+"   "+j+"   "+this.mat[i][j]+"     "+tab[i][j]);
@@ -278,7 +261,7 @@ class PlancheDeJeu
         }
     }
 	
-    function translater(direction:String):Boolean
+    public function translater(direction:String):Boolean
     {
         var la:Number;
         var ha:Number;
@@ -347,7 +330,7 @@ class PlancheDeJeu
     }
 
     //*************************************************
-    function zoomer(sens:String, fois:Number):Boolean
+    public function zoomer(sens:String, fois:Number):Boolean
     {
 		var distX:Number;
 		var distY:Number;
@@ -412,87 +395,15 @@ class PlancheDeJeu
 		if(this.zoom == -8 || this.zoom == 8) return false;
 		return true;
     }
-    //*********************************************************
-	
-	 function zoomerInHalf(sens:String):Boolean
-    {
-		var distX:Number;
-		var distY:Number;
-		
-		switch(sens)
-		{
-			case "in":
-			     
-				if(this.zoom /2 < 8)
-				{
-					
-					this.zoom++;
-					
-					// on zoom le clip sur lequel est attache tous les autres clips
-					_level0.loader.contentHolder.referenceLayer._xscale += 5;
-					_level0.loader.contentHolder.referenceLayer._yscale += 5;
-				
-					// on deplace le clip sur lequel est attache tous les autres clips
-					distX = 275 - _level0.loader.contentHolder.referenceLayer._x;
-					distX *= (5+this.zoom)/(4+this.zoom); 
-					_level0.loader.contentHolder.referenceLayer._x = 275 - distX;
-					distY = 200 - _level0.loader.contentHolder.referenceLayer._y;
-					distY *= (5+this.zoom)/(4+this.zoom); 
-					_level0.loader.contentHolder.referenceLayer._y = 200 - distY;
-					
-					// on modifie largeurDeCase et hauteurDeCase
-					this.largeurDeCase *= (5+this.zoom)/(4+this.zoom);
-					this.hauteurDeCase *= (5+this.zoom)/(4+this.zoom);
-				}
-			break;
-				
-			case "out":
-				if(this.zoom/2 > -8)
-				{
-					this.zoom--; 
-					
-					// on zoom le clip sur lequel est attache tous les autres clips
-					_level0.loader.contentHolder.referenceLayer._xscale -= 5;
-					_level0.loader.contentHolder.referenceLayer._yscale -= 5;
-					
-					// on deplace le clip sur lequel est attache tous les autres clips
-					distX = 275 - _level0.loader.contentHolder.referenceLayer._x;
-					distX *= (5+this.zoom)/(4+this.zoom); 
-					_level0.loader.contentHolder.referenceLayer._x = 275 - distX;
-					distY = 200 - _level0.loader.contentHolder.referenceLayer._y;
-					distY *= (5+this.zoom)/(4+this.zoom); 
-					_level0.loader.contentHolder.referenceLayer._y = 200 - distY;
-					
-					// on modifie largeurDeCase et hauteurDeCase
-					this.largeurDeCase *= (5+this.zoom)/(6+this.zoom);
-					this.hauteurDeCase *= (5+this.zoom)/(6+this.zoom);
-				}
-			break;
-		
-			default:
-			break;
-		}
-		
-		if(this.zoom == -8 || this.zoom == 8) return false;
-		return true;
-    }
-    //*********************************************************
    
-    function obtenirRotation():Number
+    public function obtenirRotation():Number
     {
         return rotation;
     }
-    
-    
-    function obtenirTableauDesPersonnages():Array
-    {
-        return this.tableauDesPersonnages;
-    }
-   
-    
+        
 	// cette fonction prend en entree un pt du board original et retourne la ligne et la colonne dans le board tourne
 	// a appliquer a tous les pt donnes par le serveur
-    function calculerPositionTourne(ll:Number, cc:Number):Point
+    public function calculerPositionTourne(ll:Number, cc:Number):Point
     {
         var pt:Point;
         var i:Number;
@@ -535,7 +446,7 @@ class PlancheDeJeu
     
     // cette fonction prend en entree un pt du board tourne et retourne la ligne et la colonne dans le board original
     // a appliquer a tous les points donnes au serveur
-    function calculerPositionOriginale(ll:Number, cc:Number):Point
+    public function calculerPositionOriginale(ll:Number, cc:Number):Point
     {
         var pt:Point;
         var i:Number;
@@ -574,33 +485,12 @@ class PlancheDeJeu
         pt = new Point(a,b);
         return pt;
     }
-
-	
-    function faireRirePersonnage(p:Personnage)
-    {
-        p.rire();
-    }
-
-    
-    function ajouterPersonnage(nom:String, ll:Number, cc:Number, idPers:Number, idClip:Number, userRole:Number, cloColor:String)
-    {
-		
-        var p:Personnage;
-        //trace("ajouterPersonnage:" + nom + " niveau:" + (5*tableauDesCases.length*tableauDesCases[0].length+2*num) + " idPers:" + num + " idDessin:" + idClip);
-        p = new Personnage(idPers, nom, userRole, 5 * tableauDesCases.length * tableauDesCases[0].length + 2 * idPers, idClip ,ll, cc, tableauDesCases[ll][cc].obtenirClipCase()._x,tableauDesCases[ll][cc].obtenirClipCase()._y ,cloColor);
-       
-		
+   
+    //function ajouterPersonnage(nom:String, ll:Number, cc:Number, idPers:Number, idClip:Number, userRole:Number, cloColor:String)
+	public function ajouterPersonnage(p:IPersonnage, ll:Number, cc:Number)
+    {       
+        trace("ajouterPersonnage:" + p + " ll:" + ll + " cc:" + cc );
         tableauDesCases[ll][cc].ajouterPersonnage(p);
-	
-		this.tableauDesPersonnages.push(p);
-	    p.afficher();
-        if(idPers == monPersonnage)
-        {
-            this.perso = p;
-	    	this.nomDeMonPersonnage = nom;
-	    	
-        }
-		
     }
     
     
@@ -631,7 +521,7 @@ class PlancheDeJeu
     }*/
 	
 	/////////////////////////// Etape 1 de l'animation ////////////////////////////////////////////////////////////////
-	function startAnimationCourseI():Void
+	public function startAnimationCourseI():Void
 	{
 		var dx:Number;
 		var dy:Number;
@@ -650,7 +540,7 @@ class PlancheDeJeu
 	}
 	
 	////////////////////////////// Etape 2 de l'animation //////////////////////////////////////////////////////////////////
-	function startAnimationCourseII():Void
+	public function startAnimationCourseII():Void
 	{
 		var coorByX:Number = _level0.loader.contentHolder.referenceLayer._x;
 		var coorByY:Number = _level0.loader.contentHolder.referenceLayer._y;
@@ -664,22 +554,15 @@ class PlancheDeJeu
     
     
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function recentrerBoard(l:Number, c:Number, modeGraduel:Boolean):Boolean
+	public function recentrerBoard(l:Number, c:Number, modeGraduel:Boolean):Boolean
 	{
 		var dx:Number;
 		var dy:Number;
 		var pourcent:Number;
 		
-		// if different type of game we need different pozitions
-		if(_level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament" || _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Course" )
-		{
-		   dx = 275 - (_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
-		   dy = 200 - (_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._y);
-		}else{
-		   dx = 275 - (_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
-		   dy = 200 - (_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._y);
-		}
-		
+		dx = 275 - (_level0.loader.contentHolder.referenceLayer._x + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._x);
+		dy = 200 - (_level0.loader.contentHolder.referenceLayer._y + (10+this.zoom)/10*this.tableauDesCases[l][c].obtenirClipCase()._y);
+				
 		dx = Math.round(dx);
 		dy = Math.round(dy);
 		
@@ -721,10 +604,10 @@ class PlancheDeJeu
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Method is not used now
-	function switchColor(laCase:Case)
+	public function switchColor(laCase:Case)
 	{
 		//trace("--- switchColor ---");
-		var mClip:MovieClip = new MovieClip();
+		var mClip:MovieClip;// = new MovieClip();
 		mClip = laCase.obtenirClipCase().interieur;
 		
 		var trans:Transform = new Transform(mClip);
@@ -754,10 +637,10 @@ class PlancheDeJeu
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////// Method used to put flash on the cases
-	function switchColorFlash(laCase:Case)
+	public function switchColorFlash(laCase:Case)
 	{
 		//trace("--- switchColor ---");
-		var mClip:MovieClip = new MovieClip();
+		var mClip:MovieClip;// = new MovieClip();
 		
 		
 		if(laCase.obtenirMiniGame())
@@ -776,10 +659,10 @@ class PlancheDeJeu
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////// Method used to put flash on the Braniac cases
-	function switchColorBran(laCase:Case)
+	public function switchColorBran(laCase:Case)
 	{
 		//trace("--- switchColor ---");
-		var mClip:MovieClip = new MovieClip();
+		var mClip:MovieClip;// = new MovieClip();
 		
 		
 		if(laCase.obtenirMiniGame())
@@ -798,10 +681,10 @@ class PlancheDeJeu
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////// Method used to put flash on the Banana cases
-	function switchColorFlashBanana(laCase:Case)
+	public function switchColorFlashBanana(laCase:Case)
 	{
 		//trace("--- switchColor ---");
-		var mClip:MovieClip = new MovieClip();
+		var mClip:MovieClip;// = new MovieClip();
 		
 		
 		if(laCase.obtenirMiniGame())
@@ -825,7 +708,7 @@ class PlancheDeJeu
 	*  Used to apply tween to color transformation - can be used in different situations
 	*  where you need graduate color transform 
 	*/
-	function colorTween(mc:MovieClip, ct:ColorTransform, t:Transform, seconds:Number, a:Number, r:Number, g:Number, b:Number, ease:Function, laCase:Case, intervalCol:Number):Void {
+	public function colorTween(mc:MovieClip, ct:ColorTransform, t:Transform, seconds:Number, a:Number, r:Number, g:Number, b:Number, ease:Function, laCase:Case, intervalCol:Number):Void {
       
 	 
 	   intervalCol = setInterval(executeColor, 2400, mc, ct, t, seconds, a, r, g, b, ease);
@@ -861,10 +744,10 @@ class PlancheDeJeu
     }
 	
 	//////////////////////
-	function switchBackColor(laCase:Case)
+	public function switchBackColor(laCase:Case)
 	{
 		//trace("--- switchBackColor ---");
-		var mClip:MovieClip = new MovieClip();
+		var mClip:MovieClip;// = new MovieClip();
 		mClip = laCase.obtenirClipCase().interieur;
 		
 		var trans:Transform = new Transform(mClip);
@@ -888,7 +771,7 @@ class PlancheDeJeu
 	
 	/////////////////////////////////////
 	/// method used to remove flash of cases
-	function switchBackColorFlash(laCase:Case)
+	public function switchBackColorFlash(laCase:Case)
 	{
 	    var mClip:MovieClip = new MovieClip();
 		
@@ -906,16 +789,16 @@ class PlancheDeJeu
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////
-    function afficherCasesPossibles(p:Personnage)
+    public function afficherCasesPossibles()
     {		
 	 var isInWinTheGame:Boolean = true;
-	 if(tableauDesCases[p.obtenirL()][p.obtenirC()].obtenirType() > 41000)
+	 if(tableauDesCases[perso.obtenirL()][perso.obtenirC()].obtenirType() > 41000)
         isInWinTheGame = false;
 	 
-	 this.tempoSight = 7;//_level0.loader.contentHolder.objGestionnaireEvenements.getMoveSight();
-	 var tempo = _level0.loader.contentHolder.objGestionnaireEvenements.getMoveSight();
-	 //trace("Move : " + tempo + " "+ p.getBrainiac());
-	 if( !(p.getRole() == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") && isInWinTheGame)
+	 this.tempoSight = 7;
+	 var tempo = perso.getMoveSight(); //_level0.loader.contentHolder.objGestionnaireEvenements.getMoveSight(); //
+	 trace("Move : " + tempo + " " + perso.getBrainiac());
+	 if( !(perso.getRole() == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") && isInWinTheGame)
 	 { 
 		//trace("Debut afficherCasesPossibles");
 		
@@ -929,46 +812,46 @@ class PlancheDeJeu
 		var twMove2:Tween;
 						
 		//trace("ds afficherCasesPossibles");
-        for(i = 1; i <= Math.min(mat.length-p.obtenirL()-1, tempo); i++)
+        for(i = 1; i <= Math.min(mat.length - perso.obtenirL() - 1, tempo); i++)
         {
-			temp = Number(p.obtenirL());
+			temp = Number(perso.obtenirL());
 			temp += Number(i);
 			
-			 //trace("ds premier for avant if  i  temp   mat  L   C  :  "+i+"   "+temp+"   "+this.mat[temp][p.obtenirC()]+"   "+p.obtenirL()+"   "+p.obtenirC());
+			 //trace("ds premier for avant if  i  temp   mat  L   C  :  "+i+"   "+temp+"   "+this.mat[temp][perso.obtenirC()]+"   "+perso.obtenirL()+"   "+perso.obtenirC());
 		
-            if(this.mat[temp][p.obtenirC()] > 0)
+            if(this.mat[temp][perso.obtenirC()] > 0)
             {				
 					//switchColor(tableauDesCases[temp][p.obtenirC()]);
-					if(i == tempo && p.getBrainiac())
+					if(i == tempo && perso.getBrainiac())
 					{
-						switchColorBran(tableauDesCases[temp][p.obtenirC()]);
+						switchColorBran(tableauDesCases[temp][perso.obtenirC()]);
 					
 					}else
 					{
-					   switchColorFlash(tableauDesCases[temp][p.obtenirC()]);
+					   switchColorFlash(tableauDesCases[temp][perso.obtenirC()]);
 					}
 					
-					level = (tableauDesCases.length*tableauDesCases[0].length) +(temp*tableauDesCases[0].length)+Number(p.obtenirC()) + Number(1);
+					level = (tableauDesCases.length*tableauDesCases[0].length) +(temp*tableauDesCases[0].length)+Number(perso.obtenirC()) + Number(1);
 					//trace("ds if,  level  "+level);
-					if(tableauDesCases[temp][p.obtenirC()].obtenirType() > 40000)
+					if(tableauDesCases[temp][perso.obtenirC()].obtenirType() > 40000)
 					{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level, {_width:116, _height:36.25});
-					   tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();
+					   tableauDesCases[temp][perso.obtenirC()].obtenirWinTheGame().shineWin();
 					}else{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level, {_width:116, _height:36.25});
 					   brille._alpha = 0;
 					}
-					brille._x = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._x;
-					brille._y = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._y;
+					brille._x = tableauDesCases[temp][perso.obtenirC()].obtenirClipCase()._x;
+					brille._y = tableauDesCases[temp][perso.obtenirC()].obtenirClipCase()._y;
 					//brille._width = largeurDeCase;///0.55;
 					//brille._height = hauteurDeCase;///0.55;//0.85
 					
 					brille._ligne = new Object();
 					brille._colonne = new Object();
 					brille._ligne = temp;
-					brille._colonne = p.obtenirC();
+					brille._colonne = perso.obtenirC();
 			
-					afficherValeurDeplacementColonne(p, brille, temp, p.obtenirC());
+					afficherValeurDeplacementColonne(perso, brille, temp, perso.obtenirC());
 
                    /* brille.onRollOver = function()
 					{ 
@@ -977,17 +860,15 @@ class PlancheDeJeu
 					};*/
 					brille.onPress = function()
 					{   
-						removeMovieClip(p.obtenirImage().valDeplace);
+						removeMovieClip(perso.obtenirImage().valDeplace);
 						coordonnees.definirX(this._ligne);
 						coordonnees.definirY(this._colonne);
-						_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+						_level0.loader.contentHolder.planche.effacerCasesPossibles();
 						_level0.loader.contentHolder.objGestionnaireEvenements.deplacerPersonnage(coordonnees);
-						tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().removeShineWin();
+						tableauDesCases[temp][perso.obtenirC()].obtenirWinTheGame().removeShineWin();
 					};
-					tableauDesCases[temp][p.obtenirC()].definirCasePossible(brille);
-			
-					_level0.objGestionnaireInterface.ajouterBouton(brille, 3);
-				
+					tableauDesCases[temp][perso.obtenirC()].definirCasePossible(brille);
+												
             }
             else
             {
@@ -997,59 +878,59 @@ class PlancheDeJeu
         }
 	
 	
-        for(i=1; i <= Math.min(p.obtenirL(),tempo); i++)
+        for(i=1; i <= Math.min(perso.obtenirL(),tempo); i++)
         {
-			//trace("ds deuxieme for avant if  i  mat  :  "+i+"   "+mat[p.obtenirL()-i][p.obtenirC()]);
-			temp = p.obtenirL()-i;
+			//trace("ds deuxieme for avant if  i  mat  :  "+i+"   "+mat[perso.obtenirL()-i][perso.obtenirC()]);
+			temp = perso.obtenirL() - i;
            
-			if(mat[temp][p.obtenirC()] > 0)
+			if(mat[temp][perso.obtenirC()] > 0)
             {
 					//switchColor(tableauDesCases[temp][p.obtenirC()]);
 					//if we have Bran
-					if(i == tempo && p.getBrainiac())
+					if(i == tempo && perso.getBrainiac())
 					{
-						switchColorBran(tableauDesCases[temp][p.obtenirC()]);
+						switchColorBran(tableauDesCases[temp][perso.obtenirC()]);
 					}else
 					{
-					   switchColorFlash(tableauDesCases[temp][p.obtenirC()]);
+					   switchColorFlash(tableauDesCases[temp][perso.obtenirC()]);
 					}
 					// trace("tableau des cases  vs  mat  : "+ tableauDesCases.length+"   "+mat.length);
 					// trace("tableau des cases[0]  vs  mat[]  : "+ tableauDesCases[0].length+"   "+mat[0].length);
-					level = (tableauDesCases.length * tableauDesCases[0].length)  +  ((temp) * tableauDesCases[0].length)  +  Number(p.obtenirC()) + Number(1);
+					level = (tableauDesCases.length * tableauDesCases[0].length)  +  ((temp) * tableauDesCases[0].length)  +  Number(perso.obtenirC()) + Number(1);
 					// trace("ds if,  level:  "+level);
-					if(tableauDesCases[temp][p.obtenirC()].obtenirType() > 40000 ){
+					if(tableauDesCases[temp][perso.obtenirC()].obtenirType() > 40000 ){
 					   
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level, {_width:116, _height:36.25});
-					   tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().shineWin();
+					   tableauDesCases[temp][perso.obtenirC()].obtenirWinTheGame().shineWin();
 					}else{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					   brille._alpha = 0;
 					}
 					//brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
-					brille._x = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._x;
-					brille._y = tableauDesCases[temp][p.obtenirC()].obtenirClipCase()._y;
+					brille._x = tableauDesCases[temp][perso.obtenirC()].obtenirClipCase()._x;
+					brille._y = tableauDesCases[temp][perso.obtenirC()].obtenirClipCase()._y;
 					//brille._width = largeurDeCase;///0.55;
 					//brille._height = hauteurDeCase;//0.55;//0.85;
 					brille._ligne = new Object();
 					brille._colonne = new Object();
 					brille._ligne = temp;
-					brille._colonne = p.obtenirC();
+					brille._colonne = perso.obtenirC();
 					
-					afficherValeurDeplacementColonne(p, brille, temp, p.obtenirC());
+					afficherValeurDeplacementColonne(perso, brille, temp, perso.obtenirC());
 					
 					brille.onPress = function ()
 					{
-						removeMovieClip(p.obtenirImage().valDeplace);
+						removeMovieClip(perso.obtenirImage().valDeplace);
 						coordonnees.definirX(this._ligne);
 						coordonnees.definirY(this._colonne);
 				
-						_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+						_level0.loader.contentHolder.planche.effacerCasesPossibles();
 						_level0.loader.contentHolder.objGestionnaireEvenements.deplacerPersonnage(coordonnees); 
-						tableauDesCases[temp][p.obtenirC()].obtenirWinTheGame().removeShineWin();
+						tableauDesCases[temp][perso.obtenirC()].obtenirWinTheGame().removeShineWin();
 					};
-					this.tableauDesCases[temp][p.obtenirC()].definirCasePossible(brille);
+					this.tableauDesCases[temp][perso.obtenirC()].definirCasePossible(brille);
 			
-					_root.objGestionnaireInterface.ajouterBouton(brille, 3);
+					//_root.objGestionnaireInterface.ajouterBouton(brille, 3);
 				
            	}
             else
@@ -1058,58 +939,56 @@ class PlancheDeJeu
             }
         }
 	
-        for(i=1; i <= Math.min(mat[0].length-p.obtenirC()-1, tempo); i++)
+        for(i=1; i <= Math.min(mat[0].length-perso.obtenirC()-1, tempo); i++)
         {
-			temp = Number(p.obtenirC());
+			temp = Number(perso.obtenirC());
 			temp += Number(i);
 			//trace("ds troisieme for avant if  i  temp   mat  L   C  :  "+i+"   "+temp+"    "+mat[p.obtenirL()][temp]+"   "+p.obtenirL()+"   "+p.obtenirC());
             
-			if(mat[p.obtenirL()][temp] > 0)
+			if(mat[perso.obtenirL()][temp] > 0)
             {
 					//switchColor(tableauDesCases[p.obtenirL()][temp]);
-					if(i == tempo && p.getBrainiac())
+					if(i == tempo && perso.getBrainiac())
 					{
-					   switchColorBran(tableauDesCases[p.obtenirL()][temp]);
+					   switchColorBran(tableauDesCases[perso.obtenirL()][temp]);
 					}else
 				    {
-					   switchColorFlash(tableauDesCases[p.obtenirL()][temp]);
+					   switchColorFlash(tableauDesCases[perso.obtenirL()][temp]);
 					}
 					
-					level = (tableauDesCases.length * tableauDesCases[0].length) + Number(p.obtenirL()* tableauDesCases[0].length) + temp + Number(1);
+					level = (tableauDesCases.length * tableauDesCases[0].length) + Number(perso.obtenirL()* tableauDesCases[0].length) + temp + Number(1);
 					//trace("ds if : level :   "+level);
-					if(tableauDesCases[p.obtenirL()][temp].obtenirType() > 40000){
+					if(tableauDesCases[perso.obtenirL()][temp].obtenirType() > 40000){
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level, {_width:116, _height:36.25});
-					   tableauDesCases[p.obtenirL()][temp].obtenirWinTheGame().shineWin();
+					   tableauDesCases[perso.obtenirL()][temp].obtenirWinTheGame().shineWin();
 					}else{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					   brille._alpha = 0;
 					}
 					//brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
-					brille._x = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._x;
-					brille._y = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._y;
+					brille._x = tableauDesCases[perso.obtenirL()][temp].obtenirClipCase()._x;
+					brille._y = tableauDesCases[perso.obtenirL()][temp].obtenirClipCase()._y;
 					//brille._width = largeurDeCase;///0.55;
 					//brille._height = hauteurDeCase;//0.55;//0.85;
 					brille._ligne = new Object();
 					brille._colonne = new Object();
-					brille._ligne = p.obtenirL();
+					brille._ligne = perso.obtenirL();
 					brille._colonne = temp;
 				
-					afficherValeurDeplacementLigne(p, brille, p.obtenirL(), temp);
+					afficherValeurDeplacementLigne(perso, brille, perso.obtenirL(), temp);
 					
 					brille.onPress = function ()
 					{
-						removeMovieClip(p.obtenirImage().valDeplace);
+						removeMovieClip(perso.obtenirImage().valDeplace);
 						coordonnees.definirX(this._ligne);
 						coordonnees.definirY(this._colonne);
 				
-						_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+						_level0.loader.contentHolder.planche.effacerCasesPossibles();
 						_level0.loader.contentHolder.objGestionnaireEvenements.deplacerPersonnage(coordonnees);
-			            tableauDesCases[p.obtenirL()][temp].obtenirWinTheGame().removeShineWin(); 
+			            tableauDesCases[perso.obtenirL()][temp].obtenirWinTheGame().removeShineWin(); 
 					};
-					this.tableauDesCases[p.obtenirL()][temp].definirCasePossible(brille);
-			
-					_level0.objGestionnaireInterface.ajouterBouton(brille, 3);
-				
+					this.tableauDesCases[perso.obtenirL()][temp].definirCasePossible(brille);
+												
 			}
             else
             {
@@ -1117,57 +996,54 @@ class PlancheDeJeu
             }
         }
 		
-        for(i = 1; i <= Math.min(p.obtenirC(),tempo); i++)
+        for(i = 1; i <= Math.min(perso.obtenirC(),tempo); i++)
         {
 			//trace("ds dernier for avant if  i  mat  :  "+i+"   "+mat[p.obtenirL()][p.obtenirC()-i]);
-			temp = p.obtenirC()-i;
+			temp = perso.obtenirC() - i;
 			
-            if(mat[p.obtenirL()][temp] > 0)
+            if(mat[perso.obtenirL()][temp] > 0)
             {
 					//switchColor(tableauDesCases[p.obtenirL()][temp]);
-					if(i == tempo && p.getBrainiac())
+					if(i == tempo && perso.getBrainiac())
 					{
-     				   switchColorBran(tableauDesCases[p.obtenirL()][temp]);
+     				   switchColorBran(tableauDesCases[perso.obtenirL()][temp]);
 					}else
 					{
-					   switchColorFlash(tableauDesCases[p.obtenirL()][temp]);
+					   switchColorFlash(tableauDesCases[perso.obtenirL()][temp]);
 					}
 					
-					level = (tableauDesCases.length*tableauDesCases[0].length) + (Number(p.obtenirL())*tableauDesCases[0].length)+temp+Number(1);
+					level = (tableauDesCases.length*tableauDesCases[0].length) + (Number(perso.obtenirL())*tableauDesCases[0].length)+temp+Number(1);
 					//trace("ds if,  level: "+level);
-					if(tableauDesCases[p.obtenirL()][temp].obtenirType() > 40000){
+					if(tableauDesCases[perso.obtenirL()][temp].obtenirType() > 40000){
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("winShine", "winShine"+level, level, {_width:116, _height:36.25});
-					   tableauDesCases[p.obtenirL()][temp].obtenirWinTheGame().shineWin();
+					   tableauDesCases[perso.obtenirL()][temp].obtenirWinTheGame().shineWin();
 					}else{
 					   brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
 					   brille._alpha = 0;
 					}
 					//brille = _level0.loader.contentHolder.referenceLayer.attachMovie("caseAlpha", "caseAlpha"+level, level);
-					brille._x = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._x;
-					brille._y = tableauDesCases[p.obtenirL()][temp].obtenirClipCase()._y;
+					brille._x = tableauDesCases[perso.obtenirL()][temp].obtenirClipCase()._x;
+					brille._y = tableauDesCases[perso.obtenirL()][temp].obtenirClipCase()._y;
 					//brille._width = largeurDeCase;//0.55;
 					//brille._height = hauteurDeCase;//0.55;//0.85;
 					brille._ligne = new Object();
 					brille._colonne = new Object();
-					brille._ligne = p.obtenirL();
+					brille._ligne = perso.obtenirL();
 					brille._colonne = temp;
 					
-					afficherValeurDeplacementLigne(p, brille, p.obtenirL(), temp);
+					afficherValeurDeplacementLigne(perso, brille, perso.obtenirL(), temp);
 			
 					brille.onPress = function ()
 					{
-						removeMovieClip(p.obtenirImage().valDeplace);
+						removeMovieClip(perso.obtenirImage().valDeplace);
 						coordonnees.definirX(this._ligne);
 						coordonnees.definirY(this._colonne);
 				
-						_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+						_level0.loader.contentHolder.planche.effacerCasesPossibles();
 						_level0.loader.contentHolder.objGestionnaireEvenements.deplacerPersonnage(coordonnees);
-						tableauDesCases[p.obtenirL()][temp].obtenirWinTheGame().removeShineWin(); 
+						tableauDesCases[perso.obtenirL()][temp].obtenirWinTheGame().removeShineWin(); 
 					};
-					this.tableauDesCases[p.obtenirL()][temp].definirCasePossible(brille);
-			
-					_level0.objGestionnaireInterface.ajouterBouton(brille, 3);		
-				
+					this.tableauDesCases[perso.obtenirL()][temp].definirCasePossible(brille);				
             }
             else
             {
@@ -1178,8 +1054,8 @@ class PlancheDeJeu
 		
 		// to put Banana cases 
 		//trace("in the GE " + _level0.loader.contentHolder.objGestionnaireEvenements.bananaState);
-		if(p.getBananaState())
-		   afficherCasesPossiblesBanane(p);
+		if(perso.getBananaState())
+		   afficherCasesPossiblesBanane();
 	 }// end if for watcher
 	 
 	 //
@@ -1190,16 +1066,15 @@ class PlancheDeJeu
 	////////////////////////////////////////////////////////////////////////////////////////////
 	///  Method used to put on the board the movies of the cases cauted by banana //////////////
 	////////////////////////////////////////////////////////////////////////////////////////////
-    function afficherCasesPossiblesBanane(p:Personnage)
+    public function afficherCasesPossiblesBanane()
     {	  
 	    trace("start afficher cases possibles Banane");
 	    var i:Number;
 		var j:Number;
-		var tempo:Number = _level0.loader.contentHolder.objGestionnaireEvenements.getMoveSight();
-		trace("tempo !!!!!!!!!!!!!" + tempo);
+		var tempo:Number = perso.getMoveSight();
+		//trace("tempo !!!!!!!!!!!!!" + tempo);
 		var maxSight:Number = 6;
-		//if( p.getBrainiac())
-		  // maxSight = 7;
+		
         var nb:Number = Math.min(maxSight - tempo,2);
 		
         var coordonnees:Point = new Point(0,0);
@@ -1207,66 +1082,66 @@ class PlancheDeJeu
 		var tempB:Number;
 		var hasHoles:Boolean = false;
 		
-		for(j = 1; j <= Math.min(mat.length-p.obtenirL()-1, tempo + 1); j++)  // moveVisi + 1
+		for(j = 1; j <= Math.min(mat.length-perso.obtenirL()-1, tempo + 1); j++)  // moveVisi + 1
 		{                                                                       // because first cases Banana can be on the hole
-				tempB = Number(p.obtenirL());
+				tempB = Number(perso.obtenirL());
 			    tempB += Number(j);
-			    if(this.mat[tempB][p.obtenirC()] == 0) hasHoles = true;
+			    if(this.mat[tempB][perso.obtenirC()] == 0) hasHoles = true;
 		}		
 		
         for(i = 0; i < nb; i++)//Math.min(mat.length-p.obtenirL()-1,moveVisi + 2); i++)
         {
-			temp = Number(p.obtenirL());
+			temp = Number(perso.obtenirL());
 			temp += Number(tempo + i + 1);
 						
-            if(this.mat[temp][p.obtenirC()] > 0 && !hasHoles)
+            if(this.mat[temp][perso.obtenirC()] > 0 && !hasHoles)
             {
 				//trace("Test L: " + temp + " " + (mat.length - p.obtenirL()-1));
-				switchColorFlashBanana(tableauDesCases[temp][p.obtenirC()]);
+				switchColorFlashBanana(tableauDesCases[temp][perso.obtenirC()]);
 			}
             
         }
 	    //***************************************************************
 	    hasHoles = false;
 		
-		for(j = 1; j <= Math.min(p.obtenirL()-1, tempo + 1); j++)
+		for(j = 1; j <= Math.min(perso.obtenirL() - 1, tempo + 1); j++)
 		{
-				tempB = Number(p.obtenirL());
+				tempB = Number(perso.obtenirL());
 			    tempB -= Number(j);
-			    if(this.mat[tempB][p.obtenirC()] == 0) hasHoles = true;
+			    if(this.mat[tempB][perso.obtenirC()] == 0) hasHoles = true;
 		}		
 	
         for(i = 0; i < nb; i++)//i <= Math.min(p.obtenirL(),moveVisi + 2); i++)
         {
 			//trace("ds deuxieme for avant if  i temp mat  :  " + i + "   " + temp + "    "  + mat[p.obtenirL()-i][p.obtenirC()]);
-			temp = p.obtenirL()-(tempo + i + 1);
+			temp = perso.obtenirL()-(tempo + i + 1);
            
-			if(mat[temp][p.obtenirC()] > 0 && !hasHoles)
+			if(mat[temp][perso.obtenirC()] > 0 && !hasHoles)
             {
-				switchColorFlashBanana(tableauDesCases[temp][p.obtenirC()]);
+				switchColorFlashBanana(tableauDesCases[temp][perso.obtenirC()]);
 			}
             
         }
 	    //**************************************************************
 	    hasHoles = false;
 		
-		for(j = 1; j <= Math.min(mat[0].length-p.obtenirC() - 1, tempo + 1); j++)
+		for(j = 1; j <= Math.min(mat[0].length-perso.obtenirC() - 1, tempo + 1); j++)
 		{
-				tempB = Number(p.obtenirC());
+				tempB = Number(perso.obtenirC());
 			    tempB += Number(j);
-			    if(this.mat[p.obtenirL()][tempB] == 0) hasHoles = true;
+			    if(this.mat[perso.obtenirL()][tempB] == 0) hasHoles = true;
 		}		
 	
 	    
         for(i = 0; i < nb; i++)//for(i = moveVisi + 1; i <= Math.min(mat[0].length-p.obtenirC()-1, moveVisi + 2);i++)
         {
-			temp = Number(p.obtenirC());
+			temp = Number(perso.obtenirC());
 			temp += Number(tempo + i + 1);
 			//trace("ds troisieme for avant if  i  temp   mat  L   C  :  " + i + "   " + temp + "    " + mat[p.obtenirL()][temp] + "   " + p.obtenirL() + "   " + p.obtenirC());
             
-			if(mat[p.obtenirL()][temp] > 0 && !hasHoles )
+			if(mat[perso.obtenirL()][temp] > 0 && !hasHoles )
             {
-				switchColorFlashBanana(tableauDesCases[p.obtenirL()][temp]);
+				switchColorFlashBanana(tableauDesCases[perso.obtenirL()][temp]);
 			}
            
         }
@@ -1274,21 +1149,21 @@ class PlancheDeJeu
 		//******************************************************************************
 		 hasHoles = false;
 		
-		for(j = 1; j <= Math.min(p.obtenirC(),tempo + 1); j++)
+		for(j = 1; j <= Math.min(perso.obtenirC(),tempo + 1); j++)
 		{
-				tempB = Number(p.obtenirC());
+				tempB = Number(perso.obtenirC());
 			    tempB -= Number(j);
-			    if(this.mat[p.obtenirL()][tempB] == 0) hasHoles = true;
+			    if(this.mat[perso.obtenirL()][tempB] == 0) hasHoles = true;
 		}		
 		
         for(i = 0; i < nb; i++)//for(i= moveVisi + 1; i <= Math.min(p.obtenirC(), moveVisi + 2);i++)
         {
 			//trace("ds dernier for avant if  i  mat  :  " + i + "   " + mat[p.obtenirL()][p.obtenirC()-i]);
-			temp = p.obtenirC()-(tempo + i + 1);
+			temp = perso.obtenirC()-(tempo + i + 1);
 			
-            if(mat[p.obtenirL()][temp] > 0 && !hasHoles)
+            if(mat[perso.obtenirL()][temp] > 0 && !hasHoles)
             {
-				switchColorFlashBanana(tableauDesCases[p.obtenirL()][temp]);
+				switchColorFlashBanana(tableauDesCases[perso.obtenirL()][temp]);
             }
            
         }
@@ -1297,12 +1172,12 @@ class PlancheDeJeu
     }// end function afficherCasesPossiblesBanane
     
 	
-	/*
+	/**
 	Les 2 fonctions suivantes servent a afficher le nombre de points que
 	vaut chaque deplacement quand la souris est deplacee sur les cases.
 	Elles sont appelees dans afficherCasesPossibles().
 	*/
-	function afficherValeurDeplacementColonne (p, brille:MovieClip, dx:Number, dy:Number)
+	public function afficherValeurDeplacementColonne (p, brille:MovieClip, dx:Number, dy:Number)
 	{
 		var mc:MovieClip = p.obtenirImage();
 		brille.onRollOver = function()
@@ -1349,7 +1224,7 @@ class PlancheDeJeu
 		}
 	}
 
-	function afficherValeurDeplacementLigne (p, brille:MovieClip, dx:Number, dy:Number)
+	public function afficherValeurDeplacementLigne (p, brille:MovieClip, dx:Number, dy:Number)
     {
 		var mc:MovieClip = p.obtenirImage();
 		brille.onRollOver = function()
@@ -1401,7 +1276,7 @@ class PlancheDeJeu
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////
-    function effacerCasesPossibles(p:Personnage)
+    public function effacerCasesPossibles()
     {
         var i:Number;
 		var temp:Number;
@@ -1410,19 +1285,19 @@ class PlancheDeJeu
 	    _level0.loader.contentHolder.referenceLayer.ptsTxt_mc.removeMovieClip();  
 		//switchBackColor(tableauDesCases[p.obtenirL()][p.obtenirC()]);
 		//another version more light
-		switchBackColorFlash(tableauDesCases[p.obtenirL()][p.obtenirC()]);
+		switchBackColorFlash(tableauDesCases[perso.obtenirL()][perso.obtenirC()]);
 	
-        for(i = 1; i <= Math.min(mat.length-p.obtenirL() - 1, this.tempoSight); i++)
+        for(i = 1; i <= Math.min(mat.length-perso.obtenirL() - 1, this.tempoSight); i++)
         {
-			temp = Number(Number(p.obtenirL()) + i);   
+			temp = Number(Number(perso.obtenirL()) + i);   
 			//trace("ds premier for    i     L    temp"+i+"    "+p.obtenirL()+"    "+temp);
 		
-            if(mat[temp][p.obtenirC()] > 0)
+            if(mat[temp][perso.obtenirC()] > 0)
             {
 		    	//trace("ds if premier for");
-                tableauDesCases[temp][p.obtenirC()].effacerCasePossible();
+                tableauDesCases[temp][perso.obtenirC()].effacerCasePossible();
 				//switchBackColor(tableauDesCases[temp][p.obtenirC()]);
-				switchBackColorFlash(tableauDesCases[temp][p.obtenirC()]);
+				switchBackColorFlash(tableauDesCases[temp][perso.obtenirC()]);
             }
             else
             {
@@ -1430,16 +1305,16 @@ class PlancheDeJeu
             }
         }
 		
-        for(i = 1; i <= Math.min(p.obtenirL(), this.tempoSight);i++)
+        for(i = 1; i <= Math.min(perso.obtenirL(), this.tempoSight);i++)
         {
 			//trace("ds deuxieme for");
 		
-            if(mat[p.obtenirL()-i][p.obtenirC()] > 0)
+            if(mat[perso.obtenirL()-i][perso.obtenirC()] > 0)
             {
 				// trace("ds if deuxieme for");
-                tableauDesCases[p.obtenirL()-i][p.obtenirC()].effacerCasePossible();
-				//switchBackColor(tableauDesCases[p.obtenirL()-i][p.obtenirC()]);
-				switchBackColorFlash(tableauDesCases[p.obtenirL()-i][p.obtenirC()]);
+                tableauDesCases[perso.obtenirL()-i][perso.obtenirC()].effacerCasePossible();
+				//switchBackColor(tableauDesCases[perso.obtenirL()-i][perso.obtenirC()]);
+				switchBackColorFlash(tableauDesCases[perso.obtenirL()-i][perso.obtenirC()]);
             }
             else
             {
@@ -1447,17 +1322,17 @@ class PlancheDeJeu
             }
         }
 		
-        for(i = 1; i <= Math.min(mat[0].length-p.obtenirC()-1, this.tempoSight);i++)
+        for(i = 1; i <= Math.min(mat[0].length-perso.obtenirC()-1, this.tempoSight);i++)
         {
-			temp = Number(Number(p.obtenirC())+i);   
-			//trace("ds troisieme for    i     L    temp"+i+"    "+p.obtenirC()+"    "+temp);
+			temp = Number(Number(perso.obtenirC())+i);   
+			//trace("ds troisieme for    i     L    temp"+i+"    "+perso.obtenirC()+"    "+temp);
 		
-            if(mat[p.obtenirL()][temp] > 0)
+            if(mat[perso.obtenirL()][temp] > 0)
             {
 		    	//trace("ds if troisieme for");
-                tableauDesCases[p.obtenirL()][temp].effacerCasePossible();
-				//switchBackColor(tableauDesCases[p.obtenirL()][temp]);
-				switchBackColorFlash(tableauDesCases[p.obtenirL()][temp]);
+                tableauDesCases[perso.obtenirL()][temp].effacerCasePossible();
+				//switchBackColor(tableauDesCases[perso.obtenirL()][temp]);
+				switchBackColorFlash(tableauDesCases[perso.obtenirL()][temp]);
             }
             else
             {
@@ -1465,16 +1340,16 @@ class PlancheDeJeu
             }
         }
 		
-        for(i = 1; i <= Math.min(p.obtenirC(), this.tempoSight);i++)
+        for(i = 1; i <= Math.min(perso.obtenirC(), this.tempoSight);i++)
         {
 			//trace("ds quatrieme for");
 		
-            if(mat[p.obtenirL()][p.obtenirC()-i] > 0)
+            if(mat[perso.obtenirL()][perso.obtenirC()-i] > 0)
             {
 		    	//trace("ds if quatrieme for");
-                tableauDesCases[p.obtenirL()][p.obtenirC()-i].effacerCasePossible();
+                tableauDesCases[perso.obtenirL()][perso.obtenirC()-i].effacerCasePossible();
 				//switchBackColor(tableauDesCases[p.obtenirL()][p.obtenirC()-i]);
-				switchBackColorFlash(tableauDesCases[p.obtenirL()][p.obtenirC()-i]);
+				switchBackColorFlash(tableauDesCases[perso.obtenirL()][perso.obtenirC()-i]);
             }
             else
             {
@@ -1482,11 +1357,11 @@ class PlancheDeJeu
             }
         }
 	
-		_root.objGestionnaireInterface.deleterCasesSpeciales(); 
+		//_root.objGestionnaireInterface.deleterCasesSpeciales(); 
 		
 		//trace("efface banana : " + _level0.loader.contentHolder.objGestionnaireEvenements.bananaState );
 		if(_level0.loader.contentHolder.objGestionnaireEvenements.bananaState)
-		  effacerCasesPossiblesBanane(p);
+		  effacerCasesPossiblesBanane();
 		  
 		this.setShowCases(false);
 		//trace("Fin effacerCasesPossibles");
@@ -1495,7 +1370,7 @@ class PlancheDeJeu
 	
 	
 	//////////////////////////////////////////////////////////////////////////////
-    function effacerCasesPossiblesBanane(p:Personnage)
+    public function effacerCasesPossiblesBanane()
     {
         var i:Number;
 		var temp:Number;
@@ -1504,11 +1379,11 @@ class PlancheDeJeu
 	    
 		for(i = 0; i < nb; i++)//for(i = this.tempoSight + 1; i <= Math.min(mat.length-p.obtenirL()-1, this.tempoSight + 2); i++) // +2 because Banana cut 2 cases 
         {
-			temp = Number(Number(p.obtenirL()) + (this.tempoSight + i + 1));   
+			temp = Number(Number(perso.obtenirL()) + (this.tempoSight + i + 1));   
 					
-            if(mat[temp][p.obtenirC()] > 0)
+            if(mat[temp][perso.obtenirC()] > 0)
             {
-		    	switchBackColorFlash(tableauDesCases[temp][p.obtenirC()]);
+		    	switchBackColorFlash(tableauDesCases[temp][perso.obtenirC()]);
             }
             else
             {
@@ -1518,9 +1393,9 @@ class PlancheDeJeu
 		
         for(i = 0; i < nb; i++)//for(i = this.tempoSight + 1; i <= Math.min(p.obtenirL(), this.tempoSight + 2); i++)
         {
-			if(mat[p.obtenirL()-(this.tempoSight + i + 1)][p.obtenirC()] > 0)
+			if(mat[perso.obtenirL()-(this.tempoSight + i + 1)][perso.obtenirC()] > 0)
             {
-				switchBackColorFlash(tableauDesCases[p.obtenirL()-(this.tempoSight + i + 1)][p.obtenirC()]);
+				switchBackColorFlash(tableauDesCases[perso.obtenirL()-(this.tempoSight + i + 1)][perso.obtenirC()]);
             }
             else
             {
@@ -1530,11 +1405,11 @@ class PlancheDeJeu
 		
         for(i = 0; i < nb; i++)//for(i= this.tempoSight + 1; i <= Math.min(mat[0].length-p.obtenirC()-1, this.tempoSight + 2); i++)
         {
-			temp = Number(Number(p.obtenirC())+(this.tempoSight + i + 1));   
+			temp = Number(Number(perso.obtenirC())+(this.tempoSight + i + 1));   
 			
-            if(mat[p.obtenirL()][temp] > 0)
+            if(mat[perso.obtenirL()][temp] > 0)
             {
-		    	switchBackColorFlash(tableauDesCases[p.obtenirL()][temp]);
+		    	switchBackColorFlash(tableauDesCases[perso.obtenirL()][temp]);
             }
             else
             {
@@ -1544,9 +1419,9 @@ class PlancheDeJeu
 		
         for(i = 0; i < nb; i++)//for(i= this.tempoSight + 1; i <= Math.min(p.obtenirC(), this.tempoSight + 2); i++)
         {
-			if(mat[p.obtenirL()][p.obtenirC()-(this.tempoSight + i + 1)] > 0)
+			if(mat[perso.obtenirL()][perso.obtenirC()-(this.tempoSight + i + 1)] > 0)
             {
-		    	switchBackColorFlash(tableauDesCases[p.obtenirL()][p.obtenirC()-(this.tempoSight + i + 1)]);
+		    	switchBackColorFlash(tableauDesCases[perso.obtenirL()][perso.obtenirC()-(this.tempoSight + i + 1)]);
             }
             else
             {
@@ -1560,49 +1435,42 @@ class PlancheDeJeu
     }	
 	
     ////////////////////////////////////////////////////////////////////////////
-    function effacerPiece(ll:Number, cc:Number)
+    public function effacerPiece(ll:Number, cc:Number)
     {
         tableauDesCases[ll][cc].effacerPiece();
     }
     
     
     ////////////////////////////////////////////////////////////////////////////
-    function effacerObjet(ll:Number, cc:Number)
+    public function effacerObjet(ll:Number, cc:Number)
     {
         tableauDesCases[ll][cc].effacerObjet();
     }
   
   
     // num est le numero du personnage   str est le type de collision
-    function teleporterPersonnage(nom:String, ancienL:Number, ancienC:Number, nouveauL:Number, nouveauC:Number, str:String)
+    public function teleporterPersonnage(objEvenement:Object)//nom:String, ancienL:Number, ancienC:Number, nouveauL:Number, nouveauC:Number, str:String)
     {
+		var pt_initial:Point = calculerPositionTourne(objEvenement.anciennePosition.x, objEvenement.anciennePosition.y);
+    	var pt_final:Point = calculerPositionTourne(objEvenement.nouvellePosition.x, objEvenement.nouvellePosition.y);
+						
 	    //trace(" dans teleporterPersonnage, parametres :  "+nom+"   "+ancienL+"   "+ancienC+"   "+nouveauL+"   "+nouveauC+"   "+str);
 	    var listeTemporaire:Array;
-	   //var p:Point = new Point(this.tableauDesCases[nouveauL][nouveauC].obtenirClipCase()._x, this.tableauDesCases[nouveauL][nouveauC].obtenirClipCase()._y);
-	
-	    var p:Point = new Point(nouveauL,nouveauC);
-	    
-	    //trace(" le point :  "+p.obtenirX()+"     "+p.obtenirY());
-	    listeTemporaire = this.tableauDesCases[ancienL][ancienC].obtenirListeDesPersonnages();
-		var count:Number = listeTemporaire.length;
-	    
+	    listeTemporaire = this.tableauDesCases[pt_initial.obtenirX()][pt_initial.obtenirY()].obtenirListeDesPersonnages();
+		var count:Number = listeTemporaire.length;	    
 	    for(var i:Number = 0; i< count; i++)
 	    {
-		    if(listeTemporaire[i].obtenirNom() == nom)
+		    if(listeTemporaire[i].obtenirNom() == objEvenement.nomUtilisateur)
 		    {
 			    //trace("juste avant de definir la prochaine poisition");
-			    //listeTemporaire[i].definirPosition(p, nouveauL, nouveauC);  // on le met si on veut teleportation, mais probleme avec les collisions...
-			    //this.tableauDesCases[ancienL][ancienC].obtenirListeDesPersonnages()[i].definirProchainePosition(p,str);
-				listeTemporaire[i].definirProchainePosition(p, str);
+			    listeTemporaire[i].definirProchainePosition(pt_final, objEvenement.collision);
 			    break;
 		    }
-	    }
-	    
-	    //trace("fin de teleporterPersonnage");
-    }
+	    }	    
+    }// end method
     
     
-    function estCaseSpeciale(lig:Number, col:Number):Boolean
+    public function estCaseSpeciale(lig:Number, col:Number):Boolean
     {
 	    //trace("est dans estCaseSpeciale   "+lig+"   "+col);
 		if(tableauDesCases[lig][col].obtenirType()%100 > 90)
@@ -1612,97 +1480,6 @@ class PlancheDeJeu
         }
 	
 		return false;
-    }
+    }	
 	
-	// used for Banana action on the game
-	function tossBananaShell(nameBy:String, nameTo:String ):Void
-	{
-	    // phase 1 - remove old shell_mc
-	   //_level0.loader.contentHolder.referenceLayer.shell_mc.removeMovieClip();
-	   // phase 1 - player toss banana
-	   this.getPersonnageByName(nameBy).tossBanana();
-	   
-	   // phase 2 - banana shell fly to the player that support the action
-	   var intervalId:Number;
-	   var num:Number = getPersonnageByName(nameTo).obtenirNumero();
-	   intervalId = setInterval(attendre, 3000, nameTo, nameBy);	// sert pour attendre la jusqu'a la fin de action de 
-	   
-	   function attendre(){
-	     
-		 clearInterval(intervalId);
-	     var coorByX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameBy).obtenirX() - 10;// - getPersonnageByName(nameBy).obtenirImage()._width;
-	     var coorByY:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameBy).obtenirY() - _level0.loader.contentHolder.planche.getPersonnageByName(nameBy).obtenirImage()._height;
-	   	   
-	     var coorToX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).obtenirProchainePosition().obtenirX();
-	     var coorToY:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).obtenirProchainePosition().obtenirY()- 15;
-		 		 
-		 _level0.loader.contentHolder.referenceLayer.attachMovie("bananaShell", "shell_mc" + nameBy + intervalId, _level0.loader.contentHolder.referenceLayer.getNextHighestDepth(), {_x:coorByX, _y:coorByY});
-		 
-		 var twMoveX:Tween = new Tween(_level0.loader.contentHolder.referenceLayer["shell_mc"  + nameBy + intervalId], "_x", Strong.easeOut, coorByX, coorToX, 1, true);
-		 var twMoveY:Tween = new Tween(_level0.loader.contentHolder.referenceLayer["shell_mc"  + nameBy + intervalId], "_y", Strong.easeOut, coorByY, coorToY, 1, true);
-		 var twMoveRot:Tween = new Tween(_level0.loader.contentHolder.referenceLayer["shell_mc"  + nameBy + intervalId], "_rotation", Strong.easeOut, 0, 360, 1, true);
-		 
-		 _level0.loader.contentHolder.referenceLayer["shell_mc"  + nameBy + intervalId].swapDepths(_level0.loader.contentHolder.referenceLayer["Personnage" + num]);
-		 
-		 trace("fin attendre?");
-	   }// end attendre
-	 trace("fin toss banana shell?");
-	 
-	 var intervalIdToss:Number;
-  	 intervalIdToss = setInterval(tossIt, 5000, nameTo);	// sert pour attendre la jusqu'a la fin de action de 
-     function tossIt(){
-		 clearInterval(intervalIdToss);
-		 _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).slippingBanana();       
-	 } 
-	  	   
-	}// end function
-	
-	// used for Banana action on the game
-	function tossBananaShellToAdver(nameTo:String ):Void
-	{
-	    // phase 1 - remove old shell_mc
-	   //_level0.loader.contentHolder.referenceLayer.shell_mc.removeMovieClip();
-	   // phase 1 - player toss banana
-	   this.perso.tossBanana();
-	   
-	   // phase 2 - banana shell fly to the player that support the action
-	   var intervalId:Number;
-	   var num:Number = getPersonnageByName(nameTo).obtenirNumero();
-	   intervalId = setInterval(attendre, 3000, nameTo);	// sert pour attendre la jusqu'a la fin de action de 
-	   
-	   function attendre(){
-	     
-		 clearInterval(intervalId);
-	     var coorByX:Number = _level0.loader.contentHolder.planche.obtenirPerso().obtenirX() - 10;// - getPersonnageByName(nameBy).obtenirImage()._width;
-	     var coorByY:Number = _level0.loader.contentHolder.planche.obtenirPerso().obtenirY() - _level0.loader.contentHolder.planche.obtenirPerso().obtenirImage()._height;
-	   	   
-	     var coorToX:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).obtenirProchainePosition().obtenirX();
-	     var coorToY:Number = _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).obtenirProchainePosition().obtenirY()- 15;
-		 		 
-		 _level0.loader.contentHolder.referenceLayer.attachMovie("bananaShell", "shell_mc" + nameTo + intervalId, _level0.loader.contentHolder.referenceLayer.getNextHighestDepth(), {_x:coorByX, _y:coorByY});
-		 
-		 var twMoveX:Tween = new Tween(_level0.loader.contentHolder.referenceLayer["shell_mc"  + nameTo + intervalId], "_x", Strong.easeOut, coorByX, coorToX, 1, true);
-		 var twMoveY:Tween = new Tween(_level0.loader.contentHolder.referenceLayer["shell_mc"  + nameTo + intervalId], "_y", Strong.easeOut, coorByY, coorToY, 1, true);
-		 var twMoveRot:Tween = new Tween(_level0.loader.contentHolder.referenceLayer["shell_mc"  + nameTo + intervalId], "_rotation", Strong.easeOut, 0, 360, 1, true);
-		 
-		 _level0.loader.contentHolder.referenceLayer["shell_mc"  + nameTo + intervalId].swapDepths(_level0.loader.contentHolder.referenceLayer["Personnage" + num]);
-		 
-		 trace("fin attendre?");
-		 // _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).slippingBanana();
-		 
-	   }// end attendre
-	 trace("fin toss banana shell?");
-	 
-     var intervalIdToss:Number;
-  	 intervalIdToss = setInterval(tossIt, 5000, nameTo);	// sert pour attendre la jusqu'a la fin de action de 
-     function tossIt(){
-		 clearInterval(intervalIdToss);
-		 _level0.loader.contentHolder.planche.getPersonnageByName(nameTo).slippingBanana();       
-	 } 
-
-	  	
-  }// end function
-	
-	
-        
-}
+} // end class

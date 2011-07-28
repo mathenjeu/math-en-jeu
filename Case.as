@@ -67,8 +67,6 @@ class Case
 		else
 		{
 			this.clipCase = _level0.loader.contentHolder.referenceLayer.attachMovie("case0", "case"+temp, temp,{_width:120, _height:44.7});
-			//this.clipCase._width = 120;
-			//this.clipCase._height = 48;
 			this.miniGame = false;
 		}
 		
@@ -366,7 +364,7 @@ class Case
 	
 	////////////////////////////////////////////////////////////
 	// Add a character on the cell
-	function ajouterPersonnage(p:Personnage)
+	function ajouterPersonnage(p:IPersonnage)
 	{
 		
 		//if(p.getRole() == 1)
@@ -379,13 +377,13 @@ class Case
 	////////////////////////////////////////////////////////////
 	// Remove a character from the cell
 	// ca n'affecte pas le num de la case???
-	function retirerPersonnage(p:Personnage)
+	function retirerPersonnage(p:IPersonnage)
 	{
 		var i:Number;
         var count:Number = this.listeDesPersonnages.length;        
 		for(i = 0; i < count; i++)
 		{
-			if(this.listeDesPersonnages[i].obtenirNumero() == p.obtenirNumero())
+			if(this.listeDesPersonnages[i].obtenirNom() == p.obtenirNom())
 			{
 				this.listeDesPersonnages.splice(i, 1);
 			}
@@ -489,8 +487,8 @@ class Case
 			if( this.listeDesPersonnages[i].getRole() == 1) 
 			   this.listeDesPersonnages[i].afficher();
 				   
-			//if( this.listeDesPersonnages[i].getRole == 2 &&  _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")
-			   //this.listeDesPersonnages[i].cachePersonnage();
+			if( this.listeDesPersonnages[i].getRole() == 2 &&  _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")
+			   this.listeDesPersonnages[i].cachePersonnage();
 		}
 	} //end function afficher
 	
