@@ -339,7 +339,7 @@ public class GestionnaireBD {
         try {
             int roomId = joueur.obtenirPartieCourante().obtenirTable().getObjSalle().getRoomId();
             synchronized (DB_LOCK) {
-                ResultSet rs = requete.executeQuery("SELECT requires_full_stats FROM room WHERE room_id=" + roomId);
+                ResultSet rs = requete.executeQuery("SELECT requires_full_stats FROM room WHERE room_id = " + roomId);
                 if (rs.next())
                     requiresFullStats = rs.getBoolean("requires_full_stats");
                 rs.close();
@@ -1407,10 +1407,10 @@ public class GestionnaireBD {
                 String strSQL = "SELECT game.date,game.game_type_id,game.duration,game.winner_id,gamestats_questions.*,gamestats_scores.score, jos_comprofiler.lastname, jos_comprofiler.firstname, question_info.question_flash_file, question_info.feedback_flash_file, question_info.language_id " +
                         "FROM game, gamestats_questions " +
                         "LEFT JOIN jos_comprofiler ON jos_comprofiler.user_id = gamestats_questions.user_id " +
-                        "LEFT JOIN question_info ON question_info.question_id=gamestats_questions.question_id " +
-                        "LEFT JOIN gamestats_scores ON gamestats_scores.game_id=gamestats_questions.game_id AND gamestats_scores.user_id=gamestats_questions.user_id " +
-                        "WHERE game.room_id=" + room_id + " " +
-                        "AND gamestats_questions.game_id=game.game_id";
+                        "LEFT JOIN question_info ON question_info.question_id = gamestats_questions.question_id " +
+                        "LEFT JOIN gamestats_scores ON gamestats_scores.game_id = gamestats_questions.game_id AND gamestats_scores.user_id = gamestats_questions.user_id " +
+                        "WHERE game.room_id = " + room_id + " " +
+                        "AND gamestats_questions.game_id = game.game_id";
                 ResultSet rs = requete.executeQuery(strSQL);
                 while (rs.next()) {
                     String date = mejFormatDate.format(rs.getDate("game.date"));
@@ -1426,7 +1426,7 @@ public class GestionnaireBD {
                     String lastname = rs.getString("lastname");
                     String firstname = rs.getString("firstname");
                     String q_swf = rs.getString("question_info.question_flash_file");
-                    String f_swf = rs.getString("question_info.feedback_falsh_file");
+                    String f_swf = rs.getString("question_info.feedback_flash_file");
                     int language_id = rs.getInt("question_info.language_id");
                     
                     rapport.addPlayerInfo(user_id, firstname, lastname);
@@ -1436,7 +1436,7 @@ public class GestionnaireBD {
                 rs.close();
             }
         } catch (Exception e) {
-        	objLogger.error(GestionnaireMessages.message("bd.erreur_create_report") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_create_fullReport") + e.getMessage());
         }
         return rapport;
 
@@ -1493,7 +1493,7 @@ public class GestionnaireBD {
                 rs.close();
             }
         } catch (Exception e) {
-        	objLogger.error(GestionnaireMessages.message("bd.erreur_create_report") + e.getMessage());
+        	objLogger.error(GestionnaireMessages.message("bd.erreur_create_summReport") + e.getMessage());
 
         }
         return rapport;
