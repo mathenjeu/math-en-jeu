@@ -17,7 +17,7 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import Enumerations.Visibilite;
 import ServeurJeu.ControleurJeu;
-import ServeurJeu.ComposantesJeu.InformationPartie;
+import ServeurJeu.ComposantesJeu.InformationPartieHumain;
 import ServeurJeu.ComposantesJeu.InformationQuestion;
 import ServeurJeu.ComposantesJeu.RapportDeSalle;
 import ServeurJeu.ComposantesJeu.Salle;
@@ -359,7 +359,7 @@ public class GestionnaireBD {
 
     private void addFullStats(int gameId, JoueurHumain joueur) {
     	try {
-    		InformationPartie infoPartie = joueur.obtenirPartieCourante();
+    		InformationPartieHumain infoPartie = joueur.obtenirPartieCourante();
     		LinkedList<InformationQuestion> questionsRepondues = infoPartie.obtenirListeQuestionsRepondues();
     		int userId = joueur.obtenirCleJoueur();
     		int pointage = infoPartie.obtenirPointage();
@@ -393,7 +393,7 @@ public class GestionnaireBD {
     }
 
     private void addSummaryStats(JoueurHumain joueur, boolean estGagnant) {
-        InformationPartie infoPartie = joueur.obtenirPartieCourante();
+        InformationPartieHumain infoPartie = joueur.obtenirPartieCourante();
         LinkedList<InformationQuestion> questionsRepondues = infoPartie.obtenirListeQuestionsRepondues();
         int roomId = infoPartie.obtenirTable().getObjSalle().getRoomId();
 

@@ -44,13 +44,7 @@ public abstract class GenerateurPartie
 	// Déclaration d'une liste de points contenant les points qui 
 	// contiennent des objets utilisables
 	protected LinkedList<Point> lstPointsObjetsUtilisables;
-	
-	// Déclaration d'une liste de points contenant les points de start
-	//ArrayList<Point> lstPointsStart = new ArrayList<Point>();
-	
-	// Déclaration d'une liste de points contenant les points de finish
-	//ArrayList<Point> lstPointsEnd = new ArrayList<Point>();
-					
+		
 	// Déclaration d'un compteur de cases
 	protected int intCompteurCases;
 

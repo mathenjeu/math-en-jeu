@@ -35,7 +35,7 @@ import Enumerations.RetourFonctions.ResultatDemarrerPartie;
 import Enumerations.RetourFonctions.ResultatEntreeTable;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.BD.GestionnaireBD;
-import ServeurJeu.ComposantesJeu.InformationPartie;
+import ServeurJeu.ComposantesJeu.InformationPartieHumain;
 import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ComposantesJeu.RapportDeSalle;
 import ServeurJeu.ComposantesJeu.Salle;
@@ -89,8 +89,7 @@ public class ProtocoleJoueur implements Runnable
     // en en train de joueur une partie ou non. Cet état sera utile car on
     // ne déconnectera pas un joeur en train de joueur via le vérification de connexion
     private boolean bolEnTrainDeJouer;
-    // time in seconds as reference to calculate time of reponse
-    private int lastQuestionTime;
+   
 
     /**
      * Constructeur de la classe ProtocoleJoueur qui permet de garder une 
@@ -588,6 +587,7 @@ public class ProtocoleJoueur implements Runnable
                      objControleurJeu.obtenirJoueurHumainJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
 
         // Envoyer la liste des joueurs
+        objAncientJoueurHumain.obtenirPartieCourante().setColorID();
         envoyerListeJoueurs(objAncientJoueurHumain, noeudEntree.getAttribute("no"));
 
         // Faire en sorte que le joueur est correctement considéré en train de jouer
@@ -604,8 +604,7 @@ public class ProtocoleJoueur implements Runnable
         objControleurJeu.entrerSalle(objJoueurHumain, objSalle.getRoomId(), objSalle.getPassword(), false);
 
         // Envoyer le plateau de jeu, la liste des joueurs,
-        // leurs ids personnage et leurs positions au joueur
-        // qui se reconnecte
+        // leurs ids personnage et leurs positions au joueur qui se reconnecte
         envoyerPlateauJeu(objAncientJoueurHumain);
 
         // envoyer le pointage au joueur
@@ -1569,10 +1568,7 @@ public class ProtocoleJoueur implements Runnable
             objNoeudQuestion.setAttribute("url", objQuestionAPoser.obtenirURLQuestion());
             objNoeudParametreQuestion.appendChild(objNoeudQuestion);
         }
-        noeudCommande.appendChild(objNoeudParametreQuestion);
-
-        lastQuestionTime = objJoueurHumain.obtenirPartieCourante().obtenirTable().obtenirTempsRestant();
-        //System.out.println("Protocol for : " + lastQuestionTime);
+        noeudCommande.appendChild(objNoeudParametreQuestion);        
     }
 
     private void traiterCommandeRepondreQuestion(Element noeudEntree, Element noeudCommande) {
@@ -1593,11 +1589,8 @@ public class ProtocoleJoueur implements Runnable
         }
         //Il n'y a pas eu d'erreurs
 
-        //Premièrement on calcul les statistiques        
-        InformationPartie infoPartie = objJoueurHumain.obtenirPartieCourante();
-        int timer = lastQuestionTime - infoPartie.obtenirTable().obtenirTempsRestant();
         String strReponse = obtenirValeurParametre(noeudEntree, "Reponse").getNodeValue();
-        RetourVerifierReponseEtMettreAJourPlateauJeu objRetour = infoPartie.verifierReponseEtMettreAJourPlateauJeu(strReponse, timer);
+        RetourVerifierReponseEtMettreAJourPlateauJeu objRetour = objJoueurHumain.obtenirPartieCourante().verifierReponseEtMettreAJourPlateauJeu(strReponse);
 
         //Ensuite on s'occupe du noeud de retour
         genererNumeroReponse();
@@ -1811,9 +1804,8 @@ public class ProtocoleJoueur implements Runnable
             return;
         }
 
-        InformationPartie infoPartie = objJoueurHumain.obtenirPartieCourante();
-        int timer = lastQuestionTime - infoPartie.obtenirTable().obtenirTempsRestant();
-
+        InformationPartieHumain infoPartie = objJoueurHumain.obtenirPartieCourante();
+        
         // Obtenir l'id de l'objet a utilisé
         int intIdObjet = Integer.parseInt(obtenirValeurParametre(noeudEntree, "id").getNodeValue());
         String playerName = obtenirValeurParametre(noeudEntree, "player").getNodeValue();
@@ -1844,7 +1836,7 @@ public class ProtocoleJoueur implements Runnable
         } else if (strTypeObjet.equals("Boule")) {
             // La boule permettra à un joueur de changer de question si celle
             // qu'il s'est fait envoyer ne lui tente pas
-            Question nouvelleQuestion = infoPartie.trouverQuestionAPoserCristall(timer, true);
+            Question nouvelleQuestion = infoPartie.trouverQuestionAPoserCristall(true);
 
             // On prépare l'envoi des informations sur la nouvelle question
             Element objNoeudParametreNouvelleQuestion = docSortie.createElement("parametre");
@@ -1856,9 +1848,7 @@ public class ProtocoleJoueur implements Runnable
             objNoeudParametreNouvelleQuestion.appendChild(objNoeudParametreQuestion);
             noeudCommande.setAttribute("type", "Boule");
             noeudCommande.appendChild(objNoeudParametreNouvelleQuestion);
-
-            lastQuestionTime = infoPartie.obtenirTable().obtenirTempsRestant();
-            //System.out.println("Protocol for Cristall : " + lastQuestionTime);
+            
         } else if (strTypeObjet.equals("Banane")) {
             // La partie ici ne fait que sélectionner le joueur qui sera affecté
             // Le reste se fait dans Banane.java
@@ -2774,12 +2764,7 @@ public class ProtocoleJoueur implements Runnable
      * de jeu, alors il sera complétement déconnecté.
      */
     public void detruireProtocoleJoueur() {}
-    
-    
-    public int obtenirLastQuestionTime() {
-        return lastQuestionTime;
-    }
-    
+   
     /**
      * Cette fonction permet de retourner l'adresse IP du joueur courant.
      *
@@ -2943,7 +2928,7 @@ public class ProtocoleJoueur implements Runnable
         objNoeudJoueur.setAttribute("id", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirIdPersonnage()));
         objNoeudJoueur.setAttribute("role", Integer.toString(ancientJoueur.getRole()));
         objNoeudJoueur.setAttribute("pointage", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirPointage()));
-        objNoeudJoueur.setAttribute("clocolorID", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirTable().getOneColor()));
+        objNoeudJoueur.setAttribute("clocolorID", Integer.toString(ancientJoueur.obtenirPartieCourante().getClothesColor()));
 
         // Ajouter le noeud de l'item au noeud du paramètre
         objNoeudParametreListeJoueurs.appendChild(objNoeudJoueur);
