@@ -487,7 +487,7 @@ class Case
 			if( this.listeDesPersonnages[i].getRole() == 1) 
 			   this.listeDesPersonnages[i].afficher();
 				   
-			if( this.listeDesPersonnages[i].getRole() == 2 &&  _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")
+			if( this.listeDesPersonnages[i].getRole() == 2 &&  _level0.loader.contentHolder.objGestionnaireEvenements.getOurTable().compareType("Tournament"))
 			   this.listeDesPersonnages[i].cachePersonnage();
 		}
 	} //end function afficher

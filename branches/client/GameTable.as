@@ -26,12 +26,20 @@ class GameTable
 	private var tableName:String;     // name of the created table
     private var tableTime:Number;   //  temps que va durer la partie, en minutes
 	private var gameType:String;        // gameType in our table
+	private var nLines:Number;
+	private var nColumns:Number;
     
-	// constructor//
-	public function GameTable(orderId:Number)
+	// constructor 1//
+	public function GameTable(orderId:Number, temps:Number, nameTable:String, gameType:String, nb_lines:Number, nb_columns:Number)
 	{
-		this.tableId = orderId;
+	   this.tableId = orderId;
+	   this.tableTime = temps;
+	   this.tableName = nameTable;
+	   this.gameType = gameType;
+	   this.nLines = nb_lines;
+	   this.nColumns = nb_columns;
 	}
+	
 	
 	//////////////////////////////////////
 	public function getTableId():Number
@@ -42,6 +50,41 @@ class GameTable
 	public function setTableId(nb:Number)
 	{
 		this.tableId = nb;
+	}
+	
+	public function getTableName():String
+	{
+		return this.tableName
+	}
+	
+	public function setTableName(nom:String)
+	{
+		this.tableName = nom;
+	}
+	
+	public function getTableTime():Number
+	{
+		return this.tableTime
+	}
+	
+	public function setTableTime(duration:Number)
+	{
+		this.tableTime = duration;
+	}
+	
+	public function getGameType():String
+	{
+		return this.gameType
+	}
+	
+	public function setGameType(type:String)
+	{
+		this.gameType = type;
+	}
+	
+	public function compareType(type:String):Boolean
+	{
+		return type == gameType;
 	}
 	
 }// end class
