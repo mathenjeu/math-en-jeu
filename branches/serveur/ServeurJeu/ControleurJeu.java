@@ -27,9 +27,6 @@ import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import ServeurJeu.BD.SpyRooms;
 
-//TODO: Si un jour on doit modifier le nom d'utilisateur d'un joueur pendant 
-//      le jeu, il va falloir ajouter des synchronisation à chaque fois qu'on
-//      fait des vérifications avec le nom de l'utilisateur.
 /**
  * Note importante concernant le traitement des commandes par le 
  * ProtocoleJoueur : Deux fonctions d'un même protocole ne peuvent pas être
@@ -82,8 +79,7 @@ public class ControleurJeu {
     //private Espion objEspion;
    
     // Déclaration d'un objet random pour générer des nombres aléatoires
-    private static final Random objRandom = new Random();
-   
+    private static final Random objRandom = new Random();   
     // Déclaration d'une map qui permet d'obtenir une liste de tous les
     // keywords disponible: keyword_id --> [language_id --> name]
     private TreeMap<Integer, TreeMap<Integer, String>> keywordsMap;
@@ -120,9 +116,9 @@ public class ControleurJeu {
         lstJoueursConnectes = new HashMap<String, JoueurHumain>();
 
         // Créer une liste des joueurs déconnectés
-        lstJoueursDeconnectes = new HashMap<String, JoueurHumain>();
-      
+        lstJoueursDeconnectes = new HashMap<String, JoueurHumain>();      
     }
+    
 
     /**
      * To start the controler actions

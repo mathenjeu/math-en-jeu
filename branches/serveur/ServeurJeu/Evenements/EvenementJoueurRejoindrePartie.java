@@ -30,14 +30,16 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
     // Déclaration d'une variable qui va garder la clocolor du joueur
     private int userColor;
     
-    // TODO add coords x and y  
+    private int xPosition;
+    private int yPosition;
+      
     
     /**
      * Constructeur de la classe EvenementJoueurDemarrePartie qui permet 
      * d'initialiser le numéro Id du personnage et le nom d'utilisateur du 
      * joueur qui vient de démarrer la partie. 
      */
-    public EvenementJoueurRejoindrePartie(String nomUtilisateur, int idPersonnage, int pointage, int role, int i)
+    public EvenementJoueurRejoindrePartie(String nomUtilisateur, int idPersonnage, int pointage, int role, int i, int xP, int yP)
     {
         // Définir le numéro Id du personnage et le nom d'utilisateur du joueur 
     	// qui a démarré la partie
@@ -46,6 +48,8 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
         intPointage = pointage;
         userRole = role;
         userColor = i;
+        xPosition = xP;
+        yPosition = yP;
     }
 	
 	/**
@@ -76,6 +80,8 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
 			Element objNoeudParametrePointage = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreCloColor = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreRole = objDocumentXML.createElement("parametre");
+			Element objNoeudParametreXPosition = objDocumentXML.createElement("parametre");
+			Element objNoeudParametreYPosition = objDocumentXML.createElement("parametre");
 			
 			// Créer des noeuds texte contenant le numéro Id du personnage et le 
 			// nom d'utilisateur des noeuds paramètre
@@ -84,6 +90,8 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
 			Text objNoeudTextePointage = objDocumentXML.createTextNode(Integer.toString(intPointage));
 			Text objNoeudTexteRole = objDocumentXML.createTextNode(Integer.toString(userRole));
 			Text objNoeudTexteColor = objDocumentXML.createTextNode(Integer.toString(userColor));
+			Text objNoeudTexteXPosition = objDocumentXML.createTextNode(Integer.toString(xPosition));
+			Text objNoeudTexteYPosition = objDocumentXML.createTextNode(Integer.toString(yPosition));
 			
 			// Définir les attributs du noeud de commande
 			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
@@ -97,6 +105,8 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
 			objNoeudParametrePointage.setAttribute("type", "Pointage");
 			objNoeudParametreCloColor.setAttribute("type", "Color");
 			objNoeudParametreRole.setAttribute("type", "Role");
+			objNoeudParametreXPosition.setAttribute("type", "xPosition");
+			objNoeudParametreYPosition.setAttribute("type", "yPosition");
 			
 			// Ajouter les noeuds texte aux noeuds des paramètres
 			objNoeudParametreIdPersonnage.appendChild(objNoeudTexteIdPersonnage);
@@ -104,6 +114,8 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
 			objNoeudParametrePointage.appendChild(objNoeudTextePointage);
 			objNoeudParametreRole.appendChild(objNoeudTexteRole);
 			objNoeudParametreCloColor.appendChild(objNoeudTexteColor);
+			objNoeudParametreXPosition.appendChild(objNoeudTexteXPosition);
+			objNoeudParametreYPosition.appendChild(objNoeudTexteYPosition);
 			
 			// Ajouter les noeuds paramètres au noeud de commande
 			objNoeudCommande.appendChild(objNoeudParametreNomUtilisateur);
@@ -111,6 +123,8 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
 			objNoeudCommande.appendChild(objNoeudParametrePointage);
 			objNoeudCommande.appendChild(objNoeudParametreRole);
 			objNoeudCommande.appendChild(objNoeudParametreCloColor);
+			objNoeudCommande.appendChild(objNoeudParametreXPosition);
+			objNoeudCommande.appendChild(objNoeudParametreYPosition);	
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
 			objDocumentXML.appendChild(objNoeudCommande);

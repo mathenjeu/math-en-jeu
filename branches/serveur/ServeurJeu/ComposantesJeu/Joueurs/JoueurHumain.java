@@ -1,7 +1,7 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
 import ServeurJeu.Communications.ProtocoleJoueur;
-import ServeurJeu.ComposantesJeu.InformationPartie;
+import ServeurJeu.ComposantesJeu.InformationPartieHumain;
 import ServeurJeu.ComposantesJeu.Salle;
 
 /**
@@ -18,8 +18,8 @@ public class JoueurHumain extends Joueur
 	// It's player id in the DB
 	private int intCleJoueur;
 
-        // La langue du joueur: "fr" ou "en"
-        private String strLangue;
+    // La langue du joueur: "fr" ou "en"
+    private String strLangue;
 	
 	// Cette variable va contenir l'adresse IP du joueur
 	private final String strAdresseIP;
@@ -52,7 +52,7 @@ public class JoueurHumain extends Joueur
 	// Déclaration d'une référence vers l'objet gardant l'information sur la
 	// partie courant de la table où le joueur se trouve (null si le joueur 
 	// n'est dans aucune table)
-	private InformationPartie objPartieCourante;
+	private InformationPartieHumain objPartieCourante;
 	        
 	/**
 	 * Constructeur de la classe JoueurHumain qui permet d'initialiser les 
@@ -203,7 +203,7 @@ public class JoueurHumain extends Joueur
 	 * 				   Si null est retourné, alors le joueur ne se trouve dans
 	 * 				   aucune table.
 	 */
-	public InformationPartie obtenirPartieCourante()
+	public InformationPartieHumain obtenirPartieCourante()
 	{
 		return objPartieCourante;
 	}
@@ -269,7 +269,7 @@ public class JoueurHumain extends Joueur
          *        Si la partie courante est null alors c'est que le joueur n'est
          *        dans aucune table.
 	 */
-	public void definirPartieCourante(InformationPartie partieCourante)
+	public void definirPartieCourante(InformationPartieHumain partieCourante)
 	{
 		objPartieCourante = partieCourante;
 	}
@@ -278,7 +278,5 @@ public class JoueurHumain extends Joueur
 	public void setObjProtocoleJoueur(ProtocoleJoueur protocoleJoueur) {
 		objProtocoleJoueur = protocoleJoueur;
 		
-	}
-	
-	
+	}	
 }

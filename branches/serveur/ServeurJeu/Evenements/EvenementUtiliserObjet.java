@@ -5,6 +5,8 @@ import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
+
+import ServeurJeu.ControleurJeu;
 import ServeurJeu.Monitoring.Moniteur;
 import ClassesUtilitaires.UtilitaireXML;
 import ServeurJeu.Configuration.GestionnaireMessages;
@@ -38,8 +40,6 @@ public class EvenementUtiliserObjet extends Evenement
 	
 	protected String genererCodeXML(InformationDestination information)
 	{
-		Moniteur.obtenirInstance().debut("EvenementUtiliserObjet.genererCodeXML");
-		
 		String strCodeXML = "";
 	    
 		try
@@ -89,8 +89,8 @@ public class EvenementUtiliserObjet extends Evenement
 		{
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
-		Moniteur.obtenirInstance().fin();
 		
+		if(ControleurJeu.modeDebug) System.out.println("Evenement: " + strCodeXML);
 		return strCodeXML;
 	}
 }

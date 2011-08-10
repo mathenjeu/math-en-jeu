@@ -13,7 +13,7 @@ import Enumerations.RetourFonctions.ResultatDemarrerPartie;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.Cases.Case;
-import ServeurJeu.ComposantesJeu.InformationPartie;
+import ServeurJeu.ComposantesJeu.InformationPartieHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
@@ -164,9 +164,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         bolEstCommencee = false;
         bolEstArretee = true;
 
-        // initialaise gameboard - set null
-        //objttPlateauJeu = null;
-
         objGestionnaireTemps = objControleurJeu.obtenirGestionnaireTemps();
         objTacheSynchroniser = objControleurJeu.obtenirTacheSynchroniser();
 
@@ -184,12 +181,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         Thread threadEvenements = new Thread(objGestionnaireEvenements, "GestEven table ");
         // Démarrer le thread du gestionnaire d'événements
         threadEvenements.start();
-
+        
         // fill the list of colors
         this.colors = new LinkedList<Integer>();
-
         this.idPersos = new LinkedList<Integer>();
-
+        
         creation(); // create the gameFactory
 
     }
@@ -198,6 +194,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         objGestionnaireBD.chargerReglesTable(objRegles, gameType, objSalle.getRoomId());
         MAX_NB_PLAYERS = objRegles.getMaxNbPlayers();
         ///System.out.println("We test Colors in the table  : " );
+
         this.setColors();
         this.setIdPersos();
         
@@ -216,7 +213,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     }
 
     public void destruction() {
-        System.out.println("table - wipeout the table - destruction");
+        //System.out.println("table - wipeout the table - destruction");
         arreterPartie("");
         this.objGestionnaireEvenements.arreterGestionnaireEvenements();
         this.objGestionnaireEvenements = null;
@@ -257,7 +254,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         // Le joueur est maintenant entré dans la table courante (il faut
         // créer un objet InformationPartie qui va pointer sur la table
         // courante)
-        joueur.definirPartieCourante(new InformationPartie(objGestionnaireEvenements, joueur, this));
+        joueur.definirPartieCourante(new InformationPartieHumain(objGestionnaireEvenements, joueur, this));
         
         // init players colors
         int color = this.getOneColor();
@@ -374,7 +371,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
     public void restartGame(JoueurHumain joueur, boolean doitGenererNoCommandeRetour) {
     	// to get back perso's clothes color 
         //returned to the list when get out from game
-        joueur.obtenirPartieCourante().setClothesColor(colors.getLast());
+        //joueur.obtenirPartieCourante().setClothesColor(colors.getLast());
         
         joueur.obtenirPartieCourante().cancelPosedQuestion();
     	
@@ -432,7 +429,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                 resultatDemarrerPartie = ResultatDemarrerPartie.PartieEnCours;
             } // Sinon si le joueur est déjà en attente, alors on va retourner
             // DejaEnAttente
-            else if (lstJoueursEnAttente.containsKey(joueur.obtenirNomUtilisateur()) == true) {
+            else if (lstJoueursEnAttente.containsKey(joueur.obtenirNomUtilisateur())) {
                 resultatDemarrerPartie = ResultatDemarrerPartie.DejaEnAttente;
             } else {
                 // La commande s'est effectuée avec succès
@@ -879,8 +876,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         // Cette fonction va passer les joueurs et créer un
         // InformationDestination pour chacun et ajouter l'événement
         // dans la file de gestion d'événements
-        preparerEvenementPartieDemarree(lstJoueursParticipants);
-        
+        preparerEvenementPartieDemarree(lstJoueursParticipants);        
 
         int tempsStep = 1;
         objTacheSynchroniser.ajouterObservateur(this);
@@ -944,7 +940,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
                     // Parcours des joueurs pour trouver le meilleur pointage
                     int cleJoueurGagnant = 0; //0 veut dire un joueur virtuel gagne.
                     for (JoueurHumain objJoueurHumain: lstJoueurs.values()) {
-                        InformationPartie infoPartie = objJoueurHumain.obtenirPartieCourante();
+                        InformationPartieHumain infoPartie = objJoueurHumain.obtenirPartieCourante();
                         if (infoPartie.obtenirPointage() > meilleurPointage) {
                             meilleurPointage = infoPartie.obtenirPointage();
                         }
@@ -1480,7 +1476,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         // aux joueurs pour signifier une modification du pointage
         EvenementJoueurRejoindrePartie maPartie = new EvenementJoueurRejoindrePartie(player.obtenirNomUtilisateur(),
                 player.obtenirPartieCourante().obtenirIdPersonnage(), player.obtenirPartieCourante().obtenirPointage(),
-                player.getRole(), player.obtenirPartieCourante().getClothesColor());
+                player.getRole(), player.obtenirPartieCourante().getClothesColor(), player.obtenirPartieCourante().obtenirPositionJoueur().x, 
+                player.obtenirPartieCourante().obtenirPositionJoueur().y);
 
         // Passser tous les joueurs de la table et leur envoyer l'événement
         // NOTE: On omet d'envoyer au joueur nomUtilisateur étant donné
@@ -1960,7 +1957,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
         // Le joueur est maintenant entré dans la table courante (il faut
         // créer un objet InformationPartie qui va pointer sur la table
         // courante)
-        joueur.definirPartieCourante(new InformationPartie(objGestionnaireEvenements, joueur, this));
+        joueur.definirPartieCourante(new InformationPartieHumain(objGestionnaireEvenements, joueur, this));
         // 0 - because it's first time that we fill the QuestionsBox
         // after we'll cut the level of questions by this number
         joueur.obtenirPartieCourante().getObjGestionnaireBD().remplirBoiteQuestions(0);
@@ -1996,9 +1993,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
      * number is filled with the virtuals till this constant
      * @return
      */
-    public int getMaxNbPlayers() {
+     public int getMaxNbPlayers() {
         return this.MAX_NB_PLAYERS;
-    }
+     }
 
     /**
      * use one id from list of idPersos and create idPersonnage
