@@ -493,6 +493,10 @@ class PlancheDeJeu
         tableauDesCases[ll][cc].ajouterPersonnage(p);
     }
     
+	public function getOutPerso(p:IPersonnage)
+	{
+		tableauDesCases[p.obtenirL()][p.obtenirC()].retirerPersonnage(p);
+	}
     
   /*
 	// c'est quoi la difference entre ca et recentrerBoard ??
@@ -798,7 +802,7 @@ class PlancheDeJeu
 	 this.tempoSight = 7;
 	 var tempo = perso.getMoveSight(); //_level0.loader.contentHolder.objGestionnaireEvenements.getMoveSight(); //
 	 trace("Move : " + tempo + " " + perso.getBrainiac());
-	 if( !(perso.getRole() == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament") && isInWinTheGame)
+	 if( !(perso.getRole() == 2 && _level0.loader.contentHolder.objGestionnaireEvenements.getOurTable().compareType("Tournament")) && isInWinTheGame)
 	 { 
 		//trace("Debut afficherCasesPossibles");
 		

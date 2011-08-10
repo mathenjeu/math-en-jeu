@@ -17,4 +17,7 @@
    public function slippingBanana();
    public function tossBananaShell(perso:IPersonnage);
    public function correctStateBeforeBanane();
+   public function obtenirL():Number;
+   public function obtenirC():Number;
+   public function removeImage();
 }

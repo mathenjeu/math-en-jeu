@@ -39,23 +39,20 @@ class GestionnaireEvenements
 	private var nomUtilisateur:String;    // user name of our  user
 	private var userRole:Number;  // if 1 - simple user, if 2 - is admin(master), if 3 - is  prof
 	private var motDePasse:String;  // notre mot de passe pour pouvoir jouer
+	private var langue;
 	
-	// changed this by use a liste of object's Personnage
-	//private var listeDesPersonnages:Array;
 	private var roomDescription:String;  // short room description taked from DB
 	private var numeroDuDessin:Number; // sert a associer la bonne image pour le jeu d'ile au tresor
-	public var  listeDesPersonnages:Array;   // liste associant les idPersonnage avec les nomUtilisateurs dans la table ou on est
-	                                        // contient aussi autre informations sur les joueurs, comme couleur, role, pointage, argent ...
-						    				 // un tableau complet avec toutes les informations sur les joueurs
+	
     private var nomSalle:String;  //  nom de la salle dans laquelle on est
 	private var idRoom:Number;    // ID of our room in the server's list of rooms
 	private var masterTime:Number; // masterTime of room, if masterTime != 0 is taked masterTime for the time of game 
 	
 	// subs this 5 by GameTable object
-	private var numeroTable:Number;   //   numero de la table dans laquelle on est
-	private var tablName:String;     // name of the created table
-    private var tempsPartie:Number;   //  temps que va durer la partie, en minutes
-	private var typeDeJeu:String;        // gameType in our table
+	//private var numeroTable:Number;   //   numero de la table dans laquelle on est
+	//private var tablName:String;     // name of the created table
+    //private var tempsPartie:Number;   //  temps que va durer la partie, en minutes
+	//private var typeDeJeu:String;        // gameType in our table
 	private var nbTracks:Number;   // usually is 4, 
     
 	private var listeDesJoueursDansSalle:Array;  // liste des joueurs dans la salle qu'on est. Un joueur contient un nom (nom) ???? 
@@ -70,23 +67,20 @@ class GestionnaireEvenements
     private var objGestionnaireCommunication:GestionnaireCommunication;  //  pour caller les fonctions du serveur 
 	private var tabPodiumOrdonneID:Array;			// id des personnages ordonnes par pointage une fois la partie terminee
 		
-	private var langue;
+	
 	private var endGame:Boolean;   // used to indicate the end of game
 	private var newsChat:NewsBox;  // all the messages to show in newsbox	
 	private var finishPoints:Array;
 	
 	// used to take bonus
 	private var winIt:Number;
-	
-	//used to color clothes of our perso - encapsulate too ... it's business of ourPerso
-	private var colorIt:String;
-	private var clothesColorID:Number;   // color ID - number of the color set of pictures. Given from server.
-	
+		
+	private var clothesColorID:Number;   // color ID - number of the color set of pictures. Given from server.	encapsulate too ...
 	// sets of persos colors
 	private var colorsSource_xml:XML;
 	
 	private var allowedTypes:Array;   // allowed types of game in our room - course, tournament ...
-	private var ourPerso:MyPersonnage;  // reference to our personnage on the table(planche) ..
+	
 	private var allowedTypesMap:Array;
 	private var allowedTypesTracks:Array;			
 	
@@ -94,10 +88,29 @@ class GestionnaireEvenements
     // change his first selected picture
     public var wasHereOnce:Boolean = false;
 	private var isOldGame:Boolean = false;
+	// indicate if we are in the process to select our perso
+	private var inSelectPlayer:Boolean;
+	
 	// move to the table object ... maybe later
 	private var tableauDesPersonnages:Array;
+	private var ourPerso:MyPersonnage;  // reference to our personnage on the table(planche) ..
+	private var ourTable:GameTable;
 		
 ///////////////////////////////////////////////////////////////////////
+    public function setInSelectPlayer(select:Boolean)
+	{
+		this.inSelectPlayer = select;
+	}
+    public function getOurTable():GameTable
+	{
+		return this.ourTable;
+	}
+	
+	public function setOurTable(table:GameTable)
+    {
+    	this.ourTable = table;
+    }
+
 	public function getOurPerso():MyPersonnage
 	{
 		return this.ourPerso;
@@ -168,17 +181,12 @@ class GestionnaireEvenements
 	function setListeFinishPoints(a:Array)
 	{
 		this.finishPoints = a;
-	}
+	}		
 	
-	function getColorIt():String
+	public function obtenirGestionnaireCommunication():GestionnaireCommunication
 	{
-		return this.colorIt;
+		return objGestionnaireCommunication;
 	}
-	
-	function setColorIt(color:String)
-    {
-    	this.colorIt = color;
-    }
 	    
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //                                  CONSTRUCTEUR
@@ -204,7 +212,6 @@ class GestionnaireEvenements
 		var port:Number = parseInt(_level0.configxml_mainnode.attributes.port, 10);
 		
 		this.newsChat = new NewsBox();
-		this.colorIt = "0";
 		this.clothesColorID = 0;
 		this.colorsSource_xml = new XML();
 		// get the xml for perso's colors
@@ -219,9 +226,7 @@ class GestionnaireEvenements
 				
         this.objGestionnaireCommunication = new GestionnaireCommunication(Delegate.create(this, this.evenementConnexionPhysique), 
 																		  Delegate.create(this, this.evenementDeconnexionPhysique),
-																		  url_serveur, port);
-		
-	
+																		  url_serveur, port);	
     	trace("fin du constructeur de gesEve");
     	trace("*********************************************\n");
     } // end cons
@@ -313,12 +318,7 @@ class GestionnaireEvenements
 		}// end 1 for
 		return ourColors;
 	}// end method
-	
-	function getTableName():String 
-	{
-		return this.tablName;
-	}
-    
+		    
 	function obtenirTabPodiumOrdonneID():Array
 	{
 		return this.tabPodiumOrdonneID;
@@ -473,10 +473,11 @@ class GestionnaireEvenements
     {
         trace("*********************************************");
         trace("debut de entrerTable     :" + nTable);
-        this.numeroTable = nTable;
+        //this.numeroTable = nTable;
+		this.ourTable = new GameTable(nTable, 0, "", "", 0, 0);
 			
         this.objGestionnaireCommunication.entrerTable(Delegate.create(this, this.retourEntrerTable), 
-													  Delegate.create(this, this.evenementJoueurDemarrePartie), this.numeroTable);
+													  Delegate.create(this, this.evenementJoueurDemarrePartie), nTable);
         trace("fin de entrerTable");
         trace("*********************************************\n");
     }
@@ -508,6 +509,7 @@ class GestionnaireEvenements
     {
         trace("*********************************************");
         trace("debut de sortirTable");
+		this.ourTable = null;
         this.objGestionnaireCommunication.obtenirListeTablesApres(Delegate.create(this, this.retourObtenirListeTables), FiltreTable.INCOMPLETES_NON_COMMENCEES);
         trace("fin de sortirTable");
         trace("*********************************************\n");
@@ -527,11 +529,11 @@ class GestionnaireEvenements
     {
         trace("*********************************************");
         trace("debut de creerTable     " + temps);
-		this.typeDeJeu = gameType;
-		trace("debut de creerTable     " + this.typeDeJeu);
-        this.objGestionnaireCommunication.creerTable(Delegate.create(this, this.retourCreerTable), 
-													 Delegate.create(this, this.evenementJoueurDemarrePartie), temps, nb_lines, nb_columns, nameTable, gameType);
-        trace("fin de creerTable");
+		this.ourTable = new GameTable(0, temps, nameTable, gameType, nb_lines, nb_columns);
+		this.objGestionnaireCommunication.creerTable(Delegate.create(this, this.retourCreerTable), 
+													 Delegate.create(this, this.evenementJoueurDemarrePartie),
+													 temps, nb_lines, nb_columns, nameTable, gameType);
+		trace("fin de creerTable");
         trace("*********************************************\n");
     }
 	
@@ -540,20 +542,9 @@ class GestionnaireEvenements
     {
         trace("*********************************************");
         trace("debut de demarrerPartie     " + idDessin); 
-        /*
-		this.listeDesPersonnages.push(new Object());
-        this.listeDesPersonnages[this.listeDesPersonnages.length - 1].id = 0;
-        this.listeDesPersonnages[this.listeDesPersonnages.length - 1].nom = this.nomUtilisateur;
-		this.listeDesPersonnages[this.listeDesPersonnages.length - 1].role = this.userRole;
-		this.listeDesPersonnages[this.listeDesPersonnages.length - 1].pointage = 0;
-		this.listeDesPersonnages[this.listeDesPersonnages.length - 1].idessin = idDessin;
-		this.listeDesPersonnages[this.listeDesPersonnages.length - 1].win = 0;
-		this.listeDesPersonnages[this.listeDesPersonnages.length - 1].colorID = this.clothesColorID;
-		this.colorIt = getColorByID(this.clothesColorID, idDessin);
-		this.listeDesPersonnages[this.listeDesPersonnages.length - 1].clocolor = this.colorIt; */
-				
-		this.colorIt = getColorByID(this.clothesColorID, idDessin);
-		setOurPerso(new MyPersonnage(0, this.nomUtilisateur, this.userRole, idDessin, this.clothesColorID, this.colorIt));
+       		
+		//this.colorIt = getColorByID(this.clothesColorID, idDessin);
+		setOurPerso(new MyPersonnage(0, this.nomUtilisateur, this.userRole, idDessin, this.clothesColorID, getColorByID(this.clothesColorID, idDessin)));
 		tableauDesPersonnages.push(getOurPerso());
 
         this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), 
@@ -614,7 +605,8 @@ class GestionnaireEvenements
         trace("debut de deplacerPersonnage     " + pt.obtenirX() + "     " + pt.obtenirY());
         this.objGestionnaireCommunication.deplacerPersonnage(Delegate.create(this, this.retourDeplacerPersonnage), _level0.loader.contentHolder.planche.calculerPositionOriginale(pt.obtenirX(), pt.obtenirY()));  
         // to correct the state 
-		_level0.loader.contentHolder.planche.obtenirPerso().minigameLoade = false;
+		//_level0.loader.contentHolder.planche.obtenirPerso().minigameLoade = false;
+		ourPerso.setMinigameLoade(false);
 	    trace("fin de deplacerPersonnage");
         trace("*********************************************\n");
     }
@@ -851,8 +843,7 @@ class GestionnaireEvenements
 				  {
 					  var idDessin:Number = UtilsBox.calculatePicture(objetEvenement.playersListe[i].idPersonnage);
 				      var cloColor:String = getColorByID(objetEvenement.playersListe[i].clocolor, idDessin);
-					 
-					  this.colorIt = cloColor;
+					 					 
 		              setOurPerso(new MyPersonnage( objetEvenement.playersListe[i].idPersonnage, objetEvenement.playersListe[i].nom, 
 											  objetEvenement.playersListe[i].userRole, idDessin, objetEvenement.playersListe[i].clocolor, cloColor));
 		              tableauDesPersonnages.push(getOurPerso());
@@ -867,22 +858,6 @@ class GestionnaireEvenements
 											  objetEvenement.playersListe[i].userRole, idDessin, objetEvenement.playersListe[i].clocolor, cloColor));										
 					  
 				  }
-                   /*	
-				  		      
-				  this.listeDesPersonnages[i].nom = objetEvenement.playersListe[i].nom;
-                  this.listeDesPersonnages[i].id = objetEvenement.playersListe[i].idPersonnage;
-			      this.listeDesPersonnages[i].role = objetEvenement.playersListe[i].userRole;
-			      this.listeDesPersonnages[i].pointage = objetEvenement.playersListe[i].pointage;
-				  this.listeDesPersonnages[i].brainiacState = objetEvenement.playersListe[i].brainiacState;
-			      this.listeDesPersonnages[i].brainiacTime = objetEvenement.playersListe[i].brainiacTime;
-				  //this.listeDesPersonnages[i].clocolor = objetEvenement.playersListe[i].clocolor;
-			      this.listeDesPersonnages[i].win = 0;
-				  
-				  //trace("rejoindre !!! - " +  this.listeDesPersonnages[i].nom  + " " + objetEvenement.playersListe[i].clocolor);
-				  					
-		          var idDessin:Number = calculatePicture(this.listeDesPersonnages[i].id);
-				  this.listeDesPersonnages[i].idessin = idDessin;
-				  */
                   
 			   }// end for
 			   
@@ -892,19 +867,9 @@ class GestionnaireEvenements
 			// realy speacking can be removed - we have "pointage" in the up one case 
 			case "Pointage":
 			    
-			   _level0.loader.contentHolder.planche.obtenirPerso().modifierPointage(objetEvenement.pointage);
-
-			   var count:Number = this.listeDesPersonnages.length;
-			   for(i = 0; i < count; i++)
-               {
-                  if(this.listeDesPersonnages[i].nom == this.nomUtilisateur)
-                  {
-						this.listeDesPersonnages[i].pointage = objetEvenement.pointage;
-						
-				  }
-			   }
-			
-			remplirMenuPointage();
+			   //_level0.loader.contentHolder.planche.obtenirPerso().modifierPointage(objetEvenement.pointage);
+			   ourPerso.modifierPointage(objetEvenement.pointage);			 
+			   remplirMenuPointage();
     		break;
 			
 			case "Argent":
@@ -915,17 +880,16 @@ class GestionnaireEvenements
 			
 			case "Table":
 			
-			   this.numeroTable = objetEvenement.noTable;
+			   this.ourTable = new GameTable(objetEvenement.noTable, 0, "", objetEvenement.gameType, 0, 0);
 			   this.maxPlayers = objetEvenement.maxPlayers;
-			   this.typeDeJeu = objetEvenement.gameType;
 			   _level0.loader.contentHolder.planche.zoomer("out", 4);
 			   
 			   var xState:Boolean;
 			   if(objetEvenement.brainiacState == "true") 
 			   {
 				  xState = Boolean(true);
-				  _level0.loader.contentHolder.planche.obtenirPerso().setBrainiac(xState);
-			      _level0.loader.contentHolder.planche.obtenirPerso().getReconnectionBrainiacAnimaton(objetEvenement.brainiacTime);
+				  ourPerso.setBrainiac(xState);
+			      ourPerso.getReconnectionBrainiacAnimaton(objetEvenement.brainiacTime);
 				  trace("Dans Brainiac" + xState);
 			   }
 			   
@@ -934,22 +898,19 @@ class GestionnaireEvenements
 			   if(objetEvenement.bananaState == "true")
 			   {
 				   yState = Boolean(true);
-				  _level0.loader.contentHolder.planche.obtenirPerso().setBananaTime(0);
-				  _level0.loader.contentHolder.planche.obtenirPerso().setBananaState(true);
+				  ourPerso.setBananaTime(0);
+				  ourPerso.setBananaState(true);
 			      ourPerso.setBananaTimer(objetEvenement.bananaTime);
   				  trace("Dans Banana " + yState);
 
 			   }
-               
-			  // trace("rejoindre table : " +  objetEvenement.brainiacState + " " + objetEvenement.brainiacTime + " " + objetEvenement.bananaState + " " + objetEvenement.bananaTime + " " + this.maxPlayers + " " + this.moveVisibility);
-			
-			break;
+     		break;
 			
 			case "ListeObjets":
-				var count:Number = objetEvenement.objectsListe.length;
+			   var count:Number = objetEvenement.objectsListe.length;
 			   for(i = 0; i < count; i++)
                {
-                   _level0.loader.contentHolder.planche.obtenirPerso().ajouterObjet(objetEvenement.objectsListe[i].idObject, objetEvenement.objectsListe[i].typeObject);
+                   ourPerso.ajouterObjet(objetEvenement.objectsListe[i].idObject, objetEvenement.objectsListe[i].typeObject);
 				   //trace(objetEvenement.objectsListe[i].idObject + "  " + objetEvenement.objectsListe[i].typeObject);
 			   }// end for
 			   
@@ -1035,17 +996,12 @@ class GestionnaireEvenements
 					   roomLabel = " * " +  this.listeDesSalles[i].nom;
 					else if (_level0.loader.contentHolder.roomsType == "profsType")
 					   roomLabel = this.listeDesSalles[i].userCreator + " - " +  this.listeDesSalles[i].nom;
-					//trace("salle " + i + " : " + this.listeDesSalles[i].nom);					
+					trace("salle " + i + " : " + this.listeDesSalles[i].nom);
+					_level0.loader.contentHolder.listeSalle.addItem({label: (roomLabel), data:  this.listeDesSalles[i].idRoom});
 				}
 								
 				_level0.loader.contentHolder.bt_continuer1._visible = true;
 				_level0.loader.contentHolder.txtChargementSalles._visible = false;
-
-                for( i= 0; i < count; i++)
-                {												
-					_level0.loader.contentHolder.listeSalle.addItem({label: (roomLabel), data:  this.listeDesSalles[i].idRoom});
-				}
-
             break;
 			 
             case "CommandeNonReconnue":
@@ -1084,8 +1040,7 @@ class GestionnaireEvenements
 		       var messageInfo:String = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.bugReportMess; 
 			   this.newsChat.addMessage(messageInfo);
 		      
-			trace("bug reported  ");
-			
+			trace("bug reported  ");			
             break;
 			 
             case "CommandeNonReconnue":
@@ -1101,7 +1056,7 @@ class GestionnaireEvenements
             break;
 			 
             default:
-                trace("Erreur Inconnue");
+                trace("Erreur Inconnue in retourReportBugQuestion");
         }
 		objetEvenement = null;
         trace("fin de retourReportBugQuestion");
@@ -1388,10 +1343,9 @@ class GestionnaireEvenements
         switch(objetEvenement.resultat)
         {
             case "NoTable":
-                this.numeroTable = objetEvenement.noTable;
-				this.tablName =  objetEvenement.nameTable;
-				this.clothesColorID = objetEvenement.clocolor;
-				///this.colorIt =  this
+			    this.ourTable.setTableId(objetEvenement.noTable);
+    			this.ourTable.setTableName(objetEvenement.nameTable);
+				this.clothesColorID = objetEvenement.clocolor;				
 				this.maxPlayers = objetEvenement.maxNbPlayers;
 				
                 _level0.loader.contentHolder.gotoAndPlay(3);
@@ -1507,12 +1461,12 @@ class GestionnaireEvenements
 			    var count:Number = this.listeDesTables.length;
 				for (i = 0; i < count; i++)
                 {
-                    if(this.listeDesTables[i].no == this.numeroTable)
+                    if(this.listeDesTables[i].no == this.ourTable.getTableId())
                     {
-                        this.tempsPartie = Number(this.listeDesTables[i].temps);
-						this.tablName = this.listeDesTables[i].tablName;
-						this.maxPlayers = Number(this.listeDesTables[i].maxNbPlayers);
-						this.typeDeJeu = this.listeDesTables[i].gameType;
+                        this.ourTable.setTableTime(Number(this.listeDesTables[i].temps));
+						this.ourTable.setTableName(this.listeDesTables[i].tablName);
+						this.ourTable.setGameType(this.listeDesTables[i].gameType);
+						this.maxPlayers = Number(this.listeDesTables[i].maxNbPlayers);						
 						//trace("Verifie - retour entrer tableX: " + this.tempsPartie + " " + this.tablName + " " + this.maxPlayers + " " + this.typeDeJeu);
                         break;
                     }
@@ -1593,7 +1547,7 @@ class GestionnaireEvenements
 			    var count:Number = this.listeDesTables.length;
 				for(var i = 0; i < count; i++)
 				{
-					if(this.listeDesTables[i].no == this.numeroTable)
+					if(this.listeDesTables[i].no == this.ourTable.getTableId())
 					{
 						indice = i;
 						break;
@@ -1622,7 +1576,8 @@ class GestionnaireEvenements
 				   _level0.loader.contentHolder.txtChargementTables._visible = true;
 		        }
 
-               this.tableauDesPersonnages.removeAll();
+               this.tableauDesPersonnages = new Array();
+			   this.ourTable = null;
 
                this.objGestionnaireCommunication.obtenirListeJoueursSalle(Delegate.create(this, this.retourObtenirListeJoueursSalle), Delegate.create(this, this.evenementJoueurEntreSalle), Delegate.create(this, this.evenementJoueurQuitteSalle));						
 			 	var count:Number = this.listeDesTables.length;
@@ -1885,7 +1840,8 @@ class GestionnaireEvenements
 			    ourPerso.setIdPersonnage(objetEvenement.idP);
 			    //ourPerso.setIDessin(UtilsBox.calculatePicture(objetEvenement.idP));
 				// redraw of frame 3 the list of users that is on our table
-				showTableUsers();				
+				if(!inSelectPlayer)
+				   showTableUsers();				
                 trace("retourCanceledPicture ok");
             break;
 			case "CommandeNonReconnue":
@@ -2278,7 +2234,7 @@ class GestionnaireEvenements
 		     	{
 					trace("deplacement accepte");
 			
-			       _level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+			       _level0.loader.contentHolder.planche.effacerCasesPossibles();
 					_level0.loader.contentHolder.box_question.gotoAndPlay(9);
 			
 					pt.definirX(objetEvenement.nouvellePosition.x);
@@ -2348,7 +2304,7 @@ class GestionnaireEvenements
 					{
 			     		trace("deplacement refuse  ");
 						_level0.loader.contentHolder.url_retro =objetEvenement.explication;// "Q-1-F-en.swf";
-						_level0.loader.contentHolder.planche.effacerCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
+						_level0.loader.contentHolder.planche.effacerCasesPossibles();
 
                         _level0.loader.contentHolder.box_question.monScroll._visible = false;
 						var ptX:Number = _level0.loader.contentHolder.box_question.monScroll._x;
@@ -2773,13 +2729,11 @@ class GestionnaireEvenements
 		
 		_level0.loader.contentHolder.listeTable.redraw();
 		
-		if(!endGame && objetEvenement.noTable == this.numeroTable){
+		if(!endGame && objetEvenement.noTable == this.ourTable.getTableId()){
 		   sortirSalle();
-		   //_level0.loader.contentHolder.gestionBoutons(true);
 		   _level0.loader.contentHolder["att"].removeMovieClip();
 		   _level0.loader.contentHolder.gotoAndPlay(1);
-		   this.tableauDesPersonnages.removeAll();  
-		  		  
+		   this.tableauDesPersonnages = new Array();		   		  		  
 		}		
 		objetEvenement = null;
     	trace("fin de evenementTableDetruite");
@@ -2815,14 +2769,15 @@ class GestionnaireEvenements
 					trace(i + " avant this.listeDesPersonnages[i].nom: " + this.listeDesPersonnages[i].nom + " id:" + this.listeDesPersonnages[i].id);
 	    }
 		*/
-		if(objetEvenement.noTable == this.numeroTable)
+		if(objetEvenement.noTable == this.ourTable.getTableId())
     	{   
 			 trace(" evenementJoueurEntreTable length = " + objetEvenement.nomUtilisateur + " " + objetEvenement.userColor);
 			 this.tableauDesPersonnages.push(new AdversaryPersonnage( 0, objetEvenement.nomUtilisateur, 
 											  objetEvenement.userRole, 0, objetEvenement.userColor, ""));					 
     	}// if
 		
-		showTableUsers();
+		if(!inSelectPlayer)
+		   showTableUsers();
     	
 		// verify and refactor!!!!!!!!!!!!
 		if(indice != -1)
@@ -2892,13 +2847,27 @@ class GestionnaireEvenements
             	break;
         	}
     	}
+		
+		if(!endGame && _level0.loader.contentHolder._currentframe > 3 && objetEvenement.noTable == this.ourTable.getTableId()){
+		   getPersonnageByName(objetEvenement.nomUtilisateur).removeImage();
+    	   _level0.loader.contentHolder.planche.getOutPerso(getPersonnageByName(objetEvenement.nomUtilisateur));		  
+		  		     
+		   // newsbox
+		   var messageInfo:String = objetEvenement.nomUtilisateur + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.outMess; 
+		   this.newsChat.addMessage(messageInfo);
+		 }
+		
+		
     	// si la table est la notre (on choisit nos perso frame 3)
-    	if(objetEvenement.noTable == this.numeroTable)
+    	if(!endGame && objetEvenement.noTable == this.ourTable.getTableId())
     	{
 			//first we get out the perso from the list
             removePersoFromListe(objetEvenement.nomUtilisateur);
+			dessinerMenu();
+		    remplirMenuPointage()
 			// after we replace the list on the screen
-			showTableUsers();        	
+			if(!inSelectPlayer)
+			   showTableUsers();        	
     	}
     	// si ce n'est pas notre table
     	else
@@ -2942,16 +2911,6 @@ class GestionnaireEvenements
 			_level0.loader.contentHolder.txtChargementTables._visible = true;
 			_level0.loader.contentHolder.chargementTables = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.aucuneTable;
 		}
-		
-		if(!endGame && _level0.loader.contentHolder._currentframe > 3 && objetEvenement.noTable == this.numeroTable){
-		   _level0.loader.contentHolder.planche.getPersonnageByName(objetEvenement.nomUtilisateur).cachePersonnage();
-		   dessinerMenu();
-		   remplirMenuPointage();
-		     
-		   // newsbox
-		   var messageInfo:String = objetEvenement.nomUtilisateur + _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.outMess; 
-		   this.newsChat.addMessage(messageInfo);
-		 }
 		
 		objetEvenement = null;
 		trace("fin de evenementJoueurQuitteTable");
@@ -3027,9 +2986,7 @@ class GestionnaireEvenements
 		}
 				      
 	    _level0.loader.contentHolder.planche.afficher();
-						
-		//trace("longueur de la liste des noms envoyes par serveur    :" + objetEvenement.positionJoueurs.length);
-			
+											
         for(i in tableauDesPersonnages)
         {		
 			//5 * tableauDesCases.length * tableauDesCases[0].length + 2 * idPers, tableauDesCases[ll][cc].obtenirClipCase()._x, tableauDesCases[ll][cc].obtenirClipCase()._y ,
@@ -3038,7 +2995,7 @@ class GestionnaireEvenements
 			tableauDesPersonnages[i].afficher();
 			trace("Construction du personnage : " + this.tableauDesPersonnages[i].obtenirNom());
 			var xState:Boolean;
-			if(tableauDesPersonnages[i].brainiacState == "true") 
+			if(tableauDesPersonnages[i].getBrainiacState() == "true") 
 			{				
 				tableauDesPersonnages[i].setBrainiac(Boolean(true));
 			    //tableauDesPersonnages[i].getReconnectionBrainiacAnimaton(brainiacTime);				        
@@ -3057,7 +3014,7 @@ class GestionnaireEvenements
 		// V3 head size
 		maTete._xscale = 290;
 		maTete._yscale = 290;
-		UtilsBox.colorItMatrix(this.colorIt, maTete.headClo, idDessin);
+		UtilsBox.colorItMatrix(ourPerso.getColor(), maTete.headClo, idDessin);
 
         _level0.loader.contentHolder.horlogeNum = 60*objetEvenement.tempsPartie;
 				
@@ -3073,7 +3030,7 @@ class GestionnaireEvenements
         remplirMenuPointage();
 		if(!this.isOldGame)
 		{   _level0.loader.contentHolder.planche.zoomer("out", 8);
-		    if(this.typeDeJeu == "mathEnJeu")
+		    if(this.ourTable.compareType("mathEnJeu"))
 		    {
 		       this.startAnimation();
 		   
@@ -3128,36 +3085,23 @@ class GestionnaireEvenements
 	//   "JoueurRejoindrePartie"
 	public function evenementJoueurRejoindrePartie(objetEvenement:Object)
     {
-        // parametre: nomUtilisateur, idPersonnage, Pointage
+        // parametre: nomUtilisateur, idPersonnage, Pointage, Role, xPosition, yPosition
      	trace("*********************************************");
      	trace("debut de evenementJoueurRejoindrePartie   " + objetEvenement.nomUtilisateur + "    " + objetEvenement.idPersonnage + " " + objetEvenement.Pointage);
-		/*		
-		this.listeDesPersonnages.push(new Object());		
-		var n:Number = this.listeDesPersonnages.length -1;
-		this.listeDesPersonnages[n].nom = objetEvenement.nomUtilisateur;
-        this.listeDesPersonnages[n].id = objetEvenement.idPersonnage;
-		this.listeDesPersonnages[n].colorID = objetEvenement.Color;
-		this.listeDesPersonnages[n].role = objetEvenement.Role;   
-		this.listeDesPersonnages[n].pointage = objetEvenement.Pointage;
-		this.listeDesPersonnages[n].win = 0;
-		var idDessin:Number = calculatePicture(this.listeDesPersonnages[n].id);
-		this.listeDesPersonnages[n].clocolor = getColorByID(this.listeDesPersonnages[n].colorID, idDessin);
-		this.listeDesPersonnages[n].idessin = idDessin;
-		var cloCol:String = this.listeDesPersonnages[n].clocolor;
-	    this.listeDesPersonnages[n].filterC = _level0.loader.contentHolder.objGestionnaireEvenements.colorMatrixPerso(cloCol, idDessin);
-		trace("test Rejoindre: "  + this.listeDesPersonnages[n].nom + " " + this.listeDesPersonnages[n].clocolor + " " + this.listeDesPersonnages.length);
-         */   
+				 
 		var idDessin:Number = UtilsBox.calculatePicture(objetEvenement.idPersonnage);
 		var cloColor:String = getColorByID(objetEvenement.Color, idDessin);
-		var pa:AdversaryPersonnage = new AdversaryPersonnage( objetEvenement.idPersonnage, objetEvenement.nomUtilisateur, 
-											  objetEvenement.Role, idDessin, objetEvenement.Color, cloColor);
-		pa.setIDessin(idDessin);
-		pa.modifierPointage(Number(objetEvenement.Pointage));
-		tableauDesPersonnages.push(pa);					
-					
-		_level0.loader.contentHolder.planche.ajouterPersonnage(pa, pa.obtenirL(), pa.obtenirC());
-		pa.initPlanche(_level0.loader.contentHolder.planche);
-		pa.afficher();
+		tableauDesPersonnages.push( new AdversaryPersonnage( objetEvenement.idPersonnage, objetEvenement.nomUtilisateur, 
+											  objetEvenement.Role, idDessin, objetEvenement.Color, cloColor));
+		//pa.setIDessin(idDessin);
+		var n:Number = this.tableauDesPersonnages.length - 1;
+		tableauDesPersonnages[n].modifierPointage(Number(objetEvenement.Pointage));
+		tableauDesPersonnages[n].definirL(objetEvenement.xPosition);
+		tableauDesPersonnages[n].definirC(objetEvenement.yPosition);
+							
+		_level0.loader.contentHolder.planche.ajouterPersonnage(tableauDesPersonnages[n], tableauDesPersonnages[n].obtenirL(), tableauDesPersonnages[n].obtenirC());
+		tableauDesPersonnages[n].initPlanche(_level0.loader.contentHolder.planche);
+		tableauDesPersonnages[n].afficher();
 			
 		dessinerMenu();
 		remplirMenuPointage();
@@ -3181,7 +3125,8 @@ class GestionnaireEvenements
 				
 		var iplayer =  getPersonnageByName(objetEvenement.nomUtilisateur);
 		iplayer.setIdPersonnage(0);
-		showTableUsers();
+		if(!inSelectPlayer)
+		   showTableUsers();
 							   	
 		objetEvenement = null;
 		trace("end eventPlayerPictureCanceled");
@@ -3197,7 +3142,8 @@ class GestionnaireEvenements
 		
 		var iplayer =  getPersonnageByName(objetEvenement.nomUtilisateur);
 		iplayer.setIdPersonnage(objetEvenement.idPersonnage);
-		showTableUsers();
+		if(!inSelectPlayer)
+		   showTableUsers();
 			   	
 		objetEvenement = null;
 		trace("end eventPlayerSelectedNewPicture ");
@@ -3209,15 +3155,11 @@ class GestionnaireEvenements
     {
         // parametre: nomUtilisateur, idPersonnage
      	trace("debut de evenementJoueurDemarrePartie   "+objetEvenement.nomUtilisateur+"     "+objetEvenement.idPersonnage);
-        
-       	//var idDessin:Number;
+             
 		var iplayer =  getPersonnageByName(objetEvenement.nomUtilisateur);
 		iplayer.setIdPersonnage(objetEvenement.idPersonnage);
-		showTableUsers();
-		//_level0.loader.contentHolder.refLayer["b" + i].removeMovieClip();
-        //trace( i + ": " + this.tableauDesPersonnages[i].obtenirNom() + " id:" + this.tableauDesPersonnages[i].getIdPersonnage());
-		
-		objetEvenement = null;
+		if(!inSelectPlayer)
+		   showTableUsers();
 		trace("fin de evenementJoueurDemarrePartie");
     }// end function
 	
@@ -3230,7 +3172,7 @@ class GestionnaireEvenements
 		var i:Number;
 		var playersNumber:Number = 0;
 		for (i in tableauDesPersonnages) {
-			if(!(tableauDesPersonnages[i].getRole() > 1  && this.typeDeJeu == "Tournament"))
+			if(!(tableauDesPersonnages[i].getRole() > 1  && this.ourTable.compareType("Tournament")))
 				   playersNumber++;
 		}// end for
 				
@@ -3269,7 +3211,7 @@ class GestionnaireEvenements
 		// to control the holes ...
 		var count:Number = jouersStarted.length;
 		for(i = 0; i < count; i++){
-		      if((jouersStarted[i].role > 1 && this.typeDeJeu == "Tournament"))   
+		      if(jouersStarted[i].role > 1 && this.ourTable.compareType("Tournament"))   
 		          jouersStarted.splice(i,1);
 		}
 				
@@ -3398,20 +3340,16 @@ class GestionnaireEvenements
 	
     	_level0.loader.contentHolder.gotoAndStop(5);
     
-    	Mouse.show();
- 
+    	Mouse.show(); 
   	
 		// mettre les id en ordre : tabOrdonne.id contient les id des personnages en ordre de pointage
 		// il suffit de mettre les MC correspondants sur le podium
 		
 		// to cut the holes ...
-		
-		   for(i = 0; i <= taille; i++){
-		      if((this.tabPodiumOrdonneID[i].role > 1 && this.typeDeJeu == "Tournament") )   
+       for(i = 0; i <= taille; i++){
+		      if(this.tabPodiumOrdonneID[i].role > 1 && this.ourTable.compareType("Tournament") )   
 		         this.tabPodiumOrdonneID.splice(i,1);
-		   }  
-		
-		
+	   }	
 		
 		// NOTE HUGO : Voici comment placer des variables dans des champs de texte dynamique
 		// demonstrate the result
@@ -3533,38 +3471,7 @@ class GestionnaireEvenements
      	trace("fin de evenementUtiliserObjet");
      	trace("*********************************************\n");
 } // end methode	
-	
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                      Autres
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////
-    public function obtenirNumeroTable():Number
-    {
-        return this.numeroTable;
-    }
-	
-    //////////////////////////////////////////////////////////////////////////////////////////
-    public function obtenirTempsPartie():Number
-    {
-        return this.tempsPartie;
-    }
-	
-    //////////////////////////////////////////////////////////////////////////////////////////
-    public function definirTempsPartie(t:Number)
-    {
-        trace("*********************************************");
-        trace("debut de definirTempsPartie   "+t);
-        this.tempsPartie = t;
-        trace("fin de tempsPartie");
-        trace("*********************************************\n");
-    }
-	
-	public function obtenirGestionnaireCommunication():GestionnaireCommunication
-	{
-		return objGestionnaireCommunication;
-	}
-   
-    
+	    
 	//// function used to draw the points menu	
 	////////////////////////////////////////////////////
 	public function dessinerMenu()
@@ -3684,12 +3591,12 @@ class GestionnaireEvenements
         formatPoints.align = "Right";
         _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur" + i]["dtPoints" + i].setNewTextFormat(formatPoints);
 		   
-       //menuPointages.mc_autresJoueurs["mc_joueur" + i].attachMovie("checkFlag_mc","flag" + i, 220 + i, {_x:-20, _y:0});
-    
+       //menuPointages.mc_autresJoueurs["mc_joueur" + i].attachMovie("checkFlag_mc","flag" + i, 220 + i, {_x:-20, _y:0});    
      
    }// end for
   
 } //end fonction 
+
 
 /*
   Method used to show or redraw persos on the frame 3
@@ -3750,11 +3657,7 @@ public function drawUserFrame3(i:Number, colorC:String, idDessin:Number, movClip
 		   target_mc.filterC = filterC;
 		   target_mc._xscale = 90;
 		   target_mc._yscale = 90;
-		   target_mc.gotoAndPlay(1);
-		   // not to see another players on phase 1 of frame 3
-		   if(!_level0.loader.contentHolder.seePlayers)
-		      target_mc._visible = false;
-			             
+		   target_mc.gotoAndPlay(1);		   			             
 		};
 		this["mcLoaderString"].addListener(this["mclListenerString"]);
 					
@@ -3783,6 +3686,7 @@ function testPlayers():Boolean
 // creating filters for plyerSelect
 function calculColorsAndLoadPlayerSelect()
 {
+	this.inSelectPlayer = true;
    //var clothesCol:String = this.colorIt;
    var colorsFilters:Array = new Array();
    var i:Number;

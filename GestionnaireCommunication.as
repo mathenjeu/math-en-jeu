@@ -32,6 +32,7 @@ import mx.transitions.Tween;
 import mx.transitions.easing.*;
 import mx.events.EventDispatcher;
 import mx.utils.Delegate;
+
 // TODO : Un moment donne il va falloir integrer le reply a un evenement
 //        comme pour le ping
 class GestionnaireCommunication
@@ -838,7 +839,7 @@ class GestionnaireCommunication
 				    	case "joueurQuiUtilise":
 							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
 				    		objEvenement["joueurQuiUtilise"] = lstChildNodes[i].firstChild.nodeValue;
-				    		//trace("case NomUtilisateur  "+objEvenement.nomUtilisateur+ "   "+lstChildNodes[i].firstChild.nodeValue);
+				    		trace("case NomUtilisateur  " + objEvenement.joueurQuiUtilise + "   " + lstChildNodes[i].firstChild.nodeValue);
 				    	break;
 				    
 				    	case "joueurAffecte":
@@ -947,23 +948,30 @@ class GestionnaireCommunication
 						
 						case "IdPersonnage":
 							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
-				    		objEvenement["idPersonnage"] = lstChildNodes[i].firstChild.nodeValue;
+				    		objEvenement["idPersonnage"] = Number(lstChildNodes[i].firstChild.nodeValue);
 				       	break;
 						
 						case "Pointage":
 							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
-				    		objEvenement["Pointage"] = lstChildNodes[i].firstChild.nodeValue;
+				    		objEvenement["Pointage"] = Number(lstChildNodes[i].firstChild.nodeValue);
 				       	break;
 						
 						case "Color":
 							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
-				    		objEvenement["Color"] = lstChildNodes[i].firstChild.nodeValue;
+				    		objEvenement["Color"] = Number(lstChildNodes[i].firstChild.nodeValue);
 				       	break;
 						
-						case "Pointage":
+						case "Role":
 							trace(strNomType + " " + lstChildNodes[i].firstChild.nodeValue);
-				    		objEvenement["Role"] = lstChildNodes[i].firstChild.nodeValue;
+				    		objEvenement["Role"] = Number(lstChildNodes[i].firstChild.nodeValue);
 				       	break;
+						
+						case "xPosition":
+						    objEvenement["xPosition"] = Number(lstChildNodes[i].firstChild.nodeValue);
+						break;
+						case "yPosition":
+						    objEvenement["yPosition"] = Number(lstChildNodes[i].firstChild.nodeValue);
+					    break;
 					} // end switch
 				
 				} // fin "JoueurRejoindrePartie"
@@ -1126,7 +1134,7 @@ class GestionnaireCommunication
                             
 							//Begin with the points for finish
 							var intValeurCase:Number = Number(lstChildNodesCase[j].attributes.type);
-							if( _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament" || _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Course" )
+							if( _level0.loader.contentHolder.objGestionnaireEvenements.getOurTable.compareType("Tournament") || _level0.loader.contentHolder.objGestionnaireEvenements.getOurTable.compareType("Course"))
 							{
 
 								var isWin:Boolean = false;

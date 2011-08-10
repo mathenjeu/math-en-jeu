@@ -323,10 +323,7 @@ function traiterReponseCourte()
 	if(rep.text != "")
 	{
 		// faire valider la réponse=rep.text
-		 _level0.loader.contentHolder.objGestionnaireEvenements.repondreQuestion(rep.text);
-		
-		//_level0.loader.contentHolder.fenetreAffichee = false;
-			//_level0.loader.contentHolder.box_question.gotoAndPlay(9);
+		 _level0.loader.contentHolder.objGestionnaireEvenements.repondreQuestion(rep.text);		
 	}	
 	Key.removeListener(oUserKey);
 }

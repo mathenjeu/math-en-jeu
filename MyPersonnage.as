@@ -113,7 +113,7 @@ class MyPersonnage implements IOurPersonnage
 		}
 		//trace("getBraniac " + this.moveVisibility);
 	}
-		
+	
 	public function getFinish(bonus:Number)
 	{ 
 	  if(bonus > 0)
@@ -399,20 +399,20 @@ class MyPersonnage implements IOurPersonnage
 					  bananaClip._x = 30;
                       bananaClip._y = 40;
 					  
-		        }else{
+		        }else if (nomObj == "Livre"){
+				   _level0.loader.contentHolder.objGestionnaireEvenements.getOurPerso().setUsedBook(true);
+				   
+				}else{
 					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(listeObjets[nomObj][listeObjets[nomObj].length - 1], "NA");
 					_level0.loader.contentHolder.objGestionnaireEvenements.getOurPerso().enleverObjet(nomObj);
 				}
-				
-				if(nomObj == "Livre")
-				   _level0.loader.contentHolder.objGestionnaireEvenements.getOurPerso().setUsedBook(true);
-				
+								
 				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._xscale = _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._yscale = 100;
 				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
 			}//end 1st if
 		};		
 		
-		trace("--- FIN ajouterImageBanque ! ---");
+		//trace("--- FIN ajouterImageBanque ! ---");
 	}
 	
 	
@@ -623,27 +623,25 @@ class MyPersonnage implements IOurPersonnage
 		var ourName:String = nom;
 		var mclListener:Object = new Object();
         mclListener.onLoadComplete = function(target_mc:MovieClip) {
-            target_mc.filterC = filterC;
-		    target_mc.nom = ourName;
-						
+			target_mc.filterC = filterC;
+		    target_mc.nom = ourName;					
 			target_mc.gotoAndPlay("bored");
-			//target_mc.gotoAndStop(1);			
+			
 			// assure que le clip a la bonne orientation
 			target_mc._xscale = - Math.abs(target_mc._xscale);
 			target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
 			target_mc.dtNom._x = 42;
+			target_mc._visible = true;	
         };
 		myLoader.addListener(mclListener);
 		
 		this.orient = "right";
-		if(!(role > 1 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")){  
+		if(!(role > 1 && _level0.loader.contentHolder.objGestionnaireEvenements.getOurTable().compareType("Tournament"))){  
   
           image =  _level0.loader.contentHolder.referenceLayer.createEmptyMovieClip("Personnage" + numero, level);
 		  myLoader.loadClip("Perso/perso" + this.idClip + ".swf", image);
-					
-		}
-        
-		
+		  image._visible = false;					
+		}		
 		this.boardCentre = false;
 	}
 	
@@ -1023,6 +1021,10 @@ class MyPersonnage implements IOurPersonnage
 		image._visible = false;
 	}	
 	
+	public function removeImage()
+	{
+		image.removeMovieClip();
+	}
 	//////////////////////////////////////////////////////////////////////////////////////
 	////  pt contient la ligne et la colonne PAS LES X et Y
 	public function definirProchainePosition(pt:Point, str:String)
@@ -1089,7 +1091,7 @@ class MyPersonnage implements IOurPersonnage
 		funcToCallMessage(); 
 		
 		addMoveSight(-2);
-		planche.setRepostCases(true);						 		
+		//planche.setRepostCases(true);						 		
 	}
 	
 	public function correctStateBeforeBanane()
@@ -1174,25 +1176,17 @@ class MyPersonnage implements IOurPersonnage
 			    image.dtNom._xscale = Math.abs(image._xscale);
 			    image.dtNom._x = - 42;
 				this.orient == "left";
-				
-		  } 
+		  }
+		  image._visible = false;
 		  var nameX:String = this.nom;
 		  var orientDir:String = this.orient;
 		  var mclListener:Object = new Object();
           mclListener.onLoadComplete = function(target_mc:MovieClip) {
-            /*
-			trace("orient ::: " + orientDir);
-			if(orientDir == "Est")
-			{
-				target_mc._xscale = - Math.abs(target_mc._xscale);
-			    target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
-			    target_mc.dtNom._x = 42;
-			}*/
-			//target_mc.clothesCol = col;
+           
 			target_mc.filterC = filterC; 
 			target_mc.nom = nameX;
 			target_mc.gotoAndPlay("grow");
-			
+			target_mc._visible = true;			
 			
           };
 		  myLoader.addListener(mclListener);
@@ -1236,27 +1230,18 @@ class MyPersonnage implements IOurPersonnage
 				image._xscale = Math.abs(image._xscale);
 			    image.dtNom._xscale = Math.abs(image._xscale);
 			    image.dtNom._x = - 42;
-				this.orient == "left";
-				
+				this.orient == "left";				
 		  } 
 		  var nameX:String = this.nom;
 		  var orientDir:String = this.orient;
+		  image._visible = false;
 		  var mclListener:Object = new Object();
           mclListener.onLoadComplete = function(target_mc:MovieClip) {
-            /*
-			trace("orient ::: " + orientDir);
-			if(orientDir == "Est")
-			{
-				target_mc._xscale = - Math.abs(target_mc._xscale);
-			    target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
-			    target_mc.dtNom._x = 42;
-			}*/
-			//target_mc.clothesCol = col;
+           		
 			target_mc.filterC = filterC; 
 			target_mc.nom = nameX;
 			target_mc.gotoAndPlay("bored");
-			
-			
+			target_mc._visible = true;			
           };
 		  myLoader.addListener(mclListener);
 
@@ -1308,7 +1293,8 @@ class MyPersonnage implements IOurPersonnage
 			    image.dtNom._xscale = Math.abs(image._xscale);
 			    image.dtNom._x = - 42;
 				playerUnder.setDirection("left");
-			  } 
+		      }
+			  image._visible = false;
 			  myLoader.loadClip("Perso/perso" + id + ".swf", image); 
 			  clearInterval(intervalIDEndBrain);
 			  
@@ -1320,10 +1306,10 @@ class MyPersonnage implements IOurPersonnage
 		var mclListener:Object = new Object();
 		
         mclListener.onLoadComplete = function(target_mc:MovieClip) {
-            
-			target_mc.filterC = filterC;
-			target_mc.nom = playerUnder.obtenirNom();
+           	target_mc.filterC = filterC;
 			target_mc.gotoAndPlay("bored");
+			target_mc.nom = playerUnder.obtenirNom();
+			target_mc._visible = true;
 						
         };
 		myLoader.addListener(mclListener);
@@ -1379,20 +1365,17 @@ class MyPersonnage implements IOurPersonnage
 		   
 		   		   
 		   if(timeX == 0)
-	       {
+	       {			   
 			   playerUnder.addMoveSight(-1);
-			   _level0.loader.contentHolder.planche.setRepostCases(true);
+			   // if is banana there it will repost cases
+			   if(!playerUnder.getBananaState())
+			      _level0.loader.contentHolder.planche.setRepostCases(true);
 			  // to remove the timer box
 			  _level0.loader.contentHolder.brainBox.removeMovieClip();
 		      clearInterval(_global.intervalIdBrain);
 					
-		   }
-		   
-		   
-	   } // end function brainTimerSet
-	   
-	    
-		
+		   } // end if		   
+	   } // end function brainTimerSet		
 	}// end function  setBrainiacTimer
 	
 	private function cancelBanana()

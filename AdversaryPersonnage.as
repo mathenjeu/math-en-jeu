@@ -45,9 +45,6 @@ class AdversaryPersonnage implements IPersonnage
 	private var listeDesObjets:Object;
 	private var faireCollision:String;   // sert a savoir s'il y a eu collision apres un deplacement et avec quoi
 	private var nom:String;               // name of user that is master of pers
-	//private var boardCentre:Boolean;
-	//private var listeSurMagasin:Array;	 // sert a recuperer la liste d'objets du magasin lorsque qu'on va sur une case magasin
-	//private var minigameLoade:Boolean;
 	
 	private var colorId:Number; 
 	private var clothesColor:String;
@@ -57,7 +54,7 @@ class AdversaryPersonnage implements IPersonnage
 	private var bananaId:Number;	
 	private var bananaState:Boolean;
 	private var bananaRestedTime:Number;	
-	//private var usedBook:Boolean;        // set in true if used one book in current question	
+	
 	private var idClip:Number;           // number used to identify the movie used for perso - from 1 to 12
 	private var orient:String;           // orientation ... right or left
 	
@@ -353,6 +350,7 @@ class AdversaryPersonnage implements IPersonnage
 		this.faireCollision = null;
 		this.nom = nom;
 		this.role = role;
+		this.image._visible = false;
 		
 	}// end constr
 	
@@ -376,19 +374,20 @@ class AdversaryPersonnage implements IPersonnage
 		    target_mc.nom = ourName;
 						
 			target_mc.gotoAndPlay("bored");
-			//target_mc.gotoAndStop(1);			
 			// assure que le clip a la bonne orientation
 			target_mc._xscale = - Math.abs(target_mc._xscale);
 			target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
 			target_mc.dtNom._x = 42;
+			target_mc._visible = true;
         };
 		myLoader.addListener(mclListener);
 		
 		this.orient = "right";
-       if(!(role > 1 && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")){  
+       if(!(role > 1 && _level0.loader.contentHolder.objGestionnaireEvenements.getOurTable().compareType("Tournament"))){  
   
           image =  _level0.loader.contentHolder.referenceLayer.createEmptyMovieClip("Personnage" + numero, level);
 		  myLoader.loadClip("Perso/perso" + this.idClip + ".swf", image);
+		  image._visible = false;
 					
 		}
 	}	
@@ -569,7 +568,20 @@ class AdversaryPersonnage implements IPersonnage
 	public function cachePersonnage()
 	{
 		image._visible = false;
-	}	
+	}
+	
+	public function showPersonnage()
+	{
+		image._visible = true;
+	}
+	
+	public function removeImage()
+    {
+		_level0.loader.contentHolder.referenceLayer["Personnage" + numero].removeMovieClip();
+		trace("we remove image from adversary ++++++++++");
+		//removeMovieClip(image);
+		//image.unloadMovie();
+	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////
 	////  pt contient la ligne et la colonne PAS LES X et Y
@@ -655,27 +667,18 @@ class AdversaryPersonnage implements IPersonnage
 				image._xscale = Math.abs(image._xscale);
 			    image.dtNom._xscale = Math.abs(image._xscale);
 			    image.dtNom._x = - 42;
-				this.orient == "left";
-				
+				this.orient == "left";				
 		  } 
+		  image._visible = false;
 		  var nameX:String = this.nom;
 		  var orientDir:String = this.orient;
 		  var mclListener:Object = new Object();
           mclListener.onLoadComplete = function(target_mc:MovieClip) {
-            /*
-			trace("orient ::: " + orientDir);
-			if(orientDir == "Est")
-			{
-				target_mc._xscale = - Math.abs(target_mc._xscale);
-			    target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
-			    target_mc.dtNom._x = 42;
-			}*/
-			//target_mc.clothesCol = col;
+           
 			target_mc.filterC = filterC; 
 			target_mc.nom = nameX;
 			target_mc.gotoAndPlay("grow");
-			
-			
+			target_mc._visible = true;			
           };
 		  myLoader.addListener(mclListener);
 
@@ -716,24 +719,17 @@ class AdversaryPersonnage implements IPersonnage
 				this.orient == "left";
 				
 		  } 
+		  image._visible = false;
 		  var nameX:String = this.nom;
 		  var orientDir:String = this.orient;
 		  var mclListener:Object = new Object();
           mclListener.onLoadComplete = function(target_mc:MovieClip) {
-            /*
-			trace("orient ::: " + orientDir);
-			if(orientDir == "Est")
-			{
-				target_mc._xscale = - Math.abs(target_mc._xscale);
-			    target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
-			    target_mc.dtNom._x = 42;
-			}*/
-			//target_mc.clothesCol = col;
+          			
 			target_mc.filterC = filterC; 
 			target_mc.nom = nameX;
 			target_mc.gotoAndPlay("bored");
-			
-			
+			target_mc._visible = true;
+						
           };
 		  myLoader.addListener(mclListener);
 
@@ -773,17 +769,17 @@ class AdversaryPersonnage implements IPersonnage
 		   }
 		   else if( restedTime == 0 && (image._currentFrame == 1 ||	image._currentFrame == 90 || image._currentFrame == 96))
 	       {
-			 playerUnder.setBrainiac(false);
+			  playerUnder.setBrainiac(false);
 			  if(playerUnder.getDirection() == "right")
 			  {
 				image._xscale = Math.abs(image._xscale);
 			    image.dtNom._xscale = Math.abs(image._xscale);
 			    image.dtNom._x = - 42;
 				playerUnder.setDirection("left");
-			  } 
+			  }
+			  image._visible = false;
 			  myLoader.loadClip("Perso/perso" + id + ".swf", image); 
-			  clearInterval(intervalIDEndBrain);
-			  
+			  clearInterval(intervalIDEndBrain);			  
 		   }  
 		  			
 		}// end method etapeEndBrain   
@@ -796,7 +792,7 @@ class AdversaryPersonnage implements IPersonnage
 			target_mc.filterC = filterC;
 			target_mc.nom = playerUnder.obtenirNom();
 			target_mc.gotoAndPlay("bored");
-						
+			target_mc._visible = true;						
         };
 		myLoader.addListener(mclListener);
 		
@@ -810,6 +806,7 @@ class AdversaryPersonnage implements IPersonnage
 	
 	public function correctStateBeforeBanane()
 	{
+		//???
 	}
 	
 	// used for Banana action on the game
