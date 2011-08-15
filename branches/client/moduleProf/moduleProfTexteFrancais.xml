@@ -56,6 +56,7 @@
 	unselectAllText = "Aucun"
 	nullDateText = "Aucune"
 	roomUnavailableMessage = "&lt;Salle non-disponible en francais&gt;"
+	buttonBug = " Signaler une erreur "
 	
 	dgHeaderPlayerName = "Nom du joueur"
 	dgHeaderNumGames = "# P"
