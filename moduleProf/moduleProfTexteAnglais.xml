@@ -55,6 +55,7 @@
 	unselectAllText = "None"
 	nullDateText = "None"
 	roomUnavailableMessage = "&lt;Room unavailable in English&gt;"
+	buttonBug = " Report an error "
 
 	dgHeaderPlayerName = "Player name"
 	dgHeaderNumGames = "# G"

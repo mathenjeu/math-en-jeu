@@ -42,7 +42,7 @@ class GestionnaireEvenementsProfModule
 	public var  listeDesSalles:Array;    //  liste de toutes les salles de l'utilisateur
 	private var nouvellesSalles:Boolean; //  denote le fait que l'array 'listeDesSalles' a ete update depuis la dernier 
 										 //  command 'ObtenirListeSallesProf'
-	//private var listeChansons:Array;     //  liste de toutes les chansons 
+	private var listeChansons:Array;     //  liste de toutes les chansons 
     private var objGestionnaireCommunication:GestionnaireCommunicationProfModule;  //  pour caller les fonctions du serveur 	
 
   
