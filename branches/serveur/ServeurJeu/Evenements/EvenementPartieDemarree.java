@@ -174,7 +174,7 @@ public class EvenementPartieDemarree extends Evenement
 				{
 					JoueurHumain joueur = ((JoueurHumain)lstJoueurs[i]);
 					// Définir les attributs du noeud courant
-					objNoeudPositionJoueur.setAttribute("nom", joueur.obtenirNomUtilisateur() );
+					objNoeudPositionJoueur.setAttribute("nom", joueur.obtenirNom() );
 					objNoeudPositionJoueur.setAttribute("x", Integer.toString(joueur.obtenirPartieCourante().obtenirPositionJoueur().x));
 					objNoeudPositionJoueur.setAttribute("y", Integer.toString(joueur.obtenirPartieCourante().obtenirPositionJoueur().y));
 					objNoeudPositionJoueur.setAttribute("clocolor", Integer.toString(joueur.obtenirPartieCourante().getClothesColor()));
@@ -184,9 +184,9 @@ public class EvenementPartieDemarree extends Evenement
 					JoueurVirtuel joueurV = ((JoueurVirtuel)lstJoueurs[i]);
 					// Définir les attributs du noeud courant
 					objNoeudPositionJoueur.setAttribute("nom", joueurV.obtenirNom() );
-					objNoeudPositionJoueur.setAttribute("x", Integer.toString(joueurV.obtenirPositionJoueur().x));
-					objNoeudPositionJoueur.setAttribute("y", Integer.toString(joueurV.obtenirPositionJoueur().y));
-					objNoeudPositionJoueur.setAttribute("clocolor", Integer.toString(joueurV.getClothesColor()));
+					objNoeudPositionJoueur.setAttribute("x", Integer.toString(joueurV.obtenirPartieCourante().obtenirPositionJoueur().x));
+					objNoeudPositionJoueur.setAttribute("y", Integer.toString(joueurV.obtenirPartieCourante().obtenirPositionJoueur().y));
+					objNoeudPositionJoueur.setAttribute("clocolor", Integer.toString(joueurV.obtenirPartieCourante().getClothesColor()));
 				}
 				// Ajouter le noeud de position courant au noeud paramètre
 				objNoeudParametrePositionJoueurs.appendChild(objNoeudPositionJoueur);

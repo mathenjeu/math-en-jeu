@@ -70,10 +70,7 @@ public class Regles
 	
 	//max number of players that game can hold
 	private int maxNbPlayers;
-	
-	// This is the maximum number of coins and items a player can hold at one time
-	//private int maxNbObjectsAndMoney;
-	
+		
 	//This is the number of tracks of the board of the game of type "Tournament" or "Course"
 	private int nbTracks;
 	

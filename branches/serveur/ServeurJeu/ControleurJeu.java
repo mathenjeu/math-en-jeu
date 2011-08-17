@@ -77,9 +77,7 @@ public class ControleurJeu {
     // Déclaration de l'objet Espion qui va inscrire des informations à proppos
     // du serveur en parallèle
     //private Espion objEspion;
-   
-    // Déclaration d'un objet random pour générer des nombres aléatoires
-    private static final Random objRandom = new Random();   
+      
     // Déclaration d'une map qui permet d'obtenir une liste de tous les
     // keywords disponible: keyword_id --> [language_id --> name]
     private TreeMap<Integer, TreeMap<Integer, String>> keywordsMap;
@@ -95,6 +93,7 @@ public class ControleurJeu {
     // thread to look for new rooms to add or old rooms to delete
     private SpyRooms objSpyDB;
     
+    private static final Random objRandom = new Random();    
 
     /**
      * Constructeur de la classe ControleurJeu qui permet de créer le gestionnaire
@@ -108,9 +107,6 @@ public class ControleurJeu {
         // Initialiser la classe statique GestionnaireMessages
         GestionnaireMessages.initialiser();
         objLogger.info(GestionnaireMessages.message("controleur_jeu.serveur_demarre"));
-
-        // Préparer l'objet pour créer les nombres aléatoires
-        //objRandom = new Random();
 
         // Créer une liste des joueurs
         lstJoueursConnectes = new HashMap<String, JoueurHumain>();
@@ -382,6 +378,9 @@ public class ControleurJeu {
         	// Ajouter ce nouveau joueur dans la liste des joueurs connectés
         	// au serveur de jeu
         	lstJoueursConnectes.put(username, objJoueurHumain);
+        	
+        	//adjust server info
+            obtenirGestionnaireCommunication().miseAJourInfo();
 
         	// Si on doit générer le numéro de commande de retour, alors
         	// on le génére, sinon on ne fait rien (ça devrait toujours
@@ -470,14 +469,17 @@ public class ControleurJeu {
         // connectés au serveur de jeu pendant qu'on déconnecte le joueur
         synchronized (lstJoueursConnectes) {
         	
-        	System.out.println("! Joueur deconnecter - controleur3 ");     
+        	//System.out.println("! Joueur deconnecter - controleur3 ");     
             // Enlever le joueur de la liste des joueurs connectés
-            lstJoueursConnectes.remove(joueur.obtenirNomUtilisateur());
+            lstJoueursConnectes.remove(joueur.obtenirNom());
             // Enlever la référence du protocole du joueur vers son joueur humain
             // (cela va avoir pour effet que le protocole du joueur va penser que
             // le joueur n'est plus connecté au serveur de jeu)
             joueur.obtenirProtocoleJoueur().setBolStopThread(true);
             joueur.obtenirProtocoleJoueur().definirJoueur(null);
+            
+            //adjust server info
+            obtenirGestionnaireCommunication().miseAJourInfo();
 
             // Si on doit générer le numéro de commande de retour, alors
             // on le génére, sinon on ne fait rien
@@ -489,7 +491,7 @@ public class ControleurJeu {
 
             // Aviser tous les joueurs connectés au serveur de jeu qu'un joueur
             // s'est déconnecté
-            preparerEvenementJoueurDeconnecte(joueur.obtenirNomUtilisateur());
+            preparerEvenementJoueurDeconnecte(joueur.obtenirNom());
             joueur.setObjProtocoleJoueur(null);
 
         }
@@ -623,6 +625,8 @@ public class ControleurJeu {
         synchronized (lstSalles) {
             lstSalles.remove(roomId);
         }
+      //adjust server info
+      obtenirGestionnaireCommunication().miseAJourInfo();
     }// end methode
 
     /**
@@ -692,7 +696,7 @@ public class ControleurJeu {
             // Si le nom d'utilisateur du joueur courant n'est pas celui
             // qui vient de se connecter au serveur de jeu, alors on peut
             // envoyer un événement à cet utilisateur
-            if (!objJoueur.obtenirNomUtilisateur().equalsIgnoreCase(nomUtilisateur)) {
+            if (!objJoueur.obtenirNom().equalsIgnoreCase(nomUtilisateur)) {
                 // Obtenir un numéro de commande pour le joueur courant, créer
                 // un InformationDestination et l'ajouter à l'événement
                 joueurConnecte.ajouterInformationDestination(new InformationDestination(
@@ -746,7 +750,7 @@ public class ControleurJeu {
         for (JoueurHumain objJoueur : lstJoueursConnectes.values())
         {
             //On n'envoi pas d'événement au créateur de la salle
-            if (objJoueur.obtenirNomUtilisateur().equalsIgnoreCase(createurSalle))
+            if (objJoueur.obtenirNom().equalsIgnoreCase(createurSalle))
                     continue;
             // Obtenir un numéro de commande pour le joueur courant, créer
             // un InformationDestination et l'ajouter à l'événement
@@ -784,7 +788,7 @@ public class ControleurJeu {
             // Si le nom d'utilisateur du joueur courant n'est pas celui
             // qui vient de se déconnecter du serveur de jeu, alors on peut
             // envoyer un événement à cet utilisateur
-            if (!objJoueur.obtenirNomUtilisateur().equalsIgnoreCase(nomUtilisateur)) {
+            if (!objJoueur.obtenirNom().equalsIgnoreCase(nomUtilisateur)) {
                 // Obtenir un numéro de commande pour le joueur courant, créer
                 // un InformationDestination et l'ajouter à l'événement
                 joueurDeconnecte.ajouterInformationDestination(new InformationDestination(
@@ -824,7 +828,7 @@ public class ControleurJeu {
     public void ajouterJoueurDeconnecte(JoueurHumain joueurHumain) {
 
         synchronized (lstJoueursDeconnectes) {
-            lstJoueursDeconnectes.put(joueurHumain.obtenirNomUtilisateur(), joueurHumain);
+            lstJoueursDeconnectes.put(joueurHumain.obtenirNom(), joueurHumain);
         }
     }
 
@@ -873,10 +877,6 @@ public class ControleurJeu {
         }
     }
 
-    public int genererNbAleatoire(int max) {
-        return objRandom.nextInt(max);
-    }
- 
     /**
      * Find the language_id corresponding to the 2-letter language string.
      * @param language the 2-letter language to look for ("fr","en")
@@ -921,6 +921,21 @@ public class ControleurJeu {
 
 	public void setNewTimer() {
 		objGestionnaireTemps = new GestionnaireTemps();
+	}
+	
+	public static int genererNbAleatoire(int max)
+    {
+    	//Random objRandom = new Random();
+    	return objRandom.nextInt(max);
+    }
+
+
+	public int getActiveTablesNumber() {
+		int nb = 0;
+		
+		for(Salle room : lstSalles.values())
+			nb += room.getActiveTablesNUmber();
+		return nb;
 	}
 
 }// end class

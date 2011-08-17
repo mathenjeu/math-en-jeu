@@ -1,16 +1,9 @@
 package ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables;
 
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
-import ServeurJeu.Temps.BananaHumainTask;
-import ServeurJeu.Temps.BananaVirtualTask;
-
-import java.util.Timer;
-
 /**
  * @author François Gingras
  * changed Oloieri Lilian
- * last change December 2010
+ * last change August 2011
  */
 public class Banane extends ObjetUtilisable 
 {
@@ -44,7 +37,15 @@ public class Banane extends ObjetUtilisable
 		// Appeler le constructeur du parent
 		super(id, estVisible, UID_OU_BANANE, PRIX, EST_LIMITE, PEUT_ETRE_ARME, TYPE_OBJET);
 	}
+	
+	/*
+	public static void utiliserBanane(Joueur player)
+	{   
+		if(player != null)
+		   player.getPlayerGameInfo().bananaIsUsed();		
+	}*/
 
+	/*
 	public static BananaHumainTask utiliserBanane(JoueurHumain player, long delay)
 	{   
 		//first cancel the Brainiac
@@ -52,16 +53,13 @@ public class Banane extends ObjetUtilisable
 
 		// Create TimerTask and Timer.
 		BananaHumainTask bTask = new BananaHumainTask(player);
-		//Timer bTimer = new Timer();
-		//bkTimer.cancel();
-
+		
 		// effects of Banana
-		//player.obtenirPartieCourante().getBananaState().setisUnderBananaEffects(true);
 		player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() - 2);
 
 		// used timer to take out effects of banana after the needed time
 		player.obtenirProtocoleJoueur().getObjControleurJeu().obtenirGestionnaireTemps().schedule(bTask, delay);
-		///bTimer.schedule(bTask, delay);
+		
 		return bTask;
 
 	}
@@ -71,18 +69,18 @@ public class Banane extends ObjetUtilisable
 	{
 
 		//first cancel the Brainiac
-		player.getBrainiacState().setOffBrainiac();
+		player.obtenirPartieCourante().getBrainiacState().setOffBrainiac();
 
 		// Create TimerTask and Timer.
 		BananaVirtualTask bTask = new BananaVirtualTask(player);
 		Timer bTimer = new Timer();
 
 		// effects of Banana
-		player.getBananaState().setisUnderBananaEffects(true);
+		player.obtenirPartieCourante().getBananaState().setisUnderBananaEffects(true);
 
 		// used timer to take out effects of banana after the needed time
 		bTimer.schedule(bTask, delay);
 		return bTask;
 
-	}
+	}*/
 }// end class

@@ -40,7 +40,7 @@ public class EvenementNouvelleTable extends Evenement
     	this.intTempsPartie = table.obtenirTempsTotal();
     	this.tableName = table.getTableName();
     	this.maxNbPlayers = table.getMaxNbPlayers();
-    	this.gameType = table.getGameType();
+    	this.gameType = table.getGameType().toString();
     }
 	
 	/**

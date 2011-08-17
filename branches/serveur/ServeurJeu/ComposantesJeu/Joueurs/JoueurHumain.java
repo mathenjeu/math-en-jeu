@@ -1,7 +1,6 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
 import ServeurJeu.Communications.ProtocoleJoueur;
-import ServeurJeu.ComposantesJeu.InformationPartieHumain;
 import ServeurJeu.ComposantesJeu.Salle;
 
 /**
@@ -11,15 +10,12 @@ public class JoueurHumain extends Joueur
 {
 	// Déclaration d'une référence vers le protocole du joueur
 	private ProtocoleJoueur objProtocoleJoueur;
-	
-	// Cette variable va contenir le nom d'utilisateur du joueur
-	private final String strNomUtilisateur;
-	
+		
 	// It's player id in the DB
 	private int intCleJoueur;
 
-    // La langue du joueur: "fr" ou "en"
-    private String strLangue;
+	// La langue du joueur: "fr" ou "en"
+    private String strLangue;    
 	
 	// Cette variable va contenir l'adresse IP du joueur
 	private final String strAdresseIP;
@@ -31,13 +27,7 @@ public class JoueurHumain extends Joueur
 	private String strPrenom;
 	
 	// Cette variable va contenir le nom de famille du joueur
-	private String strNomFamille;
-	
-	// Used to distinguish between simple user and administrator
-	// 1 - simple user 
-	// 2 - admin
-	// 3 - prof
-	private int role;
+	private String strNomFamille;	
 	
 	/**
 	 * Déclaration d'un variable qui contient la valeur du niveau du joueur 
@@ -66,22 +56,20 @@ public class JoueurHumain extends Joueur
 	 */
 	public JoueurHumain(ProtocoleJoueur protocole, String nomUtilisateur, String adresseIP, String port) 
 	{
-		super();
+		super(nomUtilisateur);
 
 		// Faire la référence vers le protocole du joueur
 		objProtocoleJoueur = protocole;
 		
 		// Garder en mémoire le nom d'utilisateur, l'adresse IP et le port du
-		// joueur
-		strNomUtilisateur = nomUtilisateur;
+		// joueur		
 		strAdresseIP = adresseIP;
 		strPort = port;
 		
 		// Initialiser les caractéristiques du joueur
 		//strPrenom = "";
 		//strNomFamille = "";
-       strLangue = protocole.getLang();
-				
+       				
 	}
 
 	/**
@@ -96,17 +84,7 @@ public class JoueurHumain extends Joueur
 		return objProtocoleJoueur;
 	}
 	
-		
-	/**
-	 * Cette fonction permet de retourner le nom d'utilisateur du joueur.
-	 * 
-	 * @return String : Le nom d'utilisateur du joueur
-	 */
-	public String obtenirNomUtilisateur()
-	{
-		return strNomUtilisateur;
-	}
-
+	
 	/**
 	 * Cette fonction permet de retourner l'adresse IP du joueur.
 	 * 
@@ -218,19 +196,6 @@ public class JoueurHumain extends Joueur
 		this.intCleJoueur = cle;
 	}
 
-        public String obtenirLangue()
-        {
-            return strLangue;
-        }
-
-        public void definirLangue(String lang)
-        {
-            strLangue = lang;
-            if (!lang.equals("fr") && !lang.equals("en"))
-                strLangue = "fr";
-        }
-
-	
 	public void enleverObjet(int intIdObjet, String strTypeObjet)
 	{
 		objPartieCourante.enleverObjet(intIdObjet, strTypeObjet);
@@ -247,20 +212,7 @@ public class JoueurHumain extends Joueur
 		this.cleNiveau = cleNiveau;
 	} 
 	
-	/**
-	 * @return the role
-	 */
-	public int getRole() {
-		return role;
-	}
-
-	/**
-	 * @param role le role de ce joueur.  1=normal,2=admin,3=prof
-	 */
-	public void setRole(int role) {
-		this.role = role;
-	}
-
+	
 	/**
 	 * Cette méthode permet de définir la référence vers l'information sur la 
 	 * partie courante du joueur.
@@ -278,5 +230,23 @@ public class JoueurHumain extends Joueur
 	public void setObjProtocoleJoueur(ProtocoleJoueur protocoleJoueur) {
 		objProtocoleJoueur = protocoleJoueur;
 		
+	}
+	
+	public InformationPartie getPlayerGameInfo()
+	{
+		return objPartieCourante;
+	}
+	
+	public String obtenirLangue()
+	{
+		return strLangue;
+	}
+
+	public void definirLangue(String lang)
+	{
+		strLangue = lang;
+		if (!lang.equals("fr") && !lang.equals("en"))
+			strLangue = "fr";
 	}	
+	
 }

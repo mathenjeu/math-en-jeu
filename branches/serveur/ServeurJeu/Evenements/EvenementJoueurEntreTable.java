@@ -6,6 +6,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 import ClassesUtilitaires.UtilitaireXML;
+import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
@@ -34,14 +36,14 @@ public class EvenementJoueurEntreTable extends Evenement
      * joueur qui vient d'entrer dans la table. 
      * @param colorS 
      */
-    public EvenementJoueurEntreTable(int noTable, String nomUtilisateur, int role, int color)
+    public EvenementJoueurEntreTable(int noTable, Joueur player)
     {
         // Définir le numéro de la table et le nom d'utilisateur du joueur 
     	// qui est entré
     	intNoTable = noTable;
-        strNomUtilisateur = nomUtilisateur;
-        userRole = role;
-        clothesColor = color;
+        strNomUtilisateur = player.obtenirNom();
+        userRole = player.getRole();
+        clothesColor = player.getPlayerGameInfo().getClothesColor();
     }
 	
 	/**
