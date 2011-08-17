@@ -11,6 +11,8 @@ import java.util.TreeSet;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import ServeurJeu.ComposantesJeu.Questions.InformationQuestion;
+
 /**
  *
  * @author David

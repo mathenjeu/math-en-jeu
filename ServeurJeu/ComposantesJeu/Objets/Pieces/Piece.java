@@ -1,6 +1,7 @@
 package ServeurJeu.ComposantesJeu.Objets.Pieces;
 
 import ServeurJeu.ComposantesJeu.Objets.Objet;
+//import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 
 /**
  * @author Jean-François Brind'Amour

@@ -15,13 +15,15 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import org.apache.log4j.Logger;
+
+import Enumerations.GameType;
 import Enumerations.Visibilite;
 import ServeurJeu.ControleurJeu;
-import ServeurJeu.ComposantesJeu.InformationPartieHumain;
-import ServeurJeu.ComposantesJeu.InformationQuestion;
 import ServeurJeu.ComposantesJeu.RapportDeSalle;
 import ServeurJeu.ComposantesJeu.Salle;
+import ServeurJeu.ComposantesJeu.Joueurs.InformationPartieHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.ComposantesJeu.Questions.InformationQuestion;
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesCaseSpeciale;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
@@ -190,7 +192,7 @@ public class GestionnaireBD {
                         "FROM jos_users " +
                         "LEFT JOIN jos_comprofiler ON jos_users.id = jos_comprofiler.user_id " +
                         "LEFT JOIN jos_comprofiler_field_values ON jos_comprofiler_field_values.fieldtitle = jos_comprofiler.cb_gradelevel " +
-                        "WHERE jos_users.username =  '" + joueur.obtenirNomUtilisateur() + "'");
+                        "WHERE jos_users.username =  '" + joueur.obtenirNom() + "'");
                 
                 if (rs.next()) {
                     String prenom = rs.getString("lastname");
@@ -292,20 +294,13 @@ public class GestionnaireBD {
      *
      * Retour: la clé de partie qui servira pour la table partieJoueur
      */
-    public int ajouterInfosPartieTerminee(int room_id, String gameType, Date dateDebut, int dureePartie, int cleJoueurGagnant) {
+    public int ajouterInfosPartieTerminee(int room_id, GameType gameType, Date dateDebut, int dureePartie, int cleJoueurGagnant) {
         String strDate = mejFormatDate.format(dateDebut);
         String strHeure = mejFormatHeure.format(dateDebut);
         // Création du SQL pour l'ajout
-        //System.out.println("Game type: " + gameType);
-        int gameTypeId;
-        if (gameType.equalsIgnoreCase("mathEnJeu"))
-            gameTypeId = 1;
-        else if (gameType.equalsIgnoreCase("Tournament"))
-            gameTypeId = 2;
-        else
-            gameTypeId = 3;
+                
         String strSQL = "INSERT INTO game(room_id, game_type_id, date, hour, duration,winner_id) " +
-                "VALUES (" + room_id + "," + gameTypeId + ",'" + strDate + "','" + strHeure + "'," + dureePartie + "," + cleJoueurGagnant + ")";
+                "VALUES (" + room_id + "," + gameType.getIntValue() + ",'" + strDate + "','" + strHeure + "'," + dureePartie + "," + cleJoueurGagnant + ")";
 
         try {
             synchronized (DB_LOCK) {
@@ -777,16 +772,11 @@ public class GestionnaireBD {
      * @param gameType
      * @param roomId
      */
-    public void chargerReglesTable(Regles objReglesTable, String gameType, int roomId) {
+    public void chargerReglesTable(Regles objReglesTable, GameType gameType, int roomId) {
 
-        int gameTypeID = 1; // default type - mathEnJeu
-        if (gameType.equals("Tournament"))
-            gameTypeID = 2;
-        if (gameType.equals("Course"))
-            gameTypeID = 3;
-        try {
+       try {
             synchronized (DB_LOCK) {
-                ResultSet rs = requete.executeQuery("SELECT rule.*  FROM rule WHERE rule.rule_id = " + gameTypeID + ";");
+                ResultSet rs = requete.executeQuery("SELECT rule.*  FROM rule WHERE rule.rule_id = " + gameType.getIntValue() + ";");
                 while (rs.next()) {
                     boolean shownumber = rs.getBoolean("show_nb_questions");
                     boolean chat = rs.getBoolean("chat");
@@ -1626,6 +1616,7 @@ public class GestionnaireBD {
      *     game_type_id --> name
      * @return the map of game_type_id to name for all game types in the DB.
      */
+    //  OL  I think is to be deleted - not very goog solution
     public TreeMap<Integer, String> getGameTypesMap() {
         TreeMap<Integer, String> gameTypes = new TreeMap<Integer, String>();
         try {

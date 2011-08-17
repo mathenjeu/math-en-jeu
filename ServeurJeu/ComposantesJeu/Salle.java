@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import Enumerations.GameType;
 import Enumerations.RetourFonctions.ResultatEntreeTable;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
@@ -151,9 +152,9 @@ public class Salle
     }// end method
     
     /**
-     * Cette fonction permet de générer un nouveau numéro de table.
+     * Cette fonction permet de générer un nouveau numéro de la table.
      *
-     * @return int : Le numéro de table généré
+     * @return int : Le numéro de la table généré
      *
      * @synchronism Cette fonction n'a pas besoin d'être synchronisée, car
      * 				elle doit l'être par la fonction appelante. La
@@ -206,7 +207,7 @@ public class Salle
             // cette salle pendant l'ajout du nouveau joueur dans cette salle
             synchronized (lstJoueurs) {
                 // Ajouter ce nouveau joueur dans la liste des joueurs de cette salle
-                lstJoueurs.put(joueur.obtenirNomUtilisateur(), joueur);
+                lstJoueurs.put(joueur.obtenirNom(), joueur);
            
 
             // Le joueur est maintenant entré dans la salle courante
@@ -225,7 +226,7 @@ public class Salle
             // Cette fonction va passer les joueurs et créer un
             // InformationDestination pour chacun et ajouter l'événement
             // dans la file de gestion d'événements
-            preparerEvenementJoueurEntreSalle(joueur.obtenirNomUtilisateur());
+            preparerEvenementJoueurEntreSalle(joueur.obtenirNom());
            }
 
             //objControleurJeu.obtenirGestionnaireBD().fillUserLevels(joueur, this);
@@ -268,7 +269,7 @@ public class Salle
         // cette salle pendant que le joueur quitte cette salle
         synchronized (lstJoueurs) {
             // Enlever le joueur de la liste des joueurs de cette salle
-            lstJoueurs.remove(joueur.obtenirNomUtilisateur());
+            lstJoueurs.remove(joueur.obtenirNom());
 
             // Le joueur est maintenant dans aucune salle
             joueur.definirSalleCourante(null);
@@ -286,7 +287,7 @@ public class Salle
             // Cette fonction va passer les joueurs et créer un
             // InformationDestination pour chacun et ajouter l'événement
             // dans la file de gestion d'événements
-            preparerEvenementJoueurQuitteSalle(joueur.obtenirNomUtilisateur());
+            preparerEvenementJoueurQuitteSalle(joueur.obtenirNom());
         }
     }
 
@@ -313,22 +314,23 @@ public class Salle
      * 		joueurs de la salle et leur envoyer un événement. La
      * 		fonction entrerTable est synchronisée automatiquement.
      */
-    public int creerTable(JoueurHumain joueur, int tempsPartie, boolean doitGenererNoCommandeRetour, String name, int intNbLines, int intNbColumns, String gameType) {
-        // Déclaration d'une variable qui va contenir le numéro de la table
-        int intNoTable;
-
+    public int creerTable(JoueurHumain joueur, int tempsPartie, boolean doitGenererNoCommandeRetour, String name, int intNbLines, int intNbColumns, GameType gameType) {
+    	Table objTable;
         // Empêcher d'autres thread de toucher à la liste des tables de
         // cette salle pendant la création de la table
         synchronized (lstTables) {
             //System.out.println("Salle - cree table : " + intNbLines + " " + intNbColumns);
             // Créer une nouvelle table en passant les paramètres appropriés
-            Table objTable = new Table(this, genererNoTable(), joueur, tempsPartie, name, intNbLines, intNbColumns, gameType);
+           objTable = new Table(this, genererNoTable(), joueur, tempsPartie, name, intNbLines, intNbColumns, gameType);
 
             // Ajouter la table dans la liste des tables
             lstTables.put(new Integer(objTable.obtenirNoTable()), objTable);
 
             // Ajouter le numéro de la table dans la liste des numéros de table
             lstNoTables.add(new Integer(objTable.obtenirNoTable()));
+            
+            //adjust server info
+            objControleurJeu.obtenirGestionnaireCommunication().miseAJourInfo();
 
             // Si on doit générer le numéro de commande de retour, alors
             // on le génère, sinon on ne fait rien (ça devrait toujours
@@ -346,18 +348,16 @@ public class Salle
                 // Cette fonction va passer les joueurs et créer un
                 // InformationDestination pour chacun et ajouter l'événement
                 // dans la file de gestion d'événements
-                preparerEvenementNouvelleTable(objTable, joueur.obtenirNomUtilisateur());
+                preparerEvenementNouvelleTable(objTable, joueur.obtenirNom());
             }
 
             // Entrer dans la table on ne fait rien avec la liste des
             // personnages
             objTable.entrerTable(joueur, false);
-
-            // Garder le numéro de table pour le retourner
-            intNoTable = objTable.obtenirNoTable();
+           
         }
 
-        return intNoTable;
+        return objTable.obtenirNoTable();
     }
 
     /**
@@ -413,6 +413,7 @@ public class Salle
             else if (lstTables.get(noTable).estCommencee() == true) {
                 // Une partie est en cours
                 strResultatEntreeTable = ResultatEntreeTable.PartieEnCours;
+                
             } else {
                 // Appeler la méthode permettant d'entrer dans la table
                 lstTables.get(noTable).entrerTableAutres(joueur, doitGenererNoCommandeRetour);
@@ -442,13 +443,17 @@ public class Salle
         Table t = (Table)lstTables.get(new Integer(tableADetruire.obtenirNoTable()));
         if (t != null) {
             t.destruction();
-        }
+        }        
+       
         // Enlever la table de la liste des tables de cette salle
         lstTables.remove(new Integer(tableADetruire.obtenirNoTable()));
 
         // On enlève le numéro de la table dans la liste des numéros de table
         // pour le rendre disponible pour une autre table
         lstNoTables.remove(new Integer(tableADetruire.obtenirNoTable()));
+        
+        //adjust server info
+        objControleurJeu.obtenirGestionnaireCommunication().miseAJourInfo();
 
         // Empêcher d'autres thread de toucher à la liste des joueurs de
         // cette salle pendant qu'on parcourt tous les joueurs de la salle
@@ -514,7 +519,7 @@ public class Salle
             // Si le nom d'utilisateur du joueur courant n'est pas celui
             // qui vient d'entrer dans la salle, alors on peut envoyer un
             // événement à cet utilisateur
-            if (objJoueur.obtenirNomUtilisateur().equals(nomUtilisateur)) {
+            if (objJoueur.obtenirNom().equals(nomUtilisateur)) {
                 continue;
             }
             // Obtenir un numéro de commande pour le joueur courant, créer
@@ -547,7 +552,7 @@ public class Salle
         // aux joueurs qu'un joueur a quitté la salle
         EvenementJoueurQuitteSalle joueurQuitteSalle = new EvenementJoueurQuitteSalle(nomUtilisateur);
         for (JoueurHumain objJoueur: lstJoueurs.values()) {
-            if (objJoueur.obtenirNomUtilisateur().equals(nomUtilisateur)) {
+            if (objJoueur.obtenirNom().equals(nomUtilisateur)) {
                 continue;
             }
             // Obtenir un numéro de commande pour le joueur courant, créer
@@ -586,7 +591,7 @@ public class Salle
             // Si le nom d'utilisateur du joueur courant n'est pas celui
             // qui vient de créer la table, alors on peut envoyer un
             // événement à cet utilisateur
-            if (objJoueur.obtenirNomUtilisateur().equals(nomUtilisateur)) {
+            if (objJoueur.obtenirNom().equals(nomUtilisateur)) {
                 continue;
             }
 
@@ -797,6 +802,10 @@ public class Salle
 	public void setObjGestionnaireEvenements(
 			GestionnaireEvenements objGestionnaireEvenements) {
 		this.objGestionnaireEvenements = objGestionnaireEvenements;
+	}
+
+	public int getActiveTablesNUmber() {
+		return lstTables.size();
 	}
 	
 }// end class 

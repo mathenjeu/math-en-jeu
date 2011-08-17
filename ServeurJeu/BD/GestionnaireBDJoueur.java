@@ -8,10 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import org.apache.log4j.Logger;
-import ServeurJeu.ComposantesJeu.BoiteQuestions;
 import ServeurJeu.ComposantesJeu.Language;
-import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.ComposantesJeu.Questions.BoiteQuestions;
+import ServeurJeu.ComposantesJeu.Questions.Question;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
@@ -115,6 +115,9 @@ public final class GestionnaireBDJoueur {
         // Pour tenir compte de la langue
         int cleLang = 1;
         BoiteQuestions boite = objJoueurHumain.obtenirPartieCourante().getObjBoiteQuestions();
+        //System.out.println("end boite: " + System.currentTimeMillis());
+        
+        
         String URL = boite.obtenirLangue().getURLQuestionsAnswers();
         Language language = boite.obtenirLangue();
         String langue = language.getLanguage();
@@ -133,7 +136,6 @@ public final class GestionnaireBDJoueur {
         if (niveau < 1)
             niveau = objJoueurHumain.obtenirCleNiveau() + 1;
         int room_id = objJoueurHumain.obtenirSalleCourante().getRoomId();
-
 
         String strRequeteSQL = "SELECT  question.answer_type_id, answer.is_right,question.question_id," +
                 " question_info.question_flash_file, question_info.feedback_flash_file, question_level.value" +
@@ -187,7 +189,7 @@ public final class GestionnaireBDJoueur {
 
         remplirBoiteQuestionsTF(boite, strRequeteSQL_TF, URL);
 
-        //System.out.println("end boite: " + System.currentTimeMillis());
+       // System.out.println("end boite: " + System.currentTimeMillis());
        
        boite.getBoxSize();
        ArrayList<Integer> lastQuestions = null;

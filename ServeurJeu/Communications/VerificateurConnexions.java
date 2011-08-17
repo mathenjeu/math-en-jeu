@@ -140,7 +140,7 @@ public class VerificateurConnexions implements Runnable
 					if (lstClientsPresents.contains(protocole) == false )
 					{
 						// Arrêter le ProtocoleJoueur
-						objLogger.error(" Error - protocol canceled in VerificateurConnexions for "  + protocole.obtenirJoueurHumain().obtenirNomUtilisateur());
+						objLogger.error(" Error - protocol canceled in VerificateurConnexions - " + protocole.obtenirAdresseIP());
 
 						protocole.setBolStopThread(true);
 						this.objGestionnaireCommunication.supprimerProtocoleJoueur(protocole);
@@ -190,7 +190,7 @@ public class VerificateurConnexions implements Runnable
 			if (compteurPing == intCompteurPing)
 			{
 				lstClientsPresents.add(protocole);
-				objLogger.info("ping N " + compteurPing + " returned for " + protocole.obtenirJoueurHumain().obtenirNomUtilisateur());
+				objLogger.info("ping N " + compteurPing + " returned for " + protocole.obtenirJoueurHumain().obtenirNom());
 			}
 		}
 	}

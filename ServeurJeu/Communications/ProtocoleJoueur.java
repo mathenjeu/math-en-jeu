@@ -29,23 +29,24 @@ import ClassesUtilitaires.UtilitaireNombres;
 import ClassesUtilitaires.UtilitaireXML;
 import Enumerations.Commande;
 import Enumerations.Filtre;
+import Enumerations.GameType;
 import Enumerations.TypeQuestion;
 import Enumerations.RetourFonctions.ResultatAuthentification;
 import Enumerations.RetourFonctions.ResultatDemarrerPartie;
 import Enumerations.RetourFonctions.ResultatEntreeTable;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.BD.GestionnaireBD;
-import ServeurJeu.ComposantesJeu.InformationPartieHumain;
-import ServeurJeu.ComposantesJeu.Question;
 import ServeurJeu.ComposantesJeu.RapportDeSalle;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Table;
+import ServeurJeu.ComposantesJeu.Joueurs.InformationPartieHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
+import ServeurJeu.ComposantesJeu.Questions.Question;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import ServeurJeu.Evenements.EvenementPartieDemarree;
 import ServeurJeu.Evenements.EvenementSynchroniserTemps;
@@ -265,9 +266,9 @@ public class ProtocoleJoueur implements Runnable
             objLogger.error(te.getMessage());
         } catch (Exception e) {
             objLogger.error(GestionnaireMessages.message("protocole.erreur_thread"));
-            objLogger.error(e.getMessage() + " *** " + e.getStackTrace());            
+            objLogger.error(e.getLocalizedMessage() + " *** " + e.getStackTrace());            
         } finally {
-        	objLogger.error("We reched finally in protocol");
+        	objLogger.error("For some reasons reched finally in protocol");
         	arreterProtocoleJoueur();
         }
         
@@ -334,7 +335,7 @@ public class ProtocoleJoueur implements Runnable
     //Si non: on met "JoueurNonDeconnecte" à l'attribut "nom" du noeudCommande et on retourne true
     //Si oui: on retourne false
     private boolean erreurJoueurNonDeconnecte(Element noeudCommande) {
-        if (!objControleurJeu.estJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur())) {
+        if (!objControleurJeu.estJoueurDeconnecte(objJoueurHumain.obtenirNom())) {
             noeudCommande.setAttribute("nom", "JoueurNonDeconnecte");
             return true;
         }
@@ -564,7 +565,7 @@ public class ProtocoleJoueur implements Runnable
         // On enlève le joueur déconnecté de la liste des joueurs déconnectés
         // on ne l'enlève pas de la liste des joueurs déconnectés de la table car on ne
         // vérifie qu'avec la liste des joueurs déconnectés du controleur de jeu
-        objControleurJeu.enleverJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
+        objControleurJeu.enleverJoueurDeconnecte(objJoueurHumain.obtenirNom());
         noeudCommande.setAttribute("type", "Reponse");
         noeudCommande.setAttribute("nom", "Ok");
     }
@@ -584,7 +585,7 @@ public class ProtocoleJoueur implements Runnable
 
         // On renvoie l'état du jeu au joueur pour qu'il puisse reprendre sa partie
         JoueurHumain objAncientJoueurHumain =
-                     objControleurJeu.obtenirJoueurHumainJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
+                     objControleurJeu.obtenirJoueurHumainJoueurDeconnecte(objJoueurHumain.obtenirNom());
 
         // Envoyer la liste des joueurs
         objAncientJoueurHumain.obtenirPartieCourante().setColorID();
@@ -599,7 +600,7 @@ public class ProtocoleJoueur implements Runnable
         objJoueurHumain.obtenirPartieCourante().obtenirTable().restartGame(objJoueurHumain, true);
 
         // Enlever le joueur de la liste des joueurs déconnectés
-        objControleurJeu.enleverJoueurDeconnecte(objJoueurHumain.obtenirNomUtilisateur());
+        objControleurJeu.enleverJoueurDeconnecte(objJoueurHumain.obtenirNom());
         Salle objSalle = objJoueurHumain.obtenirPartieCourante().obtenirTable().getObjSalle();
         objControleurJeu.entrerSalle(objJoueurHumain, objSalle.getRoomId(), objSalle.getPassword(), false);
 
@@ -663,7 +664,7 @@ public class ProtocoleJoueur implements Runnable
         synchronized (lstListeJoueurs) {
             for (JoueurHumain objJoueur: lstListeJoueurs.values()) {
                 Element objNoeudJoueur = docSortie.createElement("joueur");
-                objNoeudJoueur.setAttribute("nom", objJoueur.obtenirNomUtilisateur());
+                objNoeudJoueur.setAttribute("nom", objJoueur.obtenirNom());
                 objNoeudParametreListeJoueurs.appendChild(objNoeudJoueur);
             }
         }
@@ -733,7 +734,7 @@ public class ProtocoleJoueur implements Runnable
         Element objNoeudParametreListeSalles = docSortie.createElement("parametre");
         objNoeudParametreListeSalles.setAttribute("type", "ListeSalles");
         synchronized (objControleurJeu.obtenirListeSalles()) {
-            for (Salle objSalle: objControleurJeu.obtenirListeSallesCreateur(objJoueurHumain.obtenirNomUtilisateur()).values()) {
+            for (Salle objSalle: objControleurJeu.obtenirListeSallesCreateur(objJoueurHumain.obtenirNom()).values()) {
                 Element objNoeudSalle = docSortie.createElement("salle");
                 objNoeudSalle.setAttribute("id", Integer.toString(objSalle.getRoomId()));
                 //Créer les enfants <name>
@@ -878,7 +879,7 @@ public class ProtocoleJoueur implements Runnable
 
         objControleurJeu.ajouterNouvelleSalle(new Salle(
                 objControleurJeu,
-                roomId, password, objJoueurHumain.obtenirNomUtilisateur(), roomType,
+                roomId, password, objJoueurHumain.obtenirNom(), roomType,
                 dateBeginDate, dateEndDate, Integer.parseInt(masterTime),
                 names, descriptions, setKeywordIds, setGameTypeIds));
 
@@ -974,7 +975,7 @@ public class ProtocoleJoueur implements Runnable
         //This replaces the old room with the new one.
         objControleurJeu.ajouterNouvelleSalle(new Salle(
                 objControleurJeu,
-                Integer.parseInt(roomId), password, objJoueurHumain.obtenirNomUtilisateur(), roomType,
+                Integer.parseInt(roomId), password, objJoueurHumain.obtenirNom(), roomType,
                 dateBeginDate, dateEndDate, Integer.parseInt(masterTime),
                 names, descriptions, setKeywordIds, setGameTypeIds));
 
@@ -1142,7 +1143,7 @@ public class ProtocoleJoueur implements Runnable
             for (JoueurHumain objJoueur: lstListeJoueurs.values()) {
                 // Créer le noeud du joueur courant
                 Element objNoeudJoueur = docSortie.createElement("joueur");
-                objNoeudJoueur.setAttribute("nom", objJoueur.obtenirNomUtilisateur());
+                objNoeudJoueur.setAttribute("nom", objJoueur.obtenirNom());
                 objNoeudParametreListeJoueurs.appendChild(objNoeudJoueur);
             }
         }
@@ -1211,13 +1212,13 @@ public class ProtocoleJoueur implements Runnable
                     objNoeudTable.setAttribute("temps", Integer.toString(objTable.obtenirTempsTotal()));
                     objNoeudTable.setAttribute("tablName", objTable.getTableName());
                     objNoeudTable.setAttribute("maxNbPlayers", Integer.toString(objTable.getMaxNbPlayers()));
-                    objNoeudTable.setAttribute("gameType", objTable.getGameType());
+                    objNoeudTable.setAttribute("gameType", objTable.getGameType().toString());
                     for (JoueurHumain objJoueur: lstListeJoueurs.values()) {
                         // Créer le noeud du joueur courant
                         Element objNoeudJoueur = docSortie.createElement("joueur");
-                        objNoeudJoueur.setAttribute("nom", objJoueur.obtenirNomUtilisateur());
+                        objNoeudJoueur.setAttribute("nom", objJoueur.obtenirNom());
                         objNoeudJoueur.setAttribute("idPersonnage", Integer.toString(objJoueur.obtenirPartieCourante().obtenirIdPersonnage()));
-                        objNoeudJoueur.setAttribute("cloColor", Integer.toString(objJoueur.obtenirPartieCourante().getClothesColor()));
+                        objNoeudJoueur.setAttribute("cloColor", Integer.toString(objJoueur.getPlayerGameInfo().getClothesColor()));
                         objNoeudTable.appendChild(objNoeudJoueur);
                     }
                     objNoeudParametreListeTables.appendChild(objNoeudTable);
@@ -1248,15 +1249,19 @@ public class ProtocoleJoueur implements Runnable
         int intNbColumns = Integer.parseInt(obtenirValeurParametre(noeudEntree, "NbColumns").getNodeValue());
 
         String name = obtenirValeurParametre(noeudEntree, "TableName").getNodeValue();
-        String type = obtenirValeurParametre(noeudEntree, "GameType").getNodeValue();
+        GameType type = GameType.get((obtenirValeurParametre(noeudEntree, "GameType").getNodeValue()));
         //System.out.println("Protocole - create table : " + intNbColumns + " " + intNbLines + " " + type);
 
         // Appeler la méthode permettant de créer la nouvelle
         // table et d'entrer le joueur dans cette table
         int intNoTable = objJoueurHumain.obtenirSalleCourante().creerTable(
                 objJoueurHumain, intTempsPartie, true, name, intNbLines, intNbColumns, type);
+        
+        //System.out.println("Protocole - create table : " + intNbColumns + " " + intNbLines + " " + type);
 
         name = objJoueurHumain.obtenirPartieCourante().obtenirTable().getTableName();
+        
+        //System.out.println("Protocole - create table - name : " + name);
         // Ajouter le noeud paramètre du numéro de la table
         Element objNoeudParametreNoTable = docSortie.createElement("parametre");
         objNoeudParametreNoTable.setAttribute("type", "NoTable");
@@ -1272,7 +1277,7 @@ public class ProtocoleJoueur implements Runnable
         // Ajouter le noeud pour le paramètre contenant la couleur du joueur
         Element objNoeudParametreColorPersonnage = docSortie.createElement("parametre");
         objNoeudParametreColorPersonnage.setAttribute("type", "Color");
-        objNoeudParametreColorPersonnage.appendChild(docSortie.createTextNode(Integer.toString(objJoueurHumain.obtenirPartieCourante().getClothesColor())));
+        objNoeudParametreColorPersonnage.appendChild(docSortie.createTextNode(Integer.toString(objJoueurHumain.getPlayerGameInfo().getClothesColor())));
         noeudCommande.appendChild(objNoeudParametreColorPersonnage);
 
         // Ajouter le noeud pour le paramètre contenant la nombre maximum de joueur
@@ -1280,6 +1285,8 @@ public class ProtocoleJoueur implements Runnable
         objNoeudParametreMaxNbPlayers.setAttribute("type", "MaxNbPlayers");
         objNoeudParametreMaxNbPlayers.appendChild(docSortie.createTextNode("" + objJoueurHumain.obtenirPartieCourante().obtenirTable().getMaxNbPlayers()));
         noeudCommande.appendChild(objNoeudParametreMaxNbPlayers);
+        
+        //System.out.println("Protocole - create table final : " + intNbColumns + " " + intNbLines + " " + type);
     }
 
     private void traiterCommandeEntrerTable(Element noeudEntree, Element noeudCommande) {
@@ -1326,7 +1333,7 @@ public class ProtocoleJoueur implements Runnable
         objNoeudParametreListePersonnageJoueurs.setAttribute("type", "ListePersonnageJoueurs");
         for (int i = 0; i < listInit.length; i++) {
             Element objNoeudPersonnage = docSortie.createElement("personnage");
-            objNoeudPersonnage.setAttribute("nom", listInit[i].obtenirNomUtilisateur());
+            objNoeudPersonnage.setAttribute("nom", listInit[i].obtenirNom());
             objNoeudPersonnage.setAttribute("idPersonnage", ((Integer)listInit[i].obtenirPartieCourante().obtenirIdPersonnage()).toString());
             objNoeudPersonnage.setAttribute("role", ((Integer)listInit[i].getRole()).toString());
             objNoeudPersonnage.setAttribute("clothesColor", Integer.toString(listInit[i].obtenirPartieCourante().getClothesColor()));
@@ -1750,7 +1757,7 @@ public class ProtocoleJoueur implements Runnable
         // Préparer un événement pour les autres joueurs de la table
         // pour qu'il se tienne à jour du pointage de ce joueur
         objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementMAJPointage(
-                objJoueurHumain.obtenirNomUtilisateur(),
+                objJoueurHumain.obtenirNom(),
                 objJoueurHumain.obtenirPartieCourante().obtenirPointage());
     }
 
@@ -1786,7 +1793,7 @@ public class ProtocoleJoueur implements Runnable
         // Préparer un événement pour les autres joueurs de la table
         // pour qu'il se tienne à jour de l'argent de ce joueur
         objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementMAJArgent(
-                objJoueurHumain.obtenirNomUtilisateur(),
+                objJoueurHumain.obtenirNom(),
                 objJoueurHumain.obtenirPartieCourante().obtenirArgent());
     }
 
@@ -1858,14 +1865,14 @@ public class ProtocoleJoueur implements Runnable
             // On obtient la liste des joueurs humains, puis la liste des joueurs virtuels
             HashMap<String, JoueurHumain> listeJoueursHumains = infoPartie.obtenirTable().obtenirListeJoueurs();
             for (JoueurHumain objJoueur: listeJoueursHumains.values()) {
-                if (objJoueur.obtenirNomUtilisateur().equals(playerName)) {
+                if (objJoueur.obtenirNom().equals(playerName)) {
                     estHumain = true;
                     break;
                 }
             }
 
             infoPartie.obtenirTable().preparerEvenementUtiliserObjet(
-                    objJoueurHumain.obtenirNomUtilisateur(),
+                    objJoueurHumain.obtenirNom(),
                     playerName,
                     "Banane",
                     "");
@@ -1878,7 +1885,7 @@ public class ProtocoleJoueur implements Runnable
                 }
                 
             }else{
-            	infoPartie.obtenirTable().obtenirJoueurVirtuelParSonNom(playerName).getBananaState().startBanana();
+            	infoPartie.obtenirTable().obtenirJoueurVirtuelParSonNom(playerName).obtenirPartieCourante().getBananaState().startBanana();
             }
 
         } else if (strTypeObjet.equals("Brainiac")) {
@@ -1933,7 +1940,7 @@ public class ProtocoleJoueur implements Runnable
                         // Préparer un événement pour les autres joueurs de la table
                         // pour qu'il se tienne à jour de l'argent de ce joueur
                         objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementMAJArgent(
-                                objJoueurHumain.obtenirNomUtilisateur(),
+                                objJoueurHumain.obtenirNom(),
                                 objJoueurHumain.obtenirPartieCourante().obtenirArgent());
 
                         // Retourner une réponse positive au joueur
@@ -1980,7 +1987,7 @@ public class ProtocoleJoueur implements Runnable
         noeudCommande.setAttribute("type", "OK");
         // Obtenir le message à envoyer à tous et le nom du joueur qui l'envoie
         String messageAEnvoyer = obtenirValeurParametre(noeudEntree, "messageAEnvoyer").getNodeValue();
-        String nomJoueur = objJoueurHumain.obtenirNomUtilisateur();
+        String nomJoueur = objJoueurHumain.obtenirNom();
         // On prépare l'événement qui enverra le message à tous
         objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementMessageChat(
                 nomJoueur,
@@ -2907,7 +2914,7 @@ public class ProtocoleJoueur implements Runnable
         // chaque joueur et l'ajouter au noeud de paramètre
         for (JoueurHumain joueurHumain: lstJoueurs.values()) {
             Element objNoeudJoueur = objDocumentXML.createElement("joueur");
-            objNoeudJoueur.setAttribute("nom", joueurHumain.obtenirNomUtilisateur());
+            objNoeudJoueur.setAttribute("nom", joueurHumain.obtenirNom());
             objNoeudJoueur.setAttribute("id", Integer.toString(joueurHumain.obtenirPartieCourante().obtenirIdPersonnage()));
             objNoeudJoueur.setAttribute("role", Integer.toString(joueurHumain.getRole()));
             objNoeudJoueur.setAttribute("pointage", Integer.toString(joueurHumain.obtenirPartieCourante().obtenirPointage()));
@@ -2924,7 +2931,7 @@ public class ProtocoleJoueur implements Runnable
         Element objNoeudJoueur = objDocumentXML.createElement("joueur");
 
         // On ajoute les attributs nom et id identifiant le joueur
-        objNoeudJoueur.setAttribute("nom", ancientJoueur.obtenirNomUtilisateur());
+        objNoeudJoueur.setAttribute("nom", ancientJoueur.obtenirNom());
         objNoeudJoueur.setAttribute("id", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirIdPersonnage()));
         objNoeudJoueur.setAttribute("role", Integer.toString(ancientJoueur.getRole()));
         objNoeudJoueur.setAttribute("pointage", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirPointage()));
@@ -2945,12 +2952,12 @@ public class ProtocoleJoueur implements Runnable
 
                 // On ajoute les attributs nom et id identifiant le joueur
                 objNoeudJoueur.setAttribute("nom", objJoueurVirtuel.obtenirNom());
-                objNoeudJoueur.setAttribute("id", Integer.toString(objJoueurVirtuel.obtenirIdPersonnage()));
-                objNoeudJoueur.setAttribute("role", Integer.toString(1));
-                objNoeudJoueur.setAttribute("pointage", Integer.toString(objJoueurVirtuel.obtenirPointage()));
-                objNoeudJoueur.setAttribute("clocolorID", Integer.toString(objJoueurVirtuel.getClothesColor()));
-                objNoeudJoueur.setAttribute("brainiacState", Boolean.toString(objJoueurVirtuel.getBrainiacState().isInBrainiac()));
-                objNoeudJoueur.setAttribute("brainiacTime", Integer.toString(objJoueurVirtuel.getBrainiacState().getTaskTime()));
+                objNoeudJoueur.setAttribute("id", Integer.toString(objJoueurVirtuel.obtenirPartieCourante().obtenirIdPersonnage()));
+                objNoeudJoueur.setAttribute("role", Integer.toString(objJoueurVirtuel.getRole()));
+                objNoeudJoueur.setAttribute("pointage", Integer.toString(objJoueurVirtuel.obtenirPartieCourante().obtenirPointage()));
+                objNoeudJoueur.setAttribute("clocolorID", Integer.toString(objJoueurVirtuel.obtenirPartieCourante().getClothesColor()));
+                objNoeudJoueur.setAttribute("brainiacState", Boolean.toString(objJoueurVirtuel.obtenirPartieCourante().getBrainiacState().isInBrainiac()));
+                objNoeudJoueur.setAttribute("brainiacTime", Integer.toString(objJoueurVirtuel.obtenirPartieCourante().getBrainiacState().getTaskTime()));
 
                 // Ajouter le noeud de l'item au noeud du paramètre
                 objNoeudParametreListeJoueurs.appendChild(objNoeudJoueur);
@@ -3125,7 +3132,7 @@ public class ProtocoleJoueur implements Runnable
     	objNoeudParametreMaxPlayers.setAttribute("type", "MaxPlayers");
     	objNoeudParametreMaxPlayers.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().obtenirTable().getMaxNbPlayers()));
     	objNoeudParametreGameType.setAttribute("type", "GameType");
-    	objNoeudParametreGameType.setAttribute("valeur", ancientJoueur.obtenirPartieCourante().obtenirTable().getGameType());
+    	objNoeudParametreGameType.setAttribute("valeur", ancientJoueur.obtenirPartieCourante().obtenirTable().getGameType().toString());
     	objNoeudParametreMoveStep.setAttribute("type", "MoveStep");
     	objNoeudParametreMoveStep.setAttribute("valeur", Integer.toString(ancientJoueur.obtenirPartieCourante().getMoveVisibility()));
     	
