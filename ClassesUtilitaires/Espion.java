@@ -272,7 +272,7 @@ public class Espion implements Runnable{
 
 						
 						// Ajouter le nom du joueur humain
-						strJoueursConnectes.append(objJoueurHumain.obtenirNomUtilisateur());
+						strJoueursConnectes.append(objJoueurHumain.obtenirNom());
 					}
 					else
 					{
@@ -311,7 +311,7 @@ public class Espion implements Runnable{
 					strJoueursConnectes.append(", ");
 				}
 				
-				strJoueursConnectes.append(((JoueurHumain)((Map.Entry<String,JoueurHumain>)objIterateurListeJoueursConnectes.next()).getValue()).obtenirNomUtilisateur());
+				strJoueursConnectes.append(((JoueurHumain)((Map.Entry<String,JoueurHumain>)objIterateurListeJoueursConnectes.next()).getValue()).obtenirNom());
 			    intCompteur++;
 			}
         }
@@ -350,7 +350,7 @@ public class Espion implements Runnable{
 					strJoueursDeconnectes.append(", ");
 				}
 				
-				strJoueursDeconnectes.append(((JoueurHumain)((Map.Entry<String,JoueurHumain>)objIterateurListeJoueursDeconnectes.next()).getValue()).obtenirNomUtilisateur());
+				strJoueursDeconnectes.append(((JoueurHumain)((Map.Entry<String,JoueurHumain>)objIterateurListeJoueursDeconnectes.next()).getValue()).obtenirNom());
 			    intCompteur++;
 			}
         }
@@ -506,7 +506,7 @@ public class Espion implements Runnable{
 	         	   	     	JoueurHumain objJoueurHumain = (JoueurHumain)(((Map.Entry<String,JoueurHumain>)(objIterateurListeJoueurs.next())).getValue());
 	         	   	     	
 	         	   	     	// Ajouter le nom d'utilisateur du joueur
-	         	   	     	strTables.append(objJoueurHumain.obtenirNomUtilisateur());
+	         	   	     	strTables.append(objJoueurHumain.obtenirNom());
 
                          }
                          
