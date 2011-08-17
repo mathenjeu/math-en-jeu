@@ -33,7 +33,7 @@ count = bananaPlayers.length;
 for (i = 0; i < count; i++) {
 	//trace("ICI CLOCOLOR : " + bananaPlayers[i].role + " " +  bananaPlayers[i].nom);
 	//trace("ICI Banana toss : " + count);
-	if((bananaPlayers[i].role == 2 || bananaPlayers[i].role == 3) && _level0.loader.contentHolder.objGestionnaireEvenements.typeDeJeu == "Tournament")
+	if((bananaPlayers[i].role == 2 || bananaPlayers[i].role == 3) && _level0.loader.contentHolder.objGestionnaireEvenements.getOurTable().compareType("Tournament"))
 	   bananaPlayers.splice(i,1);
 }// end for
 
