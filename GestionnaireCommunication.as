@@ -1134,7 +1134,7 @@ class GestionnaireCommunication
                             
 							//Begin with the points for finish
 							var intValeurCase:Number = Number(lstChildNodesCase[j].attributes.type);
-							if( _level0.loader.contentHolder.objGestionnaireEvenements.getOurTable.compareType("Tournament") || _level0.loader.contentHolder.objGestionnaireEvenements.getOurTable.compareType("Course"))
+							if( _level0.loader.contentHolder.objGestionnaireEvenements.getOurTable().compareType("Tournament") || _level0.loader.contentHolder.objGestionnaireEvenements.getOurTable().compareType("Course"))
 							{
 
 								var isWin:Boolean = false;
