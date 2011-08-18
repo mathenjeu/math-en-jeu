@@ -1,10 +1,12 @@
-package ServeurJeu.ComposantesJeu;
+package ServeurJeu.ComposantesJeu.GenerateurPartie;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 import ServeurJeu.BD.GestionnaireBD;
+import ServeurJeu.ComposantesJeu.Salle;
+import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
@@ -55,7 +57,7 @@ public abstract class GenerateurPartie
 	// va nous servir pour identifier les cases qui ont été passées
 	protected CaseCouleur objCaseParcourue;
 			
-	// Nbs lines and columns in the table to be constracted   
+	// Nbs lines and columns in the table to be build   
 	protected int intNbColumns;
 	protected int intNbLines;
 	
@@ -103,7 +105,7 @@ public abstract class GenerateurPartie
      * @throws NullPointerException : Si la liste passée en paramètre qui doit 
      * 								  être remplie est nulle
      */
-    protected abstract Case[][] genererPlateauJeu(ArrayList<Point> lstPointsCaseLibre, ArrayList<Point> lstPointsFinish, 
+    public abstract Case[][] genererPlateauJeu(ArrayList<Point> lstPointsCaseLibre, ArrayList<Point> lstPointsFinish, 
     		Table table) throws NullPointerException;
 
 
@@ -131,5 +133,34 @@ public abstract class GenerateurPartie
      * @param Vector listePointsCaseLibre : La liste des points des cases libres
      * @return Point[] : Un tableau de points pour chaque joueur 
      */
-    protected abstract Point[] genererPositionJoueurs(Table table, int nbJoueurs, ArrayList<Point> lstPointsCaseLibre);
+    public abstract Point[] genererPositionJoueurs(Table table, int nbJoueurs, ArrayList<Point> lstPointsCaseLibre);
+    
+    /**
+     * @return the nbLines
+     */
+    public int getNbLines() {
+        return intNbLines;
+    }
+
+    /**
+     * @param nbLines the nbLines to set
+     */
+    public void setNbLines(int nbLines) {
+        this.intNbLines = nbLines;
+    }
+ 
+
+    /**
+     * @return the nbColumns
+     */
+    public int getNbColumns() {
+        return intNbColumns;
+    }
+
+    /**
+     * @param nbColumns the nbColumns to set
+     */
+    public void setNbColumns(int nbColumns) {
+        this.intNbColumns = nbColumns;
+    }
 }

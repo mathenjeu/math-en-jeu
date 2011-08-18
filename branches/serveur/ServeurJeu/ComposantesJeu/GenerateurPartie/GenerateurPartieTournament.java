@@ -1,4 +1,4 @@
-package ServeurJeu.ComposantesJeu;
+package ServeurJeu.ComposantesJeu.GenerateurPartie;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import Enumerations.Visibilite;
+import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
@@ -19,9 +20,6 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Boule;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Brainiac;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Livre;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.PotionGros;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.PotionPetit;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Telephone;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
@@ -74,34 +72,15 @@ public class GenerateurPartieTournament extends GenerateurPartie {
     	    	
 		int temps = table.obtenirTempsTotal();
 		
-		//System.out.println("temps : " + temps);
-		//System.out.println("lignes avant : " + intNbLines);
-		//System.out.println("colognes avant : " + intNbColumns);
-		//System.out.println("max min avant : " + reglesPartie.obtenirTempsMaximal() + " " + reglesPartie.obtenirTempsMinimal() + " " + reglesPartie.getNbTracks()); 
-		
 		// calculate number of lines and of columns 
 		// holes - is number of holes between tracks
 		int holes = 2;
-	    intNbColumns = (reglesPartie.getNbTracks() + holes) * (reglesPartie.obtenirTempsMinimal() * 2 + 1) - holes; // factor - 1;
-
-   	    intNbLines = temps + reglesPartie.obtenirTempsMaximal();     	 
-    	   	 
-    	
-   	    //System.out.println("temps : " + temps);
-		//System.out.println("lignes avant : " + intNbLines);
-		//System.out.println("colognes avant : " + intNbColumns);
-   	    
+		if(intNbColumns == 0)
+	       intNbColumns = (reglesPartie.getNbTracks() + holes) * (reglesPartie.obtenirTempsMinimal() * 2 + 1) - holes; // factor - 1;
+		if(intNbLines == 0)
+   	       intNbLines = temps + reglesPartie.obtenirTempsMaximal();     	 
    	    if (intNbLines < 8)
     		  intNbLines = 8;
-				
-		if(table.getNbLines() != 0)
-			intNbLines = table.getNbLines();
-		if(table.getNbColumns() != 0)
-			intNbColumns = table.getNbColumns();
-		
-		//System.out.println("temps : " + temps);
-		//System.out.println("lignes av : " + intNbLines);
-		//System.out.println("colognes av : " + intNbColumns);
 				
 		// Déclaration de variables qui vont garder le nombre de trous, 
 		// le nombre de cases spéciales, le nombres de magasins,
@@ -111,15 +90,7 @@ public class GenerateurPartieTournament extends GenerateurPartie {
 		int intNbMagasins = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioMagasins());
 		int intNbPieces = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioPieces());
 		int intNbObjetsUtilisables = (int) Math.floor(intNbLines * intNbColumns * reglesPartie.obtenirRatioObjetsUtilisables());
-
-		//System.out.println("temps : " + temps);
-		//System.out.println("lignes : " + intNbLines);
-		//System.out.println("colognes : " + intNbColumns);
-		
-		// to set the correct values on the table
-		table.setNbLines(intNbLines);
-		table.setNbColumns(intNbColumns);
-				
+	
 		// Maintenant qu'on a le nombre de lignes et de colonnes, on va créer
 		// le tableau à 2 dimensions représentant le plateau de jeu (null est 
 		// mis par défaut dans chaque élément)
@@ -223,25 +194,15 @@ public class GenerateurPartieTournament extends GenerateurPartie {
                     {
                         Boule objAAjouter = new Boule(intCompteurIdObjet, true);
                         objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                    }
-                    else if(nomDeLObjet.equals("Telephone"))
-                    {
-                        Telephone objAAjouter = new Telephone(intCompteurIdObjet, true);
-                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                    }
-                    else if(nomDeLObjet.equals("PotionGros"))
-                    {
-                        PotionGros objAAjouter = new PotionGros(intCompteurIdObjet, true);
-                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                    }
-                    else if(nomDeLObjet.equals("PotionPetit"))
-                    {
-                        PotionPetit objAAjouter = new PotionPetit(intCompteurIdObjet, true);
-                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
-                    }
+                    }                    
                     else if(nomDeLObjet.equals("Banane"))
                     {
                         Banane objAAjouter = new Banane(intCompteurIdObjet, true);
+                        objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
+                    }
+                    else if(nomDeLObjet.equals("Brainiac"))
+                    {
+                        Brainiac objAAjouter = new Brainiac(intCompteurIdObjet, false);
                         objMagasin.ajouterObjetUtilisable((ObjetUtilisable)objAAjouter);
                     }
                     
@@ -357,27 +318,12 @@ public class GenerateurPartieTournament extends GenerateurPartie {
 						objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Book"))
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Livre(intCompteurIdObjet, bolEstVisible));					
-				}
-                                
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Telephone"))
-				{
-					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Telephone(intCompteurIdObjet, bolEstVisible));					
-				}
+				}                         
                                 else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Boule") ||
                                 		objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Sphere"))
 				{
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Boule(intCompteurIdObjet, bolEstVisible));					
-				}
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("PotionGros") ||
-                                		objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Big mixture"))
-				{
-					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new PotionGros(intCompteurIdObjet, bolEstVisible));					
-				}
-                                else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("PotionPetit") ||
-                                		objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Small mixture"))
-				{
-					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new PotionPetit(intCompteurIdObjet, bolEstVisible));					
-				}
+				}                                
                                 else if (objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Banane") ||
                                 		objReglesObjetUtilisable.obtenirNomObjetUtilisable().equals("Banana"))
 				{
