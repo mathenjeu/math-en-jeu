@@ -1,7 +1,8 @@
 package ServeurJeu.Temps;
 
 import java.util.TimerTask;
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+
+import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 
 /**
  * @author Oloieri Lilian
@@ -14,30 +15,29 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
  *
  */
 
-public class BananaHumainTask extends TimerTask {
+public class BananaTask extends TimerTask {
 
 	// reference to the human player to suffer the banana
-	private JoueurHumain player;
+	private Joueur player;
 	// boolean to cancel the task if the game is over
 	private boolean runIt;
 		
-	public BananaHumainTask(JoueurHumain player){
+	public BananaTask(Joueur player){
 		this.player = player;
 		this.runIt = true;
 	}
 	
 	// override abstract run methode 
 	public void run() {
-	    if(player != null && runIt && player.obtenirPartieCourante() != null){
-	    	player.obtenirPartieCourante().getBananaState().setisUnderBananaEffects(false);
-	    	player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() + 2);
-	    	//System.out.println("BananaTask humain!!!!");
+	    if(player != null && runIt && player.getPlayerGameInfo() != null){
+	    	player.getPlayerGameInfo().setOffBanana();	    	
 	    }
 	    runIt = false;
 	}// end run
 	
 	public void cancelTask(){
-		this.runIt = false;		
+		this.runIt = false;
+		player = null;
 	}
 
 }// end class

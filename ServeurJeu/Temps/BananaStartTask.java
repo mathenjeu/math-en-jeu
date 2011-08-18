@@ -1,19 +1,18 @@
 package ServeurJeu.Temps;
 
 import java.util.TimerTask;
+import ServeurJeu.ComposantesJeu.Joueurs.PlayerBananaState;
 
-import ServeurJeu.ComposantesJeu.Joueurs.HumainPlayerBananaState;
+public class BananaStartTask extends TimerTask {
 
-public class HumainBananaStartTask extends TimerTask {
-
-	// reference to the human player to suffer the banana
-	private HumainPlayerBananaState playerState;
+	// reference to the player to suffer the banana
+	private PlayerBananaState playerState;
 	// boolean to cancel the task if the game is over
 	private boolean runIt;
 	
 	
 	
-	public HumainBananaStartTask(HumainPlayerBananaState playerState) {
+	public BananaStartTask(PlayerBananaState playerState) {
 		super();
 		this.playerState = playerState;
 		this.runIt = true;
@@ -31,5 +30,4 @@ public class HumainBananaStartTask extends TimerTask {
 	public void cancelTask(){
 		runIt = false;				
 	}
-
 }

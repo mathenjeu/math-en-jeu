@@ -1,8 +1,7 @@
 package ServeurJeu.Temps;
 
 import java.util.TimerTask;
-
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
+import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 
 /**
  * 
@@ -12,30 +11,31 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
  * after the needed amount of time (Seconds)
  * (more move possibility and softer questions)
  *
- * last change November 2010
+ * last change August 2011
  */
 
-public class BrainiacVirtuelTask extends TimerTask {
-	
-	private JoueurVirtuel vplayer;
+public class BrainiacTask extends TimerTask {
+
+	// reference to human to apply brainiac to
+	private Joueur player;
 	// boolean to cancel the task if the game is over
 	private boolean runIt;
-	
-	public BrainiacVirtuelTask(JoueurVirtuel vplayer){
-		this.vplayer = vplayer;
+		
+	public BrainiacTask(Joueur player){
+		this.player = player;
 		this.runIt = true;
 	}
 	
 	// override abstract run methode 
 	public void run() {
-	    if(runIt && vplayer != null){
-	    	vplayer.getBrainiacState().setInBrainiac(false);
-	    	//System.out.println("BraniacTask virtuel!!!!");
-	    }
+	    if(runIt && player != null && player.getPlayerGameInfo() != null){
+	    		
+	    	player.getPlayerGameInfo().setOffBrainiac();	
+	    }  
 	    runIt = false;
 	}// end run
 	
 	public void cancelTask(){
 		this.runIt = false;		
-	}	
-} // end class
+	}
+}
