@@ -52,9 +52,7 @@ public class VerificateurConnexions implements Runnable
 	 */
 	public void run()
 	{
-    	//Thread.currentThread().setPriority( Thread.currentThread().getPriority() - 2 );
-
-		// Boucler tant qu'il ne faut pas arrêter le thread
+    	// Boucler tant qu'il ne faut pas arrêter le thread
 		while (bolStopThread == false)
 		{
 			
@@ -79,22 +77,22 @@ public class VerificateurConnexions implements Runnable
 			// Déclaration d'une liste de ProtocoleJoueur qui va contenir
 			// une copie de la liste des ProtocoleJoueur du gestionnaire de 
 			// communication
-			LinkedList<ProtocoleJoueur> lstCopieProtocoleJoueur = null;
+			//LinkedList<ProtocoleJoueur> lstCopieProtocoleJoueur = null;
 			
 			// Empêcher d'autres threads de toucher à la liste des protocoles 
 			// de joueur
 			synchronized (lstProtocoleJoueur)
 			{
 				// Faire une copie de la liste des ProtocoleJoueur
-				lstCopieProtocoleJoueur = (LinkedList<ProtocoleJoueur>) lstProtocoleJoueur.clone();
+				//lstCopieProtocoleJoueur = (LinkedList<ProtocoleJoueur>) lstProtocoleJoueur. .clone();
 	       
 
 				// Passer tous les objets ProtocoleJoueur et envoyer un message ping
 				// à chacun pour savoir s'il est là
-				for (int i = 0; i < lstCopieProtocoleJoueur.size(); i++)
+				for (int i = 0; i < lstProtocoleJoueur.size(); i++)
 				{
 					// Envoyer un message ping au client courant
-					((ProtocoleJoueur) lstCopieProtocoleJoueur.get(i)).envoyerEvenementPing(intCompteurPing);
+					((ProtocoleJoueur) lstProtocoleJoueur.get(i)).envoyerEvenementPing(intCompteurPing);
 				}
 		
 			 }	
@@ -119,10 +117,10 @@ public class VerificateurConnexions implements Runnable
 			// la liste. On fait exception pour les joueurs en train de jouer
 			// une partie, dans ce cas, on ne les déconnecte pas tant que
 			// la partie est en cours
-			for (int i = 0; i < lstCopieProtocoleJoueur.size(); i++)
+			for (int i = 0; i < lstProtocoleJoueur.size(); i++)
 			{
 				// Faire la référence vers le ProtocoleJoueur courant
-				ProtocoleJoueur protocole = (ProtocoleJoueur) lstCopieProtocoleJoueur.get(i);
+				ProtocoleJoueur protocole = (ProtocoleJoueur) lstProtocoleJoueur.get(i);
 
 				// Si le joueur est en train de jouer sur une table, alors
 				// on attend, peut-être il se reconnectera et pourra
@@ -140,7 +138,7 @@ public class VerificateurConnexions implements Runnable
 					if (lstClientsPresents.contains(protocole) == false )
 					{
 						// Arrêter le ProtocoleJoueur
-						objLogger.error(" Error - protocol canceled in VerificateurConnexions - " + protocole.obtenirAdresseIP());
+						objLogger.info(" No reponse - protocol canceled in VerificateurConnexions - " + protocole.obtenirAdresseIP());
 
 						protocole.setBolStopThread(true);
 						this.objGestionnaireCommunication.supprimerProtocoleJoueur(protocole);
