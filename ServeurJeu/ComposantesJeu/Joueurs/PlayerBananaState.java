@@ -1,10 +1,8 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
 import java.util.Timer;
-
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Banane;
-import ServeurJeu.Temps.BananaHumainTask;
-import ServeurJeu.Temps.HumainBananaStartTask;
+import ServeurJeu.Temps.BananaStartTask;
+import ServeurJeu.Temps.BananaTask;
 
 /**
  * Used to treat the Banana's applied to users
@@ -18,15 +16,15 @@ import ServeurJeu.Temps.HumainBananaStartTask;
  * date 10 March 2010
  */
 
-public class HumainPlayerBananaState {
+public class PlayerBananaState {
 	
 	// timer task to start effets of Banana
 	// we need to wait 5 sec to apply the effets
 	// time to banana arrive to the player feets
-	private HumainBananaStartTask startTask;
+	private BananaStartTask startTask;
 	
 	// timer task actually applied to player
-	private BananaHumainTask bTask;
+	private BananaTask bTask;
 	
 	// time to end of the actual banana
 	private long taskDate;
@@ -35,23 +33,23 @@ public class HumainPlayerBananaState {
 	private boolean isUnderBananaEffects;
 	
 	// our player
-	private JoueurHumain player;
-		
+	private Joueur player;
+			
 	private static final long BANANA_TIME = 90000;
 	private static final int START_TIME = 5000;
 
 	// constructor - in the first time we are not in the Banana
-	public HumainPlayerBananaState(JoueurHumain player) {
+	public PlayerBananaState(Joueur player) {
 		//super();
 		this.player = player;
 	}
 	
 	// setters and getters 
-	public void setBTask(BananaHumainTask bTask) {
+	public void setBTask(BananaTask bTask) {
 		this.bTask = bTask;
 	}
 
-	public BananaHumainTask getBTask() {
+	public BananaTask getBTask() {
 		return bTask;
 	}
 
@@ -83,7 +81,8 @@ public class HumainPlayerBananaState {
 	 */
 	public void startBanana()
 	{
-		this.startTask = new HumainBananaStartTask(this);
+		player.getPlayerGameInfo().setOffBrainiac();
+		this.startTask = new BananaStartTask(this);
 		
 		Timer xTimer = new Timer();
 		// used timer to put the effects of banana after the needed time
@@ -97,19 +96,23 @@ public class HumainPlayerBananaState {
 	public void bananaIsTossed()
 	{
 		if(player != null){
-			if(this.isUnderBananaEffects == false){
-				
-				this.isUnderBananaEffects = true;
-			    this.bTask = Banane.utiliserBanane(player, BANANA_TIME);
-			    this.taskDate = System.currentTimeMillis() + BANANA_TIME;
+			if(isUnderBananaEffects == false){				
+		    	// effects of Banana
+				isUnderBananaEffects = true;
+				bTask = new BananaTask(player);
+				player.getPlayerGameInfo().setOnBanana();
+				// used timer to take out effects of banana after the needed time
+				player.getPlayerGameInfo().obtenirTable().obtenirGestionnaireTemps().schedule(bTask, BANANA_TIME);
+				taskDate = System.currentTimeMillis() + BANANA_TIME;
 			    
 			}else
 			{
-				this.bTask.cancelTask();
-				long tempDate = this.taskDate  + BANANA_TIME;
-				this.bTask = Banane.utiliserBanane(player, tempDate);
-				this.taskDate = tempDate;
-				//System.out.println("BraniacTask !!!! " + tempDate + " " + " " + bTask);								
+				bTask.cancelTask();
+				long tempDate = taskDate  + BANANA_TIME;
+				bTask = new BananaTask(player);
+				player.getPlayerGameInfo().setOnBanana();
+				player.getPlayerGameInfo().obtenirTable().obtenirGestionnaireTemps().schedule(bTask, tempDate);
+				taskDate = tempDate;										
 			}	
 		}
 		
@@ -121,10 +124,9 @@ public class HumainPlayerBananaState {
 	 */
 	public void setOffBanana()
 	{
-		if(this.isUnderBananaEffects){
-			this.isUnderBananaEffects = false;
-			this.bTask.cancelTask();
-			player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() + 2);
+		if(isUnderBananaEffects){
+			isUnderBananaEffects = false;
+			bTask.cancelTask();			
 		}
 	}
 	

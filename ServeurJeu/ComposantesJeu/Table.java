@@ -959,11 +959,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					int clePartie = objGestionnaireBD.ajouterInfosPartieTerminee(
 							objSalle.getRoomId(), gameType, objDateDebutPartie, intTempsTotal, cleJoueurGagnant);
 
-					if(clePartie == -1)
-						objLogger.error("Une erreur est survenue: - erreur dans ajouterInfosPartieTerminee ");
-
-
-
 					preparerEvenementPartieTerminee(ourResults, joueurGagnant);
 
 					// Parcours des joueurs pour mise à jour de la BD et

@@ -1,4 +1,4 @@
-package ServeurJeu.ComposantesJeu;
+package ServeurJeu.ComposantesJeu.Joueurs;
 
 import java.awt.Point;
 import java.io.BufferedWriter;
@@ -8,18 +8,16 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import ServeurJeu.BD.GestionnaireBDJoueur;
-import ServeurJeu.Evenements.GestionnaireEvenements;
+import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
-import ServeurJeu.ComposantesJeu.Joueurs.HumainPlayerBrainiacState;
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
-import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
-import ServeurJeu.ComposantesJeu.Joueurs.HumainPlayerBananaState;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
+import ServeurJeu.ComposantesJeu.Questions.BoiteQuestions;
+import ServeurJeu.ComposantesJeu.Questions.InformationQuestion;
+import ServeurJeu.ComposantesJeu.Questions.Question;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ServeurJeu.ControleurJeu;
 import java.util.LinkedList;
@@ -27,17 +25,16 @@ import java.util.LinkedList;
 /**
  * @author Jean-François Brind'Amour
  */
-public class InformationPartieHumain
+public class InformationPartieHumain extends InformationPartie
 {
 	// Déclaration d'une référence vers le gestionnaire de bases de données
 	private final GestionnaireBDJoueur objGestionnaireBD;
 	// Déclaration d'une référence vers le gestionnaire d'evenements
-	private final GestionnaireEvenements objGestionnaireEv;
+	//private final GestionnaireEvenements objGestionnaireEv;
 	// Déclaration d'une référence vers un joueur humain correspondant à cet
 	// objet d'information de partie
 	private final JoueurHumain objJoueurHumain;
-	// Déclaration d'une référence vers la table courante
-	private final Table objTable;
+	
 	// Déclaration d'une variable qui va contenir le numéro Id du personnage
 	private int intIdPersonnage;
 	private int idDessin;
@@ -64,11 +61,8 @@ public class InformationPartieHumain
 	// cet objet
 	private final BoiteQuestions objBoiteQuestions;
 	// object that describe and manipulate 
-	// the Banana state of the player
-	private HumainPlayerBananaState bananaState;
-	// object that describe and manipulate 
 	// the Braniac state of the player
-	private HumainPlayerBrainiacState brainiacState;
+	private PlayerBrainiacState brainiacState;
 	// to not get twice bonus
 	// used in course ou tournament types of game
 	private boolean wasOnFinish;
@@ -80,12 +74,7 @@ public class InformationPartieHumain
 	// Bonus is given while arrived at finish line and is calculated
 	// as number of rested game time(in sec)
 	private int tournamentBonus;
-	// this is the code of the set of colors of the clothes in the player's picture
-	// user can change it in the frame 3 of the client
-	// each of 12 picture in this set has his color
-	// so final color is combination of this code and the picture
-	// selected by user
-	private int clothesColor;
+	
 	// used to count how many times the QuestionsBox is filled
 	// if is filled after
 	private int countFillBox;
@@ -96,9 +85,11 @@ public class InformationPartieHumain
 
 	// temporary created for analyse the questions posed to the player
 	private StringBuffer boiteQuestionsInfo;
-	
+
 	// time in seconds as reference to calculate time of reponse
-    private int questionTimeReference;
+	private int questionTimeReference;
+	
+	protected PlayerBananaState bananaState;
 
 	/**
 	 * Constructeur de la classe InformationPartie qui permet d'initialiser
@@ -108,13 +99,15 @@ public class InformationPartieHumain
 	 * @param joueur
 	 * @param tableCourante
 	 */
-	public InformationPartieHumain(GestionnaireEvenements gestionnaireEv, JoueurHumain joueur, Table tableCourante) {
+	public InformationPartieHumain(JoueurHumain joueur, Table tableCourante) {
 
+		super(tableCourante, joueur);
+		
 		// Faire la référence vers le gestionnaire de base de données
 		objGestionnaireBD = new GestionnaireBDJoueur(joueur);
 
 		// Faire la référence vers le gestionnaire d'evenements
-		objGestionnaireEv = gestionnaireEv;
+		//objGestionnaireEv = gestionnaireEv;
 
 		// Faire la référence vers le joueur humain courant
 		objJoueurHumain = joueur;
@@ -123,9 +116,6 @@ public class InformationPartieHumain
 		//intPointage = 0;
 
 		//intIdPersonnage = 0;
-
-		// Faire la référence vers la table courante
-		objTable = tableCourante;
 
 		// charge money from DB if is permited
 		//intArgent = 0;
@@ -154,31 +144,35 @@ public class InformationPartieHumain
 		//tournamentBonus = 0;
 
 		// set the color to default
-		clothesColor = 0;
+		//clothesColor = 0;
 
 		// Brainiac state
-		this.brainiacState = new HumainPlayerBrainiacState(joueur);
-
+		brainiacState = new PlayerBrainiacState(joueur);
 		// Banana state
-		this.bananaState = new HumainPlayerBananaState(joueur);
-
-		String language = joueur.obtenirProtocoleJoueur().getLang();
+		bananaState = new PlayerBananaState(joueur);
+		
 		this.setBoiteQuestionsInfo();
-		this.objBoiteQuestions = new BoiteQuestions(language, objGestionnaireBD.transmitUrl(language),  this.boiteQuestionsInfo);
+		this.objBoiteQuestions = new BoiteQuestions(objJoueurHumain.obtenirProtocoleJoueur().getLang(),
+				objGestionnaireBD.transmitUrl(objJoueurHumain.obtenirProtocoleJoueur().getLang()),
+				this.boiteQuestionsInfo);
+		
+		init();		
 
 	}// fin constructeur
+	
+	private void init()
+	{		
+        setClothesColor(objTable.getOneColor());        
+	}
 
+	/*
 	public void destruction() {
 
 		this.brainiacState.destruction();
 		this.bananaState.destruction();
 		this.brainiacState = null;
-		this.bananaState = null;
-		objGestionnaireBD.finalize();
-		/*   objGestionnaireEv = null;
-        objJoueurHumain = null;
-        objTable = null;*/
-	}
+		this.bananaState = null;		
+	}*/
 
 	/**
 	 * @return the tournamentBonus
@@ -192,16 +186,6 @@ public class InformationPartieHumain
 	 */
 	public void setTournamentBonus(int tournamentBonus) {
 		this.tournamentBonus = tournamentBonus;
-	}
-
-	/**
-	 * Cette fonction permet de retourner la référence vers la table courante
-	 * du joueur.
-	 *
-	 * @return Table : La référence vers la table de cette partie
-	 */
-	public Table obtenirTable() {
-		return objTable;
 	}
 
 	/**
@@ -240,7 +224,7 @@ public class InformationPartieHumain
 	public int obtenirArgent() {
 		return intArgent;
 	}
-	
+
 	/**
 	 * This method is used to add the value to player money.
 	 *
@@ -483,7 +467,7 @@ public class InformationPartieHumain
 		//System.out.println("Difficulte de la question : " + intDifficulte);   // test
 
 		// if is under Banana effects
-		if (this.bananaState.isUnderBananaEffects() && intDifficulte < 6) {
+		if (bananaState.isUnderBananaEffects() && intDifficulte < 6) {
 			intDifficulte++;
 		}
 		// if is under Brainiac effects
@@ -538,9 +522,9 @@ public class InformationPartieHumain
 			// retourné au client
 			objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();
 		}
-		
+
 		questionTimeReference = objTable.obtenirTempsRestant();
-        //System.out.println("Protocol for : " + lastQuestionTime);
+		//System.out.println("Protocol for : " + lastQuestionTime);
 
 		return objQuestionTrouvee;
 	}// end method
@@ -570,7 +554,7 @@ public class InformationPartieHumain
 
 			}// fin while
 
-				//après pour les difficultés plus grands
+			//après pour les difficultés plus grands
 			intDifficulteTemp = intDifficulte;
 			while (objQuestionTrouvee == null && intDifficulteTemp < 6) {
 				intDifficulteTemp++;
@@ -578,7 +562,7 @@ public class InformationPartieHumain
 
 			}// fin while
 
-				// to not repeat questions
+			// to not repeat questions
 			if (objQuestionTrouvee != null && questionDejaPosee(objQuestionTrouvee.obtenirCodeQuestion())) {
 				//objBoiteQuestions.popQuestion(objQuestionTrouvee);
 				objQuestionTrouvee = null;
@@ -627,7 +611,7 @@ public class InformationPartieHumain
 				lstQuestionsRepondues.getLast().definirTempsRequis(questionTimeReference - objTable.obtenirTempsRestant());
 				lstQuestionsRepondues.add(new InformationQuestion(objQuestionTrouvee.obtenirCodeQuestion(),objTable.obtenirTempsRestant()));
 				objQuestionCourante = objQuestionTrouvee;
-								
+
 			} else if (objQuestionTrouvee == null && objBoiteQuestions.dontHaveQuestions()) {
 				countFillBox++;
 				objGestionnaireBD.remplirBoiteQuestions(countFillBox);
@@ -651,7 +635,7 @@ public class InformationPartieHumain
 		}
 
 		questionTimeReference = objTable.obtenirTempsRestant();
-        
+
 		return objQuestionTrouvee;
 	}// end methode
 
@@ -684,7 +668,7 @@ public class InformationPartieHumain
 
 			}// fin while
 
-				//au pire cas les difficultés plus grands
+			//au pire cas les difficultés plus grands
 			intDifficulteTemp = intDifficulte;
 
 			while (objQuestionTrouvee == null && intDifficulteTemp < 6) {
@@ -693,7 +677,7 @@ public class InformationPartieHumain
 
 			}// fin while
 
-				// to not repeat questions
+			// to not repeat questions
 			if (objQuestionTrouvee != null && questionDejaPosee(objQuestionTrouvee.obtenirCodeQuestion())) {
 				//objBoiteQuestions.popQuestion(objQuestionTrouvee);
 				objQuestionTrouvee = null;
@@ -722,18 +706,14 @@ public class InformationPartieHumain
 
 		// Déclaration de l'objet de retour
 		RetourVerifierReponseEtMettreAJourPlateauJeu objRetour = null;
-		
-		int bonus = 0;
-		Point positionJoueur;
-		
+
+		int bonus = getTournamentBonus();
+		Point positionJoueur = obtenirPositionJoueur();
+
 		boolean bolReponseEstBonne;
 		int deplacementJoueur = 0;
 		boolean stopTheGame = false;
-		
-		bonus = getTournamentBonus();
-		
-		positionJoueur = obtenirPositionJoueur();
-		
+
 		// Si la position en x est différente de celle désirée, alors
 		// c'est qu'il y a eu un déplacement sur l'axe des x
 		if (positionJoueur.x != objPositionJoueurDesiree.x) {
@@ -743,7 +723,7 @@ public class InformationPartieHumain
 		else if (positionJoueur.y != objPositionJoueurDesiree.y) {
 			deplacementJoueur = Math.abs(objPositionJoueurDesiree.y - positionJoueur.y);
 		}
-		
+
 		// If we're in debug mode, accept any answer
 		if (ControleurJeu.modeDebug)
 			bolReponseEstBonne = true;
@@ -771,34 +751,10 @@ public class InformationPartieHumain
 			if (deplacementJoueur == 1 && bananaState.isUnderBananaEffects()) {
 				addPoints(-1);
 			}
-			
+
 			// Calculer le nouveau pointage du joueur
-			switch (deplacementJoueur) {
-			case 1:
-				addPoints(2);
-				break;
-			case 2:
-				addPoints(3);
-				break;
-			case 3:
-				addPoints(5);
-				break;
-			case 4:
-				addPoints(8);
-				break;
-			case 5:
-				addPoints(13);
-				break;
-			case 6:
-				addPoints(21);
-				break;
-			case 7:
-				addPoints(34);
-				break;
-			}
-
-
-
+			addPoints(getPointsByMove(deplacementJoueur));
+			
 			// Si la case de destination est une case de couleur, alors on
 			// vérifie l'objet qu'il y a dessus et si c'est un objet utilisable,
 			// alors on l'enlève et on le donne au joueur, sinon si c'est une
@@ -822,7 +778,7 @@ public class InformationPartieHumain
 
 							// put the player on the Brainiac state
 							getBrainiacState().putTheOneBrainiac();
-							objTable.preparerEvenementUtiliserObjet(objJoueurHumain.obtenirNomUtilisateur(), objJoueurHumain.obtenirNomUtilisateur(), "Brainiac", "");
+							objTable.preparerEvenementUtiliserObjet(objJoueurHumain.obtenirNom(), objJoueurHumain.obtenirNom(), "Brainiac", "");
 							// Enlever l'objet de la case du plateau de jeu
 							objCaseCouleurDestination.definirObjetCase(null);
 
@@ -891,7 +847,7 @@ public class InformationPartieHumain
 				//for gametype tourmnament - bonus for finish line
 				if (objTable.getGameType().equals("Tournament") || objTable.getGameType().equals("Course")) {
 					int tracks = objTable.getRegles().getNbTracks();
-					Point objPoint = new Point(objTable.getNbLines() - 1, objTable.getNbColumns() - 1);
+					Point objPoint = new Point(objTable.getGameFactory().getNbLines() - 1, objTable.getGameFactory().getNbColumns() - 1);
 					Point objPointFinish = new Point();
 
 					// On vérifie d'abord si le joueur a atteint le WinTheGame;
@@ -936,7 +892,7 @@ public class InformationPartieHumain
 				// Cette fonction va passer les joueurs et créer un
 				// InformationDestination pour chacun et ajouter l'événement
 				// dans la file de gestion d'événements
-				objTable.preparerEvenementJoueurDeplacePersonnage(objJoueurHumain.obtenirNomUtilisateur(), collision, positionJoueur, objPositionJoueurDesiree, obtenirPointage(), obtenirArgent(), bonus, "");
+				objTable.preparerEvenementJoueurDeplacePersonnage(objJoueurHumain.obtenirNom(), collision, positionJoueur, objPositionJoueurDesiree, obtenirPointage(), obtenirArgent(), bonus, "");
 
 			}
 
@@ -1025,9 +981,10 @@ public class InformationPartieHumain
 		return false;
 	}
 
+	/*
 	public GestionnaireEvenements obtenirGestionnaireEvenements() {
 		return objGestionnaireEv;
-	}
+	}*/
 
 	public void enleverObjet(int intIdObjet, String strTypeObjet) {
 		lstObjetsUtilisablesRamasses.remove(intIdObjet);
@@ -1050,13 +1007,6 @@ public class InformationPartieHumain
 
 	public Point obtenirPositionJoueurDesiree() {
 		return objPositionJoueurDesiree;
-	}
-
-	/**
-	 * @return the bananaState
-	 */
-	public HumainPlayerBananaState getBananaState() {
-		return bananaState;
 	}
 
 	public int obtenirDistanceAuFinish() {
@@ -1089,19 +1039,37 @@ public class InformationPartieHumain
 			this.moveVisibility = 1;
 		}
 	}
-
-	public void setClothesColor(int colorCode) {
-		this.clothesColor = colorCode;
+	
+	/**
+	 * @param moveV the moveVisibility to set
+	 */
+	public void setMoveVisibilityForBanana() {
+		
+		moveVisibility -=2;
+		if (this.moveVisibility < 1) {
+			this.moveVisibility = 1;
+		}
 	}
+	
+	/**
+	 * @param moveV the moveVisibility to set
+	 */
+	public void setMoveVisibilityAfterBanana() {
+		
+		moveVisibility +=2;
+		if (this.moveVisibility > 7 && this.brainiacState.isInBrainiac()) {
+			this.moveVisibility = 7;
+		} else if (this.moveVisibility > 6 && this.brainiacState.isInBrainiac() == false) {
+			this.moveVisibility = 6;
+		} 
+	}	
 
-	public int getClothesColor() {
-		return clothesColor;
-	}
+
 
 	/**
 	 * @return the brainiacState
 	 */
-	public HumainPlayerBrainiacState getBrainiacState() {
+	public PlayerBrainiacState getBrainiacState() {
 		return brainiacState;
 	}
 
@@ -1124,10 +1092,10 @@ public class InformationPartieHumain
 		int total = 0;
 		int right = 0;
 		for (InformationQuestion iq : lstQuestionsRepondues)
-			if (iq.answerStatus == iq.RIGHT_ANSWER)
+			if (iq.answerStatus == InformationQuestion.RIGHT_ANSWER)
 			{
 				total += 1; right += 1;
-			}else if (iq.answerStatus == iq.WRONG_ANSWER)
+			}else if (iq.answerStatus == InformationQuestion.WRONG_ANSWER)
 			{
 				total +=1;
 			}
@@ -1139,76 +1107,104 @@ public class InformationPartieHumain
 	/**
 	 * @param idDessin the idDessin to set
 	 */
-	 public void setIdDessin(int idDessin) {
-		 this.idDessin = idDessin;
-	 }
+	public void setIdDessin(int idDessin) {
+		this.idDessin = idDessin;
+	}
 
-	 /**
-	  * @return the idDessin
-	  */
-	 public int getIdDessin() {
-		 return idDessin;
-	 }
+	/**
+	 * @return the idDessin
+	 */
+	public int getIdDessin() {
+		return idDessin;
+	}
 
-	 /**
-	  * @param boiteQuestionsInfo the boiteQuestionsInfo to set
-	  */
-	 public void setBoiteQuestionsInfo() {
-		 this.boiteQuestionsInfo = new StringBuffer();
-		 String table = this.objTable.getTableName();
-		 String joueur = this.objJoueurHumain.obtenirNomUtilisateur();
+	/**
+	 * @param boiteQuestionsInfo the boiteQuestionsInfo to set
+	 */
+	public void setBoiteQuestionsInfo() {
+		this.boiteQuestionsInfo = new StringBuffer();
+		String table = this.objTable.getTableName();
+		String joueur = this.objJoueurHumain.obtenirNom();
 
-		 this.boiteQuestionsInfo.append("BoiteQuestions info's for " + joueur + " in the table " + table + "\n");
+		this.boiteQuestionsInfo.append("BoiteQuestions info's for " + joueur + " in the table " + table + "\n");
 
-	 }
+	}
 
-	 /**
-	  * @return the boiteQuestionsInfo
-	  */
-	 public StringBuffer getBoiteQuestionsInfo() {
-		 return boiteQuestionsInfo;
-	 }
+	/**
+	 * @return the boiteQuestionsInfo
+	 */
+	public StringBuffer getBoiteQuestionsInfo() {
+		return boiteQuestionsInfo;
+	}
 
-	 public void writeInfo(){
-		 String table = this.objTable.getTableName();
-		 String joueur = this.objJoueurHumain.obtenirNomUtilisateur();
+	public void writeInfo(){
+		String table = this.objTable.getTableName();
+		String joueur = this.objJoueurHumain.obtenirNom();
 
-		 this.boiteQuestionsInfo.append("END INFO ");
-		 String info = this.boiteQuestionsInfo.toString();
+		this.boiteQuestionsInfo.append("END INFO ");
+		String info = this.boiteQuestionsInfo.toString();
 
-		 //System.out.println("End info" + info.length());
+		//System.out.println("End info" + info.length());
 
-		 BufferedWriter writer = null;
-		 Date infoDate = new Date();
+		BufferedWriter writer = null;
+		Date infoDate = new Date();
 
-		 File file = new File("boiteInfo" + joueur + "_" + table + "_" + infoDate.getTime() + ".txt");
-		 try {
-			 writer = new BufferedWriter(new FileWriter(file));
-			 writer.write(info);
-			 writer.flush();
-		 } catch (IOException e) {
-			 // TODO Auto-generated catch block
-			 e.printStackTrace();
-		 }
+		File file = new File("boiteInfo" + joueur + "_" + table + "_" + infoDate.getTime() + ".txt");
+		try {
+			writer = new BufferedWriter(new FileWriter(file));
+			writer.write(info);
+			writer.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-	 }
+	}	
 
-	 public Integer resetColor() {
-		 int temp = this.clothesColor;
-		 this.clothesColor = 0;
-		 return temp;
-	 }
+	/**
+	 * @return the objGestionnaireBD
+	 */
+	public GestionnaireBDJoueur getObjGestionnaireBD() {
+		return objGestionnaireBD;
+	}
 
-	 public void setColorID() {
-		 this.clothesColor = objTable.getOneColor();
-	 }
-
-
-	 /**
-	  * @return the objGestionnaireBD
-	  */
-	 public GestionnaireBDJoueur getObjGestionnaireBD() {
-		 return objGestionnaireBD;
-	 }
+	public void remplirBoiteQuestions(int i) {
+		// 0 - because it's first time that we fill the QuestionsBox
+        // after we'll cut the level of questions by this number
+		objGestionnaireBD.remplirBoiteQuestions(i);		
+	}
+	
+	/**
+	 * @return the bananaState
+	 */
+	public PlayerBananaState getBananaState() {
+		return bananaState;
+	}
+	
+	public void setOnBanana()
+	{		
+    	setMoveVisibilityForBanana();
+	}
+	
+	public void setOffBanana()
+	{
+		setMoveVisibilityAfterBanana();
+		getBananaState().setOffBanana();
+	}
+	
+	public void setOffBrainiac()
+	{
+		getBrainiacState().setOffBrainiac();
+		setMoveVisibility(getMoveVisibility() - 1);
+	}
+	
+	public void setOnBrainiac(){
+		//first cancel the Banana
+		getBananaState().setOffBanana();
+		// effect of Braniac - the rest in the BraniacState
+		setMoveVisibility(getMoveVisibility() + 1);
+		
+	}
+							
 } // end class
 

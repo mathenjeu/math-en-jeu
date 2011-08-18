@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ServeurJeu.ComposantesJeu.Joueurs;
 
 /**
