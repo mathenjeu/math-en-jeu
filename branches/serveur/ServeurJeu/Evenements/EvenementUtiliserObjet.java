@@ -5,9 +5,7 @@ import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-
 import ServeurJeu.ControleurJeu;
-import ServeurJeu.Monitoring.Moniteur;
 import ClassesUtilitaires.UtilitaireXML;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
@@ -19,67 +17,74 @@ import ServeurJeu.Configuration.GestionnaireMessages;
 
 public class EvenementUtiliserObjet extends Evenement
 {
-        // Chaînes de caractères qui vont garder en mémoire le nom des joueurs
-        // qui ont utilisé et qui sont affectés par l'objet utilisé
+	// Chaînes de caractères qui vont garder en mémoire le nom des joueurs
+	// qui ont utilisé et qui sont affectés par l'objet utilisé
 	private String joueurQuiUtilise;
-    private String joueurAffecte;
-        
-    // Nom de l'objet utilisé
-    private String objetUtilise;
-	
+	private String joueurAffecte;
+
+	// Nom de l'objet utilisé
+	private String objetUtilise;
+
 	// Autres informations à envoyer
 	private String autresInformations;
-	
-    public EvenementUtiliserObjet(String joueurQuiUtilise, String joueurAffecte, String objetUtilise, String autresInformations)
-    {
-        this.joueurQuiUtilise = joueurQuiUtilise;
-        this.joueurAffecte = joueurAffecte;
-        this.objetUtilise = objetUtilise;
-        this.autresInformations = autresInformations;
-    }
-	
-	protected String genererCodeXML(InformationDestination information)
+
+	private String messxml;
+
+	public EvenementUtiliserObjet(String joueurQuiUtilise, String joueurAffecte, String objetUtilise, String autresInformations)
 	{
-		String strCodeXML = "";
-	    
+		this.joueurQuiUtilise = joueurQuiUtilise;
+		this.joueurAffecte = joueurAffecte;
+		this.objetUtilise = objetUtilise;
+		this.autresInformations = autresInformations;
+		messxml = "";
+		generateString();
+	}
+
+	protected String genererCodeXML(InformationDestination information)
+	{	
+		return messxml;
+	}
+
+	private void generateString()
+	{
 		try
 		{
-                        Document objDocumentXML = UtilitaireXML.obtenirDocumentXML();
+			Document objDocumentXML = UtilitaireXML.obtenirDocumentXML();
 			Element objNoeudCommande = objDocumentXML.createElement("commande");
-			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
+			objNoeudCommande.setAttribute("no", Integer.toString(0));
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "UtiliserObjet");
-			
+
 			Element objNoeudParametreNomUtilise = objDocumentXML.createElement("parametre");
-                        Element objNoeudParametreNomAffecte = objDocumentXML.createElement("parametre");
-                        Element objNoeudParametreObjetUtilise = objDocumentXML.createElement("parametre");
+			Element objNoeudParametreNomAffecte = objDocumentXML.createElement("parametre");
+			Element objNoeudParametreObjetUtilise = objDocumentXML.createElement("parametre");
 			Element objNoeudParametreAutresInformations = objDocumentXML.createElement("parametre");
-			
+
 			Text objNoeudTexteNomUtilise = objDocumentXML.createTextNode(joueurQuiUtilise);
 			Text objNoeudTexteNomAffecte = objDocumentXML.createTextNode(joueurAffecte);
-                        Text objNoeudTexteObjetUtilise = objDocumentXML.createTextNode(objetUtilise);
-                        Text objNoeudTexteAutresInformations = objDocumentXML.createTextNode(autresInformations);
-			
+			Text objNoeudTexteObjetUtilise = objDocumentXML.createTextNode(objetUtilise);
+			Text objNoeudTexteAutresInformations = objDocumentXML.createTextNode(autresInformations);
+
 			objNoeudParametreNomUtilise.setAttribute("type", "joueurQuiUtilise");
-                        objNoeudParametreNomAffecte.setAttribute("type", "joueurAffecte");
-                        objNoeudParametreObjetUtilise.setAttribute("type", "objetUtilise");
-                        objNoeudParametreAutresInformations.setAttribute("type", "autresInformations");
-			
+			objNoeudParametreNomAffecte.setAttribute("type", "joueurAffecte");
+			objNoeudParametreObjetUtilise.setAttribute("type", "objetUtilise");
+			objNoeudParametreAutresInformations.setAttribute("type", "autresInformations");
+
 			objNoeudParametreNomUtilise.appendChild(objNoeudTexteNomUtilise);
-                        objNoeudParametreNomAffecte.appendChild(objNoeudTexteNomAffecte);
-                        objNoeudParametreObjetUtilise.appendChild(objNoeudTexteObjetUtilise);
-                        objNoeudParametreAutresInformations.appendChild(objNoeudTexteAutresInformations);
-			
+			objNoeudParametreNomAffecte.appendChild(objNoeudTexteNomAffecte);
+			objNoeudParametreObjetUtilise.appendChild(objNoeudTexteObjetUtilise);
+			objNoeudParametreAutresInformations.appendChild(objNoeudTexteAutresInformations);
+
 			objNoeudCommande.appendChild(objNoeudParametreNomUtilise);
 			objNoeudCommande.appendChild(objNoeudParametreNomAffecte);
-                        objNoeudCommande.appendChild(objNoeudParametreObjetUtilise);
-                        objNoeudCommande.appendChild(objNoeudParametreAutresInformations);
-			
+			objNoeudCommande.appendChild(objNoeudParametreObjetUtilise);
+			objNoeudCommande.appendChild(objNoeudParametreAutresInformations);
+
 			objDocumentXML.appendChild(objNoeudCommande);
-			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
-                        strCodeXML = strCodeXML.replaceAll("&lt;", "<");
-                        strCodeXML = strCodeXML.replaceAll("&gt;", ">");
-            //System.out.println("Evenement utilise " + joueurQuiUtilise + " " + joueurAffecte);
+			messxml = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+			messxml = messxml.replaceAll("&lt;", "<");
+			messxml = messxml.replaceAll("&gt;", ">");
+			//System.out.println("Evenement utilise " + joueurQuiUtilise + " " + joueurAffecte);
 		}
 		catch (TransformerConfigurationException tce)
 		{
@@ -89,8 +94,7 @@ public class EvenementUtiliserObjet extends Evenement
 		{
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
-		
-		if(ControleurJeu.modeDebug) System.out.println("Evenement: " + strCodeXML);
-		return strCodeXML;
+
+		if(ControleurJeu.modeDebug) System.out.println("Evenement: " + messxml);
 	}
 }

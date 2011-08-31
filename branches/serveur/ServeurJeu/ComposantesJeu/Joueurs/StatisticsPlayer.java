@@ -70,20 +70,7 @@ public class StatisticsPlayer implements Comparable<StatisticsPlayer>{
 		return position;
 	}
 
-
-	/*
-	private static class runStatistics implements Comparator<StatisticsPlayer> {
-	    public int compare(StatisticsPlayer one, StatisticsPlayer two) {
-	        int i = one.points.compareTo(two.points);
-	        if (i == 0) {
-	            i = one.timePosition.compareTo(two.timePosition);	            
-	        }
-	        return i;
-	    }
-	}*/
-
-
-	@Override
+	
 	public int compareTo(StatisticsPlayer player) {
 				
 		assert(player != null);

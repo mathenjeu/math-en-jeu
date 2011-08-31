@@ -1,31 +1,12 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
-import ClassesUtilitaires.UtilitaireNombres;
-import ServeurJeu.ControleurJeu;
 import java.awt.Point;
-
-import ServeurJeu.Communications.ProtocoleJoueur;
-import ServeurJeu.ComposantesJeu.Table;
-import ServeurJeu.ComposantesJeu.Cases.Case;
-import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
-import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
-import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
-import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 import ServeurJeu.Evenements.GestionnaireEvenements;
-import ServeurJeu.ComposantesJeu.Objets.Objet;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
-import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
+import ServeurJeu.ComposantesJeu.Tables.Table;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
 import ServeurJeu.Configuration.GestionnaireMessages;
-import static ServeurJeu.ComposantesJeu.Joueurs.ParametreIA.*;
 
 /**
  * @author Jean-François Fournier

@@ -26,7 +26,7 @@ public class PlayerBrainiacState {
 	
 	// is the state to one of them
 	private Joueur player;
-		
+	
 	private static long BRAIN_TIME = 60000;
 
 	// constructor - in the first time we are not in the Braniac

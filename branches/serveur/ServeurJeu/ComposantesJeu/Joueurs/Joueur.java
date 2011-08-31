@@ -1,5 +1,7 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
+import ServeurJeu.Communications.ProtocoleJoueur;
+
 /**
  * @author Jean-François Brind'Amour
  */
@@ -42,6 +44,6 @@ public abstract class Joueur
 		this.role = role;
 	}  
 	
-	public abstract InformationPartie getPlayerGameInfo();
+	public abstract InformationPartie getPlayerGameInfo();	
 
 }

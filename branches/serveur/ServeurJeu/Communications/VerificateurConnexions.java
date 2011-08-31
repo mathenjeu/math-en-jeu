@@ -1,8 +1,6 @@
 package ServeurJeu.Communications;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -77,19 +75,19 @@ public class VerificateurConnexions implements Runnable
 			// Déclaration d'une liste de ProtocoleJoueur qui va contenir
 			// une copie de la liste des ProtocoleJoueur du gestionnaire de 
 			// communication
-			//LinkedList<ProtocoleJoueur> lstCopieProtocoleJoueur = null;
+			LinkedList<ProtocoleJoueur> lstCopieProtocoleJoueur = null;
 			
 			// Empêcher d'autres threads de toucher à la liste des protocoles 
 			// de joueur
 			synchronized (lstProtocoleJoueur)
 			{
 				// Faire une copie de la liste des ProtocoleJoueur
-				//lstCopieProtocoleJoueur = (LinkedList<ProtocoleJoueur>) lstProtocoleJoueur. .clone();
+				lstCopieProtocoleJoueur = (LinkedList<ProtocoleJoueur>) lstProtocoleJoueur.clone();
 	       
 
 				// Passer tous les objets ProtocoleJoueur et envoyer un message ping
 				// à chacun pour savoir s'il est là
-				for (int i = 0; i < lstProtocoleJoueur.size(); i++)
+				for (int i = 0; i < lstCopieProtocoleJoueur.size(); i++)
 				{
 					// Envoyer un message ping au client courant
 					((ProtocoleJoueur) lstProtocoleJoueur.get(i)).envoyerEvenementPing(intCompteurPing);
@@ -117,10 +115,10 @@ public class VerificateurConnexions implements Runnable
 			// la liste. On fait exception pour les joueurs en train de jouer
 			// une partie, dans ce cas, on ne les déconnecte pas tant que
 			// la partie est en cours
-			for (int i = 0; i < lstProtocoleJoueur.size(); i++)
+			for (int i = 0; i < lstCopieProtocoleJoueur.size(); i++)
 			{
 				// Faire la référence vers le ProtocoleJoueur courant
-				ProtocoleJoueur protocole = (ProtocoleJoueur) lstProtocoleJoueur.get(i);
+				ProtocoleJoueur protocole = (ProtocoleJoueur) lstCopieProtocoleJoueur.get(i);
 
 				// Si le joueur est en train de jouer sur une table, alors
 				// on attend, peut-être il se reconnectera et pourra

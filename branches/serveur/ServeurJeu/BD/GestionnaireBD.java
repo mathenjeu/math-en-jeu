@@ -310,13 +310,18 @@ public class GestionnaireBD {
                 rs.next();
                 int gameId = rs.getInt("GENERATED_KEY");
                 rs.close();
+
+                // to test stats
+                objLogger.info("Add stats on the game. Id : " + gameId);
+
                 return gameId;
             }
         } catch (Exception e) {
         	objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos") + e.getMessage());
-        }
-
+        }       
+       
         // Au cas où il y aurait erreur, on retourne -1
+        objLogger.error("Une erreur est survenue: - erreur dans ajouterInfosPartieTerminee ");
         return -1;
     }
 
@@ -353,18 +358,19 @@ public class GestionnaireBD {
     }// end methode
 
     private void addFullStats(int gameId, JoueurHumain joueur) {
+    	
     	try {
     		InformationPartieHumain infoPartie = joueur.obtenirPartieCourante();
     		LinkedList<InformationQuestion> questionsRepondues = infoPartie.obtenirListeQuestionsRepondues();
     		int userId = joueur.obtenirCleJoueur();
-    		int pointage = infoPartie.obtenirPointage();
+    		objLogger.info("Update fullstats on GameId = " + gameId + " and userId = " + userId);
     		synchronized (DB_LOCK) {
     			//Remplir la table 'stats_game' une ligne par joueur pour chaque partie
     			//Ça peut faire beaucoup de lignes, donc on sauve ces lignes seulement
     			//pour les parties dans les salles de prof.
     			requete.executeUpdate(
     					"INSERT INTO gamestats_scores(game_id, user_id, score) " +
-    					"VALUES (" + gameId + "," + userId + "," + pointage + ")");
+    					"VALUES (" + gameId + "," + userId + "," +  infoPartie.obtenirPointage() + ")");
     			//Remplir la table 'gamestats_questions' une ligne par question posee.
     			//Ça peut faire ÉNORMÉMENT de lignes, donc on sauve ces lignes seulement
     			//pour les parties dans les salles de prof.
@@ -391,7 +397,7 @@ public class GestionnaireBD {
         InformationPartieHumain infoPartie = joueur.obtenirPartieCourante();
         LinkedList<InformationQuestion> questionsRepondues = infoPartie.obtenirListeQuestionsRepondues();
         int roomId = infoPartie.obtenirTable().getObjSalle().getRoomId();
-
+        objLogger.info("Update samstats on userId = " + joueur.obtenirCleJoueur());
         try {
             synchronized (DB_LOCK) {
                 //Remplir la table 'gamestatssummary_questions'.

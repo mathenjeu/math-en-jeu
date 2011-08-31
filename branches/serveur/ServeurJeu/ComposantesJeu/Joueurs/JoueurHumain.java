@@ -247,6 +247,7 @@ public class JoueurHumain extends Joueur
 		strLangue = lang;
 		if (!lang.equals("fr") && !lang.equals("en"))
 			strLangue = "fr";
-	}	
-	
+	}
+
+		
 }

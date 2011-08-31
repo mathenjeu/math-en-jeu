@@ -7,7 +7,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 import ClassesUtilitaires.UtilitaireXML;
 import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
-import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
@@ -29,6 +28,8 @@ public class EvenementJoueurEntreTable extends Evenement
     // var for color used for the player clothes
     private int clothesColor;
     
+    private String messxml;
+    
        
     /**
      * Constructeur de la classe EvenementJoueurEntreTable qui permet 
@@ -44,6 +45,8 @@ public class EvenementJoueurEntreTable extends Evenement
         strNomUtilisateur = player.obtenirNom();
         userRole = player.getRole();
         clothesColor = player.getPlayerGameInfo().getClothesColor();
+        messxml = "";
+        generateString();
     }
 	
 	/**
@@ -55,10 +58,12 @@ public class EvenementJoueurEntreTable extends Evenement
 	 * @return String : Le code XML de l'événement à envoyer
 	 */
 	protected String genererCodeXML(InformationDestination information)
+	{		
+		return messxml;
+	}
+	
+	private void generateString()
 	{
-	    // Déclaration d'une variable qui va contenir le code XML à retourner
-	    String strCodeXML = "";
-	    
 		try
 		{
 	        // Appeler une fonction qui va créer un document XML dans lequel 
@@ -83,7 +88,7 @@ public class EvenementJoueurEntreTable extends Evenement
 			
 			
 			// Définir les attributs du noeud de commande
-			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
+			objNoeudCommande.setAttribute("no", Integer.toString(0));
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "JoueurEntreTable");
 			
@@ -110,7 +115,7 @@ public class EvenementJoueurEntreTable extends Evenement
 			objDocumentXML.appendChild(objNoeudCommande);
 
 			// Transformer le document XML en code XML
-			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+			messxml = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
 		}
 		catch (TransformerConfigurationException tce)
 		{
@@ -121,6 +126,6 @@ public class EvenementJoueurEntreTable extends Evenement
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
 		
-		return strCodeXML;
 	}
+	
 }

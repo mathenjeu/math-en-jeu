@@ -21,6 +21,8 @@ public class EvenementJoueurQuitteTable extends Evenement
 	// joueur qui a quitté la table
     private String strNomUtilisateur;
     
+    private String messxml;
+    
     /**
      * Constructeur de la classe EvenementJoueurQuitteTable qui permet 
      * d'initialiser le numéro de la table et le nom d'utilisateur du 
@@ -32,6 +34,8 @@ public class EvenementJoueurQuitteTable extends Evenement
     	// qui a quitté la table
     	intNoTable = noTable;
         strNomUtilisateur = nomUtilisateur;
+        messxml = "";
+        generateString();
     }
 	
 	/**
@@ -43,61 +47,61 @@ public class EvenementJoueurQuitteTable extends Evenement
 	 * @return String : Le code XML de l'événement à envoyer
 	 */
 	protected String genererCodeXML(InformationDestination information)
+	{		
+		return messxml;
+	}
+	
+	private void generateString()
 	{
-	    // Déclaration d'une variable qui va contenir le code XML à retourner
-	    String strCodeXML = "";
-	    
-		try
-		{
-	        // Appeler une fonction qui va créer un document XML dans lequel 
-		    // on peut ajouter des noeuds
-	        Document objDocumentXML = UtilitaireXML.obtenirDocumentXML();
+		 try
+			{
+		        // Appeler une fonction qui va créer un document XML dans lequel 
+			    // on peut ajouter des noeuds
+		        Document objDocumentXML = UtilitaireXML.obtenirDocumentXML();
 
-			// Créer le noeud de commande à retourner
-			Element objNoeudCommande = objDocumentXML.createElement("commande");
-			
-			// Créer les noeuds de paramètre
-			Element objNoeudParametreNoTable = objDocumentXML.createElement("parametre");
-			Element objNoeudParametreNomUtilisateur = objDocumentXML.createElement("parametre");
-			
-			// Créer des noeuds texte contenant le numéro de la table et le 
-			// nom d'utilisateur des noeuds paramètre
-			Text objNoeudTexteNoTable = objDocumentXML.createTextNode(Integer.toString(intNoTable));
-			Text objNoeudTexteNomUtilisateur = objDocumentXML.createTextNode(strNomUtilisateur);
-			
-			// Définir les attributs du noeud de commande
-			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
-			objNoeudCommande.setAttribute("type", "Evenement");
-			objNoeudCommande.setAttribute("nom", "JoueurQuitteTable");
-			
-			// On ajoute un attribut type qui va contenir le type
-			// du paramètre
-			objNoeudParametreNoTable.setAttribute("type", "NoTable");
-			objNoeudParametreNomUtilisateur.setAttribute("type", "NomUtilisateur");
-			
-			// Ajouter les noeuds texte aux noeuds des paramètres
-			objNoeudParametreNoTable.appendChild(objNoeudTexteNoTable);
-			objNoeudParametreNomUtilisateur.appendChild(objNoeudTexteNomUtilisateur);
-			
-			// Ajouter les noeuds paramètres au noeud de commande
-			objNoeudCommande.appendChild(objNoeudParametreNoTable);
-			objNoeudCommande.appendChild(objNoeudParametreNomUtilisateur);
-			
-			// Ajouter le noeud de commande au noeud racine dans le document
-			objDocumentXML.appendChild(objNoeudCommande);
+				// Créer le noeud de commande à retourner
+				Element objNoeudCommande = objDocumentXML.createElement("commande");
+				
+				// Créer les noeuds de paramètre
+				Element objNoeudParametreNoTable = objDocumentXML.createElement("parametre");
+				Element objNoeudParametreNomUtilisateur = objDocumentXML.createElement("parametre");
+				
+				// Créer des noeuds texte contenant le numéro de la table et le 
+				// nom d'utilisateur des noeuds paramètre
+				Text objNoeudTexteNoTable = objDocumentXML.createTextNode(Integer.toString(intNoTable));
+				Text objNoeudTexteNomUtilisateur = objDocumentXML.createTextNode(strNomUtilisateur);
+				
+				// Définir les attributs du noeud de commande
+				objNoeudCommande.setAttribute("no", Integer.toString(0));
+				objNoeudCommande.setAttribute("type", "Evenement");
+				objNoeudCommande.setAttribute("nom", "JoueurQuitteTable");
+				
+				// On ajoute un attribut type qui va contenir le type
+				// du paramètre
+				objNoeudParametreNoTable.setAttribute("type", "NoTable");
+				objNoeudParametreNomUtilisateur.setAttribute("type", "NomUtilisateur");
+				
+				// Ajouter les noeuds texte aux noeuds des paramètres
+				objNoeudParametreNoTable.appendChild(objNoeudTexteNoTable);
+				objNoeudParametreNomUtilisateur.appendChild(objNoeudTexteNomUtilisateur);
+				
+				// Ajouter les noeuds paramètres au noeud de commande
+				objNoeudCommande.appendChild(objNoeudParametreNoTable);
+				objNoeudCommande.appendChild(objNoeudParametreNomUtilisateur);
+				
+				// Ajouter le noeud de commande au noeud racine dans le document
+				objDocumentXML.appendChild(objNoeudCommande);
 
-			// Transformer le document XML en code XML
-			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
-		}
-		catch (TransformerConfigurationException tce)
-		{
-			System.out.println(GestionnaireMessages.message("evenement.XML_transformation"));
-		}
-		catch (TransformerException te)
-		{
-			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
-		}
-		
-		return strCodeXML;
+				// Transformer le document XML en code XML
+				messxml = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+			}
+			catch (TransformerConfigurationException tce)
+			{
+				System.out.println(GestionnaireMessages.message("evenement.XML_transformation"));
+			}
+			catch (TransformerException te)
+			{
+				System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
+			}
 	}
 }

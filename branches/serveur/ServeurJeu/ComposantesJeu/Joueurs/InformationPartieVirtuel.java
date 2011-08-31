@@ -30,7 +30,6 @@ import java.util.Set;
 import java.util.Map.Entry;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ClassesUtilitaires.UtilitaireNombres;
-import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
@@ -41,9 +40,15 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Brainiac;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Livre;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
+import ServeurJeu.ComposantesJeu.Tables.Table;
 
+/**
+ * 
+ * @author Oloieri lilian
+ *
+ */
 
-public class InformationPartieVirtuel extends InformationPartie {
+public class InformationPartieVirtuel extends InformationPartie implements ActivePlayer {
 	
 	// Déclaration d'une variable qui va contenir le pointage de la
 	// partie du joueur virtuel
@@ -53,10 +58,6 @@ public class InformationPartieVirtuel extends InformationPartie {
 
 	// Déclaration de la position du joueur virtuel dans le plateau de jeu
 	private Point objPositionJoueur;
-	
-	// Déclaration d'une variable qui va contenir le numéro Id du personnage
-	// du joueur virtuel
-	private final int intIdPersonnage;
 	
 	private int idDessin; 
 	
@@ -155,8 +156,8 @@ public class InformationPartieVirtuel extends InformationPartie {
 
 	private PlayerBananaState bananaState;   
     
-	public InformationPartieVirtuel(JoueurVirtuel objJoueurVirtuel, Table table, 
-			int niveauDifficulte, int idPersonnage) {
+	public InformationPartieVirtuel(JoueurVirtuel objJoueurVirtuel, Table table, int idPersonnage) 
+	{
 		
 		super(table, objJoueurVirtuel);
 		this.objJoueurVirtuel = objJoueurVirtuel;
@@ -211,7 +212,8 @@ public class InformationPartieVirtuel extends InformationPartie {
 		lstMagasinsVisites = new LinkedList<Magasin>();
 		
 		// Création du profil du joueur virtuel
-		intNiveauDifficulte = niveauDifficulte;	
+		// to have virtual players of all difficulty levels
+		intNiveauDifficulte = objRandom.nextInt(4) + 1;		
 		
 	}
 
@@ -485,7 +487,7 @@ public class InformationPartieVirtuel extends InformationPartie {
 			// Cette fonction va passer les joueurs et créer un
 			// InformationDestination pour chacun et ajouter l'événement
 			// dans la file de gestion d'événements
-			objTable.preparerEvenementJoueurDeplacePersonnage(objJoueurVirtuel.obtenirNom(), collision, 
+			objTable.preparerEvenementJoueurDeplacePersonnage(objJoueurVirtuel, collision, 
 					positionJoueur, objPositionDesiree, obtenirPointage(), obtenirArgent(), bonus, "");
 		}
 
@@ -741,7 +743,7 @@ public class InformationPartieVirtuel extends InformationPartie {
 
 			// Préparer un événement pour les autres joueurs de la table
 			// pour qu'il se tienne à jour du pointage de ce joueur
-			objTable.preparerEvenementMAJPointage(objJoueurVirtuel.obtenirNom(), intPointage);
+			objTable.preparerEvenementMAJPointage(objJoueurVirtuel, intPointage);
 
 			// On incrémente le compteur de mini-jeu
 			intNbMiniJeuJoues++;
@@ -939,7 +941,7 @@ public class InformationPartieVirtuel extends InformationPartie {
 
 					// Préparer un événement pour les autres joueurs de la table
 					// pour qu'il se tienne à jour de l'argent de ce joueur
-					objTable.preparerEvenementMAJArgent(objJoueurVirtuel.obtenirNom(), intArgent);
+					objTable.preparerEvenementMAJArgent(objJoueurVirtuel, intArgent);
 
 				}
 				else

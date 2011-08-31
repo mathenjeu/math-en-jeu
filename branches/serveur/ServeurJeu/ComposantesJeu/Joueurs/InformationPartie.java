@@ -1,6 +1,6 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
-import ServeurJeu.ComposantesJeu.Table;
+import ServeurJeu.ComposantesJeu.Tables.Table;
 
 public abstract class InformationPartie {
 	
@@ -15,12 +15,34 @@ public abstract class InformationPartie {
 	protected int clothesColor;	
 	
 	protected Joueur ourPlayer;
+
+	// Déclaration d'une variable qui va contenir le numéro Id du personnage
+	protected int intIdPersonnage;
 	
 	public InformationPartie(Table tableCourante, Joueur player){
 		objTable = tableCourante;
-		clothesColor = 0;		
+		//clothesColor = 0;		
 		ourPlayer = player;
 	}
+	
+	/**
+	 * Cette fonction permet de retourner le Id du personnage du joueur.
+	 *
+	 * @return int : Le Id du personnage choisi par le joueur
+	 */
+	public int obtenirIdPersonnage() {
+		return intIdPersonnage;
+	}
+
+	/**
+	 * Cette fonction permet de redéfinir le personnage choisi par le joueur.
+	 *
+	 * @param idPersonnage Le numéro Id du personnage choisi pour cette partie
+	 */
+	public void definirIdPersonnage(int idPersonnage) {
+		intIdPersonnage = idPersonnage;
+	}
+
 	
 	/**
 	 * Cette fonction permet de retourner la référence vers la table courante
@@ -50,6 +72,7 @@ public abstract class InformationPartie {
 		this.clothesColor = objTable.getOneColor();
 	}
 	
+		
 	public static int getPointsByMove(int move)
 	{
 		int points = 0;
@@ -77,11 +100,23 @@ public abstract class InformationPartie {
 			break;
 	   }
 	   return points;
+	}	
+	public void setOnBanana()
+	{
+		ourPlayer.getPlayerGameInfo().setOnBanana();
+	}
+	public void setOffBanana()
+	{
+		ourPlayer.getPlayerGameInfo().setOffBanana();
 	}
 	
-	public abstract void setOnBanana();
-	public abstract void setOffBanana();
-	public abstract void setOffBrainiac();
-	public abstract void setOnBrainiac();
-
+	public void setOffBrainiac()
+	{
+		ourPlayer.getPlayerGameInfo().setOffBrainiac();
+	}
+	public void setOnBrainiac()
+	{
+		ourPlayer.getPlayerGameInfo().setOnBrainiac();
+	}
+	
 }
