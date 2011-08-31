@@ -1,9 +1,12 @@
 package Enumerations;
+
 /**
  *  @author Oloieri Lilian
  */
 public enum GameType {
+	
    MATHENJEU, TOURNAMENT, COURSE;
+   
    public String toString() {
 	   switch(this) {
 	   case MATHENJEU:
@@ -32,10 +35,10 @@ public enum GameType {
 	   }
    }
    
-   public static GameType get(String s) {
-       for (GameType cmd: GameType.values()) {
-           if (cmd.toString().equals(s)) {
-               return cmd;
+   public static GameType getTypeByString(String nom) {
+       for (GameType type: GameType.values()) {
+           if (type.toString().equals(nom)) {
+               return type;
            }
        }
        return null;
