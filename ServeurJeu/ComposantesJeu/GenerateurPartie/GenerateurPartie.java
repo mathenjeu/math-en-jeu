@@ -6,10 +6,10 @@ import java.util.LinkedList;
 import java.util.Random;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.Salle;
-import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.ReglesJeu.Regles;
+import ServeurJeu.ComposantesJeu.Tables.Table;
 
 /**
  * @author Jean-François Brind'Amour

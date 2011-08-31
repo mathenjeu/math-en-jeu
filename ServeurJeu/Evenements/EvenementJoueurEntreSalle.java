@@ -17,6 +17,7 @@ public class EvenementJoueurEntreSalle extends Evenement
 	// Déclaration d'une variable qui va garder le nom d'utilisateur du 
 	// joueur qui est entré dans la salle
     private String strNomUtilisateur;
+    private String messxml;
     
     /**
      * Constructeur de la classe EvenementJoueurEntreSalle qui permet 
@@ -26,6 +27,8 @@ public class EvenementJoueurEntreSalle extends Evenement
     {
         // Définir le nom d'utilisateur du joueur qui est entré
         strNomUtilisateur = nomUtilisateur;
+        messxml = "";
+        generateString();
     }
 	
 	/**
@@ -38,9 +41,11 @@ public class EvenementJoueurEntreSalle extends Evenement
 	 */
 	protected String genererCodeXML(InformationDestination information)
 	{
-	    // Déclaration d'une variable qui va contenir le code XML à retourner
-	    String strCodeXML = "";
-	    
+	   	return messxml;
+	}
+	
+	private void generateString()
+	{
 		try
 		{
 	        // Appeler une fonction qui va créer un document XML dans lequel 
@@ -57,7 +62,7 @@ public class EvenementJoueurEntreSalle extends Evenement
 			Text objNoeudTexte = objDocumentXML.createTextNode(strNomUtilisateur);
 			
 			// Définir les attributs du noeud de commande
-			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
+			objNoeudCommande.setAttribute("no", Integer.toString(0));
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "JoueurEntreSalle");
 			
@@ -75,7 +80,7 @@ public class EvenementJoueurEntreSalle extends Evenement
 			objDocumentXML.appendChild(objNoeudCommande);
 
 			// Transformer le document XML en code XML
-			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+			messxml = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
 		}
 		catch (TransformerConfigurationException tce)
 		{
@@ -86,7 +91,6 @@ public class EvenementJoueurEntreSalle extends Evenement
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
 		
-		if(ControleurJeu.modeDebug) System.out.println("Evenement: " + strCodeXML);
-		return strCodeXML;
+		if(ControleurJeu.modeDebug) System.out.println("Evenement: " + messxml);
 	}
 }

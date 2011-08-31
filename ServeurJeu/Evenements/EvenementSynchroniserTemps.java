@@ -22,16 +22,23 @@ import ServeurJeu.Configuration.GestionnaireMessages;
 public class EvenementSynchroniserTemps extends Evenement
 {
 	private int intTemps;
+	private String messxml;
+	
 	public EvenementSynchroniserTemps( int temps )
 	{
 		intTemps = temps;
+		messxml = "";
+		generateString();
 	}
 	
 	protected String genererCodeXML(InformationDestination information)
 	{
-	    // Déclaration d'une variable qui va contenir le code XML à retourner
-	    String strCodeXML = "";
-	    
+		return messxml;
+	}
+	
+	private void generateString()
+	{
+
 		try
 		{
 	        // Appeler une fonction qui va créer un document XML dans lequel 
@@ -48,7 +55,7 @@ public class EvenementSynchroniserTemps extends Evenement
 			Text objNoeudTexte = objDocumentXML.createTextNode( new Integer(intTemps).toString());
 			
 			// Définir les attributs du noeud de commande
-			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
+			objNoeudCommande.setAttribute("no", Integer.toString(0));
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "SynchroniserTemps");
 			
@@ -66,7 +73,7 @@ public class EvenementSynchroniserTemps extends Evenement
 			objDocumentXML.appendChild(objNoeudCommande);
 
 			// Transformer le document XML en code XML
-			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+			messxml = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
 		}
 		catch (TransformerConfigurationException tce)
 		{
@@ -75,9 +82,6 @@ public class EvenementSynchroniserTemps extends Evenement
 		catch (TransformerException te)
 		{
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
-		}
-		
-		//System.out.println(strCodeXML);
-		return strCodeXML;
+		}		
 	}
 }

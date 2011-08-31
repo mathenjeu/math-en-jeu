@@ -6,7 +6,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 import ClassesUtilitaires.UtilitaireXML;
-import ServeurJeu.ComposantesJeu.Table;
+import ServeurJeu.ComposantesJeu.Tables.Table;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
@@ -29,6 +29,8 @@ public class EvenementNouvelleTable extends Evenement
     
     private final String gameType;
     
+    private String messxml;
+    
     /**
      * Constructeur de la classe EvenementNouvelleTable qui permet 
      * d'initialiser le numéro de la table. 
@@ -41,6 +43,8 @@ public class EvenementNouvelleTable extends Evenement
     	this.tableName = table.getTableName();
     	this.maxNbPlayers = table.getMaxNbPlayers();
     	this.gameType = table.getGameType().toString();
+    	 messxml = "";
+    	generateString();
     }
 	
 	/**
@@ -53,9 +57,12 @@ public class EvenementNouvelleTable extends Evenement
 	 */
 	protected String genererCodeXML(InformationDestination information)
 	{
-	    // Déclaration d'une variable qui va contenir le code XML à retourner
-	    String strCodeXML = "";
-	    
+		return messxml;
+	}
+	
+	private void generateString()
+	{
+
 		try
 		{
 	        // Appeler une fonction qui va créer un document XML dans lequel 
@@ -81,7 +88,7 @@ public class EvenementNouvelleTable extends Evenement
 			Text objNoeudTexteGameType = objDocumentXML.createTextNode(gameType);
 			
 			// Définir les attributs du noeud de commande
-			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
+			objNoeudCommande.setAttribute("no", Integer.toString(0));
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "NouvelleTable");
 			
@@ -111,7 +118,7 @@ public class EvenementNouvelleTable extends Evenement
 			objDocumentXML.appendChild(objNoeudCommande);
 
 			// Transformer le document XML en code XML
-			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+			messxml = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
 		}
 		catch (TransformerConfigurationException tce)
 		{
@@ -121,7 +128,6 @@ public class EvenementNouvelleTable extends Evenement
 		{
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
-		
-		return strCodeXML;
+			
 	}
 }

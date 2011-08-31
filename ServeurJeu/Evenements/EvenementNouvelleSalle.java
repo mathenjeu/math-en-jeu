@@ -36,6 +36,8 @@ public class EvenementNouvelleSalle extends Evenement {
 	private String roomType;
 	
 	private String gameTypes;
+	
+	private String messxml;
 			
 	 /**
      * Constructeur de la classe EvenementNouvelleSalle qui permet 
@@ -52,6 +54,8 @@ public class EvenementNouvelleSalle extends Evenement {
          this.masterTime = masterTime;
          this.roomType = roomType;
          this.gameTypes = gameTypes;
+         messxml = "";
+         generateString();
                    
     }
     
@@ -65,9 +69,12 @@ public class EvenementNouvelleSalle extends Evenement {
 	 */
 	protected String genererCodeXML(InformationDestination information) {
 		
-		// Déclaration d'une variable qui va contenir le code XML à retourner
-	    String strCodeXML = "";
-	    
+		return messxml;
+	}
+
+	private void generateString()
+	{
+
 		try
 		{ // Appeler une fonction qui va créer un document XML dans lequel 
 		    // on peut ajouter des noeuds
@@ -98,7 +105,7 @@ public class EvenementNouvelleSalle extends Evenement {
 			Text objNoeudTexteGameTypes = objDocumentXML.createTextNode(gameTypes);
 			
 			// Définir les attributs du noeud de commande
-			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
+			objNoeudCommande.setAttribute("no", Integer.toString(0));
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "NouvelleSalle");
 						
@@ -138,7 +145,7 @@ public class EvenementNouvelleSalle extends Evenement {
 			objDocumentXML.appendChild(objNoeudCommande);
 
 			// Transformer le document XML en code XML
-			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+			messxml = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
 		}
 		catch (TransformerConfigurationException tce)
 		{
@@ -149,8 +156,5 @@ public class EvenementNouvelleSalle extends Evenement {
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
 		
-		//System.out.println(strCodeXML);
-		return strCodeXML;
 	}
-
 }

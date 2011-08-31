@@ -6,6 +6,8 @@ import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
+
+import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
@@ -13,10 +15,8 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
-import ServeurJeu.ControleurJeu;
-import ServeurJeu.Monitoring.Moniteur;
+import ServeurJeu.ComposantesJeu.Tables.Table;
 import ClassesUtilitaires.UtilitaireXML;
-import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
@@ -33,6 +33,7 @@ public class EvenementPartieDemarree extends Evenement
 	private Document objDocumentXML;
 	private Element objNoeudCommande;
     private Table table;
+    private String messxml; 
     
     /**
      * Constructeur de la classe EvenementPartieDemarree qui permet 
@@ -54,6 +55,7 @@ public class EvenementPartieDemarree extends Evenement
         lstJoueurs = playersListe;
         objDocumentXML = null;
         objNoeudCommande = null;
+        messxml = "";
         generateStringNode();
     }
 	
@@ -67,16 +69,17 @@ public class EvenementPartieDemarree extends Evenement
 	 */
 	protected String genererCodeXML(InformationDestination information)
 	{
+		/*
 		//Moniteur.obtenirInstance().debut( "EvenementPartieDemarree.genererCodeXML" );
 	    // Déclaration d'une variable qui va contenir le code XML à retourner
 	    String strCodeXML = "";
 	 
 		try
 		{
-			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
+			//objNoeudCommande.setAttribute("no", Integer.toString(0)); //information.obtenirNoCommande()
 
 			// Transformer le document XML en code XML
-			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+			//strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
 		}
 		catch (TransformerConfigurationException tce)
 		{
@@ -91,9 +94,9 @@ public class EvenementPartieDemarree extends Evenement
 			e.printStackTrace();
 		}
 		
-		//Moniteur.obtenirInstance().fin();
-                if(ControleurJeu.modeDebug) System.out.println("EvenementPartieDemarrer: " + strCodeXML);
-		return strCodeXML;
+		//Moniteur.obtenirInstance().fin(); */
+                if(ControleurJeu.modeDebug) System.out.println("EvenementPartieDemarrer: " + messxml);
+		return messxml;
 	}
 	
 	private void generateStringNode()
@@ -121,6 +124,7 @@ public class EvenementPartieDemarree extends Evenement
 			objNoeudParametreTempsPartie.appendChild(objNoeudTexte);
 			
 			// Définir les attributs du noeud de commande
+			objNoeudCommande.setAttribute("no", Integer.toString(0));
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "PartieDemarree");
 			
@@ -291,5 +295,28 @@ public class EvenementPartieDemarree extends Evenement
 			objDocumentXML.appendChild(objNoeudCommande);
 		}
 		
+		try
+		{
+			// Transformer le document XML en code XML
+			messxml = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+		}
+		catch (TransformerConfigurationException tce)
+		{
+			System.out.println(GestionnaireMessages.message("evenement.XML_transformation"));
+		}
+		catch (TransformerException te)
+		{
+			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+		}
+		
 	} // end method
-}
+	
+	private void generateString()
+	{
+		
+	}
+}// end class

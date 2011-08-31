@@ -5,7 +5,6 @@ import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.Monitoring.Moniteur;
 import ClassesUtilitaires.UtilitaireXML;
@@ -60,7 +59,7 @@ public class EvenementJoueurConnecte extends Evenement
 			Text objNoeudTexte = objDocumentXML.createTextNode(strNomUtilisateur);
 			
 			// Définir les attributs du noeud de commande
-			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
+			objNoeudCommande.setAttribute("no", Integer.toString(0)); //information.obtenirNoCommande()
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "JoueurConnecte");
 			

@@ -38,7 +38,6 @@ import ServeurJeu.ControleurJeu;
 import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.ComposantesJeu.RapportDeSalle;
 import ServeurJeu.ComposantesJeu.Salle;
-import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Joueurs.InformationPartieHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
@@ -47,6 +46,7 @@ import ServeurJeu.ComposantesJeu.Objets.Objet;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.ComposantesJeu.Questions.Question;
+import ServeurJeu.ComposantesJeu.Tables.Table;
 import ServeurJeu.Configuration.GestionnaireMessages;
 import ServeurJeu.Evenements.EvenementPartieDemarree;
 import ServeurJeu.Evenements.EvenementSynchroniserTemps;
@@ -1249,7 +1249,7 @@ public class ProtocoleJoueur implements Runnable
         int intNbColumns = Integer.parseInt(obtenirValeurParametre(noeudEntree, "NbColumns").getNodeValue());
 
         String name = obtenirValeurParametre(noeudEntree, "TableName").getNodeValue();
-        GameType type = GameType.get((obtenirValeurParametre(noeudEntree, "GameType").getNodeValue()));
+        GameType type = GameType.getTypeByString((obtenirValeurParametre(noeudEntree, "GameType").getNodeValue()));
         //System.out.println("Protocole - create table : " + intNbColumns + " " + intNbLines + " " + type);
 
         // Appeler la méthode permettant de créer la nouvelle
@@ -1257,7 +1257,7 @@ public class ProtocoleJoueur implements Runnable
         int intNoTable = objJoueurHumain.obtenirSalleCourante().creerTable(
                 objJoueurHumain, intTempsPartie, true, name, intNbLines, intNbColumns, type);
         
-        //System.out.println("Protocole - create table : " + intNbColumns + " " + intNbLines + " " + type);
+        System.out.println("Protocole - create table : " + intNbColumns + " " + intNbLines + " " + type);
 
         name = objJoueurHumain.obtenirPartieCourante().obtenirTable().getTableName();
         
@@ -1286,7 +1286,7 @@ public class ProtocoleJoueur implements Runnable
         objNoeudParametreMaxNbPlayers.appendChild(docSortie.createTextNode("" + objJoueurHumain.obtenirPartieCourante().obtenirTable().getMaxNbPlayers()));
         noeudCommande.appendChild(objNoeudParametreMaxNbPlayers);
         
-        //System.out.println("Protocole - create table final : " + intNbColumns + " " + intNbLines + " " + type);
+        System.out.println("Protocole - create table final : " + intNbColumns + " " + intNbLines + " " + type);
     }
 
     private void traiterCommandeEntrerTable(Element noeudEntree, Element noeudCommande) {
@@ -1757,7 +1757,7 @@ public class ProtocoleJoueur implements Runnable
         // Préparer un événement pour les autres joueurs de la table
         // pour qu'il se tienne à jour du pointage de ce joueur
         objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementMAJPointage(
-                objJoueurHumain.obtenirNom(),
+                objJoueurHumain,
                 objJoueurHumain.obtenirPartieCourante().obtenirPointage());
     }
 
@@ -1793,7 +1793,7 @@ public class ProtocoleJoueur implements Runnable
         // Préparer un événement pour les autres joueurs de la table
         // pour qu'il se tienne à jour de l'argent de ce joueur
         objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementMAJArgent(
-                objJoueurHumain.obtenirNom(),
+                objJoueurHumain,
                 objJoueurHumain.obtenirPartieCourante().obtenirArgent());
     }
 
@@ -1940,7 +1940,7 @@ public class ProtocoleJoueur implements Runnable
                         // Préparer un événement pour les autres joueurs de la table
                         // pour qu'il se tienne à jour de l'argent de ce joueur
                         objJoueurHumain.obtenirPartieCourante().obtenirTable().preparerEvenementMAJArgent(
-                                objJoueurHumain.obtenirNom(),
+                                objJoueurHumain,
                                 objJoueurHumain.obtenirPartieCourante().obtenirArgent());
 
                         // Retourner une réponse positive au joueur

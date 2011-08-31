@@ -6,6 +6,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 import ClassesUtilitaires.UtilitaireXML;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
@@ -33,25 +34,28 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
     private int xPosition;
     private int yPosition;
       
+    private String messxml;
     
     /**
      * Constructeur de la classe EvenementJoueurDemarrePartie qui permet 
      * d'initialiser le numéro Id du personnage et le nom d'utilisateur du 
      * joueur qui vient de démarrer la partie. 
      */
-    public EvenementJoueurRejoindrePartie(String nomUtilisateur, int idPersonnage, int pointage, int role, int i, int xP, int yP)
-    {
-        // Définir le numéro Id du personnage et le nom d'utilisateur du joueur 
+    	
+	public EvenementJoueurRejoindrePartie(JoueurHumain player) {
+		 // Définir le numéro Id du personnage et le nom d'utilisateur du joueur 
     	// qui a démarré la partie
-    	intIdPersonnage = idPersonnage;
-        strNomUtilisateur = nomUtilisateur;
-        intPointage = pointage;
-        userRole = role;
-        userColor = i;
-        xPosition = xP;
-        yPosition = yP;
+    	intIdPersonnage = player.obtenirPartieCourante().obtenirIdPersonnage();
+        strNomUtilisateur = player.obtenirNom();
+        intPointage = player.obtenirPartieCourante().obtenirPointage();
+        userRole = player.getRole();
+        userColor = player.obtenirPartieCourante().getClothesColor();
+        xPosition = player.obtenirPartieCourante().obtenirPositionJoueur().x;
+        yPosition = player.obtenirPartieCourante().obtenirPositionJoueur().y;
+        messxml = "";
+        generateString();
     }
-	
+
 	/**
 	 * Cette fonction permet de générer le code XML de l'événement d'un joueur
 	 * qui rejoindre une partie et de le retourner.
@@ -61,10 +65,13 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
 	 * @return String : Le code XML de l'événement à envoyer
 	 */
 	protected String genererCodeXML(InformationDestination information)
+	{		
+		return messxml;
+	}
+
+	private void generateString()
 	{
-	    // Déclaration d'une variable qui va contenir le code XML à retourner
-	    String strCodeXML = "";
-	    
+
 		try
 		{
 	        // Appeler une fonction qui va créer un document XML dans lequel 
@@ -94,7 +101,7 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
 			Text objNoeudTexteYPosition = objDocumentXML.createTextNode(Integer.toString(yPosition));
 			
 			// Définir les attributs du noeud de commande
-			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
+			objNoeudCommande.setAttribute("no", Integer.toString(0));
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "JoueurRejoindrePartie");
 			
@@ -130,7 +137,7 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
 			objDocumentXML.appendChild(objNoeudCommande);
 
 			// Transformer le document XML en code XML
-			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+			messxml = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
 		}
 		catch (TransformerConfigurationException tce)
 		{
@@ -140,9 +147,5 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
 		{
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
-		
-		return strCodeXML;
 	}
-
-	
 }

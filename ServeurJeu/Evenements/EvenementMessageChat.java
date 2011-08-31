@@ -5,8 +5,6 @@ import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-
-import ServeurJeu.Monitoring.Moniteur;
 import ClassesUtilitaires.UtilitaireXML;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
@@ -24,34 +22,29 @@ public class EvenementMessageChat extends Evenement
         
         // Le message en tant que tel
         private String messageAEnvoyer;
+        
+        private String messxml;
 	
     public EvenementMessageChat(String joueurQuiEnvoieLeMessage, String messageAEnvoyer)
     {
         this.joueurQuiEnvoieLeMessage = joueurQuiEnvoieLeMessage;
         this.messageAEnvoyer = messageAEnvoyer;
+        messxml = "";
+        generateString();
     }
 	
 	protected String genererCodeXML(InformationDestination information)
 	{
-		Moniteur.obtenirInstance().debut("EvenementUtiliserObjet.genererCodeXML");
-		
-		/*
-		 * <commande no="57" nom="MessageChat" type="Evenement">
-		 *     <parametre type="joueurQuiEnvoieLeMessage">AdversaireXYZ</parametre>
-                 *     <parametre type="message">
-                            |||| ICI on print directement le contenu de messageAEnvoyer |||||
-                 *     </parametre>
-		 * </commande>
-		 *
-		 */
-
-	    String strCodeXML = "";
-	    
+		return messxml;
+	}
+	
+	private void generateString()
+	{
 		try
 		{
                         Document objDocumentXML = UtilitaireXML.obtenirDocumentXML();
 			Element objNoeudCommande = objDocumentXML.createElement("commande");
-			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
+			objNoeudCommande.setAttribute("no", Integer.toString(0));
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "MessageChat");
 			
@@ -71,9 +64,9 @@ public class EvenementMessageChat extends Evenement
 			objNoeudCommande.appendChild(objNoeudParametreMessageAEnvoyer);
 			
 			objDocumentXML.appendChild(objNoeudCommande);
-			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
-                        strCodeXML = strCodeXML.replaceAll("&lt;", "<");
-                        strCodeXML = strCodeXML.replaceAll("&gt;", ">");
+			messxml = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+                   messxml = messxml.replaceAll("&lt;", "<");
+                   messxml = messxml.replaceAll("&gt;", ">");
 		}
 		catch (TransformerConfigurationException tce)
 		{
@@ -83,7 +76,5 @@ public class EvenementMessageChat extends Evenement
 		{
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
-		Moniteur.obtenirInstance().fin();
-		return strCodeXML;
 	}
 }

@@ -12,10 +12,9 @@ import org.w3c.dom.Element;
 import java.util.TreeSet;
 import ClassesUtilitaires.UtilitaireXML;
 import ServeurJeu.ControleurJeu;
-import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Joueurs.StatisticsPlayer;
+import ServeurJeu.ComposantesJeu.Tables.Table;
 import ServeurJeu.Configuration.GestionnaireMessages;
-import ServeurJeu.Monitoring.Moniteur;
 
 /**
  * @author Marc
@@ -24,26 +23,25 @@ import ServeurJeu.Monitoring.Moniteur;
  */
 public class EvenementPartieTerminee  extends Evenement
 {
-	//private HashMap<String, JoueurHumain> lstJoueurs;
-	//private ArrayList<JoueurVirtuel> lstJoueursVirtuels;
-    private String joueurGagnant;
+	private String joueurGagnant;
     private TreeSet<StatisticsPlayer> ourResults;
+    private String messxml;
 	
 	public EvenementPartieTerminee( Table table, TreeSet<StatisticsPlayer> ourResults, String joueurGagnant)
 	{
-		super();
-		//this.lstJoueurs = table.obtenirListeJoueurs();
-		//lstJoueursVirtuels = table.obtenirListeJoueursVirtuels();
         this.joueurGagnant = joueurGagnant;
         this.ourResults = ourResults;
+        messxml = "";
+        generateString();
 	}
 	
 	protected String genererCodeXML(InformationDestination information)
 	{
-		Moniteur.obtenirInstance().debut( "EvenementPartieTerminee.genererCodeXML" );
-	    // Déclaration d'une variable qui va contenir le code XML à retourner
-	    String strCodeXML = "";
-	    
+		return messxml;
+	}
+	
+	private void generateString()
+	{
 		try
 		{
 	        // Appeler une fonction qui va créer un document XML dans lequel 
@@ -56,7 +54,7 @@ public class EvenementPartieTerminee  extends Evenement
 			// Créer un noeud contenant le nom d'utilisateur du noeud paramètre
 			
 			// Définir les attributs du noeud de commande
-			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
+			objNoeudCommande.setAttribute("no", Integer.toString(0));
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "PartieTerminee");
 			
@@ -94,7 +92,7 @@ public class EvenementPartieTerminee  extends Evenement
 			objDocumentXML.appendChild(objNoeudCommande);
 
 			// Transformer le document XML en code XML
-			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+			messxml = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
 		}
 		catch (TransformerConfigurationException tce)
 		{
@@ -105,8 +103,6 @@ public class EvenementPartieTerminee  extends Evenement
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
 		
-		Moniteur.obtenirInstance().fin();
-        if(ControleurJeu.modeDebug) System.out.println("EvenementPartieTerminee: " + strCodeXML);
-		return strCodeXML;
+		if(ControleurJeu.modeDebug) System.out.println("EvenementPartieTerminee: " + messxml);	
 	}
 }

@@ -6,7 +6,16 @@ import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.Map;
 import java.util.Random;
+
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
+
+import ClassesUtilitaires.UtilitaireXML;
 import Enumerations.RetourFonctions.ResultatAuthentification;
 import ServeurJeu.BD.DBConnectionsPoolManager;
 import ServeurJeu.BD.GestionnaireBD;
@@ -14,12 +23,14 @@ import ServeurJeu.Communications.GestionnaireCommunication;
 import ServeurJeu.Communications.ProtocoleJoueur;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+import ServeurJeu.Evenements.Evenement;
 import ServeurJeu.Evenements.EvenementJoueurDeconnecte;
 import ServeurJeu.Evenements.EvenementJoueurConnecte;
 import ServeurJeu.Evenements.EvenementNouvelleSalle;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.Evenements.StopServerEvent;
+import ServeurJeu.Monitoring.Moniteur;
 import ServeurJeu.Monitoring.TacheLogMoniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
@@ -690,7 +701,9 @@ public class ControleurJeu {
     private void preparerEvenementJoueurConnecte(String nomUtilisateur) {
         // Créer un nouvel événement qui va permettre d'envoyer l'événement
         // aux joueurs qu'un nouveau joueur s'est connecté
-        EvenementJoueurConnecte joueurConnecte = new EvenementJoueurConnecte(nomUtilisateur);
+        //EvenementJoueurConnecte joueurConnecte = new EvenementJoueurConnecte(nomUtilisateur);
+        Evenement joueurConnecte = new Evenement();
+
         // Passer tous les joueurs connectés et leur envoyer un événement
         for (JoueurHumain objJoueur : lstJoueursConnectes.values()) {
             // Si le nom d'utilisateur du joueur courant n'est pas celui
@@ -704,7 +717,58 @@ public class ControleurJeu {
                             objJoueur.obtenirProtocoleJoueur()));
             }
         }
+              
+	    // Déclaration d'une variable qui va contenir le code XML à retourner
+	    String strCodeXML = "";
+	    
+		try
+		{
+	        // Appeler une fonction qui va créer un document XML dans lequel 
+		    // on peut ajouter des noeuds
+	        Document objDocumentXML = UtilitaireXML.obtenirDocumentXML();
 
+			// Créer le noeud de commande à retourner
+			Element objNoeudCommande = objDocumentXML.createElement("commande");
+			
+			// Créer le noeud du paramètre
+			Element objNoeudParametre = objDocumentXML.createElement("parametre");
+			
+			// Créer un noeud contenant le nom d'utilisateur du noeud paramètre
+			Text objNoeudTexte = objDocumentXML.createTextNode(nomUtilisateur);
+			
+			// Définir les attributs du noeud de commande
+			objNoeudCommande.setAttribute("no", Integer.toString(0)); //information.obtenirNoCommande()
+			objNoeudCommande.setAttribute("type", "Evenement");
+			objNoeudCommande.setAttribute("nom", "JoueurConnecte");
+			
+			// On ajoute un attribut type qui va contenir le type
+			// du paramètre
+			objNoeudParametre.setAttribute("type", "NomUtilisateur");
+			
+			// Ajouter le noeud texte au noeud du paramètre
+			objNoeudParametre.appendChild(objNoeudTexte);
+			
+			// Ajouter le noeud paramètre au noeud de commande
+			objNoeudCommande.appendChild(objNoeudParametre);
+			
+			// Ajouter le noeud de commande au noeud racine dans le document
+			objDocumentXML.appendChild(objNoeudCommande);
+
+			// Transformer le document XML en code XML
+			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+		}
+		catch (TransformerConfigurationException tce)
+		{
+			System.out.println(GestionnaireMessages.message("evenement.XML_transformation"));
+		}
+		catch (TransformerException te)
+		{
+			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
+		}		
+		
+		if(ControleurJeu.modeDebug) System.out.println("Evenement: " + strCodeXML);
+		
+		joueurConnecte.addXML(strCodeXML);
         // Ajouter le nouvel événement créé dans la liste d'événements à traiter
         objGestionnaireEvenements.ajouterEvenement(joueurConnecte);
     }
@@ -749,15 +813,14 @@ public class ControleurJeu {
         
         for (JoueurHumain objJoueur : lstJoueursConnectes.values())
         {
-            //On n'envoi pas d'événement au créateur de la salle
-            if (objJoueur.obtenirNom().equalsIgnoreCase(createurSalle))
-                    continue;
-            // Obtenir un numéro de commande pour le joueur courant, créer
-            // un InformationDestination et l'ajouter à l'événement
-            evNouvelleSalle.ajouterInformationDestination(
-                    new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
-                    objJoueur.obtenirProtocoleJoueur())
-                    );
+        	//On n'envoi pas d'événement au créateur de la salle
+        	if (!objJoueur.obtenirNom().equalsIgnoreCase(createurSalle))                   
+        		// Obtenir un numéro de commande pour le joueur courant, créer
+        		// un InformationDestination et l'ajouter à l'événement
+        		evNouvelleSalle.ajouterInformationDestination(
+        				new InformationDestination(objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
+        						objJoueur.obtenirProtocoleJoueur())
+        		);
         }
         // Ajouter le nouvel événement créé dans la liste d'événements à traiter
         objGestionnaireEvenements.ajouterEvenement(evNouvelleSalle);

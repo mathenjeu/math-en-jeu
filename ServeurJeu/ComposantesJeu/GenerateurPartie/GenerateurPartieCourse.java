@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import Enumerations.Visibilite;
-import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
@@ -21,6 +20,7 @@ import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.ObjetUtilisable;
 import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesMagasin;
 import ServeurJeu.ComposantesJeu.ReglesJeu.ReglesObjetUtilisable;
+import ServeurJeu.ComposantesJeu.Tables.Table;
 
 /**
  * @author Oloieri Lilian 31.12.2009 

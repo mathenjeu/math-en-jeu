@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import ServeurJeu.BD.GestionnaireBDJoueur;
-import ServeurJeu.ComposantesJeu.Table;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
@@ -18,6 +17,7 @@ import ServeurJeu.ComposantesJeu.Objets.Pieces.Piece;
 import ServeurJeu.ComposantesJeu.Questions.BoiteQuestions;
 import ServeurJeu.ComposantesJeu.Questions.InformationQuestion;
 import ServeurJeu.ComposantesJeu.Questions.Question;
+import ServeurJeu.ComposantesJeu.Tables.Table;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ServeurJeu.ControleurJeu;
 import java.util.LinkedList;
@@ -25,7 +25,7 @@ import java.util.LinkedList;
 /**
  * @author Jean-François Brind'Amour
  */
-public class InformationPartieHumain extends InformationPartie
+public class InformationPartieHumain extends InformationPartie implements ActivePlayer
 {
 	// Déclaration d'une référence vers le gestionnaire de bases de données
 	private final GestionnaireBDJoueur objGestionnaireBD;
@@ -35,8 +35,6 @@ public class InformationPartieHumain extends InformationPartie
 	// objet d'information de partie
 	private final JoueurHumain objJoueurHumain;
 	
-	// Déclaration d'une variable qui va contenir le numéro Id du personnage
-	private int intIdPersonnage;
 	private int idDessin;
 	// Déclaration d'une variable qui va contenir le pointage de la
 	// partie du joueur possèdant cet objet
@@ -245,24 +243,7 @@ public class InformationPartieHumain extends InformationPartie
 		intArgent = argent;
 	}
 
-	/**
-	 * Cette fonction permet de retourner le Id du personnage du joueur.
-	 *
-	 * @return int : Le Id du personnage choisi par le joueur
-	 */
-	public int obtenirIdPersonnage() {
-		return intIdPersonnage;
-	}
-
-	/**
-	 * Cette fonction permet de redéfinir le personnage choisi par le joueur.
-	 *
-	 * @param idPersonnage Le numéro Id du personnage choisi pour cette partie
-	 */
-	public void definirIdPersonnage(int idPersonnage) {
-		intIdPersonnage = idPersonnage;
-	}
-
+	
 	/**
 	 * Cette fonction permet de retourner la position du joueur dans le
 	 * plateau de jeu.
@@ -589,8 +570,15 @@ public class InformationPartieHumain extends InformationPartie
 		// à poser, la difficulté et la question à retourner
 		//***************************************************************************************
 		int oldQuestion = objQuestionCourante.obtenirCodeQuestion();
-		int intDifficulte = objQuestionCourante.obtenirDifficulte();
+		
+		// with less difficulty by one 
+		int intDifficulte = objQuestionCourante.obtenirDifficulte() - 1;
 		Question objQuestionTrouvee = null;
+		
+		// remove question from list, so from stats too
+		//lstQuestionsRepondues.removeLast();
+		cancelPosedQuestion();
+		
 		// to be sure...
 		if (intDifficulte > 6) {
 			intDifficulte = 6;
@@ -608,13 +596,14 @@ public class InformationPartieHumain extends InformationPartie
 			// traiter la réponse du joueur, on va aussi garder la position que le
 			// joueur veut se déplacer
 			if (objQuestionTrouvee != null) {
-				lstQuestionsRepondues.getLast().definirTempsRequis(questionTimeReference - objTable.obtenirTempsRestant());
+				
 				lstQuestionsRepondues.add(new InformationQuestion(objQuestionTrouvee.obtenirCodeQuestion(),objTable.obtenirTempsRestant()));
 				objQuestionCourante = objQuestionTrouvee;
 
 			} else if (objQuestionTrouvee == null && objBoiteQuestions.dontHaveQuestions()) {
 				countFillBox++;
 				objGestionnaireBD.remplirBoiteQuestions(countFillBox);
+				System.out.println("ça va mal : aucune question -  add count " + countFillBox );
 
 			}
 		} while (objQuestionTrouvee == null && countFillBox < 10);
@@ -685,7 +674,7 @@ public class InformationPartieHumain extends InformationPartie
 
 
 		} while (objQuestionTrouvee == null && !objBoiteQuestions.dontHaveQuestions());
-		//System.out.println(" verification " + objQuestionTrouvee);
+		//System.out.println(" verification " + objQuestionTrouvee.obtenirDifficulte());
 
 		return objQuestionTrouvee;
 
@@ -892,7 +881,7 @@ public class InformationPartieHumain extends InformationPartie
 				// Cette fonction va passer les joueurs et créer un
 				// InformationDestination pour chacun et ajouter l'événement
 				// dans la file de gestion d'événements
-				objTable.preparerEvenementJoueurDeplacePersonnage(objJoueurHumain.obtenirNom(), collision, positionJoueur, objPositionJoueurDesiree, obtenirPointage(), obtenirArgent(), bonus, "");
+				objTable.preparerEvenementJoueurDeplacePersonnage(objJoueurHumain, collision, positionJoueur, objPositionJoueurDesiree, obtenirPointage(), obtenirArgent(), bonus, "");
 
 			}
 
@@ -916,7 +905,7 @@ public class InformationPartieHumain extends InformationPartie
 		}
 
 		if (stopTheGame) {
-			objTable.arreterPartie(""); //to do - cleaner end of game!!!!
+			objTable.arreterPartie(""); 
 		}
 
 		objQuestionCourante = null;
@@ -1005,10 +994,7 @@ public class InformationPartieHumain extends InformationPartie
 
 	}
 
-	public Point obtenirPositionJoueurDesiree() {
-		return objPositionJoueurDesiree;
-	}
-
+	
 	public int obtenirDistanceAuFinish() {
 		Point objPoint = objTable.getPositionPointFinish();
 		return Math.abs(objPositionJoueur.x - objPoint.x) + Math.abs(objPositionJoueur.y - objPoint.y);

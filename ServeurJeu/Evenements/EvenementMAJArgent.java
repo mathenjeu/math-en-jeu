@@ -5,8 +5,6 @@ import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-
-import ServeurJeu.Monitoring.Moniteur;
 import ClassesUtilitaires.UtilitaireXML;
 import ServeurJeu.Configuration.GestionnaireMessages;
 
@@ -22,6 +20,8 @@ public class EvenementMAJArgent extends Evenement
 
     // Déclaration d'une variable qui va garder le nouvel argent
     private int intArgent;
+    
+    private String messxml;
 	
     /**
      * Constructeur de la classe EvenementMAJArgent qui permet d'initialiser
@@ -34,6 +34,8 @@ public class EvenementMAJArgent extends Evenement
         
         // Définir le nouvel argent du joueur
         intArgent = nouvelArgent;
+        messxml = "";
+        generateString();
     }
 	
 	/**
@@ -46,12 +48,12 @@ public class EvenementMAJArgent extends Evenement
 	 */
 	protected String genererCodeXML(InformationDestination information)
 	{
-		Moniteur.obtenirInstance().debut( "EvenementMAJArgent.genererCodeXML" );
-		
-				 
-	    // Déclaration d'une variable qui va contenir le code XML à retourner
-	    String strCodeXML = "";
-	    
+		return messxml;
+	}
+	
+	private void generateString()
+	{
+
 		try
 		{
 	        // Appeler une fonction qui va créer un document XML dans lequel 
@@ -70,7 +72,7 @@ public class EvenementMAJArgent extends Evenement
 			Text objNoeudTexteArgent = objDocumentXML.createTextNode(Integer.toString(intArgent));
 			
 			// Définir les attributs du noeud de commande
-			objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
+			objNoeudCommande.setAttribute("no", Integer.toString(0));
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "MAJArgent");
 			
@@ -96,7 +98,7 @@ public class EvenementMAJArgent extends Evenement
 			objDocumentXML.appendChild(objNoeudCommande);
 
 			// Transformer le document XML en code XML
-			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+			messxml = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
 		}
 		catch (TransformerConfigurationException tce)
 		{
@@ -107,9 +109,6 @@ public class EvenementMAJArgent extends Evenement
 			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
 		}
 		
-		Moniteur.obtenirInstance().fin();
-		
-		return strCodeXML;
 	}
 	
 }
