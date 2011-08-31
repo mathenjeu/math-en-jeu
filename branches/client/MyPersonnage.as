@@ -386,10 +386,11 @@ class MyPersonnage implements IOurPersonnage
 		{
 			if(peutUtiliserObjet(nomObj)&& (listeObjets[nomObj].length >= 1))
 			{
+				var objID:Number = listeObjets[nomObj][listeObjets[nomObj].length - 1];
 				if(nomObj == "Banane"){
-                      var objID:Number = listeObjets[nomObj][listeObjets[nomObj].length - 1];
-					  _level0.loader.contentHolder.objGestionnaireEvenements.getOurPerso().setBananaId(objID);
-					 
+                      
+					  _level0.loader.contentHolder.planche.obtenirPerso().setBananaId(objID);
+					  _level0.loader.contentHolder.planche.obtenirPerso().prepareBananaToUse();		
 			          var bananaClip:MovieClip;
                       //bananaClip = _level0.loader.contentHolder.attachMovie("bananaToss", "toss", 2021, objID);
 					  bananaClip = _level0.loader.contentHolder.createEmptyMovieClip("toss", 2021);
@@ -399,16 +400,18 @@ class MyPersonnage implements IOurPersonnage
 					  bananaClip._x = 30;
                       bananaClip._y = 40;
 					  
-		        }else if (nomObj == "Livre"){
-				   _level0.loader.contentHolder.objGestionnaireEvenements.getOurPerso().setUsedBook(true);
-				   
-				}else{
-					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(listeObjets[nomObj][listeObjets[nomObj].length - 1], "NA");
-					_level0.loader.contentHolder.objGestionnaireEvenements.getOurPerso().enleverObjet(nomObj);
+		        }else{
+					trace("Enlever obj - " + nomObj);
+					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(objID, "NA");
+					_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet(nomObj);
 				}
-								
+				
+				if(nomObj == "Livre")
+				   _level0.loader.contentHolder.planche.obtenirPerso().setUsedBook(true);
+				
 				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._xscale = _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._yscale = 100;
 				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
+												
 			}//end 1st if
 		};		
 		
@@ -424,6 +427,7 @@ class MyPersonnage implements IOurPersonnage
 	//
 	public function enleverObjet(n:String)
 	{		
+	    trace("enlever - " + n + listeDesObjets[n].length );
 		listeDesObjets[n].pop();
 		_level0.loader.contentHolder.objectMenu[n].countTxt = Number(_level0.loader.contentHolder.objectMenu[n].countTxt) - 1;		
 	}	
@@ -1323,7 +1327,12 @@ class MyPersonnage implements IOurPersonnage
 		  		   
 		   //first on put on the sprite the box for the timer if is our perso		
 		   _level0.loader.contentHolder.attachMovie("brainBox", "brainBox", 6);//_level0.loader.contentHolder.getNextHigesthDepth());
-		   _level0.loader.contentHolder.brainBox._x = 460;
+		   
+		   if(_level0.loader.contentHolder.objGestionnaireEvenements.getListeLength() >= 11)
+		      _level0.loader.contentHolder.brainBox._x = 420;
+		   else 
+    	      _level0.loader.contentHolder.brainBox._x = 460;
+			  
 		   //_level0.loader.contentHolder.brainBox._xscale = 90;
 		   _level0.loader.contentHolder.brainBox._y = 304;
 		
@@ -1385,7 +1394,7 @@ class MyPersonnage implements IOurPersonnage
 		//_level0.loader.contentHolder.objGestionnaireEvenements.setBrainiacTimer(playerUnder); 
 	}
 	
-	public function prepareBananaToUse(id:Number, playerName:String)
+	public function prepareBananaToUse()
 	{
 		enleverObjet("Banane");	
 	}
@@ -1463,7 +1472,11 @@ class MyPersonnage implements IOurPersonnage
 				
 		//first on put on the sprite the box for the timer
 		var banBox:MovieClip = 	_level0.loader.contentHolder.attachMovie("bananaBox", "bananaBox", 7);
-		_level0.loader.contentHolder.bananaBox._x = 460;
+		
+		 if(_level0.loader.contentHolder.objGestionnaireEvenements.getListeLength() >= 11)
+		    _level0.loader.contentHolder.bananaBox._x = 420;
+		 else
+		    _level0.loader.contentHolder.bananaBox._x = 460;
 		//_level0.loader.contentHolder.bananaBox._xscale = 90;
 		_level0.loader.contentHolder.bananaBox._y = 304;
 		

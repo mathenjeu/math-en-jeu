@@ -303,10 +303,10 @@ class Personnage implements IPersonnage
 		{
 			if(peutUtiliserObjet(nomObj)&& (listeObjets[nomObj].length >= 1))
 			{
+				var objID:Number = listeObjets[nomObj][listeObjets[nomObj].length - 1];
 				if(nomObj == "Banane"){
-                      var objID:Number = listeObjets[nomObj][listeObjets[nomObj].length - 1];
-					  _level0.loader.contentHolder.planche.obtenirPerso().setBananaId(objID);
-					 
+                      
+					  _level0.loader.contentHolder.planche.obtenirPerso().setBananaId(objID);					 
 			          var bananaClip:MovieClip;
                       //bananaClip = _level0.loader.contentHolder.attachMovie("bananaToss", "toss", 2021, objID);
 					  bananaClip = _level0.loader.contentHolder.createEmptyMovieClip("toss", 2021);
@@ -317,7 +317,8 @@ class Personnage implements IPersonnage
                       bananaClip._y = 40;
 					  
 		        }else{
-					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(listeObjets[nomObj][listeObjets[nomObj].length - 1], "NA");
+					trace("Enlever obj - " + nomObj);
+					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(objID, "NA");
 					_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet(nomObj);
 				}
 				

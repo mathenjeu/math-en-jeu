@@ -147,6 +147,12 @@ class GestionnaireEvenements
     {
         return this.tableauDesPersonnages;
     }
+	
+	public function getListLength():Number
+	{
+		return this.tableauDesPersonnages.length;
+	}
+	
 
 	function obtenirNomUtilisateur()
 	{
@@ -545,7 +551,8 @@ class GestionnaireEvenements
        		
 		//this.colorIt = getColorByID(this.clothesColorID, idDessin);
 		setOurPerso(new MyPersonnage(0, this.nomUtilisateur, this.userRole, idDessin, this.clothesColorID, getColorByID(this.clothesColorID, idDessin)));
-		tableauDesPersonnages.push(getOurPerso());
+		if(!((this.userRole == 2 || this.userRole == 3) && getOurTable().compareType("Tournament")))
+		   tableauDesPersonnages.push(getOurPerso());
 
         this.objGestionnaireCommunication.demarrerPartie(Delegate.create(this, this.retourDemarrerPartie), 
 														 Delegate.create(this, this.evenementPartieDemarree), 
@@ -626,7 +633,6 @@ class GestionnaireEvenements
     {
         trace("*********************************************");
         trace("debut de utiliserObjet : " + id + " name : " + playerName );
-		getOurPerso().prepareBananaToUse(id, playerName);		
 		this.objGestionnaireCommunication.utiliserObjet(Delegate.create(this, this.retourUtiliserObjet), id, playerName);  
         trace("fin de utiliserObjet");
         trace("*********************************************\n");
@@ -2863,8 +2869,11 @@ class GestionnaireEvenements
     	{
 			//first we get out the perso from the list
             removePersoFromListe(objetEvenement.nomUtilisateur);
-			dessinerMenu();
-		    remplirMenuPointage()
+			if( _level0.loader.contentHolder._currentframe > 3)
+			{
+				dessinerMenu();
+		        remplirMenuPointage()
+			}
 			// after we replace the list on the screen
 			if(!inSelectPlayer)
 			   showTableUsers();        	
@@ -3006,15 +3015,28 @@ class GestionnaireEvenements
 
 		// color our head
 		var idDessin:Number = ourPerso.getIDessin();
-													
-		// put the face of my avatar in the panel (next to my name)
-		maTete = _level0.loader.contentHolder.maTete.attachMovie("tete" + idDessin, "maTete", -10099);
-		maTete._x = -5;
-		maTete._y = -30;
-		// V3 head size
-		maTete._xscale = 290;
-		maTete._yscale = 290;
-		UtilsBox.colorItMatrix(ourPerso.getColor(), maTete.headClo, idDessin);
+									
+				
+		// put the face of my avatar in the panel 
+		if((this.userRole == 2 || this.userRole == 3) && getOurTable().compareType("Tournament"))
+		{
+		   maTete = _level0.loader.contentHolder.maTete.attachMovie("teacherhead", "maTete", -10099);
+		   maTete._x = 20;
+		   maTete._y = -65;
+		    // V3 head size
+		   maTete._xscale = 220;
+		   maTete._yscale = 220;
+		}else{
+		   maTete = _level0.loader.contentHolder.maTete.attachMovie("tete" + idDessin, "maTete", -10099);
+		   maTete._x = -5;
+		   maTete._y = -30;
+		    // V3 head size
+		   maTete._xscale = 290;
+		   maTete._yscale = 290;		  
+		   UtilsBox.colorItMatrix(ourPerso.getColor(), maTete.headClo, idDessin);
+		}
+		
+		
 
         _level0.loader.contentHolder.horlogeNum = 60*objetEvenement.tempsPartie;
 				
@@ -3671,7 +3693,7 @@ public function drawUserFrame3(i:Number, colorC:String, idDessin:Number, movClip
 function testPlayers():Boolean
 {
    	var verify:Boolean = true;
-	var i:Number;
+/*	var i:Number;
 	for( i in tableauDesPersonnages) {
 		if(tableauDesPersonnages[i].getIdPersonnage() == 0 || tableauDesPersonnages[i].getIDessin() == 0 ||
     		 tableauDesPersonnages[i].getIdPersonnage() == undefined || tableauDesPersonnages[i].getIDessin() == undefined){
@@ -3679,7 +3701,7 @@ function testPlayers():Boolean
 		}
 		trace("test verify : " + tableauDesPersonnages[i].getIdPersonnage() + " and dessin " +  tableauDesPersonnages[i].getIDessin());
 	}
-	trace(" verify " + verify);
+	trace(" verify " + verify);*/
 	return verify;
 }// end methode 
 
