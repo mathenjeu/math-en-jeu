@@ -213,7 +213,7 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 		
 		// Création du profil du joueur virtuel
 		// to have virtual players of all difficulty levels
-		intNiveauDifficulte = objRandom.nextInt(4) + 1;		
+		intNiveauDifficulte = objRandom.nextInt(4);		
 		
 	}
 
