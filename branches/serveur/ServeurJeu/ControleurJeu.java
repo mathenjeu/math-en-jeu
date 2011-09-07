@@ -702,7 +702,7 @@ public class ControleurJeu {
         // Créer un nouvel événement qui va permettre d'envoyer l'événement
         // aux joueurs qu'un nouveau joueur s'est connecté
         //EvenementJoueurConnecte joueurConnecte = new EvenementJoueurConnecte(nomUtilisateur);
-        Evenement joueurConnecte = new Evenement();
+        EvenementJoueurConnecte joueurConnecte = new EvenementJoueurConnecte(nomUtilisateur);
 
         // Passer tous les joueurs connectés et leur envoyer un événement
         for (JoueurHumain objJoueur : lstJoueursConnectes.values()) {
@@ -718,57 +718,7 @@ public class ControleurJeu {
             }
         }
               
-	    // Déclaration d'une variable qui va contenir le code XML à retourner
-	    String strCodeXML = "";
-	    
-		try
-		{
-	        // Appeler une fonction qui va créer un document XML dans lequel 
-		    // on peut ajouter des noeuds
-	        Document objDocumentXML = UtilitaireXML.obtenirDocumentXML();
-
-			// Créer le noeud de commande à retourner
-			Element objNoeudCommande = objDocumentXML.createElement("commande");
-			
-			// Créer le noeud du paramètre
-			Element objNoeudParametre = objDocumentXML.createElement("parametre");
-			
-			// Créer un noeud contenant le nom d'utilisateur du noeud paramètre
-			Text objNoeudTexte = objDocumentXML.createTextNode(nomUtilisateur);
-			
-			// Définir les attributs du noeud de commande
-			objNoeudCommande.setAttribute("no", Integer.toString(0)); //information.obtenirNoCommande()
-			objNoeudCommande.setAttribute("type", "Evenement");
-			objNoeudCommande.setAttribute("nom", "JoueurConnecte");
-			
-			// On ajoute un attribut type qui va contenir le type
-			// du paramètre
-			objNoeudParametre.setAttribute("type", "NomUtilisateur");
-			
-			// Ajouter le noeud texte au noeud du paramètre
-			objNoeudParametre.appendChild(objNoeudTexte);
-			
-			// Ajouter le noeud paramètre au noeud de commande
-			objNoeudCommande.appendChild(objNoeudParametre);
-			
-			// Ajouter le noeud de commande au noeud racine dans le document
-			objDocumentXML.appendChild(objNoeudCommande);
-
-			// Transformer le document XML en code XML
-			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
-		}
-		catch (TransformerConfigurationException tce)
-		{
-			System.out.println(GestionnaireMessages.message("evenement.XML_transformation"));
-		}
-		catch (TransformerException te)
-		{
-			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
-		}		
-		
-		if(ControleurJeu.modeDebug) System.out.println("Evenement: " + strCodeXML);
-		
-		joueurConnecte.addXML(strCodeXML);
+	   
         // Ajouter le nouvel événement créé dans la liste d'événements à traiter
         objGestionnaireEvenements.ajouterEvenement(joueurConnecte);
     }

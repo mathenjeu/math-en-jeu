@@ -96,4 +96,20 @@ public class GestionnaireEvenements implements Runnable
 		this.lstEvenements.clear();
 		bolStopThread = true;
 	}
+	
+	/*
+	 * Cette fonction fait une pause au thread
+	 */
+	public void pause()
+	{
+		try
+		{			
+			Thread.sleep(20);		
+		}
+		catch(InterruptedException e)
+		{ 
+			objLogger.error("Error to did thead GE to sleep..." + e.getMessage());			
+		}
+
+	}
 }

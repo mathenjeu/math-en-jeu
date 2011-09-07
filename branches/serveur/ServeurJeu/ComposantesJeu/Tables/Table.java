@@ -387,9 +387,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 		// Empécher d'autres thread de toucher à la liste des tables de
 		// cette salle pendant que le joueur entre dans cette table
-		synchronized (getObjSalle().obtenirListeTables()) {
-			
-			this.addPlayerInListe(joueur);
+		synchronized (getObjSalle().obtenirListeTables()) {			
+			addPlayerInListe(joueur);
 			
 			// Si on doit générer le numéro de commande de retour, alors
 			// on le génére, sinon on ne fait rien (ça se peut que ce soit
@@ -834,31 +833,42 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 				// Ajouter le joueur virtuel à la liste
 				lstJoueursVirtuels.add(objJoueurVirtuel);
-
+				
+				objJoueurVirtuel.obtenirPartieCourante().setClothesColor(this.getOneColor());
+				objJoueurVirtuel.obtenirPartieCourante().setIdDessin(IDdess);
+				
+				synchronized (lstJoueursVirtuels) {
+					
+						// Préparer l'événement de joueur en attente.
+						// Cette fonction va passer les joueurs et créer un
+						// InformationDestination pour chacun et ajouter l'événement
+						// dans la file de gestion d'événements
+						preparerEvenementJoueurEntreTable(objJoueurVirtuel);					
+				}
+				
+				// Pour le prochain joueur virtuel
+				intIdPersonnage++;
+				
 				// Ajouter le joueur virtuel à la liste des positions, liste qui sera envoyée
 				// aux joueurs humains
 				lstJoueursParticipants[i] = objJoueurVirtuel;
-
-				// Pour le prochain joueur virtuel
-				intIdPersonnage++;
-
-				objJoueurVirtuel.obtenirPartieCourante().setClothesColor(this.getOneColor());
-				objJoueurVirtuel.obtenirPartieCourante().setIdDessin(IDdess);
 
 
 			}
 			position++;
 		}
-
-		// On peut maintenant vider la liste des joueurs en attente
-		// car elle ne nous sert plus à rien
-		lstJoueursEnAttente.clear();
-
-
+		
+		// need to give time to virtuels to enter table - before start game
+		// the enter table event is sent by GE of the room 
+		// we have desynchronisation of events 
+		objGestionnaireEvenements.pause();
+		
 		// Maintenant pour tous les joueurs, s'il y a des joueurs
 		// virtuels de présents, on leur envoit un message comme
 		// quoi les joueurs virtuels sont prêts
 		if (intNombreJoueursVirtuels > 0) {
+			// separate to proper hold virtiel's creation
+			// we don't have command number for events ... maybe to do
 			synchronized (lstJoueursVirtuels) {
 				for (int i = 0; i < lstJoueursVirtuels.size(); i++) {
 					// Préparer l'événement de joueur en attente.
@@ -866,11 +876,17 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					// InformationDestination pour chacun et ajouter l'événement
 					// dans la file de gestion d'événements
 					JoueurVirtuel objJoueurVirtuel = lstJoueursVirtuels.get(i);
-					preparerEvenementJoueurEntreTable(objJoueurVirtuel);
+					//preparerEvenementJoueurEntreTable(objJoueurVirtuel);
 					preparerEvenementJoueurDemarrePartie(objJoueurVirtuel, objJoueurVirtuel.obtenirPartieCourante().obtenirIdPersonnage());
 				}
-			}
+			}			
 		}
+		
+		
+		
+		// On peut maintenant vider la liste des joueurs en attente
+		// car elle ne nous sert plus à rien
+		lstJoueursEnAttente.clear();
 
 		// Préparer l'événement que la partie est commencée.
 		// Cette fonction va passer les joueurs et créer un
@@ -1220,6 +1236,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 		// Passer tous les joueurs de la salle et leur envoyer un événement
 		getObjSalle().broadcastEvent(joueurEntreTable, player);
+		//broadcastEvent(joueurEntreTable, player);
+
 
 	}
 
