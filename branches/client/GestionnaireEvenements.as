@@ -150,7 +150,7 @@ class GestionnaireEvenements
 	
 	public function getListLength():Number
 	{
-		return this.tableauDesPersonnages.length;
+		return tableauDesPersonnages.length;
 	}
 	
 
@@ -2971,6 +2971,9 @@ class GestionnaireEvenements
 		    var iplayer =  getPersonnageByName(objetEvenement.positionJoueurs[i].nom);
 		    iplayer.definirL(objetEvenement.positionJoueurs[i].x);
 			iplayer.definirC(objetEvenement.positionJoueurs[i].y);
+			
+			trace("test color : " + objetEvenement.positionJoueurs[i].nom + " " + iplayer.getIdPersonnage());
+	              
 		    /* 
             for(j in tableauDesPersonnages)
             {
@@ -3116,14 +3119,29 @@ class GestionnaireEvenements
 		tableauDesPersonnages.push( new AdversaryPersonnage( objetEvenement.idPersonnage, objetEvenement.nomUtilisateur, 
 											  objetEvenement.Role, idDessin, objetEvenement.Color, cloColor));
 		//pa.setIDessin(idDessin);
-		var n:Number = this.tableauDesPersonnages.length - 1;
-		tableauDesPersonnages[n].modifierPointage(Number(objetEvenement.Pointage));
-		tableauDesPersonnages[n].definirL(objetEvenement.xPosition);
-		tableauDesPersonnages[n].definirC(objetEvenement.yPosition);
+		var n:Number = tableauDesPersonnages.length - 1;
+		
+		
+		    var iplayer =  getPersonnageByName(objetEvenement.nomUtilisateur);
+		    iplayer.definirL(objetEvenement.xPosition);
+			iplayer.definirC(objetEvenement.yPosition);
+			iplayer.modifierPointage(objetEvenement.Pointage);
+		//tableauDesPersonnages[n].modifierPointage(objetEvenement.Pointage);
+		//tableauDesPersonnages[n].definirL(objetEvenement.xPosition);
+		//tableauDesPersonnages[n].definirC(objetEvenement.yPosition);
 							
-		_level0.loader.contentHolder.planche.ajouterPersonnage(tableauDesPersonnages[n], tableauDesPersonnages[n].obtenirL(), tableauDesPersonnages[n].obtenirC());
-		tableauDesPersonnages[n].initPlanche(_level0.loader.contentHolder.planche);
-		tableauDesPersonnages[n].afficher();
+			_level0.loader.contentHolder.planche.ajouterPersonnage(iplayer, iplayer.obtenirL(), iplayer.obtenirC());
+			iplayer.initPlanche(_level0.loader.contentHolder.planche);
+			iplayer.afficher();
+
+		//_level0.loader.contentHolder.planche.ajouterPersonnage(tableauDesPersonnages[n], tableauDesPersonnages[n].obtenirL(), tableauDesPersonnages[n].obtenirC());
+		//tableauDesPersonnages[n].initPlanche(_level0.loader.contentHolder.planche);
+		//tableauDesPersonnages[n].afficher();
+		
+		for(var i in tableauDesPersonnages)
+		{
+			trace(tableauDesPersonnages[i].obtenirNom());
+		}
 			
 		dessinerMenu();
 		remplirMenuPointage();
@@ -3176,13 +3194,14 @@ class GestionnaireEvenements
     public function evenementJoueurDemarrePartie(objetEvenement:Object)
     {
         // parametre: nomUtilisateur, idPersonnage
-     	trace("debut de evenementJoueurDemarrePartie   "+objetEvenement.nomUtilisateur+"     "+objetEvenement.idPersonnage);
+     	trace("debut de evenementJoueurDemarrePartie   " + objetEvenement.nomUtilisateur + "  " + objetEvenement.idPersonnage);
              
-		var iplayer =  getPersonnageByName(objetEvenement.nomUtilisateur);
-		iplayer.setIdPersonnage(objetEvenement.idPersonnage);
+		var iplayer = getPersonnageByName(objetEvenement.nomUtilisateur);
+		var num:Number = Number(objetEvenement.idPersonnage);
+		iplayer.setIdPersonnage(num);
 		if(!inSelectPlayer)
 		   showTableUsers();
-		trace("fin de evenementJoueurDemarrePartie");
+		trace("fin de evenementJoueurDemarrePartie " + num + " " + iplayer.getIdPersonnage() + " " + iplayer.obtenirNom());
     }// end function
 	
 	
@@ -3288,6 +3307,21 @@ class GestionnaireEvenements
         // parametre: 
     	trace("*********************************************");
     	trace("debut de evenementPartieTerminee   " + objetEvenement.statistiqueJoueur);
+		
+		_level0.loader.contentHolder["banane"].removeMovieClip();
+		_level0.loader.contentHolder.miniGameLayer["magasin"].removeMovieClip();
+		_level0.loader.contentHolder["aide"].removeMovieClip();
+    	_level0.loader.contentHolder["boutonFermer"].removeMovieClip();
+		_level0.loader.contentHolder["banane"].removeMovieClip();
+		_level0.loader.contentHolder["bananeUser"].removeMovieClip();
+		_level0.loader.contentHolder["GUI_utiliserObjet"].removeMovieClip();
+		_level0.loader.contentHolder["box_question"].removeMovieClip();
+		_level0.loader.contentHolder.toss.removeMovieClip();
+		//_level0.loader.contentHolder["fond_MiniGame"]._y += 400;
+		_level0.loader.contentHolder.brainBox.removeMovieClip();
+		_level0.loader.contentHolder.bananaBox.removeMovieClip();
+		_level0.loader.contentHolder.toolTip.removeMovieClip();
+		_level0.loader.contentHolder["deconnexion"].removeMovieClip(); 
    
         var i,j:Number; 
 		var k:Number = 0;
@@ -3337,24 +3371,7 @@ class GestionnaireEvenements
 					//trace(" OPPSS Patrie terminee : " + this.listeDesPersonnages[i].role);
 				}
 			}	
-		} // end find the picture
-		
-		
-    	    	
-  		_level0.loader.contentHolder.miniGameLayer["magasin"].removeMovieClip();
-		_level0.loader.contentHolder["aide"].removeMovieClip();
-    	_level0.loader.contentHolder["boutonFermer"].removeMovieClip();
-		_level0.loader.contentHolder["banane"].removeMovieClip();
-		_level0.loader.contentHolder["bananeUser"].removeMovieClip();
-		_level0.loader.contentHolder["GUI_utiliserObjet"].removeMovieClip();
-		_level0.loader.contentHolder["box_question"].removeMovieClip();
-		_level0.loader.contentHolder.toss.removeMovieClip();
-		//_level0.loader.contentHolder["fond_MiniGame"]._y += 400;
-		_level0.loader.contentHolder.brainBox.removeMovieClip();
-		_level0.loader.contentHolder.bananaBox.removeMovieClip();
-		_level0.loader.contentHolder.toolTip.removeMovieClip();
-		_level0.loader.contentHolder["deconnexion"].removeMovieClip(); 
-		
+		} // end find the picture		
 		
 		//s'assurer que la musique s'arrete en fin de partie
 		_level0.loader.contentHolder.musique.stop();

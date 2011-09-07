@@ -1092,14 +1092,15 @@ class MyPersonnage implements IOurPersonnage
 		   setBananaTimer(BANANA_TIME);
 		}
 		// after inform user about Banane
-		funcToCallMessage(); 
+		//funcToCallMessage(); 
 		
 		addMoveSight(-2);
 		//planche.setRepostCases(true);						 		
 	}
 	
-	public function correctStateBeforeBanane()
+	public function correctStateBeforeBanane(adverName:String)
 	{
+		funcToCallMessage(adverName); 
 		//if the player is in the minigame 
 		if(getMinigameLoade())
 		{		      
@@ -1328,10 +1329,14 @@ class MyPersonnage implements IOurPersonnage
 		   //first on put on the sprite the box for the timer if is our perso		
 		   _level0.loader.contentHolder.attachMovie("brainBox", "brainBox", 6);//_level0.loader.contentHolder.getNextHigesthDepth());
 		   
-		   if(_level0.loader.contentHolder.objGestionnaireEvenements.getListeLength() >= 11)
-		      _level0.loader.contentHolder.brainBox._x = 420;
-		   else 
+		   if(_level0.loader.contentHolder.objGestionnaireEvenements.getListLength() >= 11)
+		   {
+		      trace("liste - " + _level0.loader.contentHolder.objGestionnaireEvenements.getListLength());
+			  _level0.loader.contentHolder.brainBox._x = 400;
+		   }
+		   else if(_level0.loader.contentHolder.objGestionnaireEvenements.getListLength() < 11){ 
     	      _level0.loader.contentHolder.brainBox._x = 460;
+		   }
 			  
 		   //_level0.loader.contentHolder.brainBox._xscale = 90;
 		   _level0.loader.contentHolder.brainBox._y = 304;
@@ -1446,10 +1451,10 @@ class MyPersonnage implements IOurPersonnage
   }// end function 
   
   // function to display the message of tossed banana
-  function funcToCallMessage()
+  function funcToCallMessage(adverName:String)
   {
       // we put the message only if the game is not in the way to finish
-	  if(_level0.loader.contentHolder.horlogeNum > 7)
+	  if(_level0.loader.contentHolder.horlogeNum > 3)
 	  {
 			var twMove:Tween;
             var guiBanane:MovieClip
@@ -1458,7 +1463,7 @@ class MyPersonnage implements IOurPersonnage
             guiBanane._x = 275;
 			
 		    _level0.loader.contentHolder["banane"].nomCible = " ";
-	        _level0.loader.contentHolder["banane"].nomJoueurUtilisateur = this.nom;
+	        _level0.loader.contentHolder["banane"].nomJoueurUtilisateur = adverName;
 	       
 	  }
   }// end method
@@ -1473,10 +1478,13 @@ class MyPersonnage implements IOurPersonnage
 		//first on put on the sprite the box for the timer
 		var banBox:MovieClip = 	_level0.loader.contentHolder.attachMovie("bananaBox", "bananaBox", 7);
 		
-		 if(_level0.loader.contentHolder.objGestionnaireEvenements.getListeLength() >= 11)
-		    _level0.loader.contentHolder.bananaBox._x = 420;
-		 else
+		 if(_level0.loader.contentHolder.objGestionnaireEvenements.getListLength() >= 11)
+		 {
+		    _level0.loader.contentHolder.bananaBox._x = 400;
+		 }
+		 else  if(_level0.loader.contentHolder.objGestionnaireEvenements.getListLength() < 11){
 		    _level0.loader.contentHolder.bananaBox._x = 460;
+		 }
 		//_level0.loader.contentHolder.bananaBox._xscale = 90;
 		_level0.loader.contentHolder.bananaBox._y = 304;
 		

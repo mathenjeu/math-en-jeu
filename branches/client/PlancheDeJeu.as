@@ -489,7 +489,7 @@ class PlancheDeJeu
     //function ajouterPersonnage(nom:String, ll:Number, cc:Number, idPers:Number, idClip:Number, userRole:Number, cloColor:String)
 	public function ajouterPersonnage(p:IPersonnage, ll:Number, cc:Number)
     {       
-        trace("ajouterPersonnage:" + p + " ll:" + ll + " cc:" + cc );
+        trace("ajouterPersonnage:" + p.obtenirNom() + " ll:" + ll + " cc:" + cc );
         tableauDesCases[ll][cc].ajouterPersonnage(p);
     }
     

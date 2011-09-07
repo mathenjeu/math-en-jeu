@@ -317,10 +317,12 @@ class AdversaryPersonnage implements IPersonnage
 	public function setIdPersonnage(n:Number)
 	{
 		numero = n;
+		trace("set id - adversary - " + n + " " + numero);
 		if(n == 0)
 		   setIDessin(0);
 		else
 		   setIDessin(UtilsBox.calculatePicture(n));
+		
 	}
 		   	
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -804,7 +806,7 @@ class AdversaryPersonnage implements IPersonnage
 	    bananaRestedTime = 1;		
 	}
 	
-	public function correctStateBeforeBanane()
+	public function correctStateBeforeBanane(adverName:String)
 	{
 		//???
 	}
@@ -815,7 +817,8 @@ class AdversaryPersonnage implements IPersonnage
 	    // phase 1 - remove old shell_mc
 	   //_level0.loader.contentHolder.referenceLayer.shell_mc.removeMovieClip();
 	   // phase 1 - player toss banana
-	   playerTo.correctStateBeforeBanane();
+	   
+	   playerTo.correctStateBeforeBanane(this.nom);
 	   tossBanana();
 	   
 	   // phase 2 - banana shell fly to the player that support the action
