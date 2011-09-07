@@ -597,12 +597,17 @@ public class ProtocoleJoueur implements Runnable
         objAncientJoueurHumain.obtenirProtocoleJoueur().definirJoueur(objAncientJoueurHumain);
         bolEnTrainDeJouer = true;
 
+		System.out.println("protocole - rejoindre " + objJoueurHumain.obtenirProtocoleJoueur() + " " + objAncientJoueurHumain.obtenirProtocoleJoueur());
+
         objJoueurHumain.obtenirPartieCourante().obtenirTable().restartGame(objJoueurHumain, true);
 
         // Enlever le joueur de la liste des joueurs déconnectés
         objControleurJeu.enleverJoueurDeconnecte(objJoueurHumain.obtenirNom());
         Salle objSalle = objJoueurHumain.obtenirPartieCourante().obtenirTable().getObjSalle();
         objControleurJeu.entrerSalle(objJoueurHumain, objSalle.getRoomId(), objSalle.getPassword(), false);
+        
+		System.out.println("protocole - rejoindre " + objJoueurHumain.obtenirProtocoleJoueur() + " " + objAncientJoueurHumain.obtenirProtocoleJoueur());
+
 
         // Envoyer le plateau de jeu, la liste des joueurs,
         // leurs ids personnage et leurs positions au joueur qui se reconnecte

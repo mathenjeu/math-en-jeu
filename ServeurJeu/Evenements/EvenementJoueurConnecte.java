@@ -1,14 +1,7 @@
 package ServeurJeu.Evenements;
 
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-import ServeurJeu.ControleurJeu;
-import ServeurJeu.Monitoring.Moniteur;
-import ClassesUtilitaires.UtilitaireXML;
-import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
  * @author Jean-François Brind'Amour
@@ -27,29 +20,15 @@ public class EvenementJoueurConnecte extends Evenement
     {
         // Définir le nom d'utilisateur du nouveau joueur connecté
         strNomUtilisateur = nomUtilisateur;
+        generateXML();
     }
 	
 	/**
-	 * Cette fonction permet de générer le code XML de l'événement d'un nouveau
-	 * joueur et de le retourner.
-	 * 
-	 * @param InformationDestination information : Les informations à qui 
-	 * 					envoyer l'événement
-	 * @return String : Le code XML de l'événement à envoyer
+	 * Cette fonction permet de générer le code XML de l'événement 
 	 */
-	protected String genererCodeXML(InformationDestination information)
+	private void generateXML()
 	{
-		Moniteur.obtenirInstance().debut( "EvenementJoueurConnecte.genererCodeXML" );
-	    // Déclaration d'une variable qui va contenir le code XML à retourner
-	    String strCodeXML = "";
-	    
-		try
-		{
-	        // Appeler une fonction qui va créer un document XML dans lequel 
-		    // on peut ajouter des noeuds
-	        Document objDocumentXML = UtilitaireXML.obtenirDocumentXML();
-
-			// Créer le noeud de commande à retourner
+		    // Créer le noeud de commande à retourner
 			Element objNoeudCommande = objDocumentXML.createElement("commande");
 			
 			// Créer le noeud du paramètre
@@ -59,7 +38,7 @@ public class EvenementJoueurConnecte extends Evenement
 			Text objNoeudTexte = objDocumentXML.createTextNode(strNomUtilisateur);
 			
 			// Définir les attributs du noeud de commande
-			objNoeudCommande.setAttribute("no", Integer.toString(0)); //information.obtenirNoCommande()
+			//objNoeudCommande.setAttribute("no", Integer.toString(0)); //information.obtenirNoCommande()
 			objNoeudCommande.setAttribute("type", "Evenement");
 			objNoeudCommande.setAttribute("nom", "JoueurConnecte");
 			
@@ -74,22 +53,7 @@ public class EvenementJoueurConnecte extends Evenement
 			objNoeudCommande.appendChild(objNoeudParametre);
 			
 			// Ajouter le noeud de commande au noeud racine dans le document
-			objDocumentXML.appendChild(objNoeudCommande);
-
-			// Transformer le document XML en code XML
-			strCodeXML = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
-		}
-		catch (TransformerConfigurationException tce)
-		{
-			System.out.println(GestionnaireMessages.message("evenement.XML_transformation"));
-		}
-		catch (TransformerException te)
-		{
-			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
-		}
+			objDocumentXML.appendChild(objNoeudCommande);	
 		
-		Moniteur.obtenirInstance().fin();
-		if(ControleurJeu.modeDebug) System.out.println("Evenement: " + strCodeXML);
-		return strCodeXML;
 	}
 }

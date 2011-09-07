@@ -1,6 +1,12 @@
 package ServeurJeu.Evenements;
 
 import java.util.ArrayList;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import ServeurJeu.Configuration.GestionnaireMessages;
+import ClassesUtilitaires.UtilitaireXML;
 
 /**
  * @author Jean-François Brind'Amour
@@ -8,14 +14,15 @@ import java.util.ArrayList;
 public class Evenement
 {
 	// Déclaration d'une liste de InformationDestination
-	protected ArrayList<InformationDestination> lstInformationDestination;// = new ArrayList<InformationDestination>();
-
-	private String messageXml;
+	protected ArrayList<InformationDestination> lstInformationDestination;
+	//un document XML dans lequel on peut ajouter des noeuds
+	protected Document objDocumentXML;
 
 	public Evenement()
 	{
 		lstInformationDestination = new ArrayList<InformationDestination>();
-		messageXml = "";
+	    // Appeler une fonction qui va créer le document XML 
+		objDocumentXML = UtilitaireXML.obtenirDocumentXML();
 	}
 
 	/**
@@ -33,24 +40,7 @@ public class Evenement
 		lstInformationDestination.add(information);		
 	}
 
-	/**
-	 * Cette fonction permet de générer le code XML de l'événement d'un nouveau
-	 * joueur et de le retourner.
-	 * 
-	 * @param InformationDestination information : Les informations à qui 
-	 * 					envoyer l'événement
-	 * @return String : Le code XML de l'événement à envoyer
-	 */
-	protected  String genererCodeXML(InformationDestination information)
-	{
-		return messageXml;		
-	}
-
-	public void addXML(String messXML)
-	{
-		messageXml = messXML;
-	}
-
+	
 	/**
 	 * Cette méthode permet d'envoyer l'événement courant à tous les joueurs
 	 * se trouvant dans la liste des InformationDestination.
@@ -59,24 +49,43 @@ public class Evenement
 	{
 		// Passer tous les InformationDestination se trouvant dans la liste de
 		// l'événement courant et envoyer à chacun l'événement courant
-
 		for (int i = 0; i < lstInformationDestination.size(); i++)
 		{
 			// Faire la référence vers l'objet InformationDestination courant
-			InformationDestination information =  lstInformationDestination.get(i);    
-
-
-
+			InformationDestination information =  lstInformationDestination.get(i);
+			
 			// Envoyer l'événement au joueur courant
-			if(messageXml.equals(""))
-			{
-				String strTemp = genererCodeXML(information);
-				information.obtenirProtocoleJoueur().envoyerMessage(strTemp);
-			}
-			else
-				information.obtenirProtocoleJoueur().envoyerMessage(messageXml);
-
+			information.obtenirProtocoleJoueur().envoyerMessage(genererStringXML(information));			
 		}
 
+	}
+	
+	/**
+	 * Cette fonction permet de générer le code XML de l'événement d'un joueur
+	 * et de le retourner.
+	 * 
+	 * @param InformationDestination information : Les informations à qui 
+	 * 					envoyer l'événement
+	 * @return String : Le code XML de l'événement à envoyer
+	 */
+	protected String genererStringXML(InformationDestination information)
+	{
+
+		Element objNoeudCommande = objDocumentXML.getDocumentElement();
+		objNoeudCommande.setAttribute("no", Integer.toString(information.obtenirNoCommande()));
+
+		try {
+			return UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
+		}
+		catch (TransformerConfigurationException tce)
+		{
+			System.out.println(GestionnaireMessages.message("evenement.XML_transformation"));
+		}
+		catch (TransformerException te)
+		{
+			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
+		}
+
+		return ""; //TO DO ... 
 	}
 }

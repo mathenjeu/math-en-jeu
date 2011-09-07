@@ -95,7 +95,7 @@ public class PlayerBananaState {
 	 */
 	public void bananaIsTossed()
 	{
-		if(player != null){
+		if(player != null && player.getPlayerGameInfo().obtenirTable().obtenirGestionnaireTemps() != null){
 			if(isUnderBananaEffects == false){				
 		    	// effects of Banana
 				isUnderBananaEffects = true;

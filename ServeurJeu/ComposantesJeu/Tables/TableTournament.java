@@ -545,6 +545,14 @@ public class TableTournament extends Table {
 			// Ajouter ce nouveau joueur dans la liste des joueurs de cette table
 			lstJoueurs.put(joueur.obtenirNom(), joueur);
 			lstDiffusion.put(joueur.obtenirNom(), joueur);
+			System.out.println("table - add " + joueur.obtenirNom() + " " + joueur.obtenirProtocoleJoueur());
+
+			for (JoueurHumain objJoueur: lstDiffusion.values()) {
+				System.out.println("table - in add " + objJoueur.obtenirNom() + " " + objJoueur.obtenirProtocoleJoueur());
+				
+				
+			}
+
 
 		}
 
@@ -561,6 +569,8 @@ public class TableTournament extends Table {
 			lstJoueursEnAttente.remove(player.obtenirNom());
 			lstDiffusion.remove(player.obtenirNom());
 			colors.add(player.obtenirPartieCourante().resetColor()); 
+			System.out.println("table - getout " + player.obtenirNom());
+
 		}
 	}
 
@@ -587,7 +597,7 @@ public class TableTournament extends Table {
 							objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
 							objJoueur.obtenirProtocoleJoueur()));
 				}
-				//System.out.println("table - broadcast " + objJoueur.obtenirNom());
+				System.out.println("table - broadcast " + objJoueur.obtenirNom());
 			}
 		}
 
@@ -607,13 +617,19 @@ public class TableTournament extends Table {
 		synchronized (lstJoueurs) {
 			// Passer tous les joueurs de la table et leur envoyer un événement
 			for (JoueurHumain objJoueur: lstDiffusion.values()) {
+				System.out.println("table - broadcast1 " + objJoueur.obtenirNom() + " " + objJoueur.obtenirProtocoleJoueur());
+							
+			}
+
+			for (JoueurHumain objJoueur: lstDiffusion.values()) {
+				System.out.println("table - broadcast " + objJoueur.obtenirNom() + " " + objJoueur.obtenirProtocoleJoueur());
 				// Obtenir un numéro de commande pour le joueur courant, créer
 				// un InformationDestination et l'ajouter à l'événement
 				event.ajouterInformationDestination( new InformationDestination(
 						objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
 						objJoueur.obtenirProtocoleJoueur()));
 
-				//System.out.println("table - broadcast " + objJoueur.obtenirNom());
+				
 			}
 
 		}
@@ -622,5 +638,5 @@ public class TableTournament extends Table {
 		objGestionnaireEvenements.ajouterEvenement(event);
 	}
 
-
+	
 }

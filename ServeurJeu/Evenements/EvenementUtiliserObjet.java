@@ -1,13 +1,7 @@
 package ServeurJeu.Evenements;
 
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-import ServeurJeu.ControleurJeu;
-import ClassesUtilitaires.UtilitaireXML;
-import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
  * @author François Gingras
@@ -28,73 +22,46 @@ public class EvenementUtiliserObjet extends Evenement
 	// Autres informations à envoyer
 	private String autresInformations;
 
-	private String messxml;
-
 	public EvenementUtiliserObjet(String joueurQuiUtilise, String joueurAffecte, String objetUtilise, String autresInformations)
 	{
 		this.joueurQuiUtilise = joueurQuiUtilise;
 		this.joueurAffecte = joueurAffecte;
 		this.objetUtilise = objetUtilise;
 		this.autresInformations = autresInformations;
-		messxml = "";
-		generateString();
+		generateXML();
 	}
 
-	protected String genererCodeXML(InformationDestination information)
-	{	
-		return messxml;
-	}
-
-	private void generateString()
+	private void generateXML()
 	{
-		try
-		{
-			Document objDocumentXML = UtilitaireXML.obtenirDocumentXML();
-			Element objNoeudCommande = objDocumentXML.createElement("commande");
-			objNoeudCommande.setAttribute("no", Integer.toString(0));
-			objNoeudCommande.setAttribute("type", "Evenement");
-			objNoeudCommande.setAttribute("nom", "UtiliserObjet");
+		Element objNoeudCommande = objDocumentXML.createElement("commande");
+		objNoeudCommande.setAttribute("type", "Evenement");
+		objNoeudCommande.setAttribute("nom", "UtiliserObjet");
 
-			Element objNoeudParametreNomUtilise = objDocumentXML.createElement("parametre");
-			Element objNoeudParametreNomAffecte = objDocumentXML.createElement("parametre");
-			Element objNoeudParametreObjetUtilise = objDocumentXML.createElement("parametre");
-			Element objNoeudParametreAutresInformations = objDocumentXML.createElement("parametre");
+		Element objNoeudParametreNomUtilise = objDocumentXML.createElement("parametre");
+		Element objNoeudParametreNomAffecte = objDocumentXML.createElement("parametre");
+		Element objNoeudParametreObjetUtilise = objDocumentXML.createElement("parametre");
+		Element objNoeudParametreAutresInformations = objDocumentXML.createElement("parametre");
 
-			Text objNoeudTexteNomUtilise = objDocumentXML.createTextNode(joueurQuiUtilise);
-			Text objNoeudTexteNomAffecte = objDocumentXML.createTextNode(joueurAffecte);
-			Text objNoeudTexteObjetUtilise = objDocumentXML.createTextNode(objetUtilise);
-			Text objNoeudTexteAutresInformations = objDocumentXML.createTextNode(autresInformations);
+		Text objNoeudTexteNomUtilise = objDocumentXML.createTextNode(joueurQuiUtilise);
+		Text objNoeudTexteNomAffecte = objDocumentXML.createTextNode(joueurAffecte);
+		Text objNoeudTexteObjetUtilise = objDocumentXML.createTextNode(objetUtilise);
+		Text objNoeudTexteAutresInformations = objDocumentXML.createTextNode(autresInformations);
 
-			objNoeudParametreNomUtilise.setAttribute("type", "joueurQuiUtilise");
-			objNoeudParametreNomAffecte.setAttribute("type", "joueurAffecte");
-			objNoeudParametreObjetUtilise.setAttribute("type", "objetUtilise");
-			objNoeudParametreAutresInformations.setAttribute("type", "autresInformations");
+		objNoeudParametreNomUtilise.setAttribute("type", "joueurQuiUtilise");
+		objNoeudParametreNomAffecte.setAttribute("type", "joueurAffecte");
+		objNoeudParametreObjetUtilise.setAttribute("type", "objetUtilise");
+		objNoeudParametreAutresInformations.setAttribute("type", "autresInformations");
 
-			objNoeudParametreNomUtilise.appendChild(objNoeudTexteNomUtilise);
-			objNoeudParametreNomAffecte.appendChild(objNoeudTexteNomAffecte);
-			objNoeudParametreObjetUtilise.appendChild(objNoeudTexteObjetUtilise);
-			objNoeudParametreAutresInformations.appendChild(objNoeudTexteAutresInformations);
+		objNoeudParametreNomUtilise.appendChild(objNoeudTexteNomUtilise);
+		objNoeudParametreNomAffecte.appendChild(objNoeudTexteNomAffecte);
+		objNoeudParametreObjetUtilise.appendChild(objNoeudTexteObjetUtilise);
+		objNoeudParametreAutresInformations.appendChild(objNoeudTexteAutresInformations);
 
-			objNoeudCommande.appendChild(objNoeudParametreNomUtilise);
-			objNoeudCommande.appendChild(objNoeudParametreNomAffecte);
-			objNoeudCommande.appendChild(objNoeudParametreObjetUtilise);
-			objNoeudCommande.appendChild(objNoeudParametreAutresInformations);
+		objNoeudCommande.appendChild(objNoeudParametreNomUtilise);
+		objNoeudCommande.appendChild(objNoeudParametreNomAffecte);
+		objNoeudCommande.appendChild(objNoeudParametreObjetUtilise);
+		objNoeudCommande.appendChild(objNoeudParametreAutresInformations);
 
-			objDocumentXML.appendChild(objNoeudCommande);
-			messxml = UtilitaireXML.transformerDocumentXMLEnString(objDocumentXML);
-			messxml = messxml.replaceAll("&lt;", "<");
-			messxml = messxml.replaceAll("&gt;", ">");
-			//System.out.println("Evenement utilise " + joueurQuiUtilise + " " + joueurAffecte);
-		}
-		catch (TransformerConfigurationException tce)
-		{
-			System.out.println(GestionnaireMessages.message("evenement.XML_transformation"));
-		}
-		catch (TransformerException te)
-		{
-			System.out.println(GestionnaireMessages.message("evenement.XML_conversion"));
-		}
-
-		if(ControleurJeu.modeDebug) System.out.println("Evenement: " + messxml);
+		objDocumentXML.appendChild(objNoeudCommande);			
 	}
 }
