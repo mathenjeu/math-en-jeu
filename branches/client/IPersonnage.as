@@ -20,4 +20,6 @@
    public function obtenirL():Number;
    public function obtenirC():Number;
    public function removeImage();
+   public function modifierPointage(val:Number);
+   public function getOnFinish():Boolean;
 }

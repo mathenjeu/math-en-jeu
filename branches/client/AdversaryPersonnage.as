@@ -61,6 +61,25 @@ class AdversaryPersonnage implements IPersonnage
 	private static var BRAINIAC_TIME:Number = 60;    //  constant for the time that brainiac is active
 	private var planche:PlancheDeJeu;
 	private var level:Number;
+	//used on Tournament to indicate that are on a finish line
+	private var isOnFinish:Boolean;
+	private var winGame:Boolean;
+	
+	public function getFinish(bonus:Number)
+	{ 
+	  if(bonus > 0)
+	  {
+		  isOnFinish = true;
+		  winGame = true;
+	  }
+		 
+	}
+	
+	public function getOnFinish():Boolean
+	{
+		return isOnFinish;
+	}
+
 	
 	public function getColorFilter():ColorMatrixFilter
 	{
@@ -359,7 +378,8 @@ class AdversaryPersonnage implements IPersonnage
 	public function initPlanche(planchet:PlancheDeJeu)
 	{
 		this.planche = planchet;
-		this.level = 5 * planche.obtenirTableauDesCases().length * planche.obtenirTableauDesCases()[0].length + 2 * this.numero;
+		this.level = _level0.loader.contentHolder.referenceLayer.getNextHighestDepth();//5 * planche.obtenirTableauDesCases().length * planche.obtenirTableauDesCases()[0].length + 2 * this.numero;
+		trace("Level - " + level);
 		var xx:Number = planche.obtenirTableauDesCases()[this.l][this.c].obtenirClipCase()._x;
 		var yy:Number = planche.obtenirTableauDesCases()[this.l][this.c].obtenirClipCase()._y;
 		this.position = new Point(xx,yy);

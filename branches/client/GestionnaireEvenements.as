@@ -861,7 +861,8 @@ class GestionnaireEvenements
 				      var cloColor:String = getColorByID(objetEvenement.playersListe[i].clocolor, idDessin);
 					 
 				      this.tableauDesPersonnages.push(new AdversaryPersonnage( objetEvenement.playersListe[i].idPersonnage, objetEvenement.playersListe[i].nom, 
-											  objetEvenement.playersListe[i].userRole, idDessin, objetEvenement.playersListe[i].clocolor, cloColor));										
+											  objetEvenement.playersListe[i].userRole, idDessin, objetEvenement.playersListe[i].clocolor, cloColor));
+					  getPersonnageByName(objetEvenement.playersListe[i].nom).modifierPointage(objetEvenement.playersListe[i].pointage);
 					  
 				  }
                   
@@ -887,6 +888,9 @@ class GestionnaireEvenements
 			case "Table":
 			
 			   this.ourTable = new GameTable(objetEvenement.noTable, 0, "", objetEvenement.gameType, 0, 0);
+			   // put the face of my avatar in the panel 
+		      showFaceAvatar();
+			  
 			   this.maxPlayers = objetEvenement.maxPlayers;
 			   _level0.loader.contentHolder.planche.zoomer("out", 4);
 			   
@@ -2263,10 +2267,9 @@ class GestionnaireEvenements
 					   _level0.loader.contentHolder.planche.obtenirPerso().setBrainiac(true);
 					ourPerso.setMoveSight( objetEvenement.moveVisibility );
 					// if we have bonus in the tournament game  we must treat this
-					//	  if(objetEvenement.bonus > 0){
-					//	     	this.listeDesPersonnages[i].win = 1;
-					//			 this.winIt = 1;
-					//	  }
+					if(objetEvenement.bonus > 0){
+						 ourPerso.getFinish(objetEvenement.bonus);
+					}
 						  
 				    // newsbox
 		            var messageInfo:String;
@@ -2956,11 +2959,7 @@ class GestionnaireEvenements
         trace("debut de evenementPartieDemarree   " + objetEvenement.tempsPartie + "   ");
         var i:Number;
         var j:Number;
-        
-		
-		 
-		var count:Number;
-		var maTete:MovieClip;
+    	var count:Number;
 		
 		_level0.loader.contentHolder["att"].removeMovieClip();		 
 		_level0.loader.contentHolder.gotoAndPlay(4);		
@@ -3015,31 +3014,9 @@ class GestionnaireEvenements
         }
 		
 		 _level0.loader.contentHolder.planche.setPerso(ourPerso);
-
-		// color our head
-		var idDessin:Number = ourPerso.getIDessin();
-									
-				
+			
 		// put the face of my avatar in the panel 
-		if((this.userRole == 2 || this.userRole == 3) && getOurTable().compareType("Tournament"))
-		{
-		   maTete = _level0.loader.contentHolder.maTete.attachMovie("teacherhead", "maTete", -10099);
-		   maTete._x = 20;
-		   maTete._y = -65;
-		    // V3 head size
-		   maTete._xscale = 220;
-		   maTete._yscale = 220;
-		}else{
-		   maTete = _level0.loader.contentHolder.maTete.attachMovie("tete" + idDessin, "maTete", -10099);
-		   maTete._x = -5;
-		   maTete._y = -30;
-		    // V3 head size
-		   maTete._xscale = 290;
-		   maTete._yscale = 290;		  
-		   UtilsBox.colorItMatrix(ourPerso.getColor(), maTete.headClo, idDessin);
-		}
-		
-		
+		showFaceAvatar();
 
         _level0.loader.contentHolder.horlogeNum = 60*objetEvenement.tempsPartie;
 				
@@ -3069,6 +3046,33 @@ class GestionnaireEvenements
         trace("fin de evenementPartieDemarree    " + getTimer());
         trace("*********************************************\n");
     }
+	
+	//////////////////////////////////////////////////////////////////////////////
+	public function showFaceAvatar()
+	{
+		var maTete:MovieClip;
+		// color our head
+		var idDessin:Number = ourPerso.getIDessin();		
+
+		if((this.userRole == 2 || this.userRole == 3) && getOurTable().compareType("Tournament"))
+		{
+		   maTete = _level0.loader.contentHolder.maTete.attachMovie("teacherhead", "maTete", -10099);
+		   maTete._x = 20;
+		   maTete._y = -65;
+		    // V3 head size
+		   maTete._xscale = 220;
+		   maTete._yscale = 220;
+		}else{
+		   maTete = _level0.loader.contentHolder.maTete.attachMovie("tete" + idDessin, "maTete", -10099);
+		   maTete._x = -5;
+		   maTete._y = -30;
+		    // V3 head size
+		   maTete._xscale = 290;
+		   maTete._yscale = 290;		  
+		   UtilsBox.colorItMatrix(ourPerso.getColor(), maTete.headClo, idDessin);
+		}
+	}// end function
+	
 	
 	// start animation 
 	public function startAnimation(){
@@ -3236,7 +3240,7 @@ class GestionnaireEvenements
 			        jouersStarted[i].pointage = tableauDesPersonnages[i].obtenirPointage();
 			        jouersStarted[i].role = tableauDesPersonnages[i].getRole();
 					jouersStarted[i].idessin = tableauDesPersonnages[i].getIDessin();		
-					jouersStarted[i].win = tableauDesPersonnages[i].isOnFinish();
+					jouersStarted[i].win = tableauDesPersonnages[i].getOnFinish();
 					jouersStarted[i].clocol = tableauDesPersonnages[i].getColor();
 					
 					//trace("Dans pointage : " + jouersStarted[i].nomUtilisateur + " " + this.listeDesPersonnages[i].nom );
@@ -3280,12 +3284,12 @@ class GestionnaireEvenements
 			    trans.colorTransform = colorTrans;
 			}
 		  
-			if(jouersStarted[i].win == 1){
+			if(jouersStarted[i].win){
 			   this["Flag" + (i + 1)] = new MovieClip();
 			   this["Flag" + (i + 1)] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].attachMovie("checkFlag_mc", "flag" + i, 220 + i, {_x:-20, _y:0});
 			   
 			}
-			//trace("Pointage: !!!!!!!!!! " + i + " " + jouersStarted[i].win);
+			trace("Pointage: !!!!!!!!!! " + i + " " + jouersStarted[i].win);
 			//this["tete"+j]=new MovieClip();
 			this["tete" + (i + 1)] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+ (i + 1)]["tete"+ (i + 1)].attachMovie("tete" + jouersStarted[i].idessin, "Tete" + i, -10100 + i);
 			this["tete" + (i + 1)]._x = -6;
@@ -3445,7 +3449,7 @@ class GestionnaireEvenements
     {
         // parametre: nomUtilisateur, anciennePosition et nouvellePosition, pointage, bonus
     	trace("*********************************************");
-    	trace("debut de evenementJoueurDeplacePersonnage (sans compter les rotations)  " + objetEvenement.nomUtilisateur + "   " + objetEvenement.anciennePosition.x+"   "+objetEvenement.anciennePosition.y+"   "+objetEvenement.nouvellePosition.x+"   "+objetEvenement.nouvellePosition.y+"   "+objetEvenement.collision+"   "+objetEvenement.pointage+"   "+objetEvenement.argent);
+    	trace("debut de evenementJoueurDeplacePersonnage (sans compter les rotations)  " + objetEvenement.nomUtilisateur + "   " + objetEvenement.anciennePosition.x+"   "+objetEvenement.anciennePosition.y+"   "+objetEvenement.nouvellePosition.x+"   "+objetEvenement.nouvellePosition.y+"   "+objetEvenement.collision+"   "+objetEvenement.pointage+"   "+objetEvenement.bonus);
        	
         if(!endGame){  //to cancel after end game virtual players move's		
     	   
@@ -3710,7 +3714,7 @@ public function drawUserFrame3(i:Number, colorC:String, idDessin:Number, movClip
 function testPlayers():Boolean
 {
    	var verify:Boolean = true;
-/*	var i:Number;
+	var i:Number;
 	for( i in tableauDesPersonnages) {
 		if(tableauDesPersonnages[i].getIdPersonnage() == 0 || tableauDesPersonnages[i].getIDessin() == 0 ||
     		 tableauDesPersonnages[i].getIdPersonnage() == undefined || tableauDesPersonnages[i].getIDessin() == undefined){
@@ -3718,7 +3722,7 @@ function testPlayers():Boolean
 		}
 		trace("test verify : " + tableauDesPersonnages[i].getIdPersonnage() + " and dessin " +  tableauDesPersonnages[i].getIDessin());
 	}
-	trace(" verify " + verify);*/
+	trace(" verify " + verify);
 	return verify;
 }// end methode 
 
