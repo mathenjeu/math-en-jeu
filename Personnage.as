@@ -43,17 +43,15 @@ class Personnage implements IPersonnage
 	private var listeDesObjets:Object;
 	private var faireCollision:String;   // sert a savoir s'il y a eu collision apres un deplacement et avec quoi
 	private var nom:String;               // name of user that is master of pers
-	private var boardCentre:Boolean;
-	private var listeSurMagasin:Array;	 // sert a recuperer la liste d'objets du magasin lorsque qu'on va sur une case magasin
-	private var minigameLoade:Boolean;
+		
 	private var clothesColor:String;
 	private var colorFilter:ColorMatrixFilter; // filter to color our perso 
 	private var brainiacState:Boolean;
 	private var brainiacRestedTime:Number;
 	private var bananaId:Number;	
-	  private var bananaState:Boolean;
-	  private var bananaRestedTime:Number;	
-	private var usedBook:Boolean;        // set in true if used one book in current question	
+	private var bananaState:Boolean;
+	private var bananaRestedTime:Number;	
+	
 	private var idClip:Number;           // number used to identify the movie used for perso - from 1 to 12
 	private var orient:String;           // orientation ... right or left
 	
@@ -257,96 +255,7 @@ class Personnage implements IPersonnage
 		return this.listeDesObjets[nomObj].length >= 1;
 		
 	}
-	
-	////////////////////////////////////////////////////////////
-	// - sert a ajouter une objet a la banque d'objets du personnage
-	
-	function ajouterImageBanque(nomObj:String)
-	{		
-		trace("--- ds ajouterImageBanque ! ---");
-			
-		_level0.loader.contentHolder.objectMenu[nomObj].countTxt = Number(_level0.loader.contentHolder.objectMenu[nomObj].countTxt) + 1;
-				
-		function peutUtiliserObjet(nomObjet:String):Boolean
-		{
-			switch(nomObjet)
-			{
-				case "pieceFixe":
-					return false;
-				case "PotionGros":
-					return true;
-				case "PotionPetit":
-					return true;
-				case "Banane":
-					return true;
-				case "Livre":
-					{
-						if(_level0.loader.contentHolder.objGestionnaireEvenements.obtenirGestionnaireCommunication().obtenirEtatClient() != Etat.ATTENTE_REPONSE_QUESTION.no) return false;
-						if((_level0.loader.contentHolder.type_question != "MULTIPLE_CHOICE") && (_level0.loader.contentHolder.type_question != "MULTIPLE_CHOICE_3") && (_level0.loader.contentHolder.type_question != "MULTIPLE_CHOICE_5" )) return false;
-						if(_level0.loader.contentHolder.planche.obtenirPerso().getUsedBook()) return false;
-						return true;
-					}
-				case "Boule":
-					{
-						if(_level0.loader.contentHolder.objGestionnaireEvenements.obtenirGestionnaireCommunication().obtenirEtatClient() != Etat.ATTENTE_REPONSE_QUESTION.no) return false;
-						return true;
-					}
-				default: return true;
-			}
-			return false;
-		}
 		
-		var listeObjets:Object = this.obtenirObjets();
-				
-		// function used to make action of the object on that on click
-		_level0.loader.contentHolder.objectMenu[nomObj + "_mc"].onRelease = function()
-		{
-			if(peutUtiliserObjet(nomObj)&& (listeObjets[nomObj].length >= 1))
-			{
-				var objID:Number = listeObjets[nomObj][listeObjets[nomObj].length - 1];
-				if(nomObj == "Banane"){
-                      
-					  _level0.loader.contentHolder.planche.obtenirPerso().setBananaId(objID);					 
-			          var bananaClip:MovieClip;
-                      //bananaClip = _level0.loader.contentHolder.attachMovie("bananaToss", "toss", 2021, objID);
-					  bananaClip = _level0.loader.contentHolder.createEmptyMovieClip("toss", 2021);
-					  _level0.loader.contentHolder.toss.loadMovie("GUI/bananaToss.swf");
-					  
-					  
-					  bananaClip._x = 30;
-                      bananaClip._y = 40;
-					  
-		        }else{
-					trace("Enlever obj - " + nomObj);
-					_level0.loader.contentHolder.objGestionnaireEvenements.utiliserObjet(objID, "NA");
-					_level0.loader.contentHolder.planche.obtenirPerso().enleverObjet(nomObj);
-				}
-				
-				if(nomObj == "Livre")
-				   _level0.loader.contentHolder.planche.obtenirPerso().setUsedBook(true);
-				
-				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._xscale = _level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._yscale = 100;
-				_level0.loader.contentHolder.objectMenu[nomObj + "_mc"]._alpha = 100;
-			}//end 1st if
-		};		
-		
-		trace("--- FIN ajouterImageBanque ! ---");
-	}
-	
-	
-	
-	////////////////////////////////////////////////////////////
-	// -sert a enlever un objet a un personnage :
-	// on enleve les donnees relatives a cet objet dans les listes
-	// du personnage. on enleve ensuite l'image de l'objet
-	//
-	function enleverObjet(n:String)
-	{		
-		listeDesObjets[n].pop();
-		_level0.loader.contentHolder.objectMenu[n].countTxt = Number(_level0.loader.contentHolder.objectMenu[n].countTxt) - 1;		
-	}	
-	
-	
 	////////////////////////////////////////////////////////////
 	function zoomer(valeur:Number)
 	{		
@@ -466,61 +375,7 @@ class Personnage implements IPersonnage
 		return prochainePosition;
 	}
 	
-	////////////////////////////////////////////////////////////
-	// retourne la liste des objets que le magasin ou on se trouve contient
-	//
-	function obtenirMagasin():Array
-	{
-		return listeSurMagasin;
-	}
-	
-	////////////////////////////////////////////////////////////
-	// fixe les objets contenus dans un magasin
-	//
-	function definirMagasin(mag:Array)
-	{
-		listeSurMagasin = mag;
-	}	
-	
-    ////////////////////////////////////////////////////////////
-	// When buy an object this function put the 0 for the id of the object 
-	// in liste in Shop - in this case it became unvalid object - it is selled
-	//
-	
-	function removeShopObject(idRemove:Number)
-	{		
-		var count:Number =  listeSurMagasin.length;
-				
-		for(var j:Number = 0; j < count; j++)
-		{
-			if(listeSurMagasin[j].id == idRemove)
-			   listeSurMagasin[j].id = 0;
-			   
-		}
-		//trace("Liste dans mag : " + listeSurMagasin.length);
 		
-	}
-	
-	////////////////////////////////////////////////////////////
-	// After buy an object the server sent the new id for the same object 
-	// in the shop - the object became valid - the next object of the same 
-	// type to sell to player 
-	//
-	function putNewShopObject(idPut:Number, objetType:String)
-	{
-		var count:Number =  listeSurMagasin.length;
-		for(var j:Number = 0; j < count; j++)
-		{
-			//trace(" control put new - " + j + " " + listeSurMagasin[j].id);
-			if(listeSurMagasin[j].type == objetType)
-			   listeSurMagasin[j].id = idPut;
-			   			   
-		}
-	}
-	
-	
-	
-	
 	//////////////////////////////////////////////////////////////////////////////////////
 	//	CONSTRUCTEUR
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -998,8 +853,6 @@ class Personnage implements IPersonnage
 	function tossBanana()
 	{
 		this.image.gotoAndPlay("tossing");
-		trace("tossing !!!!!!!!!!!!!!!!!");
-		
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////

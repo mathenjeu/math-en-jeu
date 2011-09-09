@@ -683,6 +683,7 @@ class MyPersonnage implements IOurPersonnage
 		this.minigameLoade = false;
 		this.role = role;
 		this.boardCentre = false;
+		isOnFinish = false;
 	}// end constr
 	
 	private function recalculateFilter()

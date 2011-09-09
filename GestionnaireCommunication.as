@@ -798,7 +798,7 @@ class GestionnaireCommunication
 				    	break;
 						
 						case "Bonus":
-				    		objEvenement["bonus"] = lstChildNodes[i].firstChild.nodeValue;
+				    		objEvenement["bonus"] = Number(lstChildNodes[i].firstChild.nodeValue);
 				    		//trace("case Pointage  "+objEvenement.pointage+ "   "+lstChildNodes[i].firstChild.nodeValue);
 				    	break;
 				    
