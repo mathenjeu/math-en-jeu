@@ -389,7 +389,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// cette salle pendant que le joueur entre dans cette table
 		synchronized (getObjSalle().obtenirListeTables()) {			
 			addPlayerInListe(joueur);
-			
+
 			// Si on doit générer le numéro de commande de retour, alors
 			// on le génére, sinon on ne fait rien (ça se peut que ce soit
 			// faux)
@@ -397,6 +397,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				// Générer un nouveau numéro de commande qui sera
 				// retourné au client
 				joueur.obtenirProtocoleJoueur().genererNumeroReponse();
+
 			}
 
 			preparerEvenementJoueurRejoindrePartie(joueur);
@@ -442,7 +443,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				resultatDemarrerPartie = ResultatDemarrerPartie.Succes;
 
 				putInWaitingList(joueur, idDessin);
-				
+
 				// Si on doit générer le numéro de commande de retour, alors
 				// on le génére, sinon on ne fait rien (ça se peut que ce soit
 				// faux)
@@ -462,8 +463,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		}		
 		return resultatDemarrerPartie;
 	}
-	
-	
+
+
 	/**
 	 * @param joueur
 	 * @param idDessin
@@ -480,7 +481,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Garder en mémoire le Id du personnage choisi par le joueur et son dessin
 		joueur.obtenirPartieCourante().setIdDessin(idDessin);
 		joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
-		
+
 		// Empêcher d'autres thread de toucher à la liste des joueurs de
 		// cette table pendant qu'on parcourt tous les joueurs de la table
 		// pour leur envoyer un événement
@@ -493,7 +494,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		}
 	}
 
-	
+
 
 
 	/**
@@ -587,7 +588,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			else {
 				// La commande s'est effectuée avec succès
 				resultatDemarrerPartie = ResultatDemarrerPartie.Succes;
-				
+
 				// Si on doit générer le numéro de commande de retour, alors
 				// on le génère, sinon on ne fait rien (ça se peut que ce soit
 				// faux)
@@ -833,22 +834,22 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 				// Ajouter le joueur virtuel à la liste
 				lstJoueursVirtuels.add(objJoueurVirtuel);
-				
+
 				objJoueurVirtuel.obtenirPartieCourante().setClothesColor(this.getOneColor());
 				objJoueurVirtuel.obtenirPartieCourante().setIdDessin(IDdess);
-				
+
 				synchronized (lstJoueursVirtuels) {
-					
-						// Préparer l'événement de joueur en attente.
-						// Cette fonction va passer les joueurs et créer un
-						// InformationDestination pour chacun et ajouter l'événement
-						// dans la file de gestion d'événements
-						preparerEvenementJoueurEntreTable(objJoueurVirtuel);					
+
+					// Préparer l'événement de joueur en attente.
+					// Cette fonction va passer les joueurs et créer un
+					// InformationDestination pour chacun et ajouter l'événement
+					// dans la file de gestion d'événements
+					preparerEvenementJoueurEntreTable(objJoueurVirtuel);					
 				}
-				
+
 				// Pour le prochain joueur virtuel
 				intIdPersonnage++;
-				
+
 				// Ajouter le joueur virtuel à la liste des positions, liste qui sera envoyée
 				// aux joueurs humains
 				lstJoueursParticipants[i] = objJoueurVirtuel;
@@ -857,12 +858,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			}
 			position++;
 		}
-		
+
 		// need to give time to virtuels to enter table - before start game
 		// the enter table event is sent by GE of the room 
 		// we have desynchronisation of events 
 		objGestionnaireEvenements.pause();
-		
+
 		// Maintenant pour tous les joueurs, s'il y a des joueurs
 		// virtuels de présents, on leur envoit un message comme
 		// quoi les joueurs virtuels sont prêts
@@ -881,9 +882,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				}
 			}			
 		}
-		
-		
-		
+
+
+
 		// On peut maintenant vider la liste des joueurs en attente
 		// car elle ne nous sert plus à rien
 		lstJoueursEnAttente.clear();
@@ -1061,28 +1062,27 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @param joueurHumain
 	 * @return
 	 */
-	public boolean isAllTheHumainsOnTheFinish(JoueurHumain joueurHumain) {
+	public boolean isAllTheHumainsOnTheFinish() {
 		boolean isAllPlayers = true;
 		int tracks = getRegles().getNbTracks();
 
 		synchronized (lstJoueurs) {
 			// Pass all players to find their position
 			for (JoueurHumain objJoueurHumain: lstJoueurs.values()) {
-				if (!objJoueurHumain.obtenirNom().equals(joueurHumain.obtenirNom())) {
-					Point pozJoueur = objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur();
-					Point objPoint = new Point(gameFactory.getNbLines() - 1, gameFactory.getNbColumns() - 1);
-					Point objPointFinish = new Point();
-					boolean isOn = false;
-					for (int i = 0; i < tracks; i++) {
-						objPointFinish.setLocation(objPoint.x, objPoint.y - i);
-						if (pozJoueur.equals(objPointFinish)) {
-							isOn = true;
-						}
-					}
-					if (!isOn) {
-						isAllPlayers = false;
+				Point pozJoueur = objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur();
+				Point objPoint = new Point(gameFactory.getNbLines() - 1, gameFactory.getNbColumns() - 1);
+				Point objPointFinish = new Point();
+				boolean isOn = false;
+				for (int i = 0; i < tracks; i++) {
+					objPointFinish.setLocation(objPoint.x, objPoint.y - i);
+					if (pozJoueur.equals(objPointFinish)) {
+						isOn = true;
 					}
 				}
+				if (!isOn) {
+					isAllPlayers = false;
+				}
+
 			}
 		}
 
@@ -1358,7 +1358,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Créer un nouveal événement qui va permettre d'envoyer l'événment
 		// aux joueurs pour signifier une modification du pointage
 		EvenementMAJPointage majPointage = new EvenementMAJPointage(player.obtenirNom(), nouveauPointage);
-
 		broadcastEvent(majPointage, player);
 	}
 
@@ -1373,11 +1372,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Créer un nouveal événement qui va permettre d'envoyer l'événment
 		// aux joueurs pour signifier une modification du pointage
 		EvenementJoueurRejoindrePartie maPartie = new EvenementJoueurRejoindrePartie(player);
-
 		broadcastEvent(maPartie, player);		
 	}
 
-	
+
 	public void preparerEvenementMAJArgent(Joueur player, int nouvelArgent) {
 		// Créer un nouveal événement qui va permettre d'envoyer l'événment
 		// aux joueurs pour signifier une modification de l'argent
@@ -1386,7 +1384,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		broadcastEvent(majArgent, player);		
 	}
 
-	
+
 	/**
 	 *
 	 * @param joueurQuiUtilise
@@ -1400,7 +1398,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		broadcastEvent(utiliserObjet);		
 	}
 
-	
+
 	public void preparerEvenementMessageChat(String joueurQuiEnvoieLeMessage, String messageAEnvoyer) {
 		// Meme chose que la fonction précédente, mais envoie plutôt un message de la part d'un joueur à tous les joueurs de la table
 		EvenementMessageChat messageChat = new EvenementMessageChat(joueurQuiEnvoieLeMessage, messageAEnvoyer);
@@ -1435,8 +1433,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		//Créer un nouvel événement qui va permettre d'envoyer l'événement
 		// aux joueurs de la table
 		EvenementSynchroniserTemps synchroniser = new EvenementSynchroniserTemps(objMinuterie.obtenirTempsActuel());
-
-		// Passer tous les joueurs de la salle et leur envoyer un événement
+		// Passer tous les joueurs de la table et leur envoyer un événement
 		broadcastEvent(synchroniser);
 	}
 
@@ -1893,6 +1890,16 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
 		objGestionnaireEvenements.ajouterEvenement(event);
+	}
+
+	public int verifyFinishAndSetBonus(Point point)
+	{
+		return 0;		
+	}
+	
+	public void verifyStopCondition()
+	{
+		// Do nothing in mathEnJeu type
 	}
 
 }// end class

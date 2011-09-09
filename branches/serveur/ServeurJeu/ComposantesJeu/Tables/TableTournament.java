@@ -53,84 +53,7 @@ public class TableTournament extends Table {
 	}
 
 
-	/**
-	 * Cette méthode permet au joueur passé en paramètres de quitter la table.
-	 * On suppose que le joueur est dans la table.
-	 *
-	 * @param joueur Le joueur demandant de quitter la table
-	 * @param doitGenererNoCommandeRetour Permet de savoir si on doit générer un
-	 *        numéro de commande pour le retour de l'appel de fonction
-	 * @param detruirePartieCourante
-	 *
-	 * Synchronisme Cette fonction est synchronisée sur la liste des tables
-	 *              puis sur la liste des joueurs de cette table, car il se
-	 *              peut qu'on doive détruire la table si c'est le dernier
-	 *              joueur et qu'on va modifier la liste des joueurs de cette
-	 *              table, car le joueur quitte la table. Cela évite que des
-	 *              joueurs entrent ou quittent une table en même temps.
-	 *              On n'a pas à s'inquiéter que le joueur soit modifié
-	 *              pendant le temps qu'on exécute cette fonction. Si on
-	 *              inverserait les synchronisations, ça pourrait créer un
-	 *              deadlock avec les personnes entrant dans la salle.
 
-
-	public void quitterTable(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, boolean detruirePartieCourante) {
-		if(!joueur.obtenirNom().equals(master.obtenirNom()))
-		playerGetOut(joueur, doitGenererNoCommandeRetour,
-				detruirePartieCourante);
-
-	}// end method */
-
-	/**
-	 * @param joueur
-	 * @param doitGenererNoCommandeRetour
-	 * @param detruirePartieCourante
-
-	private void playerGetOut(JoueurHumain joueur,
-			boolean doitGenererNoCommandeRetour, boolean detruirePartieCourante) {
-		// Empêcher d'autres thread de toucher à la liste des joueurs de
-		// cette table pendant que le joueur quitte cette table
-		synchronized (lstJoueurs) {
-			// Enlever le joueur de la liste des joueurs de cette table
-			lstJoueurs.remove(joueur.obtenirNom());
-			lstJoueursEnAttente.remove(joueur.obtenirNom());
-			colors.add(joueur.obtenirPartieCourante().resetColor()); 
-			// Le joueur est maintenant dans aucune table
-			if (detruirePartieCourante == true) {
-				//joueur.obtenirPartieCourante().destruction();
-				joueur.definirPartieCourante(null);
-			}
-
-			// Si on doit générer le numéro de commande de retour, alors
-			// on le génére, sinon on ne fait rien (ça se peut que ce soit
-			// faux)
-			if (doitGenererNoCommandeRetour == true) {
-				// Générer un nouveau numéro de commande qui sera
-				// retourné au client
-				joueur.obtenirProtocoleJoueur().genererNumeroReponse();
-			}
-
-			// Empêcher d'autres thread de toucher à la liste des joueurs de
-			// cette salle pendant qu'on parcourt tous les joueurs de la salle
-			// pour leur envoyer un événement
-			synchronized (getObjSalle().obtenirListeJoueurs()) {
-				// Préparer l'événement qu'un joueur a quitté la table.
-				// Cette fonction va passer les joueurs et créer un
-				// InformationDestination pour chacun et ajouter l'événement
-				// dans la file de gestion d'événements
-				preparerEvenementJoueurQuitteTable(joueur);
-
-				// S'il ne reste aucun joueur dans la table et que la partie
-				// est terminée, alors on doit détruire la table
-				if(lstJoueurs.isEmpty() && bolEstArretee == true)  {
-					// Détruire la table courante et envoyer les événements
-					// appropriés
-					getObjSalle().detruireTable(this);
-
-				}
-			}
-		}// 
-	}// end method */
 
 
 
@@ -224,56 +147,6 @@ public class TableTournament extends Table {
 
 
 
-	/**
-	 *
-	 * @param joueur
-	 * @param doitGenererNoCommandeRetour
-	 * @param strParamJoueurVirtuel
-	 * @return
-
-	public ResultatDemarrerPartie demarrerMaintenant(JoueurHumain joueur, boolean doitGenererNoCommandeRetour, String strParamJoueurVirtuel) {
-		// Lorsqu'on fait démarré maintenant, le nombre de joueurs sur la
-		// table devient le nombre de joueurs demandé, lorsqu'ils auront tous
-		// fait OK, la partie démarrera
-
-		ResultatDemarrerPartie resultatDemarrerPartie;
-		synchronized (lstJoueursEnAttente) {
-			// Si une partie est en cours alors on va retourner PartieEnCours
-			if (bolEstCommencee == true) {
-				resultatDemarrerPartie = ResultatDemarrerPartie.PartieEnCours;
-			} //TODO si joueur pas en attente?????
-			else {
-				// La commande s'est effectuée avec succès
-				resultatDemarrerPartie = ResultatDemarrerPartie.Succes;
-
-				// Ajouter le joueur dans la liste des joueurs en attente
-				//lstJoueursEnAttente.put(joueur.obtenirNomUtilisateur(), joueur);
-
-				// Garder en mémoire le Id du personnage choisi par le joueur
-				//joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
-
-
-				// Si on doit générer le numéro de commande de retour, alors
-				// on le génère, sinon on ne fait rien (ça se peut que ce soit
-				// faux)
-				if (doitGenererNoCommandeRetour == true) {
-					// Générer un nouveau numéro de commande qui sera
-					// retourné au client
-					joueur.obtenirProtocoleJoueur().genererNumeroReponse();
-				}
-
-				// Si le nombre de joueurs en attente est maintenant le nombre
-				// de joueurs que ça prend pour joueur au jeu, alors on lance
-				// un événement qui indique que la partie est commencée
-
-				laPartieCommence(strParamJoueurVirtuel);
-
-			}
-		}
-		return resultatDemarrerPartie;
-	} */
-
-
 
 	/**
 	 *
@@ -312,6 +185,63 @@ public class TableTournament extends Table {
 
 
 	}
+
+	/**
+	 * Cette méthode permet au joueur passé en paramètres de recommencer la partie.
+	 * On suppose que le joueur est dans la table.
+	 *
+	 * @param joueur Le joueur demandant de recommencer
+	 * @param doitGenererNoCommandeRetour Permet de savoir si on doit générer un
+	 *        numéro de commande pour le retour de l'appel de fonction
+	 *
+	 * Synchronisme Cette fonction est synchronisée sur la liste des tables
+	 * 	            puis sur la liste des joueurs de cette table, car il se
+	 *              peut qu'on doive détruire la table si c'est le dernier
+	 *              joueur et qu'on va modifier la liste des joueurs de cette
+	 *              table, car le joueur quitte la table. Cela évite que des
+	 *              joueurs entrent ou quittent une table en même temps.
+	 *              On n'a pas à s'inquiéter que le joueur soit modifié
+	 *              pendant le temps qu'on exécute cette fonction. Si on
+	 *              inverserait les synchronisations, ça pourrait créer un
+	 *              deadlock avec les personnes entrant dans la salle.
+	 */
+	public void restartGame(JoueurHumain joueur, boolean doitGenererNoCommandeRetour) {
+
+		if(joueur.equals(master))
+		{
+			lstDiffusion.put(joueur.obtenirNom(), joueur);		
+		}else
+		{
+			// to get back perso's clothes color 
+			//returned to the list when get out from game
+			//joueur.obtenirPartieCourante().setClothesColor(colors.getLast());
+
+			// to not be without move cases, in case if the server is in waiting an answer
+			joueur.obtenirPartieCourante().cancelPosedQuestion();
+
+			// Empécher d'autres thread de toucher à la liste des tables de
+			// cette salle pendant que le joueur entre dans cette table
+			synchronized (getObjSalle().obtenirListeTables()) {			
+				addPlayerInListe(joueur);
+				preparerEvenementJoueurRejoindrePartie(joueur);
+			}			
+		}		
+		
+		// Si on doit générer le numéro de commande de retour, alors
+		// on le génére, sinon on ne fait rien (ça se peut que ce soit
+		// faux)
+		if (doitGenererNoCommandeRetour == true) {
+			// Générer un nouveau numéro de commande qui sera
+			// retourné au client
+			joueur.obtenirProtocoleJoueur().genererNumeroReponse();
+
+		}
+		
+		synchronized (lstJoueursDeconnectes) {
+			lstJoueursDeconnectes.remove(joueur);
+		}    
+	}
+
 
 
 	/**
@@ -545,17 +475,7 @@ public class TableTournament extends Table {
 			// Ajouter ce nouveau joueur dans la liste des joueurs de cette table
 			lstJoueurs.put(joueur.obtenirNom(), joueur);
 			lstDiffusion.put(joueur.obtenirNom(), joueur);
-			System.out.println("table - add " + joueur.obtenirNom() + " " + joueur.obtenirProtocoleJoueur());
-
-			for (JoueurHumain objJoueur: lstDiffusion.values()) {
-				System.out.println("table - in add " + objJoueur.obtenirNom() + " " + objJoueur.obtenirProtocoleJoueur());
-				
-				
-			}
-
-
 		}
-
 	}
 
 	protected void getOutPlayerFromListe(JoueurHumain player)
@@ -569,8 +489,6 @@ public class TableTournament extends Table {
 			lstJoueursEnAttente.remove(player.obtenirNom());
 			lstDiffusion.remove(player.obtenirNom());
 			colors.add(player.obtenirPartieCourante().resetColor()); 
-			System.out.println("table - getout " + player.obtenirNom());
-
 		}
 	}
 
@@ -581,6 +499,7 @@ public class TableTournament extends Table {
 	 */
 	protected void broadcastEvent(Evenement event, Joueur eventHero)
 	{
+
 		// Empêcher d'autres thread de toucher à la liste des joueurs de
 		// cette table pendant qu'on parcourt tous les joueurs de la table
 		// pour leur envoyer un événement
@@ -597,7 +516,6 @@ public class TableTournament extends Table {
 							objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
 							objJoueur.obtenirProtocoleJoueur()));
 				}
-				System.out.println("table - broadcast " + objJoueur.obtenirNom());
 			}
 		}
 
@@ -616,20 +534,15 @@ public class TableTournament extends Table {
 		// pour leur envoyer un événement
 		synchronized (lstJoueurs) {
 			// Passer tous les joueurs de la table et leur envoyer un événement
-			for (JoueurHumain objJoueur: lstDiffusion.values()) {
-				System.out.println("table - broadcast1 " + objJoueur.obtenirNom() + " " + objJoueur.obtenirProtocoleJoueur());
-							
-			}
 
 			for (JoueurHumain objJoueur: lstDiffusion.values()) {
-				System.out.println("table - broadcast " + objJoueur.obtenirNom() + " " + objJoueur.obtenirProtocoleJoueur());
+				//System.out.println("table - broadcast " + objJoueur.obtenirNom() + " " + objJoueur.obtenirProtocoleJoueur());
 				// Obtenir un numéro de commande pour le joueur courant, créer
 				// un InformationDestination et l'ajouter à l'événement
 				event.ajouterInformationDestination( new InformationDestination(
 						objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
 						objJoueur.obtenirProtocoleJoueur()));
 
-				
 			}
 
 		}
@@ -638,5 +551,22 @@ public class TableTournament extends Table {
 		objGestionnaireEvenements.ajouterEvenement(event);
 	}
 
+
+	public int verifyFinishAndSetBonus(Point point)
+	{
+		if(checkPositionPointsFinish(point))
+		{
+			return obtenirTempsRestant();
+		}
+		return 0;		
+	}
 	
+	public void verifyStopCondition()
+	{
+		// if all the humains is on the finish line we stop the game
+		if (isAllTheHumainsOnTheFinish())
+		{
+			arreterPartie(""); 
+		}		
+	}
 }

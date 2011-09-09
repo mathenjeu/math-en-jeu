@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.Map.Entry;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ClassesUtilitaires.UtilitaireNombres;
+import Enumerations.GameType;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;
@@ -49,7 +50,7 @@ import ServeurJeu.ComposantesJeu.Tables.Table;
  */
 
 public class InformationPartieVirtuel extends InformationPartie implements ActivePlayer {
-	
+
 	// Déclaration d'une variable qui va contenir le pointage de la
 	// partie du joueur virtuel
 	private int intPointage;
@@ -58,16 +59,16 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 
 	// Déclaration de la position du joueur virtuel dans le plateau de jeu
 	private Point objPositionJoueur;
-	
+
 	private int idDessin; 
-	
+
 	// object that describe and manipulate 
 	// the Braniac state of the player
 	private PlayerBrainiacState brainiacState;
 
 	// code of the clothes color in the player's picture
 	private int clothesColor;
-	
+
 	// Déclaration d'une variable qui contient le nombre de fois
 	// que le joueur virtuel a joué à un mini-jeu
 	private int intNbMiniJeuJoues;
@@ -87,7 +88,7 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 	// cela donne un jeton au joueur virtuel, lorsqu'il croisera un
 	// magasin, il ira pour peut-être acheter un objet)
 	private int tJetonsMagasins[];
-	
+
 	// Cette liste va contenir les magasins déjà visités
 	// par le joueur virtuel, pour empêcher qu'il les visite
 	// à plus d'une reprise
@@ -117,19 +118,19 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 	// coup à jouer
 	private int matPoints[][];
 
-	
+
 	// player with max points to use Banana
 	private String playerToUseBanana;
 	private boolean estHumain;
-	
+
 	// Déclaration d'une référence vers un joueur humain correspondant à cet
 	// objet d'information de partie
 	private final JoueurVirtuel objJoueurVirtuel;
-	
+
 	// Déclaration d'une liste d'objets utilisables ramassés par le joueur
 	// virtuel
 	private HashMap<Integer, ObjetUtilisable> lstObjetsUtilisablesRamasses;
-	
+
 	// Cette variable contient la case ciblée par la joueur virtuel.
 	// Il tentera de s'y rendre. Cette case sera choisie selon 
 	// sa valeur en points et le type de joueur virtuel, en général,
@@ -141,32 +142,32 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 	// pour détecter si, par exemple, l'objet que le joueur virtuel
 	// voulait prendre n'existe plus.
 	private int intRaisonPositionFinale;
-	
+
 	// relative time the last change of points or get the finish line
 	private int pointsFinalTime;
-	
+
 	// Cette variable contient le niveau de difficulté du joueur virtuel
 	private final int intNiveauDifficulte;
-	
+
 	// Constante pour la compilation conditionnelle
 	private static final boolean ccDebug = false;
-	
+
 	// Déclaration d'un objet random pour générer des nombres aléatoires
-    private final Random objRandom = new Random();
+	private final Random objRandom = new Random();
 
 	private PlayerBananaState bananaState;   
-    
+
 	public InformationPartieVirtuel(JoueurVirtuel objJoueurVirtuel, Table table, int idPersonnage) 
 	{
-		
+
 		super(table, objJoueurVirtuel);
 		this.objJoueurVirtuel = objJoueurVirtuel;
-		
+
 		// Banana state
 		this.bananaState = new PlayerBananaState(objJoueurVirtuel);
 		// Braniac state
 		this.brainiacState = new PlayerBrainiacState(objJoueurVirtuel);
-		
+
 		if (idPersonnage == -1)
 		{
 			// Choisir un id de personnage aléatoirement
@@ -177,10 +178,10 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 			// Affecter le id personnage pour ce joueur
 			intIdPersonnage = idPersonnage;
 		}
-		
+
 		// Créer la liste des objets utilisables qui ont été ramassés
 		lstObjetsUtilisablesRamasses = new HashMap<Integer, ObjetUtilisable>();
-		
+
 		// Tableau contenant une référence vers le plateau de jeu
 		objttPlateauJeu = objTable.obtenirPlateauJeuCourant();
 
@@ -189,13 +190,13 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 		intNbColonnes = objttPlateauJeu[0].length;
 
 		// to not get twice bonus
-		setPlayerNotArrivedOnce(true);
+		setWasOnFinish(false);
 
 		// Initialiser les matrices
 		matriceParcourue = new boolean[intNbLignes][intNbColonnes];
 		matricePrec = new Point[intNbLignes][intNbColonnes];
 		matPoints = new int[intNbLignes][intNbColonnes];
-		
+
 		// Déterminer les temps des jetons des minijeus
 		determinerJetonsMiniJeu();
 
@@ -210,11 +211,11 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 
 		// Créer une liste de magasin déjà visité vide
 		lstMagasinsVisites = new LinkedList<Magasin>();
-		
+
 		// Création du profil du joueur virtuel
 		// to have virtual players of all difficulty levels
 		intNiveauDifficulte = objRandom.nextInt(4);		
-		
+
 	}
 
 	public void setClothesColor(int color) {
@@ -225,13 +226,13 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 	public int getClothesColor() {
 		return clothesColor;
 	}
-	
+
 	public HashMap<Integer, ObjetUtilisable> obtenirListeObjetsRamasses()
 	{
 		return lstObjetsUtilisablesRamasses;
 	}
 
-	
+
 
 	public int obtenirIdPersonnage()
 	{
@@ -251,12 +252,12 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 	{
 		return intArgent;
 	}
-	
+
 	public void definirPointage(int valeur)
 	{
 		intPointage = valeur;
 	}
-	
+
 	public void addPoints(int value)
 	{
 		intPointage += value;
@@ -266,7 +267,7 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 	{
 		intArgent = valeur;
 	}
-	
+
 	public void addMoney(int value)
 	{
 		intArgent += value;
@@ -276,7 +277,7 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 	{
 		objPositionJoueur = new Point(pos.x, pos.y);
 	}
-	
+
 	public Point obtenirPositionJoueur()
 	{
 		return objPositionJoueur;
@@ -313,9 +314,9 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 
 		return intNbObjets;
 	}
-	
+
 	private RetourVerifierReponseEtMettreAJourPlateauJeu 
-	   verifierReponseEtMettreAJourPlateauJeu(Point objPositionDesiree) {
+	verifierReponseEtMettreAJourPlateauJeu(Point objPositionDesiree) {
 
 		// Déclaration de l'objet de retour
 		RetourVerifierReponseEtMettreAJourPlateauJeu objRetour = null;
@@ -323,7 +324,7 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 		int bonus = 0;
 		Point positionJoueur = obtenirPositionJoueur();
 		int deplacementJoueur = 0;
-		
+
 
 		// Si la position en x est différente de celle désirée, alors
 		// c'est qu'il y a eu un déplacement sur l'axe des x
@@ -357,7 +358,7 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 
 		// Calculer le nouveau pointage du joueur
 		addPoints(getPointsByMove(deplacementJoueur));
-		
+
 		// Si la case de destination est une case de couleur, alors on
 		// vérifie l'objet qu'il y a dessus et si c'est un objet utilisable,
 		// alors on l'enlève et on le donne au joueur, sinon si c'est une
@@ -449,30 +450,13 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 
 		//***********************************
 		//for gametype tourmnament - bonus for finish line
-		if (objTable.getGameType().equals("Tournament") || objTable.getGameType().equals("Course")) {
-			int tracks = objTable.getRegles().getNbTracks();
-			Point objPoint = new Point(objTable.getGameFactory().getNbLines() - 1, objTable.getGameFactory().getNbColumns() - 1);
-			Point objPointFinish = new Point();
-
-			// On vérifie d'abord si le joueur a atteint le WinTheGame;
-			boolean isOnThePointsOfFinish = false;
-
-			for (int i = 0; i < tracks; i++) {
-				objPointFinish.setLocation(objPoint.x, objPoint.y - i);
-				if (objPositionDesiree.equals(objPointFinish)) {
-					isOnThePointsOfFinish = true;
-				}
-			}
-
-			if (isOnThePointsOfFinish && isPlayerNotArrivedOnce()) {
-				setPlayerNotArrivedOnce(false);
-				bonus = objTable.obtenirTempsRestant();
-				addPoints(bonus);
-			}
 
 
-		} //************************************  end bonus
-
+		if (getWasOnFinish()) {
+			bonus = objTable.verifyFinishAndSetBonus(objPositionDesiree);
+			addPoints(bonus);
+			if(bonus > 0) setWasOnFinish(true);
+		}
 
 		// Créer l'objet de retour
 		objRetour = new RetourVerifierReponseEtMettreAJourPlateauJeu(bolReponseEstBonne, obtenirPointage(), obtenirArgent(), bonus);
@@ -493,7 +477,7 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 
 		definirPositionJoueurVirtuel(objPositionDesiree);
 		setPointsFinalTime(objTable.obtenirTempsRestant());
-		
+
 		return objRetour;
 	}
 
@@ -504,7 +488,7 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 		this.bananaState.destruction();
 		this.bananaState = null;		
 	}*/
-	
+
 	/**
 	 * 
 	 * @return boolean -  true if we have a banana for tossing
@@ -520,7 +504,7 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Method called after each step
 	 * 
@@ -531,7 +515,7 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 		// if yes analyse if do it or not
 		if(controlHaveBanana()) analyseIfDoIt();
 	}
-	
+
 	/**
 	 * Method used to analyse and decide if use Banana
 	 * if true is called the method that apply Banana
@@ -671,7 +655,7 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 
 		return valPoints;
 	}
-	
+
 	/*
 	 * Cette fonction s'occupe de déplacer le joueur virtuel s'il a bien répondu
 	 * à la question, met à jour le plateau de jeu, envoie les événements aux autres joueurs
@@ -980,7 +964,7 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 
 	}
 
-		/* Cette fonction permet d'obtenir un tableau qui contient les pourcentages de
+	/* Cette fonction permet d'obtenir un tableau qui contient les pourcentages de
 	 * choix de déplacement pour chaque grandeur de déplacement. Ces pourcentages
 	 * sont basés sur le niveau de difficulté du joueur virtuel
 	 */
@@ -1093,7 +1077,7 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 	public int getIdDessin() {
 		return idDessin;
 	}
-	
+
 	/**
 	 * @return the braniacState
 	 */
@@ -2046,7 +2030,7 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 		return objPositionTrouvee;
 	}
 
-	
+
 
 	// it is not absolutely correct because PositionWinTheGame is a array, but it is not so important 
 	public int obtenirDistanceAuWinTheGame()
@@ -2056,12 +2040,12 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 	}
 
 
-	public void setPlayerNotArrivedOnce(boolean isPlayerNotArrivedOnce) {
-		this.wasOnFinishLine = isPlayerNotArrivedOnce;
+	public void setWasOnFinish(boolean bool) {
+		this.wasOnFinishLine = bool;
 	}
 
 
-	public boolean isPlayerNotArrivedOnce() {
+	public boolean getWasOnFinish() {
 		return wasOnFinishLine;
 	}
 
@@ -2079,7 +2063,7 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 	public int getPointsFinalTime() {
 		return pointsFinalTime;
 	}
-	
+
 	/* Cette fonction permet d'obtenir le temps de réflexion d'un joueur
 	 * virtuel pour penser à son achat dans un magasin. Ce temps est basé
 	 * sur le niveau de difficulté du joueur virtuel et comprend un élément
@@ -2627,10 +2611,10 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 
 		}
 	}
-	
+
 	/*
 	 * Cette fonction prépare l'événement indiquant que le joueur virtuel se déplace
-	
+
 	private void preparerEvenementJoueurVirtuelDeplacePersonnage( String collision, Point objNouvellePosition, int nouveauPointage )
     {
         objTable.preparerEvenementJoueurDeplacePersonnage(objJoueurVirtuel.obtenirNom(), collision, objPositionJoueur, 
@@ -2701,15 +2685,15 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 		}
 
 	}
-	
+
 	/**
 	 * @param objPositionIntermediaire
 	 * @return 
 	 * @return
 	 */
 	protected  void analyseVirtualNextStep(Point objPositionIntermediaire) {
-		
-		
+
+
 		// Cette variable indique si le joueur virtuel a répondu correctement
 		// à la question
 		boolean bolQuestionReussie;
@@ -2858,7 +2842,7 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 	{
 		return objRandom.nextInt(nb);
 	}
-	
+
 	/* 
 	 * Cette fonction retourne le pointage d'un déplacement
 	 *
@@ -2879,12 +2863,12 @@ public class InformationPartieVirtuel extends InformationPartie implements Activ
 	{
 		//getBrainiacState().setOffBrainiac();
 	}
-	
+
 	public void setOffBanana()
 	{
 		getBananaState().setOffBanana();
-   	}
-	
+	}
+
 	public void setOffBrainiac()
 	{
 		getBrainiacState().setOffBrainiac();
