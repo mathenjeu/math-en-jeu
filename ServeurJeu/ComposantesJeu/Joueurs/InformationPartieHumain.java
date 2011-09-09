@@ -19,6 +19,7 @@ import ServeurJeu.ComposantesJeu.Questions.InformationQuestion;
 import ServeurJeu.ComposantesJeu.Questions.Question;
 import ServeurJeu.ComposantesJeu.Tables.Table;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
+import Enumerations.GameType;
 import ServeurJeu.ControleurJeu;
 import java.util.LinkedList;
 
@@ -61,9 +62,6 @@ public class InformationPartieHumain extends InformationPartie implements Active
 	// object that describe and manipulate 
 	// the Braniac state of the player
 	private PlayerBrainiacState brainiacState;
-	// to not get twice bonus
-	// used in course ou tournament types of game
-	private boolean wasOnFinish;
 	// The number of cases on that user can to move. At the begining is set to 3.
 	// After 3 correct answers add one unity. Not bigger than 6, but
 	// in the case of Braniac is possible to have 7 cases. 
@@ -701,8 +699,7 @@ public class InformationPartieHumain extends InformationPartie implements Active
 
 		boolean bolReponseEstBonne;
 		int deplacementJoueur = 0;
-		boolean stopTheGame = false;
-
+		
 		// Si la position en x est différente de celle désirée, alors
 		// c'est qu'il y a eu un déplacement sur l'axe des x
 		if (positionJoueur.x != objPositionJoueurDesiree.x) {
@@ -832,37 +829,11 @@ public class InformationPartieHumain extends InformationPartie implements Active
 					objCaseCouleurDestination.definirObjetArme(null);
 				}
 
-				//***********************************
 				//for gametype tourmnament - bonus for finish line
-				if (objTable.getGameType().equals("Tournament") || objTable.getGameType().equals("Course")) {
-					int tracks = objTable.getRegles().getNbTracks();
-					Point objPoint = new Point(objTable.getGameFactory().getNbLines() - 1, objTable.getGameFactory().getNbColumns() - 1);
-					Point objPointFinish = new Point();
+				if (bonus == 0) {
+					bonus = objTable.verifyFinishAndSetBonus(objPositionJoueurDesiree);//objTable.obtenirTempsRestant();
+					addPoints(bonus);					
 
-					// On vérifie d'abord si le joueur a atteint le WinTheGame;
-					boolean isOnThePointsOfFinish = false;
-
-					for (int i = 0; i < tracks; i++) {
-						objPointFinish.setLocation(objPoint.x, objPoint.y - i);
-						if (objPositionJoueurDesiree.equals(objPointFinish)) {
-							isOnThePointsOfFinish = true;
-						}
-					}
-
-
-					if (isOnThePointsOfFinish && !wasOnFinish && objTable.getGameType().equals("Tournament")) {
-						wasOnFinish = true;
-						bonus = objTable.obtenirTempsRestant();
-						addPoints(bonus);
-					} else if (isOnThePointsOfFinish && !wasOnFinish && objTable.getGameType().equals("Course")) {
-						wasOnFinish = true;
-						bonus = objTable.obtenirTempsRestant();
-						addPoints(bonus);
-						// if all the humains is on the finish line we stop the game
-						if (objTable.isAllTheHumainsOnTheFinish(objJoueurHumain)) {
-							stopTheGame = true;
-						}
-					}
 				} //************************************  end bonus
 			}
 
@@ -903,11 +874,9 @@ public class InformationPartieHumain extends InformationPartie implements Active
 				objRetour.definirExplications(objQuestionCourante.obtenirURLExplication());
 			}
 		}
-
-		if (stopTheGame) {
-			objTable.arreterPartie(""); 
-		}
-
+		
+		objTable.verifyStopCondition();		
+		
 		objQuestionCourante = null;
 		return objRetour;
 

@@ -35,10 +35,10 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
 	 * d'initialiser le numéro Id du personnage et le nom d'utilisateur du 
 	 * joueur qui vient de démarrer la partie. 
 	 */
-
 	public EvenementJoueurRejoindrePartie(JoueurHumain player) {
 		// Définir le numéro Id du personnage et le nom d'utilisateur du joueur 
 		// qui a démarré la partie
+		System.out.println("table event - inside1  " + player.obtenirProtocoleJoueur());
 		intIdPersonnage = player.obtenirPartieCourante().obtenirIdPersonnage();
 		strNomUtilisateur = player.obtenirNom();
 		intPointage = player.obtenirPartieCourante().obtenirPointage();
@@ -46,6 +46,8 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
 		userColor = player.obtenirPartieCourante().getClothesColor();
 		xPosition = player.obtenirPartieCourante().obtenirPositionJoueur().x;
 		yPosition = player.obtenirPartieCourante().obtenirPositionJoueur().y;
+		
+		System.out.println("table event - inside  " + player.obtenirProtocoleJoueur());
 
 		generateXML();
 	}
@@ -109,5 +111,7 @@ public class EvenementJoueurRejoindrePartie extends Evenement{
 
 		// Ajouter le noeud de commande au noeud racine dans le document
 		objDocumentXML.appendChild(objNoeudCommande);
+		
+		System.out.println("table event - inside  " + objDocumentXML.toString());
 	}
 }

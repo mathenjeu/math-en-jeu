@@ -14,6 +14,7 @@ import ServeurJeu.ControleurJeu;
 import ServeurJeu.ComposantesJeu.Joueurs.Joueur;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Tables.Table;
+import ServeurJeu.ComposantesJeu.Tables.TableCourse;
 import ServeurJeu.ComposantesJeu.Tables.TableTournament;
 import ServeurJeu.Evenements.Evenement;
 import ServeurJeu.Evenements.EvenementJoueurEntreSalle;
@@ -324,8 +325,11 @@ public class Salle
 			// Créer une nouvelle table en passant les paramètres appropriés
 			if(gameType.equals(GameType.TOURNAMENT))
 				objTable = new TableTournament(this, genererNoTable(), joueur, tempsPartie, name, intNbLines, intNbColumns, gameType);
+			else if(gameType.equals(GameType.COURSE))
+				objTable = new TableCourse(this, genererNoTable(), joueur, tempsPartie, name, intNbLines, intNbColumns, gameType);
 			else
 				objTable = new Table(this, genererNoTable(), joueur, tempsPartie, name, intNbLines, intNbColumns, gameType);
+
 
 
 			// Ajouter la table dans la liste des tables
