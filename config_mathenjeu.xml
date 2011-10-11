@@ -4,7 +4,7 @@
 	language="en"
 	gameType="mathEnJeu"
 
-	url_server="moe"
+	url_server="192.168.1.67"
 	port="6100"
 	
 
