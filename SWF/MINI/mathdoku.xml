@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<group>
+   <cases>
+      <case>N11</case>
+      <case>N12</case>
+   </cases>
+   <law id = "G11">3-</law>
+   <unseen>
+      <line>v11</line>
+    </unseen>
+</group>
+<group>
+   <cases>
+      <case>N13</case>
+      <case>N22</case>
+      <case>N23</case>
+      <case>N24</case>
+   </cases>
+   <law id = "G13">24*</law>
+   <unseen>
+      <line>v22</line>
+      <line>v32</line>
+      <line>h13</line>     
+   </unseen>
+</group>
+<group>
+   <cases>
+      <case>N14</case>      
+   </cases>
+   <law id = "G14">2</law>
+</group>
+<group>
+   <cases>
+      <case>N21</case>
+      <case>N31</case>
+      <case>N41</case>
+   </cases>
+   <law id = "G21">6*</law>
+   <unseen>
+      <line>h21</line>
+      <line>h31</line>   
+   </unseen>
+</group>
+<group>
+   <cases>
+      <case>N32</case>
+      <case>N33</case>
+   </cases>
+   <law id = "G32">4+</law>
+   <unseen>
+      <line>v23</line>     
+   </unseen>
+</group>
+<group>
+   <cases>
+      <case>N34</case>
+      <case>N44</case>
+   </cases>
+   <law id = "G34">1-</law>
+   <unseen>
+      <line>h34</line> 
+   </unseen>
+</group>
+<group>
+   <cases>
+      <case>N42</case>
+      <case>N43</case>
+   </cases>
+   <law id = "G42">2/</law>
+   <unseen>
+      <line>v24</line>     
+   </unseen>
+</group>
+   
+   
+
