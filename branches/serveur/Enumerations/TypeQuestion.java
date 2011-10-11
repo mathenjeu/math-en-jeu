@@ -7,7 +7,7 @@ public final class TypeQuestion
 {
 	// Déclaration des membres de cette énumération
 	public static final String ChoixReponse = "MULTIPLE_CHOICE"; 
-	public static final String ChoixReponse3 = "MULTIPLE_CHOICE_3"; 
+	public static final String MiniDoku = "MINI_DOKU"; 
 	public static final String ChoixReponse5 = "MULTIPLE_CHOICE_5"; 
 	public static final String VraiFaux =  "TRUE_OR_FALSE";      
 	public static final String ReponseCourte = "SHORT_ANSWER"; 
@@ -31,7 +31,7 @@ public final class TypeQuestion
 		// Si la valeur passée en paramètre n'est pas égale à aucune des
 		// valeurs définies dans cette classe, alors la valeur n'est pas
 		// un membre de cette énumération, sinon elle en est un
-		return (valeur.equals(ChoixReponse) || valeur.equals(ChoixReponse3) || valeur.equals(ChoixReponse5) || valeur.equals(VraiFaux) || 
+		return (valeur.equals(ChoixReponse) || valeur.equals(MiniDoku) || valeur.equals(ChoixReponse5) || valeur.equals(VraiFaux) || 
 				valeur.equals(ReponseCourte));
 	}
 	
@@ -53,7 +53,7 @@ public final class TypeQuestion
 			   resp = ChoixReponse5;
 			   break;
 		   case 5:
-			   resp = ChoixReponse3;
+			   resp = MiniDoku;
 			   break;
 		   default: 
 		       resp = "Error";
