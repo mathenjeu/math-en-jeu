@@ -106,7 +106,7 @@ public class SpyRooms implements Runnable {
 			try
 	    	{
 	            // Update rooms liste 
-				System.out.println("test - ");
+				//System.out.println("test - ");
 				detectNewRooms(objControleurJeu.removeOldRooms());
 
                 // Bloquer la thread jusqu'à la prochaine mise à jour
@@ -152,7 +152,7 @@ public class SpyRooms implements Runnable {
 					while(rs.next())
 					{
 						int roomId = rs.getInt("room.room_id");
-						System.out.println(roomId + "NEW");				
+						//System.out.println(roomId + "NEW");				
 						rooms.add(roomId);
 					}   
 								
@@ -191,7 +191,7 @@ public class SpyRooms implements Runnable {
 					while(rs.next())
 					{
 						int roomId = rs.getInt("room.room_id");
-						System.out.println(roomId + "OLD");				
+						//System.out.println(roomId + "OLD");				
 						rooms.add(roomId);
 					}   
 								
@@ -200,7 +200,7 @@ public class SpyRooms implements Runnable {
 			catch (SQLException e)
 			{
 				// Une erreur est survenue lors de l'exécution de la requète
-				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_newRoom"));
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_oldRoom"));
 				objLogger.error(GestionnaireMessages.message("bd.trace"));
 				objLogger.error( e.getMessage() );
 				

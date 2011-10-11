@@ -641,7 +641,7 @@ public class ControleurJeu {
 
             for(Salle salle : lstSalles.values())
             {
-            	System.out.println(" salle - EndDate: "  + salle.getEndDate());
+            	//System.out.println(" salle - EndDate: "  + salle.getEndDate());
                 if (salle.getEndDate() != null && salle.getEndDate().before(new Date(System.currentTimeMillis())))
                     lstSalles.remove(salle);
                 else
@@ -948,7 +948,7 @@ public class ControleurJeu {
 
             for(int salle : rooms)
             {
-            	System.out.println(" salle - EndDate: "  + salle);
+            	//System.out.println(" salle - EndDate: "  + salle);
                 lstSalles.remove(salle);                
             }
         }
