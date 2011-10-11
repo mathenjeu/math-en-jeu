@@ -16,14 +16,14 @@ groupsxml.onLoad = Delegate.create(this, onXmlLoaded);
 //create arrays needed for groups and laws
 var unseenLines:Array = new Array();
 var groupLaw:Array = new Array();
-var path:String = _level0.loader.contentHolder.url_question;
+var path:String = _level0.loader.contentHolder.url_retro;
 
 this.onEnterFrame = loadXML;
 
 function loadXML()
 {
 	if(path == undefined)
-       groupsxml.load("mathdoku.xml");
+       groupsxml.load("mathdokuRetro.xml");
 	else
 	   groupsxml.load(path);
    delete this.onEnterFrame;	
@@ -79,7 +79,9 @@ function treatXML()
 			  for(var s in casesChildNodes)
 			  {
 				  var caseStr:String = casesChildNodes[s].attributes.id;
-				  group.addCase(caseStr, this[caseStr]);				  
+				  var solution:String = casesChildNodes[s].firstChild.nodeValue;
+				  group.addCase(caseStr, this[caseStr]);
+				  this[caseStr].text = solution;
 			  }   
 		  }		  
 	   }
@@ -94,7 +96,7 @@ function treatXML()
 
 function initGroups()
 {	
-	// trace(unseenLines.length);
+	 trace(unseenLines.length);
 	 for(var i in unseenLines)
 	    this[unseenLines[i]]._visible = false;
 		
@@ -103,42 +105,4 @@ function initGroups()
 		 this[groupLaw[i].lawCase].text = groupLaw[i].law;
 	 }
 	 	
-}
-
-/*
-var nListener:Object = new Object();
-nListener.change = function(evt_obj:Object){
-	changeNumber();
-};
-N14.addEventListener("change", nListener);*/
-/*
-N14.onChanged = function(){
-
-	dokuGame.getGroup("N14").verifyGroup();	
-}
-
-
-function changeNumber()
-{
-  //trace(" on change");
-   dokuGame.getGroup("N14").verifyGroup();	
-} */
-
-// to restrict only 1-4 numbers in input
-for(var i = 1; i <= 4; i++)
-{
-   for(var j = 1; j <= 4; j++)
-   {
-      this["N" + i + j].restrict = "1-4";
-	  //this["G" + i + j].background = true;
-	  this["N" + i + j].onChanged = function(numberField:TextField){
-		  dokuGame.setCaseValue(numberField._name, numberField.text);//getGroup(numberField._name); //setCaseValue(numberField._name, numberField.text);	     
-      }
-   }
-}
-
-function verifyIfDid():Boolean
-{
-	return dokuGame.verifyIfDid();
-    test_mc.NX.text = "";	
 }

@@ -28,6 +28,7 @@ class DokuCase
 	//private var clipCase:MovieClip;
 	private var caseValue:Number;
 	private var caseText:TextField;
+	private var caseColor:String;
 	
 	////////////////////////////////////////////////////////////
 	//	Constructor
@@ -39,13 +40,18 @@ class DokuCase
 		this.caseValue = 0;
 		generateLC();
 		caseText = caseTxt;
-		trace(caseText.textColor + " " + caseText.textColor);
+		caseColor = "0x009900";
+		//trace(caseText.textColor + " " + caseText.textColor);
 	}
 
 
 	////////////////////////////////////////////////////////////
 	//	Getter methods
 	////////////////////////////////////////////////////////////
+    function getId():String
+	{
+		return iD;
+	}
 
 	function obtenirL():Number
 	{
@@ -86,15 +92,31 @@ class DokuCase
 	
 	function setValue(val:Number, correct:Boolean)
 	{
-		trace(val + " correct = " + correct);
+		//trace(val + " correct = " + correct);
 		caseValue = val;
 				
 		if(correct)
 		{
 		   caseText.textColor = 0x009900;
+		   caseColor = "0x009900";
 		}else{
 		   caseText.textColor = 0xCC0033;
+		   caseColor = "0xCC0033";
 		}
+		//trace(" caseText.textColor + " + caseColor);
+	}
+	
+	function setGreen()
+	{
+	   caseText.textColor = 0x009900;
+ 	   caseColor = "0x009900";
+	   trace(" caseText.textColor in setGreeen " + caseColor);
+	}
+	
+	function isRedColor():Boolean
+	{
+		trace(" caseText.textColor + " + caseColor);
+		return (caseColor == "0xCC0033");
 	}
 	
 	//function to init line and column values from id string
@@ -103,6 +125,11 @@ class DokuCase
 		this.l = Number(iD.substr(1,1));
 		this.c = Number(iD.substr(2,1));
 		//trace("id - " + iD + " l " + l + " c " + c);
+	}
+	
+	function hasValue():Boolean
+	{
+		return (caseValue == 1 || caseValue == 4 || caseValue == 3 || caseValue == 2);
 	}
 
 	
