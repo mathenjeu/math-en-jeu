@@ -70,6 +70,7 @@ class MathDoku
 		if(!isNaN(val))
 		   correct = verifyLineColumn(id, val);
 		getGroup(id).setCaseValue(id, val, correct);
+		verifyCasesWrongColor();
 	}
 	
 	function verifyLineColumn(id:String, val:String):Boolean
@@ -79,13 +80,87 @@ class MathDoku
 				
 		for(var i in caseArray)
 		{
-			//var mCase:DokuCase = caseArray[i];
-			trace("case ver : l - " + caseArray[i].obtenirL() + " val - " + caseArray[i].getValue());
-			if((caseArray[i].obtenirL() == l)&&(caseArray[i].getValue() == Number(val)))
-			  return false;	
-			if((caseArray[i].obtenirC() == c)&&(caseArray[i].getValue() == Number(val)))
-			  return false;
+			if(caseArray[i].getId() != id)
+			{
+			   //var mCase:DokuCase = caseArray[i];
+			   //trace("case ver : l - " + caseArray[i].obtenirL() + " val - " + caseArray[i].getValue());
+			   if((caseArray[i].obtenirL() == l)&&(caseArray[i].getValue() == Number(val)))
+			      return false;	
+			   if((caseArray[i].obtenirC() == c)&&(caseArray[i].getValue() == Number(val)))
+			      return false;
+			}
 		}		
+		return true;
+	}
+	
+	function verifyCasesWrongColor()
+	{		
+	   	for(var i in caseArray)
+		{
+			if(caseArray[i].isRedColor())
+			{
+				trace(" verifyCasesWrongColor 2 ");
+				if(verifyLineColumn( caseArray[i].getId(),  String(caseArray[i].getValue())))
+				   caseArray[i].setGreen();				  
+			}			
+		}		
+	}
+	
+	function verifyIfDid():Boolean
+	{
+		///var correct:Boolean = false;
+		if(isComplete())
+		{
+			if(verifyLinesColumns())
+			{
+			   if(verifyGroups())
+			      return true;
+			}
+		}		
+		return false;
+	}
+	
+	function isComplete():Boolean
+	{
+		for(var i in caseArray)
+		{
+			//var mCase:DokuCase = caseArray[i];
+			if(!caseArray[i].hasValue())
+			  return false;	
+			
+		}		
+		return true;
+	}
+	
+	function verifyGroups():Boolean
+	{
+		for(var i in groupsArray)
+		{
+			if(!groupsArray[i].verifyGroup())
+			   return false;			
+		}
+		return true;
+	}
+	
+	function verifyLinesColumns():Boolean
+	{
+		for(var i in caseArray)
+		{
+			var l:Number = caseArray[i].obtenirL();
+		    var c:Number = caseArray[i].obtenirC();
+			var val:Number = caseArray[i].getValue()
+			
+			for(var j in caseArray)
+		    {
+				if(i != j)
+				{
+			       if((caseArray[j].obtenirL() == l)&&(caseArray[j].getValue() == val))
+			          return false;	
+			       if((caseArray[j].obtenirC() == c)&&(caseArray[j].getValue() == val))
+			          return false;
+				}
+		    }			   
+		}
 		return true;
 	}
 	
