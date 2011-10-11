@@ -214,8 +214,6 @@ public class BoiteQuestions
 		int nbChoix = 0;
 	 	if(objTypeQuestion == 1)
 	 			nbChoix = 4;
-	 	else if(objTypeQuestion == 5)
-	 			nbChoix = 3;
 	 	else if(objTypeQuestion == 4)
 	 			nbChoix = 5; 
 	 	

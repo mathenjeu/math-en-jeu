@@ -13,7 +13,6 @@ import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin1;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin2;
 import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin3;
-import ServeurJeu.ComposantesJeu.Objets.Magasins.Magasin4;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Banane;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Boule;
 import ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables.Brainiac;
@@ -162,11 +161,6 @@ public class GenerateurPartieTournament extends GenerateurPartie {
 					// Définir la valeur de la case au point spécifié à la case 
 					// d'identification
 					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Magasin3());
-				}else if (objReglesMagasin.obtenirNomMagasin().equals("Magasin4"))
-				{
-					// Définir la valeur de la case au point spécifié à la case 
-					// d'identification
-					((CaseCouleur) objttPlateauJeu[objPoint.x][objPoint.y]).definirObjetCase(new Magasin4());
 				}
 				
 				// Aller chercher une référence vers le magasin que l'on vient de créer

@@ -16,6 +16,7 @@ public class Question
 	private final String strURLQuestion;
 	
 	// Déclaration d'une variable qui va garder le type de la question
+	// values - from 1 to 5 for now
 	private final int objTypeQuestion;
 	
 	// Déclaration d'une variable qui va contenir la réponse à la question
@@ -123,7 +124,7 @@ public class Question
 	 * @return true si la réponse est valide
 	 *         false sinon
 	 */
-	public static boolean reponseEstValide(String reponse, String reponseCorrect)
+	public boolean reponseEstValide(String reponse)
 	{
             //En utilisant Collator.PRIMARY, les réponses sont considérées
             //équivalentes en ignorant la différence dû aux accents, au nombre
@@ -132,8 +133,8 @@ public class Question
             // Cependant les erreures de ponctuation sont importantes, par example
             // "1,2,3" n'est pas équivalent à "1;2;3" ni à "1-2-3"
             collator.setStrength(Collator.PRIMARY);
-            int cmp = collator.compare(reponse, reponseCorrect);
-            //System.out.println("Reponse du joueur: '" + reponse + "', reponse correcte: '" + reponseCorrect + "', cmp == " + cmp);
+            int cmp = collator.compare(reponse, strReponse);
+            System.out.println("Reponse du joueur: '" + reponse + "', reponse correcte: '" + strReponse + "', cmp == " + cmp);
             return cmp == 0;
 	}
 		 
@@ -146,6 +147,17 @@ public class Question
 	public String obtenirURLExplication()
 	{
 		return strURLExplication;
+	}
+	
+	/**
+	 * Cette fonction retourne une mauvaise réponse. Utilisé lorsqu'un
+	 * joueur utilise l'objet "Livre" qui permet d'éliminer un choix
+	 * de réponse. Dans le cas d'une question sans choix de réponse, la 
+	 * fonction retourne "PasUnChoixDeReponse"
+	 */
+	public  String obtenirMauvaiseReponse()
+	{
+		return "PasUnChoixDeReponse";
 	}
 	
 

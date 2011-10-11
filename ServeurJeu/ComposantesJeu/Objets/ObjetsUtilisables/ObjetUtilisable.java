@@ -1,5 +1,8 @@
 package ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables;
 
+import org.w3c.dom.Element;
+
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Objets.Objet;
 
 /**
@@ -99,4 +102,9 @@ public class ObjetUtilisable extends Objet
 	{
 		return strTypeObjet;
 	}
+	
+	public void  useObject(Element noeudCommande, String playerName, JoueurHumain player) {
+		 System.out.println("we are in objetutilisable");
+	}
+	
 }

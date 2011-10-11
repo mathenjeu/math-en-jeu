@@ -1824,75 +1824,11 @@ public class ProtocoleJoueur implements Runnable
 
         Document docSortie = noeudCommande.getOwnerDocument();
         noeudCommande.setAttribute("nom", "RetourUtiliserObjet");
-        objJoueurHumain.enleverObjet(intIdObjet, strTypeObjet);
-
+        
         // Dépendamment du type de l'objet, on effectue le traitement approprié
-        if (strTypeObjet.equals("Livre")) {
-            // Le livre est utilisé lorsqu'un joueur se fait poser une question
-            // à choix de réponse. Le serveur renvoie alors une mauvaise réponse
-            // à la question, et le client fera disparaître ce choix de réponse
-            // parmi les choix possibles pour le joueur.
-            // On obtient une mauvaise réponse à la dernière question posée
-            String mauvaiseReponse = infoPartie.getObjBoiteQuestions().obtenirMauvaiseReponse(infoPartie.obtenirQuestionCourante());
-
-            // Créer le noeud contenant le choix de réponse si c'était une question à choix de réponse
-            Element objNoeudParametreMauvaiseReponse = docSortie.createElement("parametre");
-            objNoeudParametreMauvaiseReponse.setAttribute("type", "MauvaiseReponse");
-            objNoeudParametreMauvaiseReponse.appendChild(docSortie.createTextNode(mauvaiseReponse));
-            noeudCommande.setAttribute("type", "Livre");
-            noeudCommande.appendChild(objNoeudParametreMauvaiseReponse);
-
-        } else if (strTypeObjet.equals("Boule")) {
-            // La boule permettra à un joueur de changer de question si celle
-            // qu'il s'est fait envoyer ne lui tente pas
-            Question nouvelleQuestion = infoPartie.trouverQuestionAPoserCristall(true);
-
-            // On prépare l'envoi des informations sur la nouvelle question
-            Element objNoeudParametreNouvelleQuestion = docSortie.createElement("parametre");
-            objNoeudParametreNouvelleQuestion.setAttribute("type", "nouvelleQuestion");
-            Element objNoeudParametreQuestion = docSortie.createElement("question");
-            objNoeudParametreQuestion.setAttribute("id", Integer.toString(nouvelleQuestion.obtenirCodeQuestion()));
-            objNoeudParametreQuestion.setAttribute("type", TypeQuestion.getValue(nouvelleQuestion.obtenirTypeQuestion()));
-            objNoeudParametreQuestion.setAttribute("url", nouvelleQuestion.obtenirURLQuestion());
-            objNoeudParametreNouvelleQuestion.appendChild(objNoeudParametreQuestion);
-            noeudCommande.setAttribute("type", "Boule");
-            noeudCommande.appendChild(objNoeudParametreNouvelleQuestion);
-            
-        } else if (strTypeObjet.equals("Banane")) {
-            // La partie ici ne fait que sélectionner le joueur qui sera affecté
-            // Le reste se fait dans Banane.java
-            noeudCommande.setAttribute("type", "Banane");
-            boolean estHumain = false; //Le joueur choisi est'il humain?
-
-            // On obtient la liste des joueurs humains, puis la liste des joueurs virtuels
-            HashMap<String, JoueurHumain> listeJoueursHumains = infoPartie.obtenirTable().obtenirListeJoueurs();
-            for (JoueurHumain objJoueur: listeJoueursHumains.values()) {
-                if (objJoueur.obtenirNom().equals(playerName)) {
-                    estHumain = true;
-                    break;
-                }
-            }
-
-            infoPartie.obtenirTable().preparerEvenementUtiliserObjet(
-                    objJoueurHumain.obtenirNom(),
-                    playerName,
-                    "Banane",
-                    "");
-
-            //System.out.println("Protocole joueur 4189 Banane " + objJoueurHumain.obtenirNomUtilisateur() + " " + playerName);
-            if (estHumain) {
-                JoueurHumain joueur = infoPartie.obtenirTable().obtenirJoueurHumainParSonNom(playerName);
-                if (joueur != null) {
-                    joueur.obtenirPartieCourante().getBananaState().startBanana();
-                }
-                
-            }else{
-            	infoPartie.obtenirTable().obtenirJoueurVirtuelParSonNom(playerName).obtenirPartieCourante().getBananaState().startBanana();
-            }
-
-        } else if (strTypeObjet.equals("Brainiac")) {
-            //all is did on the time when the player go on the case
-        }
+        objObjetUtilise.useObject(noeudCommande, playerName, objJoueurHumain);
+        objJoueurHumain.enleverObjet(intIdObjet, strTypeObjet);
+        
     }// end method
 
     private void traiterCommandeAcheterObjet(Element noeudEntree, Element noeudCommande) {

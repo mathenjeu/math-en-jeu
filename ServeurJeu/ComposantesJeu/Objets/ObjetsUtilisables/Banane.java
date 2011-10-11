@@ -1,5 +1,12 @@
 package ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables;
 
+import java.util.HashMap;
+
+import org.w3c.dom.Element;
+
+import ServeurJeu.ComposantesJeu.Joueurs.InformationPartieHumain;
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+
 /**
  * @author François Gingras
  * changed Oloieri Lilian
@@ -38,6 +45,44 @@ public class Banane extends ObjetUtilisable
 		super(id, estVisible, UID_OU_BANANE, PRIX, EST_LIMITE, PEUT_ETRE_ARME, TYPE_OBJET);
 	}
 	
+	public void useObject(Element noeudCommande, String playerName, JoueurHumain objJoueurHumain)
+	{
+		 System.out.println("we are in objet banana");
+		 InformationPartieHumain infoPartie = objJoueurHumain.obtenirPartieCourante();
+		 
+		 // La partie ici ne fait que sélectionner le joueur qui sera affecté
+         // Le reste se fait dans Banane.java
+         noeudCommande.setAttribute("type", "Banane");
+         boolean estHumain = false; //Le joueur choisi est'il humain?
+
+         // On obtient la liste des joueurs humains, puis la liste des joueurs virtuels
+         HashMap<String, JoueurHumain> listeJoueursHumains = infoPartie.obtenirTable().obtenirListeJoueurs();
+         for (JoueurHumain objJoueur: listeJoueursHumains.values()) {
+             if (objJoueur.obtenirNom().equals(playerName)) {
+                 estHumain = true;
+                 break;
+             }
+         }
+
+         infoPartie.obtenirTable().preparerEvenementUtiliserObjet(
+                 objJoueurHumain.obtenirNom(),
+                 playerName,
+                 "Banane",
+                 "");
+
+         //System.out.println("Protocole joueur 4189 Banane " + objJoueurHumain.obtenirNomUtilisateur() + " " + playerName);
+         if (estHumain) {
+             JoueurHumain joueur = infoPartie.obtenirTable().obtenirJoueurHumainParSonNom(playerName);
+             if (joueur != null) {
+                 joueur.obtenirPartieCourante().getBananaState().startBanana();
+             }
+             
+         }else{
+         	infoPartie.obtenirTable().obtenirJoueurVirtuelParSonNom(playerName).obtenirPartieCourante().getBananaState().startBanana();
+         }
+
+
+	}
 	/*
 	public static void utiliserBanane(Joueur player)
 	{   
