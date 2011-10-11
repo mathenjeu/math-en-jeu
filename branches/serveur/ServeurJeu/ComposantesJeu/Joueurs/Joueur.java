@@ -1,7 +1,5 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
-import ServeurJeu.Communications.ProtocoleJoueur;
-
 /**
  * @author Jean-François Brind'Amour
  */

@@ -30,7 +30,6 @@ import java.util.Set;
 import java.util.Map.Entry;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ClassesUtilitaires.UtilitaireNombres;
-import Enumerations.GameType;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
 import ServeurJeu.ComposantesJeu.Cases.CaseSpeciale;

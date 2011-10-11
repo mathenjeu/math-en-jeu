@@ -1,7 +1,6 @@
 package ServeurJeu.ComposantesJeu.Joueurs;
 
 import java.awt.Point;
-import ServeurJeu.BD.GestionnaireBDJoueur;
 import ServeurJeu.ComposantesJeu.Tables.Table;
 
 /**

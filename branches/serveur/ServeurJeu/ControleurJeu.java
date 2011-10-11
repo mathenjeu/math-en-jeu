@@ -6,16 +6,7 @@ import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.Map;
 import java.util.Random;
-
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-
 import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
-
-import ClassesUtilitaires.UtilitaireXML;
 import Enumerations.RetourFonctions.ResultatAuthentification;
 import ServeurJeu.BD.DBConnectionsPoolManager;
 import ServeurJeu.BD.GestionnaireBD;
@@ -23,14 +14,12 @@ import ServeurJeu.Communications.GestionnaireCommunication;
 import ServeurJeu.Communications.ProtocoleJoueur;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
-import ServeurJeu.Evenements.Evenement;
 import ServeurJeu.Evenements.EvenementJoueurDeconnecte;
 import ServeurJeu.Evenements.EvenementJoueurConnecte;
 import ServeurJeu.Evenements.EvenementNouvelleSalle;
 import ServeurJeu.Evenements.GestionnaireEvenements;
 import ServeurJeu.Evenements.InformationDestination;
 import ServeurJeu.Evenements.StopServerEvent;
-import ServeurJeu.Monitoring.Moniteur;
 import ServeurJeu.Monitoring.TacheLogMoniteur;
 import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;

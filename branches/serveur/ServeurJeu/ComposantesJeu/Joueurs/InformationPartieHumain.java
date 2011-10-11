@@ -19,7 +19,6 @@ import ServeurJeu.ComposantesJeu.Questions.InformationQuestion;
 import ServeurJeu.ComposantesJeu.Questions.Question;
 import ServeurJeu.ComposantesJeu.Tables.Table;
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
-import Enumerations.GameType;
 import ServeurJeu.ControleurJeu;
 import java.util.LinkedList;
 
@@ -70,11 +69,7 @@ public class InformationPartieHumain extends InformationPartie implements Active
 	// Bonus is given while arrived at finish line and is calculated
 	// as number of rested game time(in sec)
 	private int tournamentBonus;
-	
-	// used to count how many times the QuestionsBox is filled
-	// if is filled after
-	private int countFillBox;
-
+		
 	// relative time of the last change of players points
 	// used for finish statistics
 	private int pointsFinalTime;
@@ -480,18 +475,18 @@ public class InformationPartieHumain extends InformationPartie implements Active
 
 			} else if (objQuestionTrouvee == null && objBoiteQuestions.dontHaveQuestions()) {
 
-				countFillBox++;
-				objGestionnaireBD.remplirBoiteQuestions(countFillBox);
+				objGestionnaireBD.remplirBoiteQuestions();
 			}
 
-		} while (objQuestionTrouvee == null && countFillBox < 10); // must find right number for countFillBox
+		} while (objQuestionTrouvee == null ); 
 
+		/*
 		if(objQuestionTrouvee == null)
 		{
 			// en théorie on ne devrait plus entrer dans ce if
 			System.out.println( "ça va mal : aucune question" );
 			this.boiteQuestionsInfo.append("ça va mal : aucune question " + this.objBoiteQuestions.getBoxSize() + "\n");
-		}
+		}*/
 
 		// Si on doit générer le numéro de commande de retour, alors
 		// on le génére, sinon on ne fait rien (ça devrait toujours
@@ -543,7 +538,6 @@ public class InformationPartieHumain extends InformationPartie implements Active
 
 			// to not repeat questions
 			if (objQuestionTrouvee != null && questionDejaPosee(objQuestionTrouvee.obtenirCodeQuestion())) {
-				//objBoiteQuestions.popQuestion(objQuestionTrouvee);
 				objQuestionTrouvee = null;
 			}
 
@@ -595,22 +589,21 @@ public class InformationPartieHumain extends InformationPartie implements Active
 			// joueur veut se déplacer
 			if (objQuestionTrouvee != null) {
 				
-				lstQuestionsRepondues.add(new InformationQuestion(objQuestionTrouvee.obtenirCodeQuestion(),objTable.obtenirTempsRestant()));
+				lstQuestionsRepondues.add(new InformationQuestion(objQuestionTrouvee.obtenirCodeQuestion(), objTable.obtenirTempsRestant()));
 				objQuestionCourante = objQuestionTrouvee;
 
 			} else if (objQuestionTrouvee == null && objBoiteQuestions.dontHaveQuestions()) {
-				countFillBox++;
-				objGestionnaireBD.remplirBoiteQuestions(countFillBox);
-				System.out.println("ça va mal : aucune question -  add count " + countFillBox );
-
+				
+				objGestionnaireBD.remplirBoiteQuestions();				
 			}
-		} while (objQuestionTrouvee == null && countFillBox < 10);
+		} while (objQuestionTrouvee == null);
 
+		/*
 		if (objQuestionTrouvee == null) {
 			// en théorie on ne devrait plus entrer dans ce if
 			System.out.println("ça va mal : aucune question");
 			this.boiteQuestionsInfo.append("ça va mal : aucune question " + this.objBoiteQuestions.getBoxSize() + "\n");
-		}
+		}*/
 
 		// Si on doit générer le numéro de commande de retour, alors
 		// on le génére, sinon on ne fait rien (ça devrait toujours
@@ -714,7 +707,7 @@ public class InformationPartieHumain extends InformationPartie implements Active
 		if (ControleurJeu.modeDebug)
 			bolReponseEstBonne = true;
 		else
-			bolReponseEstBonne = Question.reponseEstValide(reponse, objQuestionCourante.getStringAnswer());
+			bolReponseEstBonne = objQuestionCourante.reponseEstValide(reponse);//, objQuestionCourante.getStringAnswer());
 
 		InformationQuestion iq = lstQuestionsRepondues.getLast();
 		iq.definirTempsRequis( questionTimeReference - objTable.obtenirTempsRestant());
@@ -1123,10 +1116,10 @@ public class InformationPartieHumain extends InformationPartie implements Active
 		return objGestionnaireBD;
 	}
 
-	public void remplirBoiteQuestions(int i) {
+	public void remplirBoiteQuestions() {
 		// 0 - because it's first time that we fill the QuestionsBox
         // after we'll cut the level of questions by this number
-		objGestionnaireBD.remplirBoiteQuestions(i);		
+		objGestionnaireBD.remplirBoiteQuestions();		
 	}
 	
 	/**

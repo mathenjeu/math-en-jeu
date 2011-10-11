@@ -1,5 +1,9 @@
 package ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables;
 
+import org.w3c.dom.Element;
+
+import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
+
 
 /**
  * @author Oloieri Lilian
@@ -36,6 +40,12 @@ public class Brainiac extends ObjetUtilisable {
 	{
 		// Appeler le constructeur du parent
 		super(id, estVisible, UID_OU_BRAINIAC, PRIX, EST_LIMITE, PEUT_ETRE_ARME, TYPE_OBJET);
+	}
+	
+	public void useObject(Element noeudCommande, String playerName, JoueurHumain objJoueurHumain)
+	{
+		 System.out.println("we are in objet brainiac");
+
 	}
 	
 }// end class

@@ -257,7 +257,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// créer un objet InformationPartie qui va pointer sur la table
 		// courante)
 		joueur.definirPartieCourante(new InformationPartieHumain(joueur, this));
-		joueur.obtenirPartieCourante().remplirBoiteQuestions(0);
+		joueur.obtenirPartieCourante().remplirBoiteQuestions();
 
 		// Si on doit générer le numéro de commande de retour, alors
 		// on le génére, sinon on ne fait rien
@@ -1739,7 +1739,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		joueur.definirPartieCourante(new InformationPartieHumain(joueur, this));
 		// 0 - because it's first time that we fill the QuestionsBox
 		// after we'll cut the level of questions by this number		
-		joueur.obtenirPartieCourante().remplirBoiteQuestions(0);
+		joueur.obtenirPartieCourante().remplirBoiteQuestions();
 		//System.out.println("start table2: " + System.currentTimeMillis());
 		// Si on doit générer le numéro de commande de retour, alors
 		// on le génère, sinon on ne fait rien
