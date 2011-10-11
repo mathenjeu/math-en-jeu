@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.IOException;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,10 +30,10 @@ public class XMLWriter {
     private Element rootElement;
     private SmacUI ui;
     
-    // Constructor
+ // Constructor
 	public XMLWriter(SmacUI ui)
 	{
-		this.ui = ui;
+		//this.ui = ui;
 	}
 	
 	/**
@@ -192,5 +191,5 @@ public class XMLWriter {
 		return true;
 	}// end method
 
-	
+
 } // end class

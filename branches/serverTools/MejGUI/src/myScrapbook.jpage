@@ -1,0 +1,12 @@
+
+StringBuffer keyBuffer = new StringBuffer("");
+Random rand = new Random();
+
+for(int qid = 1; qid < 33; qid++)
+{           
+	keyBuffer.setLength(0);    for(int x = 0; x < 2; x++)	{	   	keyBuffer.append(Integer.toHexString(rand.nextInt(126) + 48));	   	keyBuffer.append(Integer.toHexString(rand.nextInt(333) + 65));	   	keyBuffer.append(Integer.toHexString(rand.nextInt(777) + 97));	}	    keyBuffer.append(Integer.toHexString(qid));   	keyBuffer.append(Integer.toHexString(rand.nextInt(126) + 65));   	keyBuffer.append(Integer.toHexString(rand.nextInt(126) + 97));   	  
+    System.out.println(keyBuffer.toString());        
+}System.out.println(Integer.toString(1567 , 16));System.out.println(Integer.toHexString(189));
+System.out.println(Integer.toHexString("qcreator".hashCode()));
+
+
