@@ -689,10 +689,11 @@ class MyPersonnage implements IOurPersonnage
 	private function recalculateFilter()
 	{
 		recalculateColor();
-		if(this.clothesColor > 0 && this.idClip > 0)
+		//if(this.clothesColor > 0 && this.idClip > 0)
 		   this.colorFilter = UtilsBox.colorMatrixPerso(this.clothesColor, this.idClip);
-		else
-		   this.colorFilter = undefined;		
+		//else
+		   //this.colorFilter = undefined;		
+	   trace("verify COLORFILTER " + colorFilter);
 	}
 	
 	
@@ -1457,14 +1458,20 @@ class MyPersonnage implements IOurPersonnage
       // we put the message only if the game is not in the way to finish
 	  if(_level0.loader.contentHolder.horlogeNum > 3)
 	  {
-			var twMove:Tween;
+			//var twMove:Tween;
             var guiBanane:MovieClip
 		    guiBanane = _level0.loader.contentHolder.attachMovie("GUI_banane", "banane", 9998);
 		    guiBanane._y = 200;
             guiBanane._x = 275;
 			
-		    _level0.loader.contentHolder["banane"].nomCible = " ";
-	        _level0.loader.contentHolder["banane"].nomJoueurUtilisateur = adverName;
+            var bananaMessage:MovieClip
+		    bananaMessage = _level0.loader.contentHolder.attachMovie("bananaMess", "bMessage", 9999);
+		    bananaMessage._y = 200;
+            bananaMessage._x = 275;
+
+			
+		    _level0.loader.contentHolder["bMessage"].nomCible = " ";
+	        _level0.loader.contentHolder["bMessage"].nomJoueurUtilisateur = adverName;
 	       
 	  }
   }// end method

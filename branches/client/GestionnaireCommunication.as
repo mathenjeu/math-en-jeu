@@ -4567,35 +4567,11 @@ class GestionnaireCommunication
 		                            objMagasin.push(objMagasinObjet);
 			                        trace("id GCOM: " + objMagasinObjet.id);
 		                        }
-		                    
-		                     //**************************************************************
-								/*
-								for(var j:Number = 0; j<lstObjMagasin.length; j++)
-								{
-									var objNoeudObjMagasin:XMLNode = lstObjMagasin[j];
-									
-									objEvenement["objet"+j] = new Object();
-									objEvenement["objet"+j].cout = objNoeudObjMagasin.attributes.cout;
-									objEvenement["objet"+j].id = objNoeudObjMagasin.attributes.id;
-									objEvenement["objet"+j].type = objNoeudObjMagasin.attributes.type;
-									//trace("objet"+j+".cout :" + objEvenement["objet"+j].cout);
-									//trace("objet"+j+".id :" + objEvenement["objet"+j].id);
-									//trace("objet"+j+".type :" + objEvenement["objet"+j].type);
-								}*/
-																
+		                    		                     																
 								_level0.loader.contentHolder.planche.obtenirPerso().definirMagasin(objMagasin);
-								//trace("gest comm : " + _level0.loader.contentHolder.planche.obtenirPerso().obtenirMagasin());
-
+								
 							}
-							/*else if(objNoeudParametre.firstChild.nodeValue == "piece")
-							{
-														
-								var o:ObjetSurCase = new ObjetSurCase();
-								o.definirNom("pieceFixe");
-								_level0.loader.contentHolder.planche.obtenirPerso().ajouterObjet(o, 999);	
-										
-							}*/
-
+							
                         	objEvenement.collision =  String(objNoeudParametre.firstChild.nodeValue);
 							//objEvenement.collision = "minigame";
 							//trace("collision ds gestComm "+objEvenement.collision+"   "+objNoeudParametre.firstChild.nodeValue);

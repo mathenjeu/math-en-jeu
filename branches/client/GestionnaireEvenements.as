@@ -47,12 +47,6 @@ class GestionnaireEvenements
     private var nomSalle:String;  //  nom de la salle dans laquelle on est
 	private var idRoom:Number;    // ID of our room in the server's list of rooms
 	private var masterTime:Number; // masterTime of room, if masterTime != 0 is taked masterTime for the time of game 
-	
-	// subs this 5 by GameTable object
-	//private var numeroTable:Number;   //   numero de la table dans laquelle on est
-	//private var tablName:String;     // name of the created table
-    //private var tempsPartie:Number;   //  temps que va durer la partie, en minutes
-	//private var typeDeJeu:String;        // gameType in our table
 	private var nbTracks:Number;   // usually is 4, 
     
 	private var listeDesJoueursDansSalle:Array;  // liste des joueurs dans la salle qu'on est. Un joueur contient un nom (nom) ???? 
@@ -253,10 +247,8 @@ class GestionnaireEvenements
 	   function processTexteSource()
 	   {
 		   //trace("colors loaded.......******************");
-	   }
-		  
-	}
-	
+	   }		  
+	}	
 	 
 	
 	// we treat persos colors xml and return the string of color of our perso
@@ -1163,14 +1155,16 @@ class GestionnaireEvenements
         switch(objetEvenement.resultat)
         {
             case "Ok":
+			    _level0.loader.contentHolder.gotoAndPlay(1);	
                 delete this.listeDesJoueursDansSalle;
                 delete this.listeDesSalles;
                 delete this.listeDesJoueursConnectes;
-                this.listeDesJoueursDansSalle = new Array();
-                this.nomSalle = "";
+                
+				this.nomSalle = "";
                 //this.motDePasseSalle = "";
                 this.listeDesSalles = new Array();
                 this.listeDesJoueursConnectes = new Array();
+				this.listeDesJoueursDansSalle = new Array();
                 objGestionnaireCommunication.obtenirListeJoueurs(Delegate.create(this, this.retourObtenirListeJoueurs), 
 																 Delegate.create(this, this.evenementJoueurConnecte), 
 																 Delegate.create(this, this.evenementJoueurDeconnecte),
@@ -2283,19 +2277,17 @@ class GestionnaireEvenements
 					{
 							 messageInfo = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.bananaCollectMess;
 							 this.newsChat.addMessage(messageInfo);
-						 }
-						 else if(objetEvenement.collision == "Piece")
-						 {
+					}
+					else if(objetEvenement.collision == "Piece")
+					{
 							 messageInfo = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.moneyCollectMess;
 							 this.newsChat.addMessage(messageInfo);
-						 }
-						 else if(objetEvenement.collision == "Boule")
-						 {
+					}
+					else if(objetEvenement.collision == "Boule")
+					{
 							 messageInfo = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.cristallCollectMess;
 		                     this.newsChat.addMessage(messageInfo);
-				   }
-        	         
-        	   	   
+				    } 	   	   
 					
 				   remplirMenuPointage();
 		     	}
@@ -2312,7 +2304,7 @@ class GestionnaireEvenements
 					else
 					{
 			     		trace("deplacement refuse  ");
-						_level0.loader.contentHolder.url_retro =objetEvenement.explication;// "Q-1-F-en.swf";
+						_level0.loader.contentHolder.url_retro = objetEvenement.explication;// "Q-1-F-en.swf";
 						_level0.loader.contentHolder.planche.effacerCasesPossibles();
 
                         _level0.loader.contentHolder.box_question.monScroll._visible = false;
@@ -2486,7 +2478,7 @@ class GestionnaireEvenements
 		
 		if(!this.endGame){
 
-		   errorDeconnexion = _level0.loader.contentHolder.attachMovie("GUI_erreur", "deconnexion", 9999);//, {x: 20, y: 20});
+		   errorDeconnexion = _level0.loader.contentHolder.attachMovie("GUI_erreur", "deconnexion", 9998);//, {x: 20, y: 20});
 		   errorDeconnexion.linkGUI_erreur._visible = false;
 		   errorDeconnexion.btn_ok._visible = false;
 			
@@ -3859,7 +3851,7 @@ function colorItMatrixByID(colorID:Number, mov:MovieClip, idD:Number)
             break;
 			
             default:
-                trace("Erreur Inconnue");
+                trace("Erreur Inconnue dans colors");
      }
    
 
