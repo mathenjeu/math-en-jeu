@@ -106,7 +106,7 @@ public class SpyRooms implements Runnable {
 			try
 	    	{
 	            // Update rooms liste 
-				///System.out.println("test - ");
+				System.out.println("test - ");
 				detectNewRooms(objControleurJeu.removeOldRooms());
 
                 // Bloquer la thread jusqu'à la prochaine mise à jour
@@ -152,7 +152,7 @@ public class SpyRooms implements Runnable {
 					while(rs.next())
 					{
 						int roomId = rs.getInt("room.room_id");
-						//System.out.println(roomId + "NEW");				
+						System.out.println(roomId + "NEW");				
 						rooms.add(roomId);
 					}   
 								
@@ -180,6 +180,45 @@ public class SpyRooms implements Runnable {
 			
 			//put in Controleur finded rooms
 			objControleurJeu.obtenirGestionnaireBD().fillRoomList(rooms);
+			
+			//now find all old rooms from BD and fill in ArrayList
+			rooms.clear();
+			try
+			{
+				synchronized( requete )
+				{
+					ResultSet rs = requete.executeQuery( "SELECT room.room_id FROM room where  endDate < NOW() AND room_id IN (" + list + ");" );
+					while(rs.next())
+					{
+						int roomId = rs.getInt("room.room_id");
+						System.out.println(roomId + "OLD");				
+						rooms.add(roomId);
+					}   
+								
+				}
+			}
+			catch (SQLException e)
+			{
+				// Une erreur est survenue lors de l'exécution de la requète
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_newRoom"));
+				objLogger.error(GestionnaireMessages.message("bd.trace"));
+				objLogger.error( e.getMessage() );
+				
+			    e.printStackTrace();
+			    getNewConnection();
+			}
+			catch( RuntimeException e)
+			{
+				//Une erreur est survenue lors de la recherche de la prochaine salle
+				objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"));
+				objLogger.error(GestionnaireMessages.message("bd.trace"));
+				objLogger.error( e.getMessage() );
+			    e.printStackTrace();
+			    getNewConnection();
+			}  
+			
+			//put in Controleur finded rooms
+			objControleurJeu.removeOldRooms(rooms);
 			
 	}// end methode detectNewRooms
 		

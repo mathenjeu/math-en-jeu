@@ -641,6 +641,7 @@ public class ControleurJeu {
 
             for(Salle salle : lstSalles.values())
             {
+            	System.out.println(" salle - EndDate: "  + salle.getEndDate());
                 if (salle.getEndDate() != null && salle.getEndDate().before(new Date(System.currentTimeMillis())))
                     lstSalles.remove(salle);
                 else
@@ -938,6 +939,20 @@ public class ControleurJeu {
 		for(Salle room : lstSalles.values())
 			nb += room.getActiveTablesNUmber();
 		return nb;
+	}
+
+
+	public void removeOldRooms(ArrayList<Integer> rooms) {
+		// TODO Auto-generated method stub
+		synchronized (lstSalles) {
+
+            for(int salle : rooms)
+            {
+            	System.out.println(" salle - EndDate: "  + salle);
+                lstSalles.remove(salle);                
+            }
+        }
+		
 	}
 
 }// end class
