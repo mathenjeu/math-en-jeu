@@ -48,7 +48,7 @@ function onXmlLoaded(boole:Boolean)
 
 function treatXML()
 {
-	var groupsChildNodes:Array = groupsxml.childNodes;
+	var groupsChildNodes:Array = groupsxml.firstChild.childNodes;
 	for(var i in groupsChildNodes)
 	{
 		// create new group

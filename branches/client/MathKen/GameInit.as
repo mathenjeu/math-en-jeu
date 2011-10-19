@@ -5,13 +5,13 @@ import mx.controls.TextInput;
 var dokuGame:MathDoku = new MathDoku();
 
 // declare a new XML instance
-var groupsxml:XML = new XML();
+var dokuxml:XML = new XML();
 
 // ignore tabs, returns, and other whitespace between nodes
-groupsxml.ignoreWhite = true;
+dokuxml.ignoreWhite = true;
 
 // set the scope of the onLoad function to the MathDoku timeline, not configxml
-groupsxml.onLoad = Delegate.create(this, onXmlLoaded);
+dokuxml.onLoad = Delegate.create(this, onXmlLoaded);
 
 //create arrays needed for groups and laws
 var unseenLines:Array = new Array();
@@ -23,9 +23,9 @@ this.onEnterFrame = loadXML;
 function loadXML()
 {
 	if(path == undefined)
-       groupsxml.load("mathdoku.xml");
+       dokuxml.load("mathdoku.xml");
 	else
-	   groupsxml.load(path);
+	   dokuxml.load(path);
    delete this.onEnterFrame;	
 }
 
@@ -48,7 +48,7 @@ function onXmlLoaded(boole:Boolean)
 
 function treatXML()
 {
-	var groupsChildNodes:Array = groupsxml.childNodes;
+	var groupsChildNodes:Array = dokuxml.firstChild.childNodes;
 	for(var i in groupsChildNodes)
 	{
 		// create new group

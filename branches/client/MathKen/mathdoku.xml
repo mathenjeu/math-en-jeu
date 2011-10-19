@@ -1,73 +1,75 @@
 <?xml version="1.0" encoding="windows-1250"?>
-<group>
-   <cases>
-      <case id = "N11">4</case>
-      <case id = "N12">1</case>
-   </cases>
-   <law id = "G11">3-</law>
-   <unseen>
-      <line>v11</line>
-    </unseen>
-</group>
-<group>
-   <cases>
-      <case id = "N13">3</case>
-      <case id = "N22">2</case>
-      <case id = "N23">4</case>
-      <case id = "N24">1</case>
-   </cases>
-   <law id = "G13">24*</law>
-   <unseen>
-      <line>v22</line>
-      <line>v32</line>
-      <line>h13</line>     
-   </unseen>
-</group>
-<group>
-   <cases>
-      <case id = "N14">2</case>     
-   </cases>
-   <law id = "G14">2</law>
-</group>
-<group>
-   <cases> 
-      <case id = "N21">3</case>
-      <case id = "N31">2</case>
-      <case id = "N41">1</case>
-   </cases>
-   <law id = "G21">6*</law>
-   <unseen>
-      <line>h21</line>
-      <line>h31</line>   
-   </unseen>
-</group>
-<group>
-   <cases>
-      <case id = "N32">3</case>
-      <case id = "N33">1</case>
-   </cases>
-   <law id = "G32">4+</law>
-   <unseen>
-      <line>v23</line>     
-   </unseen>
-</group>
-<group>
-   <cases>
-      <case id = "N34">4</case>
-      <case id = "N44">3</case>
-   </cases>
-   <law id = "G34">1-</law>
-   <unseen>
-      <line>h34</line> 
-   </unseen>
-</group>
-<group>
-   <cases>
-      <case id = "N42">4</case>
-      <case id = "N43">2</case>
-   </cases>
-   <law id = "G42">2/</law>
-   <unseen>
-      <line>v24</line>     
-   </unseen>
-</group>
+<doku>
+  <group>
+     <cases>
+        <case id = "N11">4</case>
+        <case id = "N12">1</case>
+     </cases>
+     <law id = "G11">3-</law>
+     <unseen>
+        <line>v11</line>
+      </unseen>
+  </group>
+  <group>
+     <cases>
+        <case id = "N13">3</case>
+        <case id = "N22">2</case>
+        <case id = "N23">4</case>
+        <case id = "N24">1</case>
+     </cases>
+     <law id = "G13">24*</law>
+     <unseen>
+        <line>v22</line>
+        <line>v32</line>
+        <line>h13</line>     
+     </unseen>
+  </group>
+  <group>
+     <cases>
+        <case id = "N14">2</case>     
+     </cases>
+     <law id = "G14">2</law>
+  </group>
+  <group>
+     <cases> 
+        <case id = "N21">3</case>
+        <case id = "N31">2</case>
+        <case id = "N41">1</case>
+     </cases>
+     <law id = "G21">6*</law>
+     <unseen>
+        <line>h21</line>
+        <line>h31</line>   
+     </unseen>
+  </group>
+  <group>
+     <cases>
+        <case id = "N32">3</case>
+        <case id = "N33">1</case>
+     </cases>
+     <law id = "G32">4+</law>
+     <unseen>
+        <line>v23</line>     
+     </unseen>
+  </group>
+  <group>
+     <cases>
+        <case id = "N34">4</case>
+        <case id = "N44">3</case>
+     </cases>
+     <law id = "G34">1-</law>
+     <unseen>
+        <line>h34</line> 
+     </unseen>
+  </group>
+  <group>
+     <cases>
+        <case id = "N42">4</case>
+        <case id = "N43">2</case>
+     </cases>
+     <law id = "G42">2/</law>
+     <unseen>
+        <line>v24</line>     
+     </unseen>
+  </group>
+</doku>
