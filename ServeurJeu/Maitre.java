@@ -211,12 +211,4 @@ public class Maitre implements Runnable
         return answer;
     }
 
-	/*
-	public void setCommandToDo(String commandToDo) {
-		this.commandToDo = commandToDo;
-	}
-
-	public String getCommandToDo() {
-		return commandToDo;
-	}*/
 }

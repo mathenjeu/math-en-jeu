@@ -531,7 +531,7 @@ public class GestionnaireBD {
 		for(InformationQuestion info: questionsRepondues)
 		{
 			// we don't put not answered questions - they will be used again in the future games
-			if(info.answerStatus == info.RIGHT_ANSWER || info.answerStatus == info.WRONG_ANSWER)
+			if(info.answerStatus == InformationQuestion.RIGHT_ANSWER || info.answerStatus == InformationQuestion.WRONG_ANSWER)
 			   stats.append(info.obtenirQuestionId() + ",");
 		}
 		if(stats.length() > 0)
