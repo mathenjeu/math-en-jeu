@@ -193,6 +193,9 @@ public class ControleurJeu {
         
     }
     
+    /**
+     * Prepare the players about future server stop or reset
+     */
     public void stopItLater(){
     	this.sendEventServerWillBeReset();
     }
@@ -267,8 +270,6 @@ public class ControleurJeu {
         DBConnectionsPoolManager pool = DBConnectionsPoolManager.getInstance();
         pool.release();
         
-        //this.lstJoueursConnectes.clear();        
-        //this.isOn = false;
     }
 
     /**
@@ -548,6 +549,16 @@ public class ControleurJeu {
     	return sallesSupportees;
     }
 
+    /**
+     * Cette fonction permet d'obtenir la liste des salles d'un certain type 
+     * du serveur de jeu qui supporte la langue spécifiée.
+     *
+     * @param language une String de 2 caractères qui indique la langue pour
+     *                 laquelle on fait la recherche. 'fr'=français, 'en'=english
+     * @param roomsType type demand�e 
+     * @return TreeMap La liste des salles supportant la langue spécifiée
+
+     */
     public HashMap<Integer, Salle> obtenirListeSalles(String langue, String roomsType) {
     	HashMap<Integer, Salle> sallesSupportees = new HashMap<Integer, Salle>();
     	synchronized (lstSalles) {
@@ -588,6 +599,12 @@ public class ControleurJeu {
         }
     }
 
+    /**
+     * Get room's name by his Id and in requested language
+     * @param idRoom
+     * @param lang
+     * @return
+     */
     public String getRoomName(int idRoom, String lang) {
         // Retourner si la salle existe d�j� ou non
         synchronized (lstSalles) {
@@ -943,7 +960,7 @@ public class ControleurJeu {
 
 
 	public void removeOldRooms(ArrayList<Integer> rooms) {
-		// TODO Auto-generated method stub
+		
 		synchronized (lstSalles) {
 
             for(int salle : rooms)

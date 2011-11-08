@@ -21,9 +21,9 @@ import ServeurJeu.Configuration.GestionnaireMessages;
 
 public final class DBConnectionsPoolManager{
 
-	static private DBConnectionsPoolManager manager;       // The single instance
-	static private Logger objLogger = Logger.getLogger(DBConnectionsPoolManager.class);
-	private static GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
+	private static  DBConnectionsPoolManager manager;       // The single instance
+	private static  Logger objLogger = Logger.getLogger(DBConnectionsPoolManager.class);
+	private static  GestionnaireConfiguration config = GestionnaireConfiguration.obtenirInstance();
 
 	// It's number of given connectons. Did in the scope to manage
 	// correctly them
@@ -180,7 +180,7 @@ public final class DBConnectionsPoolManager{
 	 * number of connections has been reached. If a free connection
 	 * has been closed by the database, it's removed from the pool
 	 * and this method is called again recursively.
-	 * <P>
+	 * 
 	 * If no connection is available and the max number has been 
 	 * reached, this method waits the specified time for one to be
 	 * checked in.

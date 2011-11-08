@@ -18,7 +18,6 @@ import ServeurJeu.ComposantesJeu.Tables.TableCourse;
 import ServeurJeu.ComposantesJeu.Tables.TableTournament;
 import ServeurJeu.Evenements.Evenement;
 import ServeurJeu.Evenements.EvenementJoueurEntreSalle;
-import ServeurJeu.Evenements.EvenementJoueurEntreTable;
 import ServeurJeu.Evenements.EvenementJoueurQuitteSalle;
 import ServeurJeu.Evenements.EvenementNouvelleTable;
 import ServeurJeu.Evenements.EvenementTableDetruite;

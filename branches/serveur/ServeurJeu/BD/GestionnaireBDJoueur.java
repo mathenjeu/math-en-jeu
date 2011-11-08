@@ -14,7 +14,6 @@ import ServeurJeu.ComposantesJeu.Questions.BoiteQuestions;
 import ServeurJeu.ComposantesJeu.Questions.MiniDoku;
 import ServeurJeu.ComposantesJeu.Questions.MultipleChoice5Question;
 import ServeurJeu.ComposantesJeu.Questions.MultipleChoiceQuestion;
-import ServeurJeu.ComposantesJeu.Questions.Question;
 import ServeurJeu.ComposantesJeu.Questions.ShortAnswerQuestion;
 import ServeurJeu.ComposantesJeu.Questions.TrueFalseQuestion;
 import ServeurJeu.Configuration.GestionnaireMessages;
@@ -214,7 +213,7 @@ public final class GestionnaireBDJoueur {
 		" and qi.question_flash_file is not NULL" +
 		" and qi.feedback_flash_file is not NULL";
 
-		//remplirBoiteQuestionsTF(boite, strRequeteSQL_TF, URL);
+		remplirBoiteQuestionsTF(boite, strRequeteSQL_TF, URL);
 
 		// request for mathdoku
 		String strRequeteSQL_MD = "SELECT DISTINCT qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
