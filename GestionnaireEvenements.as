@@ -655,7 +655,7 @@ class GestionnaireEvenements
     {
         trace("*********************************************");
         trace("debut de repondreQuestion     " + str);
-        this.objGestionnaireCommunication.repondreQuestion(Delegate.create(this, this.retourRepondreQuestion), str);  
+        this.objGestionnaireCommunication.repondreQuestion(Delegate.create(this, this.retourRepondreQuestion), str);		
         trace("fin de repondreQuestion");
         trace("*********************************************\n");
     }
@@ -1979,6 +1979,8 @@ class GestionnaireEvenements
 		     	_level0.loader.contentHolder.url_question = objetEvenement.question.url;//"Q-1-en.swf"
 		     	_level0.loader.contentHolder.type_question = objetEvenement.question.type;
 				_level0.loader.contentHolder.box_question.gotoAndPlay(2);
+				ourPerso.setMinigameLoade(true);
+				trace(" Type - " + _level0.loader.contentHolder.type_question);
             break;
 
 			case "Banane":
@@ -2240,7 +2242,7 @@ class GestionnaireEvenements
 			
 			       _level0.loader.contentHolder.planche.effacerCasesPossibles();
 					_level0.loader.contentHolder.box_question.gotoAndPlay(9);
-			
+			ourPerso.setMinigameLoade(false);
 					pt.definirX(objetEvenement.nouvellePosition.x);
 			     	pt.definirY(objetEvenement.nouvellePosition.y);
 					
@@ -2252,6 +2254,7 @@ class GestionnaireEvenements
 					// modifier le pointage
 					_level0.loader.contentHolder.planche.obtenirPerso().modifierPointage(objetEvenement.pointage);
 					_level0.loader.contentHolder.planche.obtenirPerso().modifierArgent(objetEvenement.argent);
+				
 					_level0.loader.contentHolder.sortieDunMinigame = false; 
 					//_level0.loader.contentHolder.planche.
 					
@@ -2299,14 +2302,17 @@ class GestionnaireEvenements
 						// assurement mauvaise au serveur. Il ne faut pas afficher de retro dans ce cas
 						//_level0.loader.contentHolder.planche.afficherCasesPossibles(_level0.loader.contentHolder.planche.obtenirPerso());
 						_level0.loader.contentHolder.planche.setRepostCases(true);
+					ourPerso.setMinigameLoade(false);
 						_level0.loader.contentHolder.erreurConnexion = false;
 					}
 					else
 					{
 			     		trace("deplacement refuse  ");
 						_level0.loader.contentHolder.url_retro = objetEvenement.explication;// "Q-1-F-en.swf";
+						
 						_level0.loader.contentHolder.planche.effacerCasesPossibles();
-
+                        ourPerso.setMinigameLoade(true);
+						
                         _level0.loader.contentHolder.box_question.monScroll._visible = false;
 						var ptX:Number = _level0.loader.contentHolder.box_question.monScroll._x;
 						var ptY:Number = _level0.loader.contentHolder.box_question.monScroll._y;
@@ -3281,7 +3287,7 @@ class GestionnaireEvenements
 			   this["Flag" + (i + 1)] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+(i+1)].attachMovie("checkFlag_mc", "flag" + i, 220 + i, {_x:-20, _y:0});
 			   
 			}
-			trace("Pointage: !!!!!!!!!! " + i + " " + jouersStarted[i].win);
+			//trace("Pointage: !!!!!!!!!! " + i + " " + jouersStarted[i].win);
 			//this["tete"+j]=new MovieClip();
 			this["tete" + (i + 1)] = _level0.loader.contentHolder.menuPointages.mc_autresJoueurs["mc_joueur"+ (i + 1)]["tete"+ (i + 1)].attachMovie("tete" + jouersStarted[i].idessin, "Tete" + i, -10100 + i);
 			this["tete" + (i + 1)]._x = -6;

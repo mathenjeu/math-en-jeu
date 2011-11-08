@@ -46,7 +46,7 @@ class MyPersonnage implements IOurPersonnage
 	private var nom:String;               // name of user that is master of pers
 	private var boardCentre:Boolean;
 	private var listeSurMagasin:Array;	 // sert a recuperer la liste d'objets du magasin lorsque qu'on va sur une case magasin
-	private var minigameLoade:Boolean;
+	private var minigameLoade:Boolean;   // it is for magasin, retro or question too
 	
 	private var colorId:Number; 
 	private var clothesColor:String;
@@ -703,32 +703,37 @@ class MyPersonnage implements IOurPersonnage
 		var pourcent:Number;
 		var dx:Number = 0;
 		var dy:Number = 0;
-		var reafficher1:Boolean = true;
-		var reafficher2:Boolean = false;
-				
+						
 		dx = this.prochainePosition.obtenirX() - this.position.obtenirX();  
 		dy = this.prochainePosition.obtenirY() - this.position.obtenirY();
 		
 		//trace("ds deplacePersonnage " + this.prochainePosition.obtenirX() + " " + this.position.obtenirX());
 		//trace("ds deplacePersonnage " + dx + " " + dy);
-		
-		if( boardCentre && planche.getRepostCases())
+		if(minigameLoade)  
 		{
 			planche.effacerCasesPossibles();
-			planche.afficherCasesPossibles();
-			planche.setRepostCases(false);
-			// trace("Test sur retour 1 " + boardCentre);
-
-			return;			
-		}
-		else if( boardCentre  &&  !planche.getShowCases()) // to consider the case that we don't have possibility to move 
-		{
-			planche.afficherCasesPossibles();
 			//trace("Test sur retour 2 " + boardCentre);
 			return;
 		}
-		else if( boardCentre ) //dx == 0 && dy == 0 && image._currentFrame == 1) 
+				
+		if( boardCentre ) //dx == 0 && dy == 0 && image._currentFrame == 1) 
 		{
+			if(planche.getRepostCases())
+			{
+				planche.effacerCasesPossibles();
+				planche.afficherCasesPossibles();
+				planche.setRepostCases(false);
+				// trace("Test sur retour 1 " + boardCentre);
+				return;			
+			}
+			// to consider the case that we don't have possibility to move and 
+			// we are not with a question_box, retro or magasin
+			else if(!planche.getShowCases() && !minigameLoade)  
+			{
+				planche.afficherCasesPossibles();
+				//trace("Test sur retour 2 " + boardCentre);
+				return;
+			}
 			//  trace("Test sur retour 3 " + boardCentre);
 			return;
 		}
@@ -754,10 +759,8 @@ class MyPersonnage implements IOurPersonnage
 					case "magasin":
 						//si notre personnage tombe sur un magasin, on charge le GUI_magasin
 							this.minigameLoade = true;
-							reafficher1 = false;
 							planche.effacerCasesPossibles();
-							//_root.objGestionnaireInterface.effacerBoutons(1);			
-							
+													
 							// on charge le magasin : on ajuste sa position a l'ecran
 							// on indique qu'il ne s'agit pas d'un mini-game.
 						
@@ -910,16 +913,14 @@ class MyPersonnage implements IOurPersonnage
 							minigame._visible = true;
 						}
 					} // if(_level0.loader.contentHolder.planche.estCaseSpeciale(this.l, this.c) &&  _level0.loader.contentHolder.sortieDunMinigame == false)
-					else reafficher2 = true;
-				
+									
 			}// if(image._currentFrame != 1 && image._currentFrame < 90)
-			
-			if(reafficher1 && reafficher2) this.minigameLoade = false;
-			
+						
 			//Si le perso est le mien et qu'il est au repos, mais que le board n'est pas centre
+			
 			if(planche.recentrerBoard(this.l, this.c, false))
 			{
-					if(!this.minigameLoade)
+					if(!minigameLoade)
 					{
 						planche.afficherCasesPossibles();
 						planche.setRepostCases(false);
@@ -928,7 +929,15 @@ class MyPersonnage implements IOurPersonnage
 					boardCentre = true;
 					//trace(_level0.loader.contentHolder.horlogeNum + "temps restant");
 					
-			}			
+			}	
+			// to consider the case that we don't have possibility to move and 
+			// we are not with a question_box, retro or magasin
+			if(!planche.getShowCases() && !minigameLoade)  
+			{
+				planche.afficherCasesPossibles();
+				//trace("Test sur retour 2 " + boardCentre);
+				return;
+			}
 			return; // pour ne pas faire le reste des verifications inutilement si dx == dy == 0
 		} // if ((dx == 0) && (dy == 0))
 		
@@ -1097,12 +1106,16 @@ class MyPersonnage implements IOurPersonnage
 		//funcToCallMessage(); 
 		
 		addMoveSight(-2);
+		planche.effacerCasesPossibles();
+		planche.setRepostCases(false);
+		
 		//planche.setRepostCases(true);						 		
 	}
 	
 	public function correctStateBeforeBanane(adverName:String)
 	{
-		funcToCallMessage(adverName); 
+		funcToCallMessage(adverName);
+				
 		//if the player is in the minigame 
 		if(getMinigameLoade())
 		{		      
@@ -1114,30 +1127,34 @@ class MyPersonnage implements IOurPersonnage
                   _level0.loader.contentHolder.miniGameLayer["magasin"].loader.contentHolder.quitter();
 			  }
 			 		 			
-		// if the player read at the moment a question
-		}else if(_level0.loader.contentHolder.box_question.monScroll._visible)
-		{    		   
-			_level0.loader.contentHolder.objGestionnaireEvenements.cancelQuestion();
-			_level0.loader.contentHolder.box_question.gotoAndPlay(9);
-			_level0.loader.contentHolder.sortieDunMinigame = false;
+		      // if the player read at the moment a question
+			  if(_level0.loader.contentHolder.box_question.monScroll._visible)
+		      {    		   
+			     _level0.loader.contentHolder.objGestionnaireEvenements.cancelQuestion();
+			     _level0.loader.contentHolder.box_question.gotoAndPlay(9);
+				 setMinigameLoade(false);
 			  		
-		// if the player read a feedback of a question 
-		}else if(_level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible) 
-		{
-			// catch the rested time to be used after banana show
-			var tempsRested:Number = _level0.loader.contentHolder.box_question.GUI_retro.tempsPenalite;
-								
-			_level0.loader.contentHolder.box_question.monScroll._visible = false;
-			_level0.loader.contentHolder.box_question._visible = false;
-			_level0.loader.contentHolder.box_question.GUI_retro.removeMovieClip();
-				
-			// setTimeout( Function, delay in miliseconds, arguments)
-            _global.timerInterval = setInterval(this,"funcToRecallFeedback", 7000, tempsRested);			 
-			  
+			  // if the player read a feedback of a question 
+			  }else if(_level0.loader.contentHolder.box_question.GUI_retro.texteTemps._visible) 
+			  {
+				  // catch the rested time to be used after banana show
+				  var tempsRested:Number = _level0.loader.contentHolder.box_question.GUI_retro.tempsPenalite;
+									
+				  _level0.loader.contentHolder.box_question.monScroll._visible = false;
+				  _level0.loader.contentHolder.box_question._visible = false;
+				   _level0.loader.contentHolder.box_question.GUI_retro.quitter();
+				  //_level0.loader.contentHolder.box_question.GUI_retro.removeMovieClip();
+					
+				  // setTimeout( Function, delay in miliseconds, arguments)
+				  _global.timerInterval = setInterval(this,"funcToRecallFeedback", 7000, tempsRested);			 
+				  
+			  }
 		}
+		setMinigameLoade(true);
 		planche.effacerCasesPossibles();
 		planche.setRepostCases(false);
-		planche.setShowCases(true);
+		//boardCentre = false;
+		
 	}
 	
 	function funcToRecallFeedback(tempsRested:Number):Void
@@ -1149,6 +1166,8 @@ class MyPersonnage implements IOurPersonnage
 		var ptY:Number = _level0.loader.contentHolder.box_question.monScroll._y;
 		_level0.loader.contentHolder.box_question.attachMovie("GUI_retro","GUI_retro", 100, {_x:ptX, _y:ptY});
 	    _level0.loader.contentHolder.box_question.GUI_retro.timeX = tempsRested;
+		_level0.loader.contentHolder.planche.effacerCasesPossibles();
+		_level0.loader.contentHolder.objGestionnaireEvenements.getOurPerso().setMinigameLoade(true);
 		clearInterval(_global.timerInterval);
      
     } // end methode
@@ -1458,6 +1477,8 @@ class MyPersonnage implements IOurPersonnage
       // we put the message only if the game is not in the way to finish
 	  if(_level0.loader.contentHolder.horlogeNum > 3)
 	  {
+		  planche.effacerCasesPossibles();
+		  planche.setRepostCases(false);
 			//var twMove:Tween;
             var guiBanane:MovieClip
 		    guiBanane = _level0.loader.contentHolder.attachMovie("GUI_banane", "banane", 9998);

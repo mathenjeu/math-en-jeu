@@ -1,38 +1,32 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <config
 
-	language="fr"
+	language="en"
 	gameType="mathEnJeu"
-	username="chris"
-	password="1d0fcbf18571fe737a43409d83e6a31f:ECbirg4s9TKKiiBSVdQMrU1GyvRKp4HT"
-	url_server="moe"
-	url_flash="http://moe/math-en-jeu/flash/"
+	
+	url_server1 = "mathenjeu.ca"
+	url_server = "192.168.1.67"
+	url_serveur1 = "localhost"
+	url_flash="http://mathenjeu.mat.ulaval.ca/questions5/"
+	port1="8080"
 	port="6100"
 	
 	
 
 
-	url_server_tunneling1="moe"
-	port_tunneling="80"
+ 	username2 = "test4"
+	password2 = "5736a870700791e6c4ad532ac73ef2e5:lozRzf8WqkNQmnATnTOpbYCB6F4L8XaF"
 
-  username4 = "testd"
-	password4 = "0123456789101112"
+	username = "chris"
+	password = "1d0fcbf18571fe737a43409d83e6a31f:ECbirg4s9TKKiiBSVdQMrU1GyvRKp4HT"
 
-	username ="demo-155"
-	password ="3437a2cf2af95fe8"
-	
-  usernamex ="demo-156"
-	passwordx ="3437a1682af95c81"
-	
-	username3 = "demo-158"
-	password3 = "3437aa3e2af95757"
-		
 	gamepath="mathemaQuoi_beta.swf"
 
 	masterTime="10"
 	masterFinalTime="15"
-	windowOption = "http://mathenjeu.mat.ulaval.ca/mathenjeu/flash/pop-up.php"
+	windowOption = "http://dev2.mathamaze.ca/mathenjeu/flash/pop-up.php"
 	windowOption1 = "Close"
+	closeMain = ""
 >
 
 </config>

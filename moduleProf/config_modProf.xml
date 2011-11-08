@@ -4,15 +4,18 @@
   language="fr"
   gameType="mathEnJeu"
   
-  url_server1 = "192.168.1.67"
-  port1 = "6100"
+  url_server = "192.168.1.67"
+  port = "6100"
 
- 	url_server="mathamaze.ca"
+ 	url_server1="mathamaze.ca"
 	url_flash="http://mathamaze.ca/questions6/"
-	port="8080"
+	port1="8080"
 
-  username = "chris"
-  password = "1d0fcbf18571fe737a43409d83e6a31f:ECbirg4s9TKKiiBSVdQMrU1GyvRKp4HT"
+  username = "chris2"
+  password = "f400cfc394230683058279d14b038c97:Y35pX4NBfIirs4AYprh1tVjqawtuDkdF"
+  
+  username1 = "chris"
+  password1 = "1d0fcbf18571fe737a43409d83e6a31f:ECbirg4s9TKKiiBSVdQMrU1GyvRKp4HT"
 
 > 
 </config>

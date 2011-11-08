@@ -231,6 +231,7 @@ class PlancheDeJeu
             }
 			i++;
         }
+		
 		repostCases = true;		
     }
 
