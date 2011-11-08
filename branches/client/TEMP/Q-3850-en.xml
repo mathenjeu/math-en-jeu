@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doku caseVersion = "4">
+  <group>
+     <cases>
+        <case id = "N11">4</case>
+        <case id = "N12">1</case>
+        <case id = "N13">2</case>
+     </cases>
+     <law id = "G11">8*</law>
+     <unseen>
+        <line>v11</line>
+        <line>v21</line>
+      </unseen>
+  </group>
+  <group>
+     <cases>        
+        <case id = "N14">3</case>
+        <case id = "N24">2</case>
+        <case id = "N34">4</case>
+     </cases>
+     <law id = "G14">9+</law>
+     <unseen>        
+        <line>h14</line>
+        <line>h24</line>     
+     </unseen>
+  </group>
+  <group>
+     <cases>
+        <case id = "N22">4</case>     
+     </cases>
+     <law id = "G22">4</law>
+  </group>
+  <group>
+     <cases> 
+        <case id = "N21">3</case>
+        <case id = "N31">1</case>
+        <case id = "N41">2</case>
+     </cases>
+     <law id = "G21">6+</law>
+     <unseen>
+        <line>h21</line>
+        <line>h31</line>   
+     </unseen>
+  </group>
+  <group>
+     <cases>
+        <case id = "N23">1</case>
+        <case id = "N32">2</case>
+        <case id = "N33">3</case>
+        <case id = "N42">3</case>
+     </cases>
+     <law id = "G23">9+</law>
+     <unseen>
+        <line>v23</line>
+        <line>h23</line>
+        <line>h32</line>     
+     </unseen>
+  </group>
+  <group>
+     <cases>
+        <case id = "N43">4</case>
+        <case id = "N44">1</case>
+     </cases>
+     <law id = "G43">3-</law>
+     <unseen>
+        <line>v34</line> 
+     </unseen>
+  </group>  
+</doku>

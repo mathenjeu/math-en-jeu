@@ -1,21 +1,25 @@
-﻿//Avant tout, mettre tous les boutons invisibles
+﻿import mx.controls.TextInput;
+
+//Avant tout, mettre tous les boutons invisibles
 //_level0.loader.contentHolder.box_question.swapDepths(_level0.loader.contentHolder.menuPointages);
 
 bugText = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.buttonBug;
 bugTextRoll = _level0.loader.contentHolder.texteSource_xml.firstChild.attributes.buttonBug;
+
 
 if(_level0.loader.contentHolder.langue == "en")
 {
 	cadreLoading.texte = "Loading ...";	
 }
 
+
 // to stop drag the game table
 Mouse.removeListener(_level0.loader.contentHolder.mouseListener);
+_level0.loader.contentHolder.objGestionnaireEvenements.getOurPerso().setMinigameLoade(true);
+
 
 _root.prob_txt._visible = false;
 btn_ok_erreur._visible = false;
-
-
 
 btn_a._visible = false;
 btn_b._visible = false;
@@ -62,41 +66,46 @@ var parties_url:Array = _level0.loader.contentHolder.url_question.split("/");
 var parties_nom:Array = parties_url[parties_url.length-1].split("-");
 textBoxNumQues_txt = parties_nom[1];
 
-
-monScroll.setStyle("borderStyle", "none");
-monScroll.setStyle("scrollTrackColor", "0x333333");
-monScroll.setStyle("theme", "simple");
-
+// add possibilty to use keyboard 
 var oUserKey:Object = new Object();
-
 oUserKey.onKeyDown = function():Void {
-      if( Key.getCode() == 65 && (_level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE"
-							  || _level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE_5"
-							  || _level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE_3")){
-          _level0.loader.contentHolder.objGestionnaireEvenements.repondreQuestion("1");
-	      _level0.loader.contentHolder.box_question.enleverBoutons();
+      if( Key.getCode() == 65){
+	      if(_level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE"
+			 || _level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE_5")
+		  {
+		        _level0.loader.contentHolder.objGestionnaireEvenements.repondreQuestion("1");
+	            _level0.loader.contentHolder.box_question.enleverBoutons();
+		  }else if(_level0.loader.contentHolder.type_question == "TRUE_OR_FALSE")
+		  {
+			  _level0.loader.contentHolder.objGestionnaireEvenements.repondreQuestion("1");
+	          _level0.loader.contentHolder.box_question.enleverBoutons();
+		  }
        
-      } else if( Key.getCode() == 66 && (_level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE"
-							  || _level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE_5"
-							  || _level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE_3")) {
-          _level0.loader.contentHolder.objGestionnaireEvenements.repondreQuestion("2");
-	      _level0.loader.contentHolder.box_question.enleverBoutons();
-       
+      } else if( Key.getCode() == 66)
+	  {
+		  if(_level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE"
+							  || _level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE_5")
+		  {
+             _level0.loader.contentHolder.objGestionnaireEvenements.repondreQuestion("2");
+	         _level0.loader.contentHolder.box_question.enleverBoutons();
+		  }else if(_level0.loader.contentHolder.type_question == "TRUE_OR_FALSE")
+		  {
+			  _level0.loader.contentHolder.objGestionnaireEvenements.repondreQuestion("0");
+	          _level0.loader.contentHolder.box_question.enleverBoutons();
+		  }
+	        
       } else if( Key.getCode() == 67 && (_level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE"
-							  || _level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE_5"
-							  || _level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE_3") ) {
+							  || _level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE_5") ) {
           _level0.loader.contentHolder.objGestionnaireEvenements.repondreQuestion("3");
 	      _level0.loader.contentHolder.box_question.enleverBoutons();
        
       } else if( Key.getCode() == 68 && (_level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE"
-							  || _level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE_5"
-							  || _level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE_3")) {
+							  || _level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE_5")) {
           _level0.loader.contentHolder.objGestionnaireEvenements.repondreQuestion("4");
 	      _level0.loader.contentHolder.box_question.enleverBoutons();
        
       } else if( Key.getCode() == 69 && (_level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE"
-							  || _level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE_5"
-							  || _level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE_3")) {
+							  || _level0.loader.contentHolder.type_question == "MULTIPLE_CHOICE_5")) {
           _level0.loader.contentHolder.objGestionnaireEvenements.repondreQuestion("5");
 	      _level0.loader.contentHolder.box_question.enleverBoutons();
        
@@ -104,28 +113,27 @@ oUserKey.onKeyDown = function():Void {
            
       }
    };
-   Key.addListener(oUserKey);
+Key.addListener(oUserKey);
 
-
-loadListener = new Object();
+var monContent:MovieClip;
+var loadListener:Object = new Object();
 loadListener.complete = function(eventObject)
 {
 	
-	// on vérifie si on a cahrgé quelque quelque chose en regardant la taille chargée
+	// on vérifie si on a chargé quelque chose en regardant la taille chargée
 	if(monScroll.getBytesLoaded()!=0)
 	{
 		loaded = true;
-		
-
 		cadreLoading._visible = false;
-		
-		
-		//Quand les questions seront bien formatees, enlever ce qu'il y a entre les
-		//pointillés et mettre les 2 lignes suivantes à la place
+			
 		//FAIRE LA MEME CHOSE DANS GUI_RETRO
 		
-		monScroll.content._width = 375;
+		monScroll.content._width = 360;
 		monScroll.content._yscale = monScroll.content._xscale;
+		monScroll.content.enabled = true;
+		
+		// to get functions inside the flash swf content
+		monContent = monScroll.content;
 		Selection.setFocus(monScroll);
 	    
 		this.onEnterFrame = null;
@@ -141,12 +149,6 @@ loadListener.complete = function(eventObject)
 			//btn_e._visible = true;
 			break;
 			
-		case "MULTIPLE_CHOICE_3" ://"ChoixReponse" :
-			btn_a._visible = true;
-			btn_b._visible = true;
-			btn_c._visible = true;
-			break;
-			
 		case "MULTIPLE_CHOICE_5" ://"ChoixReponse" :
 			btn_a._visible = true;
 			btn_b._visible = true;
@@ -159,7 +161,8 @@ loadListener.complete = function(eventObject)
 			
 			btn_vrai._visible = true;
 			btn_faux._visible = true;
-			Key.removeListener(oUserKey);
+			//Key.removeListener(oUserKey);
+			trace(" TF - " + btn_faux._visible + " " + btn_vrai._visible);
 			break;
 			
 		case "SHORT_ANSWER" :
@@ -171,7 +174,7 @@ loadListener.complete = function(eventObject)
 						
 			btn_ok.onRelease = function()
 			{
-				trace("btnOK tappé");
+				//trace("btnOK tappé");
 				traiterReponseCourte();
 			}
 			
@@ -179,16 +182,28 @@ loadListener.complete = function(eventObject)
 			{
 				if(Key.getCode() == Key.ENTER)
 				{
-					trace("enter tappé");
+					//trace("enter tappé");
 					traiterReponseCourte();
 				}
 				else
 				{
-					trace("pas ENTER tappé");
+					//trace("pas ENTER tappé");
 				}
 				
+			}			
+		    break;
+		
+		case "MINI_DOKU" :
+		btn_ok._visible = true;
+		btn_ok._x = 230;
+		btn_ok._y = 340;
+			Key.removeListener(oUserKey);
+						
+			btn_ok.onRelease = function()
+			{
+				trace("btnOK tappé dans MiniDoku");
+				traiterReponseMiniDoku();
 			}
-			
 		break;
 			
 		default :
@@ -217,6 +232,8 @@ loadListener.complete = function(eventObject)
 					// envoyer une réponse assurement mauvaise
 					_level0.loader.contentHolder.objGestionnaireEvenements.repondreQuestion("-e+b*x");
 					_level0.loader.contentHolder.box_question.gotoAndPlay(9);
+					_level0.loader.contentHolder.objGestionnaireEvenements.getOurPerso().setMinigameLoade(false);
+
 					horsService.removeMovieClip();
 				}
 				
@@ -238,9 +255,10 @@ this.btnSendError.onPress = function(){
 }
 
 monScroll.addEventListener("complete", loadListener);
-
-monScroll.contentPath = _level0.loader.contentHolder.url_question;
-
+if(_level0.loader.contentHolder.type_question == "MINI_DOKU")
+   monScroll.contentPath = "MINI/mathDoku.swf";
+else
+   monScroll.contentPath = _level0.loader.contentHolder.url_question; //"MINI/mathDoku.swf";//
 var timerInit = getTimer();
 var nbEssais = 1;
 
@@ -259,7 +277,10 @@ function checkLoadProgress()
 			if(nbEssais < 3)
 			{
 				//renvoyer une requête
-				monScroll.contentPath = _level0.loader.contentHolder.url_question;
+				if(_level0.loader.contentHolder.type_question == "MINI_DOKU")
+                   monScroll.contentPath = "MINI/mathDoku.swf";
+                else
+                   monScroll.contentPath = _level0.loader.contentHolder.url_question; //"MINI/mathDoku.swf";//
 				//monScroll.contentPath = "Q-1-en.swf";
 				//reset le timer
 				timerInit = getTimer();
@@ -287,6 +308,8 @@ function checkLoadProgress()
 					// envoyer une réponse assurement mauvaise
 					_level0.loader.contentHolder.objGestionnaireEvenements.repondreQuestion("-e+b*x");
 					_level0.loader.contentHolder.box_question.gotoAndPlay(9);
+					_level0.loader.contentHolder.objGestionnaireEvenements.getOurPerso().setMinigameLoade(false);
+
 					horsService.removeMovieClip();
 				}
 				/*
@@ -328,6 +351,16 @@ function traiterReponseCourte()
 	Key.removeListener(oUserKey);
 }
 
+function traiterReponseMiniDoku()
+{
+	var reponse:String = String(monContent.verifyIfDid());
+   	
+	_level0.loader.contentHolder.objGestionnaireEvenements.repondreQuestion(reponse);		
+		
+	Key.removeListener(oUserKey);
+	btn_ok._visible = false;
+}
+
 
 function enleverBoutons()
 {
@@ -344,6 +377,7 @@ function enleverBoutons()
 	Mouse.addListener(_level0.loader.contentHolder.mouseListener);
 	monScroll.contentPath = null;
 	_level0.loader.contentHolder.objGestionnaireEvenements.getOurPerso().setUsedBook(false);
+	_level0.loader.contentHolder.objGestionnaireEvenements.getOurPerso().setMinigameLoade(false);
 
 	//btnSendError._visible = false;
 }
