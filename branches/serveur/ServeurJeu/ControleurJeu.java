@@ -972,5 +972,22 @@ public class ControleurJeu {
 		
 	}
 
+
+	public void updateRooms(ArrayList<Integer> rooms) {
+		for(int id : rooms)
+		{
+			if(!salleExiste(id))
+				rooms.remove(id);
+		}
+		
+		objGestionnaireBD.updateRooms(rooms);
+		
+	}
+
+
+	public Salle getRoomById(int roomId) {
+		return lstSalles.get(roomId);
+	}
+
 }// end class
 

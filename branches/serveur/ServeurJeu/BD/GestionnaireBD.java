@@ -1677,6 +1677,78 @@ public class GestionnaireBD {
         }
 		
 	}
+
+	public void updateRooms(ArrayList<Integer> rooms) {
+
+        synchronized (DB_LOCK) {
+            for (int roomId: rooms) {
+                Salle objSalle;
+                try {
+                    Map<String, Object> roomData = getRoomInfo(roomId);
+                    
+                    objSalle = objControleurJeu.getRoomById(roomId);
+                    objSalle.setStrPassword((String)roomData.get("password"));
+                    objSalle.setDateBeginDate((Date)roomData.get("beginDate"));
+                    objSalle.setDateEndDate((Date)roomData.get("endDate"));
+                    objSalle.setIntMasterTime((Integer)roomData.get("masterTime"));
+                    objSalle.setSetKeywordIds(getRoomKeywordIds(roomId));
+                    objSalle.setSetGameTypeIds(getRoomGameTypeIds(roomId));
+                    //Map<Integer, String> names = (Map<Integer, String>)roomData.get("names");
+                    //Map<Integer, String> descriptions = (Map<Integer, String>)roomData.get("descriptions");
+                    //String strRoomType = (String)roomData.get("roomType");
+                    //String strCreatorUsername = (String)roomData.get("username");
+                    
+                } catch (SQLException e) {
+                    // Une erreur est survenue lors de la construction de la
+                    // salle avec id 'roomId'
+                    objLogger.error(GestionnaireMessages.message("bd.erreur_construction_salle"));
+                    objLogger.error(GestionnaireMessages.message("bd.trace"));
+                    objLogger.error(e.getMessage());
+                    e.printStackTrace();
+                } catch (RuntimeException e) {
+                    // Une erreur est survenue lors de la recherche de la
+                    // prochaine salle
+                    objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"));
+                    objLogger.error(GestionnaireMessages.message("bd.trace"));
+                    objLogger.error(e.getMessage());
+                    e.printStackTrace();
+                }
+               
+              //after did updates remove key in db
+    			try
+    			{
+    				synchronized( requete )
+    				{
+    					String update = "UPDATE room SET room.update = 0 where room.room_id = " + roomId + ";";
+    					requete.executeUpdate(update);    					
+    								
+    				}
+    			}
+    			catch (SQLException e)
+    			{
+    				// Une erreur est survenue lors de l'exécution de la requète
+    				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_newRoom"));
+    				objLogger.error(GestionnaireMessages.message("bd.trace"));
+    				objLogger.error( e.getMessage() );
+    				
+    			    e.printStackTrace();
+    			    getNewConnection();
+    			}
+    			catch( RuntimeException e)
+    			{
+    				//Une erreur est survenue lors de la recherche de la prochaine salle
+    				objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"));
+    				objLogger.error(GestionnaireMessages.message("bd.trace"));
+    				objLogger.error( e.getMessage() );
+    			    e.printStackTrace();
+    			    getNewConnection();
+    			}
+    			
+            
+            }
+        }
+    
+	}
     
     
     

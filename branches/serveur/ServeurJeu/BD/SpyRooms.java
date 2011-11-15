@@ -99,30 +99,36 @@ public class SpyRooms implements Runnable {
 	 * Thread run and periodically put the new rooms from DB in 'ControleurJeu' 
 	 * and remove old rooms
 	 */
-	public void run() {
-		while (stopSpy == false) {
-			if(this.connexion == null)
-				this.getNewConnection();
-			try
-	    	{
-	            // Update rooms liste 
-				//System.out.println("test - ");
-				detectNewRooms(objControleurJeu.removeOldRooms());
+    public void run() {
+    	while (stopSpy == false) {
+    		if(this.connexion == null)
+    			this.getNewConnection();
 
-                // Bloquer la thread jusqu'à la prochaine mise à jour
-               	Thread.sleep(DELAY);
-	               	
-	    	}
-			catch( InterruptedException e )
-			{
-    			objLogger.info(GestionnaireMessages.message("spy.erreur_thread"));
-				objLogger.error( e.getMessage());
-				e.printStackTrace();
-				
-				Thread.currentThread().interrupt();
-			}
-		}
-	}
+    		// Update rooms liste 
+    		//System.out.println("test - ");
+    		detectNewRooms(objControleurJeu.removeOldRooms());
+    		
+    		// Detect changes in the existing rooms  
+    		//System.out.println("test - ");
+    		detectUpdates();            
+
+    		try
+    		{
+    			// Bloquer la thread jusqu'à la prochaine mise à jour
+    			Thread.sleep(DELAY);
+    		}
+    		catch( InterruptedException e )
+    		{
+    			objLogger.info(GestionnaireMessages.message("spy.erreur_thread_newRooms"));
+    			objLogger.error( e.getMessage());
+    			e.printStackTrace();
+
+    			Thread.currentThread().interrupt();
+    		}
+
+
+    	}
+    }
 
 	/**
 	 * Method used to detect new rooms to be activated and put in the list
@@ -222,6 +228,55 @@ public class SpyRooms implements Runnable {
 			
 	}// end methode detectNewRooms
 		
+	
+	/**
+	 * Method used to detect the rooms to be updated in the controler list
+	 */
+	private void detectUpdates()
+	{
+		   ArrayList<Integer> rooms = new ArrayList<Integer>();
+		
+		    //find all rooms with updates in the DB  and fill in ArrayList
+			try
+			{
+				synchronized( requete )
+				{
+					ResultSet rs = requete.executeQuery( "SELECT room.room_id FROM room where room.update = 1;" );
+					while(rs.next())
+					{
+						int roomId = rs.getInt("room.room_id");
+						//System.out.println(roomId + "NEW");				
+						rooms.add(roomId);
+					}   
+								
+				}
+			}
+			catch (SQLException e)
+			{
+				// Une erreur est survenue lors de l'exécution de la requète
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_newRoom"));
+				objLogger.error(GestionnaireMessages.message("bd.trace"));
+				objLogger.error( e.getMessage() );
+				
+			    e.printStackTrace();
+			    getNewConnection();
+			}
+			catch( RuntimeException e)
+			{
+				//Une erreur est survenue lors de la recherche de la prochaine salle
+				objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"));
+				objLogger.error(GestionnaireMessages.message("bd.trace"));
+				objLogger.error( e.getMessage() );
+			    e.printStackTrace();
+			    getNewConnection();
+			}
+			
+			//update in Controler finded rooms
+			objControleurJeu.updateRooms(rooms);
+			
+			
+			
+	}// end methode detectUpdates
 	
 	public void stopSpy(){
 		this.releaseConnection();
