@@ -52,25 +52,25 @@ public class Salle
 	private final Map<Integer, Integer> mapRoomTypesIdToNbTracks;
 	// Contient le mot de passe permettant d'accéder à la salle
 	// BD:  [room.password]
-	private final String strPassword;
+	private String strPassword;
 	// Contient le nom d'utilisateur du créateur de cette salle
 	// BD:  [user.username] pour le user avec id [room.user_id]
 	private final String strCreatorUsername;
 	// Contient la date d'ouverture de la salle.
 	// BD:  [room.beginDate]
-	private final Date dateBeginDate;
+	private Date dateBeginDate;
 	// Contient la date de fermeture de la salle.
 	// BD:  [room.endDate]
-	private final Date dateEndDate;
+	private Date dateEndDate;
 	// Contient le numéro d'indentification unique pour la salle dans la BD
 	// BD:  [room.room_id]
 	private final int intRoomId;
 	// Contient le numbre de minute pour la durée des parties dans la salle
 	// BD:  [room.masterTime]
-	private final int intMasterTime;
+	private int intMasterTime;
 	// Contient la liste des "game types" admis dans la salle.
 	// BD:  [room_game_types.game_type_id]
-	private final Set<Integer> setGameTypeIds;
+	private Set<Integer> setGameTypeIds;
 	// Contient le type de la salle.
 	// BD:  [user.role_id] pour le user avec user_id [room.user_id]
 	//      De plus user.role_id == 3 est converti en String "profsType"
@@ -80,7 +80,7 @@ public class Salle
 	// de la salle.  Seule les questions associées à au moins un keyword_id
 	// peuvent être utilisées dans la salle.
 	// BD:  [room_keywords.keyword_id]
-	private final Set<Integer> setKeywordIds;
+	private Set<Integer> setKeywordIds;
 	// Cet objet est une liste de numéros utilisés pour les tables (sert à
 	// générer de nouvelles tables)
 	private final HashSet<Integer> lstNoTables;
@@ -811,6 +811,38 @@ public class Salle
 			objGestionnaireEvenements.ajouterEvenement(event);
 
 		}
+	}
+	
+	public void setStrPassword(String strPassword) {
+		this.strPassword = strPassword;
+	}
+
+	public void setDateEndDate(Date dateEndDate) {
+		this.dateEndDate = dateEndDate;
+	}
+	
+	public void setDateBeginDate(Date dateBeginDate) {
+		this.dateBeginDate = dateBeginDate;
+	}
+
+	public void setIntMasterTime(int intMasterTime) {
+		this.intMasterTime = intMasterTime;
+	}
+
+	public Set<Integer> getSetGameTypeIds() {
+		return setGameTypeIds;
+	}
+
+	public void setSetGameTypeIds(Set<Integer> setGameTypeIds) {
+		this.setGameTypeIds = setGameTypeIds;
+	}
+
+	public Set<Integer> getSetKeywordIds() {
+		return setKeywordIds;
+	}
+
+	public void setSetKeywordIds(Set<Integer> setKeywordIds) {
+		this.setKeywordIds = setKeywordIds;
 	}
 
 }// end class 
