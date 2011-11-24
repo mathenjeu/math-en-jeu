@@ -672,8 +672,9 @@ public class GestionnaireBD {
 
     /**
      * Méthode utilisé pour charger les salles
+     * @return 
      */
-    public void fillsRooms() {
+    public ArrayList<Integer> fillsRooms() {
         ArrayList<Integer> rooms = new ArrayList<Integer>();
         //find all rooms  and fill in ArrayList
         try {
@@ -693,16 +694,61 @@ public class GestionnaireBD {
             e.printStackTrace();
         }
 
-        // create the rooms by this list of rooms ID  and put them in the ControleurJeu
-        fillRoomList(rooms);
-
+       return rooms;
     }//end methode fillsRooms
 
     /**
-     * Methode satellite for fillsRooms()
+     * create the rooms by this list of rooms ID  and put them in the ControleurJeu        
      * @param roomIds
      */
-    public void fillRoomList(ArrayList<Integer> roomIds) {
+    public void fillRoomsList() {
+    	ArrayList<Integer> roomIds = fillsRooms();
+        synchronized (DB_LOCK) {
+            for (int roomId: roomIds) {
+                Salle objSalle;
+                try {
+                    Map<String, Object> roomData = getRoomInfo(roomId);
+                    String strPassword = (String)roomData.get("password");
+                    String strCreatorUsername = (String)roomData.get("username");
+                    Date dateBeginDate = (Date)roomData.get("beginDate");
+                    Date dateEndDate = (Date)roomData.get("endDate");
+                    int intMasterTime = (Integer)roomData.get("masterTime");
+                    Map<Integer, String> names = (Map<Integer, String>)roomData.get("names");
+                    Map<Integer, String> descriptions = (Map<Integer, String>)roomData.get("descriptions");
+                    String strRoomType = (String)roomData.get("roomType");
+                    Set<Integer> kIds = getRoomKeywordIds(roomId);
+                    Set<Integer> gtIds = getRoomGameTypeIds(roomId);
+                    objSalle = new Salle(objControleurJeu, roomId, strPassword,
+                            strCreatorUsername, strRoomType, dateBeginDate,
+                            dateEndDate, intMasterTime, names, descriptions,
+                            kIds, gtIds);
+                    objControleurJeu.ajouterNouvelleSalle(objSalle);
+                    objControleurJeu.preparerEvenementNouvelleSalle(objSalle);
+                } catch (SQLException e) {
+                    // Une erreur est survenue lors de la construction de la
+                    // salle avec id 'roomId'
+                    objLogger.error(GestionnaireMessages.message("bd.erreur_construction_salle"));
+                    objLogger.error(GestionnaireMessages.message("bd.trace"));
+                    objLogger.error(e.getMessage());
+                    e.printStackTrace();
+                } catch (RuntimeException e) {
+                    // Une erreur est survenue lors de la recherche de la
+                    // prochaine salle
+                    objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"));
+                    objLogger.error(GestionnaireMessages.message("bd.trace"));
+                    objLogger.error(e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    
+    /**
+     * create the rooms by this list of rooms ID  and put them in the ControleurJeu        
+     * @param roomIds
+     */
+    public void fillRoomsList(ArrayList<Integer> roomIds) {
+    	
         synchronized (DB_LOCK) {
             for (int roomId: roomIds) {
                 Salle objSalle;
@@ -1125,8 +1171,8 @@ public class GestionnaireBD {
         String strBeginDate = (beginDate == null || beginDate.isEmpty()) ? "NULL" : "'" + beginDate + "'";
         String strEndDate = (endDate == null || endDate.isEmpty()) ? "NULL" : "'" + endDate + "'";
 
-        String strSQL = "INSERT INTO room (password, user_id, rule_id, beginDate, endDate, masterTime, requires_full_stats) VALUES ('" +
-                password + "'," +
+        String strSQL = "INSERT INTO room (password, user_id, rule_id, beginDate, endDate, masterTime, requires_full_stats) VALUES (SHA('" +
+                password + "')," +
                 user_id + ",1," +
                 strBeginDate + "," +
                 strEndDate + "," +
@@ -1499,10 +1545,10 @@ public class GestionnaireBD {
         String encodedPWD = "";
         try {
             synchronized (DB_LOCK) {
-                ResultSet rs = requete.executeQuery("SELECT PASSWORD('" + clientPWD + "') AS password;");
+                ResultSet rs = requete.executeQuery("SELECT SHA('" + clientPWD + "') AS passd;");
 
                 if (rs.next())
-                    encodedPWD = rs.getString("password");
+                    encodedPWD = (String)rs.getString("passd");
                 rs.close();
             }
         } catch (SQLException e) {
@@ -1519,7 +1565,7 @@ public class GestionnaireBD {
             e.printStackTrace();
         }
 
-        //System.out.println(encodedPWD);
+        System.out.println(encodedPWD);
         return encodedPWD;
     }
 
@@ -1712,38 +1758,7 @@ public class GestionnaireBD {
                     objLogger.error(GestionnaireMessages.message("bd.trace"));
                     objLogger.error(e.getMessage());
                     e.printStackTrace();
-                }
-               
-              //after did updates remove key in db
-    			try
-    			{
-    				synchronized( requete )
-    				{
-    					String update = "UPDATE room SET room.update = 0 where room.room_id = " + roomId + ";";
-    					requete.executeUpdate(update);    					
-    								
-    				}
-    			}
-    			catch (SQLException e)
-    			{
-    				// Une erreur est survenue lors de l'exécution de la requète
-    				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_newRoom"));
-    				objLogger.error(GestionnaireMessages.message("bd.trace"));
-    				objLogger.error( e.getMessage() );
-    				
-    			    e.printStackTrace();
-    			    getNewConnection();
-    			}
-    			catch( RuntimeException e)
-    			{
-    				//Une erreur est survenue lors de la recherche de la prochaine salle
-    				objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"));
-    				objLogger.error(GestionnaireMessages.message("bd.trace"));
-    				objLogger.error( e.getMessage() );
-    			    e.printStackTrace();
-    			    getNewConnection();
-    			}
-    			
+                }             
             
             }
         }

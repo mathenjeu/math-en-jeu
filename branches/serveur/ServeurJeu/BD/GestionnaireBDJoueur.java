@@ -142,25 +142,7 @@ public final class GestionnaireBDJoueur {
 		if (niveau < 1)
 			niveau = objJoueurHumain.obtenirCleNiveau() + 1;
 		int room_id = objJoueurHumain.obtenirSalleCourante().getRoomId();
-
-		/*
-		String strRequeteSQL = "SELECT  question.answer_type_id, answer.is_right, question.question_id," +
-		" question_info.question_flash_file, question_info.feedback_flash_file, question_level.value" +
-		" FROM question_info, question_level, question, answer " +
-		" WHERE  question.question_id = question_level.question_id " +
-		" AND question.question_id = question_info.question_id " +
-		" AND question.question_id = answer.question_id " +
-		" AND question_info.language_id = " + cleLang +
-		" and question_level.level_id = " + niveau +
-		" AND question.question_id IN (SELECT question.question_id FROM question, questions_keywords " +
-		" WHERE question.question_id = questions_keywords.question_id AND questions_keywords.keyword_id IN (SELECT rooms_keywords.keyword_id FROM rooms_keywords WHERE room_id = " + room_id + ")) " +
-		" AND question.answer_type_id IN (1,4) " +
-		" AND question_info.is_valid = 1 " +
-		" and question_level.value > 0 " +
-		" and question_info.question_flash_file is not NULL " +
-		" and question_info.feedback_flash_file is not NULL ";
-
-		 */
+		
 		String strRequeteSQL = "SELECT  question.answer_type_id, question.question_id," +
 		" question_info.question_flash_file, question_info.feedback_flash_file, question_level.value, " +
 		" answer.label FROM question_info, question_level, question, answer " +
@@ -179,7 +161,7 @@ public final class GestionnaireBDJoueur {
 		" and question_info.feedback_flash_file is not NULL ";
 
 
-		//remplirBoiteQuestionsMC(boite, strRequeteSQL, URL);
+		remplirBoiteQuestionsMC(boite, strRequeteSQL, URL);
 
 		String strRequeteSQL_SA = "SELECT DISTINCT a.answer_latex, qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
 		"FROM question q, question_info qi, question_level ql, answer_info a, questions_keywords " +
@@ -196,7 +178,7 @@ public final class GestionnaireBDJoueur {
 		" and qi.question_flash_file is not NULL" +
 		" and qi.feedback_flash_file is not NULL";
 
-		//remplirBoiteQuestionsSA(boite, strRequeteSQL_SA, URL);
+		remplirBoiteQuestionsSA(boite, strRequeteSQL_SA, URL);
 
 		String strRequeteSQL_TF = "SELECT DISTINCT a.is_right,qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
 		" FROM question q, question_info qi, question_level ql, answer a, questions_keywords " +
@@ -314,66 +296,6 @@ public final class GestionnaireBDJoueur {
 		return lastQuestions;
 
 	}// end method
-
-	/*
-	// This function follows one of the two previous functions. It queries the database and
-	// does the actual filling of the question box with questions of type MULTIPLE_CHOICE.
-	private void remplirBoiteQuestionsMC(BoiteQuestions boiteQuestions, String strRequeteSQL, String URL) {
-		try {
-			synchronized (DB_LOCK) {
-				ResultSet rs = requete.executeQuery(strRequeteSQL);
-				rs.setFetchSize(5);
-				//int countQuestionId = 0;
-				int codeQuestionTemp = 0;
-				int countReponse = 0;
-				while (rs.next()) {
-
-					int codeQuestion = rs.getInt("question_id");
-					if (codeQuestionTemp != codeQuestion)
-						//countQuestionId = 0;
-						countReponse = 0;
-					int condition = rs.getInt("is_right");
-					//countQuestionId++;
-					countReponse++;
-					if (condition == 1) {
-						int typeQuestion = rs.getInt("answer_type_id");
-						//int keyword_id1 = rs.getInt( "keyword_id1" );
-						//int keyword_id2 = rs.getInt( "keyword_id2" );
-						String question = rs.getString("question_flash_file");
-						String explication = rs.getString("feedback_flash_file");
-						int difficulte = rs.getInt("value");
-						String reponse = "" + countReponse;
-
-						//System.out.println("MC : question " + codeQuestion + " " + reponse + " " + difficulte);
-
-						// System.out.println(URL+explication);
-						//System.out.println("MC1: " + System.currentTimeMillis());
-						boiteQuestions.ajouterQuestion(new Question(codeQuestion, typeQuestion, difficulte, URL + question, reponse, URL + explication));
-						//System.out.println("MC2: " + System.currentTimeMillis());
-					}
-					codeQuestionTemp = codeQuestion;
-				}
-				rs.close();
-			}
-		} catch (SQLException e) {
-			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
-			this.getNewConnection();    	
-		} catch (RuntimeException e) {
-			//Une erreur est survenue lors de la recherche de la prochaine question
-			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question_MC"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
-			this.getNewConnection();    	
-		}
-	}// fin méthode
-
-	 */
-
 
 	// This function follows one of the two previous functions. It queries the database and
 	// does the actual filling of the question box with questions of type MULTIPLE_CHOICE.

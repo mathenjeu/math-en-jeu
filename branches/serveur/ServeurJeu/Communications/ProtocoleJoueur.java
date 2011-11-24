@@ -1067,6 +1067,8 @@ public class ProtocoleJoueur implements Runnable
         int roomId = Integer.parseInt(obtenirValeurParametre(noeudEntree, "RoomID").getNodeValue());
         String motDePasse = obtenirValeurParametre(noeudEntree, "MotDePasse").getNodeValue();
         
+        System.out.println(" * " + motDePasse);
+        
         if (erreurSalleNonExistante(noeudCommande, roomId)) {
             return;
         }

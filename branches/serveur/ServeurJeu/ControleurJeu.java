@@ -3,6 +3,7 @@ package ServeurJeu;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.Map;
 import java.util.Random;
@@ -143,7 +144,7 @@ public class ControleurJeu {
         
         //System.out.println("Le serveur demarre 3 ...");
     	 // Fills the rooms from DB
-        objGestionnaireBD.fillsRooms();
+        objGestionnaireBD.fillRoomsList();
 
         // update user accounts - put to all not connected
         objGestionnaireBD.updatePlayersAccounts();
@@ -913,7 +914,6 @@ public class ControleurJeu {
                 defaultLanguageId = shortLanguageEntry.getKey();
         }
         return defaultLanguageId;
-
     }
     
     public String getLanguageShortName(int language_id) {
@@ -974,12 +974,14 @@ public class ControleurJeu {
 
 
 	public void updateRooms(ArrayList<Integer> rooms) {
+		ArrayList<Integer> old = new ArrayList<Integer>();
 		for(int id : rooms)
 		{
 			if(!salleExiste(id))
-				rooms.remove(id);
+				old.add(id);
 		}
 		
+		rooms.removeAll(old);		
 		objGestionnaireBD.updateRooms(rooms);
 		
 	}
@@ -987,6 +989,22 @@ public class ControleurJeu {
 
 	public Salle getRoomById(int roomId) {
 		return lstSalles.get(roomId);
+	}
+
+
+	public void detectErasedRooms() {
+		synchronized(lstSalles){
+		   ArrayList<Integer> allBD = objGestionnaireBD.fillsRooms();
+		   ArrayList<Integer> toErase = new ArrayList<Integer>(); 
+		   Set<Integer> allControler = lstSalles.keySet();
+		   for(Integer salle:allControler){
+			   if(!allBD.contains(salle))
+				   toErase.add(salle);
+		   }
+		   for(Integer salle:toErase){
+		      lstSalles.remove(salle);
+		   }
+		}
 	}
 
 }// end class
