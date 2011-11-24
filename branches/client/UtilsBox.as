@@ -101,7 +101,7 @@ class UtilsBox
 	   
 	   var angle:Number;
 
-      trace("rr : " + rr + " gg : " + gg + " bb : " + bb);
+      //trace("rr : " + rr + " gg : " + gg + " bb : " + bb);
 
       // to obtain the multipliers
       // the RGB of base color of perso1 is 245,64,75
@@ -207,7 +207,7 @@ class UtilsBox
                 trace("Erreur Inconnue colors utils box");
      }
    
-   	   trace("rr : " + rr + " gg : " + gg + " bb : " + bb);
+   	  // trace("rr : " + rr + " gg : " + gg + " bb : " + bb);
 
 
      var matrix:Array = new Array();
@@ -230,7 +230,7 @@ class UtilsBox
        var gg:Number = Number("0x" + clothesCol.substr(4,2).toString(10));
        var bb:Number = Number("0x" + clothesCol.substr(6,2).toString(10));
 	   
-	   trace("rr : " + rr + " gg : " + gg + " bb : " + bb);
+	  // trace("rr : " + rr + " gg : " + gg + " bb : " + bb);
 
       // to obtain the multipliers
       // the RGB of base color of perso1 is 245,64,75
@@ -325,7 +325,7 @@ class UtilsBox
                 trace("Erreur Inconnue colors");
      }
    
-   	   trace("rr : " + rr + " gg : " + gg + " bb : " + bb);
+   	   //trace("rr : " + rr + " gg : " + gg + " bb : " + bb);
 
 
      var matrix:Array = new Array();

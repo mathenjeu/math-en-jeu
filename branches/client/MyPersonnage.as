@@ -629,7 +629,8 @@ class MyPersonnage implements IOurPersonnage
         mclListener.onLoadComplete = function(target_mc:MovieClip) {
 			target_mc.filterC = filterC;
 		    target_mc.nom = ourName;					
-			target_mc.gotoAndPlay("bored");
+			//target_mc.gotoAndPlay("bored"); 
+			_global.setTimeout(goBored, Math.random(5000));
 			
 			// assure que le clip a la bonne orientation
 			target_mc._xscale = - Math.abs(target_mc._xscale);
@@ -648,6 +649,8 @@ class MyPersonnage implements IOurPersonnage
 		}		
 		this.boardCentre = false;
 	}
+	
+	public function goBored(){ gotoAndPlay("bored");}
 	
 	
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -1040,6 +1043,7 @@ class MyPersonnage implements IOurPersonnage
 	{
 		image.removeMovieClip();
 	}
+	
 	//////////////////////////////////////////////////////////////////////////////////////
 	////  pt contient la ligne et la colonne PAS LES X et Y
 	public function definirProchainePosition(pt:Point, str:String)
