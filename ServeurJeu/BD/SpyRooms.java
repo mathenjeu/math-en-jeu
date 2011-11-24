@@ -110,7 +110,9 @@ public class SpyRooms implements Runnable {
     		
     		// Detect changes in the existing rooms  
     		//System.out.println("test - ");
-    		detectUpdates();            
+    		detectUpdates(); 
+    		
+    		objControleurJeu.detectErasedRooms();
 
     		try
     		{
@@ -121,9 +123,7 @@ public class SpyRooms implements Runnable {
     		{
     			objLogger.info(GestionnaireMessages.message("spy.erreur_thread_newRooms"));
     			objLogger.error( e.getMessage());
-    			e.printStackTrace();
-
-    			Thread.currentThread().interrupt();
+    			e.printStackTrace();    			
     		}
 
 
@@ -167,7 +167,7 @@ public class SpyRooms implements Runnable {
 			catch (SQLException e)
 			{
 				// Une erreur est survenue lors de l'exécution de la requète
-				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_newRoom"));
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_detect_newRoom"));
 				objLogger.error(GestionnaireMessages.message("bd.trace"));
 				objLogger.error( e.getMessage() );
 				
@@ -185,7 +185,7 @@ public class SpyRooms implements Runnable {
 			}  
 			
 			//put in Controleur finded rooms
-			objControleurJeu.obtenirGestionnaireBD().fillRoomList(rooms);
+			objControleurJeu.obtenirGestionnaireBD().fillRoomsList(rooms);
 			
 			//now find all old rooms from BD and fill in ArrayList
 			rooms.clear();
@@ -254,7 +254,7 @@ public class SpyRooms implements Runnable {
 			catch (SQLException e)
 			{
 				// Une erreur est survenue lors de l'exécution de la requète
-				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_newRoom"));
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_newRoomSelect1"));
 				objLogger.error(GestionnaireMessages.message("bd.trace"));
 				objLogger.error( e.getMessage() );
 				
@@ -273,6 +273,37 @@ public class SpyRooms implements Runnable {
 			
 			//update in Controler finded rooms
 			objControleurJeu.updateRooms(rooms);
+			
+			//after did updates remove key in db
+			try
+			{
+				synchronized( requete )
+				{
+					String update = "UPDATE room SET room.update = 0;";
+					requete.executeUpdate(update);    					
+								
+				}
+			}
+			catch (SQLException e)
+			{
+				// Une erreur est survenue lors de l'exécution de la requète
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_updateRoom0"));
+				objLogger.error(GestionnaireMessages.message("bd.trace"));
+				objLogger.error( e.getMessage() );
+				
+			    e.printStackTrace();
+			    getNewConnection();
+			}
+			catch( RuntimeException e)
+			{
+				//Une erreur est survenue lors de la recherche de la prochaine salle
+				objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"));
+				objLogger.error(GestionnaireMessages.message("bd.trace"));
+				objLogger.error( e.getMessage() );
+			    e.printStackTrace();
+			    getNewConnection();
+			}
+			
 			
 			
 			

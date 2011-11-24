@@ -120,6 +120,7 @@ public class Salle
 
 		intRoomId = roomId;
 		strPassword = password;
+		System.out.println(strPassword);
 		strCreatorUsername = username;
 		dateBeginDate = beginDate;
 		dateEndDate = endDate;
@@ -207,7 +208,8 @@ public class Salle
 		// Si le mot de passe est le bon, alors on ajoute le joueur dans la liste
 		// des joueurs de cette salle et on envoit un événement aux autres
 		// joueurs de cette salle pour leur dire qu'il y a un nouveau joueur
-		if (strPassword.equals(objControleurJeu.obtenirGestionnaireBD().controlPWD(motDePasse))) {
+		System.out.println(strPassword + " * " + motDePasse + " * " + objControleurJeu.obtenirGestionnaireBD().controlPWD(motDePasse));
+		if (strPassword.equals(motDePasse)) {
 			// Empêcher d'autres thread de toucher à la liste des joueurs de
 			// cette salle pendant l'ajout du nouveau joueur dans cette salle
 			synchronized (lstJoueurs) {
