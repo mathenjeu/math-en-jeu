@@ -1,6 +1,6 @@
 ﻿// import the Delegate class
 import mx.utils.Delegate;
-import mx.controls.TextInput;
+import mx.controls;
 
 var dokuGame:MathDoku = new MathDoku();
 
@@ -111,8 +111,8 @@ function initGroups()
 	 for(var i in groupLaw)
 	 {
 		 this[groupLaw[i].lawCase].text = groupLaw[i].law;
-	 }
-	 	
+	 } 
+	  	
 }// end InitGroups()
 
 // to restrict only 1-4 numbers in input
@@ -132,7 +132,7 @@ for(var i = 1; i <= 4; i++)
 		  //var names:String = "F" + this._name.substr(1);
 		  //_root[this._name].RC._alpha = 60;
 		  this.RC._alpha = 60;	
-		  //_root[this._name].NB.text = "4";
+		  Selection.setFocus(this.NB);
 		  //_root.attachMovie("numInsert", "nums", _root.getNextHighestDepth(),{_x:_root[this._name]._x + 25,_y:_root[this._name]._y + 15});
 		  //trace(names );
 	  }
@@ -158,8 +158,13 @@ for(var i = 1; i <= 4; i++)
 		  this._parent.nums.btx_bt.onPress = function(){ this._parent._parent[names].NB.text = "";}
 	  }
 	  
+	  if(i == 3 && j == 3)
+	     Selection.setFocus(this["N" + i + j].NB);
+	
+	  this["G" + i + j].tabEnabled = false;
 	  
-	}
+	  
+	}	
 }// end for's
 
 

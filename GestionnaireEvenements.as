@@ -1942,6 +1942,7 @@ class GestionnaireEvenements
     	switch(objetEvenement.resultat)
         {
             case "Ok":
+			    _level0.loader.contentHolder.connectedToServer = false;
                 trace("deconnexion");
             break;
 			
@@ -2344,8 +2345,7 @@ class GestionnaireEvenements
                 trace("Erreur Inconnue - retourRepondreQuestion");
         }
 		objetEvenement = null;
-     	trace("fin de ");
-    	trace("*********************************************\n");
+     	    	
     }// end method
 	
 	 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2967,31 +2967,7 @@ class GestionnaireEvenements
         {			
 		    var iplayer =  getPersonnageByName(objetEvenement.positionJoueurs[i].nom);
 		    iplayer.definirL(objetEvenement.positionJoueurs[i].x);
-			iplayer.definirC(objetEvenement.positionJoueurs[i].y);
-			
-			trace("test color : " + objetEvenement.positionJoueurs[i].nom + " " + iplayer.getIdPersonnage());
-	              
-		    /* 
-            for(j in tableauDesPersonnages)
-            {
-	            //trace(this.listeDesPersonnages[j].nom+" : "+objetEvenement.positionJoueurs[i].nom);
-                if(tableauDesPersonnages[j].obtenirNom() == objetEvenement.positionJoueurs[i].nom)
-                {
-					trace("test color : " + this.tableauDesPersonnages[j].nom + " " +  objetEvenement.positionJoueurs[i].x + " " + objetEvenement.positionJoueurs[i].y);
-	                //var idDessin:Number = //calculatePicture(this.tableauDesPersonnages[j].getIdPersonnage);
-					//var idPers:Number = calculateIDPers(this.listeDesPersonnages[j].id, idDessin);
-					//this.listeDesPersonnages[j].idPers = idPers;
-					// to update clothes color
-					//tableauDesPersonnages[j].colorID = objetEvenement.positionJoueurs[i].clocolor;
-					//var cloCol:String = = getColorByID(objetEvenement.positionJoueurs[i].clocolor, tableauDesPersonnages[j].getIDessin());//objetEvenement.clothesColor;
-					//var filterC:ColorMatrixFilter = _level0.loader.contentHolder.objGestionnaireEvenements.colorMatrixPerso(cloCol, tableauDesPersonnages[j].getIDessin());
-				    //tableauDesPersonnages[j].setColorFilter(filterC);
-					//tableauDesPersonnages[j].setColorFilter(filterC);
-					tableauDesPersonnages[j].definirL(objetEvenement.positionJoueurs[i].x);
-					tableauDesPersonnages[j].definirC(objetEvenement.positionJoueurs[i].y);
-					///trace("XXXXXX - " + this.listeDesPersonnages[j].colorID + " " + this.listeDesPersonnages[j].clocolor + " " + this.listeDesPersonnages[j].nom);										
-				}
-			}*/
+			iplayer.definirC(objetEvenement.positionJoueurs[i].y);       
 		}
 				      
 	    _level0.loader.contentHolder.planche.afficher();
@@ -3002,7 +2978,7 @@ class GestionnaireEvenements
 			_level0.loader.contentHolder.planche.ajouterPersonnage(tableauDesPersonnages[i], tableauDesPersonnages[i].obtenirL(), tableauDesPersonnages[i].obtenirC());
 			tableauDesPersonnages[i].initPlanche(_level0.loader.contentHolder.planche);
 			tableauDesPersonnages[i].afficher();
-			trace("Construction du personnage : " + this.tableauDesPersonnages[i].obtenirNom());
+			//trace("Construction du personnage : " + this.tableauDesPersonnages[i].obtenirNom());
 			var xState:Boolean;
 			if(tableauDesPersonnages[i].getBrainiacState() == "true") 
 			{				
@@ -3667,10 +3643,10 @@ private function showTableUsers()
    
     // if picture id == 0 we don't show him
 	count = listeDesPersonnages.length;
-	trace("test verify count in showUsers : " + count);
+	//trace("test verify count in showUsers : " + count);
     for(i = 0; i < count; i++)
 	{
-		trace("test verify i in showUsers : " + i);
+		//trace("test verify i in showUsers : " + i);
        _level0.loader.contentHolder["joueur" + i] =  listeDesPersonnages[i].nom;
 	   if(listeDesPersonnages[i].idDessin > 0)
 	   {
@@ -3718,9 +3694,9 @@ function testPlayers():Boolean
     		 tableauDesPersonnages[i].getIdPersonnage() == undefined || tableauDesPersonnages[i].getIDessin() == undefined){
 			verify = false;
 		}
-		trace("test verify : " + tableauDesPersonnages[i].getIdPersonnage() + " and dessin " +  tableauDesPersonnages[i].getIDessin());
+		//trace("test verify : " + tableauDesPersonnages[i].getIdPersonnage() + " and dessin " +  tableauDesPersonnages[i].getIDessin());
 	}
-	trace(" verify " + verify);
+	//trace(" verify " + verify);
 	return verify;
 }// end methode 
 

@@ -375,6 +375,10 @@ class AdversaryPersonnage implements IPersonnage
 		
 	}// end constr
 	
+	 function goBored(){ 			
+			   gotoAndPlay("bored");
+			}
+	
 	public function initPlanche(planchet:PlancheDeJeu)
 	{
 		this.planche = planchet;
@@ -394,8 +398,9 @@ class AdversaryPersonnage implements IPersonnage
         mclListener.onLoadComplete = function(target_mc:MovieClip) {
             target_mc.filterC = filterC;
 		    target_mc.nom = ourName;
-						
-			target_mc.gotoAndPlay("bored");
+			
+			_global.setTimeout(goBored, Math.random(5000));
+
 			// assure que le clip a la bonne orientation
 			target_mc._xscale = - Math.abs(target_mc._xscale);
 			target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
