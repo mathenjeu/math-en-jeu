@@ -630,12 +630,12 @@ class MyPersonnage implements IOurPersonnage
 			target_mc.filterC = filterC;
 		    target_mc.nom = ourName;					
 			//target_mc.gotoAndPlay("bored"); 
-			_global.setTimeout(goBored, Math.random(5000));
+			_global.setTimeout(goBored, Math.random(5000));		
 			
 			// assure que le clip a la bonne orientation
-			target_mc._xscale = - Math.abs(target_mc._xscale);
-			target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
-			target_mc.dtNom._x = 42;
+			//target_mc._xscale = - Math.abs(target_mc._xscale);
+			//target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
+			//target_mc.dtNom._x = 42;
 			target_mc._visible = true;	
         };
 		myLoader.addListener(mclListener);
@@ -650,7 +650,14 @@ class MyPersonnage implements IOurPersonnage
 		this.boardCentre = false;
 	}
 	
-	public function goBored(){ gotoAndPlay("bored");}
+	public function goBored()
+	{ 
+	   gotoAndPlay("bored");
+	   // assure que le clip a la bonne orientation
+	   image._xscale = - Math.abs(image._xscale);
+	   image._xscale = - Math.abs(image._xscale);
+	   image.dtNom._x = 42;
+	}
 	
 	
 	//////////////////////////////////////////////////////////////////////////////////////

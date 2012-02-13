@@ -375,9 +375,14 @@ class AdversaryPersonnage implements IPersonnage
 		
 	}// end constr
 	
-	 function goBored(){ 			
-			   gotoAndPlay("bored");
-			}
+	 function goBored()
+	 { 			
+	   gotoAndPlay("bored");
+	   // assure que le clip a la bonne orientation
+	   image._xscale = - Math.abs(image._xscale);
+	   image._xscale = - Math.abs(image._xscale);
+	   image.dtNom._x = 42;
+	}
 	
 	public function initPlanche(planchet:PlancheDeJeu)
 	{
@@ -398,14 +403,14 @@ class AdversaryPersonnage implements IPersonnage
         mclListener.onLoadComplete = function(target_mc:MovieClip) {
             target_mc.filterC = filterC;
 		    target_mc.nom = ourName;
-			
-			_global.setTimeout(goBored, Math.random(5000));
-
+			target_mc.gotoAndPlay("bored");
 			// assure que le clip a la bonne orientation
-			target_mc._xscale = - Math.abs(target_mc._xscale);
-			target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
-			target_mc.dtNom._x = 42;
+			//target_mc._xscale = - Math.abs(target_mc._xscale);
+			//target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
+			///target_mc.dtNom._x = 42;
 			target_mc._visible = true;
+			
+			//_global.setTimeout(goBored, Math.random(5000));
         };
 		myLoader.addListener(mclListener);
 		
