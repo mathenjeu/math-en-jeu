@@ -100,11 +100,13 @@ public final class DBConnectionsPoolManager{
 		// but first verify it  TO DO!!!!
 		boolean verify = false;
 		try {
-			verify = conn.isValid(0);
+			if(conn != null)
+			   verify = conn.isValid(0);
 		} catch (SQLException e) {	
 			objLogger.error("Error in verify DB connection ");
 			e.printStackTrace();
 		}
+		
 		if(verify){
 			freeConnections.add(conn);
 			givenNuumber--;		

@@ -88,7 +88,7 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 			}// end while
 
 
-			this.finalize();
+			this.arreter();
 
 		}
 		catch (Exception e)
@@ -99,14 +99,14 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 			// Envoyer la trace de l'erreur à l'écran
 			e.printStackTrace();
 
-			this.finalize();
+			this.arreter();
 
 		}
 	}
 
 
 	
-	protected void finalize(){
+	protected void arreter(){
 		
 		this.bolStopThread = true;
 	}

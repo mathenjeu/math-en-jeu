@@ -21,7 +21,7 @@ public abstract class InformationPartie {
 	
 	public InformationPartie(Table tableCourante, Joueur player){
 		objTable = tableCourante;
-		//clothesColor = 0;		
+		clothesColor = 0;		
 		ourPlayer = player;
 	}
 	

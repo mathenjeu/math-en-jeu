@@ -153,7 +153,42 @@ public class GestionnaireCommunication
 	public void arreter()
 	{
 		boolStopThread = true;
-		this.finalize();
+		synchronized(lstProtocoleJoueur){
+			// Vider la liste des protocoles de joueurs
+			for(ProtocoleJoueur protocole: this.lstProtocoleJoueur)
+			{
+				protocole.setBolStopThread(true);
+				//protocole.arreterProtocoleJoueur();
+			}
+           lstProtocoleJoueur.clear();
+		
+		}
+
+		try
+		{
+			// Fermer le socket du serveur
+			if(!objSocketServeur.isClosed())
+			   objSocketServeur.close();
+		}
+		catch (IOException e)
+		{
+			// Le socket du serveur est déjà fermé
+			objLogger.error(GestionnaireMessages.message("communication.erreur_socket"));
+		}
+		catch (NullPointerException e)
+		{
+			// Le socket du serveur est déjà fermé
+			objLogger.error(GestionnaireMessages.message("communication.erreur_socket"));
+		}
+				
+		// Arrêter le thread de vérification des connexions
+		objVerificateurConnexions.arreterVerificateurConnexions();
+		
+		// Arrêter le thread de gestionnaire d'événements
+		objGestionnaireEvenements.arreterGestionnaireEvenements();
+		
+		// Fermer toutes les connexions ouvertes pour le gestionnaire de base de données
+		objGestionnaireBD.arreterGestionnaireBD();
 	}
 	
 	/**
@@ -211,53 +246,4 @@ public class GestionnaireCommunication
 		}
 	}
 	
-	/**
-	 * Cette méthode est appelée automatiquement si le programme doit terminer.
-	 * Lorsque l'application serveur doit terminer, alors il faut s'assurer que 
-	 * tous les threads stopent et que tous les sockets soient fermés. La façon
-	 * la plus rapide est de fermer le socket serveur. Cela aura pour effet de
-	 * fermer tous les sockets obtenus par l'acceptation de connexions et comme
-	 * ces sockets se fermeront, chaque thread arrêtera car une exception 
-	 * surviendra pour chaque thread. 
-	 */
-	protected void finalize()
-	{
-		synchronized(lstProtocoleJoueur){
-			// Vider la liste des protocoles de joueurs
-			for(ProtocoleJoueur protocole: this.lstProtocoleJoueur)
-			{
-				protocole.setBolStopThread(true);
-				//protocole.arreterProtocoleJoueur();
-			}
-           lstProtocoleJoueur.clear();
-		
-		}
-
-		try
-		{
-			// Fermer le socket du serveur
-			if(!objSocketServeur.isClosed())
-			   objSocketServeur.close();
-		}
-		catch (IOException e)
-		{
-			// Le socket du serveur est déjà fermé
-			objLogger.error(GestionnaireMessages.message("communication.erreur_socket"));
-		}
-		catch (NullPointerException e)
-		{
-			// Le socket du serveur est déjà fermé
-			objLogger.error(GestionnaireMessages.message("communication.erreur_socket"));
-		}
-				
-		// Arrêter le thread de vérification des connexions
-		objVerificateurConnexions.arreterVerificateurConnexions();
-		
-		// Arrêter le thread de gestionnaire d'événements
-		objGestionnaireEvenements.arreterGestionnaireEvenements();
-		
-		// Fermer toutes les connexions ouvertes pour le gestionnaire de base de données
-		objGestionnaireBD.arreterGestionnaireBD();
-	}// end method
-
 } //end class 

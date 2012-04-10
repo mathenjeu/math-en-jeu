@@ -97,9 +97,6 @@ public class InformationPartieHumain extends InformationPartie implements Active
 		// Faire la référence vers le gestionnaire de base de données
 		objGestionnaireBD = new GestionnaireBDJoueur(joueur);
 
-		// Faire la référence vers le gestionnaire d'evenements
-		//objGestionnaireEv = gestionnaireEv;
-
 		// Faire la référence vers le joueur humain courant
 		objJoueurHumain = joueur;
 
@@ -425,6 +422,7 @@ public class InformationPartieHumain extends InformationPartie implements Active
 	 *         question retournée est null
 	 */
 	public Question trouverQuestionAPoser(Point nouvellePosition, boolean doitGenererNoCommandeRetour) {
+		
 		int intDifficulte = 0;
 		Question objQuestionTrouvee = null;
 
@@ -480,14 +478,6 @@ public class InformationPartieHumain extends InformationPartie implements Active
 
 		} while (objQuestionTrouvee == null ); 
 
-		/*
-		if(objQuestionTrouvee == null)
-		{
-			// en théorie on ne devrait plus entrer dans ce if
-			System.out.println( "ça va mal : aucune question" );
-			this.boiteQuestionsInfo.append("ça va mal : aucune question " + this.objBoiteQuestions.getBoxSize() + "\n");
-		}*/
-
 		// Si on doit générer le numéro de commande de retour, alors
 		// on le génére, sinon on ne fait rien (ça devrait toujours
 		// être vrai, donc on le génére tout le temps)
@@ -498,8 +488,6 @@ public class InformationPartieHumain extends InformationPartie implements Active
 		}
 
 		questionTimeReference = objTable.obtenirTempsRestant();
-		//System.out.println("Protocol for : " + lastQuestionTime);
-
 		return objQuestionTrouvee;
 	}// end method
 
@@ -557,7 +545,7 @@ public class InformationPartieHumain extends InformationPartie implements Active
 	 * @return La question trouvée, s'il n'y a pas eu de déplacement, alors la
 	 *         question retournée est null
 	 */
-	public Question trouverQuestionAPoserCristall(boolean doitGenererNoCommandeRetour) {
+	public Question trouverQuestionAPoser(boolean doitGenererNoCommandeRetour) {
 		// Déclarations de variables qui vont contenir la catégorie de question
 		// à poser, la difficulté et la question à retourner
 		//***************************************************************************************
@@ -598,13 +586,7 @@ public class InformationPartieHumain extends InformationPartie implements Active
 			}
 		} while (objQuestionTrouvee == null);
 
-		/*
-		if (objQuestionTrouvee == null) {
-			// en théorie on ne devrait plus entrer dans ce if
-			System.out.println("ça va mal : aucune question");
-			this.boiteQuestionsInfo.append("ça va mal : aucune question " + this.objBoiteQuestions.getBoxSize() + "\n");
-		}*/
-
+		
 		// Si on doit générer le numéro de commande de retour, alors
 		// on le génére, sinon on ne fait rien (ça devrait toujours
 		// être vrai, donc on le génére tout le temps)
@@ -1085,11 +1067,12 @@ public class InformationPartieHumain extends InformationPartie implements Active
 		return boiteQuestionsInfo;
 	}
 
+	/*
 	public void writeInfo(){
 		String table = this.objTable.getTableName();
 		String joueur = this.objJoueurHumain.obtenirNom();
 
-		this.boiteQuestionsInfo.append("END INFO ");
+		this.boiteQuestionsInfo.append("END INFO");
 		String info = this.boiteQuestionsInfo.toString();
 
 		//System.out.println("End info" + info.length());
@@ -1107,7 +1090,7 @@ public class InformationPartieHumain extends InformationPartie implements Active
 			e.printStackTrace();
 		}
 
-	}	
+	}	*/
 
 	/**
 	 * @return the objGestionnaireBD

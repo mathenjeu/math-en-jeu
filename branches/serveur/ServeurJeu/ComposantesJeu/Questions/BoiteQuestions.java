@@ -11,7 +11,6 @@ import org.apache.commons.collections.list.TreeList;
 import org.apache.log4j.Logger;
 import ClassesUtilitaires.UtilitaireNombres;
 import ServeurJeu.ComposantesJeu.Language;
-import ServeurJeu.Configuration.GestionnaireMessages;
 
 /**
  * @author Marc changed Oloieri Lilian
@@ -81,7 +80,6 @@ public class BoiteQuestions
      */
 	public Question pigerQuestion(int intDifficulte)
 	{
-		//System.out.println("Question1: " + System.currentTimeMillis());
 		Question question = null;
 		
 		TreeList questions = lstQuestions.get(intDifficulte);
@@ -89,15 +87,10 @@ public class BoiteQuestions
 		// Let's choose a question among the possible ones
 	    if( questions != null && questions.size() > 0 )
 		{
-	    	//System.out.println("erreur " + questions.size());
-	    	question = (Question)(questions.remove(UtilitaireNombres.genererNbAleatoire(questions.size())));
-	    	
-	    	//questions.remove(question);
+	    	question = (Question) questions.remove(UtilitaireNombres.genererNbAleatoire(questions.size()));	    	
     	}
 		else
-		{
-			//System.out.println("erreur boite");
-			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+		{				
 			this.info.append("QuestionsBox is empty for difficulty: " + intDifficulte + "\n");
 		}
 		
@@ -141,7 +134,7 @@ public class BoiteQuestions
 		}
 		else
 		{
-			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+			//objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
 			this.info.append("QuestionsBox is empty for difficulty: " + intDifficulte + "\n");
 		}
 	   if(question != null)
@@ -171,7 +164,7 @@ public class BoiteQuestions
 		}
 		else
 		{
-			objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
+			//objLogger.error(GestionnaireMessages.message("boite.pas_de_question"));
 			this.info.append("QuestionsBox is empty for difficulty: " + intDifficulte + "\n");
 		}
 		

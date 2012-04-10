@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.TreeSet;
 import org.apache.log4j.Logger;
@@ -14,6 +15,7 @@ import Enumerations.GameType;
 import Enumerations.RetourFonctions.ResultatDemarrerPartie;
 import ServeurJeu.ControleurJeu;
 import ServeurJeu.BD.GestionnaireBD;
+import ServeurJeu.BD.GestionnaireBDControleur;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.GenerateurPartie.GenerateurPartie;
@@ -62,7 +64,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	// Déclaration d'une référence vers le contrôleur de jeu
 	protected ControleurJeu objControleurJeu;
 	// Déclaration d'une référence vers le gestionnaire de bases de données
-	protected GestionnaireBD objGestionnaireBD;
+	protected GestionnaireBDControleur objGestionnaireBD;
 	// Déclaration d'une référence vers la salle parente dans laquelle se
 	// trouve cette table
 	protected Salle objSalle;
@@ -250,7 +252,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 *              permettant de changer ça sont synchronisées).
 	 */
 	public void entrerTableAutres(JoueurHumain joueur, boolean doitGenererNoCommandeRetour) throws NullPointerException {
-		//System.out.println("start table: " + System.currentTimeMillis());
 		addPlayerInListe(joueur);
 
 		// Le joueur est maintenant entré dans la table courante (il faut
@@ -274,7 +275,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// dans la file de gestion d'événements
 		preparerEvenementJoueurEntreTable(joueur);
 
-		//System.out.println("end table : " + System.currentTimeMillis());
 	}// end methode
 
 
@@ -476,8 +476,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 		int idPersonnage = this.getOneIdPersonnage(idDessin);
 
-		//System.out.println("idPersonnage demarrePartie : " + idPersonnage);
-
 		// Garder en mémoire le Id du personnage choisi par le joueur et son dessin
 		joueur.obtenirPartieCourante().setIdDessin(idDessin);
 		joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
@@ -511,9 +509,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		player.obtenirPartieCourante().definirIdPersonnage(0);
 		player.obtenirPartieCourante().setIdDessin(0);
 
-
-		//System.out.println("idPersonnage demarrePartie : " + idPersonnage);
-
 		// Si on doit générer le numéro de commande de retour, alors
 		// on le génére, sinon on ne fait rien (ça se peut que ce soit
 		// faux)
@@ -522,7 +517,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			// retourné au client
 			player.obtenirProtocoleJoueur().genererNumeroReponse();
 		}
-
 
 		// Préparer l'événement de joueur en attente.
 		// Cette fonction va passer les joueurs et créer un
@@ -536,10 +530,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * This method will put on the system the picture selected  by the player
 	 * (action initiate by the player).  
 	 * @param player
-	 * @param doitGenererNoCommandeRetour
 	 */
-	public void setNewPicture(JoueurHumain humainPlayer, int idDessin,
-			boolean doitGenererNoCommandeRetour) {
+	public void setNewPicture(JoueurHumain humainPlayer, int idDessin) {
 		int idPersonnage = this.getOneIdPersonnage(idDessin);
 
 		//System.out.println("idPersonnage demarrePartie : " + idPersonnage);
@@ -547,23 +539,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Garder en mémoire le Id du personnage choisi par le joueur et son dessin
 		humainPlayer.obtenirPartieCourante().setIdDessin(idDessin);
 		humainPlayer.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
-
-		// Si on doit générer le numéro de commande de retour, alors
-		// on le génére, sinon on ne fait rien (ça se peut que ce soit
-		// faux)
-		if (doitGenererNoCommandeRetour == true) {
-			// Générer un nouveau numéro de commande qui sera
-			// retourné au client
-			humainPlayer.obtenirProtocoleJoueur().genererNumeroReponse();
-		}
-
-
+		
 		// Préparer l'événement de joueur en attente.
 		// Cette fonction va passer les joueurs et créer un
 		// InformationDestination pour chacun et ajouter l'événement
 		// dans la file de gestion d'événements
 		prepareEventPlayerSelectedNewPicture(humainPlayer, idPersonnage);
-
 
 	}
 
@@ -969,7 +950,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 						else if (ourResults.last().getUsername().equalsIgnoreCase(objJoueurHumain.obtenirNom()))
 							cleJoueurGagnant = objJoueurHumain.obtenirCleJoueur();
 
-						//System.out.println("table - Joueur H " + " " + objJoueurHumain.obtenirNomUtilisateur() + " " + infoPartie.getPointsFinalTime() + " " + ourResults.size());
 					}
 
 					// Ajouter la partie dans la BD
@@ -988,8 +968,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 						}
 						boolean estGagnant = (joueur.obtenirCleJoueur() == cleJoueurGagnant);
 						objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur, estGagnant);
-						if(joueur.getRole() > 1)
-							joueur.obtenirPartieCourante().writeInfo();
+						//if(joueur.getRole() > 1)
+							//joueur.obtenirPartieCourante().writeInfo();
 
 					}
 				} //// end sinchro
@@ -1004,7 +984,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 					}
 					lstJoueursVirtuels.clear();
-					//System.out.println("table - etape 1 lst Virtuels " + lstJoueursVirtuels.size());
 				}
 			}
 
@@ -1026,13 +1005,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 			// Arrêter la partie
 			bolEstArretee = true;
-			//System.out.println("table - etape 1 " + lstJoueurs.size());
 			// Si jamais les joueurs humains sont tous déconnectés, alors
 			// il faut détruire la table ici
 			if (lstJoueurs.isEmpty()) {
 				// Détruire la table courante et envoyer les événements
 				// appropriés
-				//System.out.println("table - etape - is empty");
 				getObjSalle().detruireTable(this);
 			}
 
@@ -1047,12 +1024,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 			this.objttPlateauJeu = null;
 			this.gameFactory = null;
-			//System.out.println("table - etape 2");
 		}
-		//System.out.println("table - end of method");
 	}// end method
 
-	protected void finalize(){
+	protected void arreter(){
 		// this.objGestionnaireEvenements.arreterGestionnaireEvenements();
 		this.objGestionnaireEvenements = null;
 	}
@@ -1086,10 +1061,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			}
 		}
 
-
-		//System.out.println(isAllPlayers + " isAll");
 		return isAllPlayers;
-
 	}
 
 	/**
@@ -1691,7 +1663,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	protected void setColors() {
 		for (int i = 1; i <= 12; i++) {
 			colors.add(i);
-			//System.out.println("Colors : " + i);
 		}
 	}// end methode
 
@@ -1724,7 +1695,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @param doitGenererNoCommandeRetour
 	 */
 	public void entrerTable(JoueurHumain joueur, boolean doitGenererNoCommandeRetour) {
-		//System.out.println("start table: " + System.currentTimeMillis());
 		// Empêcher d'autres thread de toucher à la liste des joueurs de
 		// cette table pendant l'ajout du nouveau joueur dans cette table
 
@@ -1754,8 +1724,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// InformationDestination pour chacun et ajouter l'événement
 		// dans la file de gestion d'événements
 		preparerEvenementJoueurEntreTable(joueur);
-		//System.out.println("start table3: " + System.currentTimeMillis());
-
 	}
 
 	/**
@@ -1820,7 +1788,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	/**
 	 * @return the objGestionnaireBD
 	 */
-	public GestionnaireBD getObjGestionnaireBD() {
+	public GestionnaireBDControleur getObjGestionnaireBD() {
 		return objGestionnaireBD;
 	}
 
