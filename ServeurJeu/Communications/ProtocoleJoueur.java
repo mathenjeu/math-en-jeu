@@ -1066,9 +1066,7 @@ public class ProtocoleJoueur implements Runnable
         // du nom de la salle dans laquelle le client veut entrer
         int roomId = Integer.parseInt(obtenirValeurParametre(noeudEntree, "RoomID").getNodeValue());
         String motDePasse = obtenirValeurParametre(noeudEntree, "MotDePasse").getNodeValue();
-        
-        System.out.println(" * " + motDePasse);
-        
+                       
         if (erreurSalleNonExistante(noeudCommande, roomId)) {
             return;
         }
@@ -1254,18 +1252,14 @@ public class ProtocoleJoueur implements Runnable
 
         String name = obtenirValeurParametre(noeudEntree, "TableName").getNodeValue();
         GameType type = GameType.getTypeByString((obtenirValeurParametre(noeudEntree, "GameType").getNodeValue()));
-        //System.out.println("Protocole - create table : " + intNbColumns + " " + intNbLines + " " + type);
 
         // Appeler la méthode permettant de créer la nouvelle
         // table et d'entrer le joueur dans cette table
         int intNoTable = objJoueurHumain.obtenirSalleCourante().creerTable(
                 objJoueurHumain, intTempsPartie, true, name, intNbLines, intNbColumns, type);
         
-        System.out.println("Protocole - create table : " + intNbColumns + " " + intNbLines + " " + type);
-
         name = objJoueurHumain.obtenirPartieCourante().obtenirTable().getTableName();
         
-        //System.out.println("Protocole - create table - name : " + name);
         // Ajouter le noeud paramètre du numéro de la table
         Element objNoeudParametreNoTable = docSortie.createElement("parametre");
         objNoeudParametreNoTable.setAttribute("type", "NoTable");
@@ -1290,7 +1284,6 @@ public class ProtocoleJoueur implements Runnable
         objNoeudParametreMaxNbPlayers.appendChild(docSortie.createTextNode("" + objJoueurHumain.obtenirPartieCourante().obtenirTable().getMaxNbPlayers()));
         noeudCommande.appendChild(objNoeudParametreMaxNbPlayers);
         
-        System.out.println("Protocole - create table final : " + intNbColumns + " " + intNbLines + " " + type);
     }
 
     private void traiterCommandeEntrerTable(Element noeudEntree, Element noeudCommande) {
@@ -1306,7 +1299,6 @@ public class ProtocoleJoueur implements Runnable
         }
 
         Document docSortie = noeudCommande.getOwnerDocument();
-
 
         // Obtenir le numéro de la table dans laquelle le joueur
         // veut entrer et le garder en mémoire dans une variable
@@ -1478,7 +1470,6 @@ public class ProtocoleJoueur implements Runnable
         // la table pour annuler son dessin et comme il ne peut entrer
         // si une partie est en cours, alors c'est certain qu'il n'y
         // aura pas de parties en cours
-
        
         // Appeler la méthode permettant de annuler le dessin
         objJoueurHumain.obtenirPartieCourante().obtenirTable().cancelPicture(
@@ -1507,15 +1498,15 @@ public class ProtocoleJoueur implements Runnable
         // si une partie est en cours, alors c'est certain qu'il n'y
         // aura pas de parties en cours
 
-
         // Obtenir le numéro Id du personnage choisi et le garder
         // en mémoire dans une variable
         int intIdDessin = Integer.parseInt(obtenirValeurParametre(noeudEntree, "IdDessin").getNodeValue());
 
-        objJoueurHumain.obtenirPartieCourante().obtenirTable().setNewPicture(
-                objJoueurHumain, intIdDessin, true);
-
-        
+        objJoueurHumain.obtenirPartieCourante().obtenirTable().setNewPicture(objJoueurHumain, intIdDessin);
+     	// Générer un nouveau numéro de commande qui sera
+		// retourné au client
+        objJoueurHumain.obtenirProtocoleJoueur().genererNumeroReponse();
+		        
         int idPersonnage = objJoueurHumain.obtenirPartieCourante().obtenirIdPersonnage();
        
         noeudCommande.setAttribute("type", "Reponse");
@@ -2202,14 +2193,11 @@ public class ProtocoleJoueur implements Runnable
 
         		// Envoyer le message sur le canal d'envoi
         		outS.flush();
+        	       	
+        		//	objLogger.info(GestionnaireMessages.message("protocole.message_envoye") + chainetemp);
         		
-        		//if (chainetemp.contains("ping") == false) {
-        			objLogger.info(GestionnaireMessages.message("protocole.message_envoye") + chainetemp);
-        		//}
         	}catch(IOException ioe)
-        	{
-        		//this.bolStopThread = true;
-        		//this.arreterProtocoleJoueur();
+        	{        		
         		objLogger.error(ioe.getMessage() + " IOException in writing" + message);
         	}
         	
@@ -2693,8 +2681,6 @@ public class ProtocoleJoueur implements Runnable
             // client (joueur) a été fermée (on ne doit pas obtenir de
             // numéro de commande de cette fonction, car on ne retournera
             // rien du tout)
-            
-        	//System.out.println("! Joueur deconnecter - Protocole2 " + bolStopThread + " " + objJoueurHumain.obtenirNomUtilisateur());     
             objControleurJeu.deconnecterJoueur(objJoueurHumain, false, true);
            
         }else{

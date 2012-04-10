@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 import ServeurJeu.BD.GestionnaireBD;
+import ServeurJeu.BD.GestionnaireBDControleur;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Cases.Case;
 import ServeurJeu.ComposantesJeu.Cases.CaseCouleur;
@@ -64,7 +65,7 @@ public abstract class GenerateurPartie
 	protected Regles reglesPartie;
 	
 	// Déclaration d'une référence vers le gestionnaire de bases de données
-	protected GestionnaireBD objGestionnaireBD;
+	protected GestionnaireBDControleur objGestionnaireBD;
 	
 	// Déclaration d'une référence vers la salle parente ou se trouve cet objet 
 	protected Salle objSalle;

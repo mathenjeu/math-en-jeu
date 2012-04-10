@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
 import Enumerations.GameType;
 import Enumerations.RetourFonctions.ResultatEntreeTable;
 import ServeurJeu.ControleurJeu;
@@ -208,7 +207,6 @@ public class Salle
 		// Si le mot de passe est le bon, alors on ajoute le joueur dans la liste
 		// des joueurs de cette salle et on envoit un événement aux autres
 		// joueurs de cette salle pour leur dire qu'il y a un nouveau joueur
-		System.out.println(strPassword + " * " + motDePasse + " * " + objControleurJeu.obtenirGestionnaireBD().controlPWD(motDePasse));
 		if (strPassword.equals(motDePasse)) {
 			// Empêcher d'autres thread de toucher à la liste des joueurs de
 			// cette salle pendant l'ajout du nouveau joueur dans cette salle

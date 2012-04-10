@@ -1,6 +1,7 @@
 package ServeurJeu.BD;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -31,7 +32,7 @@ public class SpyRooms implements Runnable {
 	// Objet Statement nécessaire pour envoyer une requète au serveur MySQL
 	private  Statement requete;
 	
-	static private Logger objLogger = Logger.getLogger( SpyRooms.class );
+	private static Logger objLogger = Logger.getLogger( SpyRooms.class );
 
 	
 	
@@ -45,7 +46,7 @@ public class SpyRooms implements Runnable {
 		DBConnectionsPoolManager pool = DBConnectionsPoolManager.getInstance();
         connexion = pool.getConnection();
         
-        this.takeStatement();      		
+        createStatement();      		
 	}
 	
 	
@@ -54,17 +55,19 @@ public class SpyRooms implements Runnable {
      * and to take another one
      */
     public void getNewConnection(){
-    	this.releaseConnection();
+    	releaseConnection();
     	DBConnectionsPoolManager pool = DBConnectionsPoolManager.getInstance();
         connexion = pool.getConnection();
-		this.takeStatement();
+		createStatement();
+		objLogger.info("bd statement created");
+
     }
     
     
     /**
      * Cette fonction permet de créer un objet requête
      */
-    public void takeStatement() {
+    public void createStatement() {
 
     	// Création de l'objet "requête"
     	try {
@@ -74,7 +77,7 @@ public class SpyRooms implements Runnable {
     		objLogger.error(GestionnaireMessages.message("bd.erreur_creer_requete"));
     		objLogger.error(GestionnaireMessages.message("bd.trace"));
     		objLogger.error(e.getMessage());
-    		this.getNewConnection();    		
+    		getNewConnection(); 
     		return;
     	}
 
@@ -86,13 +89,13 @@ public class SpyRooms implements Runnable {
      */
     public void releaseConnection(){
     	try {
-			this.requete.close();
+			requete.close();
 		} catch (SQLException e) {
 			objLogger.error(GestionnaireMessages.message("bd.erreur_fermer_requete"));			
 		}
     	DBConnectionsPoolManager pool = DBConnectionsPoolManager.getInstance();
-    	pool.freeConnection(this.connexion);
-    	this.connexion = null;
+    	pool.freeConnection(connexion);
+    	connexion = null;
     }
 	
 	/**
@@ -101,15 +104,13 @@ public class SpyRooms implements Runnable {
 	 */
     public void run() {
     	while (stopSpy == false) {
-    		if(this.connexion == null)
-    			this.getNewConnection();
+    		if(connexion == null)
+    			getNewConnection();
 
     		// Update rooms liste 
-    		//System.out.println("test - ");
     		detectNewRooms(objControleurJeu.removeOldRooms());
     		
     		// Detect changes in the existing rooms  
-    		//System.out.println("test - ");
     		detectUpdates(); 
     		
     		objControleurJeu.detectErasedRooms();
@@ -150,19 +151,16 @@ public class SpyRooms implements Runnable {
 			rooms.clear();
             
 			//find all new rooms  and fill in ArrayList
+			ResultSet rs = null;
 			try
 			{
-				synchronized( requete )
+				rs = requete.executeQuery( "SELECT room.room_id FROM room where ((beginDate < NOW() AND endDate > NOW()) OR (beginDate is NULL AND endDate > NOW()) OR (beginDate < NOW() AND endDate is NULL) OR (beginDate is NULL AND endDate is NULL)) AND room_id NOT IN (" + list + ");" );
+				while(rs.next())
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room.room_id FROM room where ((beginDate < NOW() AND endDate > NOW()) OR (beginDate is NULL AND endDate > NOW()) OR (beginDate < NOW() AND endDate is NULL) OR (beginDate is NULL AND endDate is NULL)) AND room_id NOT IN (" + list + ");" );
-					while(rs.next())
-					{
-						int roomId = rs.getInt("room.room_id");
-						//System.out.println(roomId + "NEW");				
-						rooms.add(roomId);
-					}   
-								
-				}
+					int roomId = rs.getInt("room.room_id");
+					rooms.add(roomId);
+				}   
+
 			}
 			catch (SQLException e)
 			{
@@ -177,12 +175,14 @@ public class SpyRooms implements Runnable {
 			catch( RuntimeException e)
 			{
 				//Une erreur est survenue lors de la recherche de la prochaine salle
-				objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"));
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_detect_newRoom"));
 				objLogger.error(GestionnaireMessages.message("bd.trace"));
 				objLogger.error( e.getMessage() );
 			    e.printStackTrace();
 			    getNewConnection();
-			}  
+			}finally{ 
+				dbUtilCloseResultSet(rs, "Error in release ResultSet in detectNewRooms");    			
+			}
 			
 			//put in Controleur finded rooms
 			objControleurJeu.obtenirGestionnaireBD().fillRoomsList(rooms);
@@ -191,37 +191,33 @@ public class SpyRooms implements Runnable {
 			rooms.clear();
 			try
 			{
-				synchronized( requete )
+				rs = requete.executeQuery( "SELECT room.room_id FROM room where  endDate < NOW() AND room_id IN (" + list + ");" );
+				while(rs.next())
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room.room_id FROM room where  endDate < NOW() AND room_id IN (" + list + ");" );
-					while(rs.next())
-					{
-						int roomId = rs.getInt("room.room_id");
-						//System.out.println(roomId + "OLD");				
-						rooms.add(roomId);
-					}   
-								
+					int roomId = rs.getInt("room.room_id");
+					rooms.add(roomId);
 				}
-			}
+			}				
 			catch (SQLException e)
 			{
 				// Une erreur est survenue lors de l'exécution de la requète
 				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_oldRoom"));
 				objLogger.error(GestionnaireMessages.message("bd.trace"));
-				objLogger.error( e.getMessage() );
-				
+				objLogger.error( e.getMessage() );				
 			    e.printStackTrace();
 			    getNewConnection();
 			}
 			catch( RuntimeException e)
 			{
 				//Une erreur est survenue lors de la recherche de la prochaine salle
-				objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"));
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_oldRoom"));
 				objLogger.error(GestionnaireMessages.message("bd.trace"));
 				objLogger.error( e.getMessage() );
 			    e.printStackTrace();
 			    getNewConnection();
-			}  
+			}finally{ 
+				dbUtilCloseResultSet(rs, "Error in release ResultSet in mettreAJourJoueur");    			
+			}
 			
 			//put in Controleur finded rooms
 			objControleurJeu.removeOldRooms(rooms);
@@ -234,22 +230,19 @@ public class SpyRooms implements Runnable {
 	 */
 	private void detectUpdates()
 	{
-		   ArrayList<Integer> rooms = new ArrayList<Integer>();
-		
-		    //find all rooms with updates in the DB  and fill in ArrayList
+		   ArrayList<Integer> rooms = new ArrayList<Integer>();		
+		   //find all rooms with updates in the DB  and fill in ArrayList
+		   ResultSet rs = null;
 			try
 			{
-				synchronized( requete )
+				rs = requete.executeQuery( "SELECT room.room_id FROM room where room.update = 1;" );
+				while(rs.next())
 				{
-					ResultSet rs = requete.executeQuery( "SELECT room.room_id FROM room where room.update = 1;" );
-					while(rs.next())
-					{
-						int roomId = rs.getInt("room.room_id");
-						//System.out.println(roomId + "NEW");				
-						rooms.add(roomId);
-					}   
-								
-				}
+					int roomId = rs.getInt("room.room_id");
+					rooms.add(roomId);
+				}   
+
+
 			}
 			catch (SQLException e)
 			{
@@ -269,6 +262,8 @@ public class SpyRooms implements Runnable {
 				objLogger.error( e.getMessage() );
 			    e.printStackTrace();
 			    getNewConnection();
+			}finally{ 
+				dbUtilCloseResultSet(rs, "Error in release ResultSet in detectUpdates");    			
 			}
 			
 			//update in Controler finded rooms
@@ -277,12 +272,8 @@ public class SpyRooms implements Runnable {
 			//after did updates remove key in db
 			try
 			{
-				synchronized( requete )
-				{
-					String update = "UPDATE room SET room.update = 0;";
-					requete.executeUpdate(update);    					
-								
-				}
+				String update = "UPDATE room SET room.update = 0;";
+				requete.executeUpdate(update);
 			}
 			catch (SQLException e)
 			{
@@ -305,14 +296,20 @@ public class SpyRooms implements Runnable {
 			}
 			
 			
-			
-			
 	}// end methode detectUpdates
 	
 	public void stopSpy(){
-		this.releaseConnection();
-		this.stopSpy = true;		
+		releaseConnection();
+		stopSpy = true;		
 	}
 	
-	
+	private static void dbUtilCloseResultSet(ResultSet rs, String message)
+    {
+    	if(rs != null)
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				objLogger.error(message);
+			}
+    }
 }

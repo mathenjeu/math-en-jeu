@@ -125,8 +125,6 @@ public class TableTournament extends Table {
 
 			int idPersonnage = this.getOneIdPersonnage(idDessin);
 
-			System.out.println("idPersonnage demarrePartie : " + idPersonnage);
-
 			// Garder en mémoire le Id du personnage choisi par le joueur et son dessin
 			joueur.obtenirPartieCourante().setIdDessin(idDessin);
 			joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
@@ -180,7 +178,6 @@ public class TableTournament extends Table {
 			// InformationDestination pour chacun et ajouter l'événement
 			// dans la file de gestion d'événements
 			//preparerEvenementJoueurEntreTable(joueur);
-			//System.out.println("enter table : " + System.currentTimeMillis());
 		}
 
 
@@ -396,7 +393,6 @@ public class TableTournament extends Table {
 						else if (ourResults.last().getUsername().equalsIgnoreCase(objJoueurHumain.obtenirNom()))
 							cleJoueurGagnant = objJoueurHumain.obtenirCleJoueur();
 
-						//System.out.println("table - Joueur H " + " " + objJoueurHumain.obtenirNomUtilisateur() + " " + infoPartie.getPointsFinalTime() + " " + ourResults.size());
 					}
 
 					// Ajouter la partie dans la BD
@@ -415,8 +411,8 @@ public class TableTournament extends Table {
 						}
 						boolean estGagnant = (joueur.obtenirCleJoueur() == cleJoueurGagnant);
 						objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur, estGagnant);
-						if(joueur.getRole() > 1)
-							joueur.obtenirPartieCourante().writeInfo();
+						//if(joueur.getRole() > 1)
+							//joueur.obtenirPartieCourante().writeInfo();
 
 					}
 				} //// end sinchro
@@ -462,9 +458,7 @@ public class TableTournament extends Table {
 
 			this.objttPlateauJeu = null;
 			this.gameFactory = null;
-			//System.out.println("table - etape 2");
 		}
-		//System.out.println("table - end of method");
 	}// end method
 
 	protected void addPlayerInListe(JoueurHumain joueur)
@@ -536,7 +530,6 @@ public class TableTournament extends Table {
 			// Passer tous les joueurs de la table et leur envoyer un événement
 
 			for (JoueurHumain objJoueur: lstDiffusion.values()) {
-				//System.out.println("table - broadcast " + objJoueur.obtenirNom() + " " + objJoueur.obtenirProtocoleJoueur());
 				// Obtenir un numéro de commande pour le joueur courant, créer
 				// un InformationDestination et l'ajouter à l'événement
 				event.ajouterInformationDestination( new InformationDestination(

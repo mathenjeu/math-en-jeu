@@ -51,7 +51,7 @@ public class Boule extends ObjetUtilisable
 		 
 		 // La boule permettra à un joueur de changer de question si celle
          // qu'il s'est fait envoyer ne lui tente pas
-         Question nouvelleQuestion = infoPartie.trouverQuestionAPoserCristall(true);
+         Question nouvelleQuestion = infoPartie.trouverQuestionAPoser(true);
 
          // On prépare l'envoi des informations sur la nouvelle question
          Element objNoeudParametreNouvelleQuestion = docSortie.createElement("parametre");
