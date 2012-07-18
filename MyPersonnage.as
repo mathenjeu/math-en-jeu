@@ -614,7 +614,7 @@ class MyPersonnage implements IOurPersonnage
 	public function initPlanche(planchet:PlancheDeJeu)
 	{
 		this.planche = planchet;
-		this.level = 5 * planche.obtenirTableauDesCases().length * planche.obtenirTableauDesCases()[0].length + 2 * this.numero;
+		this.level = _level0.loader.contentHolder.referenceLayer.getNextHighestDepth();//5 * planche.obtenirTableauDesCases().length * planche.obtenirTableauDesCases()[0].length + 2 * this.numero;
 		var xx:Number = planche.obtenirTableauDesCases()[this.l][this.c].obtenirClipCase()._x;
 		var yy:Number = planche.obtenirTableauDesCases()[this.l][this.c].obtenirClipCase()._y;
 		this.position = new Point(xx,yy);
@@ -629,8 +629,8 @@ class MyPersonnage implements IOurPersonnage
         mclListener.onLoadComplete = function(target_mc:MovieClip) {
 			target_mc.filterC = filterC;
 		    target_mc.nom = ourName;					
-			//target_mc.gotoAndPlay("bored"); 
-			_global.setTimeout(goBored, Math.random(5000));		
+			target_mc.gotoAndPlay("bored"); 
+			//_global.setTimeout(goBored, Math.random(5000));		
 			
 			// assure que le clip a la bonne orientation
 			//target_mc._xscale = - Math.abs(target_mc._xscale);
@@ -638,16 +638,15 @@ class MyPersonnage implements IOurPersonnage
 			//target_mc.dtNom._x = 42;
 			target_mc._visible = true;	
         };
-		myLoader.addListener(mclListener);
+		myLoader.addListener(mclListener);		
 		
-		this.orient = "right";
 		if(!(role > 1 && _level0.loader.contentHolder.objGestionnaireEvenements.getOurTable().compareType("Tournament"))){  
   
           image =  _level0.loader.contentHolder.referenceLayer.createEmptyMovieClip("Personnage" + numero, level);
 		  myLoader.loadClip("Perso/perso" + this.idClip + ".swf", image);
 		  image._visible = false;					
 		}		
-		this.boardCentre = false;
+		//this.boardCentre = false;
 	}
 	
 	public function goBored()
@@ -655,7 +654,7 @@ class MyPersonnage implements IOurPersonnage
 	   gotoAndPlay("bored");
 	   // assure que le clip a la bonne orientation
 	   image._xscale = - Math.abs(image._xscale);
-	   image._xscale = - Math.abs(image._xscale);
+	   image.dtNom._xscale = - Math.abs(image._xscale);
 	   image.dtNom._x = 42;
 	}
 	
@@ -680,6 +679,7 @@ class MyPersonnage implements IOurPersonnage
 		this.argent = 0;
 		this.listeDesObjets = new Object();
 		this.moveVisibility = 3;
+		this.orient = "right";
 		
 		// each array will contain the ID's of objects in possession
 		//this.listeDesObjets["piece"] = new Array();

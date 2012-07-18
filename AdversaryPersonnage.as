@@ -380,7 +380,7 @@ class AdversaryPersonnage implements IPersonnage
 	   gotoAndPlay("bored");
 	   // assure que le clip a la bonne orientation
 	   image._xscale = - Math.abs(image._xscale);
-	   image._xscale = - Math.abs(image._xscale);
+	   image.dtNom._xscale = - Math.abs(image._xscale);
 	   image.dtNom._x = 42;
 	}
 	

@@ -2967,8 +2967,35 @@ class GestionnaireEvenements
         {			
 		    var iplayer =  getPersonnageByName(objetEvenement.positionJoueurs[i].nom);
 		    iplayer.definirL(objetEvenement.positionJoueurs[i].x);
-			iplayer.definirC(objetEvenement.positionJoueurs[i].y);       
+			iplayer.definirC(objetEvenement.positionJoueurs[i].y);
+			
+			/*  
+            for(j in tableauDesPersonnages)
+            {
+	            //trace(this.listeDesPersonnages[j].nom+" : "+objetEvenement.positionJoueurs[i].nom);
+                if(tableauDesPersonnages[j].obtenirNom() == objetEvenement.positionJoueurs[i].nom)
+                {
+					trace("test color : " + this.tableauDesPersonnages[j].nom + " " +  objetEvenement.positionJoueurs[i].x + " " + objetEvenement.positionJoueurs[i].y);
+	                //var idDessin:Number = //calculatePicture(this.tableauDesPersonnages[j].getIdPersonnage);
+					//var idPers:Number = calculateIDPers(this.listeDesPersonnages[j].id, idDessin);
+					//this.listeDesPersonnages[j].idPers = idPers;
+					// to update clothes color
+					//tableauDesPersonnages[j].colorID = objetEvenement.positionJoueurs[i].clocolor;
+					//var cloCol:String = = getColorByID(objetEvenement.positionJoueurs[i].clocolor, tableauDesPersonnages[j].getIDessin());//objetEvenement.clothesColor;
+					//var filterC:ColorMatrixFilter = _level0.loader.contentHolder.objGestionnaireEvenements.colorMatrixPerso(cloCol, tableauDesPersonnages[j].getIDessin());
+				    //tableauDesPersonnages[j].setColorFilter(filterC);
+					//tableauDesPersonnages[j].setColorFilter(filterC);
+					tableauDesPersonnages[j].definirL(objetEvenement.positionJoueurs[i].x);
+					tableauDesPersonnages[j].definirC(objetEvenement.positionJoueurs[i].y);
+					///trace("XXXXXX - " + this.listeDesPersonnages[j].colorID + " " + this.listeDesPersonnages[j].clocolor + " " + this.listeDesPersonnages[j].nom);										
+				}
+			}*/
 		}
+		
+		/////////////////////////////////
+					
+				      
+		////////////////////////////////
 				      
 	    _level0.loader.contentHolder.planche.afficher();
 											
@@ -2988,7 +3015,8 @@ class GestionnaireEvenements
         }
 		
 		 _level0.loader.contentHolder.planche.setPerso(ourPerso);
-			
+		 //ourPerso.deplacePersonnage();
+					
 		// put the face of my avatar in the panel 
 		showFaceAvatar();
 

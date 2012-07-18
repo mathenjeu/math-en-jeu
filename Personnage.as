@@ -417,9 +417,10 @@ class Personnage implements IPersonnage
 			//target_mc.gotoAndStop(1);
 			
 			// assure que le clip a la bonne orientation
-			target_mc._xscale = - Math.abs(target_mc._xscale);
-			target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
-			target_mc.dtNom._x = 42;
+			//target_mc._xscale = - Math.abs(target_mc._xscale);
+			//target_mc.dtNom._xscale = - Math.abs(target_mc._xscale);
+			//target_mc.dtNom._x = 42;
+			target_mc._visible = true;
         };
 		myLoader.addListener(mclListener);
 		
