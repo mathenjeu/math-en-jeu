@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel;
 import ServeurJeu.ComposantesJeu.Tables.Table;
@@ -203,7 +205,7 @@ public class Espion implements Runnable{
 		
 		// Déclaration d'un objet qui contiendra une référence vers la liste des joueurs
 		// pour une table
-		HashMap<String, JoueurHumain> lstJoueurs;
+		ConcurrentHashMap<String, JoueurHumain> lstJoueurs;
 
         // Déclaration d'un objet qui contiendra une référence vers la liste des 
         // jouers connectés au serveur
@@ -541,16 +543,12 @@ public class Espion implements Runnable{
                          {
                              strTables.append("    Joueurs déconnectés : ");
                              
-	                         for (int i = 0; i < objTable.obtenirListeJoueursDeconnectes().size(); i++)
-	                         {
-	                         	if (i > 0)
-	                         	{
-	                         		strTables.append(", ");
-	                         	}
-	                         	
-	                         	strTables.append((String) objTable.obtenirListeJoueursDeconnectes().get(i));
+	                         for (String name : objTable.obtenirListeJoueursDeconnectes().keySet())
+	                         {            	
+	                           	strTables.append(name + ", ");
 	                         }
 	                         
+	                         strTables.deleteCharAt(strTables.lastIndexOf(","));	                                  
                              strTables.append(strFinLigne);
                          }
 
