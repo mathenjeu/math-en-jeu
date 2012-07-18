@@ -107,6 +107,7 @@ public class GenerateurPartieCourse extends GenerateurPartie {
 			objPoint = new Point(intNbLines - 1,intNbColumns - i - 1);
 			lstPointsFinish.add(objPoint);
 		}
+		
 		this.caseDefinition(intNbCasesSpeciales, objttPlateauJeu);
 			
 				

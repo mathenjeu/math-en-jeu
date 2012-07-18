@@ -10,7 +10,6 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 import Enumerations.RetourFonctions.ResultatAuthentification;
 import ServeurJeu.BD.DBConnectionsPoolManager;
-import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.BD.GestionnaireBDControleur;
 import ServeurJeu.Communications.GestionnaireCommunication;
 import ServeurJeu.Communications.ProtocoleJoueur;
@@ -27,7 +26,7 @@ import ServeurJeu.Temps.GestionnaireTemps;
 import ServeurJeu.Temps.TacheSynchroniser;
 import ServeurJeu.Configuration.GestionnaireConfiguration;
 import ServeurJeu.Configuration.GestionnaireMessages;
-import ServeurJeu.BD.SpyRooms;
+import ServeurJeu.BD.GestionnaireBDUpdates;
 
 /**
  * Note importante concernant le traitement des commandes par le 
@@ -94,7 +93,7 @@ public class ControleurJeu {
 	//private boolean isOn;
 
 	// thread to look for new rooms to add or old rooms to delete
-	private SpyRooms objSpyDB;
+	private GestionnaireBDUpdates objSpyDB;
 
 	private static final Random objRandom = new Random();    
 
@@ -177,7 +176,7 @@ public class ControleurJeu {
 		//Start spyDb to update periodically the rooms list
 		// Add new rooms or out the olds
 		int intSpyStep = config.obtenirNombreEntier("controleurjeu.monitoring.spyDB");
-		objSpyDB = new SpyRooms(this, intSpyStep);
+		objSpyDB = new GestionnaireBDUpdates(this, intSpyStep);
 		//Start spy thread's
 		Thread threadSpy = new Thread(objSpyDB, "SpyRooms");
 		threadSpy.start();
@@ -248,7 +247,7 @@ public class ControleurJeu {
 
 		this.lstSalles.clear();
 
-		this.objSpyDB.stopSpy();
+		this.objSpyDB.arreterGestionnaireBD();
 		objGestionnaireCommunication.arreter();
 		objGestionnaireCommunication = null;
 		//objGestionnaireTemps.stopIt();

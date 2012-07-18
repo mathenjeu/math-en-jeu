@@ -1,9 +1,7 @@
 package ServeurJeu.ComposantesJeu.Objets.ObjetsUtilisables;
 
-import java.util.HashMap;
-
+import java.util.concurrent.ConcurrentHashMap;
 import org.w3c.dom.Element;
-
 import ServeurJeu.ComposantesJeu.Joueurs.InformationPartieHumain;
 import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 
@@ -56,7 +54,7 @@ public class Banane extends ObjetUtilisable
          boolean estHumain = false; //Le joueur choisi est'il humain?
 
          // On obtient la liste des joueurs humains, puis la liste des joueurs virtuels
-         HashMap<String, JoueurHumain> listeJoueursHumains = infoPartie.obtenirTable().obtenirListeJoueurs();
+         ConcurrentHashMap<String, JoueurHumain> listeJoueursHumains = infoPartie.obtenirTable().obtenirListeJoueurs();
          for (JoueurHumain objJoueur: listeJoueursHumains.values()) {
              if (objJoueur.obtenirNom().equals(playerName)) {
                  estHumain = true;
@@ -83,49 +81,5 @@ public class Banane extends ObjetUtilisable
 
 
 	}
-	/*
-	public static void utiliserBanane(Joueur player)
-	{   
-		if(player != null)
-		   player.getPlayerGameInfo().bananaIsUsed();		
-	}*/
-
-	/*
-	public static BananaHumainTask utiliserBanane(JoueurHumain player, long delay)
-	{   
-		//first cancel the Brainiac
-		player.obtenirPartieCourante().getBrainiacState().setOffBrainiac();
-
-		// Create TimerTask and Timer.
-		BananaHumainTask bTask = new BananaHumainTask(player);
-		
-		// effects of Banana
-		player.obtenirPartieCourante().setMoveVisibility(player.obtenirPartieCourante().getMoveVisibility() - 2);
-
-		// used timer to take out effects of banana after the needed time
-		player.obtenirProtocoleJoueur().getObjControleurJeu().obtenirGestionnaireTemps().schedule(bTask, delay);
-		
-		return bTask;
-
-	}
 	
-	// if VitualPlayer use the Banana
-	public static BananaVirtualTask utiliserBanane(JoueurVirtuel player, long delay)
-	{
-
-		//first cancel the Brainiac
-		player.obtenirPartieCourante().getBrainiacState().setOffBrainiac();
-
-		// Create TimerTask and Timer.
-		BananaVirtualTask bTask = new BananaVirtualTask(player);
-		Timer bTimer = new Timer();
-
-		// effects of Banana
-		player.obtenirPartieCourante().getBananaState().setisUnderBananaEffects(true);
-
-		// used timer to take out effects of banana after the needed time
-		bTimer.schedule(bTask, delay);
-		return bTask;
-
-	}*/
 }// end class

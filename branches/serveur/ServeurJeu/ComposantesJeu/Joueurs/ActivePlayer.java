@@ -7,9 +7,9 @@ package ServeurJeu.ComposantesJeu.Joueurs;
  */
 public interface ActivePlayer {
 	
-	public abstract void setOnBanana();
-	public abstract void setOffBanana();
-	public abstract void setOffBrainiac();
-	public abstract void setOnBrainiac();
+	void setOnBanana();
+	void setOffBanana();
+	void setOffBrainiac();
+	void setOnBrainiac();
 
 }

@@ -139,7 +139,7 @@ public class VerificateurConnexions implements Runnable
 						objLogger.info(" No reponse - protocol canceled in VerificateurConnexions - " + protocole.obtenirAdresseIP());
 
 						protocole.setBolStopThread(true);
-						this.objGestionnaireCommunication.supprimerProtocoleJoueur(protocole);
+						objGestionnaireCommunication.supprimerProtocoleJoueur(protocole);
 
 
 					}	
