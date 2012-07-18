@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
-import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.BD.GestionnaireBDControleur;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Cases.Case;
@@ -76,20 +75,20 @@ public abstract class GenerateurPartie
 	protected GenerateurPartie() {
 		super();
 		//this.objRandom = 
-		this.lstPointsCasesPresentes = new LinkedList<Point>();
-		this.lstPointsCasesSpeciales = new LinkedList<Point>();
-		this.lstPointsCasesCouleur = new LinkedList<Point>();
-		this.lstPointsMagasins = new LinkedList<Point>();
-		this.lstPointsPieces = new LinkedList<Point>();
-		this.lstPointsObjetsUtilisables = new LinkedList<Point>();
-		//this.intCompteurCases = 0;
-		this.intCompteurIdObjet = 1;
-		this.objCaseParcourue = new CaseCouleur(1);
-		//this.reglesPartie = null;//salle.getRegles();
-		//this.objGestionnaireBD = null;//salle.getObjControleurJeu().obtenirGestionnaireBD();
-		//this.objSalle = null;//salle;
-		//this.intNbColumns = 0;
-		//this.intNbLines = 0;
+		lstPointsCasesPresentes = new LinkedList<Point>();
+		lstPointsCasesSpeciales = new LinkedList<Point>();
+		lstPointsCasesCouleur = new LinkedList<Point>();
+		lstPointsMagasins = new LinkedList<Point>();
+		lstPointsPieces = new LinkedList<Point>();
+		lstPointsObjetsUtilisables = new LinkedList<Point>();
+		intCompteurCases = 0;
+		intCompteurIdObjet = 1;
+		objCaseParcourue = new CaseCouleur(1);
+		reglesPartie = null;
+		objGestionnaireBD = null;//salle.getObjControleurJeu().obtenirGestionnaireBD();
+		objSalle = null;
+		intNbColumns = 0;
+		intNbLines = 0;
 		
 	}
 

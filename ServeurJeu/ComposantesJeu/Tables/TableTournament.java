@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
+
 import Enumerations.GameType;
 import Enumerations.RetourFonctions.ResultatDemarrerPartie;
 import ServeurJeu.ComposantesJeu.Salle;
@@ -26,14 +28,14 @@ import ServeurJeu.Temps.Minuterie;
  */
 public class TableTournament extends Table {
 
-	protected HashMap<String, JoueurHumain> lstDiffusion;
+	protected ConcurrentHashMap<String, JoueurHumain> lstDiffusion;
 	public TableTournament(Salle salleParente, int noTable,
 			JoueurHumain joueur, int tempsPartie, String name, int intNbLines,
 			int intNbColumns, GameType gamesType) {
 		super(salleParente, noTable, joueur, tempsPartie, name, intNbLines,
 				intNbColumns, gamesType);
 
-		lstDiffusion = new HashMap<String, JoueurHumain>();
+		lstDiffusion = new ConcurrentHashMap<String, JoueurHumain>();
 
 	}
 
@@ -51,11 +53,6 @@ public class TableTournament extends Table {
 		gameFactory.setNbColumns(intNbColumns);
 
 	}
-
-
-
-
-
 
 	/**
 	 * Cette méthode permet au joueur passé en paramètres de démarrer la partie.
@@ -76,39 +73,35 @@ public class TableTournament extends Table {
 		// attente ou non
 		ResultatDemarrerPartie resultatDemarrerPartie;
 
-		// Empêcher d'autres thread de toucher à la liste des joueurs en attente
-		// de cette table pendant que le joueur tente de démarrer la partie
-		synchronized (lstJoueursEnAttente) {
-			// Si une partie est en cours alors on va retourner PartieEnCours
-			if (bolEstCommencee == true) {
-				resultatDemarrerPartie = ResultatDemarrerPartie.PartieEnCours;
-			} // Sinon si le joueur est déjà en attente, alors on va retourner
-			// DejaEnAttente
-			else if (lstJoueursEnAttente.containsKey(joueur.obtenirNom())) {
-				resultatDemarrerPartie = ResultatDemarrerPartie.DejaEnAttente;
-			} else {
-				// La commande s'est effectuée avec succès
-				resultatDemarrerPartie = ResultatDemarrerPartie.Succes;
+		// Si une partie est en cours alors on va retourner PartieEnCours
+		if (bolEstCommencee == true) {
+			resultatDemarrerPartie = ResultatDemarrerPartie.PartieEnCours;
+		} // Sinon si le joueur est déjà en attente, alors on va retourner
+		// DejaEnAttente
+		else if (lstJoueursEnAttente.containsKey(joueur.obtenirNom())) {
+			resultatDemarrerPartie = ResultatDemarrerPartie.DejaEnAttente;
+		} else {
+			// La commande s'est effectuée avec succès
+			resultatDemarrerPartie = ResultatDemarrerPartie.Succes;
 
-				putInWaitingList(joueur, idDessin);
+			putInWaitingList(joueur, idDessin);
 
-				// Si on doit générer le numéro de commande de retour, alors
-				// on le génére, sinon on ne fait rien (ça se peut que ce soit
-				// faux)
-				if (doitGenererNoCommandeRetour == true) {
-					// Générer un nouveau numéro de commande qui sera
-					// retourné au client
-					joueur.obtenirProtocoleJoueur().genererNumeroReponse();
-				}
-
-				// Si le nombre de joueurs en attente est maintenant le nombre
-				// de joueurs que ça prend pour joueur au jeu, alors on lance
-				// un événement qui indique que la partie est commencée
-				if (lstJoueursEnAttente.size() == MAX_NB_PLAYERS) {
-					laPartieCommence("Aucun");
-				}
+			// Si on doit générer le numéro de commande de retour, alors
+			// on le génére, sinon on ne fait rien (ça se peut que ce soit
+			// faux)
+			if (doitGenererNoCommandeRetour == true) {
+				// Générer un nouveau numéro de commande qui sera
+				// retourné au client
+				joueur.obtenirProtocoleJoueur().genererNumeroReponse();
 			}
-		}
+
+			// Si le nombre de joueurs en attente est maintenant le nombre
+			// de joueurs que ça prend pour joueur au jeu, alors on lance
+			// un événement qui indique que la partie est commencée
+			if (lstJoueursEnAttente.size() == MAX_NB_PLAYERS) {
+				laPartieCommence("Aucun");
+			}
+		}		
 		return resultatDemarrerPartie;
 	}
 
@@ -129,21 +122,13 @@ public class TableTournament extends Table {
 			joueur.obtenirPartieCourante().setIdDessin(idDessin);
 			joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
 
-			// Empêcher d'autres thread de toucher à la liste des joueurs de
-			// cette table pendant qu'on parcourt tous les joueurs de la table
-			// pour leur envoyer un événement
-			synchronized (lstJoueurs) {
-				// Préparer l'événement de joueur en attente.
-				// Cette fonction va passer les joueurs et créer un
-				// InformationDestination pour chacun et ajouter l'événement
-				// dans la file de gestion d'événements
-				preparerEvenementJoueurDemarrePartie(joueur, idPersonnage);
-			}
+			// Préparer l'événement de joueur en attente.
+			// Cette fonction va passer les joueurs et créer un
+			// InformationDestination pour chacun et ajouter l'événement
+			// dans la file de gestion d'événements
+			preparerEvenementJoueurDemarrePartie(joueur, idPersonnage);			
 		}
 	}
-
-
-
 
 
 	/**
@@ -223,7 +208,7 @@ public class TableTournament extends Table {
 				preparerEvenementJoueurRejoindrePartie(joueur);
 			}			
 		}		
-		
+
 		// Si on doit générer le numéro de commande de retour, alors
 		// on le génére, sinon on ne fait rien (ça se peut que ce soit
 		// faux)
@@ -233,7 +218,7 @@ public class TableTournament extends Table {
 			joueur.obtenirProtocoleJoueur().genererNumeroReponse();
 
 		}
-		
+
 		synchronized (lstJoueursDeconnectes) {
 			lstJoueursDeconnectes.remove(joueur);
 		}    
@@ -375,47 +360,47 @@ public class TableTournament extends Table {
 				TreeSet<StatisticsPlayer> ourResults = new TreeSet<StatisticsPlayer>();
 
 
-				synchronized (lstJoueurs) {
-					// Parcours des joueurs pour trouver le meilleur pointage
-					int cleJoueurGagnant = 0; //0 veut dire un joueur virtuel gagne.
-					for (JoueurHumain objJoueurHumain: lstJoueurs.values()) {
-						InformationPartieHumain infoPartie = objJoueurHumain.obtenirPartieCourante();
-						if (infoPartie.obtenirPointage() > meilleurPointage) {
-							meilleurPointage = infoPartie.obtenirPointage();
-						}
 
-						ourResults.add(new StatisticsPlayer(objJoueurHumain.obtenirNom(), infoPartie.obtenirPointage(), infoPartie.getPointsFinalTime()));
+				// Parcours des joueurs pour trouver le meilleur pointage
+				int cleJoueurGagnant = 0; //0 veut dire un joueur virtuel gagne.
+				for (JoueurHumain objJoueurHumain: lstJoueurs.values()) {
+					InformationPartieHumain infoPartie = objJoueurHumain.obtenirPartieCourante();
+					if (infoPartie.obtenirPointage() > meilleurPointage) {
+						meilleurPointage = infoPartie.obtenirPointage();
+					}
 
-						if (!joueurGagnant.equals("")) {
-							if (objJoueurHumain.obtenirNom().equalsIgnoreCase(joueurGagnant))
-								cleJoueurGagnant = objJoueurHumain.obtenirCleJoueur();
-						}
-						else if (ourResults.last().getUsername().equalsIgnoreCase(objJoueurHumain.obtenirNom()))
+					ourResults.add(new StatisticsPlayer(objJoueurHumain.obtenirNom(), infoPartie.obtenirPointage(), infoPartie.getPointsFinalTime()));
+
+					if (!joueurGagnant.equals("")) {
+						if (objJoueurHumain.obtenirNom().equalsIgnoreCase(joueurGagnant))
 							cleJoueurGagnant = objJoueurHumain.obtenirCleJoueur();
-
 					}
+					else if (ourResults.last().getUsername().equalsIgnoreCase(objJoueurHumain.obtenirNom()))
+						cleJoueurGagnant = objJoueurHumain.obtenirCleJoueur();
 
-					// Ajouter la partie dans la BD
-					int clePartie = objGestionnaireBD.ajouterInfosPartieTerminee(
-							objSalle.getRoomId(), gameType, objDateDebutPartie, intTempsTotal, cleJoueurGagnant);
+				}
 
-					preparerEvenementPartieTerminee(ourResults, joueurGagnant);
+				// Ajouter la partie dans la BD
+				int clePartie = objGestionnaireBD.ajouterInfosPartieTerminee(
+						objSalle.getRoomId(), gameType, objDateDebutPartie, intTempsTotal, cleJoueurGagnant);
 
-					// Parcours des joueurs pour mise à jour de la BD et
-					// pour ajouter les infos de la partie complétée
-					for (JoueurHumain joueur: lstJoueurs.values()) {
-						joueur.obtenirPartieCourante().getObjGestionnaireBD().mettreAJourJoueur(intTempsTotal);
-						// if the game was with the permission to use user's money from DB
-						if (joueur.obtenirPartieCourante().obtenirTable().getRegles().isBolMoneyPermit()) {
-							joueur.obtenirPartieCourante().getObjGestionnaireBD().setNewPlayersMoney();
-						}
-						boolean estGagnant = (joueur.obtenirCleJoueur() == cleJoueurGagnant);
-						objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur, estGagnant);
-						//if(joueur.getRole() > 1)
-							//joueur.obtenirPartieCourante().writeInfo();
+				preparerEvenementPartieTerminee(ourResults, joueurGagnant);
 
+				// Parcours des joueurs pour mise à jour de la BD et
+				// pour ajouter les infos de la partie complétée
+				for (JoueurHumain joueur: lstJoueurs.values()) {
+					joueur.obtenirPartieCourante().getObjGestionnaireBD().mettreAJourJoueur(intTempsTotal);
+					// if the game was with the permission to use user's money from DB
+					if (joueur.obtenirPartieCourante().obtenirTable().getRegles().isBolMoneyPermit()) {
+						joueur.obtenirPartieCourante().getObjGestionnaireBD().setNewPlayersMoney();
 					}
-				} //// end sinchro
+					boolean estGagnant = (joueur.obtenirCleJoueur() == cleJoueurGagnant);
+					objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur, estGagnant);
+					//if(joueur.getRole() > 1)
+					//joueur.obtenirPartieCourante().writeInfo();
+
+				}
+
 			}
 
 			// wipeout players from the table
@@ -428,13 +413,14 @@ public class TableTournament extends Table {
 			// Enlever les joueurs déconnectés de cette table de la
 			// liste des joueurs déconnectés du serveur pour éviter
 			// qu'ils ne se reconnectent et tentent de rejoindre une partie terminée
-			for (int i = 0; i < lstJoueursDeconnectes.size(); i++) {
-				objControleurJeu.enleverJoueurDeconnecte(lstJoueursDeconnectes.get(i));
+			for (String name : lstJoueursDeconnectes.keySet()) {
+				objControleurJeu.enleverJoueurDeconnecte(name);
 			}
 
 			// Enlever les joueurs déconnectés de cette table
-			lstJoueursDeconnectes = new LinkedList<String>();
-
+			lstJoueursDeconnectes.clear();
+			lstJoueursDeconnectes = new ConcurrentHashMap<String, JoueurHumain>();
+			
 			// Arrêter la partie
 			bolEstArretee = true;
 			//System.out.println("table - etape 1 " + lstJoueurs.size());
@@ -463,27 +449,21 @@ public class TableTournament extends Table {
 
 	protected void addPlayerInListe(JoueurHumain joueur)
 	{
-		//Empêcher d'autres thread de toucher à la liste des joueurs de
-		//cette table pendant l'ajout du nouveau joueur dans cette table
-		synchronized (lstJoueurs) {
-			// Ajouter ce nouveau joueur dans la liste des joueurs de cette table
-			lstJoueurs.put(joueur.obtenirNom(), joueur);
-			lstDiffusion.put(joueur.obtenirNom(), joueur);
-		}
+		// Ajouter ce nouveau joueur dans la liste des joueurs de cette table
+		lstJoueurs.put(joueur.obtenirNom(), joueur);
+		lstDiffusion.put(joueur.obtenirNom(), joueur);
 	}
 
 	protected void getOutPlayerFromListe(JoueurHumain player)
 	{
-		// Empêcher d'autres thread de toucher à la liste des joueurs de
-		// cette table pendant que le joueur quitte cette table
-		synchronized (lstJoueurs) {
-			// Enlever le joueur de la liste des joueurs de cette table
-			getBackOneIdPersonnage(player.obtenirPartieCourante().obtenirIdPersonnage());
-			lstJoueurs.remove(player.obtenirNom());
-			lstJoueursEnAttente.remove(player.obtenirNom());
-			lstDiffusion.remove(player.obtenirNom());
-			colors.add(player.obtenirPartieCourante().resetColor()); 
-		}
+
+		// Enlever le joueur de la liste des joueurs de cette table
+		getBackOneIdPersonnage(player.obtenirPartieCourante().obtenirIdPersonnage());
+		lstJoueurs.remove(player.obtenirNom());
+		lstJoueursEnAttente.remove(player.obtenirNom());
+		lstDiffusion.remove(player.obtenirNom());
+		colors.add(player.obtenirPartieCourante().resetColor()); 
+
 	}
 
 	/**
@@ -494,24 +474,20 @@ public class TableTournament extends Table {
 	protected void broadcastEvent(Evenement event, Joueur eventHero)
 	{
 
-		// Empêcher d'autres thread de toucher à la liste des joueurs de
-		// cette table pendant qu'on parcourt tous les joueurs de la table
-		// pour leur envoyer un événement
-		synchronized (lstJoueurs) {
-			// Passer tous les joueurs de la table et leur envoyer un événement
-			for (JoueurHumain objJoueur: lstDiffusion.values()) {
-				// Si le nom d'utilisateur du joueur courant n'est pas celui
-				// qui vient de démarrer la partie, alors on peut envoyer un
-				// événement à cet utilisateur
-				if (!objJoueur.obtenirNom().equals(eventHero.obtenirNom())) {
-					// Obtenir un numéro de commande pour le joueur courant, créer
-					// un InformationDestination et l'ajouter à l'événement
-					event.ajouterInformationDestination( new InformationDestination(
-							objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
-							objJoueur.obtenirProtocoleJoueur()));
-				}
+		// Passer tous les joueurs de la table et leur envoyer un événement
+		for (JoueurHumain objJoueur: lstDiffusion.values()) {
+			// Si le nom d'utilisateur du joueur courant n'est pas celui
+			// qui vient de démarrer la partie, alors on peut envoyer un
+			// événement à cet utilisateur
+			if (!objJoueur.obtenirNom().equals(eventHero.obtenirNom())) {
+				// Obtenir un numéro de commande pour le joueur courant, créer
+				// un InformationDestination et l'ajouter à l'événement
+				event.ajouterInformationDestination( new InformationDestination(
+						objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
+						objJoueur.obtenirProtocoleJoueur()));
 			}
 		}
+
 
 		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
 		objGestionnaireEvenements.ajouterEvenement(event);
@@ -523,20 +499,15 @@ public class TableTournament extends Table {
 	 */
 	protected void broadcastEvent(Evenement event)
 	{
-		// Empêcher d'autres thread de toucher à la liste des joueurs de
-		// cette table pendant qu'on parcourt tous les joueurs de la table
-		// pour leur envoyer un événement
-		synchronized (lstJoueurs) {
-			// Passer tous les joueurs de la table et leur envoyer un événement
 
-			for (JoueurHumain objJoueur: lstDiffusion.values()) {
-				// Obtenir un numéro de commande pour le joueur courant, créer
-				// un InformationDestination et l'ajouter à l'événement
-				event.ajouterInformationDestination( new InformationDestination(
-						objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
-						objJoueur.obtenirProtocoleJoueur()));
+		// Passer tous les joueurs de la table et leur envoyer un événement
 
-			}
+		for (JoueurHumain objJoueur: lstDiffusion.values()) {
+			// Obtenir un numéro de commande pour le joueur courant, créer
+			// un InformationDestination et l'ajouter à l'événement
+			event.ajouterInformationDestination( new InformationDestination(
+					objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
+					objJoueur.obtenirProtocoleJoueur()));
 
 		}
 
@@ -553,7 +524,7 @@ public class TableTournament extends Table {
 		}
 		return 0;		
 	}
-	
+
 	public void verifyStopCondition()
 	{
 		// if all the humains is on the finish line we stop the game

@@ -3,18 +3,16 @@ package ServeurJeu.ComposantesJeu.Tables;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 import ClassesUtilitaires.UtilitaireNombres;
 import Enumerations.GameType;
 import Enumerations.RetourFonctions.ResultatDemarrerPartie;
 import ServeurJeu.ControleurJeu;
-import ServeurJeu.BD.GestionnaireBD;
 import ServeurJeu.BD.GestionnaireBDControleur;
 import ServeurJeu.ComposantesJeu.Salle;
 import ServeurJeu.ComposantesJeu.Cases.Case;
@@ -79,15 +77,20 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	// cette table
 	protected final int intTempsTotal;
 	// Cet objet est une liste des joueurs qui sont présentement sur cette table
-	protected HashMap<String, JoueurHumain> lstJoueurs;
+	protected ConcurrentHashMap<String, JoueurHumain> lstJoueurs;
 	// Cet objet est une liste des joueurs qui attendent de joueur une partie
-	protected HashMap<String, JoueurHumain> lstJoueursEnAttente;
+	protected ConcurrentHashMap<String, JoueurHumain> lstJoueursEnAttente;
+	// Cette liste contient le nom des joueurs qui ont été déconnectés
+	// dans cette table, ce qui nous permettra, lorsqu'une partie se termine, de
+	// faire la mise à jour de la liste des joueurs déconnectés du gestionnaire
+	// de communication
+	protected ConcurrentHashMap<String, JoueurHumain> lstJoueursDeconnectes;
 	// Déclaration d'une variable qui va permettre de savoir si la partie est
 	// commencée ou non
-	protected boolean bolEstCommencee;
+	protected volatile boolean bolEstCommencee;
 	// Déclaration d'une variable qui va permettre d'arrêter la partie en laissant
 	// l'état de la partie à "commencée" tant que les joueurs sont à l'écran des pointages
-	protected boolean bolEstArretee;
+	protected volatile boolean bolEstArretee;
 	// Déclaration d'un tableau à 2 dimensions qui va contenir les informations
 	// sur les cases du jeu
 	protected Case[][] objttPlateauJeu;
@@ -98,15 +101,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	private ArrayList<JoueurVirtuel> lstJoueursVirtuels;
 	// Cette variable indique le nombre de joueurs virtuels sur la table
 	private int intNombreJoueursVirtuels;
-	// Cette liste contient le nom des joueurs qui ont été déconnectés
-	// dans cette table, ce qui nous permettra, lorsqu'une partie se termine, de
-	// faire la mise à jour de la liste des joueurs déconnectés du gestionnaire
-	// de communication
-	protected LinkedList<String> lstJoueursDeconnectes;
+	
 	protected Date objDateDebutPartie;
 	// Déclaration d'une variable qui permettra de créer des id pour les objets
 	// On va initialisé cette variable lorsque le plateau de jeu sera créé
-	protected Integer objProchainIdObjet;
+	protected volatile Integer objProchainIdObjet;
 	// Name of the table
 	private String tableName;
 
@@ -161,8 +160,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		intTempsTotal = tempsPartie;
 
 		// Créer une nouvelle liste de joueurs
-		lstJoueurs = new HashMap<String, JoueurHumain>();
-		lstJoueursEnAttente = new HashMap<String, JoueurHumain>();
+		lstJoueurs = new ConcurrentHashMap<String, JoueurHumain>();
+		lstJoueursEnAttente = new ConcurrentHashMap<String, JoueurHumain>();
 		master = joueur;
 
 		// Au départ, aucune partie ne se joue sur la table
@@ -176,11 +175,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Lorsque l'on démarrera une partie dans laPartieCommence(), on créera
 		// autant de joueurs virtuels que intNombreJoueursVirtuels (qui devra donc
 		// être affecté du bon nombre au préalable)
-		//intNombreJoueursVirtuels = 0;
-		//lstJoueursVirtuels = null;
+		intNombreJoueursVirtuels = 0;
+		lstJoueursVirtuels = null;
 
 		// Cette liste sera modifié si jamais un joueur est déconnecté
-		lstJoueursDeconnectes = new LinkedList<String>();
+		lstJoueursDeconnectes = new ConcurrentHashMap<String, JoueurHumain>();
 
 		// Créer un thread pour le GestionnaireEvenements
 		Thread threadEvenements = new Thread(objGestionnaireEvenements, "GestEven table ");
@@ -268,7 +267,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			joueur.obtenirProtocoleJoueur().genererNumeroReponse();
 		}
 
-
 		// Préparer l'événement de nouveau joueur dans la table.
 		// Cette fonction va passer les joueurs et créer un
 		// InformationDestination pour chacun et ajouter l'événement
@@ -280,12 +278,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 	protected void addPlayerInListe(JoueurHumain joueur)
 	{
-		//Empêcher d'autres thread de toucher à la liste des joueurs de
-		//cette table pendant l'ajout du nouveau joueur dans cette table
-		synchronized (lstJoueurs) {
-			// Ajouter ce nouveau joueur dans la liste des joueurs de cette table
-			lstJoueurs.put(joueur.obtenirNom(), joueur);
-		}
+		// Ajouter ce nouveau joueur dans la liste des joueurs de cette table
+		lstJoueurs.put(joueur.obtenirNom(), joueur);
 
 	}
 
@@ -348,15 +342,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 	protected void getOutPlayerFromListe(JoueurHumain player)
 	{
-		// Empêcher d'autres thread de toucher à la liste des joueurs de
-		// cette table pendant que le joueur quitte cette table
-		synchronized (lstJoueurs) {
-			// Enlever le joueur de la liste des joueurs de cette table
-			getBackOneIdPersonnage(player.obtenirPartieCourante().obtenirIdPersonnage());
-			lstJoueurs.remove(player.obtenirNom());
-			lstJoueursEnAttente.remove(player.obtenirNom());
-			colors.add(player.obtenirPartieCourante().resetColor());			
-		}
+		// Enlever le joueur de la liste des joueurs de cette table
+		getBackOneIdPersonnage(player.obtenirPartieCourante().obtenirIdPersonnage());
+		lstJoueurs.remove(player.obtenirNom());
+		lstJoueursEnAttente.remove(player.obtenirNom());
+		colors.add(player.obtenirPartieCourante().resetColor());		
 	}
 
 	/**
@@ -401,11 +391,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			}
 
 			preparerEvenementJoueurRejoindrePartie(joueur);
-
-
-			synchronized (lstJoueursDeconnectes) {
-				lstJoueursDeconnectes.remove(joueur);
-			}
+			lstJoueursDeconnectes.remove(joueur);			
 		}        
 	}
 
@@ -428,39 +414,36 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// attente ou non
 		ResultatDemarrerPartie resultatDemarrerPartie;
 
-		// Empêcher d'autres thread de toucher à la liste des joueurs en attente
-		// de cette table pendant que le joueur tente de démarrer la partie
-		synchronized (lstJoueursEnAttente) {
-			// Si une partie est en cours alors on va retourner PartieEnCours
-			if (bolEstCommencee == true) {
-				resultatDemarrerPartie = ResultatDemarrerPartie.PartieEnCours;
-			} // Sinon si le joueur est déjà en attente, alors on va retourner
-			// DejaEnAttente
-			else if (lstJoueursEnAttente.containsKey(joueur.obtenirNom())) {
-				resultatDemarrerPartie = ResultatDemarrerPartie.DejaEnAttente;
-			} else {
-				// La commande s'est effectuée avec succès
-				resultatDemarrerPartie = ResultatDemarrerPartie.Succes;
 
-				putInWaitingList(joueur, idDessin);
+		// Si une partie est en cours alors on va retourner PartieEnCours
+		if (bolEstCommencee == true) {
+			resultatDemarrerPartie = ResultatDemarrerPartie.PartieEnCours;
+		} // Sinon si le joueur est déjà en attente, alors on va retourner
+		// DejaEnAttente
+		else if (lstJoueursEnAttente.containsKey(joueur.obtenirNom())) {
+			resultatDemarrerPartie = ResultatDemarrerPartie.DejaEnAttente;
+		} else {
+			// La commande s'est effectuée avec succès
+			resultatDemarrerPartie = ResultatDemarrerPartie.Succes;
 
-				// Si on doit générer le numéro de commande de retour, alors
-				// on le génére, sinon on ne fait rien (ça se peut que ce soit
-				// faux)
-				if (doitGenererNoCommandeRetour == true) {
-					// Générer un nouveau numéro de commande qui sera
-					// retourné au client
-					joueur.obtenirProtocoleJoueur().genererNumeroReponse();
-				}
+			putInWaitingList(joueur, idDessin);
 
-				// Si le nombre de joueurs en attente est maintenant le nombre
-				// de joueurs que ça prend pour joueur au jeu, alors on lance
-				// un événement qui indique que la partie est commencée
-				if (lstJoueursEnAttente.size() == MAX_NB_PLAYERS) {
-					laPartieCommence("Aucun");
-				}
+			// Si on doit générer le numéro de commande de retour, alors
+			// on le génére, sinon on ne fait rien (ça se peut que ce soit
+			// faux)
+			if (doitGenererNoCommandeRetour == true) {
+				// Générer un nouveau numéro de commande qui sera
+				// retourné au client
+				joueur.obtenirProtocoleJoueur().genererNumeroReponse();
 			}
-		}		
+
+			// Si le nombre de joueurs en attente est maintenant le nombre
+			// de joueurs que ça prend pour joueur au jeu, alors on lance
+			// un événement qui indique que la partie est commencée
+			if (lstJoueursEnAttente.size() == MAX_NB_PLAYERS) {
+				laPartieCommence("Aucun");
+			}
+		}				
 		return resultatDemarrerPartie;
 	}
 
@@ -480,16 +463,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		joueur.obtenirPartieCourante().setIdDessin(idDessin);
 		joueur.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
 
-		// Empêcher d'autres thread de toucher à la liste des joueurs de
-		// cette table pendant qu'on parcourt tous les joueurs de la table
-		// pour leur envoyer un événement
-		synchronized (lstJoueurs) {
-			// Préparer l'événement de joueur en attente.
-			// Cette fonction va passer les joueurs et créer un
-			// InformationDestination pour chacun et ajouter l'événement
-			// dans la file de gestion d'événements
-			preparerEvenementJoueurDemarrePartie(joueur, idPersonnage);
-		}
+
+		// Préparer l'événement de joueur en attente.
+		// Cette fonction va passer les joueurs et créer un
+		// InformationDestination pour chacun et ajouter l'événement
+		// dans la file de gestion d'événements
+		preparerEvenementJoueurDemarrePartie(joueur, idPersonnage);		
 	}
 
 
@@ -533,13 +512,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 */
 	public void setNewPicture(JoueurHumain humainPlayer, int idDessin) {
 		int idPersonnage = this.getOneIdPersonnage(idDessin);
-
-		//System.out.println("idPersonnage demarrePartie : " + idPersonnage);
-
+		
 		// Garder en mémoire le Id du personnage choisi par le joueur et son dessin
 		humainPlayer.obtenirPartieCourante().setIdDessin(idDessin);
 		humainPlayer.obtenirPartieCourante().definirIdPersonnage(idPersonnage);
-		
+
 		// Préparer l'événement de joueur en attente.
 		// Cette fonction va passer les joueurs et créer un
 		// InformationDestination pour chacun et ajouter l'événement
@@ -561,31 +538,30 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// fait OK, la partie démarrera
 
 		ResultatDemarrerPartie resultatDemarrerPartie;
-		synchronized (lstJoueursEnAttente) {
-			// Si une partie est en cours alors on va retourner PartieEnCours
-			if (bolEstCommencee == true) {
-				resultatDemarrerPartie = ResultatDemarrerPartie.PartieEnCours;
-			} //TODO si joueur pas en attente?????
-			else {
-				// La commande s'est effectuée avec succès
-				resultatDemarrerPartie = ResultatDemarrerPartie.Succes;
 
-				// Si on doit générer le numéro de commande de retour, alors
-				// on le génère, sinon on ne fait rien (ça se peut que ce soit
-				// faux)
-				if (doitGenererNoCommandeRetour == true) {
-					// Générer un nouveau numéro de commande qui sera
-					// retourné au client
-					joueur.obtenirProtocoleJoueur().genererNumeroReponse();
-				}
+		// Si une partie est en cours alors on va retourner PartieEnCours
+		if (bolEstCommencee == true) {
+			resultatDemarrerPartie = ResultatDemarrerPartie.PartieEnCours;
+		} //TODO si joueur pas en attente?????
+		else {
+			// La commande s'est effectuée avec succès
+			resultatDemarrerPartie = ResultatDemarrerPartie.Succes;
 
-				// Si le nombre de joueurs en attente est maintenant le nombre
-				// de joueurs que ça prend pour joueur au jeu, alors on lance
-				// un événement qui indique que la partie est commencée
-
-				laPartieCommence(strParamJoueurVirtuel);
-
+			// Si on doit générer le numéro de commande de retour, alors
+			// on le génère, sinon on ne fait rien (ça se peut que ce soit
+			// faux)
+			if (doitGenererNoCommandeRetour == true) {
+				// Générer un nouveau numéro de commande qui sera
+				// retourné au client
+				joueur.obtenirProtocoleJoueur().genererNumeroReponse();
 			}
+
+			// Si le nombre de joueurs en attente est maintenant le nombre
+			// de joueurs que ça prend pour joueur au jeu, alors on lance
+			// un événement qui indique que la partie est commencée
+
+			laPartieCommence(strParamJoueurVirtuel);
+
 		}
 		return resultatDemarrerPartie;
 	}
@@ -819,14 +795,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				objJoueurVirtuel.obtenirPartieCourante().setClothesColor(this.getOneColor());
 				objJoueurVirtuel.obtenirPartieCourante().setIdDessin(IDdess);
 
-				synchronized (lstJoueursVirtuels) {
 
-					// Préparer l'événement de joueur en attente.
-					// Cette fonction va passer les joueurs et créer un
-					// InformationDestination pour chacun et ajouter l'événement
-					// dans la file de gestion d'événements
-					preparerEvenementJoueurEntreTable(objJoueurVirtuel);					
-				}
+				// Préparer l'événement de joueur en attente.
+				// Cette fonction va passer les joueurs et créer un
+				// InformationDestination pour chacun et ajouter l'événement
+				// dans la file de gestion d'événements
+				preparerEvenementJoueurEntreTable(objJoueurVirtuel);					
+
 
 				// Pour le prochain joueur virtuel
 				intIdPersonnage++;
@@ -851,17 +826,17 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		if (intNombreJoueursVirtuels > 0) {
 			// separate to proper hold virtiel's creation
 			// we don't have command number for events ... maybe to do
-			synchronized (lstJoueursVirtuels) {
-				for (int i = 0; i < lstJoueursVirtuels.size(); i++) {
-					// Préparer l'événement de joueur en attente.
-					// Cette fonction va passer les joueurs et créer un
-					// InformationDestination pour chacun et ajouter l'événement
-					// dans la file de gestion d'événements
-					JoueurVirtuel objJoueurVirtuel = lstJoueursVirtuels.get(i);
-					//preparerEvenementJoueurEntreTable(objJoueurVirtuel);
-					preparerEvenementJoueurDemarrePartie(objJoueurVirtuel, objJoueurVirtuel.obtenirPartieCourante().obtenirIdPersonnage());
-				}
-			}			
+
+			for (int i = 0; i < lstJoueursVirtuels.size(); i++) {
+				// Préparer l'événement de joueur en attente.
+				// Cette fonction va passer les joueurs et créer un
+				// InformationDestination pour chacun et ajouter l'événement
+				// dans la file de gestion d'événements
+				JoueurVirtuel objJoueurVirtuel = lstJoueursVirtuels.get(i);
+				//preparerEvenementJoueurEntreTable(objJoueurVirtuel);
+				preparerEvenementJoueurDemarrePartie(objJoueurVirtuel, objJoueurVirtuel.obtenirPartieCourante().obtenirIdPersonnage());
+			}
+
 		}
 
 
@@ -932,47 +907,47 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					}
 				}
 
-				synchronized (lstJoueurs) {
-					// Parcours des joueurs pour trouver le meilleur pointage
-					int cleJoueurGagnant = 0; //0 veut dire un joueur virtuel gagne.
-					for (JoueurHumain objJoueurHumain: lstJoueurs.values()) {
-						InformationPartieHumain infoPartie = objJoueurHumain.obtenirPartieCourante();
-						if (infoPartie.obtenirPointage() > meilleurPointage) {
-							meilleurPointage = infoPartie.obtenirPointage();
-						}
 
-						ourResults.add(new StatisticsPlayer(objJoueurHumain.obtenirNom(), infoPartie.obtenirPointage(), infoPartie.getPointsFinalTime()));
+				// Parcours des joueurs pour trouver le meilleur pointage
+				int cleJoueurGagnant = 0; //0 veut dire un joueur virtuel gagne.
+				for (JoueurHumain objJoueurHumain: lstJoueurs.values()) {
+					InformationPartieHumain infoPartie = objJoueurHumain.obtenirPartieCourante();
+					if (infoPartie.obtenirPointage() > meilleurPointage) {
+						meilleurPointage = infoPartie.obtenirPointage();
+					}
 
-						if (!joueurGagnant.equals("")) {
-							if (objJoueurHumain.obtenirNom().equalsIgnoreCase(joueurGagnant))
-								cleJoueurGagnant = objJoueurHumain.obtenirCleJoueur();
-						}
-						else if (ourResults.last().getUsername().equalsIgnoreCase(objJoueurHumain.obtenirNom()))
+					ourResults.add(new StatisticsPlayer(objJoueurHumain.obtenirNom(), infoPartie.obtenirPointage(), infoPartie.getPointsFinalTime()));
+
+					if (!joueurGagnant.equals("")) {
+						if (objJoueurHumain.obtenirNom().equalsIgnoreCase(joueurGagnant))
 							cleJoueurGagnant = objJoueurHumain.obtenirCleJoueur();
-
 					}
+					else if (ourResults.last().getUsername().equalsIgnoreCase(objJoueurHumain.obtenirNom()))
+						cleJoueurGagnant = objJoueurHumain.obtenirCleJoueur();
 
-					// Ajouter la partie dans la BD
-					int clePartie = objGestionnaireBD.ajouterInfosPartieTerminee(
-							objSalle.getRoomId(), gameType, objDateDebutPartie, intTempsTotal, cleJoueurGagnant);
+				}
 
-					preparerEvenementPartieTerminee(ourResults, joueurGagnant);
+				// Ajouter la partie dans la BD
+				int clePartie = objGestionnaireBD.ajouterInfosPartieTerminee(
+						objSalle.getRoomId(), gameType, objDateDebutPartie, intTempsTotal, cleJoueurGagnant);
 
-					// Parcours des joueurs pour mise à jour de la BD et
-					// pour ajouter les infos de la partie complétée
-					for (JoueurHumain joueur: lstJoueurs.values()) {
-						joueur.obtenirPartieCourante().getObjGestionnaireBD().mettreAJourJoueur(intTempsTotal);
-						// if the game was with the permission to use user's money from DB
-						if (joueur.obtenirPartieCourante().obtenirTable().getRegles().isBolMoneyPermit()) {
-							joueur.obtenirPartieCourante().getObjGestionnaireBD().setNewPlayersMoney();
-						}
-						boolean estGagnant = (joueur.obtenirCleJoueur() == cleJoueurGagnant);
-						objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur, estGagnant);
-						//if(joueur.getRole() > 1)
-							//joueur.obtenirPartieCourante().writeInfo();
+				preparerEvenementPartieTerminee(ourResults, joueurGagnant);
 
+				// Parcours des joueurs pour mise à jour de la BD et
+				// pour ajouter les infos de la partie complétée
+				for (JoueurHumain joueur: lstJoueurs.values()) {
+					joueur.obtenirPartieCourante().getObjGestionnaireBD().mettreAJourJoueur(intTempsTotal);
+					// if the game was with the permission to use user's money from DB
+					if (joueur.obtenirPartieCourante().obtenirTable().getRegles().isBolMoneyPermit()) {
+						joueur.obtenirPartieCourante().getObjGestionnaireBD().setNewPlayersMoney();
 					}
-				} //// end sinchro
+					boolean estGagnant = (joueur.obtenirCleJoueur() == cleJoueurGagnant);
+					objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur, estGagnant);
+					//if(joueur.getRole() > 1)
+					//joueur.obtenirPartieCourante().writeInfo();
+
+				}
+
 			}
 			if (intNombreJoueursVirtuels > 0) {
 				synchronized(lstJoueursVirtuels){
@@ -996,12 +971,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			// Enlever les joueurs déconnectés de cette table de la
 			// liste des joueurs déconnectés du serveur pour éviter
 			// qu'ils ne se reconnectent et tentent de rejoindre une partie terminée
-			for (int i = 0; i < lstJoueursDeconnectes.size(); i++) {
-				objControleurJeu.enleverJoueurDeconnecte(lstJoueursDeconnectes.get(i));
+			for (String name : lstJoueursDeconnectes.keySet()) {
+				objControleurJeu.enleverJoueurDeconnecte(name);
 			}
 
 			// Enlever les joueurs déconnectés de cette table
-			lstJoueursDeconnectes = new LinkedList<String>();
+			lstJoueursDeconnectes.clear();
+			lstJoueursDeconnectes = new ConcurrentHashMap<String, JoueurHumain>();
 
 			// Arrêter la partie
 			bolEstArretee = true;
@@ -1041,26 +1017,24 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		boolean isAllPlayers = true;
 		int tracks = getRegles().getNbTracks();
 
-		synchronized (lstJoueurs) {
-			// Pass all players to find their position
-			for (JoueurHumain objJoueurHumain: lstJoueurs.values()) {
-				Point pozJoueur = objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur();
-				Point objPoint = new Point(gameFactory.getNbLines() - 1, gameFactory.getNbColumns() - 1);
-				Point objPointFinish = new Point();
-				boolean isOn = false;
-				for (int i = 0; i < tracks; i++) {
-					objPointFinish.setLocation(objPoint.x, objPoint.y - i);
-					if (pozJoueur.equals(objPointFinish)) {
-						isOn = true;
-					}
-				}
-				if (!isOn) {
-					isAllPlayers = false;
-				}
 
+		// Pass all players to find their position
+		for (JoueurHumain objJoueurHumain: lstJoueurs.values()) {
+			Point pozJoueur = objJoueurHumain.obtenirPartieCourante().obtenirPositionJoueur();
+			Point objPoint = new Point(gameFactory.getNbLines() - 1, gameFactory.getNbColumns() - 1);
+			Point objPointFinish = new Point();
+			boolean isOn = false;
+			for (int i = 0; i < tracks; i++) {
+				objPointFinish.setLocation(objPoint.x, objPoint.y - i);
+				if (pozJoueur.equals(objPointFinish)) {
+					isOn = true;
+				}
 			}
-		}
+			if (!isOn) {
+				isAllPlayers = false;
+			}
 
+		}		
 		return isAllPlayers;
 	}
 
@@ -1083,7 +1057,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  l'être par l'appelant de cette fonction tout dépendant
 	 * 				  du traitement qu'elle doit faire
 	 */
-	public HashMap<String, JoueurHumain> obtenirListeJoueurs() {
+	public ConcurrentHashMap<String, JoueurHumain> obtenirListeJoueurs() {
 		return lstJoueurs;
 	}
 
@@ -1098,7 +1072,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  l'être par l'appelant de cette fonction tout dépendant
 	 * 				  du traitement qu'elle doit faire
 	 */
-	public HashMap<String, JoueurHumain> obtenirListeJoueursEnAttente() {
+	public ConcurrentHashMap<String, JoueurHumain> obtenirListeJoueursEnAttente() {
 		return lstJoueursEnAttente;
 	}
 
@@ -1125,14 +1099,10 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * 				  vérification.
 	 */
 	public boolean estComplete() {
-		// Empêcher d'autres Thread de toucher à la liste des joueurs de cette
-		// table pendant qu'on fait la vérification (un TreeMap n'est pas
-		// synchronisé)
-		synchronized (lstJoueurs) {
-			// Si la taille de la liste de joueurs égale le nombre maximal de
-			// joueurs alors la table est complète, sinon elle ne l'est pas
-			return (lstJoueurs.size() == MAX_NB_PLAYERS);
-		}
+
+		// Si la taille de la liste de joueurs égale le nombre maximal de
+		// joueurs alors la table est complète, sinon elle ne l'est pas
+		return (lstJoueurs.size() == MAX_NB_PLAYERS);		
 	}
 
 	/**
@@ -1433,9 +1403,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	}
 
 	public void synchronise() {
-		synchronized (lstJoueurs) {
-			preparerEvenementSynchroniser();
-		}
+
+		preparerEvenementSynchroniser();
+
 	}
 
 	public int getObservateurSynchroniserId() {
@@ -1490,10 +1460,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * les informations pour ce joueur
 	 */
 	public void ajouterJoueurDeconnecte(JoueurHumain joueurHumain) {
-		lstJoueursDeconnectes.add(joueurHumain.obtenirNom());
+		lstJoueursDeconnectes.put(joueurHumain.obtenirNom(), joueurHumain);
 	}
 
-	public LinkedList<String> obtenirListeJoueursDeconnectes() {
+	
+	public ConcurrentHashMap<String, JoueurHumain> obtenirListeJoueursDeconnectes() {
 		return lstJoueursDeconnectes;
 	}
 
@@ -1509,16 +1480,14 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @return
 	 */
 	public Integer getAndIncrementNewIdObject() {
-		synchronized (objProchainIdObjet) {
 			this.objProchainIdObjet++;
 			return this.objProchainIdObjet - 1;
-		}
+		
 	}
 
 	public void setObjProchainIdObjet(Integer objProchainIdObjet) {
-		synchronized (this.objProchainIdObjet) {
-			this.objProchainIdObjet = objProchainIdObjet;
-		}
+		
+			this.objProchainIdObjet = objProchainIdObjet;		
 	}
 
 	/**
@@ -1530,14 +1499,13 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * la liste des joueurs en attente
 	 */
 	protected boolean idPersonnageEstLibre(int intID) {
-		synchronized (lstJoueurs) {
-			// Parcourir la liste des joueurs et vérifier si le id est libre
-			for (JoueurHumain objJoueurHumain: lstJoueurs.values()) {
-				if (objJoueurHumain.obtenirPartieCourante().obtenirIdPersonnage() == intID) {
-					return false;
-				}
+
+		// Parcourir la liste des joueurs et vérifier si le id est libre
+		for (JoueurHumain objJoueurHumain: lstJoueurs.values()) {
+			if (objJoueurHumain.obtenirPartieCourante().obtenirIdPersonnage() == intID) {
+				return false;
 			}
-		}
+		}		
 		// Si on se rend ici, on a parcouru tous les joueurs et on n'a pas
 		// trouvé ce id de personnage, donc le id est libre
 		return true;
@@ -1555,14 +1523,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @return
 	 */
 	public boolean idPersonnageEstLibreEnAttente(int intID) {
-		synchronized (lstJoueursEnAttente) {
-			// Parcourir la liste des joueurs et vérifier le id
-			for (JoueurHumain objJoueurHumain: lstJoueursEnAttente.values()) {
-				// Vérifier le id
-				if (objJoueurHumain.obtenirPartieCourante().obtenirIdPersonnage() == intID) {
-					// Déjà utilisé
-					return false;
-				}
+		// Parcourir la liste des joueurs et vérifier le id
+		for (JoueurHumain objJoueurHumain: lstJoueursEnAttente.values()) {
+			// Vérifier le id
+			if (objJoueurHumain.obtenirPartieCourante().obtenirIdPersonnage() == intID) {
+				// Déjà utilisé
+				return false;
 			}
 		}
 
@@ -1576,14 +1542,12 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 * @return Humain player
 	 */
 	public JoueurHumain obtenirJoueurHumainParSonNom(String username) {
-		synchronized (lstJoueurs) {
-			for (JoueurHumain j: lstJoueurs.values()) {
-				if (username.equals(j.obtenirNom())) {
-					return j;
-				}
+		for (JoueurHumain j: lstJoueurs.values()) {
+			if (username.equals(j.obtenirNom())) {
+				return j;
 			}
-			return null;
 		}
+		return null;		
 	}
 
 	/**
@@ -1698,10 +1662,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		// Empêcher d'autres thread de toucher à la liste des joueurs de
 		// cette table pendant l'ajout du nouveau joueur dans cette table
 
-		synchronized (lstJoueurs) {
-			// Ajouter ce nouveau joueur dans la liste des joueurs de cette table
-			lstJoueurs.put(joueur.obtenirNom(), joueur);
-		}
+		// Ajouter ce nouveau joueur dans la liste des joueurs de cette table
+		lstJoueurs.put(joueur.obtenirNom(), joueur);
 
 		// Le joueur est maintenant entré dans la table courante (il faut
 		// créer un objet InformationPartie qui va pointer sur la table
@@ -1812,22 +1774,18 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 */
 	protected void broadcastEvent(Evenement event, Joueur eventHero)
 	{
-		// Empêcher d'autres thread de toucher à la liste des joueurs de
-		// cette table pendant qu'on parcourt tous les joueurs de la table
-		// pour leur envoyer un événement
-		synchronized (lstJoueurs) {
-			// Passer tous les joueurs de la table et leur envoyer un événement
-			for (JoueurHumain objJoueur: lstJoueurs.values()) {
-				// Si le nom d'utilisateur du joueur courant n'est pas celui
-				// qui vient de démarrer la partie, alors on peut envoyer un
-				// événement à cet utilisateur
-				if (!objJoueur.obtenirNom().equals(eventHero.obtenirNom())) {
-					// Obtenir un numéro de commande pour le joueur courant, créer
-					// un InformationDestination et l'ajouter à l'événement
-					event.ajouterInformationDestination( new InformationDestination(
-							objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
-							objJoueur.obtenirProtocoleJoueur()));
-				}
+
+		// Passer tous les joueurs de la table et leur envoyer un événement
+		for (JoueurHumain objJoueur: lstJoueurs.values()) {
+			// Si le nom d'utilisateur du joueur courant n'est pas celui
+			// qui vient de démarrer la partie, alors on peut envoyer un
+			// événement à cet utilisateur
+			if (!objJoueur.obtenirNom().equals(eventHero.obtenirNom())) {
+				// Obtenir un numéro de commande pour le joueur courant, créer
+				// un InformationDestination et l'ajouter à l'événement
+				event.ajouterInformationDestination( new InformationDestination(
+						objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
+						objJoueur.obtenirProtocoleJoueur()));
 			}
 		}
 
@@ -1841,20 +1799,15 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 */
 	protected void broadcastEvent(Evenement event)
 	{
-		// Empêcher d'autres thread de toucher à la liste des joueurs de
-		// cette table pendant qu'on parcourt tous les joueurs de la table
-		// pour leur envoyer un événement
-		synchronized (lstJoueurs) {
-			// Passer tous les joueurs de la table et leur envoyer un événement
-			for (JoueurHumain objJoueur: lstJoueurs.values()) {
-				// Obtenir un numéro de commande pour le joueur courant, créer
-				// un InformationDestination et l'ajouter à l'événement
-				event.ajouterInformationDestination( new InformationDestination(
-						objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
-						objJoueur.obtenirProtocoleJoueur()));
-			}
-
+		// Passer tous les joueurs de la table et leur envoyer un événement
+		for (JoueurHumain objJoueur: lstJoueurs.values()) {
+			// Obtenir un numéro de commande pour le joueur courant, créer
+			// un InformationDestination et l'ajouter à l'événement
+			event.ajouterInformationDestination( new InformationDestination(
+					objJoueur.obtenirProtocoleJoueur().obtenirNumeroCommande(),
+					objJoueur.obtenirProtocoleJoueur()));
 		}
+
 
 		// Ajouter le nouvel événement créé dans la liste d'événements à traiter
 		objGestionnaireEvenements.ajouterEvenement(event);
@@ -1864,7 +1817,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	{
 		return 0;		
 	}
-	
+
 	public void verifyStopCondition()
 	{
 		// Do nothing in mathEnJeu type
