@@ -1,6 +1,12 @@
+/**
+ * Used to create XML file with list of questions and their properties
+ * for QuestionsViewer needs. 
+ * @author Oloieri Lilian
+ *
+ */
+
 import java.io.File;
 import java.io.IOException;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -14,14 +20,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-
-/**
- * Used to create XML file with list of questions and them properties
- * for QuestionsViewer needs. 
- * @author Oloieri Lilian
- *
- */
 
 public class XMLWriter {
 

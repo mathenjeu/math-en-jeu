@@ -42,9 +42,12 @@
 //           0.2  * Fix parser bug that did not require last %End tag.
 //                * Made a lookup table of allowable subjects->categories.
 
+import java.awt.Component;
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
+
+import javax.swing.JOptionPane;
 
 public class SmacParser implements SmacUI
 {
@@ -89,10 +92,6 @@ public class SmacParser implements SmacUI
 	//occurs again, the user will not be prompted again.
 	private Set<String> ignoreBadSource = new TreeSet<String>();
 	private final Map<Integer,String> rdiffToQdiffMap = new TreeMap<Integer,String>();
-
-	//When false, use Subject,Category parsing, when true use Keywords.  The keywords is a replacement for
-	//the (subject,category) pair which is no longer supported.
-	//private boolean legacyParsing = false;
 
 	//The output stream used to display feedback.
 	private OutputStream messageStream;
@@ -222,24 +221,87 @@ public class SmacParser implements SmacUI
 				orderedArguments.add(found);
 				continue;
 			}
-			String errorMessage = "Invalid argument for " + t.tagString + " tag.  Found: '" + currentArg + "' but must be one of: ";
-			for (String value : allowableValues)
-			{
-				errorMessage += value + " ";
-				if (translationsMap.get(value) != null)
-					for (String translatedValue : translationsMap.get(value))
-						errorMessage += translatedValue + " ";
+			else {
+				String errorMessage = " Invalid argument for " + t.tagString + " tag.  Found: '" + currentArg + "' but we don't have this one in our list \n";
+
+				for (String value : allowableValues)
+				{
+					errorMessage += value + " ";
+					if (translationsMap.get(value) != null)
+						for (String translatedValue : translationsMap.get(value))
+							errorMessage += translatedValue + " ";
+				}
+				throw new Exception(errorMessage.trim());			  
 			}
-			throw new Exception(errorMessage.trim());
 		}
 		t.argument = "";
 		for (String args : orderedArguments)
 			t.argument += args + ",";
-		t.argument = t.argument.substring(0,t.argument.length()-1);
+		t.argument = t.argument.substring(0,t.argument.length()-1);		
 	}
 
-	//The %Creator or %Translator tags take a person's name as argument.  Your options for
-	//the name format are:
+	//Parse the keywords
+	//NOTE:  if a value must be taken from a set of allowable values,
+	//       this method will update the tagline argument with the
+	//       English translation of the value.
+	private void validateKeywords(TagLine t, ArrayList<String> allowableValues) throws Exception
+	{
+		String arg = t.argument.trim();
+		if (arg.length() == 0)
+			throw new Exception("Tag %" + t.tagString + " requires an argument but none was specified.");
+
+		if (allowableValues == null)
+			return;
+
+		//If the argument is a (comma separated) list every item in the list
+		//is validated.
+		StringTokenizer argList = new StringTokenizer(t.argument, ",");
+
+		TreeSet<String> orderedArguments = new TreeSet<String>();
+		while (argList.hasMoreTokens())
+		{
+			String currentArg = argList.nextToken();
+			String found = null;
+			for (String value : allowableValues)
+			{
+				if (currentArg.equalsIgnoreCase(value))
+					found = value;
+				else if (translationsMap.get(value) != null)
+					for (String translatedValue : translationsMap.get(value))
+						if (currentArg.equalsIgnoreCase(translatedValue))
+						{
+							found = value;
+							break;
+						}
+				if (found != null) break;
+			}
+			if (found != null)
+			{
+				orderedArguments.add(found);
+				continue;
+			}
+			else {
+				String errorMessage = " Invalid argument for keyword tag.  Found: '" + currentArg + "' but we don't have this one in our list \n Give your version. ";
+
+				found = JOptionPane.showInputDialog((Component) this.ui, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+				if(found == null)
+					throw new Exception("Tag %" + t.tagString + " requires an argument but none was specified.");
+				orderedArguments.add(found);
+				this.ui.outputMessage("Tag : " + currentArg + " is ignored - used : " + found);
+			}
+		}
+		
+				
+		t.argument = "";
+		for (String args : orderedArguments)
+			t.argument += args + ",";
+		t.argument = t.argument.substring(0,t.argument.length()-1);
+		this.ui.outputMessage("Tag : " + t.argument);  
+	}
+
+
+	//The %Creator or %Translator tags take a person's name as argument.  
+	//Your options for the name format are:
 	//1) username
 	//2) Firstname Lastname
 	//3) Lastname, Firstname
@@ -637,13 +699,11 @@ public class SmacParser implements SmacUI
 	//valid.
 	public void parseFile(String filename, String charset) throws Exception
 	{
-		//int numQuestionParsed = 0;
 		Tag currentRegion = Tag.End;
 		Tag nextRegion = Tag.Begin;
 		int linenumber = 0;
 		BufferedReader file = null;
 		TagLine tagLine = null;
-		//TagLine categoryTagLine = null;
 		TagLine answerTagLine = null;
 		Map<Tag, String> questionInfo = new TreeMap<Tag, String>();
 		Set<Tag> unextractedTags = null;
@@ -661,12 +721,6 @@ public class SmacParser implements SmacUI
 				//outputMessage("TagLine: " + tagLine + "\n");
 				if (tagLine.tag == Tag.Begin)
 					questionInfo.put(Tag.COMMENT, "Question in file '" + filename + "' starting on line " + linenumber);
-				/*
-        if (!legacyParsing && (tagLine.tag == Tag.Subject || tagLine.tag == Tag.Category))
-          throw new Exception("The %" + tagLine.tag + " is no longer supported, try using the legacy parsing option");
-        if (legacyParsing && tagLine.tag == Tag.Keywords)
-          throw new Exception("The %Keywords tag is not supported when using the legacy parsing option");
-				 */
 
 				if (tagLine.tag == Tag.COMMENT || tagLine.tag == Tag.NONE)
 				{
@@ -733,7 +787,7 @@ public class SmacParser implements SmacUI
 							unextractedTags.add(t);
 						break;
 					case Keywords:
-						validateTagLine(tagLine, allowableValuesMap.get(Tag.Keywords.toString()));
+						validateKeywords(tagLine, allowableValuesMap.get(Tag.Keywords.toString()));
 						break;
 
 					case Rdifficulty: validateRdifficulty(tagLine); break;
@@ -1002,7 +1056,6 @@ public class SmacParser implements SmacUI
 		this.ui = this;
 		listAllExtractedTagArguments = tagListing;
 		pedantic = pedanticParsing;
-		///legacyParsing = legacy;
 		String configFilename = "smacparser.ini";
 		Properties config = new Properties();
 		InputStream conf = SmacParser.class.getResourceAsStream(configFilename);
@@ -1011,6 +1064,7 @@ public class SmacParser implements SmacUI
 		populateTagHandlingMaps(config);
 
 	}
+
 	public SmacParser(OutputStream s, boolean tagListing, boolean pedanticParsing, SmacUI smacui) throws Exception
 	{
 		this(s, tagListing, pedanticParsing);
@@ -1123,7 +1177,7 @@ public class SmacParser implements SmacUI
 	{
 		//Valid charset: "UTF-8","ISO-8859-1";
 		SmacParser parser = null;
-		String charset = "UTF-8";
+		String charset = "ISO-8859-1";
 		boolean recursive = false;
 		boolean tagListing = false;
 		boolean pedanticParsing = false;

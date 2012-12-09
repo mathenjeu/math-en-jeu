@@ -4,6 +4,10 @@ import java.awt.event.*;
 public class SmacOptionDialog extends JOptionPane implements ActionListener
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3144720063897006694L;
 	private int selection;
 
 	public SmacOptionDialog()

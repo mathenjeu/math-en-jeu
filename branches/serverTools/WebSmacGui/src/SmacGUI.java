@@ -125,7 +125,7 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
 
 		this.addWindowListener(this);
 		smacOptionDialog = new SmacOptionDialog(); //used for interaction with the user when exporting
-		this.setVisible(true); //here we go, here we go!
+		this.setVisible(true);
 
 		this.questionsWriter = new XMLWriter(this);
 	}
@@ -543,7 +543,7 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
 	//but none of the ones in 'bad patterns'.  Additionally files that do not end in .tex are ignored if the texOnly flag
 	//is true.  The depth variable is used to indicate how many levels below the 'root' dir to explore.
 	//Bad batterns have priority on good patterns meaning that if a file matches both a good and a bad pattern, it will NOT be reported.
-	private void getFileRecursively(Collection<String> files, File root, ArrayList<String> goodPatterns, ArrayList<String> badPatterns, int depth, boolean texOnly)
+	private void getFileRecursively(Collection<String> files, File root, ArrayList<String> goodPatterns, ArrayList<String> badPatterns, int depth)
 	{
 		if (depth == 0) return;
 		if (!root.isDirectory()) return;
@@ -553,7 +553,7 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
 		for (File f : root.listFiles())
 		{
 			if (f.isDirectory() && f.canRead() && f.canExecute())
-				getFileRecursively(files, f, goodPatterns, badPatterns, depth-1, texOnly);
+				getFileRecursively(files, f, goodPatterns, badPatterns, depth-1);
 			else if (texOnly && !f.getName().endsWith(".tex"))
 				continue;
 			else
@@ -698,8 +698,9 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
 		{
 			outputMessage(e.getMessage() + " ...exception to read latextomej.ini \n");
 		}
-		
-		try {
+
+		try 
+		{
 			ltmej = new LatexToMeJ(DB_INFO, TEX2SWF_INFO, this, alwaysUseFirstUser, overwriteFlashFiles, createZip);
 		} catch (Exception e1) {
 			outputMessage(e1.getMessage() + " ...exception to create ltmej instance... \n");
@@ -714,7 +715,7 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
 		outputMessage("Looking for " + goodPatternRegex + " -- ");
 		//Get the files to be parsed/exported.  When recursion is not required the recursionDepth is set to 0
 		//meaning only the file in the specified directory will be tested against the desired patterns.
-		getFileRecursively(filesToParse, root, goodPatternRegex, badPatternRegex, recursionDepth, texOnly);
+		getFileRecursively(filesToParse, root, goodPatternRegex, badPatternRegex, recursionDepth);
 		outputMessage("Found " + filesToParse.size() + " file(s) to parse\n");
 		SmacParser parser = null;
 		try
@@ -749,14 +750,13 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
 			}
 			catch (Exception e)
 			{
-				outputMessage(e.getMessage() +" error in parsing question.\n");
-				return;
+				outputMessage(e.getMessage() + " error in parsing question. Skipping this file... " + filename + "\n");
+				//return;
 			}
 		}
 
 		int numb = parser == null  ? 0 : parser.numParsed();
-		outputMessage("Done.  Parsed a total of " + numb + " questions.\n");
-		outputMessage("Validating translations\n");
+		outputMessage("Done.  Parsed a total of " + numb + " questions.\nValidating translations\n");
 		try
 		{
 			parser.validateTranslations();
@@ -771,7 +771,7 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
 
 		if (generateSWF)
 			createFlashFiles(parser);
-        		
+
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -781,7 +781,7 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
 	private void createFlashFiles(SmacParser parser) 
 	{		
 		outputMessage("Generating SWF for all questions\n");
-        
+
 		File file = new File(flashFolderName + "questions.xml");
 		if (!file.exists())
 		{      	 
@@ -790,11 +790,11 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
 		}else{
 			this.questionsWriter.getOldXml(flashFolderName); 
 		}
-		
+
 		int qid = 1;
 		Collection<Map<Tag, String>> allQuestions = parser.allParsedQuestions();
 		int numQuestions = allQuestions.size();
-		
+
 		if(exportToDB)
 		{
 			outputMessage("Create with adding questions to the DB.\n");
@@ -898,14 +898,14 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
 			outputMessage("\n");
 			outputMessage("Error in sql while exporting\n");
 			outputMessage(ex.getMessage() + "\n");
-			
+
 		}catch (Exception e)
 		{
 			outputMessage("\n");
 			outputMessage("Error while exporting\n");
 			outputMessage(e.getMessage() + "\n");
 		}
-		
+
 		return qid;
 	}
 
@@ -1009,7 +1009,7 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
 		if (autoScrollCheckBox.isSelected())
 			messageArea.setCaretPosition(messageArea.getDocument().getLength());
 	}
-	
+
 
 	public  String encodeQuestionNumber(int qid)
 	{
