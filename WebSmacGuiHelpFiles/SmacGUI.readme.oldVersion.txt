@@ -1,0 +1,39 @@
+To run the Smac GUI
+-------------------
+
+1) Use the 'new' tex2swf.sh script.  You'll have to specify the
+location of this new script in the GUI.  Older scripts may work but
+they may also not work (which is much more likely).  Make sure it is
+executable.
+
+2) java -jar SmacGUI.jar
+
+3) Using the GUI is, I hope, self-explanatory.
+   a) Visit the Parser,Export to DB and DB tab.  Set the parameters.
+   b) Go to Main tab
+   c) The 'Parse' button checks if the files are formatted properly
+   d) The 'Export' button adds the questions contained in those files
+      to the DB.  Note that the 'Export' button will start by parsing
+      and abort if the parsing fails.
+
+4) Some help on patterns in the 'Parser' tab.
+  Although you can use complex regular expression, all you need to
+  know is that 
+    a) the patterns perform SUBSTRING matching 
+    b) * means any substring
+    ex) SF*4*.tex would match both SFA84.tex and CaribooSF4_Section1.tex
+
+Optional:
+You may want to edit the file SmacGUI.jar/latextomej.ini to specify
+proper MySQL DB connection info.  This is not necessary because you 
+can provide that information through the GUI.
+
+One way to edit a file located in a .jar archive is to use emacs.
+You can pretend the .jar file is just a regular file and emacs will
+guide you through the rest.
+
+
+Also:
+It's possible you'll need to have a mysql-connector-java-X.X.X-bin.jar
+on your machine (and tell java where to find it).  There's one on my
+site just one directory up from this one.
