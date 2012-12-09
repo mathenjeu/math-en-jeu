@@ -33,7 +33,7 @@ public class XMLWriter {
  // Constructor
 	public XMLWriter(SmacUI ui)
 	{
-		//this.ui = ui;
+		this.ui = ui;
 	}
 	
 	/**
