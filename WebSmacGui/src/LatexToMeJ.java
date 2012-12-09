@@ -98,6 +98,7 @@ public class LatexToMeJ implements SmacUI
 	private final XMLWriter questionsWriter;
 	//As we go through the questions we build a set of confirmed users, this way we often avoid looking into the set of all DB users (which can be very large)
 	private final TreeMap<String,Integer> confirmedUsers;
+
 	public LatexToMeJ() throws Exception
 	{
 		this(null, new String[]{"./", "tmp/", "flash/", "tmp/", "questions"}, null, false, false, true);
@@ -166,7 +167,7 @@ public class LatexToMeJ implements SmacUI
 					"VendorError: " + sqle.getErrorCode() + "\n");
 		}
 	}
-	
+
 	private int executeUpdate(Statement stmt, String stSQL, String errorHint) throws Exception
 	{
 		try
@@ -564,7 +565,7 @@ public class LatexToMeJ implements SmacUI
 		if (flashFile.exists() && !overwriteFlashFiles)
 			throw new FlashException("File " + flashFolderName + feedbackShortFilename + ".swf" + " exists and overwrite is set to false, the Flash movie will not be created.");
 		//Build the .tex file from the %Ftext tag
-		PrintWriter fout = new PrintWriter(new BufferedWriter(new FileWriter(tex2swfTmpFolderName+feedbackShortFilename+".tex")));
+		PrintWriter fout = new PrintWriter(new BufferedWriter(new FileWriter(tex2swfTmpFolderName + feedbackShortFilename + ".tex")));
 		fout.println(LATEX_HEADER);
 		fout.println(question.get(Tag.Ftext));
 		fout.println(LATEX_FOOTER);
@@ -715,7 +716,7 @@ public class LatexToMeJ implements SmacUI
 		if (sourceString == null)
 			return 0;
 
-		//We have alread encountered this source, look up its id in the map.
+		//We have already encountered this source, look up its id in the map.
 		Integer source_id = sourceMap.get(sourceString);
 		if (source_id != null) return source_id;
 
@@ -783,13 +784,6 @@ public class LatexToMeJ implements SmacUI
 
 	private int getUserId(String userString, int language_id) throws Exception
 	{
-		Connection dbConnection = mysqlDataSource.getConnection();
-
-		PreparedStatement pstmtInsertUser = dbConnection.prepareStatement("INSERT INTO jos_users (name, username, email, password, usertype, gid, registerDate, lastvisitDate, activation, params) VALUES(?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-		PreparedStatement pstmtInsertJosCompro = dbConnection.prepareStatement("INSERT INTO jos_comprofiler (id, user_id, firstname, lastname, registeripaddr, cbactivation, acceptedterms, cb_gradelevel, cb_gender, cb_school)  VALUES(?,?,?,?,?,?,?,?,?,?)");
-		PreparedStatement pstmtInsertJosCor = dbConnection.prepareStatement("INSERT INTO jos_core_acl_aro (section_value, value, name) VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
-		PreparedStatement pstmtInsertJosCorMap = dbConnection.prepareStatement("INSERT INTO jos_core_acl_groups_aro_map (group_id, section_value, aro_id) VALUES(?,?,?)");
-
 		//First look in the set of confirmed user mappings
 		Integer user_id = confirmedUsers.get(userString);
 		if (user_id != null) return user_id;
@@ -797,6 +791,13 @@ public class LatexToMeJ implements SmacUI
 		//Next look in a much bigger set: The set of all users present in the DB when the GUI was initialized
 		ArrayList<Map.Entry<Integer,ArrayList<String>>> allMatchingDBUsers = findUser(userString);
 
+		Connection dbConnection = mysqlDataSource.getConnection();
+
+		PreparedStatement pstmtInsertUser = dbConnection.prepareStatement("INSERT INTO jos_users (name, username, email, password, usertype, gid, registerDate, lastvisitDate, activation, params) VALUES(?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement pstmtInsertJosCompro = dbConnection.prepareStatement("INSERT INTO jos_comprofiler (id, user_id, firstname, lastname, registeripaddr, cbactivation, acceptedterms, cb_gradelevel, cb_gender, cb_school)  VALUES(?,?,?,?,?,?,?,?,?,?)");
+		PreparedStatement pstmtInsertJosCor = dbConnection.prepareStatement("INSERT INTO jos_core_acl_aro (section_value, value, name) VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement pstmtInsertJosCorMap = dbConnection.prepareStatement("INSERT INTO jos_core_acl_groups_aro_map (group_id, section_value, aro_id) VALUES(?,?,?)");
+		
 		//The user still couldn't be identified, create a new one.  Add it to the DB _and_ the set of confirmed user mappings
 		if (allMatchingDBUsers.size() == 0)
 		{
@@ -851,7 +852,7 @@ public class LatexToMeJ implements SmacUI
 	public void insertInDB(Collection<Map<Tag, String>> allQuestions, boolean overwriteDBEntries) throws Exception
 	{   		
 		Connection dbConnection = mysqlDataSource.getConnection();
-		ui.outputMessage("\rProcessing questions - overweiteDBEntries : " + overwriteDBEntries);
+		ui.outputMessage("\rProcessing questions - overwriteDBEntries : " + overwriteDBEntries);
 
 		//PreparedStatments are build to avoid creating the same statments over and over for each question
 		PreparedStatement pstmtDeleteQuestion = dbConnection.prepareStatement("DELETE FROM question WHERE question_id=?");
@@ -1238,7 +1239,7 @@ public class LatexToMeJ implements SmacUI
 				"(question_id, language_id, question_latex, question_flash_file," + 
 				"feedback_latex, feedback_flash_file, is_valid, user_id, creation_date, last_modified, is_animated) " +
 		"VALUES(?,?,?,?,?,?,?,?,?,?,?)");
-		
+
 		PreparedStatement pstmtSelectAnswer = dbConnection.prepareStatement("SELECT answer_id FROM answer WHERE question_id=? && label=?");
 		PreparedStatement pstmtSelectAnswerByQuestionId = dbConnection.prepareStatement("SELECT answer_id FROM answer WHERE question_id=?");
 		PreparedStatement pstmtInsertAnswer = dbConnection.prepareStatement("INSERT INTO answer (question_id, is_right, label) VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
@@ -1246,7 +1247,7 @@ public class LatexToMeJ implements SmacUI
 		PreparedStatement pstmtDeleteAnswerInfo = dbConnection.prepareStatement("DELETE FROM answer_info WHERE question_id=? && language_id=?");
 		PreparedStatement pstmtInsertQuestionsKeywords = dbConnection.prepareStatement("INSERT INTO questions_keywords (question_id, keyword_id) VALUES(?,?)");
 		PreparedStatement pstmtInsertQuestionLevel = dbConnection.prepareStatement("INSERT INTO question_level (question_id, level_id, value) VALUES(?,?,?)");
-		
+
 		PreparedStatement pstmtInsertSource = dbConnection.prepareStatement("INSERT INTO source (name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
 		PreparedStatement pstmtSelectAllSources = dbConnection.prepareStatement("SELECT source_id, name FROM source ORDER BY name");
 		PreparedStatement pstmtInsertTitle = dbConnection.prepareStatement("INSERT INTO title (name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
@@ -1254,7 +1255,7 @@ public class LatexToMeJ implements SmacUI
 		PreparedStatement pstmtSelectQuestionWithoutSource = dbConnection.prepareStatement("SELECT question_id FROM question WHERE creator_id=? && label=? && title_id=?");
 		PreparedStatement pstmtSelectQuestionWithSource = dbConnection.prepareStatement("SELECT question_id FROM question WHERE source_id=? && title_id=? && label=? && creator_id=?");
 		PreparedStatement pstmtSelectQuestionInfo = dbConnection.prepareStatement("SELECT * FROM question_info WHERE question_id=? && language_id=?");
-		
+
 		ResultSet rs;		
 
 		int question_id = -1;
@@ -1281,7 +1282,7 @@ public class LatexToMeJ implements SmacUI
 			ArrayList<Integer> keywordIds = new ArrayList<Integer>();
 			for (String keyword : q.get(Tag.Keywords).split(","))
 				keywordIds.add(Integer.parseInt(getProperty("keyword_id." + keyword)));
-			
+
 			String question_flash_file_prefix = "Q-" + question_id + "-" + shortLanguage(language_id);
 			String feedback_flash_file_prefix = "Q-" + question_id + "-F-" + shortLanguage(language_id);
 
@@ -1326,10 +1327,10 @@ public class LatexToMeJ implements SmacUI
 
 				strSQL = "DELETE questions_keywords.* FROM questions_keywords WHERE question_id = " + question_id + ";";
 				executeUpdate(dbConnection.createStatement(), strSQL, "An SQL error occured when trying to get out a question from table questions_keywords.");
-				
+
 				strSQL = "DELETE question_level.* FROM question_level WHERE question_id = " + question_id + ";";
 				executeUpdate(dbConnection.createStatement(), strSQL, "An SQL error occured when trying to get out a question from table question_level.");
-				
+
 				strSQL = "DELETE answer.* FROM answer WHERE question_id = " + question_id + ";";
 				executeUpdate(dbConnection.createStatement(), strSQL, "An SQL error occured when trying to get out a question from table answer.");
 
@@ -1390,7 +1391,7 @@ public class LatexToMeJ implements SmacUI
 				executeUpdate(pstmtInsertQuestionWithId, "An SQL error occured when trying to add a question to the DB.");				
 			}
 
-			
+
 			if (!overwriteDBEntries)
 			{
 				//Create a new row in the 'question_info' table of the DB
@@ -1407,14 +1408,14 @@ public class LatexToMeJ implements SmacUI
 				pstmtReplaceQuestionInfo.setInt(11, 0);
 				executeUpdate(pstmtReplaceQuestionInfo, "An SQL error occured when trying to replace a question_info to the DB.");
 			}
-			
+
 			if (isTranslation)
 			{
 				pstmtDeleteAnswerInfo.setInt(1, question_id);
 				pstmtDeleteAnswerInfo.setInt(2, language_id);
 				executeUpdate(pstmtDeleteAnswerInfo, "An SQL error occured when trying to delete answer_info associate with question_id " + question_id + " and language_id " + language_id);
 			}
-			
+
 			int answer_id = -1;
 			//Create row(s) in the 'answer' and 'answer_info' table of the DB
 			switch(answer_type_id)
@@ -1545,9 +1546,9 @@ public class LatexToMeJ implements SmacUI
 		return question_id;
 
 	}// end method
-	
+
 	private void updateQuestion(int question_id, Connection dbConnection2)
 	{		
-	   	
+
 	}
 }
