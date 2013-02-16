@@ -27,7 +27,7 @@ public class ServerFrame extends JFrame {
 	      this.setLocation(200,200);
 	      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	      //this.setIconImage(serverIcon.jpeg);
-	      stateLabel = new JLabel("  Server is on  ", SwingConstants.CENTER);
+	      stateLabel = new JLabel("  Server est demarre  ", SwingConstants.CENTER);
 	      
 	      //made the panels with components
 	      this.construction();
@@ -46,16 +46,16 @@ public class ServerFrame extends JFrame {
 		  
 		  // add buttons
 		  JLabel nullLabel = new JLabel("");
-		  JButton onButton = new JButton("On");
-		  JButton offButton = new JButton("Off");
-		//  JButton resetButton = new JButton("Reset");
-		//  JButton exitButton = new JButton("Exit");
+		  JButton onButton = new JButton(Maitre.SETON);
+		  JButton offButton = new JButton(Maitre.SETOFF);
+		  JButton resetButton = new JButton(Maitre.RESET);
+		  JButton exitButton = new JButton(Maitre.EXIT);
 		  
 		  buttons.add(nullLabel);
 		  buttons.add(onButton);
 		  buttons.add(offButton);
-		//  buttons.add(resetButton);
-		//  buttons.add(exitButton);
+		  buttons.add(resetButton);
+		  buttons.add(exitButton);
 		  
 		  info.setPreferredSize(new Dimension(300,200));
 		  //info.setBackground(Color.blue);
@@ -72,11 +72,11 @@ public class ServerFrame extends JFrame {
 		  info.add(stateLabel);
 		  info.validate();
 		 		  
-		  ServerButtonsListener buttonsListener = new ServerButtonsListener(maitre, this);
+		  ServerButtonsListener buttonsListener = new ServerButtonsListener(this);
 		  onButton.addActionListener(buttonsListener);
 		  offButton.addActionListener(buttonsListener);
-		 // resetButton.addActionListener(buttonsListener);
-		 // exitButton.addActionListener(buttonsListener);
+		  resetButton.addActionListener(buttonsListener);
+		  exitButton.addActionListener(buttonsListener);
 		  
 		  this.getContentPane().add(buttons, BorderLayout.WEST);
 		  this.getContentPane().add(info, BorderLayout.EAST);
@@ -109,17 +109,26 @@ public class ServerFrame extends JFrame {
 	   }
 	   
 	   public void setLabelOn(){
-		   stateLabel.setText("  Server is On  ");
+		   //stateLabel.setText("  Server is On  ");
+		   stateLabel.setText("  Server demarrer!  ");
 		   stateLabel.setBackground(Color.GREEN);
 	   }
 	   
 	   public void setLabelTerminating(){
-		   stateLabel.setText("  Server is Terminating...  ");
+		   ///stateLabel.setText("  Server is Terminating...  ");
+		   stateLabel.setText("  Server va se fermer...  ");
 		   stateLabel.setBackground(Color.YELLOW);
 	   }
 	
 	   public void setLabelOff(){
-		   stateLabel.setText("  Server is Off  ");
+		   //stateLabel.setText("  Server is Off  ");
+		   stateLabel.setText("  Server fermer!  ");
 		   stateLabel.setBackground(Color.RED);
 	   }
+
+	public void sendMessageToServer(String actionCommand) {
+		// TODO Auto-generated method stub
+		maitre.treatCommand(actionCommand);		
+	}
+	
 }

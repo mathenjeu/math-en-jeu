@@ -220,6 +220,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 	}
 
+	/*
 	public void destruction() {
 		//System.out.println("table - wipeout the table - destruction");
 		arreterPartie("");
@@ -227,7 +228,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		//this.objGestionnaireEvenements = null;		
 		this.objGestionnaireBD = null;
 
-	}// end method
+	}// end method*/
 
 	/**
 	 * Cette fonction permet au joueur d'entrer dans la table courante.
@@ -871,30 +872,25 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 	}// end method
 
+	
+	
 	public void arreterPartie(String joueurGagnant) {
-
+		
+		TreeSet<StatisticsPlayer> ourResults = new TreeSet<StatisticsPlayer>();
+		
 		// bolEstArretee permet de savoir si cette fonction a déjà été appelée
 		// de plus, bolEstArretee et bolEstCommencee permettent de connaître
 		// l'état de la partie
-		if (bolEstArretee == false) {
+		if (bolEstArretee == false) {	
+			
 			objTacheSynchroniser.enleverObservateur(this);
-			try{
-				objControleurJeu.obtenirGestionnaireTemps().enleverTache(objMinuterie);
-			}catch (IllegalStateException ex){
-				objControleurJeu.setNewTimer();
-				objLogger.error("Une erreur est survenue: objControleurJeu.setNewTimer()");
-			}
-
-			// to discard Banana or Brainiac tasks
-			objGestionnaireTemps.stopIt();
 
 			// S'il y a au moins un joueur qui a complété la partie,
 			// alors on ajoute les informations de cette partie dans la BD
 			if (lstJoueurs.size() > 0) {
+								
 				// Sert à déterminer le meilleur score pour cette partie
-				int meilleurPointage = 0;
-
-				TreeSet<StatisticsPlayer> ourResults = new TreeSet<StatisticsPlayer>();
+				int meilleurPointage = 0;				
 
 				// Parcours des joueurs virtuels pour trouver le meilleur pointage
 				if (lstJoueursVirtuels != null) {
@@ -926,13 +922,25 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 						cleJoueurGagnant = objJoueurHumain.obtenirCleJoueur();
 
 				}
+				
+				preparerEvenementPartieTerminee(ourResults, joueurGagnant);
+
 
 				// Ajouter la partie dans la BD
 				int clePartie = objGestionnaireBD.ajouterInfosPartieTerminee(
 						objSalle.getRoomId(), gameType, objDateDebutPartie, intTempsTotal, cleJoueurGagnant);
+				
+				// Parcours des joueurs pour mise à jour de la BD et
+				// pour ajouter les infos de la partie complétée
+				for (JoueurHumain joueur: lstJoueurs.values()) {
+					
+					boolean estGagnant = (joueur.obtenirCleJoueur() == cleJoueurGagnant);
+					objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur, estGagnant);
+					//if(joueur.getRole() > 1)
+					//joueur.obtenirPartieCourante().writeInfo();
+				}				
 
-				preparerEvenementPartieTerminee(ourResults, joueurGagnant);
-
+								
 				// Parcours des joueurs pour mise à jour de la BD et
 				// pour ajouter les infos de la partie complétée
 				for (JoueurHumain joueur: lstJoueurs.values()) {
@@ -940,15 +948,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 					// if the game was with the permission to use user's money from DB
 					if (joueur.obtenirPartieCourante().obtenirTable().getRegles().isBolMoneyPermit()) {
 						joueur.obtenirPartieCourante().getObjGestionnaireBD().setNewPlayersMoney();
-					}
-					boolean estGagnant = (joueur.obtenirCleJoueur() == cleJoueurGagnant);
-					objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur, estGagnant);
-					//if(joueur.getRole() > 1)
-					//joueur.obtenirPartieCourante().writeInfo();
+					}					
 
-				}
-
+				}				
 			}
+			
 			if (intNombreJoueursVirtuels > 0) {
 				synchronized(lstJoueursVirtuels){
 					// Arrêter les threads des joueurs virtuels
@@ -977,19 +981,29 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 			// Enlever les joueurs déconnectés de cette table
 			lstJoueursDeconnectes.clear();
-			lstJoueursDeconnectes = new ConcurrentHashMap<String, JoueurHumain>();
+			lstJoueursDeconnectes = null;
 
 			// Arrêter la partie
-			bolEstArretee = true;
+			bolEstArretee = true;			
+			
+			try{
+				objControleurJeu.obtenirGestionnaireTemps().enleverTache(objMinuterie);
+			}catch (IllegalStateException ex){
+				objControleurJeu.setNewTimer();
+				objLogger.error("Une erreur est survenue: objControleurJeu.setNewTimer()");
+			}
+
+			// to discard Banana or Brainiac tasks
+			objGestionnaireTemps.stopIt();
+			
 			// Si jamais les joueurs humains sont tous déconnectés, alors
 			// il faut détruire la table ici
 			if (lstJoueurs.isEmpty()) {
 				// Détruire la table courante et envoyer les événements
 				// appropriés
-				getObjSalle().detruireTable(this);
-			}
-
-
+				getObjSalle().detruireTable(this);				
+			}			
+			
 		}// end if bolEstArretee
 
 		if (bolEstArretee == true) {

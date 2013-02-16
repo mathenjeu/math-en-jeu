@@ -445,10 +445,7 @@ public class Salle
 	 */
 	public void detruireTable(Table tableADetruire) {
 		Table t = (Table)lstTables.get(new Integer(tableADetruire.obtenirNoTable()));
-		if (t != null) {
-			t.destruction();
-		}        
-
+		
 		// Enlever la table de la liste des tables de cette salle
 		lstTables.remove(new Integer(tableADetruire.obtenirNoTable()));
 
@@ -458,7 +455,6 @@ public class Salle
 
 		//adjust server info
 		objControleurJeu.obtenirGestionnaireCommunication().miseAJourInfo();
-
 
 		// Préparer l'événement qu'une table a été détruite.
 		// Cette fonction va passer les joueurs et créer un
