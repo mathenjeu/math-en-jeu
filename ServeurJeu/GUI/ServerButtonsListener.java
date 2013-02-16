@@ -2,7 +2,6 @@ package ServeurJeu.GUI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import ServeurJeu.Maitre;
 
 /**
  * Class for server GUI buttons
@@ -11,47 +10,15 @@ import ServeurJeu.Maitre;
  */
 public class ServerButtonsListener implements ActionListener {
 
-	private Maitre maitre;
-	private ServerFrame frame;
-	public ServerButtonsListener(Maitre maitre, ServerFrame serverFrame)
+	private final ServerFrame frame;
+	public ServerButtonsListener(ServerFrame serverFrame)
 	{
-		this.maitre = maitre;
 		this.frame = serverFrame;
 	}
 	
 	public void actionPerformed(ActionEvent evt) {
 		String actionCommand = evt.getActionCommand();
-		if(actionCommand.equals("On")){
-		   ServerBufferWorkingThread worker = new ServerBufferWorkingThread();
-		   worker.start();
-		   frame.setLabelOn();
-		}
-		else if(actionCommand.equals("Off")){
-			maitre.stopServer();
-			frame.setLabelTerminating();
-		}
-		else if(actionCommand.equals("Reset")){
-			maitre.stopServer();
-			ServerBufferWorkingThread worker = new ServerBufferWorkingThread();
-			worker.start();
-			frame.setLabelOn();
-			
-		}else if(actionCommand.equals("Exit")){
-			maitre.exitServer();
-						
-		}
+		frame.sendMessageToServer(actionCommand);
 
 	}
-	
-	// Internal class used to avoid blocking On and Reset buttons
-	// by working server thread
-	class ServerBufferWorkingThread extends Thread
-	{
-		private ServerBufferWorkingThread (){}
-		
-		public void run(){
-		   maitre.demarrer();	
-		}
-	}
-
 }
