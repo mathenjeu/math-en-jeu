@@ -27,6 +27,7 @@ public final class GestionnaireBDJoueur extends GestionnaireBD {
 		5000,  5625,  6275,  6950,  7650,  8375,  9125,  9900, 10700, 11525, 
 		12375, 13250, 14150, 15075, 16025, 17000, 18000, 19025, 20075, 21150,
 		22250, 23375, 25525, 25700, 26900, 28125, 29375, 30650, 31950, 33275};
+	
     // Déclaration d'une référence vers le notre joueur
 	private final JoueurHumain objJoueurHumain;	
 	private int counter;
@@ -573,5 +574,131 @@ public final class GestionnaireBDJoueur extends GestionnaireBD {
 		}
 
 	}//end methode
+
+
+	public void remplirBoiteQuestionsWithRoomQuestions() {
+		
+		// Pour tenir compte de la langue
+		int cleLang = 1;
+		BoiteQuestions boite = objJoueurHumain.obtenirPartieCourante().getObjBoiteQuestions();
+		
+		String URL = boite.obtenirLangue().getURLQuestionsAnswers();
+		Language language = boite.obtenirLangue();
+		String langue = language.getLanguage();
+		if (langue.equalsIgnoreCase("fr"))
+			cleLang = 1;
+		else if (langue.equalsIgnoreCase("en"))
+			cleLang = 2;
+
+		int niveau = objJoueurHumain.obtenirCleNiveau();		
+		int room_id = objJoueurHumain.obtenirSalleCourante().getRoomId();
+		
+		String strRequeteSQL = "SELECT  question.answer_type_id, question.question_id," +
+		" question_info.question_flash_file, question_info.feedback_flash_file, question_level.value, " +
+		" answer.label FROM question_info, question_level, question, answer " +
+		" WHERE question.question_id IN (SELECT room_question.question_id FROM room_question " +
+		" WHERE room_id = " + room_id + ") " +
+		" AND question.question_id = question_level.question_id " +
+		" AND question.question_id = question_info.question_id " +
+		" AND question.question_id = answer.question_id " +
+		" AND answer.is_right = 1 " +
+		" AND question_info.language_id = " + cleLang +
+		" and question_level.level_id = " + niveau +		
+		" AND question.answer_type_id IN (1,4) " +
+		" AND question_info.is_valid = 1 " +
+		" and question_level.value > 0 " +
+		" and question_info.question_flash_file is not NULL " +
+		" and question_info.feedback_flash_file is not NULL; ";
+
+
+		remplirBoiteQuestionsMC(boite, strRequeteSQL, URL);
+
+		String strRequeteSQL_SA = "SELECT DISTINCT a.answer_latex, qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
+		"FROM question q, question_info qi, question_level ql, answer_info a " +
+		"where  q.question_id = ql.question_id " +
+		" AND q.question_id = qi.question_id " +
+		" AND q.question_id = a.question_id " +
+		" AND q.question_id IN (SELECT room_question.question_id FROM room_question WHERE room_id = " + room_id +
+		") and q.answer_type_id = 3 " +
+		" AND qi.language_id = " + cleLang +
+		" and ql.level_id = " + niveau +
+		" and ql.value > 0 " +
+		" and qi.is_valid = 1 " +
+		" and qi.question_flash_file is not NULL" +
+		" and qi.feedback_flash_file is not NULL;";
+
+		remplirBoiteQuestionsSA(boite, strRequeteSQL_SA, URL);
+
+		String strRequeteSQL_TF = "SELECT DISTINCT a.is_right,qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
+		" FROM question q, question_info qi, question_level ql, answer a " +
+		"where  q.question_id = ql.question_id " +
+		" AND q.question_id = qi.question_id " +
+		" AND q.question_id = a.question_id " +
+		" AND q.question_id IN (SELECT room_question.question_id FROM room_question WHERE room_id = " + room_id +
+		") and q.answer_type_id = 2 " +
+		" AND qi.language_id = " + cleLang +
+		" and ql.level_id = " + niveau +
+		" and ql.value > 0 " +
+		" and qi.is_valid = 1 " +
+		" and qi.question_flash_file is not NULL" +
+		" and qi.feedback_flash_file is not NULL;";
+
+		remplirBoiteQuestionsTF(boite, strRequeteSQL_TF, URL);
+
+		// request for mathdoku
+		String strRequeteSQL_MD = "SELECT DISTINCT qi.question_id, qi.question_flash_file, qi.feedback_flash_file, ql.value " +
+		" FROM question q, question_info qi, question_level ql " +
+		"where  q.question_id = ql.question_id " +
+		" AND q.question_id = qi.question_id " +
+		" AND q.question_id IN (SELECT room_question.question_id FROM room_question WHERE room_id = " + room_id +
+		") and q.answer_type_id = 5 " +
+		" AND qi.language_id = " + cleLang +
+		" and ql.level_id = " + niveau +
+		" and ql.value > 0 " +
+		" and qi.is_valid = 1 " +
+		" and qi.question_flash_file is not NULL" +
+		" and qi.feedback_flash_file is not NULL;";
+
+		remplirBoiteQuestionsMD(boite, strRequeteSQL_MD, URL);
+		
+		boite.getBoxSize();
+		boite.getInfo();
+		
+	}
+
+	/**
+	 * Returns <tt>true</tt> if the room_question table contains
+	 * questions for this room
+	 * 
+	 * @return  <tt>true<tt> if the room_question table contains
+	 * questions for this room
+	 */
+	public boolean checkRoomQuestions() {
+		
+		int numberQuestions = 0;
+		int room_id = objJoueurHumain.obtenirSalleCourante().getRoomId();
+		
+		ResultSet rs = null;
+		try {
+			synchronized (DB_LOCK) {
+				rs = requete.executeQuery("SELECT COUNT(*) FROM room_question " +
+						"  WHERE room_id  = '" + room_id + "';");
+				if (rs.next()) {
+					numberQuestions = rs.getInt(1);
+				}				
+			}
+		} catch (SQLException e) {
+			// Une erreur est survenue lors de l'exécution de la requête
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
+			objLogger.error(GestionnaireMessages.message("bd.trace"));
+			objLogger.error(e.getMessage());
+			e.printStackTrace();
+			getNewConnection();    	
+		}finally{ 
+			dbUtilCloseResultSet(rs, "Error in release ResultSet in transmitURL");    			
+		}
+				
+		return (numberQuestions > 0);
+	}
 
 }

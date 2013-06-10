@@ -139,8 +139,7 @@ public class BoiteQuestions
 		}
 	   if(question != null)
 	      this.info.append("Return question " + question.obtenirCodeQuestion() + " with difficuly : " + question.obtenirDifficulte() + "\n");
-	   //popQuestion(question);
-	   
+	  	   
 	   return question;
 	}
 	
@@ -307,5 +306,10 @@ public class BoiteQuestions
 			}
 		}
 		return false;
+	}
+	
+	public void getInfo(){
+		getBoxSize();
+		System.out.println(this.info.toString());
 	}
 }
