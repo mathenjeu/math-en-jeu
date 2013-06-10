@@ -1,4 +1,5 @@
 package ServeurJeu.Configuration;
+
 import org.apache.commons.configuration.XMLConfiguration;
 
 /**

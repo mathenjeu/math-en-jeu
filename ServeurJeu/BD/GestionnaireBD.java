@@ -103,22 +103,24 @@ public abstract class GestionnaireBD {
     
     protected static void dbUtilCloseResultSet(ResultSet rs, String message)
     {
-    	if(rs != null)
+    	if(rs != null){
 			try {
 				rs.close();
 			} catch (SQLException e) {
 				objLogger.error(message);
 			}
+    	}
     }
     
     protected static void dbUtilClosePreparedStatement(PreparedStatement prep, String message)
     {
-    	if(prep != null)
+    	if(prep != null){
 			try {
 				prep.close();
 			} catch (SQLException e) {
 				objLogger.error(message);
 			}
+    	}
     }
     
     

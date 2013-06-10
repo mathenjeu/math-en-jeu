@@ -1100,9 +1100,13 @@ public class InformationPartieHumain extends InformationPartie implements Active
 	}
 
 	public void remplirBoiteQuestions() {
-		// 0 - because it's first time that we fill the QuestionsBox
-        // after we'll cut the level of questions by this number
-		objGestionnaireBD.remplirBoiteQuestions();		
+		
+		if(objGestionnaireBD.checkRoomQuestions()){
+			objGestionnaireBD.remplirBoiteQuestionsWithRoomQuestions();
+			//objGestionnaireBD.remplirBoiteQuestions();	
+		}else{
+			objGestionnaireBD.remplirBoiteQuestions();		
+		}
 	}
 	
 	/**

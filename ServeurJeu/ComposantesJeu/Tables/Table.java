@@ -252,6 +252,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	 *              permettant de changer ça sont synchronisées).
 	 */
 	public void entrerTableAutres(JoueurHumain joueur, boolean doitGenererNoCommandeRetour) throws NullPointerException {
+		
 		addPlayerInListe(joueur);
 
 		// Le joueur est maintenant entré dans la table courante (il faut
@@ -908,6 +909,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				int cleJoueurGagnant = 0; //0 veut dire un joueur virtuel gagne.
 				for (JoueurHumain objJoueurHumain: lstJoueurs.values()) {
 					InformationPartieHumain infoPartie = objJoueurHumain.obtenirPartieCourante();
+					//infoPartie.getObjBoiteQuestions().getInfo();
 					if (infoPartie.obtenirPointage() > meilleurPointage) {
 						meilleurPointage = infoPartie.obtenirPointage();
 					}
