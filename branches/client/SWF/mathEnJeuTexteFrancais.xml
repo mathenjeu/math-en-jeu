@@ -7,7 +7,7 @@
 	  bananaMess = " a lancé une Banane à "
 	  outMess = "  a quitté le jeu!"
 	  InMess = " est de retour dans le jeu!"
-	  moveMess = "Click sur une case jaune pour te déplacer."
+	  moveMess = "Clique sur une case jaune pour te déplacer."
 	  moveMessage = " a avancé."
 	  bookUsedMess = " a utilisé un livre."
 	  brainiacUsedMess = " a utilisé Brainiac."
@@ -120,7 +120,7 @@ joindre et le mode de jeu que vous souhaitez jouer...  "
 			
 			choixPerso = "Choisissez votre personnage."
 			selectPlayerText = "SELECTION DU JOUEUR"
-			selectPlayerInfo = "Sélectionnez un joueur de notre équipe coloré"
+			selectPlayerInfo = "Sélectionnez un joueur de notre équipe colorée"
 
 			inconnu = "Inconnu"
 			demarrerMaintenant = "Démarrer maintenant"
