@@ -9,9 +9,6 @@ import ServeurJeu.Temps.BrainiacTask;
  * cancel the old one and put another one with the 
  * sheduled time = + of the rest of first and 90 s 
  * for the second  
- * 
- * @author Oloieri Lilian
- * date 10 March 2010
  */
 public class PlayerBrainiacState {
 	
@@ -78,7 +75,7 @@ public class PlayerBrainiacState {
 	 */
 	public void putTheOneBrainiac()
 	{
-		if(player != null){
+		if(player != null && player.getPlayerGameInfo().obtenirTable().obtenirGestionnaireTemps() != null){
 			if(isInBrainiac == false){
 				
 				isInBrainiac = true;

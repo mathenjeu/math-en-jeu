@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
 import Enumerations.GameType;
 import Enumerations.Visibilite;
 import ServeurJeu.ControleurJeu;
@@ -522,11 +523,13 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 		try {
 			synchronized (DB_LOCK) {
 				rs = requete.executeQuery(
-						"SELECT room.password, jos_users.username, jos_users.gid, beginDate, endDate, masterTime, room_info.language_id,room_info.name,room_info.description " +
-						"FROM room_info, room, jos_users " +
+						"SELECT room.password, room.room_level, jos_users.username, jos_users.gid, beginDate, endDate, masterTime," + 
+						" room_info.language_id,room_info.name,room_info.description, jos_comprofiler.cb_type " +
+						"FROM room_info, room, jos_users, jos_comprofiler " +
 						"WHERE room.room_id = " + roomId + " " +
 						"AND room.room_id = room_info.room_id " +
-				"AND jos_users.id = room.user_id");
+						"AND jos_users.id = room.user_id " + 
+						"AND jos_users.id = jos_comprofiler.user_id ");
 				int row = 0;
 				Map<Integer, String> names = new TreeMap<Integer, String>();
 				Map<Integer, String> descriptions = new TreeMap<Integer, String>();
@@ -538,9 +541,15 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 						roomData.put("endDate", rs.getTimestamp("endDate"));
 						roomData.put("masterTime", rs.getInt("masterTime"));
 						int gid = rs.getInt("gid");
-						roomData.put("roomType", convertGIDToRole(gid) == 3 ? "profsType" : "General");
+						String cbType = rs.getString("cb_type");
+						String role = "General";
+						if (convertGIDToRole(gid) == 3 || cbType.equals("Teacher")){
+							role = "profsType";
+						} 
+						roomData.put("roomType", role);
 						roomData.put("names", names);
 						roomData.put("descriptions", descriptions);
+						roomData.put("roomLevel", rs.getInt("room_level"));
 					}
 					int language_id = rs.getInt("language_id");
 					names.put(language_id, rs.getString("room_info.name"));
@@ -661,10 +670,12 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				String strRoomType = (String)roomData.get("roomType");
 				Set<Integer> kIds = getRoomKeywordIds(roomId);
 				Set<Integer> gtIds = getRoomGameTypeIds(roomId);
+				int roomLevel = (Integer) roomData.get("roomLevel");
+				
 				objSalle = new Salle(objControleurJeu, roomId, strPassword,
 						strCreatorUsername, strRoomType, dateBeginDate,
 						dateEndDate, intMasterTime, names, descriptions,
-						kIds, gtIds);
+						kIds, gtIds, roomLevel);
 				objControleurJeu.ajouterNouvelleSalle(objSalle);
 				objControleurJeu.preparerEvenementNouvelleSalle(objSalle);
 			} catch (SQLException e) {
@@ -711,10 +722,12 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				String strRoomType = (String)roomData.get("roomType");
 				Set<Integer> kIds = getRoomKeywordIds(roomId);
 				Set<Integer> gtIds = getRoomGameTypeIds(roomId);
+				int roomLevel = (Integer) roomData.get("roomLevel");
+				
 				objSalle = new Salle(objControleurJeu, roomId, strPassword,
 						strCreatorUsername, strRoomType, dateBeginDate,
 						dateEndDate, intMasterTime, names, descriptions,
-						kIds, gtIds);
+						kIds, gtIds, roomLevel);
 				objControleurJeu.ajouterNouvelleSalle(objSalle);
 				objControleurJeu.preparerEvenementNouvelleSalle(objSalle);
 			} catch (SQLException e) {
@@ -1001,12 +1014,13 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 	 * @param masterTime the length of games in minutes for the room (0 means player's choice)
 	 * @param keywordIds the list of keywords associated with the room, the keywords tells what kind of questions will be asked in the room
 	 * @param gameTypeIds the type of games allowed in the room (classic,race,tournament)
+	 * @param roomLevelID 
 	 */
 	public void updateRoom(int room_id, String password,
 			TreeMap<Integer, String> names, TreeMap<Integer, String> descriptions,
 			String beginDate, String endDate,
 			int masterTime,
-			String keywordIds, String gameTypeIds) {
+			String keywordIds, String gameTypeIds, int roomLevelID) {
 
 		String strBeginDate = (beginDate == null || beginDate.isEmpty()) ? "NULL" : "'" + beginDate + "'";
 		String strEndDate = (endDate == null || endDate.isEmpty()) ? "NULL" : "'" + endDate + "'";
@@ -1014,7 +1028,8 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 		"password='" + password + "'," +
 		"beginDate=" + strBeginDate + "," +
 		"endDate=" + strEndDate + "," +
-		"masterTime=" + masterTime + " " +
+		"masterTime=" + masterTime + ", " +
+		"room_level=" + roomLevelID + " " +
 		"WHERE room_id=" + room_id;
 		try {
 			synchronized (DB_LOCK) {

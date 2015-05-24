@@ -224,25 +224,27 @@ public class GestionnaireCommunication
 	 * @return LinkedList : la liste des ProtocoleJoueur des clients 
 	 * 					présentement connectés au serveur de jeu
 	 */
-	public LinkedList<ProtocoleJoueur> obtenirListeProtocoleJoueur()
+	public synchronized LinkedList<ProtocoleJoueur> obtenirListeProtocoleJoueur()
 	{
 		return lstProtocoleJoueur;   /// synchro ????
 	}
 	
 	public void miseAJourInfo()
 	{
-		try
-		{
-			FileWriter writer = new FileWriter( "serveur.info" );
-			writer.write("Dans la liste joueurs : " + new Integer( objControleurJeu.obtenirListeJoueurs().size()).toString() + "\n"); ///lstProtocoleJoueur.size()
-			writer.write("Dans la liste tables: " + new Integer( objControleurJeu.getActiveTablesNumber()).toString()  + "\n" );
-			writer.close();
-			objLogger.info( GestionnaireMessages.message("communication.nb_joueurs") + lstProtocoleJoueur.size() );
-		}
-		catch( Exception e )
-		{
-			objLogger.info(GestionnaireMessages.message("communication.erreur_fichier"));
-			objLogger.error( e.getMessage() );
+		synchronized(objControleurJeu.obtenirListeJoueurs()) {
+			try
+			{
+				FileWriter writer = new FileWriter( "serveur.info" );
+				writer.write("Dans la liste joueurs : " + new Integer( objControleurJeu.obtenirListeJoueurs().size()).toString() + "\n"); ///lstProtocoleJoueur.size()
+				writer.write("Dans la liste tables: " + new Integer( objControleurJeu.getActiveTablesNumber()).toString()  + "\n" );
+				writer.close();
+				objLogger.info( GestionnaireMessages.message("communication.nb_joueurs") + lstProtocoleJoueur.size() );
+			}
+			catch( Exception e )
+			{
+				objLogger.info(GestionnaireMessages.message("communication.erreur_fichier"));
+				objLogger.error( e.getMessage() );
+			}
 		}
 	}
 	

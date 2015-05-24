@@ -20,11 +20,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
+
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 import ClassesRetourFonctions.RetourVerifierReponseEtMettreAJourPlateauJeu;
 import ClassesUtilitaires.UtilitaireEncodeurDecodeur;
 import ClassesUtilitaires.UtilitaireNombres;
@@ -105,9 +108,7 @@ public class ProtocoleJoueur implements Runnable
 	 * @param socketJoueur : Le canal de communication associé au joueur
 	 */
 	public ProtocoleJoueur(ControleurJeu controleur, VerificateurConnexions verificateur, Socket socketJoueur) {
-		super();
-
-
+		
 		// Initialiser les valeurs du ProtocoleJoueur courant
 		objControleurJeu = controleur;
 		objGestionnaireCommunication = controleur.obtenirGestionnaireCommunication();
@@ -143,7 +144,7 @@ public class ProtocoleJoueur implements Runnable
 	 * @synchronism Cette méthode n'a pas besoin d'être synchronisée
 	 */
 	public void run() {
-		//Thread.currentThread().setPriority( Thread.currentThread().getPriority() - 1 );
+		
 		try {	
 
 			// Créer le canal qui permet de recevoir des données sur le canal
@@ -160,7 +161,6 @@ public class ProtocoleJoueur implements Runnable
 			// traiter tant que le client n'a pas décidé de quitter (ou que la
 			// connexion ne s'est pas déconnectée)
 			while (isBolStopThread() == false) {
-
 				// Déclaration d'une variable qui va servir de marqueur
 				// pour savoir où on en est rendu dans la lecture
 				int intMarqueur = 0;
@@ -199,7 +199,7 @@ public class ProtocoleJoueur implements Runnable
 
 						// On appelle une fonction qui va traiter le message reçu du
 						// client et mettre le résultat à retourner dans une variable
-						//objLogger.info(GestionnaireMessages.message("protocole.message_recu") + strMessageRecu);
+						objLogger.info(GestionnaireMessages.message("protocole.message_recu") + strMessageRecu);
 
 						// If we're in debug mode (can be set in mathenjeu.xml), print communications
 						GregorianCalendar calendar = new GregorianCalendar();
@@ -266,10 +266,10 @@ public class ProtocoleJoueur implements Runnable
 		} catch (TransformerException te) {
 			objLogger.error(GestionnaireMessages.message("protocole.erreurXML_conversion"));
 			objLogger.error(te.getMessage());
-		} catch (Exception e) {
+		}/* catch (Exception e) {
 			objLogger.error(GestionnaireMessages.message("protocole.erreur_thread"));
-			objLogger.error(e.getLocalizedMessage() + " *** " + e.getStackTrace());            
-		} finally {
+			objLogger.error(e.toString() + " *** "); 
+		}*/ finally {
 			objLogger.error("For some reasons reched finally in protocol");
 			arreterProtocoleJoueur();
 		}
@@ -812,6 +812,7 @@ public class ProtocoleJoueur implements Runnable
 		String gameTypeIds = "";
 		String fullStats = "";
 		String keywordIds = "";
+		String roomLevel = "";
 		NodeList noeudsParam = noeudEntree.getChildNodes();
 		TreeMap<Integer, String> names = new TreeMap<Integer, String>();
 		TreeMap<Integer, String> descriptions = new TreeMap<Integer, String>();
@@ -839,6 +840,8 @@ public class ProtocoleJoueur implements Runnable
 				fullStats = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
 			} else if (paramType.equals("keywordIds")) {
 				keywordIds = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
+			} else if (paramType.equals("roomLevel")) {
+				roomLevel = noeudsParam.item(i).getChildNodes().item(0).getNodeValue(); 
 			} else {
 				String lid = noeudsParam.item(i).getAttributes().getNamedItem("language_id").getNodeValue();
 				if (paramType.equals("name")) {
@@ -854,12 +857,16 @@ public class ProtocoleJoueur implements Runnable
 		Date dateBeginDate = new Date(); //no arguments means right now
 		try {
 			dateBeginDate = GestionnaireBD.mejFormatDate.parse(beginDate);
-		} catch (Exception e) {} //if date is malformed, use 'right now'
+		} catch (Exception e) {
+			
+		} //if date is malformed, use 'right now'
 
 		Date dateEndDate = null;
 		try {
 			dateEndDate = GestionnaireBD.mejFormatDate.parse(endDate);
-		} catch (Exception e) {} //if date is malformed, use 'never' (i.e. null)
+		} catch (Exception e) {
+			
+		} //if date is malformed, use 'never' (i.e. null)
 
 		TreeSet<Integer> setKeywordIds = new TreeSet<Integer>();
 		for (String id: keywordIds.split(",")) {
@@ -879,13 +886,17 @@ public class ProtocoleJoueur implements Runnable
 				Integer.parseInt(masterTime),
 				fullStats.equals("1")?true:false,
 						keywordIds, gameTypeIds);
+				
+		// use commons lang function to parse level from string
+		// use 0 as default value if the string is not parsable to int
+		int roomLevelID =  NumberUtils.toInt(roomLevel, 0);
 
 
 		objControleurJeu.ajouterNouvelleSalle(new Salle(
 				objControleurJeu,
 				roomId, password, objJoueurHumain.obtenirNom(), roomType,
 				dateBeginDate, dateEndDate, Integer.parseInt(masterTime),
-				names, descriptions, setKeywordIds, setGameTypeIds));
+				names, descriptions, setKeywordIds, setGameTypeIds, roomLevelID));
 
 		genererNumeroReponse();
 		noeudCommande.setAttribute("type", "Reponse");
@@ -911,6 +922,7 @@ public class ProtocoleJoueur implements Runnable
 		String gameTypeIds = "";
 		String fullStats = "";
 		String keywordIds = "";
+		String roomLevel = "";
 		NodeList noeudsParam = noeudEntree.getChildNodes();
 		TreeMap<Integer, String> names = new TreeMap<Integer, String>();
 		TreeMap<Integer, String> descriptions = new TreeMap<Integer, String>();
@@ -940,6 +952,8 @@ public class ProtocoleJoueur implements Runnable
 				fullStats = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
 			} else if (paramType.equals("keywordIds")) {
 				keywordIds = noeudsParam.item(i).getChildNodes().item(0).getNodeValue();
+			} else if (paramType.equals("roomLevel")) {
+				roomLevel = noeudsParam.item(i).getChildNodes().item(0).getNodeValue(); 
 			} else {
 				String lid = noeudsParam.item(i).getAttributes().getNamedItem("language_id").getNodeValue();
 				if (paramType.equals("name")) {
@@ -966,7 +980,11 @@ public class ProtocoleJoueur implements Runnable
 		for (String id: gameTypeIds.split(",")) {
 			setGameTypeIds.add(Integer.parseInt(id));
 		}
-
+		
+		// use commons lang function to parse level from string
+		// use 0 as default value if the string is not parsable to int
+		int roomLevelID =  NumberUtils.toInt(roomLevel, 0);
+		
 		//update room in the DB
 		objControleurJeu.obtenirGestionnaireBD().updateRoom(
 				Integer.parseInt(roomId),
@@ -974,14 +992,14 @@ public class ProtocoleJoueur implements Runnable
 				names, descriptions,
 				beginDate, endDate,
 				Integer.parseInt(masterTime),
-				keywordIds, gameTypeIds);
+				keywordIds, gameTypeIds, roomLevelID);
 
 		//This replaces the old room with the new one.
 		objControleurJeu.ajouterNouvelleSalle(new Salle(
 				objControleurJeu,
 				Integer.parseInt(roomId), password, objJoueurHumain.obtenirNom(), roomType,
 				dateBeginDate, dateEndDate, Integer.parseInt(masterTime),
-				names, descriptions, setKeywordIds, setGameTypeIds));
+				names, descriptions, setKeywordIds, setGameTypeIds, roomLevelID));
 
 
 

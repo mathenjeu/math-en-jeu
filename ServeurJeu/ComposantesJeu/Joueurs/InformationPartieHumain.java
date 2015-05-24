@@ -471,7 +471,7 @@ public class InformationPartieHumain extends InformationPartie implements Active
 				objQuestionCourante = objQuestionTrouvee;
 				objPositionJoueurDesiree = nouvellePosition;
 
-			} else if (objQuestionTrouvee == null && objBoiteQuestions.dontHaveQuestions()) {
+			} else if (objQuestionTrouvee == null && objBoiteQuestions.isEmpty()) {
 
 				objGestionnaireBD.remplirBoiteQuestions();
 			}
@@ -529,7 +529,7 @@ public class InformationPartieHumain extends InformationPartie implements Active
 				objQuestionTrouvee = null;
 			}
 
-		} while (objQuestionTrouvee == null && !objBoiteQuestions.dontHaveQuestions());
+		} while (objQuestionTrouvee == null && !objBoiteQuestions.isEmpty());
 
 		return objQuestionTrouvee;
 
@@ -580,7 +580,7 @@ public class InformationPartieHumain extends InformationPartie implements Active
 				lstQuestionsRepondues.add(new InformationQuestion(objQuestionTrouvee.obtenirCodeQuestion(), objTable.obtenirTempsRestant()));
 				objQuestionCourante = objQuestionTrouvee;
 
-			} else if (objQuestionTrouvee == null && objBoiteQuestions.dontHaveQuestions()) {
+			} else if (objQuestionTrouvee == null && objBoiteQuestions.isEmpty()) {
 				
 				objGestionnaireBD.remplirBoiteQuestions();				
 			}
@@ -646,7 +646,7 @@ public class InformationPartieHumain extends InformationPartie implements Active
 			}
 
 
-		} while (objQuestionTrouvee == null && !objBoiteQuestions.dontHaveQuestions());
+		} while (objQuestionTrouvee == null && !objBoiteQuestions.isEmpty());
 		//System.out.println(" verification " + objQuestionTrouvee.obtenirDifficulte());
 
 		return objQuestionTrouvee;

@@ -16,7 +16,7 @@ import java.util.TimerTask;
  */
 public class GestionnaireTemps extends Timer
 {
-	public void ajouterTache( TimerTask t, int stepSeconds )
+	public void ajouterTache( TimerTask t, int stepSeconds ) throws IllegalStateException
 	{
 		this.scheduleAtFixedRate( t, stepSeconds * 1000, stepSeconds * 1000 );
 	}

@@ -67,7 +67,10 @@ public final class GestionnaireBDJoueur extends GestionnaireBD {
 			cleLang = 2;
 
 		// to not fill the Box with the same questions
-		int niveau = objJoueurHumain.obtenirCleNiveau() - counter;
+		int roomLevel = objJoueurHumain.obtenirSalleCourante().getRoomLevelId();
+		int niveau = roomLevel == 0 ? objJoueurHumain.obtenirCleNiveau() : roomLevel;
+		System.out.println("level : " + niveau);
+			niveau -= counter;
 		counter--;
 
 		StringBuffer writer = objJoueurHumain.obtenirPartieCourante().getBoiteQuestionsInfo();
