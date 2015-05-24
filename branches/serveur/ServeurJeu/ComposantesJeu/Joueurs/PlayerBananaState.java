@@ -11,9 +11,6 @@ import ServeurJeu.Temps.BananaTask;
  * cancel the old one and put another one with the 
  * Scheduled time = + of the rest of first and 90 s 
  * for the second  
- * 
- * @author Oloieri Lilian
- * date 10 March 2010
  */
 
 public class PlayerBananaState {

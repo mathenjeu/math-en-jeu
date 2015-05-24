@@ -177,13 +177,13 @@ public class BoiteQuestions
 	 *
 	 * @return boolean : si la boite est vide ou non
 	 */
-	public boolean dontHaveQuestions()
+	public boolean isEmpty()
 	{
 		boolean ret = true;
 		if(!lstQuestions.isEmpty()){
 			for(int i = 1; i < 7; i++)
 			{
-				if(!lstQuestions.get(i).isEmpty())
+				if(lstQuestions.containsKey(i) && !lstQuestions.get(i).isEmpty())
 					ret = false;		
 			}
 		}

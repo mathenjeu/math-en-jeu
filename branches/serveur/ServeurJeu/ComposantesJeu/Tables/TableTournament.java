@@ -3,12 +3,9 @@ package ServeurJeu.ComposantesJeu.Tables;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
-
 import Enumerations.GameType;
 import Enumerations.RetourFonctions.ResultatDemarrerPartie;
 import ServeurJeu.ComposantesJeu.Salle;
@@ -23,7 +20,6 @@ import ServeurJeu.Temps.Minuterie;
 
 /**
  * 
- * @author Oloieri Lilian
  *
  */
 public class TableTournament extends Table {

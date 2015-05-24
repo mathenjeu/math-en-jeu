@@ -90,6 +90,8 @@ public class Salle
 	// Un compteur pour le prochain numéro de table qui sera créé dans cette
 	// salle.
 	private int prochainNoTable;
+	
+	private int roomLevel;
 
 	/**
 	 * Une {@code Salle} est un endroit qui contient une ou plusieurs {@link Table}
@@ -112,12 +114,13 @@ public class Salle
 			int roomId, String password, String username, String type,
 			Date beginDate, Date endDate, int gameDuration,
 			Map<Integer,String> names, Map<Integer,String> descriptions,
-			Set<Integer> keywordIds, Set<Integer> gameTypeIds) {
+			Set<Integer> keywordIds, Set<Integer> gameTypeIds, int level) {
 
 		objGestionnaireEvenements = new GestionnaireEvenements();
 		objControleurJeu = controleurJeu;
 
 		intRoomId = roomId;
+		roomLevel = level;
 		strPassword = password;
 		System.out.println(strPassword);
 		strCreatorUsername = username;
@@ -839,6 +842,14 @@ public class Salle
 
 	public void setSetKeywordIds(Set<Integer> setKeywordIds) {
 		this.setKeywordIds = setKeywordIds;
+	}
+
+	public int getRoomLevelId() {
+		return this.roomLevel;
+	}
+	
+	public void setRoomLevelID(int level){
+		this.roomLevel = level;
 	}
 
 }// end class 

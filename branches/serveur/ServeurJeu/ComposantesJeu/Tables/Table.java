@@ -51,7 +51,6 @@ import ServeurJeu.Temps.TacheSynchroniser;
 
 /**
  * @author Jean-François Brind'Amour
- * last change august 2011 Oloieri Lilian
  */
 public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 {
@@ -220,16 +219,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 	}
 
-	/*
-	public void destruction() {
-		//System.out.println("table - wipeout the table - destruction");
-		arreterPartie("");
-		this.objGestionnaireEvenements.arreterGestionnaireEvenements();
-		//this.objGestionnaireEvenements = null;		
-		this.objGestionnaireBD = null;
-
-	}// end method*/
-
+	
 	/**
 	 * Cette fonction permet au joueur d'entrer dans la table courante.
 	 * On suppose que le joueur n'est pas dans une autre table, que la table

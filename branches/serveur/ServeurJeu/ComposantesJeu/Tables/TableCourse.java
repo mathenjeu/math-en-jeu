@@ -9,7 +9,6 @@ import ServeurJeu.ComposantesJeu.Joueurs.JoueurHumain;
 
 /**
  * 
- * @author Oloieri Lilian
  *
  */
 public class TableCourse extends Table {

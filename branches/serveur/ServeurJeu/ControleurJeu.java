@@ -507,7 +507,9 @@ public class ControleurJeu {
 	 * 				du traitement qu'elle doit faire
 	 */
 	public HashMap<String, JoueurHumain> obtenirListeJoueurs() {
-		return lstJoueursConnectes;
+		synchronized(lstJoueursConnectes){
+			return lstJoueursConnectes;
+		}
 	}
 
 	/**
@@ -843,7 +845,6 @@ public class ControleurJeu {
 	 * joueur tente de se reconnecter, il sera possible qu'il reprenne la partie
 	 */
 	public void ajouterJoueurDeconnecte(JoueurHumain joueurHumain) {
-
 		synchronized (lstJoueursDeconnectes) {
 			lstJoueursDeconnectes.put(joueurHumain.obtenirNom(), joueurHumain);
 		}
@@ -935,7 +936,7 @@ public class ControleurJeu {
 		return gameTypesMap;
 	}
 
-	public void setNewTimer() {
+	public synchronized void setNewTimer() {
 		objGestionnaireTemps = new GestionnaireTemps();
 	}
 
