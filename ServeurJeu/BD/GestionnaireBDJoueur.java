@@ -68,7 +68,7 @@ public final class GestionnaireBDJoueur extends GestionnaireBD {
 
 		// to not fill the Box with the same questions
 		int roomLevel = objJoueurHumain.obtenirSalleCourante().getRoomLevelId();
-		int niveau = roomLevel == 0 ? objJoueurHumain.obtenirCleNiveau() : roomLevel;
+		int niveau = roomLevel == 19 ? objJoueurHumain.obtenirCleNiveau() : roomLevel;
 		System.out.println("level : " + niveau);
 			niveau -= counter;
 		counter--;
