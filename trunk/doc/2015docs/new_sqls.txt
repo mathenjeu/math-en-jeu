@@ -1,0 +1,15 @@
+Voici SQL que j'ai utilisé pour modifié table 'room':
+ 
+ALTER TABLE `room` ADD COLUMN `room_level` tinyint(11) UNSIGNED default '0';
+ALTER TABLE `room` DROP COLUMN `room_level`;
+ALTER TABLE `room` ADD COLUMN `room_level` int(11) default '19';
+ 
+J'ai ajouté aussi foreign key :
+ 
+ALTER TABLE `room`
+  ADD CONSTRAINT `room_ibfk_3` FOREIGN KEY (`room_level`) REFERENCES `level` (`level_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+INSERT INTO mathamaze2.level VALUES (19,1,'niveau par défaut','niveau par défaut');
+INSERT INTO mathamaze2.level VALUES (19,2,'default value','default value');
+
+
