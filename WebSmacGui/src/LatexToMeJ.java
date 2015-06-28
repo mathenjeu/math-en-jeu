@@ -24,7 +24,9 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -41,9 +43,7 @@ import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
 import javax.sql.PooledConnection;
-
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource;
 
@@ -117,10 +117,25 @@ public class LatexToMeJ implements SmacUI
 		this.overwriteFlashFiles = overwriteFlashFiles;
 		this.createZip = createZip;
 		config = new Properties();
-		config.load(new InputStreamReader(new BufferedInputStream(LatexToMeJ.class.getResourceAsStream(configFilename)), "UTF-8"));
+		
+		try
+		{
+			InputStream conf = LatexToMeJ.class.getResourceAsStream(configFilename);
+			config.load(new InputStreamReader(new BufferedInputStream(conf), "UTF-8"));
+		} catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		
+		//config.load(new InputStreamReader(new BufferedInputStream(LatexToMeJ.class.getResourceAsStream(configFilename)), "UTF-8"));
 		//config.load(new InputStreamReader(new BufferedInputStream(new FileInputStream(configFilename)), "UTF-8"));
-		if (data == null)
+		if (data == null){
 			data = new String[]{getProperty("db.mej.server"), getProperty("db.mej.name"), getProperty("db.mej.user"), getProperty("db.mej.password")};
+		}else{
+			ui.outputMessage("/rserver: " + data[0]);
+		}
+		//ui.outputMessage(getProperty("db.mej.server"));
+		
 		mysqlDataSource = createDataSource(data); //this does not attempt to connect, it merely sets the connection parameters.
 
 		tex2swfFolderName = tex2swfData[0];
@@ -1606,8 +1621,5 @@ public class LatexToMeJ implements SmacUI
 
 	}// end method
 
-	private void updateQuestion(int question_id, Connection dbConnection2)
-	{		
 
-	}
 }
