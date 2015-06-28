@@ -6,7 +6,10 @@
 //
 //Date:      January 2010
 //
-//Version    0.4  * Replaced Parse/Export Buttons with Parse/Parse+SWF/Parse+SWF+DB Radio Button
+//Version    0.5  * Created possibility only update questions in DB without removing first them from DB
+//                * and to work questions without stopping process on each bugged question  
+//                * 2012/2013 Oloieri Lilian
+//           0.4  * Replaced Parse/Export Buttons with Parse/Parse+SWF/Parse+SWF+DB Radio Button
 //                * Can now generate SWF without having to export to DB
 //           0.3  * Added a checkbox for the legacy parsing option (to parse files
 //                  using the old (Subject,Category) instead of the new Keywords)
@@ -636,9 +639,9 @@ public class SmacGUI extends JFrame implements Runnable, WindowListener, ActionL
 		configSWF = new Properties();
 
 		//DB setup variables
-		DB_INFO = useConfigFileCheckBox.isSelected()? null : new String[]{mysqlServerTextField.getText().trim(), 
-			mysqlDBTextField.getText().trim(), mysqlUserTextField.getText().trim(), mysqlPasswordField.getPassword().toString().trim()};			
-
+		DB_INFO = useConfigFileCheckBox.isSelected() ? null : new String[]{mysqlServerTextField.getText().trim(), 
+			mysqlDBTextField.getText().trim(), mysqlUserTextField.getText().trim(), mysqlPasswordField.getText().trim()};	
+		
 		//make sure the user has made a 'reasonable' selection for the various folders
 		if (validateFoldersSelection())
 		{
