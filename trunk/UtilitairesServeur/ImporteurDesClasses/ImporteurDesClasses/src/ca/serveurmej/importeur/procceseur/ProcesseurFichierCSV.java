@@ -1,59 +1,73 @@
 package ca.serveurmej.importeur.procceseur;
 
-import java.io.BufferedReader;
+/**
+ * 
+ *  Class used to read a csv file and create the list of csv records to be returned.
+ *  It use the apache commons csv parser.
+ *  
+ *  @author Lilian Oloieri
+ */
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.Reader;
+import java.util.List;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
 public class ProcesseurFichierCSV {
 	
 	private String nomFichier = "";
 	private String nomFichierReponse = "";
+	private List<CSVRecord> listeJoueurs; 
 	
-	public ProcesseurFichierCSV(String nomFichier) {
-		this.nomFichier = nomFichier;
+	public ProcesseurFichierCSV(final String nomFichier, final String responseFichier) {
+		this.nomFichier = nomFichier;	
+		this.nomFichierReponse = responseFichier;
 	}	
 	
 	public ProcesseurFichierCSV() {
 		// exit
 	}
 	
-	public void processe(){
+	public List<CSVRecord> processe(){
 		
-		BufferedReader br = null;
-		String line = "";
-		String cvsSplitBy = ",";
+		CSVParser parser = null;
+		Reader csvData = null;
 	 
 		try {
 	 
-			br = new BufferedReader(new FileReader(nomFichier));
-			while ((line = br.readLine()) != null) {
-	 
-			    // use comma as separator
-				String[] country = line.split(cvsSplitBy);
-	 
-				System.out.println("Country [code= " + country[4] 
-	                                 + " , name=" + country[5] + "]");
-	 
-			}
+			csvData = new FileReader(nomFichier);
+			parser = new CSVParser(csvData, CSVFormat.EXCEL);
+			listeJoueurs = parser.getRecords();
+			parser.close();
+			csvData.close();
 	 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			if (br != null) {
+			if (parser != null) {
 				try {
-					br.close();
+					parser.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (csvData != null) {
+				try {
+					csvData.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 		}
-	 
-		System.out.println("Done");
+		
+		return listeJoueurs;
 	}
 
 }

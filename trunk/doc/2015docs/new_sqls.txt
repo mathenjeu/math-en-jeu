@@ -12,4 +12,4 @@ ALTER TABLE `room`
 INSERT INTO mathamaze2.level VALUES (19,1,'niveau par défaut','niveau par défaut');
 INSERT INTO mathamaze2.level VALUES (19,2,'default value','default value');
 
-
+ALTER TABLE `jos_users` ADD COLUMN `teacher_ref` int(11) default NULL;
