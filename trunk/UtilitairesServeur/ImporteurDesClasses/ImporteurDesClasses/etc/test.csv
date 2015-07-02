@@ -1,0 +1,6 @@
+firstname,middlename,lastname,name,username,registeripaddr,email,password,usertype,gid,language,timezone,cb_gradelevel,cb_gender,cb_school,cb_country,cb_province,teacher_ref
+Maxim,,Carbon,Maxim Carbon,juniormc,,juniormc@gmail.com,junior,Teacher,31,fr,-5,General / Général,Male / Masculin,none,Canada,Quebec,66
+Joel,,Tremblay,Joel Tremblay,juniortr,,juniortr@gmail.com,junior,Registered,18,fr,-5,General / Général,Male / Masculin,,,,66
+Valentin,,Decusara,Valentin Decusara,juniorva,,juniorva@gmail.com,junior,Registered,18,fr,-5,General / Général,Male / Masculin,,,,66
+Kim,,Trang,Kim Trang,juniorkm,,juniorkm@gmail.com,junior,Registered,18,fr,-5,General / Général,Male / Masculin,,,,66
+Jhon,,Standford,Jhon Standford,juniorjh,,juniorjh@gmail.com,junior,Registered,18,fr,-5,General / Général,Male / Masculin,,,,66

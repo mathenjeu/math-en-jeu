@@ -20,12 +20,12 @@ import org.apache.commons.csv.CSVRecord;
 public class ProcesseurFichierCSV {
 	
 	private String nomFichier = "";
-	private String nomFichierReponse = "";
 	private List<CSVRecord> listeJoueurs; 
+	private String sortie;
 	
-	public ProcesseurFichierCSV(final String nomFichier, final String responseFichier) {
-		this.nomFichier = nomFichier;	
-		this.nomFichierReponse = responseFichier;
+	public ProcesseurFichierCSV(final String nomFichier) {
+		this.nomFichier = nomFichier;
+		setSortie("");
 	}	
 	
 	public ProcesseurFichierCSV() {
@@ -33,6 +33,9 @@ public class ProcesseurFichierCSV {
 	}
 	
 	public List<CSVRecord> processe(){
+		
+		StringBuilder output = new StringBuilder();
+		output.append(" *** Parser fichier csv : \n");
 		
 		CSVParser parser = null;
 		Reader csvData = null;
@@ -67,7 +70,19 @@ public class ProcesseurFichierCSV {
 			}
 		}
 		
+		for (CSVRecord joueur : listeJoueurs){
+			output.append(joueur.toString() + "\n");
+		}
+		setSortie(output.toString());
 		return listeJoueurs;
+	}
+
+	public String getSortie() {
+		return sortie;
+	}
+
+	public void setSortie(String sortie) {
+		this.sortie = sortie;
 	}
 
 }

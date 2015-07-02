@@ -1,5 +1,8 @@
 package ca.serveurmej.importeur.lanceur;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import org.apache.commons.csv.CSVRecord;
@@ -28,6 +31,7 @@ public class Importeur {
 	 */
 	public static void main(String[] args) {
 		final ProcesseurFichierCSV processeur;
+		final ProcesseurJoueurDAO processeurDAO;
 		String nomFichier = null;
 		String fichierSortie = null;
 		List<CSVRecord> listeJoueurs = null; 
@@ -43,19 +47,35 @@ public class Importeur {
 		}		
 		
 		if( !nomFichier.isEmpty() ){
-			processeur = new ProcesseurFichierCSV(nomFichier, fichierSortie);
+			processeur = new ProcesseurFichierCSV(nomFichier);
 			listeJoueurs = processeur.processe();
+			sortie.append(processeur.getSortie());			
 		}
 		
 		if( listeJoueurs != null && !listeJoueurs.isEmpty() ){
 			
-			ProcesseurJoueurDAO processeurDAO = new ProcesseurJoueurDAO();
+			processeurDAO = new ProcesseurJoueurDAO();
 			String sortieDao = processeurDAO.insererJoueurs(listeJoueurs);
 			sortie.append(sortieDao);
-			sortie.append("Toutes les profils ont été traité.");
+			sortie.append("Toutes les profils ont été traité. SVP vérifié la liste pour des exceptions possibles.");
 		}
 		
+		//create the output file with the information of parsing and inserting in the DB the players
+		OutputStream outputStream = null;
+		try
+		{
+			//Overwrite the logfile
+			outputStream = new BufferedOutputStream(new FileOutputStream(fichierSortie));
+			outputStream.write(sortie.toString().getBytes());
+			outputStream.flush();
+		}
+		catch(Exception e)
+		{
+			outputStream = null;
+			logger.error(" le fichier des resultas n'est pas cree a cause d'un erreur! ");
+		}
 		
+		logger.info("*** Batch processing ended ***");
 	}
 
 }

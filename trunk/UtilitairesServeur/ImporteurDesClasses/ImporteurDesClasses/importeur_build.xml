@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project ImporteurDesClasses with Jar-in-Jar Loader">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="D:/SMAC_export_jar/importeur.jar">
+            <manifest>
+                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+                <attribute name="Rsrc-Main-Class" value="ca.serveurmej.importeur.lanceur.Importeur"/>
+                <attribute name="Class-Path" value="."/>
+                <attribute name="Rsrc-Class-Path" value="./ commons-csv-1.1.jar mysql-connector-java-5.1.34-bin.jar log4j-1.2-api-2.3.jar log4j-core-2.3.jar log4j-api-2.3.jar"/>
+            </manifest>
+            <zipfileset src="D:/SMAC_export_jar/jar-in-jar-loader.zip"/>
+            <fileset dir="D:/MathFiles/trunk/UtilitairesServeur/ImporteurDesClasses/ImporteurDesClasses/bin"/>
+            <zipfileset dir="D:\lib" includes="commons-csv-1.1.jar"/>
+            <zipfileset dir="D:\lib" includes="mysql-connector-java-5.1.34-bin.jar"/>
+            <zipfileset dir="D:\lib\apache-log4j-2.3-bin" includes="log4j-1.2-api-2.3.jar"/>
+            <zipfileset dir="D:\lib\apache-log4j-2.3-bin" includes="log4j-core-2.3.jar"/>
+            <zipfileset dir="D:\lib\apache-log4j-2.3-bin" includes="log4j-api-2.3.jar"/>
+            <fileset dir="D:/MathFiles/trunk/UtilitairesServeur/ImporteurDesClasses/ImporteurDesClasses/etc"/>
+        </jar>
+    </target>
+</project>

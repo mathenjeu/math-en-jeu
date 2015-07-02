@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!-- Fichier de configuration de Math en jeu -->
+<configuration>
+		
+		<!-- Set the port for communication with applet -->
+	    <maitre>
+	        <port>8181</port>
+	        <address>serveurmej.mat.ulaval.ca</address>  
+	    </maitre>
+	
+      <musique>
+           <url>http://mathenjeu.ca/musique/</url>
+      </musique>
+	
+	<!-- Section de la classe ServeurJeu.ControleurJeu -->
+	<controleurjeu>
+		<synchro>
+			<!--Delai en seconde de la synchronisation des clients avec la minuterie du serveur -->
+			<step>20</step>
+		</synchro>
+		<monitoring>
+ 			<step>3600</step>
+			<spyDB>100000</spyDB>
+ 		</monitoring>
+		<info>
+			<!--fichier de sortie qui contient les informations des activités sur le serveur -->
+			<fichier-sortie>InfosServeur.txt</fichier-sortie>
+
+			<!--le delai doit etre un nombre entier, represente une valeur en milisecondes -->
+			<delai>10000</delai>
+		</info>
+                 <messages>
+                    <!--fichier XML contenant les messages du serveur -->
+                    <fichierxml>messages_fr.xml</fichierxml>
+                </messages>
+		
+				<debug>false</debug>
+				
+				<!-- Set the time (in seconds) you need that server stop after 'stop' or 'reset' command the players will be informed about -->
+		        <stopTimer>15</stopTimer>
+	</controleurjeu>
+
+
+	<!-- Section de la classe ServeurJeu.Communication.GestionnaireCommunication -->
+	<gestionnairecommunication>
+		<port>8080</port>
+        <address>serveurmej.mat.ulaval.ca</address>
+	</gestionnairecommunication>
+	
+	<!-- Section de la classe ServeurJeu.BD.GestionnaireBD -->
+	<gestionnairebd>
+            <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+            <hote>jdbc:mysql://localhost/mathamaze2</hote>
+            <utilisateur>root</utilisateur>
+            <mot-de-passe>2pir--Smac</mot-de-passe>
+            <code_erreur_inactivite>08S01</code_erreur_inactivite>
+            <max_connections>50</max_connections>
+            <min_connections>5</min_connections>
+    </gestionnairebd>
+	
+	<!-- Section de la classe ServeurJeu.ComposantesJeu.Table -->
+	<table>
+		<max-nb-joueurs>4</max-nb-joueurs>
+	</table>
+	
+	<!-- Section de la classe ServeurJeu.Monitoring.Monitor -->
+	<monitor>
+		<fichier-sortie>serveur_monitoring.html</fichier-sortie>
+	</monitor>
+
+    <!-- Section de la classe ServeurJeu.ComposantesJeu.Joueurs.JoueurVirtuel -->
+    <joueurs-virtuels>
+        <noms>Willy/Billy/Jack/Steve/Doug/Bob/Jim/Dan/Dave/John/Joe/Mike/Tod/Jill/Stacy/Jacob/Liam/Ethan/Lucas/Benjamin/Logan/Mason/Alexander/Noah/Nathan/William/Daniel/Ryan/Mattew/Joshua/James/Owen/Jayden/Aiden/Olivia/Ella/Emma/Sophia/Emily/Ava/Chloe/Isabella/Sophie/Lily/Abigail/Hannah/Brooklyn/Grace/Madison/Charlotte/Avery/Amelia/Maya/Alexis/Eliza/Elyse/Lea/Camille/Gabriel/Antoine/Laurence/Justin/Elisabeth/Megan/Clara/Beatrice/Jasmine/Victoria</noms>
+	<difficulte_defaut>0</difficulte_defaut>
+    </joueurs-virtuels>
+</configuration>
