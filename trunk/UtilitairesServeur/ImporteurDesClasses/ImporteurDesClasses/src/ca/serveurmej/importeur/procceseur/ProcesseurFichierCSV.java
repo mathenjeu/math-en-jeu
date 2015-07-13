@@ -7,6 +7,7 @@ package ca.serveurmej.importeur.procceseur;
  *  
  *  @author Lilian Oloieri
  */
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,12 +17,15 @@ import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 public class ProcesseurFichierCSV {
 	
 	private String nomFichier = "";
 	private List<CSVRecord> listeJoueurs; 
 	private String sortie;
+	private static final Logger logger = LogManager.getLogger(ProcesseurFichierCSV.class);
 	
 	public ProcesseurFichierCSV(final String nomFichier) {
 		this.nomFichier = nomFichier;
@@ -36,12 +40,24 @@ public class ProcesseurFichierCSV {
 		
 		StringBuilder output = new StringBuilder();
 		output.append(" *** Parser fichier csv : \n");
+		logger.info(" *** Parser fichier csv : \n");
 		
 		CSVParser parser = null;
 		Reader csvData = null;
 	 
 		try {
+			/*
+			String workingDirectory = System.getProperty("user.dir");			 
+			String absoluteFilePath = "";	 
+			//absoluteFilePath = workingDirectory + System.getProperty("file.separator") + filename;
+			absoluteFilePath = workingDirectory + File.separator + nomFichier;
+			
+			//System.out.println("Final filepath : " + absoluteFilePath);			
 	 
+			File file = new File(absoluteFilePath);
+	 		
+			csvData = new FileReader(file);
+			*/
 			csvData = new FileReader(nomFichier);
 			parser = new CSVParser(csvData, CSVFormat.EXCEL);
 			listeJoueurs = parser.getRecords();
@@ -73,7 +89,10 @@ public class ProcesseurFichierCSV {
 		for (CSVRecord joueur : listeJoueurs){
 			output.append(joueur.toString() + "\n");
 		}
+		
 		setSortie(output.toString());
+		logger.info(" *** Fini de parser fichier csv : \n");
+		
 		return listeJoueurs;
 	}
 

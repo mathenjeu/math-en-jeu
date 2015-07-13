@@ -5,7 +5,6 @@ package ca.serveurmej.importeur.dao;
  */
 
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -59,7 +58,7 @@ public class ProcesseurJoueurDAO {
 		
 		try
 		{
-			InputStream conf = ProcesseurJoueurDAO.class.getResourceAsStream(appConfigFilename);
+			//InputStream conf = ProcesseurJoueurDAO.class.getResourceAsStream(appConfigFilename);
 			config.load(new InputStreamReader(new FileInputStream(appConfigFilename), "UTF-8"));
 			
 			if (data == null){
