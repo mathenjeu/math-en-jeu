@@ -39,7 +39,7 @@ public class ProcesseurFichierCSV {
 	public List<CSVRecord> processe(){
 		
 		StringBuilder output = new StringBuilder();
-		output.append(" *** Parser fichier csv : \n");
+		//output.append(" *** Parser fichier csv : \n");
 		logger.info(" *** Parser fichier csv : \n");
 		
 		CSVParser parser = null;
@@ -66,9 +66,14 @@ public class ProcesseurFichierCSV {
 	 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			output.append(" *** Un erreur c'est produit au traitement du fichier csv : \n" + nomFichier);
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
+			output.append(" *** Un erreur c'est produit au traitement du fichier csv : \n" + nomFichier);
+		} catch (Exception e) {
+			e.printStackTrace();
+			output.append(" *** Un erreur c'est produit au traitement du fichier csv : \n" + nomFichier);
+		}		finally {
 			if (parser != null) {
 				try {
 					parser.close();
@@ -86,10 +91,7 @@ public class ProcesseurFichierCSV {
 			}
 		}
 		
-		for (CSVRecord joueur : listeJoueurs){
-			output.append(joueur.toString() + "\n");
-		}
-		
+		//output.append("Un liste de " + listeJoueurs.size() + " utilisateurs a été créé \n");
 		setSortie(output.toString());
 		logger.info(" *** Fini de parser fichier csv : \n");
 		

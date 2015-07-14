@@ -12,13 +12,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
+import java.util.TreeSet;
 
 import org.apache.commons.csv.CSVRecord;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import com.mysql.jdbc.Statement;
 import com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource;
+
+import java.sql.Statement;
 
 public class ProcesseurJoueurDAO {
 	
@@ -55,6 +57,7 @@ public class ProcesseurJoueurDAO {
 	{
 		logger.info("*************** Init mysql data source creation **********************");
 		config = new Properties();
+		output = new StringBuilder();
 		
 		try
 		{
@@ -67,6 +70,7 @@ public class ProcesseurJoueurDAO {
 		} catch(Exception e)
 		{
 			logger.error(e.getMessage() + e.fillInStackTrace() + e.getCause());
+			output.append("Le traitement de fichier csv a planté a cause d'un erreur de connexion au base de données. Aucun utilisateur créer.\n");
 		}
 						
 		mysqlDataSource = createDataSource(data); //this does not attempt to connect, it merely sets the connection parameters.
@@ -79,15 +83,15 @@ public class ProcesseurJoueurDAO {
 	public String insererJoueurs(List<CSVRecord> listeJoueurs) {
 		
 		List<CSVRecord> joueurs = listeJoueurs;
-		Connection connexion = getConnection();
+		Connection connexion = getConnection();		
 		
-		output = new StringBuilder();
-		output.append("\n *** Inserer les utilisateurs : \n\n");
+		//output.append("\n *** Inserer les utilisateurs *** \n\n");
 		
 		
 		String ecole = "";		
 		String pays = "";
 		String province = "";
+		boolean estAjoute = false;
 		
 		logger.info("*************** begin to process csv records list **********************");
 		
@@ -97,38 +101,44 @@ public class ProcesseurJoueurDAO {
 			String lastname = joueur.get(2);
 			String username = joueur.get(4);
 			
+			
 			// on ignore le premiere enregistrement qui contient le map
-			if(firstname.equals("firstname") && username.equals("username")){
+			if(firstname.equals("firstname") && username.equals("username")) {
 				continue;
 			}
 			
+			if(validerNomUtilisateur(username)) {
+				output.append("Le profil avec nom utilisateur - " + username + " - non créé. Nom utilisateur déjà existante.\n");
+				continue;
+			}
+						
 			//validation de nom utilisateur
-			if(username.isEmpty() && !firstname.isEmpty()){
+			if(username.isEmpty() && !firstname.isEmpty()) {
 				username = firstname;
 			}
 			
-			if(username.isEmpty() && firstname.isEmpty() && !lastname.isEmpty()){
+			if(username.isEmpty() && firstname.isEmpty() && !lastname.isEmpty()) {
 				username = lastname;
 			}
 			
 			// on a besoin du nom utilisateur, autrement pas de insertion
-			if(username.isEmpty() && firstname.isEmpty() && lastname.isEmpty()){
-				output.append("Erreur dans les données. Un des profils non inséré.");
+			if(username.isEmpty() && firstname.isEmpty() && lastname.isEmpty()) {
+				output.append("Erreur dans les données. Un des profils non inséré.\n");
 				continue;
 			}
 			
 			// set the values for ecole - pays - province - get the first non empty values
 			// and use them till the end if the values from the next row are empty
 			
-			if(ecole.isEmpty() && !joueur.get(14).isEmpty()){
+			if(ecole.isEmpty() && !joueur.get(14).isEmpty()) {
 				ecole = joueur.get(14);
 			}
 			
-			if(pays.isEmpty() && !joueur.get(15).isEmpty()){
+			if(pays.isEmpty() && !joueur.get(15).isEmpty()) {
 				pays = joueur.get(15);
 			}
 			
-			if(province.isEmpty() && !joueur.get(16).isEmpty()){
+			if(province.isEmpty() && !joueur.get(16).isEmpty()) {
 				province = joueur.get(16);
 			}
 			
@@ -196,16 +206,21 @@ public class ProcesseurJoueurDAO {
 				prepStatementInsertJosCoreMap.setInt(3, corId);
 
 				executeUpdate(prepStatementInsertJosCoreMap, "An SQL error occured when trying to add a user to the table jos_core_acl_groups_aro_map in DB.");
+				
+				estAjoute = true;
 
 			} catch (SQLException se) {
 				logger.error(se.getMessage() + "\n " + se.fillInStackTrace());
+				output.append("L'insertion du joueur ");
+				output.append(username);
+				output.append(" a failli du a un erreur de traitement dans la BD.\n");
 				
 			} catch (Exception ex) {
 				logger.error(ex.getMessage() + "\n " + ex.fillInStackTrace());
 				output.append("L'insertion du joueur ");
 				output.append(username);
-				output.append(" a failli du au l'erreur : ");
-				output.append(ex.getMessage());
+				output.append(" a failli du a un erreur de traitement dans la BD.\n");
+				
 				try {
 					connexion.close();
 					connexion = getConnection();
@@ -217,9 +232,11 @@ public class ProcesseurJoueurDAO {
 				
 			} // Catch SQLException
 			
-			output.append("Utilisater  : ");
-			output.append(username);
-			output.append(" a été inséré dans BD avec succès dans toutes les tables de la BD.\n");
+			if(estAjoute){
+				output.append("Utilisater  : ");
+				output.append(username);
+				output.append(" a été inséré avec succès.\n");
+			}
 			
 			logger.info("*************** end to process csv records list **********************");
 		} // end process players list in the for 
@@ -227,6 +244,35 @@ public class ProcesseurJoueurDAO {
 		logger.info("*************** End DB processing ************************");
 		
 		return output.toString();		
+	}
+	/*
+	 * done true si le nom utilisateur present dans BD
+	 */
+	private boolean validerNomUtilisateur(String username) {
+		
+		Connection connexion = getConnection();
+		boolean estPresent = false;
+		try
+		{
+			java.sql.Statement stmt = connexion.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT username FROM jos_users WHERE username like '" + username + "%'");
+					
+			while (rs.next())
+			{
+				String nom = rs.getString("username");
+				if (nom.equals(username)) estPresent = true;				
+			}
+			
+			rs.close();
+			stmt.close();
+			connexion.close();		
+
+		} catch (SQLException sqle)
+		{
+			try {connexion.close();}catch(Exception e){};
+		}
+		
+		return estPresent;				
 	}
 
 	private Connection getConnection() {

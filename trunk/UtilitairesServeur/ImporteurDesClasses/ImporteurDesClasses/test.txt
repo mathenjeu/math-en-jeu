@@ -1,16 +1,6 @@
- *** Parser fichier csv : 
-CSVRecord [comment=null, mapping=null, recordNumber=1, values=[firstname, middlename, lastname, name, username, registeripaddr, email, password, usertype, gid, language, timezone, cb_gradelevel, cb_gender, cb_school, cb_country, cb_province, teacher_ref]]
-CSVRecord [comment=null, mapping=null, recordNumber=2, values=[Maxim, , Carbon, Maxim Carbon, juniormc, , juniormc@gmail.com, junior, Teacher, 31, fr, -5, General / Général, Male / Masculin, none, Canada, Quebec, 66]]
-CSVRecord [comment=null, mapping=null, recordNumber=3, values=[Joel, , Tremblay, Joel Tremblay, juniortr, , juniortr@gmail.com, junior, Registered, 18, fr, -5, General / Général, Male / Masculin, , , , 66]]
-CSVRecord [comment=null, mapping=null, recordNumber=4, values=[Valentin, , Decusara, Valentin Decusara, juniorva, , juniorva@gmail.com, junior, Registered, 18, fr, -5, General / Général, Male / Masculin, , , , 66]]
-CSVRecord [comment=null, mapping=null, recordNumber=5, values=[Kim, , Trang, Kim Trang, juniorkm, , juniorkm@gmail.com, junior, Registered, 18, fr, -5, General / Général, Male / Masculin, , , , 66]]
-CSVRecord [comment=null, mapping=null, recordNumber=6, values=[Jhon, , Standford, Jhon Standford, juniorjh, , juniorjh@gmail.com, junior, Registered, 18, fr, -5, General / Général, Male / Masculin, , , , 66]]
-
- *** Inserer les utilisateurs : 
-
-Utilisater  : juniormc a été inséré dans BD avec succès dans toutes les tables de la BD.
-Utilisater  : juniortr a été inséré dans BD avec succès dans toutes les tables de la BD.
-Utilisater  : juniorva a été inséré dans BD avec succès dans toutes les tables de la BD.
-Utilisater  : juniorkm a été inséré dans BD avec succès dans toutes les tables de la BD.
-Utilisater  : juniorjh a été inséré dans BD avec succès dans toutes les tables de la BD.
+Le profil avec nom utilisateur - juniormc - non créé. Nom utilisateur déjà existante.
+Utilisater  : juniortr a été inséré avec succès.
+Le profil avec nom utilisateur - juniorva - non créé. Nom utilisateur déjà existante.
+Utilisater  : juniorkm a été inséré avec succès.
+Le profil avec nom utilisateur - juniorjh - non créé. Nom utilisateur déjà existante.
 Toutes les profils ont été traité. SVP vérifié la liste pour des exceptions possibles.
