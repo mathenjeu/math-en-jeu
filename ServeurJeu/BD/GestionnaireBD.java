@@ -68,7 +68,7 @@ public abstract class GestionnaireBD {
     		// Une erreur est survenue lors de la création d'une requête
     		objLogger.error(GestionnaireMessages.message("bd.erreur_creer_requete"));
     		objLogger.error(GestionnaireMessages.message("bd.trace"));
-    		objLogger.error(e.getMessage());
+    		objLogger.error(e.getMessage(), e);
     		getNewConnection();    		
     		return;
     	}
@@ -82,7 +82,7 @@ public abstract class GestionnaireBD {
     	try {
 			requete.close();				
 		} catch (SQLException e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_fermer_requete"));			
+			objLogger.error(GestionnaireMessages.message("bd.erreur_fermer_requete"), e);			
 		}
     	DBConnectionsPoolManager pool = DBConnectionsPoolManager.getInstance();
     	pool.freeConnection(connexion);
@@ -107,7 +107,7 @@ public abstract class GestionnaireBD {
 			try {
 				rs.close();
 			} catch (SQLException e) {
-				objLogger.error(message);
+				objLogger.error(message, e);
 			}
     	}
     }
@@ -118,7 +118,7 @@ public abstract class GestionnaireBD {
 			try {
 				prep.close();
 			} catch (SQLException e) {
-				objLogger.error(message);
+				objLogger.error(message, e);
 			}
     	}
     }

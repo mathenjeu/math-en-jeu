@@ -63,7 +63,7 @@ public class VerificateurConnexions implements Runnable
 			}
 			catch (InterruptedException ie)
 			{
-				objLogger.error(" Error - sleep is canceled in VerificateurConnexions" + ie.getMessage());
+				objLogger.error(" Error - sleep is canceled in VerificateurConnexions", ie);
 				Thread.currentThread().interrupt();
 							
 			}
@@ -104,7 +104,7 @@ public class VerificateurConnexions implements Runnable
 			}
 			catch (InterruptedException ie)
 			{
-				objLogger.error(" Error - sleep is canceled in VerificateurConnexions" + ie.getMessage());
+				objLogger.error(" Error - sleep is canceled in VerificateurConnexions",  ie);
 				Thread.currentThread().interrupt();
 							
 			}

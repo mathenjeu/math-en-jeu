@@ -7,6 +7,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import org.apache.log4j.Logger;
+
+import ClassesUtilitaires.Espion;
 import Enumerations.GameType;
 import Enumerations.RetourFonctions.ResultatEntreeTable;
 import ServeurJeu.ControleurJeu;
@@ -92,6 +96,10 @@ public class Salle
 	private int prochainNoTable;
 	
 	private int roomLevel;
+	
+	// Déclaration de l'objet logger qui permettra d'afficher des messages
+	// d'erreurs dans le fichier log si nécessaire
+	static private Logger objLogger = Logger.getLogger( Salle.class );
 
 	/**
 	 * Une {@code Salle} est un endroit qui contient une ou plusieurs {@link Table}
@@ -458,6 +466,9 @@ public class Salle
 
 		//adjust server info
 		objControleurJeu.obtenirGestionnaireCommunication().miseAJourInfo();
+		
+		objLogger.info(" Dans la salle - controleur a " + objControleurJeu.obtenirListeJoueurs().size() + " joueurs.");
+		objLogger.info(" Dans la salle - controleur a " + objControleurJeu.obtenirListeJoueursDeconnectes().size() + " joueurs deconnecte.");
 
 		// Préparer l'événement qu'une table a été détruite.
 		// Cette fonction va passer les joueurs et créer un

@@ -134,9 +134,7 @@ public class Espion implements Runnable{
 			{
 				//System.out.println("Erreur dans la thread de l'espion.");
 				//System.out.println(e.getMessage());
-				objLogger.info(GestionnaireMessages.message("espion.erreur_thread"));
-				objLogger.error( e.getMessage() );
-				e.printStackTrace();
+				objLogger.info(GestionnaireMessages.message("espion.erreur_thread"), e);				
 			}
 		}
 		
@@ -592,8 +590,7 @@ public class Espion implements Runnable{
 	    catch( Exception e)
 	    {
 			//System.out.println("Erreur d'écriture dans le fichier espion.");
-		    objLogger.info(GestionnaireMessages.message("espion.erreur_fichier"));
-			objLogger.error(e.getMessage());
+		    objLogger.info(GestionnaireMessages.message("espion.erreur_fichier"), e);
 	    }
 	
     }

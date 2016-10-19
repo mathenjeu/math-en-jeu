@@ -157,7 +157,7 @@ public class JoueurVirtuel extends Joueur implements Runnable{
 		}
 		catch(InterruptedException e)
 		{ 
-			objLogger.error("Error to did thead Virtual to sleep..." + e.getMessage());
+			objLogger.error("Error to did thead Virtual to sleep..." + e.getMessage(), e);
 			pause(1);
 		}
 

@@ -88,9 +88,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			} catch (SQLException e) {
 				getNewConnection(); 
 				// Une erreur est survenue lors de l'exécution de la requête
-				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-				objLogger.error(GestionnaireMessages.message("bd.trace"));
-				objLogger.error(e.getMessage());
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"), e);
 				name = null;
 			}finally{ 
 				dbUtilCloseResultSet(rs, "Error in release ResultSet in getUsername");
@@ -140,10 +138,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_remplir_info_joueur"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_remplir_info_joueur"), e);
 			getNewConnection(); 
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in remplirInformationsJoueur");    			
@@ -186,17 +181,11 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"), e);
 			getNewConnection(); 
 		} catch (RuntimeException e) {
 			// Ce n'est pas le bon message d'erreur mais ce n'est pas grave
-			objLogger.error(GestionnaireMessages.message("bd.error_music"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.error_music"), e);
 			getNewConnection(); 
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in obtenirListeURLsMusique");
@@ -233,7 +222,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				return gameId;
 			}
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos"), e);
 			getNewConnection(); 
 
 		}finally{ 
@@ -264,7 +253,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 					requiresFullStats = rs.getBoolean("requires_full_stats");                
 			}
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update"), e);
 			getNewConnection(); 
 
 		}finally{ 
@@ -310,7 +299,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				prepStatement.executeBatch();    			
 			}
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update"), e);
 			getNewConnection(); 
 		}finally{ 
 			dbUtilClosePreparedStatement(prepStatement, "Error in release PreparedStatement in addFullStats");
@@ -423,7 +412,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			}
 
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update"), e);
 			getNewConnection(); 
 
 		}finally{
@@ -480,7 +469,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 		}
 		catch (Exception e)
 		{
-			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_game_user") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_game_user"), e);
 			getNewConnection(); 
 		}
 
@@ -505,10 +494,8 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"), e);
+			
 			getNewConnection();
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in getUserRole");    			
@@ -558,10 +545,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				}
 			}
 		} catch (SQLException e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_room_info"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_room_info"), e);
 			throw (e);            
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in getRoomInfo");    			
@@ -582,10 +566,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				}
 			}
 		} catch (SQLException e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_room_keywordss"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_room_keywordss"), e);
 			throw (e);
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in getRoomKeywordsIds");    			
@@ -607,10 +588,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				}
 			}
 		} catch (SQLException e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_game_types"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_game_types"), e);
 			throw (e);
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in getRoomGameTypeIds");    			
@@ -637,10 +615,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"), e);
 			getNewConnection(); 
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in fillsRooms");    			
@@ -657,6 +632,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 		ArrayList<Integer> roomIds = fillsRooms();
 
 		for (int roomId: roomIds) {
+			objLogger.info("Chargement initial de la salle : " + roomId);
 			Salle objSalle;
 			try {
 				Map<String, Object> roomData = getRoomInfo(roomId);
@@ -665,6 +641,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				Date dateBeginDate = (Date)roomData.get("beginDate");
 				Date dateEndDate = (Date)roomData.get("endDate");
 				int intMasterTime = (Integer)roomData.get("masterTime");
+				System.out.println(intMasterTime);
 				Map<Integer, String> names = (Map<Integer, String>)roomData.get("names");
 				Map<Integer, String> descriptions = (Map<Integer, String>)roomData.get("descriptions");
 				String strRoomType = (String)roomData.get("roomType");
@@ -681,19 +658,13 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			} catch (SQLException e) {
 				// Une erreur est survenue lors de la construction de la
 				// salle avec id 'roomId'
-				objLogger.error(GestionnaireMessages.message("bd.erreur_construction_salle"));
-				objLogger.error(GestionnaireMessages.message("bd.trace"));
-				objLogger.error(e.getMessage());
-				e.printStackTrace();
+				objLogger.error(GestionnaireMessages.message("bd.erreur_construction_salle"), e);
 				getNewConnection(); 
 
 			} catch (RuntimeException e) {
 				// Une erreur est survenue lors de la recherche de la
 				// prochaine salle
-				objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"));
-				objLogger.error(GestionnaireMessages.message("bd.trace"));
-				objLogger.error(e.getMessage());
-				e.printStackTrace();
+				objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle ") + " in the room : " + roomId, e);
 				getNewConnection(); 
 
 			}
@@ -733,19 +704,13 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			} catch (SQLException e) {
 				// Une erreur est survenue lors de la construction de la
 				// salle avec id 'roomId'
-				objLogger.error(GestionnaireMessages.message("bd.erreur_construction_salle"));
-				objLogger.error(GestionnaireMessages.message("bd.trace"));
-				objLogger.error(e.getMessage());
-				e.printStackTrace();
+				objLogger.error(GestionnaireMessages.message("bd.erreur_construction_salle"), e);
 				getNewConnection(); 
 
 			} catch (RuntimeException e) {
 				// Une erreur est survenue lors de la recherche de la
 				// prochaine salle
-				objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"));
-				objLogger.error(GestionnaireMessages.message("bd.trace"));
-				objLogger.error(e.getMessage());
-				e.printStackTrace();
+				objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"), e);
 				getNewConnection(); 
 
 			}
@@ -769,10 +734,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				}
 			} catch (SQLException e) {
 				// Une erreur est survenue lors de l'exécution de la requête
-				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_rules_NbTracks"));
-				objLogger.error(GestionnaireMessages.message("bd.trace"));
-				objLogger.error(e.getMessage());
-				e.printStackTrace();
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_rules_NbTracks"), e);
 				getNewConnection();
 			}finally{ 
 				dbUtilCloseResultSet(rs, "Error in release ResultSet in getNbTracks");    			
@@ -834,10 +796,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_rules_charging"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_rules_charging"), e);
 			getNewConnection();
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in chargerReglesSalles");    			
@@ -882,10 +841,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_objects_rules_"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_objects_rules_"), e);
 			getNewConnection();
 		}finally{ 
 			dbUtilCloseResultSet(rst, "Error in release ResultSet in chargerReglesObjetsUtilisables");    			
@@ -917,10 +873,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"), e);
 			getNewConnection();
 		}finally{ 
 			dbUtilCloseResultSet(rst, "Error in release ResultSet in chargerReglesCasesSpeciales");    			
@@ -953,10 +906,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"), e);
 			getNewConnection();
 		}finally{ 
 			dbUtilCloseResultSet(rst, "Error in release ResultSet in chargerReglesMagasins");    			
@@ -986,10 +936,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"), e);
 			getNewConnection();
 		}finally{ 
 			dbUtilCloseResultSet(rst, "Error in release ResultSet in fillShopObjects");    			
@@ -1037,7 +984,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				requete.executeUpdate(strSQL);
 			}
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_modProf") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_modProf"), e);
 			getNewConnection(); 
 		}
 
@@ -1063,7 +1010,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				requete.executeUpdate("DELETE FROM room_object WHERE room_id=" + room_id);
 			}
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_delete_rooms_modProf") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_delete_rooms_modProf"), e);
 			getNewConnection(); 
 		}
 	}
@@ -1115,7 +1062,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				room_id = rs.getInt("GENERATED_KEY");                
 			}
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_modProf") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_modProf"), e);
 			getNewConnection();
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in putNewRoom");    			
@@ -1165,7 +1112,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			prepStatement.executeBatch();            
 
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_Keywords") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_Keywords"), e);
 			this.getNewConnection(); 
 		}finally{
 			dbUtilClosePreparedStatement(prepStatement, "Error in release PreparedStatement in putNewRoomKeywords");
@@ -1203,7 +1150,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			prepStatement.executeBatch();
 
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_gameTypes") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_gameTypes"), e );
 			getNewConnection(); 
 
 		}finally{
@@ -1226,7 +1173,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				requete.executeUpdate(strSQL);
 			}
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_infosTable") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_infosTable"), e);
 			getNewConnection();
 		}
 
@@ -1256,7 +1203,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			prepStatement.executeBatch();            
 
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_specialSquare") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_specialSquare"), e );
 			getNewConnection();
 		}finally{
 			dbUtilClosePreparedStatement(prepStatement, "Error in release PreparedStatement in putNewRoomSpecialSquare");
@@ -1293,7 +1240,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				prepStatement.executeBatch();
 			}
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_objects") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_objects"), e);
 			getNewConnection();
 		}finally{
 			dbUtilClosePreparedStatement(prepStatement, "Error in release PreparedStatement in putNewRoomObjects");
@@ -1329,7 +1276,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				prepStatement.executeBatch();                
 			}
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_shops") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_rooms_shops"), e);
 			getNewConnection();
 		}finally{
 			dbUtilClosePreparedStatement(prepStatement, "Error in release PreparedStatement in putNewRoomsShops");
@@ -1349,7 +1296,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				numDeleted = requete.executeUpdate("DELETE FROM room WHERE room_id=" + room_id);
 			}
 		} catch (SQLException e) {
-			System.out.println(GestionnaireMessages.message("bd.erreur_deleting_room") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_deleting_room"), e);
 			getNewConnection();
 		}
 
@@ -1368,7 +1315,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 					requiresFullStats = rs.getBoolean("requires_full_stats");
 			}
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update"), e);
 			getNewConnection();
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in createRoomReport");    			
@@ -1423,7 +1370,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				}                
 			}
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_create_fullReport") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_create_fullReport"), e);
 			getNewConnection();
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in createRoomFullReport");    			
@@ -1485,7 +1432,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 
 			}
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_create_summReport") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_create_summReport"), e);
 			getNewConnection();
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in createRoomSummaryReport");    			
@@ -1506,18 +1453,12 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete _PWD"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete _PWD"), e);
 			getNewConnection(); 
 
 		} catch (RuntimeException e) {
 			//Une erreur est survenue lors de la recherche de la prochaine salle
-			objLogger.error(GestionnaireMessages.message("bd.erreur_PWD"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_PWD"), e);
 			getNewConnection(); 
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in controlPWD");    			
@@ -1536,7 +1477,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 						+ question + " ," + user_id + " , " + language_id + " ,'" + errorDescription + "');");
 			}
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_questions_errors") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_adding_questions_errors"), e);
 			getNewConnection(); 
 		}
 
@@ -1574,10 +1515,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_creer_keywords_map"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_creer_keywords_map"), e);
 			getNewConnection(); 
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in getKeywordsMap");    			
@@ -1619,10 +1557,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_creer_langues_map"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_creer_langues_map"), e);
 			getNewConnection();
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in getLanguageMap");    			
@@ -1653,10 +1588,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_creer_gameType_map"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_creer_gameType_map"), e);
 			getNewConnection();
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in getGameTypesMap");    			
@@ -1674,7 +1606,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				requete.executeUpdate(connected);
 			}
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update_connected") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update_connected"), e);
 			getNewConnection();    	
 		}
 
@@ -1690,7 +1622,7 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				requete.executeUpdate(connected);
 			}
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update_connected") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update_connected"), e);
 			getNewConnection();    	
 		}
 
@@ -1719,19 +1651,13 @@ public class GestionnaireBDControleur extends GestionnaireBD {
 				} catch (SQLException e) {
 					// Une erreur est survenue lors de la construction de la
 					// salle avec id 'roomId'
-					objLogger.error(GestionnaireMessages.message("bd.erreur_construction_salle"));
-					objLogger.error(GestionnaireMessages.message("bd.trace"));
-					objLogger.error(e.getMessage());
-					e.printStackTrace();
+					objLogger.error(GestionnaireMessages.message("bd.erreur_construction_salle"), e);
 					getNewConnection(); 
 
 				} catch (RuntimeException e) {
 					// Une erreur est survenue lors de la recherche de la
 					// prochaine salle
-					objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"));
-					objLogger.error(GestionnaireMessages.message("bd.trace"));
-					objLogger.error(e.getMessage());
-					e.printStackTrace();
+					objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"), e);
 					getNewConnection(); 
 				}             
 			}

@@ -2,38 +2,76 @@
 <!-- ====================================================================== 
      Nov 17, 2007 10:35:44 PM                                                        
 
-     mathenjeu    
-     description
-                   
-     Maxime                                                                
+     mathenjeu     Maxime  
+     
+     May 28, 2015 Lilian   
+                                                                   
      ====================================================================== -->
-<project name="mathenjeu" default="release">
-    <description>
-            description
-    </description>
+
+<project name="mathenjeu" default="LOCAL_ENV_full_rebuild" basedir=".">
+	
+	<target name="init">
+         <echo message="start create jar file"/>
+    	 <echo message="basedir : ${basedir}"/>
+    	
+    	<property name="mathenjeu.version"  value="R5.10_2015.09.09"/>	
+    	<property name="mathenjeu.builderName"  value="Lilian Oloieri"/>
+    			
+    	<fail unless="mathenjeu.version" message="'mathenjeu.version' not set" />				
+    	<fail unless="mathenjeu.builderName" message="'mathenjeu.builderName' not set" />
+    </target>
 
     <!-- ================================= 
           target: default              
          ================================= -->
-    <target name="release" depends="depends" description="--> description">
+    <target name="release" depends="init">
     		
         <tar destfile="serveur-2.0.0.tar">
         	<fileset dir="classes">
         		<exclude name="**/mathenjeu.xml" />
-						<exclude name="**/build.xml" />
-						<exclude name="log/serveur.log*" />
-						<exclude name="**/.cvsignore" />
-						<exclude name="**/.classpath" />
-						<exclude name="**/.project" />
-					</fileset>
+					<exclude name="**/build.xml" />
+					<exclude name="log/serveur.log*" />
+					<exclude name="**/.cvsignore" />
+					<exclude name="**/.classpath" />
+					<exclude name="**/.project" />
+			</fileset>
         </tar>
-				<gzip zipfile="serveur-2.0.0.tar.gz" src="serveur-2.0.0.tar" />
+		<gzip zipfile="serveur-2.0.0.tar.gz" src="serveur-2.0.0.tar" />
     </target>
 
     <!-- - - - - - - - - - - - - - - - - - 
           target: depends                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="depends">
+    <target name="LOCAL_ENV_full_rebuild" depends="init">
+    	<jar destfile="serveur-mathenjeu_${mathenjeu.version}.jar">
+    	   	<fileset dir="./bin/classes">
+    	       	<exclude name="**/mathenjeu.xml" />
+    			<exclude name="**/build.xml" />
+    			<exclude name="log/serveur.log*" />
+    			<exclude name="**/.cvsignore" />
+    			<exclude name="**/.classpath" />
+    			<exclude name="**/.project" />
+    	   		<exclude name="**/index.php" />
+    	   		<exclude name="**/mathenjeu-exemple.xml" />
+    	   		<exclude name="**/mathenjeu.out.xml" />
+    	   		<exclude name="**/serveur.info" />
+    	   		<exclude name="**/serveur_monitoring.html" />
+    	   		<exclude name="**.settings/" />
+    	   		<exclude name="**/log4j.xml" />
+    		</fileset>
+    		
+    		<manifest>
+    			<attribute name="Built-By" value="${mathenjeu.builderName}"/>
+    			<section name="mathenjeu">
+    			    <attribute name="Specification-Title" value="mathenjeu"/>
+    			    <attribute name="Specification-Version" value="${mathenjeu.version}"/>
+    				<attribute name="Manifest-Version" value="1.0"/>
+    				<attribute name="Main-Class" value="ServeurJeu.Maitre"/>
+    				<attribute name="Class-Path" value="lib/commons-beanutils.jar;lib/commons-collections-3.2.jar;lib/commons-configuration-1.2.jar;lib/commons-digester-1.7.jar;lib/commons-lang-2.2.jar;
+    					lib/commons-logging-1.1.jar;lib/jamon-2.2.jar;lib/jamon-2.7.jar;lib/junit-4.1.jar;lib/junit-4.1-src.jar;lib/log4j-1.2.14.jar;lib/mysql-connector-java-5.1.15-bin.jar"/>
+    			</section>
+    		</manifest>
+    	</jar>
     </target>
 
 </project>

@@ -341,11 +341,11 @@ public class TableTournament extends Table {
 				objControleurJeu.obtenirGestionnaireTemps().enleverTache(objMinuterie);
 			}catch (IllegalStateException ex){
 				objControleurJeu.setNewTimer();
-				//objLogger.error("Une erreur est survenue: objControleurJeu.setNewTimer()");
+				objLogger.error("Une erreur est survenue: objControleurJeu.setNewTimer() : ", ex );
 			}
 
 			// to discard Banana or Brainiac tasks
-			objGestionnaireTemps.stopIt();
+			//objGestionnaireTemps.stopIt();
 
 			// S'il y a au moins un joueur qui a complété la partie,
 			// alors on ajoute les informations de cette partie dans la BD

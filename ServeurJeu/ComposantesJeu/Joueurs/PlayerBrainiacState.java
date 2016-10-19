@@ -70,8 +70,7 @@ public class PlayerBrainiacState {
 	
 	
 	/*
-	 * Method used to set a Braniac to player with all the
-	 * side effets applayed
+	 * Method used to set a Braniac to player with all the side effets 
 	 */
 	public void putTheOneBrainiac()
 	{

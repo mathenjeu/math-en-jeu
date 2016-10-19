@@ -53,7 +53,7 @@ public class Moniteur
 		catch( Exception e )
 		{
 			logger.error( e.getMessage() );
-			logger.error( GestionnaireMessages.message("monitoring.erreur_fichier") );
+			logger.error( GestionnaireMessages.message("monitoring.erreur_fichier"), e );
 		}
 	}
 	

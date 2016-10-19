@@ -76,9 +76,7 @@ public final class DBConnectionsPoolManager{
 			Class.forName(DBConnectionsPoolManager.DRIVER);
 		} catch (Exception e) {
 			// Une erreur est survenue lors de l'instanciation du pilote
-			objLogger.error(GestionnaireMessages.message("bd.erreur_creer_driver"));
-			objLogger.error(e.getMessage());
-			objLogger.error(e.getStackTrace());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_creer_driver"), e);
 
 			return;
 		}
@@ -103,8 +101,7 @@ public final class DBConnectionsPoolManager{
 			if(conn != null)
 			   verify = conn.isValid(0);
 		} catch (SQLException e) {	
-			objLogger.error("Error in verify DB connection ");
-			e.printStackTrace();
+			objLogger.error("Error in verify DB connection ", e);			
 		}
 		
 		if(verify){
@@ -159,8 +156,7 @@ public final class DBConnectionsPoolManager{
 			try {
 				verify = conn.isValid(0);
 			} catch (SQLException e) {	
-				objLogger.error("Error in verify DB connection ");
-				e.printStackTrace();
+				objLogger.error("Error in verify DB connection ", e);
 				verify = false;
 			}
 		}
@@ -192,7 +188,7 @@ public final class DBConnectionsPoolManager{
 				wait(timeout);
 			}
 			catch (InterruptedException e) {
-				objLogger.error(GestionnaireMessages.message("bd.erreur_prendre_DBconn"));
+				objLogger.error(GestionnaireMessages.message("bd.erreur_prendre_DBconn"), e);
 			}
 			if ((new Date().getTime() - startTime) >= timeout) {
 				// Timeout has expired
@@ -212,7 +208,7 @@ public final class DBConnectionsPoolManager{
 				conn.close();				
 			}
 			catch (SQLException e) {
-				objLogger.error(GestionnaireMessages.message("bd.erreur_liberer_DBconn"));
+				objLogger.error(GestionnaireMessages.message("bd.erreur_liberer_DBconn"), e);
 			}
 		}
 		freeConnections.clear();
@@ -233,7 +229,7 @@ public final class DBConnectionsPoolManager{
 			}		
 		}
 		catch (SQLException e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_cree_DBconn"));
+			objLogger.error(GestionnaireMessages.message("bd.erreur_cree_DBconn"), e);
 			return null;
 		}
 		return conn;

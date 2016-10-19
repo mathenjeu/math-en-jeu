@@ -104,7 +104,7 @@ public class GestionnaireCommunication
 		{
 			// L'écoute n'a pas pu être démarrée
 			objLogger.error(GestionnaireMessages.message("communication.erreur_demarrage") + intPort);
-			objLogger.error(GestionnaireMessages.message("communication.serveur_arrete"));
+			objLogger.error(GestionnaireMessages.message("communication.serveur_arrete"), e);
 			boolStopThread = true;
 		}
 		
@@ -128,9 +128,9 @@ public class GestionnaireCommunication
 				threadJoueur.start();
 				
 				// Ajouter le nouveau ProtocoleJoueur dans la liste 
-				//synchronized(lstProtocoleJoueur){
+				synchronized(lstProtocoleJoueur){
 				  lstProtocoleJoueur.add( objJoueur );
-				//}
+				}
 				miseAJourInfo();
 				
 			}
@@ -138,8 +138,7 @@ public class GestionnaireCommunication
 			{
 				// Une erreur est survenue lors de l'acceptation de la connexion
 				objLogger.error(GestionnaireMessages.message("communication.erreur_accept"));
-				objLogger.error( e.getMessage() );
-				objLogger.error(GestionnaireMessages.message("communication.serveur_arrete"));
+				objLogger.error(GestionnaireMessages.message("communication.serveur_arrete"), e);
 				boolStopThread = true;
 			}
 			
@@ -173,12 +172,12 @@ public class GestionnaireCommunication
 		catch (IOException e)
 		{
 			// Le socket du serveur est déjà fermé
-			objLogger.error(GestionnaireMessages.message("communication.erreur_socket"));
+			objLogger.error(GestionnaireMessages.message("communication.erreur_socket"), e);
 		}
 		catch (NullPointerException e)
 		{
 			// Le socket du serveur est déjà fermé
-			objLogger.error(GestionnaireMessages.message("communication.erreur_socket"));
+			objLogger.error(GestionnaireMessages.message("communication.erreur_socket"), e);
 		}
 				
 		// Arrêter le thread de vérification des connexions
@@ -213,7 +212,7 @@ public class GestionnaireCommunication
 		}
 		catch( Exception e )
 		{
-			objLogger.error(GestionnaireMessages.message("communication.erreur_protocole"));
+			objLogger.error(GestionnaireMessages.message("communication.erreur_protocole"), e);
 		}
 	}
 	
@@ -242,8 +241,7 @@ public class GestionnaireCommunication
 			}
 			catch( Exception e )
 			{
-				objLogger.info(GestionnaireMessages.message("communication.erreur_fichier"));
-				objLogger.error( e.getMessage() );
+				objLogger.error(GestionnaireMessages.message("communication.erreur_fichier"), e);
 			}
 		}
 	}

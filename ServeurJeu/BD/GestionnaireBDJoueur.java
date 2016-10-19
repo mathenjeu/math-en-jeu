@@ -197,17 +197,11 @@ public final class GestionnaireBDJoueur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"), e);
 			getNewConnection();    	
 		} catch (RuntimeException e) {
 			// Ce n'est pas le bon message d'erreur mais ce n'est pas grave
-			objLogger.error(GestionnaireMessages.message("bd.error_questions"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.error_questions"), e);
 			getNewConnection();    	
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in getLastGamesQuestions");    			
@@ -226,7 +220,7 @@ public final class GestionnaireBDJoueur extends GestionnaireBD {
 					lastQuestions.add(quest);
 				}catch(NumberFormatException ex)
 				{
-					// For the moment nothing to do
+					objLogger.error(GestionnaireMessages.message("bd.error_questions"), ex);
 				}
 
 			}
@@ -262,17 +256,11 @@ public final class GestionnaireBDJoueur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"), e);
 			getNewConnection();    	
 		} catch (RuntimeException e) {
 			//Une erreur est survenue lors de la recherche de la prochaine question
-			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question_MC"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question_MC"), e);
 			getNewConnection();    	
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in remplirBoiteQuestionsMC");    			
@@ -327,17 +315,11 @@ public final class GestionnaireBDJoueur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"), e);
 			getNewConnection();    	
 		} catch (RuntimeException e) {
 			//Une erreur est survenue lors de la recherche de la prochaine question
-			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question_SA"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question_SA"), e);
 			getNewConnection();    	
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in remplirBoiteQuestionsSA");    			
@@ -370,17 +352,11 @@ public final class GestionnaireBDJoueur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"), e);
 			getNewConnection();    	
 		} catch (RuntimeException e) {
 			//Une erreur est survenue lors de la recherche de la prochaine question
-			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question_TF"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question_TF"), e);
 			getNewConnection();    	
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in remplirBoiteQuestionsTF");    			
@@ -413,17 +389,11 @@ public final class GestionnaireBDJoueur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"), e);
 			getNewConnection();    	
 		} catch (RuntimeException e) {
 			//Une erreur est survenue lors de la recherche de la prochaine question
-			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question_MD"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_question_MD"), e);
 			getNewConnection();    	
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in remplirBoiteQuestionsMD");    			
@@ -447,10 +417,7 @@ public final class GestionnaireBDJoueur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_get_money"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_get_money"), e);
 			getNewConnection();    	
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in getPlayersMoney");    			
@@ -477,10 +444,7 @@ public final class GestionnaireBDJoueur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"), e);
 			getNewConnection();    	
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in transmitURL");    			
@@ -544,10 +508,7 @@ public final class GestionnaireBDJoueur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"), e);
 			getNewConnection();    	
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in mettreAJourJoueur");    			
@@ -572,7 +533,7 @@ public final class GestionnaireBDJoueur extends GestionnaireBD {
 				requete.executeUpdate(strMoney);
 			}
 		} catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update_money") + e.getMessage());
+			objLogger.error(GestionnaireMessages.message("bd.erreur_ajout_infos_update_money"), e);
 			getNewConnection();    	
 		}
 
@@ -692,10 +653,7 @@ public final class GestionnaireBDJoueur extends GestionnaireBD {
 			}
 		} catch (SQLException e) {
 			// Une erreur est survenue lors de l'exécution de la requête
-			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"));
-			objLogger.error(GestionnaireMessages.message("bd.trace"));
-			objLogger.error(e.getMessage());
-			e.printStackTrace();
+			objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete"), e);
 			getNewConnection();    	
 		}finally{ 
 			dbUtilCloseResultSet(rs, "Error in release ResultSet in transmitURL");    			

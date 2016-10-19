@@ -257,19 +257,15 @@ public class ProtocoleJoueur implements Runnable
 		} catch (IOException ioe) {
 
 			bolStopThread = true;
-			objLogger.error(ioe.getMessage() + " IOException in run");
-			objLogger.error(GestionnaireMessages.message("protocole.erreur_reception"));
+			objLogger.error(GestionnaireMessages.message("protocole.erreur_reception"), ioe);
 
 		} catch (TransformerConfigurationException tce) {
-			objLogger.error(GestionnaireMessages.message("protocole.erreurXML_transformer"));
-			objLogger.error(tce.getMessage());
+			objLogger.error(GestionnaireMessages.message("protocole.erreurXML_transformer"), tce);
 		} catch (TransformerException te) {
-			objLogger.error(GestionnaireMessages.message("protocole.erreurXML_conversion"));
-			objLogger.error(te.getMessage());
-		}/* catch (Exception e) {
-			objLogger.error(GestionnaireMessages.message("protocole.erreur_thread"));
-			objLogger.error(e.toString() + " *** "); 
-		}*/ finally {
+			objLogger.error(GestionnaireMessages.message("protocole.erreurXML_conversion"), te);
+		} catch (Exception e) {
+			objLogger.error(GestionnaireMessages.message("protocole.erreur_thread"), e);		
+		} finally {
 			objLogger.error("For some reasons reched finally in protocol");
 			arreterProtocoleJoueur();
 		}

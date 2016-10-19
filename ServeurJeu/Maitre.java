@@ -156,9 +156,9 @@ public class Maitre implements Runnable
 		try {
 			socketServeur = new ServerSocket( port, 5, InetAddress.getByName(address));
 		} catch (UnknownHostException er) {
-			objLogger.error( er.getMessage() );
+			objLogger.error( er.getMessage(), er );
 		} catch (IOException er) {
-			objLogger.error( er.getMessage() );
+			objLogger.error( er.getMessage(), er );
 		} 
 		Socket socket = null;
 		PrintWriter out =  null;
@@ -188,7 +188,7 @@ public class Maitre implements Runnable
 		} 
 		catch (IOException e) 
 		{	
-			objLogger.error( e.getMessage() );
+			objLogger.error( e.getMessage(), e );
 		}
 	}
 

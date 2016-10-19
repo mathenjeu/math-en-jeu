@@ -1052,11 +1052,11 @@ public class InformationPartieHumain extends InformationPartie implements Active
 	 * @param boiteQuestionsInfo the boiteQuestionsInfo to set
 	 */
 	public void setBoiteQuestionsInfo() {
-		this.boiteQuestionsInfo = new StringBuffer();
-		String table = this.objTable.getTableName();
-		String joueur = this.objJoueurHumain.obtenirNom();
+		boiteQuestionsInfo = new StringBuffer();
+		String table = objTable.getTableName();
+		String joueur = objJoueurHumain.obtenirNom();
 
-		this.boiteQuestionsInfo.append("BoiteQuestions info's for " + joueur + " in the table " + table + "\n");
+		boiteQuestionsInfo.append("BoiteQuestions info's for " + joueur + " in the table " + table + "\n");
 
 	}
 

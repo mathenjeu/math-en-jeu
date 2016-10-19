@@ -254,7 +254,7 @@ public class ControleurJeu {
 		try{
 			objGestionnaireTemps.enleverTache(objTacheSynchroniser);
 		}catch (IllegalStateException ex){
-			objLogger.error(" Synchroniser cancel ganerated timer end off... ");	
+			objLogger.error(" Synchroniser cancel ganerated timer end off... ", ex);	
 		}
 		objTacheSynchroniser = null;
 		objGestionnaireTemps = null;
@@ -444,7 +444,7 @@ public class ControleurJeu {
 
 			// Ajouter ce joueur à la liste des joueurs déconnectés du serveur
 			ajouterJoueurDeconnecte(joueur);
-			//objLogger.info("! Joueur deconnecter - mettre dans la liste deccon ");     
+			objLogger.info("! Joueur deconnecter - mettre dans la liste deccon ");     
 		}
 
 		// Enlever le protocole du joueur courant de la liste des
@@ -466,8 +466,8 @@ public class ControleurJeu {
 		// Empêcher d'autres thread de venir utiliser la liste des joueurs
 		// connectés au serveur de jeu pendant qu'on déconnecte le joueur
 		synchronized (lstJoueursConnectes) {
-
-			//System.out.println("! Joueur deconnecter - controleur3 ");     
+			
+			objLogger.info(" Liste joueur connectes : " + lstJoueursConnectes.size());
 			// Enlever le joueur de la liste des joueurs connectés
 			lstJoueursConnectes.remove(joueur.obtenirNom());
 			// Enlever la référence du protocole du joueur vers son joueur humain
@@ -491,6 +491,8 @@ public class ControleurJeu {
 			// s'est déconnecté
 			preparerEvenementJoueurDeconnecte(joueur.obtenirNom());
 			joueur.setObjProtocoleJoueur(null);
+			
+			objLogger.info(" Liste joueur connectes : " + lstJoueursConnectes.size());
 
 		}
 	}

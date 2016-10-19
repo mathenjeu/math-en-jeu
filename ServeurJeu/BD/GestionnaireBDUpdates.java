@@ -63,9 +63,7 @@ public class GestionnaireBDUpdates extends GestionnaireBD implements Runnable {
     		}
     		catch( InterruptedException e )
     		{
-    			objLogger.info(GestionnaireMessages.message("spy.erreur_thread_newRooms"));
-    			objLogger.error( e.getMessage());
-    			e.printStackTrace();    			
+    			objLogger.info(GestionnaireMessages.message("spy.erreur_thread_newRooms"), e);    			
     		}
 
 
@@ -82,6 +80,7 @@ public class GestionnaireBDUpdates extends GestionnaireBD implements Runnable {
 			for (int room : rooms)
 			{
 				list += room + ",";
+				System.out.println(room);
 			}
 			
 		    int ind = list.lastIndexOf(",");
@@ -99,6 +98,7 @@ public class GestionnaireBDUpdates extends GestionnaireBD implements Runnable {
 				while(rs.next())
 				{
 					int roomId = rs.getInt("room.room_id");
+					System.out.println(roomId);
 					rooms.add(roomId);
 				}   
 
@@ -106,20 +106,13 @@ public class GestionnaireBDUpdates extends GestionnaireBD implements Runnable {
 			catch (SQLException e)
 			{
 				// Une erreur est survenue lors de l'exécution de la requète
-				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_detect_newRoom"));
-				objLogger.error(GestionnaireMessages.message("bd.trace"));
-				objLogger.error( e.getMessage() );
-				
-			    e.printStackTrace();
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_detect_newRoom"), e);
 			    getNewConnection();
 			}
 			catch( RuntimeException e)
 			{
 				//Une erreur est survenue lors de la recherche de la prochaine salle
-				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_detect_newRoom"));
-				objLogger.error(GestionnaireMessages.message("bd.trace"));
-				objLogger.error( e.getMessage() );
-			    e.printStackTrace();
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_detect_newRoom"), e);
 			    getNewConnection();
 			}finally{ 
 				dbUtilCloseResultSet(rs, "Error in release ResultSet in detectNewRooms");    			
@@ -142,19 +135,13 @@ public class GestionnaireBDUpdates extends GestionnaireBD implements Runnable {
 			catch (SQLException e)
 			{
 				// Une erreur est survenue lors de l'exécution de la requète
-				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_oldRoom"));
-				objLogger.error(GestionnaireMessages.message("bd.trace"));
-				objLogger.error( e.getMessage() );				
-			    e.printStackTrace();
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_oldRoom"), e);
 			    getNewConnection();
 			}
 			catch( RuntimeException e)
 			{
 				//Une erreur est survenue lors de la recherche de la prochaine salle
-				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_oldRoom"));
-				objLogger.error(GestionnaireMessages.message("bd.trace"));
-				objLogger.error( e.getMessage() );
-			    e.printStackTrace();
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_oldRoom"), e);
 			    getNewConnection();
 			}finally{ 
 				dbUtilCloseResultSet(rs, "Error in release ResultSet in mettreAJourJoueur");    			
@@ -188,20 +175,13 @@ public class GestionnaireBDUpdates extends GestionnaireBD implements Runnable {
 			catch (SQLException e)
 			{
 				// Une erreur est survenue lors de l'exécution de la requète
-				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_newRoomSelect1"));
-				objLogger.error(GestionnaireMessages.message("bd.trace"));
-				objLogger.error( e.getMessage() );
-				
-			    e.printStackTrace();
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_newRoomSelect1"), e);
 			    getNewConnection();
 			}
 			catch( RuntimeException e)
 			{
 				//Une erreur est survenue lors de la recherche de la prochaine salle
-				objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"));
-				objLogger.error(GestionnaireMessages.message("bd.trace"));
-				objLogger.error( e.getMessage() );
-			    e.printStackTrace();
+				objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"), e);
 			    getNewConnection();
 			}finally{ 
 				dbUtilCloseResultSet(rs, "Error in release ResultSet in detectUpdates");    			
@@ -219,20 +199,13 @@ public class GestionnaireBDUpdates extends GestionnaireBD implements Runnable {
 			catch (SQLException e)
 			{
 				// Une erreur est survenue lors de l'exécution de la requète
-				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_updateRoom0"));
-				objLogger.error(GestionnaireMessages.message("bd.trace"));
-				objLogger.error( e.getMessage() );
-				
-			    e.printStackTrace();
+				objLogger.error(GestionnaireMessages.message("bd.erreur_exec_requete_updateRoom0"), e);
 			    getNewConnection();
 			}
 			catch( RuntimeException e)
 			{
 				//Une erreur est survenue lors de la recherche de la prochaine salle
-				objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"));
-				objLogger.error(GestionnaireMessages.message("bd.trace"));
-				objLogger.error( e.getMessage() );
-			    e.printStackTrace();
+				objLogger.error(GestionnaireMessages.message("bd.erreur_prochaine_salle"), e);
 			    getNewConnection();
 			}
 			

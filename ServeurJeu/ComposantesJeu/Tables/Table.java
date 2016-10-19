@@ -123,7 +123,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	protected final Regles objRegles;
 	protected GenerateurPartie gameFactory;
 
-	private static final Logger objLogger = Logger.getLogger(Table.class);
+	protected static final Logger objLogger = Logger.getLogger(Table.class);
 	protected JoueurHumain master;
 
 	/**
@@ -204,14 +204,11 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		try {
 			this.gameFactory = (GenerateurPartie)Class.forName("ServeurJeu.ComposantesJeu.GenerateurPartie.GenerateurPartie" + gameType).newInstance();
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			objLogger.error("Une erreur est survenue dans creation de la table :  ", e );
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			objLogger.error("Une erreur est survenue dans creation de la table :  ", e );
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			objLogger.error("Une erreur est survenue dans creation de la table :  ", e );
 		}
 
 		gameFactory.setNbLines(intNbLines);
@@ -847,7 +844,8 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 		objTacheSynchroniser.ajouterObservateur(this);
 		objMinuterie = new Minuterie(intTempsTotal * 60, tempsStep);
 		objMinuterie.ajouterObservateur(this);
-		objControleurJeu.obtenirGestionnaireTemps().ajouterTache(objMinuterie, tempsStep);
+		//objControleurJeu.obtenirGestionnaireTemps().ajouterTache(objMinuterie, tempsStep);
+		objGestionnaireTemps.ajouterTache(objMinuterie, tempsStep);
 
 		// Obtenir la date à ce moment précis
 		objDateDebutPartie = new Date();
@@ -866,7 +864,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 	
 	
 	public void arreterPartie(String joueurGagnant) {
-		
+		objLogger.info(" Arreter partie - dans la table " + objControleurJeu.obtenirGestionnaireTemps().toString());
 		TreeSet<StatisticsPlayer> ourResults = new TreeSet<StatisticsPlayer>();
 		
 		// bolEstArretee permet de savoir si cette fonction a déjà été appelée
@@ -915,9 +913,6 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 
 				}
 				
-				preparerEvenementPartieTerminee(ourResults, joueurGagnant);
-
-
 				// Ajouter la partie dans la BD
 				int clePartie = objGestionnaireBD.ajouterInfosPartieTerminee(
 						objSalle.getRoomId(), gameType, objDateDebutPartie, intTempsTotal, cleJoueurGagnant);
@@ -927,7 +922,7 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 				for (JoueurHumain joueur: lstJoueurs.values()) {
 					
 					boolean estGagnant = (joueur.obtenirCleJoueur() == cleJoueurGagnant);
-					objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur, estGagnant);
+					//objGestionnaireBD.ajouterInfosJoueurPartieTerminee(clePartie, joueur, estGagnant);
 					//if(joueur.getRole() > 1)
 					//joueur.obtenirPartieCourante().writeInfo();
 				}				
@@ -942,7 +937,9 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 						joueur.obtenirPartieCourante().getObjGestionnaireBD().setNewPlayersMoney();
 					}					
 
-				}				
+				}
+				
+				preparerEvenementPartieTerminee(ourResults, joueurGagnant);
 			}
 			
 			if (intNombreJoueursVirtuels > 0) {
@@ -979,14 +976,15 @@ public class Table implements ObservateurSynchroniser, ObservateurMinuterie
 			bolEstArretee = true;			
 			
 			try{
+				objLogger.info(" Remove task - " + objControleurJeu.obtenirGestionnaireTemps().toString());
 				objControleurJeu.obtenirGestionnaireTemps().enleverTache(objMinuterie);
 			}catch (IllegalStateException ex){
 				objControleurJeu.setNewTimer();
-				objLogger.error("Une erreur est survenue: objControleurJeu.setNewTimer()");
+				objLogger.error("Une erreur est survenue: objControleurJeu.setNewTimer()", ex);
 			}
 
 			// to discard Banana or Brainiac tasks
-			objGestionnaireTemps.stopIt();
+			//objGestionnaireTemps.stopIt();
 			
 			// Si jamais les joueurs humains sont tous déconnectés, alors
 			// il faut détruire la table ici
